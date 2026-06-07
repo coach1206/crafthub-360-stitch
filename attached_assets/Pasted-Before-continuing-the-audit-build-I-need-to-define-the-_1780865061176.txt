@@ -1,0 +1,153 @@
+Before continuing the audit/build, I need to define the intended experience flow.
+
+The app should not just be a collection of screens. It should behave like a connected luxury hospitality journey inside NOVEE OS.
+
+Use this SmokeCraft 360 flow as the product blueprint for routing, user progression, session state, gamification, Passport connection, POS connection, and E.A.T. Intelligence connection.
+
+Do not build yet. First compare this intended flow against the existing mapped SmokeCraft screens and tell me:
+
+1. Which steps already exist in the uploaded Stitch screens
+2. Which steps are missing
+3. Which existing screens should map to each step
+4. Which new routes/screens will need to be created later
+5. How the guest progression should be stored
+6. How XP, badges, rank, leaderboard, Passport stamps, and POS availability should connect
+7. How NOVEE OS boot should flow into CraftHub Home
+
+Target SmokeCraft 360 Experience Flow:
+
+0. NOVEE OS Power-Up
+   Route: /boot
+   Purpose: cinematic operating system intro
+   Visual: black screen, embers, smoke, NOVEE OS logo, ambient lounge audio
+   Text: “NOVEE OS” and “The Intelligent Hospitality Operating System”
+   Transition: smoke dissolves into CraftHub
+
+1. CraftHub Home
+   Route: /
+   Purpose: module selection hub
+   Modules: SmokeCraft 360, PourCraft 360, BeerCraft 360, VapeCraft 360, 360 Passport Connection
+   Guest taps SmokeCraft 360
+
+2. SmokeCraft Opening Cinematic
+   Route: /smokecraft
+   Purpose: emotional welcome
+   Text:
+   “Every great cigar begins long before the first draw.”
+   “Tonight you will discover how tobacco is grown, cultivated, blended, aged, paired, and enjoyed.”
+   “You will eventually craft your own cigar profile.”
+   Buttons: Begin New Experience, Resume Session
+
+3. Profile Enrollment
+   Route: /smokecraft/enroll
+   Purpose: create smoking identity and SmokeCraft Passport
+   Collect: first name, last name, nickname, email, phone, city, state, profile photo
+   Optional: smoking experience, favorite cigars, favorite spirits
+
+4. Rules + Competition Intro
+   Route: /smokecraft/golden-box
+   Purpose: introduce Golden Box Challenge
+   Ranks: Novice, Enthusiast, Connoisseur, Aficionado
+   Grand Prize: Manufacturer Trip, Custom Cigar Box, Golden Box Award
+
+5. Art of the Cigar
+   Route: /smokecraft/art
+   Purpose: emotional buy-in and education
+   Topics: history, culture, craftsmanship, tobacco journey
+
+6. Select Master Mentor
+   Route: /smokecraft/mentor
+   Purpose: choose mentor by country
+   Mentors: Dominican Republic, Nicaragua, Honduras, Ecuador, Mexico, Brazil
+   Each mentor includes video intro, voice narration, background story, specialty
+
+7. Tobacco Origins
+   Route: /smokecraft/origins
+   Purpose: explore climate, soil, seed types, harvesting by country
+
+8. Leaf Education
+   Route: /smokecraft/leaves
+   Purpose: teach Criollo, Corojo, Connecticut Shade, Habano, Maduro
+   Show texture, strength, flavor, burn
+
+9. Leaf Recognition Game
+   Route: /smokecraft/leaf-challenge
+   Purpose: gamified quiz
+   Awards XP, badges, points
+
+10. Cultivation Experience
+    Route: /smokecraft/cultivation
+    Purpose: teach soil, sunlight, fermentation, harvesting
+
+11. Blending Studio
+    Route: /smokecraft/blend
+    Purpose: build personal cigar blend
+    Guest chooses filler, binder, wrapper, strength, flavor direction
+    Visual cigar builds live
+
+12. Flavor DNA Analysis
+    Route: /smokecraft/flavor-dna
+    Purpose: identify flavor personality
+    Traits: earthy, sweet, pepper, nutty, creamy, cocoa
+
+13. Pairing Experience
+    Route: /smokecraft/pairing
+    Purpose: recommend drink pairings
+    Options: bourbon, whiskey, scotch, rum, coffee
+    Powered by E.A.T. Intelligence
+
+14. POS Integration Moment
+    Route: /smokecraft/available
+    Purpose: show live inventory and pairings available in the lounge
+    Guest can order, save, favorite
+    Connects to POS 3
+
+15. Session 1 Completion
+    Route: /smokecraft/session-complete
+    Purpose: achievement ceremony
+    Reveal XP, badges, rank, leaderboard position
+
+16. Session 2 — Tobacco Terroir
+    Route: /smokecraft/terroir
+    Purpose: deep dive into soil, region, climate
+
+17. Session 3 — Spirit Pairing Mastery
+    Route: /smokecraft/pairing-mastery
+    Purpose: teach bourbon, scotch, rum, pairing science
+
+18. Session 4 — Vitola Science
+    Route: /smokecraft/vitola
+    Purpose: teach Toro, Robusto, Churchill, Lancero and shape/flavor impact
+
+19. Final Master Blender Ceremony
+    Route: /smokecraft/identity
+    Purpose: reveal final SmokeCraft identity
+    Reveal flavor DNA, favorite country, favorite leaf, preferred strength, pairing style, smoking personality
+
+20. Leaderboard
+    Route: /smokecraft/leaderboard
+    Purpose: show top venue players, event players, monthly champions
+
+21. Golden Box Challenge Status
+    Route: /smokecraft/golden-box/status
+    Purpose: track XP, challenges, achievements, qualification status
+
+22. Passport Stamp
+    Route: /smokecraft/passport-stamp
+    Purpose: connect to 360 Passport
+    Awards SmokeCraft Stamp, Event Stamp, Venue Stamp, Networking Credits
+
+23. E.A.T. Intelligence Management View
+    Route: /eat/smokecraft
+    Purpose: management analytics
+    Tracks environment, assets, transactions, guest engagement, inventory, pairings, revenue
+
+24. Return to CraftHub
+    Route: /crafthub
+    Purpose: return to module hub with session state preserved
+
+End result:
+The guest should not feel like they used an app. They should feel like they went through a luxury cigar masterclass, a tasting experience, a game, a loyalty program, a networking ecosystem, and a premium hospitality journey inside one connected NOVEE OS experience.
+
+Important:
+Do not immediately build all of this. First audit the existing Stitch screens against this intended flow and provide a SmokeCraft route/feature gap report.
