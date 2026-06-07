@@ -1,151 +1,122 @@
 import { motion } from 'framer-motion'
-import { CheckCircle2, Cloud, Terminal, Copy, Check } from 'lucide-react'
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import XPBar from '../components/XPBar.jsx'
+import AchievementBadge from '../components/AchievementBadge.jsx'
 
-const FADE = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } } }
-const STAGGER = { show: { transition: { staggerChildren: 0.1 } } }
+const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } } }
+const STAGGER = { show: { transition: { staggerChildren: 0.09 } } }
 
-const manifest = [
-  { label: '130+ Orchestrated Screens',    badge: 'Verified'  },
-  { label: 'Obsidian Glass Design Tokens', badge: 'Synced'    },
-  { label: 'NOVEE OS Technical Codex',     badge: 'Published' },
-  { label: '1.2 GB Asset Bundle',          badge: 'Locked'    },
+const quickModules = [
+  { path: '/smokecraft', img: '/smokecraft.jpg',  label: 'SmokeCraft',  sub: 'Cigar Intelligence'  },
+  { path: '/pourcraft',  img: '/pourcraft.jpg',   label: 'PourCraft',   sub: 'Cocktail Command'    },
+  { path: '/beercraft',  img: '/beercraft.jpg',   label: 'BeerCraft',   sub: 'Tap & Brew'          },
+  { path: '/winecraft',  img: '/winecraft.jpg',   label: 'WineCraft',   sub: 'Cellar Intelligence' },
+]
+
+const badges = [
+  { icon: '🥃', label: 'First Pour',    earned: true,  count: 12 },
+  { icon: '🍺', label: 'Tap Master',    earned: true,  count: 6  },
+  { icon: '🍷', label: 'Sommelier',     earned: true              },
+  { icon: '🔥', label: 'Smoke Lord',    earned: true,  count: 3  },
+  { icon: '⚡', label: 'Speed Order',   earned: false             },
+  { icon: '🏆', label: 'Grand Master',  earned: false             },
 ]
 
 export default function Home() {
-  const [copied, setCopied] = useState(false)
-  function copy() { setCopied(true); setTimeout(() => setCopied(false), 2000) }
+  const navigate = useNavigate()
 
   return (
-    <motion.div initial="hidden" animate="show" variants={STAGGER}
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-    >
-      {/* Status pill */}
-      <motion.div variants={FADE} style={{ marginBottom: 48 }}>
-        <div className="status-pill">
-          <span className="status-dot" />
-          System Production Online
+    <motion.div initial="hidden" animate="show" variants={STAGGER}>
+
+      {/* ── Welcome / Member Hero ── */}
+      <motion.div variants={FADE} style={{ position: 'relative', overflow: 'hidden' }}>
+        <img src="/background-lounge-airy.jpg" alt=""
+          style={{ width: '100%', height: 280, objectFit: 'cover', objectPosition: 'center 60%', display: 'block' }}
+        />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.1) 0%, rgba(1,1,1,0.85) 100%)' }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 24px 24px' }}>
+          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 6 }}>
+            Welcome back
+          </div>
+          <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 36, color: '#E5E2E1', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: 4 }}>
+            Founder Member
+          </div>
+          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#7A7A7A', letterSpacing: '0.08em' }}>
+            CraftHub 360 · Level 12 · Obsidian Tier
+          </div>
         </div>
       </motion.div>
 
-      {/* Title block */}
-      <motion.div variants={FADE} style={{ textAlign: 'center', marginBottom: 64 }}>
-        <h1 style={{
-          fontFamily: '"Hanken Grotesk", sans-serif',
-          fontSize: 'clamp(40px, 5vw, 72px)',
-          fontWeight: 700,
-          letterSpacing: '-0.02em',
-          lineHeight: 1.05,
-          color: '#D4AF37',
-          marginBottom: 20,
-        }}>
-          DEPLOYMENT SUCCESSFUL
-        </h1>
-        <p style={{
-          fontFamily: 'Inter, sans-serif',
-          fontSize: 16,
-          lineHeight: '26px',
-          color: '#A09A8E',
-          maxWidth: 560,
-          margin: '0 auto',
-        }}>
-          The CraftHub 360 Ecosystem has been successfully compiled and pushed to the global
-          production tier. All design tokens and technical architectures are now live.
-        </p>
+      {/* ── XP / Level progression ── */}
+      <motion.div variants={FADE} style={{ margin: '0 16px 8px', marginTop: -1 }}>
+        <div className="glass-card-gold" style={{ padding: '20px 24px' }}>
+          <XPBar current={2400} max={3000} level={12} tierLabel="FOUNDER" tierColor="#D4AF37" />
+        </div>
       </motion.div>
 
-      {/* Bento grid */}
-      <motion.div variants={FADE} style={{
-        display: 'grid',
-        gridTemplateColumns: '5fr 7fr',
-        gap: 24,
-        width: '100%',
-        marginBottom: 24,
-      }}>
-        {/* Sync status */}
-        <div className="glass-card-gold" style={{ padding: 32, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div>
-            <div className="section-label">Synchronization Status</div>
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, marginBottom: 16 }}>
-              <span style={{
-                fontFamily: '"JetBrains Mono", monospace',
-                fontSize: 80, fontWeight: 700,
-                color: '#E5E2E1', lineHeight: 1,
-              }}>100</span>
-              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 32, color: '#D4AF37', marginBottom: 6 }}>%</span>
-            </div>
-            <div className="progress-track" style={{ marginBottom: 12 }}>
-              <div className="progress-fill" style={{ width: '100%' }} />
-            </div>
-            <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, color: '#7A7A7A', letterSpacing: '0.08em' }}>
-              All global clusters are currently in sync.
-            </p>
+      {/* ── Achievement Badges ── */}
+      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
+        <div className="glass-card" style={{ padding: '20px 24px' }}>
+          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>
+            Achievements Unlocked
           </div>
-
-          <div className="glass-card" style={{ padding: '14px 18px', marginTop: 28, display: 'flex', alignItems: 'center', gap: 14 }}>
-            <Cloud size={28} style={{ color: '#D4AF37', flexShrink: 0 }} />
-            <div>
-              <div style={{ fontFamily: '"Hanken Grotesk", sans-serif', fontWeight: 600, fontSize: 15, color: '#E5E2E1' }}>
-                Cloud Latency: 14ms
-              </div>
-              <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, color: '#7A7A7A', letterSpacing: '0.06em' }}>
-                Edge nodes responding globally
-              </div>
-            </div>
+          <div style={{ display: 'flex', gap: 16, justifyContent: 'space-between' }}>
+            {badges.map(b => <AchievementBadge key={b.label} {...b} />)}
           </div>
         </div>
+      </motion.div>
 
-        {/* Deployment manifest */}
-        <div className="glass-card" style={{ padding: 32 }}>
-          <div className="section-label">Deployment Manifest</div>
-          <div>
-            {manifest.map(({ label, badge }) => (
-              <div key={label} className="data-row">
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <CheckCircle2 size={18} style={{ color: '#D4AF37', flexShrink: 0 }} />
-                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#E5E2E1' }}>{label}</span>
-                </div>
-                <span style={{
-                  fontFamily: '"JetBrains Mono", monospace',
-                  fontSize: 10, letterSpacing: '0.12em',
-                  textTransform: 'uppercase', color: '#7A7A7A',
-                }}>{badge}</span>
+      {/* ── Quick Module Access ── */}
+      <motion.div variants={FADE} style={{ margin: '20px 16px 0' }}>
+        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12, paddingLeft: 4 }}>
+          Quick Access
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          {quickModules.map(({ path, img, label, sub }) => (
+            <motion.div key={path}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate(path)}
+              style={{ cursor: 'pointer', borderRadius: 12, overflow: 'hidden', position: 'relative', height: 140 }}
+            >
+              <img src={img} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(1,1,1,0.9) 0%, rgba(1,1,1,0.1) 60%)' }} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '12px 14px' }}>
+                <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 16, color: '#E5E2E1', lineHeight: 1 }}>{label}</div>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 3 }}>{sub}</div>
+              </div>
+              {/* Gold border glow */}
+              <div style={{ position: 'absolute', inset: 0, borderRadius: 12, border: '1px solid rgba(212,175,55,0.25)', pointerEvents: 'none' }} />
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* ── Today's Session ── */}
+      <motion.div variants={FADE} style={{ margin: '20px 16px 0' }}>
+        <div className="glass-card" style={{ padding: '20px 24px' }}>
+          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>
+            Today's Session
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
+            {[['3','Experiences'],['480','XP Earned'],['94','Avg Score']].map(([v,l]) => (
+              <div key={l} style={{ textAlign: 'center', padding: '16px 8px', background: 'rgba(212,175,55,0.05)', borderRadius: 8, border: '1px solid rgba(212,175,55,0.12)' }}>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 600, fontSize: 32, color: '#D4AF37', lineHeight: 1, marginBottom: 4 }}>{v}</div>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{l}</div>
               </div>
             ))}
           </div>
         </div>
       </motion.div>
 
-      {/* GitHub link */}
-      <motion.div variants={FADE} style={{ width: '100%', marginBottom: 40 }}>
-        <div className="glass-card" style={{
-          padding: '16px 24px',
-          display: 'flex', alignItems: 'center', gap: 16,
-        }}>
-          <Terminal size={18} style={{ color: '#D4AF37', flexShrink: 0 }} />
-          <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            Live on GitHub:
-          </span>
-          <code style={{
-            fontFamily: '"JetBrains Mono", monospace', fontSize: 13,
-            color: '#D4AF37', flex: 1,
-            background: 'rgba(212,175,55,0.06)', padding: '4px 10px', borderRadius: 4,
-          }}>
-            github.com/crafthub-360/production-core
-          </code>
-          <button onClick={copy} style={{ background: 'none', border: 'none', cursor: 'pointer', color: copied ? '#D4AF37' : '#7A7A7A', transition: 'color 0.15s' }}>
-            {copied ? <Check size={16} /> : <Copy size={16} />}
-          </button>
-        </div>
-      </motion.div>
-
-      {/* CTA */}
-      <motion.div variants={FADE}>
-        <button className="btn-gold">
-          <Terminal size={14} />
-          Enter Production Terminal
+      {/* ── CTA to full hub ── */}
+      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
+        <button className="btn-gold" style={{ width: '100%', height: 60, fontSize: 13 }}
+          onClick={() => navigate('/crafthub')}
+        >
+          EXPLORE ALL 7 MODULES
         </button>
       </motion.div>
+
     </motion.div>
   )
 }

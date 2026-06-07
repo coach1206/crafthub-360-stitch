@@ -1,119 +1,125 @@
 import { motion } from 'framer-motion'
-import { CheckCircle2, XCircle } from 'lucide-react'
+import ScoreRing from '../components/ScoreRing.jsx'
+import AchievementBadge from '../components/AchievementBadge.jsx'
 
-const FADE = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
+const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
 const STAGGER = { show: { transition: { staggerChildren: 0.08 } } }
 
 const vitolas = [
-  { name: 'Robusto',   ring: 50, length: '5"',   rating: 94, country: 'Nicaragua' },
-  { name: 'Churchill', ring: 47, length: '7"',   rating: 96, country: 'Dominican' },
-  { name: 'Toro',      ring: 52, length: '6"',   rating: 92, country: 'Honduras'  },
-  { name: 'Lancero',   ring: 38, length: '7.5"', rating: 97, country: 'Cuba'      },
+  { name: 'Lancero',      country: '🇨🇺 Cuba',      ring: 38, score: 97, age: '2019', status: 'Peak'   },
+  { name: 'Churchill',    country: '🇩🇴 Dominican',  ring: 47, score: 96, age: '2020', status: 'Peak'   },
+  { name: 'Robusto',      country: '🇳🇮 Nicaragua',  ring: 50, score: 94, age: '2021', status: 'Ready'  },
+  { name: 'Toro',         country: '🇭🇳 Honduras',   ring: 52, score: 92, age: '2022', status: 'Young'  },
+  { name: 'Gran Corona',  country: '🇨🇺 Cuba',       ring: 45, score: 98, age: '2017', status: 'Legend' },
 ]
 
-const modules = [
-  ['Humidor Entry',        true ], ['Stick Selection',  true ],
-  ['Draw Tension',         true ], ['Aging Calculator', true ],
-  ['Leaf Provenance',      true ], ['Ash Quality',      true ],
-  ['Blind Rating Mode',    false], ['Pairing Engine',   false],
+const badges = [
+  { icon: '🔥', label: 'Smoke Lord',    earned: true, count: 3 },
+  { icon: '🍂', label: 'Aged Leaf',     earned: true          },
+  { icon: '🇨🇺', label: 'Cuba Pure',   earned: true, count: 5 },
+  { icon: '💎', label: 'Perfect Draw',  earned: false         },
 ]
 
-const drawStats = [
-  { label: 'Perfect Draw', pct: 72 },
-  { label: 'Slight Tight', pct: 18 },
-  { label: 'Plugged',      pct: 6  },
-  { label: 'Too Open',     pct: 4  },
-]
+const statusColor = { Peak: '#D4AF37', Ready: '#5A9A5A', Young: '#7A7A7A', Legend: '#F2CA50' }
 
 export default function SmokeCraft() {
   return (
-    <motion.div initial="hidden" animate="show" variants={STAGGER}
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-    >
-      <motion.div variants={FADE} style={{ marginBottom: 40 }}>
-        <div className="status-pill"><span className="status-dot" />Humidor Online — 48 Sticks Active</div>
-      </motion.div>
+    <motion.div initial="hidden" animate="show" variants={STAGGER}>
 
-      {/* Hero image */}
-      <motion.div variants={FADE} style={{ width: '100%', marginBottom: 32 }}>
-        <img src="/smokecraft.jpg" alt="SmokeCraft" className="hero-banner" style={{ height: 320, objectPosition: 'center 30%' }} />
-      </motion.div>
-
-      <motion.div variants={FADE} style={{ textAlign: 'center', marginBottom: 48 }}>
-        <h1 style={{ fontFamily: '"Hanken Grotesk", sans-serif', fontSize: 'clamp(36px,4vw,56px)', fontWeight: 700, letterSpacing: '-0.02em', color: '#D4AF37', marginBottom: 12 }}>
-          SMOKECRAFT 360
-        </h1>
-        <p style={{ fontFamily: 'Inter', fontSize: 16, color: '#7A7A7A', maxWidth: 520, margin: '0 auto' }}>
-          Cigar intelligence module. Aging analytics, draw precision tracking,
-          and leaf provenance from seed to smoke.
-        </p>
-      </motion.div>
-
-      {/* Stats */}
-      <motion.div variants={FADE} style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, width: '100%', marginBottom: 24 }}>
-        {[['48','Sticks'],['6','Aging'],['94','Avg Score'],['28','Screens']].map(([v,l]) => (
-          <div key={l} className="glass-card" style={{ padding: '24px 20px', textAlign: 'center' }}>
-            <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 36, fontWeight: 600, color: '#D4AF37', lineHeight: 1, marginBottom: 8 }}>{v}</div>
-            <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7A7A7A' }}>{l}</div>
-          </div>
-        ))}
-      </motion.div>
-
-      {/* Bento */}
-      <motion.div variants={FADE} style={{ display: 'grid', gridTemplateColumns: '5fr 7fr', gap: 24, width: '100%', marginBottom: 24 }}>
-        {/* Modules */}
-        <div className="glass-card" style={{ padding: 28 }}>
-          <div className="section-label">Module Status</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-            {modules.map(([label, done]) => (
-              <div key={label} className="module-chip">
-                <span style={{ fontFamily: 'Inter', fontSize: 13, color: '#E5E2E1' }}>{label}</span>
-                {done
-                  ? <CheckCircle2 size={14} style={{ color: '#D4AF37', flexShrink: 0 }} />
-                  : <XCircle size={14} style={{ color: 'rgba(122,122,122,0.3)', flexShrink: 0 }} />
-                }
-              </div>
-            ))}
+      {/* Hero */}
+      <motion.div variants={FADE} style={{ position: 'relative', height: 260 }}>
+        <img src="/smokecraft.jpg" alt="SmokeCraft"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }}
+        />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.0) 30%, rgba(1,1,1,0.95) 100%)' }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 20px 20px' }}>
+          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>Cigar Intelligence Module</div>
+          <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 34, color: '#E5E2E1', letterSpacing: '-0.02em', lineHeight: 1 }}>SmokeCraft 360</div>
+        </div>
+        <div style={{ position: 'absolute', top: 16, right: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)' }}>
+            <span className="status-dot" style={{ width: 6, height: 6 }} />
+            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase' }}>48 STICKS ACTIVE</span>
           </div>
         </div>
+      </motion.div>
 
-        {/* Vitolas */}
-        <div className="glass-card-gold" style={{ padding: 28 }}>
-          <div className="section-label">Active Vitolas</div>
-          {vitolas.map(({ name, ring, length, rating, country }) => (
-            <div key={name} className="data-row">
-              <div>
-                <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 600, fontSize: 15, color: '#E5E2E1' }}>{name}</div>
-                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#7A7A7A', marginTop: 2 }}>Ring {ring} · {length} · {country}</div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 32, fontWeight: 600, color: '#D4AF37', lineHeight: 1 }}>{rating}</div>
-                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase' }}>pts</div>
-              </div>
+      {/* Score ring + draw stats */}
+      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
+        <div className="glass-card-gold" style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', gap: 28 }}>
+          <ScoreRing score={95} label="Avg Rating" size={110} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 600, fontSize: 18, color: '#E5E2E1', marginBottom: 6 }}>Humidor Performance</div>
+            <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#7A7A7A', marginBottom: 16, lineHeight: 1.6 }}>28 screens · 48 sticks monitored</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              {[['48','Sticks'],['6','Aging'],['28','Screens'],['3','Cuba']].map(([v,l]) => (
+                <div key={l} style={{ background: 'rgba(212,175,55,0.06)', borderRadius: 8, padding: '10px 12px', border: '1px solid rgba(212,175,55,0.12)' }}>
+                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 600, fontSize: 20, color: '#D4AF37', lineHeight: 1 }}>{v}</div>
+                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 3 }}>{l}</div>
+                </div>
+              ))}
             </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Vitola cards — horizontal scroll */}
+      <motion.div variants={FADE} style={{ margin: '20px 16px 0' }}>
+        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
+          Active Vitolas — Tap to Select
+        </div>
+        <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 8 }}>
+          {vitolas.map(({ name, country, ring, score, age, status }) => (
+            <motion.div key={name} whileTap={{ scale: 0.96 }}
+              style={{ flexShrink: 0, width: 160, borderRadius: 14, overflow: 'hidden', cursor: 'pointer' }}
+            >
+              <div className="glass-card" style={{ padding: '20px 16px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                <ScoreRing score={score} label="pts" size={80} strokeWidth={6} />
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 16, color: '#E5E2E1', marginBottom: 4 }}>{name}</div>
+                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A', marginBottom: 4 }}>{country}</div>
+                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A' }}>Ring {ring} · {age}</div>
+                </div>
+                <div style={{
+                  padding: '4px 12px', borderRadius: 20,
+                  background: `${statusColor[status]}15`,
+                  border: `1px solid ${statusColor[status]}44`,
+                  fontFamily: '"JetBrains Mono",monospace', fontSize: 9,
+                  color: statusColor[status], letterSpacing: '0.1em', textTransform: 'uppercase',
+                }}>{status}</div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </motion.div>
 
-      {/* Draw tension */}
-      <motion.div variants={FADE} className="glass-card" style={{ width: '100%', padding: 32 }}>
-        <div className="section-label">Draw Tension Analytics</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32 }}>
-          {drawStats.map(({ label, pct }, i) => (
-            <div key={label} style={{ textAlign: 'center' }}>
-              <div style={{
-                fontFamily: '"JetBrains Mono",monospace', fontWeight: 600, fontSize: 42,
-                color: i === 0 ? '#D4AF37' : i === 1 ? 'rgba(212,175,55,0.55)' : i === 2 ? '#7A4A4A' : '#555',
-                lineHeight: 1, marginBottom: 6,
-              }}>{pct}%</div>
-              <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>{label}</div>
-              <div className="progress-track">
-                <div className="progress-fill" style={{ width: `${pct}%`, background: i === 0 ? '#D4AF37' : i === 1 ? 'rgba(212,175,55,0.4)' : i === 2 ? '#7A4A4A' : '#555' }} />
-              </div>
-            </div>
-          ))}
+      {/* Draw tension ring row */}
+      <motion.div variants={FADE} style={{ margin: '20px 16px 0' }}>
+        <div className="glass-card" style={{ padding: '20px 24px' }}>
+          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>
+            Draw Tension Analysis
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 16 }}>
+            <ScoreRing score={72} max={100} label="Perfect" size={90} strokeWidth={7} />
+            <ScoreRing score={18} max={100} label="Slight" size={90} strokeWidth={7} />
+            <ScoreRing score={6}  max={100} label="Plugged" size={90} strokeWidth={7} />
+            <ScoreRing score={4}  max={100} label="Open"    size={90} strokeWidth={7} />
+          </div>
         </div>
       </motion.div>
+
+      {/* Achievements */}
+      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
+        <div className="glass-card" style={{ padding: '20px 24px' }}>
+          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>
+            SmokeCraft Achievements
+          </div>
+          <div style={{ display: 'flex', gap: 20, justifyContent: 'space-around' }}>
+            {badges.map(b => <AchievementBadge key={b.label} {...b} />)}
+          </div>
+        </div>
+      </motion.div>
+
     </motion.div>
   )
 }

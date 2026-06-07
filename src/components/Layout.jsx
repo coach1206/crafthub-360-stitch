@@ -2,26 +2,17 @@ import { NavLink } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import {
   Home, LayoutGrid, Flame, GlassWater, Beer, Wine,
-  BadgeCheck, ShoppingCart, UtensilsCrossed, Settings,
+  BadgeCheck, ShoppingCart, UtensilsCrossed,
 } from 'lucide-react'
-
-const headerLinks = [
-  { to: '/',           label: 'Home'      },
-  { to: '/crafthub',   label: 'CraftHub'  },
-  { to: '/smokecraft', label: 'Smoke'     },
-  { to: '/pourcraft',  label: 'Pour'      },
-  { to: '/beercraft',  label: 'Beer'      },
-  { to: '/winecraft',  label: 'Wine'      },
-  { to: '/passport',   label: 'Passport'  },
-  { to: '/pos',        label: 'POS3'      },
-  { to: '/eat',        label: 'EAT'       },
-]
 
 const tabs = [
   { to: '/',           Icon: Home,             label: 'Home'     },
-  { to: '/crafthub',   Icon: LayoutGrid,       label: 'CraftHub' },
+  { to: '/crafthub',   Icon: LayoutGrid,       label: 'Hub'      },
   { to: '/smokecraft', Icon: Flame,            label: 'Smoke'    },
-  { to: '/passport',   Icon: BadgeCheck,       label: 'Passport' },
+  { to: '/pourcraft',  Icon: GlassWater,       label: 'Pour'     },
+  { to: '/beercraft',  Icon: Beer,             label: 'Beer'     },
+  { to: '/winecraft',  Icon: Wine,             label: 'Wine'     },
+  { to: '/passport',   Icon: BadgeCheck,       label: 'Pass'     },
   { to: '/pos',        Icon: ShoppingCart,     label: 'POS3'     },
   { to: '/eat',        Icon: UtensilsCrossed,  label: 'EAT'      },
 ]
@@ -35,82 +26,71 @@ export default function Layout() {
         <img
           src="/background-lounge-airy.jpg"
           alt=""
-          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.35 }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.28 }}
         />
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(1,1,1,0.55) 0%, rgba(1,1,1,0.3) 40%, rgba(1,1,1,0.85) 100%)',
+          background: 'linear-gradient(to bottom, rgba(1,1,1,0.6) 0%, rgba(1,1,1,0.2) 50%, rgba(1,1,1,0.9) 100%)',
         }} />
       </div>
 
-      {/* Fixed top header */}
+      {/* Compact header */}
       <header style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-        height: 64,
-        background: 'rgba(1,1,1,0.75)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(122,122,122,0.15)',
+        height: 56,
+        background: 'rgba(1,1,1,0.8)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderBottom: '1px solid rgba(212,175,55,0.12)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 40px',
+        padding: '0 24px',
       }}>
-        {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <img src="/crafthub-gold.jpg" alt="CraftHub 360"
-            style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: '50%', border: '1px solid rgba(212,175,55,0.4)' }}
+            style={{ width: 32, height: 32, objectFit: 'cover', borderRadius: '50%', border: '1.5px solid rgba(212,175,55,0.5)' }}
           />
           <span style={{
             fontFamily: '"Hanken Grotesk", sans-serif',
-            fontWeight: 700, fontSize: 16,
-            color: '#D4AF37', letterSpacing: '-0.01em',
-          }}>
-            CraftHub 360
-          </span>
+            fontWeight: 700, fontSize: 15, color: '#D4AF37', letterSpacing: '-0.01em',
+          }}>CraftHub 360</span>
         </div>
 
-        {/* Desktop nav */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-          {headerLinks.map(({ to, label }) => (
-            <NavLink
-              key={to} to={to} end={to === '/'}
-              className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
-            >
-              {label}
-            </NavLink>
-          ))}
-        </nav>
-
-        <button className="btn-ghost" style={{ height: 32, padding: '0 12px' }}>
-          <Settings size={14} />
-        </button>
+        {/* Live pulse indicator */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span className="status-dot" />
+          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            LIVE
+          </span>
+        </div>
       </header>
 
-      {/* Scrollable content */}
+      {/* Main scrollable content */}
       <main style={{
         position: 'relative', zIndex: 10,
-        maxWidth: 1440, margin: '0 auto',
-        padding: '104px 40px 120px',
+        paddingTop: 56,
+        paddingBottom: 88,
         minHeight: '100vh',
       }}>
         <Outlet />
       </main>
 
-      {/* Fixed bottom tab bar */}
+      {/* Bottom tab bar — large touch targets */}
       <footer style={{
         position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50,
-        background: 'rgba(1,1,1,0.85)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderTop: '1px solid rgba(122,122,122,0.12)',
+        background: 'rgba(1,1,1,0.92)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderTop: '1px solid rgba(122,122,122,0.15)',
         display: 'flex', justifyContent: 'space-around', alignItems: 'center',
-        padding: '10px 0 14px',
+        height: 80,
       }}>
         {tabs.map(({ to, Icon, label }) => (
           <NavLink key={to} to={to} end={to === '/'}
             className={({ isActive }) => `bottom-tab${isActive ? ' active' : ''}`}
+            style={{ minWidth: 56 }}
           >
-            <Icon size={20} />
-            <span>{label}</span>
+            <Icon size={24} />
+            <span style={{ fontSize: 9, letterSpacing: '0.08em' }}>{label}</span>
           </NavLink>
         ))}
       </footer>
