@@ -3,200 +3,286 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    background-color: #131313;
-    color: #e5e2e1;
-    font-family: 'Manrope', sans-serif;
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body {
+    background-color: #010101;
+    color: #E5E2E1;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 24px;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #010101; }
+  ::-webkit-scrollbar-thumb { background: rgba(122,122,122,0.3); border-radius: 2px; }
 }
 
 @layer components {
-  .obsidian-glass {
-    background: rgba(20, 20, 20, 0.85);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+
+  /* ─── Glass Card — core component ─────────────────── */
+  .glass-card {
+    background: rgba(15, 15, 15, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 0.5rem;
+    border: 1px solid rgba(122, 122, 122, 0.2);
+    /* Glass edge: lighter on top-left, fades bottom-right */
+    box-shadow:
+      inset 0 1px 0 rgba(122, 122, 122, 0.25),
+      inset 1px 0 0 rgba(122, 122, 122, 0.1);
   }
 
-  .gold-foil-text {
-    background: linear-gradient(135deg, #f2ca50 0%, #d4af37 50%, #ffe088 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
+  .glass-card-gold {
+    background: rgba(15, 15, 15, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 0.5rem;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    box-shadow:
+      inset 0 1px 0 rgba(212, 175, 55, 0.2),
+      0 0 20px rgba(212, 175, 55, 0.08);
   }
 
-  .gold-shimmer {
+  /* ─── Gold Glow — active telemetry ───────────────── */
+  .gold-glow {
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+  }
+
+  /* ─── Status Dot — live pulse ─────────────────────── */
+  .status-dot {
     position: relative;
-    overflow: hidden;
+    display: inline-flex;
+    width: 8px; height: 8px;
+    border-radius: 9999px;
+    background: #D4AF37;
+    animation: gold-pulse 2s ease-in-out infinite;
   }
-  .gold-shimmer::after {
+  .status-dot::after {
     content: '';
     position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-    transform: rotate(45deg);
-    animation: shimmer 3s infinite linear;
-  }
-  @keyframes shimmer {
-    0%   { transform: translateX(-100%) rotate(45deg); }
-    100% { transform: translateX(100%) rotate(45deg); }
+    inset: -3px;
+    border-radius: 9999px;
+    background: rgba(212,175,55,0.3);
+    animation: ping-gold 1.5s cubic-bezier(0,0,0.2,1) infinite;
   }
 
-  .glow-pulse { animation: glow-anim 2s infinite alternate; }
-  @keyframes glow-anim {
-    from { box-shadow: 0 0 5px rgba(212, 175, 55, 0.2); }
-    to   { box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
-  }
-
-  .stitch-card {
-    @apply obsidian-glass rounded-3xl p-8;
-  }
-  .stitch-card-accent {
-    border-top: 2px solid #d4af37;
-  }
-
-  .manifest-row {
-    @apply flex items-center justify-between p-4 rounded-xl transition-colors duration-150;
-  }
-  .manifest-row:hover { background: rgba(212, 175, 55, 0.08); }
-
-  .module-chip {
-    @apply flex items-center justify-between p-3 rounded-xl transition-colors duration-150;
-    background: rgba(255, 255, 255, 0.04);
-  }
-  .module-chip:hover { background: rgba(212, 175, 55, 0.06); }
-
-  .section-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-family: 'Space Grotesk', sans-serif;
+  /* ─── Section Label (JetBrains Mono caps) ─────────── */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    letter-spacing: 0.18em;
+    font-weight: 500;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(212, 175, 55, 0.65);
+    color: #D4AF37;
     margin-bottom: 16px;
   }
-  .section-divider::before, .section-divider::after {
-    content: ''; flex: 1; height: 1px;
-    background: rgba(212, 175, 55, 0.15);
+
+  /* ─── Telemetry Number ─────────────────────────────── */
+  .telemetry-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #D4AF37;
   }
 
-  .btn-primary {
+  /* ─── Data Row — list item ─────────────────────────── */
+  .data-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 0.375rem;
+    border-bottom: 1px solid rgba(122, 122, 122, 0.1);
+    transition: background 0.15s;
+  }
+  .data-row:last-child { border-bottom: none; }
+  .data-row:hover { background: rgba(255,255,255,0.03); }
+
+  /* ─── Module Chip ──────────────────────────────────── */
+  .module-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(122,122,122,0.12);
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.15s;
+  }
+  .module-chip:hover { border-color: rgba(212,175,55,0.2); }
+
+  /* ─── Primary Button ───────────────────────────────── */
+  .btn-gold {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 56px;
-    padding: 0 48px;
-    border-radius: 9999px;
+    gap: 8px;
+    height: 48px;
+    padding: 0 32px;
+    border-radius: 0.25rem;
     border: none;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
     font-weight: 500;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    background: #d4af37;
-    color: #3c2f00;
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    background: linear-gradient(135deg, rgba(122,122,122,0.3) 0%, rgba(90,90,90,0.2) 100%);
+    color: #D4AF37;
+    border: 1px solid rgba(122,122,122,0.3);
+    box-shadow: inset 0 1px 0 rgba(122,122,122,0.2);
     cursor: pointer;
-    transition: transform 0.15s ease;
+    transition: all 0.15s;
   }
-  .btn-primary:hover  { transform: scale(1.05); }
-  .btn-primary:active { transform: scale(0.95); }
+  .btn-gold:hover {
+    background: linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.05) 100%);
+    border-color: rgba(212,175,55,0.4);
+    box-shadow: 0 0 12px rgba(212,175,55,0.15), inset 0 1px 0 rgba(212,175,55,0.2);
+    color: #F2CA50;
+  }
+  .btn-gold:active { transform: translateY(1px); }
 
-  .status-badge {
-    @apply obsidian-glass inline-flex items-center gap-2 px-6 py-2 rounded-full;
-    border: 1px solid rgba(242, 202, 80, 0.2);
+  /* ─── Ghost Button ─────────────────────────────────── */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 0.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    color: rgba(122,122,122,0.8);
+    border: 1px solid rgba(122,122,122,0.25);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-ghost:hover {
+    border-color: rgba(212,175,55,0.3);
+    color: #D4AF37;
   }
 
+  /* ─── Status Badge (pill) ──────────────────────────── */
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    border-radius: 9999px;
+    background: rgba(15,15,15,0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212,175,55,0.2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #D4AF37;
+  }
+
+  /* ─── Progress Track ───────────────────────────────── */
   .progress-track {
-    @apply w-full h-2 rounded-full overflow-hidden;
-    background: #353534;
+    width: 100%;
+    height: 2px;
+    background: rgba(122,122,122,0.2);
+    border-radius: 9999px;
+    overflow: hidden;
   }
   .progress-fill {
-    @apply h-full rounded-full glow-pulse;
-    background: #d4af37;
+    height: 100%;
+    border-radius: 9999px;
+    background: #D4AF37;
+    box-shadow: 0 0 6px rgba(212,175,55,0.5);
   }
 
-  .header-nav-link {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 14px;
+  /* ─── Nav Active State ─────────────────────────────── */
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
     font-weight: 500;
-    color: #d0c5af;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(122,122,122,0.8);
     text-decoration: none;
-    letter-spacing: 0.05em;
     transition: color 0.15s;
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
   }
-  .header-nav-link:hover    { color: #f2ca50; }
-  .header-nav-link.active   { color: #f2ca50; font-weight: 700; }
+  .nav-link:hover { color: #D4AF37; }
+  .nav-link.active { color: #D4AF37; }
 
-  .nav-tab {
+  .bottom-tab {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    padding: 6px 16px;
-    border-radius: 12px;
+    padding: 6px 14px;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    color: rgba(122,122,122,0.6);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.15s, background 0.15s;
     border: none;
     background: none;
-    color: rgba(208, 197, 175, 0.7);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-decoration: none;
     cursor: pointer;
-    transition: background 0.15s, color 0.15s;
   }
-  .nav-tab.active {
-    background: rgba(212, 175, 55, 0.15);
-    color: #f2ca50;
-  }
-  .nav-tab:hover:not(.active) { color: #f2ca50; }
+  .bottom-tab:hover { color: rgba(212,175,55,0.7); }
+  .bottom-tab.active { color: #D4AF37; }
 
-  .no-scroll::-webkit-scrollbar { display: none; }
-  .no-scroll { scrollbar-width: none; }
+  /* ─── Module Image Card ────────────────────────────── */
+  .module-card {
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .module-card:hover {
+    border-color: rgba(212,175,55,0.4) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(212,175,55,0.2),
+      0 0 24px rgba(212,175,55,0.1) !important;
+  }
+  .module-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s;
+  }
+  .module-card:hover img { transform: scale(1.04); }
 
-  /* Typography scale matching Stitch design */
-  .text-display-tour {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(48px, 6vw, 84px);
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1.05;
+  /* ─── Hero Image Banner ────────────────────────────── */
+  .hero-banner {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(122,122,122,0.15);
   }
-  .text-display-lg {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(36px, 4vw, 60px);
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-  }
-  .text-body-intro {
-    font-family: 'Manrope', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 1.6;
-    color: rgba(208, 197, 175, 0.85);
-  }
-  .text-body-md {
-    font-family: 'Manrope', sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.5;
-  }
-  .text-label-caps {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
+
+  /* ─── Inline gold text ─────────────────────────────── */
+  .text-gold { color: #D4AF37; }
+  .text-titanium { color: #7A7A7A; }
+  .text-muted { color: #A09A8E; }
+}
+
+/* ─── Keyframes (outside @layer for broadest compat) ── */
+@keyframes gold-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(212,175,55,0); }
+}
+@keyframes ping-gold {
+  75%, 100% { transform: scale(2); opacity: 0; }
 }

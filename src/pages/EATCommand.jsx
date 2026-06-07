@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion'
 import { CheckCircle2, XCircle } from 'lucide-react'
 
-const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }
+const FADE = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
+const STAGGER = { show: { transition: { staggerChildren: 0.08 } } }
 
 const fireOrder = [
-  { name: 'Wagyu A5 Nigiri',        type: 'Amuse-Bouche', status: 'Served',  time: '7:14 PM' },
-  { name: 'Black Truffle Risotto',  type: 'Course II',    status: 'Firing',  time: '7:32 PM' },
-  { name: 'Aged Duck Confit',       type: 'Course III',   status: 'Pending', time: '7:55 PM' },
-  { name: 'Miso Chocolate Tart',    type: 'Dessert',      status: 'Pending', time: '8:20 PM' },
+  { name: 'Wagyu A5 Nigiri',       type: 'Amuse-Bouche', status: 'Served',  time: '7:14 PM' },
+  { name: 'Black Truffle Risotto', type: 'Course II',    status: 'Firing',  time: '7:32 PM' },
+  { name: 'Aged Duck Confit',      type: 'Course III',   status: 'Pending', time: '7:55 PM' },
+  { name: 'Miso Chocolate Tart',   type: 'Dessert',      status: 'Pending', time: '8:20 PM' },
 ]
 
 const tables = [
@@ -18,136 +19,135 @@ const tables = [
 ]
 
 const modules = [
-  ['Table Manager',    true ], ['Course Pacing',  true ],
-  ['Kitchen Display',  true ], ['Allergy Filter', true ],
-  ['Sommelier Link',   true ], ['Experience Log', true ],
+  ['Table Manager',   true ], ['Course Pacing',  true ],
+  ['Kitchen Display', true ], ['Allergy Filter', true ],
+  ['Sommelier Link',  true ], ['Experience Log', true ],
 ]
 
 const pacing = [
-  { label: 'Arrival',      time: '7:00', done: true  },
-  { label: 'Amuse-Bouche', time: '7:14', done: true  },
-  { label: 'Courses',      time: '7:32', done: false },
-  { label: 'Digestif',     time: '8:30', done: false },
-  { label: 'Departure',    time: '9:00', done: false },
+  { label: 'Arrival',      done: true  },
+  { label: 'Amuse-Bouche', done: true  },
+  { label: 'Courses',      done: false },
+  { label: 'Digestif',     done: false },
+  { label: 'Departure',    done: false },
 ]
 
-const statusColor  = { Served: '#f2ca50', Firing: '#ff9800', Pending: 'rgba(255,255,255,0.25)' }
-const tableColor   = { Seated: '#f2ca50', Ordering: '#ff9800', Active: '#4caf50', Reserved: 'rgba(255,255,255,0.3)' }
+const statusColor = { Served: '#D4AF37', Firing: '#C88B3A', Pending: 'rgba(122,122,122,0.5)' }
+const tableColor  = { Seated: '#D4AF37', Ordering: '#C88B3A', Active: '#5A9A5A', Reserved: 'rgba(122,122,122,0.4)' }
 
 export default function EATCommand() {
   return (
-    <motion.div className="flex flex-col items-center"
-      initial="hidden" animate="show"
-      variants={{ show: { transition: { staggerChildren: 0.1 } } }}
+    <motion.div initial="hidden" animate="show" variants={STAGGER}
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
-      <motion.div variants={FADE} className="status-badge mb-12">
-        <span className="relative flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-primary" />
-        </span>
-        <span className="font-label text-xs tracking-widest uppercase text-primary">Kitchen Live — Table 3 Active Fire Order</span>
+      <motion.div variants={FADE} style={{ marginBottom: 40 }}>
+        <div className="status-pill"><span className="status-dot" />Kitchen Live — Table 3 Active Fire Order</div>
       </motion.div>
 
-      <motion.div variants={FADE} className="text-center mb-16">
-        <h1 className="text-display-tour gold-foil-text mb-4 leading-tight">EAT COMMAND</h1>
-        <p className="text-body-intro text-on-surface-variant max-w-2xl mx-auto">
-          Dining intelligence — kitchen coordination, course pacing, table management,
+      <motion.div variants={FADE} style={{ width: '100%', marginBottom: 32 }}>
+        <img src="/eat-command.jpg" alt="EAT Command" className="hero-banner" style={{ height: 320, objectPosition: 'center 40%' }} />
+      </motion.div>
+
+      <motion.div variants={FADE} style={{ textAlign: 'center', marginBottom: 48 }}>
+        <h1 style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 'clamp(36px,4vw,56px)', fontWeight: 700, letterSpacing: '-0.02em', color: '#D4AF37', marginBottom: 12 }}>
+          E.A.T. COMMAND
+        </h1>
+        <p style={{ fontFamily: 'Inter', fontSize: 16, color: '#7A7A7A', maxWidth: 540, margin: '0 auto' }}>
+          Venue intelligence system — kitchen coordination, course pacing, table management,
           and the complete experiential arc from first bite to last glass.
         </p>
       </motion.div>
 
-      {/* Stats */}
-      <motion.div variants={FADE} className="grid grid-cols-4 gap-8 w-full mb-8">
-        {[['12','EAT Screens'],['4','Tables Active'],['4','Courses'],['$700','Floor Revenue']].map(([v,l]) => (
-          <div key={l} className="stitch-card text-center">
-            <div className="gold-foil-text font-display text-5xl font-bold mb-2">{v}</div>
-            <p className="font-label text-xs tracking-widest uppercase text-on-surface-variant">{l}</p>
+      <motion.div variants={FADE} style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, width: '100%', marginBottom: 24 }}>
+        {[['12','Screens'],['4','Active Tables'],['4','Courses'],['$700','Floor Revenue']].map(([v,l]) => (
+          <div key={l} className="glass-card" style={{ padding: '24px 20px', textAlign: 'center' }}>
+            <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 32, fontWeight: 600, color: '#D4AF37', lineHeight: 1, marginBottom: 8 }}>{v}</div>
+            <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7A7A7A' }}>{l}</div>
           </div>
         ))}
       </motion.div>
 
-      <motion.div variants={FADE} className="grid grid-cols-12 gap-8 w-full mb-8">
-
+      <motion.div variants={FADE} style={{ display: 'grid', gridTemplateColumns: '7fr 5fr', gap: 24, width: '100%', marginBottom: 24 }}>
         {/* Fire order */}
-        <div className="col-span-12 md:col-span-7 stitch-card stitch-card-accent">
-          <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-6">Fire Order — Table 3</h3>
-          <ul className="space-y-2">
-            {fireOrder.map(({ name, type, status, time }) => (
-              <li key={name} className="manifest-row">
-                <div className="flex items-center gap-4">
-                  <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: statusColor[status], boxShadow: status === 'Firing' ? '0 0 8px #ff9800' : 'none' }} />
-                  <div>
-                    <div className="font-semibold text-on-surface">{name}</div>
-                    <div className="font-label text-xs text-on-surface-variant tracking-widest uppercase mt-0.5">{type}</div>
-                  </div>
+        <div className="glass-card-gold" style={{ padding: 28 }}>
+          <div className="section-label">Fire Order — Table 3</div>
+          {fireOrder.map(({ name, type, status, time }) => (
+            <div key={name} className="data-row">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <div style={{
+                  width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
+                  background: statusColor[status],
+                  boxShadow: status === 'Firing' ? `0 0 8px ${statusColor[status]}` : 'none',
+                }} />
+                <div>
+                  <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 600, fontSize: 15, color: '#E5E2E1' }}>{name}</div>
+                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 2 }}>{type}</div>
                 </div>
-                <div className="text-right">
-                  <span className="font-label text-xs tracking-widest uppercase px-3 py-1 rounded-full"
-                    style={{ background: `${statusColor[status]}18`, color: statusColor[status], border: `1px solid ${statusColor[status]}44` }}>
-                    {status}
-                  </span>
-                  <div className="font-label text-xs text-on-surface-variant mt-1">{time}</div>
-                </div>
-              </li>
-            ))}
-          </ul>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <span style={{
+                  fontFamily: '"JetBrains Mono",monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase',
+                  padding: '3px 10px', borderRadius: 3,
+                  background: `${statusColor[status]}18`,
+                  color: statusColor[status],
+                  border: `1px solid ${statusColor[status]}44`,
+                  display: 'block', marginBottom: 4,
+                }}>{status}</span>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#7A7A7A' }}>{time}</div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Module + table status */}
-        <div className="col-span-12 md:col-span-5 flex flex-col gap-6">
-          <div className="stitch-card stitch-card-accent">
-            <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-4">Module Status</h3>
-            <div className="grid grid-cols-2 gap-2">
+        {/* Modules + Floor */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div className="glass-card" style={{ padding: 24 }}>
+            <div className="section-label">Module Status</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
               {modules.map(([label, done]) => (
                 <div key={label} className="module-chip">
-                  <span className="text-sm text-on-surface">{label}</span>
-                  {done ? <CheckCircle2 size={16} className="text-primary shrink-0" /> : <XCircle size={16} className="text-on-surface-variant/30 shrink-0" />}
+                  <span style={{ fontFamily: 'Inter', fontSize: 12, color: '#E5E2E1' }}>{label}</span>
+                  {done ? <CheckCircle2 size={13} style={{ color: '#D4AF37', flexShrink: 0 }} /> : <XCircle size={13} style={{ color: 'rgba(122,122,122,0.3)', flexShrink: 0 }} />}
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="stitch-card">
-            <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-4">Floor Status</h3>
-            <div className="space-y-2">
-              {tables.map(({ id, guests, status, course, spend }) => (
-                <div key={id} className="flex items-center justify-between p-3 rounded-xl bg-surface-container">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full shrink-0" style={{ background: tableColor[status] }} />
-                    <div>
-                      <div className="text-sm font-semibold text-on-surface">Table {id}</div>
-                      <div className="font-label text-xs text-on-surface-variant">{guests} guests · {course}</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    {spend > 0 && <div className="font-display text-lg font-bold text-primary">${spend}</div>}
-                    <span className="font-label text-xs tracking-widest uppercase" style={{ color: tableColor[status] }}>{status}</span>
+          <div className="glass-card" style={{ padding: 24 }}>
+            <div className="section-label">Floor Status</div>
+            {tables.map(({ id, guests, status, course, spend }) => (
+              <div key={id} className="data-row">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: tableColor[status], flexShrink: 0 }} />
+                  <div>
+                    <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 600, fontSize: 14, color: '#E5E2E1' }}>Table {id}</div>
+                    <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A' }}>{guests} guests · {course}</div>
                   </div>
                 </div>
-              ))}
-            </div>
+                <div style={{ textAlign: 'right' }}>
+                  {spend > 0 && <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 600, fontSize: 16, color: '#D4AF37', lineHeight: 1 }}>${spend}</div>}
+                  <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: tableColor[status] }}>{status}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </motion.div>
 
       {/* Pacing arc */}
-      <motion.div variants={FADE} className="stitch-card w-full">
-        <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-8">Experience Pacing — Ideal Arc</h3>
-        <div className="flex items-start justify-between relative">
-          <div className="absolute left-0 right-0 top-2.5 h-0.5 bg-surface-container-highest z-0" />
-          {pacing.map(({ label, time, done }, i) => (
-            <div key={label} className="flex flex-col items-center gap-3 relative z-10 flex-1">
-              <div className="w-5 h-5 rounded-full border-2 transition-all"
-                style={{
-                  background: done ? '#d4af37' : '#353534',
-                  borderColor: done ? '#f2ca50' : 'rgba(255,255,255,0.15)',
-                  boxShadow: done ? '0 0 12px rgba(212,175,55,0.5)' : 'none',
-                }}
-              />
-              <div className="text-center">
-                <div className="font-label text-xs font-semibold tracking-widest uppercase" style={{ color: done ? '#f2ca50' : '#d0c5af' }}>{label}</div>
-                <div className="font-label text-xs text-on-surface-variant">{time} PM</div>
-              </div>
+      <motion.div variants={FADE} className="glass-card" style={{ width: '100%', padding: 32 }}>
+        <div className="section-label">Experience Pacing — Ideal Arc</div>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', position: 'relative' }}>
+          <div style={{ position: 'absolute', left: 0, right: 0, top: 9, height: 1, background: 'rgba(122,122,122,0.15)', zIndex: 0 }} />
+          {pacing.map(({ label, done }) => (
+            <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, position: 'relative', zIndex: 1, flex: 1 }}>
+              <div style={{
+                width: 18, height: 18, borderRadius: '50%',
+                background: done ? '#D4AF37' : '#1A1A1A',
+                border: `2px solid ${done ? '#D4AF37' : 'rgba(122,122,122,0.25)'}`,
+                boxShadow: done ? '0 0 10px rgba(212,175,55,0.4)' : 'none',
+              }} />
+              <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', textAlign: 'center', color: done ? '#D4AF37' : '#7A7A7A' }}>{label}</div>
             </div>
           ))}
         </div>

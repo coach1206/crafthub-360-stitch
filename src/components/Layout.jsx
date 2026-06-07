@@ -1,84 +1,115 @@
-import { Outlet, NavLink } from 'react-router-dom'
-import { Settings, LayoutDashboard, Home, Flame, Badge, ShoppingCart, UtensilsCrossed } from 'lucide-react'
-import { motion } from 'framer-motion'
-
-const BG_IMG = 'https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag'
+import { NavLink } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
+import {
+  Home, LayoutGrid, Flame, GlassWater, Beer, Wine,
+  BadgeCheck, ShoppingCart, UtensilsCrossed, Settings,
+} from 'lucide-react'
 
 const headerLinks = [
-  { to: '/',           label: 'Home'     },
-  { to: '/crafthub',   label: 'CraftHub' },
-  { to: '/smokecraft', label: 'Smoke'    },
-  { to: '/passport',   label: 'Passport' },
-  { to: '/pos',        label: 'POS3'     },
-  { to: '/eat',        label: 'EAT'      },
+  { to: '/',           label: 'Home'      },
+  { to: '/crafthub',   label: 'CraftHub'  },
+  { to: '/smokecraft', label: 'Smoke'     },
+  { to: '/pourcraft',  label: 'Pour'      },
+  { to: '/beercraft',  label: 'Beer'      },
+  { to: '/winecraft',  label: 'Wine'      },
+  { to: '/passport',   label: 'Passport'  },
+  { to: '/pos',        label: 'POS3'      },
+  { to: '/eat',        label: 'EAT'       },
 ]
 
-const navTabs = [
-  { to: '/',           Icon: Home,              label: 'Home'     },
-  { to: '/crafthub',   Icon: LayoutDashboard,   label: 'CraftHub' },
-  { to: '/smokecraft', Icon: Flame,             label: 'Smoke'    },
-  { to: '/passport',   Icon: Badge,             label: 'Passport' },
-  { to: '/pos',        Icon: ShoppingCart,      label: 'POS3'     },
-  { to: '/eat',        Icon: UtensilsCrossed,   label: 'EAT'      },
+const tabs = [
+  { to: '/',           Icon: Home,             label: 'Home'     },
+  { to: '/crafthub',   Icon: LayoutGrid,       label: 'CraftHub' },
+  { to: '/smokecraft', Icon: Flame,            label: 'Smoke'    },
+  { to: '/passport',   Icon: BadgeCheck,       label: 'Passport' },
+  { to: '/pos',        Icon: ShoppingCart,     label: 'POS3'     },
+  { to: '/eat',        Icon: UtensilsCrossed,  label: 'EAT'      },
 ]
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-background text-on-background overflow-x-hidden font-body">
+    <div style={{ minHeight: '100vh', background: '#010101', color: '#E5E2E1', overflowX: 'hidden' }}>
 
-      {/* Atmospheric background */}
-      <div className="fixed inset-0 z-0">
+      {/* Fixed full-bleed background */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
         <img
-          src={BG_IMG}
+          src="/background-lounge-airy.jpg"
           alt=""
-          className="w-full h-full object-cover opacity-60 blur-sm"
-          style={{ transform: 'scale(1.05)' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.35 }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background/90" />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(1,1,1,0.55) 0%, rgba(1,1,1,0.3) 40%, rgba(1,1,1,0.85) 100%)',
+        }} />
       </div>
 
       {/* Fixed top header */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-20 border-b border-outline-variant/30"
-        style={{ background: 'rgba(19,19,19,0.8)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}
-      >
-        <div className="flex items-center gap-3">
-          <LayoutDashboard className="text-primary" size={26} />
-          <span className="font-display text-xl font-bold tracking-tight text-primary">
-            CraftHub 360 Admin
+      <header style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
+        height: 64,
+        background: 'rgba(1,1,1,0.75)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(122,122,122,0.15)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 40px',
+      }}>
+        {/* Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <img src="/crafthub-gold.jpg" alt="CraftHub 360"
+            style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: '50%', border: '1px solid rgba(212,175,55,0.4)' }}
+          />
+          <span style={{
+            fontFamily: '"Hanken Grotesk", sans-serif',
+            fontWeight: 700, fontSize: 16,
+            color: '#D4AF37', letterSpacing: '-0.01em',
+          }}>
+            CraftHub 360
           </span>
         </div>
 
-        <div className="flex items-center gap-8">
-          <nav className="hidden md:flex items-center gap-8">
-            {headerLinks.map(({ to, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={to === '/'}
-                className={({ isActive }) => `header-nav-link${isActive ? ' active' : ''}`}
-              >
-                {label}
-              </NavLink>
-            ))}
-          </nav>
-          <button className="p-2 rounded-full text-primary transition-colors hover:bg-primary/10">
-            <Settings size={22} />
-          </button>
-        </div>
+        {/* Desktop nav */}
+        <nav style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+          {headerLinks.map(({ to, label }) => (
+            <NavLink
+              key={to} to={to} end={to === '/'}
+              className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
+            >
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <button className="btn-ghost" style={{ height: 32, padding: '0 12px' }}>
+          <Settings size={14} />
+        </button>
       </header>
 
-      {/* Main content */}
-      <main className="relative z-10 w-full max-w-screen-xl mx-auto px-16 pt-28 pb-32 min-h-screen no-scroll overflow-y-auto">
+      {/* Scrollable content */}
+      <main style={{
+        position: 'relative', zIndex: 10,
+        maxWidth: 1440, margin: '0 auto',
+        padding: '104px 40px 120px',
+        minHeight: '100vh',
+      }}>
         <Outlet />
       </main>
 
-      {/* Bottom nav bar */}
-      <footer className="fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center px-4 pb-4 pt-2 border-t border-outline-variant/20 rounded-t-xl"
-        style={{ background: 'rgba(42,42,42,0.92)', backdropFilter: 'blur(32px)', WebkitBackdropFilter: 'blur(32px)' }}
-      >
-        {navTabs.map(({ to, Icon, label }) => (
-          <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-            <Icon size={22} />
+      {/* Fixed bottom tab bar */}
+      <footer style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50,
+        background: 'rgba(1,1,1,0.85)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderTop: '1px solid rgba(122,122,122,0.12)',
+        display: 'flex', justifyContent: 'space-around', alignItems: 'center',
+        padding: '10px 0 14px',
+      }}>
+        {tabs.map(({ to, Icon, label }) => (
+          <NavLink key={to} to={to} end={to === '/'}
+            className={({ isActive }) => `bottom-tab${isActive ? ' active' : ''}`}
+          >
+            <Icon size={20} />
             <span>{label}</span>
           </NavLink>
         ))}

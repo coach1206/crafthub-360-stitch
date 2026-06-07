@@ -1,125 +1,149 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle2, Cloud, Terminal, Copy, Check } from 'lucide-react'
+import { useState } from 'react'
 
-const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }
+const FADE = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } } }
+const STAGGER = { show: { transition: { staggerChildren: 0.1 } } }
 
-function PingBadge({ label }) {
-  return (
-    <div className="status-badge mb-12">
-      <span className="relative flex h-3 w-3">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-        <span className="relative inline-flex rounded-full h-3 w-3 bg-primary" />
-      </span>
-      <span className="font-label text-xs tracking-widest uppercase text-primary">{label}</span>
-    </div>
-  )
-}
+const manifest = [
+  { label: '130+ Orchestrated Screens',    badge: 'Verified'  },
+  { label: 'Obsidian Glass Design Tokens', badge: 'Synced'    },
+  { label: 'NOVEE OS Technical Codex',     badge: 'Published' },
+  { label: '1.2 GB Asset Bundle',          badge: 'Locked'    },
+]
 
 export default function Home() {
   const [copied, setCopied] = useState(false)
-
-  function handleCopy() {
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+  function copy() { setCopied(true); setTimeout(() => setCopied(false), 2000) }
 
   return (
-    <motion.div
-      className="flex flex-col items-center"
-      initial="hidden" animate="show"
-      variants={{ show: { transition: { staggerChildren: 0.12 } } }}
+    <motion.div initial="hidden" animate="show" variants={STAGGER}
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
-      <motion.div variants={FADE}>
-        <PingBadge label="System Production Online" />
+      {/* Status pill */}
+      <motion.div variants={FADE} style={{ marginBottom: 48 }}>
+        <div className="status-pill">
+          <span className="status-dot" />
+          System Production Online
+        </div>
       </motion.div>
 
-      {/* Cinematic title */}
-      <motion.div variants={FADE} className="text-center mb-16">
-        <h1 className="text-display-tour gold-foil-text mb-4 leading-tight">
+      {/* Title block */}
+      <motion.div variants={FADE} style={{ textAlign: 'center', marginBottom: 64 }}>
+        <h1 style={{
+          fontFamily: '"Hanken Grotesk", sans-serif',
+          fontSize: 'clamp(40px, 5vw, 72px)',
+          fontWeight: 700,
+          letterSpacing: '-0.02em',
+          lineHeight: 1.05,
+          color: '#D4AF37',
+          marginBottom: 20,
+        }}>
           DEPLOYMENT SUCCESSFUL
         </h1>
-        <p className="text-body-intro text-on-surface-variant max-w-2xl mx-auto">
+        <p style={{
+          fontFamily: 'Inter, sans-serif',
+          fontSize: 16,
+          lineHeight: '26px',
+          color: '#A09A8E',
+          maxWidth: 560,
+          margin: '0 auto',
+        }}>
           The CraftHub 360 Ecosystem has been successfully compiled and pushed to the global
           production tier. All design tokens and technical architectures are now live.
         </p>
       </motion.div>
 
-      {/* Bento grid — 12 cols */}
-      <motion.div variants={FADE} className="grid grid-cols-12 gap-8 w-full">
-
-        {/* Sync status — 5 cols */}
-        <div className="col-span-12 md:col-span-5 stitch-card stitch-card-accent flex flex-col justify-between">
+      {/* Bento grid */}
+      <motion.div variants={FADE} style={{
+        display: 'grid',
+        gridTemplateColumns: '5fr 7fr',
+        gap: 24,
+        width: '100%',
+        marginBottom: 24,
+      }}>
+        {/* Sync status */}
+        <div className="glass-card-gold" style={{ padding: 32, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-6">
-              Synchronization Status
-            </h3>
-            <div className="flex items-end gap-4 mb-2">
-              <span className="font-display text-8xl font-bold text-on-surface leading-none">100</span>
-              <span className="font-display text-4xl text-primary mb-2">%</span>
+            <div className="section-label">Synchronization Status</div>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, marginBottom: 16 }}>
+              <span style={{
+                fontFamily: '"JetBrains Mono", monospace',
+                fontSize: 80, fontWeight: 700,
+                color: '#E5E2E1', lineHeight: 1,
+              }}>100</span>
+              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 32, color: '#D4AF37', marginBottom: 6 }}>%</span>
             </div>
-            <div className="progress-track mb-2">
-              <div className="progress-fill glow-pulse w-full" />
+            <div className="progress-track" style={{ marginBottom: 12 }}>
+              <div className="progress-fill" style={{ width: '100%' }} />
             </div>
-            <p className="text-xs font-label text-on-surface-variant">All global clusters are currently in sync.</p>
+            <p style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, color: '#7A7A7A', letterSpacing: '0.08em' }}>
+              All global clusters are currently in sync.
+            </p>
           </div>
 
-          <div className="mt-8">
-            <div className="obsidian-glass flex items-center gap-4 p-4 rounded-2xl border border-outline-variant/30">
-              <svg className="text-primary shrink-0" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17l6.09-6.09 1.41 1.41L10 17z"/>
-              </svg>
-              <div>
-                <p className="font-semibold text-on-surface">Cloud Latency: 14ms</p>
-                <p className="text-xs font-label text-on-surface-variant">Edge nodes responding globally</p>
+          <div className="glass-card" style={{ padding: '14px 18px', marginTop: 28, display: 'flex', alignItems: 'center', gap: 14 }}>
+            <Cloud size={28} style={{ color: '#D4AF37', flexShrink: 0 }} />
+            <div>
+              <div style={{ fontFamily: '"Hanken Grotesk", sans-serif', fontWeight: 600, fontSize: 15, color: '#E5E2E1' }}>
+                Cloud Latency: 14ms
+              </div>
+              <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, color: '#7A7A7A', letterSpacing: '0.06em' }}>
+                Edge nodes responding globally
               </div>
             </div>
           </div>
         </div>
 
-        {/* Manifest — 7 cols */}
-        <div className="col-span-12 md:col-span-7 stitch-card stitch-card-accent">
-          <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-8">
-            Deployment Manifest
-          </h3>
-          <ul className="space-y-2">
-            {[
-              { label: '130+ Orchestrated Screens',     badge: 'Verified'  },
-              { label: 'Obsidian Glass Design Tokens',  badge: 'Synced'    },
-              { label: 'NOVEE OS Technical Codex',      badge: 'Published' },
-              { label: '1.2 GB Asset Bundle',           badge: 'Locked'    },
-            ].map(({ label, badge }) => (
-              <li key={label} className="manifest-row">
-                <div className="flex items-center gap-4">
-                  <CheckCircle2 size={20} className="text-primary shrink-0" fill="currentColor" fillOpacity={0.15} />
-                  <span className="text-body-md text-on-surface">{label}</span>
+        {/* Deployment manifest */}
+        <div className="glass-card" style={{ padding: 32 }}>
+          <div className="section-label">Deployment Manifest</div>
+          <div>
+            {manifest.map(({ label, badge }) => (
+              <div key={label} className="data-row">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                  <CheckCircle2 size={18} style={{ color: '#D4AF37', flexShrink: 0 }} />
+                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#E5E2E1' }}>{label}</span>
                 </div>
-                <span className="font-label text-xs tracking-widest uppercase text-primary-container">{badge}</span>
-              </li>
+                <span style={{
+                  fontFamily: '"JetBrains Mono", monospace',
+                  fontSize: 10, letterSpacing: '0.12em',
+                  textTransform: 'uppercase', color: '#7A7A7A',
+                }}>{badge}</span>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
-
       </motion.div>
 
-      {/* Live GitHub badge */}
-      <motion.div variants={FADE} className="mt-16 text-center">
-        <div className="obsidian-glass gold-shimmer inline-flex items-center gap-4 border border-primary/40 px-8 py-4 rounded-2xl">
-          <Terminal size={20} className="text-primary" />
-          <span className="font-label text-sm tracking-widest uppercase text-on-surface">LIVE ON GITHUB:</span>
-          <code className="font-mono text-sm text-primary-fixed bg-surface-container-highest px-3 py-1 rounded tracking-wider">
+      {/* GitHub link */}
+      <motion.div variants={FADE} style={{ width: '100%', marginBottom: 40 }}>
+        <div className="glass-card" style={{
+          padding: '16px 24px',
+          display: 'flex', alignItems: 'center', gap: 16,
+        }}>
+          <Terminal size={18} style={{ color: '#D4AF37', flexShrink: 0 }} />
+          <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 11, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            Live on GitHub:
+          </span>
+          <code style={{
+            fontFamily: '"JetBrains Mono", monospace', fontSize: 13,
+            color: '#D4AF37', flex: 1,
+            background: 'rgba(212,175,55,0.06)', padding: '4px 10px', borderRadius: 4,
+          }}>
             github.com/crafthub-360/production-core
           </code>
-          <button onClick={handleCopy} className="text-on-surface-variant hover:text-primary transition-colors">
-            {copied ? <Check size={20} className="text-primary" /> : <Copy size={20} />}
+          <button onClick={copy} style={{ background: 'none', border: 'none', cursor: 'pointer', color: copied ? '#D4AF37' : '#7A7A7A', transition: 'color 0.15s' }}>
+            {copied ? <Check size={16} /> : <Copy size={16} />}
           </button>
         </div>
       </motion.div>
 
       {/* CTA */}
-      <motion.div variants={FADE} className="mt-20">
-        <button className="btn-primary gold-shimmer">
-          ENTER PRODUCTION TERMINAL
+      <motion.div variants={FADE}>
+        <button className="btn-gold">
+          <Terminal size={14} />
+          Enter Production Terminal
         </button>
       </motion.div>
     </motion.div>

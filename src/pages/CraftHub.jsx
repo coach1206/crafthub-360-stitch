@@ -1,80 +1,114 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Flame, Wine, Beer, Martini, Badge, ShoppingCart, UtensilsCrossed, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 
-const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }
+const FADE = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
+const STAGGER = { show: { transition: { staggerChildren: 0.07 } } }
 
 const modules = [
-  { path: '/smokecraft', Icon: Flame,           label: 'SmokeCraft',   sub: 'Cigar & Tobacco Intelligence',  screens: 28 },
-  { path: '/pourcraft',  Icon: Martini,         label: 'PourCraft',    sub: 'Cocktail Command Center',        screens: 22 },
-  { path: '/beercraft',  Icon: Beer,            label: 'BeerCraft',    sub: 'Brew Intelligence',              screens: 18 },
-  { path: '/winecraft',  Icon: Wine,            label: 'WineCraft',    sub: 'Cellar Management',              screens: 24 },
-  { path: '/passport',   Icon: Badge,           label: 'Passport',     sub: 'Member Connection & Identity',   screens: 16 },
-  { path: '/pos',        Icon: ShoppingCart,    label: 'POS3',         sub: 'Unified Point of Sale',          screens: 14 },
-  { path: '/eat',        Icon: UtensilsCrossed, label: 'EAT Command',  sub: 'Dining Intelligence',            screens: 12 },
+  { path: '/smokecraft', img: '/smokecraft.jpg',   label: 'SmokeCraft 360',   sub: 'Cigar & Tobacco Intelligence',   screens: 28 },
+  { path: '/pourcraft',  img: '/pourcraft.jpg',    label: 'PourCraft 360',    sub: 'Cocktail Command Center',         screens: 22 },
+  { path: '/beercraft',  img: '/beercraft.jpg',    label: 'BeerCraft 360',    sub: 'Brew & Palate Intelligence',      screens: 18 },
+  { path: '/winecraft',  img: '/winecraft.jpg',    label: 'WineCraft 360',    sub: 'Cellar Management System',        screens: 24 },
+  { path: '/passport',   img: '/passport.jpg',     label: '360 Passport',     sub: 'Member Identity & Access',        screens: 16 },
+  { path: '/pos',        img: '/pos3.jpg',         label: 'POS 3 Terminal',   sub: 'Unified Point of Sale',           screens: 14 },
+  { path: '/eat',        img: '/eat-command.jpg',  label: 'E.A.T. Command',   sub: 'Venue Intelligence System',       screens: 12 },
+]
+
+const stats = [
+  ['134', 'Total Screens'],
+  ['7',   'Active Modules'],
+  ['100%','Sync Status'],
+  ['14ms','Cloud Latency'],
 ]
 
 export default function CraftHub() {
   const navigate = useNavigate()
+
   return (
-    <motion.div className="flex flex-col items-center"
-      initial="hidden" animate="show"
-      variants={{ show: { transition: { staggerChildren: 0.1 } } }}
+    <motion.div initial="hidden" animate="show" variants={STAGGER}
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
-      <motion.div variants={FADE} className="status-badge mb-12">
-        <span className="relative flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-primary" />
-        </span>
-        <span className="font-label text-xs tracking-widest uppercase text-primary">All Systems Online — 134 Screens Compiled</span>
+      {/* Status */}
+      <motion.div variants={FADE} style={{ marginBottom: 40 }}>
+        <div className="status-pill">
+          <span className="status-dot" />
+          All Systems Online — 134 Screens Compiled
+        </div>
       </motion.div>
 
-      <motion.div variants={FADE} className="text-center mb-16">
-        <h1 className="text-display-tour gold-foil-text mb-4 leading-tight">CRAFTHUB 360</h1>
-        <p className="text-body-intro text-on-surface-variant max-w-2xl mx-auto">
-          Full ecosystem dashboard. Seven modules, 134 screens, one unified production tier.
+      {/* Hero image + title */}
+      <motion.div variants={FADE} style={{ textAlign: 'center', marginBottom: 48 }}>
+        <div style={{ marginBottom: 28, display: 'flex', justifyContent: 'center' }}>
+          <img src="/crafthub-gold.jpg" alt="CraftHub 360"
+            style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: '50%', border: '2px solid rgba(212,175,55,0.5)', boxShadow: '0 0 32px rgba(212,175,55,0.2)' }}
+          />
+        </div>
+        <h1 style={{
+          fontFamily: '"Hanken Grotesk", sans-serif',
+          fontSize: 'clamp(36px, 4vw, 60px)', fontWeight: 700,
+          letterSpacing: '-0.02em', color: '#D4AF37', marginBottom: 12,
+        }}>
+          CRAFTHUB 360
+        </h1>
+        <p style={{ fontFamily: 'Inter', fontSize: 16, color: '#7A7A7A', maxWidth: 480, margin: '0 auto' }}>
+          Full ecosystem dashboard. Seven intelligence modules, 134 screens, one unified production tier.
         </p>
       </motion.div>
 
-      {/* Summary row */}
-      <motion.div variants={FADE} className="grid grid-cols-4 gap-8 w-full mb-8">
-        {[['134','Total Screens'],['7','Active Modules'],['100%','Sync Status'],['14ms','Cloud Latency']].map(([v,l]) => (
-          <div key={l} className="stitch-card text-center">
-            <div className="gold-foil-text font-display text-5xl font-bold mb-2">{v}</div>
-            <p className="font-label text-xs tracking-widest uppercase text-on-surface-variant">{l}</p>
+      {/* Ecosystem stats */}
+      <motion.div variants={FADE} style={{
+        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 16, width: '100%', marginBottom: 48,
+      }}>
+        {stats.map(([v, l]) => (
+          <div key={l} className="glass-card" style={{ padding: '24px 20px', textAlign: 'center' }}>
+            <div style={{
+              fontFamily: '"JetBrains Mono", monospace', fontSize: 36, fontWeight: 600,
+              color: '#D4AF37', lineHeight: 1, marginBottom: 8,
+            }}>{v}</div>
+            <div style={{
+              fontFamily: '"JetBrains Mono", monospace', fontSize: 10,
+              letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7A7A7A',
+            }}>{l}</div>
           </div>
         ))}
       </motion.div>
 
       {/* Module grid */}
-      <motion.div variants={FADE} className="grid grid-cols-12 gap-6 w-full">
-        {modules.map(({ path, Icon, label, sub, screens }) => (
-          <div key={path} className="col-span-12 md:col-span-6">
-            <button
+      <motion.div variants={FADE} style={{ width: '100%' }}>
+        <div className="section-label" style={{ marginBottom: 20 }}>Module Directory</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+          {modules.map(({ path, img, label, sub, screens }) => (
+            <div key={path}
+              className="glass-card module-card"
               onClick={() => navigate(path)}
-              className="w-full text-left group"
             >
-              <div className="stitch-card flex items-center gap-6 p-6 transition-all duration-200 group-hover:border-primary/30"
-                style={{ border: '1px solid rgba(255,255,255,0.1)' }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(212,175,55,0.35)'}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
-              >
-                <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
-                  <Icon size={26} className="text-primary" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-display text-xl font-semibold text-on-surface mb-1">{label}</div>
-                  <div className="font-label text-xs text-on-surface-variant tracking-wide">{sub}</div>
-                </div>
-                <div className="text-right shrink-0">
-                  <div className="gold-foil-text font-display text-3xl font-bold leading-none">{screens}</div>
-                  <div className="font-label text-xs text-on-surface-variant tracking-widest uppercase">screens</div>
-                </div>
-                <ChevronRight size={18} className="text-on-surface-variant/40 shrink-0" />
+              <div style={{ overflow: 'hidden', height: 180 }}>
+                <img src={img} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-            </button>
-          </div>
-        ))}
+              <div style={{ padding: '18px 20px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{
+                    fontFamily: '"Hanken Grotesk", sans-serif', fontWeight: 600, fontSize: 16,
+                    color: '#E5E2E1', marginBottom: 4,
+                  }}>{label}</div>
+                  <div style={{
+                    fontFamily: '"JetBrains Mono", monospace', fontSize: 10,
+                    color: '#7A7A7A', letterSpacing: '0.08em', textTransform: 'uppercase',
+                  }}>{sub}</div>
+                </div>
+                <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: 12 }}>
+                  <div style={{
+                    fontFamily: '"JetBrains Mono", monospace', fontWeight: 600,
+                    fontSize: 28, color: '#D4AF37', lineHeight: 1,
+                  }}>{screens}</div>
+                  <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 9, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase' }}>screens</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </motion.div>
     </motion.div>
   )

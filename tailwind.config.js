@@ -1,48 +1,51 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        background:                  '#131313',
-        surface:                     '#131313',
-        'surface-dim':               '#131313',
-        'surface-container':         '#201f1f',
-        'surface-container-low':     '#1c1b1b',
-        'surface-container-high':    '#2a2a2a',
-        'surface-container-highest': '#353534',
-        'surface-bright':            '#3a3939',
-        'on-background':             '#e5e2e1',
-        'on-surface':                '#e5e2e1',
-        'on-surface-variant':        '#d0c5af',
-        primary:                     '#f2ca50',
-        'primary-container':         '#d4af37',
-        'primary-fixed':             '#ffe088',
-        'on-primary':                '#3c2f00',
-        'on-primary-container':      '#554300',
-        'outline-variant':           '#4d4635',
-        'secondary-container':       '#474746',
+        /* True Obsidian base — DESIGN.md */
+        obsidian:      '#010101',
+        'obs-surface': '#0F0F0F',
+        'obs-card':    '#141414',
+        /* Warm Gold */
+        gold:          '#D4AF37',
+        'gold-dim':    '#B8962E',
+        'gold-bright': '#F2CA50',
+        /* Brushed Titanium */
+        titanium:      '#7A7A7A',
+        'titanium-dim':'rgba(122,122,122,0.2)',
+        /* On-surface */
+        'on-base':     '#E5E2E1',
+        'on-muted':    '#A09A8E',
       },
       fontFamily: {
-        display: ['"Playfair Display"', 'serif'],
-        body:    ['Manrope', 'sans-serif'],
-        label:   ['"Space Grotesk"', 'sans-serif'],
+        display: ['"Hanken Grotesk"', 'sans-serif'],
+        body:    ['Inter', 'sans-serif'],
         mono:    ['"JetBrains Mono"', 'monospace'],
       },
+      fontSize: {
+        'display-lg': ['48px', { lineHeight: '56px', letterSpacing: '-0.02em' }],
+        'headline-lg': ['32px', { lineHeight: '40px' }],
+        'headline-md': ['24px', { lineHeight: '32px' }],
+        'body-md':  ['16px', { lineHeight: '24px' }],
+        'body-sm':  ['14px', { lineHeight: '20px' }],
+        'label':    ['12px', { lineHeight: '16px', letterSpacing: '0.1em' }],
+        'telemetry':['18px', { lineHeight: '24px' }],
+      },
+      backdropBlur: { glass: '20px' },
       keyframes: {
-        shimmer: {
-          '0%':   { transform: 'translateX(-100%) rotate(45deg)' },
-          '100%': { transform: 'translateX(100%) rotate(45deg)' },
+        'gold-pulse': {
+          '0%,100%': { boxShadow: '0 0 0 0 rgba(212,175,55,0.4)' },
+          '50%':      { boxShadow: '0 0 0 6px rgba(212,175,55,0)' },
         },
-        'glow-pulse': {
-          '0%':   { boxShadow: '0 0 5px rgba(212,175,55,0.2)' },
-          '100%': { boxShadow: '0 0 20px rgba(212,175,55,0.5)' },
+        'ping-gold': {
+          '75%,100%': { transform: 'scale(2)', opacity: '0' },
         },
       },
       animation: {
-        shimmer:     'shimmer 3s infinite linear',
-        'glow-pulse': 'glow-pulse 2s infinite alternate',
+        'gold-pulse': 'gold-pulse 2s ease-in-out infinite',
+        'ping-gold':  'ping-gold 1.5s cubic-bezier(0,0,0.2,1) infinite',
       },
     },
   },
