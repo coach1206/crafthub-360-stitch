@@ -1,303 +1,329 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>CraftHub 360 - Deployment Success</title>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CraftHub 360 - Full Production Export Bundle</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@400;500&amp;family=Space+Grotesk:wght@400;500&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Manrope:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
-        }
-        .gold-foil-text {
-            background: linear-gradient(135deg, #f2ca50 0%, #d4af37 50%, #ffe088 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
-        }
-        .obsidian-glass {
-            background: rgba(20, 20, 20, 0.85);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-        }
-        .gold-shimmer {
-            position: relative;
-            overflow: hidden;
-        }
-        .gold-shimmer::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(45deg);
-            animation: shimmer 3s infinite linear;
-        }
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-        .glow-pulse {
-            animation: glow 2s infinite alternate;
-        }
-        @keyframes glow {
-            from { box-shadow: 0 0 5px rgba(212, 175, 55, 0.2); }
-            to { box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
-        }
-    </style>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "background": "#131313",
-                        "inverse-surface": "#e5e2e1",
-                        "primary-container": "#d4af37",
-                        "primary": "#f2ca50",
-                        "inverse-primary": "#735c00",
-                        "surface-container-high": "#2a2a2a",
-                        "surface-container-low": "#1c1b1b",
-                        "on-tertiary-container": "#444546",
-                        "on-tertiary": "#2f3131",
-                        "surface-tint": "#e9c349",
-                        "surface-container-highest": "#353534",
-                        "primary-fixed-dim": "#e9c349",
-                        "tertiary-container": "#b2b3b3",
-                        "surface-variant": "#353534",
-                        "on-secondary-fixed-variant": "#474746",
-                        "tertiary": "#cecece",
-                        "on-secondary-fixed": "#1c1b1b",
-                        "on-primary": "#3c2f00",
-                        "on-primary-fixed": "#241a00",
-                        "outline": "#99907c",
-                        "on-surface-variant": "#d0c5af",
-                        "inverse-on-surface": "#313030",
-                        "surface": "#131313",
-                        "surface-dim": "#131313",
-                        "on-background": "#e5e2e1",
-                        "surface-bright": "#3a3939",
-                        "secondary-container": "#474746",
-                        "on-primary-fixed-variant": "#574500",
-                        "surface-container-lowest": "#0e0e0e",
-                        "outline-variant": "#4d4635",
-                        "surface-container": "#201f1f",
-                        "on-secondary": "#313030",
-                        "error-container": "#93000a",
-                        "primary-fixed": "#ffe088",
-                        "on-error": "#690005",
-                        "error": "#ffb4ab",
-                        "secondary-fixed": "#e5e2e1",
-                        "on-primary-container": "#554300",
-                        "secondary-fixed-dim": "#c8c6c5",
-                        "tertiary-fixed": "#e2e2e2",
-                        "secondary": "#c8c6c5",
-                        "on-tertiary-fixed": "#1a1c1c",
-                        "on-surface": "#e5e2e1",
-                        "on-error-container": "#ffdad6",
-                        "tertiary-fixed-dim": "#c6c6c6",
-                        "on-tertiary-fixed-variant": "#454747",
-                        "on-secondary-container": "#b7b5b4"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "container-padding": "64px",
-                        "tour-card-width": "520px",
-                        "touch-target-min": "56px",
-                        "gutter": "32px",
-                        "unit": "8px"
-                    },
-                    "fontFamily": {
-                        "headline-lg-mobile": ["Playfair Display"],
-                        "body-intro": ["Manrope"],
-                        "label-caps": ["Space Grotesk"],
-                        "headline-lg": ["Playfair Display"],
-                        "body-md": ["Manrope"],
-                        "label-sm": ["Space Grotesk"],
-                        "display-tour": ["Playfair Display"]
-                    },
-                    "fontSize": {
-                        "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
-                        "body-intro": ["20px", {"lineHeight": "32px", "fontWeight": "400"}],
-                        "label-caps": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "500"}],
-                        "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
-                        "display-tour": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
-                    }
-                },
-            },
-        }
-    </script>
-</head>
-<body class="bg-background text-on-background min-h-screen flex flex-col items-center justify-center overflow-hidden font-body-md">
-<!-- Background Atmospheric Lounge Bokeh -->
-<div class="fixed inset-0 z-0">
-<img alt="" class="w-full h-full object-cover opacity-60 scale-105 blur-sm" src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"/>
-<div class="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background/90"></div>
-</div>
-<!-- Top App Bar (Admin Context) -->
-<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 flex items-center justify-between px-gutter h-20 shadow-sm">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary text-headline-md">dashboard_customize</span>
-<span class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</span>
-</div>
-<div class="flex items-center gap-6">
-<nav class="hidden md:flex gap-8">
-<a class="text-primary font-bold font-label-lg transition-colors" href="#">Home</a>
-<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Save</a>
-<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Preview</a>
-</nav>
-<button class="p-2 rounded-full hover:bg-primary-container/20 transition-colors">
-<span class="material-symbols-outlined text-primary">settings_suggest</span>
-</button>
-</div>
-</header>
-<!-- Main Content Canvas -->
-<main class="relative z-10 w-full max-w-screen-xl px-container-padding flex flex-col items-center justify-center pt-24 pb-32">
-<!-- Deployment Status Badge -->
-<div class="mb-12 obsidian-glass px-6 py-2 rounded-full border border-primary/20 flex items-center gap-2">
-<span class="relative flex h-3 w-3">
-<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-<span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
-</span>
-<span class="font-label-caps text-primary uppercase text-label-sm">System Production Online</span>
-</div>
-<!-- Cinematic Header -->
-<div class="text-center mb-16">
-<h1 class="font-display-tour text-display-tour gold-foil-text mb-4 leading-tight">
-                DEPLOYMENT SUCCESSFUL
-            </h1>
-<p class="font-body-intro text-body-intro text-on-surface-variant max-w-2xl mx-auto">
-                The CraftHub 360 Ecosystem has been successfully compiled and pushed to the global production tier. 
-                All design tokens and technical architectures are now live.
-            </p>
-</div>
-<!-- Central Layout: Bento Grid -->
-<div class="grid grid-cols-1 md:grid-cols-12 gap-8 w-full">
-<!-- Progress Visualization Card -->
-<div class="md:col-span-5 obsidian-glass rounded-3xl p-8 flex flex-col justify-between border-t-2 border-primary-container">
-<div>
-<h3 class="font-label-caps text-primary mb-6">Synchronization Status</h3>
-<div class="flex items-end gap-4 mb-2">
-<span class="text-7xl font-bold text-on-surface font-headline-lg">100</span>
-<span class="text-4xl text-primary font-headline-md mb-2">%</span>
-</div>
-<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden mb-2">
-<div class="h-full bg-primary-container w-full glow-pulse"></div>
-</div>
-<p class="text-on-surface-variant text-label-sm font-label-sm">All global clusters are currently in sync.</p>
-</div>
-<div class="mt-8">
-<div class="flex items-center gap-4 obsidian-glass/50 p-4 rounded-2xl border border-outline-variant/30">
-<span class="material-symbols-outlined text-primary text-4xl" data-weight="fill">cloud_done</span>
-<div>
-<p class="font-bold text-on-surface">Cloud Latency: 14ms</p>
-<p class="text-label-sm text-on-surface-variant">Edge nodes responding globally</p>
-</div>
-</div>
-</div>
-</div>
-<!-- Manifest Checklist Card -->
-<div class="md:col-span-7 obsidian-glass rounded-3xl p-8 border-t-2 border-primary-container">
-<h3 class="font-label-caps text-primary mb-8">Deployment Manifest</h3>
-<ul class="space-y-6">
-<li class="flex items-center justify-between p-4 rounded-xl hover:bg-primary-container/10 transition-all">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="font-body-md text-on-surface">130+ Orchestrated Screens</span>
-</div>
-<span class="font-label-caps text-primary-container text-xs">Verified</span>
-</li>
-<li class="flex items-center justify-between p-4 rounded-xl hover:bg-primary-container/10 transition-all">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="font-body-md text-on-surface">Obsidian Glass Design Tokens</span>
-</div>
-<span class="font-label-caps text-primary-container text-xs">Synced</span>
-</li>
-<li class="flex items-center justify-between p-4 rounded-xl hover:bg-primary-container/10 transition-all">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="font-body-md text-on-surface">NOVEE OS Technical Codex</span>
-</div>
-<span class="font-label-caps text-primary-container text-xs">Published</span>
-</li>
-<li class="flex items-center justify-between p-4 rounded-xl hover:bg-primary-container/10 transition-all">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="font-body-md text-on-surface">1.2 GB Asset Bundle</span>
-</div>
-<span class="font-label-caps text-primary-container text-xs">Locked</span>
-</li>
-</ul>
-</div>
-</div>
-<!-- Live Badge -->
-<div class="mt-16 text-center">
-<div class="inline-flex items-center gap-4 obsidian-glass border border-primary/40 px-8 py-4 rounded-2xl gold-shimmer">
-<span class="material-symbols-outlined text-primary">terminal</span>
-<span class="font-label-caps text-on-surface">LIVE ON GITHUB:</span>
-<code class="text-primary-fixed bg-surface-container-highest px-3 py-1 rounded text-sm font-mono tracking-wider">github.com/crafthub-360/production-core</code>
-<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">content_copy</span>
-</div>
-</div>
-<!-- Primary Action -->
-<div class="mt-20">
-<button class="px-12 h-touch-target-min bg-primary-container text-on-primary-container font-label-caps tracking-[0.2em] rounded-full gold-shimmer hover:scale-105 active:scale-95 transition-all shadow-[0_0_30px_rgba(212,175,55,0.3)]">
-                ENTER PRODUCTION TERMINAL
-            </button>
-</div>
-</main>
-<!-- Bottom Nav Bar -->
-<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 rounded-t-xl md:hidden">
-<div class="flex flex-col items-center justify-center text-on-surface-variant/70">
-<span class="material-symbols-outlined">home</span>
-<span class="text-label-sm font-label-sm">Home</span>
-</div>
-<div class="flex flex-col items-center justify-center text-on-surface-variant/70">
-<span class="material-symbols-outlined">save</span>
-<span class="text-label-sm font-label-sm">Save</span>
-</div>
-<div class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 transform translate-y-0.5">
-<span class="material-symbols-outlined">visibility</span>
-<span class="text-label-sm font-label-sm">Preview</span>
-</div>
-</footer>
-<!-- Interactive Layer -->
-<script>
-        // Simple micro-interaction for the checklist items
-        document.querySelectorAll('li').forEach(item => {
-            item.addEventListener('mouseover', () => {
-                const icon = item.querySelector('.material-symbols-outlined');
-                icon.style.transform = 'scale(1.2)';
-                icon.style.transition = 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-            });
-            item.addEventListener('mouseout', () => {
-                const icon = item.querySelector('.material-symbols-outlined');
-                icon.style.transform = 'scale(1)';
-            });
-        });
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  }
+  .fill-icon { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48; }
 
-        // Copy repo link feedback
-        const copyIcon = document.querySelector('.material-symbols-outlined:last-child');
-        copyIcon.addEventListener('click', () => {
-            copyIcon.innerText = 'done';
-            setTimeout(() => {
-                copyIcon.innerText = 'content_copy';
-            }, 2000);
-        });
-    </script>
-</body></html>
+  .gold-text {
+    background: linear-gradient(135deg, #f2ca50 0%, #d4af37 50%, #ffe088 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .obsidian-glass {
+    background: rgba(18, 18, 18, 0.82);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+  }
+  .gold-btn {
+    background: linear-gradient(135deg, #f2ca50 0%, #d4af37 60%, #ffe088 100%);
+    box-shadow: 0 0 28px rgba(212,175,55,0.4);
+  }
+  .gold-btn:active { transform: scale(0.97); }
+
+  .bokeh-bg {
+    position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse at 30% 60%, rgba(180,120,20,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(120,80,10,0.13) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 90%, rgba(80,50,5,0.15) 0%, transparent 50%),
+                #0c0b09;
+  }
+  .bokeh-blob {
+    position: absolute; border-radius: 9999px;
+    filter: blur(60px); opacity: 0.35;
+    background: radial-gradient(circle, #d4a017 0%, transparent 70%);
+  }
+
+  .code-token-tag { color: #e06c75; }
+  .code-token-attr { color: #98c379; }
+  .code-token-str { color: #e5c07b; }
+  .code-token-cmt { color: #5c6370; font-style: italic; }
+  .code-token-brkt { color: #abb2bf; }
+
+  .pulse-dot {
+    animation: pulseDot 2s infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(212,175,55,0.6); }
+    50% { opacity: 0.8; box-shadow: 0 0 0 5px rgba(212,175,55,0); }
+  }
+
+  .shimmer-btn {
+    position: relative; overflow: hidden;
+  }
+  .shimmer-btn::after {
+    content: '';
+    position: absolute; top: -50%; left: -60%;
+    width: 40%; height: 200%;
+    background: linear-gradient(105deg, transparent, rgba(255,255,255,0.22), transparent);
+    animation: shimmerMove 2.8s infinite;
+  }
+  @keyframes shimmerMove {
+    0% { left: -60%; }
+    100% { left: 140%; }
+  }
+
+  body { font-family: 'Manrope', sans-serif; }
+  .font-serif { font-family: 'Playfair Display', serif; }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .font-caps { font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.08em; }
+</style>
+</head>
+<body class="min-h-screen text-white overflow-x-hidden">
+
+<!-- Bokeh Background -->
+<div class="bokeh-bg">
+  <div class="bokeh-blob" style="width:320px;height:320px;top:15%;left:5%;"></div>
+  <div class="bokeh-blob" style="width:200px;height:200px;top:55%;left:70%;opacity:0.22;"></div>
+  <div class="bokeh-blob" style="width:260px;height:260px;top:75%;left:20%;opacity:0.18;"></div>
+</div>
+
+<!-- Main App Wrapper — mobile-first, max 430px centered -->
+<div class="relative z-10 flex justify-center">
+<div class="w-full max-w-[430px] min-h-screen flex flex-col pb-24">
+
+  <!-- Top Header -->
+  <header class="flex items-center justify-between px-4 pt-4 pb-2">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 flex items-center justify-center">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="0" y="0" width="12" height="12" rx="2" fill="#d4af37"/>
+          <rect x="16" y="0" width="12" height="12" rx="2" fill="#d4af37" opacity="0.6"/>
+          <rect x="0" y="16" width="12" height="12" rx="2" fill="#d4af37" opacity="0.6"/>
+          <rect x="16" y="16" width="12" height="12" rx="2" fill="#d4af37"/>
+        </svg>
+      </div>
+      <div>
+        <div class="font-caps text-[8px] text-yellow-600/70 uppercase tracking-widest leading-none">AUTHORITY REAL</div>
+        <div class="font-caps text-[13px] font-semibold text-white leading-tight">CraftHub<span class="text-yellow-400"> 360</span></div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="obsidian-glass rounded-lg px-3 py-1.5 flex items-center gap-1.5 border border-yellow-500/20">
+        <span class="font-caps text-[9px] text-yellow-400/80 uppercase tracking-widest">FOUNDER</span>
+        <span class="w-px h-3 bg-white/10"></span>
+        <span class="font-caps text-[9px] text-white/50 uppercase tracking-widest">LEVEL 0</span>
+      </div>
+      <button class="gold-btn shimmer-btn rounded-lg px-3 py-1.5">
+        <span class="font-caps text-[10px] font-semibold text-black tracking-widest uppercase">GRAND LOUNGE</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Status Badge -->
+  <div class="px-4 mt-3">
+    <div class="inline-flex items-center gap-2">
+      <span class="pulse-dot w-2 h-2 rounded-full bg-yellow-400 inline-block"></span>
+      <span class="font-caps text-[11px] text-yellow-400/90 uppercase tracking-widest">Production Ready</span>
+    </div>
+  </div>
+
+  <!-- Hero Title -->
+  <div class="px-4 mt-4 mb-6">
+    <h1 class="font-serif leading-tight">
+      <span class="block text-[48px] font-bold text-white leading-[1.05]">Full</span>
+      <span class="block text-[48px] font-bold text-white leading-[1.05]">Production</span>
+      <span class="block text-[48px] font-bold gold-text leading-[1.05]">Export</span>
+      <span class="block text-[48px] font-bold text-white leading-[1.05]">Bundle</span>
+    </h1>
+  </div>
+
+  <!-- Module Ecosystem Card -->
+  <div class="mx-4 mb-4 obsidian-glass rounded-2xl overflow-hidden">
+    <!-- Card Header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-white/06">
+      <div>
+        <div class="font-caps text-[10px] text-white/40 uppercase tracking-widest mb-0.5">MODULE</div>
+        <div class="font-serif text-[22px] font-semibold text-white leading-tight">Ecosystem</div>
+      </div>
+      <div class="text-right obsidian-glass rounded-xl px-3 py-2 border border-yellow-500/15">
+        <div class="font-caps text-[24px] font-bold text-yellow-400 leading-none">134</div>
+        <div class="font-caps text-[9px] text-white/40 uppercase tracking-wider mt-0.5">Screens<br/>Compiled</div>
+      </div>
+    </div>
+
+    <!-- SMOKECRAFT Section -->
+    <div class="px-5 pt-4 pb-2">
+      <div class="font-caps text-[10px] text-yellow-500/70 uppercase tracking-[0.18em] mb-3 flex items-center gap-2">
+        <span class="flex-1 h-px bg-yellow-500/15"></span>
+        SMOKECRAFT
+        <span class="flex-1 h-px bg-yellow-500/15"></span>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div class="flex items-center justify-between bg-white/[0.04] rounded-lg px-3 py-2.5">
+          <span class="text-[13px] text-white/80">Humidor Entry</span>
+          <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+        </div>
+        <div class="flex items-center justify-between bg-white/[0.04] rounded-lg px-3 py-2.5">
+          <span class="text-[13px] text-white/80">Stick Selection</span>
+          <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+        </div>
+        <div class="flex items-center justify-between bg-white/[0.04] rounded-lg px-3 py-2.5">
+          <span class="text-[12px] text-white/80">Draw Tension<br/>Analytics</span>
+          <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+        </div>
+        <div class="flex items-center justify-between bg-white/[0.04] rounded-lg px-3 py-2.5">
+          <span class="text-[12px] text-white/80">Aging<br/>Calculator</span>
+          <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+        </div>
+        <div class="flex items-center justify-between bg-white/[0.04] rounded-lg px-3 py-2.5">
+          <span class="text-[13px] text-white/80">Leaf Provenance</span>
+          <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+        </div>
+        <div class="flex items-center justify-between bg-white/[0.04] rounded-lg px-3 py-2.5">
+          <span class="text-[12px] text-white/80">Ash Quality<br/>Review</span>
+          <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASSPORT Section -->
+    <div class="px-5 pt-3 pb-5">
+      <div class="font-caps text-[10px] text-yellow-500/70 uppercase tracking-[0.18em] mb-3 flex items-center gap-2">
+        <span class="flex-1 h-px bg-yellow-500/15"></span>
+        PASSPORT
+        <span class="flex-1 h-px bg-yellow-500/15"></span>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div class="flex items-center justify-between bg-white/[0.04] rounded-lg px-3 py-2.5">
+          <span class="text-[13px] text-white/80">Member Portal</span>
+          <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+        </div>
+        <div class="flex items-center justify-between bg-white/[0.04] rounded-lg px-3 py-2.5">
+          <span class="text-[12px] text-white/80">NFT Access<br/>Key</span>
+          <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+        </div>
+        <div class="flex items-center justify-between bg-white/[0.04] rounded-lg px-3 py-2.5">
+          <span class="text-[13px] text-white/80">History Vault</span>
+          <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+        </div>
+        <div class="flex items-center justify-between bg-white/[0.04] rounded-lg px-3 py-2.5">
+          <span class="text-[13px] text-white/80">Travel Tier</span>
+          <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code Snippet Card -->
+  <div class="mx-4 mb-4 obsidian-glass rounded-2xl overflow-hidden">
+    <!-- Window chrome -->
+    <div class="flex items-center gap-1.5 px-4 py-3 border-b border-white/06 bg-white/[0.02]">
+      <span class="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
+      <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
+      <span class="w-2.5 h-2.5 rounded-full bg-green-500/70"></span>
+      <span class="ml-3 font-caps text-[10px] text-white/30 uppercase tracking-wider">index.html · main_production</span>
+    </div>
+    <div class="px-4 py-4 font-mono text-[12px] leading-6 select-none">
+      <div><span class="code-token-tag">&lt;!DOCTYPE html&gt;</span></div>
+      <div><span class="code-token-tag">&lt;html</span> <span class="code-token-attr">lang</span><span class="code-token-brkt">=</span><span class="code-token-str">"en"</span> <span class="code-token-attr">class</span><span class="code-token-brkt">=</span><span class="code-token-str">"dark"</span><span class="code-token-tag">&gt;</span></div>
+      <div>&nbsp;&nbsp;<span class="code-token-tag">&lt;head&gt;</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-token-tag">&lt;meta</span> <span class="code-token-attr">charset</span><span class="code-token-brkt">=</span><span class="code-token-str">"UTF-8"</span> <span class="code-token-tag">/&gt;</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-token-tag">&lt;title&gt;</span><span class="text-white/60">CraftHub 360 Ecosystem</span><span class="code-token-tag">&lt;/title&gt;</span></div>
+      <div>&nbsp;&nbsp;<span class="code-token-tag">&lt;/head&gt;</span></div>
+      <div>&nbsp;&nbsp;<span class="code-token-tag">&lt;body&gt;</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-token-tag">&lt;div</span> <span class="code-token-attr">id</span><span class="code-token-brkt">=</span><span class="code-token-str">"app"</span><span class="code-token-tag">&gt;</span><span class="text-yellow-400/70">{{ ECOSYSTEM_ROOT }}</span><span class="code-token-tag">&lt;/div&gt;</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-token-tag">&lt;script</span> <span class="code-token-attr">src</span><span class="code-token-brkt">=</span><span class="code-token-str">"./main.js"</span><span class="code-token-tag">&gt;&lt;/script&gt;</span></div>
+      <div>&nbsp;&nbsp;<span class="code-token-tag">&lt;/body&gt;</span></div>
+      <div><span class="code-token-tag">&lt;/html&gt;</span></div>
+      <div class="mt-2 code-token-cmt">// Dependencies Loaded: 24</div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="mx-4 flex flex-col gap-3 mb-2">
+    <!-- Primary: Trigger GitHub Push -->
+    <button id="githubBtn" class="gold-btn shimmer-btn rounded-2xl px-6 py-4 flex items-center justify-center gap-3 w-full" onclick="triggerGitHub()">
+      <span class="text-2xl">🚀</span>
+      <div class="text-left">
+        <div class="font-caps text-[13px] font-bold text-black tracking-wider uppercase leading-none">TRIGGER GITHUB PUSH</div>
+        <div class="font-caps text-[9px] text-black/60 uppercase tracking-widest mt-0.5">MAIN BRANCH @ PRODUCTION</div>
+      </div>
+    </button>
+
+    <!-- Secondary: Replit Direct Export -->
+    <button class="relative rounded-2xl px-6 py-3.5 flex items-center justify-between w-full border border-white/15 bg-white/[0.03] hover:bg-white/[0.06] transition-colors" onclick="replitExport()">
+      <div class="flex items-center gap-3">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="#d4af37" stroke-width="1.5" opacity="0.5"/>
+          <path d="M8 12h8M12 8l4 4-4 4" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="font-caps text-[12px] font-semibold text-white/70 uppercase tracking-wider">REPLIT DIRECT EXPORT</span>
+      </div>
+      <span class="font-caps text-[9px] text-white/30 uppercase tracking-widest border border-white/15 rounded px-1.5 py-0.5">LEGACY</span>
+    </button>
+  </div>
+
+  <!-- Push Feedback -->
+  <div id="pushFeedback" class="mx-4 mt-2 hidden obsidian-glass rounded-xl px-4 py-3 border border-yellow-500/30">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined fill-icon text-yellow-400 text-[18px]">check_circle</span>
+      <span class="font-caps text-[11px] text-yellow-400 tracking-wider">Push triggered → main branch @ production</span>
+    </div>
+  </div>
+
+</div><!-- end max-w wrapper -->
+</div><!-- end flex center -->
+
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 flex justify-center">
+  <div class="w-full max-w-[430px] obsidian-glass border-t border-white/08 flex items-center justify-around px-2 py-2">
+    <button class="flex flex-col items-center gap-1 px-4 py-2 rounded-xl hover:bg-white/05 transition-colors">
+      <span class="material-symbols-outlined text-white/40 text-[22px]">explore</span>
+      <span class="font-caps text-[9px] text-white/40 uppercase tracking-wider">Explore</span>
+    </button>
+    <button class="flex flex-col items-center gap-1 px-4 py-2 rounded-xl hover:bg-white/05 transition-colors">
+      <span class="material-symbols-outlined text-white/40 text-[22px]">inventory_2</span>
+      <span class="font-caps text-[9px] text-white/40 uppercase tracking-wider">Inventory</span>
+    </button>
+    <button class="flex flex-col items-center gap-1 px-4 py-2 rounded-xl hover:bg-white/05 transition-colors">
+      <span class="material-symbols-outlined text-white/40 text-[22px]">badge</span>
+      <span class="font-caps text-[9px] text-white/40 uppercase tracking-wider">Passport</span>
+    </button>
+    <button class="flex flex-col items-center gap-1 px-4 py-2 rounded-xl hover:bg-white/05 transition-colors">
+      <span class="material-symbols-outlined text-white/40 text-[22px]">smart_toy</span>
+      <span class="font-caps text-[9px] text-white/40 uppercase tracking-wider">Ai</span>
+    </button>
+    <button class="flex flex-col items-center gap-1 px-4 py-2 rounded-xl bg-yellow-400/10">
+      <span class="material-symbols-outlined fill-icon text-yellow-400 text-[22px]">support_agent</span>
+      <span class="font-caps text-[9px] text-yellow-400 uppercase tracking-wider">Assistant</span>
+    </button>
+  </div>
+</nav>
+
+<script>
+  function triggerGitHub() {
+    const btn = document.getElementById('githubBtn');
+    const feedback = document.getElementById('pushFeedback');
+    btn.style.opacity = '0.7';
+    btn.style.pointerEvents = 'none';
+    setTimeout(() => {
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = '';
+      feedback.classList.remove('hidden');
+      setTimeout(() => feedback.classList.add('hidden'), 4000);
+    }, 1200);
+  }
+
+  function replitExport() {
+    const el = document.querySelector('[onclick="replitExport()"] span.font-caps');
+    if (el) {
+      const orig = el.textContent;
+      el.textContent = 'EXPORTING...';
+      setTimeout(() => { el.textContent = orig; }, 2000);
+    }
+  }
+</script>
+</body>
+</html>
