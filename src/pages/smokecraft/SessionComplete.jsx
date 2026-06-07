@@ -199,7 +199,7 @@ export default function SessionComplete() {
             Open 360 Passport
           </button>
           <button
-            onClick={() => navigate('/smokecraft')}
+            onClick={() => navigate('/crafthub')}
             className="px-10 py-5 text-on-surface-variant font-label-lg text-label-lg hover:text-primary transition-colors flex items-center gap-2"
           >
             <span className="material-symbols-outlined">arrow_back</span>
