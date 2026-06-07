@@ -1,45 +1,56 @@
 import { Outlet, NavLink } from 'react-router-dom'
+import { Settings, LayoutDashboard, Home, Flame, Badge, ShoppingCart, UtensilsCrossed } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 const BG_IMG = 'https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag'
 
+const headerLinks = [
+  { to: '/',           label: 'Home'     },
+  { to: '/crafthub',   label: 'CraftHub' },
+  { to: '/smokecraft', label: 'Smoke'    },
+  { to: '/passport',   label: 'Passport' },
+  { to: '/pos',        label: 'POS3'     },
+  { to: '/eat',        label: 'EAT'      },
+]
+
 const navTabs = [
-  { to: '/',           icon: 'home',                    label: 'Home'      },
-  { to: '/crafthub',   icon: 'dashboard_customize',     label: 'CraftHub'  },
-  { to: '/smokecraft', icon: 'local_fire_department',   label: 'Smoke'     },
-  { to: '/passport',   icon: 'badge',                   label: 'Passport'  },
-  { to: '/pos',        icon: 'point_of_sale',           label: 'POS3'      },
-  { to: '/eat',        icon: 'restaurant',              label: 'EAT'       },
+  { to: '/',           Icon: Home,              label: 'Home'     },
+  { to: '/crafthub',   Icon: LayoutDashboard,   label: 'CraftHub' },
+  { to: '/smokecraft', Icon: Flame,             label: 'Smoke'    },
+  { to: '/passport',   Icon: Badge,             label: 'Passport' },
+  { to: '/pos',        Icon: ShoppingCart,      label: 'POS3'     },
+  { to: '/eat',        Icon: UtensilsCrossed,   label: 'EAT'      },
 ]
 
 export default function Layout() {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--background)', overflow: 'hidden' }}>
+    <div className="min-h-screen bg-background text-on-background overflow-x-hidden font-body">
 
-      {/* ── Atmospheric background ── */}
-      <div className="stitch-bg">
-        <img src={BG_IMG} alt="" />
-        <div className="stitch-bg-overlay" />
+      {/* Atmospheric background */}
+      <div className="fixed inset-0 z-0">
+        <img
+          src={BG_IMG}
+          alt=""
+          className="w-full h-full object-cover opacity-60 blur-sm"
+          style={{ transform: 'scale(1.05)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background/90" />
       </div>
 
-      {/* ── Fixed top header ── */}
-      <header className="stitch-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span className="material-symbols-outlined text-primary" style={{ fontSize: 28 }}>
-            dashboard_customize
-          </span>
-          <span style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 22, fontWeight: 700,
-            letterSpacing: '-0.01em',
-            color: 'var(--primary)',
-          }}>
+      {/* Fixed top header */}
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-20 border-b border-outline-variant/30"
+        style={{ background: 'rgba(19,19,19,0.8)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}
+      >
+        <div className="flex items-center gap-3">
+          <LayoutDashboard className="text-primary" size={26} />
+          <span className="font-display text-xl font-bold tracking-tight text-primary">
             CraftHub 360 Admin
           </span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-          <nav style={{ display: 'flex', gap: 32 }}>
-            {navTabs.map(({ to, label }) => (
+        <div className="flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-8">
+            {headerLinks.map(({ to, label }) => (
               <NavLink
                 key={to}
                 to={to}
@@ -50,37 +61,24 @@ export default function Layout() {
               </NavLink>
             ))}
           </nav>
-          <button
-            style={{
-              background: 'none', border: 'none',
-              padding: 8, borderRadius: '50%',
-              display: 'flex', alignItems: 'center',
-              color: 'var(--primary)',
-              transition: 'background 0.2s',
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(212,175,55,0.12)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'none'}
-          >
-            <span className="material-symbols-outlined text-primary">settings_suggest</span>
+          <button className="p-2 rounded-full text-primary transition-colors hover:bg-primary/10">
+            <Settings size={22} />
           </button>
         </div>
       </header>
 
-      {/* ── Page content ── */}
-      <main className="stitch-main page-content" style={{ minHeight: '100vh' }}>
+      {/* Main content */}
+      <main className="relative z-10 w-full max-w-screen-xl mx-auto px-16 pt-28 pb-32 min-h-screen no-scroll overflow-y-auto">
         <Outlet />
       </main>
 
-      {/* ── Bottom nav (always visible for navigation) ── */}
-      <footer className="stitch-footer">
-        {navTabs.map(({ to, icon, label }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={to === '/'}
-            className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: 24 }}>{icon}</span>
+      {/* Bottom nav bar */}
+      <footer className="fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center px-4 pb-4 pt-2 border-t border-outline-variant/20 rounded-t-xl"
+        style={{ background: 'rgba(42,42,42,0.92)', backdropFilter: 'blur(32px)', WebkitBackdropFilter: 'blur(32px)' }}
+      >
+        {navTabs.map(({ to, Icon, label }) => (
+          <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+            <Icon size={22} />
             <span>{label}</span>
           </NavLink>
         ))}

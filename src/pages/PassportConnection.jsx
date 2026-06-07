@@ -1,153 +1,145 @@
 import { useState } from 'react'
-import Card, { SectionLabel, StatusBadge, ModuleChip, SectionDivider } from '../components/Card.jsx'
+import { motion } from 'framer-motion'
+import { CheckCircle2, XCircle, Copy, Check, User } from 'lucide-react'
+
+const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }
 
 const tiers = [
-  {
-    name: 'Founder', level: 0, active: true,
-    perks: ['Grand Lounge Access', 'NFT Key Mint', 'Priority Allocation', 'Obsidian Tier Events'],
-  },
-  {
-    name: 'Artisan', level: 1, active: false,
-    perks: ['Cellar Tier Access', 'Travel Rewards', 'Session History Log'],
-  },
-  {
-    name: 'Connoisseur', level: 2, active: false,
-    perks: ['Full Module Access', 'Event Priority Queue'],
-  },
+  { name: 'Founder',      level: 0, active: true,  perks: ['Grand Lounge Access', 'NFT Key Mint', 'Priority Allocation', 'Obsidian Tier Events'] },
+  { name: 'Artisan',      level: 1, active: false, perks: ['Cellar Tier Access', 'Travel Rewards', 'Session History Log'] },
+  { name: 'Connoisseur',  level: 2, active: false, perks: ['Full Module Access', 'Event Priority Queue'] },
+]
+
+const modules = [
+  ['Member Portal',    true ],
+  ['NFT Access Key',   true ],
+  ['History Vault',    true ],
+  ['Travel Tier',      true ],
+  ['Event Access',     false],
+  ['Referral Engine',  false],
+]
+
+const sessions = [
+  { label: 'SmokeCraft',  date: 'Jun 5, 2026',  duration: '2h 14m', rating: 96 },
+  { label: 'PourCraft',   date: 'Jun 3, 2026',  duration: '1h 42m', rating: 92 },
+  { label: 'WineCraft',   date: 'May 30, 2026', duration: '3h 01m', rating: 98 },
+  { label: 'EAT Command', date: 'May 28, 2026', duration: '2h 55m', rating: 94 },
 ]
 
 export default function PassportConnection() {
   const [copied, setCopied] = useState(false)
 
-  function copyKey() {
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2500)
-  }
+  function copyKey() { setCopied(true); setTimeout(() => setCopied(false), 2500) }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <motion.div className="flex flex-col items-center"
+      initial="hidden" animate="show"
+      variants={{ show: { transition: { staggerChildren: 0.1 } } }}
+    >
+      <motion.div variants={FADE} className="status-badge mb-12">
+        <span className="relative flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-primary" />
+        </span>
+        <span className="font-label text-xs tracking-widest uppercase text-primary">Passport Active — Founder Level 0</span>
+      </motion.div>
 
-      <StatusBadge label="Passport Active — Founder Level 0" />
-
-      <div style={{ textAlign: 'center', marginBottom: 64 }}>
-        <h1 className="text-display-tour gold-foil-text" style={{ marginBottom: 16 }}>
-          PASSPORT
-        </h1>
-        <p className="text-body-intro text-on-surface-var" style={{ maxWidth: 640, margin: '0 auto' }}>
+      <motion.div variants={FADE} className="text-center mb-16">
+        <h1 className="text-display-tour gold-foil-text mb-4 leading-tight">PASSPORT</h1>
+        <p className="text-body-intro text-on-surface-variant max-w-2xl mx-auto">
           Member identity, NFT access keys, travel tier rewards,
           and complete session history — all in one secure vault.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="bento-grid">
+      <motion.div variants={FADE} className="grid grid-cols-12 gap-8 w-full mb-8">
 
-        {/* Identity card */}
-        <div className="col-5">
-          <Card accent style={{ height: '100%' }}>
-            <SectionLabel>Member Identity</SectionLabel>
+        {/* Identity + modules */}
+        <div className="col-span-12 md:col-span-5 stitch-card stitch-card-accent flex flex-col gap-6">
+          <h3 className="font-label text-sm tracking-widest uppercase text-primary">Member Identity</h3>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 28 }}>
-              <div style={{
-                width: 72, height: 72, borderRadius: '50%',
-                background: 'linear-gradient(135deg, #d4af37, #f2ca50)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0,
-              }}>
-                <span className="material-symbols-outlined icon-fill" style={{ fontSize: 36, color: '#000' }}>person</span>
-              </div>
-              <div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 600, color: 'var(--on-surface)', marginBottom: 4 }}>Founder Member</div>
-                <div className="text-label-caps text-primary" style={{ marginBottom: 2 }}>Level 0 · Authority Real</div>
-                <div className="text-label-sm text-on-surface-var">Since 2024 · CraftHub 360</div>
-              </div>
+          <div className="flex items-center gap-5">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: 'linear-gradient(135deg,#d4af37,#f2ca50)' }}>
+              <User size={30} className="text-black" />
             </div>
-
-            {/* NFT Key */}
-            <div className="obsidian-glass" style={{ borderRadius: 16, padding: '16px 20px', border: '1px solid rgba(212,175,55,0.25)', marginBottom: 20 }}>
-              <div className="text-label-sm text-on-surface-var" style={{ marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.12em' }}>NFT Access Key</div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <code style={{ fontFamily: 'var(--font-mono)', fontSize: 15, color: 'var(--primary)', letterSpacing: '0.1em' }}>CH360-FNDX-7A2E-∞</code>
-                <button
-                  onClick={copyKey}
-                  style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', transition: 'color 0.2s', color: copied ? 'var(--primary)' : 'rgba(255,255,255,0.35)' }}
-                >
-                  <span className="material-symbols-outlined icon-fill">{copied ? 'check_circle' : 'content_copy'}</span>
-                </button>
-              </div>
+            <div>
+              <div className="font-display text-xl font-semibold text-on-surface">Founder Member</div>
+              <div className="font-label text-xs text-primary tracking-widest uppercase mt-1">Level 0 · Authority Real</div>
+              <div className="font-label text-xs text-on-surface-variant mt-0.5">Since 2024 · CraftHub 360</div>
             </div>
+          </div>
 
-            {/* Module status */}
-            <SectionDivider>Modules</SectionDivider>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              <ModuleChip label="Member Portal" />
-              <ModuleChip label="NFT Access Key" />
-              <ModuleChip label="History Vault" />
-              <ModuleChip label="Travel Tier" />
-              <ModuleChip label="Event Access"    done={false} />
-              <ModuleChip label="Referral Engine" done={false} />
+          <div className="obsidian-glass rounded-2xl p-4 border border-primary/25">
+            <div className="font-label text-xs text-on-surface-variant tracking-widest uppercase mb-2">NFT Access Key</div>
+            <div className="flex items-center justify-between">
+              <code className="font-mono text-base text-primary tracking-wider">CH360-FNDX-7A2E-∞</code>
+              <button onClick={copyKey} className="transition-colors hover:text-primary text-on-surface-variant">
+                {copied ? <Check size={18} className="text-primary" /> : <Copy size={18} />}
+              </button>
             </div>
-          </Card>
+          </div>
+
+          <div>
+            <div className="section-divider">Modules</div>
+            <div className="grid grid-cols-2 gap-2">
+              {modules.map(([label, done]) => (
+                <div key={label} className="module-chip">
+                  <span className="text-sm text-on-surface">{label}</span>
+                  {done
+                    ? <CheckCircle2 size={16} className="text-primary shrink-0" />
+                    : <XCircle size={16} className="text-on-surface-variant/30 shrink-0" />
+                  }
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Tier cards */}
-        <div className="col-7" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <SectionLabel>Membership Tiers</SectionLabel>
+        <div className="col-span-12 md:col-span-7 flex flex-col gap-4">
+          <h3 className="font-label text-sm tracking-widest uppercase text-primary">Membership Tiers</h3>
           {tiers.map(({ name, level, active, perks }) => (
-            <Card key={name} style={{
-              border: active ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(255,255,255,0.1)',
-              boxShadow: active ? '0 0 32px rgba(212,175,55,0.08)' : '0 8px 32px 0 rgba(0,0,0,0.8)',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <div key={name} className="stitch-card"
+              style={{ border: active ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(255,255,255,0.1)' }}>
+              <div className="flex items-center justify-between mb-4">
                 <div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 600, color: active ? 'var(--primary)' : 'var(--on-surface)', marginBottom: 2 }}>{name}</div>
-                  <div className="text-label-sm text-on-surface-var" style={{ textTransform: 'uppercase', letterSpacing: '0.1em' }}>Level {level}</div>
+                  <div className="font-display text-xl font-semibold mb-1" style={{ color: active ? '#f2ca50' : '#e5e2e1' }}>{name}</div>
+                  <div className="font-label text-xs text-on-surface-variant tracking-widest uppercase">Level {level}</div>
                 </div>
                 {active && (
-                  <span style={{
-                    fontFamily: 'var(--font-label)', fontSize: 11, letterSpacing: '0.12em',
-                    textTransform: 'uppercase', padding: '4px 14px', borderRadius: 9999,
-                    background: 'rgba(212,175,55,0.15)', color: 'var(--primary)',
-                    border: '1px solid rgba(212,175,55,0.3)',
-                  }}>
+                  <span className="font-label text-xs tracking-widest uppercase px-4 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary">
                     ACTIVE
                   </span>
                 )}
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
                 {perks.map(p => (
-                  <div key={p} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span className="material-symbols-outlined icon-fill" style={{ fontSize: 16, color: active ? 'var(--primary)' : 'rgba(255,255,255,0.2)' }}>check_circle</span>
-                    <span className="text-body-md" style={{ color: active ? 'var(--on-surface-variant)' : 'rgba(255,255,255,0.3)' }}>{p}</span>
+                  <div key={p} className="flex items-center gap-2">
+                    <CheckCircle2 size={14} style={{ color: active ? '#f2ca50' : 'rgba(255,255,255,0.2)' }} />
+                    <span className="text-sm" style={{ color: active ? '#d0c5af' : 'rgba(255,255,255,0.3)' }}>{p}</span>
                   </div>
                 ))}
               </div>
-            </Card>
+            </div>
           ))}
         </div>
+      </motion.div>
 
-        {/* History vault */}
-        <div className="col-12">
-          <Card>
-            <SectionLabel>History Vault — Recent Sessions</SectionLabel>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-              {[
-                { label: 'SmokeCraft',   date: 'Jun 5, 2026',  duration: '2h 14m', rating: 96 },
-                { label: 'PourCraft',    date: 'Jun 3, 2026',  duration: '1h 42m', rating: 92 },
-                { label: 'WineCraft',    date: 'May 30, 2026', duration: '3h 01m', rating: 98 },
-                { label: 'EAT Command', date: 'May 28, 2026', duration: '2h 55m', rating: 94 },
-              ].map(({ label, date, duration, rating }) => (
-                <div key={label} className="obsidian-glass" style={{ borderRadius: 16, padding: '20px 24px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <div style={{ fontFamily: 'var(--font-label)', fontSize: 13, fontWeight: 600, color: 'var(--primary)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
-                  <div className="text-label-sm text-on-surface-var" style={{ marginBottom: 2 }}>{date}</div>
-                  <div className="text-label-sm text-on-surface-var" style={{ marginBottom: 12 }}>{duration}</div>
-                  <div className="gold-foil-text" style={{ fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 700 }}>{rating}</div>
-                </div>
-              ))}
+      {/* History vault */}
+      <motion.div variants={FADE} className="stitch-card w-full">
+        <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-8">History Vault — Recent Sessions</h3>
+        <div className="grid grid-cols-4 gap-6">
+          {sessions.map(({ label, date, duration, rating }) => (
+            <div key={label} className="obsidian-glass rounded-2xl p-5 border border-outline-variant/20">
+              <div className="font-label text-sm font-semibold text-primary tracking-wider uppercase mb-2">{label}</div>
+              <div className="font-label text-xs text-on-surface-variant mb-0.5">{date}</div>
+              <div className="font-label text-xs text-on-surface-variant mb-4">{duration}</div>
+              <div className="gold-foil-text font-display text-4xl font-bold">{rating}</div>
             </div>
-          </Card>
+          ))}
         </div>
-
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }

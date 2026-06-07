@@ -8,4 +8,14 @@ export default defineConfig({
     port: 5000,
     allowedHosts: true,
   },
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-dom/client',
+      'react-router-dom',
+      'framer-motion',
+      'lucide-react',
+    ],
+  },
 })

@@ -1,10 +1,13 @@
-import Card, { SectionLabel, StatusBadge, ModuleChip, SectionDivider } from '../components/Card.jsx'
+import { motion } from 'framer-motion'
+import { CheckCircle2, XCircle } from 'lucide-react'
 
-const courseOrder = [
-  { name: 'Wagyu A5 Nigiri',        type: 'Amuse-Bouche', status: 'Served',  time: '7:14 PM', table: 3 },
-  { name: 'Black Truffle Risotto',  type: 'Course II',    status: 'Firing',  time: '7:32 PM', table: 3 },
-  { name: 'Aged Duck Confit',       type: 'Course III',   status: 'Pending', time: '7:55 PM', table: 3 },
-  { name: 'Miso Chocolate Tart',    type: 'Dessert',      status: 'Pending', time: '8:20 PM', table: 3 },
+const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }
+
+const fireOrder = [
+  { name: 'Wagyu A5 Nigiri',        type: 'Amuse-Bouche', status: 'Served',  time: '7:14 PM' },
+  { name: 'Black Truffle Risotto',  type: 'Course II',    status: 'Firing',  time: '7:32 PM' },
+  { name: 'Aged Duck Confit',       type: 'Course III',   status: 'Pending', time: '7:55 PM' },
+  { name: 'Miso Chocolate Tart',    type: 'Dessert',      status: 'Pending', time: '8:20 PM' },
 ]
 
 const tables = [
@@ -14,147 +17,141 @@ const tables = [
   { id: 4, guests: 6, status: 'Reserved', course: '—',         spend: 0   },
 ]
 
-const statusColor = {
-  Served:  'var(--primary)',
-  Firing:  '#ff9800',
-  Pending: 'rgba(255,255,255,0.25)',
-}
-const tableColor = {
-  Seated:   'var(--primary)',
-  Ordering: '#ff9800',
-  Active:   '#4caf50',
-  Reserved: 'rgba(255,255,255,0.3)',
-}
+const modules = [
+  ['Table Manager',    true ], ['Course Pacing',  true ],
+  ['Kitchen Display',  true ], ['Allergy Filter', true ],
+  ['Sommelier Link',   true ], ['Experience Log', true ],
+]
+
+const pacing = [
+  { label: 'Arrival',      time: '7:00', done: true  },
+  { label: 'Amuse-Bouche', time: '7:14', done: true  },
+  { label: 'Courses',      time: '7:32', done: false },
+  { label: 'Digestif',     time: '8:30', done: false },
+  { label: 'Departure',    time: '9:00', done: false },
+]
+
+const statusColor  = { Served: '#f2ca50', Firing: '#ff9800', Pending: 'rgba(255,255,255,0.25)' }
+const tableColor   = { Seated: '#f2ca50', Ordering: '#ff9800', Active: '#4caf50', Reserved: 'rgba(255,255,255,0.3)' }
 
 export default function EATCommand() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <motion.div className="flex flex-col items-center"
+      initial="hidden" animate="show"
+      variants={{ show: { transition: { staggerChildren: 0.1 } } }}
+    >
+      <motion.div variants={FADE} className="status-badge mb-12">
+        <span className="relative flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-primary" />
+        </span>
+        <span className="font-label text-xs tracking-widest uppercase text-primary">Kitchen Live — Table 3 Active Fire Order</span>
+      </motion.div>
 
-      <StatusBadge label="Kitchen Live — Table 3 Active Fire Order" />
-
-      <div style={{ textAlign: 'center', marginBottom: 64 }}>
-        <h1 className="text-display-tour gold-foil-text" style={{ marginBottom: 16 }}>
-          EAT COMMAND
-        </h1>
-        <p className="text-body-intro text-on-surface-var" style={{ maxWidth: 640, margin: '0 auto' }}>
-          Dining intelligence — kitchen coordination, course pacing,
-          table management, and the complete experiential arc from first bite to last glass.
+      <motion.div variants={FADE} className="text-center mb-16">
+        <h1 className="text-display-tour gold-foil-text mb-4 leading-tight">EAT COMMAND</h1>
+        <p className="text-body-intro text-on-surface-variant max-w-2xl mx-auto">
+          Dining intelligence — kitchen coordination, course pacing, table management,
+          and the complete experiential arc from first bite to last glass.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="bento-grid">
-
-        {/* Stats */}
-        {[['12', 'EAT Screens'], ['4', 'Tables Active'], ['4', 'Courses'], ['$700', 'Floor Revenue']].map(([v, l]) => (
-          <div key={l} style={{ gridColumn: 'span 3' }}>
-            <Card style={{ textAlign: 'center' }}>
-              <div className="gold-foil-text" style={{ fontFamily: 'var(--font-display)', fontSize: 48, fontWeight: 700, lineHeight: 1, marginBottom: 8 }}>{v}</div>
-              <p className="text-label-sm text-on-surface-var" style={{ textTransform: 'uppercase', letterSpacing: '0.1em' }}>{l}</p>
-            </Card>
+      {/* Stats */}
+      <motion.div variants={FADE} className="grid grid-cols-4 gap-8 w-full mb-8">
+        {[['12','EAT Screens'],['4','Tables Active'],['4','Courses'],['$700','Floor Revenue']].map(([v,l]) => (
+          <div key={l} className="stitch-card text-center">
+            <div className="gold-foil-text font-display text-5xl font-bold mb-2">{v}</div>
+            <p className="font-label text-xs tracking-widest uppercase text-on-surface-variant">{l}</p>
           </div>
         ))}
+      </motion.div>
 
-        {/* Fire order card */}
-        <div className="col-7">
-          <Card accent>
-            <SectionLabel>Fire Order — Table 3</SectionLabel>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {courseOrder.map(({ name, type, status, time }) => (
-                <div key={name} className="manifest-row" style={{ padding: '16px 20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: statusColor[status], flexShrink: 0, boxShadow: status === 'Firing' ? '0 0 8px #ff9800' : 'none' }} />
-                    <div>
-                      <div className="text-body-md" style={{ fontWeight: 600, color: 'var(--on-surface)', marginBottom: 2 }}>{name}</div>
-                      <div className="text-label-sm text-on-surface-var" style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>{type}</div>
-                    </div>
+      <motion.div variants={FADE} className="grid grid-cols-12 gap-8 w-full mb-8">
+
+        {/* Fire order */}
+        <div className="col-span-12 md:col-span-7 stitch-card stitch-card-accent">
+          <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-6">Fire Order — Table 3</h3>
+          <ul className="space-y-2">
+            {fireOrder.map(({ name, type, status, time }) => (
+              <li key={name} className="manifest-row">
+                <div className="flex items-center gap-4">
+                  <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: statusColor[status], boxShadow: status === 'Firing' ? '0 0 8px #ff9800' : 'none' }} />
+                  <div>
+                    <div className="font-semibold text-on-surface">{name}</div>
+                    <div className="font-label text-xs text-on-surface-variant tracking-widest uppercase mt-0.5">{type}</div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span style={{
-                      fontFamily: 'var(--font-label)', fontSize: 11, letterSpacing: '0.1em',
-                      textTransform: 'uppercase', padding: '4px 12px', borderRadius: 9999,
-                      background: `${statusColor[status]}18`,
-                      color: statusColor[status],
-                      border: `1px solid ${statusColor[status]}44`,
-                    }}>
-                      {status}
-                    </span>
-                    <div className="text-label-sm text-on-surface-var" style={{ marginTop: 6 }}>{time}</div>
-                  </div>
+                </div>
+                <div className="text-right">
+                  <span className="font-label text-xs tracking-widest uppercase px-3 py-1 rounded-full"
+                    style={{ background: `${statusColor[status]}18`, color: statusColor[status], border: `1px solid ${statusColor[status]}44` }}>
+                    {status}
+                  </span>
+                  <div className="font-label text-xs text-on-surface-variant mt-1">{time}</div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Module + table status */}
+        <div className="col-span-12 md:col-span-5 flex flex-col gap-6">
+          <div className="stitch-card stitch-card-accent">
+            <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-4">Module Status</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {modules.map(([label, done]) => (
+                <div key={label} className="module-chip">
+                  <span className="text-sm text-on-surface">{label}</span>
+                  {done ? <CheckCircle2 size={16} className="text-primary shrink-0" /> : <XCircle size={16} className="text-on-surface-variant/30 shrink-0" />}
                 </div>
               ))}
             </div>
-          </Card>
-        </div>
+          </div>
 
-        {/* Module checklist + table status */}
-        <div className="col-5" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <Card accent>
-            <SectionLabel>Module Status</SectionLabel>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              <ModuleChip label="Table Manager" />
-              <ModuleChip label="Course Pacing" />
-              <ModuleChip label="Kitchen Display" />
-              <ModuleChip label="Allergy Filter" />
-              <ModuleChip label="Sommelier Link" />
-              <ModuleChip label="Experience Log" />
-            </div>
-          </Card>
-
-          <Card>
-            <SectionLabel>Floor Status</SectionLabel>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="stitch-card">
+            <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-4">Floor Status</h3>
+            <div className="space-y-2">
               {tables.map(({ id, guests, status, course, spend }) => (
-                <div key={id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderRadius: 12, background: 'rgba(255,255,255,0.04)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: tableColor[status] }} />
+                <div key={id} className="flex items-center justify-between p-3 rounded-xl bg-surface-container">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full shrink-0" style={{ background: tableColor[status] }} />
                     <div>
-                      <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--on-surface)' }}>Table {id}</div>
-                      <div className="text-label-sm text-on-surface-var">{guests} guests · {course}</div>
+                      <div className="text-sm font-semibold text-on-surface">Table {id}</div>
+                      <div className="font-label text-xs text-on-surface-variant">{guests} guests · {course}</div>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    {spend > 0 && <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 700, color: 'var(--primary)' }}>${spend}</div>}
-                    <span style={{ fontFamily: 'var(--font-label)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: tableColor[status] }}>{status}</span>
+                  <div className="text-right">
+                    {spend > 0 && <div className="font-display text-lg font-bold text-primary">${spend}</div>}
+                    <span className="font-label text-xs tracking-widest uppercase" style={{ color: tableColor[status] }}>{status}</span>
                   </div>
                 </div>
               ))}
             </div>
-          </Card>
+          </div>
         </div>
+      </motion.div>
 
-        {/* Pacing timeline */}
-        <div className="col-12">
-          <Card>
-            <SectionLabel>Experience Pacing — Ideal Arc</SectionLabel>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 0 }}>
-              {[
-                { label: 'Arrival',      time: '7:00',  done: true  },
-                { label: 'Amuse-Bouche', time: '7:14',  done: true  },
-                { label: 'Courses',      time: '7:32',  done: false },
-                { label: 'Digestif',     time: '8:30',  done: false },
-                { label: 'Departure',    time: '9:00',  done: false },
-              ].map(({ label, time, done }, i, arr) => (
-                <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, position: 'relative' }}>
-                  {i < arr.length - 1 && (
-                    <div style={{ position: 'absolute', left: '50%', top: 10, width: '100%', height: 2, background: done ? 'var(--primary-container)' : 'var(--surface-container-highest)', zIndex: 0 }} />
-                  )}
-                  <div style={{
-                    width: 20, height: 20, borderRadius: '50%', zIndex: 1, flexShrink: 0,
-                    background: done ? 'var(--primary-container)' : 'var(--surface-container-highest)',
-                    border: done ? '2px solid var(--primary)' : '2px solid rgba(255,255,255,0.15)',
-                    boxShadow: done ? '0 0 12px rgba(212,175,55,0.4)' : 'none',
-                  }} />
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontFamily: 'var(--font-label)', fontSize: 11, fontWeight: 600, color: done ? 'var(--primary)' : 'var(--on-surface-variant)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
-                    <div className="text-label-sm text-on-surface-var">{time} PM</div>
-                  </div>
-                </div>
-              ))}
+      {/* Pacing arc */}
+      <motion.div variants={FADE} className="stitch-card w-full">
+        <h3 className="font-label text-sm tracking-widest uppercase text-primary mb-8">Experience Pacing — Ideal Arc</h3>
+        <div className="flex items-start justify-between relative">
+          <div className="absolute left-0 right-0 top-2.5 h-0.5 bg-surface-container-highest z-0" />
+          {pacing.map(({ label, time, done }, i) => (
+            <div key={label} className="flex flex-col items-center gap-3 relative z-10 flex-1">
+              <div className="w-5 h-5 rounded-full border-2 transition-all"
+                style={{
+                  background: done ? '#d4af37' : '#353534',
+                  borderColor: done ? '#f2ca50' : 'rgba(255,255,255,0.15)',
+                  boxShadow: done ? '0 0 12px rgba(212,175,55,0.5)' : 'none',
+                }}
+              />
+              <div className="text-center">
+                <div className="font-label text-xs font-semibold tracking-widest uppercase" style={{ color: done ? '#f2ca50' : '#d0c5af' }}>{label}</div>
+                <div className="font-label text-xs text-on-surface-variant">{time} PM</div>
+              </div>
             </div>
-          </Card>
+          ))}
         </div>
-
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
