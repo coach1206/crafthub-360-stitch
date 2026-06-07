@@ -1,125 +1,193 @@
-import { motion } from 'framer-motion'
-import ScoreRing from '../components/ScoreRing.jsx'
-import AchievementBadge from '../components/AchievementBadge.jsx'
-
-const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
-const STAGGER = { show: { transition: { staggerChildren: 0.08 } } }
-
-const vitolas = [
-  { name: 'Lancero',      country: '🇨🇺 Cuba',      ring: 38, score: 97, age: '2019', status: 'Peak'   },
-  { name: 'Churchill',    country: '🇩🇴 Dominican',  ring: 47, score: 96, age: '2020', status: 'Peak'   },
-  { name: 'Robusto',      country: '🇳🇮 Nicaragua',  ring: 50, score: 94, age: '2021', status: 'Ready'  },
-  { name: 'Toro',         country: '🇭🇳 Honduras',   ring: 52, score: 92, age: '2022', status: 'Young'  },
-  { name: 'Gran Corona',  country: '🇨🇺 Cuba',       ring: 45, score: 98, age: '2017', status: 'Legend' },
-]
-
-const badges = [
-  { icon: '🔥', label: 'Smoke Lord',    earned: true, count: 3 },
-  { icon: '🍂', label: 'Aged Leaf',     earned: true          },
-  { icon: '🇨🇺', label: 'Cuba Pure',   earned: true, count: 5 },
-  { icon: '💎', label: 'Perfect Draw',  earned: false         },
-]
-
-const statusColor = { Peak: '#D4AF37', Ready: '#5A9A5A', Young: '#7A7A7A', Legend: '#F2CA50' }
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useGuestSession } from '../context/GuestSessionContext.jsx'
+import { getNextSmokecraftRoute, getLastSmokecraftRoute } from '../constants/session.js'
 
 export default function SmokeCraft() {
-  return (
-    <motion.div initial="hidden" animate="show" variants={STAGGER}>
+  const navigate = useNavigate()
+  const { session } = useGuestSession()
 
-      {/* Hero */}
-      <motion.div variants={FADE} style={{ position: 'relative', height: 260 }}>
-        <img src="/smokecraft.jpg" alt="SmokeCraft"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }}
-        />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.0) 30%, rgba(1,1,1,0.95) 100%)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 20px 20px' }}>
-          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>Cigar Intelligence Module</div>
-          <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 34, color: '#E5E2E1', letterSpacing: '-0.02em', lineHeight: 1 }}>SmokeCraft 360</div>
+  useEffect(() => {
+    const handler = () => {
+      const parallax = document.querySelector('.parallax-bg')
+      if (parallax) parallax.style.transform = `translateY(${window.pageYOffset * 0.4}px)`
+    }
+    window.addEventListener('scroll', handler)
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
+
+  function handleStart() {
+    navigate(getNextSmokecraftRoute(session.completedSteps))
+  }
+
+  function handleResume() {
+    if (session.currentSmokecraftStep) {
+      navigate(getLastSmokecraftRoute(session.currentSmokecraftStep))
+    } else {
+      navigate('/smokecraft/enroll')
+    }
+  }
+
+  return (
+    <div className="bg-background text-on-surface font-body-md overflow-x-hidden selection:bg-primary/30" style={{ minHeight: 'max(884px, 100dvh)' }}>
+      {/* TopAppBar */}
+      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md">
+        <div className="flex items-center gap-4">
+          <button
+            className="material-symbols-outlined text-primary hover:bg-surface-variant/50 p-2 rounded-full transition-colors duration-300"
+            onClick={() => navigate('/')}
+          >menu</button>
+          <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
         </div>
-        <div style={{ position: 'absolute', top: 16, right: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)' }}>
-            <span className="status-dot" style={{ width: 6, height: 6 }} />
-            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase' }}>48 STICKS ACTIVE</span>
+        <div className="flex items-center gap-6">
+          <span className="hidden md:block font-label-lg text-label-lg text-on-surface-variant">Grand Lounge</span>
+          <div className="w-10 h-10 rounded-full border border-primary/30 overflow-hidden">
+            <img
+              alt="Profile"
+              className="w-full h-full object-cover"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzfuv2N7QgwLwkNuXvHfKNP93SVWToyEEJeln6LSaXq53InX7Wm46jAcpTSxzQSgyU-n2JsFmawpiAVF8J0H9mIoomaqIoz8SCsm1Kg-NeaFPHbuyEymDdQPuL17jjPts0ym9k7W4DO7HYjONHWwe_ghnDDz-FobZNcCN808hfiWk8bje7gYFJSTnb5E9DOWz-DSiPBtOHTM7F_0o7OZNsaClBcqE0eU06p-VuPG8Asi5qpY4vsu0G4T8EzppqAwa2y5r4gNyPag0"
+            />
           </div>
         </div>
-      </motion.div>
+      </header>
 
-      {/* Score ring + draw stats */}
-      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
-        <div className="glass-card-gold" style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', gap: 28 }}>
-          <ScoreRing score={95} label="Avg Rating" size={110} />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 600, fontSize: 18, color: '#E5E2E1', marginBottom: 6 }}>Humidor Performance</div>
-            <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#7A7A7A', marginBottom: 16, lineHeight: 1.6 }}>28 screens · 48 sticks monitored</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              {[['48','Sticks'],['6','Aging'],['28','Screens'],['3','Cuba']].map(([v,l]) => (
-                <div key={l} style={{ background: 'rgba(212,175,55,0.06)', borderRadius: 8, padding: '10px 12px', border: '1px solid rgba(212,175,55,0.12)' }}>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 600, fontSize: 20, color: '#D4AF37', lineHeight: 1 }}>{v}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 3 }}>{l}</div>
+      {/* Main */}
+      <main className="relative min-h-screen pt-20 pb-32">
+        {/* Hero background */}
+        <div className="absolute inset-0 z-0">
+          <div
+            className="w-full h-full bg-cover bg-center parallax-bg brightness-[0.4]"
+            style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts')" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-8 pt-12 md:pt-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left: Brand Narrative */}
+            <div className="lg:col-span-7 space-y-8">
+              <div className="space-y-4">
+                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-label-lg text-label-lg">
+                  <span className="material-symbols-outlined text-[18px]">smoking_rooms</span>
+                  SMOKECRAFT 360
+                </span>
+                <h2 className="font-display-lg text-display-lg text-on-surface leading-tight">
+                  Discover your <br />
+                  <span className="text-primary italic font-serif">cigar profile.</span>
+                </h2>
+                <p className="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                  Pair the perfect smoke. Earn participation stamps in your digital passport.
+                  Immerse yourself in the world of premium tobacco craftsmanship.
+                </p>
+              </div>
+
+              {/* Primary actions */}
+              <div className="flex flex-wrap gap-4 pt-4">
+                <button
+                  onClick={handleStart}
+                  className="h-16 px-8 bg-gradient-to-br from-primary to-primary-container text-on-primary font-label-lg text-label-lg rounded-lg shadow-xl shadow-primary/20 flex items-center gap-3 hover:scale-[1.02] active:scale-95 transition-all duration-300"
+                >
+                  START SMOKECRAFT
+                  <span className="material-symbols-outlined">play_arrow</span>
+                </button>
+                <button
+                  onClick={handleResume}
+                  className="h-16 px-8 gold-foil-border text-primary font-label-lg text-label-lg rounded-lg flex items-center gap-3 backdrop-blur-md hover:bg-surface-variant/20 transition-all duration-300"
+                >
+                  RESUME SESSION
+                  <span className="material-symbols-outlined">restore</span>
+                </button>
+              </div>
+
+              {/* Quick links */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-outline-variant/30">
+                {[
+                  { icon: 'stars',       label: 'Rewards',  to: '/smokecraft/leaderboard' },
+                  { icon: 'leaderboard', label: 'Rankings', to: '/smokecraft/leaderboard' },
+                  { icon: 'menu_book',   label: 'Passport', to: '/passport' },
+                  { icon: 'arrow_back',  label: 'CraftHub', to: '/' },
+                ].map(({ icon, label, to }) => (
+                  <button
+                    key={label}
+                    onClick={() => navigate(to)}
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-container-high transition-colors group"
+                  >
+                    <span className="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">{icon}</span>
+                    <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">{label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Bento cards */}
+            <div className="lg:col-span-5 grid grid-cols-1 gap-6">
+              {/* Passport preview */}
+              <div className="relative overflow-hidden p-6 rounded-xl bg-surface-container-high/60 backdrop-blur-xl border border-outline-variant/20 shadow-2xl group cursor-pointer transition-all duration-500 hover:border-primary/40">
+                <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-primary/10 blur-[60px] rounded-full group-hover:bg-primary/20 transition-colors" />
+                <div className="relative z-10 flex items-start gap-4">
+                  <div className="w-16 h-20 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20">
+                    <span className="material-symbols-outlined text-primary text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>menu_book</span>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-headline-md text-headline-md text-primary">360 Passport</h3>
+                    <p className="font-body-md text-body-md text-on-surface-variant mt-2">
+                      Connect your palate journey. {session.smokecraftStamps.length} stamps earned this season.
+                    </p>
+                    <div className="mt-6 flex gap-2">
+                      {['01','02','03','04'].map((n, i) => (
+                        <div key={n} className={`w-8 h-8 rounded-full border flex items-center justify-center text-[10px] ${i < session.smokecraftStamps.length ? 'border-primary/30 text-primary' : 'border-outline-variant text-outline opacity-40'}`}>{n}</div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Pairing recommendation */}
+              <div className="relative overflow-hidden p-6 rounded-xl bg-surface-container-high/60 backdrop-blur-xl border border-outline-variant/20 shadow-2xl group cursor-pointer transition-all duration-500 hover:border-primary/40">
+                <div className="relative z-10 flex flex-col gap-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-label-lg text-label-lg text-primary uppercase tracking-widest">Recommended Pairing</span>
+                    <span className="material-symbols-outlined text-on-surface-variant">star_half</span>
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <div className="w-24 h-24 rounded-lg overflow-hidden border border-outline-variant/30">
+                      <img
+                        alt="Cigar & Bourbon"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6x8rr1W01nKJEp9VAXSLzXMhAPRM2KJoomxxbMnSRkpCfhTXTwunea-4_H_kJccMU_6GV4UYC1ca9Xce8A74TzgZ2ygqntBN2Jry62f84DocQC0tAAOb_qvbn9PV23ObA7Aa74Ro1dbMnSiTSoFUkdCbGHND0obaRjEJF9NpjY4NQTKNB7qbYnAJjPNQuhwBae0ihwcyQkOPdlHR40CKFZhw-m1XQF6CE5VynIvjW-p81iXrCP8xjLwnTtGY7mWVa6R8YePKXErw"
+                      />
+                    </div>
+                    <div>
+                      <h4 className="font-headline-md text-headline-md text-on-surface">Padrón 1964</h4>
+                      <p className="font-body-md text-body-md text-on-surface-variant">Paired with 18yr Single Malt</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </motion.div>
+      </main>
 
-      {/* Vitola cards — horizontal scroll */}
-      <motion.div variants={FADE} style={{ margin: '20px 16px 0' }}>
-        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
-          Active Vitolas — Tap to Select
-        </div>
-        <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 8 }}>
-          {vitolas.map(({ name, country, ring, score, age, status }) => (
-            <motion.div key={name} whileTap={{ scale: 0.96 }}
-              style={{ flexShrink: 0, width: 160, borderRadius: 14, overflow: 'hidden', cursor: 'pointer' }}
-            >
-              <div className="glass-card" style={{ padding: '20px 16px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-                <ScoreRing score={score} label="pts" size={80} strokeWidth={6} />
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 16, color: '#E5E2E1', marginBottom: 4 }}>{name}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A', marginBottom: 4 }}>{country}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A' }}>Ring {ring} · {age}</div>
-                </div>
-                <div style={{
-                  padding: '4px 12px', borderRadius: 20,
-                  background: `${statusColor[status]}15`,
-                  border: `1px solid ${statusColor[status]}44`,
-                  fontFamily: '"JetBrains Mono",monospace', fontSize: 9,
-                  color: statusColor[status], letterSpacing: '0.1em', textTransform: 'uppercase',
-                }}>{status}</div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Draw tension ring row */}
-      <motion.div variants={FADE} style={{ margin: '20px 16px 0' }}>
-        <div className="glass-card" style={{ padding: '20px 24px' }}>
-          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>
-            Draw Tension Analysis
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 16 }}>
-            <ScoreRing score={72} max={100} label="Perfect" size={90} strokeWidth={7} />
-            <ScoreRing score={18} max={100} label="Slight" size={90} strokeWidth={7} />
-            <ScoreRing score={6}  max={100} label="Plugged" size={90} strokeWidth={7} />
-            <ScoreRing score={4}  max={100} label="Open"    size={90} strokeWidth={7} />
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Achievements */}
-      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
-        <div className="glass-card" style={{ padding: '20px 24px' }}>
-          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>
-            SmokeCraft Achievements
-          </div>
-          <div style={{ display: 'flex', gap: 20, justifyContent: 'space-around' }}>
-            {badges.map(b => <AchievementBadge key={b.label} {...b} />)}
-          </div>
-        </div>
-      </motion.div>
-
-    </motion.div>
+      {/* Bottom nav (mobile) */}
+      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)] md:hidden">
+        <button onClick={() => navigate('/')} className="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+          <span className="material-symbols-outlined">explore</span>
+          <span className="font-label-sm text-label-sm">Explore</span>
+        </button>
+        <button className="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-full px-6 py-2">
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>smoking_rooms</span>
+          <span className="font-label-sm text-label-sm">SmokeCraft</span>
+        </button>
+        <button onClick={() => navigate('/passport')} className="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+          <span className="material-symbols-outlined">menu_book</span>
+          <span className="font-label-sm text-label-sm">Passport</span>
+        </button>
+        <button className="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+          <span className="material-symbols-outlined">auto_awesome</span>
+          <span className="font-label-sm text-label-sm">Assistant</span>
+        </button>
+      </nav>
+    </div>
   )
 }

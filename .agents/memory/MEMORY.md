@@ -1,3 +1,4 @@
 - [Lucide-react icon validation](lucide-react-icons.md) — always verify icon names exist before using; non-existent named imports silently crash React mount with blank white page.
 - [PostCSS CJS vs ESM](postcss-cjs-esm.md) — when package.json has "type":"module", use postcss.config.cjs (not .js) to avoid "Cannot find module" PostCSS plugin errors.
 - [Vite dep cache dual-React](vite-dep-cache.md) — mid-session dep optimization creates mismatched React version hashes; fix: clear node_modules/.vite, add optimizeDeps.include for all key deps, restart.
+- [Stitch HTML quote gotcha](stitch-quote-gotcha.md) — Stitch exports use curly/smart quotes in bio strings; single-quoted JSX strings break on apostrophes like 'Criollo '98 — always use double quotes or backticks for bio/label copy.

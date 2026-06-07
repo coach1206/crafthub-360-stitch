@@ -1,0 +1,189 @@
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+export default function Boot() {
+  const navigate = useNavigate()
+  const [headerVisible, setHeaderVisible] = useState(false)
+  const [holding, setHolding] = useState(false)
+  const [activating, setActivating] = useState(false)
+  const [cursor, setCursor] = useState({ x: -80, y: -80 })
+  const holdTimer = useRef(null)
+
+  useEffect(() => {
+    if (sessionStorage.getItem('novee_booted')) {
+      navigate('/', { replace: true })
+      return
+    }
+    const fadeTimer = setTimeout(() => setHeaderVisible(true), 800)
+    const onMove = (e) => setCursor({ x: e.clientX - 20, y: e.clientY - 20 })
+    document.addEventListener('mousemove', onMove)
+    document.body.style.cursor = 'none'
+    return () => {
+      clearTimeout(fadeTimer)
+      document.removeEventListener('mousemove', onMove)
+      document.body.style.cursor = ''
+    }
+  }, [navigate])
+
+  function startHold() {
+    setHolding(true)
+    holdTimer.current = setTimeout(() => {
+      setActivating(true)
+      setTimeout(() => {
+        sessionStorage.setItem('novee_booted', '1')
+        navigate('/')
+      }, 800)
+    }, 1500)
+  }
+
+  function endHold() {
+    clearTimeout(holdTimer.current)
+    setHolding(false)
+  }
+
+  return (
+    <div
+      className="relative w-full overflow-hidden bg-background text-on-background"
+      style={{
+        minHeight: 'max(884px, 100dvh)',
+        transition: 'opacity 0.8s cubic-bezier(0.7,0,0.3,1), transform 0.8s cubic-bezier(0.7,0,0.3,1)',
+        opacity: activating ? 0 : 1,
+        transform: activating ? 'scale(1.1)' : 'scale(1)',
+      }}
+    >
+      {/* Custom cursor dot */}
+      <div
+        className="fixed w-10 h-10 rounded-full border border-primary/30 pointer-events-none z-[100] mix-blend-screen transition-all duration-150"
+        style={{ left: cursor.x, top: cursor.y, boxShadow: '0 0 15px rgba(233,193,118,0.2)' }}
+      />
+
+      {/* Background cinematic layer */}
+      <div className="fixed inset-0 z-0 overflow-hidden">
+        <img
+          alt="Luxury Private Lounge"
+          className="w-full h-full object-cover scale-110 blur-[8px]"
+          src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"
+        />
+        <div className="absolute inset-0 smoke-overlay" />
+      </div>
+
+      {/* Main content */}
+      <main className="relative z-10 w-full h-screen flex flex-col items-center justify-between py-16 px-8">
+        {/* Header */}
+        <header
+          className="w-full flex justify-between items-center h-20 transition-opacity duration-1000"
+          style={{ opacity: headerVisible ? 1 : 0 }}
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full glass-panel flex items-center justify-center border border-primary/20">
+              <span className="material-symbols-outlined text-primary">terminal</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-label-lg text-label-lg text-primary tracking-widest">SYSTEM INITIALIZED</span>
+              <span className="font-body-md text-body-md text-on-surface-variant/60">V.4.2.0. PREMIUM_CORE</span>
+            </div>
+          </div>
+          <div className="glass-panel px-6 py-2 rounded-full border border-primary/10">
+            <span className="font-label-lg text-label-lg text-primary">SECURE LINK: ACTIVE</span>
+          </div>
+        </header>
+
+        {/* Brand Identity */}
+        <div className="flex flex-col items-center text-center">
+          <div className="mb-12 animate-pulse-gold">
+            <h1 className="font-display-lg text-display-lg gold-foil-text tracking-tighter mb-2">NOVEE OS</h1>
+            <div className="h-[1px] w-64 bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto" />
+            <h2 className="font-headline-md text-headline-md text-on-surface-variant mt-4 tracking-widest uppercase">CRAFTHUB 360</h2>
+          </div>
+          <p className="font-body-lg text-body-lg text-on-surface/40 uppercase tracking-[0.4em] text-sm">
+            Connected Hospitality Intelligence
+          </p>
+        </div>
+
+        {/* Service Registry panel — fixed left */}
+        <aside className="fixed left-8 top-1/2 -translate-y-1/2">
+          <div className="glass-panel p-6 rounded-xl space-y-6 w-72 shadow-2xl shadow-black/50 border-l-2 border-l-primary/40 relative overflow-hidden scan-effect">
+            <h3 className="font-label-lg text-label-lg text-on-surface-variant/50 border-b border-outline-variant pb-2">
+              SERVICE REGISTRY
+            </h3>
+            <div className="space-y-4">
+              {[
+                { icon: 'point_of_sale', label: 'POS 3' },
+                { icon: 'restaurant',    label: 'E.A.T.' },
+                { icon: 'smoking_rooms', label: 'SmokeCraft' },
+                { icon: 'wine_bar',      label: 'Cellar-Sync' },
+              ].map(({ icon, label }) => (
+                <div key={label} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-primary/80">{icon}</span>
+                    <span className="font-label-lg text-label-lg text-on-surface">{label}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]" />
+                    <span className="font-label-sm text-label-sm text-primary/80">READY</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="pt-4 border-t border-outline-variant">
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+                  <div className="h-full bg-primary origin-left animate-progress-finish" />
+                </div>
+                <span className="font-label-sm text-label-sm text-primary font-bold">100%</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Bottom: Hold to Activate + stats */}
+        <div className="flex flex-col items-center gap-12 pb-4">
+          <button
+            className="group relative outline-none flex flex-col items-center justify-center h-[72px] w-[320px] rounded-2xl glass-panel border border-primary/30 amber-glow animate-pulse-gold transition-all duration-500 select-none"
+            style={{
+              transform: holding ? 'scale(0.94)' : 'scale(1)',
+              background: holding ? 'rgba(233,193,118,0.15)' : 'rgba(31,31,32,0.4)',
+              borderColor: holding ? 'rgba(233,193,118,1)' : undefined,
+              boxShadow: holding ? '0 0 60px rgba(233,193,118,0.3)' : undefined,
+            }}
+            onMouseDown={startHold}
+            onMouseUp={endHold}
+            onMouseLeave={endHold}
+            onTouchStart={(e) => { e.preventDefault(); startHold() }}
+            onTouchEnd={endHold}
+          >
+            <div className="absolute -inset-1 bg-primary/5 rounded-2xl blur-xl group-hover:bg-primary/10 transition-all duration-700" />
+            <div className="relative flex flex-col items-center">
+              <span className="font-headline-md text-headline-md text-primary tracking-[0.2em] font-bold text-lg">
+                HOLD TO ACTIVATE
+              </span>
+              <span className="material-symbols-outlined text-primary/60 text-sm animate-bounce mt-1">
+                keyboard_double_arrow_down
+              </span>
+            </div>
+          </button>
+
+          <div className="flex gap-16">
+            {[
+              { label: 'TEMPERATURE',     value: '68°F / 20°C' },
+              { label: 'HUMIDITY',        value: '70% RH' },
+              { label: 'LOUNGE CAPACITY', value: '12 MEMBERS' },
+            ].map(({ label, value }) => (
+              <div key={label} className="flex flex-col items-center">
+                <span className="font-label-sm text-label-sm text-on-surface-variant/40">{label}</span>
+                <span className="font-body-md text-body-md text-on-surface">{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
+
+      {/* Visual polish */}
+      <div
+        className="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-10"
+        style={{ background: "url('https://www.transparenttextures.com/patterns/carbon-fibre.png')" }}
+      />
+      <div className="pointer-events-none fixed inset-0 z-40 bg-gradient-to-b from-black/20 via-transparent to-black/90" />
+    </div>
+  )
+}
