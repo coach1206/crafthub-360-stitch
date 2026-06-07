@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E.A.T. Intelligence Help Coach</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-background": "#e5e2e3",
+            "error": "#ffb4ab",
+            "surface-container-lowest": "#0e0e0f",
+            "on-tertiary-fixed": "#261814",
+            "on-primary": "#412d00",
+            "on-surface-variant": "#d1c5b4",
+            "inverse-surface": "#e5e2e3",
+            "surface": "#131314",
+            "secondary-container": "#c68315",
+            "on-secondary": "#462a00",
+            "primary-container": "#c5a059",
+            "tertiary-fixed": "#f7ddd6",
+            "surface-container": "#1f1f20",
+            "on-secondary-container": "#3d2400",
+            "inverse-primary": "#775a19",
+            "surface-container-low": "#1b1b1c",
+            "on-tertiary-fixed-variant": "#54433e",
+            "secondary": "#ffb95a",
+            "on-tertiary": "#3c2d28",
+            "surface-container-high": "#2a2a2b",
+            "secondary-fixed": "#ffddb6",
+            "primary-fixed-dim": "#e9c176",
+            "outline-variant": "#4e4639",
+            "on-surface": "#e5e2e3",
+            "on-primary-container": "#4e3700",
+            "on-error": "#690005",
+            "surface-tint": "#e9c176",
+            "primary": "#e9c176",
+            "error-container": "#93000a",
+            "inverse-on-surface": "#303031",
+            "tertiary-container": "#b7a09a",
+            "on-error-container": "#ffdad6",
+            "surface-dim": "#131314",
+            "primary-fixed": "#ffdea5",
+            "tertiary": "#dac1bb",
+            "surface-container-highest": "#353436",
+            "surface-variant": "#353436",
+            "secondary-fixed-dim": "#ffb95a",
+            "outline": "#9a8f80",
+            "surface-bright": "#39393a",
+            "on-tertiary-container": "#473733",
+            "on-secondary-fixed": "#2a1800",
+            "on-secondary-fixed-variant": "#643f00",
+            "on-primary-fixed-variant": "#5d4201",
+            "on-primary-fixed": "#261900",
+            "tertiary-fixed-dim": "#dac1bb",
+            "background": "#131314"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "container-max-width": "1440px",
+            "unit": "8px",
+            "margin": "64px",
+            "gutter": "32px",
+            "card-padding": "24px"
+          },
+          "fontFamily": {
+            "display-lg": ["Playfair Display"],
+            "body-md": ["Montserrat"],
+            "headline-xl": ["Playfair Display"],
+            "label-sm": ["Montserrat"],
+            "label-lg": ["Montserrat"],
+            "headline-md": ["Playfair Display"],
+            "headline-lg": ["Playfair Display"],
+            "body-lg": ["Montserrat"]
+          },
+          "fontSize": {
+            "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+            "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background: radial-gradient(circle at top right, #1f1f20, #131314);
+      cursor: crosshair;
+    }
+    .glass-panel {
+      background: rgba(31, 31, 32, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(233, 193, 118, 0.15);
+    }
+    .gold-glow {
+      box-shadow: 0 0 40px rgba(198, 131, 21, 0.15);
+    }
+    .amber-pulse {
+      animation: amber-glow 3s infinite ease-in-out;
+    }
+    @keyframes amber-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(198, 131, 21, 0.2); }
+      50% { box-shadow: 0 0 45px rgba(198, 131, 21, 0.5); }
+    }
+    .text-shadow-gold {
+      text-shadow: 0 0 8px rgba(233, 193, 118, 0.4);
+    }
+    .haptic-feedback:active {
+      transform: scale(0.96);
+      transition: transform 0.1s;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shared Component: TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin py-4 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">clinical_notes</span>
+<h1 class="font-display-lg text-primary text-2xl tracking-tight">E.A.T. Command | Manager Mode</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="font-headline-md text-headline-md font-medium text-primary font-semibold hover:bg-surface-container-high transition-colors duration-300 px-3 py-1 rounded-lg" href="#">Guidance</a>
+<a class="font-headline-md text-headline-md font-medium text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors duration-300 px-3 py-1 rounded-lg" href="#">Metrics</a>
+<a class="font-headline-md text-headline-md font-medium text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors duration-300 px-3 py-1 rounded-lg" href="#">Inventory</a>
+</nav>
+<div class="w-12 h-12 rounded-full border-2 border-primary overflow-hidden shadow-lg bg-surface-container-high">
+<img alt="Executive Profile" class="w-full h-full object-cover" data-alt="A professional portrait of a senior luxury hospitality executive with sharp features, wearing a bespoke charcoal wool suit. The lighting is low-key and dramatic, reminiscent of a private member's lounge. The background is softly blurred, showing hints of rich mahogany wood and ambient amber lighting from a distant fireplace. The overall mood is authoritative, sophisticated, and premium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoaoNZc4L2Gol6L691-f-rhl9vopkMY9EiIhCLQmc68qRVIdCwG2hvYVYKUcP8YCStkVm01LWo7tiZxV5PcMOiRsKsRh4z9z7ez5h-uOq7G-rkMH7C1ImE_YqB29JwGqTTMcGp8LsCL2siYJOFMYJHqP0zmyVZCOuyCJ9J6Xy1dQy9_-AJ8ozCNWbK4JtJRFg8PGl_UVevyg7ed-5T3uVlehOngBaYRks4Yob68l-hF5IA2XLFf8V-NzLAIrNGQhBIkzFZUKkzTg4"/>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-40 px-margin max-w-container-max-width mx-auto">
+<!-- Hero Command Panel -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Primary Insight -->
+<div class="lg:col-span-8 flex flex-col gap-gutter">
+<div class="glass-panel rounded-xl p-card-padding relative overflow-hidden amber-pulse">
+<div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">liquor</span>
+</div>
+<div class="flex items-center gap-3 mb-6">
+<span class="w-3 h-3 rounded-full bg-secondary shadow-[0_0_10px_#ffb95a]"></span>
+<span class="font-label-lg text-secondary tracking-widest uppercase">Intelligence Opportunity</span>
+</div>
+<h2 class="font-headline-xl text-on-surface mb-2">Aged Rum Overstock</h2>
+<p class="font-body-lg text-on-surface-variant max-w-2xl mb-12">
+            AI monitoring has detected a stagnation in high-margin Caribbean vintages. Capital efficiency is currently compromised by low-turnover assets in the primary vault.
+          </p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+<div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-primary">
+<h3 class="font-label-lg text-primary mb-2">Recommendation</h3>
+<p class="font-body-md text-on-surface">Launch "Midnight Gold" pairing special in SmokeCraft module.</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-secondary">
+<h3 class="font-label-lg text-secondary mb-2">Reasoning</h3>
+<p class="font-body-md text-on-surface">Reduces capital tied in slow-moving inventory while increasing tonight's revenue.</p>
+</div>
+</div>
+<div class="flex flex-wrap gap-4">
+<button class="haptic-feedback flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-lg font-label-lg shadow-lg hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">auto_awesome</span>
+              EXECUTE STRATEGY
+            </button>
+<button class="haptic-feedback flex items-center gap-2 border border-outline text-on-surface px-8 py-4 rounded-lg font-label-lg hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">description</span>
+              READ ANALYSIS
+            </button>
+<button class="haptic-feedback flex items-center gap-2 border border-outline text-on-surface px-8 py-4 rounded-lg font-label-lg hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">record_voice_over</span>
+              HEAR BRIEFING
+            </button>
+</div>
+</div>
+<!-- Secondary Actions Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<button class="glass-panel haptic-feedback p-6 rounded-xl flex flex-col items-center gap-3 group transition-all hover:border-primary">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">replay</span>
+<span class="font-label-lg">REPLAY DATA</span>
+</button>
+<button class="glass-panel haptic-feedback p-6 rounded-xl flex flex-col items-center gap-3 group transition-all hover:border-primary">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">support_agent</span>
+<span class="font-label-lg">CALL MANAGER</span>
+</button>
+<button class="glass-panel haptic-feedback p-6 rounded-xl flex flex-col items-center gap-3 group transition-all hover:border-error">
+<span class="material-symbols-outlined text-error text-3xl group-hover:scale-110 transition-transform">close</span>
+<span class="font-label-lg">DISMISS ALERT</span>
+</button>
+</div>
+</div>
+<!-- Right Column: Visual Context -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<div class="glass-panel rounded-xl overflow-hidden h-full flex flex-col">
+<div class="h-64 relative">
+<img alt="Aged Rum Context" class="w-full h-full object-cover" data-alt="A macro photograph of an exquisite crystal tumbler filled with a deep amber aged rum. Wisps of smoke from a nearby premium cigar dance through the low-light atmosphere. The background is a dark, moody bar with gold accents and expensive bottles of spirit catching glints of light. The image exudes warmth, luxury, and the tactile nature of high-end lounge culture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvCZTKlG_dy5JoVySHtT8F9QBgFrGEmIviJKpJC43QsYggwejBP3zKKWWt-bs1LORYzt9UHVVGIE7urlGkF5FBm_ml7AVuRgtvilEVaixae9J2StGaj3FO9RgW9sFwFYFuv3F4iMs7oNERXxrFn4aW4ez7bErgs-spr6oum43cCuRU1Qy-2SJc8hFKyk3G13LOA_onFit7UH0IZ4FFHokTmDs96ZI3gnTBDASsctDoaqz9w5rYXJzOF5wNH165pBSd5PmMTyHuW-A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container to-transparent"></div>
+</div>
+<div class="p-card-padding flex-grow">
+<h3 class="font-headline-md text-primary mb-4">Inventory Health</h3>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label-sm text-on-surface-variant">Aged Rum Turnover</span>
+<span class="font-label-sm text-error">Low - 12%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-error w-[12%] h-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label-sm text-on-surface-variant">Predicted Revenue Lift</span>
+<span class="font-label-sm text-secondary">+$4.2k</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-secondary w-[85%] h-full"></div>
+</div>
+</div>
+<div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant">
+<p class="font-body-md italic text-on-surface-variant">
+                  "The Midnight Gold pairing typically converts 65% of undecided lounge guests."
+                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Shared Component: BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin pb-8 pt-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-outline-variant shadow-[0_-8px_24px_rgba(233,193,118,0.1)] rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined text-2xl">auto_awesome</span>
+<span class="font-label-lg tracking-widest text-[10px] mt-1">Guidance</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined text-2xl">graphic_eq</span>
+<span class="font-label-lg tracking-widest text-[10px] mt-1">Haptics</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-6 py-2 shadow-[0_0_15px_rgba(198,131,21,0.4)] haptic-feedback cursor-pointer">
+<span class="material-symbols-outlined text-2xl">ring_volume</span>
+<span class="font-label-lg tracking-widest text-[10px] mt-1">Manager</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined text-2xl">close</span>
+<span class="font-label-lg tracking-widest text-[10px] mt-1">Dismiss</span>
+</div>
+</footer>
+<script>
+    // Micro-interactions for tactile feel
+    document.querySelectorAll('.haptic-feedback').forEach(button => {
+      button.addEventListener('mousedown', () => {
+        if (window.navigator.vibrate) {
+          window.navigator.vibrate(10);
+        }
+      });
+    });
+
+    // Subtle parallax effect on hero content
+    document.addEventListener('mousemove', (e) => {
+      const amount = 15;
+      const x = (e.clientX / window.innerWidth - 0.5) * amount;
+      const y = (e.clientY / window.innerHeight - 0.5) * amount;
+      const panel = document.querySelector('.amber-pulse');
+      if(panel) {
+        panel.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+      }
+    });
+  </script>
+</body></html>

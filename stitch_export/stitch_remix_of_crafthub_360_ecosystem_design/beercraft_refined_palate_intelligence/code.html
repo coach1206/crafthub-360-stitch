@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BeerCraft 360 Intake | Reserve Lounge</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#2a1800",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed-dim": "#e9c176",
+                        "inverse-on-surface": "#303031",
+                        "on-background": "#e5e2e3",
+                        "on-primary-fixed": "#261900",
+                        "primary": "#e9c176",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary-fixed": "#261814",
+                        "secondary-fixed": "#ffddb6",
+                        "on-secondary-container": "#3d2400",
+                        "secondary": "#ffb95a",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-container": "#b7a09a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "surface-container-high": "#2a2a2b",
+                        "surface-container-low": "#1b1b1c",
+                        "background": "#131314",
+                        "surface-container": "#1f1f20",
+                        "on-tertiary-container": "#473733",
+                        "surface": "#131314",
+                        "on-secondary": "#462a00",
+                        "surface-variant": "#353436",
+                        "on-surface": "#e5e2e3",
+                        "primary-container": "#c5a059",
+                        "surface-bright": "#39393a",
+                        "on-tertiary": "#3c2d28",
+                        "on-error": "#690005",
+                        "outline-variant": "#4e4639",
+                        "inverse-surface": "#e5e2e3",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "surface-tint": "#e9c176",
+                        "surface-container-highest": "#353436",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "primary-fixed": "#ffdea5",
+                        "error-container": "#93000a",
+                        "secondary-container": "#c68315",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "outline": "#9a8f80",
+                        "on-primary": "#412d00",
+                        "tertiary": "#dac1bb",
+                        "on-primary-container": "#4e3700",
+                        "surface-dim": "#131314",
+                        "on-surface-variant": "#d1c5b4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "32px",
+                        "unit": "8px",
+                        "margin": "64px",
+                        "card-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "body-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .dial-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            cursor: pointer;
+        }
+        .dial-svg {
+            transform: rotate(-90deg);
+        }
+        .dial-track {
+            fill: none;
+            stroke: #4e4639;
+            stroke-width: 4;
+        }
+        .dial-progress {
+            fill: none;
+            stroke: #e9c176;
+            stroke-width: 4;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+        .knob-inner {
+            background: radial-gradient(circle, #353436 0%, #131314 100%);
+            box-shadow: inset 0 2px 4px rgba(233,193,118,0.2), 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .gold-etching {
+            background-image: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .condensation-overlay {
+            background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            mask-image: linear-gradient(to bottom, black, transparent);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md overflow-x-hidden bg-surface">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop py-unit bg-surface/5 dark:bg-surface/5 backdrop-blur-[40px] border-b border-white/20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-95 transition-transform duration-200 hover:brightness-125">shield_person</span>
+<h1 class="text-headline-md font-headline-md font-bold text-primary tracking-tighter uppercase">BEERCRAFT 360</h1>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary overflow-hidden shadow-md">
+<img alt="Founder Level 0 Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1WLBMTPUR_N37fGNPNQEJIyc8-JA3tRuVMNytDllMHN13dsaQIejL9t88Lzep7c3OKdBAahvJ692hm3ZWQnRRxJEWBxjy9stJvaxVHMEkQvYbrlxeUrgcrSwSs6043RCJDvTHUcrVHZTG5zHkJGxgs3P-oEIEskIqtc-mLYtT2RVl1wqYVhWImp0U9XtB5ZD4nCNEnToVUjTR9JzP9aNcx57MwwzkcfITbQQsAIceN_IlC4vukOPkLBhNOkyc57xKhHgAZ5naJHk"/>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="pt-20 pb-24 relative min-h-screen">
+<!-- Background Atmospheric Texture -->
+<div class="absolute inset-0 z-0 pointer-events-none">
+<div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535958636474-b021ee887b13?q=80&amp;w=1920&amp;auto=format&amp;fit=crop')] bg-cover bg-center opacity-10"></div>
+<div class="absolute inset-0 condensation-overlay"></div>
+</div>
+<div class="relative z-10 max-w-[1200px] mx-auto px-gutter py-margin flex flex-col items-center">
+<!-- Progress Indicator -->
+<div class="w-full max-w-md mb-12"><div class="flex justify-between mb-4">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Step 2 of 4</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Palate Analysis</span>
+</div>
+<div class="h-1 bg-surface-variant/30 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-primary-container w-1/2 shadow-[0_0_15px_rgba(233,193,118,0.6)]"></div>
+</div></div>
+<!-- Header Section -->
+<div class="text-center mb-16 space-y-4">
+<h2 class="font-headline-xl text-headline-xl text-primary-fixed-dim">BeerCraft 360</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Fine-tune your sensory expectations. Rotate the tactile gold-etched dials to calibrate your preferred flavor intensity for your next selection.</p>
+</div>
+<!-- Palate Profile Dials (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+<!-- Hoppy Dial -->
+<div class="relative bg-surface-container-low/40 backdrop-blur-20px border border-white/10 p-card-padding rounded-xl flex flex-col items-center gap-6 shadow-2xl transition-all hover:border-primary/40 group overflow-hidden">
+<div class="absolute top-2 right-2 flex items-center gap-1 opacity-40">
+<span class="material-symbols-outlined text-[10px] text-primary">memory</span>
+<span class="text-[8px] font-label-sm tracking-tighter text-primary">E.A.T. LOGIC ACTIVE</span>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface tracking-widest uppercase">{{TITLE}}</h3>
+<div class="dial-container group-active:scale-95 transition-transform border-4 border-outline-variant/20 rounded-full p-2" onclick="rotateDial(this)">
+<svg class="dial-svg w-full h-full" viewbox="0 0 160 160">
+<circle class="dial-track" cx="80" cy="80" r="70"></circle>
+<circle class="dial-progress" cx="80" cy="80" r="70" style="stroke-dashoffset: {{OFFSET}};"></circle>
+</svg>
+<div class="absolute inset-6 rounded-full knob-inner flex items-center justify-center border-2 border-primary/30 shadow-inner">
+<span class="material-symbols-outlined text-4xl text-primary gold-etching">{{ICON}}</span>
+</div>
+</div>
+<div class="text-center">
+<span class="block font-body-md text-primary font-bold">{{LABEL}}: {{PERCENT}}%</span>
+<p class="text-[10px] text-on-surface-variant mt-2 max-w-[140px] leading-tight">Sommelier's Note: Adjusting this will refine the {{DESC}} profile of your recommendation.</p>
+</div>
+</div>
+<!-- Malt Dial -->
+<div class="relative bg-surface-container-low/40 backdrop-blur-20px border border-white/10 p-card-padding rounded-xl flex flex-col items-center gap-6 shadow-2xl transition-all hover:border-primary/40 group overflow-hidden">
+<div class="absolute top-2 right-2 flex items-center gap-1 opacity-40">
+<span class="material-symbols-outlined text-[10px] text-primary">memory</span>
+<span class="text-[8px] font-label-sm tracking-tighter text-primary">E.A.T. LOGIC ACTIVE</span>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface tracking-widest uppercase">{{TITLE}}</h3>
+<div class="dial-container group-active:scale-95 transition-transform border-4 border-outline-variant/20 rounded-full p-2" onclick="rotateDial(this)">
+<svg class="dial-svg w-full h-full" viewbox="0 0 160 160">
+<circle class="dial-track" cx="80" cy="80" r="70"></circle>
+<circle class="dial-progress" cx="80" cy="80" r="70" style="stroke-dashoffset: {{OFFSET}};"></circle>
+</svg>
+<div class="absolute inset-6 rounded-full knob-inner flex items-center justify-center border-2 border-primary/30 shadow-inner">
+<span class="material-symbols-outlined text-4xl text-primary gold-etching">{{ICON}}</span>
+</div>
+</div>
+<div class="text-center">
+<span class="block font-body-md text-primary font-bold">{{LABEL}}: {{PERCENT}}%</span>
+<p class="text-[10px] text-on-surface-variant mt-2 max-w-[140px] leading-tight">Sommelier's Note: Adjusting this will refine the {{DESC}} profile of your recommendation.</p>
+</div>
+</div>
+<!-- Crisp Dial -->
+<div class="relative bg-surface-container-low/40 backdrop-blur-20px border border-white/10 p-card-padding rounded-xl flex flex-col items-center gap-6 shadow-2xl transition-all hover:border-primary/40 group overflow-hidden">
+<div class="absolute top-2 right-2 flex items-center gap-1 opacity-40">
+<span class="material-symbols-outlined text-[10px] text-primary">memory</span>
+<span class="text-[8px] font-label-sm tracking-tighter text-primary">E.A.T. LOGIC ACTIVE</span>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface tracking-widest uppercase">{{TITLE}}</h3>
+<div class="dial-container group-active:scale-95 transition-transform border-4 border-outline-variant/20 rounded-full p-2" onclick="rotateDial(this)">
+<svg class="dial-svg w-full h-full" viewbox="0 0 160 160">
+<circle class="dial-track" cx="80" cy="80" r="70"></circle>
+<circle class="dial-progress" cx="80" cy="80" r="70" style="stroke-dashoffset: {{OFFSET}};"></circle>
+</svg>
+<div class="absolute inset-6 rounded-full knob-inner flex items-center justify-center border-2 border-primary/30 shadow-inner">
+<span class="material-symbols-outlined text-4xl text-primary gold-etching">{{ICON}}</span>
+</div>
+</div>
+<div class="text-center">
+<span class="block font-body-md text-primary font-bold">{{LABEL}}: {{PERCENT}}%</span>
+<p class="text-[10px] text-on-surface-variant mt-2 max-w-[140px] leading-tight">Sommelier's Note: Adjusting this will refine the {{DESC}} profile of your recommendation.</p>
+</div>
+</div>
+<!-- Sour Dial -->
+<div class="relative bg-surface-container-low/40 backdrop-blur-20px border border-white/10 p-card-padding rounded-xl flex flex-col items-center gap-6 shadow-2xl transition-all hover:border-primary/40 group overflow-hidden">
+<div class="absolute top-2 right-2 flex items-center gap-1 opacity-40">
+<span class="material-symbols-outlined text-[10px] text-primary">memory</span>
+<span class="text-[8px] font-label-sm tracking-tighter text-primary">E.A.T. LOGIC ACTIVE</span>
+</div>
+<h3 class="font-label-lg text-label-lg text-on-surface tracking-widest uppercase">{{TITLE}}</h3>
+<div class="dial-container group-active:scale-95 transition-transform border-4 border-outline-variant/20 rounded-full p-2" onclick="rotateDial(this)">
+<svg class="dial-svg w-full h-full" viewbox="0 0 160 160">
+<circle class="dial-track" cx="80" cy="80" r="70"></circle>
+<circle class="dial-progress" cx="80" cy="80" r="70" style="stroke-dashoffset: {{OFFSET}};"></circle>
+</svg>
+<div class="absolute inset-6 rounded-full knob-inner flex items-center justify-center border-2 border-primary/30 shadow-inner">
+<span class="material-symbols-outlined text-4xl text-primary gold-etching">{{ICON}}</span>
+</div>
+</div>
+<div class="text-center">
+<span class="block font-body-md text-primary font-bold">{{LABEL}}: {{PERCENT}}%</span>
+<p class="text-[10px] text-on-surface-variant mt-2 max-w-[140px] leading-tight">Sommelier's Note: Adjusting this will refine the {{DESC}} profile of your recommendation.</p>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="mt-20 flex flex-col md:flex-row gap-6 items-center"><button class="px-12 py-5 rounded-lg border-2 border-primary/40 text-primary font-label-lg text-label-lg uppercase tracking-widest hover:bg-primary/5 transition-all active:scale-95 duration-200">
+  Back
+</button>
+<button class="px-20 py-6 rounded-lg bg-gradient-to-br from-primary via-primary-container to-primary text-on-primary font-label-lg text-label-lg uppercase tracking-widest shadow-[0_12px_48px_rgba(233,193,118,0.4)] hover:shadow-[0_16px_64px_rgba(233,193,118,0.5)] transition-all active:scale-95 duration-300 animate-pulse">
+  Analyze Palate
+</button></div>
+</div>
+</main>
+<!-- Navigation Shell (Bottom Bar) -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl backdrop-blur-20px bg-surface-container-low/90 border-t border-outline-variant shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center h-24 px-gutter w-full pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all" href="#">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">PourCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold gap-1 scale-110 duration-500 ease-out" href="#">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">BeerCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all" href="#">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">WineCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Passport</span>
+</a>
+</nav>
+<script>
+        function rotateDial(element) {
+            const progressCircle = element.querySelector('.dial-progress');
+            const percentLabel = element.nextElementSibling;
+            const currentOffset = parseFloat(progressCircle.style.strokeDashoffset);
+            
+            // Random simulation for interaction
+            const newOffset = Math.floor(Math.random() * 440);
+            const percentage = Math.round(((440 - newOffset) / 440) * 100);
+            
+            progressCircle.style.strokeDashoffset = newOffset;
+            
+            // Get original label text (e.g., "Bitterness:")
+            const type = percentLabel.textContent.split(':')[0];
+            percentLabel.textContent = `${type}: ${percentage}%`;
+            
+            // Visual feedback
+            element.classList.add('scale-105');
+            setTimeout(() => element.classList.remove('scale-105'), 200);
+        }
+
+        // Initialize micro-interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.bg-surface-container-low');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 200 + (index * 100));
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NOVEE OS | Admin Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .glass-panel {
+            background: rgba(19, 19, 20, 0.8);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        .titanium-edge {
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .pulse-gold {
+            animation: pulse-gold 3s infinite;
+        }
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(233, 193, 118, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(233, 193, 118, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(233, 193, 118, 0); }
+        }
+        .leather-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/black-leather.png");
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: rgba(233, 193, 118, 0.1);
+            height: 4px;
+            border-radius: 2px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #e9c176;
+            margin-top: -10px;
+            box-shadow: 0 0 10px rgba(233, 193, 118, 0.5);
+            cursor: pointer;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#462a00",
+                      "on-surface": "#e5e2e3",
+                      "on-error": "#690005",
+                      "tertiary": "#dac1bb",
+                      "tertiary-container": "#b7a09a",
+                      "surface-container-lowest": "#0e0e0f",
+                      "secondary-fixed-dim": "#ffb95a",
+                      "tertiary-fixed": "#f7ddd6",
+                      "on-tertiary": "#3c2d28",
+                      "on-secondary-container": "#3d2400",
+                      "inverse-primary": "#775a19",
+                      "background": "#131314",
+                      "secondary": "#ffb95a",
+                      "error-container": "#93000a",
+                      "surface-tint": "#e9c176",
+                      "primary": "#e9c176",
+                      "surface-container-highest": "#353436",
+                      "error": "#ffb4ab",
+                      "primary-container": "#c5a059",
+                      "surface-variant": "#353436",
+                      "surface-bright": "#39393a",
+                      "on-primary-container": "#4e3700",
+                      "inverse-on-surface": "#303031",
+                      "on-tertiary-fixed": "#261814",
+                      "on-surface-variant": "#d1c5b4",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-fixed-variant": "#5d4201",
+                      "tertiary-fixed-dim": "#dac1bb",
+                      "secondary-container": "#c68315",
+                      "on-primary-fixed": "#261900",
+                      "surface-container-high": "#2a2a2b",
+                      "outline": "#9a8f80",
+                      "surface-dim": "#131314",
+                      "on-tertiary-fixed-variant": "#54433e",
+                      "surface-container": "#1f1f20",
+                      "on-tertiary-container": "#473733",
+                      "on-secondary-fixed-variant": "#643f00",
+                      "on-background": "#e5e2e3",
+                      "secondary-fixed": "#ffddb6",
+                      "on-secondary-fixed": "#2a1800",
+                      "surface": "#131314",
+                      "primary-fixed-dim": "#e9c176",
+                      "surface-container-low": "#1b1b1c",
+                      "on-primary": "#412d00",
+                      "outline-variant": "#4e4639",
+                      "inverse-surface": "#e5e2e3",
+                      "primary-fixed": "#ffdea5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin": "64px",
+                      "gutter": "32px",
+                      "unit": "8px",
+                      "container-max-width": "1440px",
+                      "card-padding": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Playfair Display"],
+                      "label-lg": ["Montserrat"],
+                      "headline-xl": ["Playfair Display"],
+                      "body-lg": ["Montserrat"],
+                      "body-md": ["Montserrat"],
+                      "display-lg": ["Playfair Display"],
+                      "headline-md": ["Playfair Display"],
+                      "label-sm": ["Montserrat"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden selection:bg-primary/30">
+<!-- Shared TopAppBar -->
+<header class="bg-surface/80 backdrop-blur-xl text-primary font-headline-md text-headline-md fixed top-0 w-full border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(233,193,118,0.1)] flex items-center justify-between px-margin h-20 w-full z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl" data-icon="hub">hub</span>
+<span class="font-headline-lg text-headline-lg text-primary tracking-tighter uppercase">CraftHub 360 Orchestration</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<span class="font-label-lg text-label-lg text-primary">SYSTEM STATUS: OPTIMAL</span>
+<span class="text-[10px] tracking-widest text-on-surface-variant opacity-60">ENCRYPTED NOVEE OS CHANNEL</span>
+</div>
+<div class="w-12 h-12 rounded-full border border-primary/30 overflow-hidden transition-all duration-300 ease-in-out active:scale-95 cursor-pointer">
+<img alt="Admin" class="w-full h-full object-cover" data-alt="A professional close-up portrait of a high-end luxury brand manager in a dark, sophisticated studio setting. The lighting is low-key with golden rim highlights, reflecting a premium and exclusive atmosphere. The background is a soft-focus dark wood paneling, characteristic of a private members-only lounge. The person is dressed in a bespoke charcoal suit, embodying a persona of authority and unhurried sophistication." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCldeo4HI5h-ehfR4FXmavGhAPGYV_q-ZN48L1DQV5cjVLisogZ7uEXgR1U_Lgtcxrq4VzBHSA67peSwmKqcFnnIoexep_7g5CS6hwAV2Z9DXZN_K7-1fBEIRZeb6p3v_lwbkgWOrC1uKsAmlQhYPMu6Cu5gBIZ7my2aSUK-8pGA9vnpwltn5jyfTlwqGW9HbbtxWwMWmPC9A8VwgeRhr4C5EovhuV5_6JgcCfHE8ug-PNcmGQu9prriTcvqTRhbg3QGKCHXDs5VY8"/>
+</div>
+</div>
+</header>
+<!-- Shared NavigationDrawer -->
+<aside class="bg-surface-container-lowest/95 backdrop-blur-2xl fixed left-0 top-0 h-full z-40 flex flex-col py-8 h-full w-80 rounded-r-xl border-r border-outline-variant/20 shadow-2xl transition-all duration-500">
+<div class="mt-20 px-6 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary mb-1">Command Center</h2>
+<div class="h-0.5 w-12 bg-primary"></div>
+</div>
+<nav class="flex-1 space-y-2 overflow-y-auto px-4 custom-scrollbar">
+<a class="bg-secondary-container text-on-secondary-container rounded-lg mx-2 flex items-center gap-4 px-4 h-[72px] transition-transform active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard_customize">dashboard_customize</span>
+<span class="font-label-lg text-label-lg">Orchestration</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-4 h-[72px] hover:bg-surface-variant/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-label-lg text-label-lg">Connectivity Map</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-4 h-[72px] hover:bg-surface-variant/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome_motion">auto_awesome_motion</span>
+<span class="font-label-lg text-label-lg">Guest Journeys</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-4 h-[72px] hover:bg-surface-variant/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="liquor">liquor</span>
+<span class="font-label-lg text-label-lg">Craft Modules</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-4 h-[72px] hover:bg-surface-variant/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+<span class="font-label-lg text-label-lg">Passport Networking</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-4 h-[72px] hover:bg-surface-variant/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-label-lg text-label-lg">POS 3 Integration</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-4 h-[72px] hover:bg-surface-variant/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-lg text-label-lg">E.A.T. Intelligence</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-4 h-[72px] hover:bg-surface-variant/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="conveyor_belt">conveyor_belt</span>
+<span class="font-label-lg text-label-lg">Logistics</span>
+</a>
+</nav>
+<div class="px-8 py-6 border-t border-outline-variant/10">
+<div class="flex items-center gap-3 opacity-50">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="text-[10px] tracking-widest font-mono">NOVEE_V3.8.2_BUILD</span>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-80 mt-20 p-gutter overflow-y-auto h-[calc(100vh-80px)] leather-texture pb-32">
+<div class="max-w-container-max-width mx-auto">
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Section 1: E.A.T. SYSTEM CONTROL -->
+<section class="col-span-12 lg:col-span-5 glass-panel rounded-xl p-card-padding relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+<div class="flex items-center justify-between mb-8">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1 uppercase tracking-wider">E.A.T. SYSTEM CONTROL</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60">Environment • Asset • Transaction</p>
+</div>
+<span class="material-symbols-outlined text-primary/40 text-4xl" data-icon="sensors">sensors</span>
+</div>
+<div class="space-y-6">
+<!-- High Touch Toggles -->
+<div class="flex items-center justify-between p-4 bg-surface-container-high rounded-lg titanium-edge">
+<span class="font-label-lg text-label-lg">ENVIRONMENT SENSORS</span>
+<button class="w-16 h-8 bg-primary rounded-full relative transition-colors duration-300 shadow-inner" onclick="this.classList.toggle('bg-primary'); this.classList.toggle('bg-surface-container-highest')">
+<div class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-transform duration-300 translate-x-8"></div>
+</button>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-high rounded-lg titanium-edge">
+<span class="font-label-lg text-label-lg">ASSET VISIBILITY</span>
+<button class="w-16 h-8 bg-primary rounded-full relative transition-colors duration-300 shadow-inner" onclick="this.classList.toggle('bg-primary'); this.classList.toggle('bg-surface-container-highest')">
+<div class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-transform duration-300 translate-x-8"></div>
+</button>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-high rounded-lg titanium-edge">
+<span class="font-label-lg text-label-lg">TRANSACTION TRANSPARENCY</span>
+<button class="w-16 h-8 bg-surface-container-highest rounded-full relative transition-colors duration-300 shadow-inner" onclick="this.classList.toggle('bg-primary'); this.classList.toggle('bg-surface-container-highest')">
+<div class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-transform duration-300"></div>
+</button>
+</div>
+</div>
+</section>
+<!-- Section 2: POS 3 VISUAL ENGINE -->
+<section class="col-span-12 lg:col-span-7 glass-panel rounded-xl p-card-padding flex flex-col">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-md text-headline-md text-primary uppercase tracking-wider">POS 3 VISUAL ENGINE</h3>
+<div class="flex gap-2">
+<button class="px-4 py-2 border border-primary/30 rounded text-label-sm hover:bg-primary/10 transition-all">PREVIEW LIVE</button>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-gutter flex-1">
+<div class="space-y-8">
+<div class="space-y-2">
+<label class="font-label-lg text-label-lg text-primary block">Staff Terminal Layout</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="h-14 bg-primary text-on-primary font-bold rounded titanium-edge">GRID</button>
+<button class="h-14 bg-surface-container-highest text-on-surface-variant rounded hover:text-primary transition-colors">LIST</button>
+</div>
+</div>
+<div class="space-y-4">
+<label class="font-label-lg text-label-lg text-primary block">Product Visibility</label>
+<div class="flex items-center gap-4">
+<span class="text-xs opacity-50">MIN</span>
+<input class="flex-1" max="100" min="0" type="range" value="85"/>
+<span class="text-xs opacity-50">MAX</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-highest rounded-xl p-4 titanium-edge relative group">
+<img alt="POS Mockup" class="w-full h-full object-cover rounded-lg opacity-40 group-hover:opacity-60 transition-opacity" data-alt="A highly detailed, ultra-realistic 3D render of a futuristic luxury POS terminal screen. The interface is sleek with deep charcoal glassmorphism, glowing gold accents, and high-definition macro photography of premium whiskies and cigars. The lighting is cinematic, reflecting in the glossy screen surfaces of a dimly lit, high-end cigar lounge environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD612xHx3ci7hdi6AAGABg69grBIEizhhZehhztzLOniTkZBW-aT7gwZyIxpEBjaW4YvPvPmioab6qKsMNDZsv7Q8_f5ynDJ2K03Eb7RuIWkBzZKgFfq1GNmEgx78_V7X6ka3C7dfQIPUU0de_vh7JsqrDU74dVhXvMAtohEBvAS_xXMz7aGRNBCfAkEmFMSwCjnXCBxSLQDsNzCjQ5u3uWegDpH93MC0K3ME42ugwNokIH5RYp9jENIdylzdSUvRDHWkpc-VaieLg"/>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+<span class="material-symbols-outlined text-primary mb-2 text-3xl" data-icon="haptic">auto_mode</span>
+<p class="font-label-lg text-label-lg text-primary">Haptic Intensity</p>
+<div class="mt-4 flex gap-1 h-8 items-end">
+<div class="w-2 h-4 bg-primary/20"></div>
+<div class="w-2 h-6 bg-primary/40"></div>
+<div class="w-2 h-8 bg-primary"></div>
+<div class="w-2 h-5 bg-primary/60"></div>
+<div class="w-2 h-7 bg-primary/80"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: CRAFT JOURNEY CONFIG -->
+<section class="col-span-12 glass-panel rounded-xl p-card-padding">
+<div class="flex items-center gap-4 mb-10">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="neurology">neurology</span>
+<h3 class="font-headline-md text-headline-md text-primary uppercase tracking-wider">CRAFT JOURNEY CONFIG: SENSORY INTAKE ALGORITHMS</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- SmokeCraft -->
+<div class="p-6 bg-surface-container-low rounded-xl border border-primary/10 gold-glow">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="air">air</span>
+<span class="font-label-lg text-label-lg">SmokeCraft</span>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] text-primary"><span>AROMA DEPTH</span><span>74%</span></div>
+<input class="w-full" type="range"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] text-primary"><span>DRAW RESISTANCE</span><span>42%</span></div>
+<input class="w-full" type="range"/>
+</div>
+</div>
+</div>
+<!-- PourCraft -->
+<div class="p-6 bg-surface-container-low rounded-xl border border-primary/10">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="water_drop">water_drop</span>
+<span class="font-label-lg text-label-lg">PourCraft</span>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] text-primary"><span>TEMPERATURE</span><span>18°C</span></div>
+<input class="w-full" type="range"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] text-primary"><span>AERATION LEVEL</span><span>60%</span></div>
+<input class="w-full" type="range"/>
+</div>
+</div>
+</div>
+<!-- BeerCraft -->
+<div class="p-6 bg-surface-container-low rounded-xl border border-primary/10">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="sports_bar">sports_bar</span>
+<span class="font-label-lg text-label-lg">BeerCraft</span>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] text-primary"><span>HEAD STABILITY</span><span>92%</span></div>
+<input class="w-full" type="range"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] text-primary"><span>CARBONATION</span><span>12 PSI</span></div>
+<input class="w-full" type="range"/>
+</div>
+</div>
+</div>
+<!-- WineCraft -->
+<div class="p-6 bg-surface-container-low rounded-xl border border-primary/10">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="wine_bar">wine_bar</span>
+<span class="font-label-lg text-label-lg">WineCraft</span>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] text-primary"><span>OXIDATION CTRL</span><span>OFF</span></div>
+<input class="w-full" type="range"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] text-primary"><span>SEDIMENT FILTER</span><span>ACTIVE</span></div>
+<input class="w-full" type="range"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: 360 PASSPORT CONNECTIONS MAP -->
+<section class="col-span-12 glass-panel rounded-xl p-0 relative h-[500px] overflow-hidden group">
+<!-- Map Mockup Background -->
+<div class="absolute inset-0 bg-[#0a0a0b]">
+<img alt="Map View" class="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-[10000ms]" data-alt="A dark, stylized global networking map with glowing amber connection lines pulsating between major international luxury hubs. The map is presented in a minimalist, topographical style with deep obsidian blacks and sharp gold-foil highlights. Transparent digital data overlays and floating technical indicators enhance the mission-critical, high-stakes aesthetic of a global command center." data-location="London" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwb_lm4g12WCj8tth4S3Y3yf1lfTRWVcFNB0ZfcjAI5iJ-jJ74lDqPmV5llldTKrc5GQnWSVqY_cPN9UVTrqpHgGs9F8DUot6rampD9Hwfl4cFhYQhItS-ROyH3vxgC2V8Iu4F0sktQNp6_eFOyzrThykL7N5iFO_GDk9fNrcAzje7iOgtO-Zt_5i1Ej4c-O5HYc6NQueZ9wbG_YezUuxYu5Yg6dVIqql3FPVf4neNF7HGnxcKjvzdNWuIRNmnfvdgFBzKDPGDJ0s"/>
+<!-- Pulsing Dots -->
+<div class="absolute top-1/4 left-1/3 w-3 h-3 bg-primary rounded-full pulse-gold"></div>
+<div class="absolute top-1/2 left-1/2 w-3 h-3 bg-primary rounded-full pulse-gold"></div>
+<div class="absolute top-2/3 left-2/3 w-3 h-3 bg-primary rounded-full pulse-gold"></div>
+</div>
+<div class="relative z-10 p-card-padding h-full flex flex-col justify-between pointer-events-none">
+<div class="flex justify-between items-start pointer-events-auto">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary uppercase tracking-wider">360 PASSPORT CONNECTIONS</h3>
+<p class="text-label-sm text-on-surface opacity-60">REAL-TIME NETWORKING STATUS</p>
+</div>
+<div class="flex gap-4">
+<button class="h-[72px] px-8 glass-panel rounded-full text-primary font-label-lg flex items-center gap-3 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+                                    EDIT CONNECTION LOGIC
+                                </button>
+<button class="h-[72px] px-8 glass-panel rounded-full text-primary font-label-lg flex items-center gap-3 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+                                    STAMP RULES
+                                </button>
+</div>
+</div>
+<div class="flex justify-end gap-12 pointer-events-auto bg-surface/40 backdrop-blur-md p-6 rounded-t-xl titanium-edge self-end">
+<div class="text-center">
+<p class="text-[10px] text-on-surface-variant">ACTIVE JOURNEYS</p>
+<p class="font-headline-md text-primary">1,402</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] text-on-surface-variant">PASSPORT UPTIME</p>
+<p class="font-headline-md text-primary">99.98%</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] text-on-surface-variant">STAMP AUTH RATE</p>
+<p class="font-headline-md text-primary">100%</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- SYSTEM PUSH: Deploy Global Updates -->
+<div class="fixed bottom-0 left-80 right-0 h-32 flex items-center justify-center bg-gradient-to-t from-background to-transparent z-50 px-gutter">
+<button class="w-full max-w-4xl h-[72px] bg-primary text-on-primary font-headline-md rounded-full shadow-[0_0_50px_rgba(233,193,118,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-95 pulse-gold flex items-center justify-center gap-4 tracking-[0.2em]">
+<span class="material-symbols-outlined text-3xl" data-icon="rocket_launch" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+            DEPLOY GLOBAL UPDATES
+        </button>
+</div>
+<!-- Mobile Navigation Suppressed per Rules (Admin High-Stakes Context) -->
+<script>
+        // Micro-interactions and atmospheric effects
+        document.addEventListener('mousemove', (e) => {
+            const panels = document.querySelectorAll('.glass-panel');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            panels.forEach(panel => {
+                const rect = panel.getBoundingClientRect();
+                const dx = e.clientX - (rect.left + rect.width / 2);
+                const dy = e.clientY - (rect.top + rect.height / 2);
+                
+                // Subtle parallax based on mouse
+                if (panel.classList.contains('group')) {
+                   // Only apply to specific panels to avoid layout thrashing
+                }
+            });
+        });
+
+        // Toggle handling
+        const toggles = document.querySelectorAll('button[onclick]');
+        toggles.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const audio = new Audio('https://www.soundjay.com/buttons/button-20.mp3'); // Fallback placeholder logic
+                // UI Sound would trigger here for tactile feel
+            });
+        });
+    </script>
+</body></html>

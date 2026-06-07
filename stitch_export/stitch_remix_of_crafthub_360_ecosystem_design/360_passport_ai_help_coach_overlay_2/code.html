@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#e5e2e3",
+                    "error": "#ffb4ab",
+                    "surface-container-lowest": "#0e0e0f",
+                    "on-tertiary-fixed": "#261814",
+                    "on-primary": "#412d00",
+                    "on-surface-variant": "#d1c5b4",
+                    "inverse-surface": "#e5e2e3",
+                    "surface": "#131314",
+                    "secondary-container": "#c68315",
+                    "on-secondary": "#462a00",
+                    "primary-container": "#c5a059",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container": "#1f1f20",
+                    "on-secondary-container": "#3d2400",
+                    "inverse-primary": "#775a19",
+                    "surface-container-low": "#1b1b1c",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "secondary": "#ffb95a",
+                    "on-tertiary": "#3c2d28",
+                    "surface-container-high": "#2a2a2b",
+                    "secondary-fixed": "#ffddb6",
+                    "primary-fixed-dim": "#e9c176",
+                    "outline-variant": "#4e4639",
+                    "on-surface": "#e5e2e3",
+                    "on-primary-container": "#4e3700",
+                    "on-error": "#690005",
+                    "surface-tint": "#e9c176",
+                    "primary": "#e9c176",
+                    "error-container": "#93000a",
+                    "inverse-on-surface": "#303031",
+                    "tertiary-container": "#b7a09a",
+                    "on-error-container": "#ffdad6",
+                    "surface-dim": "#131314",
+                    "primary-fixed": "#ffdea5",
+                    "tertiary": "#dac1bb",
+                    "surface-container-highest": "#353436",
+                    "surface-variant": "#353436",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "outline": "#9a8f80",
+                    "surface-bright": "#39393a",
+                    "on-tertiary-container": "#473733",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-primary-fixed": "#261900",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "background": "#131314"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "unit": "8px",
+                    "margin": "64px",
+                    "gutter": "32px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .airy-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(233, 193, 118, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .gold-foil-accent {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #e9c176 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .gold-button-foil {
+            background: linear-gradient(135deg, #e9c176 0%, #c68315 100%);
+            box-shadow: 0 4px 15px rgba(198, 131, 21, 0.3);
+        }
+        .scan-animation {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e9c176, transparent);
+            top: 0;
+            animation: scan-move 6s linear infinite;
+            box-shadow: 0 0 15px #e9c176;
+        }
+        @keyframes scan-move {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .haptic-feedback:active {
+            transform: scale(0.96);
+            transition: transform 0.05s;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 border-b border-white/5 bg-surface-container/40 backdrop-blur-2xl">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="clinical_notes">clinical_notes</span>
+<h1 class="font-headline-md text-[20px] md:text-headline-md font-medium text-on-surface">Passport Hub | <span class="text-primary italic">Coach Mode</span></h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center overflow-hidden bg-surface-container-high">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvkUuAU-LE7CtsXAzj9IK8XLIAnqQflWDBLv0ixdd7U2rSwlJbgWg3-tXojTaWlPRZ0XBag4oLDMowtH1T9CcPChML29V0Mwfu1Rvt3gsOmyDRuLOU387A9uxfWmYKkYdX_CuRlg9vPazf8WxawZ7gmw6-hseX3xKoyX6LXr9INuV8w08q3xj1E0Hug-Z4g6DcZKpNtVHuPkuqonS3EEFQlqz1w1tr3_qO4QLeo80bQ5nymtaxqcKvZh1IIoplNdCP9W2FZEX6-2Q"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative h-screen w-full flex items-center justify-center pt-16">
+<!-- Background Bokeh (Underlay) -->
+<div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag');">
+<div class="absolute inset-0 bg-background/40 backdrop-blur-sm"></div>
+<div class="scan-animation"></div>
+</div>
+<!-- Coach Modal Overlay -->
+<section class="relative z-10 w-full max-w-xl mx-6">
+<div class="airy-glass rounded-[2.5rem] overflow-hidden p-8 flex flex-col gap-8">
+<!-- Risk & Status Header -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-2 gold-foil-accent font-label-lg tracking-widest uppercase">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">security</span>
+                        Passport Coach: Security
+                    </span>
+<div class="px-4 py-1.5 rounded-full bg-error-container/20 border border-error/50 text-error text-label-sm font-bold uppercase tracking-widest">
+                        CRITICAL
+                    </div>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-white drop-shadow-sm">Unverified Scan Attempt</h2>
+</div>
+<!-- Guidance Body -->
+<div class="space-y-6">
+<div class="p-6 bg-white/5 rounded-2xl border-l-2 border-primary/60">
+<p class="font-label-lg text-primary uppercase mb-2 tracking-widest opacity-80">Recommendation</p>
+<p class="font-body-lg text-body-lg text-white leading-relaxed">
+                        Ensure both guests have confirmed the connection via their respective devices to validate credentials.
+                    </p>
+</div>
+<div class="flex flex-col gap-1 px-2">
+<p class="font-label-sm text-on-surface-variant uppercase tracking-wider">Technical Log</p>
+<p class="font-body-md text-on-surface text-opacity-80 italic">
+                        "Protocol violation: Prevents fraudulent stamp accumulation."
+                    </p>
+</div>
+</div>
+<!-- Interaction Matrix -->
+<div class="grid grid-cols-2 gap-4">
+<button class="haptic-feedback h-[72px] flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-white">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-lg">Read</span>
+</button>
+<button class="haptic-feedback h-[72px] flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-white">
+<span class="material-symbols-outlined" data-icon="hearing">hearing</span>
+<span class="font-label-lg">Hear</span>
+</button>
+<button class="haptic-feedback h-[72px] flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-white">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+<span class="font-label-lg">Replay</span>
+</button>
+<button class="haptic-feedback h-[72px] flex items-center justify-center gap-3 rounded-2xl gold-button-foil text-on-primary font-bold shadow-xl transition-all">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span class="font-label-lg uppercase tracking-widest">Call Manager</span>
+</button>
+</div>
+<button class="haptic-feedback w-full py-4 text-on-surface-variant hover:text-white transition-all font-label-lg uppercase tracking-[0.2em] opacity-60 hover:opacity-100">
+                Dismiss Guidance
+            </button>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Hidden on Desktop) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-8 pt-4 bg-surface-container-highest/60 backdrop-blur-3xl border-t border-white/5">
+<div class="flex flex-col items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-sm mt-1">Coach</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined text-[24px]" data-icon="graphic_eq">graphic_eq</span>
+<span class="font-label-sm mt-1">Haptics</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined text-[24px]" data-icon="close">close</span>
+<span class="font-label-sm mt-1">Dismiss</span>
+</div>
+</nav>
+<script>
+    // Tactile feedback simulation
+    document.querySelectorAll('.haptic-feedback').forEach(button => {
+        button.addEventListener('touchstart', () => {
+            if ('vibrate' in navigator) {
+                navigator.vibrate(12);
+            }
+        });
+    });
+
+    window.addEventListener('load', () => {
+        console.log('Airy Coach UI initialized.');
+    });
+</script>
+</body></html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background-image: linear-gradient(rgba(19, 19, 20, 0.8), rgba(19, 19, 20, 0.8)), 
+                              linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+        .gold-foil-text {
+            background: linear-gradient(135deg, #ffdea5 0%, #e9c176 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .haptic-press:active {
+            transform: scale(0.97);
+            filter: brightness(1.1);
+        }
+        @keyframes subtle-pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        .status-glow {
+            box-shadow: 0 0 40px -10px rgba(233, 193, 118, 0.3);
+            animation: subtle-pulse 4s infinite ease-in-out;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#261814",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "primary-fixed": "#ffdea5",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#353436",
+                        "surface-dim": "#131314",
+                        "tertiary": "#dac1bb",
+                        "primary": "#e9c176",
+                        "on-background": "#e5e2e3",
+                        "background": "#131314",
+                        "outline": "#9a8f80",
+                        "on-secondary-fixed": "#2a1800",
+                        "primary-container": "#c5a059",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-secondary-container": "#3d2400",
+                        "surface-container-high": "#2a2a2b",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#e5e2e3",
+                        "surface-tint": "#e9c176",
+                        "surface-variant": "#353436",
+                        "on-surface-variant": "#d1c5b4",
+                        "on-primary": "#412d00",
+                        "secondary-fixed": "#ffddb6",
+                        "tertiary-container": "#b7a09a",
+                        "inverse-on-surface": "#303031",
+                        "surface-bright": "#39393a",
+                        "surface-container": "#1f1f20",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-container-low": "#1b1b1c",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "secondary": "#ffb95a",
+                        "on-tertiary-container": "#473733",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-surface": "#e5e2e3",
+                        "on-tertiary": "#3c2d28",
+                        "tertiary-fixed": "#f7ddd6",
+                        "outline-variant": "#4e4639",
+                        "surface": "#131314",
+                        "on-primary-fixed": "#261900",
+                        "on-secondary": "#462a00",
+                        "on-primary-container": "#4e3700",
+                        "secondary-container": "#c68315",
+                        "on-primary-fixed-variant": "#5d4201"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "card-padding": "24px",
+                        "gutter": "32px",
+                        "unit": "8px",
+                        "margin": "64px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container/30 overflow-hidden">
+<!-- Background Layer -->
+<div class="fixed inset-0 z-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag');">
+<div class="absolute inset-0 bg-background/40 backdrop-blur-sm"></div>
+</div>
+<!-- Navigation Shell (TopAppBar) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-16 py-8 bg-surface/5 backdrop-blur-[40px] border-b border-white/20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">shield_person</span>
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tighter">CRAFTHUB 360</span>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<span class="text-label-lg font-label-lg text-secondary-fixed-dim hover:scale-95 transition-transform duration-200 hover:brightness-125 cursor-pointer">ECOSYSTEM</span>
+<span class="text-label-lg font-label-lg text-primary font-bold cursor-pointer underline decoration-primary decoration-2 underline-offset-8">EXPORT</span>
+<span class="text-label-lg font-label-lg text-secondary-fixed-dim hover:scale-95 transition-transform duration-200 hover:brightness-125 cursor-pointer">VAULT</span>
+</nav>
+<div class="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center bg-surface-container-high overflow-hidden">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+</div>
+</header>
+<!-- Navigation Drawer (Side) -->
+<aside class="fixed left-0 top-0 h-full w-80 z-40 pt-32 px-4 bg-surface/5 backdrop-blur-[40px] border-r border-white/10 hidden lg:flex flex-col gap-2">
+<div class="px-4 mb-10">
+<h3 class="text-primary font-headline-md">NOVEE OS</h3>
+<p class="text-secondary-fixed-dim text-body-md opacity-70">Ecosystem Master</p>
+</div>
+<a class="flex items-center gap-4 px-4 py-3 text-secondary-fixed-dim hover:bg-white/5 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">smoke_free</span>
+<span class="text-body-md">SmokeCraft</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-secondary-fixed-dim hover:bg-white/5 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">sports_bar</span>
+<span class="text-body-md">BeerCraft</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-secondary-fixed-dim hover:bg-white/5 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">liquor</span>
+<span class="text-body-md">PourCraft</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-secondary-fixed-dim hover:bg-white/5 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">wine_bar</span>
+<span class="text-body-md">WineCraft</span>
+</a>
+<div class="flex items-center gap-4 px-4 py-3 text-primary bg-primary-container/10 border-l-2 border-primary-container rounded-r-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span class="text-body-md font-bold">360 Passport</span>
+</div>
+<a class="flex items-center gap-4 px-4 py-3 text-secondary-fixed-dim hover:bg-white/5 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">restaurant</span>
+<span class="text-body-md">E.A.T.</span>
+</a>
+<div class="mt-auto px-4 py-8 border-t border-white/5">
+<p class="text-label-sm text-on-tertiary-fixed-variant">V.3.60.0</p>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="relative z-10 min-h-screen pt-32 pb-20 px-8 lg:ml-80 flex flex-col items-center justify-center">
+<div class="max-w-4xl w-full space-y-12">
+<!-- Export Status Header -->
+<div class="text-center space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+<div class="inline-flex items-center justify-center w-24 h-24 rounded-full glass-panel gold-foil-border status-glow mb-6">
+<span class="material-symbols-outlined text-primary text-5xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h1 class="font-display-lg text-display-lg gold-foil-text tracking-tight">EXPORT READY</h1>
+<p class="text-body-lg text-on-surface-variant font-medium max-w-lg mx-auto">
+                    The Codex-Compatible Build Package has been successfully compiled and validated. All dependency locks are synchronized.
+                </p>
+</div>
+<!-- Build Manifest Card -->
+<div class="glass-panel bg-surface-container-lowest/40 gold-foil-border rounded-xl p-8 shadow-2xl space-y-6">
+<div class="flex items-center justify-between border-b border-white/10 pb-4">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+                        Build Manifest
+                    </h2>
+<span class="text-label-lg font-label-lg px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full">v3.60.0-RELEASE</span>
+</div>
+<div class="space-y-4">
+<!-- Asset Manifest -->
+<div class="flex items-center justify-between p-4 rounded-lg bg-surface/30 hover:bg-surface/50 transition-colors border border-white/5">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary-fixed-dim">folder_open</span>
+<div>
+<p class="font-label-lg text-on-surface">/public</p>
+<p class="text-label-sm text-on-surface-variant">Asset Manifest (Images, Icons, Metadata)</p>
+</div>
+</div>
+<span class="text-label-sm text-primary font-bold">12.4 MB</span>
+</div>
+<!-- Compiled Styles -->
+<div class="flex items-center justify-between p-4 rounded-lg bg-surface/30 hover:bg-surface/50 transition-colors border border-white/5">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary-fixed-dim">css</span>
+<div>
+<p class="font-label-lg text-on-surface">/dist/assets/styles.min.css</p>
+<p class="text-label-sm text-on-surface-variant">Compiled Production Stylesheets</p>
+</div>
+</div>
+<span class="text-label-sm text-primary font-bold">482 KB</span>
+</div>
+<!-- Dependency Lock -->
+<div class="flex items-center justify-between p-4 rounded-lg bg-surface/30 hover:bg-surface/50 transition-colors border border-white/5">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary-fixed-dim">lock</span>
+<div>
+<p class="font-label-lg text-on-surface">package.json</p>
+<p class="text-label-sm text-on-surface-variant">Dependency Lock &amp; Build Configuration</p>
+</div>
+</div>
+<span class="text-label-sm text-primary font-bold">14 KB</span>
+</div>
+</div>
+<!-- Footer Summary -->
+<div class="pt-4 flex justify-between items-end">
+<div class="text-label-sm text-on-surface-variant opacity-60">
+                        SHA-256 Checksum: f7a9...2e01<br/>
+                        Compiled at: 2024-05-20 14:22:11
+                    </div>
+<div class="text-right">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-widest">Total Size</p>
+<p class="font-headline-md text-headline-md text-primary">12.9 MB</p>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="flex justify-center pt-4">
+<button class="haptic-press group relative overflow-hidden px-12 py-5 rounded-full bg-primary-container text-on-primary-container font-headline-md shadow-2xl hover:shadow-primary/20 transition-all duration-300 flex items-center gap-4" onclick="simulateDownload()">
+<div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+<span class="material-symbols-outlined text-3xl group-hover:translate-y-1 transition-transform" style="font-variation-settings: 'FILL' 1;">download_for_offline</span>
+<span class="tracking-wide">DOWNLOAD ZIP ARCHIVE</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="fixed bottom-0 w-full z-50 py-6 px-16 flex justify-between items-center bg-surface-container-lowest/80 backdrop-blur-md border-t border-white/5">
+<div class="text-label-caps font-bold text-primary tracking-widest uppercase">
+            © 2024 NOVEE OS • FOUNDER LEVEL 0 SECURED
+        </div>
+<div class="flex gap-8">
+<a class="text-label-caps text-on-tertiary-fixed-variant hover:text-primary-fixed duration-300" href="#">NoveeOps Status</a>
+<a class="text-label-caps text-on-tertiary-fixed-variant hover:text-primary-fixed duration-300" href="#">Health Monitor</a>
+<a class="text-label-caps text-on-tertiary-fixed-variant hover:text-primary-fixed duration-300" href="#">Privacy</a>
+</div>
+</footer>
+<script>
+        function simulateDownload() {
+            const btn = document.querySelector('button');
+            const originalContent = btn.innerHTML;
+            
+            // Haptic/Interaction Feedback
+            btn.classList.add('scale-95');
+            btn.innerHTML = `
+                <span class="material-symbols-outlined animate-spin">refresh</span>
+                <span>PREPARING ARCHIVE...</span>
+            `;
+            
+            setTimeout(() => {
+                btn.classList.remove('scale-95');
+                btn.innerHTML = `
+                    <span class="material-symbols-outlined">check</span>
+                    <span>ARCHIVE GENERATED</span>
+                `;
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                }, 3000);
+            }, 1500);
+        }
+
+        // Simple mouse parallax for background depth
+        document.addEventListener('mousemove', (e) => {
+            const bg = document.querySelector('.fixed.inset-0.z-0');
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            bg.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+        });
+    </script>
+</body></html>

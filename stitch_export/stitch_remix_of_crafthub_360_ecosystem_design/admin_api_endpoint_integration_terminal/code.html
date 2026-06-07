@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 | API Integration Terminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Space+Grotesk:wght@400;500;700&amp;family=Manrope:wght@400;500;600&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "surface-tint": "#e9c349",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary-fixed": "#241a00",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#ffe088",
+                        "on-primary-fixed-variant": "#574500",
+                        "inverse-on-surface": "#313030",
+                        "primary-fixed-dim": "#e9c349",
+                        "surface-container-highest": "#353534",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-secondary-container": "#b7b5b4",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "surface-variant": "#353534",
+                        "tertiary-container": "#b2b3b3",
+                        "on-primary-container": "#554300",
+                        "secondary-fixed": "#e5e2e1",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-background": "#e5e2e1",
+                        "primary": "#f2ca50",
+                        "on-tertiary-container": "#444546",
+                        "surface-container": "#201f1f",
+                        "outline": "#99907c",
+                        "on-secondary": "#313030",
+                        "on-surface": "#e5e2e1",
+                        "secondary-container": "#474746",
+                        "on-error-container": "#ffdad6",
+                        "tertiary": "#cecece",
+                        "secondary": "#c8c6c5",
+                        "primary-container": "#d4af37",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-bright": "#3a3939",
+                        "on-tertiary": "#2f3131",
+                        "error-container": "#93000a",
+                        "background": "#131313",
+                        "on-secondary-fixed-variant": "#474746",
+                        "inverse-primary": "#735c00",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "outline-variant": "#4d4635",
+                        "on-primary": "#3c2f00",
+                        "surface-container-low": "#1c1b1b",
+                        "on-surface-variant": "#d0c5af",
+                        "surface": "#131313",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-dim": "#131313",
+                        "gold-foil": "#c5a059"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "touch-target-min": "56px",
+                        "gutter": "32px",
+                        "tour-card-width": "520px",
+                        "container-padding": "64px"
+                    },
+                    "fontFamily": {
+                        "display-tour": ["Playfair Display"],
+                        "label-sm": ["Space Grotesk"],
+                        "body-intro": ["Manrope"],
+                        "label-caps": ["Space Grotesk"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "body-md": ["Manrope"],
+                        "terminal": ["Fira Code"]
+                    },
+                    "fontSize": {
+                        "display-tour": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "body-intro": ["20px", {"lineHeight": "32px", "fontWeight": "400"}],
+                        "label-caps": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                        "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .obsidian-glass {
+            background: rgba(19, 19, 19, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .gold-shimmer {
+            background: linear-gradient(90deg, #c5a059 0%, #f2ca50 50%, #c5a059 100%);
+            background-size: 200% auto;
+            animation: shimmer 4s linear infinite;
+        }
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+        .terminal-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .terminal-scroll::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2);
+        }
+        .terminal-scroll::-webkit-scrollbar-thumb {
+            background: #c5a059;
+            border-radius: 10px;
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .7; transform: scale(0.95); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-gold-foil/30 overflow-hidden h-screen w-screen flex flex-col">
+<!-- Background Layer -->
+<div class="fixed inset-0 z-[-1] bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag')">
+<div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+</div>
+<!-- Top Navigation Bar (Shared Component Logic) -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-gutter py-6 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">dashboard_customize</span>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-primary font-bold transition-colors" href="#">Integration</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Monitoring</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Security</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-primary-container/20 text-on-surface-variant transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">settings_suggest</span>
+</button>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 mt-24 mb-32 px-container-padding grid grid-cols-12 gap-8 h-[calc(100vh-280px)] overflow-hidden">
+<!-- Left Column: System Connectivity -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6 h-full">
+<div class="obsidian-glass rounded-xl p-8 border-t-2 border-gold-foil">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant mb-6 uppercase tracking-widest">System Connectivity</h2>
+<div class="space-y-6">
+<!-- NOVEE OS Core -->
+<div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
+<div class="flex items-center gap-4">
+<div class="w-2 h-2 rounded-full bg-primary status-pulse shadow-[0_0_10px_#f2ca50]"></div>
+<div>
+<p class="text-label-caps font-bold">NOVEE OS Core</p>
+<p class="text-[10px] text-on-surface-variant">v4.2.0-STABLE</p>
+</div>
+</div>
+<span class="text-[10px] font-label-caps text-primary bg-primary/10 px-2 py-1 rounded">ACTIVE</span>
+</div>
+<!-- ElevenLabs Voice -->
+<div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
+<div class="flex items-center gap-4">
+<div class="w-2 h-2 rounded-full bg-primary status-pulse shadow-[0_0_10px_#f2ca50]"></div>
+<div>
+<p class="text-label-caps font-bold">ElevenLabs Voice</p>
+<p class="text-[10px] text-on-surface-variant">WS_LATENCY: 42ms</p>
+</div>
+</div>
+<span class="text-[10px] font-label-caps text-primary bg-primary/10 px-2 py-1 rounded">SYNCED</span>
+</div>
+<!-- POS 3 Sync -->
+<div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
+<div class="flex items-center gap-4">
+<div class="w-2 h-2 rounded-full bg-primary status-pulse shadow-[0_0_10px_#f2ca50]"></div>
+<div>
+<p class="text-label-caps font-bold">POS 3 Sync</p>
+<p class="text-[10px] text-on-surface-variant">LAST_PUSH: 2s ago</p>
+</div>
+</div>
+<span class="text-[10px] font-label-caps text-primary bg-primary/10 px-2 py-1 rounded">READY</span>
+</div>
+</div>
+</div>
+<!-- Large Action Buttons -->
+<button class="h-[72px] w-full gold-shimmer text-on-primary font-label-caps font-bold rounded-xl flex items-center justify-center gap-3 transition-transform active:scale-95 shadow-lg shadow-gold-foil/20">
+<span class="material-symbols-outlined">refresh</span>
+                RE-VERIFY CONNECTIONS
+            </button>
+<button class="h-[72px] w-full border border-secondary text-secondary font-label-caps font-bold rounded-xl flex items-center justify-center gap-3 transition-all hover:bg-white/5 active:scale-95">
+<span class="material-symbols-outlined">file_download</span>
+                EXPORT API CODEX
+            </button>
+</div>
+<!-- Right Column: API Endpoints & Terminal -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-8 h-full">
+<!-- API Endpoint Cards (Scrollable) -->
+<div class="flex-1 overflow-y-auto terminal-scroll pr-4">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">api</span> ACTIVE ENDPOINTS
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Endpoint Card 1 -->
+<div class="obsidian-glass p-6 rounded-xl group transition-all hover:border-gold-foil/40">
+<div class="flex justify-between items-start mb-4">
+<span class="px-2 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded">GET</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-foil"></div>
+</label>
+</div>
+<p class="font-terminal text-sm text-on-surface break-all mb-2">/api/passport/profile</p>
+<p class="text-[10px] text-on-surface-variant font-label-caps">USER IDENTITY HANDSHAKE</p>
+</div>
+<!-- Endpoint Card 2 -->
+<div class="obsidian-glass p-6 rounded-xl group transition-all hover:border-gold-foil/40">
+<div class="flex justify-between items-start mb-4">
+<span class="px-2 py-1 bg-secondary-container text-secondary text-[10px] font-bold rounded">POST</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-foil"></div>
+</label>
+</div>
+<p class="font-terminal text-sm text-on-surface break-all mb-2">/api/transaction/sync</p>
+<p class="text-[10px] text-on-surface-variant font-label-caps">FINANCIAL LEDGER SYNC</p>
+</div>
+<!-- Endpoint Card 3 -->
+<div class="obsidian-glass p-6 rounded-xl group transition-all hover:border-gold-foil/40">
+<div class="flex justify-between items-start mb-4">
+<span class="px-2 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded">GET</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-foil"></div>
+</label>
+</div>
+<p class="font-terminal text-sm text-on-surface break-all mb-2">/api/voice/status</p>
+<p class="text-[10px] text-on-surface-variant font-label-caps">SPEECH ENGINE ANALYTICS</p>
+</div>
+<!-- Endpoint Card 4 -->
+<div class="obsidian-glass p-6 rounded-xl group transition-all hover:border-gold-foil/40">
+<div class="flex justify-between items-start mb-4">
+<span class="px-2 py-1 bg-secondary-container text-secondary text-[10px] font-bold rounded">POST</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-foil"></div>
+</label>
+</div>
+<p class="font-terminal text-sm text-on-surface break-all mb-2">/api/auth/challenge</p>
+<p class="text-[10px] text-on-surface-variant font-label-caps">MFA CRYPTOGRAPHIC VERIFY</p>
+</div>
+</div>
+</div>
+<!-- Terminal Block -->
+<div class="h-64 obsidian-glass rounded-xl flex flex-col overflow-hidden border border-white/5">
+<div class="bg-black/40 px-6 py-2 flex items-center justify-between border-b border-white/5">
+<div class="flex gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-error/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-secondary/50"></div>
+</div>
+<span class="font-terminal text-[10px] text-on-surface-variant tracking-widest">LIVE DATA HANDSHAKE</span>
+</div>
+<div class="flex-1 p-6 font-terminal text-[12px] text-primary/80 overflow-y-auto terminal-scroll space-y-2" id="terminal-content">
+<p class="text-on-surface-variant">[14:22:01] INITIALIZING HANDSHAKE: NOVEE_CORE -&gt; BACKEND_MASTER</p>
+<p>[14:22:02] <span class="text-secondary">{ "request_id": "CH360-X92", "method": "GET", "status": 200 }</span></p>
+<p class="text-on-surface-variant">[14:22:04] STREAMING_VOICE_PACKET: elevenlabs_us_east_1 [CHUNK_SIZE: 1024kb]</p>
+<p>[14:22:05] <span class="text-secondary">{ "auth": "SIG_VALID", "token_exp": "2024-12-31T23:59:59Z" }</span></p>
+<p class="text-gold-foil">[14:22:08] CRITICAL: POS_3_SYNC PUSHING LEDGER DATA...</p>
+<p>[14:22:10] <span class="text-secondary">{ "records_synced": 142, "latency": "12ms", "node": "NY-01" }</span></p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Shared Component Logic) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1">save</span>
+<span class="text-label-sm font-label-sm">Save</span>
+</a>
+<div class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 transform translate-y-0.5 transition-all">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span class="text-label-sm font-label-sm">Preview</span>
+</div>
+</footer>
+<script>
+        // Micro-interaction: Mock terminal streaming
+        const terminal = document.getElementById('terminal-content');
+        const logs = [
+            { t: '14:22:15', msg: 'HEARTBEAT_ACK: NOVEE_OS [HEALTH: 98%]', type: 'info' },
+            { t: '14:22:18', msg: '{ "packet_loss": 0, "jitter": "1.2ms" }', type: 'json' },
+            { t: '14:22:21', msg: 'ENCRYPTING CHANNEL: AES-256-GCM', type: 'info' },
+            { t: '14:22:25', msg: '{ "status": "CONNECTED", "handshake": "COMPLETE" }', type: 'json' }
+        ];
+        let logIndex = 0;
+
+        function addLog() {
+            const log = logs[logIndex];
+            const p = document.createElement('p');
+            
+            if (log.type === 'info') {
+                p.className = 'text-on-surface-variant';
+                p.innerHTML = `[${log.t}] ${log.msg}`;
+            } else {
+                p.innerHTML = `[${log.t}] <span class="text-secondary">${log.msg}</span>`;
+            }
+
+            terminal.appendChild(p);
+            terminal.scrollTop = terminal.scrollHeight;
+            
+            logIndex = (logIndex + 1) % logs.length;
+            setTimeout(addLog, 3000 + Math.random() * 2000);
+        }
+
+        setTimeout(addLog, 2000);
+
+        // Glass button interaction
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('touchstart', () => {
+                btn.style.transform = 'scale(0.95)';
+            });
+            btn.addEventListener('touchend', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 | Kiosk Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#e9c176",
+                    "inverse-primary": "#775a19",
+                    "surface-container-low": "#1b1b1c",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "surface-container-high": "#2a2a2b",
+                    "secondary": "#ffb95a",
+                    "surface-dim": "#131314",
+                    "on-tertiary": "#3c2d28",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-container": "#1f1f20",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-error-container": "#ffdad6",
+                    "on-error": "#690005",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#ffdea5",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "tertiary-container": "#b7a09a",
+                    "inverse-on-surface": "#303031",
+                    "on-surface": "#e5e2e3",
+                    "error-container": "#93000a",
+                    "on-secondary": "#462a00",
+                    "tertiary-fixed": "#f7ddd6",
+                    "outline-variant": "#4e4639",
+                    "on-surface-variant": "#d1c5b4",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-background": "#e5e2e3",
+                    "surface": "#131314",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface-container-highest": "#353436",
+                    "on-primary-fixed": "#261900",
+                    "background": "#131314",
+                    "primary": "#e9c176",
+                    "primary-container": "#c5a059",
+                    "outline": "#9a8f80",
+                    "on-secondary-container": "#3d2400",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "surface-bright": "#39393a",
+                    "tertiary": "#dac1bb",
+                    "surface-variant": "#353436",
+                    "on-tertiary-fixed": "#261814",
+                    "on-primary-container": "#4e3700",
+                    "on-primary": "#412d00",
+                    "secondary-container": "#c68315",
+                    "secondary-fixed": "#ffddb6",
+                    "on-tertiary-container": "#473733"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "gutter": "32px",
+                    "unit": "8px",
+                    "card-padding": "24px",
+                    "margin": "64px"
+            },
+            "fontFamily": {
+                    "body-md": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.bg-wood-grain {
+    background-color: #0e0e0f;
+    background-image: linear-gradient(rgba(14, 14, 15, 0.85), rgba(14, 14, 15, 0.85)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuAo1IIVg13RIrFb0TnMXsIbugr2qvpiEeVrIQ0Z-aPdO9lFGcwbyVny-Ja6rCf3O2d6CCW3tSzov0GWs7Wp8fsbJLWRP_sZ5jl3rtiR3pzTcHbQBxgQgNRoCCoJcQZN3t26Htl3pQL6EQb5TqI5mcZsQaG_FaR994XJbBcwx4wXG9Y5KIjA0cbd4KIsaqy5deGvt5vs6z0XLyWSSrcOIl5gbvGGtjb2l1eE5KiV010pp_xNJn8RYKqwP_UvnKXjgsUw8nZvEycNN88);
+    background-size: cover;
+    background-attachment: fixed
+    }
+.glass-panel {
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(233, 193, 118, 0.15);
+    background: linear-gradient(135deg, rgba(31, 31, 32, 0.7) 0%, rgba(19, 19, 20, 0.8) 100%)
+    }
+.gold-foil-edge {
+    box-shadow: inset 0 0 0 1px rgba(233, 193, 118, 0.2), 0 10px 30px -10px rgba(0, 0, 0, 0.5)
+    }
+.amber-glow:active {
+    box-shadow: 0 0 25px rgba(233, 193, 118, 0.4);
+    transform: scale(0.98)
+    }
+::-webkit-scrollbar {
+    width: 8px
+    }
+::-webkit-scrollbar-track {
+    background: #131314
+    }
+::-webkit-scrollbar-thumb {
+    background: #4e4639;
+    border-radius: 4px
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-wood-grain text-on-surface font-body-md overflow-x-hidden">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<button class="p-2 text-primary hover:bg-surface-variant/50 transition-colors duration-300 rounded-full active:scale-95">
+<span class="material-symbols-outlined text-headline-md">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-6">
+<span class="font-label-lg text-label-lg text-primary tracking-widest">Lounge</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant tracking-widest hover:text-primary transition-colors cursor-pointer">Cellar</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant tracking-widest hover:text-primary transition-colors cursor-pointer">Humidor</span>
+</div>
+<button class="px-6 py-2 bg-primary-container text-on-primary-container font-label-lg rounded-full shadow-lg hover:brightness-110 transition-all active:scale-95">
+                Grand Lounge
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-32 pb-40 px-gutter max-w-container-max-width mx-auto">
+<!-- Header Welcome -->
+<div class="mb-12">
+<h2 class="font-headline-xl text-headline-xl text-primary-fixed mb-2">Welcome back, Julian</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">The humidor is at 70% humidity. Your 1998 Vintage Porto is at optimal serving temperature. What shall we explore today?</p>
+</div>
+<!-- Bento Grid Layout for Modules -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- SmokeCraft 360: Large Primary Module -->
+<div class="md:col-span-8 group cursor-pointer relative overflow-hidden rounded-xl glass-panel gold-foil-edge h-[500px] amber-glow transition-all duration-500">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60" data-alt="A luxurious close-up of a premium hand-rolled cigar resting on a dark, pebbled leather surface next to a crystal glass of amber-colored bourbon. The lighting is low-key and dramatic, with soft golden highlights reflecting off the glass and wood textures. The mood is sophisticated, masculine, and evocative of a private members-only cigar lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtxXMEEzMHVgFRgiYM6rDF5DZpmLfN7e-nGD411PPbJDmtiRNbqKVCrQFWKRhcuZQbbIRNwAqwEex-w2IzrR0boALJG3NtIANb8KTJk7qJz6j8Zo2iHhX3G-GQVEFJ5NkTfxTCYVivdJYLC_NDxEzlI77t5Y01dTE2nuIucajuyWKzpIDKTVEVviQGakYgPKBHG5MKJJqsSOG584pVX46WZFNrxRHTYrwy2nLPsusBTt1ODOpMRd84LCnPUv62lecqtJWhIzQUNfE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary text-4xl">smoking_rooms</span>
+<h3 class="font-headline-lg text-headline-lg text-white">SmokeCraft 360</h3>
+</div>
+<p class="text-on-surface-variant font-body-md mb-6 max-w-lg">Cigars, premium leather seating, and curated bourbon pairings. Explore our private reserve humidor collection.</p>
+<div class="flex gap-4">
+<span class="bg-primary/20 text-primary px-4 py-1 rounded-full text-label-sm border border-primary/30">72 Selects</span>
+<span class="bg-secondary/20 text-secondary px-4 py-1 rounded-full text-label-sm border border-secondary/30">Humidor Active</span>
+</div>
+</div>
+</div>
+<!-- PourCraft 360 -->
+<div class="md:col-span-4 group cursor-pointer relative overflow-hidden rounded-xl glass-panel gold-foil-edge h-[500px] amber-glow transition-all duration-500">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-50" data-alt="A high-end cocktail scene featuring a polished silver shaker in motion with ice crystals caught in mid-air, surrounded by premium spirit bottles on a dark marble bar top. The lighting is cool and moody with focused spotlights on the liquid. The aesthetic is elegant and energetic, capturing the artistry of a master mixologist in a luxury setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPzLhG3Lzb1vraEY_PpQjnSFAeCzqg2rWM4F_16n71bpUJMf-FxI7dr03y9kx8vjqqQmnxplVbcTOZ0SX9eDIZ32iRiHlZGdaL_ZvRMGdPxkLPAJcTb0w5KkPKm2ZXvqH4j4u-KlkOfmSpr9-qLStlRsxXXrYgr1yKKEDjbtrfaccJt_g0I3sFkO1blU8Y0WI1-sn4VA6AGeJyArptNamG7u7qfjxzbbQljUBmP0mkSheTpxt55nO-i5GuPVkSFaMNFK1IVXQou7I"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<span class="material-symbols-outlined text-secondary text-4xl mb-4">liquor</span>
+<h3 class="font-headline-lg text-headline-lg text-white mb-2">PourCraft 360</h3>
+<p class="text-on-surface-variant font-body-md">Mixology masterclass and bespoke spirit selection.</p>
+</div>
+</div>
+<!-- BeerCraft 360 -->
+<div class="md:col-span-4 group cursor-pointer relative overflow-hidden rounded-xl glass-panel gold-foil-edge h-[400px] amber-glow transition-all duration-500">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-40" data-alt="A rustic yet premium beer flight featuring four distinct artisanal brews in crystal glasses on an aged dark wood tasting board. The background shows copper brewing tanks softly blurred. Warm, ambient lighting emphasizes the rich amber and golden hues of the beer. The style is artisanal, authentic, and high-quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpzgIedfJECzisQrUmf2zQvUrR4gF8L9mJl9hJIrTs5xvHQRjtsB-Zloudu3oQTVB_S-GlkWC8aH6GN1pwxYBZ07RWLJB3KtDwbMiyz4zTaDUEMVxXStt4mpG3Cu8aENwEx5LlhdYj-9al9wTrhLv5lgAV-hR9OEPiWwzpp1ap5lKoKEbQZ7pArPMZPVjWUo97GENC_8vrqXfw2bBpYFvphV_pVPwx9PbGYYRwe-YnyVFVHKkXMOrf6xce5bzVXftb4qmZ_4uHNi0"/>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="font-headline-md text-headline-md text-white mb-1">BeerCraft 360</h3>
+<p class="text-on-surface-variant text-label-lg">Taproom &amp; Artisanal Flights</p>
+</div>
+</div>
+<!-- WineCraft 360 -->
+<div class="md:col-span-4 group cursor-pointer relative overflow-hidden rounded-xl glass-panel gold-foil-edge h-[400px] amber-glow transition-all duration-500">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-40" data-alt="Rows of aged wine bottles resting in a dark oak cellar with subtle candlelight illuminating the dust on the glass and the texture of the wooden barrels. The mood is quiet, historic, and deeply luxurious. A palette of deep reds, mahoganies, and soft ambers dominates the frame." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA76es2L1hpEypU7Wl9BHTLJdCjZW_21lEqfX80NcQzFFrFEwWpSYgvjtEpPBXtE8cF5UkhkpqMwLXfJY3Dv1lBCTVi9MWsumztDCV-M5hcsScTczqyV5kw6FpXUH-TJefzykD2TioaPK4NaU75lsc9pMcELPcmLNT5DN4HtL5a8cyBRETgksccg-MSMKmxl92jZQ4REnSXNHhQWMKOC_TAb17cHCUh4ns5ShT08YHz5-ch-hehUtiNduzKxsHNzobM55cElsz7wAE"/>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="font-headline-md text-headline-md text-white mb-1">WineCraft 360</h3>
+<p class="text-on-surface-variant text-label-lg">Vintage Cellar &amp; Rare Oakes</p>
+</div>
+</div>
+<!-- Passport Connection: The Journal Component -->
+<div class="md:col-span-4 group cursor-pointer relative overflow-hidden rounded-xl glass-panel gold-foil-edge h-[400px] amber-glow transition-all duration-500 bg-surface-container-high">
+<div class="p-8 h-full flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-primary-fixed text-5xl">menu_book</span>
+<div class="bg-primary/10 p-4 rounded-xl border border-primary/20">
+<span class="material-symbols-outlined text-primary text-3xl">qr_code_2</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary-fixed mb-2">360 Passport</h3>
+<p class="text-on-surface-variant font-body-md flex-grow">Your journey through the world of fine craft. Scan to log a tasting or view your member stamps.</p>
+<div class="mt-4 pt-4 border-t border-outline-variant/30 flex items-center justify-between">
+<span class="text-label-sm text-secondary tracking-widest uppercase">Platinum Tier</span>
+<span class="text-label-sm text-white">24 Stamps Collected</span>
+</div>
+</div>
+</div>
+<!-- Management Section -->
+<div class="md:col-span-12 mt-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+<!-- E.A.T System -->
+<div class="glass-panel rounded-xl p-6 border-l-4 border-l-secondary flex flex-col gap-4 hover:bg-surface-variant/30 transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">auto_awesome</span>
+<h4 class="font-label-lg text-label-lg text-on-surface uppercase tracking-widest">E.A.T. Intelligence</h4>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-3/4 shadow-[0_0_10px_rgba(255,185,90,0.5)]"></div>
+</div>
+<p class="text-label-sm text-on-surface-variant">System Optimal • Serving Julian</p>
+</div>
+<!-- POS 3 -->
+<div class="glass-panel rounded-xl p-6 border-l-4 border-l-primary flex flex-col gap-4 hover:bg-surface-variant/30 transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">point_of_sale</span>
+<h4 class="font-label-lg text-label-lg text-on-surface uppercase tracking-widest">POS Station 3</h4>
+</div>
+<p class="text-label-sm text-on-surface-variant">Staff Mode: Active Order Screen</p>
+<span class="text-xs text-primary font-bold">Ready for Checkout</span>
+</div>
+<!-- Rewards -->
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-2 hover:bg-surface-variant/30 transition-all cursor-pointer">
+<span class="text-display-lg text-primary leading-none">12</span>
+<h4 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest">Unclaimed Rewards</h4>
+<span class="text-label-sm text-primary underline decoration-primary/30">Redeem Credits</span>
+</div>
+<!-- Admin/Staff Toggle -->
+<div class="glass-panel rounded-xl p-6 flex flex-col justify-center items-center gap-2 border-2 border-dashed border-outline-variant hover:border-primary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-outline text-3xl">admin_panel_settings</span>
+<h4 class="font-label-lg text-label-lg text-outline uppercase tracking-widest">Staff Portal</h4>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Drawer (Right Side Triggered) -->
+<aside class="fixed right-0 top-0 h-full w-80 z-[60] flex flex-col py-8 bg-surface-container-high dark:bg-surface-container-high rounded-l-xl shadow-2xl shadow-black transform translate-x-full transition-transform duration-500" id="memberDrawer">
+<div class="px-8 mb-10 flex items-center gap-4">
+<div class="w-16 h-16 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A sophisticated portrait of a gentleman in his 40s wearing a tailored dark wool blazer. He is in a warmly lit, mahogany-paneled room. The lighting is soft and focuses on his features, creating a sense of quiet confidence and luxury. The aesthetic is clean and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfzmxDfQgVHSsfyfHwfKHPRl30Vfm8PKIthuIld8x1J3cas4E8Kb7De9MROU6qCG9AjDaxhlZ9YJ8TREcppzB12D_3QfYaJ4QcDePO2BUttviXk639R6qPMiJ6NQpWojpDdSDRRvoyDO0I5bBHypY4PG47dTwAhpnT4P4PuXwqFW_V9vyMRZ8NoQxn5Ro4wIE_WINGVUA9Nyj9kE41UyCYnZxns7oIqz5q2kvMiaDgfSP30m7HsSt0rWsXsIsnHHzyo85LcAqC_gw"/>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Julian Sterling</h3>
+<p class="font-label-lg text-label-lg text-on-surface-variant">Platinum Member</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<div class="flex items-center gap-4 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 mx-2 translate-x-1 transition-transform">
+<span class="material-symbols-outlined">chair</span>
+<span class="font-label-lg text-label-lg">Lounge</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant px-4 py-3 mx-2 hover:bg-surface-container-highest/50 transition-all cursor-pointer">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-lg text-label-lg">Cellar</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant px-4 py-3 mx-2 hover:bg-surface-container-highest/50 transition-all cursor-pointer">
+<span class="material-symbols-outlined">smoking_rooms</span>
+<span class="font-label-lg text-label-lg">Humidor</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant px-4 py-3 mx-2 hover:bg-surface-container-highest/50 transition-all cursor-pointer">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-lg text-label-lg">My Passport</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant px-4 py-3 mx-2 hover:bg-surface-container-highest/50 transition-all cursor-pointer mt-auto">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-lg text-label-lg">Support</span>
+</div>
+</nav>
+<div class="mt-auto px-8 pt-8 border-t border-outline-variant/30">
+<div class="flex justify-between items-center mb-2">
+<span class="text-label-sm text-on-surface-variant">Current Credits</span>
+<span class="text-label-lg text-primary">2,450</span>
+</div>
+<button class="w-full py-4 bg-surface-container-highest text-primary font-label-lg rounded-xl hover:bg-primary hover:text-on-primary transition-all">
+                MEMBER SETTINGS
+            </button>
+</div>
+</aside>
+<!-- BottomNavBar Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)]">
+<button class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/20 rounded-full px-6 py-2 scale-95 duration-300">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-label-sm text-label-sm">Assistant</span>
+</button>
+</nav>
+<!-- Floating Action Button for Bookings -->
+<button class="fixed bottom-32 right-8 w-16 h-16 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center z-40 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<script>
+        // Simple Interaction logic
+        const menuBtn = document.querySelector('header button:first-child');
+        const drawer = document.getElementById('memberDrawer');
+        let drawerOpen = false;
+
+        menuBtn.addEventListener('click', () => {
+            drawerOpen = !drawerOpen;
+            if(drawerOpen) {
+                drawer.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('translate-x-full');
+            }
+        });
+
+        // Close drawer when clicking outside
+        document.addEventListener('click', (e) => {
+            if (drawerOpen && !drawer.contains(e.target) && !menuBtn.contains(e.target)) {
+                drawerOpen = false;
+                drawer.classList.add('translate-x-full');
+            }
+        });
+
+        // Micro-parallax on cards
+        const cards = document.querySelectorAll('.group');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const deltaX = (x - centerX) / 20;
+                const deltaY = (y - centerY) / 20;
+                
+                const img = card.querySelector('img');
+                if(img) {
+                    img.style.transform = `scale(1.1) translate(${deltaX}px, ${deltaY}px)`;
+                }
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                const img = card.querySelector('img');
+                if(img) {
+                    img.style.transform = 'scale(1) translate(0, 0)';
+                }
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>360 Passport | Artisan Directory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .wood-texture {
+            background-color: #131314;
+            background-image: url("https://www.transparenttextures.com/patterns/dark-wood.png");
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .gold-seal {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .foil-border {
+            border: 1px solid rgba(233, 193, 118, 0.2);
+            position: relative;
+        }
+        .foil-border::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid transparent;
+            background: linear-gradient(135deg, rgba(233, 193, 118, 0.4), transparent, rgba(119, 90, 25, 0.4)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#261900",
+                        "background": "#131314",
+                        "secondary": "#ffb95a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-background": "#e5e2e3",
+                        "on-tertiary-container": "#473733",
+                        "inverse-on-surface": "#303031",
+                        "secondary-container": "#c68315",
+                        "on-secondary-container": "#3d2400",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-tertiary-fixed": "#261814",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-secondary": "#462a00",
+                        "surface-variant": "#353436",
+                        "outline": "#9a8f80",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-surface-variant": "#d1c5b4",
+                        "surface-container-highest": "#353436",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-fixed": "#ffdea5",
+                        "on-tertiary": "#3c2d28",
+                        "tertiary": "#dac1bb",
+                        "surface-container-low": "#1b1b1c",
+                        "on-primary": "#412d00",
+                        "surface-tint": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "on-primary-container": "#4e3700",
+                        "surface": "#131314",
+                        "tertiary-fixed": "#f7ddd6",
+                        "surface-container-high": "#2a2a2b",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#e5e2e3",
+                        "primary": "#e9c176",
+                        "inverse-primary": "#775a19",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-error": "#690005",
+                        "surface-container": "#1f1f20",
+                        "surface-bright": "#39393a",
+                        "error": "#ffb4ab",
+                        "outline-variant": "#4e4639",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-dim": "#131314",
+                        "tertiary-container": "#b7a09a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "64px",
+                        "unit": "8px",
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "card-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden wood-texture min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface-dim/80 backdrop-blur-xl border-b border-primary/20 shadow-md">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-primary/10 p-2 rounded-full transition-colors">menu</span>
+<h1 class="font-display-lg text-headline-md text-primary uppercase tracking-widest leading-none">The 360 Passport</h1>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-label-lg text-on-surface-variant hover:text-primary transition-colors" href="#">Explore</a>
+<a class="font-label-lg text-on-surface-variant hover:text-primary transition-colors" href="#">Inventory</a>
+<a class="font-label-lg text-primary font-bold transition-colors" href="#">Passport</a>
+<a class="font-label-lg text-on-surface-variant hover:text-primary transition-colors" href="#">Assistant</a>
+</div>
+<button class="bg-primary/10 border border-primary/30 text-primary px-6 py-2 rounded-lg font-label-lg hover:bg-primary/20 transition-all active:scale-95">
+            Grand Lounge
+        </button>
+</header>
+<main class="pt-32 pb-32 px-margin max-w-container-max-width mx-auto">
+<!-- Hero Section -->
+<section class="mb-16 text-center">
+<h2 class="font-display-lg text-display-lg text-primary mb-4">Artisan Directory</h2>
+<p class="font-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                A curated collection of the world's finest craftsmen, distillers, and purveyors. Verified excellence for the discerning member.
+            </p>
+</section>
+<!-- Filter Toggle -->
+<div class="flex justify-center mb-12">
+<div class="bg-surface-container-high p-1 rounded-full foil-border flex items-center shadow-lg">
+<button class="px-8 py-2 rounded-full font-label-lg transition-all duration-300 bg-primary text-on-primary-fixed shadow-md" id="btn-featured" onclick="toggleFilter('featured')">
+                    Featured
+                </button>
+<button class="px-8 py-2 rounded-full font-label-lg transition-all duration-300 text-on-surface-variant hover:text-primary" id="btn-all" onclick="toggleFilter('all')">
+                    All Vendors
+                </button>
+</div>
+</div>
+<!-- Vendor Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="vendor-grid">
+<!-- Vendor Card 1 -->
+<div class="group relative bg-surface-container-low rounded-xl foil-border overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(233,193,118,0.15)]">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A macro close-up of a premium, hand-rolled Arturo Fuente cigar resting on an antique mahogany humidor. The lighting is low-key and dramatic, highlighting the oily texture of the tobacco leaf. Soft amber light catches the smoke curling upwards in a dark, atmospheric lounge setting. The overall mood is one of quiet luxury and heritage, utilizing the rich espresso and gold palette of the design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyeJXaeQNpbyjMR_0kn1T6iiXI4UHJteqPOtN36gqeMCcZY-iqHgqsKcDLzxuxrg8NUNta9XvTEZxWnwqx5OX1TwLTOgLcjf7nBuf32p_c3Z1P58Z2h9LWiOROnnwrgxGwAE6ntu3Ifv2g8YEx_pyMB1lLebtcBqS5y0hVWYwsH2fn_2YSItqvNv9vXe6UWnGRNitcHNrDZzcN57FXDDsjcmPIj6a7bH3gGUy30Hh2cglmyCDQmeKOTQT-0baVtp0m8JB8NbSCnLA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-low to-transparent"></div>
+<div class="absolute top-4 right-4 bg-background/80 backdrop-blur-md p-2 rounded-full shadow-lg">
+<span class="material-symbols-outlined gold-seal" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline-md text-primary">Arturo Fuente</h3>
+<span class="font-label-sm text-secondary uppercase tracking-widest border border-secondary/30 px-2 py-1 rounded">Cigars</span>
+</div>
+<p class="font-body-md text-on-surface-variant mb-8 line-clamp-3">
+                        Generations of craftsmanship culminating in the world's most sought-after cigars. A legacy of passion from the Dominican Republic.
+                    </p>
+<button class="w-full foil-border bg-surface-container hover:bg-primary transition-all duration-300 group/btn py-4 rounded-lg flex items-center justify-center gap-2 overflow-hidden relative">
+<span class="font-label-lg text-primary group-hover/btn:text-on-primary-fixed z-10">View Offerings</span>
+<span class="material-symbols-outlined text-primary group-hover/btn:text-on-primary-fixed z-10 transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
+</button>
+</div>
+<!-- Embossed Seal Background Decoration -->
+<div class="absolute -bottom-8 -right-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+<span class="material-symbols-outlined text-[160px]">history_edu</span>
+</div>
+</div>
+<!-- Vendor Card 2 -->
+<div class="group relative bg-surface-container-low rounded-xl foil-border overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(233,193,118,0.15)]">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A cinematic shot of an aged whiskey bottle with a classic, hand-stamped wax seal. The scene is set in a dark cellar with stone walls, illuminated by a single warm spotlight. The bottle features elegant gold calligraphy on a cream parchment label. The atmosphere is sophisticated and timeless, emphasizing the tactile quality of the materials and the heritage of the distillery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtl46pm0_XMsqQnLOHVUDIsjqqtyCRV5BnoxHUWE3i0FffJ4B2u3hQsZU8t2Lfl1vNPhR0zaylOoKzsVpx0WSpZb17R7VTDyrnueWysH8r8LrIQj_oH8ipx93Dp0hEMaMN4q2AMRmbJOMczzL9pR35MkmhhtDxM0ZN5PfbgBFY_feHMHL5nmcUGuL-oqY9JiGysErJVSq7bkQq-vTuWeSTatGEVn5IE0IaTRc7fzWNfsXPjvDlkJbhx416GswPhXSPN7SyFCelCBM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-low to-transparent"></div>
+<div class="absolute top-4 right-4 bg-background/80 backdrop-blur-md p-2 rounded-full shadow-lg">
+<span class="material-symbols-outlined gold-seal" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline-md text-primary">Macallan Estate</h3>
+<span class="font-label-sm text-secondary uppercase tracking-widest border border-secondary/30 px-2 py-1 rounded">Distiller</span>
+</div>
+<p class="font-body-md text-on-surface-variant mb-8 line-clamp-3">
+                        Rare single malts aged in hand-picked sherry seasoned oak casks from Jerez, Spain. The pinnacle of Scotch whisky since 1824.
+                    </p>
+<button class="w-full foil-border bg-surface-container hover:bg-primary transition-all duration-300 group/btn py-4 rounded-lg flex items-center justify-center gap-2 overflow-hidden relative">
+<span class="font-label-lg text-primary group-hover/btn:text-on-primary-fixed z-10">View Offerings</span>
+<span class="material-symbols-outlined text-primary group-hover/btn:text-on-primary-fixed z-10 transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
+</button>
+</div>
+<div class="absolute -bottom-8 -right-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+<span class="material-symbols-outlined text-[160px]">liquor</span>
+</div>
+</div>
+<!-- Vendor Card 3 -->
+<div class="group relative bg-surface-container-low rounded-xl foil-border overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(233,193,118,0.15)]">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A macro photography shot of an exquisite, handcrafted leather-bound watch case. The leather shows a rich, deep grain and impeccable gold stitching. It sits on a dark glass surface that reflects the soft ambient light of a high-end luxury boutique. The aesthetic is focused on tactile precision and timeless elegance, using the design system's smoky glass and amber glow effects." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqhR2rTalvFZO-M6mniRimRDuJuZiwe--VY5c1H4BXmbaM7lmcXxFdJqCsj6M8eHc0jCRCN__D_E1y8Xj2AjsHQDV9eIDw_fXGUW8hwSfeZe24uKbYmyn2hrOs4bqKqIRHGTrcBjeVh2f8Mm1s0-KZn8ST8-9RISRS2pR3GFlTA464rLzrFEuRB22iADTACSX6JkH-KyDiMb_b0FMwbpxPEJdYJ2HlLJtJdhZHGLKfvaENQg0nubt_macmhFJdJAfOYG2WQ0VEqfE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-low to-transparent"></div>
+<div class="absolute top-4 right-4 bg-background/80 backdrop-blur-md p-2 rounded-full shadow-lg">
+<span class="material-symbols-outlined gold-seal" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline-md text-primary">S.T. Dupont</h3>
+<span class="font-label-sm text-secondary uppercase tracking-widest border border-secondary/30 px-2 py-1 rounded">Accessories</span>
+</div>
+<p class="font-body-md text-on-surface-variant mb-8 line-clamp-3">
+                        Iconic lighters and accessories that blend French elegance with high-performance engineering. A symbol of prestige for over 150 years.
+                    </p>
+<button class="w-full foil-border bg-surface-container hover:bg-primary transition-all duration-300 group/btn py-4 rounded-lg flex items-center justify-center gap-2 overflow-hidden relative">
+<span class="font-label-lg text-primary group-hover/btn:text-on-primary-fixed z-10">View Offerings</span>
+<span class="material-symbols-outlined text-primary group-hover/btn:text-on-primary-fixed z-10 transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
+</button>
+</div>
+<div class="absolute -bottom-8 -right-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+<span class="material-symbols-outlined text-[160px]">line_style</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin py-4 bg-surface-container-low/95 backdrop-blur-2xl border-t border-primary/30 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-lg">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] transform -translate-y-1">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-lg">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-label-lg">Assistant</span>
+</div>
+</nav>
+<script>
+        function toggleFilter(type) {
+            const btnFeatured = document.getElementById('btn-featured');
+            const btnAll = document.getElementById('btn-all');
+            
+            if (type === 'featured') {
+                btnFeatured.classList.add('bg-primary', 'text-on-primary-fixed', 'shadow-md');
+                btnFeatured.classList.remove('text-on-surface-variant');
+                btnAll.classList.remove('bg-primary', 'text-on-primary-fixed', 'shadow-md');
+                btnAll.classList.add('text-on-surface-variant');
+            } else {
+                btnAll.classList.add('bg-primary', 'text-on-primary-fixed', 'shadow-md');
+                btnAll.classList.remove('text-on-surface-variant');
+                btnFeatured.classList.remove('bg-primary', 'text-on-primary-fixed', 'shadow-md');
+                btnFeatured.classList.add('text-on-surface-variant');
+            }
+            
+            // Subtle pulse effect on grid transition
+            const grid = document.getElementById('vendor-grid');
+            grid.style.opacity = '0.5';
+            setTimeout(() => {
+                grid.style.opacity = '1';
+            }, 200);
+        }
+
+        // Add intersection observer for reveal animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.group.relative.bg-surface-container-low').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(card);
+        });
+    </script>
+</body></html>

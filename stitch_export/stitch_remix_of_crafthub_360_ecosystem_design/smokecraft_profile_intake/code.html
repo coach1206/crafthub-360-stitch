@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#1b1b1c",
+                    "on-secondary": "#462a00",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed": "#261900",
+                    "inverse-on-surface": "#303031",
+                    "on-surface-variant": "#d1c5b4",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "primary-fixed": "#ffdea5",
+                    "on-error": "#690005",
+                    "on-background": "#e5e2e3",
+                    "primary": "#e9c176",
+                    "on-primary": "#412d00",
+                    "surface-variant": "#353436",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface-bright": "#39393a",
+                    "primary-fixed-dim": "#e9c176",
+                    "secondary": "#ffb95a",
+                    "surface-tint": "#e9c176",
+                    "primary-container": "#c5a059",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container-high": "#2a2a2b",
+                    "secondary-fixed": "#ffddb6",
+                    "inverse-primary": "#775a19",
+                    "on-primary-container": "#4e3700",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "outline-variant": "#4e4639",
+                    "on-secondary-container": "#3d2400",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "outline": "#9a8f80",
+                    "surface-container": "#1f1f20",
+                    "on-tertiary": "#3c2d28",
+                    "error": "#ffb4ab",
+                    "surface": "#131314",
+                    "surface-container-highest": "#353436",
+                    "error-container": "#93000a",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "tertiary-container": "#b7a09a",
+                    "on-tertiary-fixed": "#261814",
+                    "background": "#131314",
+                    "tertiary": "#dac1bb",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-surface": "#e5e2e3",
+                    "secondary-container": "#c68315",
+                    "surface-dim": "#131314",
+                    "on-tertiary-container": "#473733"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "card-padding": "24px",
+                    "gutter": "32px",
+                    "unit": "8px",
+                    "margin": "64px",
+                    "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "label-lg": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "headline-lg": ["Playfair Display"],
+                    "headline-xl": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>body {
+    background-color: #0e0e0f;
+    background-image: radial-gradient(circle at 50% -20%, rgba(233, 193, 118, 0.15), transparent), linear-gradient(rgba(14, 14, 15, 0.9), rgba(14, 14, 15, 0.9)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuAJ09Qb4oPgovTsugDxP08oGJBDqZvjMBJXAFOH6Qn7ia0xZ8dAkzZSVGkEehm1V_CjE9AkK7Z4_jPCoDAVBGXl9ZcJ_0DRPd3QblAFfEcxeTYxT7DJdrgLcYwAcZtrm8xqaxPJy-ilaG9g3Qe1837GyxeQqWxYsLgWzhkjXZmlERbtG2c2zpBszfUOEnQDwG-5xSnh6hei70Z-NmWLnabLXItL8ypoj-_d3PeyfyMHxNkQtrLlaCSTq5HKLKoWQv8PvhGDOgP4HXQ);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed
+    }
+.leather-card {
+    background: linear-gradient(145deg, #1f1f20 0%, #131314 100%);
+    border: 1px solid rgba(233, 193, 118, 0.1);
+    position: relative;
+    overflow: hidden
+    }
+.leather-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url(https://www.transparenttextures.com/patterns/dark-leather.png);
+    opacity: 0.15;
+    pointer-events: none
+    }
+.gold-underline {
+    border-bottom: 1px solid #4e4639;
+    transition: border-color 0.3s ease
+    }
+.gold-underline:focus-within {
+    border-bottom: 1px solid #e9c176;
+    box-shadow: 0 4px 12px -4px rgba(233, 193, 118, 0.3)
+    }
+.input-glow:focus {
+    outline: none
+    }
+.glass-panel {
+    background: rgba(31, 31, 32, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(233, 193, 118, 0.15)
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen text-on-surface font-body-md overflow-x-hidden">
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full z-50 shadow-md border-b border-outline-variant bg-surface/90 backdrop-blur-xl flex justify-between items-center px-card-padding h-20">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 duration-200" data-icon="menu">menu</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary drop-shadow-[0_2px_2px_rgba(233,193,118,0.5)]">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-lg text-on-surface-variant hidden md:block">Step 3 of 4</span>
+<button class="bg-surface-container-high text-primary font-label-lg px-6 py-2 rounded-lg hover:bg-surface-container-highest transition-colors active:scale-95 duration-200">Grand Lounge</button>
+</div>
+</header>
+<main class="pt-32 pb-40 px-gutter max-w-[900px] mx-auto">
+<!-- Header Section -->
+<section class="mb-12 text-center">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-4">SmokeCraft Intake</h2>
+<p class="font-body-lg text-on-surface-variant max-w-xl mx-auto">Complete your identity to join the guild. Your privacy is our priority—only your nickname enters the humidor leaderboard.</p>
+</section>
+<!-- Profile Form Card -->
+<div class="leather-card p-10 rounded-xl shadow-2xl space-y-12">
+<!-- Photo Upload Area -->
+<div class="flex flex-col items-center">
+<div class="relative group">
+<div class="w-32 h-32 rounded-full border-2 border-dashed border-primary/30 flex items-center justify-center bg-surface-container overflow-hidden transition-all group-hover:border-primary/60">
+<span class="material-symbols-outlined text-primary/40 text-5xl" data-icon="add_a_photo">add_a_photo</span>
+<img class="hidden absolute inset-0 w-full h-full object-cover" data-alt="A macro photograph of an expensive, weathered leather-bound journal sitting next to a glass of single malt scotch, lit by the warm glow of a nearby fireplace in a private library lounge." id="avatar-preview" src=""/>
+</div>
+<label class="absolute -bottom-2 -right-2 bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shadow-lg active:scale-90 transition-transform" for="photo-upload">
+<span class="material-symbols-outlined text-xl" data-icon="edit">edit</span>
+<input accept="image/*" class="hidden" id="photo-upload" type="file"/>
+</label>
+</div>
+<p class="font-label-sm text-primary mt-4 tracking-widest uppercase">Member Portrait (Optional)</p>
+</div>
+<!-- Form Grid -->
+<form class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+<!-- Private Identity Section -->
+<div class="md:col-span-2 flex items-center gap-3 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-primary" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+<h3 class="font-label-lg text-primary uppercase tracking-widest">Private Identity</h3>
+</div>
+<div class="gold-underline py-2">
+<label class="block font-label-sm text-on-surface-variant mb-1 uppercase">Full Legal Name</label>
+<input class="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0" placeholder="e.g. Alistair Sterling" type="text"/>
+</div>
+<div class="gold-underline py-2">
+<label class="block font-label-sm text-on-surface-variant mb-1 uppercase">Phone Number</label>
+<input class="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+<div class="gold-underline py-2 md:col-span-2">
+<label class="block font-label-sm text-on-surface-variant mb-1 uppercase">Confidential Email</label>
+<input class="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0" placeholder="sterling@private.com" type="email"/>
+</div>
+<!-- Public Identity Section -->
+<div class="md:col-span-2 flex items-center gap-3 border-b border-outline-variant pb-2 mt-4">
+<span class="material-symbols-outlined text-primary" data-icon="public">public</span>
+<h3 class="font-label-lg text-primary uppercase tracking-widest">Lounge Persona</h3>
+</div>
+<div class="gold-underline py-2">
+<label class="block font-label-sm text-secondary mb-1 uppercase">Leaderboard Nickname</label>
+<input class="w-full bg-transparent border-none text-body-lg text-secondary placeholder:text-secondary/20 focus:ring-0 h-12 px-0" placeholder="The Curator" type="text"/>
+</div>
+<div class="gold-underline py-2">
+<label class="block font-label-sm text-on-surface-variant mb-1 uppercase">Age Confirmation</label>
+<div class="flex items-center h-12">
+<input class="w-6 h-6 rounded border-outline bg-surface-container text-primary focus:ring-primary focus:ring-offset-surface" id="age-check" type="checkbox"/>
+<label class="ml-3 font-body-md text-on-surface" for="age-check">I am of legal smoking age</label>
+</div>
+</div>
+<!-- Location Details -->
+<div class="md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-6">
+<div class="gold-underline py-2 md:col-span-2">
+<label class="block font-label-sm text-on-surface-variant mb-1 uppercase">City</label>
+<input class="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0" placeholder="New York" type="text"/>
+</div>
+<div class="gold-underline py-2">
+<label class="block font-label-sm text-on-surface-variant mb-1 uppercase">State</label>
+<input class="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0" placeholder="NY" type="text"/>
+</div>
+<div class="gold-underline py-2">
+<label class="block font-label-sm text-on-surface-variant mb-1 uppercase">Zip</label>
+<input class="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0" placeholder="10001" type="text"/>
+</div>
+</div>
+</form>
+</div>
+<!-- Action Buttons -->
+<div class="mt-16 flex flex-col md:flex-row gap-6 justify-center">
+<button class="order-2 md:order-1 px-12 py-5 rounded-lg border border-primary text-primary font-label-lg tracking-widest hover:bg-primary/10 transition-all active:scale-95 duration-200">
+                SAVE AS DRAFT
+            </button>
+<button class="order-1 md:order-2 px-12 py-5 rounded-lg bg-primary text-on-primary font-label-lg tracking-widest shadow-[0_0_20px_rgba(233,193,118,0.3)] hover:brightness-110 transition-all active:scale-95 duration-200 flex items-center justify-center gap-3">
+                CONTINUE TO PASSPORT
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-lowest/95 backdrop-blur-2xl border-t border-outline-variant shadow-[0_-4px_20px_rgba(0,0,0,0.5)] h-24 px-gutter pb-4 flex justify-around items-center">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim transition-all active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim transition-all active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="liquor">liquor</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold scale-110 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="import_contacts" style="font-variation-settings: 'FILL' 1;">import_contacts</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim transition-all active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span class="font-label-sm text-label-sm">Assistant</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for form
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('border-primary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.classList.remove('border-primary');
+            });
+        });
+
+        // Photo Upload Preview
+        const photoUpload = document.getElementById('photo-upload');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const photoIcon = document.querySelector('[data-icon="add_a_photo"]');
+
+        photoUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatarPreview.src = e.target.result;
+                    avatarPreview.classList.remove('hidden');
+                    photoIcon.classList.add('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Atmosphere Effect: Subtle Mouse Glow
+        document.addEventListener('mousemove', (e) => {
+            const glow = 15;
+            const x = (e.clientX / window.innerWidth) * glow;
+            const y = (e.clientY / window.innerHeight) * glow;
+            document.body.style.backgroundPosition = `calc(50% + ${x}px) calc(50% + ${y}px)`;
+        });
+    </script>
+</body></html>

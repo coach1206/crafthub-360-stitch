@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NOVEE OS | CraftHub 360</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .amber-glow {
+            box-shadow: 0 0 40px rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-text {
+            background: linear-gradient(135deg, #e9c176 0%, #ffdea5 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .smoke-overlay {
+            background: radial-gradient(circle at 50% 50%, rgba(19, 19, 20, 0) 0%, rgba(19, 19, 20, 0.8) 100%);
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 4s ease-in-out infinite;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#e9c176",
+                        "inverse-primary": "#775a19",
+                        "surface-container-low": "#1b1b1c",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "surface-container-high": "#2a2a2b",
+                        "secondary": "#ffb95a",
+                        "surface-dim": "#131314",
+                        "on-tertiary": "#3c2d28",
+                        "inverse-surface": "#e5e2e3",
+                        "surface-container": "#1f1f20",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#ffdea5",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "tertiary-container": "#b7a09a",
+                        "inverse-on-surface": "#303031",
+                        "on-surface": "#e5e2e3",
+                        "error-container": "#93000a",
+                        "on-secondary": "#462a00",
+                        "tertiary-fixed": "#f7ddd6",
+                        "outline-variant": "#4e4639",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-background": "#e5e2e3",
+                        "surface": "#131314",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-container-lowest": "#0e0e0f",
+                        "surface-container-highest": "#353436",
+                        "on-primary-fixed": "#261900",
+                        "background": "#131314",
+                        "primary": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "outline": "#9a8f80",
+                        "on-secondary-container": "#3d2400",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "surface-bright": "#39393a",
+                        "tertiary": "#dac1bb",
+                        "surface-variant": "#353436",
+                        "on-tertiary-fixed": "#261814",
+                        "on-primary-container": "#4e3700",
+                        "on-primary": "#412d00",
+                        "secondary-container": "#c68315",
+                        "secondary-fixed": "#ffddb6",
+                        "on-tertiary-container": "#473733"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background overflow-hidden cursor-none">
+<!-- Background Cinematic Layer -->
+<div class="fixed inset-0 z-0 overflow-hidden">
+<img class="w-full h-full object-cover scale-110 blur-[2px]" data-alt="A high-resolution wide shot of a luxury private lounge at midnight. Deep mahogany wood paneling, plush leather armchairs, and low-profile amber accent lighting create a sophisticated atmosphere. Faint, ethereal whisps of cigar smoke drift through the air, illuminated by a warm glow. The overall aesthetic is one of exclusive, high-end tranquility and tactile luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLaz3zVC10xDwDkQ9woimrBHU2pIf5lWoN5XrOXGEQyH2ImwrBeD64QMTZORnU6_MMwikqFErHXgwJU6XQe2b2kOLuKsJ7uNjLpH1JXoKbX3akpu93dNfjY46Amz6f7Gea0K9b8dfT-DHClM5g3zsI89ELphc_v_CCeoDW9WAY0DU2MPXuJ0vp1a9_wpG9EvMkr2PRZ6p9jiQVK_xYKoxVboh3yPqwHxyI85kRJrqXSa1XGR1W_KhtzMRxte0-FjVYAsX6YF-_p4o"/>
+<div class="absolute inset-0 smoke-overlay"></div>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-10 w-full h-screen flex flex-col items-center justify-between py-margin px-gutter">
+<!-- Header: TopAppBar Style Mapping -->
+<header class="w-full flex justify-between items-center h-20 opacity-0 transition-opacity duration-1000" id="header">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary" data-icon="terminal">terminal</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-primary tracking-widest">SYSTEM INITIALIZED</span>
+<span class="font-body-md text-body-md text-on-surface-variant/60">V.4.2.0. PREMIUM_CORE</span>
+</div>
+</div>
+<div class="glass-panel px-6 py-2 rounded-full">
+<span class="font-label-lg text-label-lg text-primary">SECURE LINK: ACTIVE</span>
+</div>
+</header>
+<!-- Center: Brand Identity -->
+<div class="flex flex-col items-center text-center">
+<div class="mb-12 animate-pulse-soft">
+<h1 class="font-display-lg text-display-lg gold-foil-text tracking-tighter mb-2">NOVEE OS</h1>
+<div class="h-[1px] w-48 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto"></div>
+<h2 class="font-headline-md text-headline-md text-on-surface-variant mt-4 tracking-widest">CRAFTHUB 360</h2>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface/40 uppercase tracking-[0.4em]">Connected Hospitality Intelligence</p>
+</div>
+<!-- System Status Panel (Left Side Floating) -->
+<aside class="fixed left-gutter top-1/2 -translate-y-1/2 flex flex-col gap-4">
+<div class="glass-panel p-6 rounded-xl space-y-6 w-64 shadow-2xl shadow-black/50 border-l-2 border-l-primary/30">
+<h3 class="font-label-lg text-label-lg text-on-surface-variant/50 border-b border-outline-variant pb-2">SERVICE REGISTRY</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/80" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-label-lg text-label-lg text-on-surface">POS 3</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></span>
+<span class="font-label-sm text-label-sm text-primary/80">READY</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/80" data-icon="restaurant">restaurant</span>
+<span class="font-label-lg text-label-lg text-on-surface">E.A.T.</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></span>
+<span class="font-label-sm text-label-sm text-primary/80">READY</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/80" data-icon="smoking_rooms">smoking_rooms</span>
+<span class="font-label-lg text-label-lg text-on-surface">SmokeCraft</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></span>
+<span class="font-label-sm text-label-sm text-primary/80">READY</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/80" data-icon="wine_bar">wine_bar</span>
+<span class="font-label-lg text-label-lg text-on-surface">Cellar-Sync</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></span>
+<span class="font-label-sm text-label-sm text-primary/80">READY</span>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-2">
+<div class="flex-1 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full origin-left animate-[grow_2s_ease-out]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-primary">100%</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Bottom: Action -->
+<div class="flex flex-col items-center gap-12 pb-12">
+<button class="relative group outline-none active:scale-95 transition-transform duration-300">
+<div class="absolute -inset-4 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all duration-700"></div>
+<div class="relative flex flex-col items-center gap-4 bg-surface-container/30 backdrop-blur-md border border-primary/30 px-12 py-6 rounded-2xl amber-glow hover:border-primary/60 transition-all">
+<span class="font-headline-md text-headline-md text-primary tracking-widest font-bold">TOUCH TO BEGIN</span>
+<span class="material-symbols-outlined text-primary animate-bounce" data-icon="keyboard_double_arrow_down">keyboard_double_arrow_down</span>
+</div>
+</button>
+<div class="flex gap-16">
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant/40">TEMPERATURE</span>
+<span class="font-body-md text-body-md text-on-surface">68°F / 20°C</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant/40">HUMIDITY</span>
+<span class="font-body-md text-body-md text-on-surface">70% RH</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant/40">MEMBERS IN LOUNGE</span>
+<span class="font-body-md text-body-md text-on-surface">12 ACTIVE</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Visual Polish: Grain & Vignette -->
+<div class="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+<div class="pointer-events-none fixed inset-0 z-40 bg-gradient-to-b from-black/40 via-transparent to-black/80"></div>
+<script>
+        // Atmospheric Micro-interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+            setTimeout(() => {
+                header.style.opacity = '1';
+            }, 500);
+
+            // Cursor effect (for touchscreen/mouse simulation)
+            const dot = document.createElement('div');
+            dot.className = 'fixed w-8 h-8 rounded-full border border-primary/50 pointer-events-none z-[100] transition-transform duration-75 mix-blend-difference';
+            document.body.appendChild(dot);
+
+            document.addEventListener('mousemove', (e) => {
+                dot.style.left = `${e.clientX - 16}px`;
+                dot.style.top = `${e.clientY - 16}px`;
+            });
+
+            // Button touch visual feedback
+            const mainButton = document.querySelector('button');
+            mainButton.addEventListener('touchstart', () => {
+                mainButton.classList.add('scale-90');
+            });
+            mainButton.addEventListener('touchend', () => {
+                mainButton.classList.remove('scale-90');
+            });
+        });
+
+        // Register custom animation for the progress bar
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes grow {
+                from { transform: scaleX(0); }
+                to { transform: scaleX(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body></html>

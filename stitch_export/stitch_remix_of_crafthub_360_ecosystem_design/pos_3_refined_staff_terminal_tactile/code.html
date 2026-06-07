@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 - Staff POS Terminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-border {
+            border: 1px solid #e9c176;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #131314;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4e4639;
+            border-radius: 10px;
+        }
+        @keyframes subtle-glow {
+            0% { box-shadow: 0 0 5px rgba(233, 193, 118, 0.2); }
+            50% { box-shadow: 0 0 15px rgba(233, 193, 118, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(233, 193, 118, 0.2); }
+        }
+        .active-glow {
+            animation: subtle-glow 3s infinite ease-in-out;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "surface-container-low": "#1b1b1c",
+                "on-secondary": "#462a00",
+                "on-error-container": "#ffdad6",
+                "on-primary-fixed": "#261900",
+                "inverse-on-surface": "#303031",
+                "on-surface-variant": "#d1c5b4",
+                "on-tertiary-fixed-variant": "#54433e",
+                "primary-fixed": "#ffdea5",
+                "on-error": "#690005",
+                "on-background": "#e5e2e3",
+                "primary": "#e9c176",
+                "on-primary": "#412d00",
+                "surface-variant": "#353436",
+                "inverse-surface": "#e5e2e3",
+                "surface-container-lowest": "#0e0e0f",
+                "surface-bright": "#39393a",
+                "primary-fixed-dim": "#e9c176",
+                "secondary": "#ffb95a",
+                "surface-tint": "#e9c176",
+                "primary-container": "#c5a059",
+                "tertiary-fixed": "#f7ddd6",
+                "surface-container-high": "#2a2a2b",
+                "secondary-fixed": "#ffddb6",
+                "inverse-primary": "#775a19",
+                "on-primary-container": "#4e3700",
+                "on-secondary-fixed-variant": "#643f00",
+                "outline-variant": "#4e4639",
+                "on-secondary-container": "#3d2400",
+                "secondary-fixed-dim": "#ffb95a",
+                "outline": "#9a8f80",
+                "surface-container": "#1f1f20",
+                "on-tertiary": "#3c2d28",
+                "error": "#ffb4ab",
+                "surface": "#131314",
+                "surface-container-highest": "#353436",
+                "error-container": "#93000a",
+                "on-primary-fixed-variant": "#5d4201",
+                "tertiary-fixed-dim": "#dac1bb",
+                "tertiary-container": "#b7a09a",
+                "on-tertiary-fixed": "#261814",
+                "background": "#131314",
+                "tertiary": "#dac1bb",
+                "on-secondary-fixed": "#2a1800",
+                "on-surface": "#e5e2e3",
+                "secondary-container": "#c68315",
+                "surface-dim": "#131314",
+                "on-tertiary-container": "#473733"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
+              "spacing": {
+                "card-padding": "24px",
+                "gutter": "32px",
+                "unit": "8px",
+                "margin": "64px",
+                "container-max-width": "1440px"
+              },
+              "fontFamily": {
+                "label-sm": ["Montserrat"],
+                "headline-md": ["Playfair Display"],
+                "label-lg": ["Montserrat"],
+                "body-lg": ["Montserrat"],
+                "body-md": ["Montserrat"],
+                "headline-lg": ["Playfair Display"],
+                "headline-xl": ["Playfair Display"],
+                "display-lg": ["Playfair Display"]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-card-padding h-20 border-b border-outline-variant bg-surface/90 backdrop-blur-xl shadow-md">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 duration-200">menu</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary drop-shadow-[0_2px_2px_rgba(233,193,118,0.5)]">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<span class="font-label-lg text-on-surface">Grand Lounge</span>
+<span class="font-label-sm text-primary">Station 03 - Alpha • SYSTEM STATUS: NOMINAL</span>
+</div>
+<div class="h-10 w-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">ST</div>
+</div>
+</header>
+<main class="flex-1 mt-20 p-gutter grid grid-cols-12 gap-gutter overflow-hidden">
+<!-- Left: Product Selection Area (8 Columns) -->
+<section class="col-span-8 flex flex-col gap-6 overflow-hidden">
+<!-- Search & Filters -->
+<div class="flex gap-4 items-center h-14">
+<div class="flex-1 glass-panel rounded-xl flex items-center px-4 gap-3 focus-within:ring-1 ring-primary transition-all">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface placeholder:text-outline-variant font-body-md" placeholder="Search inventory, cigars, or spirits..." type="text"/>
+</div>
+<div class="flex gap-2 h-full">
+<button class="px-6 h-full glass-panel rounded-xl font-label-lg text-primary border border-primary/20 hover:bg-primary/10 transition-colors">Cigars</button>
+<button class="px-6 h-full glass-panel rounded-xl font-label-lg text-on-surface-variant hover:bg-surface-container-high transition-colors">Cocktails</button>
+<button class="px-6 h-full glass-panel rounded-xl font-label-lg text-on-surface-variant hover:bg-surface-container-high transition-colors">Vintage Wine</button>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+<div class="grid grid-cols-3 gap-6">
+<!-- Product Card 1 -->
+<div class="glass-panel rounded-xl overflow-hidden group cursor-pointer active:scale-95 transition-all duration-200 hover:border-primary" onclick="addToCart('Cohiba Behike 52', 125)">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A close-up, high-detail photograph of a premium Cohiba Behike cigar resting on a dark, polished mahogany humidor surface. The lighting is moody and warm, highlighting the intricate texture of the tobacco leaf and the gold-embossed band. The overall aesthetic is one of extreme luxury and exclusivity, with deep amber tones and rich shadows that evoke a high-end private lounge atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_hxxZe8IoXZF8sN_JmmX58rpkDmVk2FoEE6hjWwguA88VOMQWiTffOGYI6cPAmK2AX8PzDc2btaBkNfT3XZLPPGJXO2RuW2Hbi01p2wSoDOgf9ZPwp-VnSBf2992fxmDX_IBmd8msf7z_hUBrHQhtpeg10e9mjK1QH3ultcggDClEWzPsuDxBqV8MRuM_X6yL9bEB1CveuTH1MpLITjMZsPEnrHZBe_LbwXWkOuBfpEI77viU8v1M_cI_yu0SdlkdMe4hDclTjBE"/>
+<div class="absolute top-2 right-2 px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full border border-primary/30">
+<span class="font-label-sm text-primary">In Stock: 14</span>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-1 min-h-[72px]">
+<h3 class="font-headline-md text-on-surface text-lg">Cohiba Behike 52</h3>
+<div class="flex justify-between items-center mt-2">
+<span class="font-label-lg text-primary">$125.00</span>
+<span class="material-symbols-outlined text-primary">add_circle</span>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="glass-panel rounded-xl overflow-hidden group cursor-pointer active:scale-95 transition-all duration-200 hover:border-primary" onclick="addToCart('Smoked Old Fashioned', 24)">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A cinematic shot of a classic Old Fashioned cocktail served in a heavy crystal tumbler with a single large clear ice cube. Wisps of oak smoke are trapped inside a glass cloche being lifted, creating a dramatic, ethereal atmosphere. The scene is set on a dark, reflective granite bar top with warm, directional golden light catching the amber liquid and the orange peel garnish. The mood is sophisticated and sensory-rich." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkXNvKEdC-ORqQ700yrChMMcfgeOsFVObZivWwxGV6oU8pbkerH1x8Onon2rWBtKJn_6kgcSaHbJd3AzZBh1gAIyTSVAbBVYeJaYuenD4LY22KN7ShWbJSxTf-5l6pkS39O0uTzAoRZaCfZfFgkF9dmYQPQc1TsZDydC9Vm3w9adFvEtEOafY0JrKJrDWTzO0LP-JjDpcvXMYe9qlTqh0lT-Ph4gP8bVNOiRqE-6frCwOp-AY9VqmAHq7rtTXLds0jD-tQAX1GRao"/>
+<div class="absolute top-2 right-2 px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full border border-primary/30">
+<span class="font-label-sm text-primary">Ready</span>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-1 min-h-[72px]">
+<h3 class="font-headline-md text-on-surface text-lg">Smoked Old Fashioned</h3>
+<div class="flex justify-between items-center mt-2">
+<span class="font-label-lg text-primary">$24.00</span>
+<span class="material-symbols-outlined text-primary">add_circle</span>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="glass-panel rounded-xl overflow-hidden group cursor-pointer active:scale-95 transition-all duration-200 hover:border-primary" onclick="addToCart('Padrón 1964 Anniversary', 42)">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A macro photograph showing the box-pressed structure of a Padron 1964 Anniversary Series cigar. The rich, dark brown maduro wrapper is highly detailed, showing natural oil and texture. It lies against a backdrop of a vintage leather-bound journal and a brass cutter. The lighting is low-key and dramatic, emphasizing the premium tactile qualities and heritage of the cigar. The color palette is dominated by dark earth tones and subtle gold highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB76Y7CA1bn1fsTN99asdasYwB9_Dh2SG_Wm-i_yKzseA8owYa32u01ecnu_MIJk5lTLM1LfL5qfHL0c7Q2gqGJB2Ha9hmSHgevloyigZmxnqCuQN4BP92ZY5ZHv5ElKp6GaEWIABKLoT6n9N6y6ELD91yxOl7dv5ZRK-qkSvi1BdE-iz1BC8uXcAv7KBdzrbHKybNI90kQSyVPbO3b1R9Mpz4maxetRSBZANDEt_wH4Fo5mxRgBsKwFTZJ8FWjhds0BFfOUpWzjLE"/>
+<div class="absolute top-2 right-2 px-3 py-1 bg-error-container/80 backdrop-blur-md rounded-full border border-error/30">
+<span class="font-label-sm text-on-error-container">Low Stock: 3</span>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-1 min-h-[72px]">
+<h3 class="font-headline-md text-on-surface text-lg">Padrón 1964 Anniversary</h3>
+<div class="flex justify-between items-center mt-2">
+<span class="font-label-lg text-primary">$42.00</span>
+<span class="material-symbols-outlined text-primary">add_circle</span>
+</div>
+</div>
+</div>
+<!-- More products... -->
+<div class="glass-panel rounded-xl overflow-hidden group cursor-pointer active:scale-95 transition-all duration-200 hover:border-primary" onclick="addToCart('Macallan 18yr Pour', 55)">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A premium pour of Macallan 18-year-old single malt scotch whisky in a specialized tasting glass. The liquid has a deep mahogany color, catching the light from a nearby fireplace. The background is a blurred view of a wood-paneled study with rows of vintage books. The atmosphere is warm, quiet, and deeply luxurious, utilizing a rich palette of deep browns, golds, and ambers to convey a sense of timeless elegance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgdk6joHbig0mjUfFIBmjt2PbHXR_Ho7Km0ZmhNhsThufMnW9LSi4HyXQrUz8v7phG7of0HIdR7bI3WxnRZGfFWFQR-sSdfw4Caf0RTaffXliU3TWf_NrN5KD1sDjrwvALuO7gwO1h0sxEqaoj5g1PEDFw0wRoqFLqyxOIfhUUbKp_iohv84mhx4kgxZ_RJAbLCiqlO59Y2cSWk_tVuY8JEZULvH8Aj1j_6jZpHBETirEFh3p7gU8qO_gCHtHcB5M8EpmQ2MyiEi0"/>
+<div class="absolute top-2 right-2 px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full border border-primary/30">
+<span class="font-label-sm text-primary">In Stock: 8</span>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-1 min-h-[72px]">
+<h3 class="font-headline-md text-on-surface text-lg">Macallan 18yr Pour</h3>
+<div class="flex justify-between items-center mt-2">
+<span class="font-label-lg text-primary">$55.00</span>
+<span class="material-symbols-outlined text-primary">add_circle</span>
+</div>
+</div>
+</div>
+<div class="glass-panel rounded-xl overflow-hidden group cursor-pointer active:scale-95 transition-all duration-200 hover:border-primary" onclick="addToCart('Davidoff Signature', 38)">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A pristine Davidoff Signature cigar with its iconic white and gold band, lying elegantly on a minimalist smoked glass ashtray. The lighting is soft and high-end, showcasing the smooth, light-colored wrapper leaf. The background is a dark, out-of-focus lounge area with plush velvet seating. The image uses a sophisticated palette of cream, gold, and deep charcoal, creating a refined and clean luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzArHwT3yGmCoZdZKbwBWYVjQvbL6KdfyfhvmLL9icT6T0zVom8vLavSLfBo-UC3QaSBEDmTZbvDD97rfULex4lkVNDuPU3YzjO9Q80vnmaeNqK-xf1EEari-vC6uvHdYYIMNN92OQVHIn26gwdhv_0oQ-Tv6feIchrMifEWO-PIhawzlNKciZa_8qMCiKmPtRozTIwWSgBea--s-KUiX4mANHfCOs8CCUyFOdop7PzVOv1bnrX9szc9MfORq-r5_aIcwP8vbL7Qo"/>
+<div class="absolute top-2 right-2 px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full border border-primary/30">
+<span class="font-label-sm text-primary">In Stock: 22</span>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-1 min-h-[72px]">
+<h3 class="font-headline-md text-on-surface text-lg">Davidoff Signature No. 2</h3>
+<div class="flex justify-between items-center mt-2">
+<span class="font-label-lg text-primary">$38.00</span>
+<span class="material-symbols-outlined text-primary">add_circle</span>
+</div>
+</div>
+</div>
+<div class="glass-panel rounded-xl overflow-hidden group cursor-pointer active:scale-95 transition-all duration-200 hover:border-primary" onclick="addToCart('Negroni Riserva', 22)">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A vibrant red Negroni cocktail served in a faceted crystal glass with a large orange zest twist. The drink glows with an inner light, set against a dark, moody bar background with bokeh lights from spirits bottles. The image captures the high-contrast beauty of the deep red liquid against the dark environment, with crisp details on the glass condensation and the citrus peel. The mood is modern, chic, and high-energy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs1EYvjQ_0kaJ8vRwM59hUtX8PXxud5mX1eJxbKBMs-_7OPbXNIQ04tLXV0HnV7njbAio5Y34BGK7qvV_yvXltXXIxTBbMslHCx4VZI_dTB4FuNfgwzlYjVCASBespnjHapy6esZ592QtzN1xAS9mGt1ZV2poDcKQhVDLjiPExcYq5Kx9lFslwbUoxMUldLfxLpdnUujbWHZs_AMi9yu2VLbVVb_kdgMvFr95q6hLI5VxJDpipN5vF30A3a1hlUPYLutlFB8m8e1E"/>
+<div class="absolute top-2 right-2 px-3 py-1 bg-surface/80 backdrop-blur-md rounded-full border border-primary/30">
+<span class="font-label-sm text-primary">Ready</span>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-1 min-h-[72px]">
+<h3 class="font-headline-md text-on-surface text-lg">Negroni Riserva</h3>
+<div class="flex justify-between items-center mt-2">
+<span class="font-label-lg text-primary">$22.00</span>
+<span class="material-symbols-outlined text-primary">add_circle</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right: Order Summary & Member Profile (4 Columns) -->
+<aside class="col-span-4 flex flex-col gap-6 overflow-hidden">
+<!-- Member Passport Card -->
+<div class="glass-panel rounded-xl p-6 relative overflow-hidden gold-border active-glow">
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBwRmQJGj4PfpWKD77DTIfdpKaAOqomRpaRx5u_QACV1k4YJnhr7lxCqQ14XyBWtwGEaQjNJMiF2B6-cWmrO0lRU35gxJiUvd_VnJO_Pd1-a_iZngRFqEqisOgpWxQsvVqNTxOdfk-swKMFIxG1pkDEyy3uXoOoLol5MJ6Kg0uoRKPcOh7wYmFJOcG-SLk8pTfQQQSlmrVaGG6cVfVsuAIz7Fv7sOa9Tje0ACjA7u6ZZOf0ymdCp49jHKxWM6Th-z9-GYu4uO1OS0"/>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-md text-on-surface text-xl font-bold">Julian Sterling</h2>
+<span class="font-label-sm text-primary uppercase tracking-widest font-bold">Founder Level 0 • Gold</span>
+</div>
+</div>
+<div class="bg-primary text-on-primary px-2 py-1 rounded text-[10px] font-bold tracking-tighter">E.A.T. VERIFIED</div>
+</div>
+<div class="flex justify-between items-center bg-surface-container-highest p-3 rounded-lg border border-primary/30">
+<div class="flex flex-col">
+<span class="font-label-sm text-on-surface font-medium">Session Source</span>
+<span class="font-label-lg text-primary font-bold">Main Terrace • Table 12</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-on-surface font-medium">Rewards</span>
+<div class="flex gap-1 mt-1">
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="material-symbols-outlined text-outline-variant text-xs">stars</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">info</span>
+<span class="font-label-sm font-bold">Eligible for "Vanguard Spirit" reward</span>
+</div>
+</div>
+</div>
+<!-- Order Items -->
+<div class="flex-1 glass-panel rounded-xl flex flex-col overflow-hidden">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-label-lg text-on-surface">Current Order</h3>
+<button class="text-on-surface-variant hover:text-error transition-colors" onclick="clearCart()">
+<span class="material-symbols-outlined">delete_sweep</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-4 flex flex-col gap-4" id="cart-items">
+<!-- Cart Item Template -->
+<div class="flex justify-between items-center group">
+<div class="flex flex-col">
+<span class="font-body-md text-on-surface">Cohiba Behike 52</span>
+<span class="font-label-sm text-on-surface-variant">1 x $125.00</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-lg text-primary">$125.00</span>
+<button class="text-outline hover:text-primary"><span class="material-symbols-outlined">close</span></button>
+</div>
+</div>
+<div class="flex justify-between items-center group">
+<div class="flex flex-col">
+<span class="font-body-md text-on-surface">Smoked Old Fashioned</span>
+<span class="font-label-sm text-on-surface-variant">2 x $24.00</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-lg text-primary">$48.00</span>
+<button class="text-outline hover:text-primary"><span class="material-symbols-outlined">close</span></button>
+</div>
+</div>
+</div>
+<!-- Summary & Actions -->
+<div class="p-6 bg-surface-container-high/50 flex flex-col gap-4">
+<div class="flex flex-col gap-2 border-b border-outline-variant pb-4"><div class="flex justify-between font-label-lg">
+<span class="text-primary font-bold">Subtotal</span>
+<span class="text-primary font-bold" id="subtotal">$173.00</span>
+</div>
+<div class="flex justify-between font-label-lg">
+<span class="text-primary font-bold">Service (15%)</span>
+<span class="text-primary font-bold" id="tax">$25.95</span>
+</div>
+<div class="flex justify-between font-headline-md mt-2">
+<span class="text-primary font-bold">Total</span>
+<span class="text-primary font-bold" id="total">$198.95</span>
+</div></div>
+<div class="grid grid-cols-2 gap-3">
+<button class="py-4 glass-panel rounded-lg font-label-lg text-primary hover:bg-primary/10 border border-primary/30 transition-all active:scale-95" onclick="alert('Reward Applied')">Apply Reward</button>
+<button class="py-4 glass-panel rounded-lg font-label-lg text-on-surface-variant hover:bg-surface-container-highest transition-all active:scale-95" onclick="alert('Receipt Sent')">Send Receipt</button>
+</div>
+<button class="w-full py-5 bg-primary text-on-primary font-label-lg rounded-xl shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2" onclick="confirmPurchase()">
+<span class="material-symbols-outlined">check_circle</span>
+                        CONFIRM PURCHASE
+                    </button>
+<div class="flex gap-3"><button class="flex-1 py-3 glass-panel border border-primary/30 text-primary rounded-lg font-label-lg hover:bg-primary/10 transition-all flex items-center justify-center gap-2 active-glow" onclick="alert('Guest Notified')">
+<span class="material-symbols-outlined text-sm">notifications_active</span> NOTIFY GUEST
+</button>
+<button class="flex-1 py-3 bg-secondary-container text-on-secondary-container rounded-lg font-label-lg hover:brightness-110 transition-all flex items-center justify-center gap-2" onclick="alert('Order Fulfilled')">
+<span class="material-symbols-outlined text-sm">done_all</span> Mark Fulfilled
+                        </button>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- BottomNavBar (Suppressed on Staff POS for Focus, but logic kept for structure) -->
+<!-- We prioritize the POS content canvas here as per "Shell Visibility & Relevance" rule -->
+<script>
+        let cart = [
+            { name: 'Cohiba Behike 52', price: 125, qty: 1 },
+            { name: 'Smoked Old Fashioned', price: 24, qty: 2 }
+        ];
+
+        function addToCart(name, price) {
+            const existing = cart.find(item => item.name === name);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ name, price, qty: 1 });
+            }
+            renderCart();
+        }
+
+        function clearCart() {
+            cart = [];
+            renderCart();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            container.innerHTML = '';
+            
+            let subtotal = 0;
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+                
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center group animate-in fade-in slide-in-from-right-4 duration-300';
+                div.innerHTML = `
+                    <div class="flex flex-col">
+                        <span class="font-body-md text-on-surface">${item.name}</span>
+                        <span class="font-label-sm text-on-surface-variant">${item.qty} x $${item.price.toFixed(2)}</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="font-label-lg text-primary">$${itemTotal.toFixed(2)}</span>
+                        <button class="text-outline hover:text-error transition-colors" onclick="removeFromCart(${index})">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            const tax = subtotal * 0.15;
+            const total = subtotal + tax;
+
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function confirmPurchase() {
+            if (cart.length === 0) {
+                alert("Cart is empty");
+                return;
+            }
+            alert(`Processing payment of $${document.getElementById('total').textContent} for Julian Sterling...`);
+            clearCart();
+        }
+
+        // Initialize
+        renderCart();
+    </script>
+</body></html>

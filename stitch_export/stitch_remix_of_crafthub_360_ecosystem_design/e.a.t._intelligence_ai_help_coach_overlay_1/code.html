@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E.A.T. Intelligence Help Coach</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-background": "#e5e2e3",
+            "error": "#ffb4ab",
+            "surface-container-lowest": "#0e0e0f",
+            "on-tertiary-fixed": "#261814",
+            "on-primary": "#412d00",
+            "on-surface-variant": "#d1c5b4",
+            "inverse-surface": "#e5e2e3",
+            "surface": "#131314",
+            "secondary-container": "#c68315",
+            "on-secondary": "#462a00",
+            "primary-container": "#c5a059",
+            "tertiary-fixed": "#f7ddd6",
+            "surface-container": "#1f1f20",
+            "on-secondary-container": "#3d2400",
+            "inverse-primary": "#775a19",
+            "surface-container-low": "#1b1b1c",
+            "on-tertiary-fixed-variant": "#54433e",
+            "secondary": "#ffb95a",
+            "on-tertiary": "#3c2d28",
+            "surface-container-high": "#2a2a2b",
+            "secondary-fixed": "#ffddb6",
+            "primary-fixed-dim": "#e9c176",
+            "outline-variant": "#4e4639",
+            "on-surface": "#e5e2e3",
+            "on-primary-container": "#4e3700",
+            "on-error": "#690005",
+            "surface-tint": "#e9c176",
+            "primary": "#e9c176",
+            "error-container": "#93000a",
+            "inverse-on-surface": "#303031",
+            "tertiary-container": "#b7a09a",
+            "on-error-container": "#ffdad6",
+            "surface-dim": "#131314",
+            "primary-fixed": "#ffdea5",
+            "tertiary": "#dac1bb",
+            "surface-container-highest": "#353436",
+            "surface-variant": "#353436",
+            "secondary-fixed-dim": "#ffb95a",
+            "outline": "#9a8f80",
+            "surface-bright": "#39393a",
+            "on-tertiary-container": "#473733",
+            "on-secondary-fixed": "#2a1800",
+            "on-secondary-fixed-variant": "#643f00",
+            "on-primary-fixed-variant": "#5d4201",
+            "on-primary-fixed": "#261900",
+            "tertiary-fixed-dim": "#dac1bb",
+            "background": "#131314"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "container-max-width": "1440px",
+            "unit": "8px",
+            "margin": "16px",
+            "gutter": "16px",
+            "card-padding": "24px"
+          },
+          "fontFamily": {
+            "display-lg": ["Playfair Display"],
+            "body-md": ["Montserrat"],
+            "headline-xl": ["Playfair Display"],
+            "label-sm": ["Montserrat"],
+            "label-lg": ["Montserrat"],
+            "headline-md": ["Playfair Display"],
+            "headline-lg": ["Playfair Display"],
+            "body-lg": ["Montserrat"]
+          },
+          "fontSize": {
+            "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+            "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      cursor: crosshair;
+    }
+    .glass-panel-airy {
+      background: rgba(19, 19, 20, 0.45);
+      backdrop-filter: blur(40px) saturate(180%);
+      -webkit-backdrop-filter: blur(40px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    .gold-foil {
+      background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+      box-shadow: 0 4px 15px rgba(198, 131, 21, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    }
+    .amber-pulse-subtle {
+      animation: amber-glow-subtle 4s infinite ease-in-out;
+    }
+    @keyframes amber-glow-subtle {
+      0%, 100% { box-shadow: 0 0 20px rgba(198, 131, 21, 0.15); }
+      50% { box-shadow: 0 0 40px rgba(198, 131, 21, 0.35); }
+    }
+    .haptic-72 {
+      height: 72px;
+      min-height: 72px;
+    }
+    .haptic-feedback:active {
+      transform: scale(0.96);
+      transition: transform 0.1s;
+    }
+    .text-crisp {
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<header class="fixed top-0 left-0 w-full z-50 flex flex-col px-4 py-4 glass-panel-airy border-b border-white/10">
+<div class="flex items-center justify-between w-full max-w-container-max-width mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">clinical_notes</span>
+<div class="flex flex-col">
+<h1 class="font-display-lg text-primary text-xl leading-tight tracking-tight uppercase">E.A.T. Command</h1>
+<p class="font-label-sm text-secondary text-[10px] tracking-[0.2em] -mt-1 opacity-90">MANAGER MODE | SYSTEM ACTIVE</p>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full border border-primary/50 p-0.5 overflow-hidden shadow-lg bg-surface-container-high/40">
+<img alt="Executive Profile" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoaoNZc4L2Gol6L691-f-rhl9vopkMY9EiIhCLQmc68qRVIdCwG2hvYVYKUcP8YCStkVm01LWo7tiZxV5PcMOiRsKsRh4z9z7ez5h-uOq7G-rkMH7C1ImE_YqB29JwGqTTMcGp8LsCL2siYJOFMYJHqP0zmyVZCOuyCJ9J6Xy1dQy9_-AJ8ozCNWbK4JtJRFg8PGl_UVevyg7ed-5T3uVlehOngBaYRks4Yob68l-hF5IA2XLFf8V-NzLAIrNGQhBIkzFZUKkzTg4"/>
+</div>
+</div>
+</header>
+<main class="pt-28 pb-40 px-4 max-w-container-max-width mx-auto">
+<section class="flex flex-col gap-6">
+<!-- Primary Insight Card -->
+<div class="glass-panel-airy rounded-2xl p-6 relative overflow-hidden amber-pulse-subtle">
+<div class="flex items-center gap-3 mb-4">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#ffb95a]"></span>
+<span class="font-label-lg text-secondary tracking-widest uppercase text-xs">Intelligence Opportunity</span>
+</div>
+<h2 class="font-headline-lg text-on-surface text-crisp mb-3">Aged Rum Overstock</h2>
+<p class="font-body-md text-on-surface text-crisp mb-6 opacity-90">
+        AI monitoring has detected a stagnation in high-margin Caribbean vintages. Capital efficiency is currently compromised by low-turnover assets.
+      </p>
+<div class="space-y-4 mb-8">
+<div class="bg-white/5 p-4 rounded-xl border border-white/5">
+<h3 class="font-label-lg text-primary text-xs mb-1 uppercase tracking-wider">Recommendation</h3>
+<p class="font-body-md text-on-surface text-crisp">Launch "Midnight Gold" pairing special in SmokeCraft module.</p>
+</div>
+<div class="bg-white/5 p-4 rounded-xl border border-white/5">
+<h3 class="font-label-lg text-secondary text-xs mb-1 uppercase tracking-wider">Reasoning</h3>
+<p class="font-body-md text-on-surface text-crisp">Reduces capital tied in slow-moving inventory while increasing revenue.</p>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="haptic-feedback haptic-72 gold-foil w-full rounded-xl flex items-center justify-center gap-3 text-on-primary font-label-lg tracking-widest">
+<span class="material-symbols-outlined">auto_awesome</span>
+          EXECUTE STRATEGY
+        </button>
+<div class="grid grid-cols-2 gap-3">
+<button class="haptic-feedback haptic-72 glass-panel-airy border-white/10 rounded-xl flex items-center justify-center gap-2 text-on-surface font-label-lg text-xs tracking-widest">
+<span class="material-symbols-outlined text-xl">description</span>
+            ANALYSIS
+          </button>
+<button class="haptic-feedback haptic-72 glass-panel-airy border-white/10 rounded-xl flex items-center justify-center gap-2 text-on-surface font-label-lg text-xs tracking-widest">
+<span class="material-symbols-outlined text-xl">record_voice_over</span>
+            BRIEFING
+          </button>
+</div>
+</div>
+</div>
+<!-- Secondary Management Actions -->
+<div class="grid grid-cols-3 gap-3">
+<button class="glass-panel-airy haptic-feedback haptic-72 rounded-xl flex flex-col items-center justify-center gap-1">
+<span class="material-symbols-outlined text-primary">replay</span>
+<span class="font-label-sm text-[10px] tracking-tighter">REPLAY</span>
+</button>
+<button class="glass-panel-airy haptic-feedback haptic-72 rounded-xl flex flex-col items-center justify-center gap-1">
+<span class="material-symbols-outlined text-primary">support_agent</span>
+<span class="font-label-sm text-[10px] tracking-tighter">MANAGER</span>
+</button>
+<button class="glass-panel-airy haptic-feedback haptic-72 rounded-xl flex flex-col items-center justify-center gap-1 border-error/20">
+<span class="material-symbols-outlined text-error">close</span>
+<span class="font-label-sm text-[10px] tracking-tighter">DISMISS</span>
+</button>
+</div>
+<!-- Context & Metrics -->
+<div class="glass-panel-airy rounded-2xl overflow-hidden flex flex-col">
+<div class="h-48 relative">
+<img alt="Aged Rum Context" class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvCZTKlG_dy5JoVySHtT8F9QBgFrGEmIviJKpJC43QsYggwejBP3zKKWWt-bs1LORYzt9UHVVGIE7urlGkF5FBm_ml7AVuRgtvilEVaixae9J2StGaj3FO9RgW9sFwFYFuv3F4iMs7oNERXxrFn4aW4ez7bErgs-spr6oum43cCuRU1Qy-2SJc8hFKyk3G13LOA_onFit7UH0IZ4FFHokTmDs96ZI3gnTBDASsctDoaqz9w5rYXJzOF5wNH165pBSd5PmMTyHuW-A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<h3 class="font-headline-md text-primary text-crisp">Inventory Health</h3>
+</div>
+</div>
+<div class="p-6 space-y-6">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label-sm text-on-surface-variant uppercase text-[10px]">Aged Rum Turnover</span>
+<span class="font-label-sm text-error text-[10px]">LOW - 12%</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-error w-[12%] h-full shadow-[0_0_8px_#ffb4ab]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label-sm text-on-surface-variant uppercase text-[10px]">Predicted Revenue Lift</span>
+<span class="font-label-sm text-secondary text-[10px]">+$4.2K EST.</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary w-[85%] h-full shadow-[0_0_8px_#ffb95a]"></div>
+</div>
+</div>
+<div class="p-4 bg-white/5 rounded-xl border border-white/5">
+<p class="font-body-md italic text-on-surface-variant text-sm text-crisp">
+            "The Midnight Gold pairing typically converts 65% of undecided lounge guests."
+          </p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-4 glass-panel-airy border-t border-white/10 rounded-t-3xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300 cursor-pointer w-16">
+<span class="material-symbols-outlined text-2xl">auto_awesome</span>
+<span class="font-label-lg tracking-widest text-[8px] mt-1">GUIDANCE</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300 cursor-pointer w-16">
+<span class="material-symbols-outlined text-2xl">graphic_eq</span>
+<span class="font-label-lg tracking-widest text-[8px] mt-1">HAPTICS</span>
+</div>
+<div class="flex flex-col items-center justify-center gold-foil text-on-primary rounded-full px-6 py-2 shadow-xl haptic-feedback cursor-pointer min-w-[120px]">
+<span class="material-symbols-outlined text-2xl">ring_volume</span>
+<span class="font-label-lg tracking-widest text-[10px] mt-0.5">MANAGER</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-error transition-all duration-300 cursor-pointer w-16">
+<span class="material-symbols-outlined text-2xl">close</span>
+<span class="font-label-lg tracking-widest text-[8px] mt-1">DISMISS</span>
+</div>
+</footer>
+<script>
+    document.querySelectorAll('.haptic-feedback').forEach(button => {
+      button.addEventListener('mousedown', () => {
+        if (window.navigator.vibrate) {
+          window.navigator.vibrate(15);
+        }
+      });
+    });
+</script>
+</body></html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "tertiary-container": "#b7a09a",
+                "surface-container": "#1f1f20",
+                "surface-bright": "#39393a",
+                "tertiary": "#dac1bb",
+                "on-secondary-container": "#3d2400",
+                "on-primary-container": "#4e3700",
+                "inverse-primary": "#775a19",
+                "error": "#ffb4ab",
+                "surface": "#131314",
+                "primary-fixed": "#ffdea5",
+                "outline": "#9a8f80",
+                "on-secondary-fixed-variant": "#643f00",
+                "inverse-on-surface": "#303031",
+                "error-container": "#93000a",
+                "primary": "#e9c176",
+                "tertiary-fixed": "#f7ddd6",
+                "on-tertiary-container": "#473733",
+                "outline-variant": "#4e4639",
+                "surface-variant": "#353436",
+                "on-primary-fixed": "#261900",
+                "background": "#131314",
+                "on-secondary-fixed": "#2a1800",
+                "on-tertiary": "#3c2d28",
+                "on-secondary": "#462a00",
+                "on-tertiary-fixed-variant": "#54433e",
+                "surface-dim": "#131314",
+                "on-error-container": "#ffdad6",
+                "surface-tint": "#e9c176",
+                "secondary-fixed-dim": "#ffb95a",
+                "on-surface": "#e5e2e3",
+                "surface-container-high": "#2a2a2b",
+                "on-background": "#e5e2e3",
+                "secondary": "#ffb95a",
+                "surface-container-low": "#1b1b1c",
+                "inverse-surface": "#e5e2e3",
+                "on-tertiary-fixed": "#261814",
+                "on-error": "#690005",
+                "tertiary-fixed-dim": "#dac1bb",
+                "on-primary-fixed-variant": "#5d4201",
+                "surface-container-lowest": "#0e0e0f",
+                "secondary-container": "#c68315",
+                "surface-container-highest": "#353436",
+                "primary-fixed-dim": "#e9c176",
+                "on-surface-variant": "#d1c5b4",
+                "secondary-fixed": "#ffddb6",
+                "on-primary": "#412d00",
+                "primary-container": "#c5a059"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "margin": "64px",
+                "gutter": "32px",
+                "container-max-width": "1440px",
+                "card-padding": "24px",
+                "unit": "8px"
+            },
+            "fontFamily": {
+                "label-sm": ["Montserrat"],
+                "label-lg": ["Montserrat"],
+                "headline-md": ["Playfair Display"],
+                "body-lg": ["Montserrat"],
+                "display-lg": ["Playfair Display"],
+                "headline-xl": ["Playfair Display"],
+                "headline-lg": ["Playfair Display"],
+                "body-md": ["Montserrat"]
+            },
+            "fontSize": {
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(31, 31, 32, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .gold-foil-button {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 100%);
+            box-shadow: 0 4px 15px rgba(233, 193, 118, 0.3);
+            transition: all 0.3s ease;
+        }
+        .gold-foil-button:active {
+            transform: scale(0.96);
+        }
+        .amber-glow {
+            box-shadow: 0 0 15px rgba(233, 193, 118, 0.4);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4e4639;
+            border-radius: 10px;
+        }
+        /* Custom Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #e9c176;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #c5a059;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary/30 selection:text-primary min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-gutter h-20 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="dashboard_customize">dashboard_customize</span>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="text-on-surface-variant font-medium hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-1 rounded-lg" href="#">Dashboard</a>
+<a class="text-primary font-bold hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-1 rounded-lg" href="#">Staff Management</a>
+<a class="text-on-surface-variant font-medium hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-1 rounded-lg" href="#">Reports</a>
+</nav>
+<button class="material-symbols-outlined text-primary hover:rotate-45 transition-transform duration-500" data-icon="settings_suggest">settings_suggest</button>
+</div>
+</header>
+<main class="pt-28 pb-32 px-gutter max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<section class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="text-display-lg font-display-lg text-primary mb-2">Personnel Registry</h2>
+<p class="text-body-lg text-on-surface-variant max-w-2xl">Manage your inner circle. Control granular access for sommeliers, concierge leads, and administrative curators within the sanctuary.</p>
+</div>
+<button class="gold-foil-button px-8 py-4 rounded-full text-on-primary font-label-lg flex items-center gap-2 group">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+                Onboard New Staff
+            </button>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Staff List Side (4 columns) -->
+<div class="lg:col-span-4 space-y-4 h-[700px] overflow-y-auto pr-2 custom-scrollbar">
+<!-- Staff Card Active -->
+<div class="glass-card p-card-padding rounded-xl amber-glow border-primary/40 cursor-pointer transition-all duration-300">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Staff Portrait" class="w-full h-full object-cover" data-alt="A sophisticated portrait of a senior sommelier in a dimly lit, high-end private club. He wears a sharp charcoal suit and holds a crystal tasting glass. The background is blurred with warm amber lights reflecting off oak wine barrels. The atmosphere is professional, exclusive, and carries a rich, dark luxury aesthetic with golden highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnrtRmjVJsRsS6yemA3yIqVGIPc_4sl_vREYg1AacQbENOgRCGEQqanUwTjkcTMNU2NqsWIhk7P7kjTPHyJUwr4omc0_vlNnNGQ95s5rjqZQEO-_r39M2GQ4kc3AyjLs8lINN7C8Blunaao4QjKkUv96vfyxi9H6Ti8KnjtNXFEbT3n9l5Op-YVcMth_5KuGulBOiREbZco1j6nA1zq6tZQuP0oxuFFt9xvQDrXqQS2NAdCE3ddMg2KAR3P9rpH24MOeagn_0-1XQ"/>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-primary">Julian Thorne</h3>
+<p class="text-label-sm font-label-sm text-secondary uppercase tracking-widest">Master Sommelier</p>
+</div>
+</div>
+</div>
+<!-- Staff Card -->
+<div class="glass-card p-card-padding rounded-xl hover:bg-surface-container transition-all cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary/50 transition-colors">
+<img alt="Staff Portrait" class="w-full h-full object-cover" data-alt="A professional headshot of a female luxury concierge manager in a dark, atmospheric lounge setting. She has an elegant, confident expression and is dressed in a bespoke black blazer. Soft golden backlighting creates a halo effect against the rich dark wood paneling of the background. High contrast, cinematic lighting style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVn-nEX8Y9avr9q0WNj7XhvDC-OcHSo9uIZdIvlNuvgIWXcVICKW1iQrG_5J4QUSViiok0gsqIOdZOxW8tJpKGtLUqVfMiCNlQVx4adBMNYOWKK5oB00ifwSKKJDvGWXGB4L8KfNKB4V2qqdgfaC58pfhfLXWofFNgIKDNVIiL-Ed4wjDS8cqtTiTc_fhCUXoGJ6RqRonZaRBqn5OJqr9PgNmcHcPaNgHE0H2Q7ZQ8iJ3gXzqZggnM8-X1NO-hQF9KHvgAwl6Sd7A"/>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface">Elena Vance</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Head Concierge</p>
+</div>
+</div>
+</div>
+<!-- Staff Card -->
+<div class="glass-card p-card-padding rounded-xl hover:bg-surface-container transition-all cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary/50 transition-colors">
+<img alt="Staff Portrait" class="w-full h-full object-cover" data-alt="A close-up portrait of a male lounge administrator in a high-end, members-only cigar lounge. He is adjusting a silver cufflink, looking focused and sophisticated. The background features blurred silhouettes of premium humidors and leather furniture. Deep espresso tones and warm amber glows define the cinematic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiZsS2gwd2RXFL1a0CZBnwCW_xAe4391FhEzMhsucAkBFdj2j7p3aYwGwj14gHGdDh5m5o0KYMZJ9cjTVt_ao2mJ736-0stx2-jmUMJD00TAHHiOL7-rSAghaOSNf9fpMKOnF5RMpOGQUht4QpVTupvUTnjRXggUf-NHtXVIkpnaHZG35bWhNvj8lEL8qQKuOgKX4a7mWNE4B3hF-cK7q07r5V1hGck_ulcSvtjHKMUppYyNUfj-H140FTDCnW9HamxythRCVj9S8"/>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface">Marcus Sterling</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Admin Lead</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Management Canvas (8 columns) -->
+<div class="lg:col-span-8">
+<div class="glass-card p-10 rounded-2xl relative overflow-hidden">
+<!-- Subtle background texture -->
+<div class="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/leather.png')]"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-10">
+<div>
+<span class="text-label-sm font-label-sm text-primary border border-primary/30 px-3 py-1 rounded-full bg-primary/10">Active Session</span>
+<h3 class="text-headline-xl font-headline-xl text-on-surface mt-4">Julian Thorne</h3>
+</div>
+<div class="flex gap-4">
+<button class="p-3 rounded-full border border-outline-variant text-on-surface-variant hover:text-error hover:border-error transition-all">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+<button class="p-3 rounded-full border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-all">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+</div>
+</div>
+<form class="space-y-10">
+<!-- Basic Info -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-label-lg font-label-lg text-primary uppercase tracking-wider">Full Legal Name</label>
+<input class="w-full bg-transparent border-b border-outline-variant focus:border-primary outline-none py-3 text-body-lg text-on-surface transition-colors" type="text" value="Julian Thorne"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-lg font-label-lg text-primary uppercase tracking-wider">Assigned Role</label>
+<select class="w-full bg-surface-container border-b border-outline-variant focus:border-primary outline-none py-3 text-body-lg text-on-surface transition-colors appearance-none">
+<option>Owner</option>
+<option selected="">Admin</option>
+<option>Manager</option>
+<option>Staff</option>
+<option>Vendor</option>
+</select>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-label-lg font-label-lg text-primary uppercase tracking-wider">Security PIN / Entry Key</label>
+<div class="flex items-center gap-4">
+<input class="flex-1 bg-transparent border-b border-outline-variant focus:border-primary outline-none py-3 text-headline-md tracking-[1em] text-on-surface transition-colors" type="password" value="••••"/>
+<button class="text-primary font-label-lg hover:underline" type="button">Reveal Key</button>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant/60">4-6 digit numeric code for kiosk authentication.</p>
+</div>
+<!-- Permissions Grid -->
+<div>
+<h4 class="text-headline-md font-headline-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="key">key</span>
+                                    Granular Permissions
+                                </h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 bg-surface-container-low/40 p-6 rounded-xl">
+<!-- Permission Item -->
+<div class="flex items-center justify-between">
+<span class="text-body-md text-on-surface">Can verify attendance</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer toggle-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary toggle-label"></div>
+</label>
+</div>
+<!-- Permission Item -->
+<div class="flex items-center justify-between">
+<span class="text-body-md text-on-surface">Can verify challenges</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer toggle-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary toggle-label"></div>
+</label>
+</div>
+<!-- Permission Item -->
+<div class="flex items-center justify-between">
+<span class="text-body-md text-on-surface">Can verify VIP access</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer toggle-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary toggle-label"></div>
+</label>
+</div>
+<!-- Permission Item -->
+<div class="flex items-center justify-between">
+<span class="text-body-md text-on-surface">Can confirm POS orders</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer toggle-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary toggle-label"></div>
+</label>
+</div>
+<!-- Permission Item -->
+<div class="flex items-center justify-between">
+<span class="text-body-md text-on-surface">Can redeem rewards</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer toggle-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary toggle-label"></div>
+</label>
+</div>
+<!-- Permission Item -->
+<div class="flex items-center justify-between">
+<span class="text-body-md text-on-surface">Can view private info</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer toggle-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary toggle-label"></div>
+</label>
+</div>
+<!-- Permission Item -->
+<div class="flex items-center justify-between">
+<span class="text-body-md text-on-surface">Can access E.A.T.</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer toggle-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary toggle-label"></div>
+</label>
+</div>
+<!-- Permission Item -->
+<div class="flex items-center justify-between">
+<span class="text-body-md text-on-surface">Can access Admin Setup</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer toggle-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary toggle-label"></div>
+</label>
+</div>
+</div>
+</div>
+<div class="flex justify-end gap-6 pt-6 border-t border-outline-variant/30">
+<button class="px-8 py-3 rounded-full border border-outline-variant text-on-surface-variant font-label-lg hover:bg-surface-variant transition-colors" type="button">Discard Changes</button>
+<button class="gold-foil-button px-12 py-3 rounded-full text-on-primary font-label-lg" type="submit">Commit Records</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 flex justify-around items-center px-4 pb-4 pt-2 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+<span class="text-label-sm font-label-sm">Save</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 transform translate-y-0.5 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-label-sm">Preview</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for staff card selection
+        const cards = document.querySelectorAll('.glass-card.cursor-pointer');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                cards.forEach(c => {
+                    c.classList.remove('amber-glow', 'border-primary/40');
+                    c.classList.add('border-outline-variant/15');
+                    const title = c.querySelector('h3');
+                    if(title) title.classList.replace('text-primary', 'text-on-surface');
+                });
+                card.classList.add('amber-glow', 'border-primary/40');
+                const title = card.querySelector('h3');
+                if(title) title.classList.replace('text-on-surface', 'text-primary');
+            });
+        });
+
+        // Form submission prevention for demo
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.innerText = 'Synchronizing...';
+            btn.style.opacity = '0.7';
+            setTimeout(() => {
+                btn.innerText = 'Records Updated';
+                btn.classList.add('bg-green-600');
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.opacity = '1';
+                    btn.classList.remove('bg-green-600');
+                }, 2000);
+            }, 1000);
+        });
+    </script>
+</body></html>

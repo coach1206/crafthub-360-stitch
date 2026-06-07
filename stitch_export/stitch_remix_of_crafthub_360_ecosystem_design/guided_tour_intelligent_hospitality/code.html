@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 | Final Step</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Manrope:wght@400;500&amp;family=Space+Grotesk:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .obsidian-glass {
+            background: rgba(19, 19, 19, 0.8);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .gold-foil-accent {
+            background: linear-gradient(135deg, #D4AF37 0%, #F2CA50 50%, #B8860B 100%);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+        }
+        .haptic-pulse:active {
+            transform: scale(0.95);
+            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 45%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.1) 55%,
+                transparent 100%
+            );
+            transform: rotate(45deg);
+            animation: shimmer-effect 3s infinite;
+        }
+        @keyframes shimmer-effect {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        .step-pulse {
+            animation: pulse-gold 2s infinite;
+        }
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#574500",
+                    "secondary": "#c8c6c5",
+                    "surface": "#131313",
+                    "primary-fixed": "#ffe088",
+                    "inverse-primary": "#735c00",
+                    "on-secondary-container": "#b7b5b4",
+                    "tertiary-fixed": "#e2e2e2",
+                    "surface-bright": "#3a3939",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-tertiary-container": "#444546",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "surface-container-high": "#2a2a2a",
+                    "surface-container": "#201f1f",
+                    "tertiary-fixed-dim": "#c6c6c6",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-container-low": "#1c1b1b",
+                    "surface-dim": "#131313",
+                    "surface-variant": "#353534",
+                    "tertiary": "#cecece",
+                    "tertiary-container": "#b2b3b3",
+                    "primary": "#f2ca50",
+                    "surface-tint": "#e9c349",
+                    "on-surface": "#e5e2e1",
+                    "error": "#ffb4ab",
+                    "primary-fixed-dim": "#e9c349",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "on-background": "#e5e2e1",
+                    "on-secondary": "#313030",
+                    "surface-container-highest": "#353534",
+                    "inverse-surface": "#e5e2e1",
+                    "on-primary-fixed": "#241a00",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "outline-variant": "#4d4635",
+                    "on-tertiary": "#2f3131",
+                    "background": "#131313",
+                    "outline": "#99907c",
+                    "error-container": "#93000a",
+                    "secondary-container": "#474746",
+                    "on-primary-container": "#554300",
+                    "on-primary": "#3c2f00",
+                    "inverse-on-surface": "#313030",
+                    "on-surface-variant": "#d0c5af",
+                    "primary-container": "#d4af37",
+                    "on-error": "#690005"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "container-padding": "64px",
+                    "touch-target-min": "56px",
+                    "tour-card-width": "520px",
+                    "gutter": "32px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Space Grotesk"],
+                    "body-md": ["Manrope"],
+                    "label-caps": ["Space Grotesk"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-intro": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "display-tour": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-caps": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "body-intro": ["20px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-tour": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen overflow-hidden selection:bg-primary-container/30">
+<!-- Top App Bar (Shared Component) -->
+<header class="fixed top-0 w-full flex justify-between items-center px-container-padding h-touch-target-min z-50 bg-transparent">
+<div class="flex items-center gap-unit">
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity Active: scale-95 duration-200">close</button>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter">CraftHub 360</h1>
+<button class="font-label-caps text-label-caps text-on-surface-variant hover:opacity-80 transition-opacity Active: scale-95 duration-200">Skip Tour</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative w-full h-screen flex items-center justify-end px-container-padding">
+<!-- Environmental Background (Atmospheric Imagery) -->
+<div class="absolute inset-0 z-0 overflow-hidden">
+<img class="w-full h-full object-cover scale-110 opacity-40 blur-sm" data-alt="A luxury, dimly lit speakeasy lounge with high-end architectural finishes, featuring a polished obsidian bar counter and gold metallic shelving displaying rare spirits. The mood is sophisticated and exclusive, with soft golden ambient lighting and a sense of calm, premium hospitality in a high-precision kiosk environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNg2wtsAwFM5T9LPzcVQx6bfcmCjArWg462a1yhKRZZyIwthylWs7NeMYHUMvv6_RopFTAD9sipZQPt4hvNKf68wiahxIpgRHQQcL7IVB0TPzgCwxOshbxN8ZG6nQVcXpufWTLVwN3_PBKnRijhD7hooxq6lmGayoPE3HfT9zGg718rOtaSeMGp5AF0SR_DQ3aWo_68cUWnqgcc73v0mm1lXXNpNDzA1pkVYhlrp05CrlSy666U44xlCEEY3zSVBmmba2uWuMT2C4"/>
+<!-- Overlay to dim the background for focus -->
+<div class="absolute inset-0 bg-black/40"></div>
+</div>
+<!-- The Obsidian Card (Primary Container) -->
+<section class="obsidian-glass w-tour-card-width rounded-xl p-gutter relative z-10 border-t-2 border-primary-container shadow-[0_60px_100px_rgba(212,175,55,0.05)]">
+<!-- Tour Progress Bar -->
+<div class="flex gap-2 mb-gutter">
+<div class="h-1 flex-1 gold-foil-accent rounded-full"></div>
+<div class="h-1 flex-1 gold-foil-accent rounded-full"></div>
+<div class="h-1 flex-1 gold-foil-accent rounded-full"></div>
+<div class="h-1 flex-1 gold-foil-accent rounded-full step-pulse"></div>
+</div>
+<!-- Content -->
+<div class="space-y-6">
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-widest block">Final Step • Intelligence</span>
+<div class="space-y-4">
+<h2 class="font-headline-lg text-headline-lg text-on-surface leading-tight">Intelligent Hospitality.</h2>
+<p class="font-body-intro text-body-intro text-on-surface-variant">
+                        Our AI Concierge and E.A.T. sensors ensure your environment is always optimal and your favorite spirits are always ready.
+                    </p>
+</div>
+<!-- Feature Highlight Grid (Bento Style) -->
+<div class="grid grid-cols-2 gap-4 pt-4">
+<div class="p-4 rounded-lg bg-white/5 border border-white/10 group hover:border-primary/30 transition-colors">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="sensor_occupied">sensor_occupied</span>
+<p class="font-label-caps text-label-caps text-on-surface">E.A.T. Vision</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Environment, Atmosphere, Temperature</p>
+</div>
+<div class="p-4 rounded-lg bg-white/5 border border-white/10 group hover:border-primary/30 transition-colors">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="support_agent">support_agent</span>
+<p class="font-label-caps text-label-caps text-on-surface">Live Concierge</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Real-time assistance &amp; recommendations</p>
+</div>
+</div>
+<!-- CTA -->
+<div class="pt-gutter">
+<button class="gold-foil-accent shimmer haptic-pulse w-full h-touch-target-min rounded-full flex items-center justify-center gap-2 group">
+<span class="font-label-caps text-label-caps text-on-primary-fixed uppercase font-bold">Enter the Lounge</span>
+<span class="material-symbols-outlined text-on-primary-fixed group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Step Indicator -->
+<div class="absolute -bottom-12 right-0 flex items-center gap-4 text-on-surface-variant">
+<span class="font-label-caps text-label-caps">Step 4 of 4</span>
+</div>
+</section>
+<!-- Floating UI Decoration (Interactive Element Explained) -->
+<div class="absolute left-container-padding top-1/2 -translate-y-1/2 hidden lg:flex flex-col gap-6">
+<div class="obsidian-glass p-6 rounded-full aspect-square flex items-center justify-center border-primary/20 animate-bounce">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="cognition" data-weight="fill">cognition</span>
+</div>
+<div class="obsidian-glass px-4 py-2 rounded-full border-primary/20">
+<p class="font-label-sm text-label-sm text-primary">Monitoring System Status: Optimal</p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Shared Component) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-between items-center px-container-padding py-unit bg-surface/80 backdrop-blur-xl border-t border-white/15 shadow-[0_-4px_40px_rgba(212,175,55,0.05)]">
+<button class="flex items-center justify-center text-secondary border border-secondary rounded-full w-touch-target-min h-touch-target-min hover:bg-primary-container hover:text-on-primary-container transition-colors scale-90 duration-150 haptic-pulse">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex gap-4">
+<!-- Interactive dots or secondary info -->
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<div class="w-4 h-1.5 rounded-full bg-primary"></div>
+</div>
+</div>
+<button class="flex items-center justify-center bg-primary text-on-primary rounded-full w-touch-target-min h-touch-target-min hover:bg-primary-container hover:text-on-primary-container transition-colors scale-90 duration-150 haptic-pulse">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interaction for the "Haptic" effect
+        document.querySelectorAll('.haptic-pulse').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(10);
+                }
+            });
+        });
+
+        // Spotlight mouse tracker effect (subtle)
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            const spotlight = document.querySelector('.spotlight');
+            if(spotlight) {
+                spotlight.style.background = `radial-gradient(600px at ${x}px ${y}px, rgba(212,175,55,0.05), transparent 80%)`;
+            }
+        });
+    </script>
+<div class="spotlight pointer-events-none fixed inset-0 z-0"></div>
+</body></html>

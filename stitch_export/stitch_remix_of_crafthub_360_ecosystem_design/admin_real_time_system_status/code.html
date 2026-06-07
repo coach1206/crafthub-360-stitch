@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 Admin | System Status</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .7; transform: scale(1.1); }
+        }
+        .leather-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/black-leather.png");
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#b7a09a",
+                        "surface-container": "#1f1f20",
+                        "surface-bright": "#39393a",
+                        "tertiary": "#dac1bb",
+                        "on-secondary-container": "#3d2400",
+                        "on-primary-container": "#4e3700",
+                        "inverse-primary": "#775a19",
+                        "error": "#ffb4ab",
+                        "surface": "#131314",
+                        "primary-fixed": "#ffdea5",
+                        "outline": "#9a8f80",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "inverse-on-surface": "#303031",
+                        "error-container": "#93000a",
+                        "primary": "#e9c176",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-tertiary-container": "#473733",
+                        "outline-variant": "#4e4639",
+                        "surface-variant": "#353436",
+                        "on-primary-fixed": "#261900",
+                        "background": "#131314",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-tertiary": "#3c2d28",
+                        "on-secondary": "#462a00",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-dim": "#131314",
+                        "on-error-container": "#ffdad6",
+                        "surface-tint": "#e9c176",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-high": "#2a2a2b",
+                        "on-background": "#e5e2e3",
+                        "secondary": "#ffb95a",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-surface": "#e5e2e3",
+                        "on-tertiary-fixed": "#261814",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-container-lowest": "#0e0e0f",
+                        "secondary-container": "#c68315",
+                        "surface-container-highest": "#353436",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-surface-variant": "#d1c5b4",
+                        "secondary-fixed": "#ffddb6",
+                        "on-primary": "#412d00",
+                        "primary-container": "#c5a059"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-b border-outline-variant/30 shadow-sm flex items-center justify-between px-gutter h-20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="dashboard_customize">dashboard_customize</span>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="text-primary font-bold text-label-lg font-label-lg" href="#">Home</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-1 rounded-lg" href="#">Reports</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-1 rounded-lg" href="#">Assets</a>
+</nav>
+<button class="material-symbols-outlined text-primary hover:rotate-90 transition-transform duration-500" data-icon="settings_suggest">settings_suggest</button>
+</div>
+</header>
+<main class="pt-32 px-gutter max-w-[1440px] mx-auto">
+<!-- Hero Section: System Health Overview -->
+<section class="mb-12">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 glass-panel p-card-padding rounded-xl relative overflow-hidden gold-glow">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+<div class="flex justify-between items-start mb-8">
+<div>
+<p class="text-label-lg font-label-lg text-primary tracking-widest uppercase mb-2">Operational Status</p>
+<h2 class="text-headline-xl font-headline-xl text-on-surface">Global Ecosystem Health</h2>
+</div>
+<div class="flex flex-col items-end">
+<div class="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
+<span class="w-3 h-3 bg-primary rounded-full status-pulse"></span>
+<span class="text-primary font-bold text-label-lg">ALL SYSTEMS OPTIMAL</span>
+</div>
+<span class="text-on-surface-variant text-label-sm mt-2">Last check: 2 seconds ago</span>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<div class="text-center p-4 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<p class="text-label-sm text-on-surface-variant mb-1">Total Uptime</p>
+<p class="text-headline-md font-headline-md text-primary">99.99%</p>
+</div>
+<div class="text-center p-4 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<p class="text-label-sm text-on-surface-variant mb-1">Avg Latency</p>
+<p class="text-headline-md font-headline-md text-primary">42ms</p>
+</div>
+<div class="text-center p-4 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<p class="text-label-sm text-on-surface-variant mb-1">Active Nodes</p>
+<p class="text-headline-md font-headline-md text-primary">124</p>
+</div>
+<div class="text-center p-4 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<p class="text-label-sm text-on-surface-variant mb-1">Data Rate</p>
+<p class="text-headline-md font-headline-md text-primary">1.2GB/s</p>
+</div>
+</div>
+</div>
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-center items-center text-center relative group">
+<img class="absolute inset-0 w-full h-full object-cover opacity-20 transition-opacity group-hover:opacity-30 rounded-xl" data-alt="A macro photograph of a high-end luxury watch movement, showcasing intricate gold gears and high-precision mechanical engineering. The lighting is cinematic with deep shadows and warm amber highlights, reflecting a sophisticated command center aesthetic. The atmosphere is one of timeless reliability and artisan craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZaiDmlVtyjqOwmL--waUNdCdC_-gx0-NzQzKRvo-I8KEaF4XGtFwegk3-HduP4_CvkbRIFF3aDiQw8sxWj9K6PXV1k4xpm2c0P7vAsJ3WMxNLqtfqTESgk-75hHN3pJTeT9syJ-pBidBNFCEvV6NbZ6W8WsIvVzqptidaIpCwh5XmhGusjuDkewsHJIgv9xmpfDucx-o8BTcNp21MSc64OfV0eKxk1MRWUerJtyfWxxbb0zAbhts0kl5x1RMCkMU_bpfkMuRLbE8"/>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-6xl text-primary mb-4" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Security Shield</h3>
+<p class="text-body-md text-on-surface-variant px-4">Encryption protocols active across all 360 Passport connections.</p>
+<button class="mt-6 px-8 py-3 bg-primary text-on-primary font-bold rounded-lg hover:scale-105 active:scale-95 transition-all">Audit Logs</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Monitoring Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Core Services -->
+<div class="glass-panel p-6 rounded-xl border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="terminal">terminal</span>
+<h4 class="text-label-lg font-bold">NOVEE OS</h4>
+</div>
+<span class="text-primary text-label-sm font-bold">HEALTHY</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">CPU Load</span>
+<span class="text-primary">12%</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 12%"></div>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Uptime</span>
+<span class="text-on-surface">412d 4h</span>
+</div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="hub">hub</span>
+<h4 class="text-label-lg font-bold">CraftHub Core</h4>
+</div>
+<span class="text-primary text-label-sm font-bold">HEALTHY</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Queue Depth</span>
+<span class="text-primary">0</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Latency</span>
+<span class="text-on-surface">18ms</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">API Status</span>
+<span class="text-primary">200 OK</span>
+</div>
+</div>
+</div>
+<!-- Beverage Systems -->
+<div class="glass-panel p-6 rounded-xl border-l-4 border-secondary">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="mode_fan">mode_fan</span>
+<h4 class="text-label-lg font-bold">SmokeCraft</h4>
+</div>
+<span class="text-secondary text-label-sm font-bold">ACTIVE</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Humid. Control</span>
+<span class="text-secondary">70% RH</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Temp</span>
+<span class="text-secondary">68°F</span>
+</div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="liquor">liquor</span>
+<h4 class="text-label-lg font-bold">PourCraft</h4>
+</div>
+<span class="text-primary text-label-sm font-bold">HEALTHY</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Lines Cleaned</span>
+<span class="text-on-surface">2d ago</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Inventory Sync</span>
+<span class="text-primary">Live</span>
+</div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl border-l-4 border-error">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error" data-icon="sports_bar">sports_bar</span>
+<h4 class="text-label-lg font-bold">BeerCraft</h4>
+</div>
+<span class="text-error text-label-sm font-bold">WARNING</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Keg Level Low</span>
+<span class="text-error">Tap #4</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Pressure</span>
+<span class="text-on-surface">12 PSI</span>
+</div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="wine_bar">wine_bar</span>
+<h4 class="text-label-lg font-bold">WineCraft</h4>
+</div>
+<span class="text-primary text-label-sm font-bold">HEALTHY</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Cellar Temp</span>
+<span class="text-on-surface">55°F</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">N2 Levels</span>
+<span class="text-primary">Optimal</span>
+</div>
+</div>
+</div>
+<!-- Integrations -->
+<div class="glass-panel p-6 rounded-xl border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="badge">badge</span>
+<h4 class="text-label-lg font-bold">360 Passport</h4>
+</div>
+<span class="text-primary text-label-sm font-bold">HEALTHY</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Blockchain ledger sync confirmed. 12k members online.</p>
+</div>
+<div class="glass-panel p-6 rounded-xl border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="point_of_sale">point_of_sale</span>
+<h4 class="text-label-lg font-bold">POS 3 Integration</h4>
+</div>
+<span class="text-primary text-label-sm font-bold">HEALTHY</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Avg Transaction</span>
+<span class="text-on-surface">1.4s</span>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant">restaurant</span>
+<h4 class="text-label-lg font-bold">E.A.T. Tracking</h4>
+</div>
+<span class="text-primary text-label-sm font-bold">HEALTHY</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Table utilization at 82%. Kitchen latency: 12m.</p>
+</div>
+<div class="glass-panel p-6 rounded-xl border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="qr_code_2">qr_code_2</span>
+<h4 class="text-label-lg font-bold">QR System</h4>
+</div>
+<span class="text-primary text-label-sm font-bold">HEALTHY</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Instant redirect latency &lt; 50ms.</p>
+</div>
+<div class="glass-panel p-6 rounded-xl border-l-4 border-primary md:col-span-2">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="database">database</span>
+<h4 class="text-label-lg font-bold">Database &amp; API</h4>
+</div>
+<span class="text-primary text-label-sm font-bold">SYNCHRONIZED</span>
+</div>
+<div class="flex gap-4">
+<div class="flex-1 bg-surface-container-highest p-3 rounded border border-outline-variant/10">
+<p class="text-label-sm text-on-surface-variant mb-1">Reads/sec</p>
+<p class="text-headline-md text-primary">2,410</p>
+</div>
+<div class="flex-1 bg-surface-container-highest p-3 rounded border border-outline-variant/10">
+<p class="text-label-sm text-on-surface-variant mb-1">Writes/sec</p>
+<p class="text-headline-md text-primary">840</p>
+</div>
+<div class="flex-1 bg-surface-container-highest p-3 rounded border border-outline-variant/10">
+<p class="text-label-sm text-on-surface-variant mb-1">Replication</p>
+<p class="text-headline-md text-primary">0.02s</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Command Console micro-interaction section -->
+<section class="mt-12">
+<div class="glass-panel p-6 rounded-xl border border-primary/20 bg-surface-container-lowest leather-texture">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="terminal">terminal</span>
+<h3 class="text-label-lg text-primary font-bold">Live System Logs</h3>
+</div>
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-error"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+</div>
+<div class="font-mono text-[12px] text-on-surface-variant/80 h-32 overflow-y-auto space-y-1" id="console">
+<p class="text-primary">[SYSTEM] Initializing CraftHub Diagnostic Sequence...</p>
+<p>[AUTH] 360 Passport Handshake Verified (0.012s)</p>
+<p>[DB] Postgres Cluster 1 Node 2 Primary Active</p>
+<p>[WINE] Cellar Temperature Stable at 55.4°F</p>
+<p class="text-secondary">[WARN] BeerCraft Tap #4: Pressure drop detected.</p>
+<p>[CORE] Background task 'InventorySync' completed successfully.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/90 backdrop-blur-2xl dark:bg-surface-container-high/90 border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center px-4 pb-4 pt-2 rounded-t-xl md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 transform translate-y-0.5 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-label-sm">Preview</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+<span class="text-label-sm font-label-sm">Save</span>
+</a>
+</nav>
+<script>
+        // Console simulation
+        const consoleEl = document.getElementById('console');
+        const logs = [
+            "[SYSTEM] Checking NOVEE OS Kernel stability...",
+            "[POUR] Measured 2.4oz whiskey pour on Station 3",
+            "[E.A.T.] Table 12 seated. Estimated duration 45m",
+            "[CORE] Processing batched transactions for POS 3",
+            "[SMOKE] Humidity adjusted +2% in South Humidor",
+            "[API] Endpoint /v1/status resolved in 8ms",
+            "[USER] Member #4402 accessed Gold Lounge",
+            "[SECURITY] Firewall audit: 0 threats detected"
+        ];
+
+        setInterval(() => {
+            const p = document.createElement('p');
+            p.textContent = logs[Math.floor(Math.random() * logs.length)];
+            consoleEl.appendChild(p);
+            if (consoleEl.children.length > 20) consoleEl.removeChild(consoleEl.firstChild);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }, 3000);
+
+        // Interaction scale effect
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+        });
+    </script>
+</body></html>

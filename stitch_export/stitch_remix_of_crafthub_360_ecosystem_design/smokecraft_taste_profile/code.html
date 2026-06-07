@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smokecraft Sensory Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "tertiary": "#dac1bb",
+                "on-tertiary-fixed-variant": "#54433e",
+                "surface-container-high": "#2a2a2b",
+                "tertiary-fixed": "#f7ddd6",
+                "surface-container-highest": "#353436",
+                "on-secondary": "#462a00",
+                "on-error": "#690005",
+                "primary-fixed-dim": "#e9c176",
+                "on-background": "#e5e2e3",
+                "surface-dim": "#131314",
+                "on-error-container": "#ffdad6",
+                "outline": "#9a8f80",
+                "on-surface": "#e5e2e3",
+                "surface-container-low": "#1b1b1c",
+                "on-secondary-fixed": "#2a1800",
+                "secondary-fixed": "#ffddb6",
+                "secondary-container": "#c68315",
+                "background": "#131314",
+                "surface-variant": "#353436",
+                "on-tertiary": "#3c2d28",
+                "inverse-primary": "#775a19",
+                "surface-tint": "#e9c176",
+                "error": "#ffb4ab",
+                "surface": "#131314",
+                "surface-container": "#1f1f20",
+                "surface-bright": "#39393a",
+                "primary": "#e9c176",
+                "primary-container": "#c5a059",
+                "inverse-on-surface": "#303031",
+                "error-container": "#93000a",
+                "on-tertiary-container": "#473733",
+                "tertiary-container": "#b7a09a",
+                "primary-fixed": "#ffdea5",
+                "secondary": "#ffb95a",
+                "on-primary-fixed": "#261900",
+                "inverse-surface": "#e5e2e3",
+                "surface-container-lowest": "#0e0e0f",
+                "secondary-fixed-dim": "#ffb95a",
+                "outline-variant": "#4e4639",
+                "on-primary-fixed-variant": "#5d4201",
+                "tertiary-fixed-dim": "#dac1bb",
+                "on-primary": "#412d00",
+                "on-secondary-fixed-variant": "#643f00",
+                "on-tertiary-fixed": "#261814",
+                "on-surface-variant": "#d1c5b4",
+                "on-primary-container": "#4e3700",
+                "on-secondary-container": "#3d2400"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "card-padding": "24px",
+                "unit": "8px",
+                "gutter": "32px",
+                "margin": "64px",
+                "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                "headline-xl": ["Playfair Display"],
+                "body-lg": ["Montserrat"],
+                "display-lg": ["Playfair Display"],
+                "label-lg": ["Montserrat"],
+                "headline-md": ["Playfair Display"],
+                "headline-lg": ["Playfair Display"],
+                "label-sm": ["Montserrat"],
+                "body-md": ["Montserrat"]
+            },
+            "fontSize": {
+                "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .leather-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/black-leather.png");
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(#1f1f20, #1f1f20) padding-box,
+                        linear-gradient(135deg, #e9c176 0%, #ffdea5 50%, #c5a059 100%) border-box;
+        }
+        .smoked-glass {
+            background: rgba(31, 31, 32, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .progress-glow {
+            box-shadow: 0 0 15px rgba(233, 193, 118, 0.5);
+        }
+        .amber-spotlight {
+            background: radial-gradient(circle at center, rgba(233, 193, 118, 0.15) 0%, transparent 70%);
+        }
+        .smoke-drift {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0.3;
+            mix-blend-mode: screen;
+        }
+        .btn-active {
+            transform: scale(0.96);
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 100%) !important;
+            color: #412d00 !important;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md leather-texture min-h-screen flex flex-col">
+<!-- Top App Bar (Shared Component Logic) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer p-2 hover:bg-surface-variant/50 rounded-full transition-colors" data-icon="menu">menu</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<span class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Explore</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Inventory</span>
+<span class="font-label-lg text-label-lg text-primary transition-colors cursor-pointer">Passport</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Assistant</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right hidden sm:block">
+<p class="font-label-lg text-primary">Julian Sterling</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Platinum Member</p>
+</div>
+<button class="px-6 py-2 bg-primary-container text-on-primary-container font-label-lg rounded-full hover:opacity-90 transition-all">
+                Grand Lounge
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-32 pb-32 px-gutter max-w-container-max-width mx-auto w-full relative">
+<!-- Smoke & Ambient Effects -->
+<div class="absolute inset-0 amber-spotlight pointer-events-none"></div>
+<img alt="" class="smoke-drift top-0 left-0 w-full h-full object-cover grayscale opacity-10" data-alt="Wispy, ethereal tendrils of silver smoke drifting slowly through a dark, atmospheric lounge setting. The lighting is warm and cinematic, featuring rich amber highlights and deep espresso shadows. The visual style is luxurious, moody, and sophisticated, perfectly capturing the essence of a premium cigar humidor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT8AoImWr7lkCUxh9oOvIhM7b9b1fE2tITl6a5C_gfeMTGWefb35buqhuPqsauy_GTNlO4wSr37hsuXVYszrJhVTbZqQ2mJZmqhCpbLbNhe_FXGWeN1lPEg7BLtr6KhMkn-yhinhDFNbZVHcxBGy-rZdYt2urnOdiHftli_wiT2csl_hbghgmProYwvxPXkJzd4QXGnSiw-N4FPcHyOPBwEXc3UlaffLpoLrQNPdVfQ4btSLLyOU35m80_dKCv9SzYk_LKHIOM66U"/>
+<!-- Progress Section -->
+<div class="mb-12 max-w-3xl mx-auto text-center">
+<div class="flex justify-between items-end mb-4">
+<p class="font-label-lg text-primary uppercase tracking-[0.2em]">Step 7 of 12</p>
+<p class="font-headline-sm text-on-surface-variant italic">Sensory Mapping</p>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[58%] progress-glow transition-all duration-700 ease-in-out"></div>
+</div>
+</div>
+<div class="max-w-5xl mx-auto">
+<h2 class="font-headline-xl text-headline-xl text-center mb-16 text-on-surface drop-shadow-lg">Sensory Profile</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- Question 1: Intensity -->
+<section class="space-y-6">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="air">air</span>
+                        Smooth or bold?
+                    </h3>
+<div class="grid grid-cols-2 gap-4">
+<button class="gold-foil-border smoked-glass p-8 rounded-xl flex flex-col items-center gap-4 group transition-all hover:scale-[1.02]" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="waves">waves</span>
+<span class="font-label-lg text-label-lg uppercase tracking-widest">Smooth</span>
+</button>
+<button class="gold-foil-border smoked-glass p-8 rounded-xl flex flex-col items-center gap-4 group transition-all hover:scale-[1.02]" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="bolt">bolt</span>
+<span class="font-label-lg text-label-lg uppercase tracking-widest">Bold</span>
+</button>
+</div>
+</section>
+<!-- Question 2: Primary Notes -->
+<section class="space-y-6">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+                        Character?
+                    </h3>
+<div class="grid grid-cols-3 gap-3">
+<!-- Selection buttons with specific labels from JSON -->
+<button class="gold-foil-border smoked-glass py-4 rounded-lg font-label-sm text-center transition-all hover:bg-surface-variant/50" onclick="this.classList.toggle('btn-active')">Sweet</button>
+<button class="gold-foil-border smoked-glass py-4 rounded-lg font-label-sm text-center transition-all hover:bg-surface-variant/50" onclick="this.classList.toggle('btn-active')">Spicy</button>
+<button class="gold-foil-border smoked-glass py-4 rounded-lg font-label-sm text-center transition-all hover:bg-surface-variant/50" onclick="this.classList.toggle('btn-active')">Earthy</button>
+<button class="gold-foil-border smoked-glass py-4 rounded-lg font-label-sm text-center transition-all hover:bg-surface-variant/50" onclick="this.classList.toggle('btn-active')">Creamy</button>
+<button class="gold-foil-border smoked-glass py-4 rounded-lg font-label-sm text-center transition-all hover:bg-surface-variant/50" onclick="this.classList.toggle('btn-active')">Woody</button>
+<button class="gold-foil-border smoked-glass py-4 rounded-lg font-label-sm text-center transition-all hover:bg-surface-variant/50" onclick="this.classList.toggle('btn-active')">Peppery</button>
+</div>
+</section>
+<!-- Question 3: Deep Aromatics (Bento Card Style) -->
+<section class="md:col-span-2 space-y-6">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="temp_preferences_custom">temp_preferences_custom</span>
+                        Aromatic Nuances?
+                    </h3>
+<div class="flex flex-wrap gap-4">
+<button class="gold-foil-border smoked-glass px-8 py-5 rounded-full flex items-center gap-3 transition-all hover:translate-y-[-2px]" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-primary" data-icon="coffee">coffee</span> Coffee
+                        </button>
+<button class="gold-foil-border smoked-glass px-8 py-5 rounded-full flex items-center gap-3 transition-all hover:translate-y-[-2px]" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-primary" data-icon="cookie">cookie</span> Chocolate
+                        </button>
+<button class="gold-foil-border smoked-glass px-8 py-5 rounded-full flex items-center gap-3 transition-all hover:translate-y-[-2px]" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-primary" data-icon="icecream">icecream</span> Vanilla
+                        </button>
+<button class="gold-foil-border smoked-glass px-8 py-5 rounded-full flex items-center gap-3 transition-all hover:translate-y-[-2px]" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-primary" data-icon="nature">nature</span> Oak
+                        </button>
+<button class="gold-foil-border smoked-glass px-8 py-5 rounded-full flex items-center gap-3 transition-all hover:translate-y-[-2px]" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-primary" data-icon="wallet">wallet</span> Leather
+                        </button>
+<button class="gold-foil-border smoked-glass px-8 py-5 rounded-full flex items-center gap-3 transition-all hover:translate-y-[-2px]" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-primary" data-icon="nutrition">nutrition</span> Fruit
+                        </button>
+<button class="gold-foil-border smoked-glass px-8 py-5 rounded-full flex items-center gap-3 transition-all hover:translate-y-[-2px]" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-primary" data-icon="flare">flare</span> Spice
+                        </button>
+</div>
+</section>
+<!-- Question 4: Body Type -->
+<section class="space-y-6">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+                        Body Preference?
+                    </h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between gap-4">
+<span class="font-label-sm text-on-surface-variant">Mild</span>
+<input class="flex-grow accent-primary h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" max="3" min="1" type="range" value="2"/>
+<span class="font-label-sm text-on-surface-variant">Full-bodied</span>
+</div>
+<div class="flex justify-around pt-2">
+<button class="text-xs uppercase tracking-widest text-on-surface-variant border-b border-transparent hover:border-primary pb-1" onclick="setActive(this)">Mild</button>
+<button class="text-xs uppercase tracking-widest text-primary border-b border-primary pb-1" onclick="setActive(this)">Medium</button>
+<button class="text-xs uppercase tracking-widest text-on-surface-variant border-b border-transparent hover:border-primary pb-1" onclick="setActive(this)">Full</button>
+</div>
+</div>
+</section>
+<!-- Question 5: Experience -->
+<section class="space-y-6">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+                        Experience Level?
+                    </h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="gold-foil-border smoked-glass py-4 rounded-lg font-label-sm transition-all" onclick="this.classList.toggle('btn-active')">New</button>
+<button class="gold-foil-border smoked-glass py-4 rounded-lg font-label-sm transition-all" onclick="this.classList.toggle('btn-active')">Casual</button>
+<button class="gold-foil-border smoked-glass py-4 rounded-lg font-label-sm transition-all" onclick="this.classList.toggle('btn-active')">Experienced</button>
+<button class="gold-foil-border smoked-glass py-4 rounded-lg font-label-sm transition-all" onclick="this.classList.toggle('btn-active')">Expert</button>
+</div>
+</section>
+<!-- Question 6: Occasion (The High-End Sensory Selector) -->
+<section class="md:col-span-2 space-y-6">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+                        Today's Occasion?
+                    </h3>
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-variant/30 transition-all border border-outline-variant/30" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-3xl" data-icon="self_improvement">self_improvement</span>
+<span class="font-label-sm">Relaxing</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-variant/30 transition-all border border-outline-variant/30" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-3xl" data-icon="celebration">celebration</span>
+<span class="font-label-sm">Celebrating</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-variant/30 transition-all border border-outline-variant/30" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-3xl" data-icon="work">work</span>
+<span class="font-label-sm">Business</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-variant/30 transition-all border border-outline-variant/30" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-3xl" data-icon="favorite">favorite</span>
+<span class="font-label-sm">Date Night</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-variant/30 transition-all border border-outline-variant/30" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-3xl" data-icon="sports_score">sports_score</span>
+<span class="font-label-sm">Sports</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-variant/30 transition-all border border-outline-variant/30" onclick="this.classList.toggle('btn-active')">
+<span class="material-symbols-outlined text-3xl" data-icon="stars">stars</span>
+<span class="font-label-sm">VIP</span>
+</button>
+</div>
+</section>
+</div>
+<!-- Participation Alert -->
+<div class="mt-20 p-8 rounded-2xl bg-primary/5 border border-primary/20 flex flex-col md:flex-row items-center gap-8 smoked-glass">
+<div class="relative">
+<div class="w-24 h-24 rounded-full border-2 border-primary border-dashed flex items-center justify-center animate-spin-slow"></div>
+<span class="material-symbols-outlined text-5xl text-primary absolute inset-0 flex items-center justify-center" data-icon="approval" data-weight="fill" style="font-variation-settings: 'FILL' 1;">approval</span>
+</div>
+<div class="flex-grow text-center md:text-left">
+<h4 class="font-headline-md text-headline-md text-primary mb-1">Passport Milestone</h4>
+<p class="font-body-md text-on-surface-variant">You're about to earn the <strong class="text-primary">'Taste Profile Completion Stamp'</strong>. Complete this profile to unlock personalized humidor curation and exclusive cellar access.</p>
+</div>
+<button class="w-full md:w-auto px-12 py-5 bg-primary text-on-primary font-label-lg rounded-xl hover:shadow-[0_0_30px_rgba(233,193,118,0.4)] transition-all active:scale-95" onclick="showSuccess()">
+                    Finalize Profile
+                </button>
+</div>
+</div>
+</main>
+<!-- Success Modal (Hidden by default) -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center p-gutter" id="success-modal">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+<div class="smoked-glass gold-foil-border p-12 rounded-3xl max-w-lg w-full relative text-center scale-90 opacity-0 transition-all duration-500" id="modal-content">
+<span class="material-symbols-outlined text-8xl text-primary mb-6 block" data-icon="stars" data-weight="fill" style="font-variation-settings: 'FILL' 1;">stars</span>
+<h3 class="font-headline-xl text-headline-xl text-primary mb-4">Stamp Earned</h3>
+<p class="font-body-lg text-on-surface-variant mb-10">Your Sensory Profile is now mapped. Your personalized 'CraftHub Passport' has been updated with the Taste Profile Completion Stamp.</p>
+<button class="w-full py-4 bg-primary text-on-primary font-label-lg rounded-xl" onclick="closeModal()">Continue Journey</button>
+</div>
+</div>
+<!-- Bottom Navigation Bar (Shared Component Logic) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)] md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-full px-6 py-2">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-sm text-label-sm">Assistant</span>
+</div>
+</nav>
+<script>
+        function showSuccess() {
+            const modal = document.getElementById('success-modal');
+            const content = document.getElementById('modal-content');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                content.classList.remove('scale-90', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('success-modal');
+            const content = document.getElementById('modal-content');
+            content.classList.add('scale-90', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 500);
+        }
+
+        function setActive(el) {
+            const buttons = el.parentElement.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.classList.remove('text-primary', 'border-primary');
+                btn.classList.add('text-on-surface-variant', 'border-transparent');
+            });
+            el.classList.add('text-primary', 'border-primary');
+            el.classList.remove('text-on-surface-variant', 'border-transparent');
+        }
+
+        // Simple floating smoke animation trigger
+        setInterval(() => {
+            const smoke = document.querySelector('.smoke-drift');
+            if(smoke) {
+                smoke.style.transform = `translate(${Math.random() * 20}px, ${Math.random() * 20}px)`;
+                smoke.style.transition = "transform 5s ease-in-out";
+            }
+        }, 5000);
+    </script>
+</body></html>

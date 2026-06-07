@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The 360 Passport - Networking Stamps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .passport-texture {
+            background-color: #fdfaf3; /* Creamy parchment base */
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.05);
+        }
+        .stamp-ink-gold {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0.5px 0.5px 0px rgba(0,0,0,0.2));
+        }
+        .stamp-container {
+            border: 2px solid rgba(197, 160, 89, 0.4);
+            position: relative;
+            transform: rotate(-2deg);
+        }
+        .stamp-container::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            pointer-events: none;
+        }
+        .page-fold {
+            background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.1) 100%);
+        }
+        .spine-shadow {
+            background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.15) 100%);
+        }
+        .glass-overlay {
+            backdrop-filter: blur(12px);
+            background: rgba(19, 19, 20, 0.7);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#ffdea5",
+                        "on-error": "#690005",
+                        "on-secondary": "#462a00",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "tertiary-container": "#b7a09a",
+                        "on-surface": "#e5e2e3",
+                        "inverse-on-surface": "#303031",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed": "#2a1800",
+                        "inverse-surface": "#e5e2e3",
+                        "on-tertiary": "#3c2d28",
+                        "surface-container": "#1f1f20",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-primary": "#775a19",
+                        "surface-tint": "#e9c176",
+                        "surface-container-high": "#2a2a2b",
+                        "secondary": "#ffb95a",
+                        "surface-dim": "#131314",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-tertiary-fixed": "#261814",
+                        "tertiary": "#dac1bb",
+                        "surface-variant": "#353436",
+                        "secondary-fixed": "#ffddb6",
+                        "secondary-container": "#c68315",
+                        "on-tertiary-container": "#473733",
+                        "on-primary-container": "#4e3700",
+                        "on-primary": "#412d00",
+                        "primary-container": "#c5a059",
+                        "outline": "#9a8f80",
+                        "on-secondary-container": "#3d2400",
+                        "primary": "#e9c176",
+                        "surface-bright": "#39393a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "background": "#131314",
+                        "surface-container-highest": "#353436",
+                        "on-primary-fixed": "#261900",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-surface-variant": "#d1c5b4",
+                        "on-background": "#e5e2e3",
+                        "tertiary-fixed": "#f7ddd6",
+                        "outline-variant": "#4e4639",
+                        "surface": "#131314",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-container-lowest": "#0e0e0f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "32px",
+                        "margin": "64px",
+                        "card-padding": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-dim text-on-surface font-body-md overflow-x-hidden selection:bg-primary/30">
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface-dim/80 backdrop-blur-xl border-b border-primary/20 shadow-md">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary p-2 hover:bg-primary/10 rounded-full transition-colors duration-300">menu</button>
+<h1 class="font-display-lg text-display-lg text-primary uppercase tracking-widest text-xl lg:text-3xl">The 360 Passport</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="hidden md:block font-label-lg text-primary tracking-widest uppercase">Grand Lounge</span>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden bg-surface-variant shadow-lg active:scale-95 duration-200">
+<img class="w-full h-full object-cover" data-alt="A sophisticated headshot of a refined gentleman in his late 40s, wearing a tailored charcoal suit and a subtly textured silk tie. The lighting is low-key and dramatic, characteristic of a high-end private club. The background is softly blurred, showing hints of dark wood paneling and warm amber accent lights. The overall aesthetic is one of quiet wealth and exclusivity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBm5WAoKYknZPfjKHyfSc_5y3sLjlO_hhPkAsg_ll_FyWTtfmoAav9BUhnlXYnbWbzKbvKB3JCZ_m54z5OWJKnUjioa1BG80sDTZHwcZDCW2lfG_uDvjI4xLgVvemP6VkmYN4IQ67rbTd2bEyLRb3TmfHFwu6nZo9xC4VPwM49DiArhelIZvQJ4Q4mWBE5o-nrUs3a8mxCHCs9W_pAdlioN0gUmxexJMAwn1T8TpOD7-QKqtpv19fh3w3JJzKneWFMFLzv3LsvT1mI"/>
+</div>
+</div>
+</header>
+<main class="min-h-screen pt-32 pb-40 px-gutter flex items-center justify-center">
+<!-- Passport Booklet Container -->
+<div class="relative w-full max-w-6xl aspect-[1.4/1] md:aspect-[1.6/1] bg-[#2a1800] rounded-2xl shadow-2xl p-4 md:p-8 flex overflow-hidden">
+<!-- Left Page -->
+<div class="relative flex-1 passport-texture rounded-l-lg border-r border-black/10 p-8 md:p-12 overflow-hidden">
+<div class="absolute inset-0 spine-shadow pointer-events-none"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="flex justify-between items-start mb-12">
+<div class="space-y-1">
+<p class="font-label-sm text-on-surface-variant/60 uppercase tracking-widest">Member Records</p>
+<h2 class="font-headline-md text-headline-md text-[#3c2d28] italic">Networking Journey</h2>
+</div>
+<div class="text-[#3c2d28]/40 font-display-lg opacity-20 transform -rotate-12 select-none">PAGE 36</div>
+</div>
+<!-- Stamp 1: Atlanta Mixer -->
+<div class="stamp-container self-start mb-8 p-6 bg-white/5 border-dashed rounded-lg inline-block transform rotate-[-3deg] hover:rotate-0 transition-transform duration-500 cursor-default">
+<div class="flex items-center gap-4 mb-2">
+<span class="material-symbols-outlined text-4xl stamp-ink-gold">groups</span>
+<div>
+<h3 class="font-headline-md text-xl stamp-ink-gold font-bold">Atlanta Mixer 2024</h3>
+<p class="font-label-sm text-[#3c2d28]/70 font-medium">Buckhead Estate | Oct 14</p>
+</div>
+</div>
+<div class="border-t border-[#c5a059]/30 mt-3 pt-2 text-[10px] text-[#3c2d28]/50 tracking-[0.2em] uppercase font-bold text-center">Certified Connection</div>
+</div>
+<!-- Stamp 2: Cigar Network -->
+<div class="stamp-container self-end mr-4 mb-4 p-5 rounded-full border-double w-40 h-40 flex flex-col items-center justify-center text-center transform rotate-[8deg] hover:rotate-0 transition-transform duration-700 bg-white/5">
+<span class="material-symbols-outlined text-4xl stamp-ink-gold mb-1" style="font-variation-settings: 'FILL' 1;">smoking_rooms</span>
+<span class="font-display-lg text-lg stamp-ink-gold leading-tight">Cigar Network</span>
+<span class="font-label-sm text-[#3c2d28]/60 mt-1">St. Regis Lounge</span>
+<div class="absolute inset-2 border border-[#c5a059]/20 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Right Page -->
+<div class="relative flex-1 passport-texture rounded-r-lg border-l border-white/40 p-8 md:p-12 overflow-hidden">
+<!-- Page Curl Decor -->
+<div class="absolute bottom-0 right-0 w-24 h-24 page-fold rounded-tl-3xl shadow-[-10px_-10px_20px_rgba(0,0,0,0.1)] z-20"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="flex justify-end mb-12">
+<div class="text-right">
+<p class="font-label-sm text-on-surface-variant/60 uppercase tracking-widest">Entry Log</p>
+<p class="font-body-md text-[#3c2d28]/80">Vol. VII - Elite Circuits</p>
+</div>
+</div>
+<!-- Stamp 3: Vendor Connection -->
+<div class="stamp-container self-center mb-10 p-4 w-56 transform rotate-[-5deg] hover:rotate-2 transition-transform duration-500 bg-white/10 shadow-sm border-[3px] border-double border-[#c5a059]/40">
+<div class="flex flex-col items-center gap-2 border border-[#c5a059]/20 p-2">
+<span class="material-symbols-outlined text-3xl stamp-ink-gold">handshake</span>
+<div class="text-center">
+<h3 class="font-headline-md text-lg stamp-ink-gold uppercase tracking-tighter">Vendor Connection</h3>
+<p class="text-[11px] font-body-md text-[#3c2d28]/70 italic mt-1 font-semibold underline decoration-primary/30">Direct Sourcing Access</p>
+</div>
+</div>
+</div>
+<!-- Stamp 4: VIP Lounge -->
+<div class="stamp-container self-start ml-4 p-6 rounded-xl border-4 border-double border-[#c5a059]/30 transform rotate-[12deg] hover:rotate-3 transition-transform duration-1000 bg-white/5">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary/5 border border-primary/20">
+<span class="material-symbols-outlined text-2xl stamp-ink-gold" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div>
+<h3 class="font-display-lg text-2xl stamp-ink-gold">VIP Lounge Access</h3>
+<p class="font-label-sm text-[#3c2d28]/60 uppercase tracking-[0.15em] mt-1">Connoisseur Tier</p>
+<div class="mt-4 flex items-center gap-2">
+<span class="h-px flex-1 bg-[#c5a059]/30"></span>
+<span class="font-label-sm text-[#3c2d28]/40 italic">Global Privileges</span>
+<span class="h-px flex-1 bg-[#c5a059]/30"></span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto flex justify-end gap-2 text-[#3c2d28]/20">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="material-symbols-outlined">history_edu</span>
+</div>
+</div>
+</div>
+<!-- Absolute Decorative Elements -->
+<div class="absolute inset-0 pointer-events-none opacity-5 mix-blend-overlay">
+<img class="w-full h-full object-cover" data-alt="Macro photography of old, stained parchment paper with visible fiber texture, small foxing spots, and organic irregularities. The image is extremely high contrast, designed to be used as a subtle overlay to add physical realism to a digital surface. The palette is monochromatic with deep shadows and warm cream highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6tpVkX94cuQxQpbL8fEaeQcD-rVjNpldiXNLDphFWEGg07KQZw1BhXvV_txQnuBlQ7JJfheimmPbLQJV8LKlH6rE2GAMwyVuCl35ZquXX2u-1zi0g3k9Wxg9oNEq0QwaMZM_aHjVWz8S8_8q23UJukrGSl13ynO8mYCdtw3qBJCsTfQuTg84mMqhf4QTvZU1IvTbNMhxog06RC1L0XuqXFd7DeFbkgA8Byy6I9_0Wxx3KHiKmaCXORj3Kz0r-e8rErPtesigQcSc"/>
+</div>
+</div>
+<!-- Floating Action Button Contextual -->
+<button class="fixed right-margin bottom-32 w-16 h-16 rounded-full bg-primary text-on-primary shadow-[0_0_20px_rgba(233,193,118,0.5)] flex items-center justify-center active:scale-95 transition-all duration-300 z-50 group overflow-hidden">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">add</span>
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+</button>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin py-4 bg-surface-container-low/95 backdrop-blur-2xl border-t border-primary/30 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg text-label-lg">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-lg text-label-lg">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] transform -translate-y-1 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-lg text-label-lg">Passport</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-label-lg text-label-lg">Assistant</span>
+</a>
+</nav>
+<script>
+        // Subtle Parallax & Interactive Stamps
+        document.addEventListener('mousemove', (e) => {
+            const booklet = document.querySelector('.max-w-6xl');
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+            booklet.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // Stamp interaction sound/vibration mimic
+        const stamps = document.querySelectorAll('.stamp-container');
+        stamps.forEach(stamp => {
+            stamp.addEventListener('mouseenter', () => {
+                stamp.style.filter = 'brightness(1.1) drop-shadow(0 0 10px rgba(233, 193, 118, 0.4))';
+            });
+            stamp.addEventListener('mouseleave', () => {
+                stamp.style.filter = 'none';
+            });
+        });
+    </script>
+</body></html>

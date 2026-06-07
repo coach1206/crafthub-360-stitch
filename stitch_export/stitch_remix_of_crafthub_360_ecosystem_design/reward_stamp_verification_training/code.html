@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#ffdea5",
+                    "on-tertiary-fixed": "#261814",
+                    "surface-container-high": "#2a2a2b",
+                    "on-surface-variant": "#d1c5b4",
+                    "on-background": "#e5e2e3",
+                    "on-primary": "#412d00",
+                    "inverse-surface": "#e5e2e3",
+                    "primary": "#e9c176",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "outline": "#9a8f80",
+                    "background": "#131314",
+                    "error": "#ffb4ab",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "inverse-primary": "#775a19",
+                    "surface": "#131314",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-tertiary": "#3c2d28",
+                    "tertiary-container": "#b7a09a",
+                    "on-surface": "#e5e2e3",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "error-container": "#93000a",
+                    "surface-container-low": "#1b1b1c",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-dim": "#131314",
+                    "secondary-container": "#c68315",
+                    "tertiary": "#dac1bb",
+                    "surface-variant": "#353436",
+                    "inverse-on-surface": "#303031",
+                    "secondary": "#ffb95a",
+                    "outline-variant": "#4e4639",
+                    "on-secondary-container": "#3d2400",
+                    "on-secondary": "#462a00",
+                    "surface-tint": "#e9c176",
+                    "surface-bright": "#39393a",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-tertiary-container": "#473733",
+                    "primary-container": "#c5a059",
+                    "surface-container-highest": "#353436",
+                    "secondary-fixed": "#ffddb6",
+                    "surface-container": "#1f1f20",
+                    "on-primary-container": "#4e3700",
+                    "on-error": "#690005",
+                    "on-primary-fixed": "#261900",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-container-lowest": "#0e0e0f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "32px",
+                    "container-max-width": "1440px",
+                    "unit": "8px",
+                    "margin": "64px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(theme('colors.surface-container'), theme('colors.surface-container')) padding-box,
+                        linear-gradient(135deg, #ffdea5 0%, #775a19 100%) border-box;
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        body {
+            background-color: #0e0e0f;
+            background-image: radial-gradient(circle at 50% 0%, #2a2a2b 0%, #0e0e0f 70%);
+            min-height: 100vh;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-background">
+<!-- Top Navigation Shell -->
+<header class="bg-surface/80 backdrop-blur-xl dark:bg-surface/80 text-primary dark:text-primary w-full top-0 sticky border-b border-outline-variant/30 shadow-lg shadow-on-secondary-fixed/20 z-50 flex justify-between items-center px-gutter py-4 w-full">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-primary/30">
+<img alt="Executive Curator Profile" data-alt="A professional headshot of a sophisticated male curator in his 50s, wearing a charcoal grey tailored suit and glasses. He is posed in a luxuriously appointed library with dark wood shelving and leather-bound books in the background. The lighting is warm and cinematic, emphasizing a high-end, exclusive club atmosphere with amber tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnsst72cTG3s-4CqT4ArWJCdNFqsNnuWMrxPG7Y7x2-HDzTwMDn5rlCEsTt5QVE_vLilVURszWgh2Fe7d-azxPeL02bfy67A9x4lG5BoE0cRQE_PNwihNtBaaeMbj8UzJJN_Ut3-WzDQxRQ1CwEAlVG7-i7vrBY1JWrl4e_FZcqLaeZTk_gQQzDzd2epjoL2Pd4R_paPXL4LHZit7yHPSnQMQQxJv7GkNBO0lSrvD6bQZCdlf1LlPCMp8nGW0AMihNcBzBIMOdpRk"/>
+</div>
+<h1 class="font-display-lg text-[28px] leading-tight text-primary-fixed drop-shadow-[0_0_10px_rgba(233,193,118,0.5)]">CraftHub 360</h1>
+</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-primary-fixed-dim font-bold font-label-lg text-label-lg transition-all duration-300" href="#">Curriculum</a>
+<a class="text-on-surface-variant font-medium font-label-lg text-label-lg hover:bg-surface-bright/20 transition-all duration-300 px-3 py-1 rounded" href="#">Technique</a>
+<a class="text-on-surface-variant font-medium font-label-lg text-label-lg hover:bg-surface-bright/20 transition-all duration-300 px-3 py-1 rounded" href="#">Heritage</a>
+</nav>
+<button class="material-symbols-outlined text-primary hover:bg-surface-bright/20 transition-all duration-300 p-2 rounded-full active:scale-95">settings</button>
+</header>
+<main class="max-w-[1440px] mx-auto px-margin py-12 pb-32">
+<!-- Module Header -->
+<div class="mb-12">
+<h2 class="font-headline-xl text-headline-xl text-primary-fixed mb-4">Reward &amp; Stamp Verification</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                Master the art of authenticating digital stamps. Ensure every reward issued maintains the integrity of the CraftHub 360 ecosystem through rigorous protocol verification.
+            </p>
+</div>
+<!-- Protocol Rules Banner -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mb-16">
+<div class="glass-panel p-card-padding rounded-xl gold-foil-border flex items-start gap-4">
+<span class="material-symbols-outlined text-primary-fixed text-4xl" style="font-variation-settings: 'FILL' 1;">handshake</span>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary-fixed mb-2">Networking Protocol</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Networking stamps require confirmed connection. Check digital proximity logs before approval.</p>
+</div>
+</div>
+<div class="glass-panel p-card-padding rounded-xl gold-foil-border flex items-start gap-4">
+<span class="material-symbols-outlined text-primary-fixed text-4xl" style="font-variation-settings: 'FILL' 1;">point_of_sale</span>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary-fixed mb-2">Purchase Protocol</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Purchase stamps require POS 3 confirmation. Verify receipt ID with system backend.</p>
+</div>
+</div>
+</div>
+<!-- Verification Training Cards -->
+<section class="space-y-8">
+<div class="flex justify-between items-end mb-6">
+<h4 class="font-headline-lg text-headline-lg text-primary-fixed">Training Scenarios</h4>
+<div class="flex gap-4">
+<span class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span> Approved
+                    </span>
+<span class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_rgba(233,193,118,0.5)]"></span> Pending
+                    </span>
+<span class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-error shadow-[0_0_8px_rgba(255,180,171,0.5)]"></span> Blocked
+                    </span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Case 1: Approved -->
+<div class="group relative overflow-hidden rounded-xl glass-panel amber-glow transition-transform duration-500 hover:-translate-y-2">
+<div class="h-48 overflow-hidden">
+<img alt="Premium Cocktail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A macro photograph of a crystal rocks glass containing a premium old fashioned cocktail with a large clear ice cube and an orange peel twist. The setting is a dark, moody lounge with polished mahogany surfaces and soft amber accent lighting. The background features blurred silhouettes of liquor bottles, evoking a sense of refined luxury and high-quality craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByQ1gvOrKLMGtrLDWOHodBQtX0hyDf-3XsEECc0poCeHv4TbTIT10tor6XszMbt93VvZ5NipU5gbPHn3J2hE_xLwEAtL_2A5z8A0_c9RpjMYNJf-pDqoDslcaG0uBb5agb936V5NxTZ9OaoBLwEhHqrZIilfaap-NtlwSa29qavIqxI_8QZs667LzKiobuoGi1PRiFldl7B5NnWqZbEGvY-y8TyJbcNltLhd69cY9xwBCjrFZ5R3iggeBfhAiwFj41XSMZAjtAbAg"/>
+</div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-1">Purchase Stamp</p>
+<h5 class="font-headline-md text-headline-md text-on-surface">The Macallan 18yr</h5>
+</div>
+<span class="material-symbols-outlined text-green-500 text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between border-b border-outline-variant/30 pb-2">
+<span class="text-label-sm text-on-surface-variant">Receipt ID</span>
+<span class="text-label-sm text-primary-fixed">#POS-9921-A</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant/30 pb-2">
+<span class="text-label-sm text-on-surface-variant">Verification</span>
+<span class="text-label-sm text-green-500">POS 3 Confirmed</span>
+</div>
+</div>
+<button class="w-full py-4 bg-primary-fixed text-on-primary-fixed font-label-lg text-label-lg rounded-lg gold-foil-border active:scale-95 transition-transform">VERIFIED: APPROVED</button>
+</div>
+</div>
+<!-- Case 2: Needs Verification -->
+<div class="group relative overflow-hidden rounded-xl glass-panel transition-transform duration-500 hover:-translate-y-2">
+<div class="h-48 overflow-hidden">
+<img alt="Networking Event" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A low-light, candid photograph of two individuals in professional attire engaged in a serious conversation at a networking event. They are standing in a dimly lit, high-end cigar lounge with rich leather armchairs and warm incandescent lighting. The focus is sharp on their interaction, with a soft bokeh effect on the background elements like decanters and smoke wisps, creating an atmosphere of exclusivity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzwOBkWlwPMtYB_BMk9ef0A4F7jR-tOgNG5baU-PjNgf-w6DWOmUNu44BHPFbhfn-B2PS59rQXqP1ur-bNGL5Ebq5fvCIHSX15eX5rcsXlRMeMcB7qmPB7hG_16ePJ67udqiYFpKurZ1D65TsgOA1TImWGHVrLzne5kKG7KXkOZsdNFSi-WDh0rP0Z60oAd0MTVmT-509deCZ3YZGDJq8kxbcKTC-BikikGFK6XCMO9uFJ_5atzw98BVu30A_ekwwLtuGslWudyIY"/>
+</div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-1">Networking Stamp</p>
+<h5 class="font-headline-md text-headline-md text-on-surface">Artisan Exchange</h5>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl animate-pulse" style="font-variation-settings: 'FILL' 1;">hourglass_empty</span>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between border-b border-outline-variant/30 pb-2">
+<span class="text-label-sm text-on-surface-variant">Proximity Log</span>
+<span class="text-label-sm text-on-surface">84% Match</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant/30 pb-2">
+<span class="text-label-sm text-on-surface-variant">Status</span>
+<span class="text-label-sm text-primary">Pending Connection</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="py-4 border border-primary/40 text-primary-fixed font-label-lg text-label-lg rounded-lg hover:bg-primary/10 active:scale-95 transition-all">MANUAL</button>
+<button class="py-4 bg-primary-container text-on-primary-container font-label-lg text-label-lg rounded-lg active:scale-95 transition-transform">VERIFY</button>
+</div>
+</div>
+</div>
+<!-- Case 3: Blocked -->
+<div class="group relative overflow-hidden rounded-xl glass-panel transition-transform duration-500 hover:-translate-y-2">
+<div class="h-48 overflow-hidden grayscale">
+<img alt="Luxury Retail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="An interior shot of a high-end luxury boutique featuring glass display cases and gold accents. The lighting is focused and dramatic, highlighting expensive accessories. The image is rendered in grayscale to suggest a voided or inactive state, maintaining the premium aesthetic through texture and composition while signaling a blocked or fraudulent transaction scenario." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBkD8uXmbcTDA7VYR0aFcN6t2PVVFnLJIYJTzA-Ak2H8WlhwO00CoF3IIWv0vztlFhcjdIcBo0F4llNurb8_enVGOSHO7HwIfFO6VPl7zb1OoKT7HBBNmBhnra7Mu6LcUJXp8Gc_qZ_ITKlPEh7TwI1__1IISg5rnrkuq5LuCLwAkWSg5DL7euZHy8tq4iS0t4ZwRkAu1nmigXtMe2RsACQY6Fyh22gctyBiW_1OggGvZ8zhi7q0XTF4sz7ZPpRmV_yWo-vj6aN-0"/>
+</div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="font-label-sm text-label-sm text-error uppercase tracking-widest mb-1">Purchase Stamp</p>
+<h5 class="font-headline-md text-headline-md text-on-surface/50">Vintage Accessory</h5>
+</div>
+<span class="material-symbols-outlined text-error text-3xl" style="font-variation-settings: 'FILL' 1;">block</span>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between border-b border-outline-variant/30 pb-2">
+<span class="text-label-sm text-on-surface-variant">Receipt ID</span>
+<span class="text-label-sm text-error">Duplicate Found</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant/30 pb-2">
+<span class="text-label-sm text-on-surface-variant">Reason</span>
+<span class="text-label-sm text-error">POS Validation Fail</span>
+</div>
+</div>
+<button class="w-full py-4 border border-error/50 text-error font-label-lg text-label-lg rounded-lg hover:bg-error/10 active:scale-95 transition-all">FLAG AS FRAUD</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Training Progress Component (Passport Booklet style) -->
+<section class="mt-24 max-w-3xl mx-auto">
+<div class="glass-panel rounded-2xl overflow-hidden shadow-2xl relative">
+<div class="absolute top-0 right-0 p-8">
+<span class="text-primary-fixed/20 font-display-lg text-8xl pointer-events-none select-none">360</span>
+</div>
+<div class="p-12 border-l-8 border-primary-fixed">
+<div class="flex items-center gap-4 mb-8">
+<span class="material-symbols-outlined text-primary-fixed text-5xl">menu_book</span>
+<div>
+<h3 class="font-headline-lg text-headline-lg text-primary-fixed">Verification Passport</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Training Progress: 65% Complete</p>
+</div>
+</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<span class="font-body-lg text-on-surface">Basic Authentication</span>
+<span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-lg text-on-surface">Fraud Pattern Detection</span>
+<span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-lg text-on-surface">POS 3 Backend Sync</span>
+<span class="text-primary-fixed font-label-lg">IN PROGRESS</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full mt-8 overflow-hidden">
+<div class="bg-primary-fixed h-full w-[65%] shadow-[0_0_10px_#ffdea5]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-center items-center gap-12 px-margin pb-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary/20 h-24">
+<button class="text-on-surface-variant flex flex-col items-center justify-center w-32 py-2 hover:text-primary-fixed transition-all duration-300 active:translate-y-1 active:shadow-inner">
+<span class="material-symbols-outlined mb-1">model_training</span>
+<span class="font-label-lg text-label-lg">Practice</span>
+</button>
+<button class="bg-primary-container text-on-primary-container rounded-xl flex flex-col items-center justify-center w-32 py-2 active:translate-y-1 shadow-[0_-8px_32px_rgba(0,0,0,0.8)]">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-lg text-label-lg">Verify</span>
+</button>
+<button class="text-on-surface-variant flex flex-col items-center justify-center w-32 py-2 hover:text-primary-fixed transition-all duration-300 active:translate-y-1 active:shadow-inner">
+<span class="material-symbols-outlined mb-1">navigate_next</span>
+<span class="font-label-lg text-label-lg">Next</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions for interactive verification practice
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if(this.innerText.includes('VERIFY') || this.innerText.includes('APPROVED')) {
+                    const ripple = document.createElement('div');
+                    ripple.className = 'absolute inset-0 bg-primary/20 animate-ping rounded-xl pointer-events-none';
+                    this.parentElement.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                }
+            });
+        });
+
+        // Parallax effect for cards
+        window.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.glass-panel');
+            const x = e.clientX / window.innerWidth - 0.5;
+            const y = e.clientY / window.innerHeight - 0.5;
+            
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardX = (rect.left + rect.width/2) / window.innerWidth - 0.5;
+                const cardY = (rect.top + rect.height/2) / window.innerHeight - 0.5;
+                
+                const tiltX = (y - cardY) * 10;
+                const tiltY = (cardX - x) * 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            });
+        });
+    </script>
+</body></html>

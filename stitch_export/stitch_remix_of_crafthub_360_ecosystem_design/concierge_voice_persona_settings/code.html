@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Concierge Voice Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(31, 31, 32, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-glow:focus {
+            box-shadow: 0 0 15px rgba(233, 193, 118, 0.3);
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            background: rgba(78, 70, 57, 0.5);
+            height: 2px;
+            border-radius: 2px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #e9c176;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(233, 193, 118, 0.5);
+            border: 2px solid #131314;
+        }
+        .persona-card.active {
+            border-color: #e9c176;
+            background: rgba(197, 160, 89, 0.1);
+        }
+        .persona-card.active .check-icon {
+            display: block;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#dac1bb",
+                        "on-secondary-container": "#3d2400",
+                        "on-primary-container": "#4e3700",
+                        "inverse-primary": "#775a19",
+                        "error": "#ffb4ab",
+                        "surface": "#131314",
+                        "primary-fixed": "#ffdea5",
+                        "outline": "#9a8f80",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "tertiary-container": "#b7a09a",
+                        "surface-container": "#1f1f20",
+                        "surface-bright": "#39393a",
+                        "outline-variant": "#4e4639",
+                        "surface-variant": "#353436",
+                        "on-primary-fixed": "#261900",
+                        "background": "#131314",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-tertiary": "#3c2d28",
+                        "on-secondary": "#462a00",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "inverse-on-surface": "#303031",
+                        "error-container": "#93000a",
+                        "primary": "#e9c176",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-tertiary-container": "#473733",
+                        "secondary": "#ffb95a",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-surface": "#e5e2e3",
+                        "on-tertiary-fixed": "#261814",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-dim": "#131314",
+                        "on-error-container": "#ffdad6",
+                        "surface-tint": "#e9c176",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-high": "#2a2a2b",
+                        "on-background": "#e5e2e3",
+                        "on-surface-variant": "#d1c5b4",
+                        "secondary-fixed": "#ffddb6",
+                        "on-primary": "#412d00",
+                        "primary-container": "#c5a059",
+                        "surface-container-lowest": "#0e0e0f",
+                        "secondary-container": "#c68315",
+                        "surface-container-highest": "#353436",
+                        "primary-fixed-dim": "#e9c176"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "card-padding": "24px",
+                        "unit": "8px",
+                        "margin": "64px",
+                        "gutter": "32px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface selection:bg-primary/30 selection:text-primary min-h-screen overflow-x-hidden">
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-xl bg-surface/30 flex justify-between items-center px-margin py-8">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline-variant/30">
+<img alt="Lounge Curator Persona Silhouette" class="w-full h-full object-cover" data-alt="A sophisticated silhouette of a refined lounge curator persona, styled in deep espresso and amber tones. The aesthetic is inspired by high-end photography with a soft bokeh background representing an exclusive private club. Gold highlights illuminate the edges of the silhouette, creating a sense of mysterious luxury and professional hospitality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANTugx4t1jgMXpwvwQOMTcnmCrH_lenot1-GnBeTSu9KSCdq58RVzCTG5YoQkqGKRalTfvuAIGG-lLyepJccR_X1Wqre9e8DxAB2g0Y1pnHt5yc7C6kUsfhALEZF5q5EfARoQ1WQCpcvr_sMyL6Xj2tvz9TXoFM-t7CMVqY9otRHS_yYGBRrUE8Vvb69rXWkd2U7CloZLL0ZW9UAxGFw_6Ruzc7PbVvA7TUa1ejj488dIGxf0DhIonlSU1TagAT7FeX2pvJ-RtjWs"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">The Lounge Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity duration-500 ease-in-out" data-icon="settings">settings</button>
+</div>
+</header>
+<main class="pt-32 pb-40 px-margin max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<section class="mb-12">
+<h2 class="font-display-lg text-headline-xl text-primary mb-2">AI Concierge Voice Settings</h2>
+<p class="font-body-lg text-on-surface-variant max-w-2xl">Choose the narrator persona and voice style for the venue experience. <span class="text-primary/70 italic">The Lounge Curator is the recommended default for this atmosphere.</span></p>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Persona Grid (Left Column) -->
+<div class="lg:col-span-8">
+<h3 class="font-label-lg text-label-lg text-outline uppercase tracking-widest mb-6">Persona Selection</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Persona 1 -->
+<div class="persona-card glass-card p-6 rounded-xl cursor-pointer transition-all duration-300 group hover:shadow-[0_0_20px_rgba(233,193,118,0.1)] relative border border-outline-variant/20" onclick="selectPersona(this)">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="record_voice_over">record_voice_over</span>
+<span class="check-icon hidden material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-primary group-hover:translate-x-1 transition-transform">The Executive Host</h4>
+<p class="font-body-md text-on-surface-variant mt-2">Calm, Polished, and Efficient. Perfect for business-centric lounge hours.</p>
+</div>
+<!-- Persona 2 (Active Default) -->
+<div class="persona-card active glass-card p-6 rounded-xl cursor-pointer transition-all duration-300 group hover:shadow-[0_0_20px_rgba(233,193,118,0.1)] relative border border-primary/50" onclick="selectPersona(this)">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="campaign">campaign</span>
+<span class="check-icon material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-primary group-hover:translate-x-1 transition-transform">The Lounge Curator</h4>
+<p class="font-body-md text-on-surface-variant mt-2">Warm, Smooth, and Inviting. Our recommended signature experience.</p>
+<div class="absolute top-2 right-2 px-2 py-1 bg-primary/20 rounded text-[10px] text-primary uppercase font-bold tracking-tighter">Recommended</div>
+</div>
+<!-- Persona 3 -->
+<div class="persona-card glass-card p-6 rounded-xl cursor-pointer transition-all duration-300 group hover:shadow-[0_0_20px_rgba(233,193,118,0.1)] relative border border-outline-variant/20" onclick="selectPersona(this)">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="celebration">celebration</span>
+<span class="check-icon hidden material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-primary group-hover:translate-x-1 transition-transform">The Master of Ceremony</h4>
+<p class="font-body-md text-on-surface-variant mt-2">Energetic, Celebratory, and Bright. Ideal for social events and peaks.</p>
+</div>
+<!-- Persona 4 -->
+<div class="persona-card glass-card p-6 rounded-xl cursor-pointer transition-all duration-300 group hover:shadow-[0_0_20px_rgba(233,193,118,0.1)] relative border border-outline-variant/20" onclick="selectPersona(this)">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="wine_bar">wine_bar</span>
+<span class="check-icon hidden material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-primary group-hover:translate-x-1 transition-transform">The Sommelier Guide</h4>
+<p class="font-body-md text-on-surface-variant mt-2">Refined, Educational, and Articulate. For deep dives into the cellar.</p>
+</div>
+<!-- Persona 5 -->
+<div class="persona-card glass-card p-6 rounded-xl cursor-pointer transition-all duration-300 group hover:shadow-[0_0_20px_rgba(233,193,118,0.1)] relative border border-outline-variant/20" onclick="selectPersona(this)">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="psychology">psychology</span>
+<span class="check-icon hidden material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-primary group-hover:translate-x-1 transition-transform">The Craft Mentor</h4>
+<p class="font-body-md text-on-surface-variant mt-2">Wise, Grounded, and Resonant. A voice of experience and heritage.</p>
+</div>
+<!-- Persona 6 -->
+<div class="persona-card glass-card p-6 rounded-xl cursor-pointer transition-all duration-300 group hover:shadow-[0_0_20px_rgba(233,193,118,0.1)] relative border border-outline-variant/20" onclick="selectPersona(this)">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="visibility_off">visibility_off</span>
+<span class="check-icon hidden material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-primary group-hover:translate-x-1 transition-transform">The Quiet Luxury Assistant</h4>
+<p class="font-body-md text-on-surface-variant mt-2">Minimal, Discreet, and Subtle. For when you prefer silence with a hint of service.</p>
+</div>
+</div>
+</div>
+<!-- Controls (Right Column) -->
+<div class="lg:col-span-4 space-y-gutter">
+<div class="glass-card p-8 rounded-2xl border border-primary/10">
+<h3 class="font-label-lg text-label-lg text-outline uppercase tracking-widest mb-8">Vocal Dynamics</h3>
+<div class="space-y-10">
+<!-- Speed -->
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<label class="font-label-lg text-on-surface">Voice Speed</label>
+<span class="text-primary font-label-sm">1.0x</span>
+</div>
+<input class="w-full accent-primary" max="2" min="0.5" step="0.1" type="range" value="1"/>
+</div>
+<!-- Warmth -->
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<label class="font-label-lg text-on-surface">Warmth</label>
+<span class="text-primary font-label-sm">85%</span>
+</div>
+<input class="w-full accent-primary" max="100" min="0" type="range" value="85"/>
+</div>
+<!-- Energy -->
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<label class="font-label-lg text-on-surface">Energy</label>
+<span class="text-primary font-label-sm">40%</span>
+</div>
+<input class="w-full accent-primary" max="100" min="0" type="range" value="40"/>
+</div>
+<!-- Formality -->
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<label class="font-label-lg text-on-surface">Formality</label>
+<span class="text-primary font-label-sm">Elevated</span>
+</div>
+<input class="w-full accent-primary" max="100" min="0" type="range" value="90"/>
+</div>
+</div>
+<!-- Toggles -->
+<div class="mt-12 space-y-6 pt-8 border-t border-outline-variant/30">
+<div class="flex justify-between items-center">
+<div class="space-y-1">
+<p class="font-label-lg text-on-surface">Auto-Narration</p>
+<p class="text-[12px] text-on-surface-variant">Narrate menu descriptions automatically</p>
+</div>
+<button class="w-12 h-6 bg-primary rounded-full relative transition-colors duration-300" onclick="this.classList.toggle('bg-primary'); this.classList.toggle('bg-surface-variant')">
+<span class="absolute right-1 top-1 w-4 h-4 bg-on-primary rounded-full transition-all"></span>
+</button>
+</div>
+<div class="flex justify-between items-center">
+<div class="space-y-1">
+<p class="font-label-lg text-on-surface">Background Ducking</p>
+<p class="text-[12px] text-on-surface-variant">Lower music volume while speaking</p>
+</div>
+<button class="w-12 h-6 bg-primary rounded-full relative transition-colors duration-300" onclick="this.classList.toggle('bg-primary'); this.classList.toggle('bg-surface-variant')">
+<span class="absolute right-1 top-1 w-4 h-4 bg-on-primary rounded-full"></span>
+</button>
+</div>
+</div>
+</div>
+<!-- Preview Box -->
+<div class="bg-surface-container-highest p-6 rounded-xl border border-outline-variant/40 flex items-center gap-4 group cursor-pointer hover:bg-surface-bright/20 transition-colors">
+<button class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div>
+<p class="font-label-lg text-primary">Preview Voice</p>
+<p class="text-xs text-on-surface-variant">"Welcome back, Distinguished Guest."</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin py-6 pb-10 backdrop-blur-2xl border-t border-outline-variant/20 bg-surface-container/80 shadow-[0_-8px_30px_rgb(233,193,118,0.1)]">
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+<span class="font-label-sm text-label-sm mt-1">Voice Assist</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="concierge">concierge</span>
+<span class="font-label-sm text-label-sm mt-1">Concierge</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span class="font-label-sm text-label-sm mt-1">Settings</span>
+</button>
+</nav>
+<script>
+        function selectPersona(element) {
+            // Remove active class from all cards
+            document.querySelectorAll('.persona-card').forEach(card => {
+                card.classList.remove('active', 'border-primary/50');
+                card.classList.add('border-outline-variant/20');
+                card.querySelector('.check-icon').classList.add('hidden');
+            });
+            
+            // Add active class to clicked card
+            element.classList.add('active', 'border-primary/50');
+            element.classList.remove('border-outline-variant/20');
+            element.querySelector('.check-icon').classList.remove('hidden');
+            
+            // Trigger feedback
+            element.classList.add('scale-[0.98]');
+            setTimeout(() => element.classList.remove('scale-[0.98]'), 150);
+        }
+
+        // Simple toggle state management
+        document.querySelectorAll('button[onclick*="toggle"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const dot = this.querySelector('span');
+                if (this.classList.contains('bg-primary')) {
+                    dot.style.right = '4px';
+                    dot.style.left = 'auto';
+                } else {
+                    dot.style.left = '4px';
+                    dot.style.right = 'auto';
+                }
+            });
+        });
+    </script>
+</body></html>

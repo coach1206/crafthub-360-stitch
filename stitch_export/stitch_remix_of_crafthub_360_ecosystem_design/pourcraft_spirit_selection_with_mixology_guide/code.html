@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RESERVE LOUNGE | PourCraft</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(27, 27, 28, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background-image: linear-gradient(rgba(19, 19, 20, 1), rgba(19, 19, 20, 1)), linear-gradient(to bottom right, #e9c176, #775a19);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+        .waveform-container {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 40px;
+        }
+        .wave-bar {
+            width: 3px;
+            background: #e9c176;
+            border-radius: 4px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+        @keyframes wave {
+            0%, 100% { height: 8px; opacity: 0.5; }
+            50% { height: 24px; opacity: 1; }
+        }
+        .grain-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/black-paper.png");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        .parallax-bg {
+            transition: transform 0.5s cubic-bezier(0.2, 0, 0.2, 1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "inverse-surface": "#e5e2e3",
+                "tertiary-fixed-dim": "#dac1bb",
+                "surface-tint": "#e9c176",
+                "on-secondary-fixed": "#2a1800",
+                "primary-container": "#c5a059",
+                "primary-fixed": "#ffdea5",
+                "outline": "#9a8f80",
+                "on-primary-container": "#4e3700",
+                "secondary-fixed-dim": "#ffb95a",
+                "error-container": "#93000a",
+                "tertiary": "#dac1bb",
+                "surface-variant": "#353436",
+                "on-primary-fixed-variant": "#5d4201",
+                "on-tertiary-container": "#473733",
+                "surface-container-highest": "#353436",
+                "inverse-on-surface": "#303031",
+                "surface-container-low": "#1b1b1c",
+                "surface-dim": "#131314",
+                "tertiary-fixed": "#f7ddd6",
+                "on-tertiary": "#3c2d28",
+                "on-surface-variant": "#d1c5b4",
+                "secondary-fixed": "#ffddb6",
+                "background": "#131314",
+                "surface-container": "#1f1f20",
+                "outline-variant": "#4e4639",
+                "on-primary": "#412d00",
+                "on-surface": "#e5e2e3",
+                "primary": "#e9c176",
+                "on-tertiary-fixed": "#261814",
+                "secondary-container": "#c68315",
+                "primary-fixed-dim": "#e9c176",
+                "tertiary-container": "#b7a09a",
+                "surface-container-high": "#2a2a2b",
+                "on-secondary-container": "#3d2400",
+                "inverse-primary": "#775a19",
+                "on-secondary-fixed-variant": "#643f00",
+                "on-secondary": "#462a00",
+                "surface-container-lowest": "#0e0e0f",
+                "surface": "#131314",
+                "secondary": "#ffb95a",
+                "on-tertiary-fixed-variant": "#54433e",
+                "on-error": "#690005",
+                "surface-bright": "#39393a",
+                "on-error-container": "#ffdad6",
+                "on-primary-fixed": "#261900",
+                "on-background": "#e5e2e3",
+                "error": "#ffb4ab"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
+              "spacing": {
+                "margin": "64px",
+                "gutter": "32px",
+                "container-max-width": "1440px",
+                "unit": "8px",
+                "card-padding": "24px"
+              },
+              "fontFamily": {
+                "headline-lg": ["Playfair Display"],
+                "body-md": ["Montserrat"],
+                "display-lg": ["Playfair Display"],
+                "label-lg": ["Montserrat"],
+                "headline-md": ["Playfair Display"],
+                "body-lg": ["Montserrat"],
+                "label-sm": ["Montserrat"],
+                "headline-xl": ["Playfair Display"]
+              },
+              "fontSize": {
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<div class="fixed inset-0 grain-texture z-0 pointer-events-none"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-xl bg-surface/80 border-b border-outline-variant shadow-md flex justify-between items-center px-gutter h-20 w-full">
+<div class="flex items-center gap-4">
+<button class="text-primary hover:text-primary-fixed-dim transition-colors active:scale-95 duration-300">
+<span class="material-symbols-outlined text-headline-md">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md tracking-widest text-primary uppercase">RESERVE LOUNGE</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<a class="font-label-lg text-primary hover:text-primary-fixed-dim transition-colors uppercase tracking-widest" href="#">PourCraft</a>
+<a class="font-label-lg text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest" href="#">BeerCraft</a>
+<a class="font-label-lg text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest" href="#">WineCraft</a>
+<a class="font-label-lg text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest" href="#">Passport</a>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden shadow-md">
+<img alt="Member Digital Passport" class="w-full h-full object-cover" data-alt="A sophisticated close-up portrait of a high-net-worth individual with refined features, wearing a tailored charcoal suit and a subtle silk tie. The lighting is low-key and dramatic, typical of a private members-only club, with warm amber highlights and a deep, moody background that suggests an atmosphere of exclusivity and quiet luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_jXrgLcy6Apk28i0H9ojpuY_zCxqJR9WSOG-nOIlB5xa3T-N2FyZhs-xUaa34NH1VheeVrRj2BailStcoHV1r5EDdF7Wg17fk7C8MrNxoxrMOZDvk9Cb48sYw8ac8disY1eZJo_msU-DaY-boZCdq4Fl9pOi0bYLRsSserqH_AeklsjjRpMKwIdmeI-plV8GEIfMtuuidMFWJJNEp50j1PUhdHZQgGyQ83xa-kyI357Lntulmeuv7cYi0YVwCZ4ETmQ-jvWo-yjY"/>
+</div>
+</div>
+</header>
+<main class="relative pt-32 pb-32 min-h-screen px-gutter max-w-container-max-width mx-auto z-10">
+<!-- AI Concierge Panel (Mixology Guide) -->
+<section class="mb-12">
+<div class="glass-panel p-card-padding rounded-xl gold-foil-border flex flex-col md:flex-row items-center gap-8 shadow-2xl relative overflow-hidden group">
+<div class="absolute -right-20 -bottom-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-700"></div>
+<!-- Persona Silhouette & Animation -->
+<div class="relative flex-shrink-0">
+<div class="w-32 h-32 rounded-full bg-surface-container-high border-2 border-primary/20 flex items-center justify-center relative z-10 overflow-hidden">
+<span class="material-symbols-outlined text-6xl text-primary/40 select-none" style="font-variation-settings: 'FILL' 1;">person_apron</span>
+<div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+</div>
+<!-- Waveform -->
+<div class="waveform-container absolute -bottom-4 left-1/2 -translate-x-1/2 z-20">
+<div class="wave-bar" style="animation-delay: 0.1s"></div>
+<div class="wave-bar" style="animation-delay: 0.3s"></div>
+<div class="wave-bar" style="animation-delay: 0.5s"></div>
+<div class="wave-bar" style="animation-delay: 0.2s"></div>
+<div class="wave-bar" style="animation-delay: 0.4s"></div>
+<div class="wave-bar" style="animation-delay: 0.6s"></div>
+<div class="wave-bar" style="animation-delay: 0.3s"></div>
+<div class="wave-bar" style="animation-delay: 0.1s"></div>
+</div>
+</div>
+<div class="flex-grow text-center md:text-left">
+<h2 class="font-headline-md text-primary mb-2 flex items-center justify-center md:justify-start gap-2">
+<span class="material-symbols-outlined">auto_awesome</span>
+                        MIXOLOGY GUIDE
+                    </h2>
+<p class="font-body-lg text-on-surface leading-relaxed max-w-2xl italic">
+                        "You chose <span class="text-primary font-bold">smoky</span> and <span class="text-primary font-bold">citrus</span>. A mezcal-forward profile with a bright finish may fit your lane."
+                    </p>
+</div>
+<div class="flex-shrink-0">
+<button class="bg-primary text-on-primary font-label-lg px-8 py-4 rounded-lg shadow-lg hover:bg-primary-fixed-dim transition-all active:scale-95 uppercase tracking-widest">
+                        Generate Selection
+                    </button>
+</div>
+</div>
+</section>
+<!-- Spirit Base Selection -->
+<section>
+<div class="flex items-end justify-between mb-8">
+<div>
+<span class="font-label-lg text-primary uppercase tracking-widest block mb-2">Step 02 / Selection</span>
+<h3 class="font-display-lg text-on-surface">Spirit Base</h3>
+</div>
+<div class="hidden md:flex gap-4">
+<button class="p-2 border border-outline-variant rounded-full text-on-surface-variant hover:border-primary hover:text-primary transition-all">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="p-2 border border-outline-variant rounded-full text-on-surface-variant hover:border-primary hover:text-primary transition-all">
+<span class="material-symbols-outlined">sort</span>
+</button>
+</div>
+</div>
+<!-- Selection Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Smoky Option (Active) -->
+<div class="group relative aspect-[4/5] rounded-xl overflow-hidden glass-panel gold-foil-border shadow-2xl transition-transform duration-500 hover:-translate-y-2 cursor-pointer">
+<img alt="Smoky Profile" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="An evocative, high-detail macro photograph of a crystal rocks glass containing a dark amber liquid, surrounded by a swirling, ethereal cloud of oak-wood smoke. The scene is set in a dark, atmospheric lounge with mahogany textures. The lighting is cinematic, capturing the golden glints of the spirit through the thick smoke, creating a mysterious and intensely tactile sensory experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDazGblUeJF_PGezoZJvnbnIBYq4EbMzL2Sl2naRdKchFgVdawzdEpPdbnROfjeiRHiux70yMnNt9msKN1yhD7reGybjBi8i0W_TWTPiVpzH8ibMBf0l1hqX5dpSMim6UFIcabSxmr_rsA1UWYywv3MrOh0zVWmv6vaYERo8NqOS9HhIkO2VgxU6tQW6njcnps72a0amI_Fdi1uBaXnus8Vwj5cG0vFOHN6pkTfBkfwTOqEuZgH0U3xsUVpctz_PsCOfnv8eLSmhv8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+<div class="absolute inset-0 border-4 border-primary/40 opacity-100 ring-4 ring-primary/20 pointer-events-none rounded-xl"></div>
+<div class="absolute top-4 right-4 bg-primary text-on-primary p-1 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="absolute bottom-0 w-full p-card-padding backdrop-blur-md bg-surface-container-low/60">
+<h4 class="font-headline-md text-primary mb-1">Smoky</h4>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Oud, Leather, Peat</p>
+</div>
+</div>
+<!-- Citrus Option (Active) -->
+<div class="group relative aspect-[4/5] rounded-xl overflow-hidden glass-panel gold-foil-border shadow-2xl transition-transform duration-500 hover:-translate-y-2 cursor-pointer">
+<img alt="Citrus Profile" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A vibrant, hyper-realistic close-up of fresh citrus zests and a splash of bright orange oil being expressed over a crystal cocktail glass. The background is a sophisticated, dark-mode bar setting with subtle amber lighting. High-speed photography captures individual droplets of citrus oil suspended in the air, conveying a sense of zesty freshness and refined mixology craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAX9aR85HOx_mQ6Kry227WPWybuNaEpaYvsCnDuQTtP1lze4hnFS7xW9bmeczrq28RvhTXQAtitEdwPHdTPRnQiE1tJRqqGbpyC1-h0sb_spHYyNbdCB_0myMTJRchKDfhNgbt-nJ0HmRs8RF23QAYJlNJLu-upcyD_z1gjpetP8VuhRvcUFg8b_gf94rGuVhssNzTwIYPNVojFRTuxtiYF9N7wdct1CEZPVbAfsTVqwKSJ3TerGqPfq2C0_SJT1D7zqHwsX8Pfv6w"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+<div class="absolute inset-0 border-4 border-primary/40 opacity-100 ring-4 ring-primary/20 pointer-events-none rounded-xl"></div>
+<div class="absolute top-4 right-4 bg-primary text-on-primary p-1 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="absolute bottom-0 w-full p-card-padding backdrop-blur-md bg-surface-container-low/60">
+<h4 class="font-headline-md text-primary mb-1">Citrus</h4>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Zest, Bergamot, Bright</p>
+</div>
+</div>
+<!-- Botanical Option -->
+<div class="group relative aspect-[4/5] rounded-xl overflow-hidden glass-panel border border-outline-variant shadow-lg transition-transform duration-500 hover:-translate-y-2 cursor-pointer">
+<img alt="Botanical Profile" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" data-alt="A lush and detailed arrangement of dried juniper berries, sprigs of fresh rosemary, and delicate lavender flowers resting on a dark slate surface. The lighting is soft and directional, highlighting the organic textures of the herbs. The overall mood is sophisticated and natural, suggesting a complex, gin-based botanical profile in a luxury lounge environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkCeIwPT_xxCen2G5JF5roOGHvXSjuK074yvEOrMke5s3iTQUv-C1MIPO64HdiycZpznYkKZi-eavxHtHgvQYqNFMibMOXmLHfYgAodmiw1IiNw2wOXEcP1xWamV6kmMWM2f0BoDiyG_E2j8gPq88YxOqWVc99pPpmR9O7IVXnPalZyKKyjIsd-4UhL271RCl-VdChp4zmVA3ysfoPzsv1IALBNwqRIEgE1xFc6OnyA6-b1P2spy9-N-e7eIBn4APKJ-ftsvL-bOc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+<div class="absolute bottom-0 w-full p-card-padding backdrop-blur-md bg-surface-container-low/60">
+<h4 class="font-headline-md text-on-surface mb-1">Botanical</h4>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Herbal, Gin, Flora</p>
+</div>
+</div>
+<!-- Velvet Option -->
+<div class="group relative aspect-[4/5] rounded-xl overflow-hidden glass-panel border border-outline-variant shadow-lg transition-transform duration-500 hover:-translate-y-2 cursor-pointer">
+<img alt="Velvet Profile" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" data-alt="A rich, sumptuous close-up of dark chocolate shavings and a vanilla bean resting against a background of aged oak wood. The lighting is warm and golden, creating a sense of indulgence and depth. The textures are creamy and smooth, perfectly representing a 'Velvet' flavor profile with notes of spice and luxury, set within a high-end club atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmEHnqhJXLMB16q3NeqxMxqmvatuApYoLx4K5amXZC4-o96np4HJpL-eKIOkNVfiv0hEbl0UtXDBAPPscq1z8NBULEVgBnzBC49Wmklo3V-6wqoALMFk9NnE5hlvk6SYOzz7g7x_-SJCaNo13FX35x2c28M7rk5RpOzxHr9vvuAIt4jPYBfLAGBn7BdtJJjJTO7VHEK2tHaVdyM8IGULStRyl_olmOZsXqiyF94KlQVOA1QNztLoJXf0SL1CTEkLHBnbiFtbRqPY8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+<div class="absolute bottom-0 w-full p-card-padding backdrop-blur-md bg-surface-container-low/60">
+<h4 class="font-headline-md text-on-surface mb-1">Velvet</h4>
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Vanilla, Oak, Cocoa</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Layout Secondary Items -->
+<section class="mt-gutter grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="md:col-span-2 glass-panel p-card-padding rounded-xl flex flex-col justify-center min-h-[240px] relative overflow-hidden">
+<div class="absolute right-0 top-0 w-1/2 h-full opacity-20 pointer-events-none">
+<span class="material-symbols-outlined text-[200px] text-primary translate-x-12 -translate-y-12">history_edu</span>
+</div>
+<h5 class="font-headline-md text-primary mb-4">Your Tasting Legacy</h5>
+<p class="font-body-md text-on-surface-variant mb-6 max-w-md">Your preference for smoky profiles has grown by 14% this quarter. The Mixology Guide suggests exploring agave-based spirits today.</p>
+<div class="flex gap-4">
+<button class="border border-primary text-primary font-label-sm px-4 py-2 rounded uppercase tracking-widest hover:bg-primary/10 transition-all">View Notes</button>
+<button class="text-on-surface-variant font-label-sm px-4 py-2 uppercase tracking-widest hover:text-on-surface transition-all">Dismiss</button>
+</div>
+</div>
+<div class="glass-panel p-card-padding rounded-xl flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-4xl text-primary mb-4" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<h5 class="font-label-lg text-primary uppercase tracking-widest mb-1">Elite Tier</h5>
+<p class="font-headline-md text-on-surface mb-4">Alexander Sterling</p>
+<div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="w-3/4 h-full bg-primary shadow-[0_0_10px_rgba(233,193,118,0.5)]"></div>
+</div>
+<p class="font-label-sm text-on-surface-variant mt-2 uppercase tracking-tighter">850 / 1000 XP to Master Distiller</p>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl backdrop-blur-20px bg-surface-container-low/90 border-t border-outline-variant shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center h-24 px-gutter w-full pb-safe">
+<button class="flex flex-col items-center justify-center text-primary font-bold gap-1 scale-110 duration-500 ease-out">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">liquor</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">PourCraft</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">BeerCraft</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">WineCraft</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Passport</span>
+</button>
+</nav>
+<script>
+        // Subtle interaction: Parallax movement on cards based on mouse
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.group');
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+            
+            cards.forEach(card => {
+                const img = card.querySelector('img');
+                if (img) {
+                    img.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+                }
+            });
+        });
+
+        // Toggle state for selection
+        const selectableCards = document.querySelectorAll('.grid > div');
+        selectableCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Simplified toggle logic for demo
+                const check = card.querySelector('.top-4');
+                const border = card.querySelector('.pointer-events-none');
+                
+                if (check.classList.contains('hidden')) {
+                    check.classList.remove('hidden');
+                    border.classList.add('border-4', 'border-primary/40', 'ring-4', 'ring-primary/20');
+                    card.classList.add('gold-foil-border');
+                    card.classList.remove('border', 'border-outline-variant');
+                } else {
+                    check.classList.add('hidden');
+                    border.classList.remove('border-4', 'border-primary/40', 'ring-4', 'ring-primary/20');
+                    card.classList.remove('gold-foil-border');
+                    card.classList.add('border', 'border-outline-variant');
+                }
+            });
+        });
+    </script>
+</body></html>

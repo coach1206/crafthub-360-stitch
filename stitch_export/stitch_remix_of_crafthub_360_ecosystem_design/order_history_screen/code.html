@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order History | The Grand Humidor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#3d2400",
+                        "on-background": "#e5e2e3",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#2a2a2b",
+                        "tertiary": "#dac1bb",
+                        "surface": "#131314",
+                        "outline": "#9a8f80",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-container": "#1f1f20",
+                        "primary": "#e9c176",
+                        "outline-variant": "#4e4639",
+                        "on-primary-container": "#4e3700",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed": "#ffdea5",
+                        "secondary-fixed": "#ffddb6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary": "#3c2d28",
+                        "on-tertiary-fixed": "#261814",
+                        "surface-tint": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "background": "#131314",
+                        "on-primary-fixed": "#261900",
+                        "surface-variant": "#353436",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "secondary": "#ffb95a",
+                        "secondary-container": "#c68315",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-primary": "#412d00",
+                        "tertiary-container": "#b7a09a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-tertiary-container": "#473733",
+                        "surface-container-highest": "#353436",
+                        "inverse-surface": "#e5e2e3",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-secondary": "#462a00",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-bright": "#39393a",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-surface": "#e5e2e3",
+                        "surface-dim": "#131314"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "card-padding": "24px",
+                        "unit": "8px",
+                        "margin": "64px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", { "lineHeight": "56px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .amber-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-stroke {
+            border: 1px solid rgba(233, 193, 118, 0.3);
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #131314;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4e4639;
+            border-radius: 10px;
+        }
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .expanded .expandable-content {
+            max-height: 1000px;
+        }
+        .expanded .chevron-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-background/80 backdrop-blur-xl text-primary font-headline-md text-headline-md docked full-width top-0 border-b border-outline-variant/30 shadow-sm transition-all duration-300 ease-in-out flex justify-between items-center px-margin h-24 sticky z-50">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border border-primary/30 flex items-center justify-center overflow-hidden">
+<img alt="Staff member profile" class="w-full h-full object-cover" data-alt="A professional sommelier in a dark tailored vest and crisp white shirt, captured in a warm, moody environment with soft amber light reflecting off polished wooden cabinets. The portrait emphasizes a sense of luxury, expertise, and high-end service, consistent with the rich textures of a premium private lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvgomz3z0U-UrAd0jejS0byxbCrJTfUBkYUbS6lUCWkgCtxM80prh3TchoI5sGBXxj07j6IKFT4qk-nHJQejXiBNxjrKu6MsZtE6CBkKqQmw9yLlugBPl4ikfrys-flI-MBa7mcItqw9ulbvjtcQs9aBvBvKcbTBMzmlEmJWIeFNUI7QyZloK0ecNL3bzGw3lv-U9M6PhxuT79uARyF-APaf2Kn6UN1zHFG3MudobpemZEmRVnBw4OaVzTCAZgtJ5wImijH7ToD24"/>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</h1>
+</div>
+<div class="flex items-center gap-6">
+<button class="hover:bg-surface-container-highest/50 p-3 rounded-full transition-all">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto px-margin pt-12">
+<!-- Title & Filters Section -->
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">Order Archive</h2>
+<p class="text-on-surface-variant font-body-lg">Curated ledger of legacy transactions and heritage stock movements.</p>
+</div>
+<div class="flex gap-4">
+<!-- Status Filter -->
+<div class="relative group">
+<button class="glass-panel gold-foil-stroke px-6 py-3 rounded-lg flex items-center gap-3 hover:bg-surface-bright/20 transition-all">
+<span class="material-symbols-outlined text-primary">filter_list</span>
+<span class="font-label-lg">All Statuses</span>
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</button>
+</div>
+<!-- Date Filter -->
+<button class="glass-panel gold-foil-stroke px-6 py-3 rounded-lg flex items-center gap-3 hover:bg-surface-bright/20 transition-all">
+<span class="material-symbols-outlined text-primary">calendar_today</span>
+<span class="font-label-lg">Last 90 Days</span>
+</button>
+</div>
+</div>
+<!-- History List -->
+<div class="space-y-6">
+<!-- Order Entry 1 -->
+<div class="order-card glass-panel rounded-xl overflow-hidden amber-glow transition-all duration-300" onclick="this.classList.toggle('expanded')">
+<div class="flex items-center justify-between p-card-padding cursor-pointer">
+<div class="grid grid-cols-4 flex-grow items-center">
+<div class="flex flex-col">
+<span class="text-outline text-label-sm mb-1 uppercase tracking-widest">Order Number</span>
+<span class="font-headline-md text-primary">GH-2024-8812</span>
+</div>
+<div class="flex flex-col">
+<span class="text-outline text-label-sm mb-1 uppercase tracking-widest">Supplier</span>
+<span class="font-body-lg text-on-surface font-semibold">Padrón Reserve Estate</span>
+</div>
+<div class="flex flex-col">
+<span class="text-outline text-label-sm mb-1 uppercase tracking-widest">Destination</span>
+<span class="font-body-lg text-on-surface">Main Humidor (Vault A)</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="px-3 py-1 bg-primary-container/20 border border-primary/20 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-primary">In Transit</span>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined chevron-icon transition-transform duration-500 text-outline">expand_more</span>
+</div>
+<div class="expandable-content px-card-padding border-t border-outline-variant/20">
+<div class="py-8 grid grid-cols-3 gap-12">
+<!-- Summary Column -->
+<div class="col-span-2 space-y-6">
+<h4 class="font-headline-md text-primary">Transaction Summary</h4>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container p-4 rounded-lg gold-foil-stroke">
+<p class="text-outline text-label-sm mb-2">Item Details</p>
+<p class="text-on-surface font-body-md">24x Padrón 1926 Series No. 1 (Natural)</p>
+<p class="text-on-surface font-body-md">12x Padrón Family Reserve No. 44 (Maduro)</p>
+</div>
+<div class="bg-surface-container p-4 rounded-lg gold-foil-stroke">
+<p class="text-outline text-label-sm mb-2">Logistics Provider</p>
+<p class="text-on-surface font-body-md">Global Heritage Logistics</p>
+<p class="text-on-surface font-body-md">Tracking: #GHL-99231100</p>
+</div>
+</div>
+</div>
+<!-- E.A.T. Alert History -->
+<div class="bg-surface-container-low/50 p-6 rounded-xl gold-foil-stroke">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">warning</span>
+<h4 class="font-label-lg text-secondary">E.A.T. ALERT HISTORY</h4>
+</div>
+<div class="space-y-4">
+<div class="flex gap-3 border-l-2 border-secondary/40 pl-4 py-1">
+<div class="flex flex-col">
+<span class="text-label-sm text-outline">Today, 04:20 PM</span>
+<p class="text-body-md text-on-surface">Temperature peak: 71.4°F (Transit Hub)</p>
+</div>
+</div>
+<div class="flex gap-3 border-l-2 border-outline-variant pl-4 py-1">
+<div class="flex flex-col">
+<span class="text-label-sm text-outline">Yesterday, 11:15 AM</span>
+<p class="text-body-md text-on-surface-variant">Humidity stabilized: 69% RH</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="pb-8 flex justify-end gap-4">
+<button class="px-6 py-2 border border-outline-variant text-on-surface-variant font-label-lg rounded-lg hover:bg-surface-bright/10 transition-all">Download Manifest</button>
+<button class="px-6 py-2 bg-primary text-on-primary font-label-lg rounded-lg shadow-lg hover:shadow-primary/20 transition-all">Track Real-time</button>
+</div>
+</div>
+</div>
+<!-- Order Entry 2 (Closed/Received) -->
+<div class="order-card glass-panel rounded-xl overflow-hidden transition-all duration-300" onclick="this.classList.toggle('expanded')">
+<div class="flex items-center justify-between p-card-padding cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+<div class="grid grid-cols-4 flex-grow items-center">
+<div class="flex flex-col">
+<span class="text-outline text-label-sm mb-1 uppercase tracking-widest">Order Number</span>
+<span class="font-headline-md text-on-surface-variant">GH-2024-7741</span>
+</div>
+<div class="flex flex-col">
+<span class="text-outline text-label-sm mb-1 uppercase tracking-widest">Supplier</span>
+<span class="font-body-lg text-on-surface">Davidoff of Geneva</span>
+</div>
+<div class="flex flex-col">
+<span class="text-outline text-label-sm mb-1 uppercase tracking-widest">Destination</span>
+<span class="font-body-lg text-on-surface">Private Member Cellar B</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="px-3 py-1 border border-outline-variant/40 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-label-sm text-outline">Received</span>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined chevron-icon transition-transform duration-500 text-outline">expand_more</span>
+</div>
+<div class="expandable-content px-card-padding border-t border-outline-variant/20">
+<div class="py-8 grid grid-cols-3 gap-12">
+<div class="col-span-2">
+<h4 class="font-headline-md text-primary mb-4">Final Receipt</h4>
+<div class="bg-surface-container p-4 rounded-lg gold-foil-stroke">
+<p class="text-on-surface font-body-md mb-2">Signature acquired by: <strong>J. Vane (Head Sommelier)</strong></p>
+<p class="text-on-surface font-body-md">Physical inspection completed. Zero damage reported. Stock integrated into cellar management system.</p>
+</div>
+</div>
+<div class="bg-surface-container-low/50 p-6 rounded-xl gold-foil-stroke opacity-50">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-outline">verified</span>
+<h4 class="font-label-lg text-outline">E.A.T. COMPLIANT</h4>
+</div>
+<p class="text-body-md text-on-surface-variant italic">No environmental alerts triggered during the 14-day transit period.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Entry 3 (Closed) -->
+<div class="order-card glass-panel rounded-xl overflow-hidden transition-all duration-300" onclick="this.classList.toggle('expanded')">
+<div class="flex items-center justify-between p-card-padding cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
+<div class="grid grid-cols-4 flex-grow items-center">
+<div class="flex flex-col">
+<span class="text-outline text-label-sm mb-1 uppercase tracking-widest">Order Number</span>
+<span class="font-headline-md text-on-surface-variant">GH-2024-6502</span>
+</div>
+<div class="flex flex-col">
+<span class="text-outline text-label-sm mb-1 uppercase tracking-widest">Supplier</span>
+<span class="font-body-lg text-on-surface">Arturo Fuente Distribution</span>
+</div>
+<div class="flex flex-col">
+<span class="text-outline text-label-sm mb-1 uppercase tracking-widest">Destination</span>
+<span class="font-body-lg text-on-surface">Lounge Display Case 4</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="px-3 py-1 bg-surface-container-highest border border-outline-variant/20 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="font-label-sm text-on-surface-variant">Closed</span>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined chevron-icon transition-transform duration-500 text-outline">expand_more</span>
+</div>
+<div class="expandable-content px-card-padding border-t border-outline-variant/20">
+<div class="py-12 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-6xl text-outline-variant mb-4">archive</span>
+<p class="font-headline-md text-on-surface-variant">Legacy Record Archiving Complete</p>
+<p class="text-on-surface-variant max-w-md mx-auto mt-2">This transaction was finalized on February 12th, 2024. All quality assurance protocols were satisfied.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination / Load More -->
+<div class="mt-16 flex justify-center">
+<button class="group flex items-center gap-4 text-primary font-label-lg hover:text-secondary transition-colors">
+<span class="material-symbols-outlined group-hover:translate-y-1 transition-transform">keyboard_double_arrow_down</span>
+                LOAD MORE ARCHIVED ENTRIES
+                <span class="material-symbols-outlined group-hover:translate-y-1 transition-transform">keyboard_double_arrow_down</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors scale-105 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-sm text-label-sm mt-1">POS 3</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors scale-105 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm mt-1">Passport</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] scale-105 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-sm text-label-sm mt-1">Inventory</span>
+</a>
+</nav>
+<!-- NavigationDrawer (Floating Trigger for Desktop) -->
+<aside class="fixed left-0 top-0 h-screen w-80 z-40 bg-surface-container-low border-r border-outline-variant/20 shadow-2xl -translate-x-full transition-transform duration-500" id="nav-drawer">
+<div class="p-8 h-full flex flex-col">
+<div class="flex items-center gap-4 mb-12">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Manager Avatar" class="w-full h-full object-cover" data-alt="A profile photograph of a distinguished head sommelier with graying hair and a sharp, sophisticated navy blue suit. He stands confidently against a backdrop of floor-to-ceiling mahogany wine racks. The lighting is focused and warm, highlighting the high-end, exclusive atmosphere of a private member cellar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqr2m1pn_IR058wToT7un73lhGYxjfsJxIzarr34gNfqjWuudLujgeZYoZT3s73twuknwSyMghjXWkMYRK3OuYW6D5Z2DprNY4YkdyqNmo3sjW2ltDCdpPTfkLT2NrhcDNHQvnKmYZ94vZ9MehLeKS7qJjohfV36vHl8RCr5_get59PZnzHfUPltlSwKn6kq_jCO8YT7qv0uSL-DThCVkGGQ0D75ChSIqprUjqSBChh1kS_J0L-PwzFERLTYLeY_ZpqzgKnwtqGv4"/>
+</div>
+<div>
+<h3 class="font-headline-lg text-primary">Julian Vane</h3>
+<p class="text-on-surface-variant text-label-sm">Head Sommelier</p>
+</div>
+</div>
+<nav class="flex-grow space-y-4">
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-lg text-label-lg">Floor Plan</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg text-label-lg">Live Map</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-lg text-label-lg">Insights</span>
+</a>
+<a class="flex items-center gap-4 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 transition-all scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-8 border-t border-outline-variant/20">
+<h4 class="font-display-lg text-headline-lg text-primary mb-4">The Grand Humidor</h4>
+<p class="text-outline text-label-sm italic opacity-50">Established 1892</p>
+</div>
+</div>
+</aside>
+<script>
+        // Simple toggle for side drawer if needed, though mostly focused on content layout
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'n') {
+                const drawer = document.getElementById('nav-drawer');
+                drawer.classList.toggle('-translate-x-full');
+            }
+        });
+
+        // Micro-interactions for cards
+        const cards = document.querySelectorAll('.order-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Subtle parallax or glow increase could go here
+            });
+        });
+    </script>
+</body></html>

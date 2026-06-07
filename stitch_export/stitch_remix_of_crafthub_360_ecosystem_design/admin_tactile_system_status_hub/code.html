@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 Admin | Kiosk Monitor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-glow {
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.1);
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .7; transform: scale(1.2); }
+        }
+        .leather-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/black-leather.png");
+        }
+        .weighted-btn {
+            box-shadow: 0 4px 0px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            transition: all 0.1s ease;
+        }
+        .weighted-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0px rgba(0, 0, 0, 0.3);
+        }
+        .kiosk-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .kiosk-card:active {
+            transform: scale(0.98);
+        }
+        .kiosk-card.expanded {
+            grid-column: span 2;
+            height: auto;
+        }
+        /* Color Coding for Kiosk */
+        .status-healthy { color: #4ade80; } /* Tailwind green-400 */
+        .status-warning { color: #fbbf24; } /* Tailwind amber-400 */
+        .status-critical { color: #f87171; } /* Tailwind red-400 */
+        .bg-healthy { background-color: #22c55e; }
+        .bg-warning { background-color: #f59e0b; }
+        .bg-critical { background-color: #ef4444; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#b7a09a",
+                        "surface-container": "#1f1f20",
+                        "surface-bright": "#39393a",
+                        "tertiary": "#dac1bb",
+                        "on-secondary-container": "#3d2400",
+                        "on-primary-container": "#4e3700",
+                        "inverse-primary": "#775a19",
+                        "error": "#ffb4ab",
+                        "surface": "#131314",
+                        "primary-fixed": "#ffdea5",
+                        "outline": "#9a8f80",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "inverse-on-surface": "#303031",
+                        "error-container": "#93000a",
+                        "primary": "#e9c176",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-tertiary-container": "#473733",
+                        "outline-variant": "#4e4639",
+                        "surface-variant": "#353436",
+                        "on-primary-fixed": "#261900",
+                        "background": "#131314",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-tertiary": "#3c2d28",
+                        "on-secondary": "#462a00",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-dim": "#131314",
+                        "on-error-container": "#ffdad6",
+                        "surface-tint": "#e9c176",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-high": "#2a2a2b",
+                        "on-background": "#e5e2e3",
+                        "secondary": "#ffb95a",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-surface": "#e5e2e3",
+                        "on-tertiary-fixed": "#261814",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-container-lowest": "#0e0e0f",
+                        "secondary-container": "#c68315",
+                        "surface-container-highest": "#353436",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-surface-variant": "#d1c5b4",
+                        "secondary-fixed": "#ffddb6",
+                        "on-primary": "#412d00",
+                        "primary-container": "#c5a059"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"]
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "card-padding": "32px"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background min-h-screen pb-32">
+<!-- TopAppBar - Optimized for Kiosk Visibility -->
+<header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-2xl border-b border-outline-variant/30 px-gutter h-24 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="dashboard_customize">dashboard_customize</span>
+<div>
+<h1 class="text-headline-lg font-bold tracking-tight text-primary leading-none">CraftHub 360</h1>
+<p class="text-label-sm text-on-surface-variant font-bold uppercase tracking-widest mt-1">Command Center v4.0</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="text-right hidden sm:block">
+<p class="text-headline-md font-mono text-on-surface" id="clock">12:00:00 PM</p>
+<p class="text-label-sm text-primary tracking-widest">STATION 01-A</p>
+</div>
+<button class="material-symbols-outlined text-primary text-3xl hover:rotate-90 transition-transform duration-500 bg-surface-container-high p-3 rounded-full weighted-btn" data-icon="settings_suggest">settings_suggest</button>
+</div>
+</header>
+<main class="pt-36 px-gutter max-w-[1600px] mx-auto">
+<!-- Hero Section: System Health Overview -->
+<section class="mb-12">
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+<div class="lg:col-span-3 glass-panel p-card-padding rounded-2xl relative overflow-hidden gold-glow">
+<div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+<div class="flex justify-between items-start mb-10">
+<div>
+<p class="text-label-lg font-bold text-primary tracking-[0.2em] uppercase mb-3">Operational Status</p>
+<h2 class="text-display-lg font-headline-xl text-on-surface">Global Health Index</h2>
+</div>
+<div class="flex flex-col items-end">
+<div class="flex items-center gap-3 px-6 py-4 bg-primary/10 rounded-2xl border-2 border-primary/30">
+<span class="w-4 h-4 bg-primary rounded-full status-pulse"></span>
+<span class="text-primary font-bold text-headline-md tracking-tight">OPTIMAL</span>
+</div>
+<span class="text-on-surface-variant text-label-lg mt-3 font-medium">Auto-Refresh: <span class="text-primary">2s</span></span>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="p-6 bg-surface-container-low rounded-xl border border-outline-variant/20">
+<p class="text-label-lg text-on-surface-variant mb-3 font-bold">Total Uptime</p>
+<div class="flex items-baseline gap-2">
+<p class="text-display-lg font-headline-xl status-healthy">99.99</p>
+<span class="text-headline-md status-healthy">%</span>
+</div>
+<div class="w-full bg-surface-variant h-2 mt-4 rounded-full overflow-hidden">
+<div class="bg-healthy h-full" style="width: 99.99%"></div>
+</div>
+</div>
+<div class="p-6 bg-surface-container-low rounded-xl border border-outline-variant/20">
+<p class="text-label-lg text-on-surface-variant mb-3 font-bold">Avg Latency</p>
+<div class="flex items-baseline gap-2">
+<p class="text-display-lg font-headline-xl status-healthy">42</p>
+<span class="text-headline-md status-healthy">ms</span>
+</div>
+<div class="w-full bg-surface-variant h-2 mt-4 rounded-full overflow-hidden">
+<div class="bg-healthy h-full" style="width: 15%"></div>
+</div>
+</div>
+<div class="p-6 bg-surface-container-low rounded-xl border border-outline-variant/20">
+<p class="text-label-lg text-on-surface-variant mb-3 font-bold">Active Nodes</p>
+<div class="flex items-baseline gap-2">
+<p class="text-display-lg font-headline-xl text-primary">124</p>
+</div>
+<p class="text-label-sm text-on-surface-variant mt-4">+2 from last hour</p>
+</div>
+<div class="p-6 bg-surface-container-low rounded-xl border border-outline-variant/20">
+<p class="text-label-lg text-on-surface-variant mb-3 font-bold">Data Rate</p>
+<div class="flex items-baseline gap-2">
+<p class="text-display-lg font-headline-xl text-primary">1.2</p>
+<span class="text-headline-md text-primary">GB/s</span>
+</div>
+<div class="w-full bg-surface-variant h-2 mt-4 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 65%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="glass-panel p-card-padding rounded-2xl flex flex-col justify-between text-center relative group overflow-hidden border-2 border-primary/20">
+<img class="absolute inset-0 w-full h-full object-cover opacity-30 transition-opacity group-hover:opacity-40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZaiDmlVtyjqOwmL--waUNdCdC_-gx0-NzQzKRvo-I8KEaF4XGtFwegk3-HduP4_CvkbRIFF3aDiQw8sxWj9K6PXV1k4xpm2c0P7vAsJ3WMxNLqtfqTESgk-75hHN3pJTeT9syJ-pBidBNFCEvV6NbZ6W8WsIvVzqptidaIpCwh5XmhGusjuDkewsHJIgv9xmpfDucx-o8BTcNp21MSc64OfV0eKxk1MRWUerJtyfWxxbb0zAbhts0kl5x1RMCkMU_bpfkMuRLbE8"/>
+<div class="relative z-10 py-4">
+<span class="material-symbols-outlined text-7xl text-primary mb-6" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2 font-bold uppercase tracking-wider">Security Shield</h3>
+<p class="text-body-md text-on-surface-variant font-medium">360 Passport active</p>
+</div>
+<div class="relative z-10 flex flex-col gap-3">
+<button class="w-full py-4 bg-primary text-on-primary font-bold rounded-xl weighted-btn text-label-lg uppercase tracking-widest">Audit Logs</button>
+<button class="w-full py-4 bg-surface-container-highest text-primary border border-primary/30 font-bold rounded-xl weighted-btn text-label-lg uppercase tracking-widest">System Sync</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Monitoring Grid: Large Tap-to-Expand Blocks -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<!-- NOVEE OS (Healthy) -->
+<div class="kiosk-card glass-panel p-8 rounded-2xl border-l-8 border-healthy hover:bg-surface-container-high transition-colors" onclick="this.classList.toggle('expanded')">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl status-healthy" data-icon="terminal">terminal</span>
+<h4 class="text-headline-md font-bold">NOVEE OS</h4>
+</div>
+<span class="status-healthy text-label-lg font-black tracking-widest">HEALTHY</span>
+</div>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between text-label-lg mb-2">
+<span class="text-on-surface-variant font-bold">CPU Load</span>
+<span class="status-healthy font-black">12%</span>
+</div>
+<div class="w-full bg-surface-variant h-4 rounded-full overflow-hidden">
+<div class="bg-healthy h-full" style="width: 12%"></div>
+</div>
+</div>
+<div class="flex justify-between items-center bg-surface-container-lowest p-4 rounded-xl">
+<span class="text-label-lg text-on-surface-variant font-bold">Uptime</span>
+<span class="text-headline-md font-bold status-healthy">412d</span>
+</div>
+</div>
+</div>
+<!-- CraftHub Core (Healthy) -->
+<div class="kiosk-card glass-panel p-8 rounded-2xl border-l-8 border-healthy hover:bg-surface-container-high transition-colors" onclick="this.classList.toggle('expanded')">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl status-healthy" data-icon="hub">hub</span>
+<h4 class="text-headline-md font-bold">Core Hub</h4>
+</div>
+<span class="status-healthy text-label-lg font-black tracking-widest">HEALTHY</span>
+</div>
+<div class="space-y-6">
+<div class="flex justify-between items-center bg-surface-container-lowest p-4 rounded-xl">
+<span class="text-label-lg text-on-surface-variant font-bold">API Status</span>
+<span class="status-healthy text-label-lg font-black">200 OK</span>
+</div>
+<div>
+<div class="flex justify-between text-label-lg mb-2">
+<span class="text-on-surface-variant font-bold">Latency</span>
+<span class="status-healthy font-black">18ms</span>
+</div>
+<div class="w-full bg-surface-variant h-4 rounded-full overflow-hidden">
+<div class="bg-healthy h-full" style="width: 25%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- BeerCraft (Warning - Amber) -->
+<div class="kiosk-card glass-panel p-8 rounded-2xl border-l-8 border-warning hover:bg-surface-container-high transition-colors bg-warning/5" onclick="this.classList.toggle('expanded')">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl status-warning" data-icon="sports_bar">sports_bar</span>
+<h4 class="text-headline-md font-bold">BeerCraft</h4>
+</div>
+<span class="status-warning text-label-lg font-black tracking-widest">WARNING</span>
+</div>
+<div class="space-y-6">
+<div class="p-4 bg-warning/10 rounded-xl border border-warning/30">
+<p class="text-label-lg text-warning font-bold mb-1">Keg Level Critical</p>
+<p class="text-headline-md font-black status-warning">Tap #4 (8%)</p>
+</div>
+<div>
+<div class="flex justify-between text-label-lg mb-2">
+<span class="text-on-surface-variant font-bold">Pressure</span>
+<span class="status-warning font-black">12 PSI</span>
+</div>
+<div class="w-full bg-surface-variant h-4 rounded-full overflow-hidden">
+<div class="bg-warning h-full" style="width: 40%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Simulated Critical Blockage (Red) -->
+<div class="kiosk-card glass-panel p-8 rounded-2xl border-l-8 border-critical hover:bg-surface-container-high transition-colors bg-critical/5" onclick="this.classList.toggle('expanded')">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl status-critical" data-icon="warning">warning</span>
+<h4 class="text-headline-md font-bold">HVAC Unit 2</h4>
+</div>
+<span class="status-critical text-label-lg font-black tracking-widest">CRITICAL</span>
+</div>
+<div class="space-y-6">
+<div class="p-4 bg-critical/10 rounded-xl border border-critical/30">
+<p class="text-label-lg text-critical font-bold mb-1">Fan Failure Detected</p>
+<p class="text-headline-md font-black status-critical">EMERGENCY STOP</p>
+</div>
+<div>
+<div class="flex justify-between text-label-lg mb-2">
+<span class="text-on-surface-variant font-bold">Core Temp</span>
+<span class="status-critical font-black">104°F</span>
+</div>
+<div class="w-full bg-surface-variant h-4 rounded-full overflow-hidden">
+<div class="bg-critical h-full" style="width: 95%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- PourCraft (Healthy) -->
+<div class="kiosk-card glass-panel p-8 rounded-2xl border-l-8 border-healthy hover:bg-surface-container-high transition-colors" onclick="this.classList.toggle('expanded')">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl status-healthy" data-icon="liquor">liquor</span>
+<h4 class="text-headline-md font-bold">PourCraft</h4>
+</div>
+<span class="status-healthy text-label-lg font-black tracking-widest">HEALTHY</span>
+</div>
+<p class="text-label-lg text-on-surface-variant mb-4">Inventory synchronization active.</p>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-3 rounded-xl text-center">
+<p class="text-label-sm text-on-surface-variant font-bold">Pours/Hr</p>
+<p class="text-headline-md font-bold text-primary">82</p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-xl text-center">
+<p class="text-label-sm text-on-surface-variant font-bold">Sync</p>
+<p class="text-headline-md font-bold status-healthy">LIVE</p>
+</div>
+</div>
+</div>
+<!-- 360 Passport (Healthy) -->
+<div class="kiosk-card glass-panel p-8 rounded-2xl border-l-8 border-healthy hover:bg-surface-container-high transition-colors" onclick="this.classList.toggle('expanded')">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl status-healthy" data-icon="badge">badge</span>
+<h4 class="text-headline-md font-bold">360 Passport</h4>
+</div>
+<span class="status-healthy text-label-lg font-black tracking-widest">HEALTHY</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-label-lg">
+<span class="text-on-surface-variant font-bold">Ledger Sync</span>
+<span class="status-healthy font-black">100%</span>
+</div>
+<div class="w-full bg-surface-variant h-4 rounded-full overflow-hidden">
+<div class="bg-healthy h-full" style="width: 100%"></div>
+</div>
+<p class="text-label-sm text-on-surface-variant italic">12k members currently validated.</p>
+</div>
+</div>
+<!-- Database & API (Large Data Points) -->
+<div class="kiosk-card glass-panel p-8 rounded-2xl border-l-8 border-healthy hover:bg-surface-container-high transition-colors md:col-span-2" onclick="this.classList.toggle('expanded')">
+<div class="flex justify-between items-start mb-8">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl status-healthy" data-icon="database">database</span>
+<h4 class="text-headline-md font-bold">Storage &amp; APIs</h4>
+</div>
+<span class="status-healthy text-label-lg font-black tracking-widest">SYNCHRONIZED</span>
+</div>
+<div class="grid grid-cols-3 gap-8">
+<div class="text-center p-6 bg-surface-container-lowest rounded-2xl border border-outline-variant/10">
+<p class="text-label-lg text-on-surface-variant font-bold mb-3">Reads/sec</p>
+<p class="text-display-lg font-headline-xl text-primary">2,410</p>
+</div>
+<div class="text-center p-6 bg-surface-container-lowest rounded-2xl border border-outline-variant/10">
+<p class="text-label-lg text-on-surface-variant font-bold mb-3">Writes/sec</p>
+<p class="text-display-lg font-headline-xl text-primary">840</p>
+</div>
+<div class="text-center p-6 bg-surface-container-lowest rounded-2xl border border-outline-variant/10">
+<p class="text-label-lg text-on-surface-variant font-bold mb-3">Replication</p>
+<p class="text-display-lg font-headline-xl status-healthy">0.02<span class="text-headline-md ml-1">s</span></p>
+</div>
+</div>
+</div>
+</section>
+<!-- Command Console: Kiosk Console -->
+<section class="mt-12">
+<div class="glass-panel p-8 rounded-2xl border border-primary/20 bg-surface-container-lowest leather-texture relative">
+<div class="absolute top-0 right-0 p-4 opacity-30">
+<span class="material-symbols-outlined text-6xl" data-icon="analytics">analytics</span>
+</div>
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="terminal">terminal</span>
+<h3 class="text-headline-md text-primary font-bold tracking-widest uppercase">Live Telemetry Stream</h3>
+</div>
+<div class="flex gap-3">
+<div class="w-3 h-3 rounded-full bg-critical shadow-[0_0_8px_#ef4444]"></div>
+<div class="w-3 h-3 rounded-full bg-warning shadow-[0_0_8px_#f59e0b]"></div>
+<div class="w-3 h-3 rounded-full bg-healthy shadow-[0_0_8px_#22c55e]"></div>
+</div>
+</div>
+<div class="font-mono text-[16px] text-on-surface-variant/90 h-48 overflow-y-auto space-y-2 custom-scrollbar" id="console">
+<p class="text-primary font-bold">[SYSTEM] Kiosk Mode Initialized. High-Visibility Overlays Active.</p>
+<p>[AUTH] 360 Passport Handshake Verified (0.012s)</p>
+<p class="text-healthy">[OK] Postgres Cluster Health: Optimal (Node 1-4)</p>
+<p class="text-warning">[WARN] BeerCraft Tap #4: Pressure drop detected.</p>
+<p class="text-critical">[ALERT] HVAC 2 Internal sensor reporting 104°F</p>
+<p>[CORE] Background task 'InventorySync' completed successfully.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar - Hidden on Large Kiosk Displays -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center px-4 pb-6 pt-4 rounded-t-3xl md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70" href="#">
+<span class="material-symbols-outlined text-3xl" data-icon="home">home</span>
+<span class="text-label-sm font-bold uppercase mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary text-on-primary rounded-2xl px-8 py-3 weighted-btn" href="#">
+<span class="material-symbols-outlined text-3xl" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-black uppercase mt-1">Preview</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70" href="#">
+<span class="material-symbols-outlined text-3xl" data-icon="save">save</span>
+<span class="text-label-sm font-bold uppercase mt-1">Save</span>
+</a>
+</nav>
+<script>
+    // Clock for Kiosk
+    function updateClock() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        document.getElementById('clock').textContent = timeStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Console simulation
+    const consoleEl = document.getElementById('console');
+    const logs = [
+        "[SYSTEM] Refreshing NOVEE OS Health Status...",
+        "[POUR] Station 3: 2.4oz Single Malt Pour Detected",
+        "[E.A.T.] Table 12: New Session Initialized",
+        "[CORE] Transaction processing: 1420ms average",
+        "[SMOKE] Humidor South: Leveling Humidity +1.2%",
+        "[API] /v4/global/health status request resolved",
+        "[SECURITY] 360 Passport validation token generated",
+        "[DB] Index optimization task scheduled for 02:00 AM"
+    ];
+
+    setInterval(() => {
+        const p = document.createElement('p');
+        const colorClass = Math.random() > 0.8 ? 'text-primary' : '';
+        if(colorClass) p.className = colorClass;
+        p.textContent = logs[Math.floor(Math.random() * logs.length)];
+        consoleEl.appendChild(p);
+        if (consoleEl.children.length > 25) consoleEl.removeChild(consoleEl.firstChild);
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+    }, 2500);
+
+    // Kiosk weighted interaction logic
+    document.querySelectorAll('.weighted-btn').forEach(btn => {
+        btn.addEventListener('mousedown', () => {
+            // Haptic visual feedback is handled via CSS .weighted-btn:active
+        });
+    });
+</script>
+</body></html>

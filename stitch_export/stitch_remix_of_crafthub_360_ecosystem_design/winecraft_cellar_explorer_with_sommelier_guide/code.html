@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WineCraft Cellar Explorer - Sommelier Guide</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .gold-inner-stroke {
+            box-shadow: inset 0 0 0 1px rgba(233, 193, 118, 0.2);
+        }
+        .waveform-bar {
+            animation: wave 1.2s ease-in-out infinite;
+        }
+        @keyframes wave {
+            0%, 100% { height: 8px; }
+            50% { height: 24px; }
+        }
+        .scroll-hide::-webkit-scrollbar { display: none; }
+        .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-hidden h-screen w-screen">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#e5e2e3",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-tint": "#e9c176",
+                        "on-secondary-fixed": "#2a1800",
+                        "primary-container": "#c5a059",
+                        "primary-fixed": "#ffdea5",
+                        "outline": "#9a8f80",
+                        "on-primary-container": "#4e3700",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "error-container": "#93000a",
+                        "tertiary": "#dac1bb",
+                        "surface-variant": "#353436",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-tertiary-container": "#473733",
+                        "surface-container-highest": "#353436",
+                        "inverse-on-surface": "#303031",
+                        "surface-container-low": "#1b1b1c",
+                        "surface-dim": "#131314",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-tertiary": "#3c2d28",
+                        "on-surface-variant": "#d1c5b4",
+                        "secondary-fixed": "#ffddb6",
+                        "background": "#131314",
+                        "surface-container": "#1f1f20",
+                        "outline-variant": "#4e4639",
+                        "on-primary": "#412d00",
+                        "on-surface": "#e5e2e3",
+                        "primary": "#e9c176",
+                        "on-tertiary-fixed": "#261814",
+                        "secondary-container": "#c68315",
+                        "primary-fixed-dim": "#e9c176",
+                        "tertiary-container": "#b7a09a",
+                        "surface-container-high": "#2a2a2b",
+                        "on-secondary-container": "#3d2400",
+                        "inverse-primary": "#775a19",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-secondary": "#462a00",
+                        "surface-container-lowest": "#0e0e0f",
+                        "surface": "#131314",
+                        "secondary": "#ffb95a",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-error": "#690005",
+                        "surface-bright": "#39393a",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed": "#261900",
+                        "on-background": "#e5e2e3",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "64px",
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "unit": "8px",
+                        "card-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<!-- Background Cinematic Imagery -->
+<div class="fixed inset-0 z-0">
+<img class="w-full h-full object-cover opacity-40" data-alt="A cinematic, low-angle shot of a premium, dimly lit private wine cellar with rows of aged oak barrels and dust-covered vintage bottles. Warm amber spotlights catch the edges of the glassware and gold accents in the masonry. The atmosphere is quiet, exclusive, and saturated with deep espresso and rich mahogany tones, reflecting a high-end luxury lounge aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm6F2kHtByDX5QG8RxIvKb8mwSXazBIuTdulPmPQScmgQ0uwJbIDJR833fRkEn2qpbtnvo1QW0hj1q5DBSTWKUod9qGArryC1maFfSgN90Rdl-2qy-VZuS4_r9087IbiVhRCMSUd2VpfPiDad7s1_ImdEo1WS9wgVGfFY6FuaQfm0aYAuOT2jMgG_oeHJSVSjVic1VtHp8RdDyM3gI4UN4teYGCYAIhuwn7zfEUPx5x9wwqs1zN3bL434PMPqnZS3-sK5Y5wHyEh0"/>
+<div class="absolute inset-0 bg-gradient-to-b from-background/20 via-background/60 to-background"></div>
+</div>
+<!-- Top App Bar -->
+<nav class="fixed top-0 w-full z-50 backdrop-blur-xl bg-surface/80 border-b border-outline-variant shadow-md flex justify-between items-center px-gutter h-20 w-full">
+<div class="flex items-center gap-4">
+<button class="text-primary hover:text-primary-fixed-dim transition-colors active:scale-95 duration-300">
+<span class="material-symbols-outlined text-[28px]">menu</span>
+</button>
+<span class="font-headline-md text-headline-md tracking-widest text-primary dark:text-primary uppercase">RESERVE LOUNGE</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="#">CELLAR</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="#">HISTORY</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="#">EVENTS</a>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A sophisticated close-up portrait of a refined man in a charcoal suit, representing an elite member profile. The lighting is dramatic and warm, matching the luxurious lounge environment. The background is softly blurred to emphasize the subject's professional yet relaxed demeanor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAoy_DvV-lgstjZgbj6hpRfAiywqYMrsA2Fhgk5HwftIwN51XR9GR4koxgzkSZVcc9Z9bw2M3sALhqKSAmaxOPTKQxk8ZQ4Whbr64nBnc_VoBpBdO_r0aBpi3i6U1CtPsQnPZpqBSx8gS8Mz8QLj1mSnY0VM-HOsoRYXL-KkJnQ--muQYlJ-oUoXyvym--lun56nxep48zDAznMk0QW1RrJ35oyzwx1ZHsLBuV-nNEo_jXlH4nLJAl6qU0p3zUIbwR4iZcJm7a59k"/>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="relative z-10 pt-28 pb-32 px-gutter h-full overflow-y-auto scroll-hide">
+<div class="max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<header class="mb-12">
+<div class="flex items-baseline gap-4 mb-2">
+<span class="font-label-lg text-label-lg text-primary tracking-[0.2em] uppercase">Private Collection</span>
+<div class="h-[1px] flex-grow bg-gradient-to-r from-primary/50 to-transparent"></div>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-4">Bold Reds Selection</h1>
+</header>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
+<!-- Left Column: The Sommelier AI Guide -->
+<aside class="md:col-span-4 sticky top-0">
+<div class="glass-panel bg-surface-container-high/60 rounded-xl p-8 gold-inner-stroke border border-outline-variant/30 shadow-2xl">
+<div class="flex items-center gap-4 mb-8">
+<div class="relative">
+<div class="w-14 h-14 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-[0_0_20px_rgba(233,193,118,0.4)]">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full border-4 border-surface-container-high"></div>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">Sommelier Guide</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Active Concierge Mode</p>
+</div>
+</div>
+<!-- Voice Waveform Animation -->
+<div class="flex items-center justify-center gap-1.5 h-12 mb-8 px-4 bg-surface-container-lowest/50 rounded-lg border border-outline-variant/20">
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.1s"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.3s"></div>
+<div class="waveform-bar w-1 bg-primary-fixed-dim rounded-full" style="animation-delay: 0.5s"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.2s"></div>
+<div class="waveform-bar w-1 bg-primary-fixed-dim rounded-full" style="animation-delay: 0.4s"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.6s"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.1s"></div>
+</div>
+<div class="space-y-6">
+<div class="p-5 bg-primary/5 rounded-lg border-l-4 border-primary">
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed italic">
+                                    "You selected bold and dry. I’ll show you deeper reds with structured body and food-friendly balance."
+                                </p>
+</div>
+<div class="space-y-4">
+<h4 class="font-label-lg text-label-lg text-primary uppercase">Current Pairing Suggestions</h4>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-primary text-sm">restaurant</span>
+                                        Dry-aged Ribeye Steak
+                                    </li>
+<li class="flex items-center gap-3 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-primary text-sm">restaurant</span>
+                                        Smoked Gouda &amp; Walnut
+                                    </li>
+<li class="flex items-center gap-3 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-primary text-sm">restaurant</span>
+                                        Truffle Infused Pasta
+                                    </li>
+</ul>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-lg rounded-lg shadow-xl hover:shadow-primary/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">mic</span>
+                                ASK SOMMELIER
+                            </button>
+</div>
+</div>
+</aside>
+<!-- Right Column: Bento Grid of Featured Wines -->
+<div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-gutter pb-24">
+<!-- Wine Card 1 (Large) -->
+<div class="sm:col-span-2 group relative h-[450px] rounded-xl overflow-hidden glass-panel border border-outline-variant/30 gold-inner-stroke shadow-lg transition-transform hover:-translate-y-1">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="An artistic, high-contrast shot of a premium Cabernet Sauvignon bottle resting in a dark wooden cradle. The label is visible with elegant gold typography. The lighting focuses on the curvature of the dark glass and the deep ruby liquid inside. The background features blurred wine glasses and the warm glow of a cellar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpOMdn1N7KwMsavzwQEepkRKON6Cq0b6L3mW5GSzRgDL2MFimC1N18UjFBNACxAPbH9U7lzAgXR2ipbfCcTWujJZ1m1L5HWNcMfiY-75xAWQklLK9CJ23juMWjBvxfGRMIFBsgLWuGTQa_ZBPz6UFgLSKlxOh_J_UqVwUhcKy2_QbJeex-aH-EwNh1iXtPxP7N6q57q9JSAdKS838Zpk16uhLh5IE2BTcbpzQg7BMfKN6z5ugttNdxDBXjAZmoVqYz7xQcZXOcucA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full flex justify-between items-end">
+<div>
+<span class="px-3 py-1 bg-primary/20 border border-primary/40 rounded-full text-primary font-label-sm text-[10px] uppercase mb-4 inline-block">Top Sommelier Pick</span>
+<h2 class="font-headline-lg text-headline-lg text-white mb-2">Château Margaux 2015</h2>
+<p class="font-body-md text-on-surface-variant max-w-md">Exceptional depth with notes of blackcurrant, violet, and graphite. A legendary vintage for the bold palate.</p>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-primary">$1,250</p>
+<button class="mt-4 p-3 bg-white/10 hover:bg-primary hover:text-on-primary rounded-full transition-all backdrop-blur-md border border-white/20">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Wine Card 2 -->
+<div class="group relative h-[400px] rounded-xl overflow-hidden glass-panel border border-outline-variant/30 gold-inner-stroke shadow-lg">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A moody, elegant photograph of a bottle of vintage Napa Valley Syrah placed on a textured leather surface. Soft, warm light from the side highlights the deep purple tones of the wine bottle and the rich texture of the leather. The mood is intimate, premium, and sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNhiattC-01EDtw5_BgJKgCFD8WEqXlI99IIyF-5qpuMiRO0Ih-jvyqXXJ4QJeKpQTe4NDn85Z7stGcQohPSOrTlj260c-5fMtwan13kjgVRm9CMHx2No0ts8MKGfaMfB2LDm2fcYRWe_sySeCrcCg_356jHDZyabZ1a8PsMLfFLjmkyU91U5MMA3eygtnQ8VfVNzvjzKlpleAJAu7K0-8QpwBQ-G-e7p6TmqOoaUHOxKZq9n7sCfYE8_kC-ndu_F04lBlmsvs7ss"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h3 class="font-headline-md text-headline-md text-white mb-1">Napa Reserve Syrah</h3>
+<p class="font-label-sm text-label-sm text-primary mb-3">Vintage 2018</p>
+<p class="font-body-md text-on-surface-variant line-clamp-2">Smoky, peppery, and intensely structured with a long oak finish.</p>
+<div class="mt-4 flex justify-between items-center">
+<span class="font-headline-md text-primary">$340</span>
+<span class="material-symbols-outlined text-white/50 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Wine Card 3 -->
+<div class="group relative h-[400px] rounded-xl overflow-hidden glass-panel border border-outline-variant/30 gold-inner-stroke shadow-lg">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A macro shot of a crystal wine glass filled with a deep, dark red wine. The light catches the 'legs' of the wine as it swirls. The background consists of dark, polished mahogany wood and the soft, golden glint of a brass plaque. The aesthetic is tactile, luxurious, and focused on sensory quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXcJwKl1CUBlSUDZM-wicZCl9Zun1pMje_qYUksF45eQYRi_Js1wCt9_3XyAzwg859-dNWeUb737wEgKg5s5APtZEVEcALuo_BCdxj0OB46qyY2-zWEIp3C67zJfU6-3Mzum-f1nEw-YyIwulE02sWu_H6K-F4unv2wGV_f4Bn-Db1RDrGRJ0S8wnaAlX1QnysOQsa1JWtkKdGUI2FpEzeeeB1pwujiImUgfef-K3c3MdboiLGKTdlD0W20EWHqfE2Z8v75sTGwLQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h3 class="font-headline-md text-headline-md text-white mb-1">Amarone Classico</h3>
+<p class="font-label-sm text-label-sm text-primary mb-3">Vintage 2016</p>
+<p class="font-body-md text-on-surface-variant line-clamp-2">Dried fruit complexity with velvet tannins and incredible power.</p>
+<div class="mt-4 flex justify-between items-center">
+<span class="font-headline-md text-primary">$480</span>
+<span class="material-symbols-outlined text-white/50 group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Drawer (Hidden by default, for structure) -->
+<div class="h-full w-80 fixed left-0 top-0 z-[60] -translate-x-full transition-transform duration-500 ease-in-out bg-surface-container-high border-r border-outline-variant shadow-2xl flex flex-col py-8 px-4 gap-6" id="nav-drawer">
+<div class="flex flex-col gap-1 mb-4 px-2">
+<h2 class="font-headline-lg text-headline-lg text-primary">Alexander Sterling</h2>
+<p class="font-body-md text-on-surface-variant">Elite Tier Member</p>
+<p class="font-label-sm text-primary">Passport #8821</p>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-primary hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">inventory_2</span> Private Cellar
+            </a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-primary hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">edit_note</span> Tasting Notes
+            </a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-primary hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">event</span> Lounge Events
+            </a>
+<div class="h-[1px] bg-outline-variant my-4"></div>
+<a class="flex items-center gap-4 p-4 text-error hover:bg-error-container/20 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span> Logout
+            </a>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 backdrop-blur-20px bg-surface-container-low/90 border-t border-outline-variant shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center h-24 px-gutter w-full pb-safe">
+<button class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">PourCraft</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">BeerCraft</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary font-bold gap-1 scale-110 duration-500 ease-out">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">wine_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">WineCraft</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Passport</span>
+</button>
+</nav>
+<!-- Overlay logic -->
+<script>
+        document.querySelector('.material-symbols-outlined[data-icon="menu"]')?.parentElement?.addEventListener('click', () => {
+            const drawer = document.getElementById('nav-drawer');
+            drawer.classList.toggle('-translate-x-full');
+        });
+
+        // Simple waveform toggle to simulate activity
+        const waveform = document.querySelectorAll('.waveform-bar');
+        setInterval(() => {
+            waveform.forEach(bar => {
+                const height = Math.floor(Math.random() * 32) + 8;
+                bar.style.height = height + 'px';
+            });
+        }, 150);
+    </script>
+</body></html>

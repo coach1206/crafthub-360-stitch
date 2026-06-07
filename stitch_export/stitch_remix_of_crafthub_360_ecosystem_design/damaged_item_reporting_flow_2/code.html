@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Damage Report | The Grand Humidor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(theme('colors.surface-container'), theme('colors.surface-container')) padding-box,
+                        linear-gradient(135deg, #e9c176, #775a19) border-box;
+        }
+        .amber-glow:active {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.4);
+        }
+        .wood-grain-bg {
+            background-color: #0e0e0f;
+            background-image: url("https://www.transparenttextures.com/patterns/dark-wood.png");
+            animation: grain-shift 40s linear infinite;
+        }
+
+        @keyframes grain-shift {
+            from { background-position: 0 0; }
+            to { background-position: 100px 100px; }
+        }
+
+        @keyframes pulse-urgency {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pulse-urgency {
+            animation: pulse-urgency 2s ease-in-out infinite;
+        }
+
+        @keyframes breathing-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(233, 193, 118, 0.1), inset 0 0 20px rgba(233, 193, 118, 0.05); }
+            50% { box-shadow: 0 0 25px rgba(233, 193, 118, 0.2), inset 0 0 40px rgba(233, 193, 118, 0.1); }
+        }
+        .upload-glow {
+            animation: breathing-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .entrance-1 { animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .entrance-2 { animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards; opacity: 0; }
+        .entrance-3 { animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; opacity: 0; }
+        .entrance-4 { animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards; opacity: 0; }
+
+        .btn-weighted {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-weighted:active {
+            transform: scale(0.96) translateY(2px);
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.5) !important;
+            filter: brightness(1.1);
+        }
+
+        @keyframes flash-upload {
+            0% { background-color: rgba(233, 193, 118, 0); }
+            20% { background-color: rgba(233, 193, 118, 0.4); }
+            100% { background-color: rgba(233, 193, 118, 0); }
+        }
+        .upload-flash {
+            animation: flash-upload 0.5s ease-out;
+        }
+
+        .upload-success-img {
+            animation: slide-in-place 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+        @keyframes slide-in-place {
+            from { transform: scale(1.1) translateY(10px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#e5e2e3",
+                        "tertiary-fixed": "#f7ddd6",
+                        "surface-tint": "#e9c176",
+                        "surface-container": "#1f1f20",
+                        "on-primary-fixed": "#261900",
+                        "on-primary": "#412d00",
+                        "on-secondary": "#462a00",
+                        "surface": "#131314",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#e9c176",
+                        "secondary": "#ffb95a",
+                        "tertiary": "#dac1bb",
+                        "surface-container-high": "#2a2a2b",
+                        "surface-container-highest": "#353436",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#131314",
+                        "error-container": "#93000a",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-lowest": "#0e0e0f",
+                        "inverse-primary": "#775a19",
+                        "secondary-container": "#c68315",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-tertiary-container": "#473733",
+                        "on-tertiary": "#3c2d28",
+                        "on-surface-variant": "#d1c5b4",
+                        "background": "#131314",
+                        "surface-bright": "#39393a",
+                        "primary": "#e9c176",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "outline": "#9a8f80",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-tertiary-fixed": "#261814",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-container": "#c5a059",
+                        "inverse-surface": "#e5e2e3",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "primary-fixed": "#ffdea5",
+                        "on-secondary-container": "#3d2400",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "tertiary-container": "#b7a09a",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "outline-variant": "#4e4639",
+                        "error": "#ffb4ab",
+                        "surface-container-low": "#1b1b1c",
+                        "surface-variant": "#353436",
+                        "on-primary-container": "#4e3700"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "margin": "64px",
+                        "card-padding": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background wood-grain-bg min-h-screen selection:bg-primary/30">
+<!-- TopAppBar -->
+<header class="bg-background/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm fixed top-0 w-full z-50 flex justify-between items-center px-margin h-24">
+<div class="flex items-center gap-4">
+<button aria-label="Go back" class="p-2 hover:bg-surface-container-highest/50 transition-all rounded-full">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<span class="text-right hidden md:block">
+<p class="font-label-lg text-label-lg text-primary">Julian Vane</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Head Sommelier</p>
+</span>
+<div class="w-12 h-12 rounded-full border border-primary/30 overflow-hidden">
+<img alt="Staff member profile" class="w-full h-full object-cover" data-alt="A sophisticated close-up portrait of a professional head sommelier with a groomed beard, wearing a tailored charcoal suit. The lighting is dramatic and moody, reminiscent of a high-end private club, with warm amber highlights on the face. The background is softly blurred, showing hints of a dark mahogany wine cellar. The aesthetic is luxurious, focused, and exceptionally high-quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnN6yGb7z_h1gCqrM3de5O0dGjZ_rdJVaD1KSGRM7lP6DyCi8imLqoilIJzLcM1eFgBc1ebCRKOk20_Q6V6QEKAki2wyzmwOtdrMN8ZFlUYH55N3m7OvaV-NkJFRPbEj6dn3qHIywFuA_eZIpt3rgH62V4nYX9RpZoSlI5-3ncon9K92NhKByYTZfHJv9w0ba3lKnCMhBLH8mQ8k9LhOfovCt94D_m828y4vyRGlqNjP0BvqYOyMU8d2zWl0xUG96fK-Qvp1Mio44"/>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-110 transition-transform">notifications</span>
+</div>
+</header>
+<main class="pt-32 pb-40 px-gutter md:px-margin max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<div class="mb-12 entrance-1">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">Damage Report</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Receiving inventory for Shipment #SHP-2024-089. Please document the specific damage found on the selected item to initiate a resolution.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+<!-- Left Column: Item & Photo -->
+<div class="lg:col-span-5 space-y-8 entrance-2">
+<!-- Item Summary Card -->
+<div class="glass-panel rounded-xl p-card-padding shadow-2xl relative overflow-hidden">
+<div class="flex gap-6">
+<div class="w-32 h-32 rounded-lg overflow-hidden border border-outline-variant">
+<img alt="Limited Edition Box" class="w-full h-full object-cover" data-alt="A premium close-up shot of a vintage leather-wrapped cigar humidor box resting on a polished dark walnut surface. The lighting is warm and directional, catching the grain of the leather and the gold embossed seal of The Grand Humidor. Deep shadows create a sense of mystery and exclusivity, reflecting a high-end luxury lifestyle brand. The focus is sharp on the intricate gold stitching." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzJlpO6bEuvSQyqpoCNoBA-l4wy6LKMbiKOnN25WKIRhapGz8dNx8e--Ewl7SfZYAELkYHkS4nExPodnyfFTOyueLxvuLwPbC_eWHSOU3qxonINgVZbRD5GRaH2dm9OkCiQ64mOiYwTZkdve-5sMYCYAqg2MOrCFTr8o_oG5LNEJQ3Yv5vtY8ADuRVPeEehMISouWkvLvHDWn8R_8E0FVSINQi23d4gPIwX8BoKx6c5mAT--RiIOrQ8gx-KwAvj5OiUUazCZOsAj8"/>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-primary mb-1 block uppercase">Item Ref: GH-772</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Arturo Fuente OpusX</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Box of 20 • Reserve Selection</p>
+</div>
+</div>
+</div>
+<!-- Photo Upload Placeholder -->
+<div class="glass-panel upload-glow rounded-xl border-dashed border-2 border-primary/30 p-12 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-surface-container-high/50 transition-all group relative overflow-hidden h-96" id="upload-zone" onclick="simulateUpload()">
+<div class="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity">
+<img alt="Damaged Item Background" class="w-full h-full object-cover" data-alt="A blurred, cinematic background of a damaged luxury shipping container with shattered glass fragments and spilling dark liquids on a stone floor. The lighting is dramatic, with high contrast between bright amber spotlights and deep espresso shadows. The mood is urgent and professional, reflecting a high-stakes quality control environment in a premium lounge setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwXdUODEfVggQJJHHAIZaTZXpCJJybMMCNJyO9_VwUnR7p4tP5CKMPmyR7bJn_yNyIC6A6kyfDZRJ-tfKK4kgqmTKg5zIj1VaIGsgC1cMaRv7ePcLK8X4amkd6hS7mXNerrq4pnMqGRMXrh7yAe5eagjVNzjioNu8dlPGilrv-r0hkKJfCXY1A55_IC9lkSSCQnX1WCEGI6y--BpLcenKghM4KoNvAo2VGHO_4qPfL-RJ0UMak6Z5QBUgX_VP45nPM_wiU56dV5Xc"/>
+</div>
+<div class="absolute inset-0 pointer-events-none transition-colors duration-500" id="upload-feedback-overlay"></div>
+<div class="relative z-10 flex flex-col items-center" id="upload-content">
+<div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6 border border-primary/20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-4xl">add_a_photo</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-primary mb-2">Upload Evidence</h4>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[200px]">Capture high-resolution photos of the damage area.</p>
+</div>
+<div class="absolute inset-0 hidden" id="success-preview">
+<img class="w-full h-full object-cover upload-success-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwXdUODEfVggQJJHHAIZaTZXpCJJybMMCNJyO9_VwUnR7p4tP5CKMPmyR7bJn_yNyIC6A6kyfDZRJ-tfKK4kgqmTKg5zIj1VaIGsgC1cMaRv7ePcLK8X4amkd6hS7mXNerrq4pnMqGRMXrh7yAe5eagjVNzjioNu8dlPGilrv-r0hkKJfCXY1A55_IC9lkSSCQnX1WCEGI6y--BpLcenKghM4KoNvAo2VGHO_4qPfL-RJ0UMak6Z5QBUgX_VP45nPM_wiU56dV5Xc"/>
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-surface/80 backdrop-blur-md px-4 py-2 rounded-full border border-primary/30 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span class="font-label-sm text-label-sm text-primary">FILE UPLOADED</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Damage Selection & Actions -->
+<div class="lg:col-span-7 space-y-12 entrance-3">
+<!-- Damage Type Selection -->
+<section>
+<h5 class="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-6">Select Damage Category</h5>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Leaking Card -->
+<button class="damage-card glass-panel p-6 rounded-xl text-left transition-all hover:bg-surface-container-highest group border border-outline-variant/30 flex flex-col gap-4" onclick="selectDamage(this)">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform pulse-urgency">water_drop</span>
+<div>
+<span class="font-label-lg text-label-lg block mb-1">Leaking</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Fluid intrusion</span>
+</div>
+</button>
+<!-- Broken Card -->
+<button class="damage-card glass-panel p-6 rounded-xl text-left transition-all hover:bg-surface-container-highest group border border-outline-variant/30 flex flex-col gap-4" onclick="selectDamage(this)">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform pulse-urgency">heart_broken</span>
+<div>
+<span class="font-label-lg text-label-lg block mb-1">Broken</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Structural compromise</span>
+</div>
+</button>
+<!-- Humidity Issue Card -->
+<button class="damage-card glass-panel p-6 rounded-xl text-left transition-all hover:bg-surface-container-highest group border border-outline-variant/30 flex flex-col gap-4" onclick="selectDamage(this)">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">thermostat</span>
+<div>
+<span class="font-label-lg text-label-lg block mb-1">Humidity Issue</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Sensor trigger</span>
+</div>
+</button>
+</div>
+</section>
+<!-- Detailed Notes -->
+<section class="entrance-4">
+<h5 class="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-6">Observation Notes</h5>
+<div class="relative">
+<textarea class="w-full bg-transparent border-b border-primary/30 focus:border-primary transition-colors py-4 font-body-lg text-on-surface outline-none min-h-[120px] resize-none" placeholder="Describe the condition of the seal and internal contents..."></textarea>
+<div class="absolute bottom-4 right-0 text-[10px] text-on-surface-variant uppercase tracking-widest">Optional field</div>
+</div>
+</section>
+<!-- Action Options -->
+<section class="pt-8 border-t border-outline-variant/20 entrance-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Request Credit -->
+<button class="gold-foil-border py-6 px-8 rounded-lg font-label-lg text-label-lg text-primary amber-glow transition-all flex items-center justify-center gap-3 active:scale-[0.98]">
+<span class="material-symbols-outlined">payments</span>
+                            Request Credit
+                        </button>
+<!-- Request Replacement -->
+<button class="bg-primary text-on-primary-container py-6 px-8 rounded-lg font-label-lg text-label-lg btn-weighted flex items-center justify-center gap-3 shadow-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">package_2</span>
+                            Request Replacement
+                        </button>
+</div>
+<p class="text-center mt-8 font-label-sm text-label-sm text-on-surface-variant">
+                        Estimated resolution time: <span class="text-secondary">2-4 Business Hours</span>
+</p>
+</section>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] flex justify-around items-center px-gutter py-4 md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined group-active:scale-90 transition-transform">point_of_sale</span>
+<span class="font-label-sm text-label-sm">POS 3</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined group-active:scale-90 transition-transform">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] transition-all cursor-pointer">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</div>
+</nav>
+<!-- NavigationDrawer (Desktop Side) -->
+<aside class="hidden lg:flex fixed left-0 top-0 h-screen w-20 xl:w-80 flex-col bg-surface-container-low border-r border-outline-variant/20 shadow-2xl transition-all z-40">
+<div class="p-8 h-24 flex items-center border-b border-outline-variant/10">
+<span class="font-headline-lg text-headline-lg text-primary hidden xl:block">Management</span>
+<span class="material-symbols-outlined text-primary block xl:hidden mx-auto">admin_panel_settings</span>
+</div>
+<nav class="flex-1 py-8 px-4 space-y-4">
+<div class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all flex items-center gap-4 cursor-pointer group">
+<span class="material-symbols-outlined text-primary">layers</span>
+<span class="font-label-lg text-label-lg hidden xl:block">Floor Plan</span>
+</div>
+<div class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all flex items-center gap-4 cursor-pointer group">
+<span class="material-symbols-outlined text-primary">explore</span>
+<span class="font-label-lg text-label-lg hidden xl:block">Live Map</span>
+</div>
+<div class="bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 transition-all flex items-center gap-4 cursor-pointer shadow-lg">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-lg text-label-lg hidden xl:block">Inventory</span>
+</div>
+<div class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all flex items-center gap-4 cursor-pointer group">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<span class="font-label-lg text-label-lg hidden xl:block">Insights</span>
+</div>
+</nav>
+<div class="p-8 border-t border-outline-variant/10">
+<div class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all flex items-center gap-4 cursor-pointer group">
+<span class="material-symbols-outlined text-primary">settings</span>
+<span class="font-label-lg text-label-lg hidden xl:block">Settings</span>
+</div>
+</div>
+</aside>
+<script>
+        function selectDamage(element) {
+            // Clear previous selection
+            document.querySelectorAll('.damage-card').forEach(card => {
+                card.classList.remove('bg-primary-container', 'text-on-primary-container', 'shadow-lg');
+                card.classList.add('glass-panel', 'text-on-surface');
+                card.querySelector('.material-symbols-outlined').style.color = '#e9c176';
+            });
+            
+            // Set new selection
+            element.classList.remove('glass-panel', 'text-on-surface');
+            element.classList.add('bg-primary-container', 'text-on-primary-container', 'shadow-lg');
+            element.querySelector('.material-symbols-outlined').style.color = '#4e3700';
+
+            // Haptic-like feedback effect
+            element.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+            }, 100);
+        }
+
+        function simulateUpload() {
+            const overlay = document.getElementById('upload-feedback-overlay');
+            const content = document.getElementById('upload-content');
+            const success = document.getElementById('success-preview');
+            const zone = document.getElementById('upload-zone');
+
+            // 1. Flash effect
+            overlay.classList.add('upload-flash');
+            
+            // 2. Clear animations and hide initial content
+            setTimeout(() => {
+                content.classList.add('opacity-0');
+                zone.classList.remove('upload-glow');
+            }, 200);
+
+            // 3. Slide in the success preview
+            setTimeout(() => {
+                content.classList.add('hidden');
+                success.classList.remove('hidden');
+            }, 400);
+
+            // Clean up overlay class
+            setTimeout(() => {
+                overlay.classList.remove('upload-flash');
+            }, 1000);
+        }
+    </script>
+</body></html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 - Production Staging</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&amp;family=Playfair+Display:wght@600;700&amp;family=Space+Grotesk:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .gold-foil-texture {
+            background: linear-gradient(135deg, #f2ca50 0%, #d4af37 50%, #e9c349 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .gold-foil-texture::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.3) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shimmer 3s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+        @keyframes haptic-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+        .pulse-trigger {
+            animation: haptic-pulse 2s infinite;
+        }
+        .glass-panel {
+            backdrop-filter: blur(40px);
+            background: rgba(19, 19, 19, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .obsidian-card {
+            border-top: 2px solid #D4AF37;
+        }
+        .progress-shimmer {
+            background: linear-gradient(90deg, #D4AF37 0%, #f2ca50 50%, #D4AF37 100%);
+            background-size: 200% 100%;
+            animation: progress-move 2s infinite linear;
+        }
+        @keyframes progress-move {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "tertiary": "#cecece",
+                "on-background": "#e5e2e1",
+                "inverse-surface": "#e5e2e1",
+                "on-surface": "#e5e2e1",
+                "surface-variant": "#353534",
+                "on-tertiary": "#2f3131",
+                "surface-container-highest": "#353534",
+                "primary-fixed-dim": "#e9c349",
+                "inverse-primary": "#735c00",
+                "primary-fixed": "#ffe088",
+                "surface": "#131313",
+                "on-tertiary-fixed-variant": "#454747",
+                "tertiary-container": "#b2b3b3",
+                "surface-container-low": "#1c1b1b",
+                "on-tertiary-fixed": "#1a1c1c",
+                "on-surface-variant": "#d0c5af",
+                "error": "#ffb4ab",
+                "secondary-fixed-dim": "#c8c6c5",
+                "on-primary": "#3c2f00",
+                "on-error-container": "#ffdad6",
+                "secondary-fixed": "#e5e2e1",
+                "secondary": "#c8c6c5",
+                "on-primary-fixed-variant": "#574500",
+                "surface-bright": "#3a3939",
+                "outline-variant": "#4d4635",
+                "background": "#131313",
+                "tertiary-fixed-dim": "#c6c6c6",
+                "on-secondary": "#313030",
+                "surface-container": "#201f1f",
+                "on-primary-container": "#554300",
+                "surface-container-high": "#2a2a2a",
+                "tertiary-fixed": "#e2e2e2",
+                "surface-tint": "#e9c349",
+                "outline": "#99907c",
+                "on-tertiary-container": "#444546",
+                "surface-dim": "#131313",
+                "primary-container": "#d4af37",
+                "inverse-on-surface": "#313030",
+                "primary": "#f2ca50",
+                "on-error": "#690005",
+                "surface-container-lowest": "#0e0e0e",
+                "error-container": "#93000a",
+                "on-secondary-fixed-variant": "#474746",
+                "on-primary-fixed": "#241a00",
+                "secondary-container": "#474746",
+                "on-secondary-container": "#b7b5b4",
+                "on-secondary-fixed": "#1c1b1b"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
+              "spacing": {
+                "tour-card-width": "520px",
+                "container-padding": "64px",
+                "unit": "8px",
+                "gutter": "32px",
+                "touch-target-min": "56px"
+              },
+              "fontFamily": {
+                "body-intro": ["Manrope"],
+                "headline-lg": ["Playfair Display"],
+                "body-md": ["Manrope"],
+                "label-sm": ["Space Grotesk"],
+                "label-caps": ["Space Grotesk"],
+                "display-tour": ["Playfair Display"]
+              },
+              "fontSize": {
+                "body-intro": ["20px", {"lineHeight": "32px", "fontWeight": "400"}],
+                "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                "label-caps": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                "display-tour": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen selection:bg-primary-container selection:text-on-primary-container">
+<!-- Background Layer -->
+<div class="fixed inset-0 z-0">
+<div class="absolute inset-0 bg-black/40 z-10"></div>
+<img alt="Luxury lounge background" class="w-full h-full object-cover grayscale-[20%]" src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"/>
+</div>
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex items-center justify-between px-gutter h-20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">dashboard_customize</span>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">PRODUCTION EXPORT</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg hover:bg-primary-container/20 px-4 py-2 rounded-lg transition-colors" href="#">Consolidate</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg hover:bg-primary-container/20 px-4 py-2 rounded-lg transition-colors" href="#">Validate</a>
+<a class="text-primary font-bold text-label-lg font-label-lg hover:bg-primary-container/20 px-4 py-2 rounded-lg transition-colors" href="#">Ship</a>
+</nav>
+<button class="material-symbols-outlined text-primary p-2 hover:bg-primary-container/20 rounded-full transition-all active:scale-95">settings_suggest</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative z-20 h-full flex items-center justify-end px-container-padding pt-20 pb-32">
+<!-- Deployment Terminal Card -->
+<section class="w-tour-card-width obsidian-card glass-panel rounded-xl overflow-hidden shadow-[0_60px_80px_rgba(212,175,55,0.08)] flex flex-col transform transition-all duration-700 ease-out translate-y-0 opacity-100">
+<!-- Card Header & Progress -->
+<div class="p-8 space-y-6">
+<div class="flex justify-between items-end">
+<div>
+<span class="text-label-caps font-label-caps text-primary uppercase tracking-[0.2em] mb-2 block">Staging Environment</span>
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Export Protocol</h2>
+</div>
+<div class="text-right">
+<span class="text-display-tour font-display-tour text-primary-fixed-dim opacity-40">v3.0</span>
+</div>
+</div>
+<!-- Segmented Progress Bar -->
+<div class="space-y-4">
+<div class="flex justify-between text-label-sm font-label-sm">
+<span class="text-on-surface-variant">Global Sync Progress</span>
+<span class="text-primary">100%</span>
+</div>
+<div class="flex gap-1 h-1">
+<div class="flex-1 bg-primary-container h-full rounded-full"></div>
+<div class="flex-1 bg-primary-container h-full rounded-full"></div>
+<div class="flex-1 bg-primary-container h-full rounded-full"></div>
+<div class="flex-1 bg-primary-container h-full rounded-full"></div>
+<div class="flex-1 bg-primary-container h-full rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Task Checklist -->
+<div class="px-8 pb-4 space-y-4">
+<div class="flex items-center justify-between p-4 bg-surface-container-low/50 rounded-lg border border-primary/20 group hover:border-primary/40 transition-all cursor-default">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-body-md font-body-md">Consolidating 130+ Screens</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary/60">COMPLETED</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low/50 rounded-lg border border-primary/20 group hover:border-primary/40 transition-all cursor-default">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-body-md font-body-md">Mapping Obsidian Glass Tokens</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary/60">VALIDATED</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low/50 rounded-lg border border-primary/20 group hover:border-primary/40 transition-all cursor-default">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-body-md font-body-md">Verifying Novee OS Codex</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary/60">VERIFIED</span>
+</div>
+</div>
+<!-- File Manifest Preview -->
+<div class="px-8 py-6 border-t border-outline-variant/20 bg-black/20">
+<h3 class="text-label-caps font-label-caps text-on-surface-variant/70 mb-4">MANIFEST PREVIEW</h3>
+<div class="space-y-3 font-mono text-[13px]">
+<div class="flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">folder_open</span>
+<span>src/screens</span>
+</div>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">folder_special</span>
+<span>src/components</span>
+</div>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">settings_ethernet</span>
+<span>tailwind.config.js</span>
+</div>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="p-8 mt-auto">
+<button class="w-full h-touch-target-min gold-foil-texture rounded-full text-on-primary font-bold text-label-lg font-label-lg flex items-center justify-center gap-3 pulse-trigger transition-transform active:scale-95 group shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+<span>DEPLOYED TO PRODUCTION</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">rocket_launch</span>
+</button>
+<p class="text-center mt-4 text-label-sm font-label-sm text-on-surface-variant/50">Build synchronized • 1.2 GB Assets • Just now</p>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center px-4 pb-4 pt-2 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all active:transform active:translate-y-0.5 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all active:transform active:translate-y-0.5 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="save">save</span>
+<span class="text-label-sm font-label-sm">Save</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 transition-all active:transform active:translate-y-0.5 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-label-sm">Preview</span>
+</a>
+</nav>
+<!-- Decorative Spotlight Effect -->
+<div class="fixed top-0 right-0 w-[800px] h-[800px] bg-primary/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+<script>
+        // Micro-interactions for the terminal
+        document.querySelector('.gold-foil-texture').addEventListener('click', function() {
+            const btn = this;
+            btn.classList.add('scale-95');
+            setTimeout(() => {
+                btn.classList.remove('scale-95');
+                // Simulate success state feedback
+                const textSpan = btn.querySelector('span:nth-child(2)');
+                const originalText = textSpan.innerText;
+                textSpan.innerText = 'SUCCESSFULLY DEPLOYED';
+                setTimeout(() => { textSpan.innerText = originalText; }, 3000);
+            }, 150);
+        });
+
+        // Atmospheric shimmer follow
+        document.addEventListener('mousemove', (e) => {
+            const card = document.querySelector('.obsidian-card');
+            const x = (e.clientX / window.innerWidth - 0.5) * 8;
+            const y = (e.clientY / window.innerHeight - 0.5) * 8;
+            card.style.transform = `perspective(1000px) rotateX(${y}deg) rotateY(${-x}deg)`;
+        });
+    </script>
+</body></html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmokeCraft Master Blend Challenge</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .obsidian-glass {
+            background: rgba(14, 14, 15, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(154, 143, 128, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        .titanium-edge {
+            border: 1px solid rgba(154, 143, 128, 0.4);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .gold-foil-gradient {
+            background: linear-gradient(135deg, #ffdea5 0%, #e9c176 40%, #c5a059 70%, #775a19 100%);
+        }
+        .gold-text-gradient {
+            background: linear-gradient(135deg, #ffdea5 0%, #e9c176 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .leather-texture {
+            background-color: #131314;
+            background-image: url("https://www.transparenttextures.com/patterns/dark-leather.png");
+        }
+        .intensity-dial {
+            background: conic-gradient(from 180deg at 50% 50%, #c5a059 0deg, #1f1f20 280deg);
+            border-radius: 50%;
+            position: relative;
+        }
+        .intensity-dial::after {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            background: #131314;
+            border-radius: 50%;
+            border: 1px solid rgba(233, 193, 118, 0.2);
+        }
+        @keyframes subtle-glow {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(233, 193, 118, 0.2)); }
+            50% { filter: drop-shadow(0 0 20px rgba(233, 193, 118, 0.5)); }
+        }
+        .animate-glow {
+            animation: subtle-glow 5s ease-in-out infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#e9c176",
+                        "on-primary": "#412d00",
+                        "secondary": "#ffb95a",
+                        "surface": "#131314",
+                        "background": "#131314",
+                        "surface-container": "#1f1f20",
+                        "outline": "#9a8f80",
+                        "outline-variant": "#4e4639",
+                        "on-surface-variant": "#d1c5b4"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "margin": "64px",
+                        "unit": "8px",
+                        "card-padding": "24px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface leather-texture min-h-screen overflow-x-hidden font-body-md pb-32">
+<!-- Top AppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 obsidian-glass border-b border-outline-variant/30">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-white/5 p-2 rounded-full transition-colors" data-icon="menu">menu</span>
+<h1 class="font-headline-md text-2xl font-bold text-primary tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label-lg text-on-surface-variant hidden md:block">The Master Blend</span>
+<button class="gold-foil-gradient text-on-primary px-6 py-2 rounded-lg font-label-lg font-bold shadow-lg shadow-primary/20 transition-all active:scale-95">
+            Lounge Access
+        </button>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="pt-32 px-gutter max-w-lg mx-auto flex flex-col gap-8">
+<!-- Hero Section -->
+<div class="flex flex-col gap-2 text-center mb-4">
+<h2 class="font-display-lg text-5xl gold-text-gradient leading-tight">Master Blend Challenge</h2>
+<p class="font-body-md text-on-surface-variant px-4">Founder Level 0 Kiosk Standard: Balance heritage and innovation to secure your legacy.</p>
+</div>
+<!-- Selection Vertical Scroll Panels -->
+<div class="flex flex-col gap-6">
+<!-- Wrapper Selection Card -->
+<div class="obsidian-glass titanium-edge rounded-3xl p-6 flex flex-col gap-6 group transition-all hover:border-primary/50">
+<div class="relative w-full aspect-square rounded-2xl overflow-hidden border border-outline-variant/30">
+<img alt="Wrapper Leaf" class="w-full h-full object-cover grayscale-[0.2] contrast-125 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzOfb95ZxNCI7idU35PcHvauyiQCBODADpRZwCxcz-J2oivfIDv5HQqAe-IgaLTuxrFGGDcIWo3Mhh5HM3JMWwvCC2bmaKC-wF_93mVONxv38OJfodA4_DJsMLLeQL8rbUKb_Kgp5jYDGW1NvjDlCwQwMNPYC-t-a3fnGB_ZBLTvsFXl-Xi0ZwK6gsofgjsBHY2hCF-eVDSR1NAz6tz9u067OovvX7wRJ7BIw0QAttDe9HwWfQoSP7bcwgAYc8jnYEzLL-YF4iuPQ"/>
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="bg-surface/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase border border-primary/20">Chocolatey</span>
+<span class="bg-surface/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase border border-primary/20">Earthy</span>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-sm text-primary uppercase tracking-widest block mb-1">Wrapper</span>
+<h3 class="font-headline-md text-3xl text-on-surface font-bold">Broadleaf</h3>
+<p class="text-xs text-on-surface-variant font-medium mt-1">USA / CONNECTICUT RIVER VALLEY</p>
+</div>
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-outline text-lg" data-icon="star">star</span>
+</div>
+</div>
+</div>
+<!-- Binder Selection Card -->
+<div class="obsidian-glass titanium-edge rounded-3xl p-6 flex flex-col gap-6 group transition-all hover:border-primary/50">
+<div class="relative w-full aspect-square rounded-2xl overflow-hidden border border-outline-variant/30">
+<img alt="Binder Leaf" class="w-full h-full object-cover grayscale-[0.2] contrast-125 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1n83E4WBBKQTJvvZuVtJGdjQlQf-z_zDEjig7vUy84mpuLZtXGqTBlZ89-MnJ9wQ17XiCiN_LjOINuavewhil_F4Ftt0SDNHj1XKq-f_OgbscF7ywj34qVApUmahJITU6SXyUJooi4rWN9wm5hLDi70vm6bYHjHl7xL6BWtYJMH9BZR6E5B6nisglvnTtxKe0bNSfetqroyzzXWbOs5QgDxCdvdQyeItP-NXuGnmLT1ev30nyR2n6B1g1dK5cgycB67h5tz9aUvg"/>
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="bg-surface/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase border border-primary/20">Spicy</span>
+<span class="bg-surface/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase border border-primary/20">Sturdy</span>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-sm text-primary uppercase tracking-widest block mb-1">Binder</span>
+<h3 class="font-headline-md text-3xl text-on-surface font-bold">Criollo '98</h3>
+<p class="text-xs text-on-surface-variant font-medium mt-1">DOMINICAN REPUBLIC / JALAPA</p>
+</div>
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-outline text-lg" data-icon="star">star</span>
+<span class="material-symbols-outlined text-outline text-lg" data-icon="star">star</span>
+</div>
+</div>
+</div>
+<!-- Filler Selection Card -->
+<div class="obsidian-glass titanium-edge rounded-3xl p-6 flex flex-col gap-6 group transition-all hover:border-primary/50">
+<div class="relative w-full aspect-square rounded-2xl overflow-hidden border border-outline-variant/30">
+<img alt="Filler Leaf" class="w-full h-full object-cover grayscale-[0.2] contrast-125 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfZxQ-F_JfyYQWE0xbD8mt7EKO4N_Z_7QwhV4fUIO_FvCTFKtnTxBpq-pQcVtmXStllbtZ0xCVZvG6e6OCSqe8lEqy8bMaNXZRF2qgOOIwZQtZYapZMbMrcDBnNBcr-x7TUD2pYU4Vow6MMXAVrykgC6lqPr2tQ-oClDa_UQvIT9QS8XfgIIbK3kaR1iNdisEEQQidls22WPbMZUQmcglALf_FXiYzcnqJpsIHAVQ2nAs9jH2cT3ekoZP3XdV0pKGtO5peSROnF0U"/>
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="bg-surface/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase border border-primary/20">Bold</span>
+<span class="bg-surface/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase border border-primary/20">Robust</span>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-sm text-primary uppercase tracking-widest block mb-1">Filler</span>
+<h3 class="font-headline-md text-3xl text-on-surface font-bold">Ligero</h3>
+<p class="text-xs text-on-surface-variant font-medium mt-1">NICARAGUA / ESTELÍ RESERVE</p>
+</div>
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="star" data-weight="fill">star</span>
+</div>
+</div>
+</div>
+<!-- Intensity Gauge (Kiosk Watch Face Style) -->
+<div class="obsidian-glass titanium-edge rounded-3xl p-8 flex flex-col items-center gap-6">
+<h4 class="font-label-sm text-primary uppercase tracking-widest">Strength Profile</h4>
+<div class="w-48 h-48 intensity-dial flex items-center justify-center shadow-2xl relative">
+<div class="z-10 flex flex-col items-center">
+<span class="font-display-lg text-4xl text-primary font-bold">8.5</span>
+<span class="font-label-sm text-on-surface-variant opacity-60 uppercase">/ 10.0</span>
+</div>
+<!-- Dial Needle Placeholder -->
+<div class="absolute inset-4 rounded-full border border-primary/10"></div>
+</div>
+<div class="text-center">
+<p class="font-headline-md text-2xl text-on-surface font-bold">Full Bodied</p>
+<p class="text-on-surface-variant font-medium italic mt-1">Complex finish with a velvet mouthfeel.</p>
+</div>
+</div>
+<!-- Current Creation Card -->
+<div class="relative obsidian-glass titanium-edge rounded-3xl overflow-hidden group">
+<img alt="Current Creation" class="w-full h-80 object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbALwlKfRWZSIuiE3PB_KlEw9alwifZYPXPgyjhDKIJHU9oRAwcHje_8GhyWyOzOQJZir0BTLM3jFR6EwrbdzKW6_VZgb_g4PA9vaCOAOVmkksv2vko6i9dmYHdhn0zYuZ0iXMz8VXKFOH4t9lFsFRkl0v_l9pmFYQbS4VLaCJyhAkiA0Kjk4DAKbYULwIzmtMSjWYnhcFxbIDb0PvgO2uGZ8PtHhScu0t2lUivjPlevtbUhkPxfj50W7Iqm5lqElCMTQE6yCxDKo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20"></div>
+<div class="absolute top-4 left-4 right-4 flex justify-between items-center">
+<div class="bg-primary/20 backdrop-blur-md border border-primary/30 px-4 py-2 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="auto_awesome">auto_awesome</span>
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Live Evolution</span>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full obsidian-glass flex items-center justify-center text-on-surface transition-all active:scale-90 border border-white/10">
+<span class="material-symbols-outlined text-xl" data-icon="edit">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full obsidian-glass flex items-center justify-center text-on-surface transition-all active:scale-90 border border-white/10">
+<span class="material-symbols-outlined text-xl" data-icon="zoom_in">zoom_in</span>
+</button>
+</div>
+</div>
+<div class="absolute bottom-6 left-6 right-6">
+<span class="font-label-sm text-primary uppercase tracking-[0.3em] block mb-2">Current Creation</span>
+<h3 class="font-headline-lg text-3xl text-on-surface leading-tight">The Sterling Reserve No. 13</h3>
+</div>
+</div>
+<!-- Blend Analytics Section (E.A.T. Integration) -->
+<div class="obsidian-glass titanium-edge rounded-3xl p-8 flex flex-col gap-8">
+<div class="flex justify-between items-center border-b border-outline-variant/30 pb-4">
+<h4 class="font-headline-md text-xl gold-text-gradient font-bold tracking-tight">Blend Analytics</h4>
+<div class="text-right">
+<span class="block text-[10px] text-on-surface-variant uppercase tracking-widest">Overall E.A.T. Score</span>
+<span class="font-display-lg text-4xl text-primary font-bold">94</span>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<!-- Progress Bars -->
+<div class="space-y-2">
+<div class="flex justify-between font-label-sm text-on-surface-variant uppercase tracking-widest">
+<span>Balance</span>
+<span class="text-primary">88%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full gold-foil-gradient w-[88%] shadow-[0_0_8px_rgba(233,193,118,0.3)]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-label-sm text-on-surface-variant uppercase tracking-widest">
+<span>Flavor Harmony</span>
+<span class="text-primary">92%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full gold-foil-gradient w-[92%] shadow-[0_0_8px_rgba(233,193,118,0.3)]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-label-sm text-on-surface-variant uppercase tracking-widest">
+<span>Rarity</span>
+<span class="text-secondary">97%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[97%] shadow-[0_0_8px_rgba(255,185,90,0.3)]"></div>
+</div>
+</div>
+</div>
+<!-- Sommelier's Feedback -->
+<div class="mt-4 p-5 bg-surface-container/40 rounded-2xl border border-outline-variant/20 relative">
+<span class="material-symbols-outlined absolute -top-3 left-6 bg-surface px-2 text-primary" data-icon="format_quote">format_quote</span>
+<p class="text-on-surface-variant italic text-sm leading-relaxed">
+                    "The addition of the Connecticut Broadleaf provides a bold, chocolatey undertone that pairs exquisitely with the spicy Ligero core. A masterstroke in tactile blending."
+                </p>
+<div class="mt-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="smart_toy">smart_toy</span>
+</div>
+<span class="font-label-sm text-on-surface uppercase tracking-widest font-bold">AI Sommelier Mentor</span>
+</div>
+</div>
+</div>
+<!-- Tasting Notes (Master's Journal) -->
+<div class="obsidian-glass titanium-edge rounded-3xl p-8 border-l-4 border-l-primary/40">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="history_edu">history_edu</span>
+<h4 class="font-headline-md text-xl text-on-surface">Master's Journal</h4>
+</div>
+<ul class="space-y-4">
+<li class="flex items-start gap-4">
+<span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 shadow-[0_0_4px_rgba(233,193,118,0.8)]"></span>
+<span class="font-body-md text-on-surface-variant leading-tight">Nuances of Dark Cocoa and Rich Earth upon cold draw.</span>
+</li>
+<li class="flex items-start gap-4">
+<span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 shadow-[0_0_4px_rgba(233,193,118,0.8)]"></span>
+<span class="font-body-md text-on-surface-variant leading-tight">Lingering Black Peppercorn finish through the second third.</span>
+</li>
+<li class="flex items-start gap-4">
+<span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 shadow-[0_0_4px_rgba(233,193,118,0.8)]"></span>
+<span class="font-body-md text-on-surface-variant leading-tight">Cedar and Aged Leather aromatic profile for a legacy experience.</span>
+</li>
+</ul>
+</div>
+<!-- Completion Section -->
+<div class="flex flex-col items-center text-center gap-10 mt-8 mb-12">
+<div class="relative group">
+<div class="absolute inset-0 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all"></div>
+<div class="relative w-36 h-36 flex flex-col items-center justify-center rounded-full border-4 border-double border-primary/60 rotate-[-12deg] shadow-[inset_0_0_20px_rgba(233,193,118,0.2)] animate-glow">
+<span class="text-[10px] font-bold text-primary tracking-widest uppercase mb-1">Authentic</span>
+<span class="font-headline-md text-xl text-primary font-bold leading-none">MASTER</span>
+<span class="font-headline-md text-xl text-primary font-bold leading-none">BLEND</span>
+<span class="text-[10px] font-bold text-primary tracking-widest uppercase mt-1">2024</span>
+</div>
+</div>
+<div class="w-full space-y-4 px-4">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-[0.4em] block">Seal Your Selection</span>
+<button class="w-full h-[72px] gold-foil-gradient text-on-primary rounded-2xl font-headline-md text-xl font-bold shadow-[0_20px_40px_-10px_rgba(119,90,25,0.5)] transition-all active:scale-95 flex items-center justify-center gap-3">
+                    Submit Master Blend
+                    <span class="material-symbols-outlined" data-icon="lock">lock</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Premium BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 h-24 obsidian-glass border-t border-outline-variant/30 flex justify-around items-center px-6">
+<div class="flex flex-col items-center text-on-surface-variant gap-1 hover:text-primary cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="explore">explore</span>
+<span class="font-label-sm text-[10px] uppercase font-bold tracking-tighter">Explore</span>
+</div>
+<div class="flex flex-col items-center text-primary gap-1 cursor-pointer">
+<div class="bg-primary/10 px-6 py-2 rounded-2xl border border-primary/20 flex flex-col items-center">
+<span class="material-symbols-outlined text-2xl" data-icon="inventory_2" data-weight="fill">inventory_2</span>
+<span class="font-label-sm text-[10px] uppercase font-bold tracking-tighter">Inventory</span>
+</div>
+</div>
+<div class="flex flex-col items-center text-on-surface-variant gap-1 hover:text-primary cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-[10px] uppercase font-bold tracking-tighter">Passport</span>
+</div>
+<div class="flex flex-col items-center text-on-surface-variant gap-1 hover:text-primary cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-sm text-[10px] uppercase font-bold tracking-tighter">Assistant</span>
+</div>
+</nav>
+<script>
+    // Micro-interactions for the score and dial
+    const scoreElement = document.querySelector('.font-display-lg');
+    let score = 94;
+    
+    setInterval(() => {
+        const drift = Math.floor(Math.random() * 3) - 1; 
+        score = Math.min(Math.max(score + drift, 92), 98);
+        if(scoreElement) scoreElement.innerText = score;
+    }, 4000);
+
+    // Intersection observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.obsidian-glass').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+        observer.observe(el);
+    });
+</script>
+</body></html>

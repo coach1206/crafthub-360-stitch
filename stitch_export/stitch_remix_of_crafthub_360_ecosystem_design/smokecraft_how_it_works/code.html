@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmokeCraft Step 2: How It Works | CraftHub 360</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#e9c176",
+                    "inverse-primary": "#775a19",
+                    "surface-container-low": "#1b1b1c",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "surface-container-high": "#2a2a2b",
+                    "secondary": "#ffb95a",
+                    "surface-dim": "#131314",
+                    "on-tertiary": "#3c2d28",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-container": "#1f1f20",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-error-container": "#ffdad6",
+                    "on-error": "#690005",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#ffdea5",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "tertiary-container": "#b7a09a",
+                    "inverse-on-surface": "#303031",
+                    "on-surface": "#e5e2e3",
+                    "error-container": "#93000a",
+                    "on-secondary": "#462a00",
+                    "tertiary-fixed": "#f7ddd6",
+                    "outline-variant": "#4e4639",
+                    "on-surface-variant": "#d1c5b4",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-background": "#e5e2e3",
+                    "surface": "#131314",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface-container-highest": "#353436",
+                    "on-primary-fixed": "#261900",
+                    "background": "#131314",
+                    "primary": "#e9c176",
+                    "primary-container": "#c5a059",
+                    "outline": "#9a8f80",
+                    "on-secondary-container": "#3d2400",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "surface-bright": "#39393a",
+                    "tertiary": "#dac1bb",
+                    "surface-variant": "#353436",
+                    "on-tertiary-fixed": "#261814",
+                    "on-primary-container": "#4e3700",
+                    "on-primary": "#412d00",
+                    "secondary-container": "#c68315",
+                    "secondary-fixed": "#ffddb6",
+                    "on-tertiary-container": "#473733"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "gutter": "32px",
+                    "unit": "8px",
+                    "card-padding": "24px",
+                    "margin": "64px"
+            },
+            "fontFamily": {
+                    "body-md": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(31, 31, 32, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(233, 193, 118, 0.6);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-text {
+            background: linear-gradient(135deg, #e9c176 0%, #ffdea5 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-border-gradient {
+            border: 1px solid;
+            border-image-source: linear-gradient(135deg, #e9c176, #4e3700);
+            border-image-slice: 1;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-number {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #131314;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4e4639;
+            border-radius: 4px;
+        }
+        .mask-image-radial {
+            mask-image: radial-gradient(circle, black 0%, transparent 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl cursor-pointer hover:scale-110 transition-transform">menu</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="font-label-lg text-label-lg text-primary tracking-widest hover:opacity-80 transition-opacity" href="#">EXPLORE</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant tracking-widest hover:text-primary transition-colors" href="#">CELLAR</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant tracking-widest hover:text-primary transition-colors" href="#">LOUNGE</a>
+</nav>
+<button class="px-6 py-2 gold-border-gradient font-label-lg text-label-lg text-primary hover:bg-primary/10 transition-all uppercase tracking-widest">
+                Grand Lounge
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative pt-32 pb-40 px-gutter min-h-screen max-w-container-max-width mx-auto">
+<!-- Background Atmospheric Element -->
+<div class="fixed inset-0 pointer-events-none opacity-20 z-0 overflow-hidden">
+<img alt="atmospheric" class="w-full h-full object-cover grayscale" data-alt="A moody, high-contrast black and white photograph of wisps of cigar smoke curling elegantly against a deep black background. The lighting is low and dramatic, highlighting the intricate, ethereal textures of the smoke. The overall aesthetic is one of quiet luxury, mystery, and unhurried sophistication, mirroring a private member's lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgMU8mJFtm8_ikPv_yqlJ7-d4S92KgXAgl5_cU0l3ds4FKFiXbyeRAC3niIIay1wCfD3VwUah8qRH-ybZrzri0utWwhocc6BZqJBbJOUaflpzY537zIyscVUpHJNaE3_wmbBM9rzRyAS0C1gxtyd4z_VdZZtbmizQ4R7ja2vsjLP5pw2fKgxf8tSSOhoAL01lRWU_kZrcIuyh3hxkEuUTDtIp9esUDLG8twcExV6TqoU64FLOFB30ByH23mzV7asefFR6auE0vclg"/>
+</div>
+<!-- Hero Header -->
+<section class="relative z-10 text-center mb-24">
+<span class="font-label-lg text-label-lg text-primary tracking-[0.3em] uppercase mb-4 block">The Smokecraft Journey</span>
+<h2 class="font-display-lg text-display-lg gold-foil-text mb-6">How It Works</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+                Answer a few taste questions, choose your cigar mentors, build your blend, receive pairings, earn points, and unlock rewards.
+            </p>
+</section>
+<!-- Bento Step Grid -->
+<section class="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Step 1: Taste Profile -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col h-full group col-span-1 md:col-span-2 overflow-hidden">
+<div class="flex justify-between items-start mb-8">
+<span class="step-number text-6xl text-primary/20">01</span>
+<span class="material-symbols-outlined text-primary text-4xl">psychology</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Taste Profile</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Begin your odyssey by defining your sensory preferences through an artisanal tasting questionnaire.</p>
+</div>
+<div class="relative h-48 rounded-lg overflow-hidden border border-outline-variant/30">
+<img alt="taste profile" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A close-up photograph of a professional tasting kit including a crystal glass of dark whiskey, a wooden palette of dark chocolate, and roasted coffee beans. The scene is set on a dark walnut table with warm, golden spotlighting. The colors are rich ambers, deep browns, and burnished golds, evoking a sensory, high-end atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWYD03F08rgK3_dsD3TMqXwv4NV2Tq4vnbmUWnHJB5p7oXz3ons3uFC4oNuUkfauH7thJrdxNSLagks06bKJVBuv0sMHWTizyY_MMWiDdaNteG-AlEqu7qqcs0Z6tCvcxVSxQrKOoYZtWOBpBuyCqE-3CBy9_QhPl0pkWaxnauELZkRtiVknKBQbNIJsM4INhhRcQ5qPrM2Xw2S5jETron8CAVtZ1uzzVDygZ766wuy83chdR-MApi_Y9AtVskrefw2U0-VSD2MEw"/>
+</div>
+</div>
+<!-- Step 2: Mentor Selection -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col h-full group col-span-1">
+<div class="flex justify-between items-start mb-8">
+<span class="step-number text-6xl text-primary/20">02</span>
+<span class="material-symbols-outlined text-primary text-4xl">groups</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Mentor Selection</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Align with master blenders and heritage curators.</p>
+<div class="relative flex-grow rounded-lg overflow-hidden border border-outline-variant/30">
+<img alt="mentor" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A dignified portrait of an elderly master blender in a workshop filled with tobacco leaves. The lighting is soft and warm, highlighting the wisdom in his face and the tactile quality of his linen shirt. The aesthetic is heritage-focused, with a palette of warm sepia, deep cream, and rich tobacco browns." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC3zv_V7s9CAUf8Avqq_mS1PmUuzaihXXHHH60VddmtwvKgWjnbbGVrjPwORAPHhv5k7Fa6Gsx2g4BdZUVgSGlGpgA_wxrdtohani7a0L78LRUMl9lN_QKUAviPy-vPI7e7HMF4UGX9wsZ2dTP8Hk9w3oLaHv8p1u8DMkk31nRHIK6hddMRGaqXhqjfDuYQG7PWzDMbgbd0lProJIWFdrjEEJ2E_wmelCy3nvxqZ6Twfh_oKPC4_HUJ4PpR3wiy-ZENsIzTDOLoLM"/>
+</div>
+</div>
+<!-- Step 3: Seed and Soil -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col h-full group col-span-1">
+<div class="flex justify-between items-start mb-8">
+<span class="step-number text-6xl text-primary/20">03</span>
+<span class="material-symbols-outlined text-primary text-4xl">eco</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Seed and Soil</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Explore the terroir that shapes every puff.</p>
+<div class="relative flex-grow rounded-lg overflow-hidden border border-outline-variant/30">
+<img alt="soil" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="An artistic shot of rich, dark loam soil being cradled by sun-beaten hands, with a tiny tobacco seedling emerging. The background shows a lush, mist-covered valley at dawn. The colors are deep earthy greens, rich browns, and soft morning gold, emphasizing the organic origin of luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJb-CjNURsBDJv960F66C7SuMRlHBriCwr0RJvQOHIPgdIjnvDFw7ov4-L3kO7td4EUlSxppbpTgxKdgcsyG6p3bNn1nlif3CC9BsQQqxy01L8LQKb59833VQCW9IL7wYeA_fhcw-6xdQlU0Bn1Ix2Q_IJwQP1cnMhMr2wuIzsA1qmrs3Z-fy9Pysp73DnMPbvolNavqiq7TmHYUZmwHm8GxzXPMvqYyItOVjvb1oSZIixcviHyhoVKHD9oDiekpL1WVX-Gec1lPU"/>
+</div>
+</div>
+<!-- Step 4: Pair with Profile -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col h-full group col-span-1">
+<div class="flex justify-between items-start mb-8">
+<span class="step-number text-6xl text-primary/20">04</span>
+<span class="material-symbols-outlined text-primary text-4xl">wine_bar</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Pair with Profile</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Receive expert beverage and ambient pairings.</p>
+<div class="relative flex-grow rounded-lg overflow-hidden border border-outline-variant/30">
+<img alt="pairing" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A macro photograph of a crystal glass containing an amber liquid with a single large ice sphere, sitting next to a premium cigar in a silver rest. The lighting creates beautiful caustic patterns on a polished mahogany surface. The scene is elegant and intimate, with gold and copper highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeHNCiyX8EH82LyW5GUo5izFMdFKqTzm1S9imj_OSblkb1FFmbhfKBch8dBRghYHM0ObR-1AlDAaqhRRPLm6CGrNkRWuIc8hyhep1pqzOXXzev0GPWSKDKrlSrD17oDj3Tu7-AIbQziBtLQutoLc98qpclyZVmv42zfQCjy-CChk_P2teVvOcTNbKKZbaIrbTLznvB3CQswpgECOUpGTqXZvm4UH3Nl3h3hiX-jNPrUZywAawg6uX2KN5YINttneHQFAW2eozKgNY"/>
+</div>
+</div>
+<!-- Step 5: Master Blend -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col h-full group col-span-1 md:col-span-2">
+<div class="flex justify-between items-start mb-8">
+<span class="step-number text-6xl text-primary/20">05</span>
+<span class="material-symbols-outlined text-primary text-4xl">rebase_edit</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Master Blend</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Craft your signature cigar using a selection of aged leaves from our private vaults.</p>
+</div>
+<div class="relative h-48 rounded-lg overflow-hidden border border-outline-variant/30">
+<img alt="blend" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A cinematic top-down view of various textured tobacco leaves—ligero, seco, and volado—arranged neatly on a leather mat. A vintage brass scale and a wooden rolling tool are part of the composition. The lighting is focused and warm, highlighting the leaf textures and rich brown tones of the aged tobacco." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqq_UyCaFpqlM2WlEoJ11yJh_lUg6PbHZeNSaEomxh7IxKmy5osXOMnrDFdAd8payr-RpQQVAEt2ZnWY7Q-lAw74Yk2-gvs3Tun7AxkiegQ5UCSnOxpiYvwpMqy5c7KjGx9BTNR7pgkdOkSVxo2yGDDMW_k2U2eV0WBgwBd1eaNgFEccu4X4Fb954wEHIPdVQwBUDqoPSg8_TD1ehNt9uPgeI6FBEVwQBqd-iBWddFZq1mXj0vibx8t5bC0GQhSl1iC4cieKsPCnw"/>
+</div>
+</div>
+<!-- Step 6: Stamps and Rewards -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col h-full group col-span-1">
+<div class="flex justify-between items-start mb-8">
+<span class="step-number text-6xl text-primary/20">06</span>
+<span class="material-symbols-outlined text-primary text-4xl">military_tech</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Stamps &amp; Rewards</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Collect digital and physical stamps in your Passport.</p>
+<div class="relative flex-grow rounded-lg overflow-hidden border border-outline-variant/30 flex items-center justify-center bg-surface-container-highest/20">
+<span class="material-symbols-outlined text-8xl text-primary/40 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">approval</span>
+</div>
+</div>
+<!-- Step 7: Leaderboard -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col h-full group col-span-1">
+<div class="flex justify-between items-start mb-8">
+<span class="step-number text-6xl text-primary/20">07</span>
+<span class="material-symbols-outlined text-primary text-4xl">leaderboard</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Leaderboard</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Rise through the ranks of the global elite circle.</p>
+<div class="relative flex-grow rounded-lg overflow-hidden border border-outline-variant/30 bg-surface-container-highest/20 p-4">
+<div class="space-y-3">
+<div class="h-2 w-full bg-primary/20 rounded-full"></div>
+<div class="h-2 w-3/4 bg-primary/40 rounded-full"></div>
+<div class="h-2 w-1/2 bg-primary/10 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Step 8: Golden Box -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col h-full group col-span-1 md:col-span-2 border-primary/50">
+<div class="flex justify-between items-start mb-8">
+<span class="step-number text-6xl text-primary/40">08</span>
+<span class="material-symbols-outlined text-primary text-5xl" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-headline-md text-headline-md gold-foil-text mb-3">Unlock the Golden Box</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">The ultimate achievement. A curated humidor of your own Master Blends delivered to your door.</p>
+</div>
+<div class="relative h-64 rounded-lg overflow-hidden border border-primary/30 shadow-[0_0_30px_rgba(233,193,118,0.2)]">
+<img alt="golden box" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" data-alt="A luxurious, handcrafted cedar wood humidor box with gold-plated hinges and a polished finish. It is glowing from within with a soft, warm amber light. The box is set on a dark velvet surface in a dimly lit library. The overall feeling is one of prestige, reward, and exclusive discovery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfM6RGCZlLeBt6d_x5871k55ckBehR3B4HKG9qiv6yYLOfnI9AgmFS-GOfVKJA21GDw5sndT9Obl6ujwofml-EGpi1w6S0fKaDDQ0O0C0Mjd6cKtDqC_nMSGt5AI_xdGzya0mkh3hsVmrvLghqaPS85A15nfEmwJqRyqB_bQXAMeGJWbFh6_yckBNj77becSDw6MuHx5PdtMCVdrJhtVrDxeBOo5yyGTBJGvbUeIcr8WFRR57dTULGiqkXK2rEwvk5D6fKYNoej7A"/>
+</div>
+</div>
+</section>
+<!-- CTA Action -->
+<section class="mt-24 text-center">
+<button class="relative group px-12 py-5 overflow-hidden rounded-lg bg-primary text-on-primary font-label-lg text-label-lg tracking-widest uppercase transition-all hover:shadow-[0_0_40px_rgba(233,193,118,0.4)] active:scale-95">
+<span class="relative z-10">Start Your Journey</span>
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+</button>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">explore</span>
+<span class="font-label-sm text-label-sm mt-1">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">inventory_2</span>
+<span class="font-label-sm text-label-sm mt-1">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/20 rounded-full px-6 py-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-sm text-label-sm mt-1">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">auto_awesome</span>
+<span class="font-label-sm text-label-sm mt-1">Assistant</span>
+</div>
+</footer>
+<!-- Micro-interactions Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.glass-card');
+            
+            // Observer for scroll animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach((card, index) => {
+                card.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-700');
+                card.style.transitionDelay = `${index * 100}ms`;
+                observer.observe(card);
+            });
+
+            // Parallax effect for the hero image
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const heroImage = document.querySelector('.fixed.inset-0 img');
+                if (heroImage) {
+                    heroImage.style.transform = `translateY(${scrolled * 0.3}px)`;
+                }
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 Admin | Visual Assets</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#b7a09a",
+                    "surface-container": "#1f1f20",
+                    "surface-bright": "#39393a",
+                    "tertiary": "#dac1bb",
+                    "on-secondary-container": "#3d2400",
+                    "on-primary-container": "#4e3700",
+                    "inverse-primary": "#775a19",
+                    "error": "#ffb4ab",
+                    "surface": "#131314",
+                    "primary-fixed": "#ffdea5",
+                    "outline": "#9a8f80",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "inverse-on-surface": "#303031",
+                    "error-container": "#93000a",
+                    "primary": "#e9c176",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-tertiary-container": "#473733",
+                    "outline-variant": "#4e4639",
+                    "surface-variant": "#353436",
+                    "on-primary-fixed": "#261900",
+                    "background": "#131314",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-tertiary": "#3c2d28",
+                    "on-secondary": "#462a00",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "surface-dim": "#131314",
+                    "on-error-container": "#ffdad6",
+                    "surface-tint": "#e9c176",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "on-surface": "#e5e2e3",
+                    "surface-container-high": "#2a2a2b",
+                    "on-background": "#e5e2e3",
+                    "secondary": "#ffb95a",
+                    "surface-container-low": "#1b1b1c",
+                    "inverse-surface": "#e5e2e3",
+                    "on-tertiary-fixed": "#261814",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "surface-container-lowest": "#0e0e0f",
+                    "secondary-container": "#c68315",
+                    "surface-container-highest": "#353436",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-surface-variant": "#d1c5b4",
+                    "secondary-fixed": "#ffddb6",
+                    "on-primary": "#412d00",
+                    "primary-container": "#c5a059"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin": "64px",
+                    "gutter": "32px",
+                    "container-max-width": "1440px",
+                    "card-padding": "24px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .smoked-glass {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid #e9c176;
+        }
+        .amber-glow:focus-within {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.25);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #131314; }
+        ::-webkit-scrollbar-thumb { background: #4e4639; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen font-body-md overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full bg-surface/80 backdrop-blur-xl dark:bg-surface/80 z-50 border-b border-outline-variant/30 shadow-sm flex items-center justify-between px-gutter h-20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="dashboard_customize">dashboard_customize</span>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-primary font-bold text-label-lg font-label-lg transition-colors" href="#">Visual Assets</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-2 rounded-lg" href="#">Users</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-2 rounded-lg" href="#">Analytics</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary p-2 hover:bg-primary-container/20 rounded-full transition-colors" data-icon="settings_suggest">settings_suggest</button>
+<div class="w-10 h-10 rounded-full bg-primary-container border border-primary/30 overflow-hidden">
+<img alt="Admin Avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4TRpLzwTEJA-qaDHC2a5iUbUqknfepbWdzBlfU_OqP53o7DfFKIT0K9v-C84CiTEMQ96WdaiU0SgJalIoQfNEH_pyxbA1LchVZO4WmcLE1tCXkfJkP17AuZ1cSIkxedt4WUhK9NpNHK1TRumZYtr35JbZ8zJG0hM8oVHE-ZBS_Qjz3xdxkeobp0NDfPEuEAECh-G9vELy9mttyDGuQzUC_LHOTUSkTusX59blTHzQSPci2IEOF5j1wfxGv84QMtcnAOhPV2h7Ypc"/>
+</div>
+</div>
+</header>
+<main class="pt-28 pb-32 px-gutter max-w-container-max-width mx-auto">
+<div class="flex flex-col gap-12">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="text-headline-xl font-headline-xl text-primary">Branding &amp; Visual Assets</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl mt-2">Curate the aesthetic soul of your establishment. Manage the visual signatures that define the guest experience across the 360 ecosystem.</p>
+</div>
+<div class="flex gap-4">
+<button class="px-8 py-3 rounded-lg border border-primary text-primary font-label-lg text-label-lg hover:bg-primary/10 transition-all uppercase tracking-widest">Discard</button>
+<button class="px-8 py-3 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg hover:shadow-[0_0_20px_rgba(233,193,118,0.4)] transition-all uppercase tracking-widest font-bold">Save Changes</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Asset Editors -->
+<div class="lg:col-span-7 flex flex-col gap-8">
+<!-- Core Identity Section -->
+<section class="smoked-glass p-8 rounded-xl flex flex-col gap-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="identity_platform">identity_platform</span>
+<h3 class="text-headline-md font-headline-md text-primary">Core Identity</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Venue Logo</label>
+<div class="h-40 rounded-lg border-2 border-dashed border-outline-variant flex flex-col items-center justify-center gap-3 bg-surface-container-low hover:border-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-4xl text-outline group-hover:text-primary" data-icon="upload_file">upload_file</span>
+<span class="text-label-sm font-label-sm text-outline-variant">PNG or SVG (Max 5MB)</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-lg font-label-lg text-on-surface-variant">360 Passport Cover Seal</label>
+<div class="h-40 rounded-lg border-2 border-dashed border-outline-variant flex flex-col items-center justify-center gap-3 bg-surface-container-low hover:border-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-4xl text-outline group-hover:text-primary" data-icon="verified">verified</span>
+<span class="text-label-sm font-label-sm text-outline-variant">Embossed Gold (600x600px)</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Welcome Message</label>
+<textarea class="bg-surface-container border-b border-outline-variant focus:border-primary focus:ring-0 text-body-md font-body-md p-4 min-h-[100px] outline-none" placeholder="Welcome to the Inner Circle. Tonight, we celebrate the fine art of leisure..."></textarea>
+</div>
+</section>
+<!-- Module Hero Banners (Bento Grid Style) -->
+<section class="flex flex-col gap-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="wallpaper">wallpaper</span>
+<h3 class="text-headline-md font-headline-md text-primary">Experience Backgrounds</h3>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- SmokeCraft -->
+<div class="relative group h-64 rounded-xl overflow-hidden cursor-pointer shadow-lg border border-outline-variant/30">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="A high-resolution, atmospheric close-up of a premium hand-rolled cigar resting on a dark, polished mahogany table beside a crystal whiskey glass. The lighting is cinematic and moody, with warm amber glows reflecting off the glass and table surface. The background is a soft-focus, sophisticated lounge interior with deep shadows, creating a luxurious and tactile tactile-glassmorphic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP0uNoJtBXdAtB2Tn8bnZEa5YN4yXGpiGlU59rbmM18_FTDbmpgNNavB_LQ-Ol-vFAE0xL9g061V4AR3w5xMRKjRITtLqLQffYrH2CwT2iSGdwh8BHNxPTz3m47LnvQirBNvRqaiKOVDVq_8kWj92WXhd0o8W0SFTTNUt27tNUbNsYACAVEk-4Ibk44u2HA3N244dA9Yp8Z9zt0xpCnUO9TAQIQ1E5gn1we6ZoO_gflqJ_T7D1cWNHaHOPgINlG6MRpuH0TczfKE0"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex flex-col justify-end p-6">
+<span class="text-label-lg font-label-lg text-primary uppercase tracking-widest">SmokeCraft</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+<span class="text-label-sm font-label-sm text-on-surface/80">Change Module Background</span>
+</div>
+</div>
+</div>
+<!-- PourCraft -->
+<div class="relative group h-64 rounded-xl overflow-hidden cursor-pointer shadow-lg border border-outline-variant/30">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="A cinematic macro photograph of a perfectly prepared Old Fashioned cocktail being stirred with a silver bar spoon. Crystal-clear ice cubes and a bright orange peel garnish catch the warm, low-key lighting in a high-end members-only bar. The deep espresso and mahogany tones are accented by golden liquid highlights, embodying a sense of unhurried sophistication and tactile luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhRATviac5e4jEH_EwEHjEy4usDeNwVYTLNKe59YJSXfFQJ5x8YfkjMn2a4uS78Y5WzUL4PwDXYlr3_iYdQAXIqhTZLx7nhspETcVbFgL6oAT-zHT7WHgQITA7ney5QC8Ooj5Pm4n8EakwiWF6g-0hQehyZZ4aG3_o5YSxXnOVuaisnGWNoHl3qwnxfSk5scI4UXx9WXRHJ1x72FtjLOMTn5T3k0UDhjejrVOejuuTI8uO8irLFLgIPbfHHVfT_QxQg3JseUW-gG4"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex flex-col justify-end p-6">
+<span class="text-label-lg font-label-lg text-primary uppercase tracking-widest">PourCraft</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+<span class="text-label-sm font-label-sm text-on-surface/80">Change Module Background</span>
+</div>
+</div>
+</div>
+<!-- Event Hero -->
+<div class="col-span-2 relative group h-48 rounded-xl overflow-hidden cursor-pointer shadow-lg border border-outline-variant/30">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="An expansive wide-angle view of a sophisticated evening gala event held in a historic library or grand wood-paneled ballroom. Warm, candle-lit tables are filled with elegant guests in black-tie attire. The air is filled with a soft golden haze and bokeh light effects from crystal chandeliers. The mood is exclusive, prestigious, and timeless, maintaining a rich palette of deep browns, golds, and blacks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVAbFP-yoD6Dm7Y0VRdKV9MnoFhoie0ZQQcqeBBbZLI3wxeF7gfEgIzCPP3HtuQzAzLakIhq3AsydxwOGuOODk2aZTn-IQGVYtlpsSCrvrBKVxPXBRZNSTPjtiwyD3TlFINMhA8MXLws94eqUSINua_6Bnpz5ixNnaAiWsnvQosqUJaEx6zuFg1hlHRd6Axv43JefSQENovs-vNbdbGnylVnBdBtYqBfyMhkAF6rOnAMDtavKCjSn_-Su6QZ4wdOQrlXWt9Aqm32Q"/>
+<div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-4xl text-primary mb-2" data-icon="event">event</span>
+<span class="text-headline-md font-headline-md text-on-surface">Main Event Hero Banner</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant mt-1">1920x600px Optimal Resolution</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Themes & Messaging -->
+<section class="smoked-glass p-8 rounded-xl flex flex-col gap-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="palette">palette</span>
+<h3 class="text-headline-md font-headline-md text-primary">Global Style &amp; Footer</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="flex flex-col gap-4">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Primary Accent Color</label>
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-primary border-2 border-white/20 shadow-lg cursor-pointer"></div>
+<input class="bg-surface-container border-b border-outline-variant focus:border-primary focus:ring-0 text-body-md font-body-md flex-1 outline-none" type="text" value="#E9C176"/>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Secondary Accent</label>
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-secondary border-2 border-white/20 shadow-lg cursor-pointer"></div>
+<input class="bg-surface-container border-b border-outline-variant focus:border-primary focus:ring-0 text-body-md font-body-md flex-1 outline-none" type="text" value="#FFB95A"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Footer Legal &amp; Contact Text</label>
+<textarea class="bg-surface-container border-b border-outline-variant focus:border-primary focus:ring-0 text-body-md font-body-md p-4 min-h-[80px] outline-none" placeholder="© 2024 CraftHub 360. Member-only access. Drink responsibly."></textarea>
+</div>
+</section>
+<!-- Sponsor Logos -->
+<section class="smoked-glass p-8 rounded-xl flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="loyalty">loyalty</span>
+<h3 class="text-headline-md font-headline-md text-primary">Sponsor Logos</h3>
+</div>
+<button class="text-primary text-label-lg font-label-lg hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span> Add Sponsor
+                            </button>
+</div>
+<div class="flex flex-wrap gap-4">
+<div class="px-6 py-4 bg-surface-container rounded-lg border border-outline-variant/30 flex items-center gap-4 group">
+<span class="text-on-surface font-bold">ROLEX</span>
+<button class="material-symbols-outlined text-error opacity-0 group-hover:opacity-100 transition-opacity" data-icon="delete">delete</button>
+</div>
+<div class="px-6 py-4 bg-surface-container rounded-lg border border-outline-variant/30 flex items-center gap-4 group">
+<span class="text-on-surface font-bold">PATEK</span>
+<button class="material-symbols-outlined text-error opacity-0 group-hover:opacity-100 transition-opacity" data-icon="delete">delete</button>
+</div>
+<div class="px-6 py-4 bg-surface-container rounded-lg border border-outline-variant/30 flex items-center gap-4 group">
+<span class="text-on-surface font-bold">MACALLAN</span>
+<button class="material-symbols-outlined text-error opacity-0 group-hover:opacity-100 transition-opacity" data-icon="delete">delete</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Live Preview & Status -->
+<div class="lg:col-span-5">
+<div class="sticky top-28 flex flex-col gap-8">
+<!-- Live Preview Component -->
+<div class="smoked-glass rounded-xl overflow-hidden shadow-2xl border border-primary/20">
+<div class="bg-primary/10 px-6 py-3 border-b border-primary/20 flex items-center justify-between">
+<span class="text-label-lg font-label-lg text-primary tracking-widest uppercase">Live Mobile Preview</span>
+<div class="flex gap-1">
+<div class="w-2 h-2 rounded-full bg-error"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+</div>
+<div class="p-4 bg-black aspect-[9/16] relative overflow-hidden">
+<!-- Mock Guest Screen -->
+<div class="absolute inset-0 opacity-40">
+<img class="w-full h-full object-cover" data-alt="High-end gala event banner background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBngo08KHttHqotk4L83g6lBs6YwyCbLECEmavuekeYM8d86F5jjP-dl9TUcpJKaWRJvuZfQNZ_fDYXgxYyTwxkRyn7t6bZBd9VAYT7NB5v0sDN-UWcyoZhA03k5c6Om7fMcBvLvKQomqRufzPuy8tUX-bBgknrFS5ptkl4yW1i38WBBFGmXbYymDN1f3SkUlqD9jM396FW8lO-s1j6qcgnTJkaxVvk_JRd3MEVcIdJolhyWEK8B78rP3wMOKgqZjqGx-AuSviy0AM"/>
+</div>
+<div class="relative h-full flex flex-col items-center pt-12 px-8">
+<div class="w-24 h-24 rounded-full bg-surface shadow-xl flex items-center justify-center border border-primary/40 mb-8 overflow-hidden">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="stars">stars</span>
+</div>
+<h4 class="text-headline-md font-headline-md text-center text-on-surface leading-tight">CHATEAU ROUGE PREMIERE</h4>
+<div class="w-12 h-[1px] bg-primary my-6"></div>
+<p class="text-label-sm font-label-sm text-on-surface-variant text-center leading-relaxed">Experience the finest selection of vintage spirits and rare hand-rolled leaves in our exclusive member cellar.</p>
+<div class="mt-auto w-full flex flex-col gap-3 pb-12">
+<div class="w-full py-3 bg-primary text-on-primary text-center font-bold text-label-lg rounded">ENTER LOUNGE</div>
+<div class="w-full py-3 border border-primary text-primary text-center font-bold text-label-lg rounded">VIEW PASSPORT</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Asset Health / Status -->
+<div class="smoked-glass p-6 rounded-xl flex flex-col gap-4">
+<h4 class="text-label-lg font-label-lg text-primary uppercase">Asset Health Check</h4>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-body-md font-body-md text-on-surface-variant">Image Optimization</span>
+<span class="text-primary font-bold">94%</span>
+</div>
+<div class="w-full h-1 bg-surface-container rounded-full">
+<div class="h-full bg-primary rounded-full" style="width: 94%"></div>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface/60 mt-2">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="check_circle">check_circle</span>
+                                    All hero assets are high-resolution.
+                                </div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface/60">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="warning">warning</span>
+                                    Venue logo missing vector format (SVG).
+                                </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/90 backdrop-blur-2xl dark:bg-surface-container-high/90 border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center px-4 pb-4 pt-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 transform translate-y-0.5 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="save">save</span>
+<span class="text-label-sm font-label-sm">Save</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-label-sm">Preview</span>
+</a>
+</footer>
+<script>
+        // Micro-interactions for asset cards
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simple preview switch (mobile/desktop logic)
+        function togglePreview() {
+            // Logic for switching preview frame would go here
+        }
+    </script>
+</body></html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 | SmokeCraft Mentor Selection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Load Tailwind Config -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-low": "#1b1b1c",
+            "on-secondary": "#462a00",
+            "on-error-container": "#ffdad6",
+            "on-primary-fixed": "#261900",
+            "inverse-on-surface": "#303031",
+            "on-surface-variant": "#d1c5b4",
+            "on-tertiary-fixed-variant": "#54433e",
+            "primary-fixed": "#ffdea5",
+            "on-error": "#690005",
+            "on-background": "#e5e2e3",
+            "primary": "#e9c176",
+            "on-primary": "#412d00",
+            "surface-variant": "#353436",
+            "inverse-surface": "#e5e2e3",
+            "surface-container-lowest": "#0e0e0f",
+            "surface-bright": "#39393a",
+            "primary-fixed-dim": "#e9c176",
+            "secondary": "#ffb95a",
+            "surface-tint": "#e9c176",
+            "primary-container": "#c5a059",
+            "tertiary-fixed": "#f7ddd6",
+            "surface-container-high": "#2a2a2b",
+            "secondary-fixed": "#ffddb6",
+            "inverse-primary": "#775a19",
+            "on-primary-container": "#4e3700",
+            "on-secondary-fixed-variant": "#643f00",
+            "outline-variant": "#4e4639",
+            "on-secondary-container": "#3d2400",
+            "secondary-fixed-dim": "#ffb95a",
+            "outline": "#9a8f80",
+            "surface-container": "#1f1f20",
+            "on-tertiary": "#3c2d28",
+            "error": "#ffb4ab",
+            "surface": "#131314",
+            "surface-container-highest": "#353436",
+            "error-container": "#93000a",
+            "on-primary-fixed-variant": "#5d4201",
+            "tertiary-fixed-dim": "#dac1bb",
+            "tertiary-container": "#b7a09a",
+            "on-tertiary-fixed": "#261814",
+            "background": "#131314",
+            "tertiary": "#dac1bb",
+            "on-secondary-fixed": "#2a1800",
+            "on-surface": "#e5e2e3",
+            "secondary-container": "#c68315",
+            "surface-dim": "#131314",
+            "on-tertiary-container": "#473733"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "card-padding": "24px",
+            "gutter": "32px",
+            "unit": "8px",
+            "margin": "64px",
+            "container-max-width": "1440px"
+          },
+          "fontFamily": {
+            "label-sm": ["Montserrat"],
+            "headline-md": ["Playfair Display"],
+            "label-lg": ["Montserrat"],
+            "body-lg": ["Montserrat"],
+            "body-md": ["Montserrat"],
+            "headline-lg": ["Playfair Display"],
+            "headline-xl": ["Playfair Display"],
+            "display-lg": ["Playfair Display"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    .glass-card {
+      background: rgba(31, 31, 32, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .gold-border {
+      border: 1px solid rgba(233, 193, 118, 0.3);
+    }
+    .gold-foil {
+      background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .mentor-image-mask {
+      mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    }
+    .stamp-inner {
+      background-image: radial-gradient(circle at center, transparent 65%, #e9c176 66%, #e9c176 68%, transparent 69%);
+      background-size: 8px 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #131314;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #4e4639;
+      border-radius: 10px;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary selection:text-on-primary min-h-screen">
+<!-- TopAppBar: Derived from JSON -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-card-padding h-20 border-b border-outline-variant bg-surface/90 backdrop-blur-xl shadow-md">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 duration-200" data-icon="menu">menu</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary drop-shadow-[0_2px_2px_rgba(233,193,118,0.5)]">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label-lg text-label-lg text-on-surface-variant tracking-widest uppercase opacity-70">Step 6 of 12</span>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-lg text-label-lg shadow-lg hover:brightness-110 transition-all active:scale-95">Grand Lounge</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="pt-32 pb-40 px-gutter max-w-container-max-width mx-auto">
+<!-- Hero Section -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-margin items-end">
+<div class="md:col-span-7">
+<h2 class="font-display-lg text-display-lg mb-4 leading-tight">SmokeCraft <br/><span class="gold-foil">Mentor Selection</span></h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+          The mastery of tobacco is a lineage of fire and soil. Select two mentors from the world's most prestigious growing regions to curate your personalized tasting journey and masterclass curriculum.
+        </p>
+</div>
+<div class="md:col-span-5 flex justify-end">
+<!-- Participation Stamp Preview -->
+<div class="relative w-48 h-48 flex items-center justify-center">
+<div class="absolute inset-0 border-4 border-dashed border-primary/20 rounded-full animate-[spin_20s_linear_infinite]"></div>
+<div class="w-40 h-40 rounded-full border-2 border-primary p-1 bg-surface-container shadow-[0_0_30px_rgba(233,193,118,0.2)]">
+<div class="w-full h-full rounded-full border border-primary/40 flex flex-col items-center justify-center text-center p-4">
+<span class="material-symbols-outlined text-primary text-4xl mb-1" data-icon="verified">verified</span>
+<span class="font-label-sm text-label-sm text-primary uppercase leading-tight">Mentor Participation<br/>Stamp</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2 opacity-50">Preview Mode</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mentor Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Mentor Card 1: Dominican Republic -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden gold-border hover:shadow-[0_0_40px_rgba(233,193,118,0.15)] transition-all duration-500 cursor-pointer mentor-card" onclick="toggleMentor(this)">
+<div class="absolute top-4 right-4 z-20">
+<div class="selection-indicator w-8 h-8 rounded-full border-2 border-outline flex items-center justify-center text-transparent group-[.selected]:text-primary group-[.selected]:border-primary transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+</div>
+<div class="h-80 relative">
+<img class="w-full h-full object-cover mentor-image-mask grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="A portrait of a weathered, dignified Dominican cigar master in his 60s, wearing a white linen guayabera and a fedora, standing in a golden-hour tobacco field in Santiago. The lighting is warm and cinematic, emphasizing textures of aged skin and tobacco leaves. The background is a lush green landscape of rolling hills and curing barns under a hazy, sunset sky. The atmosphere is sophisticated and rich with heritage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW0kKp2a_4GazxkwcITfOrEAllIhzdB5Y94YI3GOF4UY_h5x3WXU2pbG40AbZ6ihlpZtaj4UtlO3jZZa3RG7zxsThDh7FmhduBj24ZARTD5K1R7U8MLRDXOnONMqyfI2KIeMMdHkMpT8935igPG_sxJb8OJRHjuKGDLwPzGN19Kt8ZfwQ69SFlzvaxfS-a9dbIpMP6nYSLM-rsa-YkNC1nuvScNfx71c8wnLnyTkUBvOK-hxauZz5t5no9zgFaKX07ODHEsIS-as4"/>
+<div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-surface to-transparent">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] mb-1 block">Dominican Republic</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Don Alejandro</h3>
+</div>
+</div>
+<div class="p-6 pt-0 space-y-4">
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Master of volcanic soil nutrients and the delicate art of Olor wrapper fermentation.</p>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] uppercase font-bold text-outline">Complexity</span>
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] uppercase font-bold text-outline">Floral Notes</span>
+</div>
+</div>
+</div>
+<!-- Mentor Card 2: Nicaragua -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden gold-border hover:shadow-[0_0_40px_rgba(233,193,118,0.15)] transition-all duration-500 cursor-pointer mentor-card" onclick="toggleMentor(this)">
+<div class="absolute top-4 right-4 z-20">
+<div class="selection-indicator w-8 h-8 rounded-full border-2 border-outline flex items-center justify-center text-transparent group-[.selected]:text-primary group-[.selected]:border-primary transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+</div>
+<div class="h-80 relative">
+<img class="w-full h-full object-cover mentor-image-mask grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="A macro close-up of dark, oily Nicaraguan tobacco leaves being inspected by strong, weathered hands. The scene is set inside a dark, rustic wooden curing barn in Estelí, with shafts of light cutting through smoke and dust. The lighting is dramatic and moody, highlighting the rich umber and espresso tones of the fermenting tobacco. The aesthetic is tactile and high-end, focusing on the sensory quality of the material." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzBPCTkkOTqC2zVjLURPTau1pgZIFLC5Co6Y0y-jLHTi3MPuPrcBjDTt0wv45iGgQO1r45o_qnlU6lhp7knFWyi9IbZdaNHSCEUCE9M7cTmVXenKhOnVtMBo4CcP12_nkaUl8Xi3d_E0-CLrlrb8x7OTohO40ZTh80kNnvB_k0ZLieO6i5oQbfWkXaferMudU-whcjP3lV-bd6ZwWDcz3bVcC5SmoiTg9Lh863jYjA4vSWFOdvZXkuJ9qi7DkgSLYyk8W-V9T1V4c"/>
+<div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-surface to-transparent">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] mb-1 block">Nicaragua</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Javier Estelí</h3>
+</div>
+</div>
+<div class="p-6 pt-0 space-y-4">
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Specialist in sun-grown Criollo '98 and the robust spice profiles of Jalapa Valley.</p>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] uppercase font-bold text-outline">Bold</span>
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] uppercase font-bold text-outline">Earth / Spice</span>
+</div>
+</div>
+</div>
+<!-- Mentor Card 3: Honduras -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden gold-border hover:shadow-[0_0_40px_rgba(233,118,118,0.15)] transition-all duration-500 cursor-pointer mentor-card" onclick="toggleMentor(this)">
+<div class="absolute top-4 right-4 z-20">
+<div class="selection-indicator w-8 h-8 rounded-full border-2 border-outline flex items-center justify-center text-transparent group-[.selected]:text-primary group-[.selected]:border-primary transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+</div>
+<div class="h-80 relative">
+<img class="w-full h-full object-cover mentor-image-mask grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="A portrait of a woman in her 50s, a master blender in Honduras, standing before a wall of aging cedar drawers. She holds a single unlit cigar, her expression one of quiet intensity. The setting is a private humidor room with dark wood panels and soft amber lighting. The colors are dominated by warm browns, golds, and deep mahogany, creating an atmosphere of exclusive luxury and quiet sophistication." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPtp4Y9j-CA6V2A2YUzioHki9r4HgYAXpga25qi9M1COUPn-mESIwesmKG0oI1E6h2va2KG9i2KujziGRyVXJcsACvoLXVtwp-FjXh_vZcGVZaIQs_fyC5Jz9dVH9liVvvuWVAKMoycLpyvukC9824JvSdMKn6zZRZBUs7asdrOGdsLoVEguXkh9FjXAyhwuX3EAC311hlF-IFrr7DDbm8mXSqzWdf456BB2x8YTJH5-TiHWqLKN1JQAV65ylwgaoAIF8IfBY049s"/>
+<div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-surface to-transparent">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] mb-1 block">Honduras</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Elena Jamastran</h3>
+</div>
+</div>
+<div class="p-6 pt-0 space-y-4">
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Legacy grower of authentic Corojo seed and the intense, full-bodied traditions of Danlí.</p>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] uppercase font-bold text-outline">Authentic</span>
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] uppercase font-bold text-outline">Rich Cedar</span>
+</div>
+</div>
+</div>
+<!-- Mentor Card 4: Mexico -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden gold-border hover:shadow-[0_0_40px_rgba(233,193,118,0.15)] transition-all duration-500 cursor-pointer mentor-card" onclick="toggleMentor(this)">
+<div class="absolute top-4 right-4 z-20">
+<div class="selection-indicator w-8 h-8 rounded-full border-2 border-outline flex items-center justify-center text-transparent group-[.selected]:text-primary group-[.selected]:border-primary transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+</div>
+<div class="h-80 relative">
+<img class="w-full h-full object-cover mentor-image-mask grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="A foggy morning landscape in San Andrés, Mexico, with low-hanging clouds over dark volcanic soil tobacco fields. A figure in the distance walks between rows of broadleaf tobacco. The palette is muted with deep greens, charcoal grays, and misty whites. The lighting is soft and diffused, creating a mysterious and serene mood. The visual style is cinematic and high-resolution, emphasizing the scale and environmental character of the region." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRshyXQNX_PtXBeEOJebDZFDGsJZ5uA2dzNwMLRsCFEHxT1dxYrfE5P0XDhj6_lw-OlVzTLz8oucgpbQUqYWCyOe__QJfEViUfjY24ntUQaYfqyZnKLPkSBlh6yVIspYyuh9MjP__1IumCEggADaqIzmMfDG3grDYXSqi0Oa6WXnvKK35jmG__D7M7KHVIjwuFaIuMUzNtccxbgr8VUF_FKJN3iLKUzdgs8U0qcuMjvQtLwAgBIoJ4CY_2rdjXUUUrWyfwMQ-CrLg"/>
+<div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-surface to-transparent">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] mb-1 block">Mexico</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Mateo San Andrés</h3>
+</div>
+</div>
+<div class="p-6 pt-0 space-y-4">
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Guardian of the Negro San Andrés leaf, the world's most sought-after Maduro wrapper.</p>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] uppercase font-bold text-outline">Dark Cocoa</span>
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] uppercase font-bold text-outline">Maduro Expert</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Additional Regions Selection (Secondary Row) -->
+<div class="mt-margin">
+<h4 class="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-8 border-b border-outline-variant pb-4">Specialty Terroir Regions</h4>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Brazil -->
+<div class="flex items-center p-6 bg-surface-container-high/40 rounded-xl gold-border hover:bg-surface-container-high transition-all cursor-pointer group mentor-card" onclick="toggleMentor(this)">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="A lush Brazilian Mata Fina tobacco field at dawn, vibrant greens and deep shadows, very detailed textures of leaves with dew drops. Macro photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA96E-i-V5iTX1UcpiMqbc_VWvmkAzNT6IXZTWyHrnST3_e-F48lk4dZcQt6tnY3-FS8SRN9eitwotUIR2p0CbKKivcTEKxmGgznzCNEX3KLcYGf38oD4XGmclAy2Q4jDvglWAW0T574-61oF2onZkUfmc4FquVGHheV_lYKdEPyv8LeMGLGcNlQmQZiN-rDd2yoYLL1XGs80WOuOsHnwif63374-0j713oPLTw3MQ2Ff7QNQzXtmmTZ3UtN0wJI9yGD0ubbxwDk4g"/>
+</div>
+<div class="ml-4 flex-grow">
+<h5 class="font-headline-md text-[18px] text-on-surface">Brazil (Mata Fina)</h5>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Sweet &amp; Earthy Profiles</p>
+</div>
+<div class="selection-indicator-sm w-6 h-6 rounded-full border border-outline flex items-center justify-center text-transparent group-[.selected]:bg-primary group-[.selected]:text-on-primary group-[.selected]:border-primary transition-all">
+<span class="material-symbols-outlined text-[14px]" data-icon="done">done</span>
+</div>
+</div>
+<!-- Ecuador -->
+<div class="flex items-center p-6 bg-surface-container-high/40 rounded-xl gold-border hover:bg-surface-container-high transition-all cursor-pointer group mentor-card" onclick="toggleMentor(this)">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Ecuadorian cloud-grown tobacco leaves being sun-dried under a soft hazy sky. Creamy and golden tones, professional food-style photography of raw ingredients." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDinqiRd53IenZj6Dg4uDGjKf7GNFR89-xAI4t2-68wH-BtJVVKUsZMoTibHD5nB2uI61lEqWTKBzcx6fUO83UUDbqCLxufZvXkYwXkxnOvzLpFpOCdbPr3M95R49mvK2G6Wm2V-erAzikJa6EXqtaeZ4RT1Tjq9ANJsNobQ4TZRDYIwxX1xdFGkGHk0QSyvjOIAzrMG8ia4rPhXcUczk9X_nbwCvyVETSYlkbNZdC-KqHYQhoIteDqdb9tGkwvNhs1IeNtBh2Q4Y"/>
+</div>
+<div class="ml-4 flex-grow">
+<h5 class="font-headline-md text-[18px] text-on-surface">Ecuador (Habano)</h5>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Silky Cloud-Grown Texture</p>
+</div>
+<div class="selection-indicator-sm w-6 h-6 rounded-full border border-outline flex items-center justify-center text-transparent group-[.selected]:bg-primary group-[.selected]:text-on-primary group-[.selected]:border-primary transition-all">
+<span class="material-symbols-outlined text-[14px]" data-icon="done">done</span>
+</div>
+</div>
+<!-- Colombia -->
+<div class="flex items-center p-6 bg-surface-container-high/40 rounded-xl gold-border hover:bg-surface-container-high transition-all cursor-pointer group mentor-card" onclick="toggleMentor(this)">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Colombian black tobacco curing in a traditional farm shed, rich dark textures, warm glowing embers in the background. High contrast moody luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6_wI8m77sJd7RbYhPEKJZHPeLKjW9-hiycbmJjyP6rJ6L_7-sgj00VR1w8kzQ9FVVhk7hbkk_ZCCDhxs67VzrLSOci3MA3FOn2eDgV2sH3e9GQp2iuI7SK0TZGtCKuuy9LVScCTKU3ZV7kUs_1THZ3qIHuTv_wKA7fgkAt3nxGqGKvLiWKOXXFzL1Ucv-_3NZDHN8WwJ7cucovaGdTCSIhjsffpSIC50SLk4oEZbj0aReWgP-z1Hymn1pRT_ZBVPO4EAgBPfe9bs"/>
+</div>
+<div class="ml-4 flex-grow">
+<h5 class="font-headline-md text-[18px] text-on-surface">Colombia (Ica Mazupa)</h5>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Exotic &amp; Pungent Nuances</p>
+</div>
+<div class="selection-indicator-sm w-6 h-6 rounded-full border border-outline flex items-center justify-center text-transparent group-[.selected]:bg-primary group-[.selected]:text-on-primary group-[.selected]:border-primary transition-all">
+<span class="material-symbols-outlined text-[14px]" data-icon="done">done</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-2xl border-t border-outline-variant shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
+<div class="max-w-container-max-width mx-auto flex justify-between items-center h-24 px-gutter">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Selections Made</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-headline-md text-primary" id="selection-count">0</span>
+<span class="text-on-surface-variant">/ 2 Mentors</span>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="px-8 py-3 rounded-lg font-label-lg text-label-lg text-on-surface border border-outline hover:bg-surface-container transition-all">Save Draft</button>
+<button class="px-12 py-3 rounded-lg font-label-lg text-label-lg bg-primary text-on-primary shadow-[0_4px_15px_rgba(233,193,118,0.3)] disabled:opacity-30 disabled:grayscale transition-all active:scale-95" disabled="" id="next-button">Proceed to Tasting Map</button>
+</div>
+</div>
+</div>
+<!-- Navigation Rail (Web) / Hidden on Mobile -->
+<nav class="hidden lg:flex fixed left-0 top-20 h-[calc(100vh-5rem)] w-24 flex-col items-center py-8 gap-8 border-r border-outline-variant bg-surface-container-low">
+<div class="flex flex-col items-center gap-2 text-on-surface-variant opacity-40 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-2xl" data-icon="wine_bar">wine_bar</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Cellar</span>
+</div>
+<div class="flex flex-col items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-2xl" data-icon="smoking_rooms" data-weight="fill">smoking_rooms</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Humidor</span>
+</div>
+<div class="flex flex-col items-center gap-2 text-on-surface-variant opacity-40 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-2xl" data-icon="chair">chair</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Lounge</span>
+</div>
+<div class="flex flex-col items-center gap-2 text-on-surface-variant opacity-40 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-2xl" data-icon="menu_book">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Passport</span>
+</div>
+</nav>
+<script>
+    let selectedCount = 0;
+    const maxSelections = 2;
+
+    function toggleMentor(card) {
+      if (card.classList.contains('selected')) {
+        card.classList.remove('selected');
+        selectedCount--;
+      } else {
+        if (selectedCount < maxSelections) {
+          card.classList.add('selected');
+          selectedCount++;
+        } else {
+          // Visual feedback for limit reached
+          card.classList.add('shake');
+          setTimeout(() => card.classList.remove('shake'), 500);
+        }
+      }
+      updateUI();
+    }
+
+    function updateUI() {
+      const countDisplay = document.getElementById('selection-count');
+      const nextButton = document.getElementById('next-button');
+      
+      countDisplay.textContent = selectedCount;
+      
+      if (selectedCount === maxSelections) {
+        nextButton.disabled = false;
+        countDisplay.classList.add('text-primary-container');
+      } else {
+        nextButton.disabled = true;
+        countDisplay.classList.remove('text-primary-container');
+      }
+    }
+
+    // Add simple shake animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-4px); }
+        75% { transform: translateX(4px); }
+      }
+      .shake { animation: shake 0.2s cubic-bezier(.36,.07,.19,.97) both; }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body></html>

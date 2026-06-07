@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .scan-line-animation {
+            animation: scanMove 3s ease-in-out infinite;
+        }
+        @keyframes scanMove {
+            0%, 100% { top: 0%; opacity: 0; }
+            10%, 90% { opacity: 1; }
+            50% { top: 100%; }
+        }
+        .shimmer-gold {
+            background: linear-gradient(90deg, transparent, rgba(233, 193, 118, 0.4), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s linear infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .glass-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#ffdea5",
+                        "on-error": "#690005",
+                        "on-secondary": "#462a00",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "tertiary-container": "#b7a09a",
+                        "on-surface": "#e5e2e3",
+                        "inverse-on-surface": "#303031",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed": "#2a1800",
+                        "inverse-surface": "#e5e2e3",
+                        "on-tertiary": "#3c2d28",
+                        "surface-container": "#1f1f20",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-primary": "#775a19",
+                        "surface-tint": "#e9c176",
+                        "surface-container-high": "#2a2a2b",
+                        "secondary": "#ffb95a",
+                        "surface-dim": "#131314",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-tertiary-fixed": "#261814",
+                        "tertiary": "#dac1bb",
+                        "surface-variant": "#353436",
+                        "secondary-fixed": "#ffddb6",
+                        "secondary-container": "#c68315",
+                        "on-tertiary-container": "#473733",
+                        "on-primary-container": "#4e3700",
+                        "on-primary": "#412d00",
+                        "primary-container": "#c5a059",
+                        "outline": "#9a8f80",
+                        "on-secondary-container": "#3d2400",
+                        "primary": "#e9c176",
+                        "surface-bright": "#39393a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "background": "#131314",
+                        "surface-container-highest": "#353436",
+                        "on-primary-fixed": "#261900",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-surface-variant": "#d1c5b4",
+                        "on-background": "#e5e2e3",
+                        "tertiary-fixed": "#f7ddd6",
+                        "outline-variant": "#4e4639",
+                        "surface": "#131314",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-container-lowest": "#0e0e0f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "32px",
+                        "margin": "64px",
+                        "card-padding": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface-dim/80 backdrop-blur-xl border-b border-primary/20 shadow-md">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform" data-icon="menu">menu</span>
+<h1 class="font-display-lg text-headline-md md:text-display-lg text-primary uppercase tracking-widest">The 360 Passport</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<span class="font-label-lg text-primary font-bold cursor-pointer">Explore</span>
+<span class="font-label-lg text-on-surface-variant hover:bg-primary/10 transition-colors duration-300 px-3 py-1 rounded">Inventory</span>
+<span class="font-label-lg text-on-surface-variant hover:bg-primary/10 transition-colors duration-300 px-3 py-1 rounded">Passport</span>
+<span class="font-label-lg text-on-surface-variant hover:bg-primary/10 transition-colors duration-300 px-3 py-1 rounded">Assistant</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-lg tracking-wider active:scale-95 transition-all">Grand Lounge</button>
+</header>
+<!-- Main Scanner Canvas -->
+<main class="relative flex-grow w-full flex flex-col items-center justify-center pt-24 pb-32 overflow-hidden">
+<!-- Live Camera View Simulation Background -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-black/40 z-10"></div>
+<img class="w-full h-full object-cover" data-alt="A cinematic, shallow depth-of-field photograph of an exclusive members-only lounge. In the soft-focus background, sophisticated guests in cocktail attire are engaged in conversation near a polished dark wood bar. The lighting is warm and atmospheric, with amber glows from vintage lamps and the glint of crystal glassware, creating a premium, private club environment with deep espresso tones and gold highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7N8kdyYAMyGFkiuWsoO_BEkLJbCZiBi5APzteclWCl5jWGoYfr4CfQF3iSln7sBk9KLJsuRyCZUEvv8JmntcbByX2La1eWy2UDk_r0v-mDCEZMVdd2S0KBDjvk8IsFTxOQfk1v7Ld_zwG_tAaw0GX87LkHSjTIQXKkWV2EIFPvb0tl3JBT_3nGrUJdDVs3v3CVSUx-3qb6UjKoLNO2sNDOznuScxCXXYcIRzb-daS_Hf0qGDuSklZ2MIF7IsuRPZEPCMfGeJz1R4"/>
+</div>
+<!-- Scanner Interface Container -->
+<div class="relative z-20 flex flex-col items-center justify-center w-full max-w-lg px-margin">
+<!-- Scanning Frame -->
+<div class="relative w-full aspect-square md:w-[480px] md:h-[480px] border-[1px] border-primary/30 rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] glass-blur bg-surface-dim/20">
+<!-- Corner Accents (The Gold Foil Corners) -->
+<div class="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-primary rounded-tl-3xl shadow-[0_0_15px_rgba(233,193,118,0.5)]"></div>
+<div class="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-primary rounded-tr-3xl shadow-[0_0_15px_rgba(233,193,118,0.5)]"></div>
+<div class="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-primary rounded-bl-3xl shadow-[0_0_15px_rgba(233,193,118,0.5)]"></div>
+<div class="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-primary rounded-br-3xl shadow-[0_0_15px_rgba(233,193,118,0.5)]"></div>
+<!-- Vertical Shimmering Gold Scan Line -->
+<div class="scan-line-animation absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_20px_#e9c176] z-30"></div>
+<!-- Inner Scanning Vignette -->
+<div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/20 pointer-events-none"></div>
+<!-- Scanner Instruction Overlay -->
+<div class="absolute bottom-8 left-0 right-0 text-center px-4">
+<p class="font-label-lg text-primary tracking-widest uppercase opacity-80 shimmer-gold py-2">System Active: Scanning...</p>
+</div>
+</div>
+<!-- Call to Action Section -->
+<div class="mt-12 text-center space-y-6">
+<div class="space-y-2">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Scan a guest or vendor to connect</h2>
+<p class="font-body-md text-on-surface-variant max-w-xs mx-auto">Position the QR code within the gold frame to instantly access their digital passport.</p>
+</div>
+<div class="flex flex-col gap-4 w-full pt-4">
+<!-- Primary Button: Manual Code -->
+<button class="w-full bg-primary-container text-on-primary-container font-label-lg py-5 rounded-xl border border-primary/30 shadow-[0_4px_20px_rgba(233,193,118,0.2)] hover:bg-primary transition-all duration-300 active:scale-95 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined" data-icon="keyboard">keyboard</span>
+                        Enter Code Manually
+                    </button>
+<!-- Secondary Button: Back -->
+<button class="w-full bg-surface-container-high/60 backdrop-blur-md text-primary font-label-lg py-4 rounded-xl border border-primary/20 hover:bg-primary/10 transition-all duration-300 active:scale-95 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+                        Back to Passport
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual Information Badge -->
+<div class="fixed top-28 right-8 z-40 hidden lg:block">
+<div class="bg-surface-container-low/90 backdrop-blur-xl p-6 rounded-2xl border border-primary/20 shadow-2xl max-w-xs">
+<div class="flex items-center gap-3 mb-3">
+<span class="material-symbols-outlined text-primary" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-lg text-primary">Identity Verified</span>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm">Every connection made via 360 Passport is encrypted and secure. Guests must opt-in to share detailed profiles.</p>
+</div>
+</div>
+<!-- Bottom Navigation Shell (Mobile Only Responsive Pivot) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-margin py-4 bg-surface-container-low/95 backdrop-blur-2xl border-t border-primary/30 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300 active:transform -translate-y-1 transition-transform">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-lg text-label-lg">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300 active:transform -translate-y-1 transition-transform">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-lg text-label-lg">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] active:transform -translate-y-1 transition-transform">
+<span class="material-symbols-outlined" data-icon="menu_book" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-lg text-label-lg">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300 active:transform -translate-y-1 transition-transform">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span class="font-label-lg text-label-lg">Assistant</span>
+</div>
+</nav>
+<!-- Micro-interaction Script -->
+<script>
+        // Subtle movement of the background to simulate a handheld camera feel
+        const bg = document.querySelector('img[data-alt]');
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            bg.style.transform = `scale(1.1) translate(${moveX}px, ${moveY}px)`;
+        });
+
+        // Click feedback for manual code button
+        const manualBtn = document.querySelector('button:has(.material-symbols-outlined[data-icon="keyboard"])');
+        manualBtn.addEventListener('click', () => {
+            // Placeholder for manual code entry modal logic
+            console.log("Manual entry requested");
+        });
+    </script>
+</body></html>

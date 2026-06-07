@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmokeCraft Master Blend Challenge</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .smoked-glass {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.2);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(theme('colors.surface-container'), theme('colors.surface-container')) padding-box,
+                        linear-gradient(135deg, #e9c176, #c5a059, #775a19) border-box;
+        }
+        .gold-text-gradient {
+            background: linear-gradient(135deg, #ffdea5 0%, #e9c176 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .leather-texture {
+            background-color: #131314;
+            background-image: url("https://www.transparenttextures.com/patterns/dark-leather.png");
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: theme('colors.surface-container-low');
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: theme('colors.primary');
+            border-radius: 10px;
+        }
+        @keyframes subtle-glow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(233, 193, 118, 0.3)); }
+            50% { filter: drop-shadow(0 0 15px rgba(233, 193, 118, 0.6)); }
+        }
+        .animate-glow {
+            animation: subtle-glow 4s ease-in-out infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#c68315",
+                        "surface-container-high": "#2a2a2b",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-tint": "#e9c176",
+                        "inverse-surface": "#e5e2e3",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-lowest": "#0e0e0f",
+                        "primary-fixed-dim": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "outline-variant": "#4e4639",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "tertiary-fixed": "#f7ddd6",
+                        "surface-variant": "#353436",
+                        "on-primary-container": "#4e3700",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#b7a09a",
+                        "tertiary": "#dac1bb",
+                        "surface-container-low": "#1b1b1c",
+                        "on-tertiary-fixed": "#261814",
+                        "on-error": "#690005",
+                        "on-secondary-container": "#3d2400",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#131314",
+                        "surface-bright": "#39393a",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "on-background": "#e5e2e3",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-tertiary": "#3c2d28",
+                        "on-surface-variant": "#d1c5b4",
+                        "surface": "#131314",
+                        "inverse-primary": "#775a19",
+                        "surface-container-highest": "#353436",
+                        "outline": "#9a8f80",
+                        "primary-fixed": "#ffdea5",
+                        "primary": "#e9c176",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary": "#462a00",
+                        "on-primary": "#412d00",
+                        "background": "#131314",
+                        "surface-container": "#1f1f20",
+                        "secondary": "#ffb95a",
+                        "on-primary-fixed": "#261900",
+                        "on-tertiary-container": "#473733",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "secondary-fixed": "#ffddb6",
+                        "on-tertiary-fixed-variant": "#54433e"
+                    },
+                    "spacing": {
+                        "margin": "64px",
+                        "unit": "8px",
+                        "container-max-width": "1440px",
+                        "gutter": "32px",
+                        "card-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Playfair Display"],
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface leather-texture min-h-screen overflow-x-hidden font-body-md">
+<!-- Top AppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-surface-variant/50 p-2 rounded-full transition-colors" data-icon="menu">menu</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label-lg text-label-lg text-on-surface-variant">Step 13: The Master Blend</span>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-lg font-label-lg hover:brightness-110 transition-all active:scale-95">
+                Grand Lounge
+            </button>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="pt-32 pb-24 px-gutter max-w-container-max-width mx-auto">
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Left: Sommelier's Workstation (Selection Area) -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
+<!-- Workshop Header -->
+<div class="flex flex-col gap-2">
+<h2 class="font-display-lg text-display-lg gold-text-gradient">Master Blend Challenge</h2>
+<p class="font-body-lg text-on-surface-variant max-w-2xl">Balance heritage and innovation. Assemble your custom cigar by selecting the finest leaves from our private reserve.</p>
+</div>
+<!-- Interactive Wheels Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Wrapper Selection -->
+<div class="smoked-glass rounded-xl p-card-padding flex flex-col items-center gap-4 group cursor-pointer hover:border-primary/50 transition-all duration-500">
+<div class="w-24 h-24 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary transition-colors">
+<img class="w-full h-full object-cover" data-alt="A close-up, high-resolution shot of a rich, oily Connecticut Broadleaf tobacco leaf with intricate veins, presented in a warm, low-light sommelier setting with gold accents and a luxurious dark wood background. The lighting is dramatic, emphasizing the tactile texture of the leaf as if it were a rare artifact." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzOfb95ZxNCI7idU35PcHvauyiQCBODADpRZwCxcz-J2oivfIDv5HQqAe-IgaLTuxrFGGDcIWo3Mhh5HM3JMWwvCC2bmaKC-wF_93mVONxv38OJfodA4_DJsMLLeQL8rbUKb_Kgp5jYDGW1NvjDlCwQwMNPYC-t-a3fnGB_ZBLTvsFXl-Xi0ZwK6gsofgjsBHY2hCF-eVDSR1NAz6tz9u067OovvX7wRJ7BIw0QAttDe9HwWfQoSP7bcwgAYc8jnYEzLL-YF4iuPQ"/>
+</div>
+<span class="font-label-lg text-primary">Wrapper</span>
+<div class="flex flex-col items-center text-center">
+<p class="font-headline-md text-on-surface">Broadleaf</p>
+<p class="text-xs text-on-surface-variant">USA / Connecticut</p>
+</div>
+<div class="w-full h-px bg-outline-variant/30 mt-2"></div>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-outline text-sm" data-icon="star">star</span>
+</div>
+</div>
+<!-- Binder Selection -->
+<div class="smoked-glass rounded-xl p-card-padding flex flex-col items-center gap-4 group cursor-pointer hover:border-primary/50 transition-all duration-500">
+<div class="w-24 h-24 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary transition-colors">
+<img class="w-full h-full object-cover" data-alt="A detailed macro photography of a Habano Seed binder leaf, showing the flexible, sturdy structure and earthy brown tones. The background features a blurred humidor interior with polished wood and soft amber lighting, creating an atmosphere of exclusivity and master craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1n83E4WBBKQTJvvZuVtJGdjQlQf-z_zDEjig7vUy84mpuLZtXGqTBlZ89-MnJ9wQ17XiCiN_LjOINuavewhil_F4Ftt0SDNHj1XKq-f_OgbscF7ywj34qVApUmahJITU6SXyUJooi4rWN9wm5hLDi70vm6bYHjHl7xL6BWtYJMH9BZR6E5B6nisglvnTtxKe0bNSfetqroyzzXWbOs5QgDxCdvdQyeItP-NXuGnmLT1ev30nyR2n6B1g1dK5cgycB67h5tz9aUvg"/>
+</div>
+<span class="font-label-lg text-primary">Binder</span>
+<div class="flex flex-col items-center text-center">
+<p class="font-headline-md text-on-surface">Criollo '98</p>
+<p class="text-xs text-on-surface-variant">DR / Jalapa</p>
+</div>
+<div class="w-full h-px bg-outline-variant/30 mt-2"></div>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-outline text-sm" data-icon="star">star</span>
+<span class="material-symbols-outlined text-outline text-sm" data-icon="star">star</span>
+</div>
+</div>
+<!-- Filler Selection -->
+<div class="smoked-glass rounded-xl p-card-padding flex flex-col items-center gap-4 group cursor-pointer hover:border-primary/50 transition-all duration-500">
+<div class="w-24 h-24 rounded-full overflow-hidden border-2 border-outline-variant group-hover:border-primary transition-colors">
+<img class="w-full h-full object-cover" data-alt="A macro image of Ligero filler tobacco leaves, exhibiting a dark, rugged, and potent texture. The setting is a Master Blender's desk with scattered tasting notes, a gold-rimmed crystal glass of bourbon, and a warm, low-key lighting scheme that highlights the high-end, tactile nature of the blend." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfZxQ-F_JfyYQWE0xbD8mt7EKO4N_Z_7QwhV4fUIO_FvCTFKtnTxBpq-pQcVtmXStllbtZ0xCVZvG6e6OCSqe8lEqy8bMaNXZRF2qgOOIwZQtZYapZMbMrcDBnNBcr-x7TUD2pYU4Vow6MMXAVrykgC6lqPr2tQ-oClDa_UQvIT9QS8XfgIIbK3kaR1iNdisEEQQidls22WPbMZUQmcglALf_FXiYzcnqJpsIHAVQ2nAs9jH2cT3ekoZP3XdV0pKGtO5peSROnF0U"/>
+</div>
+<span class="font-label-lg text-primary">Filler</span>
+<div class="flex flex-col items-center text-center">
+<p class="font-headline-md text-on-surface">Ligero</p>
+<p class="text-xs text-on-surface-variant">Nicaragua / Estelí</p>
+</div>
+<div class="w-full h-px bg-outline-variant/30 mt-2"></div>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill">star</span>
+</div>
+</div>
+<!-- Strength Selection -->
+<div class="smoked-glass rounded-xl p-card-padding flex flex-col items-center gap-4 group cursor-pointer hover:border-primary/50 transition-all duration-500">
+<div class="w-24 h-24 rounded-full border-4 border-secondary flex items-center justify-center bg-surface-container-highest shadow-inner">
+<span class="font-headline-md text-secondary">8/10</span>
+</div>
+<span class="font-label-lg text-primary">Intensity</span>
+<div class="flex flex-col items-center text-center">
+<p class="font-headline-md text-on-surface">Full Bodied</p>
+<p class="text-xs text-on-surface-variant">Strong Finish</p>
+</div>
+<div class="w-full h-px bg-outline-variant/30 mt-2"></div>
+<div class="flex gap-1">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+</div>
+</div>
+</div>
+<!-- Live Visualizer -->
+<div class="relative w-full h-96 smoked-glass rounded-2xl overflow-hidden group">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A cinematic, ultra-realistic view of a partially rolled custom cigar resting on a dark, polished mahogany workbench. Fine tobacco dust and gold-handled cigar tools are scattered around. Soft smoke curls rise elegantly in the background, illuminated by a warm spotlight that highlights the deep brown textures and the premium, members-only lounge aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbALwlKfRWZSIuiE3PB_KlEw9alwifZYPXPgyjhDKIJHU9oRAwcHje_8GhyWyOzOQJZir0BTLM3jFR6EwrbdzKW6_VZgb_g4PA9vaCOAOVmkksv2vko6i9dmYHdhn0zYuZ0iXMz8VXKFOH4t9lFsFRkl0v_l9pmFYQbS4VLaCJyhAkiA0Kjk4DAKbYULwIzmtMSjWYnhcFxbIDb0PvgO2uGZ8PtHhScu0t2lUivjPlevtbUhkPxfj50W7Iqm5lqElCMTQE6yCxDKo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<!-- Floating Badge -->
+<div class="absolute top-6 right-6 bg-secondary-container/90 text-on-secondary-container px-6 py-3 rounded-full flex items-center gap-3 backdrop-blur-md animate-glow">
+<span class="material-symbols-outlined" data-icon="workspace_premium" data-weight="fill">workspace_premium</span>
+<span class="font-label-lg">Step 13: The Bonus Pour</span>
+</div>
+<!-- HUD Overlay -->
+<div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+<div class="flex flex-col gap-1">
+<span class="font-label-sm text-primary uppercase tracking-[0.2em]">Current Creation</span>
+<h3 class="font-headline-lg text-on-surface">The Sterling Reserve No. 13</h3>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full smoked-glass flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined" data-icon="rotate_right">rotate_right</span>
+</button>
+<button class="w-12 h-12 rounded-full smoked-glass flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined" data-icon="zoom_in">zoom_in</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Scoring & Completion -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<!-- Live Score Meter -->
+<div class="smoked-glass rounded-2xl p-8 flex flex-col gap-8 gold-foil-border shadow-2xl">
+<div class="flex justify-between items-center">
+<h4 class="font-headline-md text-primary">Live Score</h4>
+<span class="font-display-lg text-primary-fixed-dim" id="scoreValue">94</span>
+</div>
+<div class="flex flex-col gap-6">
+<!-- Balance -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between font-label-lg">
+<span class="text-on-surface-variant">Balance</span>
+<span class="text-primary">88%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-1000" style="width: 88%"></div>
+</div>
+</div>
+<!-- Flavor Harmony -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between font-label-lg">
+<span class="text-on-surface-variant">Flavor Harmony</span>
+<span class="text-primary">92%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary transition-all duration-1000" style="width: 92%"></div>
+</div>
+</div>
+<!-- Rarity -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between font-label-lg">
+<span class="text-on-surface-variant">Rarity</span>
+<span class="text-secondary">97%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary transition-all duration-1000" style="width: 97%"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-4 border border-outline-variant/20 italic text-on-surface-variant text-sm">
+                        "The addition of the Connecticut Broadleaf provides a bold, chocolatey undertone that pairs exquisitely with the spicy Ligero core. A masterstroke."
+                    </div>
+</div>
+<!-- Passport Booklets / Tasting Notes -->
+<div class="bg-surface-container-high rounded-2xl p-6 flex flex-col gap-4 border border-outline-variant/30 relative overflow-hidden">
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="menu_book">menu_book</span>
+<h4 class="font-headline-sm text-on-surface">Tasting Notes</h4>
+</div>
+<ul class="flex flex-col gap-3">
+<li class="flex items-center gap-4 text-on-surface-variant group cursor-pointer hover:text-primary transition-colors">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-lg">Dark Cocoa &amp; Earth</span>
+</li>
+<li class="flex items-center gap-4 text-on-surface-variant group cursor-pointer hover:text-primary transition-colors">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-lg">Black Peppercorn Finish</span>
+</li>
+<li class="flex items-center gap-4 text-on-surface-variant group cursor-pointer hover:text-primary transition-colors">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-lg">Cedar &amp; Aged Leather</span>
+</li>
+</ul>
+</div>
+<!-- Master Blend Completion Stamp -->
+<div class="mt-auto pt-8 border-t border-outline-variant/30 flex flex-col items-center text-center gap-6">
+<div class="relative w-32 h-32 flex items-center justify-center group">
+<!-- Custom SVG for Stamp effect -->
+<div class="absolute inset-0 border-4 border-primary border-double rounded-full animate-spin-slow opacity-20"></div>
+<div class="w-24 h-24 rounded-full border-2 border-primary flex flex-col items-center justify-center p-2 rotate-[-15deg] group-hover:rotate-0 transition-transform duration-500 shadow-[0_0_15px_rgba(233,193,118,0.4)]">
+<span class="text-[10px] font-bold text-primary tracking-widest uppercase">Verified</span>
+<span class="font-headline-md text-primary leading-tight">MASTER</span>
+<span class="font-headline-md text-primary leading-tight">BLEND</span>
+<span class="text-[10px] font-bold text-primary tracking-widest uppercase">2024</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<p class="font-label-sm text-on-surface-variant tracking-widest uppercase">Ready to seal?</p>
+<button class="bg-primary hover:bg-primary-fixed-dim text-on-primary px-10 py-4 rounded-lg font-label-lg text-lg shadow-xl shadow-primary/20 transition-all active:scale-95">
+                            Submit Master Blend
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)] rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-sm">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/20 rounded-full px-6 py-2">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-sm">Assistant</span>
+</div>
+</nav>
+<!-- Side Navigation Drawer (Desktop Placeholder Logic) -->
+<aside class="hidden xl:flex fixed left-0 top-0 h-full w-20 z-[60] flex-col py-8 items-center bg-surface-container-low border-r border-outline-variant/30">
+<div class="text-primary mb-12">
+<span class="material-symbols-outlined text-4xl" data-icon="wine_bar">wine_bar</span>
+</div>
+<div class="flex flex-col gap-10">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="smoking_rooms">smoking_rooms</span>
+<span class="material-symbols-outlined text-primary" data-icon="chair">chair</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="menu_book">menu_book</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="contact_support">contact_support</span>
+</div>
+</aside>
+<script>
+        // Micro-interactions for the score
+        let score = 94;
+        const scoreElement = document.getElementById('scoreValue');
+        
+        setInterval(() => {
+            const drift = Math.floor(Math.random() * 3) - 1; // -1, 0, 1
+            score = Math.min(Math.max(score + drift, 92), 98);
+            scoreElement.innerText = score;
+        }, 3000);
+
+        // Interactive hover effects for cards
+        const cards = document.querySelectorAll('.smoked-glass');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

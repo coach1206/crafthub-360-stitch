@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Grand Humidor | Receiving PO-8842</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(#1f1f20, #1f1f20) padding-box,
+                        linear-gradient(to bottom right, #e9c176, #775a19) border-box;
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+        }
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .leather-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/leather.png");
+        }
+        /* Custom scrollbar for premium feel */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0e0e0f; }
+        ::-webkit-scrollbar-thumb { background: #4e4639; border-radius: 10px; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#e5e2e3",
+                        "tertiary-fixed": "#f7ddd6",
+                        "surface-tint": "#e9c176",
+                        "surface-container": "#1f1f20",
+                        "on-primary-fixed": "#261900",
+                        "on-primary": "#412d00",
+                        "on-secondary": "#462a00",
+                        "surface": "#131314",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#e9c176",
+                        "secondary": "#ffb95a",
+                        "tertiary": "#dac1bb",
+                        "surface-container-high": "#2a2a2b",
+                        "surface-container-highest": "#353436",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#131314",
+                        "error-container": "#93000a",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-lowest": "#0e0e0f",
+                        "inverse-primary": "#775a19",
+                        "secondary-container": "#c68315",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-tertiary-container": "#473733",
+                        "on-tertiary": "#3c2d28",
+                        "on-surface-variant": "#d1c5b4",
+                        "background": "#131314",
+                        "surface-bright": "#39393a",
+                        "primary": "#e9c176",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "outline": "#9a8f80",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-tertiary-fixed": "#261814",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-container": "#c5a059",
+                        "inverse-surface": "#e5e2e3",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "primary-fixed": "#ffdea5",
+                        "on-secondary-container": "#3d2400",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "tertiary-container": "#b7a09a",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "outline-variant": "#4e4639",
+                        "error": "#ffb4ab",
+                        "surface-container-low": "#1b1b1c",
+                        "surface-variant": "#353436",
+                        "on-primary-container": "#4e3700"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "margin": "64px",
+                        "card-padding": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden leather-texture">
+<!-- TopAppBar from JSON -->
+<header class="bg-background/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm fixed top-0 w-full z-50 flex justify-between items-center px-margin h-24">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border border-primary/30 overflow-hidden">
+<img alt="Staff member profile" class="w-full h-full object-cover" data-alt="A professional portrait of a senior staff member in a luxury setting. The man is wearing a tailored dark vest and white shirt, looking distinguished. The lighting is warm and dramatic, characteristic of a high-end private club or mahogany-lined humidor. Soft focus background with hints of glass and brass." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRMMkWcpGkt4yX9ukF8_ZHzbRacSwYSS53jwU4tLCvr_J-ZF9DygUQ_YVkHE0Z87KN05bQZIH1a4j6TvTB1GVkM7TR3XmcChWQ1_xNu-JuKU9tysRA6thnEuMWEMITLY9PRH-IM7R17L04ggWcRhwjRkX7WF6U1TlkX53PT0mHS0lmhaqh0PwRwXGLppbgO5MMubBCcOgKNDw65UYJfAbRI3OLsZyyJLx2OPSUKiENnTi97uyFpdRsxeLJT6NXnGtue9ggJGqfO2w"/>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-primary text-3xl cursor-pointer hover:bg-surface-container-highest/50 p-2 rounded-full transition-all">notifications</span>
+</div>
+</header>
+<!-- Side Navigation (Mapped from NavigationDrawer JSON) -->
+<nav class="fixed left-0 top-0 h-screen w-80 z-40 bg-surface-container-low border-r border-outline-variant/20 shadow-2xl pt-32 px-6 flex flex-col gap-4 hidden md:flex">
+<div class="mb-10 px-4">
+<h2 class="font-headline-lg text-headline-lg text-primary">Julian Vane</h2>
+<p class="text-on-surface-variant font-label-lg uppercase tracking-widest text-xs">Head Sommelier</p>
+</div>
+<a class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-transform scale-95 active:scale-90 flex items-center gap-4 rounded-lg" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-lg text-label-lg">Floor Plan</span>
+</a>
+<a class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-transform scale-95 active:scale-90 flex items-center gap-4 rounded-lg" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg text-label-lg">Live Map</span>
+</a>
+<a class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-transform scale-95 active:scale-90 flex items-center gap-4 rounded-lg" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-lg text-label-lg">Insights</span>
+</a>
+<a class="bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 shadow-[0_0_15px_rgba(233,193,118,0.2)] flex items-center gap-4" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-lg text-label-lg">Inventory</span>
+</a>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-32 pb-32 md:pl-80 px-gutter min-h-screen">
+<div class="max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full font-label-sm text-label-sm">PURCHASE ORDER</span>
+<span class="text-on-surface-variant font-body-md">#PO-8842</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface leading-tight">Havana Distributors</h2>
+<p class="text-on-surface-variant font-body-lg mt-2 italic">Premium Cuban Selection &amp; Limited Reserve Spirits</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-surface-container-high border border-outline-variant/30 text-primary px-6 py-3 rounded-lg font-label-lg hover:bg-surface-bright/30 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">description</span>
+                        VIEW INVOICE
+                    </button>
+<button class="gold-foil-border text-on-primary-fixed bg-primary-container px-8 py-3 rounded-lg font-label-lg hover:shadow-[0_0_20px_rgba(233,193,118,0.4)] transition-all flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">done_all</span>
+                        MARK FULL RECEIVED
+                    </button>
+</div>
+</div>
+<!-- Dashboard Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between min-h-[140px]">
+<span class="text-on-surface-variant font-label-sm">TOTAL ITEMS</span>
+<span class="text-4xl font-display-lg text-primary">142</span>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-2/3"></div>
+</div>
+</div>
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between min-h-[140px]">
+<span class="text-on-surface-variant font-label-sm">RECEIVED</span>
+<span class="text-4xl font-display-lg text-secondary">94</span>
+<span class="text-secondary font-label-sm">66% COMPLETE</span>
+</div>
+<div class="glass-panel p-card-padding rounded-xl border-l-4 border-error/50 flex flex-col justify-between min-h-[140px]">
+<span class="text-on-surface-variant font-label-sm">REPORTED ISSUES</span>
+<span class="text-4xl font-display-lg text-error">3</span>
+<span class="text-error font-label-sm">URGENT ATTENTION</span>
+</div>
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between min-h-[140px]">
+<span class="text-on-surface-variant font-label-sm">EXPECTED VALUE</span>
+<span class="text-4xl font-display-lg text-on-surface">$12,450</span>
+<span class="text-on-surface-variant font-label-sm">USD • NET 30</span>
+</div>
+</div>
+<!-- Product Receiving List -->
+<div class="flex flex-col gap-6">
+<!-- Product Card 1: Completed -->
+<div class="glass-panel p-6 rounded-xl border-l-4 border-green-500/50 flex flex-col md:flex-row items-center gap-8 transition-all hover:translate-x-1">
+<div class="w-32 h-32 rounded-lg overflow-hidden flex-shrink-0 shadow-lg border border-outline-variant/20">
+<img alt="Montecristo No. 2" class="w-full h-full object-cover" data-alt="A high-resolution, macro photograph of a box of Montecristo No. 2 cigars sitting on a dark mahogany table. The cedar wood box is open, revealing the rich, oily brown wrappers and iconic gold and brown bands of the cigars. Soft, warm amber lighting highlights the texture of the tobacco leaves. The background is a dark, moody luxury lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHHTuBdDn3jLyGhJYe35acJvSWMKJmRjabBt0ad_f6bGGgGucz0u101ytHFjUgWZWBQh3wFYBnaRaRzt607EG-2K6uOGpqQFJmyZu-SNls33sEdmAPyiJsDqeOBP6dlJjLLgdFquI_fOtsY7v7T73yl1AD5Hx-eWk0kB21nTuRDLXg5xU0_1-eSCUw16AMmhe7rfRJlWmdUic6Lk7mNNbmkff5c4PgdNpaTIWR0FlYLIfUT385sKBhLka3SiFjPPpLP1ESK1_tfMY"/>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-3 mb-1">
+<span class="text-xs font-label-sm text-green-500 uppercase">FULLY RECEIVED</span>
+<span class="text-on-surface-variant text-sm">• SKU: MON-002-CUB</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Montecristo No. 2 (Box of 25)</h3>
+<p class="text-on-surface-variant font-body-md">Origin: Cuba | Length: 6.1" | Ring: 52</p>
+</div>
+<div class="flex items-center gap-12 text-center">
+<div>
+<p class="text-on-surface-variant font-label-sm mb-1 uppercase">Expected</p>
+<p class="text-2xl font-display-lg">20</p>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-sm mb-1 uppercase">Received</p>
+<p class="text-2xl font-display-lg text-green-500">20</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center text-primary hover:bg-primary/20 transition-all shadow-inner">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="bg-surface-container-highest border border-outline-variant/30 text-on-surface px-4 py-2 rounded-lg font-label-sm hover:bg-surface-bright/30 transition-all">
+                            ASSIGN AREA
+                        </button>
+</div>
+</div>
+<!-- Product Card 2: Partial -->
+<div class="glass-panel p-6 rounded-xl border-l-4 border-secondary/50 flex flex-col md:flex-row items-center gap-8 transition-all hover:translate-x-1">
+<div class="w-32 h-32 rounded-lg overflow-hidden flex-shrink-0 shadow-lg border border-outline-variant/20">
+<img alt="Macallan 18 Years" class="w-full h-full object-cover" data-alt="A close-up shot of a bottle of Macallan 18 Years Old Sherry Oak Scotch Whisky standing on a polished marble bar top. The golden liquid catches the dim, warm light of the exclusive lounge. The label is sharp and clear, reflecting heritage and luxury. Behind the bottle, out-of-focus crystal glassware and leather accents create a sophisticated atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWyRip_CzrL4YqDv82x_rsHTToMqX2ImLF4e8YriTv_fw4K9zNlgH-caPMYl220rwFcFe2eNNKdSmKNpSPq5EKB8RcJvcTvjc-i_Wvtql4lfTwBh1tB0lDq-2mseddSCqsKbFDBMclh9QfaKUljK_eJIgkWJLQveauRSZAYJGLR7nddmJ2B7vZzRuQ5-A3im2y2Cbwl1u8nnfBkKcHdvRooXMr-t_iNRkNCfom66vlEmz994jH7WrPXN1-CyWU3x9wPhy2ULbrZ5I"/>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-3 mb-1">
+<span class="text-xs font-label-sm text-secondary uppercase">PARTIAL RECEIVING</span>
+<span class="text-on-surface-variant text-sm">• SKU: MAC-18-SOH</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Macallan 18 Year Sherry Oak</h3>
+<p class="text-on-surface-variant font-body-md">Highland Single Malt | 700ml</p>
+</div>
+<div class="flex items-center gap-12 text-center">
+<div>
+<p class="text-on-surface-variant font-label-sm mb-1 uppercase">Expected</p>
+<p class="text-2xl font-display-lg">12</p>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-sm mb-1 uppercase">Received</p>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-primary/10">-</button>
+<span class="text-2xl font-display-lg text-secondary">8</span>
+<button class="w-8 h-8 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-primary/10">+</button>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-secondary-container/20 border border-secondary/30 text-secondary px-4 py-2 rounded-lg font-label-sm hover:bg-secondary-container/40 transition-all">
+                            REPORT ISSUE
+                        </button>
+<button class="bg-surface-container-highest border border-outline-variant/30 text-on-surface px-4 py-2 rounded-lg font-label-sm hover:bg-surface-bright/30 transition-all">
+                            ASSIGN AREA
+                        </button>
+</div>
+</div>
+<!-- Product Card 3: Issue -->
+<div class="glass-panel p-6 rounded-xl border-l-4 border-error/50 flex flex-col md:flex-row items-center gap-8 transition-all hover:translate-x-1">
+<div class="w-32 h-32 rounded-lg overflow-hidden flex-shrink-0 shadow-lg border border-outline-variant/20 relative">
+<img alt="Cohiba Behike" class="w-full h-full object-cover grayscale-[0.5]" data-alt="A studio photograph of a Cohiba Behike cigar box with visible damage to the corner. The luxury black lacquered box is chipped, contrasting with its pristine gold accents. The lighting is cold and clinical to highlight the defect. The environment is still high-end, but the focus is clearly on the product quality issue." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvtzdP_7snmKRH2lIVPfNhuQA1Tyl4p7HxIsOAMg6rVrrIJ66sL6a6oY_RrJSbT_FwYTbndrfBbQdULcFR_ekP3-HQs-tXR5zh0fXrNe_NFVRKEWA1Pmsgs0l8YdjZ_AkdI8AD2AzKvsQvCJGXbEXBDmA3IE4pxLSXA4WFTOAkxSikQJD48vxGcVCdb103j0UR18N8dkiC90fAm4vqnyapg7E7V1w7Lf4y1dx-4QCTDnbpxiWxsXsfeQgmTyZd5ZB3fBBteHLwUGs"/>
+<div class="absolute inset-0 bg-error/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-3xl">warning</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-3 mb-1">
+<span class="text-xs font-label-sm text-error uppercase">DAMAGED GOODS</span>
+<span class="text-on-surface-variant text-sm">• SKU: COH-BEH-56</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Cohiba Behike 56 (Box of 10)</h3>
+<p class="text-on-surface-variant font-body-md">Flagship Cuban Reserve | Limited Release</p>
+</div>
+<div class="flex items-center gap-12 text-center">
+<div>
+<p class="text-on-surface-variant font-label-sm mb-1 uppercase">Expected</p>
+<p class="text-2xl font-display-lg">5</p>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-sm mb-1 uppercase text-error">Damaged</p>
+<p class="text-2xl font-display-lg text-error">3</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-error-container text-on-error-container px-6 py-2 rounded-lg font-label-sm hover:brightness-110 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+                            VIEW PROOF
+                        </button>
+<button class="bg-surface-container-highest border border-outline-variant/30 text-on-surface px-4 py-2 rounded-lg font-label-sm hover:bg-surface-bright/30 transition-all">
+                            REFUSE SHIPMENT
+                        </button>
+</div>
+</div>
+</div>
+<!-- Action Floating Area (Mocking Page Layout Logic) -->
+<div class="mt-16 glass-panel p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-8 border border-primary/20 bg-gradient-to-r from-surface-container-low to-surface-container">
+<div class="flex gap-6 items-center">
+<div class="p-4 bg-primary/10 rounded-full">
+<span class="material-symbols-outlined text-primary text-4xl">inventory</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Complete Reconciliation</h4>
+<p class="text-on-surface-variant font-body-md">Ensure all items are scanned before finalizing PO-8842</p>
+</div>
+</div>
+<div class="flex items-center gap-4 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-10 py-4 rounded-xl border border-outline-variant text-on-surface-variant font-label-lg hover:bg-surface-bright/20 transition-all">SAVE DRAFT</button>
+<button class="flex-1 md:flex-none px-12 py-4 rounded-xl bg-primary text-on-primary-fixed font-label-lg font-bold shadow-[0_0_30px_rgba(233,193,118,0.3)] hover:scale-105 transition-all">FINALIZE SHIPMENT</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar for Mobile (Mapped from JSON) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 rounded-t-xl shadow-[0_-8px_24px_rgba(0,0,0,0.5)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-sm text-label-sm">POS 3</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] scale-105">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for tactile feel
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.95)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+
+        // Atmospheric parallax effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.body.style.backgroundPositionY = -(scrolled * 0.1) + 'px';
+        });
+    </script>
+</body></html>

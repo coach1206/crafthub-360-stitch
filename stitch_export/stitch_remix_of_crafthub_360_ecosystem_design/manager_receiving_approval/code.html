@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Exception Review | The Grand Humidor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#e5e2e3",
+                        "tertiary-fixed": "#f7ddd6",
+                        "surface-tint": "#e9c176",
+                        "surface-container": "#1f1f20",
+                        "on-primary-fixed": "#261900",
+                        "on-primary": "#412d00",
+                        "on-secondary": "#462a00",
+                        "surface": "#131314",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#e9c176",
+                        "secondary": "#ffb95a",
+                        "tertiary": "#dac1bb",
+                        "surface-container-high": "#2a2a2b",
+                        "surface-container-highest": "#353436",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#131314",
+                        "error-container": "#93000a",
+                        "on-surface": "#e5e2e3",
+                        "surface-variant": "#353436",
+                        "on-surface-variant": "#d1c5b4",
+                        "background": "#131314",
+                        "surface-bright": "#39393a",
+                        "primary": "#e9c176",
+                        "outline": "#9a8f80",
+                        "primary-container": "#c5a059",
+                        "inverse-surface": "#e5e2e3",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "on-secondary-container": "#3d2400",
+                        "outline-variant": "#4e4639",
+                        "error": "#ffb4ab",
+                        "surface-container-low": "#1b1b1c",
+                        "on-primary-container": "#4e3700"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "margin": "64px",
+                        "card-padding": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .smoked-glass {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(#131314, #131314) padding-box,
+                        linear-gradient(to bottom right, #e9c176, #775a19) border-box;
+        }
+        .amber-glow:active {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.4);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #4e4639; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- Top Navigation Anchor -->
+<header class="bg-background/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm fixed top-0 w-full z-50 flex justify-between items-center px-margin h-24">
+<div class="flex items-center gap-6">
+<span class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</span>
+<div class="hidden md:flex gap-8 ml-12">
+<span class="text-on-surface-variant font-label-lg text-label-lg cursor-pointer hover:text-primary transition-all">DASHBOARD</span>
+<span class="text-primary font-bold font-label-lg text-label-lg cursor-pointer border-b-2 border-primary pb-1">INVENTORY</span>
+<span class="text-on-surface-variant font-label-lg text-label-lg cursor-pointer hover:text-primary transition-all">REPORTS</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-12 h-12 rounded-full overflow-hidden border border-primary/30">
+<img alt="Manager" class="w-full h-full object-cover" data-alt="A professional headshot of a sophisticated head sommelier in a high-end lounge. He wears a tailored charcoal suit and a crisp white shirt, looking towards the camera with a subtle, confident expression. The lighting is warm and dramatic, characteristic of a luxury cigar club, with soft amber highlights and a deep espresso background texture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiAM8GemKHmW-eMGz3oJgVKGbkQf4C-g21dktCiJNXD0D7VDsp982KgFa3sl0OB9jPVrkxlJTJFySGZChtCYqADB5gLljFiMbpO6ToF0-8ON2WcMZUhLHopO7-1VQiwloPmbJrvOeHVe3AZ54IRHAOqkEYMloAAqRG2CpSvsgzjz28ZPIt5WchyJRpuZDEWM39A7Uf2xkJ_eDs4nHQOvf4fllB_gY0ow1YaHzxBU2WBCy7zEm-yaaHwuUXMYRoBSFPQmVRXxcUZs8"/>
+</button>
+<span class="material-symbols-outlined text-primary text-2xl cursor-pointer">notifications</span>
+</div>
+</header>
+<!-- Sidebar -->
+<aside class="fixed left-0 top-0 h-screen w-80 z-40 bg-surface-container-low border-r border-outline-variant/20 pt-32 px-6 hidden lg:block">
+<div class="flex items-center gap-4 mb-12 px-4">
+<div class="w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<div>
+<p class="font-headline-md text-headline-md text-primary">Julian Vane</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Head Sommelier</p>
+</div>
+</div>
+<nav class="space-y-4">
+<div class="text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-bright/20 rounded-lg cursor-pointer transition-transform scale-95 active:scale-90">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-lg text-label-lg">Floor Plan</span>
+</div>
+<div class="text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-bright/20 rounded-lg cursor-pointer transition-transform scale-95 active:scale-90">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg text-label-lg">Live Map</span>
+</div>
+<div class="text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-bright/20 rounded-lg cursor-pointer transition-transform scale-95 active:scale-90">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-lg text-label-lg">Insights</span>
+</div>
+<div class="bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 flex items-center gap-4 transition-transform scale-100 shadow-lg">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-lg text-label-lg">Inventory</span>
+</div>
+</nav>
+</aside>
+<main class="lg:ml-80 pt-32 px-margin pb-32 max-w-[1440px] mx-auto">
+<!-- Header Section -->
+<div class="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+<div>
+<span class="text-primary font-label-lg text-label-lg tracking-widest uppercase mb-2 block">Receiving Exception #REC-88421</span>
+<h1 class="font-headline-xl text-headline-xl text-on-background">Shipment Review</h1>
+<p class="text-on-surface-variant font-body-lg text-body-lg mt-2">Vendor: Arturo Fuente Global Exports | Batch ID: FL-2023-AF9</p>
+</div>
+<div class="flex gap-4">
+<button class="h-14 px-8 smoked-glass border border-error/30 text-error hover:bg-error/10 transition-all rounded-lg font-label-lg text-label-lg tracking-widest uppercase flex items-center gap-2">
+<span class="material-symbols-outlined">close</span> Reject Receipt
+                </button>
+<button class="h-14 px-8 bg-surface-container-highest/80 border border-primary/30 text-primary hover:bg-primary/10 transition-all rounded-lg font-label-lg text-label-lg tracking-widest uppercase flex items-center gap-2">
+<span class="material-symbols-outlined">mail</span> Email Supplier
+                </button>
+<button class="h-14 px-8 bg-primary text-on-primary font-bold rounded-lg shadow-[0_0_20px_rgba(233,193,118,0.3)] hover:scale-[1.02] active:scale-95 transition-all font-label-lg text-label-lg tracking-widest uppercase flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span> Approve Receiving
+                </button>
+</div>
+</div>
+<!-- Exception Bento Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Missing Items Summary -->
+<div class="col-span-12 md:col-span-7 smoked-glass rounded-xl p-card-padding flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-background flex items-center gap-3">
+<span class="material-symbols-outlined text-error">inventory</span> Missing Items
+                    </h3>
+<span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-3 py-1 rounded-full">- 42 Units</span>
+</div>
+<div class="space-y-4">
+<!-- Item Row -->
+<div class="flex items-center gap-4 p-4 rounded-lg bg-surface-container/50 hover:bg-surface-container transition-colors group/row">
+<div class="w-16 h-16 rounded overflow-hidden bg-black/40 flex-shrink-0">
+<img class="w-full h-full object-cover opacity-70 group-hover/row:opacity-100 transition-opacity" data-alt="A macro shot of premium Opus X cigars, showing the intricate details of the cedar wrapping and the ornate gold and red bands. The lighting is moody and focused, highlighting the oily sheen of the tobacco leaves against a dark, shadowy humidor background. Professional luxury product photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz1apXkLQ0i7mLMZRVLXAmV71KgsOgmqwBCUaTLsSIMyQ2Nw-WDxd1B8sGS4wISiEv4F3P2RvGzWE3x8HGAsaSvqE3oNU0vz77NSI0wsxwjBSgoqMq8zBcqfJU9eo3ykIjxY75bib7xR9a_qmShnen5jSoODhD9gesquItidppW5BJaZVzEIKchlH5qEpFM2NOVrpVlAG5VMzjl-z5gmYyCrM98KTgIC5wTx3De8POCSEiDInTO-E5YyZgDn8cKWfFKGmvj5IPFho"/>
+</div>
+<div class="flex-grow">
+<p class="font-body-lg text-body-lg text-on-background">Fuente Fuente OpusX Lost City</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Robusto | Box of 10</p>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-error">2 Boxes</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Expected: 10</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-lg bg-surface-container/50 hover:bg-surface-container transition-colors group/row">
+<div class="w-16 h-16 rounded overflow-hidden bg-black/40 flex-shrink-0">
+<img class="w-full h-full object-cover opacity-70 group-hover/row:opacity-100 transition-opacity" data-alt="Detailed close-up of dark, rich Maduro tobacco leaves textured with visible veins and a deep brown hue. The leaves are carefully arranged on a polished mahogany surface, with soft amber light creating a luxurious, tactile atmosphere typical of a high-end cigar cellar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEussdQRUPSE6biMPlxq4YHTE0I5k40gaSlbvX9iAOpafAMJKP6RL_dLiwrl6wDqGqvCi5R0BupL72KK0ROuFqvNAJBxvIdlQ63hTPDNmCt7we4zjtIe8T6RoP-t88qLflS3DjVW3NapL6AbjG9ebM5beyv6DIZN7nu2fG96VJeqVHLr0x7AtBNe4FCsGVcHM1tNLJHBSKzE6Gq5V-xFgqxmEo8R7XwedHW5I-8SEJ-UW2jpxIv1ipigDYZ9yr-Ur_Vdsw5P67xGQ"/>
+</div>
+<div class="flex-grow">
+<p class="font-body-lg text-body-lg text-on-background">Don Carlos Reserva Superior</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">No. 4 | Single Unit</p>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-error">22 Units</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Expected: 100</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Damaged Items Gallery -->
+<div class="col-span-12 md:col-span-5 smoked-glass rounded-xl p-card-padding">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-background flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">broken_image</span> Damaged
+                    </h3>
+<span class="bg-secondary-container text-on-secondary-container font-label-sm text-label-sm px-3 py-1 rounded-full">12 Units Reported</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="aspect-square rounded-lg overflow-hidden bg-surface-container group relative cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="An inspection photograph showing a damaged cedar cigar box with a visible crack along the hinges. The box is resting on a dark velvet cloth, and the lighting is cold and analytical to highlight the structural defect. A gold foil stamp is partially visible on the lid. High resolution macro detail." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCmft89KqC3R-94EKqEC5vYQMmgaehvEYEbvsmqIuVgRYW-Brtx8dV7l2_2Lj2H6vwbmT1LJ-8IhAOuLUB8DY-mXrQLV0YpLPUYQnhCVimaQuGORJZRxmYBRASrPzldfLOG0frNmFRU_1nJtS4RKuHFIHz9O1H0IMVXkLNF2C_BQxXEJgmLCKA0fT47IGBnZVfPZRIUaBAjrbgU8b0qYeuQaocrZ8_CU-LUnIVUPGotsQTRFn7IFSpeaz3xLS_q6i6Wy8-xuqo5D0"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+<span class="material-symbols-outlined text-primary text-4xl">zoom_in</span>
+</div>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden bg-surface-container group relative cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="Close-up photo of a premium cigar with a torn outer wrapper leaf, showing the lighter colored binder underneath. The cigar is placed on a smoked glass surface reflecting deep amber tones. The lighting is sharp, emphasizing the frayed edges of the damaged leaf for evidence documentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOEuy7d3o4RLoZoQbCrjkruFITdhxArVrk3jQ2WMrhGUDaH2lC-YcFFXBKEBk_F3SLYff6n8es8BcIFVNDwyGQsKR_8ddLNWtVauo53UiHt9M8paekVcrcl3eFcOweMmNoXz16-iLpK-Yq3PKkKXZOhjoY8pSEHO-iCqa9aRW5EsqOc-3GM2TK6RkL0o9KiGnK2SXTnYtSM7ldQGqxru9zii6raUxAw7dh9I3S2MuMiIQ8aRk0Nc3IbOBdnM5CtKEAu_kOU7P5_is"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+<span class="material-symbols-outlined text-primary text-4xl">zoom_in</span>
+</div>
+</div>
+</div>
+<div class="mt-6 p-4 bg-surface-container-low rounded-lg border border-outline-variant/20 italic text-on-surface-variant text-body-md">
+                    "Outer carton (Box 4/12) arrived crushed. Moisture readings at 74% - potential leak during transit. Total 12 cigars with wrapper cracks."
+                </div>
+<div class="mt-2 text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant">- Reported by Marcus (Receiver)</span>
+</div>
+</div>
+<!-- Audit Trail (Timeline) -->
+<div class="col-span-12 smoked-glass rounded-xl p-card-padding">
+<h3 class="font-headline-md text-headline-md text-on-background mb-8 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">history</span> Audit Trail
+                </h3>
+<div class="relative space-y-8 before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-outline-variant/30">
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface border-2 border-primary-container flex items-center justify-center z-10">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+<div>
+<p class="font-label-lg text-label-lg text-on-background">Exception Flagged</p>
+<p class="text-body-md text-on-surface-variant">Marcus Reed noted missing items and structural damage to outer carton FL-AF-001.</p>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Today, 10:42 AM</p>
+</div>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface border-2 border-outline-variant/30 flex items-center justify-center z-10">
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+</div>
+<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+<div>
+<p class="font-label-lg text-label-lg text-on-background">Shipment Received at Dock</p>
+<p class="text-body-md text-on-surface-variant">Arrival check-in complete. Temperature sensors verified at 18.2°C.</p>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Today, 09:15 AM</p>
+</div>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface border-2 border-outline-variant/30 flex items-center justify-center z-10">
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+</div>
+<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+<div>
+<p class="font-label-lg text-label-lg text-on-background">ASN Received (Advanced Shipping Notice)</p>
+<p class="text-body-md text-on-surface-variant">Supplier Arturo Fuente transmitted digital manifest for Batch FL-2023-AF9.</p>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Oct 24, 04:30 PM</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] flex justify-around items-center px-gutter py-4">
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 transition-all active:scale-95">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-sm text-label-sm mt-1">POS 3</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 transition-all active:scale-95">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm mt-1">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] transition-all scale-105 active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-sm text-label-sm mt-1">Inventory</span>
+</div>
+</nav>
+<!-- Interaction Script -->
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('.smoked-glass').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+                card.style.transition = 'transform 0.1s ease-in-out';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+
+        // Toggle mobile nav active state visually
+        const navItems = document.querySelectorAll('nav .flex-col');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => {
+                    i.classList.remove('bg-primary-container', 'text-on-primary-container', 'rounded-xl', 'shadow-[0_0_15px_rgba(233,193,118,0.3)]', 'scale-105');
+                    i.classList.add('text-on-surface-variant/70');
+                });
+                this.classList.add('bg-primary-container', 'text-on-primary-container', 'rounded-xl', 'shadow-[0_0_15px_rgba(233,193,118,0.3)]', 'scale-105');
+                this.classList.remove('text-on-surface-variant/70');
+            });
+        });
+    </script>
+</body></html>

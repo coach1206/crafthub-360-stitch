@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.8);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-foil-border {
+            position: relative;
+        }
+        .gold-foil-border::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid transparent;
+            background: linear-gradient(135deg, #e9c176, #775a19) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            pointer-events: none;
+            border-radius: inherit;
+        }
+        .amber-glow:active {
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.3);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#e5e2e3",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-container-high": "#2a2a2b",
+                        "on-secondary-fixed": "#2a1800",
+                        "tertiary-fixed": "#f7ddd6",
+                        "surface": "#131314",
+                        "on-primary-container": "#4e3700",
+                        "surface-tint": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "surface-container-low": "#1b1b1c",
+                        "on-primary": "#412d00",
+                        "tertiary-container": "#b7a09a",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-dim": "#131314",
+                        "outline-variant": "#4e4639",
+                        "error": "#ffb4ab",
+                        "surface-container": "#1f1f20",
+                        "surface-bright": "#39393a",
+                        "on-error": "#690005",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "inverse-primary": "#775a19",
+                        "primary": "#e9c176",
+                        "secondary-container": "#c68315",
+                        "on-secondary-container": "#3d2400",
+                        "inverse-on-surface": "#303031",
+                        "on-tertiary-container": "#473733",
+                        "on-background": "#e5e2e3",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "secondary": "#ffb95a",
+                        "background": "#131314",
+                        "on-primary-fixed": "#261900",
+                        "tertiary": "#dac1bb",
+                        "on-tertiary": "#3c2d28",
+                        "surface-container-highest": "#353436",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-fixed": "#ffdea5",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-fixed-dim": "#e9c176",
+                        "surface-variant": "#353436",
+                        "outline": "#9a8f80",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-secondary": "#462a00",
+                        "on-tertiary-fixed": "#261814",
+                        "on-surface": "#e5e2e3",
+                        "on-tertiary-fixed-variant": "#54433e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "64px",
+                        "unit": "8px",
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "card-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden select-none">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 flex items-center justify-between px-gutter h-20 shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="dashboard_customize">dashboard_customize</span>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<span class="text-label-lg font-label-lg text-primary uppercase tracking-widest">System Status</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Maintenance Mode Active</span>
+</div>
+<button class="w-12 h-12 flex items-center justify-center rounded-xl bg-primary-container/20 text-primary transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="min-h-screen pt-24 pb-32 px-margin flex items-center justify-center relative overflow-hidden">
+<!-- Background Atmospheric Element -->
+<div class="absolute inset-0 z-0 opacity-20">
+<img class="w-full h-full object-cover grayscale" data-alt="A macro photography shot of an antique, dark wooden cigar humidor with polished gold hinges and a soft ambient glow. The lighting is low-key, emphasizing deep espresso textures and the tactile quality of premium materials, creating an atmosphere of exclusivity and heritage in a dark, luxury setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv1XWGCX9RmQQyyisGjEF9banren32S3cvOBSD4s-N4MJuy4eG4fm79Y6COD88MfdQC-Pl3NCytoh5Kh4m6wXkd0x2-pKzsoY9xXsLQwwZgrEwe4l-ZkWHWWjoqBJrg7A0x7aHz_buHvweBwRjZJqE8o7ay_nYHCklghQ5KWENUU5crXSRWYMx3gKKDmfbPsYIfCpHpirQqb0PE8LSEcat1-YTn7ChSI2JsnSUxJGXZ3BQuX7Gvf9kQBQBVXsr8BikgBoU69WjEzg"/>
+</div>
+<div class="relative z-10 w-full max-w-container-max-width grid grid-cols-12 gap-gutter">
+<!-- Left Side: System Controls (Bento Style) -->
+<div class="col-span-12 lg:col-span-7 grid grid-cols-2 gap-gutter">
+<!-- Restart Control -->
+<button class="group col-span-2 md:col-span-1 relative h-64 glass-panel rounded-xl overflow-hidden amber-glow transition-all duration-300 flex flex-col items-center justify-center gap-4 p-card-padding text-center" onclick="triggerInteraction(this)">
+<div class="w-20 h-20 rounded-full bg-primary-container/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-5xl" data-icon="restart_alt">restart_alt</span>
+</div>
+<div class="space-y-1">
+<h3 class="font-headline-md text-headline-md text-primary">Restart NOVEE OS</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Full system cycle (Est. 45s)</p>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-primary/20">
+<div class="h-full bg-primary w-0 group-active:w-full transition-all duration-[2000ms]"></div>
+</div>
+</button>
+<!-- Calibrate Control -->
+<button class="group col-span-2 md:col-span-1 glass-panel rounded-xl h-64 amber-glow transition-all duration-300 flex flex-col items-center justify-center gap-4 p-card-padding text-center" onclick="triggerInteraction(this)">
+<div class="w-20 h-20 rounded-full bg-primary-container/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-5xl" data-icon="ads_click">ads_click</span>
+</div>
+<div class="space-y-1">
+<h3 class="font-headline-md text-headline-md text-primary">Calibrate Touch</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Precision sensor alignment</p>
+</div>
+</button>
+<!-- Flush Cache -->
+<button class="group col-span-2 md:col-span-1 glass-panel rounded-xl h-64 amber-glow transition-all duration-300 flex flex-col items-center justify-center gap-4 p-card-padding text-center" onclick="triggerInteraction(this)">
+<div class="w-20 h-20 rounded-full bg-primary-container/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-5xl" data-icon="cleaning_services">cleaning_services</span>
+</div>
+<div class="space-y-1">
+<h3 class="font-headline-md text-headline-md text-primary">Flush Local Cache</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Clear offline data logs</p>
+</div>
+</button>
+<!-- Exit Home -->
+<button class="group col-span-2 md:col-span-1 glass-panel rounded-xl h-64 amber-glow transition-all duration-300 flex flex-col items-center justify-center gap-4 p-card-padding text-center border-primary/20" onclick="window.location.reload()">
+<div class="w-20 h-20 rounded-full bg-secondary-container/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-5xl" data-icon="exit_to_app">exit_to_app</span>
+</div>
+<div class="space-y-1">
+<h3 class="font-headline-md text-headline-md text-secondary">Exit to Home</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Resume kiosk operations</p>
+</div>
+</button>
+</div>
+<!-- Right Side: Security & Verification -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-gutter">
+<div class="glass-panel rounded-xl p-8 flex-1 flex flex-col">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error" data-icon="lock_person" style="font-variation-settings: 'FILL' 1;">lock_person</span>
+<span class="text-label-lg font-label-lg text-on-surface uppercase tracking-widest">System Locked</span>
+</div>
+<div class="h-2 w-2 rounded-full bg-error animate-pulse"></div>
+</div>
+<div class="text-center mb-10">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Security Verification</h2>
+<p class="font-body-md text-on-surface-variant">Please enter administrative PIN to authorize commands.</p>
+</div>
+<!-- PIN Display -->
+<div class="flex justify-center gap-4 mb-10" id="pin-display">
+<div class="w-4 h-4 rounded-full border border-primary/40 bg-transparent transition-all duration-300"></div>
+<div class="w-4 h-4 rounded-full border border-primary/40 bg-transparent transition-all duration-300"></div>
+<div class="w-4 h-4 rounded-full border border-primary/40 bg-transparent transition-all duration-300"></div>
+<div class="w-4 h-4 rounded-full border border-primary/40 bg-transparent transition-all duration-300"></div>
+</div>
+<!-- PIN Pad -->
+<div class="grid grid-cols-3 gap-4 max-w-[320px] mx-auto">
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-headline-md font-headline-md text-on-surface hover:bg-primary-container/20 transition-all active:scale-90" onclick="pressKey('1')">1</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-headline-md font-headline-md text-on-surface hover:bg-primary-container/20 transition-all active:scale-90" onclick="pressKey('2')">2</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-headline-md font-headline-md text-on-surface hover:bg-primary-container/20 transition-all active:scale-90" onclick="pressKey('3')">3</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-headline-md font-headline-md text-on-surface hover:bg-primary-container/20 transition-all active:scale-90" onclick="pressKey('4')">4</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-headline-md font-headline-md text-on-surface hover:bg-primary-container/20 transition-all active:scale-90" onclick="pressKey('5')">5</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-headline-md font-headline-md text-on-surface hover:bg-primary-container/20 transition-all active:scale-90" onclick="pressKey('6')">6</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-headline-md font-headline-md text-on-surface hover:bg-primary-container/20 transition-all active:scale-90" onclick="pressKey('7')">7</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-headline-md font-headline-md text-on-surface hover:bg-primary-container/20 transition-all active:scale-90" onclick="pressKey('8')">8</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-headline-md font-headline-md text-on-surface hover:bg-primary-container/20 transition-all active:scale-90" onclick="pressKey('9')">9</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-error transition-all active:scale-90" onclick="resetPin()">
+<span class="material-symbols-outlined text-3xl" data-icon="backspace">backspace</span>
+</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-headline-md font-headline-md text-on-surface hover:bg-primary-container/20 transition-all active:scale-90" onclick="pressKey('0')">0</button>
+<button class="h-16 w-16 md:h-20 md:w-20 rounded-xl glass-panel text-primary transition-all active:scale-90" onclick="validatePin()">
+<span class="material-symbols-outlined text-4xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</button>
+</div>
+</div>
+<!-- Last Session Info -->
+<div class="glass-panel rounded-xl p-6 border-l-4 border-l-primary/50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary-container" data-icon="history">history</span>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase">Last Successful Maintenance</p>
+<p class="text-body-md font-bold text-on-surface">Today, 04:12 AM - Admin 01</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Bar (Simulated Context) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 transform translate-y-0.5 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-label-sm">Preview</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+<span class="text-label-sm font-label-sm">Save</span>
+</a>
+</nav>
+<script>
+        let currentPin = '';
+        const pinDots = document.querySelectorAll('#pin-display div');
+
+        function pressKey(num) {
+            if (currentPin.length < 4) {
+                currentPin += num;
+                updatePinDisplay();
+            }
+        }
+
+        function resetPin() {
+            currentPin = '';
+            updatePinDisplay();
+        }
+
+        function updatePinDisplay() {
+            pinDots.forEach((dot, index) => {
+                if (index < currentPin.length) {
+                    dot.classList.add('bg-primary', 'shadow-[0_0_10px_#e9c176]');
+                    dot.classList.remove('bg-transparent');
+                } else {
+                    dot.classList.remove('bg-primary', 'shadow-[0_0_10px_#e9c176]');
+                    dot.classList.add('bg-transparent');
+                }
+            });
+        }
+
+        function validatePin() {
+            if (currentPin.length === 4) {
+                // Shake effect on error or just generic feedback
+                const display = document.getElementById('pin-display');
+                display.classList.add('animate-bounce');
+                setTimeout(() => {
+                    display.classList.remove('animate-bounce');
+                    alert('System Authorized: Administrative controls unlocked.');
+                    resetPin();
+                }, 500);
+            }
+        }
+
+        function triggerInteraction(btn) {
+            btn.classList.add('scale-95');
+            setTimeout(() => btn.classList.remove('scale-95'), 150);
+            
+            // Logic for visual feedback on long actions
+            const label = btn.querySelector('h3').innerText;
+            console.log(`Command Initiated: ${label}`);
+        }
+    </script>
+</body></html>

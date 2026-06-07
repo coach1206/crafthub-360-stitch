@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.glass-panel {
+    background: rgba(31, 31, 32, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(233, 193, 118, 0.1)
+    }
+.gold-border-gradient {
+    border: 1px solid transparent;
+    background: linear-gradient(theme("colors.surface-container"), theme("colors.surface-container")) padding-box, linear-gradient(135deg, #e9c176 0%, #775a19 100%) border-box
+    }
+.amber-glow:active {
+    box-shadow: 0 0 20px rgba(233, 193, 118, 0.3);
+    transform: scale(0.98)
+    }
+.wood-texture {
+    background-color: #131314;
+    background-image: linear-gradient(rgba(19, 19, 20, 0.8), rgba(19, 19, 20, 0.95)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuA3EbVrNpbtsLoUBpK50nB6SfBv4ivl186ybdtfujd-91Pdpje_0qWGleGfWrERDJieRNbP-8E6XRf-J0insK-RYC7TWL46lKTuedJCG03RhgiKuyHSzGsGgZJpUD5cRHiNzRJSu1BAWChMwzAjNFq8Gpp9dQrNqA6ygSPivKBF8SpukKfrGTaviI6oLGv6hPsZ3Cq46kL2mzWSZNBzA0LABlYKKPhYuPBPvyDUAqJvuYMqrROPaUqHioyIYuODH78yqlzIUwJ7Gyw);
+    background-size: cover;
+    background-attachment: fixed
+    }
+.gold-text-gradient {
+    background: linear-gradient(135deg, #ffdea5 0%, #e9c176 50%, #c5a059 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent
+    }</style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#dac1bb",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "surface-container-high": "#2a2a2b",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container-highest": "#353436",
+                    "on-secondary": "#462a00",
+                    "on-error": "#690005",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-background": "#e5e2e3",
+                    "surface-dim": "#131314",
+                    "on-error-container": "#ffdad6",
+                    "outline": "#9a8f80",
+                    "on-surface": "#e5e2e3",
+                    "surface-container-low": "#1b1b1c",
+                    "on-secondary-fixed": "#2a1800",
+                    "secondary-fixed": "#ffddb6",
+                    "secondary-container": "#c68315",
+                    "background": "#131314",
+                    "surface-variant": "#353436",
+                    "on-tertiary": "#3c2d28",
+                    "inverse-primary": "#775a19",
+                    "surface-tint": "#e9c176",
+                    "error": "#ffb4ab",
+                    "surface": "#131314",
+                    "surface-container": "#1f1f20",
+                    "surface-bright": "#39393a",
+                    "primary": "#e9c176",
+                    "primary-container": "#c5a059",
+                    "inverse-on-surface": "#303031",
+                    "error-container": "#93000a",
+                    "on-tertiary-container": "#473733",
+                    "tertiary-container": "#b7a09a",
+                    "primary-fixed": "#ffdea5",
+                    "secondary": "#ffb95a",
+                    "on-primary-fixed": "#261900",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-container-lowest": "#0e0e0f",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "outline-variant": "#4e4639",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "on-primary": "#412d00",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-tertiary-fixed": "#261814",
+                    "on-surface-variant": "#d1c5b4",
+                    "on-primary-container": "#4e3700",
+                    "on-secondary-container": "#3d2400"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "card-padding": "24px",
+                    "unit": "8px",
+                    "gutter": "32px",
+                    "margin": "64px",
+                    "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "body-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="wood-texture min-h-screen text-on-surface overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary p-2 hover:bg-surface-variant/50 rounded-full transition-colors">menu</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label-lg text-label-lg text-on-surface-variant hidden md:block">Step 8 of 12</span>
+<button class="font-label-lg text-label-lg text-primary px-4 py-2 hover:bg-surface-variant/50 transition-colors duration-300">Grand Lounge</button>
+</div>
+</header>
+<main class="pt-32 pb-40 px-gutter max-w-container-max-width mx-auto">
+<!-- Progress Indicator -->
+<div class="mb-12 flex flex-col items-center">
+<div class="w-full max-w-xl h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[66%] transition-all duration-700 ease-out shadow-[0_0_10px_rgba(233,193,118,0.5)]"></div>
+</div>
+<p class="mt-4 font-label-sm text-label-sm text-outline uppercase tracking-widest">Experience Sequence: 08 / 12</p>
+</div>
+<!-- Hero Content -->
+<div class="text-center mb-16">
+<h2 class="font-headline-xl text-headline-xl gold-text-gradient mb-4">Investment Level</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Select your preferred experience tier.</p>
+</div>
+<!-- Budget Modules -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+<!-- Option 1 -->
+<button class="group relative flex flex-col items-start p-8 glass-panel rounded-xl gold-border-gradient amber-glow transition-all duration-300 hover:scale-[1.02] text-left overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">payments</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary mb-2 uppercase tracking-widest">Entry Tier</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Under $15</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Exceptional value, approachable flavor profiles for daily enjoyment.</p>
+</button>
+<!-- Option 2 -->
+<button class="group relative flex flex-col items-start p-8 glass-panel rounded-xl gold-border-gradient amber-glow transition-all duration-300 hover:scale-[1.02] text-left overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">currency_exchange</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary mb-2 uppercase tracking-widest">Standard Tier</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">$15 to $25</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">The sweet spot of premium craftsmanship and aged tobacco character.</p>
+</button>
+<!-- Option 3 -->
+<button class="group relative flex flex-col items-start p-8 glass-panel rounded-xl gold-border-gradient amber-glow transition-all duration-300 hover:scale-[1.02] text-left overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">stars</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary mb-2 uppercase tracking-widest">Reserve Tier</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">$25 to $40</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Complex, rare blends curated for the sophisticated palate.</p>
+</button>
+<!-- Option 4 -->
+<button class="group relative flex flex-col items-start p-8 glass-panel rounded-xl gold-border-gradient amber-glow transition-all duration-300 hover:scale-[1.02] text-left overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">workspace_premium</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary mb-2 uppercase tracking-widest">Prestige Tier</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">$40 plus</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Limited editions and ultra-aged vitolas for the ultimate connoisseur.</p>
+</button>
+<!-- Featured Option -->
+<button class="md:col-span-2 group relative flex flex-col items-start p-8 bg-primary/10 backdrop-blur-xl border-2 border-primary/50 rounded-xl amber-glow transition-all duration-300 hover:scale-[1.01] text-left overflow-hidden shadow-2xl shadow-primary/20">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<img class="w-full h-full object-cover grayscale brightness-50" data-alt="A macro close-up of a high-end hand-rolled cigar showing the delicate oily texture of the dark tobacco leaf wrapper. The lighting is warm and dramatic, highlighting the rich amber and brown tones consistent with an exclusive luxury lounge aesthetic. Soft golden dust particles dance in the light in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWAP55BtcLbOLnPM9dGv8N0pTJBWSot_H3k1Umh92Tw3KQBUvxqL2TdhhJyCIi65Nff9lIhLEQ-e2LXkgB1yAvwAz9u00HMuFpBLt9YG6bmRD_p13Xx7Cz8A0Hc0wcmYoQa9I0ueGyISWXVT8QRtjDsFv4GmxAVDwuFco0I4TOwcm-E0KN-S7AZ3xOwrQdiPEbX3rYsyCgNNhkUSsH7v3VVJ02EM-9TUgcV5GrblDGSkxwOH4DVEnFznN9YDRdhFrQpmrvCY3ysXA"/>
+</div>
+<div class="relative z-10">
+<span class="inline-block px-3 py-1 bg-primary text-on-primary font-label-sm text-label-sm rounded-full mb-4 uppercase tracking-tighter">Recommended</span>
+<h3 class="font-headline-lg text-headline-lg gold-text-gradient mb-2">Show me the best experience</h3>
+<p class="font-body-lg text-body-lg text-on-surface max-w-2xl">Ignore the constraints and prioritize pure craftsmanship and rare acquisitions. This path focuses on the highest-rated selections in our humidor regardless of price.</p>
+</div>
+<div class="absolute bottom-4 right-8 z-10">
+<span class="material-symbols-outlined text-primary text-5xl group-hover:translate-x-2 transition-transform duration-500">arrow_right_alt</span>
+</div>
+</button>
+</div>
+<!-- Participation Stamp -->
+<div class="flex justify-center items-center gap-4">
+<div class="px-6 py-3 border border-primary/20 bg-primary/5 rounded-full flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-lg text-label-lg text-primary tracking-widest uppercase">Budget Preference Logged</span>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-2xl">explore</span>
+<span class="font-label-sm text-label-sm mt-1">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-2xl">inventory_2</span>
+<span class="font-label-sm text-label-sm mt-1">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/20 rounded-full px-6 py-2 cursor-pointer">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-sm text-label-sm mt-1">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-2xl">auto_awesome</span>
+<span class="font-label-sm text-label-sm mt-1">Assistant</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.96)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1.02)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

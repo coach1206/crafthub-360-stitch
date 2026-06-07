@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Grand Humidor | Live Venue Map</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(31, 31, 32, 0.7);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        .gold-foil {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+        }
+        .map-bg {
+            background-image: radial-gradient(circle at center, #1b1b1c 0%, #131314 100%);
+            background-size: 40px 40px;
+            background-image: radial-gradient(circle, #353436 1px, transparent 1px);
+        }
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(233, 193, 118, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(233, 193, 118, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(233, 193, 118, 0); }
+        }
+        .animate-pulse-gold {
+            animation: pulse-gold 2s infinite;
+        }
+        .animate-pulse-red {
+            animation: pulse-red 1.5s infinite;
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(147, 0, 10, 0.6); }
+            70% { box-shadow: 0 0 0 15px rgba(147, 0, 10, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(147, 0, 10, 0); }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#353436",
+                        "surface-container": "#1f1f20",
+                        "tertiary-fixed": "#f7ddd6",
+                        "inverse-primary": "#775a19",
+                        "on-secondary": "#462a00",
+                        "on-tertiary-container": "#473733",
+                        "background": "#131314",
+                        "surface-tint": "#e9c176",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-bright": "#39393a",
+                        "on-tertiary-fixed": "#261814",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#e5e2e3",
+                        "primary-fixed": "#ffdea5",
+                        "error-container": "#93000a",
+                        "secondary": "#ffb95a",
+                        "outline-variant": "#4e4639",
+                        "on-surface": "#e5e2e3",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "surface": "#131314",
+                        "on-primary": "#412d00",
+                        "inverse-on-surface": "#303031",
+                        "on-tertiary": "#3c2d28",
+                        "tertiary-container": "#b7a09a",
+                        "surface-variant": "#353436",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-fixed-dim": "#e9c176",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "primary-container": "#c5a059",
+                        "on-error": "#690005",
+                        "on-primary-container": "#4e3700",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-background": "#e5e2e3",
+                        "secondary-container": "#c68315",
+                        "primary": "#e9c176",
+                        "on-secondary-fixed": "#2a1800",
+                        "outline": "#9a8f80",
+                        "surface-container-lowest": "#0e0e0f",
+                        "surface-container-low": "#1b1b1c",
+                        "on-surface-variant": "#d1c5b4",
+                        "on-primary-fixed": "#261900",
+                        "surface-dim": "#131314",
+                        "on-secondary-container": "#3d2400",
+                        "surface-container-high": "#2a2a2b",
+                        "error": "#ffb4ab",
+                        "tertiary": "#dac1bb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "64px",
+                        "card-padding": "24px",
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background overflow-hidden font-body-md select-none">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-margin h-24">
+<div class="flex items-center gap-6">
+<h1 class="font-display-lg text-headline-lg text-primary tracking-tighter">The Grand Humidor</h1>
+<div class="h-8 w-[1px] bg-outline-variant/50 mx-2"></div>
+<div class="flex gap-4">
+<span class="text-primary font-bold font-label-lg px-4 py-2 border border-primary/20 rounded-lg">LIVE OPS</span>
+<span class="text-on-surface-variant font-label-lg px-4 py-2 hover:bg-surface-container-highest/50 transition-all rounded-lg cursor-pointer">ANALYTICS</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="font-label-lg text-on-surface">Julian Vane</p>
+<p class="font-label-sm text-primary">Head Sommelier</p>
+</div>
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary/30">
+<img alt="Staff member profile" class="w-full h-full object-cover" data-alt="A professional headshot of a sophisticated head sommelier in a dark tailored vest and crisp white shirt. He has a warm, authoritative expression and is set against a blurred background of a dimly lit, high-end wine cellar with mahogany shelves. The lighting is dramatic and moody, emphasizing a premium hospitality atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIv2-SoWBzPiMAzFAyResEcIy0qyY3N4LlSi9y9XYBkyJHXgOz5dkJX4fzPCJvlQSyYjGuU5G9fZyusor95E7Kb56GKxgU54oucdysAL6lpbs0JlK9VYUFTCq7MLzVnsrdfD75H12jGdtekTPUNlEgpzR1cv3oD5hj_cT3A-OqZB7LVulPZ0EhVL2rCGPEumZrJf7mOTfM6S7QSwf71NsiZW1YB4piMpj_pjdhYJqfSrZco_KapDXLxv-eRxuLK1TX8h6xZNXEXXU"/>
+</div>
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-highest/50 p-2 rounded-full transition-all">notifications</button>
+</div>
+</header>
+<!-- Side Navigation Drawer -->
+<aside class="fixed left-0 top-0 h-screen w-80 z-40 bg-surface-container-low border-r border-outline-variant/20 shadow-2xl pt-32 px-6">
+<div class="mb-10 px-4">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-1">Live Map</h2>
+<p class="font-label-sm text-on-surface-variant">Lounge B - Evening Shift</p>
+</div>
+<nav class="space-y-4">
+<button class="w-full flex items-center gap-4 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 scale-95 transition-transform active:scale-90">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg">Live Map</span>
+</button>
+<button class="w-full flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-all">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-lg">Floor Plan</span>
+</button>
+<button class="w-full flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-all">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-lg">Insights</span>
+</button>
+<button class="w-full flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-all">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg">Settings</span>
+</button>
+</nav>
+<div class="absolute bottom-10 left-6 right-6 p-4 glass-panel rounded-xl">
+<p class="font-label-sm text-primary mb-2 uppercase tracking-widest">Active E.A.T. Overlay</p>
+<div class="space-y-2">
+<button class="w-full py-2 px-3 flex justify-between items-center text-label-sm bg-surface-container-highest rounded-lg border border-primary/20">
+<span>Revenue Heat</span>
+<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#e9c176]"></div>
+</button>
+<button class="w-full py-2 px-3 flex justify-between items-center text-label-sm text-on-surface-variant/50">
+<span>Inventory Risk</span>
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content: Interactive Map -->
+<main class="ml-80 pt-24 h-screen relative map-bg overflow-hidden">
+<!-- Map Visualization Overlay -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<!-- Simulated Layout Grid -->
+<div class="relative w-[1200px] h-[800px] border border-outline-variant/10 rounded-[4rem] overflow-hidden">
+<!-- VIP Section (Gold Glow) -->
+<div class="absolute top-[100px] left-[150px] w-64 h-64 glass-panel rounded-full flex flex-col items-center justify-center animate-pulse-gold pointer-events-auto cursor-pointer group" onclick="showGuestInfo('Table 12', 'The Baron', 'SmokeCraft V4', 'Vintage Davidoff', 'Marcus A.')">
+<p class="text-primary font-headline-md">VIP TERRACE</p>
+<span class="material-symbols-outlined text-primary text-4xl mt-2">king_bed</span>
+<div class="absolute -top-4 -right-4 bg-primary text-on-primary font-bold px-3 py-1 rounded-full text-xs">GOLD STATUS</div>
+</div>
+<!-- Bar Section (Amber Glow) -->
+<div class="absolute top-[120px] right-[150px] w-96 h-32 glass-panel rounded-[2rem] border-secondary/40 shadow-[0_0_30px_rgba(255,185,90,0.15)] pointer-events-auto cursor-pointer flex items-center justify-center" onclick="showGuestInfo('Bar Kiosk 4', 'S. Miller', 'PourCraft Elite', 'Hibiki 21', 'Elena R.')">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary text-3xl">liquor</span>
+<div class="text-left">
+<p class="text-secondary font-headline-md">CRYSTAL BAR</p>
+<p class="text-on-surface-variant text-xs font-label-sm uppercase tracking-tighter">Inventory Alert: Amber Level</p>
+</div>
+</div>
+</div>
+<!-- Humidor (Red Alert) -->
+<div class="absolute bottom-[100px] right-[120px] w-48 h-80 glass-panel rounded-2xl border-error/50 animate-pulse-red flex flex-col items-center justify-center pointer-events-auto cursor-pointer">
+<span class="material-symbols-outlined text-error text-5xl mb-4">shelves</span>
+<p class="text-error font-label-lg text-center px-4">HUMIDOR STOCK CRITICAL</p>
+</div>
+<!-- Central Hub / Kiosks -->
+<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-outline-variant/20 rounded-full border-dashed flex items-center justify-center">
+<!-- Scatter dots representing guest movement -->
+<div class="absolute top-10 left-20 w-3 h-3 bg-primary rounded-full shadow-[0_0_10px_#e9c176]"></div>
+<div class="absolute top-40 right-10 w-3 h-3 bg-primary/40 rounded-full"></div>
+<div class="absolute bottom-20 left-1/3 w-3 h-3 bg-primary rounded-full shadow-[0_0_10px_#e9c176]"></div>
+<div class="w-24 h-24 bg-surface-container-highest border border-primary/20 rounded-full flex items-center justify-center shadow-2xl">
+<span class="material-symbols-outlined text-primary">hub</span>
+</div>
+</div>
+<!-- Path Visualization (E.A.T. Overlay) -->
+<svg class="absolute inset-0 w-full h-full opacity-30 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+<path d="M 278,230 Q 500,400 600,600" fill="none" stroke="#e9c176" stroke-dasharray="8 4" stroke-width="2"></path>
+<path d="M 900,180 Q 700,400 600,600" fill="none" stroke="#ffb95a" stroke-dasharray="8 4" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Floating UI: Operational Controls -->
+<div class="absolute right-margin bottom-margin flex flex-col gap-4">
+<button class="h-[72px] px-8 glass-panel border-primary/40 text-primary flex items-center gap-4 rounded-full hover:bg-primary hover:text-on-primary transition-all duration-300 shadow-xl group">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform">transfer_within_a_station</span>
+<span class="font-label-lg">MOVE GUEST</span>
+</button>
+<button class="h-[72px] px-8 glass-panel border-primary/40 text-primary flex items-center gap-4 rounded-full hover:bg-primary hover:text-on-primary transition-all duration-300 shadow-xl group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">support_agent</span>
+<span class="font-label-lg">STAFF HELP COACH</span>
+</button>
+<button class="h-[72px] px-8 bg-primary text-on-primary flex items-center gap-4 rounded-full hover:shadow-[0_0_20px_#e9c176] transition-all duration-300 shadow-xl group">
+<span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+<span class="font-label-lg">BACK TO CRAFTHUB</span>
+</button>
+</div>
+<!-- Guest Detail Card (Appears on click) -->
+<div class="hidden absolute top-32 left-margin w-96 glass-panel rounded-3xl shadow-2xl p-6 transform transition-all translate-y-10 opacity-0 border-primary/30" id="guestCard">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-primary font-label-sm uppercase tracking-widest mb-1" id="guestTable">TABLE 12</h3>
+<p class="font-headline-md text-on-surface" id="guestName">The Baron</p>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-white" onclick="hideGuestInfo()">close</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 p-3 bg-surface-container-highest/50 rounded-xl">
+<span class="material-symbols-outlined text-primary">hardware</span>
+<div>
+<p class="text-[10px] font-label-sm text-on-surface-variant uppercase">Current Module</p>
+<p class="font-label-lg" id="guestModule">SmokeCraft V4</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 bg-surface-container-highest/50 rounded-xl">
+<span class="material-symbols-outlined text-primary">shopping_cart</span>
+<div>
+<p class="text-[10px] font-label-sm text-on-surface-variant uppercase">Open Cart</p>
+<p class="font-label-lg" id="guestCart">Vintage Davidoff x2</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 bg-surface-container-highest/50 rounded-xl">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-[10px] font-bold text-on-secondary-container">MA</div>
+<div>
+<p class="text-[10px] font-label-sm text-on-surface-variant uppercase">Assigned Server</p>
+<p class="font-label-lg" id="guestServer">Marcus Aurelius</p>
+</div>
+</div>
+</div>
+<div class="mt-8 flex gap-3">
+<button class="flex-1 py-3 bg-primary text-on-primary font-label-lg rounded-xl">ACTION</button>
+<button class="flex-1 py-3 glass-panel border-outline-variant text-on-surface font-label-lg rounded-xl">LOG NOTE</button>
+</div>
+</div>
+<!-- Intelligence Toggles -->
+<div class="absolute top-margin right-margin flex gap-3">
+<div class="flex bg-surface-container-low rounded-full p-1 border border-outline-variant/30 glass-panel">
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full font-label-sm shadow-lg">HEAT</button>
+<button class="px-6 py-2 text-on-surface-variant font-label-sm hover:text-primary">RISK</button>
+<button class="px-6 py-2 text-on-surface-variant font-label-sm hover:text-primary">PATHS</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Contextual Staff View) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-sm mt-1">POS 3</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-12 py-3 shadow-[0_0_15px_rgba(233,193,118,0.3)] scale-105 transition-all cursor-pointer">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm mt-1">Live Map</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm mt-1">Inventory</span>
+</div>
+</footer>
+<script>
+        function showGuestInfo(table, name, module, cart, server) {
+            const card = document.getElementById('guestCard');
+            document.getElementById('guestTable').innerText = table;
+            document.getElementById('guestName').innerText = name;
+            document.getElementById('guestModule').innerText = module;
+            document.getElementById('guestCart').innerText = cart;
+            document.getElementById('guestServer').innerText = server;
+            
+            card.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.remove('translate-y-10', 'opacity-0');
+            }, 10);
+        }
+
+        function hideGuestInfo() {
+            const card = document.getElementById('guestCard');
+            card.classList.add('translate-y-10', 'opacity-0');
+            setTimeout(() => {
+                card.classList.add('hidden');
+            }, 300);
+        }
+
+        // Atmospheric random pulse logic for "Inventory Risk"
+        setInterval(() => {
+            const dots = document.querySelectorAll('.bg-primary');
+            dots.forEach(dot => {
+                if (Math.random() > 0.8) {
+                    dot.classList.add('scale-150');
+                    setTimeout(() => dot.classList.remove('scale-150'), 1000);
+                }
+            });
+        }, 3000);
+    </script>
+</body></html>

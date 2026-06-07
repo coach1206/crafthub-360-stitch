@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E.A.T. Intelligence - Cellar Logistics &amp; Inventory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Hanken+Grotesk:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Hanken+Grotesk:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#2a2a2a",
+                    "on-primary-fixed": "#241a00",
+                    "on-surface-variant": "#d0c5af",
+                    "on-tertiary-fixed-variant": "#474646",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "outline": "#99907c",
+                    "on-error-container": "#ffdad6",
+                    "error": "#ffb4ab",
+                    "on-secondary-container": "#b6b5b5",
+                    "tertiary": "#d0cecd",
+                    "secondary-container": "#464747",
+                    "error-container": "#93000a",
+                    "on-tertiary": "#313030",
+                    "on-tertiary-fixed": "#1c1b1b",
+                    "surface-container-low": "#1c1b1b",
+                    "primary-fixed-dim": "#e9c349",
+                    "on-primary-fixed-variant": "#574500",
+                    "on-error": "#690005",
+                    "primary-fixed": "#ffe088",
+                    "inverse-surface": "#e5e2e1",
+                    "on-primary-container": "#554300",
+                    "primary-container": "#d4af37",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "tertiary-container": "#b5b2b2",
+                    "primary": "#f2ca50",
+                    "surface-tint": "#e9c349",
+                    "inverse-primary": "#735c00",
+                    "on-primary": "#3c2f00",
+                    "on-background": "#e5e2e1",
+                    "surface": "#141313",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-container": "#201f1f",
+                    "surface-bright": "#3a3939",
+                    "on-secondary": "#303031",
+                    "on-surface": "#e5e2e1",
+                    "surface-variant": "#353434",
+                    "surface-dim": "#141313",
+                    "background": "#141313",
+                    "surface-container-highest": "#353434",
+                    "secondary": "#c7c6c6",
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "tertiary-fixed": "#e5e2e1",
+                    "outline-variant": "#4d4635",
+                    "on-secondary-fixed-variant": "#464747",
+                    "inverse-on-surface": "#313030",
+                    "secondary-fixed": "#e3e2e2",
+                    "on-tertiary-container": "#454545"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-desktop": "40px",
+                    "gutter": "24px",
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "container-padding": "20px"
+            },
+            "fontFamily": {
+                    "body-sm": ["Geist"],
+                    "body-md": ["Geist"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "telemetry-data": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "label-caps": ["JetBrains Mono"],
+                    "headline-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "telemetry-data": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #010101;
+            color: #e5e2e1;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(20, 19, 19, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(153, 144, 124, 0.2);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        .titanium-edge {
+            border: 1px solid rgba(199, 198, 198, 0.15);
+        }
+        .telemetry-pulse {
+            box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+        .scanline {
+            background: linear-gradient(to bottom, transparent 50%, rgba(242, 202, 80, 0.02) 50%);
+            background-size: 100% 4px;
+        }
+        .rack-grid {
+            perspective: 1200px;
+        }
+        .rack-3d {
+            transform: rotateX(15deg) rotateY(-5deg);
+        }
+        .success-banner {
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .success-banner.active {
+            transform: translateY(0);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-xl bg-surface/80 border-b border-outline-variant shadow-md flex justify-between items-center px-gutter h-20 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 duration-300">menu</span>
+<h1 class="font-headline-lg text-headline-lg tracking-widest text-primary dark:text-primary uppercase">RESERVE LOUNGE</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<span class="font-label-caps text-label-caps text-primary cursor-pointer hover:text-primary-fixed-dim transition-colors">CELLAR LOGISTICS</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant cursor-pointer hover:text-primary-fixed-dim transition-colors">INVENTORY</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant cursor-pointer hover:text-primary-fixed-dim transition-colors">ANALYTICS</span>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden">
+<img alt="Member Digital Passport" class="w-full h-full object-cover" data-alt="A professional portrait of a sommelier wearing a charcoal grey tailored suit in a high-end wine cellar. The lighting is dramatic and cinematic, with warm gold highlights catching the edges of crystal glassware in the background. The aesthetic is elite and executive, emphasizing expertise and precision in a luxury environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz8V8i0eHfccRbyaw0d7MQG21nac7H4423yJmUWzXELlfZZjfZt3F6kiQ72xbvX9UuPorMh3E6LrE7nIl94LZArkW_2LVKVuUUfnbqwX9W9DIR55ztYLnp3KaKxWIReMRDy5yibYboyxDDjZ1QWfCqXboyaq8ujsmNtpgn4uvc2aXw2ZPdDciCAE6w1H7XvoFTtS4nrFg2ZyeZACKfNI7cK7NBm_Th2ERxUJQKfcsCUbEKnV0rtnADCbN0_-9P3mXHN7s-d4ZbsSo"/>
+</div>
+</div>
+</header>
+<main class="pt-28 pb-32 px-margin-desktop min-h-screen scanline">
+<!-- Main Dashboard Layout -->
+<div class="max-w-7xl mx-auto grid grid-cols-12 gap-gutter">
+<!-- Left Column: 3D Rack Visualization -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+<div class="glass-card p-6 rounded-xl flex flex-col gap-4 relative overflow-hidden h-[500px]">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error telemetry-pulse"></span>
+<h2 class="font-label-caps text-label-caps text-error">CRITICAL ALERT: OPTIMAL STORAGE VARIANCE</h2>
+</div>
+<span class="font-telemetry-data text-body-sm text-on-surface-variant">RACK_04 // SECTOR_G</span>
+</div>
+<!-- 3D Style Rack Visualization -->
+<div class="rack-grid flex-1 flex items-center justify-center p-8">
+<div class="rack-3d grid grid-cols-6 grid-rows-4 gap-3 w-full h-full">
+<!-- Generate Bottle Slots -->
+<script>
+                                const rack = document.querySelector('.rack-3d');
+                                for(let i=0; i<24; i++) {
+                                    const isTarget = i === 14; // Rack 4 simulated target
+                                    const div = document.createElement('div');
+                                    div.className = `titanium-edge rounded-sm flex items-center justify-center relative ${isTarget ? 'bg-error/20 border-error animate-pulse' : 'bg-surface-container-lowest/40'}`;
+                                    div.innerHTML = `
+                                        <span class="material-symbols-outlined text-xs ${isTarget ? 'text-error' : 'text-outline/30'}">wine_bar</span>
+                                        ${isTarget ? '<div class="absolute -top-2 -right-2 bg-error text-[8px] px-1 rounded font-bold">HUMID_VAR</div>' : ''}
+                                    `;
+                                    rack.appendChild(div);
+                                }
+                            </script>
+</div>
+</div>
+<div class="absolute bottom-4 left-6 right-6 flex justify-between font-telemetry-data text-[10px] text-outline">
+<span>LATENCY: 14MS</span>
+<span>ENCRYPTION: AES-256</span>
+<span>SYSTEM_STATUS: DEGRADED</span>
+</div>
+</div>
+<!-- Telemetry Feed -->
+<div class="glass-card p-6 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<span class="font-label-caps text-label-caps text-on-surface-variant">HUMIDITY LEVEL</span>
+<span class="font-telemetry-data text-error">82.4%</span>
+</div>
+<div class="h-16 w-full flex items-end gap-1">
+<!-- Mock Sparkline -->
+<div class="flex-1 bg-primary/20 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[55%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[65%] rounded-t-sm"></div>
+<div class="flex-1 bg-error/40 h-[85%] rounded-t-sm"></div>
+<div class="flex-1 bg-error/60 h-[95%] rounded-t-sm"></div>
+<div class="flex-1 bg-error h-full rounded-t-sm"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<span class="font-label-caps text-label-caps text-on-surface-variant">CORE TEMPERATURE</span>
+<span class="font-telemetry-data text-primary">12.8°C</span>
+</div>
+<div class="h-16 w-full flex items-end gap-1">
+<!-- Mock Sparkline -->
+<div class="flex-1 bg-primary/40 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[42%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[41%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[43%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[42%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[44%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Interactive Controls -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="glass-card p-6 rounded-xl border-primary/20">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-2">Crisis Scenario</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">
+                        Sensors detect a localized humidity spike in Sector G (Rack 4). Atmospheric seals remain intact, suggesting an internal mesh imbalance. Select the priority corrective action to prevent cork degradation.
+                    </p>
+<div class="flex flex-col gap-3" id="action-list">
+<button class="group w-full p-4 rounded-lg titanium-edge bg-surface-container hover:bg-surface-variant transition-all text-left flex items-center justify-between" onclick="handleAction(this, false)">
+<span class="font-label-caps text-label-caps text-on-surface">Initiate Bottle Rotation</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">sync</span>
+</button>
+<button class="group w-full p-4 rounded-lg titanium-edge bg-surface-container hover:bg-primary/10 hover:border-primary/50 transition-all text-left flex items-center justify-between" onclick="handleAction(this, true)">
+<span class="font-label-caps text-label-caps text-on-surface">Recalibrate HVAC Mesh</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">settings_input_component</span>
+</button>
+<button class="group w-full p-4 rounded-lg titanium-edge bg-surface-container hover:bg-surface-variant transition-all text-left flex items-center justify-between" onclick="handleAction(this, false)">
+<span class="font-label-caps text-label-caps text-on-surface">Deploy Mesh Guard Shield</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">shield</span>
+</button>
+<button class="group w-full p-4 rounded-lg titanium-edge bg-surface-container hover:bg-surface-variant transition-all text-left flex items-center justify-between" onclick="handleAction(this, false)">
+<span class="font-label-caps text-label-caps text-on-surface">Manual Temp Override</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">thermostat</span>
+</button>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl flex-1">
+<h4 class="font-label-caps text-label-caps text-outline mb-4">MEMBER LOGS</h4>
+<div class="flex flex-col gap-3 font-telemetry-data text-[12px] opacity-70">
+<div class="flex gap-2">
+<span class="text-primary">[08:42:01]</span>
+<span>System initialized. Alexander Sterling logged in.</span>
+</div>
+<div class="flex gap-2">
+<span class="text-primary">[09:15:33]</span>
+<span>Ambient cellar temp stabilized at 12.8°C.</span>
+</div>
+<div class="flex gap-2 text-error">
+<span>[10:04:12]</span>
+<span>ALERT: Rack 4 humidity threshold exceeded.</span>
+</div>
+<div class="flex gap-2 animate-pulse">
+<span class="text-primary">[10:05:00]</span>
+<span>Awaiting directive...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Success Notification -->
+<div class="success-banner fixed bottom-28 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-md" id="success-notif">
+<div class="glass-card border-primary bg-primary/10 p-6 rounded-xl flex items-center gap-4 shadow-[0_0_40px_rgba(242,202,80,0.2)]">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h3 class="font-label-caps text-label-caps text-primary">SYSTEM STABLE</h3>
+<p class="font-body-sm text-body-sm text-on-surface">Humidity variance neutralized. Logistics integrity 100%.</p>
+</div>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl backdrop-blur-20px bg-surface-container-low/90 border-t border-outline-variant shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center h-24 px-gutter w-full pb-safe">
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">PourCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">BeerCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">WineCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold gap-1 scale-110 duration-500 ease-out cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Passport</span>
+</div>
+</nav>
+<script>
+        function handleAction(btn, isCorrect) {
+            // Disable all buttons
+            const buttons = document.querySelectorAll('#action-list button');
+            buttons.forEach(b => b.disabled = true);
+
+            if(isCorrect) {
+                btn.classList.add('bg-primary/20', 'border-primary');
+                // Simulate system repair
+                const target = document.querySelector('.bg-error\\/20');
+                if(target) {
+                    target.classList.remove('bg-error/20', 'border-error', 'animate-pulse');
+                    target.classList.add('bg-primary/20', 'border-primary');
+                    const badge = target.querySelector('.bg-error');
+                    if(badge) badge.remove();
+                }
+
+                // Show notification
+                document.getElementById('success-notif').classList.add('active');
+                
+                // Update Logs
+                const logContainer = document.querySelector('.member-logs-container') || document.querySelector('.glass-card .flex-col.gap-3.font-telemetry-data');
+                const newLog = document.createElement('div');
+                newLog.className = 'flex gap-2 text-primary font-bold';
+                newLog.innerHTML = `<span>[${new Date().toLocaleTimeString('en-GB')}]</span><span>SUCCESS: HVAC MESH CALIBRATED.</span>`;
+                logContainer.appendChild(newLog);
+
+            } else {
+                btn.classList.add('bg-error/20', 'border-error');
+                setTimeout(() => {
+                    btn.classList.remove('bg-error/20', 'border-error');
+                    buttons.forEach(b => b.disabled = false);
+                }, 1000);
+            }
+        }
+    </script>
+</body></html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>POS 3: Point-of-Sale Transaction Hub (Tactile)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&amp;family=Inter:wght@300;400;600;700&amp;family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#c5a059',
+                        surface: '#131314',
+                        'surface-bright': '#39393a',
+                        'surface-container-low': '#1b1b1c',
+                        'surface-container-high': '#2a2a2b',
+                        'on-surface-variant': '#c9c6c4',
+                        'outline-variant': 'rgba(197, 160, 89, 0.2)',
+                        'accent-success': '#4ade80',
+                    },
+                    fontFamily: {
+                        headline: ['Playfair Display', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    borderRadius: {
+                        'premium': '0.5rem',
+                    },
+                    boxShadow: {
+                        'tactile': '0 10px 40px rgba(0, 0, 0, 0.6)',
+                        'glow-gold': '0 0 25px rgba(197, 160, 89, 0.25)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        @layer utilities {
+            .glass-premium {
+                background: rgba(19, 19, 20, 0.9);
+                backdrop-filter: blur(24px);
+                border: 1px solid rgba(197, 160, 89, 0.15);
+            }
+            .keypad-btn {
+                height: 100px;
+                background: rgba(42, 42, 43, 0.8);
+                border: 1px solid rgba(197, 160, 89, 0.1);
+                font-family: 'Playfair Display', serif;
+                font-size: 2.5rem;
+                font-weight: 700;
+                transition: all 0.1s cubic-bezier(0, 0, 0.2, 1);
+            }
+            .keypad-btn:active {
+                transform: scale(0.92);
+                background: rgba(197, 160, 89, 0.2);
+                border-color: #c5a059;
+            }
+            .category-tab {
+                height: 80px;
+                background: rgba(27, 27, 28, 0.5);
+                border: 1px solid rgba(197, 160, 89, 0.05);
+            }
+            .category-tab.active {
+                background: rgba(197, 160, 89, 0.1);
+                border-color: #c5a059;
+                color: #c5a059;
+            }
+            .haptic-active:active {
+                transform: scale(0.97);
+                filter: brightness(0.9);
+                transition: transform 0.1s ease-out;
+            }
+        }
+        
+        body {
+            background-color: #0e0e0f;
+            color: #e3e3e3;
+            overflow: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .ledger-line {
+            border-bottom: 1px dashed rgba(197, 160, 89, 0.15);
+        }
+
+        .scroll-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="font-body selection:bg-primary/30 h-screen flex flex-col">
+<!-- Top App Bar (Station ID) -->
+<header class="h-20 flex items-center justify-between px-8 z-50 glass-premium border-b border-outline-variant shrink-0">
+<div class="flex items-center gap-4 haptic-active">
+<span class="material-icons-round text-primary text-3xl">point_of_sale</span>
+<div class="flex flex-col">
+<h1 class="font-headline text-2xl font-bold tracking-widest uppercase text-primary">POS 3 Terminal</h1>
+<span class="text-[10px] text-on-surface-variant font-bold tracking-[0.2em] uppercase">Grand Lounge Station Alpha</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right flex flex-col">
+<span class="text-xs font-bold text-white uppercase">Julian Vane</span>
+<span class="text-[10px] text-accent-success uppercase font-black">Authorized</span>
+</div>
+<div class="w-12 h-12 rounded-full border border-primary/30 overflow-hidden haptic-active">
+<img alt="Staff" class="w-full h-full object-cover grayscale" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+</div>
+</div>
+</header>
+<!-- Main POS Interface -->
+<main class="flex-grow flex flex-col md:flex-row overflow-hidden relative z-10">
+<!-- Left Column: Order Summary & Ledger -->
+<section class="w-full md:w-[400px] border-r border-outline-variant flex flex-col bg-surface/40 backdrop-blur-md">
+<!-- Category Tabs (Horizontal Scroll) -->
+<div class="flex overflow-x-auto scroll-hide p-4 gap-3 border-b border-outline-variant/30 shrink-0">
+<button class="category-tab active px-8 rounded-premium shrink-0 flex flex-col items-center justify-center haptic-active">
+<span class="material-icons-round text-xl">chair</span>
+<span class="text-[10px] font-bold uppercase mt-1">Smoke</span>
+</button>
+<button class="category-tab px-8 rounded-premium shrink-0 flex flex-col items-center justify-center haptic-active text-on-surface-variant">
+<span class="material-icons-round text-xl">liquor</span>
+<span class="text-[10px] font-bold uppercase mt-1">Pour</span>
+</button>
+<button class="category-tab px-8 rounded-premium shrink-0 flex flex-col items-center justify-center haptic-active text-on-surface-variant">
+<span class="material-icons-round text-xl">wine_bar</span>
+<span class="text-[10px] font-bold uppercase mt-1">Cellar</span>
+</button>
+<button class="category-tab px-8 rounded-premium shrink-0 flex flex-col items-center justify-center haptic-active text-on-surface-variant">
+<span class="material-icons-round text-xl">restaurant</span>
+<span class="text-[10px] font-bold uppercase mt-1">Pairing</span>
+</button>
+</div>
+<!-- Live Receipt / Ledger -->
+<div class="flex-grow overflow-y-auto p-6 space-y-4">
+<div class="flex justify-between items-start ledger-line pb-4">
+<div class="flex flex-col">
+<span class="text-white font-bold text-lg">Padrón 1926 Series</span>
+<span class="text-xs text-on-surface-variant uppercase">No. 9 Natural - Table 04</span>
+</div>
+<span class="text-primary font-mono text-xl font-bold">$42.00</span>
+</div>
+<div class="flex justify-between items-start ledger-line pb-4">
+<div class="flex flex-col">
+<span class="text-white font-bold text-lg">Macallan 18yr</span>
+<span class="text-xs text-on-surface-variant uppercase">Neat - Glencairn</span>
+</div>
+<span class="text-primary font-mono text-xl font-bold">$65.00</span>
+</div>
+<div class="flex justify-between items-start ledger-line pb-4 opacity-50">
+<div class="flex flex-col">
+<span class="text-white font-bold text-lg">Artisanal Match Set</span>
+<span class="text-xs text-on-surface-variant uppercase">Complimentary</span>
+</div>
+<span class="text-primary font-mono text-xl font-bold">$0.00</span>
+</div>
+</div>
+<!-- Calculation Panel -->
+<div class="p-6 glass-premium border-t border-outline-variant space-y-3 shrink-0">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant uppercase font-bold tracking-tighter">Subtotal</span>
+<span class="text-white font-mono">$107.00</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant uppercase font-bold tracking-tighter">Gratuity (20%)</span>
+<span class="text-white font-mono">$21.40</span>
+</div>
+<div class="flex justify-between items-end pt-2 border-t border-primary/20">
+<span class="text-primary font-headline text-xl font-bold uppercase tracking-widest">Total</span>
+<span class="text-primary font-mono text-4xl font-black drop-shadow-[0_0_10px_rgba(197,160,89,0.3)]">$128.40</span>
+</div>
+</div>
+</section>
+<!-- Right Column: Tactile Controls & Numeric Keypad -->
+<section class="flex-grow flex flex-col p-6 bg-black/40">
+<!-- Context Bar -->
+<div class="flex gap-4 mb-6 shrink-0">
+<div class="flex-grow h-20 glass-premium rounded-premium flex items-center px-6 gap-4 border-primary/30">
+<span class="material-icons-round text-primary text-3xl">badge</span>
+<div class="flex flex-col">
+<span class="text-[10px] text-primary font-black uppercase tracking-widest">Active Member</span>
+<span class="text-xl font-headline font-bold text-white">Alexander Sterling</span>
+</div>
+</div>
+<button class="w-20 h-20 glass-premium rounded-premium flex items-center justify-center text-primary haptic-active">
+<span class="material-icons-round text-3xl">person_add</span>
+</button>
+</div>
+<!-- Numeric Grid (The Core Tactile Tool) -->
+<div class="flex-grow grid grid-cols-3 gap-4">
+<button class="keypad-btn rounded-premium haptic-active">1</button>
+<button class="keypad-btn rounded-premium haptic-active">2</button>
+<button class="keypad-btn rounded-premium haptic-active">3</button>
+<button class="keypad-btn rounded-premium haptic-active">4</button>
+<button class="keypad-btn rounded-premium haptic-active">5</button>
+<button class="keypad-btn rounded-premium haptic-active">6</button>
+<button class="keypad-btn rounded-premium haptic-active">7</button>
+<button class="keypad-btn rounded-premium haptic-active">8</button>
+<button class="keypad-btn rounded-premium haptic-active">9</button>
+<button class="keypad-btn rounded-premium haptic-active text-red-500 font-headline text-3xl">CLR</button>
+<button class="keypad-btn rounded-premium haptic-active">0</button>
+<button class="keypad-btn rounded-premium haptic-active text-primary">.</button>
+</div>
+<!-- Action Strip -->
+<div class="grid grid-cols-2 gap-4 mt-6 shrink-0">
+<button class="h-24 bg-surface-container-high/60 border border-outline-variant rounded-premium flex items-center justify-center gap-3 haptic-active group">
+<span class="material-icons-round text-on-surface-variant text-3xl group-active:rotate-12 transition-transform">print</span>
+<span class="text-on-surface-variant font-headline text-xl font-bold uppercase tracking-widest">Hold/Print</span>
+</button>
+<button class="h-24 bg-gradient-to-br from-primary to-[#d4af37] rounded-premium flex items-center justify-center gap-3 haptic-active shadow-glow-gold relative overflow-hidden group">
+<div class="absolute inset-0 bg-white/20 opacity-0 group-active:opacity-100 transition-opacity"></div>
+<span class="material-icons-round text-surface text-3xl font-black">verified_user</span>
+<span class="text-surface font-headline text-2xl font-black uppercase tracking-widest">Finalize Transaction</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Global Interaction Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hapticTargets = document.querySelectorAll('.haptic-active, .keypad-btn, .category-tab');
+            
+            hapticTargets.forEach(el => {
+                el.addEventListener('touchstart', (e) => {
+                    // Industrial grade haptic feedback for POS reliability
+                    if (window.navigator.vibrate) {
+                        window.navigator.vibrate(8); 
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

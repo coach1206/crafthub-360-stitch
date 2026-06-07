@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Staff Training Center | The Lounge Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#1b1b1c",
+                    "outline": "#9a8f80",
+                    "surface-variant": "#353436",
+                    "surface-dim": "#131314",
+                    "tertiary-container": "#b7a09a",
+                    "on-secondary": "#462a00",
+                    "background": "#131314",
+                    "primary": "#e9c176",
+                    "on-primary-container": "#4e3700",
+                    "surface-container": "#1f1f20",
+                    "on-tertiary-fixed": "#261814",
+                    "primary-container": "#c5a059",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container-highest": "#353436",
+                    "surface-tint": "#e9c176",
+                    "on-surface": "#e5e2e3",
+                    "on-tertiary-container": "#473733",
+                    "on-primary-fixed": "#261900",
+                    "inverse-surface": "#e5e2e3",
+                    "error-container": "#93000a",
+                    "on-surface-variant": "#d1c5b4",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-primary": "#412d00",
+                    "secondary": "#ffb95a",
+                    "surface-container-high": "#2a2a2b",
+                    "inverse-on-surface": "#303031",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "inverse-primary": "#775a19",
+                    "primary-fixed": "#ffdea5",
+                    "secondary-fixed": "#ffddb6",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface": "#131314",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "primary-fixed-dim": "#e9c176",
+                    "outline-variant": "#4e4639",
+                    "on-background": "#e5e2e3",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "tertiary": "#dac1bb",
+                    "surface-bright": "#39393a",
+                    "on-secondary-container": "#3d2400",
+                    "error": "#ffb4ab",
+                    "secondary-container": "#c68315",
+                    "on-tertiary": "#3c2d28"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "32px",
+                    "card-padding": "24px",
+                    "margin": "64px",
+                    "container-max-width": "1440px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "headline-xl": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "label-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(31, 31, 32, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background-image: linear-gradient(#131314, #131314), radial-gradient(circle at top left, #e9c176, #412d00);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+        }
+        .leather-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/black-leather.png");
+            background-repeat: repeat;
+        }
+        .amber-glow:hover {
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.2);
+        }
+        .parallax-bg {
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md leather-texture min-h-screen pb-32">
+<!-- Top Navigation Bar -->
+<header class="bg-transparent backdrop-blur-xl bg-surface/30 docked full-width top-0 flex justify-between items-center px-margin py-8 w-full z-50 transition-opacity duration-500 ease-in-out">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-primary/30">
+<img alt="Lounge Curator Persona Silhouette" class="w-full h-full object-cover" data-alt="A sophisticated black and white silhouette of a lounge curator in a sharp tuxedo, set against a warm amber backlight. The style is cinematic and high-contrast, evoking the mysterious and exclusive atmosphere of a private members club with deep shadows and soft golden highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEM-Rcxf4Cyx-qWby_MBNZ3S4C4mxNdjquQbjkxLPI2mYxmZghpoNrIlfl4mrFcHWboLznI_yWJspUAglb6JXJa2PgomYo8GM49l158Nz79YKPtbrZwf-Y7i_xo6tlj5JDGOBwi05VTBDmyZte-tFl91Kkkr9qQOh5gctPG0Nxi5CLjOXUJSkEKYoR0bf1gHBgaD0nZvlPOlwZjhAJB1ZQLgHnINC4A8owRUqJJrt2T9qKz0OR7Nd77p1FwIU8ZeoWet2P1pvK678"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">The Lounge Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-primary" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-[1440px] mx-auto px-margin mt-12 relative">
+<!-- Hero Header -->
+<section class="mb-16">
+<h2 class="font-display-lg text-display-lg text-primary mb-4">Staff Training Center</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                Master the art of high-end service. Train staff to operate CraftHub, POS 3, E.A.T., and orchestrate impeccable guest journeys through our curated curriculum.
+            </p>
+</section>
+<!-- Bento Training Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Guest Host Card -->
+<div class="glass-card rounded-xl overflow-hidden amber-glow transition-all duration-300 group cursor-pointer h-full flex flex-col">
+<div class="h-48 relative overflow-hidden">
+<img alt="Guest Host" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A close-up shot of a polished mahogany concierge desk in a dim, upscale lounge. A brass hotel bell and a leather-bound guest book sit under warm spotlighting. The aesthetic is tactile and rich, with deep espresso wood tones and golden highlights suggesting an atmosphere of unhurried luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuJ1SX1j60UzyNcxnkWyYbt28ESrXDCEFYbuR7ez6VM-bIHNkYCpjKHtYXsWJHnmukNFq2VsVwY9zbYmcxuXW2aYfQFgYbuovV3L3JqTFJU4HEOgTJSqVSWmd1QFQUkUw4O_vCSS4n1fthztIZZzInUmyRQ2nverY7BVSotMYRFSoo4mSKvQREXm6pBHPt-tmbOeEd7kyy0xqbhQBx87GM4ll2ITQMZF6LzCauW4_eMVHyGSmcQPRRQAFe_jZGTUNJfoOp7w0Iu3g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Guest Journey</span>
+</div>
+</div>
+<div class="p-card-padding flex-grow flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Guest Host</h3>
+<p class="text-on-surface-variant font-body-md mb-6">Mastering the welcome sequence and digital waitlist management.</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. 45 mins</span>
+<span class="font-label-sm text-label-sm text-primary">60% Complete</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden mb-6">
+<div class="bg-primary h-full w-[60%]"></div>
+</div>
+<button class="w-full py-4 gold-foil-border text-primary font-label-lg text-label-lg hover:bg-primary hover:text-on-primary transition-all duration-300 rounded-lg">Resume</button>
+</div>
+</div>
+</div>
+<!-- SmokeCraft Card -->
+<div class="glass-card rounded-xl overflow-hidden amber-glow transition-all duration-300 group cursor-pointer h-full flex flex-col">
+<div class="h-48 relative overflow-hidden">
+<img alt="SmokeCraft" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Macro photography of a premium cigar resting in a heavy crystal ashtray. Wisps of blue smoke curl upwards into a dark, moody background. The textures of the tobacco leaf and the refractive facets of the crystal are sharp, bathed in the amber glow of a nearby ember." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs9XqhyWS5sMlcKYNdSChNwlZR3QrMAdCCY0gGvS-xzdQSk6jiVWte9nG56-fWaqmveQDdUshVxQll4GGBsiK1sT1RuX41YYrOqPGB6lGEy_GiXFXAAVPopTRGp86L3v7LqT_6JeMq9w7_nqgvJyjEX2frV2cBrBauXJdnps4LBGkRl0gfpvhLLdzt5ZvnbrGI7ibLw0fsdr9k4spzk5rZbcocSMfi6Q2XFNDn0ycZDNSUTEOBoP5EN_ezr-ewO8aZdLdVCYQpuNk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Sommelier Training</span>
+</div>
+</div>
+<div class="p-card-padding flex-grow flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">SmokeCraft</h3>
+<p class="text-on-surface-variant font-body-md mb-6">Inventory curation, humidity control, and precision cutting techniques.</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. 90 mins</span>
+<span class="font-label-sm text-label-sm text-primary">0% Complete</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden mb-6">
+<div class="bg-primary h-full w-[0%]"></div>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary font-label-lg text-label-lg hover:opacity-90 transition-all duration-300 rounded-lg">Start Track</button>
+</div>
+</div>
+</div>
+<!-- PourCraft Card -->
+<div class="glass-card rounded-xl overflow-hidden amber-glow transition-all duration-300 group cursor-pointer h-full flex flex-col">
+<div class="h-48 relative overflow-hidden">
+<img alt="PourCraft" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A slow-motion capture of golden whiskey being poured into a heavy-bottomed glass with a single clear ice sphere. Dark wooden textures are visible in the background, with warm orange lighting reflecting off the liquid's surface, creating a sense of luxury and tactile richness." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPH6m39HbZzc715NvMgZJQDRKYl5Q65ga-YmaSs7xNhX6MzfgW7Nn4wLCoBUgs-PeBcXdNtXGGnQ9WOSEHm37C1yi2qZsG59MEvxL38Kd5WoiH6NcC20tWb6lMulBOUVLboKdXoTkeMKLNayKVkZbcSqX5au-hD5dJvC7e6-om6Rn2pLIcPmYD3P6R_LE-2YAew8P1K4p2AQ4uExXix1mnV9RAlO5ZtDmQiB_uSzzIBBJDtrVzpmwRWAmxW6OdEI2P6kqWU8SEM08"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Mixology Masters</span>
+</div>
+</div>
+<div class="p-card-padding flex-grow flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">PourCraft</h3>
+<p class="text-on-surface-variant font-body-md mb-6">Heritage spirits knowledge and the mechanics of the perfect pour.</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. 120 mins</span>
+<span class="font-label-sm text-label-sm text-primary">25% Complete</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden mb-6">
+<div class="bg-primary h-full w-[25%]"></div>
+</div>
+<button class="w-full py-4 gold-foil-border text-primary font-label-lg text-label-lg hover:bg-primary hover:text-on-primary transition-all duration-300 rounded-lg">Resume</button>
+</div>
+</div>
+</div>
+<!-- 360 Passport Card -->
+<div class="glass-card rounded-xl overflow-hidden amber-glow transition-all duration-300 group cursor-pointer h-full flex flex-col">
+<div class="h-48 relative overflow-hidden">
+<img alt="360 Passport" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A stack of premium leather-bound journals on a dark wood table. One is open, showing thick cream-colored pages with elegant calligraphy. The lighting is soft and intimate, emphasizing the texture of the grain leather and the heritage feel of a classic membership passport." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXS-AUK_wVaLSc0iWiqEiz86ZIyrzvZw0rzUF89YLxVIAq7cfuJJxTBepXvi74HuLSxNfPCR4UNezUbT1AiRLlSBxfUxZRp4iWoJKZ-RogJ1Ou1TDhjezli0X2HJDFZeGxsrg_n_KBIXPsmGvWVKtok5ahAf2dkhJSCBminMj-Spe_VKbFVIuqQ1gderAxI4NEs2zFVJyXFCwo6Dc0quGl1865UK0QZBs1gFpQeU36v93OWCgPYwq7r6IIeLZ4rc-U8o3F5u3FzfE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Member Recognition</span>
+</div>
+</div>
+<div class="p-card-padding flex-grow flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">360 Passport</h3>
+<p class="text-on-surface-variant font-body-md mb-6">Leveraging CRM data to personalize every interaction across the lounge.</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. 30 mins</span>
+<span class="font-label-sm text-label-sm text-primary">90% Complete</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden mb-6">
+<div class="bg-primary h-full w-[90%]"></div>
+</div>
+<button class="w-full py-4 gold-foil-border text-primary font-label-lg text-label-lg hover:bg-primary hover:text-on-primary transition-all duration-300 rounded-lg">Resume</button>
+</div>
+</div>
+</div>
+<!-- POS 3 Card -->
+<div class="glass-card rounded-xl overflow-hidden amber-glow transition-all duration-300 group cursor-pointer h-full flex flex-col lg:col-span-1">
+<div class="h-48 relative overflow-hidden">
+<img alt="POS 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A sleek, modern point-of-sale terminal reflecting subtle amber light in a high-end environment. The screen shows a refined, dark-mode interface with gold icons. The surrounding area is clean and minimalist, suggesting high-tech efficiency integrated into a luxury space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAw5yATsfbi8HeBVa9xJGScCjJwF3tLhTQRFxbvJORNrVG6Zq-nRdN9XovDucAda_AHYECwLWv-InISfWVC427_G2JImNnx51wY1vr6liG-wthHZhqhuFbVf-MO_wptrjhkYC7KSA-l2b8OBHbgCJ8qOpfGtDsRjH83pTpk0B99PyH36DDUcvuDafuS5URshp9Qa64jSkP2uWjmhd4PWqRiyKFoY35V8oQKA6yhw38agAQJaokHpNocYMt25vcF7hFFJsjfcovcG_0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Operations Efficiency</span>
+</div>
+</div>
+<div class="p-card-padding flex-grow flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">POS 3</h3>
+<p class="text-on-surface-variant font-body-md mb-6">Advanced order routing, split billing, and inventory sync protocols.</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. 60 mins</span>
+<span class="font-label-sm text-label-sm text-primary">10% Complete</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden mb-6">
+<div class="bg-primary h-full w-[10%]"></div>
+</div>
+<button class="w-full py-4 gold-foil-border text-primary font-label-lg text-label-lg hover:bg-primary hover:text-on-primary transition-all duration-300 rounded-lg">Resume</button>
+</div>
+</div>
+</div>
+<!-- E.A.T. Manager Card -->
+<div class="glass-card rounded-xl overflow-hidden amber-glow transition-all duration-300 group cursor-pointer h-full flex flex-col lg:col-span-1">
+<div class="h-48 relative overflow-hidden">
+<img alt="E.A.T. Manager" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="An overhead shot of a gourmet appetizer plate featuring small, artisanal bites arranged with artistic precision. The table is dark slate, creating a high-contrast backdrop for the vibrant food. Warm, dramatic lighting creates deep shadows and highlights the delicate textures of the cuisine." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzsxbuNyWmLoDHubHXNMo11ixeys45y6R-DtY-mEi5AbEQBS0-QHdw9B2S4mMC4AP33vx0C7l9fvM1HChhKm25KZM-qaOdiuuhrWo09PSIYF-wPRUmJzQ2jPP1CbQnTqfYN5rDRVacQ7eXc_Zf4TNCMEZT1g4pbnqujW_-nnOdFfASGUFM3tmd636bh-gq1YZc7tgfD68i0e2ViWsM_5WHIjjG2SSda4G9NAeuUi8J5bh5-FyqUrmpuclwc9CrhBWLtBDeOzXc2b0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">Kitchen Operations</span>
+</div>
+</div>
+<div class="p-card-padding flex-grow flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">E.A.T. Manager</h3>
+<p class="text-on-surface-variant font-body-md mb-6">Synchronizing kitchen timing with the Guest Journey flow.</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. 50 mins</span>
+<span class="font-label-sm text-label-sm text-primary">0% Complete</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden mb-6">
+<div class="bg-primary h-full w-[0%]"></div>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary font-label-lg text-label-lg hover:opacity-90 transition-all duration-300 rounded-lg">Start Track</button>
+</div>
+</div>
+</div>
+<!-- Receiving/Restock Card (Extended Width Potential) -->
+<div class="glass-card rounded-xl overflow-hidden amber-glow transition-all duration-300 group cursor-pointer h-full flex flex-col lg:col-span-3">
+<div class="grid md:grid-cols-2 h-full">
+<div class="relative overflow-hidden h-64 md:h-full">
+<img alt="Receiving/Restock" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Inside a climate-controlled walk-in humidor and wine cellar. Shelves of fine cigars and aged wine bottles are neatly organized behind glass doors. The lighting is a cool amber, reflecting off the dark wood and glass surfaces, conveying a sense of organized, high-value inventory management." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB39eZkuXdGlQCKhMGnChtAKdnvodKzg7iMPOu6EB2ivwUmZ9NBmogEfIe6B5abMm_udNVdPggS9b3LzGkLXP1BEIBqmEjY3At7det-TTV21Ygfn75GaN-LXJVFiWZNXXMRANMSfQxKGS3l7ExEfNgK8tQlVRXN_wiBP94pBRtexACNQkM5pGsg19S-iSD7eBxrA3zOaUUkb-VFJPu9F0lg2M69CvP3IKawqGe-8cQJw8eqb8s1Ra5ASRYzoTRGJBgUyitJbMaviOk"/>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent to-background/90 hidden md:block"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent md:hidden"></div>
+</div>
+<div class="p-card-padding flex flex-col justify-center bg-background/40">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-2">Logistics &amp; Supply</span>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-4">Receiving/Restock</h3>
+<p class="text-on-surface-variant font-body-lg mb-8 max-w-md">The backbone of the lounge. Learn the elite standards for handling premium goods and maintaining the invisible perfection of our stock.</p>
+<div class="flex flex-col md:flex-row gap-6 items-center">
+<div class="w-full">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. 40 mins</span>
+<span class="font-label-sm text-label-sm text-primary">0% Complete</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[0%]"></div>
+</div>
+</div>
+<button class="w-full md:w-48 py-4 bg-primary text-on-primary font-label-lg text-label-lg hover:opacity-90 transition-all duration-300 rounded-lg shrink-0">Start Track</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin py-6 pb-10 backdrop-blur-2xl border-t border-outline-variant/20 bg-surface-container/80 shadow-[0_-8px_30px_rgb(233,193,118,0.1)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+<span class="font-label-sm text-label-sm mt-1">Voice Assist</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 transition-transform duration-200 Active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-sm text-label-sm mt-1">Training</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span class="font-label-sm text-label-sm mt-1">Settings</span>
+</a>
+</nav>
+<script>
+        // Subtle interaction script for card mouse tracking/glow effect
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

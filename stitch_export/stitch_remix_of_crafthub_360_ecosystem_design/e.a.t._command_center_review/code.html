@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E.A.T. Intelligence Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .floorplan-bg {
+            background-image: radial-gradient(rgba(233, 193, 118, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "on-secondary-container": "#3d2400",
+                "surface-tint": "#e9c176",
+                "outline-variant": "#4e4639",
+                "tertiary-fixed-dim": "#dac1bb",
+                "inverse-on-surface": "#303031",
+                "inverse-primary": "#775a19",
+                "surface-dim": "#131314",
+                "on-tertiary": "#3c2d28",
+                "background": "#131314",
+                "on-tertiary-fixed-variant": "#54433e",
+                "surface-container": "#1f1f20",
+                "surface-bright": "#39393a",
+                "secondary": "#ffb95a",
+                "on-background": "#e5e2e3",
+                "on-tertiary-container": "#473733",
+                "on-error": "#690005",
+                "tertiary-fixed": "#f7ddd6",
+                "on-surface-variant": "#d1c5b4",
+                "secondary-fixed": "#ffddb6",
+                "primary-container": "#c5a059",
+                "error": "#ffb4ab",
+                "tertiary": "#dac1bb",
+                "secondary-fixed-dim": "#ffb95a",
+                "surface-container-high": "#2a2a2b",
+                "on-error-container": "#ffdad6",
+                "surface-container-lowest": "#0e0e0f",
+                "inverse-surface": "#e5e2e3",
+                "on-tertiary-fixed": "#261814",
+                "on-primary-container": "#4e3700",
+                "surface-container-low": "#1b1b1c",
+                "tertiary-container": "#b7a09a",
+                "surface-container-highest": "#353436",
+                "on-primary-fixed-variant": "#5d4201",
+                "error-container": "#93000a",
+                "primary-fixed-dim": "#e9c176",
+                "on-surface": "#e5e2e3",
+                "on-secondary-fixed": "#2a1800",
+                "on-secondary-fixed-variant": "#643f00",
+                "primary-fixed": "#ffdea5",
+                "surface": "#131314",
+                "surface-variant": "#353436",
+                "on-secondary": "#462a00",
+                "secondary-container": "#c68315",
+                "primary": "#e9c176",
+                "on-primary-fixed": "#261900",
+                "outline": "#9a8f80",
+                "on-primary": "#412d00"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
+              "spacing": {
+                "card-padding": "24px",
+                "margin": "64px",
+                "unit": "8px",
+                "gutter": "32px",
+                "container-max-width": "1440px"
+              },
+              "fontFamily": {
+                "headline-lg": ["Playfair Display"],
+                "headline-md": ["Playfair Display"],
+                "body-md": ["Montserrat"],
+                "label-sm": ["Montserrat"],
+                "label-lg": ["Montserrat"],
+                "headline-xl": ["Playfair Display"],
+                "body-lg": ["Montserrat"],
+                "display-lg": ["Playfair Display"]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="floorplan-bg min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(233,193,118,0.1)] fixed top-0 w-full z-50 flex items-center justify-between px-margin h-20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">hub</span>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter">CraftHub 360 Orchestration</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<span class="font-label-lg text-label-lg text-primary cursor-pointer hover:bg-primary/10 px-4 py-2 rounded-lg transition-all">Orchestration</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant cursor-pointer hover:bg-primary/10 px-4 py-2 rounded-lg transition-all">Connectivity</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant cursor-pointer hover:bg-primary/10 px-4 py-2 rounded-lg transition-all">Journeys</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-container border border-primary/30 overflow-hidden">
+<img alt="Member Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOgr5zMuwRAk5sdM--a_26OyhoWpVhsePvfYveFxufnZECui4xq2SnmRguNBCYXKf_cJrQ0p01bpuZ-JgjKzRvCh1jfsoBFSrKRX6Jb0WJEBJ3IlIHIy0rZ8mdEwFT-MoGbUGHPfCsihFXpAyzZ08N1TN5SrRxRUnBqSe7TojU4KjgXbr_IhnZe6MoIJa7l9kdeT-bnlTaW_OjtKirPtxqRk7ZhF3FL8U07EeH3cROi6j7AJtghUkInCr8jFLA6FxlHIFPNUIJXLI"/>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col py-8 bg-surface-container-lowest/95 backdrop-blur-2xl w-80 rounded-r-xl border-r border-outline-variant/20 shadow-2xl mt-20 hidden lg:flex">
+<div class="px-6 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Command Center</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60">System Version 9.0.4</p>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="flex items-center gap-4 py-3 px-6 mx-2 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-transform active:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined">dashboard_customize</span>
+<span class="font-label-lg text-label-lg">Orchestration</span>
+</div>
+<div class="flex items-center gap-4 py-3 px-6 mx-2 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-transform active:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-label-lg text-label-lg">Connectivity Map</span>
+</div>
+<div class="flex items-center gap-4 py-3 px-6 mx-2 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-transform active:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined">auto_awesome_motion</span>
+<span class="font-label-lg text-label-lg">Guest Journeys</span>
+</div>
+<div class="flex items-center gap-4 py-3 px-6 mx-2 bg-secondary-container text-on-secondary-container rounded-lg transition-transform active:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-lg text-label-lg">E.A.T. Intelligence</span>
+</div>
+<div class="flex items-center gap-4 py-3 px-6 mx-2 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-transform active:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-lg text-label-lg">Craft Modules</span>
+</div>
+<div class="flex items-center gap-4 py-3 px-6 mx-2 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-transform active:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-lg text-label-lg">POS 3 Integration</span>
+</div>
+<div class="flex items-center gap-4 py-3 px-6 mx-2 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-transform active:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined">conveyor_belt</span>
+<span class="font-label-lg text-label-lg">Logistics</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-80 pt-28 px-8 max-w-[1440px] mx-auto">
+<!-- Header Section -->
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">E.A.T. Intelligence Dashboard</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Hospitality disruption through algorithmic management of Environment, Assets, and Transactions.</p>
+</div>
+<div class="flex gap-4">
+<button class="glass-panel px-6 py-3 rounded-lg flex items-center gap-2 text-primary font-label-lg hover:bg-primary/10 transition-all border border-primary/30">
+<span class="material-symbols-outlined">analytics</span>
+                    Owner Brief
+                </button>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg flex items-center gap-2 font-label-lg hover:shadow-[0_0_20px_rgba(233,193,118,0.4)] transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                    Live Sync
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Environment Control & Live Map -->
+<div class="md:col-span-8 glass-panel rounded-xl p-card-padding relative overflow-hidden amber-glow group">
+<div class="flex justify-between items-start mb-8 relative z-10">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">distance</span>
+                            Spatial Intelligence Map
+                        </h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Live Occupancy &amp; Heatmap</p>
+</div>
+<div class="flex items-center gap-2 text-xs font-mono text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary status-pulse"></span>
+                        LIVE FEED: 124 GUESTS
+                    </div>
+</div>
+<div class="aspect-video w-full rounded-lg bg-surface-container-highest/50 border border-outline-variant/30 relative flex items-center justify-center">
+<!-- Faux Floorplan Grid -->
+<div class="absolute inset-0 floorplan-bg opacity-30"></div>
+<img class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay" data-alt="A sophisticated architectural floor plan of a luxury cigar lounge and wine cellar rendered as a digital blueprint with glowing amber highlights indicating high-traffic areas. The image utilizes a deep espresso and charcoal color palette with thin gold wireframe lines defining the structural boundaries. Soft bokeh effects and a subtle glass-morphic overlay suggest a premium digital interface for high-end facility management." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7kV0B6SCD7NBc5192kaRSHULHYmiFD6Nd_yN19NvxR6jAukHDZU1p1yNy6i9KSvgP4p8e9z9WDDB-0OQJNJjN96uB8jHl8-kXujNmW6N_xgnLO5oh44Bugx4OShuxfKUa12-rcCknsIHXQz2vJwuI3pB-nQ2v_IPq3v8gxs1R3JhQ9l3_1xmgfUDgado2Y_PlGZmChjbFpVkdKCeQqvIioVR_x_14lBUPl9vjejzDAUq3wUp9cCY1QZ3aA3ciV12b4ogoPA1g79U"/>
+<!-- Heatmap Markers -->
+<div class="absolute top-[20%] left-[30%] w-32 h-32 bg-secondary/20 blur-3xl rounded-full"></div>
+<div class="absolute bottom-[40%] right-[25%] w-48 h-48 bg-primary/20 blur-3xl rounded-full"></div>
+<div class="relative z-10 grid grid-cols-3 gap-8 w-full px-12">
+<div class="bg-surface/60 backdrop-blur-md p-4 rounded-lg border border-primary/20">
+<p class="text-[10px] text-on-surface-variant mb-1 font-bold">MAIN HUMIDOR</p>
+<div class="flex justify-between items-end">
+<span class="text-2xl font-headline-md text-primary">70%</span>
+<span class="text-[10px] text-secondary">OPT_RH</span>
+</div>
+<div class="w-full h-1 bg-surface-variant mt-2 rounded-full overflow-hidden">
+<div class="w-[70%] h-full bg-primary"></div>
+</div>
+</div>
+<div class="bg-surface/60 backdrop-blur-md p-4 rounded-lg border border-secondary/20">
+<p class="text-[10px] text-on-surface-variant mb-1 font-bold">THE CELLAR</p>
+<div class="flex justify-between items-end">
+<span class="text-2xl font-headline-md text-secondary">55°F</span>
+<span class="text-[10px] text-secondary">TEMP_STB</span>
+</div>
+<div class="w-full h-1 bg-surface-variant mt-2 rounded-full overflow-hidden">
+<div class="w-[55%] h-full bg-secondary"></div>
+</div>
+</div>
+<div class="bg-surface/60 backdrop-blur-md p-4 rounded-lg border border-primary/20">
+<p class="text-[10px] text-on-surface-variant mb-1 font-bold">TERRACE BAR</p>
+<div class="flex justify-between items-end">
+<span class="text-2xl font-headline-md text-primary">82%</span>
+<span class="text-[10px] text-secondary">CAPACITY</span>
+</div>
+<div class="w-full h-1 bg-surface-variant mt-2 rounded-full overflow-hidden">
+<div class="w-[82%] h-full bg-primary"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Revenue Status / Quick Actions -->
+<div class="md:col-span-4 flex flex-col gap-gutter">
+<div class="glass-panel rounded-xl p-card-padding flex-1 border-l-4 border-l-primary">
+<h4 class="font-label-lg text-label-lg text-on-surface-variant mb-6 uppercase tracking-widest">Revenue Heatmap</h4>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-body-md text-on-surface">Hourly Target</span>
+<span class="text-primary font-bold">$12,450.00</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="w-[88%] h-full bg-gradient-to-r from-primary-container to-primary"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-body-md text-on-surface">Member Spend Index</span>
+<span class="text-secondary font-bold">+12.4%</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="w-[72%] h-full bg-gradient-to-r from-secondary-container to-secondary"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-8 border-t border-outline-variant/30">
+<div class="grid grid-cols-2 gap-4">
+<div class="text-center p-3 bg-surface-variant/30 rounded-lg">
+<p class="text-[10px] text-on-surface-variant uppercase mb-1">Slow Rooms</p>
+<p class="text-xl font-headline-md text-primary">4</p>
+</div>
+<div class="text-center p-3 bg-surface-variant/30 rounded-lg">
+<p class="text-[10px] text-on-surface-variant uppercase mb-1">Overstock</p>
+<p class="text-xl font-headline-md text-secondary">12%</p>
+</div>
+</div>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-card-padding border-l-4 border-l-secondary">
+<h4 class="font-label-lg text-label-lg text-on-surface-variant mb-4 uppercase tracking-widest">Security Watch</h4>
+<div class="flex items-center gap-4 p-3 bg-error-container/20 rounded-lg border border-error/20 mb-3">
+<span class="material-symbols-outlined text-error status-pulse">warning</span>
+<div class="flex-1">
+<p class="font-label-lg text-on-surface">VIP Entrance A</p>
+<p class="text-[10px] text-error font-bold">UNAUTHORIZED ACCESS ATTEMPT</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 bg-surface-variant/30 rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<div class="flex-1">
+<p class="font-label-lg text-on-surface">Wine Vault 02</p>
+<p class="text-[10px] text-on-surface-variant">SECURED / TEMP STABLE</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Asset Control Clusters -->
+<div class="md:col-span-12 grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<!-- Humidor/Bar -->
+<div class="glass-panel rounded-xl p-6 hover:shadow-[0_0_20px_rgba(233,193,118,0.1)] transition-all cursor-pointer">
+<div class="flex justify-between items-center mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">liquor</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">settings</span>
+</div>
+<h5 class="font-headline-md text-headline-md text-primary mb-1">The Gantry</h5>
+<p class="font-label-sm text-on-surface-variant mb-4">Liquor &amp; Spirits Inventory</p>
+<div class="flex items-end justify-between">
+<span class="text-xs text-secondary font-mono">FLOW: 4.2L/HR</span>
+<span class="text-xs px-2 py-1 bg-primary/10 text-primary rounded border border-primary/20">STABLE</span>
+</div>
+</div>
+<!-- Kitchen -->
+<div class="glass-panel rounded-xl p-6 hover:shadow-[0_0_20px_rgba(233,193,118,0.1)] transition-all cursor-pointer">
+<div class="flex justify-between items-center mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">restaurant</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">settings</span>
+</div>
+<h5 class="font-headline-md text-headline-md text-primary mb-1">Main Kitchen</h5>
+<p class="font-label-sm text-on-surface-variant mb-4">Live Ticket Latency: 12m</p>
+<div class="flex items-end justify-between">
+<span class="text-xs text-secondary font-mono">32 ACTIVE COVERS</span>
+<span class="text-xs px-2 py-1 bg-secondary/10 text-secondary rounded border border-secondary/20">PEAK</span>
+</div>
+</div>
+<!-- Wine/Beer -->
+<div class="glass-panel rounded-xl p-6 hover:shadow-[0_0_20px_rgba(233,193,118,0.1)] transition-all cursor-pointer">
+<div class="flex justify-between items-center mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">wine_bar</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">settings</span>
+</div>
+<h5 class="font-headline-md text-headline-md text-primary mb-1">Cellar Engine</h5>
+<p class="font-label-sm text-on-surface-variant mb-4">842 Bottles Monitored</p>
+<div class="flex items-end justify-between">
+<span class="text-xs text-secondary font-mono">INV: 94% ACC</span>
+<span class="text-xs px-2 py-1 bg-primary/10 text-primary rounded border border-primary/20">SYNCED</span>
+</div>
+</div>
+<!-- Staffing Needs -->
+<div class="glass-panel rounded-xl p-6 hover:shadow-[0_0_20px_rgba(233,193,118,0.1)] transition-all cursor-pointer">
+<div class="flex justify-between items-center mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">badge</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">settings</span>
+</div>
+<h5 class="font-headline-md text-headline-md text-primary mb-1">Staffing Core</h5>
+<p class="font-label-sm text-on-surface-variant mb-4">24 Active Assignments</p>
+<div class="flex items-end justify-between">
+<span class="text-xs text-error font-mono">REBALANCE REQ.</span>
+<span class="text-xs px-2 py-1 bg-error/10 text-error rounded border border-error/20">ALERT</span>
+</div>
+</div>
+</div>
+<!-- Transactions & Engine -->
+<div class="md:col-span-6 glass-panel rounded-xl overflow-hidden flex flex-col">
+<div class="p-6 border-b border-outline-variant/30 flex justify-between items-center">
+<h4 class="font-headline-md text-headline-md text-primary">Overstock Engine</h4>
+<span class="font-label-sm text-on-surface-variant px-3 py-1 bg-surface-variant/50 rounded-full">AUTO-PILOT ACTIVE</span>
+</div>
+<div class="p-6 flex-1 space-y-4">
+<div class="flex items-center gap-4 bg-surface-container-low/50 p-4 rounded-lg border border-outline-variant/10">
+<div class="w-12 h-12 rounded bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">trending_down</span>
+</div>
+<div class="flex-1">
+<p class="font-body-md text-on-surface font-semibold">Padrón 1964 Anniversary</p>
+<p class="text-xs text-on-surface-variant">Overstock alert: 42 units excess. Deploying 15% Member Special.</p>
+</div>
+<button class="text-primary font-label-lg hover:underline transition-all">APPROVE</button>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-low/50 p-4 rounded-lg border border-outline-variant/10">
+<div class="w-12 h-12 rounded bg-secondary/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">sell</span>
+</div>
+<div class="flex-1">
+<p class="font-body-md text-on-surface font-semibold">Slow Room: West Lounge</p>
+<p class="text-xs text-on-surface-variant">Occupancy below 20%. Activating "Happy Hour Premium" engine.</p>
+</div>
+<button class="text-secondary font-label-lg hover:underline transition-all">DEPLOY</button>
+</div>
+</div>
+</div>
+<!-- Invoicing & Reorder -->
+<div class="md:col-span-6 glass-panel rounded-xl overflow-hidden flex flex-col">
+<div class="p-6 border-b border-outline-variant/30 flex justify-between items-center">
+<h4 class="font-headline-md text-headline-md text-primary">Invoice &amp; Reorder</h4>
+<span class="font-label-sm text-on-surface-variant px-3 py-1 bg-surface-variant/50 rounded-full">3 PENDING</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full">
+<thead class="bg-surface-variant/20">
+<tr>
+<th class="px-6 py-4 text-left font-label-sm text-on-surface-variant">SUPPLIER</th>
+<th class="px-6 py-4 text-left font-label-sm text-on-surface-variant">ASSET</th>
+<th class="px-6 py-4 text-right font-label-sm text-on-surface-variant">TOTAL</th>
+<th class="px-6 py-4 text-right font-label-sm text-on-surface-variant">STATUS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr>
+<td class="px-6 py-4 font-body-md text-on-surface">Arturo Fuente</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">OpusX Allocation</td>
+<td class="px-6 py-4 text-right font-mono text-primary">$4,250.00</td>
+<td class="px-6 py-4 text-right">
+<span class="text-[10px] px-2 py-1 bg-primary/10 text-primary border border-primary/20 rounded">REORDERED</span>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 font-body-md text-on-surface">Southern Glazer's</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">Macallan 18yr Restock</td>
+<td class="px-6 py-4 text-right font-mono text-primary">$8,120.00</td>
+<td class="px-6 py-4 text-right">
+<span class="text-[10px] px-2 py-1 bg-secondary/10 text-secondary border border-secondary/20 rounded">PENDING</span>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 font-body-md text-on-surface">Farm to Table Co.</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">Kitchen Perishables</td>
+<td class="px-6 py-4 text-right font-mono text-primary">$1,240.00</td>
+<td class="px-6 py-4 text-right">
+<span class="text-[10px] px-2 py-1 bg-surface-variant/50 text-on-surface-variant border border-outline-variant/30 rounded">INVOICED</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full h-20 flex justify-around items-center px-4 z-50 bg-surface-container-high/90 backdrop-blur-lg border-t border-primary/20 rounded-t-xl shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">extension</span>
+<span class="font-label-sm text-label-sm">Modules</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-sm text-label-sm">Floor Plan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary scale-110 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">error</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for status meters
+        document.querySelectorAll('.glass-panel').forEach(panel => {
+            panel.addEventListener('mousedown', () => {
+                panel.style.transform = 'scale(0.98)';
+                panel.style.transition = 'transform 0.1s ease-out';
+            });
+            panel.addEventListener('mouseup', () => {
+                panel.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simulating live data updates
+        setInterval(() => {
+            const targets = document.querySelectorAll('.font-mono.text-secondary');
+            targets.forEach(target => {
+                const currentVal = target.innerText.match(/\d+(\.\d+)?/);
+                if (currentVal) {
+                    const newVal = (parseFloat(currentVal[0]) + (Math.random() * 0.4 - 0.2)).toFixed(1);
+                    target.innerText = target.innerText.replace(/\d+(\.\d+)?/, newVal);
+                }
+            });
+        }, 3000);
+    </script>
+</body></html>

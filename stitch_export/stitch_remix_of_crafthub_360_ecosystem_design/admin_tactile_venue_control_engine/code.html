@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(154, 143, 128, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        .gold-foil-border {
+            border: 1px solid rgba(197, 160, 89, 0.3);
+        }
+        .amber-glow:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            border-color: rgba(197, 160, 89, 0.6);
+        }
+        .transition-slow {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Haptic Weight Simulation */
+        .active-sink:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+        @media (min-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1280px) {
+            .bento-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-tint": "#c5a059",
+                        "surface-container-highest": "#353436",
+                        "on-surface": "#e5e2e3",
+                        "secondary": "#ffb95a",
+                        "primary-fixed": "#ffdea5",
+                        "surface-container-lowest": "#0e0e0f",
+                        "primary": "#c5a059", /* Updated to Design System Primary */
+                        "surface-container-low": "#1b1b1c",
+                        "on-secondary-fixed": "#2a1800",
+                        "outline": "#9a8f80",
+                        "inverse-surface": "#e5e2e3",
+                        "on-error": "#690005",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-primary-fixed": "#261900",
+                        "surface-container": "#1f1f20",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-primary": "#261900",
+                        "surface-bright": "#39393a",
+                        "on-tertiary-fixed": "#261814",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-secondary": "#462a00",
+                        "surface-container-high": "#2a2a2b",
+                        "on-tertiary": "#3c2d28",
+                        "outline-variant": "#4e4639",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-tertiary-container": "#473733",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#775a19",
+                        "on-primary-container": "#4e3700",
+                        "primary-fixed-dim": "#c5a059",
+                        "secondary-fixed": "#ffddb6",
+                        "tertiary-container": "#b7a09a",
+                        "on-background": "#e5e2e3",
+                        "surface-variant": "#353436",
+                        "on-secondary-container": "#3d2400",
+                        "secondary-container": "#c68315",
+                        "on-surface-variant": "#d1c5b4",
+                        "background": "#131314",
+                        "tertiary": "#dac1bb",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#303031",
+                        "surface-dim": "#131314",
+                        "primary-container": "#c5a059",
+                        "error": "#fbbf24", /* Updated for Amber Status */
+                        "status-green": "#4ade80",
+                        "status-amber": "#fbbf24",
+                        "status-blue": "#60a5fa",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "surface": "#131314"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "card-padding": "32px",
+                        "margin": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-surface overflow-x-hidden">
+<!-- Top AppBar Component -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/90 backdrop-blur-xl border-b border-outline-variant/30 shadow-xl">
+<div class="flex items-center gap-4">
+<button class="p-4 hover:bg-surface-variant/50 transition-colors duration-300 rounded-full active-sink min-h-[56px] min-w-[56px] flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline-md text-xl md:text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">Venue Center</h1>
+<p class="font-label-lg text-xs md:text-label-lg text-on-surface-variant opacity-70">CraftHub 360 Admin</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:flex items-center gap-2 px-6 py-4 rounded-xl font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors active-sink min-h-[72px]">
+<span class="material-symbols-outlined">visibility</span>
+                Preview
+            </button>
+<button class="px-8 py-4 bg-primary text-on-primary font-label-lg text-label-lg rounded-xl shadow-lg shadow-primary/20 hover:brightness-110 active-sink transition-all min-h-[72px]">
+                Publish
+            </button>
+</div>
+</header>
+<main class="relative pt-32 pb-32 px-gutter max-w-container-max-width mx-auto">
+<!-- Background Atmospheric Element -->
+<div class="fixed inset-0 pointer-events-none opacity-5">
+<img class="w-full h-full object-cover grayscale" data-alt="A macro photograph of aged oak whiskey barrels" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzZ9UGCpUaolAJFFHEWhrNs9w9fxtjVnJKt1ZhWxEWXGK5mBYrGCigD6bP1qySMs6yQfox8DBx-wSaC1SQUo5jpEFnyN_zNyRhucTRQQUIl1uP041VEHcbwh3NV-vT9AdNedXWbABUyJq3teXUbfG97Q87nfDAPZN_DBhdYFiG28KvewfOUOPKDvaAJRlEmrqb4Xx2w8l9yceJMmHnSl13acEvJgDlRGdtCTzMa7o0jXKXSQ5YRVaUPeFCjOye2Jrn-e_zTcYZVxA"/>
+</div>
+<!-- Header Content -->
+<section class="relative z-10 mb-12 max-w-3xl">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-4 leading-tight">Venue Control Engine</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                Refine the physical and digital presence of your lounge. All changes synchronize across the ecosystem instantly.
+            </p>
+</section>
+<!-- Bento Grid Configuration Cards -->
+<div class="relative z-10 bento-grid">
+<!-- Card: Venue Profile (Green Status) -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group active-sink min-h-[220px] flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="w-14 h-14 rounded-xl bg-primary-container/20 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-3xl">storefront</span>
+</div>
+<span class="px-4 py-2 bg-status-green/10 text-status-green text-label-sm font-bold rounded-lg flex items-center gap-2 border border-status-green/20">
+<span class="w-2.5 h-2.5 rounded-full bg-status-green animate-pulse"></span>
+                        Configured
+                    </span>
+</div>
+<div class="mt-6">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Venue Profile</h3>
+<p class="text-on-surface-variant text-body-md mb-6 line-clamp-2">Core identity, physical address, and operating hours.</p>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-6">
+<div class="flex items-center gap-2 text-primary font-bold group-hover:translate-x-1 transition-transform min-h-[48px]">
+                        Edit Identity <span class="material-symbols-outlined">chevron_right</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40">touch_app</span>
+</div>
+</div>
+<!-- Card: Product Inventory (Amber Status) -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group active-sink min-h-[220px] flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="w-14 h-14 rounded-xl bg-primary-container/20 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-3xl">inventory_2</span>
+</div>
+<span class="px-4 py-2 bg-status-amber/10 text-status-amber text-label-sm font-bold rounded-lg flex items-center gap-2 border border-status-amber/20">
+<span class="w-2.5 h-2.5 rounded-full bg-status-amber"></span>
+                        Action Needed
+                    </span>
+</div>
+<div class="mt-6">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Inventory</h3>
+<p class="text-on-surface-variant text-body-md mb-6 line-clamp-2">Manage stock for cigars, spirits, and rare wines.</p>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-6">
+<div class="flex items-center gap-2 text-status-amber font-bold group-hover:translate-x-1 transition-transform min-h-[48px]">
+                        Update Stock <span class="material-symbols-outlined">chevron_right</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40">touch_app</span>
+</div>
+</div>
+<!-- Card: Active Modules (Blue Status) -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group active-sink min-h-[220px] flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="w-14 h-14 rounded-xl bg-primary-container/20 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-3xl">view_quilt</span>
+</div>
+<span class="px-4 py-2 bg-status-blue/10 text-status-blue text-label-sm font-bold rounded-lg flex items-center gap-2 border border-status-blue/20">
+<span class="w-2.5 h-2.5 rounded-full bg-status-blue"></span>
+                        Active
+                    </span>
+</div>
+<div class="mt-6">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Modules</h3>
+<p class="text-on-surface-variant text-body-md mb-6 line-clamp-2">Toggle visibility for WineCraft, BeerCraft, and SmokeCraft.</p>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-6">
+<!-- Example of a large toggle cue mentioned in prompt -->
+<div class="flex items-center gap-4 w-full justify-between">
+<span class="text-primary font-bold group-hover:translate-x-1 transition-transform">Configure Modules</span>
+<div class="w-14 h-8 bg-surface-container-highest rounded-full p-1 border border-outline-variant/30">
+<div class="w-6 h-6 bg-primary rounded-full shadow-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card: POS 3 Settings (Green Status) -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group active-sink min-h-[220px] flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="w-14 h-14 rounded-xl bg-primary-container/20 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-3xl">point_of_sale</span>
+</div>
+<span class="px-4 py-2 bg-status-green/10 text-status-green text-label-sm font-bold rounded-lg flex items-center gap-2 border border-status-green/20">
+<span class="w-2.5 h-2.5 rounded-full bg-status-green"></span>
+                        Healthy
+                    </span>
+</div>
+<div class="mt-6">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">POS 3</h3>
+<p class="text-on-surface-variant text-body-md mb-6 line-clamp-2">Terminal mapping and payment gateway configurations.</p>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-6">
+<div class="flex items-center gap-2 text-primary font-bold group-hover:translate-x-1 transition-transform min-h-[48px]">
+                        Edit Terminals <span class="material-symbols-outlined">chevron_right</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40">touch_app</span>
+</div>
+</div>
+<!-- Card: 360 Passport (Blue Status) -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group active-sink min-h-[220px] flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="w-14 h-14 rounded-xl bg-primary-container/20 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-3xl">badge</span>
+</div>
+<span class="px-4 py-2 bg-status-blue/10 text-status-blue text-label-sm font-bold rounded-lg flex items-center gap-2 border border-status-blue/20">
+<span class="w-2.5 h-2.5 rounded-full bg-status-blue"></span>
+                        Active
+                    </span>
+</div>
+<div class="mt-6">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">360 Passport</h3>
+<p class="text-on-surface-variant text-body-md mb-6 line-clamp-2">Digital credentials and member tasting history logs.</p>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-6">
+<div class="flex items-center gap-2 text-primary font-bold group-hover:translate-x-1 transition-transform min-h-[48px]">
+                        Manage Access <span class="material-symbols-outlined">chevron_right</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40">touch_app</span>
+</div>
+</div>
+<!-- Card: Reward Rules (Amber Status) -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group active-sink min-h-[220px] flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="w-14 h-14 rounded-xl bg-primary-container/20 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-3xl">loyalty</span>
+</div>
+<span class="px-4 py-2 bg-status-amber/10 text-status-amber text-label-sm font-bold rounded-lg flex items-center gap-2 border border-status-amber/20">
+<span class="w-2.5 h-2.5 rounded-full bg-status-amber"></span>
+                        Review
+                    </span>
+</div>
+<div class="mt-6">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Rewards</h3>
+<p class="text-on-surface-variant text-body-md mb-6 line-clamp-2">Tier thresholds, credit ratios, and redemption logic.</p>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-6">
+<div class="flex items-center gap-2 text-status-amber font-bold group-hover:translate-x-1 transition-transform min-h-[48px]">
+                        Adjust Ratios <span class="material-symbols-outlined">chevron_right</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40">touch_app</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Actions / Persistence Bar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 px-4 md:px-gutter pb-6 pt-2">
+<div class="max-w-container-max-width mx-auto flex justify-between items-center h-24 bg-surface-container-low/95 backdrop-blur-3xl border border-outline-variant/30 shadow-[0_-12px_40px_rgba(0,0,0,0.5)] rounded-2xl px-6">
+<div class="flex items-center gap-6 md:gap-10">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active-sink min-h-[48px] min-w-[48px]">
+<span class="material-symbols-outlined text-3xl">home</span>
+<span class="font-label-sm text-[10px] uppercase tracking-widest mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active-sink min-h-[48px] min-w-[48px]">
+<span class="material-symbols-outlined text-3xl">save</span>
+<span class="font-label-sm text-[10px] uppercase tracking-widest mt-1">Draft</span>
+</button>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex flex-col items-end mr-6">
+<span class="font-label-sm text-xs text-on-surface-variant opacity-60">SYSTEM STATUS</span>
+<span class="font-label-lg text-sm text-status-green font-bold">ALL SYSTEMS SYNCED</span>
+</div>
+<button class="px-10 py-4 bg-primary text-on-primary font-bold rounded-xl shadow-xl shadow-primary/30 hover:brightness-110 active-sink transition-all flex items-center gap-3 min-h-[72px] text-lg">
+<span class="material-symbols-outlined text-2xl">publish</span>
+                    Publish Configuration
+                </button>
+</div>
+</div>
+</footer>
+<script>
+        // Enhanced tactile interaction feedback
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transition = 'transform 0.1s cubic-bezier(0.2, 0, 0, 1)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+        });
+    </script>
+</body></html>

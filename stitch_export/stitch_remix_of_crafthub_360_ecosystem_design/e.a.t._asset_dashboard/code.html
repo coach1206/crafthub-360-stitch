@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700&amp;family=Geist:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#141313",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "on-tertiary": "#313030",
+                        "on-primary-container": "#554300",
+                        "on-surface-variant": "#d0c5af",
+                        "secondary-fixed": "#e3e2e2",
+                        "primary-fixed-dim": "#e9c349",
+                        "surface-bright": "#3a3939",
+                        "tertiary": "#d0cecd",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "surface-dim": "#141313",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "on-error-container": "#ffdad6",
+                        "inverse-primary": "#735c00",
+                        "error": "#ffb4ab",
+                        "surface-container-low": "#1c1b1b",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary": "#3c2f00",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-primary-fixed-variant": "#574500",
+                        "tertiary-container": "#b5b2b2",
+                        "primary-container": "#d4af37",
+                        "on-secondary": "#303031",
+                        "outline-variant": "#4d4635",
+                        "outline": "#99907c",
+                        "tertiary-fixed": "#e5e2e1",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "inverse-surface": "#e5e2e1",
+                        "primary": "#f2ca50",
+                        "on-primary-fixed": "#241a00",
+                        "surface-variant": "#353434",
+                        "on-tertiary-container": "#454545",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#ffe088",
+                        "surface-tint": "#e9c349",
+                        "inverse-on-surface": "#313030",
+                        "background": "#141313",
+                        "secondary": "#c7c6c6",
+                        "surface-container-highest": "#353434",
+                        "on-surface": "#e5e2e1",
+                        "on-background": "#e5e2e1",
+                        "on-secondary-container": "#b6b5b5",
+                        "secondary-container": "#464747",
+                        "surface-container": "#201f1f",
+                        "surface-container-high": "#2a2a2a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["JetBrains Mono"],
+                        "telemetry-data": ["JetBrains Mono"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-sm": ["Geist"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Geist"],
+                        "headline-lg-mobile": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                        "telemetry-data": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #010101; color: #e5e2e1; }
+        .glass-card {
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid transparent;
+            border-image: linear-gradient(135deg, rgba(227, 226, 222, 0.3) 0%, rgba(227, 226, 222, 0) 100%) 1;
+        }
+        .telemetry-glow {
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
+        }
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.2); border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface antialiased">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-surface/60 backdrop-blur-xl border-b border-on-tertiary-fixed-variant/30 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-container/20 flex items-center justify-center border border-primary/30">
+<img alt="Founder" class="w-full h-full object-cover" data-alt="A highly professional and detailed avatar of an elite executive male founder with sharp facial features and refined graying hair, wearing a high-tech obsidian-colored suit with gold metallic accents. The style is hyper-realistic and cinematic, set against a deep black background with soft gold rim lighting that emphasizes a mission-critical and authoritative presence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf37bxXOMhz9mLhY68WMWjp53UezhWzPj0Mnw0-sVrcbjc6_rnFHoJ51_lOWKN_UiFZZiwhbQO5uD10N1OVDTcXwsprVSWBANNJt68MSWnJY5vTUJ6HNyDc04n_aCBeQRyCdCeRIIclKJe4gBDXZN2IhNdSiZWt97s7rj6z9pL8bPbaOvoF4ScE-K8qXUXy401r7l2rjVMnxXHMNv_xBSNQXTTB9z6fW4luZiWzjd2_C6SmCM2JA3UEWjx0fCnXZod-E7Bp88HQUA"/>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">NOVEE OS</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">Environment</a>
+<a class="font-label-caps text-label-caps text-primary font-bold transition-colors" href="#">Assets</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">Transactions</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">System Health</a>
+</nav>
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform" data-icon="sensors">sensors</span>
+</div>
+</header>
+<!-- Side Navigation (Desktop Only) -->
+<aside class="hidden md:flex fixed left-0 top-20 bottom-0 w-80 bg-surface-container-lowest/80 backdrop-blur-2xl border-r border-on-tertiary-fixed-variant/20 flex-col py-8 z-40">
+<div class="px-8 mb-8">
+<h2 class="font-label-caps text-label-caps text-primary mb-1">FOUNDER L0</h2>
+<p class="text-[10px] text-on-surface-variant/60 font-label-caps tracking-widest">SYS_ID: 8824-X</p>
+<div class="mt-4 flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary pulse-dot"></div>
+<span class="text-[11px] font-label-caps text-on-surface-variant">Mission Critical Status: Nominal</span>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<div class="group flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-bright/10 transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined text-[20px]" data-icon="language">language</span>
+<span class="font-label-caps text-label-caps">Environment</span>
+</div>
+<div class="group flex items-center gap-4 px-4 py-3 bg-primary-container/20 text-primary border-r-2 border-primary transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined text-[20px]" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-caps text-label-caps">Assets</span>
+</div>
+<div class="group flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-bright/10 transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined text-[20px]" data-icon="payments">payments</span>
+<span class="font-label-caps text-label-caps">Transactions</span>
+</div>
+<div class="group flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-bright/10 transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined text-[20px]" data-icon="pulse_alert">pulse_alert</span>
+<span class="font-label-caps text-label-caps">System Health</span>
+</div>
+</nav>
+<div class="px-8 pt-8 border-t border-on-tertiary-fixed-variant/10">
+<button class="w-full py-3 bg-transparent border border-on-tertiary-fixed-variant/30 text-on-surface-variant font-label-caps text-[10px] uppercase tracking-[0.2em] hover:border-primary/50 transition-all">
+                Audit Logs
+            </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="md:ml-80 pt-24 pb-20 px-margin-mobile md:px-margin-desktop">
+<!-- Header Section -->
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-[0.3em]">Telemetry Hub</span>
+<h2 class="font-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface mt-2">Asset Inventory Dashboard</h2>
+</div>
+<div class="flex gap-4">
+<div class="glass-card px-4 py-2 flex flex-col border-none">
+<span class="font-label-caps text-[10px] text-on-surface-variant/70 uppercase">Global Health</span>
+<span class="font-telemetry-data text-primary">94.2%</span>
+</div>
+<div class="glass-card px-4 py-2 flex flex-col border-none">
+<span class="font-label-caps text-[10px] text-on-surface-variant/70 uppercase">Total SKU Value</span>
+<span class="font-telemetry-data text-primary">$2.4M</span>
+</div>
+</div>
+</header>
+<!-- Top Row Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-gutter">
+<!-- Reorder Velocity Chart -->
+<section class="md:col-span-8 glass-card p-6 min-h-[320px] flex flex-col relative overflow-hidden">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-label-caps text-label-caps text-on-surface">Reorder Velocity &amp; Burn Rate</h3>
+<div class="flex gap-4">
+<span class="flex items-center gap-2 text-[10px] font-label-caps text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Consumption
+                        </span>
+<span class="flex items-center gap-2 text-[10px] font-label-caps text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-on-tertiary-fixed-variant"></span> Threshold
+                        </span>
+</div>
+</div>
+<!-- Visualizing a Chart via CSS/SVG for Bloat-Free Generation -->
+<div class="flex-1 w-full relative flex items-end gap-[1%]">
+<!-- Bars/Lines visualization placeholder using divs -->
+<div class="h-[40%] w-[12%] bg-primary/20 border-t border-primary relative group">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="h-[60%] w-[12%] bg-primary/20 border-t border-primary relative group"></div>
+<div class="h-[45%] w-[12%] bg-primary/20 border-t border-primary relative group"></div>
+<div class="h-[85%] w-[12%] bg-primary/20 border-t border-primary relative group"></div>
+<div class="h-[70%] w-[12%] bg-primary/20 border-t border-primary relative group"></div>
+<div class="h-[55%] w-[12%] bg-primary/20 border-t border-primary relative group"></div>
+<div class="h-[30%] w-[12%] bg-primary/20 border-t border-primary relative group"></div>
+<div class="h-[90%] w-[12%] bg-primary/20 border-t border-primary relative group"></div>
+</div>
+<div class="mt-4 pt-4 border-t border-on-tertiary-fixed-variant/20 flex justify-between font-label-caps text-[10px] text-on-surface-variant/40 uppercase">
+<span>T-30D</span><span>T-20D</span><span>T-10D</span><span>Current (T-0)</span>
+</div>
+</section>
+<!-- Tactical Vault Status -->
+<section class="md:col-span-4 glass-card p-6 flex flex-col justify-between border-primary/20">
+<div>
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-label-caps text-label-caps text-primary">Tactical Vault</h3>
+<span class="material-symbols-outlined text-primary scale-75" data-icon="lock" data-weight="fill">lock</span>
+</div>
+<div class="flex flex-col gap-1 mb-6">
+<span class="text-[32px] font-telemetry-data text-on-surface leading-tight">ACTIVE</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant tracking-widest">ENCRYPTION: AES-256-QUANTUM</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-[11px] font-label-caps">
+<span class="text-on-surface-variant">Interior Humidity</span>
+<span class="text-on-surface">62%</span>
+</div>
+<div class="w-full bg-on-tertiary h-[2px]">
+<div class="bg-primary h-full w-[62%]"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] font-label-caps">
+<span class="text-on-surface-variant">Optimal Temp</span>
+<span class="text-on-surface">55.4°F</span>
+</div>
+<div class="w-full bg-on-tertiary h-[2px]">
+<div class="bg-primary h-full w-[88%]"></div>
+</div>
+</div>
+</div>
+<button class="mt-6 w-full py-4 bg-primary text-on-primary font-label-caps text-label-caps font-bold hover:brightness-110 active:scale-95 transition-all">
+                    ACCESS INVENTORY LOGS
+                </button>
+</section>
+</div>
+<!-- Bento Grid Bottom -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Top Depleting Crafts -->
+<section class="md:col-span-4 glass-card p-0 flex flex-col h-[400px]">
+<div class="p-6 border-b border-on-tertiary-fixed-variant/20">
+<h3 class="font-label-caps text-label-caps text-on-surface">Top Depleting Crafts</h3>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<!-- Smoke Item -->
+<div class="flex items-center gap-4 p-4 border-b border-on-tertiary-fixed-variant/10 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="w-10 h-10 rounded-sm bg-on-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-primary/60 group-hover:text-primary" data-icon="cloud">cloud</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between font-label-caps text-[11px] mb-1">
+<span class="text-on-surface">SMOKE: RESERVE OAK</span>
+<span class="text-error">-18% Today</span>
+</div>
+<div class="w-full bg-on-tertiary h-[4px] rounded-full overflow-hidden">
+<div class="bg-error h-full w-[22%]"></div>
+</div>
+</div>
+</div>
+<!-- Pour Item -->
+<div class="flex items-center gap-4 p-4 border-b border-on-tertiary-fixed-variant/10 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="w-10 h-10 rounded-sm bg-on-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-primary/60 group-hover:text-primary" data-icon="water_drop">water_drop</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between font-label-caps text-[11px] mb-1">
+<span class="text-on-surface">POUR: HIGHLAND 18</span>
+<span class="text-error">-12% Today</span>
+</div>
+<div class="w-full bg-on-tertiary h-[4px] rounded-full overflow-hidden">
+<div class="bg-error h-full w-[38%]"></div>
+</div>
+</div>
+</div>
+<!-- Beer Item -->
+<div class="flex items-center gap-4 p-4 border-b border-on-tertiary-fixed-variant/10 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="w-10 h-10 rounded-sm bg-on-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-primary/60 group-hover:text-primary" data-icon="sports_bar">sports_bar</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between font-label-caps text-[11px] mb-1">
+<span class="text-on-surface">BEER: AMBER NEBULA</span>
+<span class="text-primary">-5% Today</span>
+</div>
+<div class="w-full bg-on-tertiary h-[4px] rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+</div>
+</div>
+<!-- Wine Item -->
+<div class="flex items-center gap-4 p-4 border-b border-on-tertiary-fixed-variant/10 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="w-10 h-10 rounded-sm bg-on-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-primary/60 group-hover:text-primary" data-icon="wine_bar">wine_bar</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between font-label-caps text-[11px] mb-1">
+<span class="text-on-surface">WINE: ESTATE RED</span>
+<span class="text-primary">-2% Today</span>
+</div>
+<div class="w-full bg-on-tertiary h-[4px] rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[82%]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Overstock Alerts & Health Metrics -->
+<section class="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="glass-card p-6 flex flex-col justify-between overflow-hidden relative">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-12 translate-x-12 blur-3xl"></div>
+<div>
+<h3 class="font-label-caps text-label-caps text-on-surface mb-6">Overstock Alert Indicators</h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-[11px] text-on-surface-variant uppercase">Glassware: Crystal</span>
+<span class="font-telemetry-data text-on-surface">140% Surplus</span>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="warning">warning</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-[11px] text-on-surface-variant uppercase">Dry Goods: Infusion Base</span>
+<span class="font-telemetry-data text-on-surface">112% Surplus</span>
+</div>
+<span class="material-symbols-outlined text-primary/40" data-icon="inventory">inventory</span>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-on-tertiary-fixed-variant/20">
+<p class="text-[10px] font-body-sm text-on-surface-variant/60 leading-relaxed">
+                            Predictive model suggests liquidating Crystal surplus before Q4 acquisition cycle. 
+                        </p>
+</div>
+</div>
+<div class="glass-card p-0 flex flex-col overflow-hidden">
+<div class="h-40 w-full relative">
+<img alt="Bar Inventory" class="w-full h-full object-cover opacity-40 grayscale" data-alt="A moody, high-contrast photograph of a luxury bar's interior storage, featuring rows of dark glass bottles and brushed titanium shelves. The scene is lit by dim, warm gold spotlights that highlight the labels and textures of the materials. The atmosphere is quiet, elite, and intensely focused, with deep shadows and soft bokeh effects, echoing a sophisticated obsidian and gold aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANPFfhn9QdGdtDzJXwInfKUM2XR-hZNUxHE9n1f_Gso1EbYuWFtwPM-UXxcRcLnCGX8m4LpCHpiWQvcY8X-D6pbRvZftXtSs-sU1c1IYUBNGIkbzBO8lObYBZYxLLLMFNJ1I8jsXrdFhBzc2fl-A3vkvHveTlliHul5kXu_txkcgrbX24ozs7ej2QdMarOrbfdVftUyF3MBtpIPz_izRAv4tiTOgQL280m-8iorgdouWegocTf1CkkfwZ9P92w9ChkjXU_gAOeXMA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#141313] to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="font-label-caps text-[10px] text-primary uppercase tracking-widest">Live Visual Stream</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-center">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps text-on-surface">Health Score</span>
+<span class="font-telemetry-data text-primary">A-</span>
+</div>
+<p class="text-[11px] font-body-sm text-on-surface-variant leading-relaxed">
+                            Current asset health is within Founder L0 governance parameters. Depletion of Pour category requires attention within 72 hours.
+                        </p>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full h-16 bg-surface-dim/70 backdrop-blur-lg border-t border-on-tertiary-fixed-variant/30 flex justify-around items-center px-4 z-50">
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined text-[20px]" data-icon="public">public</span>
+<span class="text-[8px] font-label-caps mt-1">Env</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1">
+<span class="material-symbols-outlined text-[20px]" data-icon="package_2">package_2</span>
+<span class="text-[8px] font-label-caps mt-1">Assets</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="text-[8px] font-label-caps mt-1">Tx</span>
+</div>
+</nav>
+<!-- Micro-interactions Script -->
+<script>
+        // Simple hover effect for data cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.borderColor = 'rgba(212, 175, 55, 0.3)';
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'all 0.3s ease';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = 'transparent';
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

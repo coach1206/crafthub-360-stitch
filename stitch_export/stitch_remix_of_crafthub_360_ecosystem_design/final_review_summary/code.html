@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 Final Orchestration Review</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-edge {
+            box-shadow: inset 0 0 0 1px rgba(233, 193, 118, 0.3);
+        }
+        .amber-glow {
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.15);
+        }
+        .leather-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/black-leather.png");
+        }
+        .parallax-bg {
+            transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+        .stamp-reveal {
+            animation: stampIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes stampIn {
+            0% { transform: scale(3) rotate(-15deg); opacity: 0; }
+            100% { transform: scale(1) rotate(-5deg); opacity: 1; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#3d2400",
+                        "surface-tint": "#e9c176",
+                        "outline-variant": "#4e4639",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "inverse-on-surface": "#303031",
+                        "inverse-primary": "#775a19",
+                        "surface-dim": "#131314",
+                        "on-tertiary": "#3c2d28",
+                        "background": "#131314",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-container": "#1f1f20",
+                        "surface-bright": "#39393a",
+                        "secondary": "#ffb95a",
+                        "on-background": "#e5e2e3",
+                        "on-tertiary-container": "#473733",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-surface-variant": "#d1c5b4",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-container": "#c5a059",
+                        "error": "#ffb4ab",
+                        "tertiary": "#dac1bb",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "surface-container-high": "#2a2a2b",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "inverse-surface": "#e5e2e3",
+                        "on-tertiary-fixed": "#261814",
+                        "on-primary-container": "#4e3700",
+                        "surface-container-low": "#1b1b1c",
+                        "tertiary-container": "#b7a09a",
+                        "surface-container-highest": "#353436",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-surface": "#e5e2e3",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "primary-fixed": "#ffdea5",
+                        "surface": "#131314",
+                        "surface-variant": "#353436",
+                        "on-secondary": "#462a00",
+                        "secondary-container": "#c68315",
+                        "primary": "#e9c176",
+                        "on-primary-fixed": "#261900",
+                        "outline": "#9a8f80",
+                        "on-primary": "#412d00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "card-padding": "24px",
+                        "margin": "64px",
+                        "unit": "8px",
+                        "gutter": "32px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(233,193,118,0.1)] flex items-center justify-between px-margin h-20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-headline-lg">hub</span>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter">CraftHub 360 Orchestration</h1>
+</div>
+<div class="flex items-center gap-8">
+<nav class="hidden md:flex gap-6">
+<a class="font-label-lg text-label-lg text-primary transition-all duration-300" href="#">Orchestration</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-all duration-300" href="#">Analysis</a>
+</nav>
+<div class="h-10 w-10 rounded-full border border-primary/30 overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a distinguished male hospitality executive in a dark, tailored suit. The lighting is moody and dramatic with warm amber highlights against a deep espresso background, reflecting a premium, high-net-worth aesthetic. The composition is clean and focused, conveying professional leadership and unhurried sophistication in a luxury lounge setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbRl7IzQEbA4FGaqP2uOr6aKGbNAo4EWeZykjBBt8kNrVXbXvedQpWvZn9mztApykhBTo1qzA_vP88o-EWnAKXDePXmCCory0KY4lxSD99Ycsj62I_j4kBZXWm2rGnJX6ADH0OUc8BbMNAn2bKVPWX4Sx_vgb65cMBb1NL5v6DFu18FQRDvJWagP23Nxk_mEoZLg5o9JZdzKJrJTCIrSmcsZ2e6TtQuwOKUOjZKZ4m8kPJGsMI8b8PNIY5G5ssgMdhiPHr22HatEE"/>
+</div>
+</div>
+</header>
+<!-- Side Navigation -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col py-8 w-80 bg-surface-container-lowest/95 backdrop-blur-2xl border-r border-outline-variant/20 shadow-2xl pt-24">
+<div class="px-8 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Command Center</h2>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="bg-secondary-container text-on-secondary-container rounded-lg mx-2 flex items-center gap-4 px-6 py-4 transition-transform active:translate-x-1">
+<span class="material-symbols-outlined">dashboard_customize</span>
+<span class="font-label-lg text-label-lg">Orchestration</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-6 py-4 hover:bg-surface-variant/50 transition-transform active:translate-x-1">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-label-lg text-label-lg">Connectivity Map</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-6 py-4 hover:bg-surface-variant/50 transition-transform active:translate-x-1">
+<span class="material-symbols-outlined">auto_awesome_motion</span>
+<span class="font-label-lg text-label-lg">Guest Journeys</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-6 py-4 hover:bg-surface-variant/50 transition-transform active:translate-x-1">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-lg text-label-lg">Craft Modules</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-6 py-4 hover:bg-surface-variant/50 transition-transform active:translate-x-1">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-label-lg text-label-lg">Passport Networking</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-6 py-4 hover:bg-surface-variant/50 transition-transform active:translate-x-1">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-lg text-label-lg">POS 3 Integration</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-6 py-4 hover:bg-surface-variant/50 transition-transform active:translate-x-1">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-lg text-label-lg">E.A.T. Intelligence</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center gap-4 px-6 py-4 hover:bg-surface-variant/50 transition-transform active:translate-x-1">
+<span class="material-symbols-outlined">conveyor_belt</span>
+<span class="font-label-lg text-label-lg">Logistics</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="ml-80 pt-32 pb-margin px-margin min-h-screen">
+<div class="max-w-[1200px] mx-auto">
+<!-- Hero Conclusion Section -->
+<section class="relative mb-16 p-12 glass-panel rounded-xl gold-foil-edge overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-20 leather-texture"></div>
+<div class="relative z-10 flex flex-col md:flex-row gap-12 items-center">
+<div class="flex-1">
+<span class="font-label-lg text-primary uppercase tracking-[0.2em] mb-4 block">System Certification</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-6">CraftHub 360 Final Orchestration Review</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8 leading-relaxed">
+                            CraftHub 360 now operates as a premium hospitality command ecosystem. Guests move through craft experiences, connect through 360 Passport Connection, receive stamps and rewards, and get guided by AI Concierge.
+                        </p>
+<div class="flex flex-wrap gap-4">
+<button class="px-8 py-4 bg-primary text-on-primary font-label-lg text-label-lg rounded hover:brightness-110 transition-all amber-glow active:scale-95">Review Guest Flow</button>
+<button class="px-8 py-4 border border-primary/50 text-primary font-label-lg text-label-lg rounded hover:bg-primary/5 transition-all active:scale-95">Review POS 3</button>
+<button class="px-8 py-4 border border-primary/50 text-primary font-label-lg text-label-lg rounded hover:bg-primary/5 transition-all active:scale-95">Review E.A.T.</button>
+</div>
+</div>
+<div class="w-full md:w-80 h-80 relative flex items-center justify-center">
+<!-- Symbolic Orchestration Visual -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl"></div>
+<div class="relative w-64 h-64 border-2 border-primary/30 rounded-full flex items-center justify-center stamp-reveal">
+<div class="w-56 h-56 border border-primary/20 rounded-full flex items-center justify-center p-8 bg-surface-container text-center">
+<span class="font-headline-md text-primary leading-tight">CERTIFIED<br/>360<br/>ECOSYSTEM</span>
+</div>
+<span class="absolute top-0 right-0 p-4 bg-primary text-on-primary rounded-full material-symbols-outlined shadow-lg">verified</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Final Positioning Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-16">
+<!-- Staff Utility Card -->
+<div class="md:col-span-1 glass-panel p-card-padding rounded-xl gold-foil-edge flex flex-col hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)] transition-all">
+<div class="mb-6 h-12 w-12 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Staff Empowerment</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        Staff uses POS 3, floor plan tools, inventory awareness, handoffs, and Help Coach to deliver seamless service excellence.
+                    </p>
+</div>
+<!-- Management Intelligence Card -->
+<div class="md:col-span-2 glass-panel rounded-xl gold-foil-edge overflow-hidden flex flex-col md:flex-row hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)] transition-all">
+<div class="w-full md:w-1/2 h-full">
+<img class="w-full h-full object-cover grayscale opacity-60 hover:grayscale-0 transition-all duration-700" data-alt="A sophisticated management dashboard reflected in the glass surface of a high-end wine cellar. The scene is illuminated by glowing amber data visualizations overlaying rows of premium oak barrels and vintage bottles. The atmosphere is quiet, intelligent, and deeply luxurious, representing the E.A.T. intelligence platform for asset and transaction monitoring." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-LdZf_s6t1SB0gOuPW3ZuRwv0vFlHyNvm98K9tEg-u9gV0giaiB8C3lZ1r4_dG7AoNFG4_B5RSTN90cV5hjzUzgrLULW5BYQLGjaI-h-26TtkJONQkU2mwSXW3T8UZmF9U1bpAv6gXBNNM68myEtUt0MM2QdELLzUw4mXD_a7XHQw9lBbKRwzS68LfWTbkTYnRibkE19ZUwtNWMh-0RUxaGuQXZuBRUFWugt8ub5v9togpe9yE4PwTs1JFq5nD9Jewkbm6vskxrk"/>
+</div>
+<div class="p-card-padding flex-1 flex flex-col justify-center">
+<div class="mb-6 h-12 w-12 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">monitoring</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">E.A.T. Intelligence</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">
+                            Monitor environment, assets, transactions, staff needs, inventory, specials, invoices, and security in a single interface.
+                        </p>
+<div class="flex items-center gap-2 text-primary font-label-lg text-label-lg">
+<span>TOTAL AWARENESS ACTIVE</span>
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+</div>
+</div>
+</div>
+<!-- The "Final Positioning" Manifest -->
+<div class="md:col-span-3 bg-surface-container-highest p-12 rounded-xl gold-foil-edge border border-primary/20 relative overflow-hidden group">
+<div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="relative z-10 max-w-3xl">
+<h2 class="font-headline-lg text-headline-lg text-primary italic mb-6">"Regular POS systems tell venues what sold. CraftHub 360 tells venues what is happening, what is needed, what is at risk, and what action to take next."</h2>
+<div class="h-1 w-24 bg-primary/40 mb-8"></div>
+<div class="flex items-center gap-6">
+<button class="px-12 py-5 bg-primary text-on-primary font-label-lg text-label-lg rounded-lg amber-glow hover:scale-105 active:scale-95 transition-all flex items-center gap-3">
+<span class="material-symbols-outlined">rocket_launch</span>
+                                READY FOR CODEX BUILD
+                            </button>
+<button class="p-5 border border-outline text-on-surface-variant hover:text-primary transition-all rounded-lg active:scale-90" title="Review Missing Items">
+<span class="material-symbols-outlined">feedback</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Flow Summary (Horizontal Scroll Pattern) -->
+<h3 class="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-8">Orchestration Nodes</h3>
+<div class="flex gap-gutter overflow-x-auto pb-8 snap-x no-scrollbar">
+<!-- Node 1 -->
+<div class="min-w-[320px] glass-panel p-card-padding rounded-xl snap-center relative border-l-4 border-primary">
+<div class="text-primary-fixed-dim font-headline-md text-headline-md mb-2">01</div>
+<h4 class="font-label-lg text-label-lg text-on-surface mb-4">GUEST JOURNEY</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Seamless transition from entry to experience via 360 Passport and stamps.</p>
+</div>
+<!-- Node 2 -->
+<div class="min-w-[320px] glass-panel p-card-padding rounded-xl snap-center relative border-l-4 border-primary/50">
+<div class="text-primary-fixed-dim font-headline-md text-headline-md mb-2">02</div>
+<h4 class="font-label-lg text-label-lg text-on-surface mb-4">STAFF EXECUTION</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Real-time awareness of guest needs and inventory through POS 3.</p>
+</div>
+<!-- Node 3 -->
+<div class="min-w-[320px] glass-panel p-card-padding rounded-xl snap-center relative border-l-4 border-primary/30">
+<div class="text-primary-fixed-dim font-headline-md text-headline-md mb-2">03</div>
+<h4 class="font-label-lg text-label-lg text-on-surface mb-4">MGMT INSIGHT</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Active E.A.T. monitoring preventing risks before they manifest.</p>
+</div>
+<!-- Node 4 -->
+<div class="min-w-[320px] glass-panel p-card-padding rounded-xl snap-center relative border-l-4 border-primary/20">
+<div class="text-primary-fixed-dim font-headline-md text-headline-md mb-2">04</div>
+<h4 class="font-label-lg text-label-lg text-on-surface mb-4">CODEX SYNC</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Final build protocols for global ecosystem deployment.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full h-20 bg-surface-container-high/90 backdrop-blur-lg border-t border-primary/20 flex justify-around items-center px-4 z-50">
+<div class="flex flex-col items-center justify-center text-primary scale-110">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined">extension</span>
+<span class="font-label-sm text-label-sm">Modules</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-sm text-label-sm">Floor Plan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined">error</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</div>
+</nav>
+<script>
+        // Subtle mouse parallax effect for cards
+        document.addEventListener('mousemove', (e) => {
+            const amount = 5;
+            const x = (e.clientX / window.innerWidth - 0.5) * amount;
+            const y = (e.clientY / window.innerHeight - 0.5) * amount;
+            
+            document.querySelectorAll('.glass-panel').forEach(card => {
+                card.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+            });
+        });
+
+        // Haptic-simulating click animations
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.96)';
+                btn.style.filter = 'brightness(0.9)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1)';
+                btn.style.filter = 'brightness(1)';
+            });
+        });
+    </script>
+</body></html>

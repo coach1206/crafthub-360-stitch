@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>POS 3 Help Coach | Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel-airy {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)) padding-box,
+                        linear-gradient(to bottom right, #e9c176, #775a19) border-box;
+        }
+        .amber-glow {
+            box-shadow: 0 8px 32px rgba(233, 193, 118, 0.25);
+        }
+        .haptic-feedback:active {
+            transform: scale(0.96);
+        }
+        .page-transition {
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .touch-target-72 {
+            min-height: 72px;
+            min-width: 72px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#303031",
+                      "error": "#ba1a1a",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed": "#261814",
+                      "on-primary": "#412d00",
+                      "on-surface-variant": "#4e4639",
+                      "inverse-surface": "#303031",
+                      "surface": "#fdf8f3",
+                      "secondary-container": "#ffdea5",
+                      "on-secondary": "#412d00",
+                      "primary-container": "#ffdea5",
+                      "tertiary-fixed": "#f7ddd6",
+                      "surface-container": "#f7f2ed",
+                      "on-secondary-container": "#2a1800",
+                      "inverse-primary": "#e9c176",
+                      "surface-container-low": "#fdf8f3",
+                      "on-tertiary-fixed-variant": "#54433e",
+                      "secondary": "#775a19",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-high": "#f1ecea",
+                      "secondary-fixed": "#ffdea5",
+                      "primary-fixed-dim": "#e9c176",
+                      "outline-variant": "#d1c5b4",
+                      "on-surface": "#1f1f20",
+                      "on-primary-container": "#261900",
+                      "on-error": "#ffffff",
+                      "surface-tint": "#775a19",
+                      "primary": "#775a19",
+                      "error-container": "#ffdad6",
+                      "inverse-on-surface": "#f7f2ed",
+                      "tertiary-container": "#f7ddd6",
+                      "on-error-container": "#410002",
+                      "surface-dim": "#ded9d6",
+                      "primary-fixed": "#ffdea5",
+                      "tertiary": "#8d4f3e",
+                      "surface-container-highest": "#e5e2e3",
+                      "surface-variant": "#ede1cf",
+                      "secondary-fixed-dim": "#e9c176",
+                      "outline": "#817667",
+                      "surface-bright": "#fdf8f3",
+                      "on-tertiary-container": "#3c2d28",
+                      "on-secondary-fixed": "#2a1800",
+                      "on-secondary-fixed-variant": "#643f00",
+                      "on-primary-fixed-variant": "#5d4201",
+                      "on-primary-fixed": "#261900",
+                      "tertiary-fixed-dim": "#dac1bb",
+                      "background": "#fdf8f3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max-width": "1440px",
+                      "unit": "8px",
+                      "margin": "64px",
+                      "gutter": "32px",
+                      "card-padding": "24px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Playfair Display"],
+                      "body-md": ["Montserrat"],
+                      "headline-xl": ["Playfair Display"],
+                      "label-sm": ["Montserrat"],
+                      "label-lg": ["Montserrat"],
+                      "headline-md": ["Playfair Display"],
+                      "headline-lg": ["Playfair Display"],
+                      "body-lg": ["Montserrat"]
+              },
+              "fontSize": {
+                      "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-hidden h-screen flex flex-col relative">
+<!-- Background: Premium Lounge Bokeh -->
+<div class="fixed inset-0 z-0 scale-105 pointer-events-none">
+<img alt="Premium lounge background" class="w-full h-full object-cover blur-[2px]" src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"/>
+<!-- Soft Overlay to ensure legibility -->
+<div class="absolute inset-0 bg-white/20"></div>
+</div>
+<!-- Header: Coach Mode Identification -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin py-4 bg-white/40 backdrop-blur-2xl border-b border-white/20 shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary scale-110" data-icon="clinical_notes">clinical_notes</span>
+<h1 class="font-headline-md text-headline-md font-medium text-primary">POS 3 Assistant | Help Coach</h1>
+</div>
+<div class="w-12 h-12 rounded-full gold-foil-border flex items-center justify-center overflow-hidden shadow-sm">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1E6TY2SvAvqVnXB2FC55FfCF5TK0RuFMm1WheXZqJacsgN8c4sdeDwHrSOJgyKAGPp0sUlT8L3y9VZANBLJTGqDXQq-SJn6JSnInQv9DfK3dTMkUQFSvGfzsfD709B86yRcYYTDxoP-_19nlWgJc7dkTo32jy1OPTkMLLk17Won5oh1lckbSMg_TjzC_XrvMMRakWh4uY4ZhW9mjmSWR8yKtR7T_6-ns4dqIEXiF0Qi-nWQZ-Q3BN6s69hmcsOvmuPc9ln5VJ9PA"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 mt-[88px] mb-[120px] px-margin flex items-center justify-center relative z-10">
+<!-- Airy Glass Panel -->
+<div class="max-w-4xl w-full glass-panel-airy rounded-[40px] overflow-hidden shadow-2xl p-10 page-transition gold-foil-border">
+<div class="flex flex-col md:flex-row gap-10">
+<!-- Left Column: Context -->
+<div class="md:w-1/3 flex flex-col gap-8">
+<div>
+<p class="text-label-sm font-label-sm text-primary font-semibold uppercase tracking-[0.2em] mb-3">Current Event</p>
+<h2 class="font-headline-lg text-headline-lg text-on-background leading-tight font-semibold">Guest Moving to Patio</h2>
+</div>
+<div class="bg-white/40 rounded-2xl p-5 border border-white/60 shadow-sm">
+<p class="text-label-sm font-label-sm text-outline uppercase tracking-widest mb-2">Risk Assessment</p>
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-secondary shadow-[0_0_12px_rgba(119,90,25,0.4)]"></span>
+<span class="font-label-lg text-label-lg text-on-background font-semibold">Stability: High</span>
+</div>
+</div>
+<div class="mt-auto hidden md:block">
+<img alt="Contextual scene" class="rounded-3xl w-full aspect-square object-cover shadow-lg border border-white/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ2p3g4q5LLEyJC1_qMiy11WwyrLYlcNQf8WN-Yk-ejJza4kaz8izJ3mXY3mw-7VpqEY5RpFksD9c6yyeUsPp3mDVW_YpqfOJVRRMqv_sjSkU87em6UD-txzbji8718d6xlFiUJWL3NREjkz3dyLcsPnd0tkNuF7EMktTKF2qMXDQQV4BWjKc-iMAJkvh8ALEmdoBecLpYaQZFi6gZqj6DMGlGin-A38F0u_BPCv8AEB92E8ETq57QyaMnbmLSNlSsPCxbiH6a9wk"/>
+</div>
+</div>
+<!-- Right Column: Recommendation & Action -->
+<div class="md:w-2/3 flex flex-col gap-10">
+<section class="space-y-5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+<p class="text-label-lg font-label-lg text-primary tracking-[0.25em] uppercase font-bold">Smart Recommendation</p>
+</div>
+<p class="font-headline-md text-[28px] text-on-background font-semibold leading-snug">Transfer order via the Table Map to maintain reward eligibility.</p>
+<div class="p-8 bg-white/50 rounded-3xl border-l-[6px] border-primary shadow-sm">
+<p class="text-label-sm font-label-sm text-primary font-bold uppercase tracking-widest mb-3">Logic Path</p>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed font-medium">
+                                Maintains session persistence and guest profile connection. Bypassing the map creates a data fragment that decouples high-value loyalty points from the transaction.
+                            </p>
+</div>
+</section>
+<!-- Interactive Actions: 72px Tactile Targets -->
+<div class="grid grid-cols-2 gap-5 mt-4">
+<button class="touch-target-72 flex items-center justify-center gap-3 bg-primary text-white rounded-2xl font-label-lg text-label-lg hover:brightness-105 haptic-feedback transition-all shadow-lg amber-glow">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+                            READ GUIDE
+                        </button>
+<button class="touch-target-72 flex items-center justify-center gap-3 bg-white/60 text-on-surface-variant/40 rounded-2xl font-label-lg text-label-lg cursor-not-allowed border border-white/80" disabled="">
+<span class="material-symbols-outlined" data-icon="hearing">hearing</span>
+                            LISTEN
+                        </button>
+<button class="touch-target-72 flex items-center justify-center gap-3 bg-white/60 text-on-surface py-4 px-6 rounded-2xl font-label-lg text-label-lg border border-white/80 hover:bg-white/80 haptic-feedback transition-all shadow-sm">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+                            REPLAY
+                        </button>
+<button class="touch-target-72 flex items-center justify-center gap-3 bg-white/60 text-on-surface py-4 px-6 rounded-2xl font-label-lg text-label-lg border border-white/80 hover:bg-white/80 haptic-feedback transition-all shadow-sm">
+<span class="material-symbols-outlined" data-icon="person_alert">person_alert</span>
+                            SUPPORT
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation: 72px Touch Targets -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin pb-10 pt-4 bg-white/60 backdrop-blur-3xl border-t border-white/30 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] rounded-t-[32px]">
+<a class="touch-target-72 flex flex-col items-center justify-center bg-primary text-white rounded-3xl px-8 shadow-lg transition-all duration-300 haptic-feedback" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-lg text-label-lg tracking-widest mt-1">GUIDANCE</span>
+</a>
+<a class="touch-target-72 flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all duration-300 haptic-feedback" href="#">
+<span class="material-symbols-outlined" data-icon="graphic_eq">graphic_eq</span>
+<span class="font-label-lg text-label-lg tracking-widest mt-1">HAPTICS</span>
+</a>
+<a class="touch-target-72 flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all duration-300 haptic-feedback" href="#">
+<span class="material-symbols-outlined" data-icon="ring_volume">ring_volume</span>
+<span class="font-label-lg text-label-lg tracking-widest mt-1">MANAGER</span>
+</a>
+<a class="touch-target-72 flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all duration-300 haptic-feedback" href="#">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+<span class="font-label-lg text-label-lg tracking-widest mt-1">DISMISS</span>
+</a>
+</nav>
+<script>
+        // Subtle Parallax
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.005;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.005;
+            document.querySelector('.fixed.inset-0.z-0').style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+        });
+
+        // Click interaction
+        document.querySelectorAll('button, a').forEach(elem => {
+            elem.addEventListener('click', () => {
+                elem.classList.add('opacity-80');
+                setTimeout(() => elem.classList.remove('opacity-80'), 100);
+            });
+        });
+    </script>
+</body></html>

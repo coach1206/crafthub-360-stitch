@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CraftHub 360 | NOVEE OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #c5a059; }
+        body { background: #131314; color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
+        .glass { background: rgba(27, 27, 28, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(197, 160, 89, 0.2); }
+        .haptic-touch:active { transform: scale(0.98); transition: transform 0.1s; }
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+    <!-- Main Viewport for Kiosk/Mobile -->
+    <main id="app-root" class="flex-1 overflow-y-auto pb-24">
+        <!-- Screens are dynamically injected here by the router -->
+        <section class="h-full flex flex-col items-center justify-center text-center p-gutter">
+            <img src="https://lh3.googleusercontent.com/aida/AP1WRLv-WT_Bhw2ld_-7coeQl5lSAmzG-a8eS6dmO1Id8jZeV5Srx423k25GIXg-uzEh6wqgYlKkjCisEnOAaMtbW7hA3Xd7GnZU4mNExMhXwejqW98agvB-halqurypgG--nwZB38i8bMZAY1sdrBzwh2noBnz6gvfsSHgi7OAflXgWhmunnbaAqB2CFrGaUhGaDeawkHJZh41TOhhkNACwBRjyLal2fUVy-Ep4smzNsiGrAhDq71mrhzb-Rw" alt="CraftHub 360" class="w-48 mb-8 animate-pulse">
+            <h1 class="font-display text-3xl text-primary mb-2">NOVEE OS</h1>
+            <p class="text-on-surface-variant tracking-widest text-sm uppercase">Initializing Production Build...</p>
+        </section>
+    </main>
+
+    <!-- Global Navigation Architecture -->
+    <nav class="fixed bottom-0 left-0 w-full h-24 glass border-t border-white/10 flex justify-around items-center px-4 z-50">
+        <button class="flex flex-col items-center gap-1 text-primary">
+            <span class="material-icons">dashboard</span>
+            <span class="text-[10px] uppercase font-bold">Home</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-on-surface-variant">
+            <span class="material-icons">explore</span>
+            <span class="text-[10px] uppercase font-bold">Explore</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-on-surface-variant">
+            <span class="material-icons">menu_book</span>
+            <span class="text-[10px] uppercase font-bold">Passport</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-on-surface-variant">
+            <span class="material-icons">settings</span>
+            <span class="text-[10px] uppercase font-bold">Admin</span>
+        </button>
+    </nav>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Geist:wght@400;500&amp;family=JetBrains+Mono:wght@500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#f2ca50",
+            "on-secondary-fixed": "#1b1c1c",
+            "surface": "#010101",
+            "secondary": "#c7c6c6",
+            "on-tertiary-fixed": "#1c1b1b",
+            "on-error": "#690005",
+            "inverse-surface": "#e5e2e1",
+            "surface-container-low": "#0a0a0a",
+            "on-surface": "#e5e2e1",
+            "on-background": "#e5e2e1",
+            "on-tertiary-fixed-variant": "#474646",
+            "tertiary-fixed": "#e5e2e1",
+            "on-primary-fixed-variant": "#574500",
+            "outline": "#99907c",
+            "surface-container-lowest": "#010101",
+            "surface-container": "#0e0e0e",
+            "secondary-fixed": "#e3e2e2",
+            "on-primary-fixed": "#241a00",
+            "on-surface-variant": "#d0c5af",
+            "error-container": "#93000a",
+            "tertiary-fixed-dim": "#c8c6c5",
+            "on-primary": "#3c2f00",
+            "outline-variant": "#2a2720",
+            "surface-dim": "#010101",
+            "secondary-fixed-dim": "#c7c6c6",
+            "on-secondary-container": "#b6b5b5",
+            "tertiary": "#d0cecd",
+            "on-primary-container": "#554300",
+            "on-secondary": "#303031",
+            "surface-bright": "#1a1a1a",
+            "surface-container-highest": "#141313",
+            "surface-tint": "#d4af37",
+            "background": "#010101",
+            "on-tertiary": "#313030",
+            "on-tertiary-container": "#454545",
+            "error": "#ffb4ab",
+            "primary-fixed-dim": "#e9c349",
+            "tertiary-container": "#b5b2b2",
+            "inverse-on-surface": "#313030",
+            "primary-container": "#d4af37",
+            "secondary-container": "#464747",
+            "on-error-container": "#ffdad6",
+            "surface-container-high": "#121212",
+            "on-secondary-fixed-variant": "#464747",
+            "inverse-primary": "#735c00",
+            "surface-variant": "#0e0e0e",
+            "primary-fixed": "#ffe088",
+            "gold": "#d4af37"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.75rem",
+            "full": "1rem"
+          },
+          "spacing": {
+            "gutter": "24px",
+            "margin-mobile": "20px",
+            "container-padding": "24px",
+            "unit": "4px",
+            "margin-desktop": "40px"
+          },
+          "fontFamily": {
+            "headline-lg": ["Hanken Grotesk"],
+            "body-md": ["Geist"],
+            "telemetry-data": ["JetBrains Mono"],
+            "headline-lg-mobile": ["Hanken Grotesk"],
+            "display-lg": ["Hanken Grotesk"],
+            "label-caps": ["JetBrains Mono"],
+            "body-sm": ["Geist"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "telemetry-data": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "display-lg": ["44px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.12em", "fontWeight": "600"}],
+            "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #010101;
+      color: #e5e2e1;
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.01em;
+    }
+    .glass-card {
+      background: rgba(14, 14, 14, 0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 175, 55, 0.1);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03), 0 12px 24px -8px rgba(0, 0, 0, 0.5);
+    }
+    .obsidian-panel {
+      background: linear-gradient(165deg, rgba(26, 26, 26, 0.8) 0%, rgba(10, 10, 10, 0.95) 100%);
+      border: 1px solid rgba(153, 144, 124, 0.15);
+    }
+    .status-pulse {
+      animation: pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #f2ca50 0%, #d4af37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .active-nav-glow {
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(844px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden pb-40">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-2xl border-b border-outline-variant/40 flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-gold text-[24px]" data-icon="shield_with_heart">shield_with_heart</span>
+<h1 class="font-headline-lg-mobile text-[18px] font-bold text-on-surface tracking-tight uppercase">Crafthub <span class="text-gold">360</span></h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container border border-outline-variant/30 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="mt-20 px-margin-mobile max-w-2xl mx-auto space-y-10">
+<!-- Title Section -->
+<section class="flex flex-col gap-2">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Procurement Engine</h2>
+<div class="flex items-center gap-2.5">
+<span class="relative flex h-2 w-2">
+<span class="status-pulse absolute inline-flex h-full w-full rounded-full bg-gold opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-gold"></span>
+</span>
+<span class="font-label-caps text-label-caps text-gold tracking-[0.2em]">PREDICTIVE ACTIVE</span>
+</div>
+</section>
+<!-- Optimization Card (Hero Action) -->
+<section class="glass-card rounded-xl p-6 relative overflow-hidden obsidian-panel">
+<div class="absolute -top-10 -right-10 opacity-[0.03]">
+<span class="material-symbols-outlined text-[160px]" data-icon="hub">hub</span>
+</div>
+<div class="relative z-10 space-y-6">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<p class="font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-[0.15em]">Projected Savings</p>
+<p class="font-display-lg text-display-lg gold-gradient-text">$4,280.50</p>
+</div>
+<div class="bg-gold/10 border border-gold/20 px-3 py-1.5 rounded-lg">
+<span class="font-label-caps text-label-caps text-gold font-bold">+12.4% ROI</span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-sm leading-relaxed max-w-[90%] opacity-90">
+          Neural analysis detected high consolidation potential across <span class="text-on-surface font-medium">3 suppliers</span>. Grouping active requisitions will trigger volume tier pricing and decrease shipping overhead.
+        </p>
+</div>
+</section>
+<!-- Supplier Network -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-[0.15em]">Supplier Network</h3>
+<button class="text-gold text-[12px] font-bold font-label-caps tracking-wider uppercase">View All</button>
+</div>
+<div class="flex gap-4 overflow-x-auto scrollbar-hide -mx-margin-mobile px-margin-mobile pb-4">
+<!-- Supplier 1 -->
+<div class="flex-shrink-0 w-52 glass-card rounded-xl p-5 obsidian-panel space-y-4 active:scale-95 transition-transform">
+<div class="flex justify-between items-center">
+<div class="w-10 h-10 rounded-lg bg-surface-container border border-outline-variant/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-gold" data-icon="waves">waves</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container/50 px-2 py-0.5 rounded border border-outline-variant/20">
+<span class="material-symbols-outlined text-gold text-[14px]" data-icon="grade" style="font-variation-settings: 'FILL' 1;">grade</span>
+<span class="font-telemetry-data text-[13px] text-on-surface">4.9</span>
+</div>
+</div>
+<div>
+<p class="font-body-md font-bold text-on-surface truncate">Highland Grains</p>
+<p class="font-telemetry-data text-[12px] text-secondary mt-1 flex justify-between">
+<span>Balance</span>
+<span class="text-gold">$12,400</span>
+</p>
+</div>
+</div>
+<!-- Supplier 2 -->
+<div class="flex-shrink-0 w-52 glass-card rounded-xl p-5 obsidian-panel space-y-4 active:scale-95 transition-transform">
+<div class="flex justify-between items-center">
+<div class="w-10 h-10 rounded-lg bg-surface-container border border-outline-variant/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-gold" data-icon="wine_bar">wine_bar</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container/50 px-2 py-0.5 rounded border border-outline-variant/20">
+<span class="material-symbols-outlined text-gold text-[14px]" data-icon="grade" style="font-variation-settings: 'FILL' 1;">grade</span>
+<span class="font-telemetry-data text-[13px] text-on-surface">4.7</span>
+</div>
+</div>
+<div>
+<p class="font-body-md font-bold text-on-surface truncate">Global Vintners</p>
+<p class="font-telemetry-data text-[12px] text-secondary mt-1 flex justify-between">
+<span>Balance</span>
+<span class="text-gold">$8,150</span>
+</p>
+</div>
+</div>
+<!-- Supplier 3 -->
+<div class="flex-shrink-0 w-52 glass-card rounded-xl p-5 obsidian-panel space-y-4 active:scale-95 transition-transform">
+<div class="flex justify-between items-center">
+<div class="w-10 h-10 rounded-lg bg-surface-container border border-outline-variant/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-gold" data-icon="precision_manufacturing">precision_manufacturing</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container/50 px-2 py-0.5 rounded border border-outline-variant/20">
+<span class="material-symbols-outlined text-gold text-[14px]" data-icon="grade" style="font-variation-settings: 'FILL' 1;">grade</span>
+<span class="font-telemetry-data text-[13px] text-on-surface">5.0</span>
+</div>
+</div>
+<div>
+<p class="font-body-md font-bold text-on-surface truncate">Titanium Corks</p>
+<p class="font-telemetry-data text-[12px] text-secondary mt-1 flex justify-between">
+<span>Balance</span>
+<span class="text-gold">$2,900</span>
+</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Reorder Queue -->
+<section class="space-y-4">
+<h3 class="font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-[0.15em]">Reorder Queue</h3>
+<div class="space-y-4">
+<!-- PO Item 1 -->
+<div class="glass-card rounded-xl p-5 obsidian-panel flex items-start gap-4 active:scale-[0.98] transition-all">
+<div class="h-12 w-12 rounded-xl bg-surface-container-high flex items-center justify-center border border-outline-variant/30 flex-shrink-0">
+<span class="material-symbols-outlined text-gold" data-icon="package_2">package_2</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-3">
+<div class="min-w-0">
+<p class="font-body-md font-bold text-on-surface truncate">Draft PO: Malt &amp; Grain</p>
+<p class="text-[11px] text-secondary-fixed-dim uppercase tracking-wider font-label-caps">Logistics ID: #H-2490</p>
+</div>
+<span class="text-gold font-telemetry-data text-[15px]">$14,200</span>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-3 border-t border-outline-variant/20">
+<div class="flex flex-col">
+<span class="text-[10px] text-secondary-fixed-dim uppercase tracking-widest font-label-caps">Burn Rate</span>
+<span class="font-telemetry-data text-[13px] text-on-surface">14.2kg / day</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-[10px] text-secondary-fixed-dim uppercase tracking-widest font-label-caps">Run-out Date</span>
+<span class="font-telemetry-data text-[13px] text-error">Oct 24 (4d)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- PO Item 2 -->
+<div class="glass-card rounded-xl p-5 obsidian-panel flex items-start gap-4 active:scale-[0.98] transition-all">
+<div class="h-12 w-12 rounded-xl bg-surface-container-high flex items-center justify-center border border-outline-variant/30 flex-shrink-0">
+<span class="material-symbols-outlined text-gold" data-icon="shutter_speed">shutter_speed</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-3">
+<div class="min-w-0">
+<p class="font-body-md font-bold text-on-surface truncate">Draft PO: Estate Vineyards</p>
+<p class="text-[11px] text-secondary-fixed-dim uppercase tracking-wider font-label-caps">Logistics ID: #E-1120</p>
+</div>
+<span class="text-gold font-telemetry-data text-[15px]">$22,500</span>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-3 border-t border-outline-variant/20">
+<div class="flex flex-col">
+<span class="text-[10px] text-secondary-fixed-dim uppercase tracking-widest font-label-caps">Burn Rate</span>
+<span class="font-telemetry-data text-[13px] text-on-surface">310L / day</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-[10px] text-secondary-fixed-dim uppercase tracking-widest font-label-caps">Run-out Date</span>
+<span class="font-telemetry-data text-[13px] text-gold">Nov 02 (12d)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- PO Item 3 -->
+<div class="glass-card rounded-xl p-5 obsidian-panel flex items-start gap-4 active:scale-[0.98] transition-all">
+<div class="h-12 w-12 rounded-xl bg-surface-container-high flex items-center justify-center border border-outline-variant/30 flex-shrink-0">
+<span class="material-symbols-outlined text-gold" data-icon="inventory">inventory</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-3">
+<div class="min-w-0">
+<p class="font-body-md font-bold text-on-surface truncate">Draft PO: Glass &amp; Casing</p>
+<p class="text-[11px] text-secondary-fixed-dim uppercase tracking-wider font-label-caps">Logistics ID: #G-4450</p>
+</div>
+<span class="text-gold font-telemetry-data text-[15px]">$5,800</span>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-3 border-t border-outline-variant/20">
+<div class="flex flex-col">
+<span class="text-[10px] text-secondary-fixed-dim uppercase tracking-widest font-label-caps">Burn Rate</span>
+<span class="font-telemetry-data text-[13px] text-on-surface">2.1k / day</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-[10px] text-secondary-fixed-dim uppercase tracking-widest font-label-caps">Run-out Date</span>
+<span class="font-telemetry-data text-[13px] text-on-surface">Oct 30 (10d)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Sticky Review Action -->
+<div class="fixed bottom-24 left-0 w-full px-margin-mobile z-40">
+<button class="w-full h-14 bg-gold text-on-primary font-bold rounded-xl shadow-[0_8px_32px_rgba(212,175,55,0.25)] flex items-center justify-center gap-3 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-caps text-label-caps text-[14px] font-bold">Review &amp; Approve All Orders</span>
+</button>
+</div>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-4 bg-background/90 backdrop-blur-3xl border-t border-outline-variant/30 z-50 rounded-t-2xl shadow-[0_-12px_40px_rgba(0,0,0,0.8)]">
+<div class="flex flex-col items-center justify-center text-secondary opacity-50 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[24px]" data-icon="layers">layers</span>
+<span class="font-label-caps text-[10px] mt-1">Vault</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary opacity-50 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[24px]" data-icon="trolley">trolley</span>
+<span class="font-label-caps text-[10px] mt-1">Receiving</span>
+</div>
+<div class="flex flex-col items-center justify-center text-gold bg-gold/10 rounded-xl py-1.5 px-4 border border-gold/20 active-nav-glow">
+<span class="material-symbols-outlined text-[24px]" data-icon="shopping_bag" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
+<span class="font-label-caps text-[10px] mt-1 font-bold">Reorder</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary opacity-50 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[24px]" data-icon="groups">groups</span>
+<span class="font-label-caps text-[10px] mt-1">Suppliers</span>
+</div>
+</nav>
+<script>
+    // Improved haptic-like interaction feedback
+    document.querySelectorAll('.glass-card').forEach(card => {
+      card.addEventListener('touchstart', () => {
+        card.style.borderColor = 'rgba(212, 175, 55, 0.4)';
+        card.style.background = 'rgba(212, 175, 55, 0.05)';
+      });
+      card.addEventListener('touchend', () => {
+        card.style.borderColor = 'rgba(212, 175, 55, 0.1)';
+        card.style.background = 'rgba(14, 14, 14, 0.4)';
+      });
+    });
+
+    // Horizontal scroll helper
+    const scrollContainer = document.querySelector('.scrollbar-hide');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    scrollContainer.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - scrollContainer.offsetLeft;
+      scrollLeft = scrollContainer.scrollLeft;
+    });
+    scrollContainer.addEventListener('mouseleave', () => isDown = false);
+    scrollContainer.addEventListener('mouseup', () => isDown = false);
+    scrollContainer.addEventListener('mousemove', (e) => {
+      if(!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - scrollContainer.offsetLeft;
+      const walk = (x - startX) * 2;
+      scrollContainer.scrollLeft = scrollLeft - walk;
+    });
+  </script>
+</body></html>

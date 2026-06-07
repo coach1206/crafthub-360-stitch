@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 | Production Export</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Space+Grotesk:wght@400;500;700&amp;family=Manrope:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface": "#e5e2e1",
+                      "on-primary-fixed": "#241a00",
+                      "on-tertiary": "#2f3131",
+                      "secondary-fixed": "#e5e2e1",
+                      "on-tertiary-container": "#444546",
+                      "tertiary-fixed-dim": "#c6c6c6",
+                      "error": "#ffb4ab",
+                      "primary-fixed-dim": "#e9c349",
+                      "on-secondary-container": "#b7b5b4",
+                      "surface-tint": "#e9c349",
+                      "surface-bright": "#3a3939",
+                      "on-error": "#690005",
+                      "on-primary-fixed-variant": "#574500",
+                      "on-surface-variant": "#d0c5af",
+                      "surface-dim": "#131313",
+                      "surface-container-high": "#2a2a2a",
+                      "primary-fixed": "#ffe088",
+                      "on-secondary-fixed-variant": "#474746",
+                      "secondary": "#c8c6c5",
+                      "secondary-container": "#474746",
+                      "surface-variant": "#353534",
+                      "background": "#131313",
+                      "surface": "#131313",
+                      "on-primary-container": "#554300",
+                      "surface-container-low": "#1c1b1b",
+                      "error-container": "#93000a",
+                      "outline": "#99907c",
+                      "primary": "#f2ca50",
+                      "inverse-surface": "#e5e2e1",
+                      "primary-container": "#d4af37",
+                      "tertiary-fixed": "#e2e2e2",
+                      "on-error-container": "#ffdad6",
+                      "outline-variant": "#4d4635",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "inverse-primary": "#735c00",
+                      "tertiary-container": "#b2b3b3",
+                      "on-primary": "#3c2f00",
+                      "surface-container-lowest": "#0e0e0e",
+                      "on-tertiary-fixed-variant": "#454747",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "on-secondary": "#313030",
+                      "inverse-on-surface": "#313030",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "tertiary": "#cecece",
+                      "surface-container-highest": "#353534",
+                      "surface-container": "#201f1f",
+                      "on-background": "#e5e2e1"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-padding": "64px",
+                      "touch-target-min": "56px",
+                      "unit": "8px",
+                      "tour-card-width": "520px",
+                      "gutter": "32px"
+              },
+              "fontFamily": {
+                      "display-tour": ["Playfair Display"],
+                      "label-sm": ["Space Grotesk"],
+                      "body-md": ["Manrope"],
+                      "headline-lg-mobile": ["Playfair Display"],
+                      "label-caps": ["Space Grotesk"],
+                      "headline-lg": ["Playfair Display"],
+                      "body-intro": ["Manrope"]
+              },
+              "fontSize": {
+                      "display-tour": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "label-caps": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                      "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                      "body-intro": ["20px", {"lineHeight": "32px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .obsidian-glass {
+            background: rgba(19, 19, 19, 0.8);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .gold-border-top {
+            border-top: 2px solid #d4af37;
+        }
+        .gold-foil-text {
+            background: linear-gradient(to bottom right, #f2ca50, #d4af37, #ffe088);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-foil-bg {
+            background: linear-gradient(to bottom right, #f2ca50, #d4af37, #ffe088);
+            color: #131313;
+        }
+        .shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary/30 min-h-screen overflow-x-hidden font-body-md">
+<!-- Background Asset -->
+<div class="fixed inset-0 z-0 opacity-40">
+<img alt="" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"/>
+</div>
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 border-b border-outline-variant bg-surface/90 backdrop-blur-xl shadow-md flex justify-between items-center px-container-padding h-20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">menu</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary drop-shadow-[0_2px_2px_rgba(233,193,118,0.5)]">
+                CraftHub 360
+            </h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<span class="text-xs font-label-caps tracking-widest text-outline">AUTHORITY SEAL</span>
+<span class="text-primary font-bold">FOUNDER LEVEL 0</span>
+</div>
+<button class="px-6 py-2 obsidian-glass rounded-full border border-primary/30 text-primary font-label-caps text-xs hover:bg-surface-container-high transition-colors active:scale-95 duration-200">
+                GRAND LOUNGE
+            </button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="relative z-10 pt-28 pb-32 px-container-padding flex flex-col gap-12 max-w-[1600px] mx-auto">
+<!-- Hero Context -->
+<section class="flex justify-between items-end">
+<div class="space-y-2">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-primary text-[10px] font-bold tracking-widest uppercase">Production Ready</span>
+</div>
+<h2 class="font-display-tour text-display-tour text-white leading-tight">Full Production<br/><span class="gold-foil-text">Export Bundle</span></h2>
+</div>
+<div class="flex gap-4 mb-4">
+<div class="obsidian-glass p-4 rounded-xl border border-outline-variant flex flex-col items-center min-w-[120px]">
+<span class="text-outline text-[10px] font-label-caps mb-1">HEALTH</span>
+<span class="text-white font-bold text-xl">100%</span>
+</div>
+<div class="obsidian-glass p-4 rounded-xl border border-outline-variant flex flex-col items-center min-w-[120px]">
+<span class="text-outline text-[10px] font-label-caps mb-1">LATENCY</span>
+<span class="text-white font-bold text-xl">12ms</span>
+</div>
+</div>
+</section>
+<!-- Asymmetric Bento Layout -->
+<div class="grid grid-cols-12 gap-8 items-start">
+<!-- Module Screens List (Category-based) -->
+<div class="col-span-12 lg:col-span-7 obsidian-glass rounded-2xl gold-border-top p-8 h-[700px] flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg text-headline-lg text-white scale-75 origin-left">Module Ecosystem</h3>
+<span class="text-outline text-sm">134 Screens Compiled</span>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar pr-4 space-y-8">
+<!-- SmokeCraft -->
+<div>
+<h4 class="text-primary font-label-caps text-xs tracking-widest mb-4 flex items-center gap-3">
+                            SMOKECRAFT
+                            <span class="h-px bg-outline-variant flex-1"></span>
+</h4>
+<div class="grid grid-cols-2 gap-3">
+<template id="screen-item">
+<div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5 hover:border-primary/30 transition-all cursor-default group">
+<span class="text-on-surface-variant text-sm group-hover:text-on-surface transition-colors">--screen-name--</span>
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</template>
+<script>
+                                const modules = {
+                                    "SmokeCraft": ["Humidor Entry", "Stick Selection", "Draw Tension Analytics", "Aging Calculator", "Leaf Provenance", "Ash Quality Review"],
+                                    "Passport": ["Member Portal", "NFT Access Key", "History Vault", "Travel Tier Dashboard", "Reward Shards", "QR Identity"],
+                                    "E.A.T.": ["Menu Discovery", "Flavor Profile Map", "Reservation Engine", "Sommelier Connect", "Ingredient Trace", "Kitchen Live Stream"],
+                                    "POS 3": ["Checkout Terminal", "Split-Bill Wizard", "Gratuity Matrix", "Invoice PDF Render", "Merchant Portal", "Transaction Ledger"]
+                                };
+                                const listContainer = document.querySelector('.custom-scrollbar');
+                                Object.entries(modules).forEach(([modName, screens]) => {
+                                    const section = document.createElement('div');
+                                    section.className = 'mb-8';
+                                    section.innerHTML = `
+                                        <h4 class="text-primary font-label-caps text-xs tracking-widest mb-4 flex items-center gap-3">
+                                            ${modName.toUpperCase()}
+                                            <span class="h-px bg-outline-variant flex-1"></span>
+                                        </h4>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            ${screens.map(s => `
+                                                <div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5 hover:border-primary/30 transition-all cursor-default group">
+                                                    <span class="text-on-surface-variant text-sm group-hover:text-on-surface transition-colors">${s}</span>
+                                                    <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    `;
+                                    listContainer.appendChild(section);
+                                });
+                            </script>
+</div>
+</div>
+</div>
+</div>
+<!-- Code & Actions -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-8">
+<!-- Code Snippet -->
+<div class="obsidian-glass rounded-2xl border border-outline-variant overflow-hidden flex flex-col h-[350px]">
+<div class="bg-surface-container-high px-6 py-3 flex items-center gap-2">
+<div class="flex gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
+</div>
+<span class="text-[11px] font-label-caps text-outline-variant ml-4">ROOT_DIRECTORY / INDEX.HTML</span>
+<button class="ml-auto material-symbols-outlined text-outline-variant text-base hover:text-primary transition-colors">content_copy</button>
+</div>
+<div class="p-6 bg-[#0e0e0e] flex-1 font-mono text-xs overflow-auto custom-scrollbar leading-relaxed">
+<span class="text-primary-fixed-dim">&lt;!DOCTYPE html&gt;</span><br/>
+<span class="text-primary-fixed-dim">&lt;html lang="en" class="dark"&gt;</span><br/>
+<span class="text-on-surface-variant">  &lt;head&gt;</span><br/>
+<span class="text-outline">    &lt;meta charset="UTF-8" /&gt;</span><br/>
+<span class="text-outline">    &lt;title&gt;CraftHub 360 Ecosystem&lt;/title&gt;</span><br/>
+<span class="text-on-surface-variant">  &lt;/head&gt;</span><br/>
+<span class="text-on-surface-variant">  &lt;body&gt;</span><br/>
+<span class="text-primary">    &lt;div id="app"&gt;{{ ECOSYSTEM_ROOT }}&lt;/div&gt;</span><br/>
+<span class="text-outline">    &lt;script src="./main.js"&gt;&lt;/script&gt;</span><br/>
+<span class="text-on-surface-variant">  &lt;/body&gt;</span><br/>
+<span class="text-primary-fixed-dim">&lt;/html&gt;</span><br/><br/>
+<span class="text-on-tertiary-container">// Dependencies Loaded: 24</span><br/>
+<span class="text-on-tertiary-container">// Tailwind JIT Active</span><br/>
+<span class="text-on-tertiary-container">// Obsidian Glassmorphism V2.4</span>
+</div>
+</div>
+<!-- Massive Trigger Button -->
+<button class="shimmer gold-foil-bg w-full h-32 rounded-2xl flex flex-col items-center justify-center gap-1 active:scale-95 transition-all shadow-[0_0_40px_rgba(212,175,55,0.2)] group">
+<span class="material-symbols-outlined text-4xl mb-1 group-hover:scale-110 transition-transform">rocket_launch</span>
+<span class="font-label-caps text-lg font-bold tracking-[0.2em]">TRIGGER GITHUB PUSH</span>
+<span class="text-[10px] font-bold opacity-70">MAIN BRANCH @ PRODUCTION</span>
+</button>
+<!-- Secondary Export -->
+<button class="w-full h-20 rounded-2xl obsidian-glass border border-outline-variant flex items-center justify-center gap-4 hover:bg-surface-container-high transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-secondary">cloud_sync</span>
+<span class="font-label-caps text-on-surface font-medium">REPLIT DIRECT EXPORT</span>
+<span class="text-[10px] text-outline px-2 py-0.5 rounded border border-outline-variant">LEGACY</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Navigation Shell (Bottom) -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl border-t border-outline-variant bg-surface-container-lowest/95 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.5)] flex justify-around items-center h-24 px-gutter pb-4">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim transition-all cursor-pointer">
+<span class="material-symbols-outlined mb-1">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim transition-all cursor-pointer">
+<span class="material-symbols-outlined mb-1">liquor</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim transition-all cursor-pointer">
+<span class="material-symbols-outlined mb-1">import_contacts</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold scale-110 cursor-pointer">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<span class="font-label-sm text-label-sm">Assistant</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction: Shimmer follow
+        document.querySelector('.gold-foil-bg').addEventListener('mousemove', (e) => {
+            const rect = e.target.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            e.target.style.setProperty('--x', `${x}px`);
+            e.target.style.setProperty('--y', `${y}px`);
+        });
+
+        // Atmospheric effect: Soft pulse on the Health stat
+        const stats = document.querySelectorAll('.obsidian-glass span.text-white');
+        setInterval(() => {
+            stats.forEach(s => {
+                s.style.transition = 'text-shadow 2s ease';
+                s.style.textShadow = '0 0 15px rgba(242, 202, 80, 0.4)';
+                setTimeout(() => {
+                    s.style.textShadow = 'none';
+                }, 2000);
+            });
+        }, 4000);
+    </script>
+</body></html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#e5e2e3",
+                        "tertiary-fixed": "#f7ddd6",
+                        "surface-tint": "#e9c176",
+                        "surface-container": "#1f1f20",
+                        "on-primary-fixed": "#261900",
+                        "on-primary": "#412d00",
+                        "on-secondary": "#462a00",
+                        "surface": "#131314",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#e9c176",
+                        "secondary": "#ffb95a",
+                        "tertiary": "#dac1bb",
+                        "surface-container-high": "#2a2a2b",
+                        "surface-container-highest": "#353436",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#131314",
+                        "error-container": "#93000a",
+                        "on-surface": "#e5e2e3",
+                        "surface-variant": "#353436",
+                        "on-surface-variant": "#d1c5b4",
+                        "background": "#131314",
+                        "surface-bright": "#39393a",
+                        "primary": "#e9c176",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "outline": "#9a8f80",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-tertiary-fixed": "#261814",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-container": "#c5a059",
+                        "inverse-surface": "#e5e2e3",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "primary-fixed": "#ffdea5",
+                        "on-secondary-container": "#3d2400",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "tertiary-container": "#b7a09a",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "outline-variant": "#4e4639",
+                        "error": "#ffb4ab",
+                        "surface-container-low": "#1b1b1c",
+                        "on-primary-container": "#4e3700"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "margin": "64px",
+                        "card-padding": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .smoked-glass {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-inner-stroke {
+            box-shadow: inset 0 0 0 1px rgba(233, 193, 118, 0.2);
+        }
+        .amber-glow:focus-within {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        .slide-to-confirm-track {
+            background: rgba(233, 193, 118, 0.05);
+            border: 1px solid rgba(233, 193, 118, 0.2);
+        }
+        body {
+            background-color: #0e0e0f;
+            color: #e5e2e3;
+            overflow-x: hidden;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* 1. Card Reveal Animation */
+        @keyframes revealOvershoot {
+            0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+            70% { opacity: 1; transform: translateY(-8px) scale(1.02); }
+            100% { transform: translateY(0) scale(1); }
+        }
+        .animate-reveal {
+            animation: revealOvershoot 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* 5. Ambient Pulse */
+        @keyframes ambientPulse {
+            0%, 100% { opacity: 1; text-shadow: 0 0 0px rgba(233, 193, 118, 0); }
+            50% { opacity: 0.9; text-shadow: 0 0 20px rgba(233, 193, 118, 0.4); }
+        }
+        .pulse-ambient {
+            animation: ambientPulse 4s ease-in-out infinite;
+        }
+
+        /* 4. Settle Animation */
+        @keyframes settle {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .animate-settle {
+            animation: settle 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Counter Fade transition */
+        .counter-change {
+            transition: all 0.2s ease-out;
+            transform: translateY(-5px);
+            opacity: 0.5;
+        }
+        
+        #slider-handle {
+            transition: transform 0.1s linear, background-color 0.3s ease;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-64 h-24">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-highest/50 p-2 rounded-full transition-all">arrow_back</button>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right hidden md:block">
+<p class="font-label-lg text-label-lg text-on-surface">Julian Vane</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant/70">Head Sommelier</p>
+</div>
+<div class="w-12 h-12 rounded-full overflow-hidden border border-primary/30">
+<img alt="Staff member profile" data-alt="A professional portrait of a head sommelier in a high-end lounge setting. He wears a tailored charcoal suit and a gold lapel pin. The background is a dimly lit, sophisticated humidor with rows of cedar boxes and warm amber lighting. The mood is authoritative yet welcoming." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqbfnXy4UfHymTQYzLPZ2yYwcxEqM61RZiS8WM5A7DfqexfIeeud85Ci4dtaaHPFbk7ITN4-gU3Ngp0aaEWe0o1huXuegYw5qFkXMXNOnlBGs3AkIVpP0U3tfiDhB2XzXhRRrDxTSxywxoHpJ6apFsXyUH5E-CjmowU7nvFZ50euUe4OyHhVEvWvfuDMqfgUOyUGn7wjuXzhN8nW5MQmlTJo06-yfWS9Q5XiihAcpieTkbnvzj4zM3FQxiOUcaVi8nwUS_NgJcP1E"/>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-40 px-64 max-w-container-max-width mx-auto">
+<!-- Receipt Workflow Container -->
+<div class="grid grid-cols-12 gap-gutter items-start">
+<!-- Left Column: Product Visuals -->
+<div class="col-span-12 lg:col-span-7 space-y-gutter animate-reveal">
+<div class="relative group rounded-xl overflow-hidden smoked-glass gold-inner-stroke aspect-[4/3] shadow-2xl">
+<img alt="Padrón 1964 Anniversary Series" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Macro photography of a box of Padrón 1964 Anniversary Series cigars resting on a polished mahogany table. The rich brown tobacco leaves show intricate texture, with the iconic gold and maroon bands shining under soft, directional spotlighting. The atmosphere is luxurious and tactile, featuring deep shadows and warm wood tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKOjLCLXdr7uxCbZLDMViQZr16nvu12W1yViEe_PlruDKGAMBtszfr-iEHsLVZ69Ai8ZTSlQ5M5Pg80ZS0k-812LrQMkdTccn8efVcOfC6qgYH8jYj27GVXu4tl3JM6U9O05FuHn_jh7rhghmEo5zywR2AhDtDR7V1rMwEIQUcvoPZfzPILjYBti8uVDnZ2lhzL8IkHWhu_Le75rcug3rVdiI7kRMMzi6eEUgJ0JUfrY6kSK2GZY795U_58u_EmWIqmcscCKQpo2E"/>
+<div class="absolute bottom-0 left-0 w-full p-card-padding bg-gradient-to-t from-background to-transparent">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] mb-2 block">Premium Inventory</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-2">Padrón 1964 Anniversary</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">Imperial Maduro • Box of 25 • Estelí, Nicaragua</p>
+</div>
+</div>
+<!-- Tasting Notes / Passport Style Card -->
+<div class="smoked-glass rounded-xl p-card-padding gold-inner-stroke flex gap-8 items-center">
+<div class="w-24 h-24 flex-shrink-0 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-4xl text-primary" data-weight="fill">menu_book</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">Sommelier Notes</h3>
+<p class="font-body-md text-body-md text-on-surface-variant italic">"A medium-to-full-bodied smoke with complex notes of cocoa, coffee, and spice. Perfectly aged wrapper leaves provide a silky finish."</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Receiving Controls -->
+<div class="col-span-12 lg:col-span-5 space-y-gutter animate-reveal" style="animation-delay: 0.15s; opacity: 0;">
+<div class="smoked-glass rounded-xl p-card-padding gold-inner-stroke shadow-2xl space-y-8">
+<div class="flex justify-between items-end border-b border-outline-variant/30 pb-4">
+<h3 class="font-headline-md text-headline-md text-on-surface">Inventory Inbound</h3>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant block uppercase">Current Stock</span>
+<span class="font-headline-md text-headline-md text-primary">142 Units</span>
+</div>
+</div>
+<!-- Input Grid -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Received -->
+<div class="amber-glow flex flex-col gap-2 p-4 rounded-lg bg-surface-container-high transition-all">
+<label class="font-label-lg text-label-lg text-on-surface-variant uppercase">Received</label>
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-primary">add_box</span>
+<input class="bg-transparent border-none text-right font-headline-xl text-headline-xl text-on-surface focus:ring-0 w-full p-0" id="input-received" type="number" value="25"/>
+</div>
+</div>
+<!-- Damaged -->
+<div class="amber-glow flex flex-col gap-2 p-4 rounded-lg bg-surface-container-high transition-all">
+<label class="font-label-lg text-label-lg text-error uppercase">Damaged / Reject</label>
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-error">heart_broken</span>
+<input class="bg-transparent border-none text-right font-headline-xl text-headline-xl text-error focus:ring-0 w-full p-0" id="input-damaged" type="number" value="0"/>
+</div>
+</div>
+<!-- Missing -->
+<div class="amber-glow flex flex-col gap-2 p-4 rounded-lg bg-surface-container-high transition-all">
+<label class="font-label-lg text-label-lg text-on-surface-variant uppercase">Missing in Shipment</label>
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-on-surface-variant">inventory</span>
+<input class="bg-transparent border-none text-right font-headline-xl text-headline-xl text-on-surface-variant focus:ring-0 w-full p-0" id="input-missing" type="number" value="0"/>
+</div>
+</div>
+</div>
+<!-- Preview Section -->
+<div class="bg-primary/5 rounded-xl p-6 border border-primary/20 text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">New Count Preview</p>
+<div class="flex items-center justify-center gap-4">
+<span class="font-headline-lg text-headline-lg text-on-surface-variant line-through opacity-50">142</span>
+<span class="material-symbols-outlined text-primary">trending_up</span>
+<!-- 5. Ambient Pulse on final count -->
+<span class="font-display-lg text-display-lg text-primary pulse-ambient transition-all duration-300" id="new-count-display">167</span>
+</div>
+</div>
+<!-- 3. Slide to Action -->
+<div class="relative h-20 w-full slide-to-confirm-track rounded-full flex items-center p-2 group overflow-hidden select-none">
+<div class="absolute left-0 top-0 h-full bg-primary/10 rounded-full w-0 transition-[width] duration-75" id="slider-progress"></div>
+<div class="h-16 w-16 bg-primary rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(233,193,118,0.3)] cursor-grab active:cursor-grabbing z-10" id="slider-handle">
+<span class="material-symbols-outlined text-on-primary text-3xl" id="handle-icon">chevron_right</span>
+</div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<span class="font-label-lg text-label-lg text-primary uppercase tracking-widest opacity-70 group-hover:opacity-100 transition-opacity">Slide to Confirm Receipt</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] flex justify-around items-center px-gutter py-4">
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined mb-1 group-active:scale-95 transition-transform">point_of_sale</span>
+<span class="font-label-sm text-label-sm">POS 3</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined mb-1 group-active:scale-95 transition-transform">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] cursor-pointer">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</div>
+</nav>
+<script>
+    // 2. Counter Animation
+    const newCountDisplay = document.getElementById('new-count-display');
+    const inputs = ['input-received', 'input-damaged', 'input-missing'];
+    const baseCount = 142;
+
+    function updatePreview() {
+        const received = parseInt(document.getElementById('input-received').value) || 0;
+        const damaged = parseInt(document.getElementById('input-damaged').value) || 0;
+        const missing = parseInt(document.getElementById('input-missing').value) || 0;
+        const targetValue = baseCount + received - damaged - missing;
+        
+        const currentValue = parseInt(newCountDisplay.innerText);
+        if (targetValue !== currentValue) {
+            animateNumber(currentValue, targetValue, 400);
+        }
+    }
+
+    function animateNumber(start, end, duration) {
+        let startTime = null;
+        const step = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            const value = Math.floor(progress * (end - start) + start);
+            newCountDisplay.innerText = value;
+            
+            // Visual feedback during roll
+            newCountDisplay.style.opacity = 0.7;
+            newCountDisplay.style.transform = 'translateY(-2px)';
+            
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                newCountDisplay.innerText = end;
+                newCountDisplay.style.opacity = 1;
+                newCountDisplay.style.transform = 'translateY(0)';
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    inputs.forEach(id => {
+        document.getElementById(id).addEventListener('input', updatePreview);
+    });
+
+    // 3. Improved Slide-to-Confirm Interaction
+    const handle = document.getElementById('slider-handle');
+    const icon = document.getElementById('handle-icon');
+    const track = handle.parentElement;
+    const progress = document.getElementById('slider-progress');
+    let isDragging = false;
+    let startX;
+    let maxScroll;
+
+    function startDrag(e) {
+        if (track.classList.contains('confirmed')) return;
+        isDragging = true;
+        startX = (e.type === 'mousedown') ? e.pageX : e.touches[0].pageX;
+        maxScroll = track.offsetWidth - handle.offsetWidth - 16;
+        handle.style.transition = 'none';
+        progress.style.transition = 'none';
+    }
+
+    function moveDrag(e) {
+        if (!isDragging) return;
+        const currentX = (e.type === 'mousemove') ? e.pageX : e.touches[0].pageX;
+        const moveX = Math.max(0, Math.min(currentX - startX, maxScroll));
+        
+        handle.style.transform = `translateX(${moveX}px)`;
+        progress.style.width = `${moveX + 32}px`;
+        
+        // Dynamic background fill feedback
+        const opacity = (moveX / maxScroll) * 0.4 + 0.1;
+        progress.style.backgroundColor = `rgba(233, 193, 118, ${opacity})`;
+
+        if (moveX >= maxScroll) {
+            confirmAction();
+        }
+    }
+
+    function endDrag() {
+        if (!isDragging) return;
+        isDragging = false;
+        if (!track.classList.contains('confirmed')) {
+            handle.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            progress.style.transition = 'width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            handle.style.transform = 'translateX(0px)';
+            progress.style.width = '0px';
+        }
+    }
+
+    function confirmAction() {
+        isDragging = false;
+        track.classList.add('confirmed');
+        
+        // Visual Success State
+        icon.innerHTML = 'check';
+        icon.style.transition = 'transform 0.3s ease';
+        icon.style.transform = 'scale(1.2)';
+        
+        handle.style.transform = `translateX(${maxScroll}px)`;
+        handle.style.backgroundColor = '#e9c176'; // Solid primary
+        
+        progress.style.width = '100%';
+        progress.style.backgroundColor = 'rgba(233, 193, 118, 0.2)';
+        
+        // 4. Haptic/Settle Animation
+        track.classList.add('animate-settle');
+
+        setTimeout(() => {
+            // Success Notification Simulation
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-12 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-8 py-3 rounded-full font-label-lg shadow-2xl z-[100] animate-reveal';
+            notification.innerText = 'Inventory Successfully Updated';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        }, 300);
+    }
+
+    handle.addEventListener('mousedown', startDrag);
+    handle.addEventListener('touchstart', startDrag, {passive: true});
+    window.addEventListener('mousemove', moveDrag);
+    window.addEventListener('touchmove', moveDrag, {passive: true});
+    window.addEventListener('mouseup', endDrag);
+    window.addEventListener('touchend', endDrag);
+</script>
+</body></html>

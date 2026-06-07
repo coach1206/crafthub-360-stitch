@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#3d2400",
+                    "surface-tint": "#e9c176",
+                    "outline-variant": "#4e4639",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "inverse-on-surface": "#303031",
+                    "inverse-primary": "#775a19",
+                    "surface-dim": "#131314",
+                    "on-tertiary": "#3c2d28",
+                    "background": "#131314",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "surface-container": "#1f1f20",
+                    "surface-bright": "#39393a",
+                    "secondary": "#ffb95a",
+                    "on-background": "#e5e2e3",
+                    "on-tertiary-container": "#473733",
+                    "on-error": "#690005",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-surface-variant": "#d1c5b4",
+                    "secondary-fixed": "#ffddb6",
+                    "primary-container": "#c5a059",
+                    "error": "#ffb4ab",
+                    "tertiary": "#dac1bb",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "surface-container-high": "#2a2a2b",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-lowest": "#0e0e0f",
+                    "inverse-surface": "#e5e2e3",
+                    "on-tertiary-fixed": "#261814",
+                    "on-primary-container": "#4e3700",
+                    "surface-container-low": "#1b1b1c",
+                    "tertiary-container": "#b7a09a",
+                    "surface-container-highest": "#353436",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "error-container": "#93000a",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-surface": "#e5e2e3",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "primary-fixed": "#ffdea5",
+                    "surface": "#131314",
+                    "surface-variant": "#353436",
+                    "on-secondary": "#462a00",
+                    "secondary-container": "#c68315",
+                    "primary": "#e9c176",
+                    "on-primary-fixed": "#261900",
+                    "outline": "#9a8f80",
+                    "on-primary": "#412d00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "card-padding": "24px",
+                    "margin": "64px",
+                    "unit": "8px",
+                    "gutter": "32px",
+                    "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .data-flow-line {
+            stroke-dasharray: 10;
+            animation: flow 20s linear infinite;
+        }
+        @keyframes flow {
+            from { stroke-dashoffset: 200; }
+            to { stroke-dashoffset: 0; }
+        }
+        .pulse-node {
+            animation: node-pulse 3s ease-in-out infinite;
+        }
+        @keyframes node-pulse {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(233,193,118,0.3)); }
+            50% { filter: drop-shadow(0 0 15px rgba(233,193,118,0.8)); }
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .system-node:hover {
+            transform: scale(1.05);
+            background: rgba(233, 193, 118, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-hidden h-screen w-screen">
+<!-- Top AppBar -->
+<header class="bg-surface/80 backdrop-blur-xl text-primary font-headline-md text-headline-md fixed top-0 w-full border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(233,193,118,0.1)] flex items-center justify-between px-margin h-20 w-full z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="hub">hub</span>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter">CraftHub 360 Orchestration</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center space-x-8">
+<span class="font-label-lg text-label-lg text-primary transition-all duration-300 ease-in-out active:scale-95 cursor-pointer">Connectivity Map</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-all duration-300 ease-in-out active:scale-95 cursor-pointer">Orchestration</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-all duration-300 ease-in-out active:scale-95 cursor-pointer">E.A.T. Intelligence</span>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden">
+<img alt="Member Profile" data-alt="A sophisticated portrait of a high-end member in a luxury lounge environment. The lighting is low-key and dramatic, highlighting textured leather and rich wood backgrounds. The aesthetic is refined and exclusive, using a warm palette of ambers and deep espresso tones consistent with a premium private club." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHotkvC5Ho2dAWxSyFTu_oM9PMUzBhwfQomVyjuY1Zqb36a9b2A1b7POuB57g4P8tlAtdI_LYtrC2w8XdU_zK7ug3m364xyvCwF4RUrByYKvlCWvK3udw2s41sZJVxbsDH1h-zabmbmjqeG8zhC7j2P9uxX1qcpkvbet8YJXVsIgrkbxGMLU2LdpdmGWSfkTyeJeU7RFo3x5uhDIDqMWcTkdeepUUE2b6jjWT11_wQR1FPnRvSEgFiawHJDz9TNJxGfj73_ysokUc"/>
+</div>
+</div>
+</header>
+<!-- Navigation Drawer (SideNav) -->
+<aside class="bg-surface-container-lowest/95 backdrop-blur-2xl fixed left-0 top-0 h-full z-40 flex flex-col py-8 w-80 rounded-r-xl border-r border-outline-variant/20 shadow-2xl mt-20 hidden md:flex">
+<div class="px-6 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Command Center</h2>
+</div>
+<nav class="flex-1 space-y-2 px-2">
+<div class="flex items-center gap-4 p-3 font-label-lg text-label-lg text-on-surface-variant hover:text-primary mx-2 hover:bg-surface-variant/50 rounded-lg cursor-pointer transition-transform active:translate-x-1">
+<span class="material-symbols-outlined" data-icon="dashboard_customize">dashboard_customize</span>
+<span>Orchestration</span>
+</div>
+<div class="flex items-center gap-4 p-3 font-label-lg text-label-lg bg-secondary-container text-on-secondary-container rounded-lg mx-2 cursor-default transition-transform">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span>Connectivity Map</span>
+</div>
+<div class="flex items-center gap-4 p-3 font-label-lg text-label-lg text-on-surface-variant hover:text-primary mx-2 hover:bg-surface-variant/50 rounded-lg cursor-pointer transition-transform active:translate-x-1">
+<span class="material-symbols-outlined" data-icon="auto_awesome_motion">auto_awesome_motion</span>
+<span>Guest Journeys</span>
+</div>
+<div class="flex items-center gap-4 p-3 font-label-lg text-label-lg text-on-surface-variant hover:text-primary mx-2 hover:bg-surface-variant/50 rounded-lg cursor-pointer transition-transform active:translate-x-1">
+<span class="material-symbols-outlined" data-icon="liquor">liquor</span>
+<span>Craft Modules</span>
+</div>
+<div class="flex items-center gap-4 p-3 font-label-lg text-label-lg text-on-surface-variant hover:text-primary mx-2 hover:bg-surface-variant/50 rounded-lg cursor-pointer transition-transform active:translate-x-1">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+<span>Passport Networking</span>
+</div>
+<div class="flex items-center gap-4 p-3 font-label-lg text-label-lg text-on-surface-variant hover:text-primary mx-2 hover:bg-surface-variant/50 rounded-lg cursor-pointer transition-transform active:translate-x-1">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span>POS 3 Integration</span>
+</div>
+<div class="flex items-center gap-4 p-3 font-label-lg text-label-lg text-on-surface-variant hover:text-primary mx-2 hover:bg-surface-variant/50 rounded-lg cursor-pointer transition-transform active:translate-x-1">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span>E.A.T. Intelligence</span>
+</div>
+<div class="flex items-center gap-4 p-3 font-label-lg text-label-lg text-on-surface-variant hover:text-primary mx-2 hover:bg-surface-variant/50 rounded-lg cursor-pointer transition-transform active:translate-x-1">
+<span class="material-symbols-outlined" data-icon="conveyor_belt">conveyor_belt</span>
+<span>Logistics</span>
+</div>
+</nav>
+</aside>
+<!-- Main Map Canvas -->
+<main class="ml-0 md:ml-80 mt-20 h-[calc(100vh-5rem)] relative overflow-hidden bg-[radial-gradient(circle_at_50%_50%,_#1f1f20_0%,_#0e0e0f_100%)]">
+<!-- SVG Connections Layer -->
+<svg class="absolute inset-0 w-full h-full z-0 pointer-events-none" preserveaspectratio="xMidYMid slice" viewbox="0 0 1000 800">
+<defs>
+<marker id="arrowhead" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon fill="#e9c176" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<lineargradient id="glowGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" style="stop-color:#e9c176;stop-opacity:0"></stop>
+<stop offset="50%" style="stop-color:#ffb95a;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#e9c176;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<!-- Lines (Logic-driven) -->
+<!-- Admin Setup to CraftHub -->
+<path d="M200 150 Q 300 150 450 350" fill="none" opacity="0.3" stroke="#9a8f80" stroke-width="1"></path>
+<path class="data-flow-line" d="M200 150 Q 300 150 450 350" fill="none" marker-end="url(#arrowhead)" stroke="url(#glowGradient)" stroke-width="2"></path>
+<!-- NOVEE OS Core Hub Hub connections -->
+<line class="data-flow-line" stroke="#e9c176" stroke-width="2" x1="500" x2="500" y1="400" y2="250"></line> <!-- to CraftHub -->
+<line class="data-flow-line" stroke="#e9c176" stroke-width="2" x1="500" x2="300" y1="400" y2="400"></line> <!-- to Modules -->
+<line class="data-flow-line" stroke="#e9c176" stroke-width="2" x1="500" x2="700" y1="400" y2="400"></line> <!-- to Passport -->
+<line class="data-flow-line" stroke="#e9c176" stroke-width="2" x1="500" x2="500" y1="400" y2="550"></line> <!-- to E.A.T. -->
+<!-- Specific Logic Flows -->
+<path class="data-flow-line" d="M300 450 Q 500 500 700 450" fill="none" marker-end="url(#arrowhead)" stroke="#e9c176" stroke-width="1"></path> <!-- Modules to Passport -->
+<path class="data-flow-line" d="M500 650 Q 700 650 750 550" fill="none" marker-end="url(#arrowhead)" stroke="#e9c176" stroke-width="1"></path> <!-- E.A.T to POS -->
+</svg>
+<!-- Node Layer (Absolute Positioned HTML Elements) -->
+<div class="relative w-full h-full">
+<!-- Center Node: NOVEE OS -->
+<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+<div class="glass-panel w-48 h-48 rounded-full flex flex-col items-center justify-center border-2 border-primary pulse-node">
+<span class="material-symbols-outlined text-5xl text-primary mb-2" data-icon="settings_input_component">settings_input_component</span>
+<span class="font-headline-md text-primary text-center">NOVEE OS</span>
+<div class="mt-1 px-3 py-0.5 bg-primary/20 rounded-full">
+<span class="text-[10px] uppercase tracking-widest text-primary font-bold">Primary Core</span>
+</div>
+</div>
+</div>
+<!-- Tier 1: Main Pillars -->
+<!-- CraftHub 360 -->
+<div class="absolute left-1/2 top-[15%] -translate-x-1/2 system-node glass-panel px-6 py-4 rounded-xl flex items-center gap-3 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-primary" data-icon="hub">hub</span>
+<div>
+<p class="font-label-lg text-primary">CraftHub 360</p>
+<p class="text-[10px] text-on-surface-variant opacity-60">System Orchestrator</p>
+</div>
+</div>
+<!-- 360 Passport -->
+<div class="absolute right-[15%] top-1/2 -translate-y-1/2 system-node glass-panel px-6 py-4 rounded-xl flex items-center gap-3 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-primary" data-icon="badge">badge</span>
+<div>
+<p class="font-label-lg text-primary">360 Passport</p>
+<p class="text-[10px] text-on-surface-variant opacity-60">Guest Recognition</p>
+</div>
+</div>
+<!-- E.A.T Intelligence -->
+<div class="absolute left-1/2 bottom-[15%] -translate-x-1/2 system-node glass-panel px-6 py-4 rounded-xl flex items-center gap-3 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-primary" data-icon="psychology">psychology</span>
+<div>
+<p class="font-label-lg text-primary">E.A.T. Intelligence</p>
+<p class="text-[10px] text-on-surface-variant opacity-60">Predictive Events</p>
+</div>
+</div>
+<!-- Craft Modules Cluster -->
+<div class="absolute left-[5%] top-1/2 -translate-y-1/2 flex flex-col gap-4">
+<div class="glass-panel p-4 rounded-xl border-l-4 border-primary">
+<p class="font-headline-md text-primary mb-4">Craft Modules</p>
+<div class="grid grid-cols-2 gap-3">
+<div class="system-node glass-panel p-3 rounded-lg flex flex-col items-center gap-1 cursor-pointer">
+<span class="material-symbols-outlined text-secondary" data-icon="cigar">smoking_rooms</span>
+<span class="text-[10px] font-semibold text-on-surface">SmokeCraft</span>
+</div>
+<div class="system-node glass-panel p-3 rounded-lg flex flex-col items-center gap-1 cursor-pointer">
+<span class="material-symbols-outlined text-secondary" data-icon="liquor">liquor</span>
+<span class="text-[10px] font-semibold text-on-surface">PourCraft</span>
+</div>
+<div class="system-node glass-panel p-3 rounded-lg flex flex-col items-center gap-1 cursor-pointer">
+<span class="material-symbols-outlined text-secondary" data-icon="sports_bar">sports_bar</span>
+<span class="text-[10px] font-semibold text-on-surface">BeerCraft</span>
+</div>
+<div class="system-node glass-panel p-3 rounded-lg flex flex-col items-center gap-1 cursor-pointer">
+<span class="material-symbols-outlined text-secondary" data-icon="wine_bar">wine_bar</span>
+<span class="text-[10px] font-semibold text-on-surface">WineCraft</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Satellite Operational Nodes -->
+<div class="absolute left-[15%] top-[10%] system-node glass-panel p-3 rounded-lg flex items-center gap-3 cursor-pointer opacity-80">
+<span class="material-symbols-outlined text-primary scale-75" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="text-xs text-on-surface-variant">Admin Setup</span>
+</div>
+<div class="absolute right-[20%] top-[15%] system-node glass-panel p-3 rounded-lg flex items-center gap-3 cursor-pointer opacity-80">
+<span class="material-symbols-outlined text-primary scale-75" data-icon="point_of_sale">point_of_sale</span>
+<span class="text-xs text-on-surface-variant">POS 3</span>
+</div>
+<div class="absolute right-[5%] bottom-[20%] system-node glass-panel p-3 rounded-lg flex items-center gap-3 cursor-pointer opacity-80">
+<span class="material-symbols-outlined text-primary scale-75" data-icon="support_agent">support_agent</span>
+<span class="text-xs text-on-surface-variant">AI Concierge</span>
+</div>
+<div class="absolute left-[20%] bottom-[5%] system-node glass-panel p-3 rounded-lg flex items-center gap-3 cursor-pointer opacity-80">
+<span class="material-symbols-outlined text-primary scale-75" data-icon="layers">layers</span>
+<span class="text-xs text-on-surface-variant">Floor Plan</span>
+</div>
+<div class="absolute right-[30%] bottom-[5%] system-node glass-panel p-3 rounded-lg flex items-center gap-3 cursor-pointer opacity-80">
+<span class="material-symbols-outlined text-primary scale-75" data-icon="inventory_2">inventory_2</span>
+<span class="text-xs text-on-surface-variant">Inventory</span>
+</div>
+<!-- Map Controls Overlay -->
+<div class="absolute bottom-10 right-10 flex flex-col gap-2 z-30">
+<button class="glass-panel p-3 rounded-full text-primary hover:bg-primary/20 transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="zoom_in">zoom_in</span>
+</button>
+<button class="glass-panel p-3 rounded-full text-primary hover:bg-primary/20 transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="zoom_out">zoom_out</span>
+</button>
+<button class="glass-panel p-3 rounded-full text-primary hover:bg-primary/20 transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="my_location">my_location</span>
+</button>
+</div>
+<!-- Dashboard Stats Sidebar Overlay (Right) -->
+<div class="absolute top-1/2 -translate-y-1/2 right-10 w-64 glass-panel p-6 rounded-2xl hidden xl:block z-30 border-l-4 border-primary">
+<h3 class="font-headline-md text-primary mb-6">Live Data Flow</h3>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between text-xs mb-2">
+<span class="text-on-surface-variant">Module Traffic</span>
+<span class="text-primary">88%</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[88%] animate-pulse"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-2">
+<span class="text-on-surface-variant">Passport Sync</span>
+<span class="text-primary">Active</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-full opacity-50"></div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/30">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest mb-3">Recent Events</p>
+<ul class="space-y-3">
+<li class="flex items-start gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-primary mt-1"></div>
+<p class="text-xs text-on-surface">Member 049 Entered Wine Cellar</p>
+</li>
+<li class="flex items-start gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary mt-1"></div>
+<p class="text-xs text-on-surface">E.A.T. Suggesting Restock: Cohiba</p>
+</li>
+<li class="flex items-start gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-primary mt-1"></div>
+<p class="text-xs text-on-surface">POS 3 - Reorder Pulse Sent</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navbar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container-high/90 backdrop-blur-lg border-t border-primary/20 fixed bottom-0 w-full h-20 flex justify-around items-center px-4 z-50 rounded-t-xl shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary scale-110 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="extension">extension</span>
+<span class="font-label-sm text-label-sm">Modules</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+<span class="font-label-sm text-label-sm">Floor Plan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="error">error</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction for hovering nodes
+        document.querySelectorAll('.system-node').forEach(node => {
+            node.addEventListener('mouseenter', () => {
+                // Future: Highlight corresponding SVG lines
+            });
+        });
+
+        // Atmospheric particle effect on canvas background
+        const main = document.querySelector('main');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'absolute w-1 h-1 bg-primary/20 rounded-full blur-[1px]';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animation = `float ${5 + Math.random() * 10}s linear infinite`;
+            main.appendChild(particle);
+        }
+
+        // Add float animation dynamically to avoid CSS bloat
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0% { transform: translateY(0) translateX(0); opacity: 0; }
+                50% { opacity: 0.5; }
+                100% { transform: translateY(-100px) translateX(20px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body></html>

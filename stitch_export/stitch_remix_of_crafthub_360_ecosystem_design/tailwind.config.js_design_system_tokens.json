@@ -1,0 +1,31 @@
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#c5a059', // Gold Foil
+        surface: '#131314',
+        'surface-bright': '#39393a',
+        'surface-container-low': '#1b1b1c',
+        'on-surface-variant': '#c9c6c4',
+        'accent-amber': '#e9c176',
+        'accent-copper': '#b87333',
+        'accent-brown': '#3d2b1f',
+      },
+      fontFamily: {
+        display: ['Playfair Display', 'serif'],
+        body: ['Inter', 'sans-serif'],
+      },
+      borderRadius: {
+        'premium': '0.5rem', // ROUND_EIGHT
+      },
+      boxShadow: {
+        'tactile': '0 4px 20px rgba(0, 0, 0, 0.5)',
+        'glow-amber': '0 0 15px rgba(233, 193, 118, 0.3)',
+      },
+      backdropBlur: {
+        'glass': '20px',
+      }
+    },
+  },
+  plugins: [],
+}

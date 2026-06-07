@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 - The 360 Passport</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Manrope:wght@400;500&amp;family=Space+Grotesk:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#574500",
+                    "secondary": "#c8c6c5",
+                    "surface": "#131313",
+                    "primary-fixed": "#ffe088",
+                    "inverse-primary": "#735c00",
+                    "on-secondary-container": "#b7b5b4",
+                    "tertiary-fixed": "#e2e2e2",
+                    "surface-bright": "#3a3939",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-tertiary-container": "#444546",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "surface-container-high": "#2a2a2a",
+                    "surface-container": "#201f1f",
+                    "tertiary-fixed-dim": "#c6c6c6",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-container-low": "#1c1b1b",
+                    "surface-dim": "#131313",
+                    "surface-variant": "#353534",
+                    "tertiary": "#cecece",
+                    "tertiary-container": "#b2b3b3",
+                    "primary": "#f2ca50",
+                    "surface-tint": "#e9c349",
+                    "on-surface": "#e5e2e1",
+                    "error": "#ffb4ab",
+                    "primary-fixed-dim": "#e9c349",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "on-background": "#e5e2e1",
+                    "on-secondary": "#313030",
+                    "surface-container-highest": "#353534",
+                    "inverse-surface": "#e5e2e1",
+                    "on-primary-fixed": "#241a00",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "outline-variant": "#4d4635",
+                    "on-tertiary": "#2f3131",
+                    "background": "#131313",
+                    "outline": "#99907c",
+                    "error-container": "#93000a",
+                    "secondary-container": "#474746",
+                    "on-primary-container": "#554300",
+                    "on-primary": "#3c2f00",
+                    "inverse-on-surface": "#313030",
+                    "on-surface-variant": "#d0c5af",
+                    "primary-container": "#d4af37",
+                    "on-error": "#690005"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "container-padding": "64px",
+                    "touch-target-min": "56px",
+                    "tour-card-width": "520px",
+                    "gutter": "32px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Space Grotesk"],
+                    "body-md": ["Manrope"],
+                    "label-caps": ["Space Grotesk"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-intro": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "display-tour": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-caps": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "body-intro": ["20px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-tour": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .obsidian-glass {
+            background: rgba(19, 19, 19, 0.8);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .gold-foil-text {
+            background: linear-gradient(135deg, #f2ca50 0%, #d4af37 50%, #f2ca50 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-foil-bg {
+            background: linear-gradient(135deg, #f2ca50 0%, #d4af37 50%, #f2ca50 100%);
+        }
+        .stamp-reveal {
+            animation: stampIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(3) rotate(-15deg);
+        }
+        @keyframes stampIn {
+            to { opacity: 1; transform: scale(1) rotate(-8deg); }
+        }
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen overflow-hidden flex flex-col font-body-md text-body-md">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-container-padding h-touch-target-min z-50 bg-transparent">
+<div class="flex items-center gap-unit cursor-pointer hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined text-primary" data-icon="close">close</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tighter">CraftHub 360</h1>
+<button class="font-label-caps text-label-caps text-primary hover:opacity-80 transition-opacity active:scale-95 duration-200">
+            Skip Tour
+        </button>
+</header>
+<!-- Main Content Canvas (Environmental/AR feel) -->
+<main class="flex-grow relative flex items-center justify-center p-gutter overflow-hidden">
+<!-- Background Ambient Element -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-30 grayscale brightness-50" data-alt="A luxurious architectural interior of a modern craft distillery or high-end kiosk lounge. Deep obsidian marble surfaces and warm, golden architectural lighting create a prestigious and atmospheric environment. The focus is soft-blurred in the background to provide a sense of place while keeping the UI clear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABv5anAPWMJD1X9pANCSWPKAcX0raorDeysOYcNxdF-cvZMxQToLOUCBHX1LGmdUxE5dUSE2m3UlEOrHGNeXitqBGp46pzZPLyY42DIZ8lTxbP5_sva3Kcc-5lE9jP76QQ5RVBez2IAtP-QiphuI7IYO62JD7If8esWIUPNJ35lt419eRpZ7dd3t_XngA4GyV0S2DztVdkc5W4nMNX9WkvPCAm4T17m2LJDox4mthRrziUePKmb3hceyQmXjWjpjEG48EOu1D-nH0"/>
+<div class="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background"></div>
+</div>
+<!-- Visual Representation: Digital Stamp Earning -->
+<div class="relative z-10 w-full max-w-4xl flex flex-col md:flex-row items-center justify-center gap-16">
+<!-- Passport Representation -->
+<div class="relative w-80 h-[480px] obsidian-glass rounded-2xl shadow-2xl flex flex-col p-8 overflow-hidden transform md:-rotate-3 transition-transform hover:rotate-0 duration-700">
+<div class="absolute top-0 left-0 w-full h-2 gold-foil-bg"></div>
+<div class="flex justify-between items-center mb-12">
+<span class="material-symbols-outlined text-primary/50" data-icon="qr_code_2">qr_code_2</span>
+<span class="font-label-caps text-[10px] text-primary/40 tracking-widest">EST. 2024</span>
+</div>
+<div class="space-y-6">
+<div class="h-12 w-12 rounded-full border border-primary/20 flex items-center justify-center text-primary/30">
+<span class="material-symbols-outlined text-3xl" data-icon="account_circle">account_circle</span>
+</div>
+<div>
+<p class="font-label-caps text-[10px] text-primary/60">COLLECTOR ID</p>
+<p class="font-headline-lg-mobile text-xl text-on-surface">CH-8829-001</p>
+</div>
+</div>
+<!-- Stamps Container -->
+<div class="mt-16 grid grid-cols-2 gap-4 opacity-80">
+<div class="aspect-square rounded-full border-2 border-dashed border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white/5" data-icon="token">token</span>
+</div>
+<div class="aspect-square rounded-full border-2 border-dashed border-white/10 flex items-center justify-center relative">
+<!-- Active Earning Stamp -->
+<div class="stamp-reveal absolute inset-0 flex items-center justify-center">
+<div class="w-20 h-20 rounded-full border-4 border-primary/40 flex items-center justify-center bg-primary/10 backdrop-blur-sm">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+</div>
+</div>
+<div class="aspect-square rounded-full border-2 border-dashed border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white/5" data-icon="liquor">liquor</span>
+</div>
+<div class="aspect-square rounded-full border-2 border-dashed border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white/5" data-icon="restaurant">restaurant</span>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-white/5">
+<div class="flex justify-between items-end">
+<div class="space-y-1">
+<p class="font-label-caps text-[10px] text-primary/60 uppercase">Ecosystem Tier</p>
+<p class="text-on-surface font-bold">Artisan Initiate</p>
+</div>
+<div class="h-8 w-8 bg-primary/20 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="shield">shield</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Tour Instruction Card -->
+<div class="w-full max-w-tour-card-width obsidian-glass p-12 rounded-xl relative shadow-[0_-4px_60px_rgba(212,175,55,0.08)]">
+<div class="absolute top-0 left-0 w-full h-[2px] bg-primary shadow-[0_0_15px_rgba(242,202,80,0.5)]"></div>
+<!-- Progress Header -->
+<div class="flex items-center gap-2 mb-8">
+<div class="h-1 flex-grow rounded-full gold-foil-bg"></div>
+<div class="h-1 flex-grow rounded-full gold-foil-bg"></div>
+<div class="h-1 flex-grow rounded-full bg-primary/40 relative overflow-hidden">
+<div class="absolute inset-0 gold-foil-bg animate-pulse"></div>
+</div>
+<div class="h-1 flex-grow rounded-full bg-white/10"></div>
+</div>
+<div class="mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="stars" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-label-caps text-label-caps text-primary uppercase">Step 3 of 4</span>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-6">Your Digital Legacy.</h2>
+<p class="font-body-intro text-body-intro text-on-surface-variant mb-10 leading-relaxed">
+                    Scan your passport at any station to log your tastings, earn artisanal stamps, and unlock exclusive rewards within the ecosystem.
+                </p>
+<div class="grid grid-cols-2 gap-gutter mb-12">
+<div class="p-4 rounded-lg bg-white/5 border border-white/10 flex items-start gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="group">group</span>
+<div>
+<p class="font-label-caps text-xs text-primary mb-1">NETWORK</p>
+<p class="text-xs text-on-surface-variant">Connect with makers and fellow collectors.</p>
+</div>
+</div>
+<div class="p-4 rounded-lg bg-white/5 border border-white/10 flex items-start gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="inventory_2">inventory_2</span>
+<div>
+<p class="font-label-caps text-xs text-primary mb-1">COLLECTION</p>
+<p class="text-xs text-on-surface-variant">Build a permanent digital archive of flavors.</p>
+</div>
+</div>
+</div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-80 obsidian-glass rounded-full p-2 px-4 flex items-center gap-4 shadow-2xl border border-primary/20 z-50">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/40">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="person">person</span>
+</div>
+<div class="flex-grow">
+<p class="font-label-caps text-[10px] text-primary/60 leading-none mb-1">ElevenLabs • Master Host Persona</p>
+<div class="flex items-end gap-[2px] h-3">
+<div class="w-1 bg-primary rounded-full animate-pulse h-full"></div>
+<div class="w-1 bg-primary rounded-full animate-pulse h-2/3" style="animation-delay: 0.2s"></div>
+<div class="w-1 bg-primary rounded-full animate-pulse h-1/2" style="animation-delay: 0.4s"></div>
+<div class="w-1 bg-primary rounded-full animate-pulse h-3/4" style="animation-delay: 0.1s"></div>
+<div class="w-1 bg-primary rounded-full animate-pulse h-full" style="animation-delay: 0.3s"></div>
+<div class="w-1 bg-primary rounded-full animate-pulse h-1/2" style="animation-delay: 0.5s"></div>
+<div class="w-1 bg-primary rounded-full animate-pulse h-2/3" style="animation-delay: 0.2s"></div>
+<div class="w-1 bg-primary rounded-full animate-pulse h-3/4" style="animation-delay: 0.4s"></div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm animate-pulse" data-icon="graphic_eq">graphic_eq</span>
+</div>
+</div></div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<footer class="fixed bottom-0 w-full z-50 flex justify-between items-center px-container-padding py-unit bg-surface/80 backdrop-blur-xl border-t border-white/15 shadow-[0_-4px_40px_rgba(212,175,55,0.05)] h-24">
+<button class="flex items-center justify-center text-secondary border border-secondary rounded-full w-touch-target-min h-touch-target-min hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-90 duration-150">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex gap-4 items-center">
+<div class="text-right hidden md:block mr-4">
+<p class="font-label-caps text-xs text-primary/60">CONTINUE TO</p>
+<p class="font-label-caps text-sm text-on-surface">Final Integration</p>
+</div>
+<button class="flex items-center justify-center bg-primary text-on-primary rounded-full w-touch-target-min h-touch-target-min hover:opacity-90 transition-all active:scale-90 duration-150 relative group overflow-hidden">
+<div class="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined relative z-10" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</footer>
+<!-- Interactive Logic -->
+<script>
+        // Subtle Mouse parallax for environmental depth
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) / 100;
+            const moveY = (e.clientY - window.innerHeight / 2) / 100;
+            
+            const background = document.querySelector('img[data-alt]');
+            if (background) {
+                background.style.transform = `scale(1.1) translate(${moveX}px, ${moveY}px)`;
+            }
+        });
+
+        // Loop the stamp animation for visual focus
+        const stampElement = document.querySelector('.stamp-reveal');
+        setInterval(() => {
+            stampElement.style.animation = 'none';
+            void stampElement.offsetWidth; // trigger reflow
+            stampElement.style.animation = null;
+        }, 5000);
+    </script>
+</body></html>

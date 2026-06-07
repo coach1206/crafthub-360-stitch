@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RESERVE LOUNGE | PourCraft</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --titanium-border: rgba(255, 255, 255, 0.15);
+            --gold-primary: #e9c176;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Refined Airy Glassmorphism Style */
+        .glass-panel {
+            background: rgba(19, 19, 20, 0.15);
+            backdrop-filter: blur(64px);
+            -webkit-backdrop-filter: blur(64px);
+            border: 1px solid var(--titanium-border);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background-image: linear-gradient(rgba(20, 20, 21, 0.3), rgba(20, 20, 21, 0.3)), linear-gradient(to bottom right, var(--gold-primary), #775a19);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+        .waveform-container {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 40px;
+        }
+        .wave-bar {
+            width: 3px;
+            background: var(--gold-primary);
+            border-radius: 4px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+        @keyframes wave {
+            0%, 100% { height: 8px; opacity: 0.5; }
+            50% { height: 24px; opacity: 1; }
+        }
+        .grain-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/black-paper.png");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        /* Atmospheric Background */
+        body {
+            background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: max(884px, 100dvh);
+        }
+        /* 72px Touch Target Utility */
+        .touch-target-72 {
+            min-height: 72px;
+            min-width: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "inverse-surface": "#e5e2e3",
+                "tertiary-fixed-dim": "#dac1bb",
+                "surface-tint": "#e9c176",
+                "on-secondary-fixed": "#2a1800",
+                "primary-container": "#c5a059",
+                "primary-fixed": "#ffdea5",
+                "outline": "#9a8f80",
+                "on-primary-container": "#4e3700",
+                "secondary-fixed-dim": "#ffb95a",
+                "error-container": "#93000a",
+                "tertiary": "#dac1bb",
+                "surface-variant": "#353436",
+                "on-primary-fixed-variant": "#5d4201",
+                "on-tertiary-container": "#473733",
+                "surface-container-highest": "#353436",
+                "inverse-on-surface": "#303031",
+                "surface-container-low": "#1b1b1c",
+                "surface-dim": "#131314",
+                "tertiary-fixed": "#f7ddd6",
+                "on-tertiary": "#3c2d28",
+                "on-surface-variant": "#f1e8dc",
+                "secondary-fixed": "#ffddb6",
+                "background": "transparent",
+                "surface-container": "#1f1f20",
+                "outline-variant": "rgba(255, 255, 255, 0.15)",
+                "on-primary": "#412d00",
+                "on-surface": "#ffffff",
+                "primary": "#e9c176",
+                "on-tertiary-fixed": "#261814",
+                "secondary-container": "#c68315",
+                "primary-fixed-dim": "#e9c176",
+                "tertiary-container": "#b7a09a",
+                "surface-container-high": "#2a2a2b",
+                "on-secondary-container": "#3d2400",
+                "inverse-primary": "#775a19",
+                "on-secondary-fixed-variant": "#643f00",
+                "on-secondary": "#462a00",
+                "surface-container-lowest": "#0e0e0f",
+                "surface": "rgba(19, 19, 20, 0.2)",
+                "secondary": "#ffb95a",
+                "on-tertiary-fixed-variant": "#54433e",
+                "on-error": "#690005",
+                "surface-bright": "#39393a",
+                "on-error-container": "#ffdad6",
+                "on-primary-fixed": "#261900",
+                "on-background": "#ffffff",
+                "error": "#ffb4ab"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
+              "spacing": {
+                "margin": "64px",
+                "gutter": "32px",
+                "container-max-width": "1440px",
+                "unit": "8px",
+                "card-padding": "24px"
+              },
+              "fontFamily": {
+                "headline-lg": ["Playfair Display"],
+                "body-md": ["Montserrat"],
+                "display-lg": ["Playfair Display"],
+                "label-lg": ["Montserrat"],
+                "headline-md": ["Playfair Display"],
+                "body-lg": ["Montserrat"],
+                "label-sm": ["Montserrat"],
+                "headline-xl": ["Playfair Display"]
+              },
+              "fontSize": {
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="text-on-surface font-body-md overflow-x-hidden antialiased">
+<div class="fixed inset-0 grain-texture z-0 pointer-events-none"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-3xl bg-surface/10 border-b border-white/10 shadow-2xl flex justify-between items-center px-gutter h-24">
+<div class="flex items-center gap-4">
+<button class="text-primary hover:text-primary-fixed-dim transition-colors active:scale-95 duration-300 touch-target-72">
+<span class="material-symbols-outlined text-headline-md">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md tracking-widest text-primary uppercase drop-shadow-2xl">RESERVE LOUNGE</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<a class="font-label-lg text-primary hover:text-primary-fixed-dim transition-colors uppercase tracking-widest" href="#">PourCraft</a>
+<a class="font-label-lg text-on-surface/90 hover:text-primary transition-colors uppercase tracking-widest" href="#">BeerCraft</a>
+<a class="font-label-lg text-on-surface/90 hover:text-primary transition-colors uppercase tracking-widest" href="#">WineCraft</a>
+<a class="font-label-lg text-on-surface/90 hover:text-primary transition-colors uppercase tracking-widest" href="#">Passport</a>
+</div>
+<div class="w-12 h-12 rounded-full border border-primary/40 overflow-hidden shadow-2xl">
+<img alt="Member Digital Passport" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_jXrgLcy6Apk28i0H9ojpuY_zCxqJR9WSOG-nOIlB5xa3T-N2FyZhs-xUaa34NH1VheeVrRj2BailStcoHV1r5EDdF7Wg17fk7C8MrNxoxrMOZDvk9Cb48sYw8ac8disY1eZJo_msU-DaY-boZCdq4Fl9pOi0bYLRsSserqH_AeklsjjRpMKwIdmeI-plV8GEIfMtuuidMFWJJNEp50j1PUhdHZQgGyQ83xa-kyI357Lntulmeuv7cYi0YVwCZ4ETmQ-jvWo-yjY"/>
+</div>
+</div>
+</header>
+<main class="relative pt-32 pb-40 min-h-screen px-gutter max-w-container-max-width mx-auto z-10">
+<!-- AI Concierge Panel (Mixology Guide) -->
+<section class="mb-12">
+<div class="glass-panel p-card-padding rounded-2xl gold-foil-border flex flex-col md:flex-row items-center gap-8 shadow-2xl relative overflow-hidden group">
+<div class="absolute -right-20 -bottom-20 w-80 h-80 bg-primary/10 rounded-full blur-[100px] group-hover:bg-primary/20 transition-all duration-700"></div>
+<!-- Persona Silhouette & Animation -->
+<div class="relative flex-shrink-0">
+<div class="w-32 h-32 rounded-full bg-white/5 border border-primary/30 flex items-center justify-center relative z-10 overflow-hidden backdrop-blur-xl">
+<span class="material-symbols-outlined text-6xl text-primary/60 select-none" style="font-variation-settings: 'FILL' 1;">person_apron</span>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<!-- Waveform -->
+<div class="waveform-container absolute -bottom-4 left-1/2 -translate-x-1/2 z-20">
+<div class="wave-bar" style="animation-delay: 0.1s"></div>
+<div class="wave-bar" style="animation-delay: 0.3s"></div>
+<div class="wave-bar" style="animation-delay: 0.5s"></div>
+<div class="wave-bar" style="animation-delay: 0.2s"></div>
+<div class="wave-bar" style="animation-delay: 0.4s"></div>
+<div class="wave-bar" style="animation-delay: 0.6s"></div>
+<div class="wave-bar" style="animation-delay: 0.3s"></div>
+<div class="wave-bar" style="animation-delay: 0.1s"></div>
+</div>
+</div>
+<div class="flex-grow text-center md:text-left">
+<h2 class="font-headline-md text-primary mb-2 flex items-center justify-center md:justify-start gap-2 drop-shadow-2xl">
+<span class="material-symbols-outlined">auto_awesome</span>
+                    MIXOLOGY GUIDE
+                </h2>
+<p class="font-body-lg text-white leading-relaxed max-w-2xl italic drop-shadow-lg">
+                    "You chose <span class="text-primary font-bold">smoky</span> and <span class="text-primary font-bold">citrus</span>. A mezcal-forward profile with a bright finish may fit your lane."
+                </p>
+</div>
+<div class="flex-shrink-0">
+<button class="bg-primary text-on-primary font-label-lg px-8 rounded-xl shadow-2xl hover:bg-primary-fixed-dim transition-all active:scale-95 uppercase tracking-widest touch-target-72">
+                    Generate Selection
+                </button>
+</div>
+</div>
+</section>
+<!-- Spirit Base Selection -->
+<section>
+<div class="flex items-end justify-between mb-8">
+<div>
+<span class="font-label-lg text-primary uppercase tracking-widest block mb-2 drop-shadow-lg">Step 02 / Selection</span>
+<h3 class="font-display-lg text-white drop-shadow-2xl">Spirit Base</h3>
+</div>
+<div class="hidden md:flex gap-4">
+<button class="p-2 border border-white/20 rounded-full text-white hover:border-primary hover:text-primary transition-all backdrop-blur-xl touch-target-72">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="p-2 border border-white/20 rounded-full text-white hover:border-primary hover:text-primary transition-all backdrop-blur-xl touch-target-72">
+<span class="material-symbols-outlined">sort</span>
+</button>
+</div>
+</div>
+<!-- Selection Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Smoky Option (Active) -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden glass-panel gold-foil-border shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer">
+<img alt="Smoky Profile" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDazGblUeJF_PGezoZJvnbnIBYq4EbMzL2Sl2naRdKchFgVdawzdEpPdbnROfjeiRHiux70yMnNt9msKN1yhD7reGybjBi8i0W_TWTPiVpzH8ibMBf0l1hqX5dpSMim6UFIcabSxmr_rsA1UWYywv3MrOh0zVWmv6vaYERo8NqOS9HhIkO2VgxU6tQW6njcnps72a0amI_Fdi1uBaXnus8Vwj5cG0vFOHN6pkTfBkfwTOqEuZgH0U3xsUVpctz_PsCOfnv8eLSmhv8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute inset-0 border-4 border-primary/50 ring-4 ring-primary/20 pointer-events-none rounded-2xl"></div>
+<div class="absolute top-4 right-4 bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center shadow-2xl">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="absolute bottom-0 w-full p-card-padding backdrop-blur-2xl bg-black/40 border-t border-white/10">
+<h4 class="font-headline-md text-primary mb-1 drop-shadow-lg">Smoky</h4>
+<p class="font-label-sm text-white/80 uppercase tracking-widest">Oud, Leather, Peat</p>
+</div>
+</div>
+<!-- Citrus Option (Active) -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden glass-panel gold-foil-border shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer">
+<img alt="Citrus Profile" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAX9aR85HOx_mQ6Kry227WPWybuNaEpaYvsCnDuQTtP1lze4hnFS7xW9bmeczrq28RvhTXQAtitEdwPHdTPRnQiE1tJRqqGbpyC1-h0sb_spHYyNbdCB_0myMTJRchKDfhNgbt-nJ0HmRs8RF23QAYJlNJLu-upcyD_z1gjpetP8VuhRvcUFg8b_gf94rGuVhssNzTwIYPNVojFRTuxtiYF9N7wdct1CEZPVbAfsTVqwKSJ3TerGqPfq2C0_SJT1D7zqHwsX8Pfv6w"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute inset-0 border-4 border-primary/50 ring-4 ring-primary/20 pointer-events-none rounded-2xl"></div>
+<div class="absolute top-4 right-4 bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center shadow-2xl">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="absolute bottom-0 w-full p-card-padding backdrop-blur-2xl bg-black/40 border-t border-white/10">
+<h4 class="font-headline-md text-primary mb-1 drop-shadow-lg">Citrus</h4>
+<p class="font-label-sm text-white/80 uppercase tracking-widest">Zest, Bergamot, Bright</p>
+</div>
+</div>
+<!-- Botanical Option -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden glass-panel shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer border border-white/10">
+<img alt="Botanical Profile" class="w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-110 transition-all duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkCeIwPT_xxCen2G5JF5roOGHvXSjuK074yvEOrMke5s3iTQUv-C1MIPO64HdiycZpznYkKZi-eavxHtHgvQYqNFMibMOXmLHfYgAodmiw1IiNw2wOXEcP1xWamV6kmMWM2f0BoDiyG_E2j8gPq88YxOqWVc99pPpmR9O7IVXnPalZyKKyjIsd-4UhL271RCl-VdChp4zmVA3ysfoPzsv1IALBNwqRIEgE1xFc6OnyA6-b1P2spy9-N-e7eIBn4APKJ-ftsvL-bOc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+<div class="absolute top-4 right-4 w-10 h-10 hidden bg-primary text-on-primary rounded-full flex items-center justify-center shadow-2xl">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="absolute bottom-0 w-full p-card-padding backdrop-blur-2xl bg-black/40 border-t border-white/10">
+<h4 class="font-headline-md text-white mb-1 drop-shadow-lg">Botanical</h4>
+<p class="font-label-sm text-white/70 uppercase tracking-widest">Herbal, Gin, Flora</p>
+</div>
+</div>
+<!-- Velvet Option -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden glass-panel shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer border border-white/10">
+<img alt="Velvet Profile" class="w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-110 transition-all duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmEHnqhJXLMB16q3NeqxMxqmvatuApYoLx4K5amXZC4-o96np4HJpL-eKIOkNVfiv0hEbl0UtXDBAPPscq1z8NBULEVgBnzBC49Wmklo3V-6wqoALMFk9NnE5hlvk6SYOzz7g7x_-SJCaNo13FX35x2c28M7rk5RpOzxHr9vvuAIt4jPYBfLAGBn7BdtJJjJTO7VHEK2tHaVdyM8IGULStRyl_olmOZsXqiyF94KlQVOA1QNztLoJXf0SL1CTEkLHBnbiFtbRqPY8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+<div class="absolute top-4 right-4 w-10 h-10 hidden bg-primary text-on-primary rounded-full flex items-center justify-center shadow-2xl">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="absolute bottom-0 w-full p-card-padding backdrop-blur-2xl bg-black/40 border-t border-white/10">
+<h4 class="font-headline-md text-white mb-1 drop-shadow-lg">Velvet</h4>
+<p class="font-label-sm text-white/70 uppercase tracking-widest">Vanilla, Oak, Cocoa</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Layout Secondary Items -->
+<section class="mt-gutter grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="md:col-span-2 glass-panel p-card-padding rounded-2xl flex flex-col justify-center min-h-[240px] relative overflow-hidden border border-white/10">
+<div class="absolute right-0 top-0 w-1/2 h-full opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[200px] text-primary translate-x-12 -translate-y-12">history_edu</span>
+</div>
+<h5 class="font-headline-md text-primary mb-4 drop-shadow-2xl">Your Tasting Legacy</h5>
+<p class="font-body-md text-white/90 mb-6 max-w-md drop-shadow-lg">Your preference for smoky profiles has grown by 14% this quarter. The Mixology Guide suggests exploring agave-based spirits today.</p>
+<div class="flex gap-4">
+<button class="border border-primary text-primary font-label-sm rounded uppercase tracking-widest hover:bg-primary/10 transition-all backdrop-blur-xl touch-target-72 px-8">View Notes</button>
+<button class="text-white/60 font-label-sm uppercase tracking-widest hover:text-white transition-all touch-target-72 px-8">Dismiss</button>
+</div>
+</div>
+<div class="glass-panel p-card-padding rounded-2xl flex flex-col items-center justify-center text-center border border-white/10">
+<span class="material-symbols-outlined text-5xl text-primary mb-4 drop-shadow-2xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<h5 class="font-label-lg text-primary uppercase tracking-widest mb-1 drop-shadow-lg">Elite Tier</h5>
+<p class="font-headline-md text-white mb-4 drop-shadow-2xl">Alexander Sterling</p>
+<div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+<div class="w-3/4 h-full bg-primary shadow-[0_0_20px_rgba(233,193,118,0.8)]"></div>
+</div>
+<p class="font-label-sm text-white/80 mt-2 uppercase tracking-tighter">850 / 1000 XP to Master Distiller</p>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-3xl backdrop-blur-[80px] bg-black/20 border-t border-white/15 shadow-[0_-16px_48px_rgba(0,0,0,0.5)] flex justify-around items-center h-28 px-gutter pb-safe">
+<button class="flex flex-col items-center justify-center text-primary font-bold gap-1 scale-110 duration-500 ease-out touch-target-72">
+<span class="material-symbols-outlined text-2xl drop-shadow-2xl" style="font-variation-settings: 'FILL' 1;">liquor</span>
+<span class="font-label-sm text-[10px] uppercase tracking-[0.2em]">PourCraft</span>
+</button>
+<button class="flex flex-col items-center justify-center text-white/60 gap-1 hover:text-primary transition-all touch-target-72">
+<span class="material-symbols-outlined text-2xl">sports_bar</span>
+<span class="font-label-sm text-[10px] uppercase tracking-[0.2em]">BeerCraft</span>
+</button>
+<button class="flex flex-col items-center justify-center text-white/60 gap-1 hover:text-primary transition-all touch-target-72">
+<span class="material-symbols-outlined text-2xl">wine_bar</span>
+<span class="font-label-sm text-[10px] uppercase tracking-[0.2em]">WineCraft</span>
+</button>
+<button class="flex flex-col items-center justify-center text-white/60 gap-1 hover:text-primary transition-all touch-target-72">
+<span class="material-symbols-outlined text-2xl">auto_stories</span>
+<span class="font-label-sm text-[10px] uppercase tracking-[0.2em]">Passport</span>
+</button>
+</nav>
+<script>
+    // Parallax movement on cards
+    document.addEventListener('mousemove', (e) => {
+        const cards = document.querySelectorAll('.group');
+        const x = (window.innerWidth / 2 - e.pageX) / 100;
+        const y = (window.innerHeight / 2 - e.pageY) / 100;
+        
+        cards.forEach(card => {
+            const img = card.querySelector('img');
+            if (img) {
+                img.style.transform = `scale(1.15) translate(${x}px, ${y}px)`;
+            }
+        });
+    });
+
+    // Toggle state for selection
+    const selectableCards = document.querySelectorAll('.grid > .group');
+    selectableCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const check = card.querySelector('.top-4');
+            const ring = card.querySelector('.pointer-events-none');
+            
+            if (check.classList.contains('hidden')) {
+                check.classList.remove('hidden');
+                if (ring) {
+                    ring.classList.add('border-4', 'border-primary/50', 'ring-4', 'ring-primary/20');
+                }
+                card.classList.add('gold-foil-border');
+                const img = card.querySelector('img');
+                if (img) img.classList.remove('opacity-60');
+            } else {
+                check.classList.add('hidden');
+                if (ring) {
+                    ring.classList.remove('border-4', 'border-primary/50', 'ring-4', 'ring-primary/20');
+                }
+                card.classList.remove('gold-foil-border');
+                // Only reset opacity if it's not one of the initially active ones
+                if (!card.querySelector('h4').textContent.match(/Smoky|Citrus/)) {
+                   const img = card.querySelector('img');
+                   if (img) img.classList.add('opacity-60');
+                }
+            }
+        });
+    });
+</script>
+</body></html>

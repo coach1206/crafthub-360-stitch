@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Montserrat:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#ffdea5",
+                    "on-error": "#690005",
+                    "on-secondary": "#462a00",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "tertiary-container": "#b7a09a",
+                    "on-surface": "#e5e2e3",
+                    "inverse-on-surface": "#303031",
+                    "error-container": "#93000a",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary-fixed": "#2a1800",
+                    "inverse-surface": "#e5e2e3",
+                    "on-tertiary": "#3c2d28",
+                    "surface-container": "#1f1f20",
+                    "surface-container-low": "#1b1b1c",
+                    "inverse-primary": "#775a19",
+                    "surface-tint": "#e9c176",
+                    "surface-container-high": "#2a2a2b",
+                    "secondary": "#ffb95a",
+                    "surface-dim": "#131314",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-tertiary-fixed": "#261814",
+                    "tertiary": "#dac1bb",
+                    "surface-variant": "#353436",
+                    "secondary-fixed": "#ffddb6",
+                    "secondary-container": "#c68315",
+                    "on-tertiary-container": "#473733",
+                    "on-primary-container": "#4e3700",
+                    "on-primary": "#412d00",
+                    "primary-container": "#c5a059",
+                    "outline": "#9a8f80",
+                    "on-secondary-container": "#3d2400",
+                    "primary": "#e9c176",
+                    "surface-bright": "#39393a",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "background": "#131314",
+                    "surface-container-highest": "#353436",
+                    "on-primary-fixed": "#261900",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-surface-variant": "#d1c5b4",
+                    "on-background": "#e5e2e3",
+                    "tertiary-fixed": "#f7ddd6",
+                    "outline-variant": "#4e4639",
+                    "surface": "#131314",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "surface-container-lowest": "#0e0e0f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "gutter": "32px",
+                    "margin": "64px",
+                    "card-padding": "24px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .passport-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+            background-blend-mode: multiply;
+        }
+        .leather-bg {
+            background-image: url("https://www.transparenttextures.com/patterns/leather.png");
+            background-color: #0e0e0f;
+        }
+        .gold-shimmer {
+            background: linear-gradient(135deg, #e9c176 0%, #ffdea5 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-border {
+            border: 1px solid transparent;
+            background: linear-gradient(#1f1f20, #1f1f20) padding-box,
+                        linear-gradient(135deg, #e9c176, #4e3700) border-box;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-hidden leather-bg min-h-screen flex items-center justify-center">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface-dim/80 backdrop-blur-xl border-b border-primary/20 shadow-md">
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-primary/10 transition-colors duration-300 active:scale-95">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<h1 class="font-display-lg text-[24px] leading-tight text-primary uppercase tracking-widest">The 360 Passport</h1>
+</div>
+<button class="px-6 py-2 rounded-full gold-border font-label-lg text-primary hover:bg-primary/10 transition-all duration-300">
+            Grand Lounge
+        </button>
+</header>
+<!-- Main Content: Passport View -->
+<main class="w-full max-w-container-max-width px-margin pt-24 pb-32 flex flex-col items-center justify-center min-h-screen">
+<!-- The Open Passport Container -->
+<div class="relative w-full max-w-[1000px] aspect-[1.4/1] flex shadow-[0_50px_100px_rgba(0,0,0,0.8)] perspective-[2000px] group">
+<!-- Spine / Middle -->
+<div class="absolute left-1/2 top-0 bottom-0 w-[4px] bg-black/40 z-20 -translate-x-1/2 shadow-inner"></div>
+<!-- Left Page: Profile -->
+<div class="flex-1 bg-[#fdfcf5] passport-texture rounded-l-2xl border-r border-black/10 overflow-hidden flex flex-col p-10 relative">
+<div class="absolute top-0 right-0 w-32 h-32 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[120px] text-primary" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<!-- Profile Header -->
+<div class="flex items-start gap-6 mb-10">
+<div class="relative">
+<div class="w-32 h-40 overflow-hidden rounded-lg shadow-lg border-2 border-primary/30">
+<img class="w-full h-full object-cover grayscale-[0.2]" data-alt="A sophisticated headshot of a distinguished man in his 40s with a sharp, well-groomed beard, wearing a tailored navy wool blazer. He is standing in a dimly lit, high-end private member's club with mahogany walls and amber accent lighting. The photography is cinematic, high-resolution, and uses a shallow depth of field to emphasize his professional yet approachable expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCw1vl1twAYDts9W5urKYQfCbVU7xB_ogZo4U2pbi-wCc0sA6yfJgwCJr1GjRkAP7fEV9BmdyspCscfV5HTkW4_tAZmEAiiSzkNNO7yIQvLa0Q-Bc-_zWm_EPPSkkwnu20t4DAwKJZmt-yCkq2iHZIBW7R624c6nrP81CAEMFzIBUr9sESVnqk4OguqZssVGvRWQrVglAd4xFoBRL5ZHwulfDYZxwkhg8btJGWSjZ1SzC63aMOiJ_rvwncZS2CPpmxTxSIkD0EhC6o"/>
+</div>
+<div class="absolute -bottom-3 -right-3 bg-primary text-on-primary px-3 py-1 rounded shadow-md font-label-sm uppercase tracking-tighter italic">
+                            Platinum
+                        </div>
+</div>
+<div class="flex-1">
+<h2 class="font-headline-md text-[28px] text-surface-dim mb-1">Julian Sterling</h2>
+<p class="font-label-lg text-primary uppercase tracking-widest mb-4">The Curator</p>
+<div class="h-[1px] w-full bg-primary/20 mb-4"></div>
+<div class="grid grid-cols-1 gap-y-3">
+<div>
+<span class="block text-[10px] font-bold text-primary/60 uppercase tracking-widest">Business Field</span>
+<span class="text-surface-dim font-medium">Hospitality</span>
+</div>
+<div>
+<span class="block text-[10px] font-bold text-primary/60 uppercase tracking-widest">Networking Goal</span>
+<span class="text-surface-dim font-medium">Strategic Partnerships</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats Section -->
+<div class="mt-auto flex justify-between items-center border-t border-primary/20 pt-6">
+<div class="text-center flex-1">
+<span class="block text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1">Stamps</span>
+<span class="font-display-lg text-[32px] leading-none text-surface-dim">24</span>
+</div>
+<div class="w-[1px] h-10 bg-primary/20"></div>
+<div class="text-center flex-1">
+<span class="block text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1">Connections</span>
+<span class="font-display-lg text-[32px] leading-none text-surface-dim">112</span>
+</div>
+</div>
+<div class="mt-6 flex justify-center">
+<div class="italic text-primary/40 text-[12px] font-serif tracking-widest">Validated by The 360 Guild</div>
+</div>
+</div>
+<!-- Right Page: QR Code -->
+<div class="flex-1 bg-[#fdfcf5] passport-texture rounded-r-2xl border-l border-white/50 overflow-hidden flex flex-col items-center justify-center p-12">
+<div class="w-full flex flex-col items-center">
+<div class="relative p-6 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.1)] rounded-3xl mb-8 group-hover:scale-105 transition-transform duration-500">
+<!-- Simulated Gold QR Code -->
+<div class="w-64 h-64 relative bg-surface-dim p-4 rounded-xl">
+<div class="absolute inset-0 m-4 flex flex-wrap gap-1 p-2">
+<!-- Generative QR-like pattern using flex blocks -->
+<div class="w-full h-full flex flex-col gap-2">
+<div class="flex justify-between h-12 w-full">
+<div class="w-12 h-12 border-4 border-primary rounded"></div>
+<div class="w-12 h-12 border-4 border-primary rounded"></div>
+</div>
+<div class="flex-1 w-full grid grid-cols-12 gap-1 overflow-hidden opacity-80">
+<!-- QR Grid Sim -->
+<script>
+                                            document.currentScript.parentElement.innerHTML = Array(144).fill(0).map(() => 
+                                                `<div class="w-1 h-1 rounded-sm ${Math.random() > 0.5 ? 'bg-primary' : 'bg-transparent'}"></div>`
+                                            ).join('');
+                                        </script>
+</div>
+<div class="flex justify-start h-12 w-full">
+<div class="w-12 h-12 border-4 border-primary rounded"></div>
+</div>
+</div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-surface-dim p-2 rounded-lg border border-primary/40">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">qr_code_2</span>
+</div>
+</div>
+</div>
+<!-- Corner Accents -->
+<div class="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-primary"></div>
+<div class="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-primary"></div>
+<div class="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-primary"></div>
+<div class="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-primary"></div>
+</div>
+<h3 class="font-headline-md text-surface-dim text-[24px] mb-2">Scan to Connect</h3>
+<p class="text-surface-dim/60 font-body-md text-sm text-center max-w-[200px] mb-10">Add Julian to your network to share professional stamps and notes.</p>
+<div class="flex flex-col gap-4 w-full">
+<button class="w-full py-4 rounded-xl bg-primary text-on-primary font-label-lg uppercase tracking-widest shadow-lg hover:shadow-primary/30 transition-all duration-300 active:scale-95 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+                            Scan Someone
+                        </button>
+<button class="w-full py-4 rounded-xl border border-primary/30 text-primary font-label-lg uppercase tracking-widest hover:bg-primary/5 transition-all duration-300 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+                            View Stamps
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin py-4 bg-surface-container-low/95 backdrop-blur-2xl border-t border-primary/30 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">explore</span>
+<span class="font-label-lg text-label-lg">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">inventory_2</span>
+<span class="font-label-lg text-label-lg">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] transform -translate-y-1 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-lg text-label-lg">Passport</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">support_agent</span>
+<span class="font-label-lg text-label-lg">Assistant</span>
+</a>
+</nav>
+<!-- Atmospheric Overlay Particles -->
+<div class="fixed inset-0 pointer-events-none z-10 opacity-30">
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-[100px]"></div>
+</div>
+<script>
+        // Micro-interactions for the passport 3D tilt
+        const passport = document.querySelector('.perspective-\\[2000px\\]');
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+            passport.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // Click effects for buttons
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.95)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

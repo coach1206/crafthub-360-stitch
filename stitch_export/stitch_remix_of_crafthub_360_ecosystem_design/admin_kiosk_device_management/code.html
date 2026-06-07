@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 Admin - Kiosk Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#ffdad6",
+                    "inverse-surface": "#e5e2e3",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "surface-container-high": "#2a2a2b",
+                    "on-secondary-fixed": "#2a1800",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface": "#131314",
+                    "on-primary-container": "#4e3700",
+                    "surface-tint": "#e9c176",
+                    "primary-container": "#c5a059",
+                    "surface-container-low": "#1b1b1c",
+                    "on-primary": "#412d00",
+                    "tertiary-container": "#b7a09a",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-dim": "#131314",
+                    "outline-variant": "#4e4639",
+                    "error": "#ffb4ab",
+                    "surface-container": "#1f1f20",
+                    "surface-bright": "#39393a",
+                    "on-error": "#690005",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "inverse-primary": "#775a19",
+                    "primary": "#e9c176",
+                    "secondary-container": "#c68315",
+                    "on-secondary-container": "#3d2400",
+                    "inverse-on-surface": "#303031",
+                    "on-tertiary-container": "#473733",
+                    "on-background": "#e5e2e3",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "secondary": "#ffb95a",
+                    "background": "#131314",
+                    "on-primary-fixed": "#261900",
+                    "tertiary": "#dac1bb",
+                    "on-tertiary": "#3c2d28",
+                    "surface-container-highest": "#353436",
+                    "secondary-fixed": "#ffddb6",
+                    "primary-fixed": "#ffdea5",
+                    "on-surface-variant": "#d1c5b4",
+                    "primary-fixed-dim": "#e9c176",
+                    "surface-variant": "#353436",
+                    "outline": "#9a8f80",
+                    "error-container": "#93000a",
+                    "surface-container-lowest": "#0e0e0f",
+                    "on-secondary": "#462a00",
+                    "on-tertiary-fixed": "#261814",
+                    "on-surface": "#e5e2e3",
+                    "on-tertiary-fixed-variant": "#54433e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin": "64px",
+                    "unit": "8px",
+                    "gutter": "32px",
+                    "container-max-width": "1440px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        .amber-text-gradient {
+            background: linear-gradient(135deg, #e9c176 0%, #ffb95a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-b border-outline-variant/30 shadow-sm flex items-center justify-between px-gutter h-20">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-primary-container/20 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined text-primary" data-icon="dashboard_customize">dashboard_customize</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="text-primary font-bold text-label-lg font-label-lg transition-colors hover:text-primary" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg transition-colors hover:text-primary" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg transition-colors hover:text-primary" href="#">Users</a>
+</nav>
+<button class="p-2 hover:bg-primary-container/20 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined text-primary" data-icon="settings_suggest">settings_suggest</span>
+</button>
+</div>
+</header>
+<main class="pt-32 px-gutter max-w-container-max-width mx-auto">
+<div class="flex flex-col gap-2 mb-12">
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Kiosk Device Management</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant">Real-time status and remote command center for lounge hardware.</p>
+</div>
+<!-- Bento Grid for Devices -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Device Card 1 -->
+<div class="glass-panel p-card-padding rounded-xl relative overflow-hidden group gold-glow transition-all duration-300">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+<div class="flex justify-between items-start mb-8 relative z-10">
+<div class="flex flex-col gap-1">
+<h3 class="text-headline-md font-headline-md text-primary">Kiosk_A09 - Entry Vault</h3>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#e9c176]"></span>
+<span class="text-label-sm font-label-sm text-primary uppercase tracking-widest">Active System</span>
+</div>
+</div>
+<div class="bg-surface-container-highest px-4 py-2 rounded-lg border border-outline-variant/30">
+<span class="text-label-lg font-label-lg text-on-surface">ID: 8842-AX</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-8">
+<div class="flex flex-col gap-2 p-4 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary" data-icon="battery_full">battery_full</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Battery</span>
+<span class="text-headline-md font-headline-md amber-text-gradient">98%</span>
+</div>
+<div class="flex flex-col gap-2 p-4 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary" data-icon="signal_cellular_alt">signal_cellular_alt</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Network</span>
+<span class="text-headline-md font-headline-md amber-text-gradient">Excellent</span>
+</div>
+<div class="flex flex-col gap-2 p-4 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Current Mode</span>
+<span class="text-headline-md font-headline-md amber-text-gradient">Admin</span>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 bg-primary text-on-primary font-label-lg text-label-lg py-4 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all border border-primary/50 shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined" data-icon="restart_alt">restart_alt</span>
+                        Restart Session
+                    </button>
+<button class="flex-1 border border-primary text-primary font-label-lg text-label-lg py-4 rounded-lg flex items-center justify-center gap-2 hover:bg-primary/10 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+                        Identify Device
+                    </button>
+</div>
+</div>
+<!-- Device Card 2 -->
+<div class="glass-panel p-card-padding rounded-xl relative overflow-hidden group gold-glow transition-all duration-300">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+<div class="flex justify-between items-start mb-8 relative z-10">
+<div class="flex flex-col gap-1">
+<h3 class="text-headline-md font-headline-md text-primary">Kiosk_B02 - Humidor Lounge</h3>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#ffb95a]"></span>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-widest">Active System</span>
+</div>
+</div>
+<div class="bg-surface-container-highest px-4 py-2 rounded-lg border border-outline-variant/30">
+<span class="text-label-lg font-label-lg text-on-surface">ID: 9910-LX</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-8">
+<div class="flex flex-col gap-2 p-4 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary" data-icon="battery_charging_80" style="font-variation-settings: 'FILL' 1;">battery_charging_80</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Battery</span>
+<span class="text-headline-md font-headline-md amber-text-gradient">84%</span>
+</div>
+<div class="flex flex-col gap-2 p-4 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary" data-icon="wifi_tethering">wifi_tethering</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Network</span>
+<span class="text-headline-md font-headline-md amber-text-gradient">Stable</span>
+</div>
+<div class="flex flex-col gap-2 p-4 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary" data-icon="person">person</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Current Mode</span>
+<span class="text-headline-md font-headline-md amber-text-gradient">Guest</span>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 bg-primary text-on-primary font-label-lg text-label-lg py-4 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all border border-primary/50 shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined" data-icon="restart_alt">restart_alt</span>
+                        Restart Session
+                    </button>
+<button class="flex-1 border border-primary text-primary font-label-lg text-label-lg py-4 rounded-lg flex items-center justify-center gap-2 hover:bg-primary/10 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+                        Identify Device
+                    </button>
+</div>
+</div>
+<!-- Additional Stats / Passive Monitoring -->
+<div class="glass-panel p-card-padding rounded-xl lg:col-span-2 border-dashed border-outline/30 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary scale-150" data-icon="health_and_safety">health_and_safety</span>
+</div>
+<div>
+<h4 class="text-headline-md font-headline-md text-on-surface">Global System Integrity</h4>
+<p class="text-body-md font-body-md text-on-surface-variant">All 14 synchronized devices are reporting optimal temperatures and sync status.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="text-center px-6">
+<div class="text-headline-lg font-headline-lg text-primary">100%</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant uppercase">Uptime</div>
+</div>
+<div class="w-px h-12 bg-outline-variant/30"></div>
+<div class="text-center px-6">
+<div class="text-headline-lg font-headline-lg text-primary">0</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant uppercase">Criticals</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center px-4 pb-4 pt-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="save">save</span>
+<span class="text-label-sm font-label-sm">Save</span>
+</a>
+<div class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 transform translate-y-0.5 transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-label-sm">Preview</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const icon = this.querySelector('.material-symbols-outlined');
+                if (icon) {
+                    icon.classList.add('animate-spin');
+                    setTimeout(() => icon.classList.remove('animate-spin'), 600);
+                }
+            });
+        });
+
+        // Simulating rhythmic amber glow on active status
+        const dots = document.querySelectorAll('.rounded-full.bg-primary, .rounded-full.bg-secondary');
+        setInterval(() => {
+            dots.forEach(dot => {
+                dot.style.opacity = dot.style.opacity === '0.5' ? '1' : '0.5';
+                dot.style.transition = 'opacity 1.5s ease-in-out';
+            });
+        }, 1500);
+    </script>
+</body></html>

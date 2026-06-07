@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background-image: linear-gradient(#1f1f20, #1f1f20), radial-gradient(circle at top left, #e9c176, #4e3700);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+        }
+        .amber-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#3d2400",
+                        "on-background": "#e5e2e3",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#2a2a2b",
+                        "tertiary": "#dac1bb",
+                        "surface": "#131314",
+                        "outline": "#9a8f80",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-container": "#1f1f20",
+                        "primary": "#e9c176",
+                        "outline-variant": "#4e4639",
+                        "on-primary-container": "#4e3700",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed": "#ffdea5",
+                        "secondary-fixed": "#ffddb6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary": "#3c2d28",
+                        "on-tertiary-fixed": "#261814",
+                        "surface-tint": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "background": "#131314",
+                        "on-primary-fixed": "#261900",
+                        "surface-variant": "#353436",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "secondary": "#ffb95a",
+                        "secondary-container": "#c68315",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-primary": "#412d00",
+                        "tertiary-container": "#b7a09a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-tertiary-container": "#473733",
+                        "surface-container-highest": "#353436",
+                        "inverse-surface": "#e5e2e3",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-secondary": "#462a00",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-bright": "#39393a",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-surface": "#e5e2e3",
+                        "surface-dim": "#131314"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "card-padding": "24px",
+                        "unit": "8px",
+                        "margin": "64px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background selection:bg-primary/30">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-margin h-24">
+<div class="flex items-center gap-6">
+<span class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</span>
+</div>
+<div class="flex items-center gap-unit">
+<button class="material-symbols-outlined text-primary p-3 hover:bg-surface-container-highest/50 transition-all rounded-full" data-icon="notifications">notifications</button>
+<div class="w-12 h-12 rounded-full overflow-hidden border border-primary/30">
+<img alt="Staff profile" data-alt="A professional close-up portrait of a senior staff member in a luxury setting. The lighting is warm and dramatic, highlighting textured fabric of a bespoke waistcoat. The background is softly blurred, showing glimpses of a high-end lounge with dark wood and amber lighting. The overall mood is sophisticated, professional, and welcoming, fitting an exclusive members-only club aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC-5eX-unS2MuNdHkr4xB7pqJ8fNvsYHK9xfw_A4xBEcmELDeM-Et3etRHBvZ4TtPA54c6aBzk8gXA_IqZDpRNMwOPWRWi9b_ovQQlZsgu0CeKExrEPUAZpM18MDlv8S7tG1yZIBYnxTJuLVrgNM0JgEVAjD5KafPy-tMTk2C0JmMqr37PfubrjiVo8hU5noYzlnhX4e-OapoxIOyKz1wjB6fGXcx12DsST0oU7MknchocW3IR-QRD-B1iUfj8sJNZHRBXnNW5GPk"/>
+</div>
+</div>
+</header>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-80 z-40 bg-surface-container-low border-r border-outline-variant/20 shadow-2xl pt-32 px-6">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-4 mb-8 px-4">
+<div class="w-14 h-14 rounded-xl overflow-hidden shadow-lg border border-primary/20">
+<img alt="Manager Avatar" data-alt="Headshot of a refined sommelier in a dark environment. The lighting is low-key, with a warm rim light defining the profile. He is wearing a classic dark suit. The atmosphere is quiet, dignified, and expert, echoing the tactile-glassmorphic aesthetic of the lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuApv8TbDi7pY43rmbytqhOxqbLYj1lBkdbhRT4-dxyeN-rSo8ugJT9zo0mygoR36b2w_Dkg2yHg6_M543adb8mRCSG87BlI6s9evwf7tflYM2hD85Bix9f6c5QwzrgaDpRuhMNSuGzY1x3lpjjL3_UOPnmQvaniuzR39S4HtAAYcJuRVjqktwWOprwE5vY4VYY4Vw3YNbqPjyU9DNL2JJfJUla6BKO5hVhm0NMnZlYJ7WqF5qIRVYqKPHfqgFFijSI7KclqjH8trF0"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">Julian Vane</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant/70 uppercase tracking-widest">Head Sommelier</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+<span class="font-label-lg text-label-lg">Floor Plan</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-lg text-label-lg">Live Map</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-lg text-label-lg">Insights</span>
+</a>
+<a class="flex items-center gap-4 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 scale-95 transition-transform shadow-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-80 pt-32 pb-32 px-margin min-h-screen">
+<div class="max-w-[1440px] mx-auto">
+<!-- Breadcrumbs & Header -->
+<div class="mb-12 flex justify-between items-end">
+<div>
+<nav class="flex gap-2 text-on-surface-variant/60 font-label-sm text-label-sm mb-4 uppercase tracking-widest">
+<span>Directory</span>
+<span>/</span>
+<span class="text-primary">Suppliers</span>
+</nav>
+<h1 class="font-headline-xl text-headline-xl text-on-background">Havana Heritage Imports</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mt-2">Specializing in premium aged leaf and limited-edition humidor stock for the world's most discerning lounges.</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-3 px-8 py-4 bg-surface-container-high border border-outline-variant/50 text-on-surface hover:border-primary transition-all rounded-lg font-label-lg text-label-lg group">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="mail">mail</span>
+                        Email Vendor
+                    </button>
+<button class="flex items-center gap-3 px-8 py-4 bg-primary text-on-primary hover:bg-primary-container transition-all rounded-lg font-label-lg text-label-lg shadow-lg hover:shadow-primary/20">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+                        Create New Order
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Main Profile Card -->
+<section class="col-span-8 glass-panel rounded-xl overflow-hidden flex flex-col">
+<div class="h-64 relative overflow-hidden">
+<img alt="Vendor Banner" class="w-full h-full object-cover grayscale-[0.2]" data-alt="A wide cinematic shot of a traditional cigar drying barn in Cuba. The late afternoon sun streams through wooden slats, illuminating the rich brown tobacco leaves hanging in massive bundles. The scene is filled with warm, golden tones and earthy textures. The lighting creates a sense of heritage, craftsmanship, and the slow passage of time." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5UJhX3J1LetbPdy6v9PVC3K5gvcvyc3nx9WhaVwqPJSeZDqyFAh2qpo-ln6jrPQhSu1HEUYbQ37_B3l8cCsSg6jCsQw2NRIKmQG20O-A6_HUqSQ737UfhwFB9EnlZyQwfQwRf2yhvtCzp5a5HIxZrEe3nBvTnxtE15fYNxx6XEHx3DUz_eNfHOv6PEieu0pQoJCW4ttS7ITM_cV7w91BQ7iv4CjGs6nSbiFuhBGSx6etHYWSSYCOLh4EMsyvQxPutORvglOlojjc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-8 flex items-center gap-6">
+<div class="w-24 h-24 bg-surface-container border-2 border-primary/40 rounded-xl flex items-center justify-center p-4">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="token">token</span>
+</div>
+<div>
+<div class="bg-primary/20 text-primary px-3 py-1 rounded-full inline-block font-label-sm text-label-sm mb-2">PLATINUM PARTNER</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Official Curator</h2>
+</div>
+</div>
+</div>
+<div class="p-card-padding grid grid-cols-2 gap-12">
+<div class="space-y-8">
+<div>
+<h4 class="font-label-lg text-label-lg text-primary mb-4 uppercase tracking-widest border-b border-outline-variant/30 pb-2">Product Categories</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 bg-surface-variant/40 rounded-full font-label-sm text-label-sm text-on-surface">Vintage Cubans</span>
+<span class="px-4 py-2 bg-surface-variant/40 rounded-full font-label-sm text-label-sm text-on-surface">Cedar Humidors</span>
+<span class="px-4 py-2 bg-surface-variant/40 rounded-full font-label-sm text-label-sm text-on-surface">Artisan Cutters</span>
+<span class="px-4 py-2 bg-surface-variant/40 rounded-full font-label-sm text-label-sm text-on-surface">Aged Wrappers</span>
+</div>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg text-primary mb-4 uppercase tracking-widest border-b border-outline-variant/30 pb-2">Contact Details</h4>
+<ul class="space-y-4 font-body-md text-body-md text-on-surface-variant">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/60" data-icon="phone">phone</span>
+                                        +44 20 7946 0123
+                                    </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/60" data-icon="pin_drop">pin_drop</span>
+                                        St. James's Street, London, SW1A
+                                    </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/60" data-icon="language">language</span>
+                                        www.havanaheritage.co.uk
+                                    </li>
+</ul>
+</div>
+</div>
+<div class="bg-surface-container-lowest/50 p-6 rounded-xl border border-outline-variant/20">
+<h4 class="font-label-lg text-label-lg text-primary mb-6 uppercase tracking-widest">Supply Chain Performance</h4>
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-on-surface-variant">Standard Lead Time</span>
+<span class="font-headline-md text-headline-md text-on-surface">4-6 Days</span>
+</div>
+<div class="w-full bg-surface-variant/30 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%] shadow-[0_0_10px_rgba(233,193,118,0.5)]"></div>
+</div>
+<div class="flex justify-between items-center pt-4">
+<span class="font-body-md text-on-surface-variant">Active PO Volume</span>
+<span class="font-headline-md text-headline-md text-on-surface">£142,500</span>
+</div>
+<div class="flex justify-between items-center pt-4 border-t border-outline-variant/20">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block uppercase">Reliability Score</span>
+<span class="font-display-lg text-display-lg text-primary">98.2<span class="text-headline-md">%</span></span>
+</div>
+<div class="p-4 bg-primary/10 rounded-full">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Side Panels -->
+<div class="col-span-4 space-y-gutter">
+<!-- Connected Areas -->
+<div class="glass-panel p-card-padding rounded-xl">
+<h4 class="font-label-lg text-label-lg text-primary mb-6 uppercase tracking-widest">Connected Areas</h4>
+<div class="space-y-4">
+<div class="flex items-center gap-4 p-4 bg-surface-container-high/40 rounded-lg hover:bg-surface-bright/20 transition-all cursor-pointer group">
+<div class="w-12 h-12 rounded bg-background flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary/80" data-icon="wine_bar">wine_bar</span>
+</div>
+<div>
+<div class="font-label-lg text-label-lg text-on-surface">Main Bar Inventory</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">32 Lines Supplied</div>
+</div>
+<span class="material-symbols-outlined ml-auto text-primary opacity-0 group-hover:opacity-100 transition-all" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-4 bg-surface-container-high/40 rounded-lg hover:bg-surface-bright/20 transition-all cursor-pointer group">
+<div class="w-12 h-12 rounded bg-background flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary/80" data-icon="cabin">cabin</span>
+</div>
+<div>
+<div class="font-label-lg text-label-lg text-on-surface">Private Humidor A</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">Consignment Stock</div>
+</div>
+<span class="material-symbols-outlined ml-auto text-primary opacity-0 group-hover:opacity-100 transition-all" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- History / Recent Activity -->
+<div class="glass-panel p-card-padding rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-label-lg text-label-lg text-primary uppercase tracking-widest">Recent Orders</h4>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors">VIEW ALL</button>
+</div>
+<div class="space-y-6">
+<div class="border-l-2 border-primary/30 pl-4 py-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-1">Oct 12, 2023</div>
+<div class="font-body-md text-on-surface">Restock: Cohiba Siglo VI (Box of 25)</div>
+<div class="font-label-sm text-label-sm text-primary mt-1">Status: En Route</div>
+</div>
+<div class="border-l-2 border-outline-variant/30 pl-4 py-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-1">Sep 28, 2023</div>
+<div class="font-body-md text-on-surface">Annual Reserve Humidor Service</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60 mt-1">Status: Completed</div>
+</div>
+<div class="border-l-2 border-outline-variant/30 pl-4 py-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-1">Sep 15, 2023</div>
+<div class="font-body-md text-on-surface">Trinidad Vigia Special Edition x50</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60 mt-1">Status: Completed</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Insights / Analytics Footer Section -->
+<div class="mt-gutter grid grid-cols-4 gap-gutter">
+<div class="glass-panel p-6 rounded-xl border-l-4 border-l-primary flex flex-col justify-between">
+<div class="text-on-surface-variant font-label-sm uppercase tracking-wider mb-2">Total Spend YTD</div>
+<div class="text-headline-lg font-headline-lg text-on-background">£842,200</div>
+<div class="text-secondary font-label-sm mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+                        12% vs last year
+                    </div>
+</div>
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between">
+<div class="text-on-surface-variant font-label-sm uppercase tracking-wider mb-2">Stock Outage Risk</div>
+<div class="text-headline-lg font-headline-lg text-on-background">Low</div>
+<div class="text-primary font-label-sm mt-2">Optimal inventory levels</div>
+</div>
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between">
+<div class="text-on-surface-variant font-label-sm uppercase tracking-wider mb-2">Returns / QC Issues</div>
+<div class="text-headline-lg font-headline-lg text-on-background">0.4%</div>
+<div class="text-on-surface-variant/60 font-label-sm mt-2">Industry avg: 2.1%</div>
+</div>
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between">
+<div class="text-on-surface-variant font-label-sm uppercase tracking-wider mb-2">Last Audit</div>
+<div class="text-headline-lg font-headline-lg text-on-background">Sep 30</div>
+<div class="text-primary font-label-sm mt-2">Passed with Distinction</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-label-sm text-label-sm">POS 3</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] scale-105 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</a>
+</nav>
+<!-- Micro-interaction Scripts -->
+<script>
+        // Subtle Parallax Effect for Banner
+        window.addEventListener('scroll', function() {
+            const banner = document.querySelector('section img');
+            let offset = window.pageYOffset;
+            banner.style.transform = `translateY(${offset * 0.15}px)`;
+        });
+
+        // Click interaction for cards
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+                card.style.transition = 'transform 0.1s ease';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

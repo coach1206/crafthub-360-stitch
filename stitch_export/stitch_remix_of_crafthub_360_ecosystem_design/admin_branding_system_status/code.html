@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 Admin - System Branding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#131314",
+                        "on-secondary-container": "#3d2400",
+                        "surface-container-low": "#1b1b1c",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-dim": "#131314",
+                        "tertiary-container": "#b7a09a",
+                        "error": "#ffb4ab",
+                        "background": "#131314",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-error-container": "#ffdad6",
+                        "primary-container": "#c5a059",
+                        "tertiary": "#dac1bb",
+                        "surface-container": "#1f1f20",
+                        "on-surface-variant": "#d1c5b4",
+                        "on-secondary": "#462a00",
+                        "on-tertiary": "#3c2d28",
+                        "surface-container-highest": "#353436",
+                        "on-primary": "#412d00",
+                        "secondary-fixed": "#ffddb6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary-fixed": "#261814",
+                        "on-primary-fixed": "#261900",
+                        "primary": "#e9c176",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "outline-variant": "#4e4639",
+                        "surface-tint": "#e9c176",
+                        "secondary": "#ffb95a",
+                        "on-tertiary-container": "#473733",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-high": "#2a2a2b",
+                        "on-background": "#e5e2e3",
+                        "on-primary-container": "#4e3700",
+                        "inverse-primary": "#775a19",
+                        "tertiary-fixed": "#f7ddd6",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "secondary-container": "#c68315",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "primary-fixed": "#ffdea5",
+                        "outline": "#9a8f80",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "surface-bright": "#39393a",
+                        "surface-variant": "#353436",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e5e2e3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "64px",
+                        "gutter": "32px",
+                        "card-padding": "24px",
+                        "unit": "8px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "label-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .smoked-glass {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 100%);
+            box-shadow: 0 4px 15px rgba(233, 193, 118, 0.3);
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        body {
+            background-image: radial-gradient(circle at 50% 50%, #1b1b1c 0%, #131314 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface font-body-md min-h-screen pb-32">
+<!-- TopAppBar from JSON -->
+<header class="fixed top-0 w-full bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-b border-outline-variant/30 shadow-sm z-50 flex items-center justify-between px-gutter py-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="dashboard_customize">dashboard_customize</span>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="text-primary font-bold text-label-lg font-label-lg transition-colors" href="#">Settings</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-1 rounded-lg" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-1 rounded-lg" href="#">Assets</a>
+</nav>
+<button class="material-symbols-outlined text-primary hover:scale-95 transition-transform" data-icon="settings_suggest">settings_suggest</button>
+</div>
+</header>
+<main class="mt-24 px-margin max-w-container-max-width mx-auto space-y-12">
+<!-- Branding Section -->
+<section>
+<div class="flex items-end justify-between mb-8">
+<div>
+<h2 class="text-headline-xl font-headline-xl text-primary mb-2">Branding Identity</h2>
+<p class="text-on-surface-variant text-body-lg">Manage the visual heartbeat of your exclusive lounge experience.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Venue Logo Card -->
+<div class="md:col-span-4 group cursor-pointer">
+<div class="smoked-glass rounded-xl overflow-hidden amber-glow h-full flex flex-col transition-all duration-300 hover:translate-y-[-4px]">
+<div class="h-48 relative bg-surface-container flex items-center justify-center p-12">
+<div class="absolute inset-0 bg-cover bg-center opacity-20 grayscale" data-alt="A macro shot of a vintage leather book cover with gold-stamped lettering. The lighting is low and atmospheric, emphasizing the rich texture of the grain. The scene is set in an upscale, dim library with deep amber tones and dark wooden shelves in the soft-focus background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDp3CQP5q9eRBJXAYrf1IXWGF0RfQZNl5pga6qyEbAb4k0kZqiCSfV0nAo7eCRY8Y6gQjVKpYn6FPO65Se0APLvGy0dE3TFE7e-HWunvd8LiijAkpmh9tegc7sDUgyHNwctOmBgfDRfOEvntpqm6DwzkhOg681ueUQ-5iZCKEMZcan4mMRmySjwV2WlCp7c8gMjVAYGhdqN2Qczuixs70Iucd9mTqONzH1a-T9QQ_j5_trg31u0Wb3sZdXeyCQM9-eLAzXbfjhDd1s')"></div>
+<span class="material-symbols-outlined text-6xl text-primary relative z-10" data-icon="temp_preferences_custom">temp_preferences_custom</span>
+</div>
+<div class="p-card-padding flex-grow flex flex-col justify-between">
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Venue Logo</h3>
+<p class="text-label-sm font-label-sm text-outline uppercase tracking-widest mb-4">Master Asset</p>
+</div>
+<button class="gold-foil text-on-primary font-label-lg text-label-lg py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+                                CHANGE LOGO
+                            </button>
+</div>
+</div>
+</div>
+<!-- Event Hero Card -->
+<div class="md:col-span-8 group cursor-pointer">
+<div class="smoked-glass rounded-xl overflow-hidden h-full flex flex-col transition-all duration-300 hover:translate-y-[-4px]">
+<div class="h-48 relative overflow-hidden">
+<img alt="Lounge Hero" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A sophisticated cinematic photograph of a crystal whiskey decanter and a glass on a polished mahogany table. In the background, a plush leather armchair and a glowing cigar in an ashtray create an atmosphere of quiet luxury. The lighting is dramatic and low-key, with warm golden highlights and deep espresso shadows reflecting the brand's premium identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbu9-i1KuXAGl93NdbyXwPmSjgN_jiH4_RcUja8NibQQxWI9Bqgh-LJQzzfNs8YdlmFCLt2HmwQYgtE_nm8oNqhEvCDpsnM9fTBK4tjfGZ0-VnZdqAICRw2BGjFSQ_hnUij0YRgvHaENCn0nNDFSvYkqCz0RECEYYZWswv8o-CM2-3K__9IEXxe1eU8lVonUWoq1VoHNevqOOazPdMl1LzzHPKZNlKwb1cNkFwBEmJW8fBGHJmWwnyQQHN8bnEBfVpEX5D852-w5E"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+</div>
+<div class="p-card-padding flex flex-row items-center justify-between">
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface">Event Hero Banners</h3>
+<p class="text-body-md text-on-surface-variant">Active Display: Vintage Tasting Series</p>
+</div>
+<button class="border border-primary text-primary font-label-lg text-label-lg py-3 px-8 rounded-lg flex items-center gap-2 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add_photo_alternate">add_photo_alternate</span>
+                                UPDATE BANNER
+                            </button>
+</div>
+</div>
+</div>
+<!-- Module Backgrounds -->
+<div class="md:col-span-12">
+<div class="smoked-glass p-card-padding rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 rounded-lg bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="wallpaper">wallpaper</span>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface">Module Backgrounds</h3>
+<p class="text-body-md text-on-surface-variant">Manage textures and glassmorphism gradients for OS layers.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full border-2 border-primary ring-offset-4 ring-offset-surface ring-2 ring-primary/20 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&amp;fit=crop&amp;q=80&amp;w=100')] bg-cover" data-alt="A dark, abstract texture of swirling smoke and deep grey marble. Subtle amber light glints off reflective surfaces within the smoke, creating a sense of depth and tactile richness. The overall mood is mysterious and high-end, fitting for a background in a luxury digital interface."></div>
+<div class="w-12 h-12 rounded-full border-2 border-transparent hover:border-outline bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&amp;fit=crop&amp;q=80&amp;w=100')] bg-cover" data-alt="Close-up of premium dark grain leather with precise, subtle stitching. The lighting catches the natural texture of the leather, giving it a soft matte sheen. The color is a deep, rich espresso, conveying durability and timeless elegance for a digital background layer."></div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary p-2" data-icon="settings_input_component">settings_input_component</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- System Status Section -->
+<section class="space-y-8">
+<div class="flex items-center gap-4">
+<span class="w-3 h-3 rounded-full bg-primary animate-pulse"></span>
+<h2 class="text-headline-lg font-headline-lg text-primary">Real-time System Status</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<!-- Status Item 1 -->
+<div class="smoked-glass p-card-padding rounded-xl space-y-4 border-l-4 border-l-primary">
+<div class="flex justify-between items-start">
+<span class="text-label-lg font-label-lg text-outline uppercase tracking-wider">NOVEE OS</span>
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="text-headline-md font-headline-md text-on-surface">Healthy</p>
+<p class="text-label-sm font-label-sm text-primary/70">Uptime: 14d 02h</p>
+</div>
+</div>
+<!-- Status Item 2 -->
+<div class="smoked-glass p-card-padding rounded-xl space-y-4 border-l-4 border-l-primary">
+<div class="flex justify-between items-start">
+<span class="text-label-lg font-label-lg text-outline uppercase tracking-wider">CraftHub</span>
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="text-headline-md font-headline-md text-on-surface">Healthy</p>
+<p class="text-label-sm font-label-sm text-primary/70">Latency: 14ms</p>
+</div>
+</div>
+<!-- Status Item 3 -->
+<div class="smoked-glass p-card-padding rounded-xl space-y-4 border-l-4 border-l-error">
+<div class="flex justify-between items-start">
+<span class="text-label-lg font-label-lg text-outline uppercase tracking-wider">POS 3</span>
+<span class="material-symbols-outlined text-error" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<p class="text-headline-md font-headline-md text-error">Warning</p>
+<p class="text-label-sm font-label-sm text-error/70">Connection unstable</p>
+</div>
+</div>
+<!-- Status Item 4 -->
+<div class="smoked-glass p-card-padding rounded-xl space-y-4 border-l-4 border-l-primary">
+<div class="flex justify-between items-start">
+<span class="text-label-lg font-label-lg text-outline uppercase tracking-wider">E.A.T.</span>
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="text-headline-md font-headline-md text-on-surface">Healthy</p>
+<p class="text-label-sm font-label-sm text-primary/70">API Synchronized</p>
+</div>
+</div>
+</div>
+<!-- Global Actions -->
+<div class="flex flex-col md:flex-row gap-gutter pt-8">
+<button class="flex-1 bg-surface-container-highest border border-outline-variant text-on-surface font-label-lg text-label-lg py-5 rounded-xl flex items-center justify-center gap-3 hover:bg-surface-bright transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+                    REFRESH CONFIGURATION
+                </button>
+<button class="flex-1 bg-error/10 border border-error/30 text-error font-label-lg text-label-lg py-5 rounded-xl flex items-center justify-center gap-3 hover:bg-error/20 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="power_settings_new">power_settings_new</span>
+                    RESTART KIOSK SYSTEM
+                </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar from JSON -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/90 backdrop-blur-2xl dark:bg-surface-container-high/90 border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl flex justify-around items-center px-4 pb-4 pt-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+<span class="text-label-sm font-label-sm">Save</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 transform translate-y-0.5 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-label-sm">Preview</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                const icon = this.querySelector('.material-symbols-outlined');
+                if (icon && icon.textContent === 'sync') {
+                    icon.classList.add('animate-spin');
+                    setTimeout(() => icon.classList.remove('animate-spin'), 1000);
+                }
+            });
+        });
+
+        // Simulating some status changes
+        setInterval(() => {
+            const warningCard = document.querySelector('.border-l-error');
+            if (warningCard) {
+                warningCard.classList.toggle('brightness-125');
+            }
+        }, 2000);
+    </script>
+</body></html>

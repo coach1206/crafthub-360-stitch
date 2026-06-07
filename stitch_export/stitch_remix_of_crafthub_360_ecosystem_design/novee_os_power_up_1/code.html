@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NOVEE OS | Power-Up</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .amber-glow {
+            box-shadow: 0 0 40px rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-text {
+            background: linear-gradient(135deg, #e9c176 0%, #ffdea5 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .smoke-overlay {
+            background: radial-gradient(circle at 50% 50%, rgba(19, 19, 20, 0.2) 0%, rgba(19, 19, 20, 0.9) 100%);
+        }
+        @keyframes pulse-gold {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(233, 193, 118, 0.4)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 30px rgba(233, 193, 118, 0.7)); transform: scale(1.01); }
+        }
+        .animate-pulse-gold {
+            animation: pulse-gold 4s ease-in-out infinite;
+        }
+        .glass-panel {
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+            background: rgba(31, 31, 32, 0.4);
+        }
+        @keyframes scan-line {
+            0% { transform: translateY(-100%) translateX(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(100%) translateX(100%) rotate(45deg); opacity: 0; }
+        }
+        .scan-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 200%; height: 200%;
+            background: linear-gradient(to right, transparent, rgba(233, 193, 118, 0.1), transparent);
+            animation: scan-line 3s infinite;
+            pointer-events: none;
+        }
+        @keyframes progress-finish {
+            0% { width: 0%; box-shadow: 0 0 0px #e9c176; }
+            100% { width: 100%; box-shadow: 0 0 15px #e9c176; }
+        }
+        .animate-progress-finish {
+            animation: progress-finish 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+        .hold-to-activate {
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .hold-to-activate:active {
+            transform: scale(0.92);
+            background: rgba(233, 193, 118, 0.15);
+            border-color: rgba(233, 193, 118, 1);
+            box-shadow: 0 0 60px rgba(233, 193, 118, 0.3);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#e9c176",
+                        "inverse-primary": "#775a19",
+                        "surface-container-low": "#1b1b1c",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "surface-container-high": "#2a2a2b",
+                        "secondary": "#ffb95a",
+                        "surface-dim": "#131314",
+                        "on-tertiary": "#3c2d28",
+                        "inverse-surface": "#e5e2e3",
+                        "surface-container": "#1f1f20",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#ffdea5",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "tertiary-container": "#b7a09a",
+                        "inverse-on-surface": "#303031",
+                        "on-surface": "#e5e2e3",
+                        "error-container": "#93000a",
+                        "on-secondary": "#462a00",
+                        "tertiary-fixed": "#f7ddd6",
+                        "outline-variant": "#4e4639",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-background": "#e5e2e3",
+                        "surface": "#131314",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-container-lowest": "#0e0e0f",
+                        "surface-container-highest": "#353436",
+                        "on-primary-fixed": "#261900",
+                        "background": "#131314",
+                        "primary": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "outline": "#9a8f80",
+                        "on-secondary-container": "#3d2400",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "surface-bright": "#39393a",
+                        "tertiary": "#dac1bb",
+                        "surface-variant": "#353436",
+                        "on-tertiary-fixed": "#261814",
+                        "on-primary-container": "#4e3700",
+                        "on-primary": "#412d00",
+                        "secondary-container": "#c68315",
+                        "secondary-fixed": "#ffddb6",
+                        "on-tertiary-container": "#473733"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background overflow-hidden cursor-none">
+<!-- Background Cinematic Layer -->
+<div class="fixed inset-0 z-0 overflow-hidden">
+<img alt="Luxury Private Lounge" class="w-full h-full object-cover scale-110 blur-[8px]" src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"/>
+<div class="absolute inset-0 smoke-overlay"></div>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-10 w-full h-screen flex flex-col items-center justify-between py-margin px-gutter">
+<!-- Header -->
+<header class="w-full flex justify-between items-center h-20 opacity-0 transition-opacity duration-1000" id="header">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary" data-icon="terminal">terminal</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-primary tracking-widest">SYSTEM INITIALIZED</span>
+<span class="font-body-md text-body-md text-on-surface-variant/60">V.4.2.0. PREMIUM_CORE</span>
+</div>
+</div>
+<div class="glass-panel px-6 py-2 rounded-full border border-primary/10">
+<span class="font-label-lg text-label-lg text-primary">SECURE LINK: ACTIVE</span>
+</div>
+</header>
+<!-- Center: Brand Identity -->
+<div class="flex flex-col items-center text-center">
+<div class="mb-12 animate-pulse-gold">
+<h1 class="font-display-lg text-display-lg gold-foil-text tracking-tighter mb-2">NOVEE OS</h1>
+<div class="h-[1px] w-64 bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto"></div>
+<h2 class="font-headline-md text-headline-md text-on-surface-variant mt-4 tracking-widest uppercase">CRAFTHUB 360</h2>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface/40 uppercase tracking-[0.4em] text-sm md:text-base">Connected Hospitality Intelligence</p>
+</div>
+<!-- System Status Panel -->
+<aside class="fixed left-gutter top-1/2 -translate-y-1/2 flex flex-col gap-4">
+<div class="glass-panel p-6 rounded-xl space-y-6 w-72 shadow-2xl shadow-black/50 border-l-2 border-l-primary/40 relative overflow-hidden scan-effect">
+<h3 class="font-label-lg text-label-lg text-on-surface-variant/50 border-b border-outline-variant pb-2">SERVICE REGISTRY</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/80" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-label-lg text-label-lg text-on-surface">POS 3</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></span>
+<span class="font-label-sm text-label-sm text-primary/80">READY</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/80" data-icon="restaurant">restaurant</span>
+<span class="font-label-lg text-label-lg text-on-surface">E.A.T.</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></span>
+<span class="font-label-sm text-label-sm text-primary/80">READY</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/80" data-icon="smoking_rooms">smoking_rooms</span>
+<span class="font-label-lg text-label-lg text-on-surface">SmokeCraft</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></span>
+<span class="font-label-sm text-label-sm text-primary/80">READY</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/80" data-icon="wine_bar">wine_bar</span>
+<span class="font-label-lg text-label-lg text-on-surface">Cellar-Sync</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></span>
+<span class="font-label-sm text-label-sm text-primary/80">READY</span>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary origin-left animate-progress-finish"></div>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">100%</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Bottom: Action -->
+<div class="flex flex-col items-center gap-12 pb-16">
+<button class="hold-to-activate group relative outline-none flex flex-col items-center justify-center h-[72px] w-[320px] rounded-2xl bg-surface-container/20 glass-panel border border-primary/30 amber-glow animate-pulse-gold">
+<div class="absolute -inset-1 bg-primary/5 rounded-2xl blur-xl group-hover:bg-primary/10 transition-all duration-700"></div>
+<div class="relative flex flex-col items-center">
+<span class="font-headline-md text-headline-md text-primary tracking-[0.2em] font-bold text-lg">HOLD TO ACTIVATE</span>
+<span class="material-symbols-outlined text-primary/60 text-sm animate-bounce mt-1" data-icon="keyboard_double_arrow_down">keyboard_double_arrow_down</span>
+</div>
+</button>
+<div class="flex gap-16">
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant/40">TEMPERATURE</span>
+<span class="font-body-md text-body-md text-on-surface">68°F / 20°C</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant/40">HUMIDITY</span>
+<span class="font-body-md text-body-md text-on-surface">70% RH</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant/40">LOUNGE CAPACITY</span>
+<span class="font-body-md text-body-md text-on-surface">12 MEMBERS</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Visual Polish -->
+<div class="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+<div class="pointer-events-none fixed inset-0 z-40 bg-gradient-to-b from-black/20 via-transparent to-black/90"></div>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('header');
+            setTimeout(() => {
+                header.style.opacity = '1';
+            }, 800);
+
+            // High-fidelity cursor simulation
+            const dot = document.createElement('div');
+            dot.className = 'fixed w-10 h-10 rounded-full border border-primary/30 pointer-events-none z-[100] transition-all duration-150 mix-blend-screen ease-out';
+            dot.style.boxShadow = '0 0 15px rgba(233, 193, 118, 0.2)';
+            document.body.appendChild(dot);
+
+            document.addEventListener('mousemove', (e) => {
+                dot.style.left = `${e.clientX - 20}px`;
+                dot.style.top = `${e.clientY - 20}px`;
+            });
+
+            // Cinematic "Hold to Activate" Simulation
+            const mainButton = document.querySelector('.hold-to-activate');
+            let holdTimer;
+            
+            const startHold = () => {
+                mainButton.style.transform = 'scale(0.94)';
+                mainButton.style.background = 'rgba(233, 193, 118, 0.15)';
+                document.body.style.transition = 'filter 2s ease';
+                document.body.style.filter = 'brightness(1.5) contrast(1.1)';
+                
+                holdTimer = setTimeout(() => {
+                    // Trigger "Dashboard" transition
+                    document.body.style.opacity = '0';
+                    document.body.style.transform = 'scale(1.1)';
+                    document.body.style.transition = 'all 0.8s cubic-bezier(0.7, 0, 0.3, 1)';
+                    console.log("Navigating to Dashboard...");
+                }, 1500);
+            };
+
+            const endHold = () => {
+                clearTimeout(holdTimer);
+                mainButton.style.transform = 'scale(1)';
+                mainButton.style.background = 'rgba(31, 31, 32, 0.4)';
+                document.body.style.filter = 'none';
+            };
+
+            mainButton.addEventListener('mousedown', startHold);
+            mainButton.addEventListener('mouseup', endHold);
+            mainButton.addEventListener('mouseleave', endHold);
+            mainButton.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(); });
+            mainButton.addEventListener('touchend', endHold);
+        });
+    </script>
+</body></html>

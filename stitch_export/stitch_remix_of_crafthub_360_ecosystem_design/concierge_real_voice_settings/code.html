@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Real Voice Settings | CraftHub 360</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(154, 143, 128, 0.2);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(theme('colors.surface-container'), theme('colors.surface-container')) padding-box,
+                        linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #e9c176 100%) border-box;
+        }
+        .amber-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            background: theme('colors.outline-variant');
+            height: 2px;
+            border-radius: 2px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: theme('colors.primary');
+            box-shadow: 0 0 10px rgba(233, 193, 118, 0.5);
+            cursor: pointer;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant');
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "inverse-on-surface": "#303031",
+                    "outline": "#9a8f80",
+                    "surface-variant": "#353436",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed": "#ffdea5",
+                    "on-tertiary-fixed": "#261814",
+                    "secondary": "#ffb95a",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-dim": "#131314",
+                    "primary-container": "#c5a059",
+                    "surface-container-highest": "#353436",
+                    "tertiary": "#dac1bb",
+                    "on-error": "#690005",
+                    "surface-container-low": "#1b1b1c",
+                    "surface": "#131314",
+                    "error-container": "#93000a",
+                    "on-tertiary-container": "#473733",
+                    "on-surface-variant": "#d1c5b4",
+                    "secondary-container": "#c68315",
+                    "outline-variant": "#4e4639",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "secondary-fixed": "#ffddb6",
+                    "primary-fixed-dim": "#e9c176",
+                    "background": "#131314",
+                    "primary": "#e9c176",
+                    "on-secondary-container": "#3d2400",
+                    "surface-container-high": "#2a2a2b",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-primary-fixed": "#261900",
+                    "surface-container": "#1f1f20",
+                    "on-surface": "#e5e2e3",
+                    "on-tertiary": "#3c2d28",
+                    "on-background": "#e5e2e3",
+                    "on-secondary": "#462a00",
+                    "surface-bright": "#39393a",
+                    "surface-container-lowest": "#0e0e0f",
+                    "on-primary": "#412d00",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "surface-tint": "#e9c176",
+                    "on-primary-container": "#4e3700",
+                    "tertiary-fixed": "#f7ddd6",
+                    "tertiary-container": "#b7a09a",
+                    "error": "#ffb4ab",
+                    "inverse-primary": "#775a19"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "gutter": "32px",
+                    "card-padding": "24px",
+                    "unit": "8px",
+                    "margin": "64px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "label-lg": ["Montserrat"],
+                    "headline-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-surface/30 flex justify-between items-center px-margin py-8">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-outline-variant/30">
+<img alt="Lounge Curator" data-alt="A sophisticated silhouette of a distinguished male curator in a dark tailored suit, captured in soft golden-hour lighting that highlights premium fabrics and professional poise. The background is a blurred, high-end private lounge with mahogany accents and amber light glows, maintaining a moody, luxury-focused aesthetic consistent with dark-mode elegance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKkRNC0SPTEEjTs86GJ3RH26bKnAp8YfNCyHmtp1d8kKR2V7nopvA3-n1DXLA26f1VmWg6AN7ABDgUILA8cV7HvB1txy0z6G1XZcz2kyclq7hXRiK48NQrIcAodP2A2DI7s9r_YTqIK_k_uoTgaHwhvyR0E87l1oQB0tae6Ad06FsAioxyxUlpFjXq7YaGetSRq6yWKrk7oCOOm4-gcsdHbz7sptLdZyBAB1MezGibY3N24PMSKitRRKvYb2Jp8wZwn0P48CK39hw"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">The Lounge Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity duration-500 ease-in-out">settings</span>
+</div>
+</header>
+<main class="pt-32 pb-40 px-margin max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<section class="mb-12">
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-2">Real Voice Settings</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Choose how the CraftHub AI Concierge speaks, guides, or stays silent.</p>
+</section>
+<div class="grid grid-cols-12 gap-8">
+<!-- Voice Persona Selection (Main Content) -->
+<section class="col-span-12 lg:col-span-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg text-headline-lg text-primary">Voice Persona Selection</h3>
+<div class="flex bg-surface-container rounded-full p-1 border border-outline-variant/30">
+<button class="px-6 py-2 rounded-full bg-primary text-on-primary font-label-lg transition-all duration-300" id="guide-voice">Voice Guidance</button>
+<button class="px-6 py-2 rounded-full text-on-surface-variant font-label-lg hover:text-on-surface transition-all duration-300" id="guide-read">Read Only</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Cards -->
+<div class="persona-card group glass-panel p-card-padding rounded-xl gold-foil-border cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-95" data-persona="Lounge Curator">
+<div class="w-12 h-12 bg-primary-container/20 rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">compost</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Lounge Curator</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Warm, smooth, mature.</p>
+</div>
+<div class="persona-card group glass-panel p-card-padding rounded-xl border border-outline-variant/30 cursor-pointer transition-all duration-300 hover:border-primary/50 hover:scale-[1.02] active:scale-95" data-persona="Executive Host">
+<div class="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-surface-variant">workspace_premium</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Executive Host</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Commanding, professional, crisp.</p>
+</div>
+<div class="persona-card group glass-panel p-card-padding rounded-xl border border-outline-variant/30 cursor-pointer transition-all duration-300 hover:border-primary/50 hover:scale-[1.02] active:scale-95" data-persona="Craft Mentor">
+<div class="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-surface-variant">school</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Craft Mentor</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Encouraging, wise, steady.</p>
+</div>
+<div class="persona-card group glass-panel p-card-padding rounded-xl border border-outline-variant/30 cursor-pointer transition-all duration-300 hover:border-primary/50 hover:scale-[1.02] active:scale-95" data-persona="Mixology Guide">
+<div class="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-surface-variant">liquor</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Mixology Guide</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Vibrant, rhythmic, artistic.</p>
+</div>
+<div class="persona-card group glass-panel p-card-padding rounded-xl border border-outline-variant/30 cursor-pointer transition-all duration-300 hover:border-primary/50 hover:scale-[1.02] active:scale-95" data-persona="Brewmaster">
+<div class="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-surface-variant">sports_bar</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Brewmaster</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Deep, hearty, authentic.</p>
+</div>
+<div class="persona-card group glass-panel p-card-padding rounded-xl border border-outline-variant/30 cursor-pointer transition-all duration-300 hover:border-primary/50 hover:scale-[1.02] active:scale-95" data-persona="Sommelier Guide">
+<div class="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-surface-variant">wine_bar</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Sommelier Guide</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Refined, subtle, melodic.</p>
+</div>
+<div class="persona-card group glass-panel p-card-padding rounded-xl border border-outline-variant/30 cursor-pointer transition-all duration-300 hover:border-primary/50 hover:scale-[1.02] active:scale-95" data-persona="Staff Ops Coach">
+<div class="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-surface-variant">admin_panel_settings</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Staff Ops Coach</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Efficient, clear, direct.</p>
+</div>
+<div class="persona-card group glass-panel p-card-padding rounded-xl border border-outline-variant/30 cursor-pointer transition-all duration-300 hover:border-primary/50 hover:scale-[1.02] active:scale-95" data-persona="Executive Insight">
+<div class="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-surface-variant">insights</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Executive Insight</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Analytical, calm, articulate.</p>
+</div>
+<div class="persona-card group glass-panel p-card-padding rounded-xl border border-outline-variant/30 cursor-pointer transition-all duration-300 hover:border-primary/50 hover:scale-[1.02] active:scale-95" data-persona="Setup Coach">
+<div class="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-surface-variant">settings_suggest</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Setup Coach</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Patient, instructional, helpful.</p>
+</div>
+</div>
+</section>
+<!-- Sidebar Controls -->
+<aside class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Voice Controls -->
+<div class="glass-panel p-8 rounded-xl">
+<h3 class="font-headline-md text-headline-md text-primary mb-8">Voice Controls</h3>
+<div class="space-y-10">
+<div class="space-y-4">
+<div class="flex justify-between">
+<label class="font-label-lg text-label-lg text-on-surface">Warmth</label>
+<span class="text-primary font-label-sm">85%</span>
+</div>
+<input class="w-full" max="100" min="0" type="range" value="85"/>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between">
+<label class="font-label-lg text-label-lg text-on-surface">Energy</label>
+<span class="text-primary font-label-sm">40%</span>
+</div>
+<input class="w-full" max="100" min="0" type="range" value="40"/>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between">
+<label class="font-label-lg text-label-lg text-on-surface">Formality</label>
+<span class="text-primary font-label-sm">75%</span>
+</div>
+<input class="w-full" max="100" min="0" type="range" value="75"/>
+</div>
+</div>
+</div>
+<!-- System Sounds -->
+<div class="glass-panel p-8 rounded-xl">
+<h3 class="font-headline-md text-headline-md text-primary mb-6">System Sounds</h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface">Page Sounds</span>
+<button class="w-12 h-6 rounded-full bg-primary-container relative transition-colors duration-300">
+<span class="absolute right-1 top-1 w-4 h-4 bg-on-primary rounded-full"></span>
+</button>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface">Stamp Sounds</span>
+<button class="w-12 h-6 rounded-full bg-primary-container relative transition-colors duration-300">
+<span class="absolute right-1 top-1 w-4 h-4 bg-on-primary rounded-full"></span>
+</button>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface">Quiet Mode</span>
+<button class="w-12 h-6 rounded-full bg-outline-variant relative transition-colors duration-300">
+<span class="absolute left-1 top-1 w-4 h-4 bg-surface rounded-full"></span>
+</button>
+</div>
+</div>
+</div>
+<!-- Powered by -->
+<div class="flex justify-center">
+<div class="px-4 py-2 bg-surface-container-high rounded-full flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity cursor-default">
+<span class="font-label-sm text-label-sm tracking-widest uppercase">Powered by</span>
+<span class="font-bold text-primary">ElevenLabs</span>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Bottom Actions Bar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 backdrop-blur-2xl border-t border-outline-variant/20 bg-surface-container/80 flex justify-center items-center px-margin py-8 gap-6 shadow-[0_-8px_30px_rgb(233,193,118,0.05)]">
+<button class="px-10 py-4 border border-primary/40 rounded-lg text-primary font-label-lg hover:bg-primary/5 transition-all active:scale-95">
+            Preview Voice
+        </button>
+<button class="px-10 py-4 bg-primary text-on-primary rounded-lg font-label-lg shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95">
+            Use This Voice
+        </button>
+<button class="px-10 py-4 text-on-surface-variant font-label-lg hover:text-on-surface transition-all">
+            Voice Off
+        </button>
+<div class="h-8 w-px bg-outline-variant/30 mx-4"></div>
+<button class="px-10 py-4 bg-surface-container-highest border border-outline-variant/50 rounded-lg text-on-surface font-label-lg hover:border-primary/50 transition-all">
+            Save Settings
+        </button>
+</footer>
+<!-- Bottom Nav for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface-container/80 backdrop-blur-2xl border-t border-outline-variant/20 flex justify-around items-center px-6 py-6 pb-10">
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined">mic</span>
+<span class="font-label-sm text-label-sm">Voice Assist</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined">concierge</span>
+<span class="font-label-sm text-label-sm">Concierge</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">tune</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</div>
+</nav>
+<script>
+        // Simple Persona Selection Interaction
+        const cards = document.querySelectorAll('.persona-card');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                cards.forEach(c => {
+                    c.classList.remove('gold-foil-border', 'border-primary/50');
+                    c.classList.add('border-outline-variant/30');
+                    c.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 0";
+                    c.querySelector('.material-symbols-outlined').classList.replace('text-primary', 'text-on-surface-variant');
+                    c.querySelector('.w-12').classList.replace('bg-primary-container/20', 'bg-surface-container-high');
+                });
+                card.classList.add('gold-foil-border');
+                card.classList.remove('border-outline-variant/30');
+                card.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 1";
+                card.querySelector('.material-symbols-outlined').classList.replace('text-on-surface-variant', 'text-primary');
+                card.querySelector('.w-12').classList.replace('bg-surface-container-high', 'bg-primary-container/20');
+            });
+        });
+
+        // Guidance Toggle
+        const guideVoice = document.getElementById('guide-voice');
+        const guideRead = document.getElementById('guide-read');
+
+        guideVoice.addEventListener('click', () => {
+            guideVoice.classList.add('bg-primary', 'text-on-primary');
+            guideVoice.classList.remove('text-on-surface-variant');
+            guideRead.classList.remove('bg-primary', 'text-on-primary');
+            guideRead.classList.add('text-on-surface-variant');
+        });
+
+        guideRead.addEventListener('click', () => {
+            guideRead.classList.add('bg-primary', 'text-on-primary');
+            guideRead.classList.remove('text-on-surface-variant');
+            guideVoice.classList.remove('bg-primary', 'text-on-primary');
+            guideVoice.classList.add('text-on-surface-variant');
+        });
+
+        // Toggles
+        document.querySelectorAll('button[class*="w-12 h-6"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const circle = btn.querySelector('span');
+                if (btn.classList.contains('bg-primary-container')) {
+                    btn.classList.replace('bg-primary-container', 'bg-outline-variant');
+                    circle.classList.replace('right-1', 'left-1');
+                    circle.classList.replace('bg-on-primary', 'bg-surface');
+                } else {
+                    btn.classList.replace('bg-outline-variant', 'bg-primary-container');
+                    circle.classList.replace('left-1', 'right-1');
+                    circle.classList.replace('bg-surface', 'bg-on-primary');
+                }
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CRAFTHUB 360 | NOVEE OS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --obsidian: #010101;
+            --titanium: rgba(160, 160, 160, 0.2);
+            --warm-gold: #D4AF37;
+        }
+        body {
+            background-color: var(--obsidian);
+            color: #e2e2e2;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--titanium);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .caustic-glow {
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(1, 1, 1, 0) 70%);
+        }
+        .haptic-button {
+            height: 72px;
+            transition: all 0.2s ease-out;
+            border: 1px solid var(--titanium);
+            background: linear-gradient(180deg, #1a1c1c 0%, #010101 100%);
+        }
+        .haptic-button:active {
+            transform: scale(0.98);
+            filter: brightness(1.2);
+        }
+        .hairline-divider {
+            height: 0.5px;
+            background-color: var(--titanium);
+        }
+        .gold-underglow:focus-within {
+            border-bottom-color: var(--warm-gold);
+            box-shadow: 0 4px 12px -2px rgba(212, 175, 55, 0.3);
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--titanium); border-radius: 10px; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#d4af37",
+                        "inverse-surface": "#e2e2e2",
+                        "surface-variant": "#333535",
+                        "on-tertiary-fixed-variant": "#484646",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "error": "#ffb4ab",
+                        "surface-container-high": "#282a2b",
+                        "primary-fixed-dim": "#e9c349",
+                        "surface-container": "#1e2020",
+                        "on-primary-container": "#554300",
+                        "surface": "#121414",
+                        "on-tertiary-container": "#464544",
+                        "on-surface": "#e2e2e2",
+                        "tertiary-fixed-dim": "#c9c6c5",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#b8b8b8",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "on-primary-fixed": "#241a00",
+                        "primary-fixed": "#ffe088",
+                        "inverse-primary": "#735c00",
+                        "tertiary-container": "#b5b2b2",
+                        "on-primary": "#3c2f00",
+                        "on-surface-variant": "#d0c5af",
+                        "secondary": "#c7c6c6",
+                        "surface-container-highest": "#333535",
+                        "surface-container-low": "#1a1c1c",
+                        "inverse-on-surface": "#2f3131",
+                        "tertiary": "#d1cdcd",
+                        "secondary-fixed": "#e3e2e2",
+                        "outline": "#99907c",
+                        "on-error": "#690005",
+                        "on-background": "#e2e2e2",
+                        "on-tertiary": "#313030",
+                        "primary": "#f2ca50",
+                        "surface-dim": "#121414",
+                        "on-primary-fixed-variant": "#574500",
+                        "on-error-container": "#ffdad6",
+                        "surface-tint": "#e9c349",
+                        "on-secondary-fixed-variant": "#464747",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-bright": "#37393a",
+                        "on-secondary": "#2f3131",
+                        "secondary-container": "#484949",
+                        "outline-variant": "#4d4635",
+                        "surface-container-lowest": "#0c0f0f",
+                        "background": "#121414"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "24px",
+                        "margin-desktop": "64px",
+                        "panel-padding": "32px",
+                        "gutter": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "button-text": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.15em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "button-text": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCvUlkVCGrUCe1CwafyISfcPuHGI0UF6DhqFhvcfaSKF-JdLStGjUrY4uzAZ4zvSTewRfccRsl4IuF-DqWZ4xUrJqWDEInnWhKNRi2WLajX0VlMx83wU4cMcri5nf8s91cGuEt6efk4YnhaM1HUBrS5sppruKWIFsU9d-v6POw_86-K3eAcKGl50iOGcXQU2-pC_FaA0xUvsmuDjmdSeHHqgIGnQOopQGVAwLqxnkFSt_W4QA2_c1y4AGuWTCRPWM4zKzkTC52TlZ0'); background-size: cover; background-attachment: fixed; background-position: center;">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop py-unit bg-surface/5 dark:bg-surface/5 backdrop-blur-[40px] border-b border-white/20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-headline-md" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">shield_person</span>
+<h1 class="text-headline-md font-headline-md font-bold text-primary tracking-tighter uppercase" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">CRAFTHUB 360</h1>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<div class="flex flex-col items-end">
+<span class="text-label-caps font-label-caps text-primary tracking-widest">FOUNDER LEVEL 0 SECURED</span>
+<div class="flex gap-1 mt-1">
+<div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style="animation-delay: 0.2s"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style="animation-delay: 0.4s"></div>
+</div>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden hover:scale-95 transition-transform duration-200 hover:brightness-125 cursor-pointer">
+<img alt="Founder 0" class="w-full h-full object-cover" data-alt="A hyper-realistic, cinematic portrait of a visionary executive with sharp features, wearing a high-collared charcoal grey tech-suit. The lighting is dramatic and low-key, featuring a subtle warm gold rim light that highlights the profile against a deep obsidian black background. The overall aesthetic is authoritative, sophisticated, and integrated into a premium futuristic operating system environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRC5LlkDvIBPHl7CO5zBuH1woH9JSns63Q4PRl38bimi4M8RGYZiH8aMPWwkmIM-SHkb8q5KijbGTHX9aDleWnr1aHlncLLJ8I_SysfYrAY3kFvGnCT_tGz0depw6o7hJvVWKVh3N8t943gdRW74peJuCn_iFstnCra6e6HiRQsRrnPnGXlBjHtSZKQMXhysTvmAFfiyxEgK6mA-nkkX_qlFbVfw42uaLMbweAQNbKTIsrLZ4yVH80gAwgBoPeKUVoX7LImR1VhH0"/>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer -->
+<aside class="fixed left-0 top-0 h-full z-40 pt-20 px-4 w-80 bg-surface/5 dark:bg-surface/5 backdrop-blur-[40px] border-r border-white/10 hidden lg:flex flex-col">
+<div class="py-8 flex flex-col items-start px-4">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-lg glass-panel flex items-center justify-center backdrop-blur-2xl border-white/10 bg-white/5">
+<span class="material-symbols-outlined text-primary">token</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-primary" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">NOVEE OS</h2>
+<p class="text-body-md font-body-md text-secondary-fixed-dim">Ecosystem Master</p>
+</div>
+</div>
+<div class="w-full hairline-divider mb-8"></div>
+<nav class="w-full space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-primary bg-primary-container/10 border-l-2 border-primary-container scale-98 transition-all duration-150" href="#">
+<span class="material-symbols-outlined">smoke_free</span>
+<span class="text-body-md font-body-md">SmokeCraft</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:text-on-surface-variant hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="text-body-md font-body-md">BeerCraft</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:text-on-surface-variant hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">liquor</span>
+<span class="text-body-md font-body-md">PourCraft</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:text-on-surface-variant hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="text-body-md font-body-md">WineCraft</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:text-on-surface-variant hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="text-body-md font-body-md">360 Passport</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:text-on-surface-variant hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="text-body-md font-body-md">E.A.T.</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:text-on-surface-variant hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="text-body-md font-body-md">POS 3</span>
+</a>
+</nav>
+<div class="mt-auto pb-8 px-4">
+<p class="text-label-caps font-label-caps text-on-tertiary-fixed-variant">V.3.60.0</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-80 mt-24 px-margin-desktop pb-24 flex-grow flex flex-col gap-12 max-w-[1440px] mx-auto w-full">
+<!-- System Health Section -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="glass-panel p-panel-padding rounded-xl relative overflow-hidden group hover:bg-white/10 transition-all duration-300 backdrop-blur-2xl border-white/10 bg-white/5">
+<div class="absolute inset-0 caustic-glow opacity-50"></div>
+<div class="relative z-10 flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-label-caps font-label-caps text-primary">SMOKECRAFT</span>
+<div class="w-2 h-2 rounded-full bg-primary" style="box-shadow: 0 0 4px #f2ca50;"></div>
+</div>
+<p class="text-headline-sm font-headline-sm" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">98.2%</p>
+<p class="text-label-caps text-on-tertiary-fixed-variant">NODE STABILITY</p>
+</div>
+</div>
+<div class="glass-panel p-panel-padding rounded-xl relative overflow-hidden group hover:bg-white/10 transition-all duration-300 backdrop-blur-2xl border-white/10 bg-white/5">
+<div class="relative z-10 flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-label-caps font-label-caps text-primary">BEERCRAFT</span>
+<div class="w-2 h-2 rounded-full bg-primary" style="box-shadow: 0 0 4px #f2ca50;"></div>
+</div>
+<p class="text-headline-sm font-headline-sm" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">ACTIVE</p>
+<p class="text-label-caps text-on-tertiary-fixed-variant">TAP TELEMETRY</p>
+</div>
+</div>
+<div class="glass-panel p-panel-padding rounded-xl relative overflow-hidden group hover:bg-white/10 transition-all duration-300 backdrop-blur-2xl border-white/10 bg-white/5">
+<div class="relative z-10 flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-label-caps font-label-caps text-primary">POURCRAFT</span>
+<div class="w-2 h-2 rounded-full bg-primary" style="box-shadow: 0 0 4px #f2ca50;"></div>
+</div>
+<p class="text-headline-sm font-headline-sm" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">SYNCED</p>
+<p class="text-label-caps text-on-tertiary-fixed-variant">DISPENSE FLOW</p>
+</div>
+</div>
+<div class="glass-panel p-panel-padding rounded-xl relative overflow-hidden group hover:bg-white/10 transition-all duration-300 backdrop-blur-2xl border-white/10 bg-white/5">
+<div class="relative z-10 flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-label-caps font-label-caps text-primary">WINECRAFT</span>
+<div class="w-2 h-2 rounded-full bg-primary" style="box-shadow: 0 0 4px #f2ca50;"></div>
+</div>
+<p class="text-headline-sm font-headline-sm" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">OPTIMAL</p>
+<p class="text-label-caps text-on-tertiary-fixed-variant">CELLAR CLIMATE</p>
+</div>
+</div>
+</section>
+<!-- Central Layout: Dashboard Grid + Intelligence Sidebar -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+<!-- Bento Module Grid -->
+<div class="xl:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Main Module Tile: 360 Passport -->
+<div class="md:col-span-2 aspect-[21/9] glass-panel rounded-xl p-8 relative overflow-hidden flex flex-col justify-end group cursor-pointer backdrop-blur-2xl border-white/10 bg-white/5">
+<img class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-50 transition-opacity duration-500" data-alt="An intricate, holographic circuit board pattern glowing with soft golden light against a deep matte black obsidian background. The composition is cinematic with high depth of field, suggesting a secure, high-tech identity network. The mood is mysterious and exclusive, utilizing shimmering titanium accents and caustic light reflections that dance across the dark surface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXvVEgTHGaclhk6Yi0TYKV1mWP1Xt38BQVfeEEIu1owH0gz3KirLpXcx_KEwp_2ckYprPMXv-bSFLtlPMreOIAEaqyPilrBs6yjFyvwtm5oyl6DKbyqo7pWucRt70wETHSGxI18gaoCWRr-pxJ9GrMHCOWBZAcFdCEfsQMGx7mTVvvL2N4UK5cHNdcXKxc4OdHHF2DZcIpWBmRV6axRFTvHpLMICXuWBmPxqYVE3OflPe90TjYC-YmmRv9Tqpi3GpagOTgeRdEqMk"/>
+<div class="relative z-10">
+<span class="text-label-caps font-label-caps text-primary mb-2 block">MEMBER NETWORK</span>
+<h3 class="text-display-lg font-display-lg text-white" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">360 Passport</h3>
+<p class="text-body-lg font-body-lg text-secondary max-w-md mt-4">Global authority management and credentialed access for the elite CraftHub network.</p>
+<button class="haptic-button mt-8 px-12 rounded-full text-primary font-bold hover:brightness-125 transition-all">
+                            LAUNCH IDENTITY
+                        </button>
+</div>
+</div>
+<!-- Sub Modules -->
+<div class="glass-panel rounded-xl p-8 hover:bg-white/10 transition-all duration-300 group backdrop-blur-2xl border-white/10 bg-white/5">
+<div class="flex justify-between items-start mb-12">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant">arrow_outward</span>
+</div>
+<h4 class="text-headline-md font-headline-md mb-2" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">E.A.T.</h4>
+<p class="text-label-caps text-on-tertiary-fixed-variant tracking-widest mb-6">ENVIRONMENT ASSET TRANSACTION</p>
+<div class="hairline-divider mb-6"></div>
+<p class="text-body-md text-secondary">Automated asset liquidation and resource procurement terminal.</p>
+</div>
+<div class="glass-panel rounded-xl p-8 hover:bg-white/10 transition-all duration-300 group backdrop-blur-2xl border-white/10 bg-white/5">
+<div class="flex justify-between items-start mb-12">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">point_of_sale</span>
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant">arrow_outward</span>
+</div>
+<h4 class="text-headline-md font-headline-md mb-2" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">POS 3</h4>
+<p class="text-label-caps text-on-tertiary-fixed-variant tracking-widest mb-6">TACTILE TERMINAL</p>
+<div class="hairline-divider mb-6"></div>
+<p class="text-body-md text-secondary">High-frequency transaction processing for modern trade hubs.</p>
+</div>
+</div>
+<!-- Intelligence Sidebar -->
+<div class="xl:col-span-4 flex flex-col gap-gutter">
+<div class="glass-panel flex-grow rounded-xl p-panel-padding flex flex-col backdrop-blur-2xl border-white/10 bg-white/5">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-label-caps font-label-caps text-primary">INTELLIGENCE FEED</h3>
+<span class="material-symbols-outlined text-primary animate-spin" style="font-size: 16px;">autorenew</span>
+</div>
+<div class="space-y-6">
+<!-- Alert Item -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-label-caps text-on-surface-variant">02:45 PM | E.A.T.</span>
+<span class="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded uppercase">Verified</span>
+</div>
+<p class="text-body-md font-medium text-white">Asset "Hops_Alpha_01" successfully liquidated at +12% margin.</p>
+<div class="hairline-divider mt-4"></div>
+</div>
+<div class="flex flex-col gap-2 opacity-80">
+<div class="flex justify-between items-center">
+<span class="text-label-caps text-on-surface-variant">02:12 PM | POS 3</span>
+<span class="text-[10px] bg-white/10 text-secondary px-2 py-0.5 rounded uppercase">Processed</span>
+</div>
+<p class="text-body-md font-medium text-white">Transaction velocity spike detected in Sector 7G. Monitoring.</p>
+<div class="hairline-divider mt-4"></div>
+</div>
+<div class="flex flex-col gap-2 opacity-60">
+<div class="flex justify-between items-center">
+<span class="text-label-caps text-on-surface-variant">01:55 PM | SYSTEM</span>
+<span class="text-[10px] bg-white/10 text-secondary px-2 py-0.5 rounded uppercase">Log</span>
+</div>
+<p class="text-body-md font-medium text-white">Founder Level 0 credentials verified at secondary terminal.</p>
+<div class="hairline-divider mt-4"></div>
+</div>
+</div>
+<div class="mt-auto pt-12">
+<div class="p-6 glass-panel rounded-lg border-primary/20 backdrop-blur-2xl border-white/10 bg-white/5">
+<p class="text-label-caps text-primary mb-4">VELOCITY MONITOR</p>
+<div class="h-24 w-full flex items-end gap-1">
+<div class="w-full bg-primary/30 h-1/2"></div>
+<div class="w-full bg-primary/40 h-2/3"></div>
+<div class="w-full bg-primary/60 h-3/4"></div>
+<div class="w-full bg-primary h-full"></div>
+<div class="w-full bg-primary/80 h-4/5"></div>
+<div class="w-full bg-primary/50 h-1/2"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- System Prompt / Search bar -->
+<div class="w-full glass-panel h-20 rounded-full px-8 flex items-center gap-4 gold-underglow backdrop-blur-2xl border-white/10 bg-white/5">
+<span class="material-symbols-outlined text-primary">comment</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-headline-sm font-headline-sm text-primary placeholder:text-primary/20 uppercase tracking-widest" placeholder="EXECUTIVE COMMAND INPUT..." style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);" type="text"/>
+<div class="flex items-center gap-4 text-secondary-fixed-dim">
+<span class="text-label-caps">CTRL + K</span>
+<span class="material-symbols-outlined">mic</span>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-4 px-margin-desktop flex flex-col md:flex-row justify-between items-center mt-auto bg-surface-container-lowest/80 dark:bg-surface-container-lowest/80 backdrop-blur-md border-t border-white/5">
+<p class="text-label-caps font-bold text-primary">© 2024 NOVEE OS • FOUNDER LEVEL 0 SECURED</p>
+<div class="flex gap-8 mt-4 md:mt-0">
+<a class="text-label-caps text-on-tertiary-fixed-variant hover:text-primary-fixed duration-300" href="#">NoveeOps Status</a>
+<a class="text-label-caps text-on-tertiary-fixed-variant hover:text-primary-fixed duration-300" href="#">Health Monitor</a>
+<a class="text-label-caps text-on-tertiary-fixed-variant hover:text-primary-fixed duration-300" href="#">Privacy</a>
+</div>
+</footer>
+<!-- Authority Verification Overlay (Interaction element) -->
+<div class="fixed inset-0 z-[100] pointer-events-none opacity-0 transition-opacity duration-500 bg-background/90 flex items-center justify-center" id="authority-check">
+<div class="text-center flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-[120px] animate-pulse" style="font-variation-settings: 'FILL' 1;">shield_person</span>
+<h2 class="text-display-lg font-display-lg text-primary mt-8" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">VERIFYING AUTHORITY</h2>
+<p class="text-label-caps tracking-[0.5em] text-white mt-4">FOUNDER LEVEL 0 DETECTED</p>
+</div>
+</div>
+<script>
+        // Micro-interactions & Atmospheric Effects
+        document.querySelectorAll('.haptic-button, .glass-panel').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                if (window.navigator.vibrate) window.navigator.vibrate(10);
+            });
+        });
+
+        // Authority Check Visualizer
+        function triggerAuthorityCheck() {
+            const overlay = document.getElementById('authority-check');
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            overlay.classList.add('opacity-100');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-100');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            }, 1200);
+        }
+
+        // Random alert generation for Intelligence Sidebar
+        setInterval(() => {
+            const items = document.querySelectorAll('.intelligence-feed .alert-item');
+            if (items.length > 5) items[items.length - 1].remove();
+        }, 10000);
+
+        // Visual initialization
+        window.addEventListener('load', () => {
+            console.log("NOVEE OS: CRAFTHUB 360 Ecosystem Initialized.");
+            // Optional: Auto-trigger authority check on entry
+            setTimeout(triggerAuthorityCheck, 500);
+        });
+    </script>
+</body></html>

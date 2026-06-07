@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 | Project Export Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(theme('colors.surface-container'), theme('colors.surface-container')) padding-box,
+                        linear-gradient(135deg, #e9c176 0%, #775a19 50%, #e9c176 100%) border-box;
+        }
+        .gold-text-gradient {
+            background: linear-gradient(135deg, #ffdea5 0%, #e9c176 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .leather-texture {
+            background-color: #131314;
+            background-image: 
+                radial-gradient(circle at 50% -20%, #302410 0%, #131314 70%),
+                url("https://www.transparenttextures.com/patterns/dark-leather.png");
+            background-blend-mode: overlay;
+            min-height: 100vh;
+            color: theme('colors.on-surface');
+        }
+        .haptic-press {
+            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1), filter 0.1s;
+        }
+        .haptic-press:active {
+            transform: scale(0.97);
+            filter: brightness(0.85);
+        }
+        .code-window {
+            background: #0e0e0f;
+            border-radius: 12px;
+            border: 1px solid rgba(233, 193, 118, 0.1);
+            font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', monospace;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#4e3700",
+                        "on-primary": "#412d00",
+                        "surface-container-high": "#2a2a2b",
+                        "primary": "#e9c176",
+                        "on-tertiary-container": "#473733",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "outline": "#9a8f80",
+                        "surface-bright": "#39393a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "inverse-surface": "#e5e2e3",
+                        "surface-container": "#1f1f20",
+                        "secondary-container": "#c68315",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "tertiary": "#dac1bb",
+                        "on-surface": "#e5e2e3",
+                        "error": "#ffb4ab",
+                        "outline-variant": "#4e4639",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-primary-fixed": "#261900",
+                        "surface-tint": "#e9c176",
+                        "surface-container-low": "#1b1b1c",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-secondary-fixed": "#2a1800",
+                        "primary-fixed-dim": "#e9c176",
+                        "inverse-on-surface": "#303031",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#462a00",
+                        "on-surface-variant": "#d1c5b4",
+                        "surface-dim": "#131314",
+                        "inverse-primary": "#775a19",
+                        "tertiary-container": "#b7a09a",
+                        "surface-container-lowest": "#0e0e0f",
+                        "primary-fixed": "#ffdea5",
+                        "on-background": "#e5e2e3",
+                        "on-tertiary": "#3c2d28",
+                        "background": "#131314",
+                        "surface-container-highest": "#353436",
+                        "primary-container": "#c5a059",
+                        "secondary": "#ffb95a",
+                        "on-tertiary-fixed": "#261814",
+                        "on-secondary-container": "#3d2400",
+                        "surface-variant": "#353436",
+                        "surface": "#131314",
+                        "secondary-fixed": "#ffddb6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "card-padding": "24px",
+                        "margin": "64px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="leather-texture overflow-x-hidden pb-32">
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(233,193,118,0.1)] flex items-center justify-between px-margin h-20 w-full z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="hub">hub</span>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter">CraftHub 360 Orchestration</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8 text-on-surface-variant font-label-lg text-label-lg">
+<a class="text-primary hover:text-primary-fixed transition-colors" href="#">Export Hub</a>
+<a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="hover:text-primary transition-colors" href="#">Modules</a>
+</div>
+<div class="w-12 h-12 rounded-full border border-primary/30 overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGfXtsHQH4AXQ2Dy9DoijxT00DveHAnIg9StdI8HDPSEgZsVkr1Hx13v7UWJ2KanNLU8M-A1iZi98PykmKm9Lplc6KaAiaAXRPD6wVWsUTFQRBTztnKQR6oDwhKER4jZfBKZk-A9bUVsmLipEUqPmIDJQVWLszz6dlMuy51SjP6afae1vIj1KPkQde_dQO9nMxUWABdG-dtLoiNxRx8aAqugdpGxfHYMhl0e9U9SQwFBb77lqdFPbSuSrtRdDudUJiM257Pzb4jWE"/>
+</div>
+</div>
+</header>
+<!-- Navigation Drawer (Desktop) -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col py-8 bg-surface-container-lowest/95 backdrop-blur-2xl h-full w-80 rounded-r-xl border-r border-outline-variant/20 shadow-2xl hidden lg:flex mt-20">
+<div class="px-6 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Command Center</h2>
+</div>
+<nav class="flex flex-col gap-1">
+<div class="bg-secondary-container text-on-secondary-container rounded-lg mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-label-lg text-label-lg">Code &amp; Wiring</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-label-lg text-label-lg">Connectivity Map</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="auto_awesome_motion">auto_awesome_motion</span>
+<span class="font-label-lg text-label-lg">Guest Journeys</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-lg text-label-lg">E.A.T. Intelligence</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-lg text-label-lg">Global Config</span>
+</div>
+</nav>
+</aside>
+<main class="lg:ml-80 mt-28 px-6 lg:px-12 max-w-7xl mx-auto">
+<!-- Hero Section -->
+<div class="flex flex-col items-center justify-center mb-16 space-y-6 text-center">
+<div class="relative">
+<img alt="CraftHub 360 Logo" class="w-40 h-40 md:w-48 md:h-48 rounded-full shadow-[0_0_50px_rgba(233,193,118,0.2)] border-2 border-primary/40 p-2 bg-surface-container" src="https://lh3.googleusercontent.com/aida/AP1WRLv-WT_Bhw2ld_-7coeQl5lSAmzG-a8eS6dmO1Id8jZeV5Srx423k25GIXg-uzEh6wqgYlKkjCisEnOAaMtbW7hA3Xd7GnZU4mNExMhXwejqW98agvB-halqurypgG--nwZB38i8bMZAY1sdrBzwh2noBnz6gvfsSHgi7OAflXgWhmunnbaAqB2CFrGaUhGaDeawkHJZh41TOhhkNACwBRjyLal2fUVy-Ep4smzNsiGrAhDq71mrhzb-Rw"/>
+<div class="absolute -bottom-2 -right-2 bg-primary text-on-primary p-2 rounded-lg shadow-lg">
+<span class="material-symbols-outlined text-xl" data-icon="verified">verified</span>
+</div>
+</div>
+<div class="space-y-2">
+<h2 class="font-display-lg text-4xl md:text-display-lg gold-text-gradient">Code &amp; Wiring Dashboard</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                Review your environment manifest and orchestrate the production-ready build for global deployment.
+            </p>
+</div>
+</div>
+<!-- Section 1: Core Repository Bundle -->
+<section class="mb-12">
+<div class="gold-foil-border p-[1px] rounded-2xl shadow-2xl overflow-hidden">
+<div class="p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 glass-panel rounded-2xl bg-surface-container-low/80">
+<div class="space-y-4 text-center md:text-left">
+<div class="flex items-center gap-3 justify-center md:justify-start">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="inventory_2">inventory_2</span>
+<h3 class="font-headline-xl text-3xl md:text-headline-xl text-on-surface">Repository Bundle</h3>
+</div>
+<p class="font-body-lg text-body-md md:text-body-lg text-on-surface-variant max-w-xl">
+                        The definitive 'GitHub Ready' project structure containing core logic, configurations, and manifest data.
+                    </p>
+<div class="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
+<span class="bg-surface-variant/50 px-3 py-1.5 rounded-md font-label-sm text-label-sm border border-outline-variant/30 text-on-surface-variant">package.json</span>
+<span class="bg-surface-variant/50 px-3 py-1.5 rounded-md font-label-sm text-label-sm border border-outline-variant/30 text-on-surface-variant">tailwind.config.js</span>
+<span class="bg-surface-variant/50 px-3 py-1.5 rounded-md font-label-sm text-label-sm border border-outline-variant/30 text-on-surface-variant">routes.js</span>
+</div>
+</div>
+<button class="min-w-[220px] h-[64px] bg-primary text-on-primary font-label-lg text-label-lg rounded-xl haptic-press flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(233,193,118,0.2)] hover:shadow-primary/40 transition-all border border-primary-fixed-dim/20">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                    DOWNLOAD ZIP
+                </button>
+</div>
+</div>
+</section>
+<!-- Source Code Preview Section -->
+<section class="mb-16">
+<div class="flex items-center gap-4 mb-6">
+<h3 class="font-headline-md text-headline-md text-primary">Source Code Preview</h3>
+<div class="h-px flex-1 bg-outline-variant/20"></div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Directory Tree -->
+<div class="code-window p-6 h-[400px] overflow-y-auto">
+<div class="flex items-center gap-2 mb-4 text-on-surface-variant border-b border-outline-variant/10 pb-2">
+<span class="material-symbols-outlined text-sm" data-icon="folder_open">folder_open</span>
+<span class="font-label-sm">PROJECT EXPLORER</span>
+</div>
+<ul class="text-on-surface-variant font-mono text-sm space-y-2">
+<li class="flex items-center gap-2 text-primary"><span class="material-symbols-outlined text-base" data-icon="folder">folder</span> src/</li>
+<li class="pl-6 flex items-center gap-2"><span class="material-symbols-outlined text-base" data-icon="folder">folder</span> components/</li>
+<li class="pl-6 flex items-center gap-2"><span class="material-symbols-outlined text-base" data-icon="folder">folder</span> styles/</li>
+<li class="pl-12 flex items-center gap-2 text-on-surface"><span class="material-symbols-outlined text-base text-secondary" data-icon="css">css</span> main.css</li>
+<li class="pl-6 flex items-center gap-2 text-on-surface"><span class="material-symbols-outlined text-base text-secondary" data-icon="javascript">javascript</span> routes.js</li>
+<li class="flex items-center gap-2 text-on-surface"><span class="material-symbols-outlined text-base text-secondary" data-icon="settings">settings</span> tailwind.config.js</li>
+<li class="flex items-center gap-2 text-on-surface"><span class="material-symbols-outlined text-base text-secondary" data-icon="description">description</span> package.json</li>
+<li class="flex items-center gap-2 text-on-surface"><span class="material-symbols-outlined text-base text-secondary" data-icon="html">html</span> index.html</li>
+</ul>
+</div>
+<!-- File Content Preview -->
+<div class="code-window lg:col-span-2 p-6 h-[400px] overflow-y-auto relative">
+<div class="flex items-center justify-between mb-4 text-on-surface-variant border-b border-outline-variant/10 pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span>
+<span class="font-label-sm">package.json</span>
+</div>
+<span class="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded">READ ONLY</span>
+</div>
+<pre class="text-sm text-primary/80 font-mono leading-relaxed">{
+  "name": "crafthub-360-core",
+  "version": "3.2.0",
+  "private": true,
+  "dependencies": {
+    "tailwindcss": "^3.0.0",
+    "framer-motion": "^10.0.0",
+    "lucide-react": "^0.284.0"
+  },
+  "scripts": {
+    "build": "tailwind build -i ./src/main.css -o ./dist/output.css",
+    "deploy": "crafthub-cli deploy --env prod"
+  },
+  "crafthub": {
+    "modules": ["smoke", "pour", "pos3"],
+    "intel": "E.A.T. Core v4"
+  }
+}
+                </pre>
+</div>
+</div>
+</section>
+<!-- Operational Pillars (Export Logic Focus) -->
+<section class="mb-16">
+<div class="flex items-center gap-4 mb-8">
+<h3 class="font-headline-lg text-headline-lg gold-text-gradient">Module Connectivity</h3>
+<div class="h-px flex-1 bg-gradient-to-r from-primary/30 to-transparent"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Module 1 -->
+<div class="glass-panel p-6 rounded-2xl border border-outline-variant/20 flex flex-col gap-4 hover:border-primary/40 transition-all group cursor-pointer haptic-press">
+<div class="flex items-center justify-between">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl" data-icon="cable">cable</span>
+</div>
+<span class="text-[10px] font-label-lg text-primary bg-primary/5 px-2 py-1 rounded border border-primary/20">CONNECTED</span>
+</div>
+<div>
+<h4 class="font-headline-md text-xl text-on-surface mb-1">Wiring Manifest</h4>
+<p class="font-body-md text-sm text-on-surface-variant">Global routing hooks for SmokeCraft and PourCraft telemetry.</p>
+</div>
+</div>
+<!-- Module 2 -->
+<div class="glass-panel p-6 rounded-2xl border border-outline-variant/20 flex flex-col gap-4 hover:border-primary/40 transition-all group cursor-pointer haptic-press">
+<div class="flex items-center justify-between">
+<div class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl" data-icon="data_object">data_object</span>
+</div>
+<span class="text-[10px] font-label-lg text-secondary bg-secondary/5 px-2 py-1 rounded border border-secondary/20">VALIDATED</span>
+</div>
+<div>
+<h4 class="font-headline-md text-xl text-on-surface mb-1">E.A.T. Schema</h4>
+<p class="font-body-md text-sm text-on-surface-variant">Intelligent data structures for staff mastery and venue logistics.</p>
+</div>
+</div>
+<!-- Module 3 -->
+<div class="glass-panel p-6 rounded-2xl border border-outline-variant/20 flex flex-col gap-4 hover:border-primary/40 transition-all group cursor-pointer haptic-press">
+<div class="flex items-center justify-between">
+<div class="w-12 h-12 bg-tertiary/10 rounded-lg flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl" data-icon="cloud_sync">cloud_sync</span>
+</div>
+<span class="text-[10px] font-label-lg text-tertiary bg-tertiary/5 px-2 py-1 rounded border border-tertiary/20">READY</span>
+</div>
+<div>
+<h4 class="font-headline-md text-xl text-on-surface mb-1">Cloud Sync logic</h4>
+<p class="font-body-md text-sm text-on-surface-variant">Production endpoints for Passport Networking and POS 3.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Export Action Footer - PRIMARY FOCUS -->
+<div class="py-12 flex flex-col items-center gap-8 relative">
+<div class="absolute inset-0 bg-primary/5 blur-3xl -z-10 rounded-full h-1/2 mt-12"></div>
+<div class="w-full h-px bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent mb-4"></div>
+<div class="text-center space-y-2 mb-2">
+<h3 class="font-headline-md text-on-surface">Ready for Deployment?</h3>
+<p class="font-body-md text-on-surface-variant">Initiate the secure handshake with your production environment.</p>
+</div>
+<button class="w-full max-w-2xl h-[80px] rounded-2xl gold-foil-border bg-gradient-to-r from-primary via-primary-container to-secondary text-on-primary-fixed font-label-lg text-label-lg haptic-press flex items-center justify-center gap-4 shadow-[0_20px_50px_rgba(233,193,118,0.3)] hover:shadow-primary/60 transition-all uppercase tracking-[0.2em] relative group overflow-hidden" id="export-btn">
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-3xl group-hover:animate-bounce" data-icon="publish">publish</span>
+<span class="font-bold">Push Build to GitHub</span>
+</button>
+<div class="flex flex-col items-center gap-3">
+<p class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-2 bg-surface-container-highest/40 px-4 py-2 rounded-full border border-outline-variant/20">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="terminal">terminal</span>
+                Target: <span class="text-primary">main</span> branch / <span class="text-primary">craft-hub-production</span>
+</p>
+<p class="font-label-sm text-[10px] text-on-surface-variant/40 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="lock">lock</span>
+                SECURE END-TO-END ENCRYPTED EXPORT
+            </p>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Bar (Mobile) -->
+<nav class="fixed bottom-0 w-full h-20 flex justify-around items-center px-4 z-50 bg-surface-container-high/90 backdrop-blur-lg border-t border-primary/20 shadow-[0_-8px_32px_rgba(0,0,0,0.5)] md:hidden">
+<div class="flex flex-col items-center justify-center text-primary scale-110 haptic-press">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-label-sm text-[10px]">Wiring</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 haptic-press">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-label-sm text-[10px]">Map</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 haptic-press">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-sm text-[10px]">E.A.T.</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 haptic-press">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-[10px]">Config</span>
+</div>
+</nav>
+<script>
+    // Enhanced micro-interactions for tactile haptic feedback
+    document.querySelectorAll('.haptic-press').forEach(el => {
+        el.addEventListener('pointerdown', () => {
+            if (window.navigator.vibrate) {
+                window.navigator.vibrate(15);
+            }
+        });
+    });
+
+    const exportBtn = document.getElementById('export-btn');
+    exportBtn.addEventListener('click', function() {
+        this.innerHTML = `
+            <span class="material-symbols-outlined text-3xl animate-spin" data-icon="sync">sync</span>
+            <span>PUSHING TO REPO...</span>
+        `;
+        setTimeout(() => {
+            this.innerHTML = `
+                <span class="material-symbols-outlined text-3xl" data-icon="check_circle">check_circle</span>
+                <span>SUCCESSFULLY EXPORTED</span>
+            `;
+            this.classList.remove('from-primary', 'to-secondary');
+            this.classList.add('bg-green-600', 'border-green-400');
+        }, 2000);
+    });
+
+    // Parallax background effect refined
+    document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 20;
+        const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        document.body.style.backgroundPosition = `calc(50% + ${x}px) calc(-20% + ${y}px)`;
+    });
+</script>
+</body></html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmokeCraft Journey - Begin Experience</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#e9c176",
+                      "inverse-primary": "#775a19",
+                      "surface-container-low": "#1b1b1c",
+                      "on-secondary-fixed-variant": "#643f00",
+                      "surface-container-high": "#2a2a2b",
+                      "secondary": "#ffb95a",
+                      "surface-dim": "#131314",
+                      "on-tertiary": "#3c2d28",
+                      "inverse-surface": "#e5e2e3",
+                      "surface-container": "#1f1f20",
+                      "on-secondary-fixed": "#2a1800",
+                      "on-error-container": "#ffdad6",
+                      "on-error": "#690005",
+                      "error": "#ffb4ab",
+                      "primary-fixed": "#ffdea5",
+                      "tertiary-fixed-dim": "#dac1bb",
+                      "tertiary-container": "#b7a09a",
+                      "inverse-on-surface": "#303031",
+                      "on-surface": "#e5e2e3",
+                      "error-container": "#93000a",
+                      "on-secondary": "#462a00",
+                      "tertiary-fixed": "#f7ddd6",
+                      "outline-variant": "#4e4639",
+                      "on-surface-variant": "#d1c5b4",
+                      "primary-fixed-dim": "#e9c176",
+                      "on-background": "#e5e2e3",
+                      "surface": "#131314",
+                      "on-tertiary-fixed-variant": "#54433e",
+                      "surface-container-lowest": "#0e0e0f",
+                      "surface-container-highest": "#353436",
+                      "on-primary-fixed": "#261900",
+                      "background": "#131314",
+                      "primary": "#e9c176",
+                      "primary-container": "#c5a059",
+                      "outline": "#9a8f80",
+                      "on-secondary-container": "#3d2400",
+                      "on-primary-fixed-variant": "#5d4201",
+                      "secondary-fixed-dim": "#ffb95a",
+                      "surface-bright": "#39393a",
+                      "tertiary": "#dac1bb",
+                      "surface-variant": "#353436",
+                      "on-tertiary-fixed": "#261814",
+                      "on-primary-container": "#4e3700",
+                      "on-primary": "#412d00",
+                      "secondary-container": "#c68315",
+                      "secondary-fixed": "#ffddb6",
+                      "on-tertiary-container": "#473733"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max-width": "1440px",
+                      "gutter": "32px",
+                      "unit": "8px",
+                      "card-padding": "24px",
+                      "margin": "64px"
+              },
+              "fontFamily": {
+                      "body-md": ["Montserrat"],
+                      "headline-xl": ["Playfair Display"],
+                      "headline-lg": ["Playfair Display"],
+                      "body-lg": ["Montserrat"],
+                      "label-lg": ["Montserrat"],
+                      "label-sm": ["Montserrat"],
+                      "display-lg": ["Playfair Display"],
+                      "headline-md": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        :root {
+            --titanium: rgba(160, 160, 160, 0.15);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        @keyframes smokeFlow {
+            0% { transform: translate(0, 0) scale(1); opacity: 0; }
+            50% { opacity: 0.05; }
+            100% { transform: translate(10%, -5%) scale(1.2); opacity: 0; }
+        }
+
+        .smoke-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+            filter: blur(80px);
+            animation: smokeFlow 25s infinite linear;
+        }
+
+        .gold-foil-button {
+            background: linear-gradient(135deg, #f3d7a1 0%, #c5a059 50%, #91722d 100%);
+            box-shadow: 0 4px 25px rgba(233, 193, 118, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .gold-foil-button:active {
+            transform: scale(0.96);
+        }
+
+        .glass-panel {
+            background: rgba(19, 19, 20, 0.25);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .parallax-bg {
+            transition: transform 0.1s ease-out;
+        }
+
+        body {
+            min-height: max(884px, 100dvh);
+            background-color: #0c0c0c;
+        }
+
+        /* 72px Touch Target Standard */
+        .touch-target-72 {
+            min-height: 72px;
+            min-width: 72px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background overflow-hidden selection:bg-primary selection:text-on-primary">
+<!-- Cinematic Background -->
+<div class="fixed inset-0 z-0">
+<!-- High-End Background Image Placeholder -->
+<div class="absolute inset-0 parallax-bg scale-110" id="hero-bg">
+<img alt="Luxury Lounge Bokeh" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"/>
+<div class="absolute inset-0 bg-black/30"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-background/50"></div>
+</div>
+<!-- Subtle Smoke Simulation -->
+<div class="smoke-layer" style="animation-delay: 0s;"></div>
+<div class="smoke-layer" style="animation-delay: -7s; left: -50%;"></div>
+</div>
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-black/10 backdrop-blur-[60px] border-b border-white/5">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-white/10 p-2 rounded-full transition-colors touch-target-72 flex items-center justify-center" data-icon="menu">menu</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight" style="text-shadow: 0 2px 8px rgba(0,0,0,0.8);">CraftHub 360</span>
+</div>
+<button class="font-label-lg text-label-lg text-primary dark:text-primary-fixed-dim hover:bg-white/10 px-6 rounded-lg transition-colors duration-300 touch-target-72">
+            Grand Lounge
+        </button>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative z-10 w-full h-screen flex flex-col items-center justify-center px-gutter pt-20">
+<div class="max-w-4xl w-full text-center space-y-12">
+<!-- Branding/Identity -->
+<div class="space-y-4 animate-fade-in-up">
+<div class="flex items-center justify-center gap-4 text-primary">
+<span class="h-[1px] w-12 bg-primary/60"></span>
+<span class="font-label-lg text-label-lg tracking-[0.3em] uppercase font-bold">SmokeCraft</span>
+<span class="h-[1px] w-12 bg-primary/60"></span>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface" style="text-shadow: 0 4px 20px rgba(0,0,0,0.8);">
+                    Your SmokeCraft <span class="italic text-primary">journey</span> begins now.
+                </h1>
+<p class="font-body-lg text-body-lg text-white max-w-2xl mx-auto leading-relaxed font-medium" style="text-shadow: 0 2px 10px rgba(0,0,0,0.9);">
+                    Build your taste profile, earn points, unlock rewards, and compete for the prestigious Golden Box in our exclusive connoisseur ecosystem.
+                </p>
+</div>
+<!-- Action Cluster -->
+<div class="flex flex-col md:flex-row items-center justify-center gap-6 pt-8 animate-fade-in-up" style="animation-delay: 0.2s;">
+<button class="gold-foil-button min-w-[280px] touch-target-72 rounded-full flex items-center justify-center gap-3 px-10 text-on-primary font-bold text-label-lg uppercase tracking-widest">
+<span>Begin Experience</span>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="min-w-[280px] touch-target-72 rounded-full border border-white/30 bg-black/20 backdrop-blur-3xl flex items-center justify-center gap-3 px-10 text-primary font-bold text-label-lg uppercase tracking-widest hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+<span>Back to CraftHub</span>
+</button>
+</div>
+<!-- Features Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-16">
+<div class="glass-panel p-card-padding rounded-2xl text-left space-y-4 group hover:bg-white/5 transition-all duration-500">
+<div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="wine_bar">wine_bar</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Taste Profile</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mt-2">Curate your sensory preferences with our AI sommelier.</p>
+</div>
+</div>
+<div class="glass-panel p-card-padding rounded-2xl text-left space-y-4 group hover:bg-white/5 transition-all duration-500">
+<div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="military_tech">military_tech</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Passport Perks</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mt-2">Earn credits and unlock access to private cellar reserves.</p>
+</div>
+</div>
+<div class="glass-panel p-card-padding rounded-2xl text-left space-y-4 group hover:bg-white/5 transition-all duration-500">
+<div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="workspace_premium">workspace_premium</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Golden Box</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mt-2">The pinnacle of luxury. Compete for the ultimate member award.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-black/10 backdrop-blur-[60px] border-t border-white/5 rounded-t-[32px]">
+<div class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-white/5 rounded-full touch-target-72 px-6 border border-white/10">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-sm text-label-sm font-bold">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 touch-target-72">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 touch-target-72">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 touch-target-72">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-sm text-label-sm">Assistant</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction: Mouse parallax for the background
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.008;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.008;
+            const bg = document.getElementById('hero-bg');
+            if (bg) {
+                bg.style.transform = `scale(1.1) translate(${moveX}px, ${moveY}px)`;
+            }
+        });
+
+        // Simple fade-in sequence
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.animate-fade-in-up');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(24px)';
+                el.style.transition = 'opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1)';
+                
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 400 + (index * 250));
+            });
+        });
+    </script>
+</body></html>

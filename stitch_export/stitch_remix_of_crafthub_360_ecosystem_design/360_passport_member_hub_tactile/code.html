@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE RESERVE | 360 Passport Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#e9c176",
+                    "secondary-container": "#c68315",
+                    "outline": "#9a8f80",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-variant": "#353436",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-primary": "#412d00",
+                    "background": "#131314",
+                    "tertiary-container": "#b7a09a",
+                    "tertiary": "#dac1bb",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-secondary-container": "#3d2400",
+                    "primary-container": "#c5a059",
+                    "secondary": "#ffb95a",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-primary-container": "#4e3700",
+                    "surface": "#131314",
+                    "surface-container": "#1f1f20",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface-dim": "#131314",
+                    "surface-bright": "#39393a",
+                    "error-container": "#93000a",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "on-primary-fixed": "#261900",
+                    "on-tertiary": "#3c2d28",
+                    "on-error": "#690005",
+                    "primary-fixed": "#ffdea5",
+                    "outline-variant": "#4e4639",
+                    "error": "#ffb4ab",
+                    "on-secondary-fixed": "#2a1800",
+                    "surface-container-low": "#1b1b1c",
+                    "on-background": "#e5e2e3",
+                    "on-tertiary-fixed": "#261814",
+                    "on-error-container": "#ffdad6",
+                    "on-surface-variant": "#d1c5b4",
+                    "surface-container-high": "#2a2a2b",
+                    "primary": "#e9c176",
+                    "on-surface": "#e5e2e3",
+                    "on-secondary": "#462a00",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-tertiary-container": "#473733",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "surface-container-highest": "#353436",
+                    "secondary-fixed": "#ffddb6",
+                    "inverse-primary": "#775a19",
+                    "inverse-on-surface": "#303031"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "32px",
+                    "unit": "8px",
+                    "card-padding": "24px",
+                    "margin": "64px",
+                    "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "label-sm": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0e0e0f;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil {
+            background: linear-gradient(135deg, #ffdea5 0%, #e9c176 50%, #c5a059 100%);
+            color: #261900;
+        }
+        .active-glow {
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.2);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 48;
+            font-size: 40px;
+        }
+        .tile-active:active {
+            transform: scale(0.96);
+            filter: brightness(1.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface font-body-md select-none">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky bg-surface/80 backdrop-blur-xl z-50 border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+<div class="flex justify-between items-center h-24 px-gutter max-w-container-max-width mx-auto">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-primary/10 transition-colors p-3 rounded-full active:scale-95 duration-300 ease-out">menu</button>
+</div>
+<h1 class="font-display-lg text-headline-xl tracking-widest uppercase text-primary">THE RESERVE</h1>
+<div class="flex items-center gap-6">
+<div class="text-right hidden md:block">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Master Sommelier</p>
+<p class="font-headline-md text-headline-md text-primary">Julian Vane</p>
+</div>
+<div class="w-14 h-14 rounded-full border-2 border-primary overflow-hidden shadow-lg">
+<img alt="Member Portrait" class="w-full h-full object-cover" data-alt="A sophisticated headshot of a middle-aged man with refined features, wearing a dark bespoke charcoal suit and a crisp white shirt. He has a confident, warm expression suitable for a high-end luxury lounge member. The lighting is dramatic and moody, utilizing high-contrast shadows common in luxury editorial photography. The background is a blurred, warm-toned interior of an upscale private club." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD00NGHulIdeKkVzeXPsl1kcKf_s346rRwc08yDAu24gb8hxbf9D0APawDcFtYun9ACjrpZCbko2DI1je7eOZrG88769AGQPtesZRiUhY_6wMNXpfLMA7P8pg6pKUmxju2J98BpfPgAQRwE4wCUG9tHBZ1j5YzygsKkhGomDKXVcEF2QOP9R6urnuPIr_wCNoHzD8DIlSmLGj3qAk9WE4GAQlXTm8L6KPSdofD-e6_Xtrr8tNmYgkdyLYSskqPzyrnLqUSO7dtkx6w"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-container-max-width mx-auto px-gutter py-12 h-[calc(100vh-196px)] overflow-hidden">
+<!-- Welcome & Status Area -->
+<div class="flex justify-between items-end mb-12">
+<div class="space-y-2">
+<h2 class="font-headline-xl text-headline-xl text-on-surface">Digital Passport Hub</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Access your exclusive benefits, track your tasting journey, and connect with fellow connoisseurs.</p>
+</div>
+<div class="glass-panel rounded-xl px-10 py-6 text-center border-primary/30">
+<p class="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-1">Loyalty Points</p>
+<p class="font-display-lg text-headline-xl text-on-surface font-bold tracking-tight">12,450 <span class="text-primary text-headline-md uppercase font-medium">pts</span></p>
+</div>
+</div>
+<!-- 360 Action Grid (6 Large Tiles) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Tile 1: QR Scan -->
+<button class="tile-active relative group h-64 glass-panel rounded-2xl flex flex-col items-center justify-center gap-6 transition-all duration-500 hover:active-glow overflow-hidden" onclick="simulateAction('QR Scanner Active')">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">qr_code_scanner</span>
+</div>
+<div class="text-center">
+<span class="font-headline-md text-headline-md block mb-1">QR Scan</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Identify Collection Items</span>
+</div>
+</button>
+<!-- Tile 2: Check In (Tactile Gold) -->
+<button class="tile-active relative h-64 gold-foil rounded-2xl flex flex-col items-center justify-center gap-6 shadow-[0_15px_40px_rgba(233,193,118,0.3)] transition-all duration-500 overflow-hidden" onclick="simulateAction('Checked In to Lounge')">
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/leather.png')] opacity-20"></div>
+<div class="w-20 h-20 rounded-full bg-on-primary/10 flex items-center justify-center border border-on-primary/20">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div class="text-center">
+<span class="font-headline-md text-headline-md block mb-1 text-on-primary font-bold">Check In</span>
+<span class="font-label-sm text-label-sm text-on-primary/70 uppercase tracking-widest">Notify Concierge</span>
+</div>
+</button>
+<!-- Tile 3: View Stamps -->
+<button class="tile-active relative group h-64 glass-panel rounded-2xl flex flex-col items-center justify-center gap-6 transition-all duration-500 hover:active-glow overflow-hidden" onclick="simulateAction('Opening Passport Book')">
+<div class="absolute inset-0 bg-gradient-to-bl from-tertiary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">menu_book</span>
+</div>
+<div class="text-center">
+<span class="font-headline-md text-headline-md block mb-1">View Stamps</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">14/25 Regions Visited</span>
+</div>
+</button>
+<!-- Tile 4: Member Match -->
+<button class="tile-active relative group h-64 glass-panel rounded-2xl flex flex-col items-center justify-center gap-6 transition-all duration-500 hover:active-glow overflow-hidden" onclick="simulateAction('Searching for Members')">
+<div class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">diversity_3</span>
+</div>
+<div class="text-center">
+<span class="font-headline-md text-headline-md block mb-1">Member Match</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Connect &amp; Network</span>
+</div>
+<div class="flex -space-x-3 mt-2">
+<img class="w-8 h-8 rounded-full border border-surface" data-alt="Portrait of a professional man in a tailored suit, warm lighting, luxury club atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnuXqE5gwM6X_uS7o7Fzpz_nvkZtq4-0isCWqiuoqnP0y8Ouzr7RBJWA53zgvcYcf6Xsl3IJA6nwL3Ex8QbUpd4_0xY15PAHVsO6rcXIh9IvXantHYKosSm_eZsgVnMOVhsejqS_FA16x0uZz7rv1JGXiHHagI4WfxNi-tmZI-8Yz83pVITyWALiBk0qBewX5IgCoH7Vovn7NiQDKLa44ClJ1onH3E-TPw54S-NWUCcIIZW7hxDzoa-P99CGE54J1CMewiNGvfU8U"/>
+<img class="w-8 h-8 rounded-full border border-surface" data-alt="Portrait of an elegant woman in professional attire, soft cinematic lighting, high-end interior background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtTUOFGpaEqsfpgoODB97kBrTs1KGxr1dBrLDu7VyrrsUYCqu_LvvsxGj_kWpBFzKGBzmlog0Cpu4KghsV1cRnxxHXJGi1_46j8zKFeltZ533u-uJXGNVJXFkhgKl0p1sDuX-UW1CPh28PwJ1AsYb4jL6KO-3A96TKjxreJzfw8ufBJa-Mc97-JDV50M5eioLeV4O-Cqn7wovSFeUptoHjGFaidKA225RrfYtJqPP7sPVdLG4jV1jPPJAXFup0oKEEYBbUeFmix_4"/>
+<img class="w-8 h-8 rounded-full border border-surface" data-alt="Portrait of a sophisticated gentleman, sharp business attire, warm ambient light, premium lounge aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvoBqrW-gpK5H2pxV79vSQ_XzxQkxs8MDzwXBOThGR3zO1mHQzh9wNcaegxdJs9jWhXeUKHqVoq0WuVzsZlS57XhhyAz3drntWgU8UpW0B9yMdk7IocvkuEVd6IyiyqeBGd11Nal7nuAJ0QzubLIv5xS8d-OwlZBt3VcCcXs3M6Ouw7Jb8FtuvuTezdPk_E-ck4jMY45rksaaXM76eZ9EILXZivaKeGJ_iwObBDL7E-Qt7GsxJa-aKTAL-KwcoeuF6vBtrtEsCePw"/>
+<div class="w-8 h-8 rounded-full bg-primary-container text-[10px] flex items-center justify-center border border-surface text-on-primary-container font-bold">+12</div>
+</div>
+</button>
+<!-- Tile 5: Loyalty -->
+<button class="tile-active relative group h-64 glass-panel rounded-2xl flex flex-col items-center justify-center gap-6 transition-all duration-500 hover:active-glow overflow-hidden" onclick="simulateAction('Rewards Catalogue')">
+<div class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">diamond</span>
+</div>
+<div class="text-center">
+<span class="font-headline-md text-headline-md block mb-1">Loyalty</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Redeem Rewards</span>
+</div>
+<div class="w-48 h-1.5 bg-surface-container-highest rounded-full overflow-hidden mt-2">
+<div class="w-3/4 h-full gold-foil rounded-full"></div>
+</div>
+</button>
+<!-- Tile 6: Venue Access -->
+<button class="tile-active relative group h-64 glass-panel rounded-2xl flex flex-col items-center justify-center gap-6 transition-all duration-500 hover:active-glow overflow-hidden" onclick="simulateAction('Access Keys Active')">
+<div class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">nfc</span>
+</div>
+<div class="text-center">
+<span class="font-headline-md text-headline-md block mb-1">Venue Access</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Tap to Open Doors</span>
+</div>
+<div class="px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5">
+<span class="text-[10px] text-primary uppercase font-bold tracking-widest">Signal Strength: Optimal</span>
+</div>
+</button>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full h-[100px] z-50 bg-surface-container-low/90 backdrop-blur-2xl border-t border-primary/20 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
+<div class="flex justify-around items-center w-full max-w-4xl mx-auto h-full">
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-8 py-4 hover:text-primary transition-all duration-500 active:translate-y-1" href="#">
+<span class="material-symbols-outlined">chair</span>
+<span class="font-label-lg text-label-lg tracking-widest uppercase">Lounge</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-8 py-4 hover:text-primary transition-all duration-500 active:translate-y-1" href="#">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-lg text-label-lg tracking-widest uppercase">Humidor</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-8 py-4 hover:text-primary transition-all duration-500 active:translate-y-1" href="#">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-lg text-label-lg tracking-widest uppercase">Cellar</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-primary-fixed-dim bg-primary-container/20 rounded-xl px-8 py-4 shadow-[0_0_15px_rgba(233,193,118,0.3)]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-lg text-label-lg tracking-widest uppercase">Passport</span>
+</a>
+</div>
+</nav>
+<!-- Interactive Feedback Toast -->
+<div class="fixed top-28 left-1/2 -translate-x-1/2 glass-panel border-primary py-4 px-10 rounded-full text-primary font-bold tracking-widest uppercase opacity-0 pointer-events-none transition-all duration-500 z-[100] translate-y-4" id="toast">
+        Action Completed
+    </div>
+<script>
+        function simulateAction(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            
+            // Haptic/Tactile feedback simulation
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(20);
+            }
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 2500);
+        }
+
+        // Add subtle mouse-parallax effect for kiosks with mouse/trackball
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.005;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.005;
+            document.querySelectorAll('.tile-active').forEach(tile => {
+                tile.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+    </script>
+</body></html>

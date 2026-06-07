@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Grand Humidor | Reorder Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-foil-border {
+            border: 1px solid rgba(233, 193, 118, 0.3);
+        }
+        .amber-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        .wood-texture {
+            background-color: #131314;
+            background-image: url("https://www.transparenttextures.com/patterns/dark-wood.png");
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #131314;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4e4639;
+            border-radius: 4px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#3d2400",
+                        "on-background": "#e5e2e3",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#2a2a2b",
+                        "tertiary": "#dac1bb",
+                        "surface": "#131314",
+                        "outline": "#9a8f80",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-container": "#1f1f20",
+                        "primary": "#e9c176",
+                        "outline-variant": "#4e4639",
+                        "on-primary-container": "#4e3700",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed": "#ffdea5",
+                        "secondary-fixed": "#ffddb6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary": "#3c2d28",
+                        "on-tertiary-fixed": "#261814",
+                        "surface-tint": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "background": "#131314",
+                        "on-primary-fixed": "#261900",
+                        "surface-variant": "#353436",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "secondary": "#ffb95a",
+                        "secondary-container": "#c68315",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-primary": "#412d00",
+                        "tertiary-container": "#b7a09a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-tertiary-container": "#473733",
+                        "surface-container-highest": "#353436",
+                        "inverse-surface": "#e5e2e3",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-secondary": "#462a00",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-bright": "#39393a",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-surface": "#e5e2e3",
+                        "surface-dim": "#131314"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "card-padding": "24px",
+                        "unit": "8px",
+                        "margin": "64px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="wood-texture text-on-background min-h-screen pb-32">
+<!-- Top Navigation -->
+<header class="bg-background/80 backdrop-blur-xl text-primary docked full-width top-0 border-b border-outline-variant/30 shadow-sm transition-all duration-300 ease-in-out flex justify-between items-center px-64 h-24 sticky z-50">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full gold-foil-border overflow-hidden bg-surface-container">
+<img alt="Staff member profile" data-alt="A professional headshot of a distinguished head sommelier in a dark tailored suit, set against the warm, amber-lit interior of a luxury wine cellar. The lighting is moody and sophisticated, highlighting the tactile textures of wood and glass. The overall aesthetic is one of exclusive, high-end hospitality and expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWJOrKG0K0Bnq6gv_1snKdx8lLHmOAOKxDSfQoqooJLK-JXwHrNVil4Z6B6-J9O1L1M7mHVC1ouNfphMUoztmMoxXJtyz5r9rRTUlg54SV8gRIcRgQaDkdeYgw_QNxzMGDHJBtPP8I9ku6yJhFV4NX3TNk8GPoUvcwPBmHEdBNEnc24lHuHveobNT2ZhXhyZCwKOEVzMmRgW1rfC2SfaV5FRsUQlS953-P-RG1Ke2VFOFtonDFOl1jZ33m4lBge1cGJ82tfD4SWro"/>
+</div>
+<h1 class="font-display-lg text-headline-md text-primary tracking-tighter">The Grand Humidor</h1>
+</div>
+<nav class="hidden md:flex items-center gap-12">
+<a class="text-primary font-bold font-label-lg transition-colors" href="#">Inventory</a>
+<a class="text-on-surface-variant font-label-lg hover:text-primary transition-colors" href="#">Floor Plan</a>
+<a class="text-on-surface-variant font-label-lg hover:text-primary transition-colors" href="#">Insights</a>
+<a class="text-on-surface-variant font-label-lg hover:text-primary transition-colors" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">search</button>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto px-margin pt-12">
+<!-- Dashboard Header -->
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
+<div class="space-y-2">
+<p class="font-label-lg text-primary uppercase tracking-widest">Procurement &amp; Stock</p>
+<h2 class="font-headline-xl text-headline-xl">Reorder Needed</h2>
+<p class="font-body-md text-on-surface-variant max-w-xl">High-priority replenishment items based on live floor sales and projected member demand.</p>
+</div>
+<div class="flex gap-4">
+<div class="glass-panel px-6 py-4 rounded-xl gold-foil-border">
+<p class="font-label-sm text-on-surface-variant">Est. Revenue Impact</p>
+<p class="font-headline-md text-error text-2xl">-$12,450</p>
+</div>
+<div class="glass-panel px-6 py-4 rounded-xl gold-foil-border">
+<p class="font-label-sm text-on-surface-variant">Critical Items</p>
+<p class="font-headline-md text-primary text-2xl">08</p>
+</div>
+</div>
+</div>
+<!-- Inventory Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Item Card 1: Critical (Red) -->
+<div class="glass-panel rounded-xl overflow-hidden amber-glow transition-all duration-500 flex flex-col md:flex-row group border-l-4 border-l-error">
+<div class="w-full md:w-2/5 h-64 md:h-auto relative overflow-hidden">
+<img alt="Dominican Cigars" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" data-alt="Close-up macro photography of premium Dominican cigars resting on a rich mahogany surface. The lighting mimics a warm sunset, creating deep amber shadows and highlighting the delicate oily texture of the tobacco leaf. The composition is elegant and high-end, evoking the atmosphere of a private lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASqpDruo83h84DFiYGgk2P_nZlMa3N3MS0dpgo61MeViY4GQ6gTE1XTyenX6BijaUSu4F1yVj95CfAB75PIkKtobfGQFKG8dfjd0L8-uHJUio_pjyVWcbYVsLdU6Urdg_qMin_OHf9Fqn_ps-61_xfhzPH4DSHaD94Pe2Ar1xy3dS4imJyHUcMYE-HJIv1t8q8s7KVuHp-qBYDB3btxsEya6wHDXHS-xInV2ePU-WnT-NC7C_enZDE6rvpODNKODglVyVIHIBpwks"/>
+<div class="absolute top-4 left-4">
+<span class="bg-error/90 text-on-error px-3 py-1 rounded font-label-sm backdrop-blur-md">CRITICAL</span>
+</div>
+</div>
+<div class="p-card-padding flex-1 flex flex-col justify-between space-y-6">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-on-background">Arturo Fuente OpusX</h3>
+<span class="font-label-sm bg-surface-variant px-3 py-1 rounded text-on-surface-variant">Floor: Humidor A</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-6">
+<div>
+<p class="font-label-sm text-on-surface-variant">Stock Level</p>
+<p class="text-xl font-headline-md"><span class="text-error">12</span> / 120</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant">Demand Trend</p>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+<span class="font-label-lg">HIGH</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/20">
+<div class="flex justify-between items-center mb-6">
+<p class="font-label-sm text-on-surface-variant">Missed Sales Impact</p>
+<p class="font-body-md text-error">-$4,200 / week</p>
+</div>
+<button class="w-full bg-primary py-4 px-6 rounded-lg text-on-primary font-label-lg hover:bg-primary-container transition-all flex justify-center items-center gap-3">
+                            CREATE PURCHASE ORDER
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item Card 2: Warning (Amber) -->
+<div class="glass-panel rounded-xl overflow-hidden amber-glow transition-all duration-500 flex flex-col md:flex-row group border-l-4 border-l-secondary">
+<div class="w-full md:w-2/5 h-64 md:h-auto relative overflow-hidden">
+<img alt="Small Batch Bourbon" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" data-alt="A bottle of rare aged bourbon being poured into a crystal tumbler, capturing the liquid's rich golden-amber hue and the refractive brilliance of the glass. The background is a blurred, dark library with leather-bound books, suggesting an environment of quiet luxury and intellectual pursuit. The lighting is warm and directional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsgt-k1bld-3ZJs95nDBzQCSKjJPOwMEH8uewGSXn_8UsANh9m4dh6aPQzLDqr931vtIZJvSfHsZfE0mnGHbS5yaRiC-DEhDSisvtFPjgay5ZIViD2FYloLV9PNnQykOZhE1EAsiBEiUJSU3a1QSYfuaFedziaEDaGbWpBe5KuHvUbCL6VAPdiVXkyDctLpg0VEg1UNl_nAcQewMFSd0tREWV2vR_x4Jmiuc-LvaBxhUSdmqg6Mj-LToP5NKgiDQQ3auy-FZN5_yE"/>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary/90 text-on-secondary px-3 py-1 rounded font-label-sm backdrop-blur-md">REORDER SOON</span>
+</div>
+</div>
+<div class="p-card-padding flex-1 flex flex-col justify-between space-y-6">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-on-background">Pappy Van Winkle 15yr</h3>
+<span class="font-label-sm bg-surface-variant px-3 py-1 rounded text-on-surface-variant">Floor: Bar Display</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-6">
+<div>
+<p class="font-label-sm text-on-surface-variant">Stock Level</p>
+<p class="text-xl font-headline-md"><span class="text-secondary">4</span> / 12 units</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant">Demand Trend</p>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined">trending_flat</span>
+<span class="font-label-lg">STABLE</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/20">
+<div class="flex justify-between items-center mb-6">
+<p class="font-label-sm text-on-surface-variant">Missed Sales Impact</p>
+<p class="font-body-md text-secondary">-$2,850 / week</p>
+</div>
+<button class="w-full bg-primary py-4 px-6 rounded-lg text-on-primary font-label-lg hover:bg-primary-container transition-all flex justify-center items-center gap-3">
+                            CREATE PURCHASE ORDER
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item Card 3: Critical (Red) -->
+<div class="glass-panel rounded-xl overflow-hidden amber-glow transition-all duration-500 flex flex-col md:flex-row group border-l-4 border-l-error">
+<div class="w-full md:w-2/5 h-64 md:h-auto relative overflow-hidden">
+<img alt="Vintage Red Wine" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" data-alt="Exquisite crystal wine glasses filled with deep red Bordeaux, reflecting the soft candlelight of a high-end restaurant. The setting is intimate and opulent, with dark wood paneling and velvet accents in the background. Every detail is rendered with crisp clarity and a rich, moody color palette of crimsons and blacks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0AeORVQZOf3XAT7V0VBP-egFyoNmWhJrWywBXpRPObjTGgUrCCjphhEOae0gonuFA4K3t6rWIrx1V1ZNTy5_fGU0G3x0TEl0ThU71aFID0Vy40YJop8dhkugP-_pnLIPzB-s509vSHs0wXUq_0sesX30k4LzC90zZDdo9e3UmWostshGDk8ELzIDWPvWfMcZ639IwkxinTUrLqFtRr7c7Iye3vrHTHFvVlbe7LEXhyaQVvF0BIwfxMWNl-XN1x1jpstnaHbEdijU"/>
+<div class="absolute top-4 left-4">
+<span class="bg-error/90 text-on-error px-3 py-1 rounded font-label-sm backdrop-blur-md">STOCK OUT</span>
+</div>
+</div>
+<div class="p-card-padding flex-1 flex flex-col justify-between space-y-6">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-on-background">Château Margaux 2015</h3>
+<span class="font-label-sm bg-surface-variant px-3 py-1 rounded text-on-surface-variant">Floor: Private Cellar</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-6">
+<div>
+<p class="font-label-sm text-on-surface-variant">Stock Level</p>
+<p class="text-xl font-headline-md"><span class="text-error">0</span> / 24 bottles</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant">Demand Trend</p>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+<span class="font-label-lg">ELITE</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/20">
+<div class="flex justify-between items-center mb-6">
+<p class="font-label-sm text-on-surface-variant">Missed Sales Impact</p>
+<p class="font-body-md text-error">-$5,400 / week</p>
+</div>
+<button class="w-full bg-primary py-4 px-6 rounded-lg text-on-primary font-label-lg hover:bg-primary-container transition-all flex justify-center items-center gap-3">
+                            CREATE PURCHASE ORDER
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item Card 4: Warning (Amber) -->
+<div class="glass-panel rounded-xl overflow-hidden amber-glow transition-all duration-500 flex flex-col md:flex-row group border-l-4 border-l-secondary">
+<div class="w-full md:w-2/5 h-64 md:h-auto relative overflow-hidden">
+<img alt="Accessories" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" data-alt="A collection of handmade cedar humidors and smoking accessories displayed on a polished dark wood table. The scene is illuminated by warm, spotlight-like lighting that emphasizes the rich wood grains and the metallic sheen of brass cutters and lighters. The aesthetic is masculine, refined, and deeply luxurious." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-HHQjQMh-9dQqxKmL37S1Fn-KevjOlH95H9STM6QwHw5zmeTCQ9zkEkfUEcsn7hFHL1iBzqQ4EPltW9KSwJ1gbT_VF1FHw8gP8TFDOMwGz67KLMU6ReysrxrCaAlYtnrzvHEYOfATp3YfGOW--_qA53STyUWegPTCqaHsp5RvlELsacMooY46pf6l5iN2B7GzSt1YbW4KtW8Bu1Mw-GZCj44o91vOuBwDHc4v6-d0-FBL9cSYnNAylBjBzSegMqz2nwPVo7PZ7gY"/>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary/90 text-on-secondary px-3 py-1 rounded font-label-sm backdrop-blur-md">REORDER SOON</span>
+</div>
+</div>
+<div class="p-card-padding flex-1 flex flex-col justify-between space-y-6">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-on-background">S.T. Dupont Ligne 2</h3>
+<span class="font-label-sm bg-surface-variant px-3 py-1 rounded text-on-surface-variant">Floor: Retail Wing</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-6">
+<div>
+<p class="font-label-sm text-on-surface-variant">Stock Level</p>
+<p class="text-xl font-headline-md"><span class="text-secondary">2</span> / 10 units</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant">Demand Trend</p>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined">trending_down</span>
+<span class="font-label-lg">LOW</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/20">
+<div class="flex justify-between items-center mb-6">
+<p class="font-label-sm text-on-surface-variant">Missed Sales Impact</p>
+<p class="font-body-md text-secondary">-$1,100 / week</p>
+</div>
+<button class="w-full bg-primary py-4 px-6 rounded-lg text-on-primary font-label-lg hover:bg-primary-container transition-all flex justify-center items-center gap-3">
+                            CREATE PURCHASE ORDER
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-all scale-105 active:scale-95">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-sm">POS 3</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-all scale-105 active:scale-95">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] transition-all scale-105 active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-sm">Inventory</span>
+</div>
+</nav>
+<!-- Mobile Navigation Drawer (Hidden by default) -->
+<div class="fixed left-0 top-0 h-screen w-80 z-40 bg-surface-container-low border-r border-outline-variant/20 shadow-2xl rounded-r-xl transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden" id="side-drawer">
+<div class="p-8">
+<div class="flex flex-col items-start gap-4 mb-12">
+<div class="w-16 h-16 rounded-xl overflow-hidden gold-foil-border">
+<img alt="Julian Vane" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHUWTWfQx9CmxRa4Ig0W5lH4aQCzAiLgOyr0RUuYS61cgG1rascWoro1BCwqwxsyEO4zNiXc-MwnqMexmeMMHsCsieGc3OBU5v-47LXxn3bbg4bBIXk6ZHneK3ewaYOKg-ROyWKjxbS_G6ANSYm_rXetKDYCaUKN4_4X5YhhJvWBd_kpTQauCOTDL0NnaFSYjVedGs9ceyXLAPOhs7TvtJIdWLcDWUuOnPwvir_3S8pu_Z7XHqdVYimp722ySlJ5KaMnwd8jV8UTA"/>
+</div>
+<div>
+<h4 class="font-headline-lg text-primary">Julian Vane</h4>
+<p class="font-label-sm text-on-surface-variant">Head Sommelier</p>
+</div>
+</div>
+<ul class="space-y-4">
+<li class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all flex items-center gap-4">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-lg">Floor Plan</span>
+</li>
+<li class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all flex items-center gap-4">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg">Live Map</span>
+</li>
+<li class="bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 transition-all flex items-center gap-4">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-lg">Insights</span>
+</li>
+<li class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all flex items-center gap-4">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg">Settings</span>
+</li>
+</ul>
+</div>
+</div>
+<script>
+        // Micro-interactions and atmospheric effects
+        document.querySelectorAll('.glass-panel').forEach(panel => {
+            panel.addEventListener('mousemove', (e) => {
+                const rect = panel.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                panel.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(233, 193, 118, 0.05) 0%, rgba(31, 31, 32, 0.7) 70%)`;
+            });
+            
+            panel.addEventListener('mouseleave', () => {
+                panel.style.background = 'rgba(31, 31, 32, 0.7)';
+            });
+        });
+
+        // Floating Action Button logic if needed
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.style.transform = 'scale(0.95)');
+            btn.addEventListener('mouseup', () => btn.style.transform = 'scale(1)');
+        });
+    </script>
+</body></html>

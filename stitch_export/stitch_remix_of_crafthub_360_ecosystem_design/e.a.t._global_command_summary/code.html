@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E.A.T. Intelligence | Command Summary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#141313",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "on-tertiary": "#313030",
+                      "on-primary-container": "#554300",
+                      "on-surface-variant": "#d0c5af",
+                      "secondary-fixed": "#e3e2e2",
+                      "primary-fixed-dim": "#e9c349",
+                      "surface-bright": "#3a3939",
+                      "tertiary": "#d0cecd",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "surface-dim": "#141313",
+                      "on-tertiary-fixed-variant": "#474646",
+                      "on-error-container": "#ffdad6",
+                      "inverse-primary": "#735c00",
+                      "error": "#ffb4ab",
+                      "surface-container-low": "#1c1b1b",
+                      "on-error": "#690005",
+                      "surface-container-lowest": "#0e0e0e",
+                      "on-primary": "#3c2f00",
+                      "tertiary-fixed-dim": "#c8c6c5",
+                      "on-secondary-fixed-variant": "#464747",
+                      "on-primary-fixed-variant": "#574500",
+                      "tertiary-container": "#b5b2b2",
+                      "primary-container": "#d4af37",
+                      "on-secondary": "#303031",
+                      "outline-variant": "#4d4635",
+                      "outline": "#99907c",
+                      "tertiary-fixed": "#e5e2e1",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "inverse-surface": "#e5e2e1",
+                      "primary": "#f2ca50",
+                      "on-primary-fixed": "#241a00",
+                      "surface-variant": "#353434",
+                      "on-tertiary-container": "#454545",
+                      "error-container": "#93000a",
+                      "primary-fixed": "#ffe088",
+                      "surface-tint": "#e9c349",
+                      "inverse-on-surface": "#313030",
+                      "background": "#141313",
+                      "secondary": "#c7c6c6",
+                      "surface-container-highest": "#353434",
+                      "on-surface": "#e5e2e1",
+                      "on-background": "#e5e2e1",
+                      "on-secondary-container": "#b6b5b5",
+                      "secondary-container": "#464747",
+                      "surface-container": "#201f1f",
+                      "surface-container-high": "#2a2a2a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "24px",
+                      "margin-desktop": "40px",
+                      "margin-mobile": "16px",
+                      "container-padding": "20px"
+              },
+              "fontFamily": {
+                      "label-caps": ["JetBrains Mono"],
+                      "telemetry-data": ["JetBrains Mono"],
+                      "display-lg": ["Hanken Grotesk"],
+                      "body-sm": ["Geist"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "body-md": ["Geist"],
+                      "headline-lg-mobile": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                      "telemetry-data": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { background-color: #010101; color: #e5e2e1; }
+        .glass-card {
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, transparent 50%, rgba(212, 175, 55, 0.05) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .pulse-gold {
+            box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+        .gauge-ring {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 70;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #010101; }
+        ::-webkit-scrollbar-thumb { background: #313030; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-body-md overflow-x-hidden selection:bg-primary/30">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/60 backdrop-blur-xl border-b border-on-tertiary-fixed-variant/30 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center overflow-hidden">
+<img alt="Founder" class="w-full h-full object-cover" data-alt="A close-up, high-detail portrait of an executive leader in a dark, professional setting. The lighting is dramatic and moody, utilizing high-contrast shadows and warm amber highlights that match a luxury obsidian aesthetic. The subject has a confident, authoritative expression. The background is a blurred, futuristic command center with faint golden data holographic elements, reinforcing a mission-critical, Founder Level 0 atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiRoC9U6ifW2V2KhiBv-4_M5P0vhgH2fTmACbYz1OVnce6EWsNko060Ugt3BSDMgKAx4N30pIsk7QkLVi95JhQY3fKlnm4H2HUeHDKyGw0bWOXWMHNDFx0FC3ZHjuI194nq1OMliL6Y-L1F5giCCn8Z5MGBiqi75EOtWJgg4Gxwu0xM9dfk52BndegI6vqDOVrYQ5mLHa59KVVw4XQs_j6BlnqHJglhQr5J2IFAfqwcpBJm6WCQA3TsIHmE3sXnvTB3tPJ1Sk8L_k"/>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">NOVEE OS</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="text-primary font-bold font-label-caps text-label-caps" href="#">Environment</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-caps text-label-caps" href="#">Assets</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-caps text-label-caps" href="#">Transactions</a>
+</nav>
+<span class="material-symbols-outlined text-primary active:scale-95 transition-transform cursor-pointer" data-icon="sensors">sensors</span>
+</div>
+</header>
+<!-- Side Navigation (Desktop Only) -->
+<aside class="fixed left-0 top-20 h-[calc(100vh-80px)] w-80 border-r border-on-tertiary-fixed-variant/20 bg-surface-container-lowest/80 backdrop-blur-2xl hidden md:flex flex-col py-8 z-40">
+<div class="px-8 mb-10">
+<p class="font-label-caps text-label-caps text-primary mb-1">FOUNDER L0</p>
+<p class="text-on-surface-variant text-xs opacity-70">SYS_ID: 8824-X</p>
+<p class="text-on-surface-variant text-sm mt-4 font-medium italic">"Mission Critical Status: Nominal"</p>
+</div>
+<nav class="flex-1 divide-y divide-on-tertiary-fixed-variant/10">
+<div class="py-4">
+<a class="flex items-center gap-4 px-8 py-4 bg-primary-container/20 text-primary border-r-2 border-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="language">language</span>
+<span class="font-label-caps text-label-caps">System Health</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-on-surface-variant hover:bg-surface-bright/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-caps text-label-caps">Assets</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-on-surface-variant hover:bg-surface-bright/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-caps text-label-caps">Transactions</span>
+</a>
+<a class="flex items-center gap-4 px-8 py-4 text-on-surface-variant hover:bg-surface-bright/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="pulse_alert">pulse_alert</span>
+<span class="font-label-caps text-label-caps">Network</span>
+</a>
+</div>
+</nav>
+<div class="px-8 mt-auto">
+<div class="p-4 rounded-xl bg-primary/5 border border-primary/20">
+<p class="text-[10px] text-primary/60 font-label-caps mb-2">ENCRYPTION PROTOCOL</p>
+<div class="flex gap-1">
+<div class="h-1 w-full bg-primary"></div>
+<div class="h-1 w-full bg-primary"></div>
+<div class="h-1 w-full bg-primary/20"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-32 pb-24 md:pb-12 px-margin-mobile md:pl-[340px] md:pr-margin-desktop min-h-screen">
+<!-- Hero Summary Section -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-10">
+<!-- Global Ecosystem Status -->
+<div class="lg:col-span-8 glass-card rounded-xl p-8 flex flex-col justify-between min-h-[320px]">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-caps text-label-caps text-primary bg-primary/10 px-3 py-1 rounded-full">LIVE TELEMETRY</span>
+<h2 class="font-headline-lg text-headline-lg mt-4">Global Ecosystem Status</h2>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-primary pulse-gold"></div>
+<span class="font-telemetry-data text-primary">OPERATIONAL</span>
+</div>
+</div>
+<div class="mt-12 flex flex-wrap gap-12">
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs font-label-caps opacity-60 mb-2">SYNC RATE</span>
+<span class="font-telemetry-data text-3xl">99.98<span class="text-primary text-sm ml-1">%</span></span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs font-label-caps opacity-60 mb-2">LATENCY (GLOBAL)</span>
+<span class="font-telemetry-data text-3xl">14<span class="text-primary text-sm ml-1">MS</span></span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs font-label-caps opacity-60 mb-2">ACTIVE NODES</span>
+<span class="font-telemetry-data text-3xl">4,281</span>
+</div>
+</div>
+<div class="mt-8 h-24 w-full relative overflow-hidden flex items-end gap-1">
+<!-- Sparkline Visualization -->
+<div class="flex-1 bg-primary/20 h-8 rounded-t-sm transition-all duration-500 hover:h-12"></div>
+<div class="flex-1 bg-primary/10 h-12 rounded-t-sm transition-all duration-500 hover:h-16"></div>
+<div class="flex-1 bg-primary/30 h-10 rounded-t-sm transition-all duration-500 hover:h-14"></div>
+<div class="flex-1 bg-primary/20 h-16 rounded-t-sm transition-all duration-500 hover:h-20"></div>
+<div class="flex-1 bg-primary/40 h-14 rounded-t-sm transition-all duration-500 hover:h-18"></div>
+<div class="flex-1 bg-primary/50 h-20 rounded-t-sm transition-all duration-500 hover:h-24"></div>
+<div class="flex-1 bg-primary/30 h-12 rounded-t-sm transition-all duration-500 hover:h-16"></div>
+</div>
+</div>
+<!-- Revenue Target Progress -->
+<div class="lg:col-span-4 glass-card rounded-xl p-8 flex flex-col items-center justify-center text-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-6">REVENUE TARGET PROGRESS</span>
+<div class="relative w-48 h-48 mb-6">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-on-tertiary-fixed-variant/20" cx="96" cy="96" fill="transparent" r="90" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary gauge-ring shadow-[0_0_15px_rgba(212,175,55,0.4)]" cx="96" cy="96" fill="transparent" r="90" stroke="currentColor" stroke-dasharray="565" stroke-dashoffset="141" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-telemetry-data text-4xl">75%</span>
+<span class="text-[10px] font-label-caps text-on-surface-variant opacity-60">Q4 GOAL</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-2xl font-telemetry-data text-on-surface">$12.4M</span>
+<span class="text-xs text-primary font-label-caps">+$1.2M THIS WEEK</span>
+</div>
+</div>
+</section>
+<!-- Command Summary Grid (Bento Style) -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Pillar 1: Environment -->
+<div class="glass-card rounded-xl p-6 group cursor-pointer transition-all hover:translate-y-[-4px]">
+<div class="flex items-center justify-between mb-8">
+<div class="w-12 h-12 rounded-lg bg-surface-bright flex items-center justify-center border border-on-tertiary-fixed-variant/20">
+<span class="material-symbols-outlined text-primary" data-icon="language">language</span>
+</div>
+<span class="text-[10px] font-label-caps text-primary px-2 py-1 border border-primary/20 rounded">PILLAR 01</span>
+</div>
+<h3 class="text-xl font-headline-lg mb-2">Environment</h3>
+<p class="text-sm text-on-surface-variant/70 mb-6">Global spatial monitoring and logistics integrity.</p>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-xs">
+<span class="font-label-caps opacity-60">STABILITY</span>
+<span class="font-telemetry-data text-primary">OPTIMAL</span>
+</div>
+<div class="h-1 w-full bg-surface-bright rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[92%]"></div>
+</div>
+</div>
+</div>
+<!-- Pillar 2: Assets -->
+<div class="glass-card rounded-xl p-6 group cursor-pointer transition-all hover:translate-y-[-4px]">
+<div class="flex items-center justify-between mb-8">
+<div class="w-12 h-12 rounded-lg bg-surface-bright flex items-center justify-center border border-on-tertiary-fixed-variant/20">
+<span class="material-symbols-outlined text-primary" data-icon="inventory_2">inventory_2</span>
+</div>
+<span class="text-[10px] font-label-caps text-primary px-2 py-1 border border-primary/20 rounded">PILLAR 02</span>
+</div>
+<h3 class="text-xl font-headline-lg mb-2">Active Guest Count</h3>
+<p class="text-sm text-on-surface-variant/70 mb-6">Real-time attendance across all premium hubs.</p>
+<div class="flex items-end gap-2">
+<span class="text-4xl font-telemetry-data">1,842</span>
+<span class="material-symbols-outlined text-green-500 text-sm mb-1" data-icon="trending_up">trending_up</span>
+<span class="text-[10px] font-label-caps text-green-500 mb-1">+12%</span>
+</div>
+</div>
+<!-- Pillar 3: Transactions -->
+<div class="glass-card rounded-xl p-6 group cursor-pointer transition-all hover:translate-y-[-4px]">
+<div class="flex items-center justify-between mb-8">
+<div class="w-12 h-12 rounded-lg bg-surface-bright flex items-center justify-center border border-on-tertiary-fixed-variant/20">
+<span class="material-symbols-outlined text-primary" data-icon="payments">payments</span>
+</div>
+<span class="text-[10px] font-label-caps text-primary px-2 py-1 border border-primary/20 rounded">PILLAR 03</span>
+</div>
+<h3 class="text-xl font-headline-lg mb-2">Transactions</h3>
+<p class="text-sm text-on-surface-variant/70 mb-6">Encrypted ledger of high-value system exchanges.</p>
+<div class="divide-y divide-on-tertiary-fixed-variant/10">
+<div class="py-2 flex justify-between items-center">
+<span class="text-[10px] font-label-caps opacity-50">#TX_9901</span>
+<span class="text-[10px] font-telemetry-data text-primary">$450.00</span>
+</div>
+<div class="py-2 flex justify-between items-center">
+<span class="text-[10px] font-label-caps opacity-50">#TX_9900</span>
+<span class="text-[10px] font-telemetry-data text-primary">$1,280.00</span>
+</div>
+</div>
+</div>
+<!-- Full Width Telemetry Image -->
+<div class="lg:col-span-3 h-64 glass-card rounded-xl relative overflow-hidden group">
+<img alt="System Visualization" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" data-alt="A futuristic, high-tech digital interface displaying complex planetary data and network nodes in a minimalist, luxury aesthetic. The color palette is dominated by deep obsidian blacks, muted charcoal grays, and glowing warm gold accents. The scene conveys a sense of global intelligence and absolute control, with sleek typography and semi-transparent glass-like layers overlapping a dark, sophisticated digital world map." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm83LGTKgeAFMy8U4s7pv-9UtV5MXBwzBuaL671o8-rtcdS1MzikX9zJAiqt1FSVE2vjZ13ZkgZN4bg1kd3fskYzJt8ZQjsm8d2OVywettcDVhX9mt-Iii1JFh8E_P1yqHNWFXWaIQFYELqZnPHZwy2jUDm2QbJ6_mfgw7MDgB_ApjjWDaW2RSR38pYlgRbl-gGNOwzqnaENSaAkY8M9oRpQfhxHiD5vzSS5926GaFnGU6O2G9EcIATv2RL6HtiVGMMWndPbVYE3w"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-6 left-6">
+<p class="font-label-caps text-label-caps text-primary">SATELLITE DOWNLINK</p>
+<h4 class="text-lg font-headline-lg">Region: North Atlantic Sector</h4>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full h-16 bg-surface-dim/70 backdrop-blur-lg border-t border-on-tertiary-fixed-variant/30 flex justify-around items-center px-4 z-50">
+<a class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="public">public</span>
+<span class="font-label-caps text-[10px]">Environment</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60" href="#">
+<span class="material-symbols-outlined" data-icon="package_2">package_2</span>
+<span class="font-label-caps text-[10px]">Assets</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-caps text-[10px]">Wallet</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for radial gauge
+        document.addEventListener('DOMContentLoaded', () => {
+            const gauge = document.querySelector('.gauge-ring');
+            if (gauge) {
+                // Animate to 75% (75% of 565 is 141 dashoffset)
+                setTimeout(() => {
+                    gauge.style.strokeDashoffset = '141';
+                }, 500);
+            }
+
+            // Simple haptic-simulating click response
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                card.addEventListener('mousedown', () => {
+                    card.style.transform = 'scale(0.98) translateY(2px)';
+                    card.style.transition = 'transform 0.1s ease';
+                });
+                card.addEventListener('mouseup', () => {
+                    card.style.transform = '';
+                });
+            });
+        });
+    </script>
+</body></html>

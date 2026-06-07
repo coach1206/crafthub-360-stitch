@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>POS 3 Integration Review | CraftHub 360</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#3d2400",
+                        "surface-tint": "#e9c176",
+                        "outline-variant": "#4e4639",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "inverse-on-surface": "#303031",
+                        "inverse-primary": "#775a19",
+                        "surface-dim": "#131314",
+                        "on-tertiary": "#3c2d28",
+                        "background": "#131314",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-container": "#1f1f20",
+                        "surface-bright": "#39393a",
+                        "secondary": "#ffb95a",
+                        "on-background": "#e5e2e3",
+                        "on-tertiary-container": "#473733",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-surface-variant": "#d1c5b4",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-container": "#c5a059",
+                        "error": "#ffb4ab",
+                        "tertiary": "#dac1bb",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "surface-container-high": "#2a2a2b",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "inverse-surface": "#e5e2e3",
+                        "on-tertiary-fixed": "#261814",
+                        "on-primary-container": "#4e3700",
+                        "surface-container-low": "#1b1b1c",
+                        "tertiary-container": "#b7a09a",
+                        "surface-container-highest": "#353436",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-surface": "#e5e2e3",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "primary-fixed": "#ffdea5",
+                        "surface": "#131314",
+                        "surface-variant": "#353436",
+                        "on-secondary": "#462a00",
+                        "secondary-container": "#c68315",
+                        "primary": "#e9c176",
+                        "on-primary-fixed": "#261900",
+                        "outline": "#9a8f80",
+                        "on-primary": "#412d00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "card-padding": "24px",
+                        "margin": "64px",
+                        "unit": "8px",
+                        "gutter": "32px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background-image: linear-gradient(#1f1f20, #1f1f20), linear-gradient(to right, #e9c176, #412d00);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e9c176;
+            border-radius: 10px;
+        }
+        .leather-texture {
+            background-image: url('https://www.transparenttextures.com/patterns/black-leather.png');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-body-md leather-texture">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(233,193,118,0.1)] flex items-center justify-between px-margin h-20 z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">hub</span>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter">CraftHub 360 Orchestration</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<a class="font-label-lg text-label-lg text-primary" href="#">Orchestration</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="#">Connectivity</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="#">Inventory</a>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center overflow-hidden">
+<img alt="Member Profile" class="w-full h-full object-cover" data-alt="A high-end studio portrait of a sophisticated male club member in a tailored charcoal suit, positioned in a luxury lounge with warm amber lighting. The atmosphere is exclusive and polished, reflecting a premium members-only aesthetic with soft bokeh backgrounds and rich textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOyGiG9RKwf-r8J-4o7d2DPuXmT769f_6pUEzWNFsls7R_qXLEg14u4ARe9jtdV2a2883iSR_TSMJBLQmsvtg68yLzJZJKiLqcFdr-TRxvltW_5YQ4Rqn91nDOFTQiElszETj5zWQYdOuzKEqi7dYDcv_wTnkfNat-lEAx1zS73EBLWQK59n2UqPNYzq4nI_uQh9Iniss0JHNwYZ-KZchyh7-ufebdFmICmnLcTdKucMiC8P8gm4D8qnZn2gNHN2IW51OS05K1nY8"/>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer (Sidebar) -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col py-8 w-80 bg-surface-container-lowest/95 backdrop-blur-2xl border-r border-outline-variant/20 shadow-2xl mt-20 hidden md:flex">
+<div class="px-6 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Command Center</h2>
+</div>
+<nav class="flex-1 space-y-2 px-2 overflow-y-auto custom-scrollbar">
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard_customize</span>
+<span class="font-label-lg text-label-lg">Orchestration</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-label-lg text-label-lg">Connectivity Map</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">auto_awesome_motion</span>
+<span class="font-label-lg text-label-lg">Guest Journeys</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-lg text-label-lg">Craft Modules</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-label-lg text-label-lg">Passport Networking</span>
+</a>
+<a class="flex items-center gap-4 p-4 bg-secondary-container text-on-secondary-container rounded-lg mx-2 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-lg text-label-lg">POS 3 Integration</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-lg text-label-lg">E.A.T. Intelligence</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">conveyor_belt</span>
+<span class="font-label-lg text-label-lg">Logistics</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="md:ml-80 pt-28 pb-32 px-gutter min-h-screen">
+<div class="max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">POS 3 Integration Hub</h2>
+<p class="text-on-surface-variant font-body-lg text-body-lg max-w-2xl">
+                        A unified orchestration layer bridging legacy terminal systems with the CraftHub real-time sensory ecosystem.
+                    </p>
+</div>
+<div class="flex gap-4">
+<button class="px-8 h-14 gold-foil-border text-primary font-label-lg text-label-lg rounded-lg flex items-center gap-2 hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined">sync</span>
+                        RE-SYNC ALL
+                    </button>
+<button class="px-8 h-14 bg-primary text-on-primary font-label-lg text-label-lg rounded-lg flex items-center gap-2 hover:opacity-90 transition-all shadow-lg active:scale-95">
+<span class="material-symbols-outlined">add</span>
+                        NEW HUB
+                    </button>
+</div>
+</div>
+<!-- Integration Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 mb-12">
+<!-- Active Integration: Clover -->
+<div class="col-span-1 md:col-span-2 glass-panel p-card-padding rounded-xl relative overflow-hidden group border-2 border-primary/40">
+<div class="absolute top-0 right-0 p-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-primary/20 text-primary rounded-full text-xs font-bold uppercase tracking-widest">
+<span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                            Active
+                        </div>
+</div>
+<div class="flex items-center gap-4 mb-6">
+<div class="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center border border-white/20">
+<span class="material-symbols-outlined text-white text-4xl">close</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Clover POS</h3>
+<p class="text-on-surface-variant text-sm">System Integrated v4.2</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Sync Health</span>
+<span class="text-primary font-bold">98.4%</span>
+</div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[98%] shadow-[0_0_10px_rgba(233,193,118,0.5)]"></div>
+</div>
+<p class="text-xs text-on-surface-variant/60 italic leading-relaxed">Last transaction recorded 2m ago: 1x Padrón 1964 Anniversary.</p>
+</div>
+</div>
+<!-- Integration Options -->
+<div class="col-span-1 glass-panel p-6 rounded-xl hover:bg-surface-variant/20 transition-all flex flex-col items-center justify-center gap-3 cursor-pointer group">
+<div class="w-12 h-12 bg-on-surface-variant/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">local_fire_department</span>
+</div>
+<span class="font-label-lg text-on-surface">Toast</span>
+</div>
+<div class="col-span-1 glass-panel p-6 rounded-xl hover:bg-surface-variant/20 transition-all flex flex-col items-center justify-center gap-3 cursor-pointer group">
+<div class="w-12 h-12 bg-on-surface-variant/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">check_box_outline_blank</span>
+</div>
+<span class="font-label-lg text-on-surface">Square</span>
+</div>
+<div class="col-span-1 glass-panel p-6 rounded-xl hover:bg-surface-variant/20 transition-all flex flex-col items-center justify-center gap-3 cursor-pointer group">
+<div class="w-12 h-12 bg-on-surface-variant/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">bolt</span>
+</div>
+<span class="font-label-lg text-on-surface">Lightspeed</span>
+</div>
+<div class="col-span-1 glass-panel p-6 rounded-xl hover:bg-surface-variant/20 transition-all flex flex-col items-center justify-center gap-3 cursor-pointer group">
+<div class="w-12 h-12 bg-on-surface-variant/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">shopping_bag</span>
+</div>
+<span class="font-label-lg text-on-surface">Shopify</span>
+</div>
+<!-- Hub Modules Section -->
+<div class="col-span-1 md:col-span-6 mt-6">
+<h3 class="font-headline-md text-headline-md text-primary mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined">extension</span>
+                        Active Intelligence Modules
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Visual Product Inventory -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col h-full border border-primary/10">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" data-alt="Macro photography of rows of premium hand-rolled cigars stored in a dark Spanish cedar humidor. The lighting is warm and dramatic, highlighting the oily texture of the tobacco wrappers and the fine craftsmanship. The atmosphere is luxurious, moody, and focused on sensory detail." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDewvbB30E4ca06EE8VtBpec32GdE6AD8PIWha-ApiS00vCdhxY6FWU2zphgFK2C7X6_mG1-TdHR6BWr3V_Eer-yFEme1Z_pdKwiyprHAfODmjB7UnWDz-UX_0NZqzlWR4Jqsht5sADBGRJZkCqmdKHDIFRnqtbAMNaYcqdzFFtQZlQgcmoL5isAXUZm3PPZAw33Lnt_3ttwvDml_sbyILLZkLINOpbOCpM_Vko5Gr5tRxm6IQ8tVM0TAZdCKIeOyu3jdJa08FvBnM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<span class="font-label-lg text-label-lg text-primary tracking-widest uppercase">Visual Inventory</span>
+</div>
+</div>
+<div class="p-6 flex-1">
+<p class="text-on-surface-variant text-sm mb-4 leading-relaxed">Real-time status of Humidor and Beer/Wine cellar. Integrated with optical sensors.</p>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-error/10 border border-error/20 rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error">warning</span>
+<span class="text-sm font-medium text-error">Monte Cristo No. 2</span>
+</div>
+<span class="text-xs bg-error text-on-error px-2 py-0.5 rounded">OUT OF STOCK</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-secondary/10 border border-secondary/20 rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">trending_down</span>
+<span class="text-sm font-medium text-secondary">Aged Rye Whiskey</span>
+</div>
+<span class="text-xs font-bold text-secondary">LOW STOCK (4)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rewards & VIP Mapping -->
+<div class="glass-panel rounded-xl p-card-padding flex flex-col h-full border border-primary/10">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">stars</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">VIP &amp; Rewards</h4>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest">Cross-Platform Sync</p>
+</div>
+</div>
+<div class="flex-1 space-y-6">
+<div class="p-4 bg-surface-container-high rounded-xl border border-outline-variant/30">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-label-lg text-on-surface">Guest Persistence</span>
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+</div>
+<p class="text-xs text-on-surface-variant">Active sessions, rewards, and carts persist across movement between floors and bar areas.</p>
+</div>
+<div class="p-4 bg-surface-container-high rounded-xl border border-outline-variant/30">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-label-lg text-on-surface">Purchase Stamps</span>
+<span class="text-xs text-secondary">POS CONFIRM REQ</span>
+</div>
+<div class="flex gap-2">
+<div class="w-8 h-8 rounded-full border border-primary/40 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-xs">verified</span></div>
+<div class="w-8 h-8 rounded-full border border-primary/40 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-xs">verified</span></div>
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-outline-variant"><span class="material-symbols-outlined text-xs">lock</span></div>
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-outline-variant"><span class="material-symbols-outlined text-xs">lock</span></div>
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-outline-variant"><span class="material-symbols-outlined text-xs">lock</span></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Logic Engine & Rules -->
+<div class="glass-panel rounded-xl p-card-padding flex flex-col h-full border border-primary/10 leather-texture bg-opacity-30">
+<h4 class="font-label-lg text-label-lg text-primary mb-6 uppercase tracking-widest">System Logic Check</h4>
+<ul class="space-y-6 flex-1">
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">rule</span>
+<div>
+<span class="block font-bold text-on-surface text-sm">Recommendation Filter</span>
+<p class="text-xs text-on-surface-variant">Out-of-stock items automatically removed from AI guest suggestions.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">notification_important</span>
+<div>
+<span class="block font-bold text-on-surface text-sm">Staff Alerts</span>
+<p class="text-xs text-on-surface-variant">Low-stock warnings pushed to haptic wearables when guest approaches bay.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">shopping_cart_checkout</span>
+<div>
+<span class="block font-bold text-on-surface text-sm">Cart Persistence</span>
+<p class="text-xs text-on-surface-variant">Session data follows guest via E.A.T. intelligence beacon mapping.</p>
+</div>
+</li>
+</ul>
+<div class="mt-8">
+<button class="w-full py-4 rounded-lg bg-surface-variant text-primary font-label-lg text-label-lg hover:bg-primary hover:text-on-primary transition-all duration-300">
+                                    CONFIGURE RULES
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Terminal View (Simulation) -->
+<section class="mt-12">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-md text-headline-md text-primary">Terminal Preview: Floor 3 Bar</h3>
+<div class="flex gap-2">
+<span class="w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_#e9c176]"></span>
+<span class="w-3 h-3 rounded-full bg-surface-variant"></span>
+<span class="w-3 h-3 rounded-full bg-surface-variant"></span>
+</div>
+</div>
+<div class="glass-panel p-2 rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+<div class="bg-black/40 p-card-padding flex gap-6 min-h-[400px]">
+<!-- Terminal Sidebar -->
+<div class="w-48 bg-surface-container-low rounded-xl p-4 flex flex-col gap-4">
+<div class="p-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold text-xs text-center">CURRENT TAB</div>
+<div class="p-3 hover:bg-surface-variant rounded-lg text-xs font-medium cursor-pointer transition-colors">DRINKS</div>
+<div class="p-3 hover:bg-surface-variant rounded-lg text-xs font-medium cursor-pointer transition-colors">CIGARS</div>
+<div class="p-3 hover:bg-surface-variant rounded-lg text-xs font-medium cursor-pointer transition-colors">SNACKS</div>
+<div class="mt-auto p-3 border-t border-outline-variant text-[10px] text-on-surface-variant">STATION 12-B (LOBBY)</div>
+</div>
+<!-- Terminal Grid -->
+<div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Large Touch Target Buttons -->
+<button class="glass-panel rounded-xl flex flex-col items-center justify-center gap-3 p-4 hover:bg-primary/20 transition-all active:scale-95 group">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary/60 transition-all">
+<img class="w-full h-full object-cover" data-alt="A macro close-up of a perfectly crafted crystal cocktail glass containing a dark amber Old Fashioned, garnished with a vibrant orange peel. The background is a dimly lit luxury bar with mahogany accents and polished brass, creating a wealthy and sophisticated sensory environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkEUn8Xw_r7rOHkpnwgiBXv-MlyEIzJU1xb2yD6ogfh8bQt8d6RJYS8k-13g8mcvk15nyWydQlRHL9rnpzqlC_iu3H40AGMQtMko74j233pQd1FlYRVfedH50uwvURe3h38sx2Isl_fZnlxTY-_WswNrXwyW-VTNLLNGTx5LB-rtDwsWQLG3vSkxB8QKUom8OS5aFF3B-4wDR7fhMtJN4hebHZl9JUGHl4M9Uigc7VTfSh6nUzRd0JM7Civv_RjV1sA2z1XvTeCfo"/>
+</div>
+<span class="font-label-lg text-on-surface text-xs text-center">Old Fashioned</span>
+</button>
+<button class="glass-panel rounded-xl flex flex-col items-center justify-center gap-3 p-4 opacity-50 cursor-not-allowed grayscale">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Macro photo of a prestigious cigar resting in a crystal ashtray. The wrapper is deep chocolate brown with a gold label. The setting is an opulent study with dark wood and soft leather textures. Mood is dark and refined." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDS_JK-e3XDCExG_vXym_xn6DWrvL90DxAKUInEJ8iIydQgoA4T6v7AUA7YDl0sJbtffYY6RszyHtpjn7yNNVzu-Ybd0Xx3YSWzdYntems-3pHfVorv7qDmxwGNrhDIZiK9WBVA4D53lMPPgINieHrZK_6xj_MOACX4HcUYA0QzZpMfh2ATAyqyz4YRaBJ0Rb2VSakyIcWDomO57Jyk8vrF0jKS8p_zosJ6QRABNkNTinRysykQvlfiExzCEEek4F75WreoT-0xpAw"/>
+</div>
+<span class="font-label-lg text-on-surface text-xs text-center">Cohiba Behike</span>
+<span class="text-[10px] text-error font-bold">OUT OF STOCK</span>
+</button>
+<!-- More grid items simulated -->
+<button class="glass-panel rounded-xl flex flex-col items-center justify-center gap-3 p-4 hover:bg-primary/20 transition-all active:scale-95 group">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary/60 transition-all">
+<img class="w-full h-full object-cover" data-alt="A macro shot of a single crystal glass being filled with a deep ruby red wine. The pour is captured with crisp detail against a background of a dark wine cellar with wooden racks. The lighting is focused and warm, emphasizing the premium quality of the vintage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7kTaun8leM2zxC6Qb6QYnYPwCtFQLgLR1zjp8p2Vx6fsZMHHYw693vg2vvGZtbwBTHAYNqhadABDnC8GzBldTWpZFgsSUheCH6CTgJn-5EESA_zURWRymA8f7G7vkn3XxZYzw5OTnrtYVhmV7fY5By5DuRRNLMk-AItuc9yi7hpHnYTp2tLZG9-5rQwQ368SGfbn6r_I2W4tCaEHPDmGpxgTG5PHvaN6bMHsYzt3iezlh4Kf2ZoAGQLR7ThSWt5OZabmG_UBRHoA"/>
+</div>
+<span class="font-label-lg text-on-surface text-xs text-center">Cabernet 2018</span>
+</button>
+<button class="glass-panel rounded-xl flex flex-col items-center justify-center gap-3 p-4 hover:bg-primary/20 transition-all active:scale-95 group">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary/60 transition-all">
+<img class="w-full h-full object-cover" data-alt="A sophisticated close-up of a high-end small plate dish featuring artisanal cheeses and cured meats. The plating is minimalist and elegant on a dark slate board. The setting is a luxury lounge with candlelight, reflecting a culture of connoisseurship and high-quality ingredients." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSwl3t3Wh7s-y8Zm0goei97_vw3RTm-sRSm4qHlw2MAXkKxlqHpElUXLL4xWYpIuFr8pi_QmrJaTiO8TzDTK0rIa9euT3lzSn-ylo_Qgzwx_BZSXCcNkBOmKVEa0CTu2J93UYx566JnmMtL4O12MJ9QSD7iaL3MWKib7T6jhstGIWdeRXM8BAgwKxKW1AWt-9Jecu2K_qKf6CfasG5ao6UV0Y-DwZTQkqjn1ICMi82J5kMzxEYAHCcqSsk4BiAg99rSQ2h5ZaPMHk"/>
+</div>
+<span class="font-label-lg text-on-surface text-xs text-center">Artisan Board</span>
+</button>
+</div>
+<!-- Terminal Cart -->
+<div class="w-72 bg-surface-container-highest rounded-xl p-6 flex flex-col gap-4 border-l border-outline-variant/30">
+<div class="text-on-surface font-headline-md text-headline-md">Cart #402</div>
+<div class="flex-1 overflow-y-auto space-y-4">
+<div class="flex justify-between items-center">
+<div class="text-sm font-medium">1x Old Fashioned</div>
+<div class="text-sm text-primary">$18.00</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant">
+<div class="flex justify-between items-center mb-6">
+<span class="text-on-surface-variant">Total</span>
+<span class="text-xl font-bold text-primary">$18.00</span>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary font-bold rounded-lg shadow-xl">CHARGE GUEST</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full h-20 bg-surface-container-high/90 backdrop-blur-lg border-t border-primary/20 flex justify-around items-center px-4 z-50 rounded-t-xl shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">extension</span>
+<span class="font-label-sm text-label-sm">Modules</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-sm text-label-sm">Floor Plan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary scale-110 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for integration cards
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+                card.style.transition = 'transform 0.1s ease-out';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+
+        // Atmospheric effect: Subtle light sweep on the gold foil border
+        setInterval(() => {
+            const buttons = document.querySelectorAll('.gold-foil-border');
+            buttons.forEach(btn => {
+                btn.style.filter = 'brightness(1.2) contrast(1.1)';
+                setTimeout(() => {
+                    btn.style.filter = 'brightness(1) contrast(1)';
+                }, 1000);
+            });
+        }, 5000);
+    </script>
+</body></html>

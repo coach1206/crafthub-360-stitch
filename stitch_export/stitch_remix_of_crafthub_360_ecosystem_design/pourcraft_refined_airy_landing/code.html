@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PourCraft 360 | The Rare Spirits Experience</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --titanium: rgba(255, 255, 255, 0.15);
+            --warm-gold: #e9c176;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            background: rgba(19, 19, 20, 0.2);
+            border: 1px solid var(--titanium);
+        }
+        .gold-foil-text {
+            background: linear-gradient(135deg, #e9c176 0%, #ffdea5 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .amber-glow {
+            box-shadow: 0 0 50px rgba(233, 193, 118, 0.2);
+        }
+        .leather-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/leather.png");
+        }
+        body {
+            background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: max(884px, 100dvh);
+        }
+        /* Founder Level 0 standard 72px touch targets */
+        .touch-target-72 {
+            min-height: 72px;
+            min-width: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#2a1800",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed-dim": "#e9c176",
+                        "inverse-on-surface": "#303031",
+                        "on-background": "#e5e2e3",
+                        "on-primary-fixed": "#261900",
+                        "primary": "#e9c176",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary-fixed": "#261814",
+                        "secondary-fixed": "#ffddb6",
+                        "on-secondary-container": "#3d2400",
+                        "secondary": "#ffb95a",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-container": "#b7a09a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "surface-container-high": "#2a2a2b",
+                        "surface-container-low": "#1b1b1c",
+                        "background": "#131314",
+                        "surface-container": "#1f1f20",
+                        "on-tertiary-container": "#473733",
+                        "surface": "#131314",
+                        "on-secondary": "#462a00",
+                        "surface-variant": "#353436",
+                        "on-surface": "#e5e2e3",
+                        "primary-container": "#c5a059",
+                        "surface-bright": "#39393a",
+                        "on-tertiary": "#3c2d28",
+                        "on-error": "#690005",
+                        "outline-variant": "rgba(255, 255, 255, 0.15)",
+                        "inverse-surface": "#e5e2e3",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "surface-tint": "#e9c176",
+                        "surface-container-highest": "#353436",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "primary-fixed": "#ffdea5",
+                        "error-container": "#93000a",
+                        "secondary-container": "#c68315",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "outline": "rgba(255, 255, 255, 0.3)",
+                        "on-primary": "#412d00",
+                        "tertiary": "#dac1bb",
+                        "on-primary-container": "#4e3700",
+                        "surface-dim": "#131314",
+                        "on-surface-variant": "#d1c5b4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "32px",
+                        "unit": "8px",
+                        "margin": "64px",
+                        "card-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "body-md": ["Montserrat"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-on-surface font-body-md overflow-x-hidden antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-[60px] bg-surface/10 border-b border-outline-variant flex justify-between items-center px-8 h-20">
+<div class="flex items-center gap-4">
+<div class="touch-target-72 -ml-4">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-90 transition-transform" data-icon="menu">menu</span>
+</div>
+<h1 class="font-headline-md text-headline-md tracking-widest text-primary uppercase drop-shadow-md">RESERVE LOUNGE</h1>
+</div>
+<div class="hidden md:flex gap-8">
+<a class="font-label-lg text-label-lg text-primary tracking-widest uppercase hover:text-primary-fixed-dim transition-colors py-4" href="#">The Vault</a>
+<a class="font-label-lg text-label-lg text-white/80 tracking-widest uppercase hover:text-primary transition-colors py-4" href="#">Tastings</a>
+<a class="font-label-lg text-label-lg text-white/80 tracking-widest uppercase hover:text-primary transition-colors py-4" href="#">Estates</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border border-primary/40 overflow-hidden cursor-pointer active:scale-95 duration-300 shadow-xl ring-2 ring-white/10">
+<img alt="Member Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXY_j343TuR7F5qzhzEy0Bmz7hGe8aNszFgCLNb4VOmdAUx_hunGuqHd2JTYJ82vk8EC1HX1rs_SLZodxP8d_rSuol9Ezm_DNaZrFONZJsHqpymw_qOWdR9PKWWOwxs_AwF37vaw-BnfJFxU2Q3vPQ9Jw1QJGz89pnPARjXX0djn2v89MCOhEJkR7EcQZZP9WQtANJl5Ik02uKX7MagKMXzMc7F6zho4esK95BcRn3SNdgphOWjwINF4ha_1Jeuv64qoYA9vHpv8M"/>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<main class="relative min-h-screen flex items-center justify-center pt-20">
+<!-- Hero Content -->
+<div class="relative z-20 container mx-auto px-gutter text-center max-w-4xl">
+<div class="inline-block px-6 py-2 mb-8 glass-panel rounded-full bg-white/5 border-white/20">
+<span class="font-label-sm text-label-sm uppercase tracking-[0.4em] text-primary font-bold">Established 1882</span>
+</div>
+<h2 class="font-display-lg text-display-lg mb-8 leading-tight gold-foil-text drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
+            The Soul of <br/> Rare Spirits
+        </h2>
+<p class="font-body-lg text-body-lg text-white mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-xl font-medium">
+            Step into a curated sanctuary where time slows down. Discover a private collection of the world's most elusive pours, crafted for the discerning palate.
+        </p>
+<div class="flex flex-col md:flex-row items-center justify-center gap-8">
+<button class="group relative touch-target-72 px-12 bg-primary text-on-primary font-label-lg text-label-lg uppercase tracking-widest rounded-lg shadow-2xl amber-glow hover:scale-105 active:scale-95 transition-all duration-500 overflow-hidden">
+<span class="relative z-10 font-bold">Start Your Journey</span>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+</button>
+<button class="touch-target-72 px-12 glass-panel text-white font-label-lg text-label-lg uppercase tracking-widest rounded-lg hover:bg-white/10 active:scale-95 transition-all duration-300 font-bold border-white/30">
+                Learn About PourCraft
+            </button>
+</div>
+</div>
+<!-- Scroll Indicator -->
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer flex flex-col items-center gap-2 opacity-90 touch-target-72">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">Explore Vault</span>
+<span class="material-symbols-outlined text-primary" data-icon="expand_more">expand_more</span>
+</div>
+</main>
+<!-- Bento Grid Section -->
+<section class="py-32 px-gutter">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+<div>
+<h3 class="font-headline-xl text-headline-xl text-primary mb-4 drop-shadow-xl">Curated Selections</h3>
+<p class="text-white font-body-md max-w-xl drop-shadow-md font-medium">Every bottle in our cellar tells a story of heritage, terroir, and the pursuit of perfection.</p>
+</div>
+<button class="touch-target-72 flex items-center gap-3 text-primary font-label-lg hover:gap-6 transition-all font-bold">
+                View Entire Collection <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 h-full md:h-[800px]">
+<!-- Large Featured Card -->
+<div class="md:col-span-8 group relative overflow-hidden rounded-xl glass-panel amber-glow transition-all duration-700 cursor-pointer border-white/20">
+<img alt="Featured Cocktail" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 opacity-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCq6VsIIq51JM6yBPl6yhmwYyJHwSiz4JI1yEoiSnhJ0cCsS9rdAoBroYaP9PUrJx54c2gtkWcGuACImNY4JgVeHC8Jc6gtW07qtfe1zpA-1zvQlgi-UZegrAx4O0jRWjTS-u59LsGjBtwvUni69lWJY6CsEkwOgghOnDIEyjGhb8BXLi50QTMR193-pK9oCpWwzZIRfNboxmkkKjmW6kvjGWul-jFCjep2ROky6BoWbQiQvfmfBg2-zOZjLsmPlw_3yzBxwuG0io"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 p-12 w-full">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-[0.5em] mb-4 block font-bold">Master's Choice</span>
+<h4 class="font-headline-lg text-headline-lg mb-4 text-white drop-shadow-lg">The Smoked Amber Old Fashioned</h4>
+<p class="font-body-md text-white/90 max-w-md font-medium">Our signature pour featuring 15-year aged rye, house-made bitters, and cedar-wood smoke.</p>
+</div>
+</div>
+<!-- Vertical Card -->
+<div class="md:col-span-4 group relative overflow-hidden rounded-xl glass-panel cursor-pointer border-white/20">
+<div class="absolute inset-0 leather-texture opacity-20 z-10 pointer-events-none"></div>
+<div class="p-10 h-full flex flex-col justify-between relative z-20">
+<div>
+<span class="material-symbols-outlined text-primary text-5xl mb-8" data-icon="inventory_2">inventory_2</span>
+<h4 class="font-headline-md text-headline-md mb-4 text-white drop-shadow-md">Private Cellar Access</h4>
+<p class="font-body-md text-white/80 font-medium">Store your personal rare spirits in our temperature-controlled humidor and tasting vault.</p>
+</div>
+<div class="pt-8">
+<ul class="space-y-6">
+<li class="flex items-center gap-4 text-white/90">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check">check</span>
+<span class="font-label-sm tracking-widest font-bold">Climate Controlled 65°F</span>
+</li>
+<li class="flex items-center gap-4 text-white/90">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check">check</span>
+<span class="font-label-sm tracking-widest font-bold">Biometric Security</span>
+</li>
+<li class="flex items-center gap-4 text-white/90">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check">check</span>
+<span class="font-label-sm tracking-widest font-bold">Sommelier Service</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Bottom Row Bento Cards -->
+<div class="md:col-span-4 group relative overflow-hidden rounded-xl glass-panel cursor-pointer border-white/20 min-h-[240px]">
+<img alt="Cigar Lounge" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAj1Fe58mbZcL1Pgzvl92olknuBRogtW4bv_-PMDsZpzpcBsdY_H54r9GqI2lAzvv1qg0CdJtwVNsApReLIitMk-l5bC1-FC37Bg9Y6E20POJif5JEVXVt6TyQAzgCGorCI5-ipmpyfhYdyOd_sDGweN1_JyULVa5IMW38gYtTwV1vFV0d5p6nzMZoVpZi6gBkYGszszlVRKQx1HUKR3_2i5grmiUf8COfLkVnAmYOD5Sc6O780q7t_OQBqb24IWpyei0n7EfCYCug"/>
+<div class="absolute inset-0 bg-black/30"></div>
+<div class="relative p-10 h-full flex flex-col justify-end">
+<h4 class="font-label-lg text-label-lg text-primary uppercase tracking-[0.3em] font-bold drop-shadow-md">Havana Selection</h4>
+</div>
+</div>
+<div class="md:col-span-8 flex items-center justify-between p-12 glass-panel rounded-xl relative overflow-hidden group cursor-pointer border-white/20 min-h-[240px]">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+<div class="relative z-10 max-w-lg">
+<h4 class="font-headline-md text-headline-md mb-4 text-white drop-shadow-md">The Membership Passport</h4>
+<p class="font-body-md text-white/80 font-medium">Unlock exclusive estates, world-class distilleries, and private tasting events globally.</p>
+</div>
+<span class="material-symbols-outlined text-primary text-7xl group-hover:translate-x-6 transition-transform drop-shadow-xl" data-icon="auto_stories">auto_stories</span>
+</div>
+</div>
+</div>
+</section>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-2xl backdrop-blur-[60px] bg-surface-container-low/20 border-t border-outline-variant shadow-[0_-10px_30px_rgba(0,0,0,0.5)] flex justify-around items-center h-28 px-4 pb-safe">
+<div class="touch-target-72 flex flex-col items-center justify-center text-primary font-bold gap-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="liquor">liquor</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider">PourCraft</span>
+</div>
+<div class="touch-target-72 flex flex-col items-center justify-center text-white/60 gap-1 active:scale-90 transition-all">
+<span class="material-symbols-outlined" data-icon="sports_bar">sports_bar</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider">BeerCraft</span>
+</div>
+<div class="touch-target-72 flex flex-col items-center justify-center text-white/60 gap-1 active:scale-90 transition-all">
+<span class="material-symbols-outlined" data-icon="wine_bar">wine_bar</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider">WineCraft</span>
+</div>
+<div class="touch-target-72 flex flex-col items-center justify-center text-white/60 gap-1 active:scale-90 transition-all">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider">Passport</span>
+</div>
+</nav>
+<!-- Side Navigation Drawer -->
+<aside class="h-full w-80 fixed left-0 top-0 z-[60] -translate-x-full duration-500 ease-in-out backdrop-blur-[60px] bg-surface-container-high/30 border-r border-outline-variant shadow-2xl flex flex-col py-8 px-4 gap-6" id="side-drawer">
+<div class="flex items-center gap-4 px-4 mb-8">
+<div class="w-16 h-16 rounded-full border-2 border-primary overflow-hidden shadow-xl ring-4 ring-white/5">
+<img alt="Member Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrFVO9m3z4xORsM8zc7IvOQt5qabE2fdfan6hHZgFXF__G3O9YqmGGnRN4hZyzZNW4UlbQ516DEM4vhs2PDW3xtmA9ieyCqALPwg_1On8JojqzlBtCmd-sKnwetxZ8FQ3ET67plx5uBIFmE2jb7FLzCgL5FzZAvqyqPtGuSFb9O7bS7dZC5DAtiXWXGCPW3hoConkz0SzpmmRMCsrnYkAmgIWLiC7XimDjTu_uxA84XybS0ClFQMhJkuvPIoCwbx5focDXH-Gvwx0"/>
+</div>
+<div>
+<h5 class="font-body-md font-bold text-white text-lg">Alexander Sterling</h5>
+<p class="text-xs text-primary font-bold uppercase tracking-widest">Elite Tier Member</p>
+<p class="text-[10px] text-white/60 mt-1">Passport #8821</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 p-4 text-white/80 hover:text-primary hover:bg-white/10 rounded-lg transition-colors mx-2 touch-target-72" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-md font-medium">Private Cellar</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-white/80 hover:text-primary hover:bg-white/10 rounded-lg transition-colors mx-2 touch-target-72" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span class="font-body-md font-medium">Tasting Notes</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-white/80 hover:text-primary hover:bg-white/10 rounded-lg transition-colors mx-2 touch-target-72" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-body-md font-medium">Lounge Events</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-white/80 hover:text-primary hover:bg-white/10 rounded-lg transition-colors mx-2 touch-target-72" href="#">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span class="font-body-md font-medium">Member Services</span>
+</a>
+<hr class="border-white/10 my-4 mx-6"/>
+<a class="flex items-center gap-4 p-4 text-white/60 hover:text-error transition-colors mx-2 touch-target-72" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-md font-medium">Logout</span>
+</a>
+</nav>
+</aside>
+<!-- Overlay for Drawer -->
+<div class="fixed inset-0 bg-black/60 backdrop-blur-md z-[55] opacity-0 pointer-events-none transition-opacity duration-500" id="drawer-overlay"></div>
+<script>
+    const menuBtn = document.querySelector('[data-icon="menu"]');
+    const drawer = document.getElementById('side-drawer');
+    const overlay = document.getElementById('drawer-overlay');
+
+    function toggleDrawer() {
+        drawer.classList.toggle('-translate-x-full');
+        overlay.classList.toggle('opacity-0');
+        overlay.classList.toggle('pointer-events-none');
+    }
+
+    menuBtn.parentElement.addEventListener('click', toggleDrawer);
+    overlay.addEventListener('click', toggleDrawer);
+</script>
+</body></html>

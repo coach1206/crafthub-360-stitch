@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Invoice Draft | The Grand Humidor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#3d2400",
+                        "on-background": "#e5e2e3",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#2a2a2b",
+                        "tertiary": "#dac1bb",
+                        "surface": "#131314",
+                        "outline": "#9a8f80",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-container": "#1f1f20",
+                        "primary": "#e9c176",
+                        "outline-variant": "#4e4639",
+                        "on-primary-container": "#4e3700",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed": "#ffdea5",
+                        "secondary-fixed": "#ffddb6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary": "#3c2d28",
+                        "on-tertiary-fixed": "#261814",
+                        "surface-tint": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "background": "#131314",
+                        "on-primary-fixed": "#261900",
+                        "surface-variant": "#353436",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "secondary": "#ffb95a",
+                        "secondary-container": "#c68315",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-primary": "#412d00",
+                        "tertiary-container": "#b7a09a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-tertiary-container": "#473733",
+                        "surface-container-highest": "#353436",
+                        "inverse-surface": "#e5e2e3",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-secondary": "#462a00",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-bright": "#39393a",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-surface": "#e5e2e3",
+                        "surface-dim": "#131314"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "card-padding": "24px",
+                        "unit": "8px",
+                        "margin": "64px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.smoked-glass {
+    background: rgba(31, 31, 32, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(233, 193, 118, 0.15)
+    }
+.gold-foil-edge {
+    box-shadow: inset 0 0 0 1px rgba(233, 193, 118, 0.2)
+    }
+.amber-glow:hover {
+    box-shadow: 0 0 30px rgba(233, 193, 118, 0.2)
+    }
+body {
+    background-image: linear-gradient(rgba(19, 19, 20, 0.95), rgba(19, 19, 20, 0.95)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuCN0yvJefEQ61vS1BPUTQCsNGvDLfohcbcAWVNCe9WUIQF9I6JbEZPErcxGNEza3ugdfa6O-83waPcmnyKgc2Kji3gzbn8CXT166roaj1z0VB6Q3qez6eKB9fXy2rVokXzvNP-53MQ5J7SErIT6I65IhZd_gD7x2479UTshwsdcWrftyfJ2IdvYO8s-XFKrehOCrT2o7VzbnKe6spraOZwZ5t3xzUmnsJZIHPSeaT20nIK3fFI-ivKr0RVK1mOBwKvTsfgarMn0dwo);
+    background-size: cover;
+    background-attachment: fixed
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background font-body-md overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-outline-variant/30 flex justify-between items-center px-16 h-24 shadow-sm">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3 px-4 py-2 hover:bg-surface-container-highest/50 rounded-lg transition-all duration-300">
+<img alt="Staff member profile" class="w-10 h-10 rounded-full object-cover border border-primary/30" data-alt="A professional headshot of a senior sommelier in a dark luxury setting. He wears a tailored charcoal suit with a subtle gold lapel pin. The lighting is warm and cinematic, emphasizing textures of fine wool and soft ambient glow from an exclusive lounge background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfBTArJ_IqvtcvuQ4CO9lVsDfi4KKJ31Gtd-KA6iqflpnwvPOONPWPAUi5vSKJUw3iegP_ikAmgoZHgX7vXuvVWXLaHBo-DHuJpzkyo_TvJVc4nzFPVsw9XwPLnW84MYP9l4WeXl1h15Gf2AlOJq7a8vG2V3r4yyN7BApOo9uw8KHtI94A9Tl_5q7jZz4Ypdw3iWsOOZ2QDkFtjtPPM9u12EErhkjeZBQvmdu4v4I4gjPoB4hizQFv12mPD8k3IJiZHoSgQFdHiHA"/>
+<span class="font-label-lg text-label-lg text-primary">Julian Vane</span>
+</div>
+<button class="material-symbols-outlined text-primary text-2xl hover:bg-surface-container-highest/50 p-2 rounded-full transition-all">notifications</button>
+</div>
+</header>
+<!-- Side Navigation Drawer -->
+<aside class="fixed left-0 top-0 h-screen w-80 z-40 bg-surface-container-low border-r border-outline-variant/20 shadow-2xl transition-transform hidden md:flex flex-col pt-32 px-6">
+<div class="mb-10 px-4">
+<h2 class="font-headline-lg text-headline-lg text-primary">Management</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant/60">Financial Operations</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-transform scale-95 active:scale-90 flex items-center gap-4" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-lg text-label-lg">Floor Plan</span>
+</a>
+<a class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-transform scale-95 active:scale-90 flex items-center gap-4" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg text-label-lg">Live Map</span>
+</a>
+<a class="bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 transition-transform flex items-center gap-4" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-lg text-label-lg">Insights</span>
+</a>
+<a class="text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-transform scale-95 active:scale-90 flex items-center gap-4" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-32 pb-24 md:pl-80 px-8 max-w-[1440px] mx-auto min-h-screen">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+<div>
+<nav class="flex items-center gap-2 mb-2 text-on-surface-variant/60">
+<span class="font-label-sm text-label-sm">FINANCE</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="font-label-sm text-label-sm">INVOICES</span>
+</nav>
+<h1 class="font-headline-xl text-headline-xl text-on-background">Invoice Draft <span class="text-primary/50">#INV-8829</span></h1>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 px-4 py-2 rounded-full border border-primary/40 bg-primary/5">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest">E.A.T. Verified</span>
+</div>
+</div>
+</div>
+<!-- Tactile Financial Document View -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Invoice Main Body -->
+<div class="lg:col-span-2 space-y-8">
+<div class="smoked-glass rounded-xl p-card-padding gold-foil-edge relative overflow-hidden">
+<!-- Texture overlay for paper grain -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cardboard-flat.png')]"></div>
+<!-- Billing Info Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 pb-12 border-b border-outline-variant/30 relative z-10">
+<div>
+<h3 class="font-label-lg text-label-lg text-primary mb-4 uppercase tracking-tighter">Venue Billing</h3>
+<p class="font-headline-md text-headline-md text-on-background">The Grand Humidor</p>
+<p class="text-on-surface-variant/80 mt-2 font-body-md">
+                                42 Mayfair Square<br/>
+                                London, W1J 7BR<br/>
+                                United Kingdom
+                            </p>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-primary mb-4 uppercase tracking-tighter">Supplier Details</h3>
+<p class="font-headline-md text-headline-md text-on-background">Habanos Prestige S.A.</p>
+<p class="text-on-surface-variant/80 mt-2 font-body-md">
+                                Edificio Partagas, Industria 520<br/>
+                                Havana, Cuba<br/>
+                                VAT ID: CU882901-B
+                            </p>
+</div>
+</div>
+<!-- Line Items Table -->
+<div class="mt-12 relative z-10">
+<table class="w-full text-left">
+<thead>
+<tr class="border-b border-outline-variant/30 font-label-lg text-label-lg text-on-surface-variant/50">
+<th class="pb-4 font-normal">PRODUCT DESCRIPTION</th>
+<th class="pb-4 text-right font-normal">QTY</th>
+<th class="pb-4 text-right font-normal">UNIT PRICE</th>
+<th class="pb-4 text-right font-normal">TOTAL</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr>
+<td class="py-6">
+<p class="font-headline-md text-headline-md leading-none">Cohiba Siglo VI</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant/60 mt-2 uppercase">VINTAGE SELECTION 2021 | CABINET OF 25</p>
+</td>
+<td class="py-6 text-right font-body-lg">12</td>
+<td class="py-6 text-right font-body-lg">£1,450.00</td>
+<td class="py-6 text-right font-body-lg text-primary">£17,400.00</td>
+</tr>
+<tr>
+<td class="py-6">
+<p class="font-headline-md text-headline-md leading-none">Macallan 25 Years Old</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant/60 mt-2 uppercase">SHERRY OAK CASK | 700ML</p>
+</td>
+<td class="py-6 text-right font-body-lg">4</td>
+<td class="py-6 text-right font-body-lg">£2,100.00</td>
+<td class="py-6 text-right font-body-lg text-primary">£8,400.00</td>
+</tr>
+<tr>
+<td class="py-6">
+<p class="font-headline-md text-headline-md leading-none">Davidoff Oro Blanco</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant/60 mt-2 uppercase">SPECIAL RESERVE SINGLE STICKS</p>
+</td>
+<td class="py-6 text-right font-body-lg">10</td>
+<td class="py-6 text-right font-body-lg">£480.00</td>
+<td class="py-6 text-right font-body-lg text-primary">£4,800.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Summary -->
+<div class="mt-8 pt-8 flex flex-col items-end gap-2 border-t border-outline-variant/30">
+<div class="flex justify-between w-full md:w-64">
+<span class="text-on-surface-variant/60 font-label-lg">Subtotal</span>
+<span class="font-body-lg">£30,600.00</span>
+</div>
+<div class="flex justify-between w-full md:w-64">
+<span class="text-on-surface-variant/60 font-label-lg">VAT (20%)</span>
+<span class="font-body-lg">£6,120.00</span>
+</div>
+<div class="flex justify-between w-full md:w-64 mt-4 pt-4 border-t border-primary/20">
+<span class="text-primary font-headline-md uppercase">Total Balance</span>
+<span class="font-headline-md text-primary">£36,720.00</span>
+</div>
+</div>
+</div>
+<!-- Payment Terms -->
+<div class="smoked-glass rounded-xl p-card-padding flex gap-8 items-center border border-secondary/20">
+<div class="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl">calendar_month</span>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg text-secondary uppercase">Payment Terms</h4>
+<p class="text-on-surface-variant/80 font-body-md">Net 30. Payment due via Bank Transfer by October 24th, 2023. Late payments subject to a 2% monthly premium.</p>
+</div>
+</div>
+</div>
+<!-- Action Sidebar -->
+<div class="space-y-6">
+<div class="smoked-glass rounded-xl p-card-padding space-y-4">
+<h3 class="font-label-lg text-label-lg text-primary uppercase mb-6">Workflow Actions</h3>
+<button class="w-full bg-primary py-5 rounded-lg text-on-primary font-label-lg flex items-center justify-center gap-3 hover:brightness-110 active:scale-[0.98] transition-all amber-glow shadow-lg shadow-primary/20 group">
+<span class="material-symbols-outlined transition-transform group-hover:scale-110">check_circle</span>
+                        Approve Invoice
+                    </button>
+<button class="w-full border border-primary/50 text-primary py-5 rounded-lg font-label-lg flex items-center justify-center gap-3 hover:bg-primary/5 transition-all">
+<span class="material-symbols-outlined">send</span>
+                        Mark Sent
+                    </button>
+<button class="w-full border border-outline-variant text-on-surface-variant/80 py-5 rounded-lg font-label-lg flex items-center justify-center gap-3 hover:bg-surface-bright/20 transition-all">
+<span class="material-symbols-outlined">mail</span>
+                        Email Supplier
+                    </button>
+<div class="pt-6 mt-6 border-t border-outline-variant/30">
+<div class="flex justify-between text-on-surface-variant/60 font-label-sm mb-4">
+<span>Status</span>
+<span class="text-secondary font-bold">Draft</span>
+</div>
+<div class="flex justify-between text-on-surface-variant/60 font-label-sm">
+<span>Last Edited</span>
+<span>2 hours ago</span>
+</div>
+</div>
+</div>
+<!-- Preview Card -->
+<div class="relative rounded-xl overflow-hidden aspect-[4/3] smoked-glass group">
+<img alt="Cigar humidor selection" class="w-full h-full object-cover opacity-50 transition-transform duration-700 group-hover:scale-110" data-alt="A macro photograph of premium Cohiba cigars arranged neatly inside a Spanish cedar humidor. The warm, dark wood grain is highly detailed, and the iconic yellow and black checkerboard bands of the cigars catch the soft light. The atmosphere is intimate and exclusive, with a slight shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzNlPEL5FlNeKC2JT10SCFOrmzViku_y80ULpI2ra6NNbaWeWgMyGlHigYzb6dHrKGu3sUjMoqbk2mYNa196d-NkwBGQmRbfMaiK98_-ZSkAzyWLuelE8z0zFFg3s7xotuC8pgVxGC7o-OE3QRplfJkGLuHboakGpPR8yaPJsjjLeJd7CVVy1H63mqFjaR9W2y1JihR1WDzsrHk2PDhol8MvN_B1A8T7i6GJQ9bkDuAUqOQa55Tfc9UKya7OHOt2Bww02RFA9hsmk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent flex flex-col justify-end p-6">
+<h4 class="font-headline-md text-headline-md text-on-background">Stock Insight</h4>
+<p class="font-body-md text-on-surface-variant/80">This purchase replenishes 40% of the vintage humidor capacity.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 flex justify-around items-center px-gutter py-4 shadow-[0_-8px_24px_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-sm text-label-sm">POS 3</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] scale-105 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</a>
+</nav>
+<script>
+        // Subtle hover interaction for tactile feedback
+        document.querySelectorAll('.smoked-glass').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.99)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1)';
+            });
+            card.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+        });
+
+        // Simulating the gold foil edge shine on mouse move
+        const cards = document.querySelectorAll('.gold-foil-edge');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+                card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(233, 193, 118, 0.05) 0%, rgba(31, 31, 32, 0.7) 50%)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.background = 'rgba(31, 31, 32, 0.7)';
+            });
+        });
+    </script>
+</body></html>

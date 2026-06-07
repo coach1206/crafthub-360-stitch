@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 | Luxury Inventory Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .smoked-glass {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-foil-border {
+            border: 1px solid rgba(233, 193, 118, 0.3);
+        }
+        .amber-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+        }
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #131314;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4e4639;
+            border-radius: 3px;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-tint": "#e9c176",
+                    "surface-container-highest": "#353436",
+                    "on-surface": "#e5e2e3",
+                    "secondary": "#ffb95a",
+                    "primary-fixed": "#ffdea5",
+                    "surface-container-lowest": "#0e0e0f",
+                    "primary": "#e9c176",
+                    "surface-container-low": "#1b1b1c",
+                    "on-secondary-fixed": "#2a1800",
+                    "outline": "#9a8f80",
+                    "inverse-surface": "#e5e2e3",
+                    "on-error": "#690005",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-primary-fixed": "#261900",
+                    "surface-container": "#1f1f20",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-primary": "#412d00",
+                    "surface-bright": "#39393a",
+                    "on-tertiary-fixed": "#261814",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-secondary": "#462a00",
+                    "surface-container-high": "#2a2a2b",
+                    "on-tertiary": "#3c2d28",
+                    "outline-variant": "#4e4639",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "on-tertiary-container": "#473733",
+                    "error-container": "#93000a",
+                    "inverse-primary": "#775a19",
+                    "on-primary-container": "#4e3700",
+                    "primary-fixed-dim": "#e9c176",
+                    "secondary-fixed": "#ffddb6",
+                    "tertiary-container": "#b7a09a",
+                    "on-background": "#e5e2e3",
+                    "surface-variant": "#353436",
+                    "on-secondary-container": "#3d2400",
+                    "secondary-container": "#c68315",
+                    "on-surface-variant": "#d1c5b4",
+                    "background": "#131314",
+                    "tertiary": "#dac1bb",
+                    "on-error-container": "#ffdad6",
+                    "inverse-on-surface": "#303031",
+                    "surface-dim": "#131314",
+                    "primary-container": "#c5a059",
+                    "error": "#ffb4ab",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "surface": "#131314"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "label-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md">
+<!-- Top AppBar (From Shared Components) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-primary hover:bg-surface-variant/50 p-2 rounded-full transition-colors active:scale-95">arrow_back</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-4">
+<nav class="hidden md:flex gap-8 mr-8">
+<button class="font-label-lg text-label-lg text-primary transition-colors">Inventory</button>
+<button class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors">Passport</button>
+<button class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors">Assistant</button>
+</nav>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-label-lg text-label-lg active:scale-95 transition-transform">Publish Changes</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="pt-32 pb-40 px-8 max-w-[1440px] mx-auto">
+<!-- Dashboard Header -->
+<section class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">Inventory Vault</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Manage your curated collection of premium modules. Update stock levels, refine pairings, and sync across SmokeCraft &amp; POS clusters.</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-5 py-3 gold-foil-border rounded-lg font-label-lg text-label-lg text-primary hover:bg-primary/10 transition-all">
+<span class="material-symbols-outlined">save</span> Save Draft
+                </button>
+<button class="flex items-center gap-2 px-5 py-3 bg-secondary-container text-on-secondary-container rounded-lg font-label-lg text-label-lg hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">visibility</span> Preview Lounge
+                </button>
+</div>
+</section>
+<!-- Category Filter & Search -->
+<div class="mb-12 flex flex-wrap items-center justify-between gap-6 smoked-glass p-4 rounded-xl gold-foil-border">
+<div class="flex flex-wrap gap-2">
+<button class="px-6 py-2 rounded-full bg-primary text-on-primary font-label-lg text-label-lg">All Assets</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg hover:text-primary transition-colors">Cigars</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg hover:text-primary transition-colors">Spirits</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg hover:text-primary transition-colors">Cocktails</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg hover:text-primary transition-colors">Wine</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg hover:text-primary transition-colors">Food</button>
+</div>
+<div class="relative w-full md:w-80">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-lowest border-b border-primary/30 focus:border-primary outline-none py-3 pl-12 pr-4 text-on-surface font-body-md rounded-t-lg" placeholder="Search inventory..." type="text"/>
+</div>
+</div>
+<!-- Inventory Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<!-- Product Card 1: Cigar -->
+<div class="group flex flex-col smoked-glass rounded-xl overflow-hidden amber-glow transition-all duration-500 hover:-translate-y-2">
+<div class="relative h-64 overflow-hidden">
+<img alt="Premium Cigar" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A macro close-up photograph of a luxury hand-rolled cigar resting on a dark walnut table. The lighting is moody and cinematic, highlighting the rich texture of the tobacco leaf wrapper. Wisps of soft smoke curl in the background, creating an atmosphere of an exclusive, high-end gentlemen's lounge. The color palette is dominated by deep browns, ambers, and subtle gold highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJQFFQzqdSEZAmBDh0b0mnWDCzbD5ClXKDDRkPJyn1hjrFD_vvBXSTgiSLCAXrGp9lbmAx7p3zjNZyzFuytlhBFyQM13QxDx2RPihJAf1-ACDvzd4vNgS24hHYMw0cQ3bywL4eiBhO9y-mLcaNBgP100kaXKNSeR9_ptTPLikH3ZzwnOjXmlCSwBWkhgWETngcgOjOgpAXDxK9_af6AI57Z89Z0AlzRgQ615xOPbP2RHNCft1zCXSouuYBkX9Bw7zD5tFYESUoNIc"/>
+<div class="absolute top-4 left-4 px-3 py-1 bg-primary/90 text-on-primary text-[10px] uppercase font-bold tracking-widest rounded">Cigar</div>
+<div class="absolute top-4 right-4 flex gap-2">
+<button class="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Padrón 1964 Anniversary</h3>
+<span class="font-headline-md text-headline-md text-primary">$32.00</span>
+</div>
+<p class="text-on-surface-variant font-label-lg text-label-lg mb-4">Arturo Fuente &amp; Sons</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/20">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-1">Stock</p>
+<p class="text-headline-md font-headline-md text-on-surface">42 <span class="text-label-sm font-label-sm text-outline">pcs</span></p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/20">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-1">Status</p>
+<div class="flex items-center gap-2 pt-1">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-label-lg font-label-lg text-on-surface">Active</span>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-2">Flavor Profile</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] text-on-surface-variant">Cedar</span>
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] text-on-surface-variant">Dark Chocolate</span>
+<span class="px-2 py-1 bg-surface-container-high rounded text-[10px] text-on-surface-variant">Spice</span>
+</div>
+</div>
+<div class="mt-auto pt-6 border-t border-outline-variant/30">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]" data-weight="fill">auto_awesome</span>
+<span class="text-label-sm font-label-lg text-on-surface">SmokeCraft Rec</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">point_of_sale</span>
+<span class="text-label-sm font-label-lg text-on-surface">POS 3 Sync</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 2: Spirit -->
+<div class="group flex flex-col smoked-glass rounded-xl overflow-hidden amber-glow transition-all duration-500 hover:-translate-y-2">
+<div class="relative h-64 overflow-hidden">
+<img alt="Rare Bourbon" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A stunning product photograph of a premium bourbon whiskey bottle on a slate surface. The amber liquid glows from within, caught by a soft backlight. Crystalline ice cubes and a crystal glass sit nearby. The mood is sophisticated and warm, evoking the quiet luxury of a private club's back bar. The background is softly blurred, focusing all attention on the rich textures of glass and gold-labeled spirits." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKvrMt3Uc6nTueIHPlmOYTj22ia-O-jWvPU03se29qLYtQLFIQWrdTJ8SJFSpOopd3D9aYE0FdxgN3NxgqE2iCc3TnKJeXBtozx7vJxUwkTNxu2j6aJv3Q8xmEmmGAzJSX-MrqKN4TpLlBkN2k1_bszkeTm5PAtW2--QUdalrxz2ZUCYF8ORZcJYk4AwPhpLePQeu2SQCPToaGGPCYoYuheqvHnqXE7Z47NK1D1V5zZzHM_RAtt8w39Nau755BhI9ApSEGyLklTd0"/>
+<div class="absolute top-4 left-4 px-3 py-1 bg-secondary/90 text-on-secondary text-[10px] uppercase font-bold tracking-widest rounded">Spirit</div>
+<div class="absolute top-4 right-4 flex gap-2">
+<button class="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Blanton's Gold Edition</h3>
+<span class="font-headline-md text-headline-md text-primary">$185.00</span>
+</div>
+<p class="text-on-surface-variant font-label-lg text-label-lg mb-4">Buffalo Trace Distillery</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/20">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-1">Stock</p>
+<p class="text-headline-md font-headline-md text-on-surface">12 <span class="text-label-sm font-label-sm text-outline">btl</span></p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/20">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-1">Status</p>
+<div class="flex items-center gap-2 pt-1">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-label-lg font-label-lg text-on-surface">Active</span>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-2">Pairing Notes</p>
+<p class="text-label-sm text-on-surface-variant italic">Pairs excellently with full-bodied Maduro cigars.</p>
+</div>
+<div class="mt-auto pt-6 border-t border-outline-variant/30">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]" data-weight="fill">auto_awesome</span>
+<span class="text-label-sm font-label-lg text-on-surface">SmokeCraft Rec</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">point_of_sale</span>
+<span class="text-label-sm font-label-lg text-on-surface">POS 3 Sync</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 3: Cocktail -->
+<div class="group flex flex-col smoked-glass rounded-xl overflow-hidden amber-glow transition-all duration-500 hover:-translate-y-2">
+<div class="relative h-64 overflow-hidden">
+<img alt="Signature Cocktail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A sophisticated cocktail presentation featuring a deep red drink in a crystal coupe glass. A single large ice cube floats perfectly, garnished with a twist of orange peel and a sprig of fresh herbs. The background is a dark, textured wood surface with soft, bokeh-style lighting from a nearby fireplace. The image radiates a warm, high-end nightlife energy with rich colors of ruby, gold, and charcoal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_KP2wX-IUHx7P8K-h6_BGHIkw1aK2V8d1wdDxldQ24DvSHB8zeR2z0-s68bAh80VVbzvKzfbupMYgnRiltEHr5lGfphy0c3vVKan1oQtZ_zNEnUhZ9lChj3kV4_AQkGykjQD5eMlmputdP1AQRUR1bWLNBR3S_mdzIK_T-9FyzQ356oQVZ_263Iy_7Mjhk56VwgdrjcU8OVaLF0awG9GLS0YXC7GlrrjaIdgJzZw__gDlHI6kTwhMlid-hWXK_pezsRnN0t7dMWw"/>
+<div class="absolute top-4 left-4 px-3 py-1 bg-tertiary/90 text-on-tertiary text-[10px] uppercase font-bold tracking-widest rounded">Cocktail</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Onyx Old Fashioned</h3>
+<span class="font-headline-md text-headline-md text-primary">$24.00</span>
+</div>
+<p class="text-on-surface-variant font-label-lg text-label-lg mb-4">House Signature</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/20">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-1">Mix Stock</p>
+<p class="text-headline-md font-headline-md text-on-surface">85 <span class="text-label-sm font-label-sm text-outline">svs</span></p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/20">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-1">Status</p>
+<div class="flex items-center gap-2 pt-1">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-label-lg font-label-lg text-on-surface">Available</span>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-2">Ingredients</p>
+<p class="text-label-sm text-on-surface-variant">Rye Whiskey, Black Walnut Bitters, Maple Syrup, Smoked Oak.</p>
+</div>
+<div class="mt-auto pt-6 border-t border-outline-variant/30">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]" data-weight="fill">auto_awesome</span>
+<span class="text-label-sm font-label-lg text-on-surface">SmokeCraft Rec</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">point_of_sale</span>
+<span class="text-label-sm font-label-lg text-on-surface">POS 3 Sync</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 4: Wine -->
+<div class="group flex flex-col smoked-glass rounded-xl overflow-hidden amber-glow transition-all duration-500 hover:-translate-y-2">
+<div class="relative h-64 overflow-hidden">
+<img alt="Vintage Wine" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A luxurious vineyard cellar setting showing an aged bottle of red wine being poured into a large crystal glass. The deep purple liquid catches the light, creating a sense of movement and elegance. The background consists of rustic oak barrels and soft ambient lighting from wrought-iron sconces. The color story is centered on rich burgundies, warm woods, and the brilliant clarity of crystal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkJfx4hqyGmYjyVR9A42M_84o5Rhbmi3n9asCbfrw8ckS4nNkOEjdZ3bEP2oLDyK_UyiDQLv9nKAK9JzuxJEMH0oWgP35iBQi91g4J-zBL6Qx7Zg8nJxbSc4OoKr9AZePO_E0WVDQngDuCOm10EOytIdZtYm7ZciNT6YECqmf2eDy0W6st7NI32uakddFLHTD8g5bC8bdJKcJciE-YJa-a1Fqoc7oipPLPAzMCWnmWe4uNBTh-4dxCLuCzy4_LDxGtYq07wHq4pKM"/>
+<div class="absolute top-4 left-4 px-3 py-1 bg-red-800/90 text-white text-[10px] uppercase font-bold tracking-widest rounded">Wine</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Château Margaux 2015</h3>
+<span class="font-headline-md text-headline-md text-primary">$1,250.00</span>
+</div>
+<p class="text-on-surface-variant font-label-lg text-label-lg mb-4">Bordeaux, France</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/20">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-1">Stock</p>
+<p class="text-headline-md font-headline-md text-on-surface text-error">2 <span class="text-label-sm font-label-sm text-outline">btl</span></p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/20">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-1">Status</p>
+<div class="flex items-center gap-2 pt-1">
+<div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+<span class="text-label-lg font-label-lg text-on-surface">Low Stock</span>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<p class="text-[10px] uppercase text-outline tracking-wider mb-2">Vintage Details</p>
+<p class="text-label-sm text-on-surface-variant">99 Point Rating. Limited allocation remaining in the Grand Lounge vault.</p>
+</div>
+<div class="mt-auto pt-6 border-t border-outline-variant/30">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]" data-weight="fill">auto_awesome</span>
+<span class="text-label-sm font-label-lg text-on-surface">SmokeCraft Rec</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">point_of_sale</span>
+<span class="text-label-sm font-label-lg text-on-surface">POS 3 Sync</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Add New Product Action Card -->
+<div class="flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/50 rounded-xl p-8 hover:border-primary/50 hover:bg-primary/5 transition-all group cursor-pointer h-full min-h-[500px]">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:scale-110 transition-transform mb-4">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface">New Module</h4>
+<p class="text-on-surface-variant font-label-lg text-label-lg text-center mt-2">Add a new cigar, spirit, or culinary masterpiece to the catalog.</p>
+</div>
+</div>
+</main>
+<!-- Bottom NavBar (From Shared Components) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined mb-1">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/20 rounded-full px-6 py-2 cursor-pointer">
+<span class="material-symbols-outlined mb-1">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined mb-1">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined mb-1">auto_awesome</span>
+<span class="font-label-sm text-label-sm">Assistant</span>
+</div>
+</nav>
+<!-- Atmospheric Effect Script -->
+<script>
+        // Subtle Mouse Parallax for Background
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.005;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.005;
+            document.body.style.backgroundPosition = `${moveX}px ${moveY}px`;
+        });
+
+        // Toggle Visuals
+        const toggles = document.querySelectorAll('input[type="checkbox"]');
+        toggles.forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const parent = this.closest('.group');
+                if (!this.checked) {
+                    parent.style.opacity = '0.7';
+                } else {
+                    parent.style.opacity = '1';
+                }
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 Orchestration | Readiness Scoreboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#3d2400",
+                    "surface-tint": "#e9c176",
+                    "outline-variant": "#4e4639",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "inverse-on-surface": "#303031",
+                    "inverse-primary": "#775a19",
+                    "surface-dim": "#131314",
+                    "on-tertiary": "#3c2d28",
+                    "background": "#131314",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "surface-container": "#1f1f20",
+                    "surface-bright": "#39393a",
+                    "secondary": "#ffb95a",
+                    "on-background": "#e5e2e3",
+                    "on-tertiary-container": "#473733",
+                    "on-error": "#690005",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-surface-variant": "#d1c5b4",
+                    "secondary-fixed": "#ffddb6",
+                    "primary-container": "#c5a059",
+                    "error": "#ffb4ab",
+                    "tertiary": "#dac1bb",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "surface-container-high": "#2a2a2b",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-lowest": "#0e0e0f",
+                    "inverse-surface": "#e5e2e3",
+                    "on-tertiary-fixed": "#261814",
+                    "on-primary-container": "#4e3700",
+                    "surface-container-low": "#1b1b1c",
+                    "tertiary-container": "#b7a09a",
+                    "surface-container-highest": "#353436",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "error-container": "#93000a",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-surface": "#e5e2e3",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "primary-fixed": "#ffdea5",
+                    "surface": "#131314",
+                    "surface-variant": "#353436",
+                    "on-secondary": "#462a00",
+                    "secondary-container": "#c68315",
+                    "primary": "#e9c176",
+                    "on-primary-fixed": "#261900",
+                    "outline": "#9a8f80",
+                    "on-primary": "#412d00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "card-padding": "24px",
+                    "margin": "64px",
+                    "unit": "8px",
+                    "gutter": "32px",
+                    "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .status-ready { color: #4ade80; border-color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+        .status-refinement { color: #fbbf24; border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
+        .status-blocked { color: #f87171; border-color: #f87171; background: rgba(248, 113, 113, 0.1); }
+        .status-missing { color: #94a3b8; border-color: #94a3b8; background: rgba(148, 163, 184, 0.1); }
+        
+        body {
+            background-color: #131314;
+            background-image: radial-gradient(circle at 50% 0%, rgba(233, 193, 118, 0.08) 0%, transparent 50%);
+            min-height: 100vh;
+            color: #e5e2e3;
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(233, 193, 118, 0.2); border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="bg-surface/80 backdrop-blur-xl text-primary font-headline-md text-headline-md fixed top-0 w-full border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(233,193,118,0.1)] flex items-center justify-between px-margin h-20 w-full z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">hub</span>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter">CraftHub 360 Orchestration</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<a class="text-primary font-label-lg transition-all duration-300" href="#">Orchestration</a>
+<a class="text-on-surface-variant font-label-lg hover:text-primary transition-all" href="#">Command Center</a>
+<a class="text-on-surface-variant font-label-lg hover:text-primary transition-all" href="#">Analytics</a>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden bg-surface-container">
+<img alt="Member Profile" data-alt="A sophisticated close-up portrait of a senior luxury hospitality executive in a dimly lit, high-end private members club. The lighting is dramatic and moody, with warm amber highlights catching the textures of a tailored wool suit and a silk tie. The background features blurred wooden paneling and soft glows from antique crystal lamps, creating an atmosphere of exclusivity and seasoned authority. The image color palette consists of deep espresso browns and warm gold tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgnDTZz6sulYo8hKnnS_qdFD-SjpDTB_1L3pkBpwtMWbjCbuhCzq_kHYI3DGRQ-H9ODFXVgWhoSjmYWWAdlcZDZt8aWFCUgs7gTmNbPdXYgxy-CRL_X0X0NHzkfTj8BelLDu83KzNiJtivi2yw5ptrpmmpojaIi0JqNcrgcVvlMVAXhuuicwgKrxJocvaS3FnsDpuGC_3nmVE4E-P1OvpJw7h9glMp_yzkvXwnzn5E-KrRlc1y7v_Ez6vEoQSfmTMyymQ6ldXjWoc"/>
+</div>
+</div>
+</header>
+<!-- Navigation Drawer (Desktop) -->
+<aside class="hidden lg:flex fixed left-0 top-20 h-[calc(100vh-80px)] w-80 bg-surface-container-lowest/95 backdrop-blur-2xl border-r border-outline-variant/20 shadow-2xl flex-col py-8 z-40">
+<div class="px-6 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Command Center</h2>
+<p class="text-on-surface-variant text-label-sm mt-1 opacity-70">SYSTEM READINESS OVERVIEW</p>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-4 p-3 bg-secondary-container text-on-secondary-container rounded-lg transition-transform active:translate-x-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard_customize</span>
+<span class="font-label-lg">Orchestration</span>
+</a>
+<a class="flex items-center gap-4 p-3 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-label-lg">Connectivity Map</span>
+</a>
+<a class="flex items-center gap-4 p-3 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">auto_awesome_motion</span>
+<span class="font-label-lg">Guest Journeys</span>
+</a>
+<a class="flex items-center gap-4 p-3 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-lg">Craft Modules</span>
+</a>
+<a class="flex items-center gap-4 p-3 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-label-lg">Passport Networking</span>
+</a>
+<a class="flex items-center gap-4 p-3 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-lg">POS 3 Integration</span>
+</a>
+<a class="flex items-center gap-4 p-3 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-lg">E.A.T. Intelligence</span>
+</a>
+<a class="flex items-center gap-4 p-3 text-on-surface-variant hover:text-primary hover:bg-surface-variant/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">conveyor_belt</span>
+<span class="font-label-lg">Logistics</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-80 pt-28 pb-32 px-gutter min-h-screen">
+<div class="max-w-container-max-width mx-auto">
+<!-- Hero Header Section -->
+<section class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">Readiness Scoreboard</h2>
+<p class="text-body-lg text-on-surface-variant max-w-2xl">Executive summary of the CraftHub 360 ecosystem. Monitor critical integration statuses, identify operational bottlenecks, and authorize next-phase deployments.</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-primary hover:bg-primary-container text-on-primary font-label-lg px-8 py-4 rounded-lg shadow-lg flex items-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined">download</span>
+                        EXPORT REPORT
+                    </button>
+<button class="border border-primary text-primary hover:bg-primary/10 font-label-lg px-8 py-4 rounded-lg transition-all active:scale-95">
+                        RE-SCAN SYSTEM
+                    </button>
+</div>
+</section>
+<!-- Scoreboard Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
+<!-- Category Card: Guest Flow -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)] group">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">groups</span>
+<span class="status-ready text-label-sm border px-3 py-1 rounded-full font-semibold">READY</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Guest Flow</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Tracking movement and throughput of visitors within the sensory lounge environment.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">None. High-efficiency routing active.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Activate VIP bypass sensors.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Card: Craft Journeys -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">auto_awesome</span>
+<span class="status-refinement text-label-sm border px-3 py-1 rounded-full font-semibold">REFINEMENT</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Craft Journeys</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Personalized tasting and sensory narratives for individual member preferences.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Mild latency in curation engine.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Optimize DB query for cellar assets.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Card: Passport Connection -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">passkey</span>
+<span class="status-ready text-label-sm border px-3 py-1 rounded-full font-semibold">READY</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Passport Connection</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">NFC-enabled member authentication and data synchronization layer.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Seamless biometric and NFC handshake.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Batch-sync offline transactions.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Card: POS 3 -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">point_of_sale</span>
+<span class="status-blocked text-label-sm border px-3 py-1 rounded-full font-semibold">BLOCKED</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">POS 3</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Next-gen point of sale with integrated inventory and member rewards reconciliation.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Critical. Payment terminal auth failure.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Manual gateway reset required.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Card: E.A.T. -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">psychology</span>
+<span class="status-refinement text-label-sm border px-3 py-1 rounded-full font-semibold">REFINEMENT</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">E.A.T. Intelligence</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Expertise, Authoritativeness, and Trustworthiness scoring for AI pairing suggestions.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Inaccurate vintage recommendations.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Update sommelier training set.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Card: Admin Setup -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">settings_account_box</span>
+<span class="status-ready text-label-sm border px-3 py-1 rounded-full font-semibold">READY</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Admin Setup</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Global configuration dashboard for floor managers and property owners.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Stable. All roles and permissions mapped.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Audit log verification.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Card: Staff Mode -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">hail</span>
+<span class="status-missing text-label-sm border px-3 py-1 rounded-full font-semibold">MISSING</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Staff Mode</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Context-aware mobile companion interface for concierge and servers.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Service delays due to walk-back. </p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Deploy v0.9 Beta to test tablets.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Card: AI Concierge -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">smart_toy</span>
+<span class="status-ready text-label-sm border px-3 py-1 rounded-full font-semibold">READY</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">AI Concierge</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Multi-modal AI assistant for table-side bottle service and history.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Voice recognition at 98.4% accuracy.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Add multilingual support (FR/ES).</p>
+</div>
+</div>
+</div>
+</div>
+<!-- More cards can follow this pattern... truncated for space but covering the requested list -->
+<!-- Category Card: Inventory -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">inventory_2</span>
+<span class="status-refinement text-label-sm border px-3 py-1 rounded-full font-semibold">REFINEMENT</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Inventory</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Real-time cellar and humidor stock tracking with predictive depletion alerts.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Discrepancy in rare cigar count.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Sync RFID tags with master DB.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Card: Floor Plan -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">map</span>
+<span class="status-ready text-label-sm border px-3 py-1 rounded-full font-semibold">READY</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Floor Plan</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Dynamic 3D digital twin of the club layout and table occupancy.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Full real-time spatial visualization.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Update lounge lighting overlay.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Card: Security -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">security</span>
+<span class="status-ready text-label-sm border px-3 py-1 rounded-full font-semibold">READY</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Security</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Access control, vault monitoring, and perimeter intrusion detection systems.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Encrypted and hardened. Verified.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Routine penetrative testing.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Card: Touchscreen UX -->
+<div class="glass-panel p-card-padding rounded-xl flex flex-col justify-between transition-all hover:shadow-[0_8px_32px_rgba(233,193,118,0.15)]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">touch_app</span>
+<span class="status-refinement text-label-sm border px-3 py-1 rounded-full font-semibold">REFINEMENT</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Touchscreen UX</h3>
+<p class="text-label-sm text-on-surface-variant mb-4">Tactile interaction patterns for heavy-duty kiosk deployments.</p>
+<div class="space-y-3 border-t border-outline-variant/30 pt-4">
+<div>
+<p class="text-label-sm font-bold text-primary">IMPACT</p>
+<p class="text-body-md text-on-surface/80">Haptic feedback lag on scroll.</p>
+</div>
+<div>
+<p class="text-label-sm font-bold text-primary">NEXT ACTION</p>
+<p class="text-body-md text-on-surface/80">Calibrate physical engine drivers.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile) -->
+<footer class="md:hidden fixed bottom-0 w-full h-20 bg-surface-container-high/90 backdrop-blur-lg border-t border-primary/20 shadow-[0_-8px_32px_rgba(0,0,0,0.5)] flex justify-around items-center px-4 z-50 rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-primary scale-110 transition-transform duration-200">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-sm">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary transition-transform duration-200 active:scale-90">
+<span class="material-symbols-outlined">extension</span>
+<span class="font-label-sm">Modules</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary transition-transform duration-200 active:scale-90">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-sm">Floor Plan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary transition-transform duration-200 active:scale-90">
+<span class="material-symbols-outlined">error</span>
+<span class="font-label-sm">Alerts</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary transition-transform duration-200 active:scale-90">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm">Settings</span>
+</div>
+</footer>
+<script>
+        // Micro-interactions for glass cards
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+                card.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Background parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.body.style.backgroundPosition = `${50 + moveX}% ${moveY}px`;
+        });
+    </script>
+</body></html>

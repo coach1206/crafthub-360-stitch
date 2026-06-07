@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Grand Humidor | Floor Plan Builder</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .canvas-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(154, 143, 128, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(154, 143, 128, 0.05) 1px, transparent 1px);
+        }
+        .gold-foil {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 100%);
+            box-shadow: 0 4px 15px rgba(233, 193, 118, 0.2);
+        }
+        .haptic-drop {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .haptic-drop:active {
+            transform: scale(0.95);
+        }
+        @keyframes amber-pulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(233, 193, 118, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(233, 193, 118, 0.4); }
+        }
+        .active-glow {
+            animation: amber-pulse 3s infinite;
+        }
+        .status-open { background-color: #4ade80; }
+        .status-active { background-color: #3b82f6; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "surface-container-highest": "#353436",
+                "surface-container": "#1f1f20",
+                "background": "#131314",
+                "surface-tint": "#e9c176",
+                "surface-bright": "#39393a",
+                "inverse-surface": "#e5e2e3",
+                "primary": "#e9c176",
+                "primary-container": "#c5a059",
+                "on-primary-container": "#4e3700",
+                "secondary-container": "#c68315",
+                "on-secondary-container": "#3d2400",
+                "on-surface": "#e5e2e3",
+                "on-surface-variant": "#d1c5b4",
+                "outline": "#9a8f80",
+                "outline-variant": "#4e4639",
+                "surface-container-low": "#1b1b1c",
+                "surface-container-high": "#2a2a2b"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
+              "spacing": {
+                "margin": "64px",
+                "card-padding": "24px",
+                "gutter": "32px",
+                "container-max-width": "1440px",
+                "unit": "8px"
+              },
+              "fontFamily": {
+                "label-lg": ["Montserrat"],
+                "headline-xl": ["Playfair Display"],
+                "headline-md": ["Playfair Display"],
+                "headline-lg": ["Playfair Display"],
+                "display-lg": ["Playfair Display"],
+                "body-md": ["Montserrat"]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
+<!-- TopAppBar Component Mapping -->
+<header class="bg-background/80 backdrop-blur-xl text-primary flex justify-between items-center px-margin h-24 border-b border-outline-variant/30 shadow-sm z-50 fixed top-0 w-full">
+<div class="flex items-center gap-6">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</h1>
+<div class="h-8 w-[1px] bg-outline-variant/50"></div>
+<span class="font-headline-md text-headline-md opacity-70">Floor Plan Builder</span>
+</div>
+<div class="flex items-center gap-6">
+<button class="hover:bg-surface-container-highest/50 p-2 rounded-full transition-all duration-300">
+<span class="material-symbols-outlined text-3xl" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-3 bg-surface-container-high px-4 py-2 rounded-full border border-outline-variant/20">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-primary-container flex items-center justify-center text-on-primary-container font-bold">
+                    JV
+                </div>
+<span class="font-label-lg text-label-lg text-on-surface">Julian Vane</span>
+</div>
+</div>
+</header>
+<div class="flex flex-1 pt-24 pb-0 h-full">
+<!-- NavigationDrawer / Sidebar Component Mapping -->
+<aside class="fixed left-0 top-0 h-screen w-80 z-40 bg-surface-container-low border-r border-outline-variant/20 pt-24 flex flex-col">
+<div class="p-8 border-b border-outline-variant/20">
+<div class="flex items-center gap-4 mb-2">
+<span class="font-headline-lg text-headline-lg text-primary">Orchestration</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Master Palette</p>
+</div>
+<nav class="p-4 space-y-1 overflow-y-auto flex-1">
+<!-- Navigation Drawer Items Mapping -->
+<a class="bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 flex items-center gap-4 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+<span class="font-label-lg text-label-lg">Floor Plan</span>
+</a>
+<a class="text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-bright/20 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-lg text-label-lg">Live Map</span>
+</a>
+<a class="text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-bright/20 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-lg text-label-lg">Insights</span>
+</a>
+<a class="text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-bright/20 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+<div class="mt-8 pt-8 border-t border-outline-variant/20">
+<h3 class="font-label-sm text-label-sm text-on-surface-variant/60 uppercase tracking-widest px-4 mb-4">Venue Elements</h3>
+<div class="grid grid-cols-2 gap-3 px-2">
+<!-- Bar Seats (Deep Amber) -->
+<div class="haptic-drop bg-[#5d4201] p-4 rounded-xl border border-primary/20 flex flex-col items-center gap-2 cursor-grab group active:cursor-grabbing" draggable="true">
+<div class="w-10 h-10 rounded-full border-2 border-primary/40 group-hover:border-primary transition-colors"></div>
+<span class="font-label-sm text-[10px] text-primary uppercase">Bar Seat</span>
+</div>
+<!-- Lounge Seats (Burgundy) -->
+<div class="haptic-drop bg-[#473733] p-4 rounded-xl border border-tertiary/20 flex flex-col items-center gap-2 cursor-grab group" draggable="true">
+<div class="w-12 h-10 rounded-lg border-2 border-tertiary/40 group-hover:border-tertiary transition-colors"></div>
+<span class="font-label-sm text-[10px] text-tertiary uppercase">Lounge</span>
+</div>
+<!-- VIP Tables (Black Gold) -->
+<div class="haptic-drop bg-surface-container-highest p-4 rounded-xl border border-surface-tint/30 flex flex-col items-center gap-2 cursor-grab group" draggable="true">
+<div class="w-14 h-14 rounded-full border-2 border-surface-tint shadow-[0_0_10px_rgba(233,193,118,0.2)] group-hover:shadow-[0_0_20px_rgba(233,193,118,0.4)]"></div>
+<span class="font-label-sm text-[10px] text-surface-tint uppercase">VIP Table</span>
+</div>
+<!-- Humidor Zones (Dark Brown) -->
+<div class="haptic-drop bg-[#2a1800] p-4 rounded-xl border border-outline-variant/30 flex flex-col items-center gap-2 cursor-grab group" draggable="true">
+<div class="w-14 h-8 bg-outline-variant/20 border border-outline-variant/50"></div>
+<span class="font-label-sm text-[10px] text-on-surface-variant uppercase">Humidor</span>
+</div>
+<!-- Kiosks -->
+<div class="haptic-drop bg-surface-container-high p-4 rounded-xl border border-outline/20 flex flex-col items-center gap-2 cursor-grab group" draggable="true">
+<div class="w-8 h-12 bg-outline/20 border-t-4 border-primary"></div>
+<span class="font-label-sm text-[10px] text-on-surface uppercase">Kiosk</span>
+</div>
+</div>
+</div>
+</nav>
+</aside>
+<!-- Center Canvas -->
+<main class="ml-80 flex-1 relative bg-surface-container-lowest overflow-hidden">
+<div class="absolute inset-0 canvas-grid opacity-30"></div>
+<div class="relative w-full h-full p-12 overflow-auto scrollbar-hide" id="canvas">
+<!-- Patio Area -->
+<div class="absolute top-20 left-20 w-[600px] h-[400px] glass-panel rounded-3xl p-8 border-dashed border-2 border-outline-variant/40 flex flex-col">
+<span class="font-headline-md text-headline-md text-on-surface-variant/50 mb-auto">The Terrace Patio</span>
+<div class="flex gap-12 justify-center pb-12">
+<!-- Dragged Objects Examples -->
+<div class="w-16 h-16 rounded-full border-2 border-primary active-glow flex items-center justify-center relative">
+<div class="absolute -top-1 -right-1 w-4 h-4 rounded-full status-open shadow-lg"></div>
+</div>
+<div class="w-16 h-16 rounded-full border-2 border-primary active-glow flex items-center justify-center relative">
+<div class="absolute -top-1 -right-1 w-4 h-4 rounded-full status-open shadow-lg"></div>
+</div>
+<div class="w-16 h-16 rounded-full border-2 border-primary active-glow flex items-center justify-center relative">
+<div class="absolute -top-1 -right-1 w-4 h-4 rounded-full status-active shadow-lg"></div>
+</div>
+</div>
+</div>
+<!-- Dining Room -->
+<div class="absolute top-20 left-[700px] w-[800px] h-[600px] glass-panel rounded-3xl p-8 border-2 border-outline-variant/20">
+<div class="flex justify-between items-start">
+<span class="font-headline-md text-headline-md text-on-surface-variant/50">Main Dining Salon</span>
+<div class="px-4 py-1 rounded-full bg-surface-tint/10 border border-surface-tint/20">
+<span class="font-label-sm text-surface-tint">Active Layout</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-12 mt-16 p-8">
+<div class="w-24 h-24 rounded-full border-4 border-primary/60 flex items-center justify-center bg-surface-container-highest/40">
+<span class="font-label-lg text-primary">T-12</span>
+</div>
+<div class="w-24 h-24 rounded-full border-4 border-primary/60 flex items-center justify-center bg-surface-container-highest/40">
+<span class="font-label-lg text-primary">T-14</span>
+</div>
+<div class="w-24 h-24 rounded-full border-4 border-primary/60 flex items-center justify-center bg-surface-container-highest/40">
+<span class="font-label-lg text-primary">T-16</span>
+</div>
+<div class="w-24 h-24 rounded-full border-4 border-primary/60 flex items-center justify-center bg-surface-container-highest/40">
+<span class="font-label-lg text-primary">T-18</span>
+</div>
+<div class="w-24 h-24 rounded-full border-4 border-primary/60 flex items-center justify-center bg-surface-container-highest/40">
+<span class="font-label-lg text-primary">T-20</span>
+</div>
+</div>
+</div>
+<!-- Wine Cellar (Asymmetric Layout) -->
+<div class="absolute top-[650px] left-20 w-[1480px] h-[300px] glass-panel rounded-3xl p-8 border-2 border-[#643f00]/30 overflow-hidden">
+<div class="absolute top-0 right-0 w-full h-full opacity-20 pointer-events-none">
+<img class="w-full h-full object-cover" data-alt="Close-up architectural macro photography of a luxury wine cellar with dark mahogany shelves and back-lit amber lighting reflecting off crystalline wine glasses and vintage bottles. The atmosphere is quiet, expensive, and deeply textured, featuring rich wood grains and soft shadows. High-end lifestyle aesthetic with deep shadows and golden highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDO38LYtMs3hY5ro74PSU5FOKk8w7c9yGsulX-Gra2MECAfiCP8QcCzvdoVO5lbkMh0SLVTbtbL_w9muSflpCswG0pz1fI1g6rxOvT2lXaY03KPhnoUxb54LcQeJJAXhodUGX3T4wVdWelrRGCxPWqNxxacIZ1q965DzblXuR3UEiGltZqxAjRgeZTuWOo1BNCgMZLb9QN5j-h6GLs1YeWuzJdi9Dhqet9e33IQx4jUkyL4KmP52ftCiYVB6OKbT4WP7QjiaFZvMg"/>
+</div>
+<div class="relative z-10 flex flex-col h-full">
+<span class="font-headline-md text-headline-md text-[#e9c176]">The Reserve Cellar</span>
+<div class="flex items-center gap-24 mt-8">
+<div class="h-20 w-48 border border-surface-tint/40 bg-surface-container-low/80 backdrop-blur-sm rounded-lg flex items-center justify-center font-label-lg text-primary uppercase tracking-tighter">Humidor A-1</div>
+<div class="h-20 w-48 border border-surface-tint/40 bg-surface-container-low/80 backdrop-blur-sm rounded-lg flex items-center justify-center font-label-lg text-primary uppercase tracking-tighter">Humidor A-2</div>
+<div class="h-20 w-48 border border-surface-tint/40 bg-surface-container-low/80 backdrop-blur-sm rounded-lg flex items-center justify-center font-label-lg text-primary uppercase tracking-tighter">Vault</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Control Bar (Large 72px buttons) -->
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-6 bg-surface-container-highest/90 backdrop-blur-2xl p-4 rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-outline-variant/20 z-50">
+<button class="h-[72px] px-10 rounded-full font-label-lg text-label-lg gold-foil text-on-primary-container hover:scale-105 active:scale-95 transition-all flex items-center gap-3">
+                    Save Layout
+                </button>
+<button class="h-[72px] px-10 rounded-full font-label-lg text-label-lg border border-primary/40 text-primary hover:bg-primary/10 transition-all flex items-center gap-3">
+                    Preview
+                </button>
+<button class="h-[72px] w-[72px] rounded-full border border-outline/30 text-on-surface hover:bg-surface-bright/20 transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl" data-icon="lock">lock</span>
+</button>
+<div class="h-12 w-[1px] bg-outline-variant/50"></div>
+<button class="h-[72px] px-10 rounded-full font-label-lg text-label-lg bg-surface-container-low border border-secondary-container/30 text-secondary hover:shadow-[0_0_15px_rgba(233,193,118,0.2)] transition-all">
+                    Publish to POS 3
+                </button>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Suppressed on Builder Screen per UX Goal of task focus, but included in data so I reference for logic) -->
+<!-- Not rendering BottomNavBar here as this is a Task-Focused "Builder" screen -->
+<script>
+        // Micro-interactions for 'Haptic Weight'
+        const draggables = document.querySelectorAll('.haptic-drop');
+        const canvas = document.getElementById('canvas');
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', (e) => {
+                draggable.classList.add('opacity-50');
+                // Simulate haptic pick-up with JS if needed, CSS scale-95 handles most
+            });
+
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('opacity-50');
+                // Soft snap effect animation handled by CSS transition
+            });
+        });
+
+        // Simple Canvas Logic for Drop
+        canvas.addEventListener('dragover', e => {
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('drop', e => {
+            e.preventDefault();
+            // In a real app, logic to place object at e.clientX/Y would go here
+            console.log("Object Dropped with Haptic Weight at", e.clientX, e.clientY);
+        });
+
+        // Toggle Sidebar
+        const sidebar = document.querySelector('aside');
+        // Logic could be added here for expand/collapse
+    </script>
+</body></html>

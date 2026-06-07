@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#e5e2e3",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-tint": "#e9c176",
+                    "on-secondary-fixed": "#2a1800",
+                    "primary-container": "#c5a059",
+                    "primary-fixed": "#ffdea5",
+                    "outline": "#9a8f80",
+                    "on-primary-container": "#4e3700",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "error-container": "#93000a",
+                    "tertiary": "#dac1bb",
+                    "surface-variant": "#353436",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-tertiary-container": "#473733",
+                    "surface-container-highest": "#353436",
+                    "inverse-on-surface": "#303031",
+                    "surface-container-low": "#1b1b1c",
+                    "surface-dim": "#131314",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-tertiary": "#3c2d28",
+                    "on-surface-variant": "#d1c5b4",
+                    "secondary-fixed": "#ffddb6",
+                    "background": "#131314",
+                    "surface-container": "#1f1f20",
+                    "outline-variant": "#4e4639",
+                    "on-primary": "#412d00",
+                    "on-surface": "#e5e2e3",
+                    "primary": "#e9c176",
+                    "on-tertiary-fixed": "#261814",
+                    "secondary-container": "#c68315",
+                    "primary-fixed-dim": "#e9c176",
+                    "tertiary-container": "#b7a09a",
+                    "surface-container-high": "#2a2a2b",
+                    "on-secondary-container": "#3d2400",
+                    "inverse-primary": "#775a19",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-secondary": "#462a00",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface": "#131314",
+                    "secondary": "#ffb95a",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-error": "#690005",
+                    "surface-bright": "#39393a",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed": "#261900",
+                    "on-background": "#e5e2e3",
+                    "error": "#ffb4ab"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin": "64px",
+                    "gutter": "32px",
+                    "container-max-width": "1440px",
+                    "unit": "8px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-border {
+            border: 1px solid #e9c176;
+        }
+        .bg-wood-texture {
+            background-color: #131314;
+            background-image: radial-gradient(circle at center, #1b1b1c 0%, #131314 100%);
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .shimmer-text {
+            background: linear-gradient(90deg, #e9c176 0%, #ffdea5 50%, #e9c176 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 6s infinite linear;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-wood-texture text-on-surface min-h-screen font-body-md overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-xl bg-surface/80 border-b border-outline-variant flex justify-between items-center px-gutter h-20 shadow-md">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:text-primary-fixed-dim transition-colors active:scale-95 duration-300">menu</button>
+<h1 class="font-headline-md text-headline-md tracking-widest text-primary uppercase">RESERVE LOUNGE</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex gap-8 px-8 h-full items-center">
+<span class="font-label-lg text-on-surface-variant hover:text-primary transition-colors cursor-pointer">POURCRAFT</span>
+<span class="font-label-lg text-on-surface-variant hover:text-primary transition-colors cursor-pointer">BEERCRAFT</span>
+<span class="font-label-lg text-on-surface-variant hover:text-primary transition-colors cursor-pointer">WINECRAFT</span>
+<span class="font-label-lg text-primary font-bold cursor-pointer">PASSPORT</span>
+</div>
+<img alt="Member Digital Passport" class="w-10 h-10 rounded-full border border-primary shadow-sm object-cover" data-alt="A sophisticated close-up portrait of a refined man in his 40s wearing a tailored dark velvet dinner jacket. The lighting is low-key and dramatic, characteristic of an exclusive private lounge. The background is softly blurred with amber highlights from crystal chandeliers, creating a luxurious and private atmosphere. The color palette consists of deep espresso tones, warm amber, and metallic gold accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4U_o5bcTlAOu6GSJuLYLhYEArwHIXusrZYIMzXmwgSGa1KlTLj7ehLoc7bTGN81RRbbIFKuwrwa0Te0KNaJGl0wTuUJDnIPTVGQT67lIBb_J33BoAgDTmfy8If3HTgH15w-5Vkgrn2QWJq_mQtW5F9Nd7eeLX6hj1BFYkSpvtLSg_G-Q0WHC9zY2hGX-eW3mIymeS8tO7hUXPfHYv9LKpyOnqZXQQfHhsKJqZLAoJZd08V16zxbqJ3OBHv6ttP5VP2o205kUfrsc"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 px-gutter container mx-auto max-w-container-max-width flex flex-col lg:grid lg:grid-cols-12 gap-gutter">
+<!-- Left: AI Concierge / Executive Host Persona -->
+<section class="lg:col-span-4 flex flex-col gap-6 order-2 lg:order-1">
+<div class="glass-card rounded-xl p-card-padding flex flex-col gap-4 border-l-4 border-l-primary shadow-2xl">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+</div>
+<div>
+<h2 class="font-headline-md text-primary tracking-tight">Executive Host</h2>
+<p class="font-label-sm text-secondary tracking-widest uppercase">Concierge AI Active</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant italic text-on-surface-variant font-body-md leading-relaxed">
+                    "Your QR code is ready. Let another guest scan it to send a connection request. Remember, both users must confirm before NOVEE OS verifies the connection."
+                </div>
+<div class="flex flex-col gap-2 mt-2">
+<p class="font-label-sm text-on-surface-variant/60 uppercase">Recent Network Activity</p>
+<div class="flex items-center gap-3 py-2 border-b border-outline-variant/30">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">handshake</span>
+</div>
+<p class="text-body-md text-sm">New Request from <span class="text-primary font-semibold">Julian V.</span></p>
+</div>
+</div>
+</div>
+<!-- Contextual Stats Card -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col gap-4">
+<h3 class="font-label-lg text-primary uppercase">Passport Stats</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-highest p-4 rounded-lg text-center">
+<span class="block font-headline-md text-primary">84</span>
+<span class="text-xs uppercase tracking-tighter text-on-surface-variant">Connections</span>
+</div>
+<div class="bg-surface-container-highest p-4 rounded-lg text-center">
+<span class="block font-headline-md text-secondary">Elite</span>
+<span class="text-xs uppercase tracking-tighter text-on-surface-variant">Tier</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right: QR Code Passport Visual -->
+<section class="lg:col-span-8 flex flex-col gap-8 order-1 lg:order-2">
+<div class="relative w-full aspect-[4/5] md:aspect-video rounded-2xl overflow-hidden shadow-2xl border border-outline-variant group">
+<div class="absolute inset-0 z-0 overflow-hidden">
+<img alt="Luxury Lounge Background" class="w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-1000" data-alt="An expansive, ultra-luxury members-only lounge featuring rich mahogany walls and leather-bound library shelves in the background. The lighting is cinematic with warm amber glows emanating from hidden fixtures, casting soft light on velvet upholstery. The air feels sophisticated and exclusive, using a deep palette of charcoal, gold, and dark wood tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmOkP2rytd7f_zoyknkIgBOA8IpVUDZAk78GqFDR2ta9c1u1ncWbD2rcGHH1IgFPLMGFn4OO6eCp_DUxIKgpd7Xffqoyz8kXhJXYDJFBtuSeK0x58QTPThmaqmnaNk03xeptXB1IUCClfBWRYzWSUIJBl4GvR_LmCDL-Z4nwTIMZnA0nqJYPZDakizB9AfX9aNzNjTOy_njTj1NqkwW9apnjlaeN9To2bDb_preYECuhnJfEtb_6AYcQnAGc72IJuf43SNWy2Nlzg"/>
+</div>
+<div class="relative z-10 w-full h-full flex flex-col items-center justify-center p-gutter bg-gradient-to-t from-background via-transparent to-transparent">
+<div class="text-center mb-10">
+<h2 class="font-headline-xl text-primary shimmer-text tracking-widest uppercase mb-2">360 Passport</h2>
+<p class="font-label-lg text-on-surface tracking-[0.3em] uppercase opacity-70">Member Identity Verified</p>
+</div>
+<!-- The QR Code Component -->
+<div class="relative p-8 rounded-3xl glass-card border-2 border-primary/30 shadow-[0_0_50px_rgba(233,193,118,0.2)]">
+<div class="bg-white p-4 rounded-xl shadow-inner">
+<img alt="Passport Connection QR Code" class="w-48 h-48 md:w-64 md:h-64" data-alt="A high-contrast, professional QR code centered on a clean white paper texture. The QR code is sharp and minimalist. The surrounding container has a soft amber glow and is framed by a luxury smoked glass border with subtle gold foil accents, maintaining the premium aesthetic of the private lounge interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnZfbs1nQXyAeaZyXkPriPR6IptS2dl-CBfFC1sDn7fK7tthZUrLHg90Pfnw2-KiOdnKqKsqCILY8g9eVr86e7tkju5yjtZRRJ_GZSBFZDor8pySLGaNjrMqh1YCcseDZOYqq_8YCag3o88vellMktmLkvKWqsQPth0ZeVm4CgcUlnlM5TMCqRmp5hBDqGhYt-NUMmEh7y60nlpqKcEfUvlM25ZXeIhXI8yow12J8tjA5BrTdxv7px2HjoEfnq1MTlMA78E13AVwA"/>
+</div>
+<!-- Corner Accents -->
+<div class="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-primary rounded-tl-lg"></div>
+<div class="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-right-2 border-primary rounded-tr-lg border-r-2"></div>
+<div class="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-primary rounded-bl-lg"></div>
+<div class="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-right-2 border-primary rounded-br-lg border-r-2"></div>
+</div>
+<div class="mt-12 flex flex-wrap justify-center gap-4">
+<button class="px-8 py-3 bg-primary text-on-primary rounded-full font-label-lg uppercase tracking-widest hover:bg-primary-fixed-dim transition-all active:scale-95 shadow-lg flex items-center gap-2">
+<span class="material-symbols-outlined">share</span>
+                            Share Passport
+                        </button>
+<button class="px-8 py-3 border border-primary text-primary rounded-full font-label-lg uppercase tracking-widest hover:bg-primary/10 transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined">photo_camera</span>
+                            Scan Guest
+                        </button>
+</div>
+</div>
+</div>
+<!-- Transactional Note -->
+<div class="flex items-start gap-4 p-4 rounded-xl bg-surface-container-low border border-outline-variant/30">
+<span class="material-symbols-outlined text-secondary">verified_user</span>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+<strong class="text-on-surface">Privacy Protocol:</strong> Connections via 360 Passport are end-to-end encrypted. No personal contact information is exchanged until both parties verify the connection through their private dashboard.
+                </p>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl backdrop-blur-20px bg-surface-container-low/90 border-t border-outline-variant flex justify-around items-center h-24 px-gutter pb-safe shadow-[0_-4px_20px_rgba(233,193,118,0.15)] md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">PourCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">BeerCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">WineCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold gap-1 scale-110 duration-500 ease-out cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Passport</span>
+</div>
+</nav>
+<!-- Visual Polish: Ambient Particle Overlay (Scripted) -->
+<canvas class="fixed inset-0 pointer-events-none z-[1] opacity-20" id="ambient-canvas"></canvas>
+<script>
+        const canvas = document.getElementById('ambient-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.2;
+                this.vy = (Math.random() - 0.5) * 0.2;
+                this.size = Math.random() * 2;
+                this.alpha = Math.random() * 0.5;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(233, 193, 118, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            resize();
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        init();
+    </script>
+</body></html>

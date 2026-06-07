@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Concierge Coach - Floor Plan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#e5e2e3",
+                    "error": "#ffb4ab",
+                    "surface-container-lowest": "#0e0e0f",
+                    "on-tertiary-fixed": "#261814",
+                    "on-primary": "#412d00",
+                    "on-surface-variant": "#d1c5b4",
+                    "inverse-surface": "#e5e2e3",
+                    "surface": "#131314",
+                    "secondary-container": "#c68315",
+                    "on-secondary": "#462a00",
+                    "primary-container": "#c5a059",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container": "#1f1f20",
+                    "on-secondary-container": "#3d2400",
+                    "inverse-primary": "#775a19",
+                    "surface-container-low": "#1b1b1c",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "secondary": "#ffb95a",
+                    "on-surface": "#e5e2e3",
+                    "on-primary-container": "#4e3700",
+                    "on-error": "#690005",
+                    "surface-tint": "#e9c176",
+                    "primary": "#e9c176",
+                    "error-container": "#93000a",
+                    "inverse-on-surface": "#303031",
+                    "tertiary-container": "#b7a09a",
+                    "on-error-container": "#ffdad6",
+                    "surface-dim": "#131314",
+                    "primary-fixed": "#ffdea5",
+                    "tertiary": "#dac1bb",
+                    "surface-container-highest": "#353436",
+                    "surface-variant": "#353436",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "outline": "#9a8f80",
+                    "surface-bright": "#39393a",
+                    "on-tertiary-container": "#473733",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-primary-fixed": "#261900",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "background": "#131314"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "unit": "8px",
+                    "margin": "64px",
+                    "gutter": "32px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .amber-glow {
+            box-shadow: 0 0 40px rgba(198, 131, 21, 0.15);
+        }
+        .map-container {
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+        }
+        .pulsing-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .host-mode-active {
+            text-shadow: 0 0 10px rgba(233, 193, 118, 0.5);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen font-body-md overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-margin py-4 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="clinical_notes">clinical_notes</span>
+<h1 class="font-headline-md text-headline-md font-medium text-primary">AI Concierge Coach</h1>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<span class="text-primary font-semibold font-label-lg tracking-widest cursor-pointer">Floor Plan | Host Mode</span>
+<span class="text-on-surface-variant font-medium font-label-lg tracking-widest hover:text-primary transition-colors cursor-pointer">Live Analytics</span>
+<span class="text-on-surface-variant font-medium font-label-lg tracking-widest hover:text-primary transition-colors cursor-pointer">Staffing</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center border border-primary/20 cursor-pointer overflow-hidden">
+<img alt="Executive Profile" class="w-full h-full object-cover" data-alt="A professional studio portrait of a high-end hospitality executive in a dark tailored suit. The lighting is moody and cinematic with warm amber highlights, reflecting an atmosphere of exclusive luxury. The background is softly blurred, suggesting an upscale lounge or private club environment. The overall aesthetic is sophisticated, polished, and authoritative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg2KjAog65u1J0dJV55pSXp07Ry0UMCoGjdA3CRhNMKvgWJXS-CthONKkvJZJIBJqsxrywANr-mUHG0wm5v_rgiOBwDHZjlIYVlgVV-j8CyJptu2EEOPAnExAPy9zISkfXypAi5IB-vXXNVNGjRXRHwt7kMvka8usJ1OISVitCgSUdFW93ZBE9NAgeIa4kXv-khafyc2DlPNvwO9CmpWahWYhGrnoMUNIhUv3mFN9cUYUhsxY79Hi7qtIStNTDfAj0B2xHlcjC1yQ"/>
+</div>
+</header>
+<!-- Main Canvas: Venue Map -->
+<main class="relative w-full h-screen pt-20 pb-32 flex items-center justify-center">
+<!-- Interactive Map Background -->
+<div class="absolute inset-0 w-full h-full z-0 map-container">
+<img class="w-full h-full object-cover opacity-40 mix-blend-luminosity grayscale" data-alt="A sophisticated architectural floor plan of a multi-level luxury lounge and cigar bar. The drawing uses elegant gold lines on a deep espresso charcoal background, highlighting various seating zones, a mahogany bar, and a secluded patio area. The style is reminiscent of a high-end real estate blueprint with meticulous detail and premium aesthetic. The lighting is low and atmospheric with subtle glows on active zones." data-location="Luxury Member Lounge Floor Plan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBOJguaqvZ4T6pyDeNZCQ4JsGc9x7LRH9EzhGNi7D4IaCUdd2cWPZwg5I2scoxkO94IUT_A6t_RfSL2BV6h4KpW94LCnyksZ3jwAyYopSafozQd8c0Kvc_Fvw_K9tnx-S_w9jpfPkDFzI1-AI_CUdE6101KUYF8HiLa7InRSTwSztJfLObUOHWh_1PD4BIhLAjqeaAVjO3c1moQaIrl9RpvNWn-ur73nyJIVqOfYjJAYxbjkuAO_i8hDuL-SdAzlKtVE6HR-SVkBQ"/>
+<!-- Congestion Markers -->
+<div class="absolute top-[40%] left-[60%] w-32 h-32 bg-error/20 rounded-full border border-error pulsing-dot flex items-center justify-center">
+<span class="text-error font-bold text-label-sm uppercase tracking-tighter">Patio Congestion</span>
+</div>
+<div class="absolute top-[55%] left-[30%] w-24 h-24 bg-primary/10 rounded-full border border-primary/40 flex items-center justify-center">
+<span class="text-primary font-bold text-label-sm uppercase tracking-tighter">VIP Lounge</span>
+</div>
+<div class="absolute top-[30%] left-[20%] w-24 h-24 bg-primary/10 rounded-full border border-primary/40 flex items-center justify-center">
+<span class="text-primary font-bold text-label-sm uppercase tracking-tighter">Bar Display</span>
+</div>
+</div>
+<!-- AI Coaching Overlay Card (Glassmorphic) -->
+<div class="relative z-10 w-full max-w-2xl px-6 md:px-0">
+<div class="glass-panel rounded-3xl p-card-padding amber-glow transition-all duration-500 hover:scale-[1.01]">
+<!-- Card Header -->
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-secondary text-xl" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-secondary font-label-lg tracking-widest uppercase">Coach Recommendation</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Patio Congestion</h2>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-label-sm text-on-surface-variant uppercase mb-1">Risk Level</span>
+<div class="flex gap-1">
+<div class="w-8 h-1.5 rounded-full bg-secondary"></div>
+<div class="w-8 h-1.5 rounded-full bg-secondary"></div>
+<div class="w-8 h-1.5 rounded-full bg-on-surface-variant/20"></div>
+</div>
+<span class="text-secondary font-medium mt-1">Moderate</span>
+</div>
+</div>
+<!-- Recommendation Content -->
+<div class="space-y-6">
+<div class="border-l-2 border-primary pl-6 py-1">
+<p class="font-body-lg text-on-surface-variant leading-relaxed mb-4">
+                            Current arrivals are saturating the Patio zone, creating a <span class="text-error font-semibold">service bottleneck</span>. 
+                        </p>
+<div class="bg-primary/10 p-4 rounded-xl border border-primary/20">
+<span class="text-primary font-bold block mb-1">Coach Strategy:</span>
+<p class="text-on-surface font-medium">Redirect arrivals to VIP Lounge or Bar Display.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant text-body-md italic">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+<span>Reason: Optimizes guest flow and prevents service bottlenecks in high-traffic corridors.</span>
+</div>
+<!-- Action Buttons Cluster -->
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3 pt-4">
+<button class="flex items-center justify-center gap-2 bg-primary text-on-primary font-label-lg py-4 rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-lg border border-primary/20">
+<span class="material-symbols-outlined text-xl" data-icon="menu_book">menu_book</span>
+                            Read
+                        </button>
+<button class="flex items-center justify-center gap-2 bg-surface-container-high border border-outline-variant text-on-surface font-label-lg py-4 rounded-xl hover:bg-surface-variant active:scale-95 transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="record_voice_over" style="font-variation-settings: 'FILL' 1;">record_voice_over</span>
+                            Hear
+                        </button>
+<button class="flex items-center justify-center gap-2 bg-surface-container-high border border-outline-variant text-on-surface font-label-lg py-4 rounded-xl hover:bg-surface-variant active:scale-95 transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="replay">replay</span>
+                            Replay
+                        </button>
+<button class="md:col-span-1 flex items-center justify-center gap-2 border border-secondary text-secondary font-label-lg py-4 rounded-xl hover:bg-secondary/10 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="ring_volume">ring_volume</span>
+                            Call Manager
+                        </button>
+<button class="md:col-span-2 flex items-center justify-center gap-2 bg-on-surface-variant/10 text-on-surface-variant font-label-lg py-4 rounded-xl hover:bg-on-surface-variant/20 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="close">close</span>
+                            Dismiss
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 md:px-margin pb-8 pt-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-outline-variant shadow-[0_-8px_24px_rgba(233,193,118,0.1)]">
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-8 py-2 shadow-[0_0_15px_rgba(198,131,21,0.4)] cursor-pointer">
+<span class="material-symbols-outlined mb-0.5" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-lg text-label-lg tracking-widest">Guidance</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:text-primary transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined mb-0.5" data-icon="graphic_eq">graphic_eq</span>
+<span class="font-label-lg text-label-lg tracking-widest">Haptics</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:text-primary transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined mb-0.5" data-icon="ring_volume">ring_volume</span>
+<span class="font-label-lg text-label-lg tracking-widest">Manager</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:text-primary transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined mb-0.5" data-icon="close">close</span>
+<span class="font-label-lg text-label-lg tracking-widest">Dismiss</span>
+</div>
+</nav>
+<!-- Interaction Script -->
+<script>
+        document.querySelectorAll('button, nav div').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.95)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = 'scale(1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+
+        // Atmospheric parallax effect for the map
+        window.addEventListener('mousemove', (e) => {
+            const map = document.querySelector('.map-container img');
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+            map.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+        });
+    </script>
+</body></html>

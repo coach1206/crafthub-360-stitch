@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Staff &amp; Vendor Management | CraftHub 360 Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#131314",
+                        "on-secondary-container": "#3d2400",
+                        "surface-container-low": "#1b1b1c",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-dim": "#131314",
+                        "tertiary-container": "#b7a09a",
+                        "error": "#ffb4ab",
+                        "background": "#131314",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-error-container": "#ffdad6",
+                        "primary-container": "#c5a059",
+                        "tertiary": "#dac1bb",
+                        "surface-container": "#1f1f20",
+                        "on-surface-variant": "#d1c5b4",
+                        "on-secondary": "#462a00",
+                        "on-tertiary": "#3c2d28",
+                        "surface-container-highest": "#353436",
+                        "on-primary": "#412d00",
+                        "secondary-fixed": "#ffddb6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary-fixed": "#261814",
+                        "on-primary-fixed": "#261900",
+                        "primary": "#e9c176",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "outline-variant": "#4e4639",
+                        "surface-tint": "#e9c176",
+                        "secondary": "#ffb95a",
+                        "on-tertiary-container": "#473733",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-high": "#2a2a2b",
+                        "on-background": "#e5e2e3",
+                        "on-primary-container": "#4e3700",
+                        "inverse-primary": "#775a19",
+                        "tertiary-fixed": "#f7ddd6",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "secondary-container": "#c68315",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "primary-fixed": "#ffdea5",
+                        "outline": "#9a8f80",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "surface-bright": "#39393a",
+                        "surface-variant": "#353436",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e5e2e3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "64px",
+                        "gutter": "32px",
+                        "card-padding": "24px",
+                        "unit": "8px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "label-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-stroke {
+            border: 1px solid #e9c176;
+        }
+        .leather-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/black-leather.png");
+        }
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="leather-texture min-h-screen pb-24 md:pb-0 font-body-md">
+<!-- TopAppBar -->
+<header class="bg-surface/80 backdrop-blur-xl dark:bg-surface/80 fixed top-0 w-full border-b border-outline-variant/30 shadow-sm z-50 flex items-center justify-between px-gutter w-full h-16">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="dashboard_customize">dashboard_customize</span>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="text-primary font-bold text-label-lg font-label-lg hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-1 rounded-lg" href="#">Staff</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-1 rounded-lg" href="#">Vendors</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg hover:bg-primary-container/20 hover:text-primary transition-colors px-3 py-1 rounded-lg" href="#">Logs</a>
+</nav>
+<button class="material-symbols-outlined text-primary hover:scale-95 duration-150 ease-in-out" data-icon="settings_suggest">settings_suggest</button>
+</div>
+</header>
+<main class="pt-24 pb-12 px-gutter max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<section class="mb-12">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">Command Center</h2>
+<p class="text-on-surface-variant text-body-lg max-w-2xl">Manage your elite staff credentials and curated vendor partnerships within the CraftHub ecosystem.</p>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Staff Management Section -->
+<div class="lg:col-span-8 space-y-8">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface border-l-4 border-primary pl-4">Active Staff</h3>
+<button class="bg-primary text-on-primary font-label-lg text-label-lg px-6 py-2.5 rounded-lg gold-foil-stroke hover:brightness-110 active:scale-95 transition-all shadow-lg">
+                        Add New Member
+                    </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Staff Card: Owner -->
+<div class="glass-panel rounded-xl p-card-padding amber-glow group hover:border-primary/40 transition-all duration-300">
+<div class="flex items-start justify-between mb-6">
+<div class="flex gap-4">
+<div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/50">
+<img alt="Alister Sterling" class="w-full h-full object-cover" data-alt="A professional portrait of a refined middle-aged man with a neatly groomed beard and silver-streaked hair, wearing a bespoke charcoal wool suit. He is captured in high-key, warm studio lighting against a backdrop of rich walnut wood and leather. The mood is authoritative and sophisticated, echoing a high-end club environment with a subtle amber glow." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEV9JlRTXEJLQR4SwK4wENUTWW7tksgYgriGzHtLJpk5BRMdP3LoZ7dwBBTGwZVK-eouYQvn7ZLPbnb4wt69kE-dDDeT7h6JzbFXawAG0o2GetIVPpHF5MsJTvCpQKifoSpFsNsbGPN9B0aCoj8xv9t5tG4rB5mOfUsaebS5kXXlVtjowrNi-9TNPMvdqdM4kq61NGQEqQ8RqIYoq4p9rMko-dx6lswFyzzslpRoZg4jGZbc5SrottxgWh0q_na1jxPKyqLPPpiUI"/>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Alister Sterling</h4>
+<p class="text-primary font-label-lg text-label-lg uppercase tracking-widest">Proprietor</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary/40" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="space-y-3 bg-surface-container-low rounded-lg p-4">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-label-sm font-label-sm">Login PIN</span>
+<span class="text-primary font-bold tracking-tighter">****</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-label-sm font-label-sm">Terminal Status</span>
+<span class="text-green-400 flex items-center gap-1 text-label-sm font-label-sm">
+<span class="w-2 h-2 rounded-full bg-green-400"></span> Active
+                                </span>
+</div>
+</div>
+<div class="mt-6 flex gap-2">
+<button class="flex-1 py-2 rounded border border-outline text-on-surface-variant text-label-sm font-label-sm hover:border-primary hover:text-primary transition-colors">Edit Access</button>
+<button class="px-3 py-2 rounded border border-outline text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="lock_reset">lock_reset</span></button>
+</div>
+</div>
+<!-- Staff Card: Sommelier -->
+<div class="glass-panel rounded-xl p-card-padding group hover:border-primary/40 transition-all duration-300">
+<div class="flex items-start justify-between mb-6">
+<div class="flex gap-4">
+<div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20">
+<img alt="Elena Moretti" class="w-full h-full object-cover" data-alt="A portrait of an elegant woman with dark hair pulled back, wearing a professional black sommelier vest and a white crisp shirt. She is in a dimly lit, high-end wine cellar with golden lighting reflecting off glass bottles in the background. The atmosphere is warm and luxurious, emphasizing her expertise and professional poise within a refined culinary setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2cXxYIdSt2jAwdZriDfBBlPwOrPdm22E-elIIP83tZxVipxCjlwCnFB99CIb8zmeEo5Hz_3T0KDjZbLv3KZ8b6si15JzPnhup4BU1MsB8bfdRTrEgYiiNFK2UxT6FFQdAY3dL1-Ve_WHBsTxuO12UdsVZi2zSw_nxlcWjWUhP84jqo4kWby3Dv56BAveY1CkuTCVwy7T9_aLFq6gGx_SwUcPh1j7ppVPtA0eHcEw_aPzTzKg__Fzs-0jkLQHlBRRGqhMHVTHd64I"/>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Elena Moretti</h4>
+<p class="text-primary font-label-lg text-label-lg uppercase tracking-widest">Head Sommelier</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary/40" data-icon="wine_bar">wine_bar</span>
+</div>
+<div class="space-y-3 bg-surface-container-low rounded-lg p-4">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-label-sm font-label-sm">Login PIN</span>
+<span class="text-primary font-bold tracking-tighter">7294</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-label-sm font-label-sm">Terminal Status</span>
+<span class="text-on-surface-variant/50 text-label-sm font-label-sm">Offline</span>
+</div>
+</div>
+<div class="mt-6 flex gap-2">
+<button class="flex-1 py-2 rounded border border-outline text-on-surface-variant text-label-sm font-label-sm hover:border-primary hover:text-primary transition-colors">Edit Access</button>
+<button class="px-3 py-2 rounded border border-outline text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="lock_reset">lock_reset</span></button>
+</div>
+</div>
+<!-- Staff Card: Manager -->
+<div class="glass-panel rounded-xl p-card-padding group hover:border-primary/40 transition-all duration-300">
+<div class="flex items-start justify-between mb-6">
+<div class="flex gap-4">
+<div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20">
+<img alt="Julian Thorne" class="w-full h-full object-cover" data-alt="A portrait of a sharp-featured man with dark hair in a sophisticated navy blazer and a tailored shirt, standing in a modern lounge with smoked glass partitions. The lighting is low and moody with amber highlights. His expression is focused and calm, radiating managerial confidence in a premium hospitality environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBk1VKs6OhdL_Uy3x_h9yMv2oEvM07PSWMp2CwGFfzBqK9mZbG0RVDRj_gStxrfomfsLmn4I7LlZwKf8hsgirTonQDSBg2-zFpxyW41Ah5OBDAzfPJijbtEB3TCa1Ajoa_McE87X4LuHQMG3Q-D7DNqtGUW0ZdAeskfGJSNHiPJpaCCRK0oO5qZA0Bs5RGFUD83LAMBM9NTUeqmIvC7tU0tYMcE5MpOA1AD3gztjCMNhAspbLUjItn0fOuwfDP3AmNXsLmwP7O-0JE"/>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Julian Thorne</h4>
+<p class="text-primary font-label-lg text-label-lg uppercase tracking-widest">Floor Manager</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary/40" data-icon="room_service">room_service</span>
+</div>
+<div class="space-y-3 bg-surface-container-low rounded-lg p-4">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-label-sm font-label-sm">Login PIN</span>
+<span class="text-primary font-bold tracking-tighter">5510</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-label-sm font-label-sm">Terminal Status</span>
+<span class="text-green-400 flex items-center gap-1 text-label-sm font-label-sm">
+<span class="w-2 h-2 rounded-full bg-green-400"></span> Active
+                                </span>
+</div>
+</div>
+<div class="mt-6 flex gap-2">
+<button class="flex-1 py-2 rounded border border-outline text-on-surface-variant text-label-sm font-label-sm hover:border-primary hover:text-primary transition-colors">Edit Access</button>
+<button class="px-3 py-2 rounded border border-outline text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="lock_reset">lock_reset</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Vendor Management Section -->
+<aside class="lg:col-span-4 space-y-8">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface">Elite Partners</h3>
+<button class="text-primary hover:underline text-label-sm font-label-sm">View Directory</button>
+</div>
+<div class="space-y-6">
+<!-- Vendor Profile 1 -->
+<div class="glass-panel rounded-xl overflow-hidden group">
+<div class="h-32 relative">
+<img alt="Macallan Estate" class="w-full h-full object-cover brightness-75 group-hover:scale-110 transition-transform duration-700" data-alt="A cinematic, low-angle shot of The Macallan Distillery's undulating green roof under a dramatic Scottish sky. The image features deep earth tones, pristine architectural lines, and a warm golden glow from the windows. It conveys heritage, luxury, and meticulous craftsmanship, aligned with a premium dark-themed UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdd07CnCW71_F3f4hPLQwarsEe346siK6XwxZU4OzSoXOX6EjVar1AMD5kiLmJ-y0D1xGhoFhaaHLpRDIcXuMhZqkc9cZ8lPwazZtMkqK4csaa1H513OctVMIRIGUIIC8sYrl4_lvkQO46XYBLScZpLX9Z_fzFr-2SkFDPXXWL1HmNSLo9qenu9f3NLpyefNqjv4MFt6glUeno3RIG35SjhVYO0aPZfVOPs-jJHA_B2k6UPvzlcPIkNbib5m62Gs7SSzxTjWfqbc4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h5 class="text-on-surface font-headline-md text-headline-md">Macallan Estate</h5>
+</div>
+</div>
+<div class="p-card-padding space-y-4">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="hub">hub</span>
+<span class="text-label-lg font-label-lg tracking-wide uppercase">PourCraft Connected</span>
+</div>
+<p class="text-on-surface-variant text-label-sm font-label-sm leading-relaxed">Exclusive distribution rights for the Rare Cask series and custom inventory integration.</p>
+<div class="pt-4 border-t border-outline-variant/30">
+<div class="flex justify-between items-center text-label-sm font-label-sm">
+<span class="text-on-surface-variant/60">Contact</span>
+<span class="text-on-surface">Lachlan Ross</span>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm mt-2">
+<span class="text-on-surface-variant/60">Service Level</span>
+<span class="text-primary">Tier I - Global</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Vendor Profile 2 -->
+<div class="glass-panel rounded-xl overflow-hidden group">
+<div class="h-32 relative">
+<img alt="Davidoff Geneva" class="w-full h-full object-cover brightness-75 group-hover:scale-110 transition-transform duration-700" data-alt="A macro photograph of high-end cigars resting in a cedar-lined humidor. The lighting is warm and directional, highlighting the rich textures of the tobacco leaves and the elegant white and gold bands. The image evokes a sense of tradition, luxury, and tactile quality, perfect for a high-end member lounge aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqTo4-vtTxrTpNe-ENMGnwFq4tEsMhBLjoC88gFICu28IFfrBraw1dk6P8i-SqCPJQZYuXuu5E8Db_aa8EkhyxHhR04OnCj5dN7puloVhh1uyxI57h-5Sb9p4l_BeD3EEF-xb1WTG_GqquBTNn_iKmdX_Mau5KFsJJKyYdrHQ8g4emXa2nZMTwSHvp3Ml01ALEo3jLWVFOE_n8NUfbh9UkmwLNTytIX7VKYJYyXRb-r3IVQQvCBSRv6rIamzM4GdWRLujjqzNghFU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h5 class="text-on-surface font-headline-md text-headline-md">Davidoff Geneva</h5>
+</div>
+</div>
+<div class="p-card-padding space-y-4">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="inventory">inventory</span>
+<span class="text-label-lg font-label-lg tracking-wide uppercase">Humidor Sync</span>
+</div>
+<p class="text-on-surface-variant text-label-sm font-label-sm leading-relaxed">Automated reordering system for the Signature and Escurio limited editions.</p>
+<div class="pt-4 border-t border-outline-variant/30">
+<div class="flex justify-between items-center text-label-sm font-label-sm">
+<span class="text-on-surface-variant/60">Contact</span>
+<span class="text-on-surface">Marcus Weber</span>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm mt-2">
+<span class="text-on-surface-variant/60">Service Level</span>
+<span class="text-primary">Regional Direct</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 text-label-sm font-label-sm hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+            Home
+        </a>
+<a class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 text-label-sm font-label-sm transform translate-y-0.5 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="save" style="font-variation-settings: 'FILL' 1;">save</span>
+            Save
+        </a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 text-label-sm font-label-sm hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="visibility">visibility</span>
+            Preview
+        </a>
+</nav>
+<script>
+        // Micro-interactions for glass panels
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+                card.style.transition = 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Toggle state for staff online status for demo
+        setInterval(() => {
+            const statusElements = document.querySelectorAll('.text-green-400');
+            statusElements.forEach(el => {
+                el.classList.add('animate-pulse');
+                setTimeout(() => el.classList.remove('animate-pulse'), 1000);
+            });
+        }, 5000);
+    </script>
+</body></html>

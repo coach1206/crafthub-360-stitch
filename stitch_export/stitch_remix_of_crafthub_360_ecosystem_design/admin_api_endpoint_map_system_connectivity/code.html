@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>API Endpoint Map | AI Concierge Coach</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-surface-variant": "#d0c5af",
+                        "outline": "#99907c",
+                        "surface-container": "#201f1f",
+                        "primary-fixed-dim": "#e9c349",
+                        "surface-tint": "#e9c349",
+                        "surface-container-high": "#2a2a2a",
+                        "primary": "#f2ca50",
+                        "error": "#ffb4ab",
+                        "secondary": "#c7c6c6",
+                        "background": "#141313",
+                        "on-background": "#e5e2e1",
+                        "outline-variant": "#4d4635",
+                        "primary-container": "#d4af37",
+                        "on-primary-container": "#554300",
+                        "surface-container-highest": "#353434"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-padding": "20px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "telemetry-data": ["JetBrains Mono"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Geist"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #010101; /* True Obsidian Base */
+            color: #e5e2e1;
+            overflow-x: hidden;
+        }
+        .obsidian-glass {
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(153, 144, 124, 0.1);
+            position: relative;
+        }
+        .glass-edge {
+            box-shadow: inset 1px 1px 0px 0px rgba(233, 195, 73, 0.1);
+        }
+        .telemetry-glow {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+        }
+        .pulse-gold {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        .terminal-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .terminal-scroll::-webkit-scrollbar-thumb {
+            background: #4d4635;
+        }
+        .status-beam {
+            background: linear-gradient(90deg, transparent, #f2ca50, transparent);
+            height: 1px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            opacity: 0.3;
+        }
+        .mesh-grid {
+            background-image: radial-gradient(circle, #4d4635 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-background">
+<!-- Grid Background -->
+<div class="fixed inset-0 mesh-grid pointer-events-none"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-10 py-4 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="clinical_notes">clinical_notes</span>
+<div>
+<h1 class="font-display-lg text-2xl font-bold tracking-tight text-primary">AI Concierge Coach</h1>
+<p class="text-[10px] font-label-caps tracking-[0.2em] text-outline uppercase">System Connectivity Map</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="hidden md:flex flex-col items-end">
+<span class="text-[10px] font-label-caps text-outline">SECURITY STATUS</span>
+<span class="text-primary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user">verified_user</span>
+                    Founder Level 0 Secured
+                </span>
+</div>
+<div class="h-10 w-10 rounded-full border border-primary/30 p-0.5 overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIxZBOlmSp6brTEaldwS1l98s7U4nk8Uf2N2Mxa6ti82qhcwESKREbURFSuHEyLIOgMEPlyPgDdPIEZlOdcY40YiJarRiAz825q2cIemPRO31x_xzTrbnTC0fdZ4rXNt06Dmk_bFgKSsXmnCEGfHRCs00bz5U5RBBSTsDsv_kK7pZsGAeykOezs3jwoAy3YKsQUiQ0GkYEbPL403M7iLXo7ylXPP7L3p4CGW7FDjB53NAVTIoMYABqykPhjiXzQOYBApNNkqeAtTU"/>
+</div>
+</div>
+</header>
+<main class="pt-28 pb-32 px-10 max-w-7xl mx-auto space-y-8">
+<!-- Metrics Ribbon -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="obsidian-glass glass-edge p-5 rounded-lg flex flex-col justify-between h-24">
+<span class="text-[10px] font-label-caps text-outline">SYNC RATE</span>
+<div class="flex items-baseline gap-2">
+<span class="font-telemetry-data text-2xl text-primary">99.8%</span>
+<span class="text-[10px] text-primary/60">NOMINAL</span>
+</div>
+<div class="w-full bg-outline-variant h-[2px] mt-2 overflow-hidden">
+<div class="bg-primary h-full w-[99.8%]"></div>
+</div>
+</div>
+<div class="obsidian-glass glass-edge p-5 rounded-lg flex flex-col justify-between h-24">
+<span class="text-[10px] font-label-caps text-outline">LATENCY</span>
+<div class="flex items-baseline gap-2">
+<span class="font-telemetry-data text-2xl text-primary">14ms</span>
+<span class="text-[10px] text-primary/60">EXCELLENT</span>
+</div>
+<div class="flex gap-1 mt-2">
+<div class="h-1 w-2 bg-primary"></div>
+<div class="h-1 w-2 bg-primary"></div>
+<div class="h-1 w-2 bg-primary/20"></div>
+</div>
+</div>
+<div class="obsidian-glass glass-edge p-5 rounded-lg flex flex-col justify-between h-24">
+<span class="text-[10px] font-label-caps text-outline">ACTIVE MESH</span>
+<div class="flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+<span class="font-telemetry-data text-lg">ENCRYPTED</span>
+</div>
+<span class="text-[10px] text-outline truncate">AES-256 GCM</span>
+</div>
+<div class="obsidian-glass glass-edge p-5 rounded-lg flex flex-col justify-between h-24">
+<span class="text-[10px] font-label-caps text-outline">TRAFFIC LOAD</span>
+<div class="flex items-baseline gap-2">
+<span class="font-telemetry-data text-2xl text-primary">1.2k</span>
+<span class="text-[10px] text-primary/60">REQ/S</span>
+</div>
+<div class="status-beam"></div>
+</div>
+</div>
+<!-- Service Hubs Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- NOVEE Core Gateway -->
+<div class="md:col-span-4 obsidian-glass glass-edge p-6 rounded-xl space-y-4">
+<div class="flex justify-between items-start">
+<div class="h-10 w-10 bg-primary/10 border border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="hub">hub</span>
+</div>
+<span class="text-[10px] font-label-caps bg-outline-variant px-2 py-1 rounded">V1.2.4</span>
+</div>
+<h3 class="font-headline-lg text-lg text-on-background">NOVEE Core Gateway</h3>
+<div class="space-y-3 pt-2">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-label-caps text-outline">GUEST IDENTITY</span>
+<code class="text-xs font-telemetry-data text-primary-fixed-dim py-1">GET /identity/session/:uid</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-label-caps text-outline">PASSPORT STAMPS</span>
+<code class="text-xs font-telemetry-data text-primary-fixed-dim py-1">POST /stamps/award/batch</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-label-caps text-outline">MEMBERSHIP TIERS</span>
+<code class="text-xs font-telemetry-data text-primary-fixed-dim py-1">GET /tiers/lookup</code>
+</div>
+</div>
+</div>
+<!-- E.A.T. Telemetry Mesh -->
+<div class="md:col-span-5 obsidian-glass glass-edge p-6 rounded-xl space-y-4">
+<div class="flex justify-between items-start">
+<div class="h-10 w-10 bg-primary/10 border border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="sensors">sensors</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="pulse-gold h-1.5 w-1.5 rounded-full bg-primary"></span>
+<span class="text-[10px] font-label-caps text-primary">STREAMING</span>
+</div>
+</div>
+<h3 class="font-headline-lg text-lg text-on-background">E.A.T. Telemetry Mesh</h3>
+<div class="grid grid-cols-2 gap-4 pt-2">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-label-caps text-outline">IOT CLIMATE</span>
+<code class="text-xs font-telemetry-data text-primary-fixed-dim">WSS /climate/mesh</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-label-caps text-outline">OCCUPANCY</span>
+<code class="text-xs font-telemetry-data text-primary-fixed-dim">GET /sensor/zone_a</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-label-caps text-outline">ASSET DEPLETION</span>
+<code class="text-xs font-telemetry-data text-primary-fixed-dim">POST /models/predict</code>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-label-caps text-outline">HUMIDOR STATE</span>
+<code class="text-xs font-telemetry-data text-primary-fixed-dim">GET /humidor/:id</code>
+</div>
+</div>
+</div>
+<!-- Security Governance Small Card -->
+<div class="md:col-span-3 obsidian-glass glass-edge p-6 rounded-xl flex flex-col justify-center items-center text-center space-y-4">
+<div class="relative">
+<div class="h-16 w-16 rounded-full border border-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-4xl" data-icon="security" data-weight="fill" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div class="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-primary text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+</div>
+</div>
+<div>
+<h4 class="text-sm font-semibold text-primary">Mesh Guard Active</h4>
+<p class="text-[10px] font-label-caps text-outline mt-1">ALL TRAFFIC TUNNELED VIA TLS 1.3</p>
+</div>
+</div>
+<!-- POS 3 Transaction Bridge -->
+<div class="md:col-span-6 obsidian-glass glass-edge p-6 rounded-xl">
+<div class="flex items-center gap-4 mb-6">
+<div class="h-10 w-10 bg-primary/10 border border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="point_of_sale">point_of_sale</span>
+</div>
+<h3 class="font-headline-lg text-lg text-on-background">POS 3 Transaction Bridge</h3>
+</div>
+<div class="overflow-hidden border border-outline-variant/30 rounded">
+<table class="w-full text-left text-xs font-telemetry-data">
+<thead class="bg-surface-container text-outline uppercase font-label-caps">
+<tr>
+<th class="p-3">Endpoint</th>
+<th class="p-3">Method</th>
+<th class="p-3 text-right">Avg Response</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<tr>
+<td class="p-3">/order/validate</td>
+<td class="p-3"><span class="text-primary">POST</span></td>
+<td class="p-3 text-right">42ms</td>
+</tr>
+<tr>
+<td class="p-3">/inventory/sync</td>
+<td class="p-3"><span class="text-secondary">PUT</span></td>
+<td class="p-3 text-right">108ms</td>
+</tr>
+<tr>
+<td class="p-3">/revenue/velocity</td>
+<td class="p-3"><span class="text-primary-fixed-dim">GET</span></td>
+<td class="p-3 text-right">24ms</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- ElevenLabs Voice Engine -->
+<div class="md:col-span-6 obsidian-glass glass-edge p-6 rounded-xl flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 bg-primary/10 border border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="graphic_eq">graphic_eq</span>
+</div>
+<h3 class="font-headline-lg text-lg text-on-background">ElevenLabs Voice Engine</h3>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center space-y-4">
+<div class="flex items-center justify-between obsidian-glass p-3 border-l-2 border-l-primary">
+<div>
+<p class="text-[10px] font-label-caps text-outline">ACTIVE STREAM</p>
+<p class="text-xs font-telemetry-data">Concierge_Narration_Main</p>
+</div>
+<span class="text-primary text-xs font-telemetry-data">BUFFERING 1.2s</span>
+</div>
+<div class="flex gap-2">
+<span class="text-[10px] font-label-caps text-outline">MENTOR PROFILES:</span>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-full border border-primary/20 text-[10px] font-label-caps text-primary">Socrates</span>
+<span class="px-2 py-0.5 rounded-full border border-outline/20 text-[10px] font-label-caps text-outline">Marcus</span>
+<span class="px-2 py-0.5 rounded-full border border-outline/20 text-[10px] font-label-caps text-outline">Seneca</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Traffic Feed (Full Width) -->
+<div class="md:col-span-12 obsidian-glass glass-edge p-6 rounded-xl border-t border-t-primary/20">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-lg text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="terminal">terminal</span>
+                        Live Traffic Feed
+                    </h3>
+<div class="text-[10px] font-label-caps text-outline">REAL-TIME TELEMETRY</div>
+</div>
+<div class="terminal-scroll h-48 overflow-y-auto font-telemetry-data text-[11px] space-y-2 bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/30">
+<div class="flex gap-4 opacity-70">
+<span class="text-outline">[14:22:01]</span>
+<span class="text-primary">POST</span>
+<span class="flex-1">/stamps/award/X-8821</span>
+<span class="text-primary">201 OK</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline">[14:22:03]</span>
+<span class="text-secondary">GET</span>
+<span class="flex-1">/telemetry/humidor/zone_a</span>
+<span class="text-primary">200 OK</span>
+</div>
+<div class="flex gap-4 opacity-70">
+<span class="text-outline">[14:22:05]</span>
+<span class="text-primary">POST</span>
+<span class="flex-1">/identity/verify/biometric</span>
+<span class="text-primary">200 OK</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline">[14:22:08]</span>
+<span class="text-secondary">GET</span>
+<span class="flex-1">/concierge/prompt/gen_01</span>
+<span class="text-primary">200 OK</span>
+</div>
+<div class="flex gap-4 text-error">
+<span class="text-outline">[14:22:10]</span>
+<span>POST</span>
+<span class="flex-1">/transaction/bridge/auth</span>
+<span>403 FORBIDDEN (TOKEN_EXPIRED)</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline">[14:22:12]</span>
+<span class="text-primary">POST</span>
+<span class="flex-1">/stamps/award/L-9920</span>
+<span class="text-primary">201 OK</span>
+</div>
+<div class="flex gap-4 opacity-50">
+<span class="text-outline">[14:22:15]</span>
+<span class="text-secondary">GET</span>
+<span class="flex-1">/asset/depletion/whiskey_zone_3</span>
+<span class="text-primary">200 OK</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-10 pb-8 pt-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-outline-variant shadow-[0_-8px_24px_rgba(233,193,118,0.1)]">
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-lg text-[10px] tracking-widest mt-1">Guidance</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="graphic_eq">graphic_eq</span>
+<span class="font-label-lg text-[10px] tracking-widest mt-1">Haptics</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-6 py-2 shadow-[0_0_15px_rgba(198,131,21,0.4)] transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="ring_volume">ring_volume</span>
+<span class="font-label-lg text-[10px] tracking-widest mt-1">Manager</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+<span class="font-label-lg text-[10px] tracking-widest mt-1">Dismiss</span>
+</button>
+</nav>
+<!-- Visual Polish: Hover states and interactive effects -->
+<script>
+        // Micro-interaction for the terminal: adding new lines periodically
+        const terminal = document.querySelector('.terminal-scroll');
+        const endpoints = [
+            { method: 'POST', path: '/stamps/award/K-1234', status: '201 OK' },
+            { method: 'GET', path: '/telemetry/sensor/occupancy_1', status: '200 OK' },
+            { method: 'GET', path: '/identity/lookup/guest_99', status: '200 OK' },
+            { method: 'POST', path: '/voice/stream/new', status: '200 OK' }
+        ];
+
+        setInterval(() => {
+            const entry = endpoints[Math.floor(Math.random() * endpoints.length)];
+            const time = new Date().toLocaleTimeString('en-GB', { hour12: false });
+            const div = document.createElement('div');
+            div.className = 'flex gap-4 transition-all duration-500 transform translate-y-2 opacity-0';
+            div.innerHTML = `
+                <span class="text-outline">[${time}]</span>
+                <span class="${entry.method === 'POST' ? 'text-primary' : 'text-secondary'}">${entry.method}</span>
+                <span class="flex-1">${entry.path}</span>
+                <span class="text-primary">${entry.status}</span>
+            `;
+            terminal.appendChild(div);
+            
+            // Trigger animation
+            setTimeout(() => {
+                div.classList.remove('opacity-0', 'translate-y-2');
+            }, 50);
+
+            // Maintain scroll position
+            terminal.scrollTop = terminal.scrollHeight;
+
+            // Remove old entries
+            if (terminal.children.length > 50) {
+                terminal.removeChild(terminal.firstChild);
+            }
+        }, 3000);
+
+        // Card Hover Parallax-ish Effect
+        document.querySelectorAll('.obsidian-glass').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+                card.style.borderColor = 'rgba(242, 202, 80, 0.4)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = 'rgba(153, 144, 124, 0.1)';
+            });
+        });
+    </script>
+</body></html>

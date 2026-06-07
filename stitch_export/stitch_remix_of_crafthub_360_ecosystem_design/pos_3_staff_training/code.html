@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>POS 3 Staff Training | The Lounge Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#1b1b1c",
+                    "outline": "#9a8f80",
+                    "surface-variant": "#353436",
+                    "surface-dim": "#131314",
+                    "tertiary-container": "#b7a09a",
+                    "on-secondary": "#462a00",
+                    "background": "#131314",
+                    "primary": "#e9c176",
+                    "on-primary-container": "#4e3700",
+                    "surface-container": "#1f1f20",
+                    "on-tertiary-fixed": "#261814",
+                    "primary-container": "#c5a059",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container-highest": "#353436",
+                    "surface-tint": "#e9c176",
+                    "on-surface": "#e5e2e3",
+                    "on-tertiary-container": "#473733",
+                    "on-primary-fixed": "#261900",
+                    "inverse-surface": "#e5e2e3",
+                    "error-container": "#93000a",
+                    "on-surface-variant": "#d1c5b4",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-primary": "#412d00",
+                    "secondary": "#ffb95a",
+                    "surface-container-high": "#2a2a2b",
+                    "inverse-on-surface": "#303031",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "inverse-primary": "#775a19",
+                    "primary-fixed": "#ffdea5",
+                    "secondary-fixed": "#ffddb6",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface": "#131314",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "primary-fixed-dim": "#e9c176",
+                    "outline-variant": "#4e4639",
+                    "on-background": "#e5e2e3",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "tertiary": "#dac1bb",
+                    "surface-bright": "#39393a",
+                    "on-secondary-container": "#3d2400",
+                    "error": "#ffb4ab",
+                    "secondary-container": "#c68315",
+                    "on-tertiary": "#3c2d28",
+                    "status-blue": "#3b82f6",
+                    "status-purple": "#a855f7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "32px",
+                    "card-padding": "24px",
+                    "margin": "64px",
+                    "container-max-width": "1440px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "headline-xl": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "label-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .amber-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        .wood-texture {
+            background-image: linear-gradient(rgba(19, 19, 20, 0.95), rgba(19, 19, 20, 0.95)), url('https://www.transparenttextures.com/patterns/dark-wood.png');
+        }
+        .gold-foil {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #e9c176 100%);
+        }
+        .status-active-order { background-color: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; color: #3b82f6; }
+        .status-passport-link { background-color: rgba(168, 85, 247, 0.1); border: 1px solid #a855f7; color: #a855f7; }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface wood-texture min-h-screen font-body-md overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin py-8 backdrop-blur-xl bg-surface/30">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-primary/30">
+<img alt="Lounge Curator Persona" class="w-full h-full object-cover" data-alt="A sophisticated close-up portrait of a lounge curator silhouette against a dark, moody background with warm amber backlighting. The aesthetic is high-end, featuring subtle textures of polished wood and soft leather. The lighting is cinematic, casting deep shadows and emphasizing a refined, professional aura in a luxury members-only club setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtPuZUxa0BVRNOVO6T4c9LUMIOWZyNxQ4VofdGHmgy-OTzLC0_ulad_sNTkSBFRWrEGOLZPV-WxwBjlW8yH9RZyVn8UD96EkW2-DwNQH0sgaqepwylQAYEze-iE_9zHzqGXzyd2ae8WjyIrQ6l3coODmSRShCVFieG_B7r7V6F3_2ysrCb1A3_ckjFbFk13LA1AmjR0m-hmwohK9Ur0JPM4KQKIm0ZSOKcUVcqd74SdAAT_zFFoya1PIrXt-cf_PAc4KxDG5TCHCs"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">The Lounge Curator</h1>
+</div>
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity duration-500 ease-in-out">settings</button>
+</header>
+<!-- Sidebar Navigation (Desktop) -->
+<aside class="fixed inset-y-0 left-0 z-40 hidden md:flex flex-col h-screen w-80 bg-surface-container-lowest border-r border-outline-variant/30 backdrop-blur-2xl shadow-2xl shadow-on-secondary-container/20 pt-32">
+<div class="px-8 mb-10">
+<div class="font-headline-lg text-headline-lg text-primary mb-1">Distinguished Guest</div>
+<div class="text-label-lg font-label-lg text-on-surface-variant/70 italic">Invitation Only Access</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 py-4 px-6 text-on-surface-variant hover:text-on-surface hover:bg-surface-bright/10 transition-all duration-300 mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">compost</span>
+<span class="font-label-lg text-label-lg">Curator Home</span>
+</a>
+<a class="flex items-center gap-4 py-4 px-6 text-on-surface-variant hover:text-on-surface hover:bg-surface-bright/10 transition-all duration-300 mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-lg text-label-lg">Craft Journeys</span>
+</a>
+<a class="flex items-center gap-4 py-4 px-6 text-on-surface-variant hover:text-on-surface hover:bg-surface-bright/10 transition-all duration-300 mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span class="font-label-lg text-label-lg">Networking Stamps</span>
+</a>
+<a class="flex items-center gap-4 py-4 px-6 bg-secondary-container text-on-secondary-container transition-all duration-300 mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="font-label-lg text-label-lg">System Ops</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:pl-80 pt-32 pb-32 px-gutter min-h-screen">
+<div class="max-w-container-max-width mx-auto">
+<!-- Training Header -->
+<section class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<span class="text-primary font-label-lg text-label-lg uppercase tracking-widest mb-2 block">Instructional Simulation</span>
+<h2 class="font-display-lg text-display-lg text-on-surface">POS 3 Terminal Mastery</h2>
+</div>
+<div class="glass-panel p-4 rounded-xl flex items-center gap-4 border-l-4 border-primary">
+<span class="material-symbols-outlined text-primary text-3xl">info</span>
+<div>
+<p class="font-label-lg text-label-lg text-primary">CRITICAL RULE</p>
+<p class="text-on-surface-variant font-body-md">Purchase-related stamps require POS confirmation.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Training Modules Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">
+<!-- Live Inventory Module -->
+<div class="md:col-span-8 glass-panel rounded-xl overflow-hidden amber-glow transition-all group">
+<div class="h-48 relative">
+<img alt="Luxury Bar Inventory" class="w-full h-full object-cover" data-alt="A close-up, high-detail photograph of rare spirit bottles and fine glassware arranged on a dark mahogany shelf. The lighting is low and warm, creating a high-contrast scene with amber reflections on the glass. The style is ultra-luxurious and tactile, suggesting a private cellar environment with a focus on premium inventory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiyURSqZ-e6xlT0kyihfCyT_rmat9va0b8ZvDanPf5M7OkyQItiyjHGXwO--NObJPcXGpZFqOxxrs6BSYWp3MDEf0325-bRNNQBgSdyVsUt6Esl84OmevoAlHxGlxHO7h6p_0NrAE0ZKInMVIt_uGueIKe_iYowJ4kOmMs_GPTVs_1GJCkXp22v6UOuPb7UXvWIsWyra7OLUYAzVfzHJmtyIvlY8-Bah_WLXBWmQPZ7DvTgMjGr7upSMwd8Xl8IPKIUtZh7k3Vaxo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Live Inventory Management</h3>
+</div>
+</div>
+<div class="p-card-padding">
+<p class="text-on-surface-variant mb-6 font-body-md">Learn to sync real-time cellar stock levels. Ensure high-value allocations are updated instantly across all curator kiosks.</p>
+<div class="flex flex-wrap gap-3">
+<span class="px-4 py-2 rounded-full bg-surface-container-high border border-outline-variant/30 text-label-sm font-label-sm">Cellar Sync</span>
+<span class="px-4 py-2 rounded-full bg-surface-container-high border border-outline-variant/30 text-label-sm font-label-sm">Stock Alerts</span>
+<span class="px-4 py-2 rounded-full bg-surface-container-high border border-outline-variant/30 text-label-sm font-label-sm">High-Value Audit</span>
+</div>
+</div>
+</div>
+<!-- Visual Product Cards Module -->
+<div class="md:col-span-4 glass-panel rounded-xl overflow-hidden amber-glow transition-all">
+<div class="p-card-padding h-full flex flex-col">
+<div class="mb-4">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">grid_view</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Visual Product Cards</h3>
+</div>
+<div class="space-y-4 mb-8">
+<div class="p-3 bg-surface-container-high rounded-lg flex items-center gap-3">
+<div class="w-12 h-12 rounded bg-surface-dim border border-outline-variant/20 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up of a premium scotch glass with large ice cube" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVrmVxRortgHwj6dAYKNN5TUW5WgYxHTFeFvOns-sF7VgiWDuChAppynD3wrAMVrPnbJ26oTkPGhiLAlInx5v-Cd9iZkB3ehwffixWGzqtE22R6SoCzHc7KNECEnRJCnc5uB-8n90PxYhGR7Me_LAT5iC9Jh7dOrPyW5XZh-9H7sLkSFPRMSuf7pFG8c4iI5LRkojK-4NrcJZTVXcMqspK_sm8BTHQ-T5Fl0A9yxCzXq5Z9TSCzEydeSwNgI1FlEFXUfkBBzX56nc"/>
+</div>
+<div class="text-label-lg font-label-lg">Macallan 18yr</div>
+</div>
+<div class="p-3 bg-surface-container-high rounded-lg flex items-center gap-3">
+<div class="w-12 h-12 rounded bg-surface-dim border border-outline-variant/20 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Exquisite handmade cigar on a wooden tray" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXVFNrMgJJHBYcnTjaCV44H6l7sWTcIO8q8F-mHwAfOhtgkJvyLxWwNYoszbzKvPdXH5tVxj5AWbL7FWUq5dmTgvSF5iQaDq-jJFPXH-qwiQdqZ4KJSKqJCmGuePOMNs0pfJS1oNqm6ANF83w6xNgo8SNyYZx-pNaYLQdJ78dPFwPSvZ3QeEPtjL8coAIUKEegFXGuPlGHsDVtzsV5ePgmk46Qp-YlDtcX1_rxUw2y3CUUBXANGRvUTHyuHy5Ga7CQ3Ze9xONUtBc"/>
+</div>
+<div class="text-label-lg font-label-lg">Padrón 1964</div>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md mt-auto">Interface provides macro-visuals to ensure error-free selection during high-pace sessions.</p>
+</div>
+</div>
+<!-- Interactive Transaction Simulator -->
+<div class="md:col-span-12 glass-panel rounded-xl overflow-hidden border border-primary/20">
+<div class="bg-surface-container-high px-8 py-4 flex justify-between items-center">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">touch_app</span>
+<span class="font-label-lg text-label-lg uppercase tracking-widest text-primary">Live POS Simulation 3.1</span>
+</div>
+<div class="flex gap-4">
+<div class="status-active-order px-3 py-1 rounded-full text-xs font-bold uppercase tracking-tighter">Active: Table 12</div>
+<div class="status-passport-link px-3 py-1 rounded-full text-xs font-bold uppercase tracking-tighter">360 Passport: Connected</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 min-h-[500px]">
+<!-- Left: Product Selection -->
+<div class="border-r border-outline-variant/30 p-6 flex flex-col gap-4">
+<div class="font-label-lg text-label-lg text-outline mb-2">Category: Sommelier Selections</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="aspect-square glass-panel rounded-xl p-3 flex flex-col items-center justify-center gap-2 hover:bg-primary-container/20 transition-all border-none amber-glow">
+<img class="w-12 h-12 rounded-full mb-1" data-alt="Crystal glass with deep red wine" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYJZRXQ0C-tPQJ4VNsCHP59IlJCiWaAWEtTiTH35qRbPrUtXiv-f3s7Ta8ptzucHpSFhhsmERC9cz7K483jjJFEDQ3AkRTpG6N4glPcdxnY0VLcE6XGMuU4fC4uY3H9WOrGCAkSACttjNvjPZNyQK4hgCC8YXprs77mcpJhmXGZlbl4gGBwjP8Us829shAjHsUx7hRsLdQwoSvYf8c9m_jOnQ_Ugca2BI8cZ7wphm1_P_xQERb8vaNb1uQeDliD1MbyNtotg5o8eI"/>
+<span class="text-xs font-label-lg text-center leading-tight">Vintage Merlot</span>
+</button>
+<button class="aspect-square glass-panel rounded-xl p-3 flex flex-col items-center justify-center gap-2 hover:bg-primary-container/20 transition-all border-none amber-glow">
+<img class="w-12 h-12 rounded-full mb-1" data-alt="Icy white wine in elegant flute" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqA5-XFn8Y8DlSMi7G4rErt3-i2of-JQHmPX7Wefz3MTRvIisJLEWGGYjcUzUiK8l3HxDJFwD38ElkStbaJRBM02U-qcK0uFglRrBrq9U6mO1iLuWCnm3dryMM_Ks6kovEbP1gpEdukSJIuKtqnZhJ4Lgf5no7KNzvS3lszN9ixLAdleDP7rDpN2fq1NvrrqILX9hZt54I07vPP6p6u0UVeHFqdbwnKUy6vEnijjvqu7O7TYbDJ9v2jGfC-qjrgzU6z9L-cyNyZkY"/>
+<span class="text-xs font-label-lg text-center leading-tight">Chardonnay</span>
+</button>
+<button class="aspect-square glass-panel rounded-xl p-3 flex flex-col items-center justify-center gap-2 hover:bg-primary-container/20 transition-all border-none amber-glow">
+<img class="w-12 h-12 rounded-full mb-1" data-alt="Classic neat scotch whiskey" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4QV35QIZ4TDhF47EOm9cFc8cjHlpm2v25NiiyTB9RwhwKjZMvA3QBfZkJhv_5JTTaDQoBkrV9DNnkN31Ock_1yPn5O1epTvhfJp1g4lB_SjULS2p8-GpoQHudwjlAhp2O5ikNPNG69vYGPfirA_TmOyBzvuZTAeOLKk7iYgx2iVefw_ci-FCxl_QQ88nntcNSqNmJX6Ic0lz7cmyjKCZhQ0tkRTG3fG6BKPjZqCycCG_FWkBKZ7iKHeWB_SxioYlwgidHIJZ_ZH8"/>
+<span class="text-xs font-label-lg text-center leading-tight">House Blend</span>
+</button>
+<button class="aspect-square glass-panel rounded-xl p-3 flex flex-col items-center justify-center gap-2 hover:bg-primary-container/20 transition-all border-none amber-glow">
+<img class="w-12 h-12 rounded-full mb-1" data-alt="Artisanal cocktail with garnish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrZ_LwGCVimjHFek91PbKQ4Dw-1Rn0zf_5SZYGTrc0SYeyrEOd82qc_gWnFa-F0q6EVPwYOjIqTy7JjCQ84psFqx15bbo7kKp1gYbMGhQF9-Bi_nn51UdAmG5B3_jUQAa45I7axPw66lqk8N3rDAP5CoRrOKdX5EQkX1_9XfQ7Hb0qBDMr_lMjiGEpcoi7_Nx6eb7fh0gFhDBN6fGx2ilR-2D1yZJuiorzqrz54_JnOmJ0n1lWCjXvk_z3S3BJz7BKQAre8Smur04"/>
+<span class="text-xs font-label-lg text-center leading-tight">Negroni</span>
+</button>
+</div>
+</div>
+<!-- Middle: Order Detail -->
+<div class="border-r border-outline-variant/30 p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline-md text-headline-md text-on-surface">Order #442</h4>
+<span class="material-symbols-outlined text-status-blue">shopping_cart</span>
+</div>
+<div class="flex-grow space-y-4">
+<div class="flex justify-between items-center p-3 rounded-lg bg-status-blue/5 border border-status-blue/20">
+<div>
+<div class="font-label-lg">Macallan 18yr</div>
+<div class="text-xs text-status-blue">Active Pour</div>
+</div>
+<div class="font-label-lg">$55.00</div>
+</div>
+<div class="flex justify-between items-center p-3 rounded-lg bg-status-blue/5 border border-status-blue/20">
+<div>
+<div class="font-label-lg">Padrón 1964</div>
+<div class="text-xs text-status-blue">Ready for Humidor</div>
+</div>
+<div class="font-label-lg">$42.00</div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-outline-variant/20">
+<button class="w-full py-4 glass-panel text-primary font-label-lg flex items-center justify-center gap-2 mb-3 hover:bg-primary/10">
+<span class="material-symbols-outlined">redeem</span>
+                                    Apply Rewards
+                                </button>
+<button class="w-full py-4 glass-panel text-on-surface-variant font-label-lg flex items-center justify-center gap-2 hover:bg-surface-bright/10">
+<span class="material-symbols-outlined">move_up</span>
+                                    Transfer Order
+                                </button>
+</div>
+</div>
+<!-- Right: Action Terminal -->
+<div class="p-6 flex flex-col bg-surface-container-low/50">
+<div class="flex flex-col items-center text-center mb-10 pt-4">
+<div class="w-20 h-20 rounded-full status-passport-link flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-4xl">contactless</span>
+</div>
+<div class="font-headline-md text-headline-md text-on-surface">Member Connected</div>
+<div class="text-status-purple font-label-lg">J. Montgomery - Gold Elite</div>
+</div>
+<div class="space-y-4 mt-auto">
+<div class="bg-surface-container-highest p-4 rounded-xl border border-outline-variant/30">
+<div class="flex justify-between text-on-surface-variant text-sm mb-1">
+<span>Subtotal</span>
+<span>$97.00</span>
+</div>
+<div class="flex justify-between text-primary font-bold">
+<span>Total</span>
+<span>$97.00</span>
+</div>
+</div>
+<button class="w-full h-24 gold-foil rounded-xl flex flex-col items-center justify-center text-on-primary shadow-xl shadow-primary/10 active:scale-95 transition-transform duration-200">
+<span class="font-label-lg text-label-lg font-extrabold tracking-widest uppercase">Process Payment</span>
+<span class="text-xs opacity-75 mt-1 font-label-sm">CONFIRM STAMPS ON POS</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Rewards & Transfers Sub-modules -->
+<div class="md:col-span-6 glass-panel rounded-xl p-card-padding flex items-start gap-6 amber-glow transition-all">
+<div class="w-16 h-16 rounded-xl bg-tertiary-container/20 flex items-center justify-center flex-shrink-0 text-tertiary">
+<span class="material-symbols-outlined text-3xl">celebration</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-2">Applying Rewards</h4>
+<p class="text-on-surface-variant font-body-md">Connect Member Passports to see eligible 'Nectar Credits' or 'Rare Bottle Unlocks'. Validation is required before closing the ticket.</p>
+</div>
+</div>
+<div class="md:col-span-6 glass-panel rounded-xl p-card-padding flex items-start gap-6 amber-glow transition-all">
+<div class="w-16 h-16 rounded-xl bg-secondary-container/20 flex items-center justify-center flex-shrink-0 text-secondary">
+<span class="material-symbols-outlined text-3xl">move_item</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-2">Transferring Orders</h4>
+<p class="text-on-surface-variant font-body-md">Seamlessly move tabs between the Humidor, Main Lounge, and Private Terrace. Maintains 360 Passport connection during migration.</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin py-6 pb-10 bg-surface-container/80 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_30px_rgb(233,193,118,0.1)]">
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all">
+<span class="material-symbols-outlined">mic</span>
+<span class="font-label-sm text-label-sm">Voice Assist</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">concierge</span>
+<span class="font-label-sm text-label-sm">Concierge</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all">
+<span class="material-symbols-outlined">tune</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</button>
+</nav>
+<script>
+        // Simple interactive simulation for the training terminal
+        document.querySelectorAll('.aspect-square').forEach(button => {
+            button.addEventListener('click', function() {
+                const productName = this.querySelector('span').innerText;
+                console.log(`Training Event: Selected ${productName}`);
+                // Simple visual feedback
+                this.style.backgroundColor = 'rgba(233, 193, 118, 0.3)';
+                setTimeout(() => {
+                    this.style.backgroundColor = '';
+                }, 200);
+            });
+        });
+
+        // Atmospheric parallax effect
+        window.addEventListener('scroll', function() {
+            const scroll = window.pageYOffset;
+            document.body.style.backgroundPositionY = -(scroll * 0.1) + 'px';
+        });
+    </script>
+</body></html>

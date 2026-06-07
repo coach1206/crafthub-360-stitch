@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Venue Profile Setup | CraftHub 360 Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131314;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(233, 193, 118, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(233, 193, 118, 0.02) 0%, transparent 50%);
+            min-height: 100vh;
+            color: #e5e2e3;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(154, 143, 128, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        .gold-foil-border {
+            border-bottom: 1px solid #e9c176;
+        }
+        .leather-texture {
+            background-color: #0e0e0f;
+            background-image: url("https://www.transparenttextures.com/patterns/black-leather.png");
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ffdea5;
+            box-shadow: 0 4px 12px -2px rgba(233, 193, 118, 0.2);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-tint": "#e9c176",
+                        "surface-container-highest": "#353436",
+                        "on-surface": "#e5e2e3",
+                        "secondary": "#ffb95a",
+                        "primary-fixed": "#ffdea5",
+                        "surface-container-lowest": "#0e0e0f",
+                        "primary": "#e9c176",
+                        "surface-container-low": "#1b1b1c",
+                        "on-secondary-fixed": "#2a1800",
+                        "outline": "#9a8f80",
+                        "inverse-surface": "#e5e2e3",
+                        "on-error": "#690005",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-primary-fixed": "#261900",
+                        "surface-container": "#1f1f20",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-primary": "#412d00",
+                        "surface-bright": "#39393a",
+                        "on-tertiary-fixed": "#261814",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-secondary": "#462a00",
+                        "surface-container-high": "#2a2a2b",
+                        "on-tertiary": "#3c2d28",
+                        "outline-variant": "#4e4639",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-tertiary-container": "#473733",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#775a19",
+                        "on-primary-container": "#4e3700",
+                        "primary-fixed-dim": "#e9c176",
+                        "secondary-fixed": "#ffddb6",
+                        "tertiary-container": "#b7a09a",
+                        "on-background": "#e5e2e3",
+                        "surface-variant": "#353436",
+                        "on-secondary-container": "#3d2400",
+                        "secondary-container": "#c68315",
+                        "on-surface-variant": "#d1c5b4",
+                        "background": "#131314",
+                        "tertiary": "#dac1bb",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#303031",
+                        "surface-dim": "#131314",
+                        "primary-container": "#c5a059",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "surface": "#131314"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "32px",
+                        "unit": "8px",
+                        "card-padding": "24px",
+                        "margin": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md leather-texture">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-b border-outline-variant/30 shadow-sm flex items-center justify-between px-gutter h-20">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-primary-container/20 hover:text-primary transition-colors rounded-full active:scale-95 duration-150 ease-in-out">
+<span class="material-symbols-outlined text-primary" data-icon="dashboard_customize">dashboard_customize</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="hidden md:block text-label-lg font-label-lg text-on-surface-variant font-medium">Venue Identity Wizard</span>
+<button class="p-2 hover:bg-primary-container/20 hover:text-primary transition-colors rounded-full active:scale-95 duration-150 ease-in-out">
+<span class="material-symbols-outlined text-primary" data-icon="settings_suggest">settings_suggest</span>
+</button>
+</div>
+</header>
+<main class="pt-32 pb-40 px-gutter max-w-[1200px] mx-auto">
+<!-- Header Section -->
+<div class="mb-12">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-4">Venue Profile Setup</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                Define the digital soul of your establishment. This information will automatically propagate across all member-facing interfaces, replacing generic placeholders with your curated brand identity.
+            </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<!-- Form Section -->
+<div class="lg:col-span-8 space-y-10">
+<!-- Section: Core Identity -->
+<section class="glass-panel p-8 rounded-xl">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-surface-tint" data-icon="branding_watermark">branding_watermark</span>
+<h3 class="font-headline-md text-headline-md text-primary">Core Identity</h3>
+</div>
+<div class="space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">Venue Name</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all placeholder:text-outline/40" placeholder="e.g., The Amber Vault" type="text"/>
+</div>
+<div class="relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">Venue Type</label>
+<select class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all">
+<option class="bg-surface">Private Cigar Lounge</option>
+<option class="bg-surface">Speakeasy / Cocktail Club</option>
+<option class="bg-surface">Boutique Distillery</option>
+<option class="bg-surface">Member-Only Social Club</option>
+</select>
+</div>
+</div>
+<div>
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-4">Venue Logo</label>
+<div class="w-full h-48 border-2 border-dashed border-outline-variant/50 rounded-xl flex flex-col items-center justify-center bg-surface-container-low/50 hover:bg-surface-container/50 transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-4xl text-outline group-hover:text-primary mb-3" data-icon="cloud_upload">cloud_upload</span>
+<p class="text-body-md font-body-md text-on-surface-variant">Drag and drop or <span class="text-primary font-bold">browse</span></p>
+<p class="text-label-sm font-label-sm text-outline mt-1">Recommended: PNG/SVG, Min 512x512px</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Location & Access -->
+<section class="glass-panel p-8 rounded-xl">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-surface-tint" data-icon="location_on">location_on</span>
+<h3 class="font-headline-md text-headline-md text-primary">Location &amp; Access</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="md:col-span-2 relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">Physical Address</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all" placeholder="123 Heritage Lane" type="text"/>
+</div>
+<div class="relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">City</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all" placeholder="Manhattan" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">State</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all" placeholder="NY" type="text"/>
+</div>
+<div class="relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">Zip</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all" placeholder="10001" type="text"/>
+</div>
+</div>
+<div class="md:col-span-2 relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-4">Operating Hours</label>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-outline-variant/30">
+<span class="text-body-md font-body-md">Mon — Thu</span>
+<span class="text-primary font-bold">16:00 — 01:00</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container rounded-lg border border-outline-variant/30">
+<span class="text-body-md font-body-md">Fri — Sat</span>
+<span class="text-primary font-bold">14:00 — 03:00</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Communication & Staff -->
+<section class="glass-panel p-8 rounded-xl">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-surface-tint" data-icon="contact_mail">contact_mail</span>
+<h3 class="font-headline-md text-headline-md text-primary">Communication &amp; Key Personnel</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">Phone</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all" placeholder="+1 (212) 555-0199" type="tel"/>
+</div>
+<div class="relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">Email</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all" placeholder="concierge@venue.com" type="email"/>
+</div>
+<div class="md:col-span-2 relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">Website</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all" placeholder="www.venue-experience.com" type="url"/>
+</div>
+<div class="relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">Primary Manager</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all" placeholder="Alexander Sterling" type="text"/>
+</div>
+<div class="relative">
+<label class="text-label-sm font-label-sm text-surface-tint uppercase tracking-widest block mb-2">Emergency Contact</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant py-3 text-body-lg font-body-lg text-on-surface focus:border-primary transition-all" placeholder="+1 (212) 555-0911" type="tel"/>
+</div>
+</div>
+</section>
+<!-- Actions -->
+<div class="flex flex-wrap gap-4 pt-6">
+<button class="flex items-center gap-2 px-8 py-4 bg-primary text-on-primary rounded-xl font-bold shadow-lg hover:shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="publish">publish</span>
+                        Publish Configuration
+                    </button>
+<button class="px-8 py-4 border border-primary/50 text-primary rounded-xl font-bold hover:bg-primary/5 transition-all">
+                        Secondary Options
+                    </button>
+</div>
+</div>
+<!-- Preview/Visualizer Sidebar -->
+<aside class="lg:col-span-4">
+<div class="sticky top-32 space-y-8">
+<div class="glass-panel p-6 rounded-xl border-primary/20 bg-surface-container-highest/40 overflow-hidden">
+<h4 class="text-label-lg font-label-lg text-surface-tint uppercase tracking-widest mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span>
+                            Live Preview
+                        </h4>
+<!-- Mini Card Mockup -->
+<div class="relative rounded-lg overflow-hidden h-64 shadow-2xl mb-6">
+<img alt="Premium Lounge Interior" class="absolute inset-0 w-full h-full object-cover grayscale-[0.5]" data-alt="A luxurious, dimly lit private members lounge featuring deep leather armchairs, a polished mahogany bar, and shelves of aged spirits and cigars. The lighting is warm and amber-toned, catching the smoke from a cigar in the air. The atmosphere is intimate, exclusive, and unhurried, reflecting a high-end, classic aesthetic with rich textures of wood, leather, and crystal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7azXQeyaUuP3PCMSUtSu-GCQsvKmZrIxdxsFyhovvob7tXlOKkwYBdAfKfv_BU9GV-q8ciNk5TOGV9UsgNm9EHU99AJcPV0T2dD8ZMY1KLuYKVcXrUJDL04_Bl5cu6j9v8EsjG02tvlZTbNhFAhyFTFNYGstOFU9xiZ280ExHc2pgxUo33MH5UYNCns-KhWbEragcfvvTWTKx5vP7GHMOz6nq7A7icMGl74vxP87th9Mofkb4VO9lcIkZXl3_ABpNbtctRAg-U_Y"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<div class="font-headline-md text-headline-md text-primary leading-tight" id="preview-venue-name">The Amber Vault</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1" id="preview-location">
+<span class="material-symbols-outlined text-[14px]" data-icon="location_on">location_on</span>
+                                    123 Heritage Lane, Manhattan
+                                </div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="p-3 bg-primary-container/10 rounded border border-primary/10">
+<p class="text-label-sm font-label-sm text-surface-tint mb-1">DATA PROPAGATION STATUS</p>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-body-md font-body-md text-on-surface">Syncing to Member App...</span>
+</div>
+</div>
+<div class="text-body-md font-body-md text-on-surface-variant/80 italic">
+                                "The venue name and address entered on the left will instantly overwrite generic placeholders in the digital guestbook and checkout screens."
+                            </div>
+</div>
+</div>
+<!-- Additional Context -->
+<div class="glass-panel p-6 rounded-xl space-y-4">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-lg font-label-lg">Smart Brand Matching</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant">
+                            Our AI analyzes your Venue Type to suggest an appropriate atmospheric color palette for the Member App.
+                        </p>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center px-4 pb-4 pt-2 md:pb-6 rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all active:transform active:translate-y-0.5 duration-200">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all active:transform active:translate-y-0.5 duration-200">
+<span class="material-symbols-outlined mb-1" data-icon="save">save</span>
+<span class="text-label-sm font-label-sm">Save</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 active:transform active:translate-y-0.5 duration-200">
+<span class="material-symbols-outlined mb-1" data-icon="visibility">visibility</span>
+<span class="text-label-sm font-label-sm">Preview</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interaction for form inputs reflecting in preview
+        const nameInput = document.querySelector('input[placeholder="e.g., The Amber Vault"]');
+        const addrInput = document.querySelector('input[placeholder="123 Heritage Lane"]');
+        const previewName = document.getElementById('preview-venue-name');
+        const previewLoc = document.getElementById('preview-location');
+
+        nameInput.addEventListener('input', (e) => {
+            previewName.textContent = e.target.value || "The Amber Vault";
+        });
+
+        addrInput.addEventListener('input', (e) => {
+            const city = document.querySelector('input[placeholder="Manhattan"]').value;
+            previewLoc.innerHTML = `<span class="material-symbols-outlined text-[14px]" data-icon="location_on">location_on</span> ${e.target.value || '123 Heritage Lane'}${city ? ', ' + city : ''}`;
+        });
+    </script>
+</body></html>

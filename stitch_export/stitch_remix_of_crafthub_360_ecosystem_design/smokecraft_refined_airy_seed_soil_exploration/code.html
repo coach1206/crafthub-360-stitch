@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Seed &amp; Soil Exploration | CraftHub 360</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#dac1bb",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "surface-container-high": "#2a2a2b",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container-highest": "#353436",
+                    "on-secondary": "#462a00",
+                    "on-error": "#690005",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-background": "#e5e2e3",
+                    "surface-dim": "#131314",
+                    "on-error-container": "#ffdad6",
+                    "outline": "#9a8f80",
+                    "on-surface": "#e5e2e3",
+                    "surface-container-low": "#1b1b1c",
+                    "on-secondary-fixed": "#2a1800",
+                    "secondary-fixed": "#ffddb6",
+                    "secondary-container": "#c68315",
+                    "background": "#131314",
+                    "surface-variant": "#353436",
+                    "on-tertiary": "#3c2d28",
+                    "inverse-primary": "#775a19",
+                    "surface-tint": "#e9c176",
+                    "error": "#ffb4ab",
+                    "surface": "#131314",
+                    "surface-container": "#1f1f20",
+                    "surface-bright": "#39393a",
+                    "primary": "#e9c176",
+                    "primary-container": "#c5a059",
+                    "inverse-on-surface": "#303031",
+                    "error-container": "#93000a",
+                    "on-tertiary-container": "#473733",
+                    "tertiary-container": "#b7a09a",
+                    "primary-fixed": "#ffdea5",
+                    "secondary": "#ffb95a",
+                    "on-primary-fixed": "#261900",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-container-lowest": "#0e0e0f",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "outline-variant": "#4e4639",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "on-primary": "#412d00",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-tertiary-fixed": "#261814",
+                    "on-surface-variant": "#d1c5b4",
+                    "on-primary-container": "#4e3700",
+                    "on-secondary-container": "#3d2400"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "card-padding": "24px",
+                    "unit": "8px",
+                    "gutter": "32px",
+                    "margin": "64px",
+                    "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "body-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #010101;
+            color: #e5e2e3;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        .airy-glass {
+            background: rgba(19, 19, 20, 0.1);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gold-text-gradient {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        .stamp-reveal {
+            animation: stampBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes stampBounce {
+            0% { transform: scale(3) rotate(-20deg); opacity: 0; }
+            100% { transform: scale(1) rotate(-10deg); opacity: 1; }
+        }
+        .scrolling-hide::-webkit-scrollbar { display: none; }
+        
+        .gold-action {
+            background: linear-gradient(180deg, #e9c176 0%, #c5a059 100%);
+            color: #412d00;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        /* Maintain 72px touch target for selection cards */
+        .touch-target-72 {
+            min-height: 72px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-black/30 backdrop-blur-3xl border-b border-white/10 shadow-lg">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-white/10 transition-colors duration-300 rounded-full active:scale-95">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label-lg text-label-lg text-white font-bold drop-shadow-md">Step 9 of 12</span>
+<button class="gold-action px-6 py-2 rounded-full font-label-lg text-label-lg hover:brightness-110 transition-all active:scale-95">
+                Grand Lounge
+            </button>
+</div>
+</header>
+<!-- Side Navigation (Drawer) -->
+<nav class="fixed left-0 top-0 h-full w-80 z-[60] flex flex-col py-8 bg-black/60 backdrop-blur-[50px] border-r border-white/10 shadow-2xl transform -translate-x-full transition-transform duration-300" id="sideNav">
+<div class="px-6 mb-10 flex items-center gap-4">
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-primary ring-4 ring-primary/10">
+<img alt="Julian Sterling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApZFwdAjVlSjGaW3dPRafxKbesR2BfvYyyEq21fqV8oQowVpYZgmvWXTK2d2ihq39_HDK0Ne2tO9X3-ilLl0QaTmkZEHMqgSI1N44V3Sdnkvsg5vOxsjTnQq5k-HHFfH52JoX4B8wIAt7uymD0z1gJirZPqsO6TiSRBnPQFJFR5bBIurVRit5MGLXa7-jVpR2VuxmhkMgp6XeVxauEZpX9FBKLewuUsjl8f7zb1zk8Uog_6_A3hJuRanH2uVOb93zjFuhd8c5MH6I"/>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Julian Sterling</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Platinum Member</p>
+</div>
+</div>
+<div class="flex-1 space-y-2">
+<a class="flex items-center gap-4 text-on-surface/80 px-4 py-3 mx-2 hover:bg-white/5 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-lg">Cellar</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface/80 px-4 py-3 mx-2 hover:bg-white/5 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">smoking_rooms</span>
+<span class="font-label-lg">Humidor</span>
+</a>
+<a class="flex items-center gap-4 bg-primary/20 text-primary rounded-lg px-4 py-3 mx-2 border border-primary/30" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chair</span>
+<span class="font-label-lg">Lounge</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface/80 px-4 py-3 mx-2 hover:bg-white/5 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-lg">My Passport</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface/80 px-4 py-3 mx-2 hover:bg-white/5 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-lg">Support</span>
+</a>
+</div>
+<div class="px-6 py-4 border-t border-white/10">
+<p class="text-primary font-label-lg">2,450 Credits</p>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-20 pb-32 min-h-screen relative overflow-hidden">
+<!-- Overlay for better readability -->
+<div class="absolute inset-0 z-0 bg-black/10 pointer-events-none"></div>
+<div class="container mx-auto px-gutter relative z-10 py-12 max-w-[1440px]">
+<header class="mb-12 text-center">
+<h2 class="font-headline-xl text-headline-xl gold-text-gradient mb-4">Seed &amp; Soil Exploration</h2>
+<p class="font-body-lg text-body-lg text-white max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
+                    The journey of a masterpiece begins deep within the earth. Explore the synergy between genetic heritage and the minerals that breathe life into every leaf.
+                </p>
+</header>
+<!-- Interactive Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+<!-- Seed Paths Section -->
+<section>
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">filter_vintage</span>
+<h3 class="font-headline-lg text-headline-lg text-primary tracking-tight">Seed Paths</h3>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Seed Cards -->
+<div class="airy-glass p-6 rounded-xl hover:scale-[1.02] transition-all cursor-pointer group border-l-4 border-primary/60 flex flex-col justify-center touch-target-72">
+<h4 class="font-label-lg text-primary mb-2">Smooth Starter</h4>
+<p class="text-sm text-on-surface/90 font-medium">Gentle introduction with silky, cream-forward genetics.</p>
+<div class="mt-4 h-0.5 w-0 bg-primary/40 group-hover:w-full transition-all duration-500"></div>
+</div>
+<div class="airy-glass p-6 rounded-xl hover:scale-[1.02] transition-all cursor-pointer group flex flex-col justify-center touch-target-72">
+<h4 class="font-label-lg text-white mb-2">Bold Explorer</h4>
+<p class="text-sm text-on-surface/90 font-medium">Robust, full-bodied heirloom strains for the seasoned palate.</p>
+</div>
+<div class="airy-glass p-6 rounded-xl hover:scale-[1.02] transition-all cursor-pointer group border-l-4 border-secondary/60 flex flex-col justify-center touch-target-72">
+<h4 class="font-label-lg text-secondary mb-2">Sweet Finish</h4>
+<p class="text-sm text-on-surface/90 font-medium">Natural sugars preserved through unique high-altitude aging.</p>
+</div>
+<div class="airy-glass p-6 rounded-xl hover:scale-[1.02] transition-all cursor-pointer group flex flex-col justify-center touch-target-72">
+<h4 class="font-label-lg text-white mb-2">Earth and Spice</h4>
+<p class="text-sm text-on-surface/90 font-medium">Complex notes of cinnamon, cedar, and mineral soil.</p>
+</div>
+<div class="airy-glass p-6 rounded-xl hover:scale-[1.02] transition-all cursor-pointer group flex flex-col justify-center touch-target-72">
+<h4 class="font-label-lg text-white mb-2">Luxury Reserve</h4>
+<p class="text-sm text-on-surface/90 font-medium">A limited hybrid developed for ultra-premium wrappers.</p>
+</div>
+<div class="airy-glass p-6 rounded-xl hover:scale-[1.02] transition-all cursor-pointer group border-l-4 border-tertiary/60 flex flex-col justify-center touch-target-72">
+<h4 class="font-label-lg text-tertiary mb-2">Rare Leaf</h4>
+<p class="text-sm text-on-surface/90 font-medium">Small-batch cultivation of nearly extinct tobacco varietals.</p>
+</div>
+<div class="airy-glass p-6 rounded-xl hover:scale-[1.02] transition-all cursor-pointer group flex flex-col justify-center touch-target-72">
+<h4 class="font-label-lg text-white mb-2">Social Smoke</h4>
+<p class="text-sm text-on-surface/90 font-medium">Light, airy aromatics designed for conversation and ease.</p>
+</div>
+<div class="airy-glass p-6 rounded-xl hover:scale-[1.02] transition-all cursor-pointer group border-l-4 border-primary/60 flex flex-col justify-center touch-target-72">
+<h4 class="font-label-lg text-primary mb-2">Celebration Smoke</h4>
+<p class="text-sm text-on-surface/90 font-medium">Festive, dynamic flavors with a long-lasting finish.</p>
+</div>
+</div>
+</section>
+<!-- Soil Paths Section -->
+<section>
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">landscape</span>
+<h3 class="font-headline-lg text-headline-lg text-primary tracking-tight">Soil Paths</h3>
+</div>
+<div class="space-y-4">
+<!-- Soil Detailed Rows -->
+<div class="airy-glass rounded-xl overflow-hidden group touch-target-72">
+<div class="p-5 flex items-center gap-6 transition-transform group-hover:translate-x-2">
+<div class="w-16 h-16 rounded-full flex-shrink-0 overflow-hidden border border-white/20 ring-4 ring-black/10">
+<img class="w-full h-full object-cover" data-alt="Macro photography of rich, loamy Dominican soil." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCg50HY93Bp-gbVpTpaJiQgmFOuegI7nbYhr8_vpqXP9l39DKN0go7xXdtmCNF0gDR_DWWRJbznGbLKboViDPpCONAkSi5uXEZg4H7lqCeFkzZmU21PIleJJXw6DCnDxtMbYPyk3qnL7dM9-bfT_fQpk-cs31g-0279IRp2DOjKtv10NvtxmYnA1rmzVAjezF9pRTVNvp6qRymNnVQ9q_3xIuK7uXZ6YT2ZukAwz74VHhTGQiM4f7iiKI-QGoq_p39B2N8wcOSycos"/>
+</div>
+<div class="flex-1">
+<h4 class="font-label-lg text-primary">Dominican smooth soil</h4>
+<p class="text-sm text-on-surface/90 font-medium">Silky texture yielding elegant, creamy profiles.</p>
+</div>
+<span class="material-symbols-outlined text-on-surface/60">chevron_right</span>
+</div>
+</div>
+<div class="airy-glass rounded-xl overflow-hidden group touch-target-72">
+<div class="p-5 flex items-center gap-6 transition-transform group-hover:translate-x-2">
+<div class="w-16 h-16 rounded-full flex-shrink-0 overflow-hidden border border-white/20 ring-4 ring-black/10">
+<img class="w-full h-full object-cover" data-alt="Intense dark volcanic soil from Nicaragua." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUTFaVR-5jBRur8j7rPk_c3CCo47y_mMu_jFyLGgdua5v23hApyWG8j4GI5rw2GeCKXe93Y9Asm2IdY-BtJj7lAbYxEVw1r4BcadXIlrk1HKQun1KboBq0uasGnnWSvD0wSGrgf29Uak7ntw_w0N6WAYxy7vNB-T-jasmaRGaBYLuthqSLMX1Ni8czSlTrdrZOy0CTNtQ_Yoj4NVg8dO2ig_MgYOlXALSaqQP42KFtDPt4IHJQQxBduDh1vqEl1oybE_Xa5pOdcDQ"/>
+</div>
+<div class="flex-1">
+<h4 class="font-label-lg text-primary">Nicaraguan volcanic soil</h4>
+<p class="text-sm text-on-surface/90 font-medium">Mineral-rich black earth producing bold, spicy notes.</p>
+</div>
+<span class="material-symbols-outlined text-on-surface/60">chevron_right</span>
+</div>
+</div>
+<div class="airy-glass rounded-xl overflow-hidden group touch-target-72">
+<div class="p-5 flex items-center gap-6 transition-transform group-hover:translate-x-2">
+<div class="w-16 h-16 rounded-full bg-white/5 flex-shrink-0 overflow-hidden border border-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl text-primary/70">terrain</span>
+</div>
+<div class="flex-1">
+<h4 class="font-label-lg text-primary">Honduran rich earth</h4>
+<p class="text-sm text-on-surface/90 font-medium">Heavy clay providing strength and deep character.</p>
+</div>
+<span class="material-symbols-outlined text-on-surface/60">chevron_right</span>
+</div>
+</div>
+<div class="airy-glass rounded-xl overflow-hidden group touch-target-72">
+<div class="p-5 flex items-center gap-6 transition-transform group-hover:translate-x-2">
+<div class="w-16 h-16 rounded-full flex-shrink-0 overflow-hidden border border-white/20 ring-4 ring-black/10">
+<img class="w-full h-full object-cover" data-alt="A detailed view of a thin, elastic tobacco wrapper leaf." src="https://lh3.googleusercontent.com/aida-public/AB6AXuApvWrW8xRtabgC5osR5xaZ-BKdPr_OiBBivJ1MR9ZrWm5egT9kM1kO0AUYYggsh_cuHq_zCRDR-4ZA3a7wsncVtcVXXGQNWV80y9OaIB2oLQouGiMbvrYo_mUWvgxu-IikmYNsZxFKxhOQ8DO9lhNF4STcmQIWDxo252Zs3a64sJk5yirSkRrZBDuLTAzLLbwgrgHbU_WbvpRfDh6BN_K-hzwOR7lxJOeW7Ye2yDi6m_Y5y1C4-90tx19AOp-9KDHRAaY011PInhE"/>
+</div>
+<div class="flex-1">
+<h4 class="font-label-lg text-primary">Ecuadorian wrapper influence</h4>
+<p class="text-sm text-on-surface/90 font-medium">Cloud-filtered sunlight creates floral sweetness.</p>
+</div>
+<span class="material-symbols-outlined text-on-surface/60">chevron_right</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-2">
+<div class="airy-glass p-4 rounded-lg text-center hover:bg-white/10 transition-colors cursor-pointer touch-target-72 flex flex-col justify-center">
+<h5 class="font-label-sm text-white drop-shadow-sm">Mexican San Andrés</h5>
+<p class="text-xs text-white/80 font-medium">Dark depth</p>
+</div>
+<div class="airy-glass p-4 rounded-lg text-center hover:bg-white/10 transition-colors cursor-pointer touch-target-72 flex flex-col justify-center">
+<h5 class="font-label-sm text-white drop-shadow-sm">Brazilian Mata Fina</h5>
+<p class="text-xs text-white/80 font-medium">Natural sweetness</p>
+</div>
+</div>
+<div class="airy-glass p-4 rounded-lg text-center border border-dashed border-primary/40 hover:border-primary/60 transition-colors cursor-pointer touch-target-72 flex flex-col justify-center">
+<h5 class="font-label-sm text-primary drop-shadow-sm">Colombian experimental profile</h5>
+<p class="text-xs text-on-surface/80 font-medium">Untamed highland minerals</p>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Participation Alert Overlay (Bottom Right) -->
+<div class="fixed bottom-32 right-gutter z-40 max-w-sm pointer-events-none opacity-0 translate-y-10 transition-all duration-700" id="stampAlert">
+<div class="airy-glass p-0.5 rounded-2xl shadow-2xl overflow-hidden">
+<div class="p-6 flex items-center gap-6">
+<div class="w-20 h-20 flex-shrink-0 flex items-center justify-center relative">
+<div class="absolute inset-0 bg-primary/20 rounded-full animate-ping"></div>
+<div class="w-16 h-16 gold-action rounded-full flex items-center justify-center stamp-reveal shadow-lg">
+<span class="material-symbols-outlined text-on-primary text-4xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary leading-tight">Seed and Soil Completion Stamp</h4>
+<p class="font-label-sm text-label-sm text-white mt-2 drop-shadow-sm">Added to your Member Passport</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-black/40 backdrop-blur-3xl border-t border-white/10 shadow-2xl rounded-t-2xl md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface/80 hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm text-label-sm mt-1">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface/80 hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm mt-1">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary bg-primary/10 rounded-full px-6 py-2 scale-90 border border-primary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-sm text-label-sm mt-1">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface/80 hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-label-sm text-label-sm mt-1">Assistant</span>
+</div>
+</footer>
+<!-- FAB -->
+<button class="fixed bottom-28 left-1/2 -translate-x-1/2 z-50 gold-action px-10 py-4 rounded-full shadow-2xl flex items-center gap-3 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined">local_library</span>
+<span class="font-label-lg uppercase tracking-widest font-bold">Next: Curation</span>
+</button>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Reveal Stamp Alert after a delay
+            setTimeout(() => {
+                const alert = document.getElementById('stampAlert');
+                if(alert) {
+                    alert.classList.remove('opacity-0', 'translate-y-10');
+                    alert.classList.add('opacity-100', 'translate-y-0');
+                    
+                    setTimeout(() => {
+                        alert.classList.add('opacity-0', 'translate-y-10');
+                        alert.classList.remove('opacity-100', 'translate-y-0');
+                    }, 6000);
+                }
+            }, 2500);
+
+            // Toggle side nav
+            const menuBtn = document.querySelector('header button');
+            const sideNav = document.getElementById('sideNav');
+            let isOpen = false;
+
+            if(menuBtn && sideNav) {
+                menuBtn.addEventListener('click', () => {
+                    isOpen = !isOpen;
+                    if(isOpen) {
+                        sideNav.classList.remove('-translate-x-full');
+                    } else {
+                        sideNav.classList.add('-translate-x-full');
+                    }
+                });
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WineCraft 360 | Cellar Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#3d2400",
+                      "on-primary-fixed": "#261900",
+                      "inverse-primary": "#775a19",
+                      "on-secondary-fixed-variant": "#643f00",
+                      "on-primary-container": "#4e3700",
+                      "surface-variant": "#353436",
+                      "secondary-fixed": "#ffddb6",
+                      "tertiary-fixed": "#f7ddd6",
+                      "surface": "#131314",
+                      "outline": "#9a8f80",
+                      "on-tertiary": "#3c2d28",
+                      "surface-tint": "#e9c176",
+                      "surface-container": "#1f1f20",
+                      "on-primary-fixed-variant": "#5d4201",
+                      "inverse-on-surface": "#303031",
+                      "surface-container-low": "#1b1b1c",
+                      "surface-container-lowest": "#0e0e0f",
+                      "secondary-fixed-dim": "#ffb95a",
+                      "on-tertiary-container": "#473733",
+                      "error": "#ffb4ab",
+                      "on-tertiary-fixed-variant": "#54433e",
+                      "on-error": "#690005",
+                      "secondary-container": "#c68315",
+                      "on-background": "#e5e2e3",
+                      "tertiary-fixed-dim": "#dac1bb",
+                      "outline-variant": "#4e4639",
+                      "on-surface-variant": "#d1c5b4",
+                      "primary": "#e9c176",
+                      "on-tertiary-fixed": "#261814",
+                      "on-secondary": "#462a00",
+                      "tertiary": "#dac1bb",
+                      "surface-container-high": "#2a2a2b",
+                      "tertiary-container": "#b7a09a",
+                      "on-surface": "#e5e2e3",
+                      "surface-container-highest": "#353436",
+                      "on-error-container": "#ffdad6",
+                      "primary-fixed-dim": "#e9c176",
+                      "secondary": "#ffb95a",
+                      "primary-container": "#c5a059",
+                      "on-primary": "#412d00",
+                      "surface-bright": "#39393a",
+                      "primary-fixed": "#ffdea5",
+                      "inverse-surface": "#e5e2e3",
+                      "error-container": "#93000a",
+                      "surface-dim": "#131314",
+                      "background": "#131314",
+                      "on-secondary-fixed": "#2a1800",
+                      "titanium": "#A5A9B4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "card-padding": "24px",
+                      "unit": "8px",
+                      "container-max-width": "1440px",
+                      "margin": "64px",
+                      "gutter": "32px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Montserrat"],
+                      "headline-md": ["Playfair Display"],
+                      "headline-lg": ["Playfair Display"],
+                      "body-lg": ["Montserrat"],
+                      "body-md": ["Montserrat"],
+                      "display-lg": ["Playfair Display"],
+                      "label-lg": ["Montserrat"],
+                      "headline-xl": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .glass-airy {
+            background: rgba(19, 19, 20, 0.3);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(165, 169, 180, 0.2); /* Titanium border */
+        }
+        .gold-foil-stroke {
+            border: 1px solid transparent;
+            background-image: linear-gradient(rgba(19, 19, 20, 0), rgba(19, 19, 20, 0)), linear-gradient(135deg, #e9c176 0%, #4e3700 100%);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+        }
+        .gold-foil-gradient {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+        }
+        .rotary-dial {
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .pulse-gold {
+            animation: pulse-gold 2s infinite;
+        }
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(233, 193, 118, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(233, 193, 118, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(233, 193, 118, 0); }
+        }
+        .step-active { width: 40px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        body {
+            background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+<style>
+        body {
+          min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen overflow-x-hidden selection:bg-primary selection:text-on-primary">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-2xl bg-surface/30 border-b border-white/5 h-20 px-gutter flex justify-between items-center">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform" data-icon="menu">menu</span>
+<h1 class="font-headline-md text-headline-md tracking-[0.2em] text-primary uppercase">RESERVE LOUNGE</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-8 font-label-lg text-label-lg tracking-widest">
+<span class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer">POURCRAFT</span>
+<span class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer">BEERCRAFT</span>
+<span class="text-primary cursor-pointer border-b border-primary pb-1">WINECRAFT</span>
+<span class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer">PASSPORT</span>
+</div>
+<div class="w-10 h-10 rounded-full border border-titanium/30 overflow-hidden ring-2 ring-primary/20">
+<img alt="Member Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeaLPqllPZdc2EoTvCERbUX8DB3394JgX4SYbKBHUdBGXvQ-SdlPiJtiW2iWEEN4tkODLGGZKDZWY4UBQJoIAYtddiipD3GUMQwfowAjELTX0b5weQqRBiFwJv8mFMFWk6ME5rzBd_I_DrNI3WTmtzfuulVHn7aX8Q4r7c-U3_JA_gcV16qCjAaj7tCMIbvTFa7_vLBIjxmvc-ILMkyaYKwWp_o4HIILNAbQLZNRBZTQAiFfs-S8qs6eBjGtPYr37hdom7zWm-Low"/>
+</div>
+</div>
+</header>
+<main class="pt-40 pb-48 px-gutter max-w-[1440px] mx-auto min-h-screen">
+<!-- Cinematic Header & Progress -->
+<div class="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-12">
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span class="w-8 h-[1px] bg-primary"></span>
+<p class="text-primary font-label-lg uppercase tracking-[0.4em]">Excellence Defined</p>
+</div>
+<h2 class="font-display-lg text-display-lg text-white">WineCraft 360</h2>
+<p class="text-on-surface-variant font-body-lg max-w-xl leading-relaxed">Tailor the molecular profile of your selection through our high-fidelity sensory intake system.</p>
+</div>
+<div class="flex flex-col items-end gap-4 min-w-[320px]">
+<div class="flex justify-between w-full font-label-sm text-primary tracking-widest">
+<span>PROGRESS</span>
+<span>STEP 3 OF 4</span>
+</div>
+<div class="flex gap-3 w-full h-1 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary/40 rounded-full w-1/4"></div>
+<div class="h-full bg-primary/40 rounded-full w-1/4"></div>
+<div class="h-full bg-primary rounded-full flex-grow shadow-[0_0_10px_#e9c176]"></div>
+<div class="h-full bg-white/5 rounded-full w-1/4"></div>
+</div>
+<p class="text-[10px] text-titanium/60 uppercase tracking-widest mt-1">Cellar Exploration Active</p>
+</div>
+</div>
+<!-- Main Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<!-- Column 1: Sensory Dials -->
+<section class="lg:col-span-8 space-y-10">
+<div class="glass-airy rounded-2xl p-10">
+<div class="flex items-center gap-4 mb-14">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="settings_input_component">settings_input_component</span>
+<h3 class="font-headline-md text-headline-md text-white uppercase tracking-[0.2em]">Sensory Intake</h3>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-16">
+<!-- Dial: Body -->
+<div class="flex flex-col items-center group cursor-pointer" onclick="rotateDial(this)">
+<div class="relative w-36 h-36 mb-8">
+<div class="absolute inset-0 rounded-full border border-white/10"></div>
+<div class="absolute inset-0 rounded-full border-t-2 border-primary rotary-dial shadow-[0_-4px_12px_rgba(233,193,118,0.3)]" style="transform: rotate(45deg)"></div>
+<div class="absolute inset-4 rounded-full bg-surface/40 backdrop-blur-xl flex items-center justify-center border border-white/5">
+<span class="text-primary font-headline-md text-3xl">7.5</span>
+</div>
+<div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></div>
+</div>
+<h4 class="font-label-lg text-white mb-2 tracking-[0.2em] uppercase">Body</h4>
+<p class="text-label-sm text-on-surface-variant text-center opacity-60">Viscosity &amp; Weight</p>
+</div>
+<!-- Dial: Tannin -->
+<div class="flex flex-col items-center group cursor-pointer" onclick="rotateDial(this)">
+<div class="relative w-36 h-36 mb-8">
+<div class="absolute inset-0 rounded-full border border-white/10"></div>
+<div class="absolute inset-0 rounded-full border-t-2 border-primary rotary-dial shadow-[0_-4px_12px_rgba(233,193,118,0.3)]" style="transform: rotate(120deg)"></div>
+<div class="absolute inset-4 rounded-full bg-surface/40 backdrop-blur-xl flex items-center justify-center border border-white/5">
+<span class="text-primary font-headline-md text-3xl">4.2</span>
+</div>
+<div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></div>
+</div>
+<h4 class="font-label-lg text-white mb-2 tracking-[0.2em] uppercase">Tannin</h4>
+<p class="text-label-sm text-on-surface-variant text-center opacity-60">Structure &amp; Grip</p>
+</div>
+<!-- Dial: Acidity -->
+<div class="flex flex-col items-center group cursor-pointer" onclick="rotateDial(this)">
+<div class="relative w-36 h-36 mb-8">
+<div class="absolute inset-0 rounded-full border border-white/10"></div>
+<div class="absolute inset-0 rounded-full border-t-2 border-primary rotary-dial shadow-[0_-4px_12px_rgba(233,193,118,0.3)]" style="transform: rotate(200deg)"></div>
+<div class="absolute inset-4 rounded-full bg-surface/40 backdrop-blur-xl flex items-center justify-center border border-white/5">
+<span class="text-primary font-headline-md text-3xl">8.1</span>
+</div>
+<div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></div>
+</div>
+<h4 class="font-label-lg text-white mb-2 tracking-[0.2em] uppercase">Acidity</h4>
+<p class="text-label-sm text-on-surface-variant text-center opacity-60">Brightness &amp; Lift</p>
+</div>
+<!-- Dial: Fruit -->
+<div class="flex flex-col items-center group cursor-pointer" onclick="rotateDial(this)">
+<div class="relative w-36 h-36 mb-8">
+<div class="absolute inset-0 rounded-full border border-white/10"></div>
+<div class="absolute inset-0 rounded-full border-t-2 border-primary rotary-dial shadow-[0_-4px_12px_rgba(233,193,118,0.3)]" style="transform: rotate(310deg)"></div>
+<div class="absolute inset-4 rounded-full bg-surface/40 backdrop-blur-xl flex items-center justify-center border border-white/5">
+<span class="text-primary font-headline-md text-3xl">6.8</span>
+</div>
+<div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]"></div>
+</div>
+<h4 class="font-label-lg text-white mb-2 tracking-[0.2em] uppercase">Fruit</h4>
+<p class="text-label-sm text-on-surface-variant text-center opacity-60">Aroma Intensity</p>
+</div>
+</div>
+</div>
+<!-- Regional Selection -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<!-- Old World Card -->
+<div class="relative group cursor-pointer rounded-2xl overflow-hidden glass-airy p-1.5 transition-all duration-500 hover:-translate-y-1">
+<div class="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity duration-700">
+<img alt="Old World" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBszlswa-ROQ15tO8dP1bRgSKuPUqRWOilP64Tr4pvDj9zu8huXtwwV3ptMUybhDfbsY-nL55N6Jh93Ly-mSlfBn11ciAJUl5T7xatTtkfx6Smw-X3nGuOyGWv6u9vbpU5dJdxYIVbjrRc5FanCTPKplDumaa6PJK8y40c0Od1oqkRmBbQRk99wpZA74o13V_-ifnEH6sikpl686CgkZHIfoIre2xnZAq_dVS7_rj9ad5qLtQ0L9NAxzbygB4tBtdk52NyppumFMWQ"/>
+</div>
+<div class="relative z-10 p-10 h-80 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="px-3 py-1.5 bg-primary text-on-primary font-label-sm tracking-widest rounded shadow-lg">E.A.T. LOGIC</div>
+<span class="material-symbols-outlined text-primary text-3xl drop-shadow-lg" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="space-y-3">
+<h4 class="font-headline-lg text-headline-lg text-white">Old World</h4>
+<p class="text-on-surface-variant font-body-md text-sm leading-relaxed">France, Italy, Spain. Earth-driven, mineral, high acidity.</p>
+<div class="pt-2 flex items-center gap-3">
+<div class="w-2.5 h-2.5 rounded-full bg-primary pulse-gold"></div>
+<span class="text-primary font-label-sm tracking-widest text-[10px] uppercase">Profile Recommended</span>
+</div>
+</div>
+</div>
+<div class="absolute inset-0 border-2 border-primary/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+</div>
+<!-- New World Card -->
+<div class="relative group cursor-pointer rounded-2xl overflow-hidden glass-airy p-1.5 opacity-80 hover:opacity-100 transition-all duration-500 hover:-translate-y-1">
+<div class="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-700">
+<img alt="New World" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYHabxG0LcnpdLv51VrOYyNsb7jLvZRLTATT2cJBeegCgyJSrpFk69-uKY3BSP0CTGube40o877Pk8l0rE5otO3NDZ7NFwtA41ONsr8Vz8ML2-4RbxqiziEjm7vi0ycKcAHo0lhciFh6jvyFRHPE-7Prym6jxrNqPTjCj0NpYKPqtNT6xsk6m_8SCPXUKH9xxmjEm9YI58TULx1YnZkfIApwZrmTuShIGCs3fIv4TYJglhoMnBcroqP8fS_3DIxGQfnxvoyifs7Tw"/>
+</div>
+<div class="relative z-10 p-10 h-80 flex flex-col justify-between">
+<div class="flex justify-end">
+<span class="material-symbols-outlined text-titanium/40 text-3xl" data-icon="public">public</span>
+</div>
+<div class="space-y-3">
+<h4 class="font-headline-lg text-headline-lg text-white">New World</h4>
+<p class="text-on-surface-variant font-body-md text-sm leading-relaxed">USA, Australia, Chile. Fruit-forward, bold, higher alcohol.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Column 2: Vertical Selectors -->
+<aside class="lg:col-span-4">
+<!-- Vintage Vertical Slider -->
+<div class="glass-airy rounded-2xl p-10 h-full flex flex-col">
+<div class="flex items-center gap-4 mb-12">
+<span class="material-symbols-outlined text-primary" data-icon="history">history</span>
+<h3 class="font-headline-md text-headline-md text-white uppercase tracking-[0.2em]">Vintage Vertical</h3>
+</div>
+<div class="flex-grow flex gap-10 overflow-hidden relative">
+<!-- Ruler -->
+<div class="w-16 flex flex-col justify-between py-6 text-titanium/40 font-label-sm">
+<span class="hover:text-primary transition-colors cursor-pointer">2024</span>
+<span class="hover:text-primary transition-colors cursor-pointer">2020</span>
+<span class="text-primary font-bold scale-125">2018</span>
+<span class="hover:text-primary transition-colors cursor-pointer">2015</span>
+<span class="hover:text-primary transition-colors cursor-pointer">2010</span>
+<span class="hover:text-primary transition-colors cursor-pointer">2005</span>
+<span class="hover:text-primary transition-colors cursor-pointer">1998</span>
+</div>
+<!-- Physical Slider Track -->
+<div class="flex-grow flex items-center justify-center relative">
+<div class="absolute h-full w-px bg-white/10 rounded-full"></div>
+<div class="absolute top-1/3 w-full cursor-pointer touch-none" id="vintage-slider">
+<div class="glass-airy bg-surface/60 p-6 rounded-xl border border-primary/40 shadow-[0_0_40px_rgba(233,193,118,0.15)] flex items-center justify-between group">
+<div class="space-y-1">
+<p class="text-primary font-label-lg tracking-[0.3em] text-lg">2018</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest opacity-60">Exceptional Harvest</p>
+</div>
+<span class="material-symbols-outlined text-primary group-hover:translate-y-0.5 transition-transform" data-icon="unfold_more">unfold_more</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-white/10">
+<div class="flex items-start gap-4 p-5 rounded-xl bg-primary/5 border border-primary/10">
+<span class="material-symbols-outlined text-primary text-xl mt-1" data-icon="info">info</span>
+<p class="text-xs text-on-surface-variant leading-relaxed font-light">The 2018 vintage was characterized by steady rainfall followed by a dry heatwave, producing intense tannins and structural longevity.</p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Sticky Interaction Bar -->
+<div class="fixed bottom-32 left-0 w-full px-gutter z-40 pointer-events-none">
+<div class="max-w-[1440px] mx-auto flex justify-end">
+<div class="pointer-events-auto flex items-center gap-10 glass-airy p-5 pr-5 rounded-2xl border border-white/10 shadow-2xl">
+<div class="flex flex-col items-end pr-10 border-r border-white/10">
+<p class="text-titanium/60 font-label-sm tracking-widest uppercase mb-1">Current Estimate</p>
+<p class="text-white font-headline-md text-2xl tracking-tighter">$425.00 <span class="text-xs text-on-surface-variant ml-1 font-normal">/ Bottle</span></p>
+</div>
+<button class="gold-foil-gradient h-[80px] px-14 rounded-xl flex items-center gap-6 group active:scale-95 transition-all pulse-gold relative overflow-hidden">
+<div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-12"></div>
+<span class="text-on-primary font-label-lg tracking-[0.3em] font-bold text-base">FINALIZE SELECTION</span>
+<div class="w-10 h-10 rounded-full bg-on-primary/15 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-2xl group-hover:rotate-180 transition-transform duration-500" data-icon="sync" style="font-variation-settings: 'FILL' 1;">sync</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 backdrop-blur-3xl bg-surface/30 border-t border-white/5 h-24 px-gutter flex justify-around items-center pb-safe">
+<div class="flex flex-col items-center justify-center text-titanium/50 gap-1.5 hover:text-primary transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform" data-icon="liquor">liquor</span>
+<span class="font-label-sm text-[10px] uppercase tracking-[0.2em]">PourCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-titanium/50 gap-1.5 hover:text-primary transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform" data-icon="sports_bar">sports_bar</span>
+<span class="font-label-sm text-[10px] uppercase tracking-[0.2em]">BeerCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold gap-1.5 scale-110 cursor-pointer">
+<span class="material-symbols-outlined text-2xl drop-shadow-[0_0_8px_rgba(233,193,118,0.5)]" data-icon="wine_bar" style="font-variation-settings: 'FILL' 1;">wine_bar</span>
+<span class="font-label-sm text-[10px] uppercase tracking-[0.2em]">WineCraft</span>
+<div class="w-1 h-1 bg-primary rounded-full mt-0.5"></div>
+</div>
+<div class="flex flex-col items-center justify-center text-titanium/50 gap-1.5 hover:text-primary transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform" data-icon="auto_stories">auto_stories</span>
+<span class="font-label-sm text-[10px] uppercase tracking-[0.2em]">Passport</span>
+</div>
+</nav>
+<!-- Custom Cursor Overlay (Kiosk Experience) -->
+<div class="fixed w-10 h-10 border border-primary/40 rounded-full pointer-events-none z-[100] transition-transform duration-150 ease-out hidden lg:block bg-primary/5" id="kiosk-cursor"></div>
+<script>
+    // Kiosk Cursor Logic
+    const cursor = document.getElementById('kiosk-cursor');
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
+    });
+
+    // Dial Rotation Micro-interaction
+    function rotateDial(el) {
+        const dial = el.querySelector('.rotary-dial');
+        const valueSpan = el.querySelector('span');
+        let currentRotation = parseInt(dial.style.transform.replace(/[^\d.]/g, '')) || 0;
+        const newRotation = currentRotation + 45;
+        dial.style.transform = `rotate(${newRotation}deg)`;
+        
+        // Randomly update value for demo feel
+        const newVal = (Math.random() * 9 + 1).toFixed(1);
+        valueSpan.innerText = newVal;
+    }
+
+    // Vintage Slider Drag Logic (Basic Mockup)
+    const slider = document.getElementById('vintage-slider');
+    let isDragging = false;
+    let startY;
+    let startTop;
+
+    slider.addEventListener('mousedown', startDrag);
+    slider.addEventListener('touchstart', (e) => startDrag(e.touches[0]));
+
+    function startDrag(e) {
+        isDragging = true;
+        startY = e.clientY;
+        startTop = slider.offsetTop;
+        document.addEventListener('mousemove', onDrag);
+        document.addEventListener('mouseup', stopDrag);
+        document.addEventListener('touchmove', (e) => onDrag(e.touches[0]));
+        document.addEventListener('touchend', stopDrag);
+    }
+
+    function onDrag(e) {
+        if (!isDragging) return;
+        const dy = e.clientY - startY;
+        const containerHeight = slider.parentElement.offsetHeight;
+        let newTop = startTop + dy;
+        
+        // Constrain
+        newTop = Math.max(0, Math.min(newTop, containerHeight - slider.offsetHeight));
+        slider.style.top = `${newTop}px`;
+    }
+
+    function stopDrag() {
+        isDragging = false;
+        document.removeEventListener('mousemove', onDrag);
+        document.removeEventListener('mouseup', stopDrag);
+    }
+</script>
+</body></html>

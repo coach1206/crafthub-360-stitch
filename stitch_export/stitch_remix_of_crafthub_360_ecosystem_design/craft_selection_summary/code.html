@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reserve Lounge | Selection Summary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed": "#2a1800",
+            "inverse-primary": "#775a19",
+            "primary-fixed-dim": "#e9c176",
+            "inverse-on-surface": "#303031",
+            "on-background": "#e5e2e3",
+            "on-primary-fixed": "#261900",
+            "primary": "#e9c176",
+            "surface-container-lowest": "#0e0e0f",
+            "on-tertiary-fixed": "#261814",
+            "secondary-fixed": "#ffddb6",
+            "on-secondary-container": "#3d2400",
+            "secondary": "#ffb95a",
+            "on-tertiary-fixed-variant": "#54433e",
+            "on-error-container": "#ffdad6",
+            "tertiary-container": "#b7a09a",
+            "secondary-fixed-dim": "#ffb95a",
+            "surface-container-high": "#2a2a2b",
+            "surface-container-low": "#1b1b1c",
+            "background": "#131314",
+            "surface-container": "#1f1f20",
+            "on-tertiary-container": "#473733",
+            "surface": "#131314",
+            "on-secondary": "#462a00",
+            "surface-variant": "#353436",
+            "on-surface": "#e5e2e3",
+            "primary-container": "#c5a059",
+            "surface-bright": "#39393a",
+            "on-tertiary": "#3c2d28",
+            "on-error": "#690005",
+            "outline-variant": "#4e4639",
+            "inverse-surface": "#e5e2e3",
+            "tertiary-fixed": "#f7ddd6",
+            "on-secondary-fixed-variant": "#643f00",
+            "surface-tint": "#e9c176",
+            "surface-container-highest": "#353436",
+            "error": "#ffb4ab",
+            "tertiary-fixed-dim": "#dac1bb",
+            "primary-fixed": "#ffdea5",
+            "error-container": "#93000a",
+            "secondary-container": "#c68315",
+            "on-primary-fixed-variant": "#5d4201",
+            "outline": "#9a8f80",
+            "on-primary": "#412d00",
+            "tertiary": "#dac1bb",
+            "on-primary-container": "#4e3700",
+            "surface-dim": "#131314",
+            "on-surface-variant": "#d1c5b4"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "container-max-width": "1440px",
+            "gutter": "32px",
+            "unit": "8px",
+            "margin": "64px",
+            "card-padding": "24px"
+          },
+          "fontFamily": {
+            "label-lg": ["Montserrat"],
+            "label-sm": ["Montserrat"],
+            "body-lg": ["Montserrat"],
+            "headline-lg": ["Playfair Display"],
+            "headline-md": ["Playfair Display"],
+            "display-lg": ["Playfair Display"],
+            "headline-xl": ["Playfair Display"],
+            "body-md": ["Montserrat"]
+          },
+          "fontSize": {
+            "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+            "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-panel {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .gold-border {
+      border: 1px solid rgba(233, 193, 118, 0.3);
+    }
+    .gold-foil {
+      background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #e9c176 100%);
+      box-shadow: 0 4px 15px rgba(233, 193, 118, 0.2);
+    }
+    .amber-glow {
+      box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+    }
+    body {
+      background-color: #131314;
+      background-image: 
+        radial-gradient(circle at 0% 0%, rgba(233, 193, 118, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(61, 36, 0, 0.1) 0%, transparent 50%);
+      color: #e5e2e3;
+      min-height: 100vh;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-xl bg-surface/80 border-b border-outline-variant shadow-md flex justify-between items-center px-gutter h-20 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 duration-300" data-icon="menu">menu</span>
+<h1 class="font-headline-md text-headline-md tracking-widest text-primary uppercase">RESERVE LOUNGE</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<span class="font-label-lg text-label-lg text-primary cursor-pointer hover:text-primary-fixed-dim transition-colors uppercase">Curations</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant cursor-pointer hover:text-primary-fixed-dim transition-colors uppercase">History</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant cursor-pointer hover:text-primary-fixed-dim transition-colors uppercase">Concierge</span>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden cursor-pointer hover:scale-105 transition-transform">
+<img alt="Alexander Sterling" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWWWZ2opntLS-mW89lFhMvaZU9R06XVgyMJyWSLaqznKje5WQid9Yt4OVVcCs1py4t-YYfXx3_KUKgP243pRJ79yNiMQe-zQTq0K72WIUUdrV_eRa0TevHEdqEYgveMfeZb8o9TmyJ1cnP4G6xrmU1gC9TXIfIXDRBCO6eI5N92rpo5P_Tio3CGrT1x3LB98aQrmUzEgqf_TeitMPWDWFJEicIQFvytZKa_kjwwCTJVk-1xAFiILYRl-Eabi6fFthfsskfMJRtbTU"/>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-40 px-gutter max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<div class="mb-12">
+<h2 class="font-headline-xl text-headline-xl mb-2">Review Your Selections</h2>
+<p class="text-on-surface-variant max-w-2xl font-body-lg text-body-lg">Confirm your tailored experience before finalization. Your selections from our curated cellars and bars are listed below.</p>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Selected Items -->
+<div class="lg:col-span-8 space-y-gutter">
+<!-- Selection Category: PourCraft -->
+<section class="glass-panel bg-surface-container-low/90 rounded-xl p-card-padding gold-border amber-glow">
+<div class="flex justify-between items-end mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="liquor">liquor</span>
+<h3 class="font-headline-md text-headline-md uppercase tracking-wide">PourCraft</h3>
+</div>
+<span class="font-label-sm text-label-sm text-primary underline cursor-pointer">Edit Selection</span>
+</div>
+<div class="flex gap-6 items-center">
+<div class="w-32 h-40 rounded-lg overflow-hidden flex-shrink-0 gold-border">
+<img class="w-full h-full object-cover" data-alt="A macro photograph of an expensive, dark amber single malt scotch whiskey being poured into a heavy crystal glass. The lighting is warm and moody, highlighting the viscous texture and slow-moving bubbles of the spirit. In the background, a blur of dark wood and leather suggests an ultra-premium private lounge atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq2kGtnIXevWsDqbP9vOAR_K5L-ezY6jtjbqzkfgDY0Sm4tFV4XdgFoVd55nqo7wn4RxFgzyWmN37zHkl7e5WM-e5tFf_IDdJ9qAJY9XvijpNYijhb-QLnd29X-9CY7RS8I2CwPsPc6nMSat_QHM2su2yrPf1Xb7jvWDVvd3jkqu1kHpdgEYt5zJsXdH21YfqnIjoiOmwOtixLJgaEDZKcfa-r2K_TuJtsHOlY-ewzWy6Gbz6qKXvinBYU6_xuLAs6bjzH3i_gaBY"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Macallan Rare Cask</h4>
+<p class="text-on-surface-variant font-body-md text-body-md mb-4">Neat • Highland Single Malt • 43% ABV</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-primary font-label-lg text-label-lg">Tasting Note: Rich raisin, vanilla, and apple.</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-primary">$95</span>
+</div>
+</div>
+</section>
+<!-- Selection Category: WineCraft -->
+<section class="glass-panel bg-surface-container-low/90 rounded-xl p-card-padding gold-border amber-glow">
+<div class="flex justify-between items-end mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="wine_bar">wine_bar</span>
+<h3 class="font-headline-md text-headline-md uppercase tracking-wide">WineCraft</h3>
+</div>
+<span class="font-label-sm text-label-sm text-primary underline cursor-pointer">Edit Selection</span>
+</div>
+<div class="flex gap-6 items-center">
+<div class="w-32 h-40 rounded-lg overflow-hidden flex-shrink-0 gold-border">
+<img class="w-full h-full object-cover" data-alt="A high-resolution shot of a deep red Bordeaux wine being swirled in an elegant long-stemmed crystal glass. The dark wine catches reflections of gold light from a nearby ember. The setting is a dimly lit, sophisticated cellar with shelves of old vintages visible in the soft-focus background, evoking a sense of heritage and luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMO15D0nA73T9R98MMRGjFBysozuWb0z2bF2q3PKgdTalEQjO13lYSAkXRyqVySZXPgPyewymLQlP7Wp-nwhggRaz46Mcdxnlb7XkUe3G_9XbHUxbpcnM0IDcbSzbGkHNtgtwezf6O0Z3rYbQTj70A2wb0B_qPyJNvg1pUCR5AMdXNM__-MxfpXPwx8CvmD8nmre2z0kb6AI7LWWt-6e1GrC_ANC78SW3gBlo1D3jfehJLQHpUyGYdLwFmkQ61y3NBApV5lcJ_tD0"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-headline-md text-headline-md text-on-surface mb-1">Château Margaux 2015</h4>
+<p class="text-on-surface-variant font-body-md text-body-md mb-4">Premier Grand Cru Classé • Margaux, France</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-primary font-label-lg text-label-lg">Sommelier Pick: Perfect maturity.</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-primary">$420</span>
+</div>
+</div>
+</section>
+<!-- E.A.T. Pairing Suggestions (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="glass-panel bg-surface-container/50 rounded-xl p-card-padding border border-outline-variant relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex items-center justify-between mb-4">
+<span class="text-primary font-label-lg text-label-lg uppercase tracking-widest">E.A.T. Suggestion</span>
+<span class="material-symbols-outlined text-primary" data-icon="restaurant">restaurant</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-2">Artisan Truffle Board</h4>
+<p class="text-on-surface-variant text-body-md mb-6">Specifically paired with your Macallan to enhance the earthy undertones of the single malt.</p>
+<button class="w-full py-3 rounded-lg border border-primary text-primary font-label-lg text-label-lg uppercase hover:bg-primary/10 transition-colors">Add to Order • $45</button>
+</div>
+<div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="A close-up, artistically lit photograph of a dark wooden board featuring gourmet truffle cheeses, thin slices of artisan cured meats, and dark chocolate shards. The scene is captured in a high-contrast style with deep shadows and warm highlights, suggesting a private, exclusive dining experience in a high-end luxury lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq9HWdSvjbB-VtRQmWSLRDcaSuqzpdyMUY9xGUGhHxrTQl6xkykIlUlhtj-GoydMQ0_v9_aAK2HqQZgkhzvVh8wh49EKH-Rt8JWJtiuEy5bsSRRpPUPPDrC_R-2tqntjhHZ-g8qTOqq8DRUVmqHPyy943HPUPEdYw3eMt2BFH35B3-MZWoimLEWpeHObPWcg1VPlt0fJ0RCMgbCpSMI1h85diS9-T3vjvSbmPwVlpbI4pEMFwYWt6C_bKgZ8Kbt_kCqsM6De46gMA"/>
+</div>
+</div>
+<div class="glass-panel bg-surface-container/50 rounded-xl p-card-padding border border-outline-variant relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex items-center justify-between mb-4">
+<span class="text-primary font-label-lg text-label-lg uppercase tracking-widest">E.A.T. Suggestion</span>
+<span class="material-symbols-outlined text-primary" data-icon="set_meal">set_meal</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-2">Wild Salmon Tartare</h4>
+<p class="text-on-surface-variant text-body-md mb-6">Designed to cut through the richness of the Margaux with bright citrus and herb notes.</p>
+<button class="w-full py-3 rounded-lg border border-primary text-primary font-label-lg text-label-lg uppercase hover:bg-primary/10 transition-colors">Add to Order • $32</button>
+</div>
+<div class="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="A professional food photography shot of a vibrant salmon tartare served on a dark slate plate. The dish is garnished with micro-greens and gold leaf, illuminated by a sharp spotlight that creates a dramatic, high-end culinary aesthetic. The surrounding environment is dark and mysterious, fitting for an elite members-only club." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC62jDOFgENLuGftagxIqhppymgwkQ08e_Lo-6HeHBdgaBTvQdjkFhXS6IgER7MPeqRGWC9DeLV5nH2vG4LJiNO21pq-uyOvrZbsRaOgz6YvR7zgD102eaE9BVLvRbSX5l9YYBDo2jy2oXZbkmdkUt-Lymd9zIo0dWhT31TnNE5GU7vChElTl5rF4T2BfFcRy2DFVUImG_N_3Dnf9Wm4D5BonotXgUeNVf14YZS_LZWVHT-yDIGbgyTwZQIwa-n-OtMJLKNQ9NCZPI"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Summary & Passport -->
+<div class="lg:col-span-4 space-y-gutter">
+<!-- Order Summary Card -->
+<section class="glass-panel bg-surface-container-highest rounded-xl p-card-padding border border-primary/20 shadow-2xl">
+<h3 class="font-headline-md text-headline-md uppercase mb-6 tracking-widest border-b border-outline-variant pb-4">Grand Summary</h3>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between font-body-md text-body-md">
+<span class="text-on-surface-variant">PourCraft Selections</span>
+<span>$95.00</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md">
+<span class="text-on-surface-variant">WineCraft Selections</span>
+<span>$420.00</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md">
+<span class="text-on-surface-variant">Service Gratuity (20%)</span>
+<span>$103.00</span>
+</div>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-baseline">
+<span class="font-headline-md text-headline-md text-primary">TOTAL</span>
+<span class="font-headline-lg text-headline-lg text-primary">$618.00</span>
+</div>
+</div>
+<button class="w-full gold-foil h-16 rounded-lg text-on-primary font-label-lg text-label-lg uppercase tracking-widest active:scale-[0.98] transition-transform flex items-center justify-center gap-2" onclick="handleFinalize()">
+            Finalize Order
+            <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<p class="text-center text-on-surface-variant text-label-sm font-label-sm mt-4 italic">Confirming will trigger the POS 3 Handoff to your Concierge.</p>
+</section>
+<!-- Earned Passport Preview -->
+<section class="bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] bg-surface-container-low rounded-xl p-card-padding gold-border">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="auto_stories">auto_stories</span>
+<h3 class="font-headline-md text-headline-md uppercase tracking-wide">Passport Progress</h3>
+</div>
+<div class="bg-surface/50 rounded-lg p-4 border border-outline-variant mb-6">
+<p class="font-label-sm text-label-sm text-primary uppercase mb-2">Stamps to be Earned</p>
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full border-2 border-dashed border-primary/40 flex items-center justify-center group cursor-help relative">
+<span class="material-symbols-outlined text-primary/40" data-icon="liquor">liquor</span>
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-surface-bright p-2 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap gold-border z-20">The Macallan Stamp</div>
+</div>
+<div class="w-12 h-12 rounded-full border-2 border-dashed border-primary/40 flex items-center justify-center group cursor-help relative">
+<span class="material-symbols-outlined text-primary/40" data-icon="wine_bar">wine_bar</span>
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-surface-bright p-2 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap gold-border z-20">First Growth Bordeaux</div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex-grow bg-surface h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[75%] shadow-[0_0_10px_#e9c176]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">12/16 Stamps</span>
+</div>
+<p class="text-on-surface-variant text-label-sm font-label-sm mt-3">4 more selections until your next Elite Perk: <span class="text-primary">The Cellar Master's Gift</span>.</p>
+</section>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl backdrop-blur-20px bg-surface-container-low/90 border-t border-outline-variant shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center h-24 px-gutter w-full pb-safe">
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="liquor">liquor</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">PourCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="sports_bar">sports_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">BeerCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="wine_bar">wine_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">WineCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold gap-1 scale-110 duration-500 ease-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="auto_stories" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Passport</span>
+</div>
+</nav>
+<!-- Toast for POS Handoff Simulator -->
+<div class="fixed bottom-32 left-1/2 -translate-x-1/2 z-[100] translate-y-20 opacity-0 transition-all duration-500" id="pos-toast">
+<div class="glass-panel bg-surface-container-highest/90 gold-border px-8 py-4 rounded-full flex items-center gap-4 shadow-2xl">
+<span class="material-symbols-outlined text-primary animate-pulse" data-icon="sync">sync</span>
+<span class="font-label-lg text-label-lg uppercase tracking-widest text-on-surface">Initiating POS 3 Handoff...</span>
+</div>
+</div>
+<script>
+    function handleFinalize() {
+      const toast = document.getElementById('pos-toast');
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        toast.innerHTML = `
+          <div class="glass-panel bg-surface-container-highest/90 border border-green-500/50 px-8 py-4 rounded-full flex items-center gap-4 shadow-2xl">
+            <span class="material-symbols-outlined text-green-500" data-icon="check_circle">check_circle</span>
+            <span class="font-label-lg text-label-lg uppercase tracking-widest text-on-surface">Concierge Notified • Order Secured</span>
+          </div>
+        `;
+      }, 2000);
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 5000);
+    }
+
+    // Parallax effect for cards
+    document.addEventListener('mousemove', (e) => {
+      const cards = document.querySelectorAll('.glass-panel');
+      const mouseX = e.clientX / window.innerWidth - 0.5;
+      const mouseY = e.clientY / window.innerHeight - 0.5;
+
+      cards.forEach(card => {
+        const speed = 10;
+        const x = mouseX * speed;
+        const y = mouseY * speed;
+        card.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      });
+    });
+  </script>
+</body></html>

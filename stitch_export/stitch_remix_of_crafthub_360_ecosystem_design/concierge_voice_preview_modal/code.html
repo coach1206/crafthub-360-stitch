@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "inverse-on-surface": "#303031",
+                    "outline": "#9a8f80",
+                    "surface-variant": "#353436",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed": "#ffdea5",
+                    "on-tertiary-fixed": "#261814",
+                    "secondary": "#ffb95a",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-dim": "#131314",
+                    "primary-container": "#c5a059",
+                    "surface-container-highest": "#353436",
+                    "tertiary": "#dac1bb",
+                    "on-error": "#690005",
+                    "surface-container-low": "#1b1b1c",
+                    "surface": "#131314",
+                    "error-container": "#93000a",
+                    "on-tertiary-container": "#473733",
+                    "on-surface-variant": "#d1c5b4",
+                    "secondary-container": "#c68315",
+                    "outline-variant": "#4e4639",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "secondary-fixed": "#ffddb6",
+                    "primary-fixed-dim": "#e9c176",
+                    "background": "#131314",
+                    "primary": "#e9c176",
+                    "on-secondary-container": "#3d2400",
+                    "surface-container-high": "#2a2a2b",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-primary-fixed": "#261900",
+                    "surface-container": "#1f1f20",
+                    "on-surface": "#e5e2e3",
+                    "on-tertiary": "#3c2d28",
+                    "on-background": "#e5e2e3",
+                    "on-secondary": "#462a00",
+                    "surface-bright": "#39393a",
+                    "surface-container-lowest": "#0e0e0f",
+                    "on-primary": "#412d00",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "surface-tint": "#e9c176",
+                    "on-primary-container": "#4e3700",
+                    "tertiary-fixed": "#f7ddd6",
+                    "tertiary-container": "#b7a09a",
+                    "error": "#ffb4ab",
+                    "inverse-primary": "#775a19"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "gutter": "32px",
+                    "card-padding": "24px",
+                    "unit": "8px",
+                    "margin": "64px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "label-lg": ["Montserrat"],
+                    "headline-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .gold-waveform-bar {
+            background: linear-gradient(to top, #e9c176, #c5a059);
+            box-shadow: 0 0 15px rgba(233, 193, 118, 0.3);
+        }
+        @keyframes wave {
+            0%, 100% { height: 8px; }
+            50% { height: 32px; }
+        }
+        .animate-wave {
+            animation: wave 1.2s ease-in-out infinite;
+        }
+        .smoked-glass {
+            backdrop-filter: blur(20px);
+            background-color: rgba(31, 31, 32, 0.7);
+            border: 1px solid rgba(233, 193, 118, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen selection:bg-primary/30">
+<!-- Top AppBar (from JSON guidance) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin py-8 backdrop-blur-xl bg-surface/30">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-outline/30">
+<img alt="Lounge Curator Silhouette" class="w-full h-full object-cover" data-alt="A sophisticated silhouette of a distinguished man in a tuxedo, seen from behind as he looks out over a dimly lit, high-end private club. The lighting is moody and warm, highlighting textures of leather and mahogany with a focus on gold and deep amber tones. The aesthetic is luxurious, exclusive, and unhurried." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMi15WnTxQ3VWv6lwDX8bM7gax0TSFQUipwlKWBacpPPCNJavXpI8C_2qmBiJOTRxjuOUIPrpbmSkP5ZnFPEz2dZmiI7HdhiFD1u8a7YQbWH4eX8oOSzJXN70gFVw_rP71IQQK7aefRNADe-ejvftU9n7UmEeIT5uxFBiSfxU-ymm__U6EB8Gnw4SnU9qlSMtbuDAcUqsMEKJ-v0WTYFgeG83ivOgOu6X97Skr5-ruos6rxxBQEtNa3GGqLQ4R2yky6qkYP7rDfqU"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">The Lounge Curator</h1>
+</div>
+<button class="text-primary hover:opacity-80 transition-opacity duration-500">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas (Background Context) -->
+<main class="pt-32 pb-40 px-margin max-w-container-max-width mx-auto">
+<div class="grid grid-cols-12 gap-gutter">
+<div class="col-span-12 md:col-span-8">
+<div class="font-display-lg text-display-lg text-on-surface mb-8">Refining Your Digital Palate</div>
+<div class="smoked-glass rounded-xl p-card-padding h-64 flex flex-col justify-end relative overflow-hidden group">
+<img alt="Luxury Spirit" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-1000" data-alt="Close-up macro photography of a crystal glass being filled with a golden, aged spirit. Sunlight filters through the liquid, creating intricate refractions and highlights. The background is a blurred, dark library with leather-bound books. The mood is sophisticated and evokes high-end sensory quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDODLXOm8uVc0dr_QpPAxjVXmCFIvz5HSuDQN0yK_FwRlf8ngtvMLWOWpmYJRkjBR-wz7KjtasJXZsshGTXROzFdFpmQWW8SNybajgQG8sqLBjLJ4tOtHiEx8V3iY1VCwN336ojirNXvjHBKvQKh2qZCviTGPUN38cDAK0_G6asfpp3hR2U4sXrPAZkK1200V-HOLfvtzoanrbov7_x1Y_MefHc2Y_XNoHPSOYsftiahzEx9l2OGy7LJeUyVZ30P2eJjPnBpDzDACg"/>
+<div class="relative z-10">
+<span class="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-2 block">Curation Step 04</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Select The Voice of Authority</h2>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 space-y-gutter">
+<div class="smoked-glass rounded-xl p-card-padding border-primary/20">
+<h3 class="font-headline-md text-headline-md text-primary mb-4">Membership Stats</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Your journey through the CraftHub ecosystem is 64% complete. Finalizing your AI Concierge settings will unlock the full suite of Networking Stamps.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Voice Preview Modal Overlay -->
+<div class="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-surface-container-lowest/80 backdrop-blur-md" id="voiceModal">
+<div class="smoked-glass w-full max-w-2xl rounded-xl shadow-2xl shadow-primary/10 overflow-hidden relative">
+<!-- Modal Header -->
+<div class="px-8 pt-8 pb-4 flex justify-between items-start">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Voice Preview</h2>
+<p class="font-label-lg text-label-lg text-on-tertiary-fixed-variant mt-1">Lounge Curator Persona</p>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<div class="px-8 pb-8">
+<!-- Waveform Visualization Container -->
+<div class="bg-surface-container-lowest/50 rounded-xl p-10 mb-8 border border-outline-variant/10 flex flex-col items-center justify-center min-h-[200px]">
+<div class="flex items-center gap-1.5 h-12 mb-6">
+<div class="w-1 gold-waveform-bar rounded-full animate-wave" style="animation-delay: 0.1s"></div>
+<div class="w-1 gold-waveform-bar rounded-full animate-wave" style="animation-delay: 0.3s"></div>
+<div class="w-1 gold-waveform-bar rounded-full animate-wave" style="animation-delay: 0.2s"></div>
+<div class="w-1 gold-waveform-bar rounded-full animate-wave" style="animation-delay: 0.5s"></div>
+<div class="w-1 gold-waveform-bar rounded-full animate-wave" style="animation-delay: 0.4s"></div>
+<div class="w-1 gold-waveform-bar rounded-full animate-wave" style="animation-delay: 0.6s"></div>
+<div class="w-1 gold-waveform-bar rounded-full animate-wave" style="animation-delay: 0.2s"></div>
+<div class="w-1 gold-waveform-bar rounded-full animate-wave" style="animation-delay: 0.8s"></div>
+<div class="w-1 gold-waveform-bar rounded-full animate-wave" style="animation-delay: 0.1s"></div>
+<div class="w-1 gold-waveform-bar rounded-full animate-wave" style="animation-delay: 0.5s"></div>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface text-center italic max-w-md">
+                        "This is your CraftHub AI Concierge. I can guide your experience, explain each step, and help you connect, participate, and earn stamps."
+                    </p>
+</div>
+<!-- Primary Playback Controls -->
+<div class="flex flex-wrap gap-4 mb-8 justify-center">
+<button class="bg-primary text-on-primary font-label-lg text-label-lg px-8 py-4 rounded-full flex items-center gap-2 hover:bg-primary-container transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        Play Preview
+                    </button>
+<button class="border border-outline text-on-surface font-label-lg text-label-lg px-8 py-4 rounded-full flex items-center gap-2 hover:bg-surface-bright/20 transition-all">
+<span class="material-symbols-outlined">stop</span>
+                        Stop
+                    </button>
+</div>
+<!-- Secondary Actions -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 border-t border-outline-variant/20 pt-8">
+<button class="bg-secondary-container text-on-secondary-container font-label-lg text-label-lg py-3 px-4 rounded-lg hover:opacity-90 transition-opacity">
+                        Use This Voice
+                    </button>
+<button class="bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg py-3 px-4 rounded-lg hover:text-on-surface transition-colors">
+                        Choose Another
+                    </button>
+<button class="bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg py-3 px-4 rounded-lg hover:text-on-surface transition-colors">
+                        Read Instead
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation (from JSON guidance) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin py-6 pb-10 backdrop-blur-2xl border-t border-outline-variant/20 bg-surface-container/80 shadow-[0_-8px_30px_rgb(233,193,118,0.1)]">
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all">
+<span class="material-symbols-outlined">mic</span>
+<span class="font-label-sm text-label-sm mt-1">Voice Assist</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">concierge</span>
+<span class="font-label-sm text-label-sm mt-1">Concierge</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all">
+<span class="material-symbols-outlined">tune</span>
+<span class="font-label-sm text-label-sm mt-1">Settings</span>
+</button>
+</nav>
+<script>
+        // Simple Interaction logic
+        const modal = document.getElementById('voiceModal');
+        const waveformBars = document.querySelectorAll('.gold-waveform-bar');
+        
+        // Stop animation by default, simulate playback toggling
+        function toggleAnimation(active) {
+            waveformBars.forEach(bar => {
+                bar.style.animationPlayState = active ? 'running' : 'paused';
+            });
+        }
+
+        // Start animation after a brief delay to simulate initial state
+        setTimeout(() => toggleAnimation(true), 500);
+
+        // Interaction for buttons (visual only)
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const text = btn.innerText.toLowerCase();
+                if(text.includes('stop')) {
+                    toggleAnimation(false);
+                } else if(text.includes('play')) {
+                    toggleAnimation(true);
+                } else if(text.includes('close')) {
+                    modal.style.opacity = '0';
+                    setTimeout(() => modal.classList.add('hidden'), 300);
+                }
+            });
+        });
+    </script>
+</body></html>

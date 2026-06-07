@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Hub | Owner Mode</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+    }
+    .glass-panel {
+      backdrop-filter: blur(24px);
+      background: rgba(31, 31, 32, 0.85);
+      border: 1px solid rgba(233, 193, 118, 0.15);
+    }
+    .gold-foil-stroke {
+      border: 1px solid rgba(197, 160, 89, 0.5);
+    }
+    .amber-glow {
+      box-shadow: 0 0 20px rgba(233, 193, 118, 0.1);
+    }
+    .haptic-feedback:active {
+      transform: scale(0.98);
+    }
+    body {
+      background-color: #131314;
+      background-image: radial-gradient(circle at 50% 50%, #1f1f20 0%, #131314 100%);
+      overflow: hidden;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "on-background": "#e5e2e3",
+                  "error": "#ffb4ab",
+                  "surface-container-lowest": "#0e0e0f",
+                  "on-tertiary-fixed": "#261814",
+                  "on-primary": "#412d00",
+                  "on-surface-variant": "#d1c5b4",
+                  "inverse-surface": "#e5e2e3",
+                  "surface": "#131314",
+                  "secondary-container": "#c68315",
+                  "on-secondary": "#462a00",
+                  "primary-container": "#c5a059",
+                  "tertiary-fixed": "#f7ddd6",
+                  "surface-container": "#1f1f20",
+                  "on-secondary-container": "#3d2400",
+                  "inverse-primary": "#775a19",
+                  "surface-container-low": "#1b1b1c",
+                  "on-tertiary-fixed-variant": "#54433e",
+                  "secondary": "#ffb95a",
+                  "on-tertiary": "#3c2d28",
+                  "surface-container-high": "#2a2a2b",
+                  "secondary-fixed": "#ffddb6",
+                  "primary-fixed-dim": "#e9c176",
+                  "outline-variant": "#4e4639",
+                  "on-surface": "#e5e2e3",
+                  "on-primary-container": "#4e3700",
+                  "on-error": "#690005",
+                  "surface-tint": "#e9c176",
+                  "primary": "#e9c176",
+                  "error-container": "#93000a",
+                  "inverse-on-surface": "#303031",
+                  "tertiary-container": "#b7a09a",
+                  "on-error-container": "#ffdad6",
+                  "surface-dim": "#131314",
+                  "primary-fixed": "#ffdea5",
+                  "tertiary": "#dac1bb",
+                  "surface-container-highest": "#353436",
+                  "surface-variant": "#353436",
+                  "secondary-fixed-dim": "#ffb95a",
+                  "outline": "#9a8f80",
+                  "surface-bright": "#39393a",
+                  "on-tertiary-container": "#473733",
+                  "on-secondary-fixed": "#2a1800",
+                  "on-secondary-fixed-variant": "#643f00",
+                  "on-primary-fixed-variant": "#5d4201",
+                  "on-primary-fixed": "#261900",
+                  "tertiary-fixed-dim": "#dac1bb",
+                  "background": "#131314"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "container-max-width": "1440px",
+                  "unit": "8px",
+                  "margin": "64px",
+                  "gutter": "32px",
+                  "card-padding": "24px"
+          },
+          "fontFamily": {
+                  "display-lg": ["Playfair Display"],
+                  "body-md": ["Montserrat"],
+                  "headline-xl": ["Playfair Display"],
+                  "label-sm": ["Montserrat"],
+                  "label-lg": ["Montserrat"],
+                  "headline-md": ["Playfair Display"],
+                  "headline-lg": ["Playfair Display"],
+                  "body-lg": ["Montserrat"]
+          },
+          "fontSize": {
+                  "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                  "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                  "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                  "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                  "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                  "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                  "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background min-h-screen flex flex-col font-body-md selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar: Identity Layer -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin py-4 border-b border-outline-variant bg-surface-container bg-opacity-80 backdrop-blur-xl shadow-sm">
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center w-12 h-12 rounded-full bg-primary-container text-on-primary-container">
+<span class="material-symbols-outlined text-2xl" data-icon="clinical_notes">clinical_notes</span>
+</div>
+<div>
+<h1 class="font-display-lg text-primary text-[28px] leading-tight font-bold tracking-tight">Admin Hub | Owner Mode</h1>
+<p class="font-label-sm text-on-surface-variant tracking-widest uppercase">System Governance Engine</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end hidden md:flex">
+<span class="font-label-lg text-primary">Executive Profile</span>
+<span class="font-label-sm text-on-surface-variant">Lounge Administrator</span>
+</div>
+<div class="w-12 h-12 rounded-full border border-primary/30 overflow-hidden shadow-lg bg-surface-container-high">
+<img alt="Executive Profile" class="w-full h-full object-cover grayscale" data-alt="A sophisticated headshot of a mature executive with salt-and-pepper hair, wearing a high-end charcoal tailored suit. The background is a blurred luxury library with leather-bound books and warm amber spotlighting. The aesthetic is monochromatic and high-contrast, conveying a sense of authority, heritage, and quiet luxury consistent with a members-only lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWhqPjQ1omcuACua3_v1G_KEY25qxZPJeO-L5xvmyZ4PCwR2xwMQTMoLDZb0xiV0uDCpy6JAYz33omWadrvH-zELF9pq4MQ40O3s2wz1IByuFNxpEH62TfHcVuYNG4f9QtAlySZ91t2g2nJs-8ZrVA6BusfO9XvSIc43yThs3V9pdIVxHxXmIy3BTxCPf38qHaTxgcjfc_YSB6zbSuWZh0rga02aAgwwFkTyEBF7BC3GfrSOVAmVGDW_uHKfma12-1ifBCDdsNypY"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex items-center justify-center p-margin pt-32 pb-32 relative">
+<!-- Background "System Settings" Simulation Layer -->
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none grid grid-cols-12 gap-gutter px-margin pt-32">
+<div class="col-span-3 h-64 bg-surface-container-high rounded-xl border border-outline-variant"></div>
+<div class="col-span-9 h-64 bg-surface-container-high rounded-xl border border-outline-variant"></div>
+<div class="col-span-6 h-48 bg-surface-container-high rounded-xl border border-outline-variant"></div>
+<div class="col-span-6 h-48 bg-surface-container-high rounded-xl border border-outline-variant"></div>
+</div>
+<!-- AI Concierge Coach: Dark Glass Overlay Card -->
+<div class="relative z-10 w-full max-w-[900px] glass-panel rounded-xl shadow-2xl p-10 flex flex-col md:flex-row gap-12 amber-glow">
+<!-- Visual Context Side (Physical Tiering) -->
+<div class="w-full md:w-2/5 shrink-0">
+<div class="relative aspect-[3/4] rounded-lg overflow-hidden border border-primary/20 shadow-inner">
+<img alt="Supplier Documentation" class="w-full h-full object-cover brightness-75 contrast-125" data-alt="Macro photography of vintage ledger books and high-end stationery on a dark mahogany desk. The lighting is low and dramatic, with a single warm spotlight illuminating the texture of the thick paper and the gold-stamped letters of a business name. A crystal glass of whiskey sits in the soft-focus background, suggesting an environment of unhurried administrative precision and refined executive taste." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR_QTNHWp-Bq6MBQQMT7vS2KwWHsARIy_AqVYVMbb1CF95nhfIldv7-BMLSpN0w_WC4vHIaq8CpyZyghu5ikJhUBkiCLm-RDIWmckZTEKxMDZNlUfSqdG1b9rmQbAhKcxDjJsck6KwbUyXnVfr6uYJ9Y7jqNQAETU-SeCRvcfyP7B8nfd7wK8BE3-8NELv8KdI2Uls2wHkk8LwTCm12iCHJEbt8Ah-DVf0KbSiodtRpP-yHaLByPjqDM3R_88z1-qeQuYBE2t3DJA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-dim via-transparent to-transparent"></div>
+<!-- Critical Status Badge -->
+<div class="absolute top-4 right-4 bg-error-container text-on-error-container px-4 py-2 rounded-full font-label-lg flex items-center gap-2 shadow-lg">
+<span class="material-symbols-outlined text-[18px]" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+            CRITICAL
+          </div>
+</div>
+</div>
+<!-- Content Side -->
+<div class="flex-1 flex flex-col justify-center">
+<div class="mb-2 flex items-center gap-3">
+<span class="w-10 h-[1px] bg-primary"></span>
+<span class="font-label-sm text-primary tracking-[0.2em] uppercase">Executive Intelligence</span>
+</div>
+<h2 class="font-headline-xl text-on-surface mb-6 leading-tight">Missing Supplier Profiles</h2>
+<div class="space-y-6 mb-10">
+<div class="space-y-2">
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Recommendation</p>
+<p class="font-headline-md text-primary">Complete vendor registry for Havana Distributors Ltd.</p>
+</div>
+<div class="space-y-2">
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Strategic Rationale</p>
+<p class="font-body-lg text-on-surface/80 leading-relaxed">
+              Required for E.A.T. (Executive Automation Tooling) auto-reordering and seamless invoice generation. Delaying this profile completion risks inventory depletion for premium reserve stock.
+            </p>
+</div>
+</div>
+<!-- Action Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+<button class="col-span-2 sm:col-span-1 h-14 bg-primary text-on-primary font-label-lg rounded-lg shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2 gold-foil-stroke">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+            Read
+          </button>
+<button class="h-14 bg-surface-container-highest text-primary border border-primary/30 font-label-lg rounded-lg hover:bg-surface-container-high active:scale-95 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="headset">headset</span>
+            Hear
+          </button>
+<button class="h-14 bg-surface-container-highest text-primary border border-primary/30 font-label-lg rounded-lg hover:bg-surface-container-high active:scale-95 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+            Replay
+          </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar: Contextual Manager Actions -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin pb-8 pt-4 bg-surface-container-highest bg-opacity-90 backdrop-blur-2xl border-t border-outline-variant shadow-[0_-8px_24px_rgba(233,193,118,0.1)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300 haptic-feedback active:scale-90">
+<span class="material-symbols-outlined mb-1" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-lg tracking-widest">Guidance</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300 haptic-feedback active:scale-90">
+<span class="material-symbols-outlined mb-1" data-icon="graphic_eq">graphic_eq</span>
+<span class="font-label-lg tracking-widest">Haptics</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-8 py-2 shadow-[0_0_15px_rgba(198,131,21,0.4)] haptic-feedback active:scale-90">
+<span class="material-symbols-outlined mb-1" data-icon="ring_volume" style="font-variation-settings: 'FILL' 1;">ring_volume</span>
+<span class="font-label-lg tracking-widest">Manager</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300 haptic-feedback active:scale-90">
+<span class="material-symbols-outlined mb-1" data-icon="close">close</span>
+<span class="font-label-lg tracking-widest">Dismiss</span>
+</button>
+</footer>
+<!-- Micro-interactions Script -->
+<script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mousedown', () => {
+        // Mock haptic response
+        if (window.navigator && window.navigator.vibrate) {
+          window.navigator.vibrate(5);
+        }
+      });
+    });
+
+    // Subtle parallax effect for the "settings" background
+    window.addEventListener('mousemove', (e) => {
+      const amount = 15;
+      const x = (e.clientX / window.innerWidth - 0.5) * amount;
+      const y = (e.clientY / window.innerHeight - 0.5) * amount;
+      document.querySelector('.absolute.inset-0.z-0').style.transform = `translate(${x}px, ${y}px)`;
+    });
+  </script>
+</body></html>

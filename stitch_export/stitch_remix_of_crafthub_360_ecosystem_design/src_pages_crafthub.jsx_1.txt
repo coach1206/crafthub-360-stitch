@@ -1,0 +1,46 @@
+import { motion } from 'framer-motion';
+import { Cigarette, Wine, Beer, Beaker, ArrowRight } from 'lucide-react';
+
+export default function CraftHub({ onNavigate }) {
+  const modules = [
+    { id: 'smokecraft', name: 'SmokeCraft 360', desc: 'Sensory Humidor Journey', icon: <Cigarette size={28} /> },
+    { id: 'winecraft', name: 'WineCraft 360', desc: 'Vintage Vertical Assessment', icon: <Wine size={28} /> },
+    { id: 'beercraft', name: 'BeerCraft 360', desc: 'Palate Intelligence', icon: <Beer size={28} /> },
+    { id: 'pourcraft', name: 'PourCraft 360', desc: 'Mixology Curation', icon: <Beaker size={28} /> }
+  ];
+
+  return (
+    <div className="px-6 py-10">
+      <header className="mb-14">
+        <h2 className="text-4xl font-black gold-text uppercase tracking-widest mb-3">Module Ecosystem</h2>
+        <p className="text-on-surface-variant text-[10px] tracking-[0.2em] uppercase font-bold">Select your sensory path</p>
+      </header>
+
+      <div className="grid grid-cols-1 gap-5">
+        {modules.map((m, i) => (
+          <motion.button
+            key={m.id}
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.1, duration: 0.6 }}
+            onClick={() => onNavigate(m.id)}
+            className="glass-panel p-8 rounded-2xl flex items-center justify-between group active:scale-95 transition-all border-primary/10 hover:border-primary/30"
+          >
+            <div className="flex items-center gap-8">
+              <div className="bg-primary/10 p-5 rounded-2xl text-primary border border-primary/20 group-hover:bg-primary group-hover:text-surface transition-all duration-300">
+                {m.icon}
+              </div>
+              <div className="text-left">
+                <h3 className="text-2xl font-black text-white mb-1 uppercase tracking-tight">{m.name}</h3>
+                <p className="text-on-surface-variant text-[10px] uppercase tracking-widest font-bold opacity-70">{m.desc}</p>
+              </div>
+            </div>
+            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-surface-bright/30 text-primary opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all">
+              <ArrowRight size={24} />
+            </div>
+          </motion.button>
+        ))}
+      </div>
+    </div>
+  );
+}

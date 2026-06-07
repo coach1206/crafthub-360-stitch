@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>POS 3 Admin - CraftHub 360</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(theme('colors.surface-container'), theme('colors.surface-container')) padding-box,
+                        linear-gradient(135deg, #e9c176 0%, #4e3700 100%) border-box;
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+        }
+        body {
+            background-color: #131314;
+            background-image: radial-gradient(circle at 50% -20%, #2a1800 0%, #131314 70%);
+            min-height: 100vh;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #131314; }
+        ::-webkit-scrollbar-thumb { background: #4e4639; border-radius: 10px; }
+
+        @keyframes landing-impact {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); filter: brightness(1.5); }
+            100% { transform: scale(1); }
+        }
+        .impact-animation {
+            animation: landing-impact 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite alternate;
+        }
+
+        .tactile-toggle {
+            width: 64px;
+            height: 32px;
+            background: #2a2a2b;
+            border-radius: 9999px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .tactile-toggle.active {
+            background: #e9c176;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 15px rgba(233, 193, 118, 0.3);
+        }
+        .tactile-handle {
+            width: 24px;
+            height: 24px;
+            background: #e5e2e3;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 4px;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .tactile-toggle.active .tactile-handle {
+            left: 34px;
+            background: #131314;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-tint": "#e9c176",
+                    "surface-container-highest": "#353436",
+                    "on-surface": "#e5e2e3",
+                    "secondary": "#ffb95a",
+                    "primary-fixed": "#ffdea5",
+                    "surface-container-lowest": "#0e0e0f",
+                    "primary": "#e9c176",
+                    "surface-container-low": "#1b1b1c",
+                    "on-secondary-fixed": "#2a1800",
+                    "outline": "#9a8f80",
+                    "inverse-surface": "#e5e2e3",
+                    "on-error": "#690005",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-primary-fixed": "#261900",
+                    "surface-container": "#1f1f20",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-primary": "#412d00",
+                    "surface-bright": "#39393a",
+                    "on-tertiary-fixed": "#261814",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-secondary": "#462a00",
+                    "surface-container-high": "#2a2a2b",
+                    "on-tertiary": "#3c2d28",
+                    "outline-variant": "#4e4639",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "on-tertiary-container": "#473733",
+                    "error-container": "#93000a",
+                    "inverse-primary": "#775a19",
+                    "on-primary-container": "#4e3700",
+                    "primary-fixed-dim": "#e9c176",
+                    "secondary-fixed": "#ffddb6",
+                    "tertiary-container": "#b7a09a",
+                    "on-background": "#e5e2e3",
+                    "surface-variant": "#353436",
+                    "on-secondary-container": "#3d2400",
+                    "secondary-container": "#c68315",
+                    "on-surface-variant": "#d1c5b4",
+                    "background": "#131314",
+                    "tertiary": "#dac1bb",
+                    "on-error-container": "#ffdad6",
+                    "inverse-on-surface": "#303031",
+                    "surface-dim": "#131314",
+                    "primary-container": "#c5a059",
+                    "error": "#ffb4ab",
+                    "on-secondary-fixed-variant": "#643000",
+                    "surface": "#131314"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "gutter": "32px",
+                    "unit": "8px",
+                    "card-padding": "24px",
+                    "margin": "64px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "label-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="text-on-surface font-body-md overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex items-center justify-between px-gutter h-16">
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-primary">dashboard_customize</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors text-label-lg font-label-lg" href="#">Overview</a>
+<a class="text-primary font-bold transition-colors text-label-lg font-label-lg" href="#">POS Settings</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors text-label-lg font-label-lg" href="#">Inventory</a>
+</nav>
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-primary">settings_suggest</span>
+</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-gutter max-w-7xl mx-auto">
+<!-- Header Section -->
+<section class="mb-12">
+<div class="flex items-center gap-4 mb-2">
+<span class="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-label-sm font-label-sm">System ID: POS-003</span>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse"></span>
+<span class="text-label-sm font-label-sm text-green-500 font-bold uppercase tracking-wider">Live Connection</span>
+</div>
+</div>
+<h2 class="text-display-lg font-display-lg text-on-surface mb-4">POS Integration Hub</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">Configure your transaction validation and loyalty synchronization across multiple POS ecosystems with enterprise-grade security.</p>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Left Column: Primary Controls -->
+<div class="md:col-span-8 space-y-8">
+<!-- POS Mode Selection -->
+<div class="glass-panel p-card-padding rounded-xl amber-glow">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-headline-md font-headline-md text-primary mb-1">Operational Mode</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Define how POS 3 interacts with local sales data</p>
+</div>
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<label class="relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="pos_mode" type="radio"/>
+<div class="p-6 border border-blue-500/50 rounded-lg group-hover:border-blue-400 transition-all bg-blue-500/10 peer-checked:bg-blue-500/20 peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+<span class="material-symbols-outlined mb-3 block text-blue-400">sync_alt</span>
+<p class="text-label-lg font-label-lg text-blue-100 mb-1">Connected (API)</p>
+<p class="text-label-sm font-label-sm text-blue-200/70">Real-time sync active and secured</p>
+</div>
+</label>
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="pos_mode" type="radio"/>
+<div class="p-6 border border-outline-variant/30 rounded-lg group-hover:border-primary/50 transition-all bg-surface-container peer-checked:bg-primary/5 peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary">
+<span class="material-symbols-outlined mb-3 block text-on-surface-variant group-hover:text-primary transition-colors">back_hand</span>
+<p class="text-label-lg font-label-lg text-on-surface mb-1">Manual Entry</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Verify receipts via visual hub manually</p>
+</div>
+</label>
+</div>
+</div>
+<!-- Integration Selector (Bento Style) -->
+<div class="glass-panel p-card-padding rounded-xl">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-headline-md font-headline-md text-primary mb-1">Transaction Hooks</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">State management for POS 3 events</p>
+</div>
+<span class="material-symbols-outlined text-4xl text-primary">webhook</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="p-3 border border-outline-variant/30 rounded-lg bg-surface-container-low text-center">
+<p class="text-label-sm font-bold text-on-surface-variant uppercase">Pending</p>
+</div>
+<div class="p-3 border border-green-500/50 rounded-lg bg-green-500/10 text-center">
+<p class="text-label-sm font-bold text-green-400 uppercase">Confirmed</p>
+</div>
+<div class="p-3 border border-outline-variant/30 rounded-lg bg-surface-container-low text-center">
+<p class="text-label-sm font-bold text-on-surface-variant uppercase">Cancelled</p>
+</div>
+<div class="p-3 border border-outline-variant/30 rounded-lg bg-surface-container-low text-center">
+<p class="text-label-sm font-bold text-on-surface-variant uppercase">Refunded</p>
+</div>
+</div>
+</div><div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+<div class="glass-panel p-6 rounded-xl flex flex-col items-center justify-center gap-3 hover:border-primary/40 cursor-pointer transition-all active:scale-95 group">
+<img alt="Clover Logo" class="w-12 h-12 grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG52BDvwx5hh2n6NpxxI1Us9abxIv4fm-2j0vAqXV62ygXAgSC2Jka_wyUVaTCkHtf2xuRW7M2a15Et66cDpli7agxoLPJC4V-NYZkl4BkAH3mGCJUMe85BJrCiv_GR3o4I3t9n4u9ml2wuuQDWecxbQdV2dBGEXFI922f3QxQYbaPFc0Mop-cXNjX6yHjkfpASGC1Qf_3DUn7TSXP3sIc_ZhwzPfybOM8MLj6bYhA95FN2uPu4jSWgb6Nm3ZwSHIY0m7W4DrX23E"/>
+<span class="text-label-lg font-label-lg">Clover</span>
+</div>
+<div class="glass-panel p-6 rounded-xl flex flex-col items-center justify-center gap-3 border-primary/60 bg-primary/5 relative overflow-hidden group">
+<div class="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+<span class="text-[10px] font-bold uppercase">Active</span>
+</div>
+<img alt="Toast Logo" class="w-12 h-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAag90-j0NoyvQ5hw3q9CmZv5LRnbCWg3jRQ_uo4A_STWzLeERBtsx3xl6gQFU1qmMp5FHGIv14i88RrOup7GcPMSm5cVebVbX0-4P6laPuB9j9OrHzmllusl7kprZDm_2qQFEZt3CBwWPiOlKpyHngrCYtwEnoJMTXNEitmUQSoxKxM4De8v0nuMJ_505FC6AzP89MpAJBGVazKvxZqRJTvweENAABuV7O5jfU04UrQO6-aQpvbFeE0V2AGuWj33Z9nezZ0vTLUY4"/>
+<span class="text-label-lg font-label-lg text-primary">Toast</span>
+</div>
+<div class="glass-panel p-6 rounded-xl flex flex-col items-center justify-center gap-3 hover:border-primary/40 cursor-pointer transition-all active:scale-95 group">
+<img alt="Square Logo" class="w-12 h-12 grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr9K6mVb-ECfdFNHQvgadRxEdy1DlojPnCVNBQUixh2nG4H6VN6tOtj19K4DTFQhGqRx4S-SXjJIea_WHGsSCNTMy3y_LdYIrnRGkW49_GNdn7Es_Rdt_DyuqlIzXYc6_G7MJvqZjYPG18CFeDLS0ZTtJ7U8Vu23be333KZyAGAjiP3zC5EyzKror80ve8iMcraXaPPz03-xCacMs3ptHokWtbs1KVW0NSCXiohNCLrsbPKJHzGocH-RDNPrAmUlUoWPW_qEKAq1Y"/>
+<span class="text-label-lg font-label-lg">Square</span>
+</div>
+</div>
+<!-- Sync & Payment Status -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="glass-panel p-6 rounded-xl">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-secondary">inventory_2</span>
+<h4 class="text-label-lg font-label-lg text-on-surface">Inventory Sync</h4>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between text-label-sm font-label-sm">
+<span class="text-on-surface-variant">Last Full Sync:</span>
+<span class="text-on-surface">14 mins ago</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 85%"></div>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-green-400 font-medium">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+                            4,102 SKU's Mapped
+                        </div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-secondary">payments</span>
+<h4 class="text-label-lg font-label-lg text-on-surface">Payment Status</h4>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-2.5 rounded bg-surface-container-low border border-outline-variant/20 shadow-sm">
+<span class="text-label-sm font-label-sm">Card Terminal 01</span>
+<span class="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full font-bold uppercase tracking-tighter">Online</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded bg-surface-container-low border border-outline-variant/20 shadow-sm">
+<span class="text-label-sm font-label-sm">Card Terminal 02</span>
+<span class="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full font-bold uppercase tracking-tighter">Online</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Verification & Redemption -->
+<div class="md:col-span-4 space-y-8">
+<!-- Purchase Validation Visualization -->
+<div class="glass-panel p-card-padding rounded-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+                    Logic Flow
+                </h3>
+<div class="relative pl-8 border-l border-outline-variant space-y-8">
+<div class="relative">
+<span class="absolute -left-[41px] top-0 w-5 h-5 rounded-full bg-surface-container border-2 border-primary flex items-center justify-center">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</span>
+<p class="text-label-lg font-label-lg text-primary">Customer Scans</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Member QR ID detected at POS</p>
+</div>
+<div class="relative">
+<span class="impact-animation absolute -left-[41px] top-0 w-5 h-5 rounded-full bg-surface-container border-2 border-secondary flex items-center justify-center">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</span>
+<p class="text-label-lg font-label-lg text-secondary">API Validation</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Verifying purchase amount ≥ $20.00</p>
+</div>
+<div class="relative">
+<span class="impact-animation absolute -left-[41px] top-0 w-5 h-5 rounded-full bg-surface-container border-2 border-green-500 flex items-center justify-center shadow-[0_0_10px_rgba(34,197,94,0.3)]">
+<span class="material-symbols-outlined text-[12px] text-green-500" style="font-variation-settings: 'wght' 700;">check</span>
+</span>
+<p class="text-label-lg font-label-lg text-green-400">Stamp Awarded</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Ledger updated &amp; Push notification sent</p>
+</div>
+<div class="relative">
+<span class="impact-animation absolute -left-[41px] top-0 w-5 h-5 rounded-full bg-surface-container border-2 border-blue-400 flex items-center justify-center shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+<span class="material-symbols-outlined text-[12px] text-blue-400" style="font-variation-settings: 'wght' 700;">inventory_2</span>
+</span>
+<p class="text-label-lg font-label-lg text-blue-400">Inventory Sync</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Real-time stock decrement on POS_CONFIRMATION</p>
+</div></div>
+</div>
+<!-- Reward & Receipt Settings -->
+<div class="glass-panel p-card-padding rounded-xl gold-foil-border">
+<h3 class="text-label-lg font-label-lg text-primary uppercase tracking-widest mb-6">Execution Settings</h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm">Auto-Redeem Rewards</span>
+<div class="tactile-toggle" onclick="this.classList.toggle('active')">
+<div class="tactile-handle"></div>
+</div>
+</div>
+<hr class="border-outline-variant/20"/>
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm">Print QR on Receipt</span>
+<div class="tactile-toggle active" onclick="this.classList.toggle('active')">
+<div class="tactile-handle"></div>
+</div>
+</div>
+<hr class="border-outline-variant/20"/>
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm">Cart Persistence</span>
+<span class="text-[10px] text-on-surface-variant">Guest ID + Table ID Binding</span>
+</div>
+<div class="tactile-toggle active" onclick="this.classList.toggle('active')">
+<div class="tactile-handle"></div>
+</div>
+</div>
+<hr class="border-outline-variant/20"/><div>
+<label class="block text-label-sm font-label-sm mb-3">Loyalty Prefix</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-b border-primary/40 focus:border-primary text-primary px-3 py-2 text-label-lg font-label-lg outline-none transition-all rounded-t" type="text" value="CH-LOYALTY-"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Help/Status Card -->
+<div class="p-6 rounded-xl border border-outline-variant/20 bg-surface-container-highest/30">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">info</span>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface leading-relaxed">Changes to integration settings may require a manual POS terminal restart to propagate credentials.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] px-4 pb-4 pt-2 flex justify-around items-center rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all flex-1" href="#">
+<span class="material-symbols-outlined mb-1">arrow_back</span>
+<span class="text-label-sm font-label-sm">Back</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all flex-1" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<div class="flex-[1.5] px-2">
+<button class="w-full flex flex-col items-center justify-center bg-primary text-on-primary rounded-xl px-4 py-2.5 transition-all duration-300 shadow-[0_4px_15px_rgba(233,193,118,0.4)] active:scale-95 group" id="saveButton" onclick="confirmSave(this)"><div class="flex items-center gap-2 mb-0.5">
+<span class="material-symbols-outlined text-sm group-[.saved]:hidden">verified</span>
+<span class="text-[10px] font-bold tracking-widest uppercase group-[.saved]:hidden">Founder Lvl 0</span>
+<span class="material-symbols-outlined hidden group-[.saved]:block" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="text-label-lg font-bold group-[.saved]:hidden">SAVE CHANGES</span>
+<span class="text-label-lg font-bold hidden group-[.saved]:block uppercase">CONFIRMED</span></button>
+</div>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all flex-1" href="#">
+<span class="material-symbols-outlined mb-1">visibility</span>
+<span class="text-label-sm font-label-sm">Preview</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all flex-1" href="#">
+<span class="material-symbols-outlined mb-1">publish</span>
+<span class="text-label-sm font-label-sm">Publish</span>
+</a>
+</nav>
+<script>
+    function confirmSave(btn) {
+        btn.classList.add('saved');
+        btn.classList.remove('bg-primary');
+        btn.classList.add('bg-green-500', 'text-white', 'shadow-[0_4px_15px_rgba(34,197,94,0.4)]');
+        
+        setTimeout(() => {
+            btn.classList.remove('saved', 'bg-green-500', 'text-white', 'shadow-[0_4px_15px_rgba(34,197,94,0.4)]');
+            btn.classList.add('bg-primary');
+        }, 2500);
+    }
+
+    // Impact Animation trigger on viewport/load (simulated)
+    window.addEventListener('load', () => {
+        const impacts = document.querySelectorAll('.impact-animation');
+        impacts.forEach(el => {
+            el.style.animation = 'none';
+            void el.offsetWidth; // trigger reflow
+            el.style.animation = null;
+        });
+    });
+</script>
+</body></html>

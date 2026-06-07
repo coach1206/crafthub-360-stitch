@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 Admin | Kiosk Configuration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(154, 143, 128, 0.2);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background-image: linear-gradient(rgba(19, 19, 20, 1), rgba(19, 19, 20, 1)), linear-gradient(to bottom right, #e9c176, #775a19);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+        }
+        .amber-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        body {
+            background-color: #131314;
+            background-image: radial-gradient(circle at 50% 50%, rgba(26, 19, 0, 0.5) 0%, rgba(19, 19, 20, 1) 100%);
+            min-height: 100vh;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#b7a09a",
+                    "surface-container": "#1f1f20",
+                    "surface-bright": "#39393a",
+                    "tertiary": "#dac1bb",
+                    "on-secondary-container": "#3d2400",
+                    "on-primary-container": "#4e3700",
+                    "inverse-primary": "#775a19",
+                    "error": "#ffb4ab",
+                    "surface": "#131314",
+                    "primary-fixed": "#ffdea5",
+                    "outline": "#9a8f80",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "inverse-on-surface": "#303031",
+                    "error-container": "#93000a",
+                    "primary": "#e9c176",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-tertiary-container": "#473733",
+                    "outline-variant": "#4e4639",
+                    "surface-variant": "#353436",
+                    "on-primary-fixed": "#261900",
+                    "background": "#131314",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-tertiary": "#3c2d28",
+                    "on-secondary": "#462a00",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "surface-dim": "#131314",
+                    "on-error-container": "#ffdad6",
+                    "surface-tint": "#e9c176",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "on-surface": "#e5e2e3",
+                    "surface-container-high": "#2a2a2b",
+                    "on-background": "#e5e2e3",
+                    "secondary": "#ffb95a",
+                    "surface-container-low": "#1b1b1c",
+                    "inverse-surface": "#e5e2e3",
+                    "on-tertiary-fixed": "#261814",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "surface-container-lowest": "#0e0e0f",
+                    "secondary-container": "#c68315",
+                    "surface-container-highest": "#353436",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-surface-variant": "#d1c5b4",
+                    "secondary-fixed": "#ffddb6",
+                    "on-primary": "#412d00",
+                    "primary-container": "#c5a059"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin": "64px",
+                    "gutter": "32px",
+                    "container-max-width": "1440px",
+                    "card-padding": "24px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface font-body-md overflow-x-hidden">
+<!-- TopAppBar Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex items-center justify-between px-gutter h-20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="dashboard_customize">dashboard_customize</span>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-primary">CraftHub 360 Admin</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-primary font-bold text-label-lg font-label-lg uppercase tracking-widest transition-colors" href="#">Kiosk Config</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg uppercase tracking-widest hover:text-primary transition-colors" href="#">Venues</a>
+<a class="text-on-surface-variant font-medium text-label-lg font-label-lg uppercase tracking-widest hover:text-primary transition-colors" href="#">Analytics</a>
+</nav>
+<div class="flex items-center gap-6">
+<button class="p-2 rounded-full hover:bg-primary-container/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-primary" data-icon="settings_suggest">settings_suggest</span>
+</button>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden bg-surface-container">
+<img alt="Admin Profile" class="w-full h-full object-cover" data-alt="A professional portrait of a distinguished man in a dark tailored suit, captured in a moody, high-contrast studio setting. The lighting is low-key, emphasizing facial features with subtle amber highlights that reflect the premium, leather-bound aesthetic of an exclusive club. The background is a deep, dark espresso tone with a hint of warm texture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4xdqbjb-15gJpmymQNud6zCI7voRdrHNYFAYH-GILe-rPfwaAV-TIHcKQrKTN4GKbQOHCwkIDodjOEwkjOFu-7rbkD_ju-gNHsMCFthbXRthdsaPlZkRn5oVlygKu4J_iVhRaJIb8RbTRfLdd2BMH78CMAXJCmYoRbxSDq4zx9WbD1p1komlRoTfJ9rDiZBfoAtX-9poP4hhqarGU4jO5RKU94DGcevytX8NKQPDFF-mcOIAY1fHeAr2iYrRkBW9NPEiCMOyxbQA"/>
+</div>
+</div>
+</header>
+<main class="mt-28 mb-24 px-gutter max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<h2 class="text-headline-xl font-headline-xl text-on-surface mb-2">Device Command Center</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant/80">Managing 12 active physical interfaces across primary venue clusters.</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-6 py-3 bg-surface-container border border-outline-variant/50 rounded-lg hover:bg-surface-bright transition-all text-label-lg font-label-lg text-primary uppercase">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                    Register New Kiosk
+                </button>
+<button class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-lg shadow-lg amber-glow transition-all active:scale-95 text-label-lg font-label-lg uppercase font-bold">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+                    Global Refresh
+                </button>
+</div>
+</section>
+<!-- Kiosk Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Kiosk Device Card 1 -->
+<div class="glass-panel rounded-xl overflow-hidden group hover:border-primary/40 transition-all duration-300">
+<div class="p-card-padding border-b border-outline-variant/20 flex justify-between items-start">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+<span class="text-label-sm font-label-sm text-green-500 uppercase">Operational</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-primary">Humidor Alpha-1</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant font-mono">ID: CH-8821-X9</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40 text-4xl" data-icon="tablet_mac">tablet_mac</span>
+</div>
+<div class="p-card-padding space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<p class="text-label-sm font-label-sm text-on-surface-variant/60 mb-1 uppercase">Venue Area</p>
+<p class="text-body-md font-body-md font-bold text-on-surface">Grand Lounge</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<p class="text-label-sm font-label-sm text-on-surface-variant/60 mb-1 uppercase">Mode</p>
+<p class="text-body-md font-body-md font-bold text-primary">Guest Interface</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="battery_charging_90">battery_charging_90</span>
+<span class="text-body-md font-body-md">Battery Status</span>
+</div>
+<span class="text-body-md font-body-md font-bold text-on-surface">94%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="wifi_tethering">wifi_tethering</span>
+<span class="text-body-md font-body-md">Network Health</span>
+</div>
+<span class="text-body-md font-body-md font-bold text-green-400">Stable (12ms)</span>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/10 grid grid-cols-2 gap-2">
+<button class="flex items-center justify-center gap-2 p-3 bg-surface-container-high hover:bg-surface-bright rounded text-label-sm font-label-sm uppercase transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="restart_alt">restart_alt</span> Session
+                        </button>
+<button class="flex items-center justify-center gap-2 p-3 bg-surface-container-high hover:bg-surface-bright rounded text-label-sm font-label-sm uppercase transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="lock_open">lock_open</span> Lock
+                        </button>
+<button class="col-span-2 flex items-center justify-center gap-2 p-3 bg-primary-container/20 text-primary border border-primary/20 hover:bg-primary-container/30 rounded text-label-sm font-label-sm uppercase font-bold transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="cleaning_services">cleaning_services</span> Clear Guest Session
+                        </button>
+</div>
+</div>
+</div>
+<!-- Kiosk Device Card 2 -->
+<div class="glass-panel rounded-xl overflow-hidden group hover:border-primary/40 transition-all duration-300">
+<div class="p-card-padding border-b border-outline-variant/20 flex justify-between items-start">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="w-2 h-2 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.6)]"></span>
+<span class="text-label-sm font-label-sm text-yellow-500 uppercase">Warning</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-primary">Cellar Portal B</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant font-mono">ID: CH-9042-L2</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40 text-4xl" data-icon="desktop_windows">desktop_windows</span>
+</div>
+<div class="p-card-padding space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<p class="text-label-sm font-label-sm text-on-surface-variant/60 mb-1 uppercase">Venue Area</p>
+<p class="text-body-md font-body-md font-bold text-on-surface">Wine Cellar</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<p class="text-label-sm font-label-sm text-on-surface-variant/60 mb-1 uppercase">Mode</p>
+<p class="text-body-md font-body-md font-bold text-secondary">Admin Config</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2 text-yellow-500">
+<span class="material-symbols-outlined" data-icon="battery_2_bar">battery_2_bar</span>
+<span class="text-body-md font-body-md">Battery Status</span>
+</div>
+<span class="text-body-md font-body-md font-bold text-yellow-500">22%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="wifi_off">wifi_off</span>
+<span class="text-body-md font-body-md">Network Health</span>
+</div>
+<span class="text-body-md font-body-md font-bold text-yellow-400">Latency Spike</span>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/10 grid grid-cols-2 gap-2">
+<button class="flex items-center justify-center gap-2 p-3 bg-surface-container-high hover:bg-surface-bright rounded text-label-sm font-label-sm uppercase transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span> Refresh
+                        </button>
+<button class="flex items-center justify-center gap-2 p-3 bg-surface-container-high hover:bg-surface-bright rounded text-label-sm font-label-sm uppercase transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="lock_person">lock_person</span> Admin
+                        </button>
+<button class="col-span-2 flex items-center justify-center gap-2 p-3 bg-secondary text-on-secondary hover:brightness-110 rounded text-label-sm font-label-sm uppercase font-bold transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="power_settings_new">power_settings_new</span> Restart System
+                        </button>
+</div>
+</div>
+</div>
+<!-- Kiosk Device Card 3 -->
+<div class="glass-panel rounded-xl overflow-hidden group hover:border-primary/40 transition-all duration-300">
+<div class="p-card-padding border-b border-outline-variant/20 flex justify-between items-start">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="w-2 h-2 rounded-full bg-on-surface-variant/30"></span>
+<span class="text-label-sm font-label-sm text-on-surface-variant/60 uppercase">Locked</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-primary">Member Entry V3</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant font-mono">ID: CH-1120-P5</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40 text-4xl" data-icon="key_visualizer">key_visualizer</span>
+</div>
+<div class="p-card-padding space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<p class="text-label-sm font-label-sm text-on-surface-variant/60 mb-1 uppercase">Venue Area</p>
+<p class="text-body-md font-body-md font-bold text-on-surface">East Entrance</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<p class="text-label-sm font-label-sm text-on-surface-variant/60 mb-1 uppercase">Mode</p>
+<p class="text-body-md font-body-md font-bold text-on-surface">Lock Mode</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="battery_full_alt">battery_full_alt</span>
+<span class="text-body-md font-body-md">Battery Status</span>
+</div>
+<span class="text-body-md font-body-md font-bold text-on-surface">100% (AC)</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="wifi_channel">wifi_channel</span>
+<span class="text-body-md font-body-md">Network Health</span>
+</div>
+<span class="text-body-md font-body-md font-bold text-green-400">Excellent</span>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/10 grid grid-cols-2 gap-2">
+<button class="flex items-center justify-center gap-2 p-3 bg-surface-container-high hover:bg-surface-bright rounded text-label-sm font-label-sm uppercase transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="settings_input_component">settings_input_component</span> Diagnostics
+                        </button>
+<button class="flex items-center justify-center gap-2 p-3 bg-primary text-on-primary rounded text-label-sm font-label-sm uppercase font-bold transition-all shadow-md">
+<span class="material-symbols-outlined text-sm" data-icon="lock_open_right">lock_open_right</span> Unlock
+                        </button>
+<button class="col-span-2 flex items-center justify-center gap-2 p-3 bg-surface-container-high hover:bg-surface-bright rounded text-label-sm font-label-sm uppercase transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="history">history</span> View Access Logs
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- System-wide High Contrast Data Insight -->
+<section class="mt-12 glass-panel p-card-padding rounded-xl gold-foil-border flex flex-wrap items-center justify-between gap-8">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-primary uppercase mb-1 tracking-widest">Global Network Status</span>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-lg font-headline-lg">Optimum</span>
+<span class="text-label-lg font-label-lg text-green-400">99.98% Uptime</span>
+</div>
+</div>
+<div class="flex items-center gap-12">
+<div class="text-center">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase mb-1">Active Sessions</p>
+<p class="text-headline-md font-headline-md font-bold">1,422</p>
+</div>
+<div class="text-center">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase mb-1">Mean Response</p>
+<p class="text-headline-md font-headline-md font-bold">14ms</p>
+</div>
+<div class="text-center">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase mb-1">Power Alerts</p>
+<p class="text-headline-md font-headline-md font-bold text-secondary">02</p>
+</div>
+</div>
+<button class="px-8 py-3 bg-surface-bright text-primary border border-primary/40 rounded-full text-label-lg font-label-lg uppercase tracking-widest font-bold hover:bg-primary hover:text-on-primary transition-all active:scale-95">
+                Generate Network Audit
+            </button>
+</section>
+</main>
+<!-- BottomNavBar Navigation Shell (Mobile only) -->
+<footer class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface-container-high/90 backdrop-blur-2xl border-t border-outline-variant/20 px-4 pb-4 pt-2 flex justify-around items-center">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 text-label-sm font-label-sm hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1.5 text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+<span>Save</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 text-label-sm font-label-sm hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span>Preview</span>
+</a>
+</footer>
+<script>
+        // Atmospheric Micro-interactions
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Simulating Live Data Updates
+        setInterval(() => {
+            const batteries = document.querySelectorAll('.font-bold.text-on-surface');
+            batteries.forEach(bat => {
+                if(bat.innerText.includes('%') && !bat.innerText.includes('AC')) {
+                    let val = parseInt(bat.innerText);
+                    if(Math.random() > 0.8) {
+                        bat.innerText = (val - 1) + '%';
+                    }
+                }
+            });
+        }, 15000);
+    </script>
+</body></html>

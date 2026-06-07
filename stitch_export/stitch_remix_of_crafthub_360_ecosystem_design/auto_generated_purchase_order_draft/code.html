@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#3d2400",
+                    "on-background": "#e5e2e3",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#2a2a2b",
+                    "tertiary": "#dac1bb",
+                    "surface": "#131314",
+                    "outline": "#9a8f80",
+                    "error": "#ffb4ab",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-container": "#1f1f20",
+                    "primary": "#e9c176",
+                    "outline-variant": "#4e4639",
+                    "on-primary-container": "#4e3700",
+                    "surface-container-low": "#1b1b1c",
+                    "inverse-primary": "#775a19",
+                    "primary-fixed": "#ffdea5",
+                    "secondary-fixed": "#ffddb6",
+                    "surface-container-lowest": "#0e0e0f",
+                    "on-tertiary": "#3c2d28",
+                    "on-tertiary-fixed": "#261814",
+                    "surface-tint": "#e9c176",
+                    "primary-container": "#c5a059",
+                    "on-error-container": "#ffdad6",
+                    "on-error": "#690005",
+                    "background": "#131314",
+                    "on-primary-fixed": "#261900",
+                    "surface-variant": "#353436",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "secondary": "#ffb95a",
+                    "secondary-container": "#c68315",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-primary": "#412d00",
+                    "tertiary-container": "#b7a09a",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "on-surface-variant": "#d1c5b4",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-tertiary-container": "#473733",
+                    "surface-container-highest": "#353436",
+                    "inverse-surface": "#e5e2e3",
+                    "inverse-on-surface": "#303031",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-secondary": "#462a00",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "surface-bright": "#39393a",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-surface": "#e5e2e3",
+                    "surface-dim": "#131314"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "32px",
+                    "card-padding": "24px",
+                    "unit": "8px",
+                    "margin": "64px",
+                    "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "label-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-inner-stroke {
+            box-shadow: inset 0 0 0 1px rgba(233, 193, 118, 0.1);
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        .stepper-line {
+            height: 2px;
+            background: linear-gradient(90deg, #e9c176 50%, #4e4639 50%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-glow {
+            box-shadow: 0 0 15px rgba(233, 193, 118, 0.3);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen selection:bg-primary/30">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-outline-variant/30 flex justify-between items-center px-margin h-24 shadow-sm transition-all duration-300 ease-in-out">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</span>
+</div>
+<div class="flex items-center gap-gutter">
+<div class="flex items-center gap-6 hidden md:flex">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-lg text-label-lg" href="#">FLOOR PLAN</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-lg text-label-lg" href="#">LIVE MAP</a>
+<a class="text-primary font-bold font-label-lg text-label-lg flex flex-col items-center" href="#">INVENTORY<div class="w-1 h-1 bg-primary rounded-full mt-1"></div></a>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-highest/50 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<div class="w-12 h-12 rounded-full border border-primary/30 overflow-hidden shadow-sm">
+<img alt="Julian Vane Profile" data-alt="A professional headshot of a head sommelier in a high-end lounge, wearing a tailored charcoal suit and a gold lapel pin. The background is a softly blurred wood-paneled wall and rows of crystal glassware. The lighting is warm and dramatic, highlighting the texture of the suit and the refined, welcoming expression on his face. Global colors of deep espresso and warm amber dominate the scene." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBX4JLM5KErP-kGjztOcbdWD-EkAjdHG4SQu3hH1uZDZauJdq8WlnXuEXpXP_rac62WbYFvNHJYtTiDjohsBqgR1H1jkwlgguelUboNp1uW6_yDfPSxqgti2FMC1RQ12F8Gb1ubN6cxY5fA7NDGkdbaY7JKmnnfsIdmKSkUEzLfepYWqgXfsB2GJQQtRY4ylEe4lZO9fodOXY4cJJKt5FgjcVx1gb9MujUlTnAW09rbArI1xJUwLXGZys8yBWTYh8tFVMMPq-AEWuE"/>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-24 px-margin container mx-auto max-w-container-max-width">
+<!-- Purchase Order Header Section -->
+<section class="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+<div>
+<nav class="flex items-center gap-2 mb-4 text-on-surface-variant/60 font-label-sm text-label-sm">
+<span>INVENTORY</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span>PURCHASE ORDERS</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-primary/80">DRAFT PO-8842</span>
+</nav>
+<h1 class="font-headline-xl text-headline-xl text-on-background mb-2">Purchase Order Draft</h1>
+<p class="text-on-surface-variant font-body-lg text-body-lg">Created on October 14, 2023 by Julian Vane</p>
+</div>
+<!-- Action Cluster -->
+<div class="flex gap-4">
+<button class="px-8 py-4 border border-outline-variant rounded-lg font-label-lg text-label-lg text-on-background hover:bg-surface-bright/20 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+                    EXPORT PDF
+                </button>
+<button class="px-10 py-4 bg-primary text-on-primary font-label-lg text-label-lg rounded-lg shadow-lg amber-glow hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">send</span>
+                    APPROVE &amp; SEND
+                </button>
+</div>
+</section>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Left Column: Order Details & Status -->
+<div class="col-span-12 lg:col-span-8 space-y-gutter">
+<!-- Status Stepper -->
+<div class="glass-panel rounded-xl p-card-padding">
+<div class="flex justify-between items-center relative mb-4">
+<div class="absolute top-1/2 left-0 w-full h-1 bg-surface-variant -translate-y-1/2 z-0"></div>
+<div class="absolute top-1/2 left-0 w-[50%] h-1 bg-primary -translate-y-1/2 z-0"></div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center amber-glow">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<span class="font-label-lg text-label-lg text-primary">Draft</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest border-2 border-primary text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">approval</span>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface-variant">Approved</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest border-2 border-outline-variant text-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface-variant">Sent</span>
+</div>
+</div>
+</div>
+<!-- Product Table -->
+<div class="glass-panel rounded-xl overflow-hidden">
+<div class="px-card-padding py-6 border-b border-outline-variant/20 flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-primary">Line Items</h3>
+<button class="text-primary font-label-lg text-label-lg flex items-center gap-2">
+<span class="material-symbols-outlined">add_circle</span>
+                            ADD PRODUCT
+                        </button>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50 text-on-surface-variant font-label-sm text-label-sm uppercase tracking-widest">
+<th class="px-card-padding py-4 font-semibold">Product Details</th>
+<th class="px-card-padding py-4 font-semibold">Quantity</th>
+<th class="px-card-padding py-4 font-semibold">Unit Cost</th>
+<th class="px-card-padding py-4 font-semibold text-right">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Item 1 -->
+<tr class="hover:bg-surface-bright/5 transition-colors group">
+<td class="px-card-padding py-6">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded overflow-hidden border border-outline-variant/30 flex-shrink-0">
+<img alt="Davidoff Nicaragua Diadema" data-alt="A macro photograph of a rare, hand-rolled Davidoff cigar resting on a dark cedar block. The lighting is low and atmospheric, emphasizing the oily texture of the dark tobacco leaf and the intricate gold and white paper band. The background is a deep espresso wood, creating a sense of luxury and sensory richness. Soft amber highlights accentuate the craftsmanship of the product." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC73kPNPWAMABTugrZX5WElVRRLexHdA3XdSwqgU79whS858c70lCOK4oHNt9BRUreQGV1Ttt_8OFmAE2pe6Qz3_qrP3UhCApN_AkJ_n5m1uF6m2GOmwyuO78iv_o9PRiv240guR1cb1rl_y688UgAejOlvAuGJkongDgMobnOee4E567YvqSjWa0GGOP4-Hw3eY4-qqZPu1DqOFrHZo0a4tX4D9o6M2IOd1X4qEskpSzj9NXtpomE9ckrJ_mLmGIFhhhpJ6LP4gjI"/>
+</div>
+<div>
+<div class="font-body-lg text-body-lg text-on-background">Davidoff Nicaragua Diadema</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">SKU: DAV-NIC-DIA-01</div>
+</div>
+</div>
+</td>
+<td class="px-card-padding py-6 text-on-background font-body-md">50 Boxes</td>
+<td class="px-card-padding py-6 text-on-background font-body-md">$420.00</td>
+<td class="px-card-padding py-6 text-right font-headline-md text-headline-md text-primary">$21,000.00</td>
+</tr>
+<!-- Item 2 -->
+<tr class="hover:bg-surface-bright/5 transition-colors group">
+<td class="px-card-padding py-6">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded overflow-hidden border border-outline-variant/30 flex-shrink-0">
+<img alt="Macallan 18 Year Single Malt" data-alt="A studio photograph of a premium crystal decanter containing aged Macallan Scotch whiskey. The liquid glows with a deep golden-amber hue against a dark, moody background. Light catches the sharp facets of the crystal, creating brilliant sparkling highlights. The composition is elegant and minimalist, conveying elite quality and the heritage of fine spirits." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkmn4vDS2R813KIBq2bw1GemCwPhRFe3qDewZcCTzEk1lVOvH44_PEKilK_monfzbOXDi2oAlby3XJkpQESUVMIsvP93CPdDocZb1Za6mW09PYmRvRXXPB4TUitn4LRjGqHXdFMpXH9_nd8pUauE9Lh72KErHoQuKBhDLOy9SwfM7Hf0RFfX5G1s13PPjxtjQFLdeSBZ0hSF0NrA6qzphZVlxBAYb-2o62dcSbzY1g2IiTtqJ3yKH3bWbmDZ0uZrE7tCFU98oPr7c"/>
+</div>
+<div>
+<div class="font-body-lg text-body-lg text-on-background">Macallan 18 Year Single Malt</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">SKU: MAC-18-SM-004</div>
+</div>
+</div>
+</td>
+<td class="px-card-padding py-6 text-on-background font-body-md">24 Units</td>
+<td class="px-card-padding py-6 text-on-background font-body-md">$385.00</td>
+<td class="px-card-padding py-6 text-right font-headline-md text-headline-md text-primary">$9,240.00</td>
+</tr>
+<!-- Item 3 -->
+<tr class="hover:bg-surface-bright/5 transition-colors group">
+<td class="px-card-padding py-6">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded overflow-hidden border border-outline-variant/30 flex-shrink-0">
+<img alt="Artisan Leather Humidor Lining" data-alt="A close-up shot of hand-stitched leather coasters and humidor accessories resting on a polished mahogany surface. The leather has a rich pebbled grain and is a deep chestnut color. Subtle gold foil branding is visible on the edge. The lighting is soft and focused, creating a warm, tactile feel consistent with a private member's lounge aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3QFkBJzmkNLe3qF_T6t2K2k3_gr7dVt86JylpCuT-mhTp4e4WmZ4tEmr50UugiKwVKJdcEZpD9ovmufdU1PO3LHznlaH-MV7TMk35QqtQyc2j7VkkAg_GAUBQ93tmy0XXCbmXcFLFDXaI6imBoOn9RGzZTLMI8T8HqIs8RI3rZbkTeI9Sce9MfDxblzwvilhLT-c8llkZ9136921wmbkJoyfUi-MqsuOIktl7x9mgN5IzD50XPT8GsnBknH0Ub1O-3hIMJ-3IJWk"/>
+</div>
+<div>
+<div class="font-body-lg text-body-lg text-on-background">Artisan Cedar &amp; Leather Trays</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant/60">SKU: ACC-LTH-CED-02</div>
+</div>
+</div>
+</td>
+<td class="px-card-padding py-6 text-on-background font-body-md">10 Sets</td>
+<td class="px-card-padding py-6 text-on-background font-body-md">$150.00</td>
+<td class="px-card-padding py-6 text-right font-headline-md text-headline-md text-primary">$1,500.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right Column: Summary & Supplier -->
+<div class="col-span-12 lg:col-span-4 space-y-gutter">
+<!-- Supplier Info -->
+<div class="glass-panel rounded-xl p-card-padding gold-inner-stroke">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">storefront</span>
+<h3 class="font-headline-md text-headline-md">Supplier Details</h3>
+</div>
+<div class="space-y-4">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant/60 uppercase">VENDOR</p>
+<p class="font-body-lg text-body-lg text-on-background">Havana Distributors Ltd.</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant/60 uppercase">CONTACT</p>
+<p class="font-body-lg text-body-lg text-on-background">Eduardo Gomez</p>
+<p class="font-body-md text-body-md text-on-surface-variant">e.gomez@havanadist.com</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant/60 uppercase">PAYMENT TERMS</p>
+<div class="inline-block px-3 py-1 bg-secondary-container/20 text-secondary border border-secondary/30 rounded text-label-sm">NET 30</div>
+</div>
+</div>
+</div>
+<!-- Destination & Delivery -->
+<div class="glass-panel rounded-xl p-card-padding">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">local_shipping</span>
+<h3 class="font-headline-md text-headline-md">Shipping Destination</h3>
+</div>
+<div class="space-y-4">
+<div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant/30">
+<p class="font-body-lg text-body-lg text-on-background">The Grand Humidor Central</p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                                442 Luxury Way, Penthouse Level<br/>
+                                Mayfair, London W1J 7JZ<br/>
+                                United Kingdom
+                            </p>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="font-label-sm text-label-sm">Requested Delivery: Oct 28, 2023</span>
+</div>
+</div>
+</div>
+<!-- Financial Summary -->
+<div class="glass-panel rounded-xl p-card-padding bg-surface-container-high/40">
+<h3 class="font-headline-md text-headline-md mb-6">Summary</h3>
+<div class="space-y-3 font-body-md text-body-md border-b border-outline-variant/20 pb-4 mb-4">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Subtotal</span>
+<span class="text-on-background">$31,740.00</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Estimated Shipping</span>
+<span class="text-on-background">$450.00</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Import Duties</span>
+<span class="text-on-background">$1,220.00</span>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-label-lg text-label-lg text-primary">TOTAL AMOUNT</span>
+<span class="font-headline-lg text-headline-lg text-primary">$33,410.00</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 transition-all" href="#">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-sm text-label-sm">POS 3</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 transition-all" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction: Update header on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('h-20', 'bg-background/95');
+                header.classList.remove('h-24', 'bg-background/80');
+            } else {
+                header.classList.add('h-24', 'bg-background/80');
+                header.classList.remove('h-20', 'bg-background/95');
+            }
+        });
+
+        // Hover animations for cards
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('scale-[1.005]');
+                card.style.borderColor = 'rgba(233, 193, 118, 0.4)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('scale-[1.005]');
+                card.style.borderColor = 'rgba(233, 193, 118, 0.15)';
+            });
+        });
+    </script>
+</body></html>

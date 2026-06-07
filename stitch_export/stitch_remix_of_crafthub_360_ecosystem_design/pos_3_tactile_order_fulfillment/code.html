@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Staff Handoff Terminal - CraftHub 360</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(154, 143, 128, 0.2);
+        }
+        .gold-foil-border {
+            border: 1px solid #e9c176;
+        }
+        .amber-glow:active {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.4);
+            transform: scale(0.98);
+        }
+        .leather-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/dark-leather.png");
+        }
+        /* New Physicality States */
+        .product-card-press:active {
+            transform: scale(0.97);
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.5);
+            border-color: rgba(233, 193, 118, 0.4);
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes settled-glow {
+            0% { box-shadow: 0 0 0 0 rgba(233, 193, 118, 0); }
+            50% { box-shadow: 0 0 25px 2px rgba(233, 193, 118, 0.3); }
+            100% { box-shadow: 0 0 15px 0px rgba(233, 193, 118, 0.15); border-color: #e9c176; }
+        }
+        .match-card-locked {
+            animation: settled-glow 2s forwards cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#c68315",
+                        "surface-container-high": "#2a2a2b",
+                        "error-container": "#93000a",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-tint": "#e9c176",
+                        "inverse-surface": "#e5e2e3",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-lowest": "#0e0e0f",
+                        "primary-fixed-dim": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "outline-variant": "#4e4639",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "tertiary-fixed": "#f7ddd6",
+                        "surface-variant": "#353436",
+                        "on-primary-container": "#4e3700",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#b7a09a",
+                        "tertiary": "#dac1bb",
+                        "surface-container-low": "#1b1b1c",
+                        "on-tertiary-fixed": "#261814",
+                        "on-error": "#690005",
+                        "on-secondary-container": "#3d2400",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#131314",
+                        "surface-bright": "#39393a",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "on-background": "#e5e2e3",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-tertiary": "#3c2d28",
+                        "on-surface-variant": "#d1c5b4",
+                        "surface": "#131314",
+                        "inverse-primary": "#775a19",
+                        "surface-container-highest": "#353436",
+                        "outline": "#9a8f80",
+                        "primary-fixed": "#ffdea5",
+                        "primary": "#e9c176",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary": "#462a00",
+                        "on-primary": "#412d00",
+                        "background": "#131314",
+                        "surface-container": "#1f1f20",
+                        "secondary": "#ffb95a",
+                        "on-primary-fixed": "#261900",
+                        "on-tertiary-container": "#473733",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "secondary-fixed": "#ffddb6",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        /* Custom Status Colors */
+                        "status-live": "#3b82f6",
+                        "status-fulfilled": "#22c55e",
+                        "status-vip": "#e9c176"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "64px",
+                        "unit": "8px",
+                        "container-max-width": "1440px",
+                        "gutter": "32px",
+                        "card-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Playfair Display"],
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden leather-texture min-h-screen">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer">menu</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label-lg text-label-lg text-white uppercase tracking-widest bg-status-live px-4 py-1.5 rounded-full border-2 border-white/20 shadow-[0_0_10px_rgba(59,130,246,0.5)]">POS 3 ACTIVE</span>
+<div class="flex items-center gap-2 bg-surface-container-high border border-outline-variant/40 px-4 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-primary">account_circle</span>
+<span class="font-label-lg text-label-lg font-bold text-primary">STAFF TERMINAL</span>
+</div>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="pt-28 pb-10 px-gutter max-w-container-max-width mx-auto grid grid-cols-12 gap-8 h-screen">
+<!-- Left Column: Guest Identity & Selection Details -->
+<section class="col-span-12 lg:col-span-7 flex flex-col gap-6">
+<!-- Guest Profile Card -->
+<div class="glass-panel p-card-padding rounded-xl flex items-center gap-6 shadow-2xl">
+<div class="relative">
+<img alt="Julian" class="w-24 h-24 rounded-full border-2 border-status-vip object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYYouRm63bVtsYRTSJ7TyfC6WwrJy1z1do-jXA6SX_GXIT-yVtq6PQtUAe_W4fF8qkQ1M2fHvoKitE3NJGYNwi320p9VNHWlptCMQ-XwkdV3hRxXo8lXfQcDQFfjYT6eM6aHjaHKIP7j0QplFX_hsol4Gf5wzvbB9L_hqyhs6Mp3zOzhE1Qj7UvjmEDcgKbtq7pcMIFn8nRX9RHaxkPcgfaSG9MxtGhLwVr5_uWhRfGBCCCbXf7l48RBrrje0UOHenJ6IHMgmWh28"/>
+<div class="absolute -bottom-2 -right-2 bg-status-vip text-on-primary-fixed text-xs font-black px-2 py-1 rounded shadow-lg">PLATINUM</div>
+</div>
+<div>
+<div class="flex items-center gap-3">
+<h2 class="font-headline-lg text-headline-lg text-status-vip">Julian</h2>
+<span class="bg-status-live/10 text-status-live text-[10px] font-bold px-2 py-0.5 rounded border border-status-live/30 uppercase">Live Session</span>
+</div>
+<p class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-tighter">Current Session ID: #CH-4492</p>
+<div class="flex gap-4 mt-2">
+<span class="flex items-center gap-1 text-status-vip text-sm"><span class="material-symbols-outlined text-sm">stars</span> 2,450 Credits Available</span>
+<span class="flex items-center gap-1 text-on-surface-variant text-sm"><span class="material-symbols-outlined text-sm">history</span> Member since 2018</span>
+</div>
+</div>
+</div>
+<!-- Item Details Bento -->
+<div class="grid grid-cols-2 gap-4 flex-grow">
+<!-- Cigar Recommendation -->
+<div class="glass-panel p-6 rounded-xl relative overflow-hidden group product-card-press cursor-pointer">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" style="font-variation-settings: 'FILL' 1;">smoking_rooms</span>
+</div>
+<p class="font-label-sm text-label-sm text-primary uppercase mb-2">Cigar Selection</p>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">OpusX</h3>
+<p class="text-on-surface-variant text-sm italic mb-4">Fuente Fuente OpusX Reserva d'Chateau</p>
+<div class="flex justify-between items-end">
+<div>
+<span class="text-2xl font-bold text-primary">$42.00</span>
+<span class="text-xs text-on-surface-variant block">Inventory: <span class="text-secondary font-bold">14 units</span></span>
+</div>
+<span class="bg-primary/10 text-primary px-3 py-1 rounded text-xs border border-primary/20">PREMIUM STOCK</span>
+</div>
+</div>
+<!-- Pairing Recommendation -->
+<div class="glass-panel p-6 rounded-xl relative overflow-hidden group product-card-press cursor-pointer">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" style="font-variation-settings: 'FILL' 1;">wine_bar</span>
+</div>
+<p class="font-label-sm text-label-sm text-primary uppercase mb-2">Spirit Pairing</p>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Vintage Bourbon</h3>
+<p class="text-on-surface-variant text-sm italic mb-4">12-Year Small Batch Single Barrel</p>
+<div class="flex justify-between items-end">
+<div>
+<span class="text-2xl font-bold text-primary">$28.00</span>
+<span class="text-xs text-on-surface-variant block">Inventory: <span class="text-secondary font-bold">8 bottles</span></span>
+</div>
+<span class="bg-primary/10 text-primary px-3 py-1 rounded text-xs border border-primary/20">RESERVE CELLAR</span>
+</div>
+</div>
+<!-- Tasting Notes Summary -->
+<div class="glass-panel col-span-2 p-6 rounded-xl border-l-4 border-primary transition-all match-card-locked" id="match-notes-card">
+<p class="font-label-sm text-label-sm text-primary uppercase mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">description</span> Guest Profile Match Notes
+                </p>
+<p class="text-on-surface-variant leading-relaxed">
+                    Julian prefers full-bodied profiles with cedar and spice notes. The OpusX provides the complexity he enjoys, while the Vintage Bourbon's caramel undertones balance the cigar's peppery finish. <span class="text-status-vip font-bold underline decoration-status-vip/30">94% Match Probability.</span>
+</p>
+</div>
+</div>
+</section>
+<!-- Right Column: POS Actions & Confirmation -->
+<section class="col-span-12 lg:col-span-5 flex flex-col gap-4">
+<!-- Order Summary Sidebar -->
+<div class="bg-surface-container-high rounded-xl p-6 flex-grow flex flex-col shadow-inner">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-6 flex items-center justify-between border-b border-outline-variant/30 pb-4">
+                Order Summary
+                <span class="bg-status-live/20 text-status-live text-xs px-2 py-1 rounded uppercase">In Progress</span>
+</h3>
+<div class="space-y-4 mb-auto">
+<div class="flex justify-between items-center group cursor-pointer hover:bg-surface-variant/20 p-2 rounded transition-colors">
+<div>
+<p class="font-medium text-on-surface">OpusX Reserva</p>
+<p class="text-xs text-on-surface-variant">Rare Dominican Tobacco</p>
+</div>
+<span class="font-mono text-primary">$42.00</span>
+</div>
+<div class="flex justify-between items-center group cursor-pointer hover:bg-surface-variant/20 p-2 rounded transition-colors">
+<div>
+<p class="font-medium text-on-surface">Vintage Bourbon (2oz)</p>
+<p class="text-xs text-on-surface-variant">Neat - Glencairn Glass</p>
+</div>
+<span class="font-mono text-primary">$28.00</span>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-dashed border-outline-variant/50">
+<div class="flex justify-between text-on-surface-variant mb-2">
+<span>Subtotal</span>
+<span>$70.00</span>
+</div>
+<div class="flex justify-between text-on-surface-variant mb-4">
+<span>Tax (8.5%)</span>
+<span>$5.95</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-on-surface">Total</span>
+<span class="font-headline-md text-headline-md text-primary">$75.95</span>
+</div>
+</div>
+<!-- Mandatory Warning Text -->
+<div class="mt-8 bg-error-container/20 border border-error-container p-4 rounded-lg flex items-start gap-3">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">info</span>
+<p class="text-error text-xs font-medium leading-tight">
+                    Purchase-related stamps require POS 3 confirmation. Ensure the physical items match the digital selection before proceeding with fulfillment.
+                </p>
+</div>
+</div>
+<!-- Action Grid -->
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-surface-container-highest text-on-surface h-[72px] rounded-lg flex flex-col items-center justify-center gap-1 amber-glow transition-all hover:bg-primary/20 gold-foil-border/30">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+<span class="font-label-lg text-label-lg">Add to Order</span>
+</button>
+<button class="bg-secondary-container text-on-secondary-container h-[72px] rounded-lg flex flex-col items-center justify-center gap-1 amber-glow transition-all shadow-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">loyalty</span>
+<span class="font-label-lg text-label-lg">Apply Reward</span>
+</button>
+<button class="col-span-2 bg-status-live text-white h-[72px] rounded-lg flex items-center justify-center gap-3 shadow-xl transition-all font-bold text-lg active:scale-95 hover:brightness-110">
+<span class="material-symbols-outlined">check_circle</span>
+<span>Confirm Purchase</span>
+</button>
+<button class="col-span-2 bg-status-fulfilled text-white h-[72px] rounded-lg flex items-center justify-center gap-2 hover:brightness-110 transition-all mb-4 shadow-lg active:scale-95" id="fulfill-btn">
+<span class="material-symbols-outlined">done_all</span>
+<span class="font-label-lg text-label-lg uppercase tracking-widest font-bold">Mark Fulfilled</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Side Navigation Shell -->
+<nav class="hidden lg:flex fixed left-0 top-0 h-full w-20 z-[60] flex flex-col items-center py-8 bg-surface-container-low border-r border-outline-variant/10">
+<div class="mb-12">
+<span class="material-symbols-outlined text-primary text-3xl">token</span>
+</div>
+<div class="flex flex-col gap-8">
+<div class="text-primary p-3 rounded-xl bg-primary-container/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+</div>
+<div class="text-on-surface-variant p-3 rounded-xl hover:bg-surface-variant transition-colors cursor-pointer">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<div class="text-on-surface-variant p-3 rounded-xl hover:bg-surface-variant transition-colors cursor-pointer">
+<span class="material-symbols-outlined">group</span>
+</div>
+<div class="text-on-surface-variant p-3 rounded-xl hover:bg-surface-variant transition-colors cursor-pointer">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+</div>
+<div class="mt-auto text-on-surface-variant p-3 rounded-xl hover:bg-error-container/20 hover:text-error transition-colors cursor-pointer">
+<span class="material-symbols-outlined">logout</span>
+</div>
+</nav>
+<script>
+    // Micro-interactions for staff feedback
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const textEl = this.querySelector('span:last-child');
+            const text = textEl ? textEl.textContent : 'Action';
+            console.log(`POS Action Logged: ${text} for Guest: Julian`);
+            
+            // Physicality feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => this.style.transform = '', 100);
+        });
+    });
+
+    // Handle fulfillment state change
+    const fulfillBtn = document.getElementById('fulfill-btn');
+    fulfillBtn.addEventListener('click', function() {
+        this.innerHTML = '<span class="material-symbols-outlined">check</span><span class="font-label-lg text-label-lg uppercase tracking-widest font-bold">Order Ready</span>';
+        this.classList.replace('bg-status-fulfilled', 'bg-status-live');
+    });
+</script>
+</body></html>

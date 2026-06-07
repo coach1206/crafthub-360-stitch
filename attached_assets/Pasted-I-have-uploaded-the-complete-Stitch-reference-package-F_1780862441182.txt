@@ -1,0 +1,79 @@
+I have uploaded the complete Stitch reference package.
+
+Files include:
+
+* Original HTML reference screens
+* JPG screenshots of those screens
+* DESIGN.md design system
+* Original image assets
+
+The HTML files and JPG screenshots are the source of truth for layout and visual appearance.
+
+DESIGN.md is the source of truth for fonts, colors, spacing, glass effects, typography scales, component standards, and design tokens.
+
+Your task is NOT to redesign, reinterpret, modernize, simplify, improve, optimize, reorganize, or create a new version.
+
+Your task is to recreate the Stitch project as accurately as possible.
+
+Rules:
+
+1. Compare every generated page against both the HTML reference and the JPG screenshot.
+
+2. The HTML reference determines:
+
+   * Layout
+   * Structure
+   * Component placement
+   * Navigation
+   * Animations
+   * Section order
+
+3. The JPG screenshots determine:
+
+   * Visual accuracy
+   * Alignment
+   * Spacing
+   * Sizing
+   * Positioning
+
+4. DESIGN.md determines:
+
+   * Fonts
+   * Colors
+   * Design tokens
+   * Typography scales
+   * Glass treatments
+   * Borders
+   * Shadows
+   * Visual system standards
+
+5. Do not substitute components.
+
+6. Do not create a generic dashboard.
+
+7. Do not invent new layouts.
+
+8. Do not remove sections.
+
+9. Do not merge sections.
+
+10. Do not replace images.
+
+11. Build one screen at a time and verify against the uploaded reference before moving to the next screen.
+
+12. After each screen is completed, provide:
+
+    * The page/component created
+    * Any missing assets
+    * Any differences between the implementation and the reference
+
+13. If there is a conflict:
+
+    * HTML and JPG reference win for layout
+    * DESIGN.md wins for design tokens and styling
+
+Before writing code, analyze all uploaded files and provide a migration plan showing how each Stitch screen maps into the Replit project structure.
+
+Goal:
+
+Create the closest possible 1:1 recreation of the Stitch project. Accuracy is more important than speed, optimization, or creativity.

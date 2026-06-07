@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>360 Passport - Connections Directory</title>
+<!-- Google Fonts: Playfair Display for Serifs, Montserrat for Sans -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-primary-fixed": "#261900",
+                "background": "#131314",
+                "secondary": "#ffb95a",
+                "secondary-fixed-dim": "#ffb95a",
+                "on-background": "#e5e2e3",
+                "on-tertiary-container": "#473733",
+                "inverse-on-surface": "#303031",
+                "secondary-container": "#c68315",
+                "on-secondary-container": "#3d2400",
+                "on-tertiary-fixed-variant": "#54433e",
+                "on-tertiary-fixed": "#261814",
+                "on-surface": "#e5e2e3",
+                "surface-container-lowest": "#0e0e0f",
+                "on-secondary": "#462a00",
+                "surface-variant": "#353436",
+                "outline": "#9a8f80",
+                "error-container": "#93000a",
+                "primary-fixed-dim": "#e9c176",
+                "on-surface-variant": "#d1c5b4",
+                "surface-container-highest": "#353436",
+                "secondary-fixed": "#ffddb6",
+                "primary-fixed": "#ffdea5",
+                "on-tertiary": "#3c2d28",
+                "tertiary": "#dac1bb",
+                "surface-container-low": "#1b1b1c",
+                "on-primary": "#412d00",
+                "surface-tint": "#e9c176",
+                "primary-container": "#c5a059",
+                "on-primary-container": "#4e3700",
+                "surface": "#131314",
+                "tertiary-fixed": "#f7ddd6",
+                "surface-container-high": "#2a2a2b",
+                "on-secondary-fixed": "#2a1800",
+                "on-primary-fixed-variant": "#5d4201",
+                "on-error-container": "#ffdad6",
+                "inverse-surface": "#e5e2e3",
+                "primary": "#e9c176",
+                "inverse-primary": "#775a19",
+                "on-secondary-fixed-variant": "#643f00",
+                "on-error": "#690005",
+                "surface-container": "#1f1f20",
+                "surface-bright": "#39393a",
+                "error": "#ffb4ab",
+                "outline-variant": "#4e4639",
+                "tertiary-fixed-dim": "#dac1bb",
+                "surface-dim": "#131314",
+                "tertiary-container": "#b7a09a"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "margin": "64px",
+                "unit": "8px",
+                "gutter": "32px",
+                "container-max-width": "1440px",
+                "card-padding": "24px"
+            },
+            "fontFamily": {
+                "headline-md": ["Playfair Display"],
+                "body-lg": ["Montserrat"],
+                "headline-xl": ["Playfair Display"],
+                "headline-lg": ["Playfair Display"],
+                "label-sm": ["Montserrat"],
+                "label-lg": ["Montserrat"],
+                "display-lg": ["Playfair Display"],
+                "body-md": ["Montserrat"]
+            },
+            "fontSize": {
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .parchment-card {
+            background: linear-gradient(145deg, rgba(233, 193, 118, 0.08), rgba(19, 19, 20, 0.95));
+            border: 1px solid rgba(233, 193, 118, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .parchment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(233, 193, 118, 0.4), transparent);
+        }
+
+        .gold-foil-text {
+            background: linear-gradient(to right, #e9c176, #ffdea5, #e9c176);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(233, 193, 118, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(233, 193, 118, 0.2);
+            border-radius: 10px;
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="dark font-body-md text-body-md overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation Shell -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface-dim/80 backdrop-blur-xl border-b border-primary/20 shadow-md">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-primary/10 transition-colors duration-300 rounded-full active:scale-95">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<h1 class="font-display-lg text-[24px] lg:text-headline-md text-primary uppercase tracking-widest">The 360 Passport</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<span class="font-label-lg text-on-surface-variant hover:text-primary cursor-pointer transition-all">Events</span>
+<span class="font-label-lg text-on-surface-variant hover:text-primary cursor-pointer transition-all">Curations</span>
+<button class="bg-primary/10 border border-primary/30 px-6 py-2 rounded-full font-label-lg text-primary hover:bg-primary/20 transition-all active:scale-95">
+                Grand Lounge
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 mt-24 pb-24 px-4 lg:px-margin max-w-container-max-width mx-auto w-full flex flex-col">
+<!-- Header & Search -->
+<header class="mb-10 space-y-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">Julian's Network</h2>
+<p class="font-body-lg text-on-surface-variant opacity-70">Curating connections across the global elite.</p>
+</div>
+<!-- Search & Filters Container -->
+<div class="w-full md:w-auto space-y-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full md:w-80 bg-surface-container-low border-b border-primary/30 focus:border-primary px-12 py-3 font-body-md text-on-surface focus:ring-0 transition-all outline-none rounded-t-lg" placeholder="Search connections..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Filter Tabs -->
+<div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+<button class="px-6 py-2 bg-primary/20 text-primary border border-primary/40 rounded-full font-label-lg whitespace-nowrap">Recent</button>
+<button class="px-6 py-2 bg-surface-container-high text-on-surface-variant border border-transparent hover:border-primary/20 rounded-full font-label-lg transition-all whitespace-nowrap">Favorites</button>
+<button class="px-6 py-2 bg-surface-container-high text-on-surface-variant border border-transparent hover:border-primary/20 rounded-full font-label-lg transition-all whitespace-nowrap">By Industry</button>
+<button class="px-6 py-2 bg-surface-container-high text-on-surface-variant border border-transparent hover:border-primary/20 rounded-full font-label-lg transition-all whitespace-nowrap">Atlanta Hub</button>
+</div>
+</header>
+<!-- Connections List -->
+<div class="flex-1 overflow-y-auto custom-scrollbar pr-2 -mr-2">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-8">
+<!-- Connection Card 1 -->
+<div class="parchment-card group cursor-pointer rounded-xl p-card-padding transition-all duration-500 hover:shadow-[0_10px_30px_rgba(233,193,118,0.1)] active:scale-[0.98]">
+<div class="flex gap-6 items-start">
+<div class="relative w-20 h-20 shrink-0">
+<div class="absolute inset-0 rounded-full border border-primary/30 group-hover:border-primary transition-colors"></div>
+<img alt="Portrait" class="w-full h-full object-cover rounded-full p-1" data-alt="A sophisticated portrait of a gentleman in a tailored navy charcoal suit, standing against a background of a dimly lit, high-end library with dark wood and warm amber lighting. The style is cinematic and luxurious, reflecting a professional yet exclusive members-only atmosphere with a soft, warm-toned highlight on his face." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmwZofm08BmSPPUNJwq4w50oyJnI5NJPL-ktwkd97kXHrw3aEYE5ZoWCd60WpWSTBdGbMZ_tpK5gNA-Hl5KGLVGegAym9UAyUUW88hNdJQeG4H1Id6fJnuXLTS_aokEdu4PSQZw7TugMuz1nsDz1TbVJLQ0wAStQvU1NbCA9R4n2OqUB0nKp1M4589mJFhs8KwylyURXFxN7BPUCEAVoF6Vr0xsPJG0Tuj-FO1pzrAh5JNv8GntT5tK7S6Lji3mfV-PSjWs2YRmDA"/>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md gold-foil-text mb-1">Alistair Vaughn</h3>
+<p class="font-label-lg text-primary-fixed-dim uppercase tracking-wider text-[11px] mb-3">Chief Acquisitions Officer, Orion Capital</p>
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="text-[12px] font-label-sm">Grand Lounge, Atlanta</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span class="text-[12px] font-label-sm">October 14, 2023</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Connection Card 2 -->
+<div class="parchment-card group cursor-pointer rounded-xl p-card-padding transition-all duration-500 hover:shadow-[0_10px_30px_rgba(233,193,118,0.1)] active:scale-[0.98]">
+<div class="flex gap-6 items-start">
+<div class="relative w-20 h-20 shrink-0">
+<div class="absolute inset-0 rounded-full border border-primary/30 group-hover:border-primary transition-colors"></div>
+<img alt="Portrait" class="w-full h-full object-cover rounded-full p-1" data-alt="A sharp, elegant portrait of a woman executive with a minimalist gold necklace, set against a blurred background of a modern glass skyscraper lobby at dusk. The lighting is soft and golden-hour inspired, creating a warm, elite professional aesthetic that perfectly matches the dark, premium brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL2AZAkzwXZYWsZ15Cl5pvPTTH24q_GsyEFhYWH93h0tRxmgCjs-PKhz-GO1Y04mvp-DBrTz4BESi-VBW4lg0jqyrcnb-c2g5QFUijdqldCYq-yOAv1gJBXW1NPBUjyMcUm1WvTLZ4-SQztA9g0ZRsVTLNtLM_CLb1Yb0OC12SsKTOIzp59izbLJY58nsbv5KAEb2CjY1rDRdfxx8XST2YVl7wwY95u8aVsRbC8CjKQom1GEx8fnKNBPZT_eOHF4KNA21B2YMRRhc"/>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md gold-foil-text mb-1">Elena Moretti</h3>
+<p class="font-label-lg text-primary-fixed-dim uppercase tracking-wider text-[11px] mb-3">Founder, Moretti Rare Estates</p>
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="text-[12px] font-label-sm">The Vault, London</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span class="text-[12px] font-label-sm">October 12, 2023</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Connection Card 3 -->
+<div class="parchment-card group cursor-pointer rounded-xl p-card-padding transition-all duration-500 hover:shadow-[0_10px_30px_rgba(233,193,118,0.1)] active:scale-[0.98]">
+<div class="flex gap-6 items-start">
+<div class="relative w-20 h-20 shrink-0">
+<div class="absolute inset-0 rounded-full border border-primary/30 group-hover:border-primary transition-colors"></div>
+<img alt="Portrait" class="w-full h-full object-cover rounded-full p-1" data-alt="A portrait of a mature entrepreneur in a dark turtleneck, lit by the glowing embers of a nearby cigar humidor. The atmosphere is quiet, sophisticated, and intimate, with deep shadows and warm amber light catching the edges of his profile. High-end luxury photography style with deep espresso tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPtGfG4FjbxEax3armkv28z6M7Su2ASCf-iM_4xRJPFYOTGveDGVDhxzF9w4Z9CJnX68r0CjlU_bJvWAov2a2Rc8t1M8cnZC0_zp643sJBOF3hlbdHwlJQtqTtEY9tdEbku1rJgPPrjKx4cUwQJwSq90IYMgsWNu46PH8X6oNH83T-LqZlxVPsWaAzE_Ox-6yPRBvp8AE1I3Y3jCbkYegGseB_ZRGQ2uMcvl-fH6jTUnmf9dnZSrHZxxq9MarY68tU-4s63qJrIYE"/>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md gold-foil-text mb-1">Marcus Thorne</h3>
+<p class="font-label-lg text-primary-fixed-dim uppercase tracking-wider text-[11px] mb-3">Principal, Thorne &amp; Co. Yachts</p>
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="text-[12px] font-label-sm">Rooftop Terrace, Monaco</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span class="text-[12px] font-label-sm">October 09, 2023</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Connection Card 4 -->
+<div class="parchment-card group cursor-pointer rounded-xl p-card-padding transition-all duration-500 hover:shadow-[0_10px_30px_rgba(233,193,118,0.1)] active:scale-[0.98]">
+<div class="flex gap-6 items-start">
+<div class="relative w-20 h-20 shrink-0">
+<div class="absolute inset-0 rounded-full border border-primary/30 group-hover:border-primary transition-colors"></div>
+<img alt="Portrait" class="w-full h-full object-cover rounded-full p-1" data-alt="A professional portrait of a tech visionary with a confident smile, wearing a sleek black blazer. The lighting is dramatic and low-key, featuring soft rim lighting that separates her from a textured dark slate wall background. The aesthetic is modern, high-contrast, and deeply premium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhYQwL9wrgfPFDBQOT8oe-q7gl8dbKj3WZVptCpD-p6QdOhvcdy_qeDFgWE0V4tIzDcuHMd_XS7GNrs7HsOMhmlz23xQ8sRcB_oBCE17pQ0RA0snw9JQ4u8_XPEdik0cj2-Ec2vpOahNHg2_ChaagHDwhZ_rCLOFh4JvHpdB0eD0WVL8Sx8FuBSL4_2g4ffJBbt5dHw_T45hFRLwdn8JIy4r6SO2YNziIlzarzTtrDujSu7BMJhMiZILAaVgO6QAtmIAfsUaxUZzU"/>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md gold-foil-text mb-1">Sarah Jenkins</h3>
+<p class="font-label-lg text-primary-fixed-dim uppercase tracking-wider text-[11px] mb-3">VP Engineering, BlockScale</p>
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="text-[12px] font-label-sm">The Hub, San Francisco</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span class="text-[12px] font-label-sm">October 05, 2023</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Connection Card 5 -->
+<div class="parchment-card group cursor-pointer rounded-xl p-card-padding transition-all duration-500 hover:shadow-[0_10px_30px_rgba(233,193,118,0.1)] active:scale-[0.98]">
+<div class="flex gap-6 items-start">
+<div class="relative w-20 h-20 shrink-0">
+<div class="absolute inset-0 rounded-full border border-primary/30 group-hover:border-primary transition-colors"></div>
+<img alt="Portrait" class="w-full h-full object-cover rounded-full p-1" data-alt="A portrait of a distinguished business leader with grey hair, wearing a bespoke suit and tie. He is standing in a luxurious lounge with velvet curtains and polished mahogany furniture in the background. The lighting is warm and cinematic, suggesting an atmosphere of traditional wealth and unhurried sophistication." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHMkqZW-30D_aCDOFjb2thhNiolAu4e_zSEX1_A-1AlburJwIUof-rYxP_HQFjIISk82oyV2A5dZkJ_fklBkfBbzIH9Uf6enOFhIzj1VQQIr94CQO5LM3hapmRNoPY8KnzV3MtewUxq6RT3nZtU0n_Vf8zIqmL5fKCB-tTbo-7uPkBeGpL8eZWrF7mjrC0cs5LGGLVYQGYe5jB-0jPDvGfuPy9NVbgqOShttOKzG0EfHJ62m7Jq7OF1YnjkFZ4M9hG0VPp00xTAgQ"/>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md gold-foil-text mb-1">David Sterling</h3>
+<p class="font-label-lg text-primary-fixed-dim uppercase tracking-wider text-[11px] mb-3">Managing Partner, Sterling &amp; Assoc.</p>
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="text-[12px] font-label-sm">Grand Lounge, Atlanta</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span class="text-[12px] font-label-sm">October 01, 2023</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Connection Card 6 -->
+<div class="parchment-card group cursor-pointer rounded-xl p-card-padding transition-all duration-500 hover:shadow-[0_10px_30px_rgba(233,193,118,0.1)] active:scale-[0.98]">
+<div class="flex gap-6 items-start">
+<div class="relative w-20 h-20 shrink-0">
+<div class="absolute inset-0 rounded-full border border-primary/30 group-hover:border-primary transition-colors"></div>
+<img alt="Portrait" class="w-full h-full object-cover rounded-full p-1" data-alt="A vibrant yet sophisticated portrait of a creative director with colorful accessories, set in a bright, modern art gallery. The lighting is crisp and high-key, creating a fresh, modern aesthetic while maintaining a high-end feel. The composition uses clean lines and a sophisticated color palette of blacks, whites, and gold accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_937WPuI0nON7xTVODi5RjsaqVYyR66QscIenYHi33JPfAd8-8UV47o3IMk4wSjD34WcR6A4M3gVFHFdvq3HbCMvNBGBLGVqkVGWlMmpC7HqO9N_lVq-jADowjUcqhPQSZhehJpX6cXzOJtlAjxlg0NVjh-RjltaXV0EmXTYYMCQgaLbJ0GqY5tzjk9rq2v62eo6WnUUBKUTGm5WzfbhvwIXUqqkfdbKQt8e2uOAMDFyBw9YACLNykxANEsx2O4QEAAsYF8jEYPI"/>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md gold-foil-text mb-1">Chloe DuPont</h3>
+<p class="font-label-lg text-primary-fixed-dim uppercase tracking-wider text-[11px] mb-3">Creative Director, L'Artiste Paris</p>
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="text-[12px] font-label-sm">Private Atelier, Paris</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant/60">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span class="text-[12px] font-label-sm">September 28, 2023</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin py-4 bg-surface-container-low/95 backdrop-blur-2xl border-t border-primary/30 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg text-label-lg">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-lg text-label-lg">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] transform -translate-y-1 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-lg text-label-lg">Passport</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-label-lg text-label-lg">Assistant</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for cards
+        document.querySelectorAll('.parchment-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Subtle lighting effect on hover handled by CSS
+            });
+            
+            card.addEventListener('click', () => {
+                // Visual feedback for tap
+                card.style.transform = 'scale(0.96)';
+                setTimeout(() => {
+                    card.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+
+        // Atmospheric parallax-like effect on background (subtle)
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            // Background is pure color, but we could shift a texture if we had one
+        });
+    </script>
+</body></html>

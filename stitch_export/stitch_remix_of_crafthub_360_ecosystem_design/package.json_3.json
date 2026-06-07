@@ -1,0 +1,15 @@
+{
+  "name": "crafthub-360-frontend",
+  "version": "1.0.0",
+  "description": "Production frontend for CraftHub 360 Ecosystem",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx tailwindcss -i ./src/styles/main.css -o ./dist/output.css --watch",
+    "build": "npx tailwindcss -i ./src/styles/main.css -o ./dist/output.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.0.0",
+    "autoprefixer": "^10.0.0",
+    "postcss": "^8.0.0"
+  }
+}

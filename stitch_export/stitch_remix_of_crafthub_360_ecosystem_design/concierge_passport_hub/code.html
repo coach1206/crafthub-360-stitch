@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .gold-foil-border {
+            border: 1px solid rgba(233, 193, 118, 0.3);
+        }
+        .cinematic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: brightness(0.4) saturate(0.8);
+            transform: scale(1.1);
+            transition: transform 10s ease-out;
+        }
+        .amber-glow:active {
+            box-shadow: 0 0 25px rgba(233, 193, 118, 0.4);
+        }
+        .passport-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/leather.png");
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#e5e2e3",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-container-high": "#2a2a2b",
+                        "on-secondary-fixed": "#2a1800",
+                        "tertiary-fixed": "#f7ddd6",
+                        "surface": "#131314",
+                        "on-primary-container": "#4e3700",
+                        "surface-tint": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "surface-container-low": "#1b1b1c",
+                        "on-primary": "#412d00",
+                        "tertiary-container": "#b7a09a",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-dim": "#131314",
+                        "outline-variant": "#4e4639",
+                        "error": "#ffb4ab",
+                        "surface-container": "#1f1f20",
+                        "surface-bright": "#39393a",
+                        "on-error": "#690005",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "inverse-primary": "#775a19",
+                        "primary": "#e9c176",
+                        "secondary-container": "#c68315",
+                        "on-secondary-container": "#3d2400",
+                        "inverse-on-surface": "#303031",
+                        "on-tertiary-container": "#473733",
+                        "on-background": "#e5e2e3",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "secondary": "#ffb95a",
+                        "background": "#131314",
+                        "on-primary-fixed": "#261900",
+                        "tertiary": "#dac1bb",
+                        "on-tertiary": "#3c2d28",
+                        "surface-container-highest": "#353436",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-fixed": "#ffdea5",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-fixed-dim": "#e9c176",
+                        "surface-variant": "#353436",
+                        "outline": "#9a8f80",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-secondary": "#462a00",
+                        "on-tertiary-fixed": "#261814",
+                        "on-surface": "#e5e2e3",
+                        "on-tertiary-fixed-variant": "#54433e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "64px",
+                        "unit": "8px",
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "card-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- Cinematic Background -->
+<div class="cinematic-bg overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A cinematic, low-angle shot of a luxurious Grand Lounge featuring heavy mahogany wood panels, deep leather armchairs, and a soft amber glow from antique floor lamps. The background is softly blurred to emphasize the depth of the space, creating a sophisticated and private atmosphere with a warm, rich color palette of espresso, gold, and deep shadows." id="hero-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkG0WffszA9WAlMQ39EhYKcIFh3MZsCUeb6PCb6Y8ZSyeRovKUG3VAliZK3qJgLXUYaFQcQhpe5i7QaVaaGFS4DDK8_RazfoXn-6sA-d-2QhrryX80h_QPbXWD0oM0wBfcLNAF4oqoZabmRXcsYQtJDyyZdCzmHjpSeCsVu7fwvfgaUili5hIXm1jIY_bC43pmsPWGgRCLElgMnsK79gOy6Y-FxRJkN08WOe1hWsrQ97y7jRIu6wSaZqwWdvK5LMM-8qyVkXjePEQ"/>
+</div>
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface-dim/80 backdrop-blur-xl border-b border-primary/20 shadow-md">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-primary/10 transition-colors duration-300 p-2 rounded-full Active: scale-95 duration-200 ease-in-out">menu</button>
+<h1 class="font-display-lg text-[24px] md:text-display-lg text-primary uppercase tracking-widest">The 360 Passport</h1>
+</div>
+<div class="hidden md:flex items-center gap-6">
+<button class="font-label-lg text-on-surface-variant hover:text-primary transition-colors">Concierge</button>
+<button class="font-label-lg text-on-surface-variant hover:text-primary transition-colors">Exclusives</button>
+<div class="h-6 w-[1px] bg-primary/20"></div>
+<button class="bg-primary/10 text-primary font-label-lg px-6 py-2 rounded-full border border-primary/30 hover:bg-primary/20 transition-all">Grand Lounge</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-[120px] pb-[120px] px-6 md:px-margin container mx-auto max-w-container-max-width flex flex-col items-center justify-center">
+<!-- Welcome Section -->
+<section class="w-full text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+<h2 class="font-headline-xl text-primary mb-4">Welcome back, Julian</h2>
+<p class="font-body-lg text-on-surface-variant max-w-2xl mx-auto">Your journey through the world's most exclusive lounges continues. Your status reflects your refined taste and growing legacy.</p>
+</section>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mb-12">
+<!-- Connections Card -->
+<div class="glass-panel rounded-xl p-card-padding flex items-center justify-between group hover:border-primary/50 transition-all duration-500">
+<div class="flex flex-col">
+<span class="font-label-sm text-on-surface-variant/60 uppercase tracking-widest mb-1">Networking Status</span>
+<span class="font-headline-lg text-primary">112 Connections</span>
+</div>
+<div class="h-16 w-16 glass-panel rounded-full flex items-center justify-center border border-primary/20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">hub</span>
+</div>
+</div>
+<!-- Stamps Card -->
+<div class="glass-panel rounded-xl p-card-padding flex items-center justify-between group hover:border-primary/50 transition-all duration-500">
+<div class="flex flex-col">
+<span class="font-label-sm text-on-surface-variant/60 uppercase tracking-widest mb-1">Tasting Journey</span>
+<span class="font-headline-lg text-primary">24 Stamps Earned</span>
+</div>
+<div class="h-16 w-16 glass-panel rounded-full flex items-center justify-center border border-primary/20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">verified</span>
+</div>
+</div>
+</div>
+<!-- Primary Actions -->
+<div class="flex flex-col items-center gap-6 w-full max-w-md">
+<!-- Main CTA: Digital Passport -->
+<button class="w-full h-16 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline-md rounded-xl shadow-[0_0_20px_rgba(233,193,118,0.3)] hover:shadow-[0_0_40px_rgba(233,193,118,0.5)] transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-3 passport-texture amber-glow">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+                Open Digital Passport
+            </button>
+<!-- Secondary CTA: Artisans -->
+<button class="w-full h-16 glass-panel border border-primary/40 text-primary font-headline-md rounded-xl hover:bg-primary/5 transition-all duration-300 flex items-center justify-center gap-3 active:scale-95">
+<span class="material-symbols-outlined">explore</span>
+                Find Artisans Near You
+            </button>
+<p class="font-label-sm text-on-surface-variant/40 mt-4 italic text-center">Curated experiences based on your current location in Paris</p>
+</div>
+<!-- Visual Anchor: Recent Connections -->
+<section class="w-full max-w-4xl mt-20">
+<div class="flex justify-between items-end mb-6">
+<h3 class="font-headline-md text-primary">Recent Lounge Encounters</h3>
+<a class="font-label-lg text-primary border-b border-primary/30 pb-1" href="#">View All Activity</a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="glass-panel aspect-square rounded-xl overflow-hidden group relative cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale hover:grayscale-0" data-alt="A portrait of a distinguished man in his 40s wearing a tailored charcoal suit and a classic watch, captured in a warm, low-light environment that suggests a high-end private club. The lighting is focused on his face, creating a moody, professional, and sophisticated look that aligns with the premium leather and gold aesthetic of the brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRpC_8AUjbIUD18tFGvleNG6y7SZtXSRoHOt1S0qiyPS_-hgL3oj_NHt_Zg_1_kjHCzPupNESbIdaddVm6H7pyNE4twKOYXShtBFva0H5-v82aMw7aIbCqRRgCw3z1WqB1SP4KNA7sgH1RhLsZUa6X9kZjTW7dUxERPw3-R8oZpGebujSSyxVh-J7vnNVkDpw94bL2CJ9ZV_0Xxt88MQpZD0H--CKr5AVXPJOZOOArgkKaVu5t6qJr4bU6Jk75qBLm19_H7A5FNqg"/>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+<p class="font-label-lg text-primary">Marcus V.</p>
+<p class="text-[10px] uppercase text-on-surface-variant/70 tracking-tighter">Fine Wine Collector</p>
+</div>
+</div>
+<div class="glass-panel aspect-square rounded-xl overflow-hidden group relative cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale hover:grayscale-0" data-alt="A professional woman in an elegant silk blouse, sitting in a dimly lit library atmosphere with vintage books in the background. The scene is illuminated by warm, localized light, highlighting a sense of intelligence and exclusivity. The overall color palette is composed of rich browns, deep creams, and golden highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ6XkOB4u5c_sHA-4WR91OIRR74J8r5zOucg3yETZ0es--u7nOtEZf0571259GwA_QIZMJykZI5ZdxwFK7IdzyocMhBylchePUb2xkl4j7g0CNpoKfjMPlLDQthOw6kdj7jirTNRDB3nG1L7ApzKmxB8my-2sFuokICYaGTFeMz9vzt8IxmZKc-Aeh4UtZlYmVXKTkB--m49XyZxsMCHwCzxJNZajlKva77uqXF5qPbBSjbtQiIHHq5Rua9tBZ1GYhstfc6wYIGGc"/>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+<p class="font-label-lg text-primary">Elena S.</p>
+<p class="text-[10px] uppercase text-on-surface-variant/70 tracking-tighter">Architectural Lead</p>
+</div>
+</div>
+<div class="glass-panel aspect-square rounded-xl overflow-hidden group relative cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale hover:grayscale-0" data-alt="Close-up portrait of a creative professional in an artisan studio, with soft industrial lighting and warm amber tones. He is wearing a minimalist dark sweater, and the environment hints at luxury craftsmanship. The mood is intimate and high-end, featuring a sophisticated dark mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAflAqXehYEgSoywuz9ZYPaez9m_1PZt-O6gIBWaY663XC7rhtjmjNYZIAvGgVBFCG2QahVBPM2R4YdStPdt1aZlCP9wxAZsKyweLPk-ZG_P-SFRMbEjsH5cIPdm27L_BFITqQA8QpsNuYcAM5_ivhHHrR7sODVBsO7mQVqIxnTBjIOrWsPtDwhUT1_nKAvD6-JxlZQGSWumSPc837tBCQZS1_bYNWKlCgibjTv_CEvh3xyQ7stAus4JMI-0jInHLfNcCK7U9oi6s"/>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+<p class="font-label-lg text-primary">David L.</p>
+<p class="text-[10px] uppercase text-on-surface-variant/70 tracking-tighter">Master Watchmaker</p>
+</div>
+</div>
+<div class="glass-panel aspect-square rounded-xl overflow-hidden group relative cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale hover:grayscale-0" data-alt="A stylish woman laughing in a luxurious lounge setting, with crystal glassware reflecting soft light in the background. She is dressed in cocktail attire, and the scene exudes celebration and membership. The lighting is cinematic and rich, with deep contrast and warm golden glows consistent with the exclusive brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKh_XxJmUkkIRsPVHTTPXc1JCT3AR3IcZHkGZfdLGT1JM4tcWt3cbeJzubkJbvz0Nl06aIeu2YJ3fDErSdTWX1SYe6-cCPvVJg3cfUtEJAE54gcy3ukh0cAzeYey2PFRgQ2W6tZgmjDmW5AZ-RYCtp3fHCt8IYeuH87ztyF34e3125XlpVLQi6byykRuZM4BoHXGA9gYpnGbim6HbD9htasq_fx34YEzGRULI7NmioL1ifCWEU1ilslVYzYYDLwQBHFVUM7kFXwak"/>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+<p class="font-label-lg text-primary">Sophie M.</p>
+<p class="text-[10px] uppercase text-on-surface-variant/70 tracking-tighter">Art Curator</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom NavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin py-4 bg-surface-container-low/95 backdrop-blur-2xl border-t border-primary/30 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300 Active: transform -translate-y-1 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">explore</span>
+<span class="font-label-lg">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300 Active: transform -translate-y-1 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">inventory_2</span>
+<span class="font-label-lg">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] Active: transform -translate-y-1 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-lg">Passport</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 opacity-60 px-6 py-2 hover:text-primary transition-all duration-300 Active: transform -translate-y-1 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">support_agent</span>
+<span class="font-label-lg">Assistant</span>
+</a>
+</nav>
+<script>
+        // Subtle Parallax Effect for the background
+        document.addEventListener('mousemove', (e) => {
+            const img = document.getElementById('hero-image');
+            const x = (e.clientX - window.innerWidth / 2) / 100;
+            const y = (e.clientY - window.innerHeight / 2) / 100;
+            img.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+        });
+
+        // Initialize cinematic reveal
+        window.addEventListener('load', () => {
+            const img = document.getElementById('hero-image');
+            img.parentElement.style.opacity = '0';
+            setTimeout(() => {
+                img.parentElement.style.transition = 'opacity 2s ease-in-out';
+                img.parentElement.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body></html>

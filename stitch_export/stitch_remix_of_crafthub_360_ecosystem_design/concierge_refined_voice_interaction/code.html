@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grand Lounge Concierge</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#ffdad6",
+                    "inverse-surface": "#e5e2e3",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "surface-container-high": "#2a2a2b",
+                    "on-secondary-fixed": "#2a1800",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface": "#131314",
+                    "on-primary-container": "#4e3700",
+                    "surface-tint": "#e9c176",
+                    "primary-container": "#c5a059",
+                    "surface-container-low": "#1b1b1c",
+                    "on-primary": "#412d00",
+                    "tertiary-container": "#b7a09a",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-dim": "#131314",
+                    "outline-variant": "#4e4639",
+                    "error": "#ffb4ab",
+                    "surface-container": "#1f1f20",
+                    "surface-bright": "#39393a",
+                    "on-error": "#690005",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "inverse-primary": "#775a19",
+                    "primary": "#e9c176",
+                    "secondary-container": "#c68315",
+                    "on-secondary-container": "#3d2400",
+                    "inverse-on-surface": "#303031",
+                    "on-tertiary-container": "#473733",
+                    "on-background": "#e5e2e3",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "secondary": "#ffb95a",
+                    "background": "#131314",
+                    "on-primary-fixed": "#261900",
+                    "tertiary": "#dac1bb",
+                    "on-tertiary": "#3c2d28",
+                    "surface-container-highest": "#353436",
+                    "secondary-fixed": "#ffddb6",
+                    "primary-fixed": "#ffdea5",
+                    "on-surface-variant": "#d1c5b4",
+                    "primary-fixed-dim": "#e9c176",
+                    "surface-variant": "#353436",
+                    "outline": "#9a8f80",
+                    "error-container": "#93000a",
+                    "surface-container-lowest": "#0e0e0f",
+                    "on-secondary": "#462a00",
+                    "on-tertiary-fixed": "#261814",
+                    "on-surface": "#e5e2e3",
+                    "on-tertiary-fixed-variant": "#54433e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin": "64px",
+                    "unit": "8px",
+                    "gutter": "32px",
+                    "container-max-width": "1440px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>body {
+    background-color: #0e0e0f;
+    background-image: radial-gradient(circle at 50% -20%, rgba(233, 193, 118, 0.15), transparent 60%), linear-gradient(rgba(19, 19, 20, 0.95), rgba(19, 19, 20, 0.95)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuCbdWe5bZLCmFXsqEGAF0HKYXmqwOK91zTOSKFiD4DPU7HkobTOYWAexRGO3YtzfTmYTcPpOkGpcjDANanmpTdfqaPj_KEsyO2xoEKYZNU8ZpiXJj2yQBJWK_iynTP4uOkqJ9o120VUlNYtQ8kMXMDT3UBHmtj9BqzQQ-oSV_0bMZMvi4idDclRi40bwgoM8QWI0VebQlnYYWekkOH_j9MDWgqwHdFsvjAz8tsNJZE7albkXNj2Ikwv5cLHW8Sm9Animk46vR0vJFw);
+    /* Leather Texture Subtle Pattern */
+    background-blend-mode: normal, normal, overlay;
+    background-size: cover;
+    background-attachment: fixed
+    }
+.glass-card {
+    background: rgba(31, 31, 32, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(233, 193, 118, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8)
+    }
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px
+    }
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent
+    }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(233, 193, 118, 0.3);
+    border-radius: 10px
+    }
+.text-glow {
+    text-shadow: 0 0 10px rgba(233, 193, 118, 0.3)
+    }
+
+/* New Voice Interaction Animations */
+@keyframes frequency-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1.6);
+        opacity: 0.2;
+    }
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+@keyframes mic-glow {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(233, 193, 118, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 35px rgba(233, 193, 118, 0.6);
+    }
+}
+
+@keyframes letter-shimmer {
+    0%, 100% { opacity: 0.4; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-1px); }
+}
+
+.voice-wave {
+    position: absolute;
+    border: 1.5px solid #c5a059;
+    border-radius: 50%;
+    inset: 0;
+    pointer-events: none;
+    animation: frequency-pulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.voice-wave:nth-child(2) { animation-delay: 1s; }
+.voice-wave:nth-child(3) { animation-delay: 2s; }
+
+.shimmer-text span {
+    display: inline-block;
+    animation: letter-shimmer 2s ease-in-out infinite;
+}
+
+/* Pause animations when not listening */
+.not-listening .voice-wave,
+.not-listening .shimmer-text span {
+    animation-play-state: paused;
+    opacity: 0.3;
+}
+.not-listening #voiceBtn {
+    animation: none;
+}
+</style>
+</head>
+<body class="text-on-surface font-body-md selection:bg-primary/30 selection:text-primary min-h-screen flex flex-col">
+<!-- Top Navigation Header -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-xl bg-surface/80 border-b border-outline-variant shadow-md flex justify-between items-center px-8 h-20">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:text-primary-fixed-dim transition-colors active:scale-95 duration-300">menu</button>
+<span class="font-headline-md text-headline-md tracking-widest text-primary dark:text-primary uppercase">RESERVE LOUNGE</span>
+</div>
+<div class="h-10 w-10 rounded-full bg-primary-container flex items-center justify-center border border-primary/30 overflow-hidden">
+<img alt="Member Digital Passport" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlkrtKyNQxA7jKw3sqgFgmzh0GzWKRK-JLWvaGi_l6QSJI9hz4K5WSWdLohiAeQhOr7dFz6iHjoHVefOMpqnYwqsp_dmVhZyQkGBGGI0uB5t4VRd-70IXdkfteemGLhcLdZ5lzROv6vYOABs_9JxEwyVlv8RVGIPuVv42C-zNOvumBlDkbyZPjvtQk1KEXpLOESgFgjpVhBnk207XmT1VjmcXTjin6bila54xM3NJDHLTHf3HXqDr42gOrn2erB6qICsjAvAfflO8"/>
+</div>
+</header>
+<!-- Main Concierge Canvas -->
+<main class="flex-grow flex flex-col pt-32 pb-32 max-w-5xl mx-auto w-full px-6">
+<!-- Welcome Section -->
+<section class="mb-12 text-center">
+<h1 class="font-display-lg text-display-lg text-primary text-glow mb-4">How may I assist your craft journey today?</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto opacity-80">
+                Your personal concierge is ready to curate your evening. Speak your request or select a specialized service below.
+            </p>
+</section>
+<!-- Conversational Interface -->
+<div class="flex-grow space-y-8 overflow-y-auto custom-scrollbar pr-4 mb-8">
+<!-- Concierge Message -->
+<div class="flex justify-start">
+<div class="glass-card rounded-2xl p-6 max-w-2xl transform transition-all hover:scale-[1.01]">
+<div class="flex items-center gap-3 mb-3 border-b border-primary/10 pb-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">concierge</span>
+<span class="font-label-lg text-label-lg text-primary uppercase tracking-widest">Grand Concierge AI</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">Good evening, Mr. Sterling. I see you've recently enjoyed the <span class="text-primary italic font-medium">1998 Macallan Sherry Oak</span>. Based on your preference for Highland malts with rich, fruity profiles, our cellar master has just uncorked a limited <span class="text-secondary italic">25 Year Single Malt</span>. Would you like me to reserve a pour and prepare your preferred corner in the Private Cellar?</p>
+</div>
+</div>
+<!-- User Message (Simulated) -->
+<div class="flex justify-end">
+<div class="bg-primary/10 border border-primary/40 backdrop-blur-md rounded-2xl p-6 max-w-md shadow-lg shadow-primary/5">
+<p class="font-body-md text-body-md text-on-surface">That sounds exceptional. Please do. I'd also like to inquire about a cigar pairing that complements the Macallan's sherry-cask sweetness.</p>
+</div>
+</div>
+<!-- Concierge Message 2 -->
+<div class="flex justify-start">
+<div class="glass-card rounded-2xl p-6 max-w-2xl transform transition-all hover:scale-[1.01]">
+<div class="flex items-center gap-3 mb-3 border-b border-primary/10 pb-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">concierge</span>
+<span class="font-label-lg text-label-lg text-primary uppercase tracking-widest">Grand Concierge AI</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">A masterful choice. For the Macallan 25, our lead tobacconist recommends the <span class="text-primary italic font-medium">Padrón 1926 Series No. 1</span>. Its deep cocoa and espresso notes are designed to elevate the sherry richness without overpowering the delicate oak finish. Shall I arrange for this to be prepared and humidified for your arrival in the Humidor Lounge?</p>
+</div>
+</div>
+</div>
+<!-- Quick Action Buttons -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+<button class="glass-card hover:bg-primary-container hover:text-on-primary-container transition-all group p-5 rounded-xl flex flex-col items-center gap-3 text-center active:scale-95 duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-3xl">wine_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">RESERVE MACALLAN 25</span>
+</button>
+<button class="glass-card hover:bg-primary-container hover:text-on-primary-container transition-all group p-5 rounded-xl flex flex-col items-center gap-3 text-center active:scale-95 duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-3xl">meeting_room</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">VIEW CIGAR SPECS</span>
+</button>
+<button class="glass-card hover:bg-primary-container hover:text-on-primary-container transition-all group p-5 rounded-xl flex flex-col items-center gap-3 text-center active:scale-95 duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-3xl">star</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">EXPLORE CELLAR</span>
+</button>
+<button class="glass-card hover:bg-primary-container hover:text-on-primary-container transition-all group p-5 rounded-xl flex flex-col items-center gap-3 text-center active:scale-95 duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-3xl">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">PASSPORT STATUS</span>
+</button>
+</div>
+</main>
+<!-- Refined Voice Control Area -->
+<div class="fixed bottom-32 left-0 right-0 flex justify-center pointer-events-none" id="voiceControlContainer">
+<div class="flex flex-col items-center gap-6 pointer-events-auto">
+<div class="relative flex items-center justify-center">
+<!-- Frequency Waves -->
+<div class="voice-wave"></div>
+<div class="voice-wave"></div>
+<div class="voice-wave"></div>
+<!-- Mic Button -->
+<button class="h-20 w-20 bg-primary rounded-full flex items-center justify-center shadow-2xl relative z-10 hover:scale-110 active:scale-90 transition-all cursor-pointer" id="voiceBtn" style="animation: mic-glow 3s ease-in-out infinite;">
+<span class="material-symbols-outlined text-on-primary text-4xl" id="micIcon">mic</span>
+</button>
+</div>
+<span class="font-label-lg text-label-lg text-primary uppercase tracking-[0.4em] shimmer-text" id="voiceStatus">
+<span style="animation-delay: 0.1s">L</span><span style="animation-delay: 0.2s">I</span><span style="animation-delay: 0.3s">S</span><span style="animation-delay: 0.4s">T</span><span style="animation-delay: 0.5s">E</span><span style="animation-delay: 0.6s">N</span><span style="animation-delay: 0.7s">I</span><span style="animation-delay: 0.8s">N</span><span style="animation-delay: 0.9s">G</span><span style="animation-delay: 1.0s">.</span><span style="animation-delay: 1.1s">.</span><span style="animation-delay: 1.2s">.</span>
+</span>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl backdrop-blur-20px bg-surface-container-low/90 border-t border-outline-variant shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center h-24 px-8 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all" href="#">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">PourCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all" href="#">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">BeerCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all" href="#">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">WineCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold gap-1 scale-110 duration-500 ease-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Passport</span>
+</a>
+</nav>
+<script>
+        const voiceBtn = document.getElementById('voiceBtn');
+        const container = document.getElementById('voiceControlContainer');
+        const statusText = document.getElementById('voiceStatus');
+        const micIcon = document.getElementById('micIcon');
+        let isListening = true;
+
+        voiceBtn.addEventListener('click', () => {
+            isListening = !isListening;
+            
+            if (isListening) {
+                container.classList.remove('not-listening');
+                micIcon.innerText = 'mic';
+                statusText.innerHTML = `
+                    <span style="animation-delay: 0.1s">L</span><span style="animation-delay: 0.2s">I</span><span style="animation-delay: 0.3s">S</span><span style="animation-delay: 0.4s">T</span><span style="animation-delay: 0.5s">E</span><span style="animation-delay: 0.6s">N</span><span style="animation-delay: 0.7s">I</span><span style="animation-delay: 0.8s">N</span><span style="animation-delay: 0.9s">G</span><span style="animation-delay: 1.0s">.</span><span style="animation-delay: 1.1s">.</span><span style="animation-delay: 1.2s">.</span>
+                `;
+            } else {
+                container.classList.add('not-listening');
+                micIcon.innerText = 'mic_off';
+                statusText.innerText = 'TAP TO SPEAK';
+            }
+        });
+
+        // Interactive "sink" effect for cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1.01)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE RESERVE | Command Staff Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background-image: linear-gradient(rgba(19, 19, 20, 1), rgba(19, 19, 20, 1)), radial-gradient(circle at top left, #e9c176, #4e3700);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+        .amber-glow:active {
+            box-shadow: 0 0 25px rgba(233, 193, 118, 0.4);
+        }
+        .pulsing-alert {
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(255, 180, 171, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 180, 171, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 180, 171, 0); }
+        }
+        .grain-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/leather.png");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#e9c176",
+                    "secondary-container": "#c68315",
+                    "outline": "#9a8f80",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-variant": "#353436",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-primary": "#412d00",
+                    "background": "#131314",
+                    "tertiary-container": "#b7a09a",
+                    "tertiary": "#dac1bb",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-secondary-container": "#3d2400",
+                    "primary-container": "#c5a059",
+                    "secondary": "#ffb95a",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-primary-container": "#4e3700",
+                    "surface": "#131314",
+                    "surface-container": "#1f1f20",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface-dim": "#131314",
+                    "surface-bright": "#39393a",
+                    "error-container": "#93000a",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "on-primary-fixed": "#261900",
+                    "on-tertiary": "#3c2d28",
+                    "on-error": "#690005",
+                    "primary-fixed": "#ffdea5",
+                    "outline-variant": "#4e4639",
+                    "error": "#ffb4ab",
+                    "on-secondary-fixed": "#2a1800",
+                    "surface-container-low": "#1b1b1c",
+                    "on-background": "#e5e2e3",
+                    "on-tertiary-fixed": "#261814",
+                    "on-error-container": "#ffdad6",
+                    "on-surface-variant": "#d1c5b4",
+                    "surface-container-high": "#2a2a2b",
+                    "primary": "#e9c176",
+                    "on-surface": "#e5e2e3",
+                    "on-secondary": "#462a00",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-tertiary-container": "#473733",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "surface-container-highest": "#353436",
+                    "secondary-fixed": "#ffddb6",
+                    "inverse-primary": "#775a19",
+                    "inverse-on-surface": "#303031"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "32px",
+                    "unit": "8px",
+                    "card-padding": "24px",
+                    "margin": "64px",
+                    "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "label-sm": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
+<!-- Grain Overlay for Physical Texture -->
+<div class="fixed inset-0 grain-texture z-[100]"></div>
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+<div class="flex justify-between items-center h-24 px-gutter max-w-container-max-width mx-auto">
+<div class="flex items-center gap-6">
+<button class="w-14 h-14 rounded-full flex items-center justify-center hover:bg-primary/10 transition-colors active:scale-95 duration-300">
+<span class="material-symbols-outlined text-primary text-3xl">menu</span>
+</button>
+<h1 class="font-display-lg text-headline-xl tracking-widest uppercase text-primary dark:text-primary-fixed-dim">THE RESERVE</h1>
+</div>
+<div class="flex items-center gap-8">
+<!-- Alerts (Red Pulsing Badge) -->
+<button class="relative w-[72px] h-[72px] rounded-xl glass-panel flex items-center justify-center pulsing-alert active:scale-95 transition-all">
+<span class="material-symbols-outlined text-error text-4xl" data-weight="fill">notifications_active</span>
+<span class="absolute -top-1 -right-1 w-6 h-6 bg-error rounded-full text-on-error flex items-center justify-center text-[10px] font-bold">3</span>
+</button>
+<div class="flex flex-col items-end">
+<span class="font-label-lg text-primary uppercase">Commander V. Sterling</span>
+<span class="text-label-sm text-outline">E.A.T. Session Active</span>
+</div>
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-primary/40">
+<img class="w-full h-full object-cover" data-alt="A professional close-up portrait of a high-end hospitality manager with a sophisticated, composed expression. The lighting is warm and dramatic, characteristic of a dimly lit luxury lounge, highlighting high-quality fabric and refined features. The background is a soft-focus bokeh of amber liquor bottles and dark wood textures, maintaining the brand's premium, exclusive aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB_V_VbLNxr_QeYuA_LWraIBwl4VpJr2Jkwqppk4H8UCAaNpCIuIvcce62ega4SUvKVgs2QKyI3mF6Gughbjk9v12EgKU4z09qj_U9CH6bVA3Rj8Ly5p8hGENNtYyTnWa_SZdjfEF4gko5jl9mnRAJtMarhAUrRYZFBNNCn51Ty54eYM7aAOo0Fa7VWWUjVQVzyq-bmWGuIidUBKuzpzO1U0BnhqPahK9sgSzEHyuOEv-6y7Uv9183--o4oihGUb9N__dmKZXIdK8"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 overflow-hidden grid grid-cols-12 gap-6 p-gutter max-w-container-max-width mx-auto w-full">
+<!-- Left Column: Controls & Lookups -->
+<div class="col-span-4 flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar">
+<!-- Guest Lookup -->
+<div class="glass-panel p-6 rounded-2xl flex flex-col gap-4">
+<h2 class="font-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">person_search</span>
+                    Guest Lookup
+                </h2>
+<div class="relative group">
+<input class="w-full bg-surface-container-lowest border-b-2 border-primary/30 focus:border-primary outline-none py-4 px-4 text-headline-md font-body-md transition-all placeholder:text-outline/40" placeholder="Surname or Passport ID..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 w-16 h-12 bg-primary/10 rounded-lg flex items-center justify-center hover:bg-primary/20 active:scale-90 transition-all">
+<span class="material-symbols-outlined text-primary text-3xl">keyboard</span>
+</button>
+</div>
+</div>
+<!-- Verify Passport -->
+<button class="h-[120px] rounded-2xl gold-foil-border glass-panel flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.98] transition-all amber-glow group">
+<span class="material-symbols-outlined text-primary text-5xl group-hover:scale-110 transition-transform">qr_code_scanner</span>
+<span class="font-headline-md text-primary uppercase tracking-widest">Verify Passport</span>
+</button>
+<!-- Loyalty Adjust -->
+<div class="glass-panel p-6 rounded-2xl flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<h2 class="font-headline-md text-primary">Loyalty Credits</h2>
+<span class="text-headline-md font-bold text-secondary-fixed-dim">+450</span>
+</div>
+<div class="flex items-center justify-between gap-4">
+<button class="flex-1 h-[72px] rounded-xl bg-surface-container-high border border-outline/20 flex items-center justify-center hover:bg-surface-variant active:scale-95 transition-all" onclick="adjustLoyalty(-10)">
+<span class="material-symbols-outlined text-primary text-4xl">remove</span>
+</button>
+<div class="px-8 text-center">
+<div class="text-label-sm text-outline uppercase">Adjustment</div>
+<div class="text-headline-lg font-bold" id="loyalty-val">10</div>
+</div>
+<button class="flex-1 h-[72px] rounded-xl bg-surface-container-high border border-outline/20 flex items-center justify-center hover:bg-surface-variant active:scale-95 transition-all" onclick="adjustLoyalty(10)">
+<span class="material-symbols-outlined text-primary text-4xl">add</span>
+</button>
+</div>
+</div>
+<!-- AI Recommendations -->
+<div class="glass-panel p-6 rounded-2xl flex-1 flex flex-col gap-4">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined" data-weight="fill">auto_awesome</span>
+<h2 class="font-headline-md uppercase">E.A.T. Smart Recs</h2>
+</div>
+<div class="flex flex-col gap-3">
+<div class="p-4 bg-primary/5 border-l-4 border-primary rounded-r-lg">
+<p class="font-label-lg text-primary-fixed-dim">Padrón 1964 Anniversary</p>
+<p class="text-label-sm text-outline">Matches Table 04 Profile (Woody/Peppery)</p>
+</div>
+<div class="p-4 bg-secondary/5 border-l-4 border-secondary rounded-r-lg">
+<p class="font-label-lg text-secondary">Rare Cask Macallan</p>
+<p class="text-label-sm text-outline">Suggested for Guest #8822 (Anniversary)</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Center Column: Table Status (Floor Plan) -->
+<div class="col-span-5 flex flex-col gap-6">
+<div class="glass-panel p-6 rounded-2xl flex-1 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-primary uppercase">Floor Status</h2>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-error pulsing-alert"></span>
+<span class="text-label-sm text-outline">Needs Service</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-label-sm text-outline">Occupied</span>
+</div>
+</div>
+</div>
+<!-- Floor Map Toggle -->
+<div class="flex mb-6 bg-surface-container-highest p-1 rounded-xl">
+<button class="flex-1 py-3 rounded-lg bg-primary-container/20 text-primary font-label-lg">TABLE VIEW</button>
+<button class="flex-1 py-3 rounded-lg text-on-surface-variant font-label-lg hover:text-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">local_fire_department</span>
+                        HEATMAP
+                    </button>
+</div>
+<!-- Table Grid -->
+<div class="grid grid-cols-4 gap-4 flex-1 content-start">
+<!-- Tables -->
+<div class="aspect-square rounded-2xl bg-primary/20 border-2 border-primary flex flex-col items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer hover:bg-primary/30">
+<span class="text-headline-md font-bold">01</span>
+<span class="text-[10px] text-primary-fixed-dim uppercase tracking-tighter">VIP LOUNGE</span>
+</div>
+<div class="aspect-square rounded-2xl bg-surface-container-high border border-outline/20 flex flex-col items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer hover:bg-surface-variant">
+<span class="text-headline-md font-bold text-outline">02</span>
+<span class="text-[10px] text-outline uppercase tracking-tighter">OPEN</span>
+</div>
+<div class="aspect-square rounded-2xl bg-error/20 border-2 border-error pulsing-alert flex flex-col items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer">
+<span class="text-headline-md font-bold text-error">03</span>
+<span class="text-[10px] text-error uppercase tracking-tighter font-bold">SERVICE</span>
+</div>
+<div class="aspect-square rounded-2xl bg-primary/20 border-2 border-primary flex flex-col items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer">
+<span class="text-headline-md font-bold">04</span>
+<span class="text-[10px] text-primary-fixed-dim uppercase tracking-tighter">OCCUPIED</span>
+</div>
+<div class="aspect-square rounded-2xl bg-primary/20 border-2 border-primary flex flex-col items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer">
+<span class="text-headline-md font-bold">05</span>
+<span class="text-[10px] text-primary-fixed-dim uppercase tracking-tighter">OCCUPIED</span>
+</div>
+<div class="col-span-2 row-span-1 rounded-2xl bg-surface-container-high border border-outline/20 flex items-center justify-center gap-4 active:scale-95 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-outline">meeting_room</span>
+<span class="text-label-lg text-outline">CHAMBER A</span>
+</div>
+<div class="aspect-square rounded-2xl bg-surface-container-high border border-outline/20 flex flex-col items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer">
+<span class="text-headline-md font-bold text-outline">06</span>
+<span class="text-[10px] text-outline uppercase tracking-tighter">OPEN</span>
+</div>
+<!-- Row 3 -->
+<div class="aspect-square rounded-2xl bg-primary/20 border-2 border-primary flex flex-col items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer">
+<span class="text-headline-md font-bold">07</span>
+<span class="text-[10px] text-primary-fixed-dim uppercase tracking-tighter">OCCUPIED</span>
+</div>
+<div class="aspect-square rounded-2xl bg-primary/20 border-2 border-primary flex flex-col items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer">
+<span class="text-headline-md font-bold">08</span>
+<span class="text-[10px] text-primary-fixed-dim uppercase tracking-tighter">OCCUPIED</span>
+</div>
+<div class="aspect-square rounded-2xl bg-surface-container-high border border-outline/20 flex flex-col items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer">
+<span class="text-headline-md font-bold text-outline">09</span>
+<span class="text-[10px] text-outline uppercase tracking-tighter">RESERVED</span>
+</div>
+<div class="aspect-square rounded-2xl bg-primary/20 border-2 border-primary flex flex-col items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer">
+<span class="text-headline-md font-bold">10</span>
+<span class="text-[10px] text-primary-fixed-dim uppercase tracking-tighter">OCCUPIED</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Service Notes & Session History -->
+<div class="col-span-3 flex flex-col gap-6">
+<!-- Service Notes -->
+<div class="glass-panel p-6 rounded-2xl flex-1 flex flex-col gap-4">
+<h2 class="font-headline-md text-primary uppercase">Service Notes</h2>
+<textarea class="flex-1 w-full bg-surface-container-lowest border-none rounded-xl p-4 font-body-md text-on-surface focus:ring-1 focus:ring-primary/50 resize-none" placeholder="Add specific notes for Table 04..."></textarea>
+<div class="grid grid-cols-2 gap-2">
+<button class="h-[72px] rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center font-label-lg text-primary active:scale-95 transition-all">SAVE NOTE</button>
+<button class="h-[72px] rounded-xl bg-error/10 border border-error/30 flex items-center justify-center font-label-lg text-error active:scale-95 transition-all">URGENT</button>
+</div>
+</div>
+<!-- Active Personnel -->
+<div class="glass-panel p-6 rounded-2xl flex flex-col gap-4">
+<h2 class="font-headline-md text-primary uppercase">Staff On Call</h2>
+<div class="flex -space-x-3 overflow-hidden">
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-background" data-alt="Close up of a sophisticated male server in a high-end luxury cigar lounge. He is wearing a tailored charcoal vest and crisp white shirt. Warm amber lighting reflects off the polished surroundings. The style is cinematic and intimate, matching the brand's premium aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO2VHVqXFVvcU5QIkXIS2Xc11blTOIKAH5E4HpGD6XK9BXR-bP0W8DVj4xhBh8oBlAKYBquuvx3DGKVlCGUTa6aSBPrj5nAvp2aPfDonF-cZWFmt44FdvszBjXXx5jCv0DYAKrueYueqoWLT6U9FY8oX-UFqC0cC93YwEH_YTROMN7KFMaPRktb5wOevcNJXR7pSJan8-AzPR2G9chOUQ2_fMYO0aSGXMs4aC7Frohbat-zp-VbnMXQ3UvYZsvWHrRGCIRbO2UcMY"/>
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-background" data-alt="A portrait of a elegant female sommelier in a dimly lit wine cellar. Her expression is professional and inviting. Soft golden highlights catch the edges of crystal glassware in the blurred background. The palette is rich with deep espresso and gold tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdWTnbg1NiNpW2k_DaGX6aABL3-RtzOJD_K6XrMANx0XiDaxNCbNx6MEFO64K6oFCWONCxRDtGX7Td-sj6z954V3WVzynis61aztH1cW5wnZ_MYtvV6Z2F7tp6Rx6zxdKx_BWeWjZt5yBEdGqg0CRxjTjUSWOzUIOWjQYAZppGbNwvXiF7CBrHCvssGp0R2lO2THXca3SJLYdaCLE03oUB4awG4eiCFtffy5nn_AOvXqXi_GNa5YjcsyuB5Sn7s08mzWEU7W2ptSs"/>
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-background" data-alt="A focused male hospitality professional wearing a dark, textured uniform in a high-end club environment. The lighting is moody with warm-toned spotlights creating dramatic shadows and highlighting the luxurious atmosphere of dark woods and leather." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxwrlL1B9-VVLX9LdoAff3nZRjAt51YPsZ1RbY3xXWaQeLP74TjcC4dKDjLhkGHTD27E2DjHQXQaxvQjGhJ3AT13U9WDLFY-721bd6bEDHLP9mfPccYuIru5_U3WQl2IaeyZNRAOJuYY9jhsvZimXRPCT4oFz8z7Dtt4k0xrUUIaKCNwfoGbEvCN9WXE0vZoN_2omLe2ovZzF2mcw4z6oqaHqrXXPEfS5_UeqWgrwICesAXOfq_dydBnBaDMI2ZwNFE6OouqEwhOo"/>
+<div class="h-12 w-12 rounded-full ring-2 ring-background bg-surface-container-highest flex items-center justify-center text-label-sm font-bold text-primary">+4</div>
+</div>
+<button class="w-full h-14 bg-surface-container-high rounded-xl border border-outline/20 text-on-surface-variant font-label-lg hover:text-primary transition-all active:scale-95">REQUEST BACKUP</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Shared Component Placeholder Logic) -->
+<nav class="fixed bottom-0 w-full h-[100px] z-50 bg-surface-container-low/90 backdrop-blur-2xl dark:bg-surface-container-low/90 border-t border-primary/20 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
+<div class="flex justify-around items-center w-full max-w-4xl mx-auto h-full">
+<a class="flex flex-col items-center justify-center gap-1 text-primary-fixed-dim bg-primary-container/20 rounded-xl px-8 py-4 transition-all active:translate-y-1 shadow-[0_0_15px_rgba(233,193,118,0.3)]" href="#">
+<span class="material-symbols-outlined text-3xl">dashboard</span>
+<span class="font-label-lg text-label-lg tracking-widest uppercase">Lounge</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-8 py-4 hover:text-primary duration-500 transition-all active:translate-y-1" href="#">
+<span class="material-symbols-outlined text-3xl">liquor</span>
+<span class="font-label-lg text-label-lg tracking-widest uppercase">Humidor</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-8 py-4 hover:text-primary duration-500 transition-all active:translate-y-1" href="#">
+<span class="material-symbols-outlined text-3xl">wine_bar</span>
+<span class="font-label-lg text-label-lg tracking-widest uppercase">Cellar</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-8 py-4 hover:text-primary duration-500 transition-all active:translate-y-1" href="#">
+<span class="material-symbols-outlined text-3xl">menu_book</span>
+<span class="font-label-lg text-label-lg tracking-widest uppercase">Passport</span>
+</a>
+</div>
+</nav>
+<script>
+        let currentLoyalty = 10;
+        function adjustLoyalty(val) {
+            currentLoyalty += val;
+            if (currentLoyalty < 0) currentLoyalty = 0;
+            document.getElementById('loyalty-val').innerText = currentLoyalty;
+        }
+
+        // Add small vibration-like effect on touch targets for tablet feel
+        document.querySelectorAll('button, a, .aspect-square').forEach(el => {
+            el.addEventListener('click', () => {
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(20);
+                }
+            });
+        });
+    </script>
+</body></html>

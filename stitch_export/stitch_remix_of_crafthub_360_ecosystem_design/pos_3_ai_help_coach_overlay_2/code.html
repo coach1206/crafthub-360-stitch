@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>POS 3 Help Coach | Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(#1f1f20, #1f1f20) padding-box,
+                        linear-gradient(to bottom right, #e9c176, #775a19) border-box;
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+        }
+        .haptic-feedback:active {
+            transform: scale(0.97);
+        }
+        .page-transition {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#e5e2e3",
+                      "error": "#ffb4ab",
+                      "surface-container-lowest": "#0e0e0f",
+                      "on-tertiary-fixed": "#261814",
+                      "on-primary": "#412d00",
+                      "on-surface-variant": "#d1c5b4",
+                      "inverse-surface": "#e5e2e3",
+                      "surface": "#131314",
+                      "secondary-container": "#c68315",
+                      "on-secondary": "#462a00",
+                      "primary-container": "#c5a059",
+                      "tertiary-fixed": "#f7ddd6",
+                      "surface-container": "#1f1f20",
+                      "on-secondary-container": "#3d2400",
+                      "inverse-primary": "#775a19",
+                      "surface-container-low": "#1b1b1c",
+                      "on-tertiary-fixed-variant": "#54433e",
+                      "secondary": "#ffb95a",
+                      "on-tertiary": "#3c2d28",
+                      "surface-container-high": "#2a2a2b",
+                      "secondary-fixed": "#ffddb6",
+                      "primary-fixed-dim": "#e9c176",
+                      "outline-variant": "#4e4639",
+                      "on-surface": "#e5e2e3",
+                      "on-primary-container": "#4e3700",
+                      "on-error": "#690005",
+                      "surface-tint": "#e9c176",
+                      "primary": "#e9c176",
+                      "error-container": "#93000a",
+                      "inverse-on-surface": "#303031",
+                      "tertiary-container": "#b7a09a",
+                      "on-error-container": "#ffdad6",
+                      "surface-dim": "#131314",
+                      "primary-fixed": "#ffdea5",
+                      "tertiary": "#dac1bb",
+                      "surface-container-highest": "#353436",
+                      "surface-variant": "#353436",
+                      "secondary-fixed-dim": "#ffb95a",
+                      "outline": "#9a8f80",
+                      "surface-bright": "#39393a",
+                      "on-tertiary-container": "#473733",
+                      "on-secondary-fixed": "#2a1800",
+                      "on-secondary-fixed-variant": "#643f00",
+                      "on-primary-fixed-variant": "#5d4201",
+                      "on-primary-fixed": "#261900",
+                      "tertiary-fixed-dim": "#dac1bb",
+                      "background": "#131314"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max-width": "1440px",
+                      "unit": "8px",
+                      "margin": "64px",
+                      "gutter": "32px",
+                      "card-padding": "24px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Playfair Display"],
+                      "body-md": ["Montserrat"],
+                      "headline-xl": ["Playfair Display"],
+                      "label-sm": ["Montserrat"],
+                      "label-lg": ["Montserrat"],
+                      "headline-md": ["Playfair Display"],
+                      "headline-lg": ["Playfair Display"],
+                      "body-lg": ["Montserrat"]
+              },
+              "fontSize": {
+                      "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
+<!-- Background Mockup: Dimmed POS Interface -->
+<div class="fixed inset-0 z-0 opacity-20 pointer-events-none grayscale">
+<img class="w-full h-full object-cover" data-alt="A sophisticated commercial point of sale interface displayed on a high-resolution terminal within a luxury lounge setting. The screen shows complex table layouts and fine dining menu items, illuminated by soft warm ambient lighting from overhead brass fixtures. The overall atmosphere is premium and professional, with a shallow depth of field focusing on the tactile digital interface elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzReeL9uV4rYP0QXWJkvCD6xwf5UPg48K9jZTp_I04fVXzUIqtkistmPpg-FeX5t2NZuM6Vfx9U4ghaxLrFIiNuHOz-mCJ-ZkPetXumniJoDiThBxZVTzajzbGeBQ7hh_toq8MUm8dZEkySJ78UC4Sp7EYKH2phEKjOPY1Z_GYS7CNliASFdxVbP5II7683xhhDJSFBVnTjqMg5E0nL5SCA3QrD3dSabno7lT4aCi97ivtiKbniYQc67vkgYV-O7rd_HQXp8bWBSE"/>
+</div>
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin py-4 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="clinical_notes">clinical_notes</span>
+<h1 class="font-headline-md text-headline-md font-medium text-primary">POS 3 Assistant | Server Mode</h1>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A portrait of a professional male hospitality executive in a tailored dark suit. He is standing in a dimly lit, high-end private members' club with dark wood paneling and warm golden accents in the background. The lighting is dramatic and cinematic, highlighting his sophisticated and confident expression, perfectly suited for a luxury concierge application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1E6TY2SvAvqVnXB2FC55FfCF5TK0RuFMm1WheXZqJacsgN8c4sdeDwHrSOJgyKAGPp0sUlT8L3y9VZANBLJTGqDXQq-SJn6JSnInQv9DfK3dTMkUQFSvGfzsfD709B86yRcYYTDxoP-_19nlWgJc7dkTo32jy1OPTkMLLk17Won5oh1lckbSMg_TjzC_XrvMMRakWh4uY4ZhW9mjmSWR8yKtR7T_6-ns4dqIEXiF0Qi-nWQZ-Q3BN6s69hmcsOvmuPc9ln5VJ9PA"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 mt-[88px] mb-[120px] px-margin flex items-center justify-center relative z-10">
+<!-- Premium Coaching Panel -->
+<div class="max-w-4xl w-full glass-panel rounded-[32px] overflow-hidden shadow-2xl p-8 page-transition gold-foil-border">
+<div class="flex flex-col md:flex-row gap-8">
+<!-- Left Column: Context -->
+<div class="md:w-1/3 flex flex-col gap-6">
+<div>
+<p class="text-label-sm font-label-sm text-outline uppercase tracking-widest mb-2">Current Issue</p>
+<h2 class="font-headline-lg text-headline-lg text-on-surface leading-tight">Guest Moving to Patio</h2>
+</div>
+<div class="bg-surface-container-low rounded-xl p-4 border border-outline-variant">
+<p class="text-label-sm font-label-sm text-outline uppercase tracking-widest mb-1">Risk Level</p>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(255,185,90,0.6)]"></span>
+<span class="font-label-lg text-label-lg text-secondary">Low</span>
+</div>
+</div>
+<div class="mt-auto hidden md:block">
+<img class="rounded-2xl w-full aspect-square object-cover opacity-80" data-alt="A close-up, high-detail photograph of a crystal whiskey tumbler on a dark mahogany table, with soft amber light reflecting through the glass. In the background, a blurred patio area is visible through large windows, suggesting the transition between indoor and outdoor dining spaces. The image is rich in texture and evokes a sense of unhurried, high-end hospitality service." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ2p3g4q5LLEyJC1_qMiy11WwyrLYlcNQf8WN-Yk-ejJza4kaz8izJ3mXY3mw-7VpqEY5RpFksD9c6yyeUsPp3mDVW_YpqfOJVRRMqv_sjSkU87em6UD-txzbji8718d6xlFiUJWL3NREjkz3dyLcsPnd0tkNuF7EMktTKF2qMXDQQV4BWjKc-iMAJkvh8ALEmdoBecLpYaQZFi6gZqj6DMGlGin-A38F0u_BPCv8AEB92E8ETq57QyaMnbmLSNlSsPCxbiH6a9wk"/>
+</div>
+</div>
+<!-- Right Column: Recommendation & Action -->
+<div class="md:w-2/3 flex flex-col gap-8">
+<section class="space-y-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+<p class="text-label-lg font-label-lg text-primary tracking-[0.2em] uppercase">Recommendation</p>
+</div>
+<p class="font-headline-md text-headline-md text-on-surface">Transfer order via the Table Map to maintain reward eligibility.</p>
+<div class="p-6 bg-surface-container-high/50 rounded-2xl border-l-4 border-primary">
+<p class="text-label-sm font-label-sm text-outline uppercase tracking-widest mb-2">Reasoning</p>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                                Maintains session persistence and guest profile connection. Bypassing the map creates a fragment that decouples high-value loyalty points from the transaction.
+                            </p>
+</div>
+</section>
+<!-- Interactive Actions -->
+<div class="grid grid-cols-2 gap-4 mt-4">
+<button class="flex items-center justify-center gap-3 bg-primary text-on-primary py-4 px-6 rounded-xl font-label-lg text-label-lg hover:brightness-110 haptic-feedback transition-all amber-glow">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+                            READ INSTRUCTION
+                        </button>
+<button class="flex items-center justify-center gap-3 bg-surface-container-highest text-on-surface-variant/40 py-4 px-6 rounded-xl font-label-lg text-label-lg cursor-not-allowed border border-outline-variant/30" disabled="">
+<span class="material-symbols-outlined" data-icon="hearing">hearing</span>
+                            HEAR INSTRUCTION
+                        </button>
+<button class="flex items-center justify-center gap-3 bg-surface-container-high text-on-surface py-4 px-6 rounded-xl font-label-lg text-label-lg border border-outline-variant hover:bg-surface-container-highest haptic-feedback transition-all">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+                            REPLAY
+                        </button>
+<button class="flex items-center justify-center gap-3 bg-surface-container-high text-on-surface py-4 px-6 rounded-xl font-label-lg text-label-lg border border-outline-variant hover:bg-surface-container-highest haptic-feedback transition-all">
+<span class="material-symbols-outlined" data-icon="person_alert">person_alert</span>
+                            CALL MANAGER
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin pb-8 pt-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-outline-variant shadow-[0_-8px_24px_rgba(233,193,118,0.1)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-6 py-2 shadow-[0_0_15px_rgba(198,131,21,0.4)] transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-lg text-label-lg tracking-widest mt-1">Guidance</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="graphic_eq">graphic_eq</span>
+<span class="font-label-lg text-label-lg tracking-widest mt-1">Haptics</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="ring_volume">ring_volume</span>
+<span class="font-label-lg text-label-lg tracking-widest mt-1">Manager</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+<span class="font-label-lg text-label-lg tracking-widest mt-1">Dismiss</span>
+</a>
+</nav>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('button, a').forEach(elem => {
+            elem.addEventListener('click', () => {
+                // Subtle scale effect on click
+                elem.classList.add('scale-95');
+                setTimeout(() => elem.classList.remove('scale-95'), 150);
+            });
+        });
+
+        // Atmospheric parallax effect for background
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.querySelector('.fixed.inset-0.z-0').style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+        });
+    </script>
+</body></html>

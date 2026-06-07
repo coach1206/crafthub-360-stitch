@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E.A.T. Intelligence | Environment Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #010101;
+            color: #e5e2e1;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(115, 115, 115, 0.2);
+            box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.05);
+        }
+        .titanium-border {
+            border: 1px solid rgba(199, 198, 198, 0.3);
+        }
+        .gold-glow {
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+        }
+        .pulse-gold {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(0.95); opacity: 0.5; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#141313",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "on-tertiary": "#313030",
+                      "on-primary-container": "#554300",
+                      "on-surface-variant": "#d0c5af",
+                      "secondary-fixed": "#e3e2e2",
+                      "primary-fixed-dim": "#e9c349",
+                      "surface-bright": "#3a3939",
+                      "tertiary": "#d0cecd",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "surface-dim": "#141313",
+                      "on-tertiary-fixed-variant": "#474646",
+                      "on-error-container": "#ffdad6",
+                      "inverse-primary": "#735c00",
+                      "error": "#ffb4ab",
+                      "surface-container-low": "#1c1b1b",
+                      "on-error": "#690005",
+                      "surface-container-lowest": "#0e0e0e",
+                      "on-primary": "#3c2f00",
+                      "tertiary-fixed-dim": "#c8c6c5",
+                      "on-secondary-fixed-variant": "#464747",
+                      "on-primary-fixed-variant": "#574500",
+                      "tertiary-container": "#b5b2b2",
+                      "primary-container": "#d4af37",
+                      "on-secondary": "#303031",
+                      "outline-variant": "#4d4635",
+                      "outline": "#99907c",
+                      "tertiary-fixed": "#e5e2e1",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "inverse-surface": "#e5e2e1",
+                      "primary": "#f2ca50",
+                      "on-primary-fixed": "#241a00",
+                      "surface-variant": "#353434",
+                      "on-tertiary-container": "#454545",
+                      "error-container": "#93000a",
+                      "primary-fixed": "#ffe088",
+                      "surface-tint": "#e9c349",
+                      "inverse-on-surface": "#313030",
+                      "background": "#141313",
+                      "secondary": "#c7c6c6",
+                      "surface-container-highest": "#353434",
+                      "on-surface": "#e5e2e1",
+                      "on-background": "#e5e2e1",
+                      "on-secondary-container": "#b6b5b5",
+                      "secondary-container": "#464747",
+                      "surface-container": "#201f1f",
+                      "surface-container-high": "#2a2a2a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "24px",
+                      "margin-desktop": "40px",
+                      "margin-mobile": "16px",
+                      "container-padding": "20px"
+              },
+              "fontFamily": {
+                      "label-caps": ["JetBrains Mono"],
+                      "telemetry-data": ["JetBrains Mono"],
+                      "display-lg": ["Hanken Grotesk"],
+                      "body-sm": ["Geist"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "body-md": ["Geist"],
+                      "headline-lg-mobile": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                      "telemetry-data": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/60 backdrop-blur-xl border-b border-on-tertiary-fixed-variant/30 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center bg-surface-variant">
+<span class="material-symbols-outlined text-primary text-xl">person</span>
+</div>
+<h1 class="font-display-lg text-primary text-[24px] md:text-display-lg tracking-tight">NOVEE OS</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="font-label-caps text-label-caps text-primary font-bold transition-colors duration-300" href="#">Environment</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Assets</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Transactions</a>
+</nav>
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform">sensors</span>
+</div>
+</header>
+<!-- Sidebar (Desktop) -->
+<aside class="fixed left-0 top-20 h-[calc(100vh-80px)] w-80 border-r border-on-tertiary-fixed-variant/20 bg-surface-container-lowest/80 backdrop-blur-2xl hidden md:flex flex-col py-8 z-40">
+<div class="px-8 mb-8">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-full titanium-border overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A high-resolution portrait of a sophisticated executive leader in a tailored dark suit. The lighting is cinematic and moody, with warm gold highlights reflecting off polished surfaces in the background. The aesthetic is ultra-premium, emphasizing power, clarity, and authority in a futuristic corporate setting. Minimalist obsidian tones dominate the palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG3U5_g0QB3-vp2JxQYhG--LdI8mjZrE_cKMSPLQTHeHGxeuy5FrOaUi77ejzoSBrfX3woBJV3Lt4_anMY5PjX5PV7qiGEU42ImNT8TzIXCJunT-CIs7W6i0p4qAKwlNYHyqxIHodRRxaaXb8Wu4F6Ar3_OmMQO-cgUK-HodWILEAWDA8qo7_CZRZnc4a1cH3wE7cu9GzVUpRcIisk_n0jUHiLgEm9ssqSylQGHgR-eEOloWrgH2bU2uqMbGVtKLMVvm8XCNj3CWs"/>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-primary">FOUNDER L0</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-70">SYS_ID: 8824-X</p>
+</div>
+</div>
+<div class="p-3 bg-primary/10 border border-primary/20 rounded-lg">
+<p class="font-label-caps text-[10px] text-primary mb-1 uppercase">Mission Status</p>
+<p class="font-body-sm text-body-sm text-on-surface">NOMINAL</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container/20 text-primary border-r-2 border-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">language</span>
+<span class="font-label-caps text-label-caps">Environment</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-bright/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-caps text-label-caps">Assets</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-bright/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-caps text-label-caps">Transactions</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-bright/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">pulse_alert</span>
+<span class="font-label-caps text-label-caps">System Health</span>
+</a>
+</nav>
+<div class="px-8 mt-auto pt-8 border-t border-on-tertiary-fixed-variant/10">
+<p class="font-label-caps text-[10px] text-on-surface-variant mb-4 opacity-40 uppercase">Terminal Logs</p>
+<div class="space-y-2 font-telemetry-data text-[11px] text-primary/60">
+<p>&gt; ENV_SYNC: OK</p>
+<p>&gt; IOT_STREAM: ACTIVE</p>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="md:pl-80 pt-28 pb-24 px-margin-mobile md:px-margin-desktop min-h-screen">
+<header class="mb-10">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-2 h-2 rounded-full bg-primary pulse-gold"></div>
+<p class="font-label-caps text-label-caps text-primary">REAL-TIME TELEMETRY</p>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-on-surface">Atmospheric Integrity Suite</h2>
+</header>
+<!-- Bento Grid Dashboard -->
+<div class="grid grid-cols-4 md:grid-cols-12 gap-gutter">
+<!-- Humidity Card (Critical) -->
+<div class="col-span-4 md:col-span-6 glass-card p-6 rounded-xl flex flex-col justify-between titanium-border h-64">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">HUMIDOR STABILITY</p>
+<h3 class="font-headline-lg-mobile md:font-headline-lg text-primary gold-glow">72.4%</h3>
+</div>
+<div class="px-3 py-1 bg-primary/20 border border-primary/40 rounded-full">
+<p class="font-label-caps text-[10px] text-primary">OPTIMAL</p>
+</div>
+</div>
+<div class="mt-4 flex-1 flex items-end">
+<div class="w-full h-24 flex items-end gap-1">
+<!-- Simulated Bar Chart -->
+<div class="bg-primary/20 hover:bg-primary/40 transition-colors h-[60%] w-full rounded-t-sm"></div>
+<div class="bg-primary/20 hover:bg-primary/40 transition-colors h-[65%] w-full rounded-t-sm"></div>
+<div class="bg-primary/20 hover:bg-primary/40 transition-colors h-[75%] w-full rounded-t-sm"></div>
+<div class="bg-primary/60 hover:bg-primary h-[85%] w-full rounded-t-sm"></div>
+<div class="bg-primary/20 hover:bg-primary/40 transition-colors h-[80%] w-full rounded-t-sm"></div>
+<div class="bg-primary/20 hover:bg-primary/40 transition-colors h-[70%] w-full rounded-t-sm"></div>
+<div class="bg-primary/20 hover:bg-primary/40 transition-colors h-[75%] w-full rounded-t-sm"></div>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-on-tertiary-fixed-variant/20 flex justify-between">
+<span class="font-label-caps text-[10px] text-on-surface-variant">LIFETIME DRIFT: 0.02%</span>
+<span class="font-label-caps text-[10px] text-primary">SENSORS: 08 ACTIVE</span>
+</div>
+</div>
+<!-- Temperature Card -->
+<div class="col-span-4 md:col-span-3 glass-card p-6 rounded-xl titanium-border h-64 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<span class="material-symbols-outlined text-on-surface-variant">thermostat</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">TEMP</span>
+</div>
+<div class="flex-1 flex flex-col justify-center items-center">
+<div class="relative w-32 h-32 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90">
+<circle class="text-surface-variant" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-primary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="100" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<p class="font-telemetry-data text-[28px] text-on-surface">21.5°</p>
+<p class="font-label-caps text-[10px] text-on-surface-variant">CELSIUS</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Noise Levels Card -->
+<div class="col-span-4 md:col-span-3 glass-card p-6 rounded-xl titanium-border h-64 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<span class="material-symbols-outlined text-on-surface-variant">equalizer</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">ACOUSTICS</span>
+</div>
+<div class="flex-1 flex flex-col justify-end">
+<div class="flex items-center justify-between mb-2">
+<p class="font-body-sm text-on-surface-variant">Ambient</p>
+<p class="font-telemetry-data text-primary">42 dB</p>
+</div>
+<div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[42%]"></div>
+</div>
+<div class="flex items-center justify-between mt-4 mb-2">
+<p class="font-body-sm text-on-surface-variant">Peak</p>
+<p class="font-telemetry-data text-error">88 dB</p>
+</div>
+<div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-error w-[88%]"></div>
+</div>
+</div>
+</div>
+<!-- Floor Heatmap Thumbnail -->
+<div class="col-span-4 md:col-span-8 glass-card rounded-xl titanium-border overflow-hidden relative group cursor-pointer h-80">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" data-alt="A top-down architectural floor plan of a luxury private club. Overlaid is a vibrant, neon-style heat map with warm gold and amber glows indicating high activity zones. The setting is dark obsidian glass with thin, brushed titanium lines defining the rooms. The lighting is low-key, with the floor plan appearing like a high-tech glowing blueprint in a mission control center." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUJGIh5Hfqss2X2acFSCQ2Tf5IMxiWMsK1-8UjckB4n4ZmC8VcpMBY-K33ZF8gmYbNabWotCPR5mPZHl4eO328sxYSBxUu_fbcOUcaR6PJjHeWsTKSdjXDc6Y5AAXKMVpkMHYweEujh918xj35iwgaUHIS9BN0sFvjYuMX932f6DKbGc268SadKbp5Xn-UUvhRY3cKMsyuy_Mog3UrNKV2LZZheyfoCbAzfSgIoNPc9ZP7eEpQmAsh9JCFhVKa4IofXr1PMQXx6gc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-80"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full flex justify-between items-end">
+<div>
+<p class="font-label-caps text-label-caps text-primary mb-2">LIVE FLOOR HEATMAP</p>
+<h4 class="font-headline-lg-mobile text-on-surface">Lounge &amp; Dining Deck B</h4>
+</div>
+<div class="flex items-center gap-3 bg-surface-bright/50 backdrop-blur-md titanium-border px-6 py-3 rounded-xl hover:bg-primary transition-colors hover:text-on-primary">
+<span class="font-label-caps text-label-caps">VIEW FLOOR PLAN</span>
+<span class="material-symbols-outlined">north_east</span>
+</div>
+</div>
+<div class="absolute top-6 right-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-error/10 border border-error/30 rounded-full">
+<div class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></div>
+<span class="font-label-caps text-[10px] text-error">LIVE BROADCAST</span>
+</div>
+</div>
+</div>
+<!-- Occupancy Stats Card -->
+<div class="col-span-4 md:col-span-4 glass-card p-8 rounded-xl titanium-border h-80 flex flex-col justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-4">CURRENT OCCUPANCY</p>
+<div class="flex items-baseline gap-2">
+<h3 class="font-display-lg text-[64px] text-primary leading-none">124</h3>
+<p class="font-label-caps text-on-surface-variant">/ 200 MAX</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">Members</span>
+<span class="font-telemetry-data text-on-surface">82</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">Guests</span>
+<span class="font-telemetry-data text-on-surface">31</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">Staff</span>
+<span class="font-telemetry-data text-on-surface">11</span>
+</div>
+</div>
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden flex">
+<div class="h-full bg-primary" style="width: 62%;"></div>
+<div class="h-full bg-secondary-fixed-dim" style="width: 15%;"></div>
+<div class="h-full bg-on-tertiary-fixed-variant" style="width: 10%;"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full h-16 bg-surface-dim/70 backdrop-blur-lg border-t border-on-tertiary-fixed-variant/30 flex justify-around items-center px-4 z-50">
+<a class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-6 py-1 active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">public</span>
+<span class="font-label-caps text-[10px]">Environment</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">package_2</span>
+<span class="font-label-caps text-[10px]">Assets</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-caps text-[10px]">Transactions</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for real-time telemetry feel
+        setInterval(() => {
+            const humidorText = document.querySelector('.gold-glow');
+            if (humidorText) {
+                const base = 72.4;
+                const drift = (Math.random() * 0.1).toFixed(2);
+                humidorText.innerText = (parseFloat(base) + parseFloat(drift)).toFixed(1) + '%';
+            }
+        }, 3000);
+    </script>
+</body></html>

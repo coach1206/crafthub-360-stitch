@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Lounge Curator | AI Concierge</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(31, 31, 32, 0.7);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+        }
+        .waveform-bar {
+            animation: wave 1.2s ease-in-out infinite;
+        }
+        @keyframes wave {
+            0%, 100% { height: 8px; }
+            50% { height: 32px; }
+        }
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            overflow: hidden;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#dac1bb",
+                        "on-secondary-container": "#3d2400",
+                        "on-primary-container": "#4e3700",
+                        "inverse-primary": "#775a19",
+                        "error": "#ffb4ab",
+                        "surface": "#131314",
+                        "primary-fixed": "#ffdea5",
+                        "outline": "#9a8f80",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "tertiary-container": "#b7a09a",
+                        "surface-container": "#1f1f20",
+                        "surface-bright": "#39393a",
+                        "outline-variant": "#4e4639",
+                        "surface-variant": "#353436",
+                        "on-primary-fixed": "#261900",
+                        "background": "#131314",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-tertiary": "#3c2d28",
+                        "on-secondary": "#462a00",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "inverse-on-surface": "#303031",
+                        "error-container": "#93000a",
+                        "primary": "#e9c176",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-tertiary-container": "#473733",
+                        "secondary": "#ffb95a",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-surface": "#e5e2e3",
+                        "on-tertiary-fixed": "#261814",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-dim": "#131314",
+                        "on-error-container": "#ffdad6",
+                        "surface-tint": "#e9c176",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface": "#e5e2e3",
+                        "surface-container-high": "#2a2a2b",
+                        "on-background": "#e5e2e3",
+                        "on-surface-variant": "#d1c5b4",
+                        "secondary-fixed": "#ffddb6",
+                        "on-primary": "#412d00",
+                        "primary-container": "#c5a059",
+                        "surface-container-lowest": "#0e0e0f",
+                        "secondary-container": "#c68315",
+                        "surface-container-highest": "#353436",
+                        "primary-fixed-dim": "#e9c176"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="h-screen w-screen flex overflow-hidden">
+<!-- Background Layer with Parallax-ready feel -->
+<div class="fixed inset-0 -z-10 bg-cover bg-center opacity-40 scale-105 transition-transform duration-[10000ms] ease-linear" data-alt="A cinematic, high-resolution interior of a private members-only lounge with dark mahogany walls, deep leather armchairs, and amber-lit humidors in the background. The atmosphere is smoky, luxurious, and exclusive, featuring a palette of deep espressos and warm golds. The lighting is soft and directional, creating a sophisticated sanctuary vibe for connoisseurs." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCijzYzH_Rz3lbo5_5G6srD-C2pj3_MA-dnozHbUHLfqo2XmXig86MC9l7UBeEUsgZa1I--dn_EGXVjxZqEN7dtabMsGvzyXB4ngqjSfIazWvIpGwOR0O48TFt8vVnxkSHYoqUUCugH_RTqDitoYysuuMmqZXuG163viayEiywZSm5_RGX8vh4jIiRmFOdxVlhWFea10mucDo2NHQD9eMLGm65ZQZ9bH9S6KIPqPxwgld_lkEP62iIbxXULff25pK8Lm6jcTjBzlVc')">
+</div>
+<!-- Navigation Drawer (Mandatory Shell) -->
+<nav class="fixed inset-y-0 left-0 z-50 flex flex-col h-screen w-80 rounded-r-xl bg-surface-container-lowest border-r border-outline-variant/30 backdrop-blur-2xl shadow-2xl shadow-on-secondary-container/20">
+<div class="p-8 flex flex-col h-full">
+<div class="mb-12">
+<h1 class="font-headline-lg text-headline-lg text-primary">The Lounge Curator</h1>
+<div class="mt-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-outline-variant/30 flex items-center justify-center overflow-hidden border border-primary/20">
+<img alt="User Passport Silhouette" class="w-full h-full object-cover grayscale" data-alt="A sophisticated black and white portrait of a distinguished gentleman in a tailored suit, looking slightly away with an air of quiet confidence. The lighting is dramatic, high-contrast chiaroscuro, emphasizing textures of the fine fabric and sharp grooming. Set against a dark, minimalist studio background for an invitation-only aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnkQSnyK1ZPaDOreHko9BYWuvZyF9aYmDeYarzLQZY4fc_EGujyA5a5NPJrtSme5rGeJpOOYHfhMeilisw4HFu2sD7c4CTlAUSILVJ8fRW_KHOJUmaETdqtqy4DOwKOcMETA00l_I0l7nt-mZUklBvDanX_As5qZy7-k9zlB9U_GXv4Fc0Ch5mWE1AD8rG0nowa8PYmIxiG-_42wdtHoP4nrPIEYJIXaffZfQBJDkULQC2mwl9lZ0vzWeETBl4mwquQPaVHGVJax4"/>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Distinguished Guest</p>
+<p class="font-label-sm text-label-sm text-primary/70">Invitation Only Access</p>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface mx-2 transition-all duration-300 ease-out hover:bg-surface-bright/10 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="tempest">compost</span>
+<span class="font-label-lg text-label-lg">Curator Home</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg mx-2 transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="liquor">liquor</span>
+<span class="font-label-lg text-label-lg">Craft Journeys</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface mx-2 transition-all duration-300 ease-out hover:bg-surface-bright/10 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-label-lg text-label-lg">Networking Stamps</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface mx-2 transition-all duration-300 ease-out hover:bg-surface-bright/10 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="font-label-lg text-label-lg">System Ops</span>
+</a>
+</div>
+<div class="mt-auto pt-8 border-t border-outline-variant/20">
+<p class="text-primary font-label-sm uppercase tracking-widest opacity-50 mb-4">Venue Context</p>
+<div class="p-4 rounded-lg bg-surface-variant/40 border border-outline-variant/20">
+<p class="font-label-lg text-on-surface">The Sapphire Vault</p>
+<p class="font-label-sm text-on-surface-variant opacity-70">Private Event: Rare Malts 2024</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-80 flex-1 flex flex-col relative h-full">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center px-16 py-10 w-full z-50 backdrop-blur-xl bg-surface/30">
+<div class="flex items-center gap-6">
+<div class="relative">
+<div class="absolute inset-0 bg-primary/20 blur-xl rounded-full"></div>
+<div class="w-16 h-16 rounded-full border-2 border-primary flex items-center justify-center bg-surface-container relative">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">concierge</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary tracking-tight">The Lounge Curator</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Active Deep Interaction Mode</p>
+</div>
+</div>
+<div class="flex items-center gap-12">
+<!-- Gold Waveform -->
+<div class="flex items-end gap-1 h-8">
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.1s"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.3s"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.2s"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.5s"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.4s"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.2s"></div>
+<div class="waveform-bar w-1 bg-primary rounded-full" style="animation-delay: 0.1s"></div>
+</div>
+<button class="text-primary hover:opacity-80 transition-opacity duration-500 ease-in-out">
+<span class="material-symbols-outlined text-3xl">settings</span>
+</button>
+</div>
+</header>
+<!-- Cinematic Conversation Space -->
+<section class="flex-1 px-16 flex flex-col justify-center max-w-5xl mx-auto w-full">
+<div class="space-y-12 mb-12">
+<div class="space-y-6">
+<p class="font-label-lg text-primary uppercase tracking-[0.3em] opacity-80">Your Personal Curator</p>
+<h1 class="font-display-lg text-display-lg text-on-surface leading-[1.1]">
+                        Welcome back. Shall we explore the <span class="text-primary">vintage portfolio</span> or focus on your <span class="italic">pairing profile</span> for tonight?
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+                        I've prepared a selection of Arturo Fuente OpusX cigars that have been aging in our humidor since 2018. They would pair exceptionally well with the 25-year Macallan currently available at the bar.
+                    </p>
+</div>
+<!-- Guided Suggestion Cards -->
+<div class="grid grid-cols-2 gap-8">
+<!-- Card 1 -->
+<button class="group glass-panel rounded-xl p-8 text-left transition-all duration-500 hover:scale-[1.02] hover:gold-glow relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-6xl">liquor</span>
+</div>
+<div class="relative z-10">
+<p class="font-label-sm text-primary uppercase tracking-widest mb-2">Recommended Discovery</p>
+<h3 class="font-headline-md text-on-surface mb-4">Curated Scotch Pairing</h3>
+<p class="font-body-md text-on-surface-variant">A deep dive into Highland malts with leather and smoke notes specifically for your palate.</p>
+<div class="mt-6 flex items-center gap-2 text-primary">
+<span class="font-label-lg">Explore Notes</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+</button>
+<!-- Card 2 -->
+<button class="group glass-panel rounded-xl p-8 text-left transition-all duration-500 hover:scale-[1.02] hover:gold-glow relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-6xl">smoking_rooms</span>
+</div>
+<div class="relative z-10">
+<p class="font-label-sm text-primary uppercase tracking-widest mb-2">Craft Journey</p>
+<h3 class="font-headline-md text-on-surface mb-4">Bespoke SmokeCraft</h3>
+<p class="font-body-md text-on-surface-variant">Configure your preferred cut, lighting ritual, and humidity preference for our staff to prepare.</p>
+<div class="mt-6 flex items-center gap-2 text-primary">
+<span class="font-label-lg">Start Sequence</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+</button>
+</div>
+</div>
+</section>
+<!-- Quick Actions Footer -->
+<footer class="fixed bottom-0 left-80 right-0 z-50 backdrop-blur-2xl border-t border-outline-variant/20 bg-surface-container/80 px-16 py-8 flex items-center justify-between shadow-[0_-8px_30px_rgb(233,193,118,0.1)]">
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-3 px-8 py-4 bg-primary text-on-primary font-label-lg rounded-full hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+                    SPEAK
+                </button>
+<div class="h-12 w-px bg-outline-variant/30 mx-4"></div>
+<div class="flex items-center gap-2 px-6 py-4 glass-panel rounded-full border-primary/20">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="keyboard">keyboard</span>
+<input class="bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-on-surface-variant/40 w-64 font-label-lg" placeholder="Inquire about tonight's cellar..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all px-4">
+<span class="material-symbols-outlined mb-1" data-icon="history_edu">history_edu</span>
+<span class="font-label-sm">Open Passport</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all px-4">
+<span class="material-symbols-outlined mb-1" data-icon="qr_code_2">qr_code_2</span>
+<span class="font-label-sm">Show My QR</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all px-4">
+<span class="material-symbols-outlined mb-1" data-icon="search_insights">search_insights</span>
+<span class="font-label-sm">Find Pairing</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 ml-4 hover:scale-105 transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="notifications_active" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+<span class="font-label-sm">Call Staff</span>
+</button>
+</div>
+</footer>
+</main>
+<!-- Interactive script for waveform and glass entry effects -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.waveform-bar');
+            bars.forEach(bar => {
+                const duration = 0.8 + Math.random() * 1.5;
+                bar.style.animationDuration = `${duration}s`;
+            });
+
+            // Subtle interaction logic
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.addEventListener('mousedown', () => {
+                    btn.classList.add('scale-95');
+                });
+                btn.addEventListener('mouseup', () => {
+                    btn.classList.remove('scale-95');
+                });
+            });
+        });
+    </script>
+</body></html>

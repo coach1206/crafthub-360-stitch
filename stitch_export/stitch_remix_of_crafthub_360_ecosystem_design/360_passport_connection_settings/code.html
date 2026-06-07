@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-tint": "#e9c176",
+                        "surface-container-highest": "#353436",
+                        "on-surface": "#e5e2e3",
+                        "secondary": "#ffb95a",
+                        "primary-fixed": "#ffdea5",
+                        "surface-container-lowest": "#0e0e0f",
+                        "primary": "#e9c176",
+                        "surface-container-low": "#1b1b1c",
+                        "on-secondary-fixed": "#2a1800",
+                        "outline": "#9a8f80",
+                        "inverse-surface": "#e5e2e3",
+                        "on-error": "#690005",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-primary-fixed": "#261900",
+                        "surface-container": "#1f1f20",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-primary": "#412d00",
+                        "surface-bright": "#39393a",
+                        "on-tertiary-fixed": "#261814",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-secondary": "#462a00",
+                        "surface-container-high": "#2a2a2b",
+                        "on-tertiary": "#3c2d28",
+                        "outline-variant": "#4e4639",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-tertiary-container": "#473733",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#775a19",
+                        "on-primary-container": "#4e3700",
+                        "primary-fixed-dim": "#e9c176",
+                        "secondary-fixed": "#ffddb6",
+                        "tertiary-container": "#b7a09a",
+                        "on-background": "#e5e2e3",
+                        "surface-variant": "#353436",
+                        "on-secondary-container": "#3d2400",
+                        "secondary-container": "#c68315",
+                        "on-surface-variant": "#d1c5b4",
+                        "background": "#131314",
+                        "tertiary": "#dac1bb",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#303031",
+                        "surface-dim": "#131314",
+                        "primary-container": "#c5a059",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "surface": "#131314"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "32px",
+                        "unit": "8px",
+                        "card-padding": "24px",
+                        "margin": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .leather-bg {
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(31, 31, 32, 0.7), rgba(19, 19, 20, 1)),
+                url('https://www.transparenttextures.com/patterns/black-leather.png');
+        }
+        .gold-border {
+            border: 1px solid rgba(233, 193, 118, 0.3);
+        }
+        .gold-glow:hover {
+            box-shadow: 0 0 15px rgba(233, 193, 118, 0.2);
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(31, 31, 32, 0.6);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .passport-card {
+            background: linear-gradient(135deg, #1f1f20 0%, #0e0e0f 100%);
+            border: 1px solid rgba(233, 193, 118, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .passport-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+            opacity: 0.05;
+            pointer-events: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden leather-bg min-h-screen">
+<!-- Top AppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary p-2 hover:bg-surface-variant/50 rounded-full transition-all active:scale-95">arrow_back</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">360 Passport Connection</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label-lg text-label-lg text-primary">Grand Lounge</span>
+<div class="flex gap-3">
+<button class="px-6 py-2 border border-primary text-primary font-label-lg rounded-lg hover:bg-primary/10 transition-all">Preview</button>
+<button class="px-6 py-2 bg-primary text-on-primary font-label-lg rounded-lg hover:brightness-110 shadow-lg shadow-primary/20 active:scale-95 transition-all">Publish Changes</button>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-40 px-gutter max-w-container-max-width mx-auto">
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Primary Settings -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<!-- Section: Networking Core -->
+<section class="glass-panel rounded-xl p-card-padding">
+<div class="flex items-center gap-4 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">hub</span>
+<h2 class="font-headline-md text-headline-md text-primary">Networking System</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Toggle: QR Networking -->
+<div class="flex items-center justify-between p-6 rounded-lg bg-surface-container-low border border-outline-variant/20">
+<div>
+<p class="font-label-lg text-on-surface">Enable QR Networking</p>
+<p class="text-xs text-on-surface-variant">Allow members to scan and connect via digital passport.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-14 h-7 bg-surface-container-highest rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:left-1 after:bg-primary after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container/40"></div>
+</label>
+</div>
+<!-- Select: Active Event -->
+<div class="p-6 rounded-lg bg-surface-container-low border border-outline-variant/20">
+<label class="font-label-lg text-on-surface block mb-2">Active Event Mapping</label>
+<div class="relative">
+<select class="w-full bg-surface-container border-b border-primary text-on-surface py-2 focus:ring-0 focus:border-primary-fixed appearance-none cursor-pointer">
+<option>Concours d'Elegance 2024</option>
+<option>Art Basel VIP Vernissage</option>
+<option>Monaco Grand Prix Lounge</option>
+</select>
+<span class="material-symbols-outlined absolute right-0 top-2 pointer-events-none text-primary">expand_more</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Business Field Color Mapping -->
+<section class="glass-panel rounded-xl p-card-padding">
+<div class="flex items-center gap-4 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">palette</span>
+<h2 class="font-headline-md text-headline-md text-primary">Identity Color Mapping</h2>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+<!-- Color Chips -->
+<div class="flex flex-col gap-2 p-4 rounded-lg bg-surface-container-low border-l-4 border-[#000080]">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Navy</span>
+<span class="font-label-lg">Business</span>
+</div>
+<div class="flex flex-col gap-2 p-4 rounded-lg bg-surface-container-low border-l-4 border-[#800020]">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Burgundy</span>
+<span class="font-label-lg">Hospitality</span>
+</div>
+<div class="flex flex-col gap-2 p-4 rounded-lg bg-surface-container-low border-l-4 border-[#008000]">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Green</span>
+<span class="font-label-lg">Vendor</span>
+</div>
+<div class="flex flex-col gap-2 p-4 rounded-lg bg-surface-container-low border-l-4 border-[#000000]">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Black</span>
+<span class="font-label-lg">VIP</span>
+</div>
+<div class="flex flex-col gap-2 p-4 rounded-lg bg-surface-container-low border-l-4 border-[#800080]">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Purple</span>
+<span class="font-label-lg">Media</span>
+</div>
+<div class="flex flex-col gap-2 p-4 rounded-lg bg-surface-container-low border-l-4 border-[#36454F]">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Charcoal</span>
+<span class="font-label-lg">Partners</span>
+</div>
+</div>
+</section>
+<!-- Section: Advanced Protocols -->
+<section class="glass-panel rounded-xl p-card-padding">
+<div class="flex items-center gap-4 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">security</span>
+<h2 class="font-headline-md text-headline-md text-primary">Connection Protocols</h2>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">verified_user</span>
+<div>
+<p class="font-label-lg">Connection Confirmation</p>
+<p class="text-xs text-on-surface-variant">Require bilateral approval for networking exchange.</p>
+</div>
+</div>
+<input checked="" class="w-5 h-5 rounded border-primary bg-transparent text-primary focus:ring-0" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between p-4 border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">storefront</span>
+<div>
+<p class="font-label-lg">Vendor Scans</p>
+<p class="text-xs text-on-surface-variant">Automate lead capture when scanning partner stalls.</p>
+</div>
+</div>
+<input class="w-5 h-5 rounded border-primary bg-transparent text-primary focus:ring-0" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between p-4 border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">badge</span>
+<div>
+<p class="font-label-lg">Staff Verification</p>
+<p class="text-xs text-on-surface-variant">Enable priority scanning for hospitality team members.</p>
+</div>
+</div>
+<input checked="" class="w-5 h-5 rounded border-primary bg-transparent text-primary focus:ring-0" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between p-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">gpp_maybe</span>
+<div>
+<p class="font-label-lg">Fraud Detection</p>
+<p class="text-xs text-on-surface-variant">Geo-fence QR validity to lounge coordinates only.</p>
+</div>
+</div>
+<input checked="" class="w-5 h-5 rounded border-primary bg-transparent text-primary focus:ring-0" type="checkbox"/>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Visual Preview & Canvas -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Preview Canvas -->
+<div class="sticky top-28">
+<div class="glass-panel rounded-xl overflow-hidden shadow-2xl">
+<div class="p-6 border-b border-outline-variant/20 bg-surface-container-high flex justify-between items-center">
+<h3 class="font-label-lg text-primary uppercase tracking-widest">Passport Preview</h3>
+<span class="material-symbols-outlined text-on-surface-variant">visibility</span>
+</div>
+<div class="p-8 flex justify-center items-center bg-[url('https://www.transparenttextures.com/patterns/dark-wood.png')]">
+<!-- Visual Passport Component -->
+<div class="passport-card w-full max-w-[280px] aspect-[2/3] rounded-2xl shadow-2xl p-6 flex flex-col items-center text-center">
+<div class="w-20 h-20 rounded-full border-2 border-primary p-1 mb-6">
+<img alt="Profile" class="w-full h-full object-cover rounded-full filter grayscale" data-alt="A high-contrast black and white portrait of a sophisticated man with groomed facial hair, wearing a bespoke tailored tuxedo. The lighting is dramatic and moody, reminiscent of luxury photography in a high-end members-only club. The background is softly blurred with amber bokeh lights, creating an atmosphere of exclusivity and unhurried elegance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx1FcgtlteWX4EOK0Rm5TZDJB-uSvSURuiH_8EmMAWniEcWF1dc0FxOrSW6cqdHCcGGzPiBJ7z-dCijOd9c27SmC4DeAUlngAzPdNRz6VRfcWv-E4agXFYfdSpfHBbiTxAg1dsdDFuTBBIt8cUUvRmCJVPmwyd1e7KJNevI3prIbfyU5ELq6co9njKvk83FGB2FnHFSrHyk1uqy4kuUvmQa895MXbX83tiIXbZcbtm1jSdit9r5T9hNLh6NghYeYDgnudzeCMGqNU"/>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1">Julian Sterling</h4>
+<p class="font-label-sm text-on-surface-variant mb-6">PLATINUM MEMBER</p>
+<div class="w-32 h-32 bg-white p-2 rounded-lg mb-6 shadow-inner">
+<div class="w-full h-full border-2 border-black/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-black text-6xl">qr_code_2</span>
+</div>
+</div>
+<div class="mt-auto pt-6 border-t border-outline-variant/30 w-full">
+<div class="flex justify-between text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-2">
+<span>Status</span>
+<span>Identity</span>
+</div>
+<div class="flex justify-between font-label-lg text-primary">
+<span>Active</span>
+<span class="text-[#000080]">Business</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-6 bg-surface-container">
+<label class="font-label-lg text-on-surface block mb-4">Passport Visual Style</label>
+<div class="grid grid-cols-3 gap-3">
+<button class="aspect-square rounded-lg border-2 border-primary bg-black/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+</button>
+<button class="aspect-square rounded-lg border border-outline-variant bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">grid_view</span>
+</button>
+<button class="aspect-square rounded-lg border border-outline-variant bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">texture</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Actions Card -->
+<div class="mt-8 flex flex-col gap-3">
+<button class="w-full py-4 bg-surface-container-high border gold-border text-on-surface font-label-lg rounded-xl hover:bg-surface-container-highest transition-all flex items-center justify-center gap-3 active:scale-95">
+<span class="material-symbols-outlined">save</span>
+                            Save Configuration
+                        </button>
+<button class="w-full py-4 bg-error-container/20 border border-error/30 text-error font-label-lg rounded-xl hover:bg-error-container/30 transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">refresh</span>
+                            Reset to Default
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile only fallback logic) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/20 rounded-full px-6 py-2">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-label-sm text-label-sm">Assistant</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction for the passport card parallax effect
+        const passport = document.querySelector('.passport-card');
+        const container = passport.parentElement;
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            passport.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            passport.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            passport.style.transition = 'transform 0.5s ease';
+        });
+
+        container.addEventListener('mouseenter', () => {
+            passport.style.transition = 'none';
+        });
+    </script>
+</body></html>

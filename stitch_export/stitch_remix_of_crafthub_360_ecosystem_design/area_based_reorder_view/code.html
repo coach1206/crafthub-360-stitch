@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Area-Based Reorder View | The Grand Humidor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#3d2400",
+                        "on-background": "#e5e2e3",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#2a2a2b",
+                        "tertiary": "#dac1bb",
+                        "surface": "#131314",
+                        "outline": "#9a8f80",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-container": "#1f1f20",
+                        "primary": "#e9c176",
+                        "outline-variant": "#4e4639",
+                        "on-primary-container": "#4e3700",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed": "#ffdea5",
+                        "secondary-fixed": "#ffddb6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary": "#3c2d28",
+                        "on-tertiary-fixed": "#261814",
+                        "surface-tint": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "background": "#131314",
+                        "on-primary-fixed": "#261900",
+                        "surface-variant": "#353436",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "secondary": "#ffb95a",
+                        "secondary-container": "#c68315",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-primary": "#412d00",
+                        "tertiary-container": "#b7a09a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-tertiary-container": "#473733",
+                        "surface-container-highest": "#353436",
+                        "inverse-surface": "#e5e2e3",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-secondary": "#462a00",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-bright": "#39393a",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-surface": "#e5e2e3",
+                        "surface-dim": "#131314"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "card-padding": "24px",
+                        "unit": "8px",
+                        "margin": "64px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(31, 31, 32, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .amber-glow:active, .amber-glow.active {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.25);
+            border-color: #e9c176;
+        }
+        .gold-foil {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 100%);
+            color: #412d00;
+        }
+        .wood-texture {
+            background-color: #131314;
+            background-image: radial-gradient(circle at 50% 50%, rgba(30, 20, 10, 0.2) 0%, transparent 100%);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md wood-texture min-h-screen pb-32">
+<!-- Top App Bar -->
+<header class="bg-background/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm fixed top-0 w-full z-50 flex justify-between items-center px-margin h-24">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-full border border-primary/30 flex items-center justify-center bg-surface-container overflow-hidden">
+<img alt="Staff member profile" class="w-full h-full object-cover" data-alt="A professional headshot of a sophisticated head sommelier in a dark tailored suit. He has a warm, welcoming expression, set against a blurred background of a luxury wine cellar with amber ambient lighting and rich wood textures. The aesthetic is high-end and exclusive, echoing a private members-only lounge atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8rFS7A3MwQ-QyoB2ZkG8z_xtPKZiG77ITGht2-wR90CzN6n7FePkR015VupKrMrUvlpnLBCPJYtLI97ab5sLs0Wt4nHj7UF6HHK__ubMboptr5Bue6W_K1uIPf3-x7w-co45826GZvhU0kht5EayZOTsvFIwAukayZ7kaI7yRuPGVHDqD6MgWqCYOuYJ4F617VTCEEBYI30MTllQQYTe6-ivjJD8LYj2CQhyM8zooCIVEjoYDWuV0nfK-mDFG7Q8HRIXqP4IbeVc"/>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</h1>
+</div>
+<div class="flex items-center gap-8">
+<nav class="hidden md:flex gap-10">
+<a class="text-primary font-bold transition-all duration-300" href="#">Inventory Control</a>
+<a class="text-on-surface-variant hover:text-primary transition-all duration-300" href="#">Analytics</a>
+<a class="text-on-surface-variant hover:text-primary transition-all duration-300" href="#">Staff Shift</a>
+</nav>
+<button class="material-symbols-outlined text-primary text-3xl hover:bg-surface-container-highest/50 p-2 rounded-full transition-all">notifications</button>
+</div>
+</header>
+<!-- Side Navigation (Drawer) -->
+<aside class="fixed left-0 top-0 h-screen w-80 z-40 bg-surface-container-low border-r border-outline-variant/20 shadow-2xl pt-28 px-6 hidden xl:block">
+<div class="mb-10 flex items-center gap-4 px-4">
+<div class="text-left">
+<p class="font-headline-lg text-headline-lg text-primary">Julian Vane</p>
+<p class="font-label-lg text-label-lg text-on-surface-variant/70">Head Sommelier</p>
+</div>
+</div>
+<nav class="space-y-4">
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-transform scale-95 active:scale-90 rounded-lg" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-lg text-label-lg">Floor Plan</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-transform scale-95 active:scale-90 rounded-lg" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg text-label-lg">Live Map</span>
+</a>
+<a class="flex items-center gap-4 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-lg text-label-lg">Insights</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 transition-transform scale-95 active:scale-90 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="xl:ml-80 mt-24 px-gutter pt-12 max-w-container-max-width mx-auto">
+<!-- Header & Area Tabs -->
+<header class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-background mb-2">Area-Based Reorder</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Manage stock levels across specific zones. Items flagged with <span class="text-secondary">Craft Recommendation</span> are optimized for tonight's VIP Cigar Pairing event.</p>
+</div>
+<button class="gold-foil px-8 py-4 rounded-lg font-label-lg text-label-lg shadow-lg hover:brightness-110 transition-all flex items-center gap-3">
+<span class="material-symbols-outlined">shopping_cart_checkout</span>
+                    PROCESS BULK REORDER
+                </button>
+</div>
+<!-- Tab Switcher -->
+<div class="mt-10 flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+<button class="tab-btn active amber-glow flex items-center gap-3 px-8 py-4 glass-card rounded-xl text-primary border-primary transition-all whitespace-nowrap" onclick="switchTab('Humidor')">
+<span class="material-symbols-outlined">smoking_rooms</span>
+<span class="font-label-lg text-label-lg">Humidor</span>
+</button>
+<button class="tab-btn flex items-center gap-3 px-8 py-4 glass-card rounded-xl text-on-surface-variant border-transparent hover:border-primary/30 transition-all whitespace-nowrap" onclick="switchTab('Bar')">
+<span class="material-symbols-outlined">local_bar</span>
+<span class="font-label-lg text-label-lg">Cocktail Bar</span>
+</button>
+<button class="tab-btn flex items-center gap-3 px-8 py-4 glass-card rounded-xl text-on-surface-variant border-transparent hover:border-primary/30 transition-all whitespace-nowrap" onclick="switchTab('Wine Cellar')">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-lg text-label-lg">Wine Cellar</span>
+</button>
+<button class="tab-btn flex items-center gap-3 px-8 py-4 glass-card rounded-xl text-on-surface-variant border-transparent hover:border-primary/30 transition-all whitespace-nowrap" onclick="switchTab('Kitchen')">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-label-lg text-label-lg">Main Kitchen</span>
+</button>
+</div>
+</header>
+<!-- Bento Grid for Inventory -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="inventory-grid">
+<!-- Inventory Card: Critical Reorder -->
+<div class="glass-card rounded-2xl overflow-hidden group hover:shadow-[0_0_30px_rgba(233,193,118,0.1)] transition-all duration-500">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A close-up, high-detail macro shot of premium hand-rolled cigars lying in a polished cedar wood box. The lighting is warm and directional, catching the oily sheen of the tobacco leaves. The background is a dark, out-of-focus lounge setting with amber glowing embers. The composition is luxurious and tactile, emphasizing artisanal quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCguZ41PNQJ_sbh7as4TN6r9tk8wwH-YV6S9NfW6ltUX3mAHKeq85YY4whXMBHV0ZWGa4q3WNSgmFUfrP0exfMfWkf_zG4Y44cZY97hNyOuMhLsZw7wXVuL_JsZW2frv_ci5w2EVN199rezrUNKOkuDwmQhzVp3uldrjBhw4Q37lC8px7SA7X2GwhAJd_33qn9p770zXXjR2z-_I4vJJCsNTCWUkQnI-9ia_Ye1ebVhaDUWX7Xw6IsKEhS9tsSWLUNMgidG0_Fd7U"/>
+<div class="absolute top-4 left-4 bg-error-container/90 text-on-error-container px-3 py-1 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">warning</span>
+<span class="font-label-sm text-label-sm">LOW STOCK: 4 UNITS</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-1">Zone: Private Vault A</p>
+<h3 class="font-headline-md text-headline-md text-white">Cohiba Siglo VI</h3>
+</div>
+</div>
+<div class="p-6 space-y-6">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-lg text-label-lg">Status: Critical</span>
+<span class="font-body-md text-body-md">Ref. #CH-992</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between p-4 bg-surface-container-high rounded-xl border border-outline-variant/30">
+<span class="font-label-lg text-label-lg">AUTO-REORDER</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<button class="w-full py-3 border border-primary/40 text-primary rounded-xl font-label-lg text-label-lg hover:bg-primary/10 transition-all">USE SUBSTITUTE: SIGLO V</button>
+</div>
+</div>
+</div>
+<!-- Inventory Card: Recommendation -->
+<div class="glass-card rounded-2xl overflow-hidden group border-secondary/30 hover:shadow-[0_0_30px_rgba(255,185,90,0.15)] transition-all duration-500">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A macro photograph of an antique crystal decanter being filled with rich, dark amber bourbon. Tiny, sparkling droplets of liquid are caught in mid-air. The lighting is moody and cinematic, highlighting the faceted texture of the glass and the deep warmth of the spirit. The scene is set on a dark, polished mahogany table in a high-end whiskey lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFrvSHZ4DihAwPJEyfBKnLfGZGcBDkSt-J9Xi7V2wooUEvvydhVgnviFbR0NXn7p0obtDNV-2mH2378ipjiJ_fi6cwweqfIKD1bvxC4DBHNjjnlueCHqq27wRujn9UoG2zx4M_A8jcZEt0VycJeaYs8vJ9LcNKT9CpPE5nNZnupEN4xVnDNjPyKtb5yB5yTfY_bOim1IKmnEJabYsPmOT_UB7D2-EG9gjTiLNlpIBQ6wY2XoVSDsqIsRuAeFoj_vMVrAgLNWvsAec"/>
+<div class="absolute top-4 left-4 bg-secondary-container/90 text-on-secondary-container px-3 py-1 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">stars</span>
+<span class="font-label-sm text-label-sm">CRAFT RECOMMENDATION</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1">Zone: Main Bar Shelf</p>
+<h3 class="font-headline-md text-headline-md text-white">Old Forester Birthday</h3>
+</div>
+</div>
+<div class="p-6 space-y-6">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-lg text-label-lg">Event: Founders Night</span>
+<span class="font-body-md text-body-md">Ref. #OF-1910</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between p-4 bg-surface-container-high rounded-xl border border-secondary/20">
+<span class="font-label-lg text-label-lg">BOOST STOCK (QTY: 6)</span>
+<button class="material-symbols-outlined text-secondary">add_circle</button>
+</div>
+<button class="w-full py-3 bg-secondary-container text-on-secondary-container rounded-xl font-label-lg text-label-lg hover:brightness-110 transition-all">APPROVE EVENT QTY</button>
+</div>
+</div>
+</div>
+<!-- Inventory Card: Stable Stock -->
+<div class="glass-card rounded-2xl overflow-hidden group hover:shadow-[0_0_30px_rgba(233,193,118,0.05)] transition-all duration-500">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A dark and atmospheric shot of a row of luxury red wine bottles resting in a wrought iron rack within a cool stone cellar. The labels are elegant with gold foil lettering. Dust motes dance in a single, narrow beam of light that illuminates the curves of the glass. The mood is silent, aged, and premium, suggesting long-term curation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_onX_NCYRICc11Jrd5JAMQ5G-LjiHmTm69O2LLdRe0I477sJbYmGOlMej8SRZ8PK75snrO0_nJAV9zNszEM19tlhp6AYt5I7ZqhBSqHrDEGQigpQ94NsgCufZdDaolaXOSDl1P9D_wYdqzZ4JTEHUPFD0nJNUH8KoasyHFdefoanLKRiz3nDBib-ZjYhV0j2AalySWQ5CmO4Pfmxp4sj49XXy8komAT8pSwUJlCBD9g0U8ngC9gz6LojUpSCQ4_rV-6MSn1yfJek"/>
+<div class="absolute top-4 left-4 bg-surface-container-highest/90 text-on-surface px-3 py-1 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span class="font-label-sm text-label-sm">STABLE: 24 UNITS</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-1">Zone: Cellar West</p>
+<h3 class="font-headline-md text-headline-md text-white">Château Margaux 2015</h3>
+</div>
+</div>
+<div class="p-6 space-y-6">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-lg text-label-lg">Next Review: 4 Days</span>
+<span class="font-body-md text-body-md">Ref. #CM-2015</span>
+</div>
+<div class="flex flex-col gap-3 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+<div class="flex items-center justify-between p-4 bg-surface-container-high rounded-xl border border-outline-variant/30">
+<span class="font-label-lg text-label-lg">AUTO-REORDER</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<button class="w-full py-3 border border-outline/40 text-on-surface-variant rounded-xl font-label-lg text-label-lg">MANUAL OVERRIDE</button>
+</div>
+</div>
+</div>
+<!-- Inventory Card: Reorder Triggered -->
+<div class="glass-card rounded-2xl overflow-hidden group hover:shadow-[0_0_30px_rgba(233,193,118,0.1)] transition-all duration-500">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A close-up of a perfectly crafted crystal cocktail glass with a large clear ice cube and an orange twist, sitting on a dark marble bar top. The background shows blurred rows of premium spirit bottles with warm backlighting. The lighting creates sparkling reflections on the crystal facets. The overall aesthetic is clean, sophisticated, and inviting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-Aep7UGJY_jcihyas0rIw9ULA9KMK0xoNxpBgIw0dpD1VgUe_Q8Wns4z_zsftm4PWR3BewfVSweQIA163jz1scOJcDfIOCTLTX_P6InDq163zaPEgGW5vFuIdfF_TCReIEdNoxRVP383-r7r6_iZUmM30JylQhYsOzIMn3-JJzC6cg-RNIQ0JUkg8bLS7_nrpdMlH2DfVv7QDqh0tObgNdNOJPyITEOblqUiToURHe3ARhqUFfXrr2o_VQlXSroYC2qthAjm9ejM"/>
+<div class="absolute top-4 left-4 bg-primary-container/90 text-on-primary-container px-3 py-1 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">local_shipping</span>
+<span class="font-label-sm text-label-sm">REORDER IN TRANSIT</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-1">Zone: Bar Back</p>
+<h3 class="font-headline-md text-headline-md text-white">Angostura Bitters (Bulk)</h3>
+</div>
+</div>
+<div class="p-6 space-y-6">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-lg text-label-lg">ETA: Tomorrow 10AM</span>
+<span class="font-body-md text-body-md">Ref. #AB-882</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="p-4 bg-primary-container/20 rounded-xl border border-primary/30 flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="font-label-sm text-label-sm text-on-surface">Order confirmed with Global Spirits Dist.</p>
+</div>
+<button class="w-full py-3 bg-surface-container-highest border border-outline-variant/30 text-on-surface-variant rounded-xl font-label-lg text-label-lg hover:bg-surface-bright transition-all">VIEW TRACKING</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Mobile View Focused) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="font-label-sm text-label-sm">POS 3</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] scale-105 transition-all">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</button>
+</nav>
+<!-- Floating Action Button for Inventory Scan -->
+<button class="fixed bottom-24 right-8 xl:bottom-12 xl:right-12 w-20 h-20 rounded-full gold-foil shadow-2xl flex items-center justify-center group hover:scale-110 active:scale-95 transition-all duration-300 z-50">
+<span class="material-symbols-outlined text-4xl">barcode_scanner</span>
+<span class="absolute right-full mr-4 bg-surface-container px-4 py-2 rounded-lg border border-primary/30 text-primary font-label-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">QUICK SCAN</span>
+</button>
+<script>
+        function switchTab(area) {
+            // Visual feedback for tabs
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                tab.classList.remove('active', 'amber-glow', 'text-primary', 'border-primary');
+                tab.classList.add('text-on-surface-variant', 'border-transparent');
+                if (tab.innerText.includes(area)) {
+                    tab.classList.add('active', 'amber-glow', 'text-primary', 'border-primary');
+                    tab.classList.remove('text-on-surface-variant', 'border-transparent');
+                }
+            });
+
+            // Log activity for demo purposes
+            console.log(`Filtering view for: ${area}`);
+            
+            // Interaction logic: Simulating content change
+            const grid = document.getElementById('inventory-grid');
+            grid.style.opacity = '0';
+            setTimeout(() => {
+                grid.style.opacity = '1';
+                // In a real app, this would trigger a data refetch and DOM update
+            }, 300);
+        }
+
+        // Simple parallax for background richness
+        window.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            document.body.style.backgroundPosition = `${x * 20}px ${y * 20}px`;
+        });
+    </script>
+</body></html>

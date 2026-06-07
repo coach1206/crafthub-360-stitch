@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WineCraft 360 Cellar Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+    }
+    .glass-panel {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        background: rgba(19, 19, 20, 0.4);
+    }
+    .gold-foil-border {
+        border: 1px solid rgba(233, 193, 118, 0.15)
+    }
+    .amber-glow:hover {
+        box-shadow: 0 0 30px rgba(233, 193, 118, 0.1)
+    }
+    .lounge-bg {
+        background-image: linear-gradient(rgba(19, 19, 20, 0.6), rgba(19, 19, 20, 0.6)), url(https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+</style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#2a1800",
+                      "inverse-primary": "#775a19",
+                      "primary-fixed-dim": "#e9c176",
+                      "inverse-on-surface": "#303031",
+                      "on-background": "#e5e2e3",
+                      "on-primary-fixed": "#261900",
+                      "primary": "#e9c176",
+                      "surface-container-lowest": "#0e0e0f",
+                      "on-tertiary-fixed": "#261814",
+                      "secondary-fixed": "#ffddb6",
+                      "on-secondary-container": "#3d2400",
+                      "secondary": "#ffb95a",
+                      "on-tertiary-fixed-variant": "#54433e",
+                      "on-error-container": "#ffdad6",
+                      "tertiary-container": "#b7a09a",
+                      "secondary-fixed-dim": "#ffb95a",
+                      "surface-container-high": "#2a2a2b",
+                      "surface-container-low": "#1b1b1c",
+                      "background": "#131314",
+                      "surface-container": "#1f1f20",
+                      "on-tertiary-container": "#473733",
+                      "surface": "#131314",
+                      "on-secondary": "#462a00",
+                      "surface-variant": "#353436",
+                      "on-surface": "#e5e2e3",
+                      "primary-container": "#c5a059",
+                      "surface-bright": "#39393a",
+                      "on-tertiary": "#3c2d28",
+                      "on-error": "#690005",
+                      "outline-variant": "#4e4639",
+                      "inverse-surface": "#e5e2e3",
+                      "tertiary-fixed": "#f7ddd6",
+                      "on-secondary-fixed-variant": "#643f00",
+                      "surface-tint": "#e9c176",
+                      "surface-container-highest": "#353436",
+                      "error": "#ffb4ab",
+                      "tertiary-fixed-dim": "#dac1bb",
+                      "primary-fixed": "#ffdea5",
+                      "error-container": "#93000a",
+                      "secondary-container": "#c68315",
+                      "on-primary-fixed-variant": "#5d4201",
+                      "outline": "#9a8f80",
+                      "on-primary": "#412d00",
+                      "tertiary": "#dac1bb",
+                      "on-primary-container": "#4e3700",
+                      "surface-dim": "#131314",
+                      "on-surface-variant": "#d1c5b4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max-width": "1440px",
+                      "gutter": "32px",
+                      "unit": "8px",
+                      "margin": "64px",
+                      "card-padding": "24px"
+              },
+              "fontFamily": {
+                      "label-lg": ["Montserrat"],
+                      "label-sm": ["Montserrat"],
+                      "body-lg": ["Montserrat"],
+                      "headline-lg": ["Playfair Display"],
+                      "headline-md": ["Playfair Display"],
+                      "display-lg": ["Playfair Display"],
+                      "headline-xl": ["Playfair Display"],
+                      "body-md": ["Montserrat"]
+              },
+              "fontSize": {
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "300"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "400"}],
+                      "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "300"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface lounge-bg min-h-screen font-body-md">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-xl bg-surface/40 border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-gutter h-20">
+<button class="text-primary hover:text-primary-fixed-dim transition-colors active:scale-95 duration-300">
+<span class="material-symbols-outlined text-[32px]">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md tracking-[0.3em] text-primary/90 uppercase">RESERVE LOUNGE</h1>
+<div class="flex items-center gap-4">
+<span class="hidden md:block font-label-lg text-label-lg text-primary/80">ALEXANDER STERLING</span>
+<div class="h-10 w-10 rounded-full border border-primary/40 bg-surface-container/30 overflow-hidden">
+<img alt="Member Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0cBcqevuSE8T3Y8COx50bYEOXFJXhYbgSBYqTCTD8wlzaPMmYAcWWws26W0LC1_yqYtiUqJt5R_ikXq0Jx92pgDD5q86OP_hXWKyYo8xo2ekTCc_hz2DG6TV9FMNoNk1h_ojmIjGqVQ8zuEE9gXRUg4StoUBiGBY-YVkAcxid0y9Il--mK2-h1Ec4FHP-OF-9ERYqWDi1DyhVG0kskvscfbX8f2YD2bUjCcWl-qLgNgXz3qzB_mjEFU3-V62tKt0IRf5vqEFt3ys"/>
+</div>
+</div>
+</header>
+<main class="pt-28 pb-32 px-gutter max-w-screen-xl mx-auto">
+<!-- Hero Section -->
+<div class="mb-12">
+<h2 class="font-headline-xl text-headline-xl text-primary/90 mb-2 font-light">WineCraft 360 Cellar Explorer</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant/90 max-w-2xl">Curated exclusively for our Elite Tier members, browse the world's most rare vintages currently resting in our climate-controlled vault.</p>
+</div>
+<!-- Filter Chips -->
+<div class="flex flex-wrap items-center gap-4 mb-10 overflow-x-auto pb-4">
+<div class="flex items-center gap-2 px-4 py-2 rounded-full gold-foil-border glass-panel text-primary font-label-lg">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+<span>FILTERS</span>
+</div>
+<button class="px-6 py-2 rounded-full glass-panel gold-foil-border text-on-surface-variant/80 hover:text-primary hover:border-primary/50 transition-all duration-300 font-label-lg">
+                REGION: ALL
+            </button>
+<button class="px-6 py-2 rounded-full glass-panel gold-foil-border text-on-surface-variant/80 hover:text-primary hover:border-primary/50 transition-all duration-300 font-label-lg">
+                VARIETAL: BORDEAUX
+            </button>
+<button class="px-6 py-2 rounded-full glass-panel gold-foil-border text-on-surface-variant/80 hover:text-primary hover:border-primary/50 transition-all duration-300 font-label-lg">
+                VINTAGE: 2010 - 2018
+            </button>
+<button class="ml-auto flex items-center gap-2 text-primary/70 font-label-lg hover:text-primary transition-all">
+<span>CLEAR ALL</span>
+</button>
+</div>
+<!-- Reserve Selections Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Wine Card 1 -->
+<div class="group relative flex flex-col glass-panel rounded-xl overflow-hidden gold-foil-border amber-glow transition-all duration-500 hover:-translate-y-1">
+<div class="relative h-96 overflow-hidden">
+<img alt="Château Margaux 2015" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmdATwtV_x12lHxy1rJR3BSmeiC8X_Sf_YOK1_SkGLjacXcB8s2cAY8JTzU1yJIInPuWj9IEwd9HnzsvWq3NA3oUHaMz8tFxbZwRS2EkIBpryUjcYpKsB38XSzpMxcO9mMyGSGwihZu23FHEufzKNEZv94grY3w5Wk7CYWYb4bFaJT7DHRfvfabGS3yVY9KiQimaJbPesfQ_7WslgWwuZ7oqX3H8XAKuKOYz97GVQeCjF2uyuG65E5d9WhUgwsBBJYcuwmDNej-24"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface/60 to-transparent"></div>
+</div>
+<div class="p-card-padding flex flex-col flex-grow border-t border-outline-variant/20">
+<div class="mb-4">
+<span class="font-label-sm text-label-sm text-primary/80 uppercase tracking-[0.2em]">Bordeaux Superior</span>
+<h3 class="font-headline-md text-headline-md text-on-surface/90 mt-1">Château Margaux 2015</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant/80 italic mb-6 leading-relaxed">
+                        "A majestic vintage offering profound notes of dark currants, violets, and graphite. The tannins are architectural yet silky."
+                    </p>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-primary/90">$1,250</span>
+<button class="bg-primary/20 hover:bg-primary/30 border border-primary/30 text-primary font-label-lg px-6 py-3 rounded-lg shadow-sm active:scale-95 transition-all">
+                            VIEW DETAILS
+                        </button>
+</div>
+</div>
+</div>
+<!-- Wine Card 2 -->
+<div class="group relative flex flex-col glass-panel rounded-xl overflow-hidden gold-foil-border amber-glow transition-all duration-500 hover:-translate-y-1">
+<div class="relative h-96 overflow-hidden">
+<img alt="Montrachet Grand Cru 2018" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjWXnCZh4sFFrTBlULQHPFXhQnc10oPO8xg9HFIYbSvYTGUlPROu6-U-t_BTPLoD1XMPUlV8RGWu37SPl0Sqa9zk8E6_aJLNE5AkDlAt5SfQDJd87RRzNm4M74fWq9aMLso4Uw5vPhg_A30Ti5k6eP35mxAh-3uWGbpRRwJOswpEeD1TyLp4374k2lgqcnqrP4S32uwfdofykDm1pMqaRbT8BmNovu1Doe-wSGblxbSQ0H0hp8pEGCPjgXi6jyzIKriEELwm_KQVM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface/60 to-transparent"></div>
+</div>
+<div class="p-card-padding flex flex-col flex-grow border-t border-outline-variant/20">
+<div class="mb-4">
+<span class="font-label-sm text-label-sm text-primary/80 uppercase tracking-[0.2em]">Burgundy Blanc</span>
+<h3 class="font-headline-md text-headline-md text-on-surface/90 mt-1">Montrachet Grand Cru 2018</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant/80 italic mb-6 leading-relaxed">
+                        "Exceptional power balanced by crystalline acidity. Expect layers of toasted brioche, white truffle, and preserved lemon."
+                    </p>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-primary/90">$2,800</span>
+<button class="bg-primary/20 hover:bg-primary/30 border border-primary/30 text-primary font-label-lg px-6 py-3 rounded-lg shadow-sm active:scale-95 transition-all">
+                            VIEW DETAILS
+                        </button>
+</div>
+</div>
+</div>
+<!-- Wine Card 3 -->
+<div class="group relative flex flex-col glass-panel rounded-xl overflow-hidden gold-foil-border amber-glow transition-all duration-500 hover:-translate-y-1">
+<div class="relative h-96 overflow-hidden">
+<img alt="Opus One 2012" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJyKp4jzNWWopW8P0W6UfLhejTaIip0v-IBnDIzwPKHAMoGWJKf1xTMaf-FLP5dy8AYjsh4G3lOYUcJ4UwloJUkT3E9_oIo8rnE8nQH3o28lHgEfP1yQfjpSHGZK2WwDg1rbl2wWY71D-Xbc0zfh7lpz912kbNkd3v0ie1i5ZqhNje1wI7G_kAy6lgMvz0uhvdB18PGtcRL8pYSpOv6cAxkF9--XpL5x-KUWLshytgU_XvkjdUibY2_dJXaJs6Wi04eQMBA8HtmyI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface/60 to-transparent"></div>
+</div>
+<div class="p-card-padding flex flex-col flex-grow border-t border-outline-variant/20">
+<div class="mb-4">
+<span class="font-label-sm text-label-sm text-primary/80 uppercase tracking-[0.2em]">Napa Valley Red</span>
+<h3 class="font-headline-md text-headline-md text-on-surface/90 mt-1">Opus One 2012</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant/80 italic mb-6 leading-relaxed">
+                        "An expressive blend showing tobacco leaf, black olive, and espresso. A long, velvety finish that lingers on the palate."
+                    </p>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-primary/90">$640</span>
+<button class="bg-primary/20 hover:bg-primary/30 border border-primary/30 text-primary font-label-lg px-6 py-3 rounded-lg shadow-sm active:scale-95 transition-all">
+                            VIEW DETAILS
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-2xl backdrop-blur-2xl bg-surface/40 border-t border-outline-variant/20 shadow-lg flex justify-around items-center h-24 px-gutter pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 gap-1 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider">PourCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 gap-1 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider">BeerCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-medium gap-1 scale-105" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">wine_bar</span>
+<span class="font-label-sm text-[10px] uppercase tracking-widest">WineCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 gap-1 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-label-sm text-[10px] uppercase tracking-wider">Passport</span>
+</a>
+</nav>
+<!-- NavigationDrawer -->
+<aside class="h-full w-80 fixed left-0 top-0 z-[60] -translate-x-full duration-500 ease-in-out glass-panel border-r border-outline-variant/30 shadow-2xl flex flex-col py-8 px-4 gap-6" id="nav-drawer">
+<div class="flex items-center gap-4 mb-8 px-2">
+<div class="h-12 w-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">shield_person</span>
+</div>
+<div>
+<h4 class="font-headline-md text-lg text-primary leading-none font-medium">Alexander Sterling</h4>
+<p class="font-label-sm text-xs text-on-surface-variant/70 mt-1">Passport #8821</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 py-3 px-4 rounded-lg bg-primary/10 text-primary border border-primary/10" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md text-sm">Private Cellar</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-lg text-on-surface-variant/80 hover:text-primary hover:bg-surface-variant/20 transition-colors" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-body-md text-sm">Tasting Notes</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-lg text-on-surface-variant/80 hover:text-primary hover:bg-surface-variant/20 transition-colors" href="#">
+<span class="material-symbols-outlined">event</span>
+<span class="font-body-md text-sm">Lounge Events</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-lg text-on-surface-variant/80 hover:text-primary hover:bg-surface-variant/20 transition-colors" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-body-md text-sm">Member Services</span>
+</a>
+<hr class="my-4 border-outline-variant/20"/>
+<a class="flex items-center gap-4 py-3 px-4 rounded-lg text-error/80 hover:bg-error-container/10 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-sm">Logout</span>
+</a>
+</nav>
+<button class="absolute top-4 right-4 text-on-surface-variant/50" id="close-drawer">
+<span class="material-symbols-outlined">close</span>
+</button>
+</aside>
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[55] hidden transition-opacity duration-500" id="drawer-overlay"></div>
+<script>
+        const menuBtn = document.querySelector('header button');
+        const drawer = document.getElementById('nav-drawer');
+        const overlay = document.getElementById('drawer-overlay');
+        const closeBtn = document.getElementById('close-drawer');
+
+        function toggleDrawer() {
+            drawer.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        menuBtn.addEventListener('click', toggleDrawer);
+        closeBtn.addEventListener('click', toggleDrawer);
+        overlay.addEventListener('click', toggleDrawer);
+
+        const cards = document.querySelectorAll('.group');
+        cards.forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.99)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1.01)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body></html>

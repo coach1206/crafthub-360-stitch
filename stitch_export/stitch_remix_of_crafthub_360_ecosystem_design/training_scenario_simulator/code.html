@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Lounge Curator | Training Simulator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(31, 31, 32, 0.7);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+        .scenario-card-active {
+            border: 1px solid #e9c176;
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.1);
+        }
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .float-anim { animation: subtle-float 6s ease-in-out infinite; }
+        
+        /* Custom haptic simulation */
+        .haptic-feedback:active {
+            transform: scale(0.97);
+            filter: brightness(1.2);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#1b1b1c",
+                        "outline": "#9a8f80",
+                        "surface-variant": "#353436",
+                        "surface-dim": "#131314",
+                        "tertiary-container": "#b7a09a",
+                        "on-secondary": "#462a00",
+                        "background": "#131314",
+                        "primary": "#e9c176",
+                        "on-primary-container": "#4e3700",
+                        "surface-container": "#1f1f20",
+                        "on-tertiary-fixed": "#261814",
+                        "primary-container": "#c5a059",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed": "#f7ddd6",
+                        "surface-container-highest": "#353436",
+                        "surface-tint": "#e9c176",
+                        "on-surface": "#e5e2e3",
+                        "on-tertiary-container": "#473733",
+                        "on-primary-fixed": "#261900",
+                        "inverse-surface": "#e5e2e3",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#d1c5b4",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-primary": "#412d00",
+                        "secondary": "#ffb95a",
+                        "surface-container-high": "#2a2a2b",
+                        "inverse-on-surface": "#303031",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed": "#ffdea5",
+                        "secondary-fixed": "#ffddb6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "surface": "#131314",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "primary-fixed-dim": "#e9c176",
+                        "outline-variant": "#4e4639",
+                        "on-background": "#e5e2e3",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "tertiary": "#dac1bb",
+                        "surface-bright": "#39393a",
+                        "on-secondary-container": "#3d2400",
+                        "error": "#ffb4ab",
+                        "secondary-container": "#c68315",
+                        "on-tertiary": "#3c2d28"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "card-padding": "24px",
+                        "margin": "64px",
+                        "container-max-width": "1440px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Playfair Display"],
+                        "headline-xl": ["Playfair Display"],
+                        "label-sm": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "label-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- Top Navigation Anchor -->
+<header class="bg-transparent backdrop-blur-xl bg-surface/30 flex justify-between items-center px-margin py-8 w-full z-50 fixed top-0">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-primary/30">
+<img alt="Curator" data-alt="A sophisticated silhouette of a luxury lounge curator in a sharp tuxedo, backlit by warm amber light against a dark, moody background. The atmosphere is professional, exclusive, and refined, aligning with a high-end concierge aesthetic with deep shadows and golden highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdeoDFHf9LVwPMcgHYpmNd6-OBYG-hsUjbrvdot_3KtJaVXS9hhHwrA9y4naGYoJZNkaF4XhQ5NjbU7F7XtCz2jTkp9tWEx137qlDpGqigKyjBLeiXRHLmR55r9em08-H9pVAz2_5psjfyDnfGb3G8-HBc_lQKl6SY8yWIIouceER4MofGs2RzPsEtfIfLRVHbYW_3adUjVpRK_OWRS4Fn2JWHMXz76ITaK6ZZuXdT5x4p7K2k1045SyjOfDdyYq44hcCXhdppl5Q"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">The Lounge Curator</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label-lg text-label-lg text-primary tracking-widest uppercase">Training Simulation Alpha-1</span>
+<button class="text-primary hover:opacity-80 transition-opacity duration-500 ease-in-out">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Navigation Drawer (Shell) -->
+<nav class="fixed inset-y-0 left-0 z-50 flex flex-col h-screen w-80 rounded-r-xl bg-surface-container-lowest border-r border-outline-variant/30 backdrop-blur-2xl shadow-2xl shadow-on-secondary-container/20 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+<div class="px-8 py-10 flex flex-col gap-2">
+<h2 class="font-headline-lg text-headline-lg text-primary">Distinguished Guest</h2>
+<p class="font-label-lg text-label-lg text-on-surface-variant opacity-60">Invitation Only Access</p>
+</div>
+<div class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface mx-2 hover:bg-surface-bright/10 transition-all duration-300 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="tempest">compost</span>
+<span class="font-label-lg text-label-lg">Curator Home</span>
+</a>
+<a class="flex items-center gap-4 p-4 bg-secondary-container text-on-secondary-container rounded-lg mx-2 transition-all duration-300 shadow-lg shadow-primary/10" href="#">
+<span class="material-symbols-outlined" data-icon="liquor" style="font-variation-settings: 'FILL' 1;">liquor</span>
+<span class="font-label-lg text-label-lg">Craft Journeys</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface mx-2 hover:bg-surface-bright/10 transition-all duration-300 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-label-lg text-label-lg">Networking Stamps</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface mx-2 hover:bg-surface-bright/10 transition-all duration-300 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="font-label-lg text-label-lg">System Ops</span>
+</a>
+</div>
+<div class="p-8 border-t border-outline-variant/10">
+<div class="p-4 glass-panel rounded-xl flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-xs font-label-sm text-outline uppercase tracking-tighter">System Status: Optimal</span>
+</div>
+</div>
+</nav>
+<!-- Main Simulator Canvas -->
+<main class="ml-0 lg:ml-80 pt-32 pb-24 px-margin h-screen overflow-y-auto">
+<div class="max-w-container-max-width mx-auto">
+<!-- Scenario Header -->
+<div class="mb-12">
+<span class="text-primary font-label-lg text-label-lg tracking-widest uppercase mb-4 block">Active Training Module</span>
+<h2 class="font-display-lg text-display-lg text-on-surface mb-6">Service Continuity Challenge</h2>
+<div class="h-1 w-24 bg-primary rounded-full"></div>
+</div>
+<!-- Bento Grid Simulation Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Live Scene Visualization -->
+<div class="col-span-12 lg:col-span-8 group relative overflow-hidden rounded-3xl h-[500px] glass-panel shadow-2xl">
+<img class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-[2000ms]" data-alt="A dark, atmospheric ultra-high-end hotel bar with leather-bound chairs, polished mahogany surfaces, and a warm amber glow from crystal decanters. In the background, a large glass door leads to a misty, moonlit patio area. The style is cinematic, evocative of a secret members-only club, with deep espresso tones and soft gold lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnK5aA0AsNSv5KgV9Y35KFJDfEGhuWPdFx5x7GVqjQKePlDw7UBLQaWtXgInfNa4JOU5DGLm3njbG2QPRWhgujlLkVbuClPSDNiLGeZ8XMLIUMn-gm0xuXWbc99k2vISeVDhdni_K6XjapvPzskA6Tu_NlqzJN-xxmO_FZVZaFs3d5HvsEZ4tnpJ_sBAyPo4mn17mecz0hKZ9b3AT_V4rWe481OmwbB8r8VfDaFzColC9q0utRcJ2Fub3ulQR0rF-TPakc8WUHtkY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<!-- Scenario Overlay Info -->
+<div class="absolute bottom-0 left-0 p-12 w-full">
+<div class="flex items-center gap-4 mb-4">
+<span class="px-4 py-1 rounded-full bg-primary/20 border border-primary text-primary font-label-sm text-label-sm">CURRENT STATE: BAR</span>
+<span class="material-symbols-outlined text-primary" data-icon="arrow_forward">arrow_forward</span>
+<span class="px-4 py-1 rounded-full bg-secondary-container/20 border border-secondary text-secondary font-label-sm text-label-sm">DESTINATION: PATIO</span>
+</div>
+<p class="font-headline-md text-headline-md text-on-surface max-w-2xl">
+                            "Guest moves from Bar to Patio with an open cart. Items: 1x Aged Scotch, 1x Cohiba Siglo VI."
+                        </p>
+</div>
+<!-- Animated Indicator -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 float-anim pointer-events-none">
+<div class="w-32 h-32 rounded-full border border-primary/30 flex items-center justify-center backdrop-blur-sm bg-primary/5">
+<span class="material-symbols-outlined text-6xl text-primary opacity-50" data-icon="motion_sensor_active">motion_sensor_active</span>
+</div>
+</div>
+</div>
+<!-- Interaction Panel -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+<!-- Options Card -->
+<div class="p-card-padding glass-panel rounded-3xl flex-1 flex flex-col justify-between" id="interaction-card">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-6">Select Action</h3>
+<div class="space-y-4">
+<!-- Option 1: Incorrect -->
+<button class="w-full text-left p-6 rounded-2xl border border-outline-variant/30 hover:border-primary/50 transition-all haptic-feedback group" onclick="selectOption(this, false, 'Standard protocol requires tab settlement, but in high-end service, we prioritize the guest\'s movement flow over immediate billing.')">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface-variant group-hover:text-on-surface">Close Order</span>
+<span class="material-symbols-outlined opacity-30 group-hover:opacity-100" data-icon="close">close</span>
+</div>
+</button>
+<!-- Option 2: Incorrect -->
+<button class="w-full text-left p-6 rounded-2xl border border-outline-variant/30 hover:border-primary/50 transition-all haptic-feedback group" onclick="selectOption(this, false, 'Manual transfers are prone to error and disrupt the seamless digital experience we promise to our members.')">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface-variant group-hover:text-on-surface">Manual Transfer</span>
+<span class="material-symbols-outlined opacity-30 group-hover:opacity-100" data-icon="sync_alt">sync_alt</span>
+</div>
+</button>
+<!-- Option 3: Correct -->
+<button class="w-full text-left p-6 rounded-2xl border border-primary bg-primary/10 transition-all haptic-feedback group shadow-lg shadow-primary/5" onclick="selectOption(this, true, 'Correct. This maintains the tactile luxury of the experience. Session persistence allows the guest to enjoy their transition without administrative friction, while the system intelligently re-assigns the location tag to the Patio zone.')">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-primary">Confirm Move with Session Persistence</span>
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Feedback Section (Hidden by default) -->
+<div class="mt-8 pt-8 border-t border-outline-variant/20 hidden transition-opacity duration-500" id="feedback-panel">
+<h4 class="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-3">Why it matters</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed" id="feedback-text"></p>
+</div>
+</div>
+<!-- Status Display -->
+<div class="p-card-padding glass-panel rounded-3xl h-32 flex items-center justify-center" id="status-card">
+<div class="flex items-center gap-4 text-outline" id="status-idle">
+<span class="material-symbols-outlined animate-spin" data-icon="hourglass_empty">hourglass_empty</span>
+<span class="font-label-lg">Awaiting Curatorial Decision...</span>
+</div>
+<div class="hidden flex flex-col items-center" id="status-success">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-headline-md">SCENARIO PASSED</span>
+</div>
+<span class="text-xs text-outline uppercase tracking-[0.2em] mt-1">Certification Recorded</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Mobile) -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin py-6 pb-10 bg-surface-container/80 backdrop-blur-2xl border-t border-outline-variant/20 md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+<span class="font-label-sm text-label-sm">Voice Assist</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 transition-all">
+<span class="material-symbols-outlined" data-icon="concierge" style="font-variation-settings: 'FILL' 1;">concierge</span>
+<span class="font-label-sm text-label-sm">Concierge</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</div>
+</footer>
+<script>
+        function selectOption(element, isCorrect, feedback) {
+            // Reset all sibling button states
+            const buttons = element.parentElement.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-primary/10', 'border-red-500/50', 'bg-red-500/5');
+                btn.classList.add('border-outline-variant/30');
+            });
+
+            // Show Feedback
+            const feedbackPanel = document.getElementById('feedback-panel');
+            const feedbackText = document.getElementById('feedback-text');
+            feedbackPanel.classList.remove('hidden');
+            feedbackText.innerText = feedback;
+
+            // Handle Logic
+            if (isCorrect) {
+                element.classList.remove('border-outline-variant/30');
+                element.classList.add('border-primary', 'bg-primary/10');
+                
+                // Update Status
+                document.getElementById('status-idle').classList.add('hidden');
+                document.getElementById('status-success').classList.remove('hidden');
+                
+                // Certification Animation
+                document.getElementById('status-card').classList.add('ring-2', 'ring-primary/50', 'bg-primary/5');
+            } else {
+                element.classList.remove('border-outline-variant/30');
+                element.classList.add('border-red-500/50', 'bg-red-500/5');
+                
+                document.getElementById('status-success').classList.add('hidden');
+                document.getElementById('status-idle').classList.remove('hidden');
+                document.getElementById('status-card').classList.remove('ring-2', 'ring-primary/50', 'bg-primary/5');
+            }
+        }
+    </script>
+</body></html>

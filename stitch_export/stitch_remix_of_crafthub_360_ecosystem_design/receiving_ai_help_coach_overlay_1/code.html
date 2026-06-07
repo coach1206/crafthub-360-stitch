@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#e5e2e3",
+                    "error": "#ffb4ab",
+                    "surface-container-lowest": "#0e0e0f",
+                    "on-tertiary-fixed": "#261814",
+                    "on-primary": "#412d00",
+                    "on-surface-variant": "#d1c5b4",
+                    "inverse-surface": "#e5e2e3",
+                    "surface": "#131314",
+                    "secondary-container": "#c68315",
+                    "on-secondary": "#462a00",
+                    "primary-container": "#c5a059",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container": "#1f1f20",
+                    "on-secondary-container": "#3d2400",
+                    "inverse-primary": "#775a19",
+                    "surface-container-low": "#1b1b1c",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "secondary": "#ffb95a",
+                    "on-tertiary": "#3c2d28",
+                    "surface-container-high": "#2a2a2b",
+                    "secondary-fixed": "#ffddb6",
+                    "primary-fixed-dim": "#e9c176",
+                    "outline-variant": "#4e4639",
+                    "on-surface": "#e5e2e3",
+                    "on-primary-container": "#4e3700",
+                    "on-error": "#690005",
+                    "surface-tint": "#e9c176",
+                    "primary": "#e9c176",
+                    "error-container": "#93000a",
+                    "inverse-on-surface": "#303031",
+                    "tertiary-container": "#b7a09a",
+                    "on-error-container": "#ffdad6",
+                    "surface-dim": "#131314",
+                    "primary-fixed": "#ffdea5",
+                    "tertiary": "#dac1bb",
+                    "surface-container-highest": "#353436",
+                    "surface-variant": "#353436",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "outline": "#9a8f80",
+                    "surface-bright": "#39393a",
+                    "on-tertiary-container": "#473733",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-primary-fixed": "#261900",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "background": "#131314"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "unit": "8px",
+                    "margin": "64px",
+                    "gutter": "32px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .airy-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gold-foil-accent {
+            background: linear-gradient(135deg, #e9c176 0%, #c68315 50%, #ffdea5 100%);
+            box-shadow: 0 4px 15px rgba(198, 131, 21, 0.3);
+        }
+        .scan-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e9c176, transparent);
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan {
+            0% { transform: translateY(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        .touch-target {
+            min-height: 72px;
+        }
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Background Image Container -->
+<div class="fixed inset-0 z-0">
+<img alt="Premium Lounge Bokeh Background" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"/>
+<div class="absolute inset-0 bg-black/40"></div>
+<div class="scan-line absolute top-0 left-0 w-full z-10"></div>
+</div>
+<!-- Top Navigation -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-transparent">
+<div class="flex items-center gap-3">
+<div class="p-2 airy-glass rounded-xl">
+<span class="material-symbols-outlined text-primary text-[28px]">clinical_notes</span>
+</div>
+<div>
+<h1 class="font-headline-md text-[20px] text-white font-medium tracking-tight">AI Concierge Coach</h1>
+<p class="font-label-sm text-[10px] text-primary uppercase tracking-[0.1em]">Receiving Mode</p>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full border-2 border-primary/30 overflow-hidden shadow-lg">
+<img alt="Executive Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5k2rkPlkNVKwDIiddaAqgH69VWiaCgwWH22_O5cHevlX_OH1RGGHEZVVkE0t9LgPqSuey2N481Xm2AXQpfOplHqaCBSSL3TIZ00Vi9LNBYopFjqHhRTL_8ljWG3N1f89X0G06oFN3ZYftrAobncOwybKvjx5u-K6pwYv1LZJOOQ-BvXQ0dWLUC6zFeuXTbkqxqUE2qp3RCGYjspzrQuYe-qHr_a9cDozczv2QBE9UvjQc-FxETPFrI1A5p92JvYVeql4elf3Kuwc"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative z-20 w-full h-screen pt-28 pb-36 flex items-center justify-center">
+<section class="w-full max-w-[500px] mx-auto px-6">
+<div class="airy-glass p-8 rounded-[40px] shadow-2xl animate-in fade-in zoom-in duration-700">
+<!-- Header -->
+<div class="flex items-center justify-between mb-8">
+<div class="flex flex-col">
+<span class="font-label-sm text-primary-fixed-dim uppercase tracking-[0.2em] mb-1">Status Alert</span>
+<h2 class="font-headline-lg text-[28px] text-white flex items-center gap-2">
+                        Damaged Item
+                    </h2>
+</div>
+<div class="bg-error/20 border border-error/30 text-error px-4 py-2 rounded-full flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-error"></span>
+</span>
+<span class="font-label-lg text-[12px] font-bold">Action Required</span>
+</div>
+</div>
+<!-- Content Area -->
+<div class="space-y-6">
+<div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+<h3 class="font-label-lg text-primary text-[12px] uppercase tracking-widest mb-2">Recommendation</h3>
+<p class="font-headline-md text-[22px] text-white leading-tight">
+                        Capture evidence, mark as damaged, and flag for Review.
+                    </p>
+</div>
+<div class="aspect-video rounded-[24px] overflow-hidden border border-white/20 shadow-inner relative group">
+<img alt="Visual Damage Reference" class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgVV1xKmSU-Tt2RyBYUqDt1bfEw_aHU8jqZMt2xxrkljPtowqp3YH11WuawysSI2aflY4l9KGcAH3LFV8A2f8Ri4mzl1eGU2ti0x7C6LYd_r3czzGwlTVN9bijNi6x_zoUbQYHtI0iX-n1CQysvCZy6WBYQHi7vaVny8eHmitvzl4zm-purdsrTjST0RnoaQKFqfZ4Doirdih8_eeEg5iy5_LmmSJLKdVry1kE_M8gMSPUsbQolMNObS8I_nwBT1BrcON7_05L3BM"/>
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+<div class="w-14 h-14 airy-glass rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white">zoom_in</span>
+</div>
+</div>
+</div>
+<div class="pt-2">
+<h3 class="font-label-lg text-white/50 text-[11px] uppercase tracking-widest mb-1">Impact Analysis</h3>
+<p class="font-body-md text-white/80 text-[15px] leading-relaxed">
+                        Unresolved damage at receipt creates untraceable shrink and supplier liability. Mark as damaged to protect margin.
+                    </p>
+</div>
+</div>
+<!-- Action Controls -->
+<div class="mt-10 grid grid-cols-2 gap-4">
+<button class="touch-target gold-foil-accent text-on-primary rounded-[20px] font-label-lg flex items-center justify-center gap-3 transition-transform active:scale-95 shadow-lg">
+<span class="material-symbols-outlined">camera</span>
+                    Capture
+                </button>
+<button class="touch-target airy-glass text-white rounded-[20px] font-label-lg flex items-center justify-center gap-3 transition-all active:scale-95 hover:bg-white/10">
+<span class="material-symbols-outlined">support_agent</span>
+                    Manager
+                </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-6 pb-8 pt-4">
+<div class="flex items-center gap-2 p-2 airy-glass rounded-full shadow-2xl">
+<button class="w-[72px] h-[72px] flex flex-col items-center justify-center gold-foil-accent text-on-primary rounded-full transition-transform active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-[10px] font-semibold mt-1">Guide</span>
+</button>
+<button class="w-[72px] h-[72px] flex flex-col items-center justify-center text-white/70 transition-all hover:text-white active:scale-90">
+<span class="material-symbols-outlined">graphic_eq</span>
+<span class="text-[10px] mt-1">Voice</span>
+</button>
+<button class="w-[72px] h-[72px] flex flex-col items-center justify-center text-white/70 transition-all hover:text-white active:scale-90">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] mt-1">Stock</span>
+</button>
+<button class="w-[72px] h-[72px] flex flex-col items-center justify-center text-error/80 transition-all hover:text-error active:scale-90">
+<span class="material-symbols-outlined">close</span>
+<span class="text-[10px] mt-1">Dismiss</span>
+</button>
+</div>
+</nav>
+<script>
+    // Floating Action (Contextual: Confirm Receipt)
+    const fab = document.createElement('button');
+    fab.className = 'fixed bottom-28 right-8 w-[72px] h-[72px] gold-foil-accent text-on-primary rounded-full shadow-2xl flex items-center justify-center z-40 transition-transform active:scale-90';
+    fab.innerHTML = '<span class="material-symbols-outlined text-3xl">done_all</span>';
+    document.body.appendChild(fab);
+
+    // Haptic Simulation
+    document.querySelectorAll('button').forEach(button => {
+        button.addEventListener('touchstart', () => {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(15);
+            }
+        });
+    });
+</script>
+</body></html>

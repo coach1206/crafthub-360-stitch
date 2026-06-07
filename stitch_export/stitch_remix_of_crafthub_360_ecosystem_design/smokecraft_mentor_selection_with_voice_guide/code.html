@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#e5e2e3",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-tint": "#e9c176",
+                    "on-secondary-fixed": "#2a1800",
+                    "primary-container": "#c5a059",
+                    "primary-fixed": "#ffdea5",
+                    "outline": "#9a8f80",
+                    "on-primary-container": "#4e3700",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "error-container": "#93000a",
+                    "tertiary": "#dac1bb",
+                    "surface-variant": "#353436",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-tertiary-container": "#473733",
+                    "surface-container-highest": "#353436",
+                    "inverse-on-surface": "#303031",
+                    "surface-container-low": "#1b1b1c",
+                    "surface-dim": "#131314",
+                    "tertiary-fixed": "#f7ddd6",
+                    "on-tertiary": "#3c2d28",
+                    "on-surface-variant": "#d1c5b4",
+                    "secondary-fixed": "#ffddb6",
+                    "background": "#131314",
+                    "surface-container": "#1f1f20",
+                    "outline-variant": "#4e4639",
+                    "on-primary": "#412d00",
+                    "on-surface": "#e5e2e3",
+                    "primary": "#e9c176",
+                    "on-tertiary-fixed": "#261814",
+                    "secondary-container": "#c68315",
+                    "primary-fixed-dim": "#e9c176",
+                    "tertiary-container": "#b7a09a",
+                    "surface-container-high": "#2a2a2b",
+                    "on-secondary-container": "#3d2400",
+                    "inverse-primary": "#775a19",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-secondary": "#462a00",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface": "#131314",
+                    "secondary": "#ffb95a",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-error": "#690005",
+                    "surface-bright": "#39393a",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed": "#261900",
+                    "on-background": "#e5e2e3",
+                    "error": "#ffb4ab"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin": "64px",
+                    "gutter": "32px",
+                    "container-max-width": "1440px",
+                    "unit": "8px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .waveform-bar {
+            animation: waveform 1.2s ease-in-out infinite;
+            transform-origin: bottom;
+        }
+        @keyframes waveform {
+            0%, 100% { height: 8px; }
+            50% { height: 28px; }
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .gold-border {
+            border: 1px solid rgba(233, 193, 118, 0.3);
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-20 backdrop-blur-xl bg-surface/80 border-b border-outline-variant shadow-md">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 duration-300">menu</span>
+<h1 class="font-headline-md text-headline-md tracking-widest text-primary uppercase">RESERVE LOUNGE</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<a class="font-label-lg text-primary transition-colors hover:text-primary-fixed-dim" href="#">POURCRAFT</a>
+<a class="font-label-lg text-on-surface-variant transition-colors hover:text-primary-fixed-dim" href="#">BEERCRAFT</a>
+<a class="font-label-lg text-on-surface-variant transition-colors hover:text-primary-fixed-dim" href="#">WINECRAFT</a>
+<a class="font-label-lg text-on-surface-variant transition-colors hover:text-primary-fixed-dim" href="#">PASSPORT</a>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary overflow-hidden">
+<img alt="Member Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATgZoFyjXQjFaQZ0SHpmJMV30Aoh8AG7AytH7PKRKowQeIwIhwKFVxo0vF6MwFhDvNfyzTa6uXxzwaKENxfN3BZNTDVpYknHUULI3IsRDSh56JUPDbDcjhIub1Ld9ZugUKGFbpXi2VQs80JWsK56ye3eMvR9JHssZ40tbs8tW0xsCbT-jhwmng-kbXqf1lj56-SbhNqrkLPQ1OQ4j7lPu1NcmfxGR31A_1UY5McubWLMb8PNL-Ksj27ZMtDUcydOF32Ai0NhsrorU"/>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-48 px-gutter max-w-container-max-width mx-auto">
+<!-- Page Introduction -->
+<div class="mb-12">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">SmokeCraft Mentor Selection</h2>
+<p class="font-body-lg text-on-surface-variant max-w-2xl">Refine your palate with guidance from the world's leading artisans. Select a mentor to begin your sensory journey.</p>
+</div>
+<!-- AI Concierge Voice Panel (Craft Mentor Persona) -->
+<section class="mb-12 glass-panel bg-surface-container-high/60 rounded-xl gold-border p-8 shadow-2xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<span class="text-primary/20 font-headline-xl opacity-10 select-none">CRAFT MENTOR</span>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+<!-- Golden Waveform Animation -->
+<div class="flex items-end gap-1.5 h-12">
+<div class="waveform-bar w-1.5 bg-primary rounded-full" style="animation-delay: 0.1s"></div>
+<div class="waveform-bar w-1.5 bg-primary-container rounded-full" style="animation-delay: 0.3s"></div>
+<div class="waveform-bar w-1.5 bg-primary rounded-full" style="animation-delay: 0.2s"></div>
+<div class="waveform-bar w-1.5 bg-secondary rounded-full" style="animation-delay: 0.5s"></div>
+<div class="waveform-bar w-1.5 bg-primary rounded-full" style="animation-delay: 0.4s"></div>
+<div class="waveform-bar w-1.5 bg-primary-container rounded-full" style="animation-delay: 0.1s"></div>
+<div class="waveform-bar w-1.5 bg-primary rounded-full" style="animation-delay: 0.6s"></div>
+</div>
+<div class="flex-1 text-center md:text-left">
+<p class="font-label-lg text-primary tracking-widest mb-2 uppercase">AI Concierge Advice</p>
+<p class="font-headline-md text-on-surface italic leading-relaxed">
+                        "Your taste profile is leaning <span class="text-primary font-bold">smooth and social</span>. A Dominican-style mentor may be a strong fit for your current palate."
+                    </p>
+</div>
+<div class="flex flex-wrap justify-center gap-4">
+<button class="flex items-center gap-2 px-6 py-3 gold-gradient text-on-primary font-label-lg rounded-full shadow-lg active:scale-95 transition-all">
+<span class="material-symbols-outlined text-lg">volume_up</span>
+                        HEAR IT
+                    </button>
+<button class="flex items-center gap-2 px-6 py-3 bg-surface-variant text-on-surface font-label-lg rounded-full border border-outline-variant hover:border-primary transition-all active:scale-95">
+<span class="material-symbols-outlined text-lg">description</span>
+                        READ IT
+                    </button>
+<button class="flex items-center gap-2 px-6 py-3 bg-error-container/20 text-error font-label-lg rounded-full border border-error/30 hover:bg-error-container/40 transition-all active:scale-95">
+<span class="material-symbols-outlined text-lg">call</span>
+                        CALL STAFF
+                    </button>
+</div>
+</div>
+</section>
+<!-- Mentor Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Featured Mentor (Dominican Specialist) -->
+<div class="md:col-span-8 group relative overflow-hidden rounded-xl h-[500px] gold-border shadow-xl cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A portrait of a distinguished older man with warm features, wearing a linen shirt in a sun-drenched colonial-style Dominican workshop. The scene is filled with golden light and rich textures of aged tobacco leaves and polished cedar wood. The mood is sophisticated, warm, and authentic, reflecting a high-end luxury lifestyle brand." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCIeNnfrrF_07XyTvcv68-jq21IX2ZiaQGYUTjy0Lyqh8qFIH5c9lc3yLeqS7s_O_WugwNv2CXWTdXWZrs3a_tgrDFu2W9sYj_y8lDIip2_qQbop5EMJxvvoDK8n4dSQJggRc_t6ijVOliCJBWBwpIB7aG12myDgUrogaOm_CTuC-RFlaE4txpx02gaQ2p78-LAtnaKHtKQIwFiMeqKcfrubODzQZ2OYzPQhTb_OOBQcak2GGQ0LIciFdVHoI_BYg1BrMPJ295Evq0')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full glass-panel bg-black/40 border-t border-primary/20">
+<div class="flex justify-between items-end">
+<div>
+<span class="bg-primary/20 text-primary border border-primary/40 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 inline-block">Recommended Specialist</span>
+<h3 class="font-headline-lg text-headline-lg text-white mb-1">Mateo De Los Santos</h3>
+<p class="font-body-md text-primary-fixed mb-4">Master of Dominican Shade &amp; Social Blends</p>
+<div class="flex gap-4">
+<span class="flex items-center gap-1 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-sm">workspace_premium</span> 35 Years Exp.</span>
+<span class="flex items-center gap-1 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-sm">schedule</span> Available Now</span>
+</div>
+</div>
+<button class="w-16 h-16 rounded-full gold-gradient flex items-center justify-center text-on-primary shadow-2xl group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Side Mentor 1 -->
+<div class="md:col-span-4 group relative overflow-hidden rounded-xl h-[500px] border border-outline-variant shadow-lg cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A close-up artistic portrait of a master blender's hands working with dark, oily Maduro leaves in a dimly lit, atmospheric cellar. The lighting is moody and dramatic, highlighting the texture of the leaves and the glint of a gold signet ring. The aesthetic is deep, rich, and intensely premium, focused on the craft of heavy blends." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCimTMq5k6_4YqRlmgmr4zxDe2JrNW95LtBzsCLutFVJ5TMMOU6if49zBCPjpcFyq0WBMS0o-DHBpI6GEyuHucaPNFwkGhvg6E7OIFAjSwk0CYqPLEf9S2wztPq2hxctY7XR3geuqC_uOl5FWJU03xR_b8W4kek5S1tLTwQ0fMAldR4q5dt1vTDsxd_RVwvGCHdphUtCT4UuoKgkJ1I8A2I1fl_yA8EqWKCPLc8E-UMcFvXalQLIGmPxwr3fSTw_CTHRqJcbD7OsKA')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full glass-panel bg-black/60 border-t border-outline-variant">
+<h3 class="font-headline-md text-headline-md text-white mb-1">Elena Moretti</h3>
+<p class="font-body-md text-secondary-fixed mb-4">The Maduro Alchemist</p>
+<button class="text-primary font-label-lg flex items-center gap-2 hover:gap-4 transition-all">
+                        VIEW PROFILE <span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Mentor 3 -->
+<div class="md:col-span-4 group relative overflow-hidden rounded-xl h-[400px] border border-outline-variant shadow-lg cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A portrait of a sharp, modern sommelier in a sleek, dark-toned luxury lounge setting. The lighting is cool and sophisticated with subtle amber accents. He is standing next to a glass-encased humidor, representing a scientific and modern approach to tobacco pairing. The style is contemporary luxury with a focus on precision." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD5CYEEL12rXXgUGZlu8H_iuwFzuU8cvOPhutTXbqjP76w50uZXiB0iX9PL2w3EgEZwhVVIAlpO07WB-EUy_UJ4j2Bja8ZG2LpdFg5Izvg9z9jEFJ2aUPJQeBWNjfgVcCnFok557kmSvK9w07NIMvONvEx_dtLL2Qo2sqpgtzQAqA60gY4zAOQW38XuZ3meOUgd9HkB1ewpNDNwg-qPl3ZBwsVTBs6KjUjZ3JMw8xJUmgKf1x0NM-lJPbSXAzsJpTJzuwyKCXT87GI')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h3 class="font-headline-md text-white">Julian Vance</h3>
+<p class="font-body-md text-on-surface-variant">The Pairing Scientist</p>
+</div>
+</div>
+<!-- Mentor 4 -->
+<div class="md:col-span-4 group relative overflow-hidden rounded-xl h-[400px] border border-outline-variant shadow-lg cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A portrait of an elderly Cuban master roller in a heritage workshop surrounded by historic photographs and boxes of cigars. The atmosphere is nostalgic and full of history, with soft smoke curling in the air and a warm, sepia-toned light quality. It evokes a sense of tradition, legacy, and timeless expertise in the craft." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA0meJAliUxgQ2wLjjSpD9Ui_Qze0hnl8npwtWVwdMTOOdsGmCvEJ3U8mjdYBOa2JOYHrTAHIahxeILHxBNQPzVV84cmEdZOtgnqa5w3dxmWRPGHkTPmbcVuoErWeGk_dOpGy3NB5t-w_Serl9VLdda66QkGFjB3A24SLB_jI6XAaS0OLH28hn_4pjmYUg8PbE23npADejPFVPZ9VSS5pqPeSrowrzHDs8z64LmOOAqmgVz5MEnYFD_YGWj2mji5H_5yuBQ5yaNp-Q')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h3 class="font-headline-md text-white">Silvio Castro</h3>
+<p class="font-body-md text-on-surface-variant">Heritage &amp; History Guide</p>
+</div>
+</div>
+<!-- Mentor 5 -->
+<div class="md:col-span-4 group relative overflow-hidden rounded-xl h-[400px] border border-outline-variant shadow-lg cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A sophisticated woman in a high-end private club setting, holding a crystal glass and a cigar. The environment is rich with leather, velvet, and mahogany. The lighting is soft and intimate, emphasizing a social and elegant lifestyle. The mood is exclusive, relaxed, and refined, perfect for social cigar enthusiasts." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_iI-JAHJnnC_ilS_eIfv6dehkIcgMZMttIN2iFK8OZuNlc1_AAd6pOeLfwWWDNerqe2xj2p7Ec5Zlf9mWf-NrI37hGe8TL9zWwUl1kyh9DBZtHRgw3MIkWWvVcmXL-HijQ5r91CpOObLbn_I5ieWEuz0iM41qOabVGanwVrKy-lc_KURuaA5SqThT4g_lioRlYNrTWNUiHwp-jZ7Oa9048Za3UxNJR_dpY5zNGZOJVwaPG7uUTHlfJdtziBof00AuXEgTPLfE__U')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6">
+<h3 class="font-headline-md text-white">Claire Fontaine</h3>
+<p class="font-body-md text-on-surface-variant">Lifestyle &amp; Lounge Curator</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Active: PourCraft implied by selection) -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl flex justify-around items-center h-24 px-gutter pb-safe backdrop-blur-20px bg-surface-container-low/90 border-t border-outline-variant shadow-[0_-4px_20px_rgba(233,193,118,0.15)]">
+<div class="flex flex-col items-center justify-center text-primary font-bold gap-1 transition-all scale-110 duration-500 ease-out">
+<span class="material-symbols-outlined">liquor</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">PourCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">BeerCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">WineCraft</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Passport</span>
+</div>
+</nav>
+<!-- Interactive Scripts -->
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+                card.style.transition = 'transform 0.1s';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+
+        // Toggle waveform bars randomly to simulate voice
+        const bars = document.querySelectorAll('.waveform-bar');
+        setInterval(() => {
+            bars.forEach(bar => {
+                const height = Math.floor(Math.random() * 20) + 10;
+                bar.style.height = `${height}px`;
+            });
+        }, 150);
+    </script>
+</body></html>

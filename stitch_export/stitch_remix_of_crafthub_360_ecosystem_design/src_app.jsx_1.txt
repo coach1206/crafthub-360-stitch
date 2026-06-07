@@ -1,0 +1,36 @@
+import { useState } from 'react';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import CraftHub from './pages/CraftHub';
+import SmokeCraft from './pages/SmokeCraft';
+import PourCraft from './pages/PourCraft';
+import BeerCraft from './pages/BeerCraft';
+import WineCraft from './pages/WineCraft';
+import PassportConnection from './pages/PassportConnection';
+import POS3 from './pages/POS3';
+import EATCommand from './pages/EATCommand';
+
+export default function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'home': return <Home onNavigate={setCurrentPage} />;
+      case 'crafthub': return <CraftHub onNavigate={setCurrentPage} />;
+      case 'smokecraft': return <SmokeCraft onNavigate={setCurrentPage} />;
+      case 'pourcraft': return <PourCraft onNavigate={setCurrentPage} />;
+      case 'beercraft': return <BeerCraft onNavigate={setCurrentPage} />;
+      case 'winecraft': return <WineCraft onNavigate={setCurrentPage} />;
+      case 'passport': return <PassportConnection onNavigate={setCurrentPage} />;
+      case 'pos3': return <POS3 onNavigate={setCurrentPage} />;
+      case 'eat': return <EATCommand onNavigate={setCurrentPage} />;
+      default: return <Home onNavigate={setCurrentPage} />;
+    }
+  };
+
+  return (
+    <Layout activePage={currentPage} onNavigate={setCurrentPage}>
+      {renderPage()}
+    </Layout>
+  );
+}

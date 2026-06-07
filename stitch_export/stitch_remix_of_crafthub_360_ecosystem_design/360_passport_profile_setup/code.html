@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>360 Passport | Profile Creation</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed": "#261900",
+                    "background": "#131314",
+                    "secondary": "#ffb95a",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "on-background": "#e5e2e3",
+                    "on-tertiary-container": "#473733",
+                    "inverse-on-surface": "#303031",
+                    "secondary-container": "#c68315",
+                    "on-secondary-container": "#3d2400",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-tertiary-fixed": "#261814",
+                    "on-surface": "#e5e2e3",
+                    "surface-container-lowest": "#0e0e0f",
+                    "on-secondary": "#462a00",
+                    "surface-variant": "#353436",
+                    "outline": "#9a8f80",
+                    "error-container": "#93000a",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-surface-variant": "#d1c5b4",
+                    "surface-container-highest": "#353436",
+                    "secondary-fixed": "#ffddb6",
+                    "primary-fixed": "#ffdea5",
+                    "on-tertiary": "#3c2d28",
+                    "tertiary": "#dac1bb",
+                    "surface-container-low": "#1b1b1c",
+                    "on-primary": "#412d00",
+                    "surface-tint": "#e9c176",
+                    "primary-container": "#c5a059",
+                    "on-primary-container": "#4e3700",
+                    "surface": "#131314",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container-high": "#2a2a2b",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-error-container": "#ffdad6",
+                    "inverse-surface": "#e5e2e3",
+                    "primary": "#e9c176",
+                    "inverse-primary": "#775a19",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-error": "#690005",
+                    "surface-container": "#1f1f20",
+                    "surface-bright": "#39393a",
+                    "error": "#ffb4ab",
+                    "outline-variant": "#4e4639",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-dim": "#131314",
+                    "tertiary-container": "#b7a09a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin": "64px",
+                    "unit": "8px",
+                    "gutter": "32px",
+                    "container-max-width": "1440px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>body {
+    background-color: #0e0e0f;
+    color: #e5e2e3;
+    -webkit-font-smoothing: antialiased
+    }
+.leather-bg {
+    background-image: radial-gradient(circle at 50% 50%, rgba(19, 19, 20, 0.4) 0%, rgba(14, 14, 15, 0.9) 100%), url(https://lh3.googleusercontent.com/aida-public/AB6AXuDsONKj4H2_rj_wOYw-wqzEIOye91AfJbYjm6b9-u0M8SO7TucTjNOMAw1TokIv5BHwv7EHlCKik7wkUD87_maFlfuyVR1ZkNEtPuGKzfW3SbAVCRVOvGhxc797rqyIAuHQE_9KjHe9vBBE27MWi54vCdJUnEc2bi9tu0WhAjgunPVoqm7Pn_AAQH-F7IPtHdBgErbzrbN1v8rtZfvM_-EsUOoeA6DrbVxyZJKq1xKxeUEINrye3MRgUoHDfOsGkPpfkI2NbuVGUSs);
+    background-blend-mode: multiply;
+    background-size: cover;
+    background-position: center
+    }
+.gold-foil {
+    background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent
+    }
+.gold-border {
+    border: 1px solid rgba(233, 193, 118, 0.3);
+    transition: all 0.3s ease
+    }
+.gold-border:hover {
+    border-color: rgba(233, 193, 118, 0.8);
+    box-shadow: 0 0 15px rgba(233, 193, 118, 0.2)
+    }
+.gold-border.active {
+    background: rgba(233, 193, 118, 0.1);
+    border-color: #e9c176;
+    box-shadow: 0 0 20px rgba(233, 193, 118, 0.25)
+    }
+.glass-panel {
+    backdrop-filter: blur(20px);
+    background: rgba(27, 27, 28, 0.7);
+    border: 1px solid rgba(233, 193, 118, 0.15)
+    }
+.step-progress {
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1)
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="leather-bg min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- Top Navigation Anchor (Manual for Onboarding) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-6 bg-surface-dim/40 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-[24px] text-primary uppercase tracking-[0.2em]">The 360 Passport</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<span class="font-label-lg text-primary/60">Step 02 of 03</span>
+<button class="font-label-lg text-primary hover:opacity-80 transition-opacity">Save &amp; Exit</button>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center pt-24 pb-12 px-gutter">
+<div class="max-w-4xl w-full">
+<!-- Progress Bar -->
+<div class="mb-12">
+<div class="flex justify-between items-end mb-4">
+<h1 class="font-headline-xl text-primary gold-foil">Refining Your Circle</h1>
+<span class="font-label-lg text-on-surface-variant/60 uppercase tracking-widest md:hidden">Step 2 / 3</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="step-progress h-full bg-primary shadow-[0_0_15px_rgba(233,193,118,0.5)]" style="width: 66.6%;"></div>
+</div>
+</div>
+<!-- Content Area -->
+<div class="glass-panel rounded-xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+<!-- Atmospheric Background Detail -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-[100px]"></div>
+<section class="space-y-12">
+<!-- Professional Industry Selection -->
+<div>
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">work</span>
+<h2 class="font-headline-md text-on-surface">Professional Industry</h2>
+</div>
+<p class="font-body-md text-on-surface-variant/80 mb-8 max-w-2xl">
+                            Select the primary sector where your influence resides. This helps us curate your networking events and lounge access.
+                        </p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Industry Chips -->
+<button class="gold-border p-6 rounded-lg flex flex-col items-center gap-3 text-center active:scale-95 transition-all" onclick="toggleChip(this)">
+<span class="material-symbols-outlined text-primary">account_balance</span>
+<span class="font-label-lg uppercase tracking-wider">Finance</span>
+</button>
+<button class="gold-border p-6 rounded-lg flex flex-col items-center gap-3 text-center active:scale-95 transition-all active" onclick="toggleChip(this)">
+<span class="material-symbols-outlined text-primary">precision_manufacturing</span>
+<span class="font-label-lg uppercase tracking-wider">Tech</span>
+</button>
+<button class="gold-border p-6 rounded-lg flex flex-col items-center gap-3 text-center active:scale-95 transition-all" onclick="toggleChip(this)">
+<span class="material-symbols-outlined text-primary">apartment</span>
+<span class="font-label-lg uppercase tracking-wider">Real Estate</span>
+</button>
+<button class="gold-border p-6 rounded-lg flex flex-col items-center gap-3 text-center active:scale-95 transition-all" onclick="toggleChip(this)">
+<span class="material-symbols-outlined text-primary">wine_bar</span>
+<span class="font-label-lg uppercase tracking-wider">Hospitality</span>
+</button>
+<button class="gold-border p-6 rounded-lg flex flex-col items-center gap-3 text-center active:scale-95 transition-all" onclick="toggleChip(this)">
+<span class="material-symbols-outlined text-primary">balance</span>
+<span class="font-label-lg uppercase tracking-wider">Legal</span>
+</button>
+<button class="gold-border p-6 rounded-lg flex flex-col items-center gap-3 text-center active:scale-95 transition-all" onclick="toggleChip(this)">
+<span class="material-symbols-outlined text-primary">medical_services</span>
+<span class="font-label-lg uppercase tracking-wider">Healthcare</span>
+</button>
+<button class="gold-border p-6 rounded-lg flex flex-col items-center gap-3 text-center active:scale-95 transition-all" onclick="toggleChip(this)">
+<span class="material-symbols-outlined text-primary">palette</span>
+<span class="font-label-lg uppercase tracking-wider">Creative</span>
+</button>
+<button class="gold-border p-6 rounded-lg flex flex-col items-center gap-3 text-center active:scale-95 transition-all" onclick="toggleChip(this)">
+<span class="material-symbols-outlined text-primary">add</span>
+<span class="font-label-lg uppercase tracking-wider">Other</span>
+</button>
+</div>
+</div>
+<!-- Networking Goals -->
+<div>
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">handshake</span>
+<h2 class="font-headline-md text-on-surface">Networking Intent</h2>
+</div>
+<p class="font-body-md text-on-surface-variant/80 mb-8 max-w-2xl">
+                            How should the 360 Concierge facilitate your connections within the private lounges?
+                        </p>
+<div class="flex flex-wrap gap-4">
+<!-- Goal Chips -->
+<button class="gold-border px-8 py-4 rounded-full font-label-lg uppercase tracking-widest active:scale-95 active" onclick="toggleChip(this)">
+                                Seeking Investment
+                            </button>
+<button class="gold-border px-8 py-4 rounded-full font-label-lg uppercase tracking-widest active:scale-95" onclick="toggleChip(this)">
+                                Strategic Partnerships
+                            </button>
+<button class="gold-border px-8 py-4 rounded-full font-label-lg uppercase tracking-widest active:scale-95" onclick="toggleChip(this)">
+                                Mentor Opportunities
+                            </button>
+<button class="gold-border px-8 py-4 rounded-full font-label-lg uppercase tracking-widest active:scale-95 active" onclick="toggleChip(this)">
+                                Deal Sourcing
+                            </button>
+<button class="gold-border px-8 py-4 rounded-full font-label-lg uppercase tracking-widest active:scale-95" onclick="toggleChip(this)">
+                                Brand Awareness
+                            </button>
+<button class="gold-border px-8 py-4 rounded-full font-label-lg uppercase tracking-widest active:scale-95" onclick="toggleChip(this)">
+                                Social Influence
+                            </button>
+</div>
+</div>
+</section>
+<!-- Navigation Controls -->
+<div class="mt-16 pt-8 border-t border-primary/10 flex flex-col md:flex-row justify-between items-center gap-6">
+<button class="flex items-center gap-2 font-label-lg text-primary/60 hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                        Back to Profile
+                    </button>
+<button class="bg-primary hover:bg-primary-container text-on-primary-container font-label-lg uppercase tracking-[0.2em] px-12 py-5 rounded-lg shadow-lg hover:shadow-primary/20 transition-all active:scale-95 flex items-center gap-4">
+                        Confirm Selection
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Contextual Note -->
+<p class="mt-8 text-center font-label-sm text-on-surface-variant/40 italic">
+                These preferences can be adjusted at any time via your Passport Management portal.
+            </p>
+</div>
+</main>
+<!-- Decoration Element -->
+<div class="fixed -bottom-32 -left-32 w-96 h-96 opacity-10 pointer-events-none">
+<img alt="Cigar smoke silhouette" class="w-full h-full object-cover filter grayscale sepia" data-alt="A high-contrast macro photograph of elegant, swirling cigar smoke captured against a deep black background. The lighting is dramatic and moody, casting warm golden highlights on the delicate tendrils of smoke. The aesthetic is sophisticated and masculine, reminiscent of a private smoking lounge with rich textures and a timeless, luxury atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCecP4Re9IMq-KMeROlVgYNkMZaSMuwJXo7fGV6bOhqj4WF7ru_58CKdEziaMU5eo47YG9flhch4tUM3ZiF1xZ5TxzQ1-sC88mDfDVBrnNEhCKAsiFAmqhhU_tBAojHEsh9I1c9oi0CXdnLLHpTQwgyMmLWet7BujmqrqcVyaEk1lEbIdcNlmCZJHxysQp2FcbOcwDuNo5YjKt0G358faITPH_yFulLhBSu7Eut_kytwwAbIr_HAP6mIhIim1enDbgBbi2q-KbcsQ"/>
+</div>
+<script>
+        function toggleChip(element) {
+            element.classList.toggle('active');
+            
+            // Interaction Feedback
+            if (element.classList.contains('active')) {
+                const rect = element.getBoundingClientRect();
+                createSparkle(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            }
+        }
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'fixed pointer-events-none z-[100]';
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.width = '20px';
+            sparkle.style.height = '20px';
+            sparkle.style.background = 'radial-gradient(circle, #e9c176 0%, transparent 70%)';
+            sparkle.style.borderRadius = '50%';
+            sparkle.style.transform = 'translate(-50%, -50%) scale(0)';
+            
+            document.body.appendChild(sparkle);
+            
+            sparkle.animate([
+                { transform: 'translate(-50%, -50%) scale(0)', opacity: 1 },
+                { transform: 'translate(-50%, -50%) scale(2.5)', opacity: 0 }
+            ], {
+                duration: 500,
+                easing: 'ease-out'
+            }).onfinish = () => sparkle.remove();
+        }
+
+        // Parallax Effect for Background
+        window.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.body.style.backgroundPosition = `calc(50% + ${moveX}px) calc(50% + ${moveY}px)`;
+        });
+    </script>
+</body></html>

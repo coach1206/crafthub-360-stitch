@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(154, 143, 128, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        .gold-foil-border {
+            border: 1px solid rgba(233, 193, 118, 0.3);
+        }
+        .amber-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.15);
+            border-color: rgba(233, 193, 118, 0.6);
+        }
+        .transition-slow {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        @media (min-width: 1280px) {
+            .bento-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-tint": "#e9c176",
+                        "surface-container-highest": "#353436",
+                        "on-surface": "#e5e2e3",
+                        "secondary": "#ffb95a",
+                        "primary-fixed": "#ffdea5",
+                        "surface-container-lowest": "#0e0e0f",
+                        "primary": "#e9c176",
+                        "surface-container-low": "#1b1b1c",
+                        "on-secondary-fixed": "#2a1800",
+                        "outline": "#9a8f80",
+                        "inverse-surface": "#e5e2e3",
+                        "on-error": "#690005",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-primary-fixed": "#261900",
+                        "surface-container": "#1f1f20",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-primary": "#412d00",
+                        "surface-bright": "#39393a",
+                        "on-tertiary-fixed": "#261814",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-secondary": "#462a00",
+                        "surface-container-high": "#2a2a2b",
+                        "on-tertiary": "#3c2d28",
+                        "outline-variant": "#4e4639",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-tertiary-container": "#473733",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#775a19",
+                        "on-primary-container": "#4e3700",
+                        "primary-fixed-dim": "#e9c176",
+                        "secondary-fixed": "#ffddb6",
+                        "tertiary-container": "#b7a09a",
+                        "on-background": "#e5e2e3",
+                        "surface-variant": "#353436",
+                        "on-secondary-container": "#3d2400",
+                        "secondary-container": "#c68315",
+                        "on-surface-variant": "#d1c5b4",
+                        "background": "#131314",
+                        "tertiary": "#dac1bb",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#303031",
+                        "surface-dim": "#131314",
+                        "primary-container": "#c5a059",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "surface": "#131314"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-width": "1440px",
+                        "gutter": "32px",
+                        "unit": "8px",
+                        "card-padding": "24px",
+                        "margin": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-md text-on-surface overflow-x-hidden">
+<!-- Top AppBar Component -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-variant/50 transition-colors duration-300 rounded-full active:scale-95">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">Venue Configuration Center</h1>
+<p class="font-label-lg text-label-lg text-on-surface-variant opacity-70">CraftHub 360 Admin</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+                Preview
+            </button>
+<button class="px-6 py-2.5 bg-primary text-on-primary font-label-lg text-label-lg rounded-lg shadow-lg shadow-primary/20 hover:brightness-110 active:scale-95 transition-all">
+                Publish Configuration
+            </button>
+</div>
+</header>
+<main class="relative pt-32 pb-24 px-gutter max-w-container-max-width mx-auto">
+<!-- Background Atmospheric Element -->
+<div class="fixed inset-0 pointer-events-none opacity-10">
+<img class="w-full h-full object-cover grayscale" data-alt="A macro photograph of aged oak whiskey barrels in a dimly lit, atmospheric cellar with soft golden dust motes dancing in shafts of amber light. The mood is historic, premium, and sophisticated, perfectly matching a dark mode luxury aesthetic with warm wood textures and deep shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzZ9UGCpUaolAJFFHEWhrNs9w9fxtjVnJKt1ZhWxEWXGK5mBYrGCigD6bP1qySMs6yQfox8DBx-wSaC1SQUo5jpEFnyN_zNyRhucTRQQUIl1uP041VEHcbwh3NV-vT9AdNedXWbABUyJq3teXUbfG97Q87nfDAPZN_DBhdYFiG28KvewfOUOPKDvaAJRlEmrqb4Xx2w8l9yceJMmHnSl13acEvJgDlRGdtCTzMa7o0jXKXSQ5YRVaUPeFCjOye2Jrn-e_zTcYZVxA"/>
+</div>
+<!-- Header Content -->
+<section class="relative z-10 mb-12 max-w-3xl">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-4">Venue Control Engine</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                Control the real venue data that powers CraftHub, POS 3, E.A.T., SmokeCraft, PourCraft, BeerCraft, WineCraft, and 360 Passport Connection. Each module here synchronizes across all member touchpoints instantly.
+            </p>
+</section>
+<!-- Bento Grid Configuration Cards -->
+<div class="relative z-10 bento-grid pb-12">
+<!-- Card: Venue Profile -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">storefront</span>
+</div>
+<span class="px-3 py-1 bg-secondary-container/20 text-secondary text-label-sm font-semibold rounded-full flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                        Configured
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Venue Profile</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Core identity, physical address, and operating hours for the main lounge.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Edit Identity <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<!-- Card: Product Inventory -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">inventory_2</span>
+</div>
+<span class="px-3 py-1 bg-error-container/20 text-error text-label-sm font-semibold rounded-full flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                        Action Needed
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Product Inventory</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Manage stock for cigars, spirits, and wines across all beverage modules.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Update Stock <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<!-- Card: POS 3 Settings -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">point_of_sale</span>
+</div>
+<span class="px-3 py-1 bg-secondary-container/20 text-secondary text-label-sm font-semibold rounded-full flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                        Configured
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">POS 3 Settings</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Payment gateways, terminal mapping, and transaction fee configurations.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Configure Terminals <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<!-- Card: 360 Passport -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<span class="px-3 py-1 bg-secondary-container/20 text-secondary text-label-sm font-semibold rounded-full flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                        Configured
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">360 Passport</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Digital member credentials, tasting history, and international lounge access.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Manage Access <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<!-- Card: Active Modules -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">view_quilt</span>
+</div>
+<span class="px-3 py-1 bg-secondary-container/20 text-secondary text-label-sm font-semibold rounded-full flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                        Configured
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Active Modules</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Toggle visibility and features for BeerCraft, WineCraft, and SmokeCraft.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Modify Active <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<!-- Card: Stamp Rules -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">approval_delegation</span>
+</div>
+<span class="px-3 py-1 bg-error-container/20 text-error text-label-sm font-semibold rounded-full flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                        Action Needed
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Stamp Rules</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Define criteria for earning stamps and progression in member booklets.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Define Logic <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<!-- Card: Staff Users -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">badge</span>
+</div>
+<span class="px-3 py-1 bg-secondary-container/20 text-secondary text-label-sm font-semibold rounded-full flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                        Configured
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Staff Users</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Manage permissions for concierge, sommeliers, and admin personnel.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Manage Team <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<!-- Card: System Status -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">analytics</span>
+</div>
+<span class="px-3 py-1 bg-secondary-container/20 text-secondary text-label-sm font-semibold rounded-full flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                        Healthy
+                    </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">System Status</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Real-time health of cloud sync, API endpoints, and peripheral hardware.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    View Logs <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<!-- Additional Cards for variety -->
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">palette</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Branding Assets</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Logos, colors, and fonts specific to this venue's lounge personality.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Update Assets <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">devices</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Kiosk Devices</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Register and pair physical touchscreens and lounge kiosks.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Device Setup <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">loyalty</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Reward Rules</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Configure membership tiers, credit ratios, and redemption values.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Configure Rewards <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<div class="glass-panel gold-foil-border p-card-padding rounded-xl amber-glow transition-slow cursor-pointer group">
+<div class="w-12 h-12 rounded-lg bg-primary-container/30 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">restaurant</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">E.A.T. Tracking</h3>
+<p class="text-on-surface-variant text-body-md mb-4">Expert Appetizer Tracking and gourmet pairing menu management.</p>
+<div class="flex items-center gap-2 text-primary font-label-lg group-hover:translate-x-1 transition-transform">
+                    Menu Logic <span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Actions / Persistence Bar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)]">
+<div class="flex items-center gap-8">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">save</span>
+<span class="font-label-sm text-label-sm">Save Draft</span>
+</button>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex flex-col items-end mr-4">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Last Publish</span>
+<span class="font-label-lg text-label-lg text-secondary">Oct 24, 2023 - 11:04 AM</span>
+</div>
+<button class="px-8 py-3 bg-primary text-on-primary font-label-lg text-label-lg rounded-lg shadow-lg shadow-primary/30 hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">publish</span>
+                Publish Configuration
+            </button>
+</div>
+</footer>
+<script>
+        // Micro-interactions for card hover effect
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Potential for adding subtle parallax or specific sound effects if desired
+            });
+        });
+    </script>
+</body></html>

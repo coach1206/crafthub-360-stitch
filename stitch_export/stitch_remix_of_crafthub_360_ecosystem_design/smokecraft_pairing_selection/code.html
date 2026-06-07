@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmokeCraft - Pairing Selection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary-container": "#c68315",
+                "surface-container-high": "#2a2a2b",
+                "error-container": "#93000a",
+                "on-primary-fixed-variant": "#5d4201",
+                "surface-tint": "#e9c176",
+                "inverse-surface": "#e5e2e3",
+                "on-surface": "#e5e2e3",
+                "surface-container-lowest": "#0e0e0f",
+                "primary-fixed-dim": "#e9c176",
+                "primary-container": "#c5a059",
+                "outline-variant": "#4e4639",
+                "on-secondary-fixed-variant": "#643f00",
+                "tertiary-fixed": "#f7ddd6",
+                "surface-variant": "#353436",
+                "on-primary-container": "#4e3700",
+                "error": "#ffb4ab",
+                "tertiary-container": "#b7a09a",
+                "tertiary": "#dac1bb",
+                "surface-container-low": "#1b1b1c",
+                "on-tertiary-fixed": "#261814",
+                "on-error": "#690005",
+                "on-secondary-container": "#3d2400",
+                "on-error-container": "#ffdad6",
+                "surface-dim": "#131314",
+                "surface-bright": "#39393a",
+                "tertiary-fixed-dim": "#dac1bb",
+                "on-background": "#e5e2e3",
+                "on-secondary-fixed": "#2a1800",
+                "on-tertiary": "#3c2d28",
+                "on-surface-variant": "#d1c5b4",
+                "surface": "#131314",
+                "inverse-primary": "#775a19",
+                "surface-container-highest": "#353436",
+                "outline": "#9a8f80",
+                "primary-fixed": "#ffdea5",
+                "primary": "#e9c176",
+                "inverse-on-surface": "#303031",
+                "on-secondary": "#462a00",
+                "on-primary": "#412d00",
+                "background": "#131314",
+                "surface-container": "#1f1f20",
+                "secondary": "#ffb95a",
+                "on-primary-fixed": "#261900",
+                "on-tertiary-container": "#473733",
+                "secondary-fixed-dim": "#ffb95a",
+                "secondary-fixed": "#ffddb6",
+                "on-tertiary-fixed-variant": "#54433e"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "margin": "64px",
+                "unit": "8px",
+                "container-max-width": "1440px",
+                "gutter": "32px",
+                "card-padding": "24px"
+            },
+            "fontFamily": {
+                "headline-md": ["Playfair Display"],
+                "label-sm": ["Montserrat"],
+                "label-lg": ["Montserrat"],
+                "headline-xl": ["Playfair Display"],
+                "display-lg": ["Playfair Display"],
+                "body-md": ["Montserrat"],
+                "body-lg": ["Montserrat"],
+                "headline-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(42, 42, 43, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-border {
+            border: 1px solid #e9c176;
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.1);
+        }
+        .amber-glow-active:active {
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.3);
+            transform: scale(0.98);
+        }
+        .texture-bg {
+            background-image: radial-gradient(circle at 50% 50%, rgba(31, 31, 32, 0.8) 0%, rgba(19, 19, 20, 1) 100%), url('https://www.transparenttextures.com/patterns/black-linen.png');
+        }
+        .stamp-notification {
+            animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden texture-bg min-h-screen">
+<!-- Top AppBar (from JSON) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-variant/50 p-2 rounded-full transition-colors">menu</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label-lg text-label-lg text-primary">Grand Lounge</span>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden">
+<img alt="Member" data-alt="A high-end, close-up portrait of a sophisticated gentleman in a tailored charcoal suit, set against a blurred background of a dimly lit luxury lounge. The lighting is warm and cinematic, emphasizing the fine texture of the fabric and the polished skin tones. The overall aesthetic is rich, exclusive, and representative of a high-net-worth individual in a private club setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALdfcSd50DfRFBRxkR_xMSIX-skaK-Wc_K-1fY5HOMd9bA7_pkmMPcGbTYk8zV6alnMGch-O3CqgAZTO6FzbOLa5UwjmOEzTY-KpouMz4Qr4KHXKp_-zuNKE0N4YUde2wjKfasPUw4u3ET-beGIYCsH9uLLJ2vVMHe7NLedYJ7EQDKgapByLeVXlAXm_hUaFmL8MaVHhwx6QLVyH6V7kfNgskzHEQGF1qV3xaJ3PcbrMLFrP92KKiqj2xlzR8ne2PUIclHIH40wMo"/>
+</div>
+</div>
+</header>
+<main class="pt-28 pb-32 px-margin max-w-container-max-width mx-auto">
+<!-- Progress Indicator -->
+<div class="flex items-center justify-between mb-8">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-1">Cigar Experience Architect</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Step 11 of 12: The Art of Pairing</h2>
+</div>
+<div class="flex gap-2">
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-surface-variant"></div>
+</div>
+</div>
+<!-- Selected Cigar Hero -->
+<div class="glass-card rounded-xl overflow-hidden mb-12 flex flex-col md:flex-row shadow-2xl">
+<div class="md:w-1/3 relative h-64 md:h-auto">
+<img class="w-full h-full object-cover" data-alt="A macro photograph of an Arturo Fuente OpusX cigar resting on a vintage leather humidor. The detailed texture of the dark, oily tobacco leaf is visible, highlighted by a soft amber spotlight. In the background, soft bokeh of a mahogany-paneled room creates a sense of deep luxury and quiet sophistication. The lighting is warm and evokes the feeling of a private smoking room." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBjb17tZGWhWOsbXW8XcEiR4WIW8SRdSpM3JbzTootwik0rNdnLOw7S9JZ3EXsRrWIwqWrDXTd8Pvkve7yk0Djguo_fc3IWZ5D9c7ECY5EDcu6g5JsWk0HLo-pS1P0Sp_kNEtMoJ7_UWd-u_nKBePg_hyVmOWBd7C9H9b16E7bHFZlxdXVSBDqmCktK_b7wsck7DeYbjNOVSSREGTNzZg89N6q8Zqmzw_ubYO5Nur2k8euqiBLwOh-CQCTEjFfzzYA0LEgqcCTY6g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-6 left-6">
+<span class="bg-primary/20 text-primary px-3 py-1 rounded-full text-xs font-bold border border-primary/40 uppercase tracking-tighter">Selection</span>
+<h3 class="font-headline-md text-headline-md text-white mt-2">Arturo Fuente OpusX</h3>
+</div>
+</div>
+<div class="md:w-2/3 p-8 flex flex-col justify-center">
+<p class="font-body-lg text-on-surface-variant leading-relaxed">
+                    "A legendary blend that redefines the pinnacle of tobacco craftsmanship. To elevate its complex notes of cedar, spice, and leather, our Sommeliers have curated these four distinct pairing paths."
+                </p>
+<div class="mt-6 flex gap-4">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm">stars</span>
+<span class="font-label-lg">Full Bodied</span>
+</div>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="font-label-lg">90 min Smoke</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pairing Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-12">
+<!-- Pairing 1: Bourbon -->
+<div class="glass-card rounded-xl group overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-primary/10 shadow-xl">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A crystal tumbler of premium aged bourbon with a single large ice sphere, sitting on a dark, polished walnut table. The golden liquid catches the light of a nearby fireplace, creating deep amber reflections and highlights. The background is a blurred bookshelf of old leather-bound books, conveying a classic, intellectual, and wealthy atmosphere. High-end product photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJZsse0-OBgJv-XDIDBT6z6JK8iL9blzeC9kleK1PDkKrj0FBsYqFcs0GyZw-PLWVrxFiZXdMufDw1cIBvMasItRgJ6aFzDcebGi8_34haiZ7Em1MLicK7NRF77TNUTvT8skjF-P9T0SI-lbXEnAnDHXOxsf6_i6KV7ky911BOJ3ruOZ84gPu73nSpupTRYWrYwHAvSFgRsnUXJR3ylKBCJ6xWkGWbanlkGrqr8KNtnQE9teLUKG1GUrTYY5gT6jFgWer9FlUNjWs"/>
+</div>
+<div class="p-6">
+<h4 class="font-headline-md text-primary mb-2">Old Rip Van Winkle</h4>
+<p class="font-label-sm text-on-surface-variant mb-4 uppercase tracking-wider">The Classic Spirit</p>
+<p class="text-on-surface/70 text-sm mb-6">Sweet caramel and vanilla undertones that soften the spicy finish of the OpusX.</p>
+<button class="w-full py-3 gold-border text-primary font-label-lg hover:bg-primary/10 transition-colors uppercase">Select Pour</button>
+</div>
+</div>
+<!-- Pairing 2: Rum -->
+<div class="glass-card rounded-xl group overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-primary/10 shadow-xl">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A bottle and glass of dark, aged Cuban rum served neat. The scene is set on a distressed leather coaster over a dark wood surface. Soft, warm lighting from the side emphasizes the viscosity of the rum and the rich mahogany color. The environment feels tropical yet extremely refined, like a high-end Havana club. Luxurious, moody, and deeply textured visual." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ82XKQyntwTgn3xxDjYrawzeTtaASYwT_mcTIkMxzqs-6J3Yr-oTLECNP_mzZqFX4uiBg5B-ERa8lDXQy8ny1te9sIfRsA0ww6Ncn0vk4uK05iZgQ5uwKriVqA6ZyXNNadhHdOSMIFP81qtdrhm_NNZOj7KrRSR0tHJ-Cs-nG_Ra9vQout-3ik-TFNOnqj6rXMeuiO9lCUk2-4Vc1r0tO3UQr9meCFsldeQqNnSxutvMgBSsIMYii2N7hjYmhy0sdQY9DvL2sP00"/>
+</div>
+<div class="p-6">
+<h4 class="font-headline-md text-primary mb-2">Zacapa Centenario</h4>
+<p class="font-label-sm text-on-surface-variant mb-4 uppercase tracking-wider">The Tropical Depth</p>
+<p class="text-on-surface/70 text-sm mb-6">Molasses and dried fruit notes that complement the earthy core of the Dominican tobacco.</p>
+<button class="w-full py-3 gold-border text-primary font-label-lg hover:bg-primary/10 transition-colors uppercase">Select Pour</button>
+</div>
+</div>
+<!-- Pairing 3: Coffee -->
+<div class="glass-card rounded-xl group overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-primary/10 shadow-xl">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A steaming cup of artisanal espresso in a matte black ceramic cup, topped with a perfect crema layer. Beside it rests a small piece of dark chocolate on a silver tray. The scene is lit with a focused, dramatic spotlight that makes the steam visible against the dark, shadowy background of a luxury cafe. The aesthetic is modern, sleek, and focused on sensory quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1whB9ENQS5yVK7-ZSqInf3ufx2FPgTfXCAe0K8akvyRBTB8moMmSAgsHEzZ4MYuCnY9j0tQgpBWdzXt1MN2xpKUKxND76828-U-vONUv5srNvUdg4gtp47LYcOwkut7yCtM8yNlqQzVSDPo6ZhSwqZTybS3LM2MThzggnviBsIffUKi6bI0EIBwm5NfbYc65os7cs9PsiRlSBgG7mGWiMC7afsuN_5riLlpYp9P4_wxIhBHuluPPJwTxtNoqBaJ6IlJFFJUp61Pc"/>
+</div>
+<div class="p-6">
+<h4 class="font-headline-md text-primary mb-2">Blue Mountain</h4>
+<p class="font-label-sm text-on-surface-variant mb-4 uppercase tracking-wider">The Morning Ritual</p>
+<p class="text-on-surface/70 text-sm mb-6">A clean, bright acidity that cleanses the palate between each long, flavorful draw.</p>
+<button class="w-full py-3 gold-border text-primary font-label-lg hover:bg-primary/10 transition-colors uppercase">Select Brew</button>
+</div>
+</div>
+<!-- Pairing 4: Chocolate -->
+<div class="glass-card rounded-xl group overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-primary/10 shadow-xl">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A decadent dark chocolate truffle dessert with gold leaf flakes, served on a fine bone china plate. The chocolate has a velvety matte finish, and a rich, ganache-filled center is slightly visible. The background is a dimly lit, high-end restaurant setting with soft amber candle light. The visual style is indulgent, expensive, and emphasizes the tactile pleasure of gourmet food." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkj1vyr57VqCSvkAIytKCP-dMimzcM6Bkfpo2BogqBmXvJno7XWBIkFHJP0uTjIRf43VMB4VT0fAzPe56ohr59HTYYKsym0J2JV6xGqZPzbw5OHeK9oQVklLm-rTkus0D_QeG5AsW_i3r95SxCCtkda_GbYOLo3MnRfTZ3tRjOehK1rR6yLCjtmEhkAfL3RPm8SEoj5khmFowDyNMdG5WO2fYsQ3Jh34sFkF3uM5Rql5d_S8_0z_f_osUhL3uDZji89YvLMFPAia4"/>
+</div>
+<div class="p-6">
+<h4 class="font-headline-md text-primary mb-2">Cacao Noir 85%</h4>
+<p class="font-label-sm text-on-surface-variant mb-4 uppercase tracking-wider">The Dark Indulgence</p>
+<p class="text-on-surface/70 text-sm mb-6">Bitter cocoa solids that mirror the charred cedar notes of the cigar's final third.</p>
+<button class="w-full py-3 gold-border text-primary font-label-lg hover:bg-primary/10 transition-colors uppercase">Select Plate</button>
+</div>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="flex flex-wrap justify-center items-center gap-6 py-8 border-t border-outline-variant/20">
+<button class="flex items-center gap-3 bg-primary text-on-primary px-8 py-4 rounded-lg font-label-lg uppercase tracking-widest amber-glow-active transition-all">
+<span class="material-symbols-outlined">shopping_cart</span>
+                Add to Order
+            </button>
+<button class="flex items-center gap-3 gold-border text-primary px-8 py-4 rounded-lg font-label-lg uppercase tracking-widest hover:bg-primary/10 transition-all">
+<span class="material-symbols-outlined">concierge</span>
+                Call Staff
+            </button>
+<button class="flex items-center gap-3 text-on-surface-variant px-6 py-4 rounded-lg font-label-lg uppercase tracking-widest hover:text-primary transition-all">
+<span class="material-symbols-outlined">bookmark</span>
+                Save Pairing
+            </button>
+<button class="flex items-center gap-3 bg-surface-container-highest text-primary px-10 py-4 rounded-lg font-label-lg uppercase tracking-widest hover:bg-surface-variant transition-all ml-auto">
+                Continue
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</main>
+<!-- Notification (Stamp) -->
+<div class="fixed bottom-32 left-margin z-[70] stamp-notification">
+<div class="glass-card p-6 rounded-xl border-l-4 border-l-primary flex items-center gap-6 shadow-2xl max-w-md">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container shadow-inner border border-primary/20">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div>
+<h5 class="font-headline-sm text-primary">Pairing Specialist</h5>
+<p class="font-body-md text-on-surface-variant text-sm">Cigar Pairing Participation Stamp earned! Your passport has been updated.</p>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-white transition-colors" onclick="this.parentElement.parentElement.remove()">close</button>
+</div>
+</div>
+<!-- Navigation Drawer (from JSON - hidden by default, accessible via menu) -->
+<nav class="fixed left-0 top-0 h-full w-80 z-[100] flex flex-col py-8 bg-surface-container-high dark:bg-surface-container-high rounded-r-xl shadow-2xl shadow-black -translate-x-full transition-transform duration-500" id="sideNav">
+<div class="px-8 mb-10 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Member Portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArYh7WPqMfse1OlR24lG2MVWKCMQM4K8dJIz2EVqf3OM2F7YhIy_9JFL6uPb13EqaSRzf9bvA5gE5XrX7xUBfOdMgrFRWcjc04ZAoJSQTtmh48ttF11V90a4EqJGLSE-yi04zG7GPM-2XWIsyR8J9rlAWuXstjcpanZ0bX15gFDaXJhkHyYxLboFEmnrkOlVkZsQXpjNmEWMomHVehaJZ_LUDlF752h6MRSHoIh_Fw-HclFczMkoQQOIcMYDPFI9V1N_IXfYaI7aM"/>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Julian Sterling</h3>
+<p class="font-label-sm text-on-surface-variant">Platinum Member</p>
+<p class="font-label-sm text-primary">2,450 Credits</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 mx-2 hover:bg-surface-container-highest/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-lg">Cellar</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 mx-2 hover:bg-surface-container-highest/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">smoking_rooms</span>
+<span class="font-label-lg">Humidor</span>
+</a>
+<a class="flex items-center gap-4 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 mx-2 translate-x-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chair</span>
+<span class="font-label-lg">Lounge</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 mx-2 hover:bg-surface-container-highest/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-lg">My Passport</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 mx-2 hover:bg-surface-container-highest/50 transition-all rounded-lg mt-10" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-lg">Support</span>
+</a>
+</div>
+</nav>
+<!-- Bottom Navigation (from JSON) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)] md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/20 rounded-full px-6 py-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-label-sm">Assistant</span>
+</div>
+</nav>
+<script>
+        const menuBtn = document.querySelector('header button');
+        const sideNav = document.getElementById('sideNav');
+        let isOpen = false;
+
+        menuBtn.addEventListener('click', () => {
+            isOpen = !isOpen;
+            if (isOpen) {
+                sideNav.style.transform = 'translateX(0)';
+            } else {
+                sideNav.style.transform = 'translateX(-100%)';
+            }
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (isOpen && !sideNav.contains(e.target) && !menuBtn.contains(e.target)) {
+                isOpen = false;
+                sideNav.style.transform = 'translateX(-100%)';
+            }
+        });
+
+        // Interactive card selection
+        document.querySelectorAll('.glass-card button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.closest('.glass-card');
+                const isSelected = parent.classList.contains('amber-glow');
+                
+                // Clear others
+                document.querySelectorAll('.glass-card').forEach(c => {
+                    c.classList.remove('amber-glow');
+                    c.classList.remove('scale-[1.02]');
+                    const b = c.querySelector('button');
+                    if (b) b.innerText = b.innerText.replace('Selected', 'Select');
+                });
+
+                if (!isSelected) {
+                    parent.classList.add('amber-glow');
+                    parent.classList.add('scale-[1.02]');
+                    this.innerText = this.innerText.replace('Select', 'Selected');
+                }
+            });
+        });
+    </script>
+</body></html>

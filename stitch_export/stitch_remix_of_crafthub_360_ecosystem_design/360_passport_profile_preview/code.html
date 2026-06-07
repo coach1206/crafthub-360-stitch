@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The 360 Passport - Profile Preview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .gold-foil-border {
+            border: 1px solid rgba(233, 193, 118, 0.4);
+            box-shadow: inset 0 0 10px rgba(233, 193, 118, 0.1);
+        }
+        .smoked-glass {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+        }
+        .connection-glow {
+            filter: drop-shadow(0 0 15px rgba(233, 193, 118, 0.4));
+        }
+        .page-flip-transition {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes subtle-pulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+        .animate-pulse-slow {
+            animation: subtle-pulse 4s infinite ease-in-out;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error": "#ffb4ab",
+                      "primary-fixed": "#ffdea5",
+                      "on-error": "#690005",
+                      "on-secondary": "#462a00",
+                      "tertiary-fixed-dim": "#dac1bb",
+                      "tertiary-container": "#b7a09a",
+                      "on-surface": "#e5e2e3",
+                      "inverse-on-surface": "#303031",
+                      "error-container": "#93000a",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-fixed": "#2a1800",
+                      "inverse-surface": "#e5e2e3",
+                      "on-tertiary": "#3c2d28",
+                      "surface-container": "#1f1f20",
+                      "surface-container-low": "#1b1b1c",
+                      "inverse-primary": "#775a19",
+                      "surface-tint": "#e9c176",
+                      "surface-container-high": "#2a2a2b",
+                      "secondary": "#ffb95a",
+                      "surface-dim": "#131314",
+                      "on-secondary-fixed-variant": "#643f00",
+                      "on-tertiary-fixed": "#261814",
+                      "tertiary": "#dac1bb",
+                      "surface-variant": "#353436",
+                      "secondary-fixed": "#ffddb6",
+                      "secondary-container": "#c68315",
+                      "on-tertiary-container": "#473733",
+                      "on-primary-container": "#4e3700",
+                      "on-primary": "#412d00",
+                      "primary-container": "#c5a059",
+                      "outline": "#9a8f80",
+                      "on-secondary-container": "#3d2400",
+                      "primary": "#e9c176",
+                      "surface-bright": "#39393a",
+                      "secondary-fixed-dim": "#ffb95a",
+                      "on-primary-fixed-variant": "#5d4201",
+                      "background": "#131314",
+                      "surface-container-highest": "#353436",
+                      "on-primary-fixed": "#261900",
+                      "primary-fixed-dim": "#e9c176",
+                      "on-surface-variant": "#d1c5b4",
+                      "on-background": "#e5e2e3",
+                      "tertiary-fixed": "#f7ddd6",
+                      "outline-variant": "#4e4639",
+                      "surface": "#131314",
+                      "on-tertiary-fixed-variant": "#54433e",
+                      "surface-container-lowest": "#0e0e0f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max-width": "1440px",
+                      "gutter": "32px",
+                      "margin": "64px",
+                      "card-padding": "24px",
+                      "unit": "8px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Playfair Display"],
+                      "headline-md": ["Playfair Display"],
+                      "headline-xl": ["Playfair Display"],
+                      "headline-lg": ["Playfair Display"],
+                      "body-md": ["Montserrat"],
+                      "label-sm": ["Montserrat"],
+                      "label-lg": ["Montserrat"],
+                      "body-lg": ["Montserrat"]
+              },
+              "fontSize": {
+                      "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary/30 min-h-screen overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface-dim/80 backdrop-blur-xl border-b border-primary/20 shadow-md">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-primary/10 transition-colors duration-300 rounded-full active:scale-95">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<h1 class="font-display-lg text-[24px] text-primary uppercase tracking-widest leading-none">The 360 Passport</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-lg text-primary bg-primary/10 px-4 py-1 rounded-full border border-primary/20">Grand Lounge</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative min-h-screen pt-24 pb-32 flex items-center justify-center px-gutter">
+<!-- Blurred Background Context (Simulated Scan Screen) -->
+<div class="fixed inset-0 z-0 overflow-hidden opacity-40">
+<img alt="Blurred Lounge Background" class="w-full h-full object-cover blur-2xl" data-alt="A cinematic, wide-angle shot of an ultra-exclusive members-only lounge with deep mahogany walls, leather-bound books, and a dimly lit humidor. Warm amber light catches the smoke from a cigar in the distance. The overall aesthetic is rich, dark, and sophisticated, perfectly aligned with a luxury lifestyle brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZUIJnsOJz1gZZjQPI0oZlictIqzvN2AYNBTZVUMm8jr-l6qCNGIEpZXVXtTX6KuQQkvwX7f96k2c2PFObgwGB7YVnyyrWvFmGnA_iqxYc_5hJRRa1stxffWpR0IRpPVkyindhpYkcV8BMLLp2pJZAd0MwmNPZW1mTlQXll-kgFaaYNNG6sO39d99ru1qe4d9d9XfNobU1CRAnhDTjbVHLsJll5cUUXYGXC5SsCNAVh6WlmlTHd-0eGsTbmJxdX3kwPhRtnA1xkMg"/>
+<div class="absolute inset-0 bg-gradient-to-b from-background/80 via-transparent to-background/90"></div>
+</div>
+<!-- Scanned Passport Card -->
+<div class="relative z-10 w-full max-w-[500px] animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out">
+<div class="smoked-glass gold-foil-border rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col">
+<!-- Profile Header -->
+<div class="relative h-64 overflow-hidden">
+<img alt="Don Alejandro Profile" class="w-full h-full object-cover scale-110 transition-transform duration-1000" data-alt="A dignified and successful elderly gentleman with a well-groomed white beard, wearing a bespoke tailored linen suit and a panama hat. He exudes wisdom and charisma, sitting in a dimly lit, high-end cigar lounge with golden highlights. The portrait is high-contrast, premium, and shot with a shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhxYddKtqTBsulGAZCSCM98wGJFZe-kRaKbsEEVX7oFz44A8K3nBp-4fcjKUAegjBtd3epgWU63TJN9TWrDvLooZiXu3M-xKdQekMtRZDQgu1rWwjec18JjpW6x5sNKe3dcUpPjGqPsvtlJl-qMwSusv9ne87jHFocikdqYYgB4HBRvpidV4R-QWuFPHJghSauetp_saah8f4S3RTH6UxszzYW57t1NRVV69FiUYxbg4geGL5nRcbuPxbtZaR4d-KBOvyvw_1pfAg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#1f1f20] via-transparent to-transparent"></div>
+<!-- Connection Score Badge -->
+<div class="absolute top-6 right-6 flex items-center justify-center">
+<div class="relative w-20 h-20 rounded-full smoked-glass gold-foil-border flex flex-col items-center justify-center connection-glow">
+<span class="font-headline-md text-primary leading-none">92%</span>
+<span class="text-[10px] font-label-sm text-primary/70 uppercase tracking-tighter">Match</span>
+</div>
+</div>
+</div>
+<!-- Content Body -->
+<div class="p-card-padding flex flex-col gap-6">
+<div class="text-center">
+<h2 class="font-display-lg text-[42px] text-primary tracking-normal leading-tight">Don Alejandro</h2>
+<div class="flex items-center justify-center gap-2 mt-1">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+<p class="font-label-lg text-secondary/80 tracking-widest uppercase">Mentor / Guest</p>
+</div>
+</div>
+<!-- Details Sections -->
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-surface-container/50 p-4 rounded-xl border border-white/5">
+<label class="text-[10px] font-label-sm text-on-surface-variant uppercase tracking-[0.2em] block mb-1">Business</label>
+<p class="font-body-lg text-on-surface font-medium">Tobacco Cultivation</p>
+</div>
+<div class="bg-surface-container/50 p-4 rounded-xl border border-white/5">
+<label class="text-[10px] font-label-sm text-on-surface-variant uppercase tracking-[0.2em] block mb-1">Goal</label>
+<p class="font-body-lg text-on-surface font-medium">Export Partnerships</p>
+</div>
+</div>
+<!-- Action Cluster -->
+<div class="flex flex-col gap-3 pt-4">
+<button class="w-full bg-gradient-to-r from-primary/80 to-primary text-on-primary py-5 rounded-full font-label-lg uppercase tracking-widest shadow-[0_4px_20px_rgba(233,193,118,0.3)] hover:scale-[1.02] active:scale-95 transition-all duration-300">
+                            Connect
+                        </button>
+<button class="w-full bg-transparent border border-primary/40 text-primary py-5 rounded-full font-label-lg uppercase tracking-widest hover:bg-primary/10 active:scale-95 transition-all duration-300">
+                            Exchange Info
+                        </button>
+</div>
+</div>
+<!-- Footer Accent -->
+<div class="h-1 w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+</div>
+<!-- Cancel/Dismiss -->
+<button class="mt-8 mx-auto flex items-center gap-2 text-on-surface-variant/60 hover:text-on-surface transition-colors duration-300 active:scale-95">
+<span class="material-symbols-outlined text-xl">close</span>
+<span class="font-label-sm uppercase tracking-widest">Keep Scanning</span>
+</button>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Hidden on this focused screen based on "Relevance Check" logic, but provided for layout context) -->
+<!-- The prompt implies a task-focused confirmation screen, so the nav is suppressed as per guidelines. -->
+<script>
+        // Micro-interaction for the passport "page-flip" feel
+        document.querySelector('main').addEventListener('mousemove', (e) => {
+            const card = document.querySelector('.smoked-glass');
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 50;
+            const rotateY = (centerX - x) / 50;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        document.querySelector('main').addEventListener('mouseleave', () => {
+            const card = document.querySelector('.smoked-glass');
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            card.style.transition = 'transform 0.5s ease-out';
+        });
+
+        // Interactive Button Ripple effect (Simulating luxury tactile feedback)
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const x = e.clientX - e.target.offsetLeft;
+                const y = e.clientY - e.target.offsetTop;
+                
+                const ripple = document.createElement('span');
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('absolute', 'w-0', 'h-0', 'bg-white/20', 'rounded-full', 'pointer-events-none', 'animate-ping');
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 1000);
+            });
+        });
+    </script>
+</body></html>

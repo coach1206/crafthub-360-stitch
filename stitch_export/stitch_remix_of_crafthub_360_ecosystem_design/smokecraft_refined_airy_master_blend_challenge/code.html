@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Master Blend Challenge | CRAFTHUB 360</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#ffb95a",
+                    "background": "#131314",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface-container": "#1f1f20",
+                    "on-primary": "#412d00",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "tertiary": "#dac1bb",
+                    "on-secondary": "#462a00",
+                    "on-surface-variant": "#d1c5b4",
+                    "on-secondary-container": "#3d2400",
+                    "primary-fixed": "#ffdea5",
+                    "on-tertiary-container": "#473733",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-container": "#4e3700",
+                    "secondary-container": "#c68315",
+                    "primary-container": "#c5a059",
+                    "on-background": "#e5e2e3",
+                    "surface-tint": "#e9c176",
+                    "secondary-fixed": "#ffddb6",
+                    "tertiary-fixed": "#f7ddd6",
+                    "error": "#ffb4ab",
+                    "on-surface": "#e5e2e3",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-primary-fixed": "#261900",
+                    "inverse-primary": "#775a19",
+                    "error-container": "#93000a",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface": "#131314",
+                    "surface-bright": "#39393a",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "surface-variant": "#353436",
+                    "inverse-on-surface": "#303031",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "primary": "#e9c176",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-dim": "#131314",
+                    "primary-fixed-dim": "#e9c176",
+                    "outline": "#9a8f80",
+                    "surface-container-low": "#1b1b1c",
+                    "outline-variant": "#4e4639",
+                    "on-secondary-fixed": "#2a1800",
+                    "surface-container-high": "#2a2a2b",
+                    "on-tertiary": "#3c2d28",
+                    "tertiary-container": "#b7a09a",
+                    "on-tertiary-fixed": "#261814",
+                    "on-error": "#690005",
+                    "surface-container-highest": "#353436"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "32px",
+                    "card-padding": "24px",
+                    "container-max-width": "1440px",
+                    "unit": "8px",
+                    "margin": "64px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "label-caps": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "label-caps": ["10px", {"lineHeight": "12px", "letterSpacing": "0.2em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .glass-panel {
+        background: rgba(19, 19, 20, 0.25);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .gold-foil {
+        background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #e9c176 100%);
+        box-shadow: 0 4px 15px rgba(233, 193, 118, 0.2);
+      }
+      .titanium-border {
+        border: 0.5px solid rgba(218, 193, 187, 0.3);
+      }
+      .intensity-gauge {
+        background: conic-gradient(from 180deg at 50% 50%, #e9c176 0deg, transparent 270deg);
+      }
+      .scroll-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary/30">
+<!-- Atmospheric Background -->
+<div class="fixed inset-0 z-0">
+<img alt="Background" class="w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"/>
+<div class="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background"></div>
+</div>
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop py-unit bg-surface/5 dark:bg-surface/5 backdrop-blur-[40px] border-b border-white/20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="shield_person">shield_person</span>
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tighter">CRAFTHUB 360</span>
+</div>
+<div class="flex items-center gap-8">
+<nav class="hidden md:flex items-center gap-6">
+<span class="text-primary font-bold text-label-caps font-label-caps cursor-pointer">CHALLENGES</span>
+<span class="text-secondary dark:text-secondary-fixed-dim text-label-caps font-label-caps cursor-pointer hover:scale-95 transition-transform duration-200 hover:brightness-125">VAULT</span>
+<span class="text-secondary dark:text-secondary-fixed-dim text-label-caps font-label-caps cursor-pointer hover:scale-95 transition-transform duration-200 hover:brightness-125">CONNOISSEUR</span>
+</nav>
+<div class="h-10 w-10 rounded-full border border-primary/30 flex items-center justify-center overflow-hidden bg-surface-container-high transition-all duration-300 hover:scale-110 cursor-pointer">
+<img alt="Founder Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq4_EpkSpYVcHVlVxnKXJacUbdRmQWEovF-KvyMHM6dJqnGjPivNcRVqPojva00dcFw-6BVVfhI1gFLcaSclOfplLXr3i6MUVX4P-hkoIEfJTKgiHqRbMzmwdN_3t5yChLEGMio7Do167r-rCSqyVByUbYjQFGK9oISPUctIdJqwIGb-QKw2h3XuvSYjbpmyaRpt-JnoQzW41fw_DgeBRzjFoBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo"/>
+</div>
+</div>
+</header>
+<!-- Navigation Drawer -->
+<aside class="fixed left-0 top-0 h-full z-40 pt-20 px-4 h-full w-80 bg-surface/5 dark:bg-surface/5 backdrop-blur-[40px] border-r border-white/10 hidden lg:block">
+<div class="mb-10 px-4">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-lg gold-foil flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined font-bold" data-icon="token">token</span>
+</div>
+<div>
+<p class="text-primary font-headline-sm font-headline-sm">NOVEE OS</p>
+<p class="text-secondary-fixed-dim text-label-sm opacity-70">Founder 0 Authority</p>
+</div>
+</div>
+<div class="p-3 bg-primary/10 rounded-lg titanium-border">
+<p class="text-primary text-label-caps font-bold">V.3.60.0 • ECOSYSTEM MASTER</p>
+</div>
+</div>
+<nav class="space-y-1">
+<div class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-colors cursor-pointer active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="smoke_free">smoke_free</span>
+<span class="text-body-md font-body-md">SmokeCraft</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 rounded-lg text-primary bg-primary-container/10 border-l-2 border-primary-container cursor-pointer">
+<span class="material-symbols-outlined" data-icon="sports_bar">sports_bar</span>
+<span class="text-body-md font-body-md">BeerCraft</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="liquor">liquor</span>
+<span class="text-body-md font-body-md">PourCraft</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="wine_bar">wine_bar</span>
+<span class="text-body-md font-body-md">WineCraft</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+<span class="text-body-md font-body-md">360 Passport</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+<span class="text-body-md font-body-md">E.A.T.</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span class="text-body-md font-body-md">POS 3</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="relative z-10 pt-32 pb-24 px-gutter lg:pl-[340px] max-w-[1440px] mx-auto">
+<!-- Header Section -->
+<div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div class="max-w-2xl">
+<h1 class="font-display-lg text-display-lg text-primary mb-4 leading-tight">Master Blend Challenge</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl opacity-80 leading-relaxed">
+                    Orchestrate your signature vitola. Select from our heritage seed banks to create a profile that balances intensity, body, and aroma.
+                </p>
+</div>
+<div class="glass-panel p-card-padding rounded-xl flex items-center gap-6 titanium-border">
+<div class="relative w-24 h-24 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-4 border-white/5"></div>
+<div class="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-[spin_3s_linear_infinite]"></div>
+<span class="font-display-lg text-headline-lg text-primary">94</span>
+</div>
+<div>
+<p class="text-label-caps font-label-caps text-secondary tracking-[0.2em]">ORCHESTRATION</p>
+<p class="text-body-md font-body-md text-white mt-1">Excellent Balance</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+<!-- Selection Area (Bento Layout) -->
+<div class="xl:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Wrapper Selection -->
+<section class="glass-panel p-card-padding rounded-xl titanium-border group hover:border-primary/40 transition-all duration-500">
+<div class="flex items-center justify-between mb-8">
+<div>
+<span class="text-label-caps font-label-caps text-primary opacity-60">PHASE 01</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mt-1">Wrapper</h3>
+</div>
+<span class="material-symbols-outlined text-primary/50" data-icon="layers">layers</span>
+</div>
+<div class="flex flex-wrap gap-4">
+<button class="w-[72px] h-[72px] rounded-lg gold-foil p-[1px] group/btn transition-transform hover:scale-105 active:scale-95">
+<div class="w-full h-full bg-background/80 rounded-[7px] flex items-center justify-center overflow-hidden border border-white/10 group-focus/btn:border-primary">
+<img class="w-full h-full object-cover" data-alt="Macro photography of a dark, oily Connecticut Broadleaf tobacco leaf, showing intricate veins and a rich, chocolatey texture, high-end luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMxHg5VUIQz2opEFUOvAZaHkGnvXKQ9yDFdsq3RUowHT7ozQeGhkOj4CtmRKiM64Y--LZWrD2SfEqNVNEH5IZUbCwfEJYQpQwwcdMQAeOyCUeYQg-zVwzE-DvSbMRj8Cw_DUs1wIH-vZ_9HgSCJd4UG2wAR0buIJt-vZYQA8hg9avSf8LT23EFKEFs-MFFo7yLtpvTd-wvvXzkeo0sNBrWfsPNQiHid4U8fxXVVtkjV2jsMDW_0AsjU-Q3UH0N9nSdOOHzqSQuD9U"/>
+</div>
+</button>
+<button class="w-[72px] h-[72px] rounded-lg titanium-border p-[1px] opacity-40 hover:opacity-100 transition-all">
+<div class="w-full h-full bg-background/20 rounded-[7px] flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up of a light-colored Ecuador Connecticut tobacco leaf with a silky smooth finish and golden hue, soft cinematic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxTg65Wt9uZIkpBqyy4dP-yfpAOzZbz2z5ZkV13oVaJ2SAkBidZBFP7grSXlnvgp0rzviZQ5z2QkEdoI5kL1JIAKOIeQwpBh6JQcEGoYgi9hWq5KktjPbu0JFnOgOPJQVxxQ5dzEyYiC6zZsnAzdfCzfC2_n70T7Il7VU5QitXotLyl-tyuOyPD8qOjumx5OXXmnAYMXRe-yumHpuykGEynj_dpEkroC7aiLKuXGRVBObPXsvZ5CI4Og0tcI5Qts4m648an1iWXHk"/>
+</div>
+</button>
+<button class="w-[72px] h-[72px] rounded-lg titanium-border p-[1px] opacity-40 hover:opacity-100 transition-all">
+<div class="w-full h-full bg-background/20 rounded-[7px] flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-white/20" data-icon="add">add</span>
+</div>
+</button>
+</div>
+<div class="mt-6 pt-6 border-t border-white/5">
+<p class="text-label-sm font-label-sm text-on-surface-variant">SELECTED: <span class="text-primary">Habano Maduro Heritage</span></p>
+</div>
+</section>
+<!-- Binder Selection -->
+<section class="glass-panel p-card-padding rounded-xl titanium-border group hover:border-primary/40 transition-all duration-500">
+<div class="flex items-center justify-between mb-8">
+<div>
+<span class="text-label-caps font-label-caps text-primary opacity-60">PHASE 02</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mt-1">Binder</h3>
+</div>
+<span class="material-symbols-outlined text-primary/50" data-icon="texture">texture</span>
+</div>
+<div class="flex flex-wrap gap-4">
+<button class="w-[72px] h-[72px] rounded-lg titanium-border p-[1px] group/btn transition-transform hover:scale-105 active:scale-95 ring-2 ring-primary ring-offset-4 ring-offset-background/40">
+<div class="w-full h-full bg-background/20 rounded-[7px] flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Macro view of a sun-grown Criollo tobacco leaf used for binding, displaying a robust and rustic texture with deep amber tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-wFKd36V8Kte15q8k8B-07-DyWINrytg3jtB6nOkc55ovBl4NALS6YptCCnVeaf3H0BiZaFZyCPhdpRz6cJuFHWafpHgA0bqZij04ksDjTgbbT5XRZzsSojqvCQVT5O8jsyto4qMMBNy06XdXMxckzv0jbOT8tWEt9Nt1Z6g8UILoCRPg0EX6hSOgzhvRWrHCdvSBENZGQ1W5nkASD5aX019MPiabFOQUvieuxQyNse6-qHGoiBrr39deuAFKC3uxypdFhGZN_8U"/>
+</div>
+</button>
+<button class="w-[72px] h-[72px] rounded-lg titanium-border p-[1px] opacity-40 hover:opacity-100 transition-all">
+<div class="w-full h-full bg-background/20 rounded-[7px] flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Photography of a high-quality Corojo binder leaf, exhibiting a slightly reddish hue and elastic strength, warm studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZfnH-MsSB9L3fIvUmuB2jydCCAwvaAMEPJRNZecV6PKAJjHl8HulsTrHI7spXAr_AUXO1qSOOPo_DW4VdixxR-ayV4PnjVm2xiPhwWoFuWAF5PXCEsSlxekHHk-9vi2U4TZZT_qBdTVZ_-asuKsewgotaUAHMpqQqbSTlWGbxa8cyI7OPGMqVK5UT3jPVfaKM9X6uqMaQVfu-wFOCMZ_jY166IMOq2LWncgNMBJG-6FojwRTZejpcpIJ7mK8e1pi_2SjsjN9CTYo"/>
+</div>
+</button>
+</div>
+<div class="mt-6 pt-6 border-t border-white/5">
+<p class="text-label-sm font-label-sm text-on-surface-variant">SELECTED: <span class="text-primary">Estelí Criollo '98</span></p>
+</div>
+</section>
+<!-- Filler Selection (Double Wide) -->
+<section class="md:col-span-2 glass-panel p-card-padding rounded-xl titanium-border">
+<div class="flex items-center justify-between mb-8">
+<div>
+<span class="text-label-caps font-label-caps text-primary opacity-60">PHASE 03</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mt-1">Filler Master Mix</h3>
+</div>
+<div class="flex gap-2">
+<div class="px-3 py-1 rounded-full bg-primary/20 border border-primary/40 text-[10px] font-bold text-primary">3 SLOTS ACTIVE</div>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4">
+<button class="w-[72px] h-[72px] rounded-lg gold-foil p-[1px] transition-transform hover:scale-105">
+<div class="w-full h-full bg-background/80 rounded-[7px] flex items-center justify-center overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="Close-up of dried and fermented tobacco filler leaves, aged Ometepe seeds, showcasing a dark and complex profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBktRXv3px18iAdmk-FIbB6ajfhPahwqk9W_JP8Z3CMm5d75I1D5sQYn3y5CtixAGzZo0bWs5yXhZQ8TGcBZxfdlOrRy-X2jzZpEocDLKB-z48LeV4PdnPkWAu1EF0aLxDcp6N-JXmverp_fSYWKdujWH1FrWoLUY1CgVrJguJJeILwvw4JN5SLy70oWxWGRHWFymEXJ3FzmzsY93qIxljsbG1ANTGrbqwoIcmIQ6eUZnCfcsPhFk08_Z55717Itp90HwmP1ssOO0o"/>
+</div>
+</button>
+<button class="w-[72px] h-[72px] rounded-lg gold-foil p-[1px] transition-transform hover:scale-105">
+<div class="w-full h-full bg-background/80 rounded-[7px] flex items-center justify-center overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="Rich Jalapa filler tobacco leaves with high oil content and vibrant color intensity, luxurious high-resolution photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7N47zDRsd9xrna2FHDxZmmuHa9zMDEUx9pMH9OCchjzHa3TdmwiSK8rUNWCu3tQGc-DAewn13cJY0epAJPIuDmMkZDOxrSVbOlyqVToXKvvjL6eG_DDV4N_NgC9R-umyF3Ju6St0MmAbi63vwiC983oWNNS-xjiFcTNM2U0WpVcTXm-UZIbkyIPsqPC1U2cXP_tBIdctZFXNXkmSZml4JE2zbuDf4hyFSqmaSAAOlPQFZcXaAVWIcu0KFWBuNqFEsHk7jQouxUVY"/>
+</div>
+</button>
+<button class="w-[72px] h-[72px] rounded-lg gold-foil p-[1px] transition-transform hover:scale-105">
+<div class="w-full h-full bg-background/80 rounded-[7px] flex items-center justify-center overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="Fine Condega filler leaves, known for spice and sweetness, displayed in a cinematic high-contrast close-up." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBChsiFnTvnyOgSUpMyb4bHIgSDdIDhtpVEibdxcWU0oqYOeuVhtcpaQzJvQfET3Dl4wY9hl8p0fpXwW4XrqkFuv9HW2neJbZUZKfMZGQCfkXjs_fRdITEoj5UvPENLQzNGUUM_RBaDeiJ-jn_US4q1RIfcVoAzzXno57Z3KAEbJOV54Ym7cFmm9S_sigXryY_V0GkHk1A-cDY_EY3FBroW7N8DIF1iWCMn_WfRHq2S5Z-vavYMLfgkOelI1guIV4t6T3wFJJYPkZ8"/>
+</div>
+</button>
+<button class="w-[72px] h-[72px] rounded-lg border-2 border-dashed border-white/10 flex items-center justify-center group hover:border-primary/40 transition-colors">
+<span class="material-symbols-outlined text-white/10 group-hover:text-primary transition-colors" data-icon="add_circle">add_circle</span>
+</button>
+</div>
+</section>
+</div>
+<!-- Mentor & Intensity Sidebar -->
+<div class="xl:col-span-4 space-y-6">
+<!-- Master Sommelier Feedback -->
+<div class="glass-panel p-card-padding rounded-xl titanium-border relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-3xl"></div>
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-full border border-primary overflow-hidden">
+<img alt="Mentor" class="w-full h-full bg-surface-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb_QZr6Rcm5yAhoSToxjFZlKstPP_xnANgwmcyebOi0hM07Oc1SIX0GSF_Syk0jBYjnBOFZH6USUIgzjk5Z2IvBbJ9KPe7FZxm4Nr2zEfiUD3pj5SrHSrKTqrHnHZ7b6_PXBFAEA-POR-ylC-x_OD_RU-x7tqzqgVYZKxSV18uwF4EjoMgLf5YAXyaknUAZVGRjIiijHuUWkG5-_gH_xsHMhYlP-2-aGuwZuieceSWjeP3c4o-xgWwVNQCED0_lt1MLIpgq51Vx_g"/>
+</div>
+<div>
+<p class="text-label-caps font-label-caps text-secondary">MASTER MENTOR</p>
+<p class="font-headline-md text-white">Adrian Vazquez</p>
+</div>
+</div>
+<blockquote class="text-body-md font-body-md text-on-surface-variant italic leading-relaxed mb-6">
+                        "Your current selection shows remarkable maturity. The Ometepe filler provides a spicy backbone that pairs beautifully with the silkiness of the Connecticut wrapper. Consider adding a touch more Jalapa for a smoother finish."
+                    </blockquote>
+<div class="p-4 bg-white/5 rounded-lg border border-white/10">
+<p class="text-label-sm font-label-sm text-primary uppercase tracking-widest mb-2">Current Insight</p>
+<p class="text-body-md text-on-surface opacity-80">Orchestration score peaked at 94 with the addition of the Habano Maduro.</p>
+</div>
+</div>
+<!-- Intensity Gauge -->
+<div class="glass-panel p-card-padding rounded-xl titanium-border">
+<div class="flex justify-between items-center mb-8">
+<p class="text-label-caps font-label-caps text-secondary">INTENSITY PROFILE</p>
+<span class="material-symbols-outlined text-primary" data-icon="speed">speed</span>
+</div>
+<div class="relative py-12 flex flex-col items-center justify-center">
+<svg class="w-48 h-48 -rotate-90">
+<circle class="text-white/5 fill-none" cx="96" cy="96" r="88" stroke="currentColor" stroke-width="2"></circle>
+<circle class="text-primary fill-none transition-all duration-1000 ease-out" cx="96" cy="96" r="88" stroke="currentColor" stroke-dasharray="553" stroke-dashoffset="138" stroke-width="12" style="stroke-linecap: round;"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center pt-2">
+<span class="font-display-lg text-headline-xl text-white">8.5</span>
+<span class="text-label-sm font-label-sm text-secondary opacity-80">BOLD</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between text-label-sm font-label-sm">
+<span class="opacity-60">Aroma</span>
+<span class="text-primary">High</span>
+</div>
+<div class="w-full bg-white/10 h-1 rounded-full">
+<div class="bg-primary h-1 rounded-full" style="width: 85%"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm">
+<span class="opacity-60">Complexity</span>
+<span class="text-primary">Exceptional</span>
+</div>
+<div class="w-full bg-white/10 h-1 rounded-full">
+<div class="bg-primary h-1 rounded-full" style="width: 94%"></div>
+</div>
+</div>
+</div>
+<!-- CTA Button -->
+<button class="w-full group relative py-6 px-8 rounded-xl gold-foil overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(233,193,118,0.4)] active:scale-95">
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+<div class="relative flex items-center justify-center gap-3">
+<span class="font-headline-md text-on-primary font-bold tracking-tight">SUBMIT MASTER BLEND</span>
+<span class="material-symbols-outlined text-on-primary" data-icon="send">send</span>
+</div>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full py-4 px-margin-desktop flex flex-col md:flex-row justify-between items-center mt-auto bg-surface-container-lowest/80 dark:bg-surface-container-lowest/80 backdrop-blur-md border-t border-white/5 relative z-20">
+<div class="text-label-caps font-label-caps font-bold text-primary mb-4 md:mb-0">
+            © 2024 NOVEE OS • FOUNDER LEVEL 0 SECURED
+        </div>
+<div class="flex gap-8">
+<a class="text-on-tertiary-fixed-variant text-label-caps font-label-caps hover:text-primary duration-300 transition-colors" href="#">NoveeOps Status</a>
+<a class="text-on-tertiary-fixed-variant text-label-caps font-label-caps hover:text-primary duration-300 transition-colors" href="#">Health Monitor</a>
+<a class="text-on-tertiary-fixed-variant text-label-caps font-label-caps hover:text-primary duration-300 transition-colors" href="#">Privacy</a>
+</div>
+</footer>
+<!-- Interactive Layer / Micro-interactions -->
+<script>
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                // Subtle haptic-like effect or sound could trigger here
+            });
+        });
+
+        // Ambient Light Pulse Effect
+        const pulseLayer = document.createElement('div');
+        pulseLayer.className = 'fixed inset-0 pointer-events-none z-0 mix-blend-soft-light opacity-30';
+        pulseLayer.style.background = 'radial-gradient(circle at 50% 50%, rgba(233, 193, 118, 0.1), transparent 70%)';
+        document.body.appendChild(pulseLayer);
+
+        let lastMove = Date.now();
+        document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            if (now - lastMove > 50) {
+                const x = (e.clientX / window.innerWidth) * 100;
+                const y = (e.clientY / window.innerHeight) * 100;
+                pulseLayer.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(233, 193, 118, 0.15), transparent 70%)`;
+                lastMove = now;
+            }
+        });
+    </script>
+</body></html>

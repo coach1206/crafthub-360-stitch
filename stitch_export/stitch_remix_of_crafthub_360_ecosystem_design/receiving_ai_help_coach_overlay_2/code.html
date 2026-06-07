@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#e5e2e3",
+                    "error": "#ffb4ab",
+                    "surface-container-lowest": "#0e0e0f",
+                    "on-tertiary-fixed": "#261814",
+                    "on-primary": "#412d00",
+                    "on-surface-variant": "#d1c5b4",
+                    "inverse-surface": "#e5e2e3",
+                    "surface": "#131314",
+                    "secondary-container": "#c68315",
+                    "on-secondary": "#462a00",
+                    "primary-container": "#c5a059",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container": "#1f1f20",
+                    "on-secondary-container": "#3d2400",
+                    "inverse-primary": "#775a19",
+                    "surface-container-low": "#1b1b1c",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "secondary": "#ffb95a",
+                    "on-tertiary": "#3c2d28",
+                    "surface-container-high": "#2a2a2b",
+                    "secondary-fixed": "#ffddb6",
+                    "primary-fixed-dim": "#e9c176",
+                    "outline-variant": "#4e4639",
+                    "on-surface": "#e5e2e3",
+                    "on-primary-container": "#4e3700",
+                    "on-error": "#690005",
+                    "surface-tint": "#e9c176",
+                    "primary": "#e9c176",
+                    "error-container": "#93000a",
+                    "inverse-on-surface": "#303031",
+                    "tertiary-container": "#b7a09a",
+                    "on-error-container": "#ffdad6",
+                    "surface-dim": "#131314",
+                    "primary-fixed": "#ffdea5",
+                    "tertiary": "#dac1bb",
+                    "surface-container-highest": "#353436",
+                    "surface-variant": "#353436",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "outline": "#9a8f80",
+                    "surface-bright": "#39393a",
+                    "on-tertiary-container": "#473733",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "on-primary-fixed": "#261900",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "background": "#131314"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "unit": "8px",
+                    "margin": "64px",
+                    "gutter": "32px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.2);
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(198, 131, 21, 0.2);
+        }
+        .red-alert-glow {
+            box-shadow: 0 0 30px rgba(147, 0, 10, 0.4);
+        }
+        .scan-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffb95a, transparent);
+            animation: scan 3s linear infinite;
+        }
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
+        .haptic-feedback:active {
+            transform: scale(0.95);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin py-4 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-[32px]">clinical_notes</span>
+<h1 class="font-headline-md text-headline-md font-medium text-primary tracking-tight">AI Concierge Coach</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<button class="font-label-lg text-label-lg text-primary font-semibold hover:text-primary transition-colors">Logistics Mode</button>
+<button class="font-label-lg text-label-lg text-on-surface-variant font-medium hover:text-primary transition-colors">Inventory</button>
+<button class="font-label-lg text-label-lg text-on-surface-variant font-medium hover:text-primary transition-colors">Reports</button>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary-container overflow-hidden">
+<img alt="Executive Profile" data-alt="A professional portrait of a senior logistics executive in a dark, luxury lounge setting. The lighting is moody and dramatic with golden amber highlights reflecting off a glass surface in the background. He is wearing a tailored charcoal suit, exuding an air of expertise and quiet confidence. The overall aesthetic is refined, echoing a high-end members-only environment with a warm, sophisticated palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5k2rkPlkNVKwDIiddaAqgH69VWiaCgwWH22_O5cHevlX_OH1RGGHEZVVkE0t9LgPqSuey2N481Xm2AXQpfOplHqaCBSSL3TIZ00Vi9LNBYopFjqHhRTL_8ljWG3N1f89X0G06oFN3ZYftrAobncOwybKvjx5u-K6pwYv1LZJOOQ-BvXQ0dWLUC6zFeuXTbkqxqUE2qp3RCGYjspzrQuYe-qHr_a9cDozczv2QBE9UvjQc-FxETPFrI1A5p92JvYVeql4elf3Kuwc"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas (Shipment Scan Background) -->
+<main class="relative w-full h-screen pt-24 pb-32 flex items-center justify-center bg-surface-container-lowest">
+<!-- Simulated Background Content (The Scan Screen) -->
+<div class="absolute inset-0 z-0 opacity-40">
+<img class="w-full h-full object-cover" data-alt="A high-resolution view of a dark, professional warehouse receiving dock with stacked luxury wooden crates and premium packaging materials. The scene is captured with a shallow depth of field, focused on a shipping label with logistics barcodes. Warm, overhead spotlighting creates long shadows and highlights the tactile texture of the wood and corrugated cardboard. The atmosphere is industrial yet high-end and exclusive." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3Vk4BboHl7YwHKsax1opY0d9PNg9vkN2qBhgsIhCX2ZRuFH_ajChoKraVXVdCU4XbfVv7aUAxjuR70lkwGz8uBdmjOe699Z_O68IXS-R2PbBg2vWtLLIgPUhWglrKvJSLT6nokGEBReCtMRqD9bMVoMiIF_qfXhDRMlsNDVN_tGiV9cuLvSLJmwxJLCU3ZIF9VGwVbLDOGuZIWkz8UprszkXJTINxavrDmXZwsSKFGHjb-7Ox1LU2_BZBs3iidBoa4t4lhcj3aR0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background"></div>
+<div class="scan-line absolute top-0 left-0 w-full z-10"></div>
+</div>
+<!-- Coach Dark Glass Overlay -->
+<section class="relative z-20 w-full max-w-[900px] mx-auto px-6">
+<div class="glass-panel p-10 rounded-[32px] red-alert-glow animate-in fade-in zoom-in duration-500">
+<!-- Overlay Header -->
+<div class="flex items-start justify-between mb-8">
+<div>
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] mb-2">Receiving Center | Logistics Mode</p>
+<h2 class="font-headline-lg text-headline-lg text-error flex items-center gap-3">
+<span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">report</span>
+                            Damaged Item Detected
+                        </h2>
+</div>
+<div class="bg-error-container text-on-error-container px-4 py-2 rounded-full flex items-center gap-2">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-error"></span>
+</span>
+<span class="font-label-lg text-label-lg font-bold">High Risk</span>
+</div>
+</div>
+<!-- Guidance Content -->
+<div class="grid md:grid-cols-5 gap-8">
+<div class="md:col-span-3 space-y-6">
+<div class="space-y-2">
+<h3 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest">Recommendation</h3>
+<p class="font-headline-md text-headline-md text-on-surface leading-snug">
+                                Capture evidence, mark as damaged, and flag for Manager Review.
+                            </p>
+</div>
+<div class="space-y-2 pt-4 border-t border-outline-variant">
+<h3 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest">Reason</h3>
+<p class="font-body-lg text-body-lg text-on-surface/80">
+                                Ensures accurate supplier credit and inventory integrity. Unresolved damage at receipt creates untraceable shrink and financial liability.
+                            </p>
+</div>
+</div>
+<!-- Visual Context / Photo-Icon -->
+<div class="md:col-span-2 flex flex-col justify-end">
+<div class="aspect-square rounded-2xl overflow-hidden border border-outline-variant shadow-xl relative group cursor-pointer">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A macro photo of a damaged premium item, showing a cracked crystal glass surface reflecting warm amber light. The detail of the fracture is sharp and dramatic, emphasizing the loss of value. The background is a deep, dark espresso brown, consistent with the luxury lounge theme. The lighting focuses on the damage as if under a forensic spotlight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgVV1xKmSU-Tt2RyBYUqDt1bfEw_aHU8jqZMt2xxrkljPtowqp3YH11WuawysSI2aflY4l9KGcAH3LFV8A2f8Ri4mzl1eGU2ti0x7C6LYd_r3czzGwlTVN9bijNi6x_zoUbQYHtI0iX-n1CQysvCZy6WBYQHi7vaVny8eHmitvzl4zm-purdsrTjST0RnoaQKFqfZ4Doirdih8_eeEg5iy5_LmmSJLKdVry1kE_M8gMSPUsbQolMNObS8I_nwBT1BrcON7_05L3BM"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-5xl">add_a_photo</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Controls -->
+<div class="mt-12 flex flex-wrap items-center gap-4">
+<button class="haptic-feedback flex-1 min-w-[140px] bg-primary text-on-primary py-4 px-6 rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-2 hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">visibility</span>
+                        Read
+                    </button>
+<button class="haptic-feedback flex-1 min-w-[140px] border border-primary text-primary py-4 px-6 rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-2 hover:bg-primary/10 transition-all">
+<span class="material-symbols-outlined">graphic_eq</span>
+                        Hear
+                    </button>
+<button class="haptic-feedback w-14 h-14 border border-outline text-on-surface-variant rounded-xl flex items-center justify-center hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">replay</span>
+</button>
+<div class="h-10 w-[1px] bg-outline-variant mx-2"></div>
+<button class="haptic-feedback px-8 py-4 bg-error-container text-on-error-container rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-2 hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">support_agent</span>
+                        Call Manager
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin pb-8 pt-4 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-outline-variant shadow-[0_-8px_24px_rgba(233,193,118,0.1)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-6 py-2 shadow-[0_0_15px_rgba(198,131,21,0.4)] haptic-feedback">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-lg text-label-lg tracking-widest">Guidance</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary hover:opacity-100 transition-all duration-300 haptic-feedback">
+<span class="material-symbols-outlined">graphic_eq</span>
+<span class="font-label-lg text-label-lg tracking-widest">Haptics</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary hover:opacity-100 transition-all duration-300 haptic-feedback">
+<span class="material-symbols-outlined">ring_volume</span>
+<span class="font-label-lg text-label-lg tracking-widest">Manager</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary hover:opacity-100 transition-all duration-300 haptic-feedback">
+<span class="material-symbols-outlined">close</span>
+<span class="font-label-lg text-label-lg tracking-widest">Dismiss</span>
+</button>
+</nav>
+<!-- Interaction Script -->
+<script>
+        document.querySelectorAll('.haptic-feedback').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(20);
+                }
+            });
+        });
+
+        // Floating Action (Contextual: Submit Damage)
+        const fab = document.createElement('button');
+        fab.className = 'fixed bottom-28 right-8 w-16 h-16 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center z-40 haptic-feedback hover:scale-110 transition-transform amber-glow';
+        fab.innerHTML = '<span class="material-symbols-outlined text-3xl">task_alt</span>';
+        document.body.appendChild(fab);
+    </script>
+</body></html>

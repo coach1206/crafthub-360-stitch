@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Guest Journey Review | CraftHub 360</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(theme('colors.surface-container'), theme('colors.surface-container')) padding-box,
+                        linear-gradient(135deg, #e9c176, #4e3700) border-box;
+        }
+        .timeline-line {
+            background: linear-gradient(to bottom, #e9c176 0%, #4e3700 100%);
+        }
+        .step-glow {
+            box-shadow: 0 0 15px rgba(233, 193, 118, 0.3);
+        }
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            overflow-x: hidden;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#3d2400",
+                      "surface-tint": "#e9c176",
+                      "outline-variant": "#4e4639",
+                      "tertiary-fixed-dim": "#dac1bb",
+                      "inverse-on-surface": "#303031",
+                      "inverse-primary": "#775a19",
+                      "surface-dim": "#131314",
+                      "on-tertiary": "#3c2d28",
+                      "background": "#131314",
+                      "on-tertiary-fixed-variant": "#54433e",
+                      "surface-container": "#1f1f20",
+                      "surface-bright": "#39393a",
+                      "secondary": "#ffb95a",
+                      "on-background": "#e5e2e3",
+                      "on-tertiary-container": "#473733",
+                      "on-error": "#690005",
+                      "tertiary-fixed": "#f7ddd6",
+                      "on-surface-variant": "#d1c5b4",
+                      "secondary-fixed": "#ffddb6",
+                      "primary-container": "#c5a059",
+                      "error": "#ffb4ab",
+                      "tertiary": "#dac1bb",
+                      "secondary-fixed-dim": "#ffb95a",
+                      "surface-container-high": "#2a2a2b",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-lowest": "#0e0e0f",
+                      "inverse-surface": "#e5e2e3",
+                      "on-tertiary-fixed": "#261814",
+                      "on-primary-container": "#4e3700",
+                      "surface-container-low": "#1b1b1c",
+                      "tertiary-container": "#b7a09a",
+                      "surface-container-highest": "#353436",
+                      "on-primary-fixed-variant": "#5d4201",
+                      "error-container": "#93000a",
+                      "primary-fixed-dim": "#e9c176",
+                      "on-surface": "#e5e2e3",
+                      "on-secondary-fixed": "#2a1800",
+                      "on-secondary-fixed-variant": "#643f00",
+                      "primary-fixed": "#ffdea5",
+                      "surface": "#131314",
+                      "surface-variant": "#353436",
+                      "on-secondary": "#462a00",
+                      "secondary-container": "#c68315",
+                      "primary": "#e9c176",
+                      "on-primary-fixed": "#261900",
+                      "outline": "#9a8f80",
+                      "on-primary": "#412d00"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "card-padding": "24px",
+                      "margin": "64px",
+                      "unit": "8px",
+                      "gutter": "32px",
+                      "container-max-width": "1440px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Playfair Display"],
+                      "headline-md": ["Playfair Display"],
+                      "body-md": ["Montserrat"],
+                      "label-sm": ["Montserrat"],
+                      "label-lg": ["Montserrat"],
+                      "headline-xl": ["Playfair Display"],
+                      "body-lg": ["Montserrat"],
+                      "display-lg": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(233,193,118,0.1)] h-20 flex items-center justify-between px-margin z-50">
+<div class="flex items-center gap-4">
+<button class="transition-all duration-300 ease-in-out active:scale-95 hover:bg-primary/10 p-2 rounded-full">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter">CraftHub 360 Orchestration</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container border border-primary/20">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-label-lg text-label-lg text-on-surface">VIP Priority</span>
+</div>
+<div class="h-10 w-10 rounded-full border border-primary/40 bg-cover bg-center overflow-hidden" data-alt="A professional headshot of a refined gentleman in a bespoke suit, looking directly at the camera with a warm, welcoming expression. The lighting is soft and cinematic, characteristic of an exclusive members-only lounge. The background is a blurred study of deep mahogany and warm amber tones, maintaining the dark luxury aesthetic of the CraftHub 360 system." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcZWuS6KOcAvTKl2BrVtl61yvCGu7U-TPXm8f3I7P-I3Rkk8hV2dFwOL7BaFdnknVboL-QbFhtnZuMS7HEsA7zJXGZ9RvKg5YNSol5Td-5xxVFBE5ML6bgBvxPEBs-flFS2hmNqBQ53umuup-JlC-hPFvXqqsTG5KNSle6W_qqoVFIA7mi1MqaeZzA1fm8p3cZ8LQKcXMlLfCzP7XSQFu6XLAJQlgTpbrP2W0lxACcjVRlagss1MDOEQYR8_awcFMGrbihU1ZQkKc')">
+</div>
+</div>
+</header>
+<main class="flex-1 mt-20 mb-20 px-margin py-12 max-w-[1440px] mx-auto w-full">
+<!-- Hero Header -->
+<div class="mb-12">
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-2">Guest Journey Review</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">A linear orchestration of the complete member experience, from arrival to departure. Monitor status across all touchpoints.</p>
+</div>
+<!-- Status Overview Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-16">
+<div class="glass-card p-card-padding rounded-xl flex items-center gap-4">
+<div class="bg-primary/20 p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary">login</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Entry Clear</p>
+<p class="font-headline-md text-headline-md text-on-surface">Active</p>
+</div>
+</div>
+<div class="glass-card p-card-padding rounded-xl flex items-center gap-4">
+<div class="bg-secondary/20 p-3 rounded-lg">
+<span class="material-symbols-outlined text-secondary">psychology</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Guidance</p>
+<p class="font-headline-md text-headline-md text-on-surface">Available</p>
+</div>
+</div>
+<div class="glass-card p-card-padding rounded-xl flex items-center gap-4">
+<div class="bg-tertiary/20 p-3 rounded-lg">
+<span class="material-symbols-outlined text-tertiary">ads_click</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Touch Flow</p>
+<p class="font-headline-md text-headline-md text-on-surface">100% Ready</p>
+</div>
+</div>
+<div class="glass-card p-card-padding rounded-xl flex items-center gap-4 border-primary/40 gold-foil-border">
+<div class="bg-primary/30 p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary">record_voice_over</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Voice Sync</p>
+<p class="font-headline-md text-headline-md text-on-surface text-primary">Optional</p>
+</div>
+</div>
+</div>
+<!-- Vertical Timeline Journey -->
+<div class="relative ml-8 md:ml-24">
+<!-- Continuous Line -->
+<div class="absolute left-6 top-0 bottom-0 w-0.5 timeline-line opacity-30"></div>
+<!-- Steps -->
+<div class="space-y-12">
+<!-- Step 1: Entry -->
+<div class="relative flex items-start group">
+<div class="absolute -left-12 mt-1 z-10 flex items-center justify-center">
+<div class="h-12 w-12 rounded-full bg-surface border-2 border-primary flex items-center justify-center step-glow transition-transform duration-500 group-hover:scale-110">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">door_open</span>
+</div>
+</div>
+<div class="ml-10 glass-card p-card-padding rounded-xl w-full max-w-4xl transition-all duration-300 hover:translate-x-2">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Guest Arrives</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Identity verified via biometric gateway. Welcome sequence initiated.</p>
+</div>
+<div class="w-32 h-20 rounded-lg bg-cover bg-center border border-outline-variant/30" data-alt="The elegant threshold of a high-end private members club. Large heavy oak doors are partially open, revealing a warm, softly lit interior with amber highlights and deep shadows. The atmosphere is quiet, exclusive, and welcoming, perfectly matching the tactile luxury aesthetic of the CraftHub 360 experience." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAPH-hVMp4qVfeMIf83zYC1iJlADPkywgtVpQfG90V-88dP7mPixKyuEszb1XcAtYmFkpxpGIHRq4QlWNHx7sW0Q9FchH2CA0G6TCw1oikB_e80GQpjKv2gABonynyWUlI_UbEBq1k6pnypMEajadPOmL9-wHZx0GT1Oxgh6zTRS77cNyzo7ltxqyFldHLHCZKRzJZvujoRyNJ0B-lP-ANeBbhJq9cgeAWgQ68zQBsYySN3oHbzVR05mQPsdGAGps9OlSxwpLnJlQ8')">
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2: Hub Open -->
+<div class="relative flex items-start group">
+<div class="absolute -left-12 mt-1 z-10 flex items-center justify-center">
+<div class="h-12 w-12 rounded-full bg-surface border-2 border-primary flex items-center justify-center step-glow transition-transform duration-500 group-hover:scale-110">
+<span class="material-symbols-outlined text-primary">hub</span>
+</div>
+</div>
+<div class="ml-10 glass-card p-card-padding rounded-xl w-full max-w-4xl transition-all duration-300 hover:translate-x-2">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">CraftHub Opens</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">The digital canvas initializes personal preferences and past tasting history.</p>
+</div>
+<div class="w-32 h-20 rounded-lg bg-cover bg-center border border-outline-variant/30" data-alt="A futuristic and elegant tablet interface glowing with golden data visualizations on a dark smoked glass background. The interface shows sophisticated graphs and membership details in a minimalist, high-end style. The lighting is dim with warm amber accents, evoking the feeling of a private humidor or wine cellar control panel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuClarbNOsNs-k9DCGEPqche7cV1fmf4b62qsRy4VXBvN-30bIODUlsL38zxktBTAHA9Zu_4t6Cb2rYhdAFZg5ElKJFN5yPAipBjcfD1GfcrcsbMjNrZWsOsB7yH8uA7e7Rp9mdqBX6s81jyYU11NUh3k2G8ymK1Jad82pMFkP5mmFLhlfbVlvbMc81GkO3AS-Eq7zxrSf9QxiRq09Zadv0Ea8ZHfqkIqiMlyXHJohnaN1vqeZ1dQa8F_rPePCB6a1wfKD5ZlzEOCMY')">
+</div>
+</div>
+</div>
+</div>
+<!-- Step 3: AI Concierge -->
+<div class="relative flex items-start group">
+<div class="absolute -left-12 mt-1 z-10 flex items-center justify-center">
+<div class="h-12 w-12 rounded-full bg-surface border-2 border-secondary flex items-center justify-center step-glow transition-transform duration-500 group-hover:scale-110">
+<span class="material-symbols-outlined text-secondary">psychology</span>
+</div>
+</div>
+<div class="ml-10 glass-card p-card-padding rounded-xl w-full max-w-4xl transition-all duration-300 hover:translate-x-2">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md text-secondary mb-2">AI Concierge Guidance</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Conversational intelligence suggests a limited edition 1978 Bordeaux based on atmospheric data.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 4: Craft Choice (Complex Bento) -->
+<div class="relative flex items-start group">
+<div class="absolute -left-12 mt-1 z-10 flex items-center justify-center">
+<div class="h-12 w-12 rounded-full bg-surface border-2 border-primary flex items-center justify-center step-glow transition-transform duration-500 group-hover:scale-110">
+<span class="material-symbols-outlined text-primary">extension</span>
+</div>
+</div>
+<div class="ml-10 w-full max-w-4xl space-y-4">
+<div class="glass-card p-card-padding rounded-xl">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Craft Choice Selection</h3>
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+<div class="bg-surface-container rounded-lg p-3 text-center border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary mb-2">liquor</span>
+<p class="font-label-sm text-label-sm">Pour</p>
+</div>
+<div class="bg-surface-container rounded-lg p-3 text-center border border-primary transition-colors cursor-pointer gold-foil-border">
+<span class="material-symbols-outlined text-primary mb-2">smoking_rooms</span>
+<p class="font-label-sm text-label-sm text-primary">Smoke</p>
+</div>
+<div class="bg-surface-container rounded-lg p-3 text-center border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary mb-2">sports_bar</span>
+<p class="font-label-sm text-label-sm">Beer</p>
+</div>
+<div class="bg-surface-container rounded-lg p-3 text-center border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary mb-2">wine_bar</span>
+<p class="font-label-sm text-label-sm">Wine</p>
+</div>
+<div class="bg-surface-container rounded-lg p-3 text-center border border-outline-variant/30 hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary mb-2">badge</span>
+<p class="font-label-sm text-label-sm">Passport</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 5: Participation & Networking -->
+<div class="relative flex items-start group">
+<div class="absolute -left-12 mt-1 z-10 flex items-center justify-center">
+<div class="h-12 w-12 rounded-full bg-surface border-2 border-tertiary flex items-center justify-center step-glow transition-transform duration-500 group-hover:scale-110">
+<span class="material-symbols-outlined text-tertiary">qr_code_scanner</span>
+</div>
+</div>
+<div class="ml-10 glass-card p-card-padding rounded-xl w-full max-w-4xl transition-all duration-300 hover:translate-x-2">
+<div class="flex flex-col md:flex-row gap-6">
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Experience Completion</h3>
+<div class="flex gap-4 mb-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-tertiary/10 border border-tertiary/30 rounded-full">
+<span class="material-symbols-outlined text-tertiary text-xs">verified</span>
+<span class="font-label-sm text-label-sm text-tertiary">Participation Stamp</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/30 rounded-full">
+<span class="material-symbols-outlined text-primary text-xs">sensors</span>
+<span class="font-label-sm text-label-sm text-primary">Networking Scan</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Member connected with 2 other Connoisseurs in the lounge.</p>
+</div>
+<div class="flex -space-x-4">
+<div class="h-12 w-12 rounded-full border-2 border-surface bg-cover" data-alt="Refined man avatar profile" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBTwTIvvZ4a9F3IRxDtbGSFuaRJHfz4G4HQzD67QfoaLsPUkClSZS3yN3naJMROSbDBB6KsKMM64V-7Z7vmDjmv-YgJg-5ZZMnpY-6ltADP9DUgbOs-k-0e3Dc1Mdi7yOrrUz3Bv-12ZV8-8PQm2OxRHp2yqByAF42EQbl9GNVDY-xvGJXadVksIR4PuC9_IaCN52259s9Uzzi61MyCzzJJIRJW8hSQWg8knsNOoFw2rlRa6BBGgA-3CD2R-nCk9EerDgVPTKMdgjg')"></div>
+<div class="h-12 w-12 rounded-full border-2 border-surface bg-cover" data-alt="Sophisticated woman avatar profile" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBImG7IQa0RLuvgZCkqXEZLx7gi5UCqkmRVgGJRUzx1ygyM6cnhqHRJRlGhvxs9-4iKowK7uXiDs7FNiXFJk-y5z5HyzrFcGYsNPV9YpzIyrizWKWf0Gg-KoL1Z5tYnPVOftmc2YOOcYb1uQq8MjTAVthFRarx1wAQzayLy4JOIEsGkvxR6OWERE1QSyrb46bM5gEg34ABkD_tAtRxJq5Tqij0v7IOFF8Qt--oPCW4SDbT5149-OoQbAKRQiG6kD9nbHfqtiEXZD20')"></div>
+<div class="h-12 w-12 rounded-full border-2 border-surface bg-primary/20 flex items-center justify-center font-label-lg">+8</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 6: Checkout & Handoff -->
+<div class="relative flex items-start group">
+<div class="absolute -left-12 mt-1 z-10 flex items-center justify-center">
+<div class="h-12 w-12 rounded-full bg-surface border-2 border-primary flex items-center justify-center step-glow transition-transform duration-500 group-hover:scale-110">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">point_of_sale</span>
+</div>
+</div>
+<div class="ml-10 glass-card p-card-padding rounded-xl w-full max-w-4xl transition-all duration-300 hover:translate-x-2 border-primary/40">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary">Final Stage</span>
+<div class="h-px flex-1 bg-primary/20"></div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">POS 3 Confirmation &amp; Reward Update</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Transaction finalized. 500 Loyalty Gems added to Passport.</p>
+<div class="flex items-center gap-3 text-secondary">
+<span class="material-symbols-outlined">real_estate_agent</span>
+<span class="font-label-lg text-label-lg">Staff Handoff: Lead Steward James</span>
+</div>
+</div>
+<div class="bg-surface-container-highest p-6 rounded-xl border border-outline-variant/30 text-center min-w-[180px]">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Passport Recap</p>
+<p class="font-headline-md text-headline-md text-primary">$420.00</p>
+<div class="mt-4 flex justify-center">
+<span class="material-symbols-outlined text-primary text-4xl">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Navigation Actions -->
+<div class="fixed bottom-24 right-margin z-50 flex flex-col gap-4">
+<button class="h-16 w-16 rounded-full bg-surface-container border border-primary/20 shadow-2xl flex items-center justify-center text-primary hover:scale-110 active:scale-95 transition-all duration-300">
+<span class="material-symbols-outlined text-3xl">home</span>
+</button>
+<button class="h-16 w-16 rounded-full bg-primary text-on-primary shadow-[0_0_30px_rgba(233,193,118,0.4)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300">
+<span class="material-symbols-outlined text-3xl">print</span>
+</button>
+</div>
+</main>
+<!-- Bottom NavBar -->
+<nav class="fixed bottom-0 w-full h-20 bg-surface-container-high/90 backdrop-blur-lg border-t border-primary/20 shadow-[0_-8px_32px_rgba(0,0,0,0.5)] flex justify-around items-center px-4 z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary scale-110 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">extension</span>
+<span class="font-label-sm text-label-sm">Modules</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-sm text-label-sm">Floor Plan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">error</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-secondary transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for timeline steps
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.borderColor = 'rgba(233, 193, 118, 0.5)';
+                card.style.boxShadow = '0 0 20px rgba(233, 193, 118, 0.1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = 'rgba(233, 193, 118, 0.15)';
+                card.style.boxShadow = 'none';
+            });
+        });
+
+        // Simple scroll reveal for timeline
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.relative.flex.items-start').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body></html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CRAFTHUB 360 • Asset Download Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#e5e2e3",
+                        "tertiary": "#dac1bb",
+                        "surface-container-lowest": "#0e0e0f",
+                        "surface": "#131314",
+                        "on-background": "#e5e2e3",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "tertiary-container": "#b7a09a",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "inverse-surface": "#e5e2e3",
+                        "secondary": "#ffb95a",
+                        "inverse-on-surface": "#303031",
+                        "surface-variant": "#353436",
+                        "on-tertiary": "#3c2d28",
+                        "surface-container-high": "#2a2a2b",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-fixed": "#ffdea5",
+                        "primary-container": "#c5a059",
+                        "primary": "#e9c176",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#353436",
+                        "surface-bright": "#39393a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface-variant": "#d1c5b4",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-primary-container": "#4e3700",
+                        "on-primary-fixed": "#261900",
+                        "on-primary": "#412d00",
+                        "surface-container-low": "#1b1b1c",
+                        "on-tertiary-container": "#473733",
+                        "inverse-primary": "#775a19",
+                        "surface-container": "#1f1f20",
+                        "outline": "#9a8f80",
+                        "outline-variant": "#4e4639",
+                        "on-tertiary-fixed": "#261814",
+                        "on-secondary-fixed": "#2a1800",
+                        "surface-tint": "#e9c176",
+                        "on-error": "#690005",
+                        "on-secondary-container": "#3d2400",
+                        "background": "#131314",
+                        "on-secondary": "#462a00",
+                        "surface-dim": "#131314",
+                        "secondary-container": "#c68315",
+                        "primary-fixed-dim": "#e9c176",
+                        "tertiary-fixed": "#f7ddd6",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "64px",
+                        "gutter": "32px",
+                        "unit": "8px",
+                        "container-max-width": "1440px",
+                        "card-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-sm": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "label-caps": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.2em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0e0e0f;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .glass-panel {
+            background: rgba(19, 19, 20, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .gold-foil-stroke {
+            border: 1px solid rgba(233, 193, 118, 0.2);
+        }
+        
+        .amber-glow:hover {
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.15);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e9c176;
+            border-radius: 10px;
+        }
+
+        .asset-card img {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .asset-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface selection:bg-primary/30 selection:text-primary min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin py-4 bg-surface/5 backdrop-blur-[40px] border-b border-white/20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">shield_person</span>
+<h1 class="text-headline-md font-headline-md font-bold text-primary tracking-tighter">CRAFTHUB 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="text-primary font-bold text-label-caps hover:scale-95 transition-transform duration-200 hover:brightness-125" href="#">ASSETS</a>
+<a class="text-secondary-fixed-dim text-label-caps hover:scale-95 transition-transform duration-200 hover:brightness-125" href="#">GUIDELINES</a>
+<a class="text-secondary-fixed-dim text-label-caps hover:scale-95 transition-transform duration-200 hover:brightness-125" href="#">DOCS</a>
+</nav>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden hover:scale-95 transition-transform">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLs6f4Qij9QGqVwj2X_bNmo1hDaI1_7EGxbPI7gqeaOAQ6urcvgahqkSpLq1evYP0NR5BRccB47MTk9yYS5An9wU7J-ADEXofNEn5-ymDI6JsD6146-pyxH26fTtKh-Y7USZTtvxRqnWZb7BNVB3_frHkm7CwGaq_ZLUV_YE5SiCeNb_07ioUMe6Rq5U71462TubazgNfg717UQWqo8WMP_iRCddbDFhmBuOrmzmqIaV5jn3cDwxa_iB8BA"/>
+</div>
+</div>
+</header>
+<!-- Side Navigation -->
+<aside class="fixed left-0 top-0 h-full w-80 z-40 pt-24 px-4 bg-surface/5 backdrop-blur-[40px] border-r border-white/10 hidden xl:flex flex-col">
+<div class="flex items-center gap-4 mb-10 px-4">
+<div class="w-12 h-12 rounded-lg bg-primary-container/20 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-2xl">point_of_sale</span>
+</div>
+<div>
+<p class="text-headline-sm font-headline-sm text-primary">NOVEE OS</p>
+<p class="text-label-sm text-secondary-fixed-dim uppercase tracking-widest">Ecosystem Master</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<button class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-all active:scale-98">
+<span class="material-symbols-outlined">smoke_free</span>
+<span class="text-body-md">SmokeCraft</span>
+</button>
+<button class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-all active:scale-98">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="text-body-md">BeerCraft</span>
+</button>
+<button class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-all active:scale-98">
+<span class="material-symbols-outlined">liquor</span>
+<span class="text-body-md">PourCraft</span>
+</button>
+<button class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-all active:scale-98">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="text-body-md">WineCraft</span>
+</button>
+<button class="flex items-center gap-4 px-4 py-3 rounded-lg text-primary bg-primary-container/10 border-l-2 border-primary-container active:scale-98">
+<span class="material-symbols-outlined">badge</span>
+<span class="text-body-md">360 Passport</span>
+</button>
+<button class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-all active:scale-98">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="text-body-md">E.A.T.</span>
+</button>
+<button class="flex items-center gap-4 px-4 py-3 rounded-lg text-secondary-fixed-dim hover:bg-white/5 transition-all active:scale-98">
+<span class="material-symbols-outlined">point_of_sale</span>
+<span class="text-body-md">POS 3</span>
+</button>
+</nav>
+<div class="mt-auto pb-8 px-4">
+<p class="text-label-sm text-secondary-fixed-dim/50 uppercase tracking-[0.3em]">V.3.60.0</p>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-28 pb-16 xl:pl-80 relative overflow-hidden">
+<!-- Parallax Background Overlay -->
+<div class="absolute inset-0 z-[-1] opacity-40 grayscale pointer-events-none parallax-bg" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtT3YFjPWZ5TCGkzdrwvNYbOvNWE3ZWJwB_sh4srMZv8CwaDE79tZykt2ila6_uFJT5_xHwE3dGlfYeO8U_cWQEbHryE5WGeFlwKs0_3R6-xqjX2CA03mKv2eLvSp6ai8SinntV8bPHqYD_p3koEvMXdRgwyYyYqtB6jfH0gzdAJz_2QsIJke3b5IcHRRKQHOWWqyRN9gnO9J9QBDp7xHbIT_GgvCT8UD2aoKzhqK6v_7f2BSmo6k8Dlfo');"></div>
+<div class="max-w-container-max-width mx-auto px-6 md:px-margin">
+<!-- Header Section -->
+<header class="mb-12">
+<div class="flex items-center gap-2 mb-4">
+<span class="w-12 h-[1px] bg-primary"></span>
+<span class="text-label-caps text-primary tracking-[0.4em]">REPOSITORY</span>
+</div>
+<h2 class="font-headline-xl text-display-lg text-on-surface mb-6 leading-tight">Production Asset<br/><span class="text-primary italic">Download Center</span></h2>
+<!-- Instruction Banner -->
+<div class="inline-flex items-center gap-4 p-4 glass-panel gold-foil-stroke rounded-xl amber-glow transition-all duration-500">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="text-body-lg text-on-surface-variant font-medium">Right-click any image and select <span class="text-primary">'Save Image As...'</span> to download for your repository.</p>
+</div>
+</header>
+<!-- Asset Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-gutter">
+<!-- Primary Logo -->
+<article class="asset-card group glass-panel rounded-2xl overflow-hidden gold-foil-stroke flex flex-col">
+<div class="aspect-square bg-surface-container overflow-hidden relative border-b border-white/5">
+<img alt="Primary Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLssIXd_yFF9KrY6zbBYkA9J810gkwt1IlSH5ADzKcKF-qvyOVYUW5_PvSzfzPhGIoD6jBK1gS10d6FaP7FlB8NiUY8a1YnQwWtzloaAJ-EAJ_-id4oP5xmxxvFIo7K-mk052Uo3Uowsp-9zSEGu6-RVlSk2fE5OaY547LY57oORVxYOQ3NSbzOx_om9jfK89gXiBbhN2SVrFyge6-unCoeI9fMHFXG6ekwE3frCx8HRN870oICa4xKG8hU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+<span class="text-primary text-label-sm font-bold uppercase tracking-widest">Master Brand Mark</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">Primary Logo</h3>
+<code class="text-label-sm text-primary bg-primary/10 px-2 py-1 rounded">crafthub-gold.jpg</code>
+</div>
+</article>
+<!-- System Logo -->
+<article class="asset-card group glass-panel rounded-2xl overflow-hidden gold-foil-stroke flex flex-col">
+<div class="aspect-square bg-surface-container overflow-hidden relative border-b border-white/5">
+<img alt="System Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLssIXd_yFF9KrY6zbBYkA9J810gkwt1IlSH5ADzKcKF-qvyOVYUW5_PvSzfzPhGIoD6jBK1gS10d6FaP7FlB8NiUY8a1YnQwWtzloaAJ-EAJ_-id4oP5xmxxvFIo7K-mk052Uo3Uowsp-9zSEGu6-RVlSk2fE5OaY547LY57oORVxYOQ3NSbzOx_om9jfK89gXiBbhN2SVrFyge6-unCoeI9fMHFXG6ekwE3frCx8HRN870oICa4xKG8hU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+<span class="text-primary text-label-sm font-bold uppercase tracking-widest">Navigation Unit</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">System Logo</h3>
+<code class="text-label-sm text-primary bg-primary/10 px-2 py-1 rounded">system-logo-gold.jpg</code>
+</div>
+</article>
+<!-- Master Background -->
+<article class="asset-card group glass-panel rounded-2xl overflow-hidden gold-foil-stroke flex flex-col lg:col-span-2">
+<div class="aspect-video bg-surface-container overflow-hidden relative border-b border-white/5">
+<img alt="Master Background" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLtT3YFjPWZ5TCGkzdrwvNYbOvNWE3ZWJwB_sh4srMZv8CwaDE79tZykt2ila6_uFJT5_xHwE3dGlfYeO8U_cWQEbHryE5WGeFlwKs0_3R6-xqjX2CA03mKv2eLvSp6ai8SinntV8bPHqYD_p3koEvMXdRgwyYyYqtB6jfH0gzdAJz_2QsIJke3b5IcHRRKQHOWWqyRN9gnO9J9QBDp7xHbIT_GgvCT8UD2aoKzhqK6v_7f2BSmo6k8Dlfo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+<span class="text-primary text-label-sm font-bold uppercase tracking-widest">Environment Plate</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">Master Background</h3>
+<code class="text-label-sm text-primary bg-primary/10 px-2 py-1 rounded">background-lounge-airy.jpg</code>
+</div>
+</article>
+<!-- SmokeCraft -->
+<article class="asset-card group glass-panel rounded-2xl overflow-hidden gold-foil-stroke flex flex-col">
+<div class="aspect-square bg-surface-container overflow-hidden relative border-b border-white/5">
+<img alt="SmokeCraft" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLuYCEkKAMbBrbhpgX0cQ3sf0d1LG_ztP9nBNb_3hGPRCIgbGs6vYOJFjJ8YdhIw5P2P_xzWDisp1qn7hehWAqHzbmDYupmbVvqsx5I56s5cVAD3NBAoSGBVJEAiN5cMHyrDgVgc-gqdX6A68nExAa6rMMAr9sjk83fOYlT9-u7DpU0rwsxHrZ9lL4HK4hmA7trADeVdArpLVfin0sYUA3dwcddZGq3_zb2p02nhgXvB1fefWOWTT8MHlQ"/>
+</div>
+<div class="p-6">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">SmokeCraft</h3>
+<code class="text-label-sm text-primary bg-primary/10 px-2 py-1 rounded">smokecraft.jpg</code>
+</div>
+</article>
+<!-- PourCraft -->
+<article class="asset-card group glass-panel rounded-2xl overflow-hidden gold-foil-stroke flex flex-col">
+<div class="aspect-square bg-surface-container overflow-hidden relative border-b border-white/5">
+<img alt="PourCraft" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLv-pO_3-0Sz2Ya5niy-6xla3zgtzxkShuf4QX0UL0u6KDkp4FDkwqjuokGP7V5MgdzQMSK_FMNH7T1N97BYyZz6qL05Xn_ccVgwX_pmEttm3GtkLfPHu13DEYpIXL6HonyMbdM--76CMs-c3oujiFJ7WKsKyPLortG7IWGpcL1C1VkG5QHDwe12r_Oz35SXV2TNi4kgmHsqnW7TOUi6U_8tNbgPuzE9XMdxZBXFs8mdBGsUlupM5HPq1rY"/>
+</div>
+<div class="p-6">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">PourCraft</h3>
+<code class="text-label-sm text-primary bg-primary/10 px-2 py-1 rounded">pourcraft.jpg</code>
+</div>
+</article>
+<!-- WineCraft -->
+<article class="asset-card group glass-panel rounded-2xl overflow-hidden gold-foil-stroke flex flex-col">
+<div class="aspect-square bg-surface-container overflow-hidden relative border-b border-white/5">
+<img alt="WineCraft" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLtOM_QbftmiBuyXQcP7psEUCzwOnTCo8-BtIdpdcrxGyibxZ8H9_ix7IvpKivK937pmF9YbgiL2cK2_pDXxwo-RA_eCwOv7IUrZebag-zAZwRd3u637msQ6LLN3-UA8l2LdGtuEZFNpoG6vSPgbsVYuT8XVXpDrzkqzXtuuq3CQGodXun-OZLNjjoZ-99cxbDHBeOXZIfTRMFmaa7oVdqseXfChCauhpbSz84EX_aoJ05qxMGyX0qLfxQ"/>
+</div>
+<div class="p-6">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">WineCraft</h3>
+<code class="text-label-sm text-primary bg-primary/10 px-2 py-1 rounded">winecraft.jpg</code>
+</div>
+</article>
+<!-- BeerCraft -->
+<article class="asset-card group glass-panel rounded-2xl overflow-hidden gold-foil-stroke flex flex-col">
+<div class="aspect-square bg-surface-container overflow-hidden relative border-b border-white/5">
+<img alt="BeerCraft" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLvB25QYLdbjNAKC7xCX2t8hDizlGAxM4j8weiaYJNLp8nm9IUiv2Me4OiU1IsEtbZyudL1ucvxPpOM-ANnydVCzryTv1iOQiYfV2HYb4YkIn7sMQNfDVxMSkPpOCumCt_MK-2EkRpLTdEO6cvSzhSnpqQiCAHuRWsWeH-lpd9iMMfE3gujhAEiHfAuMrQfezeLj_GWy3t3dHbQWefjUhUFmyabmF94fOKuPlZGykC-zfXOVL0S4o7KwEeg"/>
+</div>
+<div class="p-6">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">BeerCraft</h3>
+<code class="text-label-sm text-primary bg-primary/10 px-2 py-1 rounded">beercraft.jpg</code>
+</div>
+</article>
+<!-- 360 Passport -->
+<article class="asset-card group glass-panel rounded-2xl overflow-hidden gold-foil-stroke flex flex-col">
+<div class="aspect-square bg-surface-container overflow-hidden relative border-b border-white/5">
+<img alt="360 Passport" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLvJtKGdKm-uLRsTyR-2v4BDK0Cwq2O40LbjUlORPAIkPcvi730ZyhYOvOLedjonIP_lU_RS3GEzkpUwkSXDxBEq92fc82ZKq13uFsZu7TLpG_viu7p1K5xTIeg9NfUNAWIEwvVxrz4d3BoR32H5x1ZKo_EMcMaBrwGCOF-9b-Fq9RYwsoAsn1dg7uWGmSEQkXmYt_gUzbh5ZfWOAoxLwXdpqGJXt2aL_AwfoJlig5jH9TgCxU0SZZDzwq0"/>
+</div>
+<div class="p-6">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">360 Passport</h3>
+<code class="text-label-sm text-primary bg-primary/10 px-2 py-1 rounded">passport.jpg</code>
+</div>
+</article>
+<!-- E.A.T. Command -->
+<article class="asset-card group glass-panel rounded-2xl overflow-hidden gold-foil-stroke flex flex-col md:col-span-2">
+<div class="aspect-[16/9] bg-surface-container overflow-hidden relative border-b border-white/5">
+<img alt="E.A.T. Command" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLu__SILH57QIq-0DuS6_9K8hpXw9OWJCAC33ZmcnHyAZuFzS_7RiDp77dM6JgA0eH1NvrOdoZppC0sRVBArtF07TvPUKo_ooQ0AN12p7DvwNzXF3JYFK19eLk-NV2cN7bPeMoRhVsryUHReCRUE5K-SKoMwB0wWwqfLzK6kvzk1W4jy5MBdd2r51hf2i8_0-WLL2QPq9KACnmqC5SKqIbz6yuqfvyyriUnAUOLjeIwdTPtAptUKejmlgZc"/>
+</div>
+<div class="p-6">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">E.A.T. Command</h3>
+<code class="text-label-sm text-primary bg-primary/10 px-2 py-1 rounded">eat-command.jpg</code>
+</div>
+</article>
+<!-- POS 3 Interface -->
+<article class="asset-card group glass-panel rounded-2xl overflow-hidden gold-foil-stroke flex flex-col">
+<div class="aspect-square bg-surface-container overflow-hidden relative border-b border-white/5">
+<img alt="POS 3 Interface" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLvqdX3CvJCKQDB6q0MRlcL1OUrBhTpl-Q6VGzM_xEl9XIG4AIcUbSMeioefR0Na3EjsHviO8D-nomLo8CtD0IvnW0DBeiLyStdcWe8jLMmuR0462YxmjpbhiIrIBARFHEa2HGhBndD6nHWVAueZ5sCk6EwUb-IxkqHEUASXn3j6xKUi4YPn_M6kcrMCc8LF6LDAm4IIdDspinOLxnaYmsbNCerfPqtwTu4rcdgg6i8pPKh1w-u2hBAXcvk"/>
+</div>
+<div class="p-6">
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">POS 3 Interface</h3>
+<code class="text-label-sm text-primary bg-primary/10 px-2 py-1 rounded">pos3.jpg</code>
+</div>
+</article>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-6 px-margin bg-surface-container-lowest/80 backdrop-blur-md border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto">
+<p class="text-label-caps font-bold text-primary">© 2024 NOVEE OS • FOUNDER LEVEL 0 SECURED</p>
+<div class="flex gap-8">
+<a class="text-on-tertiary-fixed-variant text-label-caps hover:text-primary-fixed transition-all duration-300" href="#">NoveeOps Status</a>
+<a class="text-on-tertiary-fixed-variant text-label-caps hover:text-primary-fixed transition-all duration-300" href="#">Health Monitor</a>
+<a class="text-on-tertiary-fixed-variant text-label-caps hover:text-primary-fixed transition-all duration-300" href="#">Privacy</a>
+</div>
+</footer>
+<!-- Interactive Atmospheric Effect Script -->
+<script>
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            const bg = document.querySelector('.parallax-bg');
+            if (bg) {
+                bg.style.transform = `translate(${x * 20}px, ${y * 20}px) scale(1.1)`;
+            }
+        });
+
+        // Simple animation for cards on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.asset-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+    </script>
+</body></html>

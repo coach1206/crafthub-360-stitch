@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Active Modules Configuration | CraftHub 360</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(154, 143, 128, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(233, 193, 118, 0.4);
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.1);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(rgba(31, 31, 32, 1), rgba(31, 31, 32, 1)) padding-box,
+                        linear-gradient(135deg, #e9c176, #775a19) border-box;
+        }
+        .gold-glow {
+            box-shadow: 0 0 15px rgba(233, 193, 118, 0.2);
+        }
+        .custom-toggle:checked + .toggle-dot {
+            transform: translateX(100%);
+            background-color: #e9c176;
+        }
+        .custom-toggle:checked + .toggle-bg {
+            background-color: #4e3700;
+            border-color: #e9c176;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 rounded-full hover:bg-surface-variant/50 transition-colors duration-300 text-primary">menu</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-label-lg text-label-lg text-primary tracking-widest uppercase">Admin Terminal</span>
+<div class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-full border border-outline-variant/30">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="font-label-sm text-label-sm">POS 3 Connected</span>
+</div>
+</div>
+</header>
+<!-- NavigationDrawer (Suppressed for focused task, but conceptually present in DOM) -->
+<main class="pt-32 pb-40 px-gutter max-w-container-max-width mx-auto">
+<!-- Header Section -->
+<section class="mb-12 flex justify-between items-end">
+<div>
+<nav class="flex items-center gap-2 text-on-surface-variant mb-4 font-label-lg text-label-lg">
+<span class="hover:text-primary cursor-pointer transition-colors">Dashboard</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-primary">System Configuration</span>
+</nav>
+<h2 class="font-headline-xl text-headline-xl text-on-surface">Active Modules</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2 max-w-2xl">Configure the core operational units for this lounge location. Changes here affect global kiosk visibility and backend synchronizations.</p>
+</div>
+<div class="flex gap-4">
+<button class="px-8 py-3 rounded-lg border border-outline hover:bg-surface-variant/50 transition-all font-label-lg text-label-lg flex items-center gap-2">
+<span class="material-symbols-outlined">arrow_back</span> Back
+                </button>
+<button class="px-8 py-3 rounded-lg border border-primary text-primary hover:bg-primary/10 transition-all font-label-lg text-label-lg flex items-center gap-2">
+<span class="material-symbols-outlined">visibility</span> Preview
+                </button>
+<button class="px-8 py-3 rounded-lg bg-primary text-on-primary font-bold hover:brightness-110 active:scale-95 transition-all font-label-lg text-label-lg flex items-center gap-2 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">publish</span> Publish Changes
+                </button>
+</div>
+</section>
+<!-- Module Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Module Card: SmokeCraft 360 -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest border border-outline-variant rounded-full toggle-bg transition-colors"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-on-surface-variant rounded-full transition-transform toggle-dot"></div>
+</label>
+</div>
+<div class="flex items-start gap-4 mb-6">
+<div class="w-16 h-16 rounded-lg overflow-hidden bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">smoking_rooms</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">SmokeCraft 360</h3>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-green-400">
+<span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Active
+                        </span>
+</div>
+</div>
+<div class="space-y-4 flex-grow">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Visibility on Kiosk</span>
+<span class="text-on-surface font-label-lg">Public</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Verification Req.</span>
+<span class="text-on-surface font-label-lg">Age &amp; Membership</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">POS 3 Sync</span>
+<span class="text-green-400 font-label-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">sync</span> Synced
+                        </span>
+</div>
+</div>
+<button class="mt-8 py-3 w-full border border-outline-variant rounded-lg hover:border-primary hover:text-primary transition-colors font-label-lg text-label-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">settings</span> Configure Parameters
+                </button>
+</div>
+<!-- Module Card: PourCraft 360 -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest border border-outline-variant rounded-full toggle-bg transition-colors"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-on-surface-variant rounded-full transition-transform toggle-dot"></div>
+</label>
+</div>
+<div class="flex items-start gap-4 mb-6">
+<div class="w-16 h-16 rounded-lg overflow-hidden bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">wine_bar</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">PourCraft 360</h3>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-green-400">
+<span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Active
+                        </span>
+</div>
+</div>
+<div class="space-y-4 flex-grow">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Visibility on Kiosk</span>
+<span class="text-on-surface font-label-lg">Members Only</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">E.A.T. Connection</span>
+<span class="text-primary font-label-lg">Prioritized</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Inventory Tracking</span>
+<span class="text-on-surface font-label-lg">Real-time</span>
+</div>
+</div>
+<button class="mt-8 py-3 w-full border border-outline-variant rounded-lg hover:border-primary hover:text-primary transition-colors font-label-lg text-label-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">liquor</span> Edit Spirits Catalog
+                </button>
+</div>
+<!-- Module Card: WineCraft 360 -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest border border-outline-variant rounded-full toggle-bg transition-colors"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-on-surface-variant rounded-full transition-transform toggle-dot"></div>
+</label>
+</div>
+<div class="flex items-start gap-4 mb-6">
+<div class="w-16 h-16 rounded-lg overflow-hidden bg-surface-container-high border border-outline-variant flex items-center justify-center opacity-50">
+<span class="material-symbols-outlined text-on-surface-variant text-4xl">inventory_2</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface-variant">WineCraft 360</h3>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant/50">
+<span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant/50"></span> Disabled
+                        </span>
+</div>
+</div>
+<div class="space-y-4 flex-grow opacity-50">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Visibility on Kiosk</span>
+<span class="text-on-surface font-label-lg">Hidden</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Cellar Link</span>
+<span class="text-on-surface font-label-lg">Not Configured</span>
+</div>
+</div>
+<button class="mt-8 py-3 w-full border border-outline-variant rounded-lg hover:border-primary hover:text-primary transition-colors font-label-lg text-label-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_circle</span> Initialize Module
+                </button>
+</div>
+<!-- Module Card: 360 Passport Connection -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col relative overflow-hidden group gold-foil-border">
+<div class="absolute top-0 right-0 p-4">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest border border-outline-variant rounded-full toggle-bg transition-colors"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-on-surface-variant rounded-full transition-transform toggle-dot"></div>
+</label>
+</div>
+<div class="flex items-start gap-4 mb-6">
+<div class="w-16 h-16 rounded-lg overflow-hidden bg-primary-container/20 border border-primary/30 flex items-center justify-center gold-glow">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">360 Passport</h3>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-green-400">
+<span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> System Critical
+                        </span>
+</div>
+</div>
+<div class="space-y-4 flex-grow">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Global Ledger Sync</span>
+<span class="text-on-surface font-label-lg">Instant</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Reward Integration</span>
+<span class="text-primary font-label-lg">Full Access</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Guest Access</span>
+<span class="text-error font-label-lg">Restricted</span>
+</div>
+</div>
+<button class="mt-8 py-3 w-full bg-primary/10 text-primary border border-primary/30 rounded-lg hover:bg-primary/20 transition-colors font-label-lg text-label-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">database</span> Manage Ledger
+                </button>
+</div>
+<!-- Module Card: E.A.T. System -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest border border-outline-variant rounded-full toggle-bg transition-colors"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-on-surface-variant rounded-full transition-transform toggle-dot"></div>
+</label>
+</div>
+<div class="flex items-start gap-4 mb-6">
+<div class="w-16 h-16 rounded-lg overflow-hidden bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-4xl">restaurant</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">E.A.T. System</h3>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-green-400">
+<span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Connected
+                        </span>
+</div>
+</div>
+<div class="space-y-4 flex-grow">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Ordering State</span>
+<span class="text-on-surface font-label-lg">Enabled</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Wait Time Est.</span>
+<span class="text-on-surface font-label-lg">15-20 Min</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Staff Alert</span>
+<span class="text-on-surface font-label-lg">Auto-Dispatch</span>
+</div>
+</div>
+<button class="mt-8 py-3 w-full border border-outline-variant rounded-lg hover:border-primary hover:text-primary transition-colors font-label-lg text-label-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">table_restaurant</span> Table Mapping
+                </button>
+</div>
+<!-- Module Card: Rewards & Leaderboard -->
+<div class="glass-card rounded-xl p-card-padding flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest border border-outline-variant rounded-full toggle-bg transition-colors"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-on-surface-variant rounded-full transition-transform toggle-dot"></div>
+</label>
+</div>
+<div class="flex items-start gap-4 mb-6">
+<div class="w-16 h-16 rounded-lg overflow-hidden bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">Engagement</h3>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-green-400">
+<span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Dynamic
+                        </span>
+</div>
+</div>
+<div class="space-y-4 flex-grow">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Leaderboard Mode</span>
+<span class="text-on-surface font-label-lg">Seasonal</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-on-surface-variant font-label-lg">Point Multiplier</span>
+<span class="text-primary font-label-lg">1.5x (Happy Hour)</span>
+</div>
+</div>
+<button class="mt-8 py-3 w-full border border-outline-variant rounded-lg hover:border-primary hover:text-primary transition-colors font-label-lg text-label-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">leaderboard</span> Leaderboard Rules
+                </button>
+</div>
+<!-- Mode Selector Card (Staff/Vendor) -->
+<div class="lg:col-span-3 glass-card rounded-xl p-card-padding flex flex-col md:flex-row items-center gap-8 border-dashed border-2 border-outline-variant/50">
+<div class="flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Access &amp; Operational Modes</h3>
+<p class="text-on-surface-variant font-body-md max-w-xl">Configure special terminal behavior for service staff and maintenance vendors. These modes override standard customer interface profiles.</p>
+</div>
+<div class="flex gap-4 w-full md:w-auto">
+<div class="flex items-center gap-4 bg-surface-container-highest/50 px-6 py-4 rounded-xl border border-outline-variant/30 flex-grow md:flex-grow-0">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Staff Mode</span>
+<span class="text-on-surface-variant font-label-sm">Terminal Override</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer ml-4">
+<input checked="" class="sr-only custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest border border-outline-variant rounded-full toggle-bg transition-colors"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-on-surface-variant rounded-full transition-transform toggle-dot"></div>
+</label>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-highest/50 px-6 py-4 rounded-xl border border-outline-variant/30 flex-grow md:flex-grow-0">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Vendor Mode</span>
+<span class="text-on-surface-variant font-label-sm">Maintenance Portal</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer ml-4">
+<input class="sr-only custom-toggle" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest border border-outline-variant rounded-full toggle-bg transition-colors"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-on-surface-variant rounded-full transition-transform toggle-dot"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)] md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/20 rounded-full px-6 py-2 transition-transform active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-label-sm text-label-sm">Assistant</span>
+</a>
+</nav>
+<!-- Save Confirmation Toast (Hidden by default) -->
+<div class="fixed bottom-32 left-1/2 -translate-x-1/2 bg-surface-container-highest border border-primary/40 px-8 py-4 rounded-xl shadow-2xl opacity-0 translate-y-10 transition-all duration-500 pointer-events-none z-[70]" id="save-toast">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="font-label-lg text-label-lg text-on-surface">Configuration Staged for Publication</span>
+</div>
+</div>
+<script>
+        // Micro-interactions for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+            btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+        });
+
+        // Mock "Publish" interaction
+        const publishBtn = document.querySelector('button.bg-primary');
+        const toast = document.getElementById('save-toast');
+        
+        publishBtn.addEventListener('click', () => {
+            toast.classList.remove('opacity-0', 'translate-y-10');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-10');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 3000);
+        });
+
+        // Add subtle parallax effect to glass cards
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.glass-card');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardX = (rect.left + rect.width / 2) / window.innerWidth;
+                const cardY = (rect.top + rect.height / 2) / window.innerHeight;
+
+                const moveX = (mouseX - cardX) * 10;
+                const moveY = (mouseY - cardY) * 10;
+
+                card.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+    </script>
+</body></html>

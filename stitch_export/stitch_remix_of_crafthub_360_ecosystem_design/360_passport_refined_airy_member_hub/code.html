@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Lounge | Passport Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-panel {
+            background: rgba(19, 19, 20, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #e9c176 100%);
+            box-shadow: 0 4px 20px rgba(233, 193, 118, 0.3);
+        }
+        .text-shadow-premium {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .parallax-bg {
+            transition: transform 0.1s ease-out;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#9a8f80",
+                        "outline-variant": "#4e4639",
+                        "inverse-on-surface": "#303031",
+                        "on-background": "#e5e2e3",
+                        "on-primary": "#412d00",
+                        "on-tertiary-container": "#473733",
+                        "on-secondary-container": "#3d2400",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-container-low": "#1b1b1c",
+                        "on-tertiary-fixed": "#261814",
+                        "on-primary-fixed": "#261900",
+                        "on-surface": "#e5e2e3",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "error": "#ffb4ab",
+                        "on-secondary": "#462a00",
+                        "background": "#131314",
+                        "on-error": "#690005",
+                        "tertiary-container": "#b7a09a",
+                        "surface-container": "#1f1f20",
+                        "surface-container-highest": "#353436",
+                        "surface-tint": "#e9c176",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed-dim": "#e9c176",
+                        "tertiary-fixed": "#f7ddd6",
+                        "primary-fixed": "#ffdea5",
+                        "surface-dim": "#131314",
+                        "primary": "#e9c176",
+                        "on-primary-container": "#4e3700",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "tertiary": "#dac1bb",
+                        "surface": "#131314",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-container": "#c5a059",
+                        "surface-bright": "#39393a",
+                        "on-error-container": "#ffdad6",
+                        "secondary-container": "#c68315",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "on-secondary-fixed": "#2a1800",
+                        "inverse-surface": "#e5e2e3",
+                        "surface-variant": "#353436",
+                        "surface-container-high": "#2a2a2b",
+                        "on-tertiary": "#3c2d28",
+                        "surface-container-lowest": "#0e0e0f",
+                        "secondary-fixed": "#ffddb6",
+                        "secondary": "#ffb95a",
+                        "secondary-fixed-dim": "#ffb95a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "card-padding": "24px",
+                        "unit": "8px",
+                        "container-max-width": "1440px",
+                        "margin": "64px",
+                        "gutter": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Playfair Display"],
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen select-none">
+<!-- Background Layer with Parallax -->
+<div class="fixed inset-0 z-0 scale-110" id="parallax-bg">
+<img alt="Lounge Interior Bokeh" class="w-full h-full object-cover opacity-60 filter brightness-50" src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"/>
+</div>
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/60 dark:bg-surface/60 backdrop-blur-xl border-b border-primary/10 shadow-sm flex justify-between items-center px-card-padding h-20">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border border-primary/30 p-0.5 overflow-hidden">
+<img class="w-full h-full object-cover rounded-full" data-alt="A sophisticated close-up portrait of an elegant man in a bespoke tailored suit, looking directly into the camera with a subtle, knowing smile. The lighting is low-key and dramatic, highlighting the textures of his premium wool jacket. The background is a softly blurred, warm-toned private member's club with amber ambient glows and mahogany wood details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz6lbOZ3-JSwU0XitnhTFjcElAf_4go42gfTfxVuJcYBsh7zDMUWgwpXr7WRNCT0yPl-QbAolUHb_s2ZgaOd-S4ZBZnOldmHaOsQFfv6qFY3DDGAQt6ah3PFyT2_zxID_EuR9g2V8DYjuzBCWOOZ4zZDD7l9-a5vZ9vePTo0g0Tt6nHEeAykbssH8dqnwrqAJNhcI6lBQHdZkfAaDDj3aMmfTmUQqMBGtIgn2PXaMRWZxFkCM_He0zS9D-5EIViVLk5iug8XXEbMY"/>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-primary tracking-tighter leading-none">The Lounge</span>
+<span class="font-label-sm text-on-surface-variant uppercase tracking-[0.2em]">Passport Hub</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right flex flex-col justify-center">
+<span class="font-label-sm text-primary uppercase">2,450 Credits</span>
+<span class="font-label-sm text-on-surface-variant">Platinum Tier</span>
+</div>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 text-primary hover:opacity-80 transition-opacity active:scale-95 duration-300">
+<span class="material-symbols-outlined">colab</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative z-10 pt-28 pb-24 px-12 h-full flex flex-col max-w-[1440px] mx-auto overflow-y-auto hide-scrollbar">
+<!-- Welcome Hero -->
+<section class="mb-12 animate-fade-in">
+<h1 class="font-display-lg text-primary text-shadow-premium leading-tight mb-2">Welcome back, Julian Sterling</h1>
+<p class="font-body-lg text-on-surface-variant max-w-2xl">Your journey through the world's finest collections continues. Explore your digital portfolio and upcoming artisan events.</p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-8 mb-12 flex-grow">
+<!-- Passport Progress Panel -->
+<div class="col-span-12 md:col-span-5 glass-panel rounded-xl p-8 flex flex-col justify-between group cursor-pointer hover:border-primary/40 transition-all duration-500 overflow-hidden relative h-[400px]">
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors"></div>
+<div>
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-primary text-4xl">menu_book</span>
+<span class="font-label-lg text-primary bg-primary/10 px-4 py-1 rounded-full">Season 04</span>
+</div>
+<h2 class="font-headline-lg text-on-surface mb-2">Passport Progress</h2>
+<p class="font-body-md text-on-surface-variant mb-8">You've collected 12 artisanal stamps this season. Only 3 more to reach Diamond status.</p>
+</div>
+<div class="space-y-6">
+<div class="flex justify-between items-end">
+<div class="flex flex-col">
+<span class="font-display-lg text-primary leading-none">12</span>
+<span class="font-label-sm text-on-surface-variant uppercase tracking-widest mt-2">Stamps Earned</span>
+</div>
+<div class="w-32 h-32 relative">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-primary/10" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-primary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364" stroke-dashoffset="100" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-headline-md text-primary">80%</span>
+</div>
+</div>
+</div>
+<button class="gold-foil w-full h-[72px] rounded-lg text-on-primary font-label-lg uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all">
+                        View All Stamps
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Core Navigation Tiles -->
+<div class="col-span-12 md:col-span-7 grid grid-cols-2 gap-8 h-[400px]">
+<!-- Tile 1 -->
+<div class="glass-panel rounded-xl p-8 flex flex-col justify-between group active:scale-95 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">person</span>
+<div>
+<h3 class="font-headline-md text-on-surface">My Profile</h3>
+<p class="font-label-sm text-on-surface-variant mt-1">Preferences &amp; Tastes</p>
+</div>
+</div>
+<!-- Tile 2 -->
+<div class="glass-panel rounded-xl p-8 flex flex-col justify-between group active:scale-95 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">qr_code_2</span>
+<div>
+<h3 class="font-headline-md text-on-surface">Digital Stamps</h3>
+<p class="font-label-sm text-on-surface-variant mt-1">Verification Center</p>
+</div>
+</div>
+<!-- Tile 3 -->
+<div class="glass-panel rounded-xl p-8 flex flex-col justify-between group active:scale-95 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">storefront</span>
+<div>
+<h3 class="font-headline-md text-on-surface">Artisan Directory</h3>
+<p class="font-label-sm text-on-surface-variant mt-1">Exclusive Partners</p>
+</div>
+</div>
+<!-- Tile 4 -->
+<div class="glass-panel rounded-xl p-8 flex flex-col justify-between group active:scale-95 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">hub</span>
+<div>
+<h3 class="font-headline-md text-on-surface">Connections</h3>
+<p class="font-label-sm text-on-surface-variant mt-1">Member Network</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity Horizontal Scroller -->
+<section class="mb-24">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg text-on-surface">Recent Achievements</h3>
+<button class="text-primary font-label-lg flex items-center gap-2 hover:opacity-80 transition-opacity">
+                    Full History <span class="material-symbols-outlined">history</span>
+</button>
+</div>
+<div class="flex gap-8 overflow-x-auto hide-scrollbar pb-8 px-2 -mx-2">
+<!-- Activity Card 1 -->
+<div class="min-w-[400px] glass-panel rounded-xl overflow-hidden group cursor-pointer border-transparent hover:border-primary/30 transition-all">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Macro photography of hand-rolled premium tobacco leaves with intricate veins and a rich brown texture, captured in a dimly lit, high-end cigar humidor. The atmosphere is dense and aromatic, with soft warm backlighting creating a golden halo effect around the edges of the leaves. Cinematic depth of field focuses on the craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiPi_TIOFEfvgZSxUsCess2N9TlBAjCwLjuoAk_9hLbxzFRjXa39iwPd6bVTRg3HLVFhwLiDYPuOv5W9vak0mAYyRcuRUOMkpG5yCAbdj2LIVDPw8r6INHPxu74DKMjN8PzQsk74_iL8Wd3vzgENAb7pc4UwAzyBQAYKBNLvzH1zqH91JYGcb44szsqLWF7VjU2XhC7K-06qMfSPrpWHQJv1oqlUrxE9QcwZ0K4-jrbozTnoVONhNo2eAOTxYvdHbSaHirw6Jpg7E"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="font-label-sm text-primary uppercase tracking-[0.2em] bg-surface/80 backdrop-blur px-3 py-1 rounded">Earned Yesterday</span>
+</div>
+</div>
+<div class="p-6">
+<h4 class="font-headline-md text-on-surface mb-2">Master Blend Challenge</h4>
+<p class="font-body-md text-on-surface-variant">Authenticated at the Havana Room. Achievement unlocked for blending session.</p>
+</div>
+</div>
+<!-- Activity Card 2 -->
+<div class="min-w-[400px] glass-panel rounded-xl overflow-hidden group cursor-pointer border-transparent hover:border-primary/30 transition-all">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A detailed wide shot of a pristine, sun-drenched vineyard at dusk with rows of grapevines receding into the distance. The lighting is golden hour, casting long soft shadows and bathing the landscape in amber and orange hues. In the foreground, a single hand holds a crystal wine glass, catching the last light of the sun through the deep red liquid. High luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcj9TELem3h8ECWE4_CL8RYK8-zAk21jLR3VtM1XplKYt6ZR33EXmgoktKzg7Prdn3szqk43DAgElFa_i53qG8pnKZax7zKnnlDp-ieFmVTVh0KXOsdPqtlmclZvtfG6kpMB6NaNHWuQek4pRjGj2SqwrWhiGOuNKm8IrImx3C8_2tGvo-4BvwLMf28XVWuaqyqd7vi9mSMrwslgk07HPdRoXvAvTVeV2SVE-fj-0RRktyRPBtOennDWK5yoY7NoTOhqHs_we4-FE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="font-label-sm text-primary uppercase tracking-[0.2em] bg-surface/80 backdrop-blur px-3 py-1 rounded">Earned 3 Days Ago</span>
+</div>
+</div>
+<div class="p-6">
+<h4 class="font-headline-md text-on-surface mb-2">Seed &amp; Soil</h4>
+<p class="font-body-md text-on-surface-variant">Vineyard heritage tour completed. Exclusive 'Oenophile' badge awarded.</p>
+</div>
+</div>
+<!-- Activity Card 3 -->
+<div class="min-w-[400px] glass-panel rounded-xl overflow-hidden group cursor-pointer border-transparent hover:border-primary/30 transition-all">
+<div class="h-48 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Close up photography of clear crystal ice being carved by a professional mixologist in a dimly lit, upscale speakeasy. Sparks of reflected light bounce off the facets of the ice. The background features shelves of backlit amber spirits in intricate glass bottles. The mood is focused, artisanal, and sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkFsx-srl59Hp0iT1IkjJvju5YMrEj3iD3Ku922Qmi3Yli5yMPgHK2pl5K-fg_d2KVasRG5pUKVh7IkPfF44wPnm1oOkQL8afMmMmAF63PkFOypGU5ewrnFCzz2arquumXDnGnUK6NPy-dHHq8J_Ex8kka98pk4BP8LnVool8lxfyVS6L72aXwK49Q_rHJ7LCy-uK9z9rElFOBLZawQUB9-uDcHRLNcVd9HKm77Y8gMnXvD2JqXqyBHMoCoEDoSQQ4DjAr-yim7H0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<span class="font-label-sm text-primary uppercase tracking-[0.2em] bg-surface/80 backdrop-blur px-3 py-1 rounded">Earned 1 Week Ago</span>
+</div>
+</div>
+<div class="p-6">
+<h4 class="font-headline-md text-on-surface mb-2">The Alchemist’s Pour</h4>
+<p class="font-body-md text-on-surface-variant">Mixology masterclass participation. Signature cocktail creation verified.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- AI Concierge Floating Action Button -->
+<div class="fixed bottom-24 right-8 z-[60]">
+<button class="gold-foil w-[72px] h-[72px] rounded-full flex items-center justify-center text-on-primary shadow-2xl hover:scale-110 transition-transform active:scale-90 group relative" id="concierge-trigger">
+<span class="material-symbols-outlined text-3xl">smart_toy</span>
+<!-- Tooltip/Badge -->
+<div class="absolute right-full mr-4 bg-surface/80 backdrop-blur text-primary border border-primary/20 px-4 py-2 rounded-lg font-label-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                AI Concierge Available
+            </div>
+</button>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest/80 dark:bg-surface-container-lowest/80 backdrop-blur-2xl border-t border-primary/20 shadow-[0_-4px_24px_rgba(233,193,118,0.1)] rounded-t-xl h-20 pb-4 px-8 flex justify-around items-center">
+<!-- Active Tab: Hub -->
+<a class="flex flex-col items-center gap-1 text-primary scale-110 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-sm">Hub</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant/60 hover:text-primary/80 transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm">Passport</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant/60 hover:text-primary/80 transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined">temp_preferences_custom</span>
+<span class="font-label-sm">Artisans</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant/60 hover:text-primary/80 transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined">settings_accessibility</span>
+<span class="font-label-sm">Settings</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions & Parallax
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 100;
+            const y = (window.innerHeight / 2 - e.pageY) / 100;
+            const bg = document.getElementById('parallax-bg');
+            bg.style.transform = `translate(${x}px, ${y}px) scale(1.1)`;
+        });
+
+        // Simple Fade-in animation for page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const items = document.querySelectorAll('.animate-fade-in');
+            items.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.8s ease-out';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+
+        // Concierge Interaction Simulation
+        const conciergeBtn = document.getElementById('concierge-trigger');
+        conciergeBtn.addEventListener('click', () => {
+            // Visual feedback for the touch target
+            conciergeBtn.classList.add('animate-pulse');
+            setTimeout(() => conciergeBtn.classList.remove('animate-pulse'), 1000);
+            
+            // Note: In a real app, this would open a glassmorphic chat overlay
+            console.log('Concierge Activated');
+        });
+    </script>
+</body></html>

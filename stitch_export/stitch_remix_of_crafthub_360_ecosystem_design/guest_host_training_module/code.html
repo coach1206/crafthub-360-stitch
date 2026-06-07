@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Guest Host Training | The Lounge Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#1b1b1c",
+                    "outline": "#9a8f80",
+                    "surface-variant": "#353436",
+                    "surface-dim": "#131314",
+                    "tertiary-container": "#b7a09a",
+                    "on-secondary": "#462a00",
+                    "background": "#131314",
+                    "primary": "#e9c176",
+                    "on-primary-container": "#4e3700",
+                    "surface-container": "#1f1f20",
+                    "on-tertiary-fixed": "#261814",
+                    "primary-container": "#c5a059",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-container-highest": "#353436",
+                    "surface-tint": "#e9c176",
+                    "on-surface": "#e5e2e3",
+                    "on-tertiary-container": "#473733",
+                    "on-primary-fixed": "#261900",
+                    "inverse-surface": "#e5e2e3",
+                    "error-container": "#93000a",
+                    "on-surface-variant": "#d1c5b4",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-primary": "#412d00",
+                    "secondary": "#ffb95a",
+                    "surface-container-high": "#2a2a2b",
+                    "inverse-on-surface": "#303031",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "inverse-primary": "#775a19",
+                    "primary-fixed": "#ffdea5",
+                    "secondary-fixed": "#ffddb6",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface": "#131314",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "primary-fixed-dim": "#e9c176",
+                    "outline-variant": "#4e4639",
+                    "on-background": "#e5e2e3",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "tertiary": "#dac1bb",
+                    "surface-bright": "#39393a",
+                    "on-secondary-container": "#3d2400",
+                    "error": "#ffb4ab",
+                    "secondary-container": "#c68315",
+                    "on-tertiary": "#3c2d28"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "32px",
+                    "card-padding": "24px",
+                    "margin": "64px",
+                    "container-max-width": "1440px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "headline-xl": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "label-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-border {
+            border: 1px solid #e9c176;
+        }
+        .gold-foil {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 100%);
+            color: #412d00;
+        }
+        .bg-wood {
+            background-color: #0e0e0f;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1b 0%, #0e0e0f 100%);
+        }
+        .step-transition {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .amber-glow:active {
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.3);
+            transform: scale(0.98);
+        }
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+            transform: scale(1.1);
+            transition: transform 10s linear;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-wood text-on-surface min-h-screen overflow-x-hidden font-body-md">
+<!-- Background Parallax Image -->
+<div class="parallax-bg" data-alt="A moody, high-end private club interior with dark wood paneling, plush leather chairs, and soft amber lighting. The atmosphere is quiet, exclusive, and sophisticated, reflecting a members-only lounge aesthetic with deep espresso tones and golden highlights. The scene suggests timeless luxury and quiet conversation." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD89_0sYVtonTLY5KItwEhRjO6_AFsmTSO_LdACFtwPpOgwG_979E2mYtMwxg9mgSB0a7aNnsO4ixkYF3LH6t0wHaEQtcF-hVreLDUHKYBqqQlRc6CyAOZGNs1edx4GqTbsn9KOJLF3bwN34KclZoNR39EkpNtohCPjSHFlSewcPgmfymdF6LhduKWJwEZVPXxlIahF_LkCvmpBYmer0qfr41HlGLs8TGFbs31LikZDOUX6t_B_pi-h7Rw1pPxrjyB0uw_YSXnSZLA')"></div>
+<!-- TopAppBar -->
+<header class="bg-transparent backdrop-blur-xl bg-surface/30 fixed top-0 w-full z-50 flex justify-between items-center px-margin py-8">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary/30">
+<img alt="Lounge Curator Persona" class="w-full h-full object-cover" data-alt="A dignified silhouette portrait of a sophisticated lounge curator in a tailored suit. The lighting is low-key, highlighting the professional yet welcoming demeanor of a luxury service professional. Deep shadows and amber rim lighting create an atmosphere of mystery and high-tier expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9TLmEJetDyD02h4sjYUKDqEfryFS6ZcBvEhkiJvkE8raytRkchHx_FiVq7GgCyLZXuBFIcoKmbrL1UsU0yHRYapOWybzFrLjdTN9a0rwgLHfKR3WGdONisJOnhOZpm5yxZSIMnZatgV75OZyvOxPGfdqcIbvv8u-sUGO43hsmLnxyoYJBQu4HUrurbpwwctXXEUw1YoQtfrsBNAB9AxDiUkLNo8oIy8yeoZuDopUwqTSKwKdc9H7FUZfZDGhumR35TA8-DMXr1Zo"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">The Lounge Curator</h1>
+</div>
+<button class="text-primary hover:opacity-80 transition-opacity duration-500 ease-in-out">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</header>
+<main class="pt-32 pb-40 px-margin flex flex-col items-center">
+<!-- Progress Stepper -->
+<div class="w-full max-w-4xl mb-16 flex justify-between relative">
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-outline-variant/30 -translate-y-1/2 z-0"></div>
+<div class="absolute top-1/2 left-0 w-0 h-0.5 bg-primary -translate-y-1/2 z-10 transition-all duration-700 ease-in-out" id="progress-bar"></div>
+<!-- Step Indicators -->
+<div class="relative z-20 flex flex-col items-center group">
+<div class="w-10 h-10 rounded-full gold-foil flex items-center justify-center font-label-lg shadow-lg shadow-primary/20 step-circle" data-step="1">1</div>
+<span class="mt-2 font-label-sm text-primary opacity-100 uppercase tracking-widest">Welcome</span>
+</div>
+<div class="relative z-20 flex flex-col items-center group">
+<div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center font-label-lg text-on-surface-variant step-circle" data-step="2">2</div>
+<span class="mt-2 font-label-sm text-on-surface-variant opacity-60 uppercase tracking-widest">Discovery</span>
+</div>
+<div class="relative z-20 flex flex-col items-center group">
+<div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center font-label-lg text-on-surface-variant step-circle" data-step="3">3</div>
+<span class="mt-2 font-label-sm text-on-surface-variant opacity-60 uppercase tracking-widest">Concierge</span>
+</div>
+<div class="relative z-20 flex flex-col items-center group">
+<div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center font-label-lg text-on-surface-variant step-circle" data-step="4">4</div>
+<span class="mt-2 font-label-sm text-on-surface-variant opacity-60 uppercase tracking-widest">Handoff</span>
+</div>
+</div>
+<!-- Content Canvas -->
+<div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Training Content (Left) -->
+<div class="md:col-span-7 space-y-8">
+<div class="glass-panel p-card-padding rounded-xl min-h-[400px] flex flex-col justify-center step-transition" id="step-content">
+<div class="space-y-6">
+<span class="inline-block px-4 py-1 rounded-full border border-primary/40 text-primary font-label-sm uppercase tracking-widest">Module 01</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface" id="step-title">Welcome Guest</h2>
+<p class="text-body-lg text-on-surface-variant leading-relaxed" id="step-description">
+                            Begin the experience by establishing a connection. The guest should feel recognized and valued the moment they step into the CraftHub zone. Maintain open posture and a warm, measured tone.
+                        </p>
+<div class="flex gap-4 mt-8">
+<button class="gold-foil px-10 py-5 rounded-lg font-label-lg flex items-center gap-3 amber-glow transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-primary/10" id="next-btn">
+<span>Next Step</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="glass-panel text-primary px-8 py-5 rounded-lg font-label-lg hover:bg-surface-bright/10 transition-all active:scale-95" id="replay-btn">
+<span class="material-symbols-outlined mr-2">replay</span>
+<span>Replay</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Practice Script & Visuals (Right) -->
+<div class="md:col-span-5 space-y-8">
+<!-- Practice Script Card (Passport Style) -->
+<div class="glass-panel rounded-xl overflow-hidden shadow-2xl relative">
+<div class="absolute top-0 right-0 w-16 h-16 opacity-10">
+<span class="material-symbols-outlined text-[64px]" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<div class="p-card-padding border-b border-outline-variant/20 bg-surface-container-low">
+<h3 class="font-label-lg text-primary uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">edit_note</span>
+                            Practice Script
+                        </h3>
+</div>
+<div class="p-card-padding bg-surface-container-lowest italic text-body-lg text-on-surface leading-loose">
+                        "Welcome to CraftHub. You can explore cigars, cocktails, or networking. The system will guide you, and I am here for any approvals."
+                    </div>
+<div class="p-4 bg-primary/5 flex justify-between items-center px-6">
+<span class="text-label-sm text-outline">Tone: Distinguished &amp; Warm</span>
+<span class="material-symbols-outlined text-primary" data-weight="fill">record_voice_over</span>
+</div>
+</div>
+<!-- Visual Cue -->
+<div class="rounded-xl overflow-hidden aspect-video relative group border border-outline-variant/30">
+<img alt="Interaction Guidance" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" data-alt="A close-up photograph showing a host professionally presenting a high-end digital tablet to a guest in a luxury lounge. The focus is on the tactile interaction and the warm, golden light reflecting off the glass surface. In the background, soft-focus silhouettes of leather furniture and premium bottles create a sense of place." id="step-visual" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDEebgFYLtufPYdQHtVmnVXcmmCMCfed9oTxIAFNxJLI64_yOA-p5gil3dSA36DfXF8tJcdaemlw2QLDFn2iQTIBUwbGh_Lb4bWc4ine-bfPLd_4z1d6nN29ThL40U24ch9DL4sHbQz9AjIEnlUBMUbaPhrsKjRKXFF_IdJ68GYwDHN1Pn66aX9gY-qDho44LRhmMN07clJnjWC5ojGoc3ph5z3UdoVXEOVy9JJLa6UZ66uf5mXtrjKP0aM4hR4ICP0rP_2okvem8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>
+<div class="absolute bottom-4 left-6">
+<p class="font-label-sm text-primary uppercase tracking-widest" id="visual-caption">Key Visual: Eye Contact</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin py-6 pb-10 bg-surface-container/80 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_30px_rgb(233,193,118,0.1)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all" href="#">
+<span class="material-symbols-outlined mb-1">mic</span>
+<span class="font-label-sm text-label-sm">Voice Assist</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-6 py-2 hover:opacity-100 hover:scale-105 transition-all" href="#">
+<span class="material-symbols-outlined mb-1">concierge</span>
+<span class="font-label-sm text-label-sm font-bold">Concierge</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 hover:opacity-100 hover:scale-105 transition-all" href="#">
+<span class="material-symbols-outlined mb-1">tune</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<script>
+        const steps = [
+            {
+                title: "Welcome Guest",
+                description: "Begin the experience by establishing a connection. The guest should feel recognized and valued the moment they step into the CraftHub zone. Maintain open posture and a warm, measured tone.",
+                script: "Welcome to CraftHub. You can explore cigars, cocktails, or networking. The system will guide you, and I am here for any approvals.",
+                visual: "https://images.unsplash.com/photo-1541535650810-10d26f5c2abb?q=80&w=800&auto=format&fit=crop",
+                caption: "Key Visual: Eye Contact"
+            },
+            {
+                title: "Experience Discovery",
+                description: "Gently guide the guest towards the tactile interface. Explain the three pillars of the lounge: Tobacco, Spirits, and Connection. Highlight the sensory nature of the selection process.",
+                script: "Our curated selection is divided into three sensory paths. Feel free to touch and browse; each item has a story and a specific heritage to share.",
+                visual: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop",
+                caption: "Key Visual: Gesturing to Hub"
+            },
+            {
+                title: "AI Concierge Start",
+                description: "Introduce the AI Concierge as a digital sommelier. Ensure the guest understands that the AI uses their personal preferences to suggest perfect pairings and unique experiences.",
+                script: "This interface acts as your personal digital sommelier. It learns your palate over time to recommend pairings that reflect your specific tastes.",
+                visual: "https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=800&auto=format&fit=crop",
+                caption: "Key Visual: Digital Interaction"
+            },
+            {
+                title: "Experience Handoff",
+                description: "Once the guest is comfortably engaged, step back to allow for private exploration. Assure them that you are nearby for any specialized requests or physical service needs.",
+                script: "I will leave you to explore these stories. Should you need a recommendation or an immediate pour, I am standing by just over there.",
+                visual: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=800&auto=format&fit=crop",
+                caption: "Key Visual: Graceful Exit"
+            }
+        ];
+
+        let currentStep = 0;
+
+        const titleEl = document.getElementById('step-title');
+        const descEl = document.getElementById('step-description');
+        const scriptEl = document.querySelector('.italic');
+        const visualEl = document.getElementById('step-visual');
+        const captionEl = document.getElementById('visual-caption');
+        const progressBar = document.getElementById('progress-bar');
+        const circles = document.querySelectorAll('.step-circle');
+        const nextBtn = document.getElementById('next-btn');
+        const replayBtn = document.getElementById('replay-btn');
+
+        function updateUI() {
+            const data = steps[currentStep];
+            
+            // Fade out
+            titleEl.parentElement.style.opacity = '0';
+            visualEl.style.opacity = '0';
+            
+            setTimeout(() => {
+                titleEl.textContent = data.title;
+                descEl.textContent = data.description;
+                scriptEl.textContent = `"${data.script}"`;
+                visualEl.src = data.visual;
+                captionEl.textContent = data.caption;
+                
+                // Update Progress
+                const percent = (currentStep / (steps.length - 1)) * 100;
+                progressBar.style.width = `${percent}%`;
+                
+                circles.forEach((circle, idx) => {
+                    if (idx <= currentStep) {
+                        circle.classList.add('gold-foil');
+                        circle.classList.remove('glass-panel', 'text-on-surface-variant');
+                        circle.nextElementSibling.classList.add('text-primary');
+                        circle.nextElementSibling.classList.remove('text-on-surface-variant', 'opacity-60');
+                    } else {
+                        circle.classList.remove('gold-foil');
+                        circle.classList.add('glass-panel', 'text-on-surface-variant');
+                        circle.nextElementSibling.classList.remove('text-primary');
+                        circle.nextElementSibling.classList.add('text-on-surface-variant', 'opacity-60');
+                    }
+                });
+
+                // Fade in
+                titleEl.parentElement.style.opacity = '1';
+                visualEl.style.opacity = '1';
+            }, 300);
+
+            if (currentStep === steps.length - 1) {
+                nextBtn.innerHTML = `<span>Complete Training</span><span class="material-symbols-outlined">check_circle</span>`;
+            } else {
+                nextBtn.innerHTML = `<span>Next Step</span><span class="material-symbols-outlined">arrow_forward</span>`;
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateUI();
+            } else {
+                // Final interaction
+                nextBtn.classList.add('opacity-50');
+                alert('Training Module Successfully Completed.');
+            }
+        });
+
+        replayBtn.addEventListener('click', () => {
+            currentStep = 0;
+            updateUI();
+        });
+
+        // Background Subtle Zoom
+        let zoom = 1.1;
+        setInterval(() => {
+            zoom = zoom === 1.1 ? 1.05 : 1.1;
+            document.querySelector('.parallax-bg').style.transform = `scale(${zoom})`;
+        }, 10000);
+
+        // Initial update
+        updateUI();
+    </script>
+</body></html>

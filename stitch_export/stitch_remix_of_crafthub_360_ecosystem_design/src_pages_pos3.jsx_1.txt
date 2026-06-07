@@ -1,0 +1,35 @@
+import { motion } from 'framer-motion';
+import { Terminal, CreditCard, ShoppingBag, ArrowRight } from 'lucide-react';
+
+export default function POS3({ onNavigate }) {
+  return (
+    <div className="px-6 py-8">
+      <header className="mb-12">
+        <h2 className="text-3xl font-bold gold-text uppercase tracking-widest mb-2">POS 3 Terminal</h2>
+        <p className="text-on-surface-variant text-xs tracking-widest uppercase">Transaction Orchestration</p>
+      </header>
+
+      <div className="space-y-4">
+        <div className="glass-panel p-6 rounded-2xl flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center text-primary">
+              <ShoppingBag size={24} />
+            </div>
+            <div>
+              <h4 className="font-bold text-white uppercase tracking-tighter">Draft Order</h4>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest">3 Items Pending</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-lg font-bold text-white">$425.00</div>
+          </div>
+        </div>
+
+        <button className="w-full h-24 glass-panel border-primary/30 flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform group">
+          <CreditCard className="text-primary group-hover:scale-110 transition-transform" size={32} />
+          <span className="text-xs font-black uppercase tracking-[0.3em]">Tap to Process</span>
+        </button>
+      </div>
+    </div>
+  );
+}

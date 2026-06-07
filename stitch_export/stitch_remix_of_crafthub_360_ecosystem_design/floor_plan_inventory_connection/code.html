@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Grand Humidor | Inventory Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#3d2400",
+                        "on-background": "#e5e2e3",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#2a2a2b",
+                        "tertiary": "#dac1bb",
+                        "surface": "#131314",
+                        "outline": "#9a8f80",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "surface-container": "#1f1f20",
+                        "primary": "#e9c176",
+                        "outline-variant": "#4e4639",
+                        "on-primary-container": "#4e3700",
+                        "surface-container-low": "#1b1b1c",
+                        "inverse-primary": "#775a19",
+                        "primary-fixed": "#ffdea5",
+                        "secondary-fixed": "#ffddb6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "on-tertiary": "#3c2d28",
+                        "on-tertiary-fixed": "#261814",
+                        "surface-tint": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "background": "#131314",
+                        "on-primary-fixed": "#261900",
+                        "surface-variant": "#353436",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "secondary": "#ffb95a",
+                        "secondary-container": "#c68315",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-primary": "#412d00",
+                        "tertiary-container": "#b7a09a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "on-surface-variant": "#d1c5b4",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-tertiary-container": "#473733",
+                        "surface-container-highest": "#353436",
+                        "inverse-surface": "#e5e2e3",
+                        "inverse-on-surface": "#303031",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-secondary": "#462a00",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-bright": "#39393a",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-surface": "#e5e2e3",
+                        "surface-dim": "#131314"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "card-padding": "24px",
+                        "unit": "8px",
+                        "margin": "64px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "label-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .gold-foil {
+            background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+        }
+        .smoked-glass {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.3);
+        }
+        .red-glow {
+            box-shadow: 0 0 25px rgba(147, 0, 10, 0.5);
+        }
+        .wood-texture {
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.05); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 3s infinite ease-in-out;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary/30 overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex justify-between items-center px-16 h-24">
+<div class="flex items-center gap-4">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tighter">The Grand Humidor</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3 hover:bg-surface-container-highest/50 p-2 rounded-lg transition-all cursor-pointer">
+<img alt="Staff member profile" class="w-10 h-10 rounded-full object-cover border border-primary/30" data-alt="A professional headshot of an elegant man in a tailored dark suit, representing a head sommelier for an elite lounge. He has a warm yet authoritative expression, captured in soft, cinematic lighting with a shallow depth of field against a blurred library of vintage spirits. The color palette is rich with deep ambers and dark mahogany tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIJB8bzxZPoAearCZdxKCEu7w_opJVdnMsfUXbjtleP3EWcfo5tCrBRVyJh-aJ6WxHM2YbymmozSNyTDPvquDz8pA04sEWIs21Fe0-Woa0sLPcHr3v9D-TpsLlGHntTVz-SHASSa_SDEnNkWaK6gALhJC76OUT5pkBk7sEj7lzYZSqGg-MHLGwEP08LuLuW8X3puK4r5hoF3OEjcuDTOPe60pCru6uzBxV1D3qb6ftWIgEYSoR7LXMQraZ10hNGqTlkODWs7a73Qo"/>
+<span class="font-label-lg text-label-lg text-on-surface">Julian Vane</span>
+</div>
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-highest/50 p-2 rounded-full transition-all">notifications</button>
+</div>
+</header>
+<!-- Side Navigation Drawer -->
+<aside class="fixed left-0 top-0 h-screen w-80 z-40 bg-surface-container-low border-r border-outline-variant/20 shadow-2xl flex flex-col pt-24">
+<div class="p-8 flex flex-col h-full">
+<div class="space-y-4 flex-grow">
+<a class="flex items-center gap-4 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 scale-95 transition-transform group" href="#">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform">layers</span>
+<span class="font-label-lg text-label-lg">Floor Plan</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-lg text-label-lg">Live Map</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-lg text-label-lg">Insights</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant px-4 py-3 hover:bg-surface-bright/20 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+</div>
+<div class="mt-auto border-t border-outline-variant/20 pt-8 pb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center border border-primary/40">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">System Active</p>
+<p class="text-xs text-on-surface-variant">Last sync: 2m ago</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pl-80 pt-24 h-screen w-full relative overflow-hidden wood-texture">
+<!-- Floor Plan Visual Bridge -->
+<div class="h-full w-full p-12 relative flex items-center justify-center">
+<!-- Map Container -->
+<div class="relative w-full max-w-5xl aspect-[16/9] smoked-glass rounded-3xl overflow-hidden shadow-2xl p-8 border border-primary/20">
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, rgba(233,193,118,0.2) 1px, transparent 0); background-size: 40px 40px;"></div>
+<!-- Floor Layout SVG Placeholder (Conceptual) -->
+<div class="w-full h-full border border-outline-variant/40 rounded-xl relative overflow-hidden bg-surface-container-lowest/50">
+<!-- Humidor Zone (Red/Warning) -->
+<div class="absolute top-[10%] left-[15%] w-[30%] h-[40%] bg-error/10 border-2 border-error/40 rounded-xl animate-pulse-slow cursor-pointer hover:bg-error/20 transition-all flex items-center justify-center red-glow" id="zone-humidor" onclick="openPanel('humidor')">
+<div class="text-center">
+<span class="font-headline-md text-headline-md text-error block">Humidor A1</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Critical Stock Low</span>
+</div>
+</div>
+<!-- Problem Detected Card: Humidor -->
+<div class="absolute top-[5%] left-[35%] z-20 smoked-glass p-4 rounded-xl border-l-4 border-error w-64 shadow-xl transform -rotate-1">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-error">warning</span>
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">Problem Detected</h4>
+<p class="text-xs text-on-surface-variant mt-1">Cohiba Behike 52: 2 units remaining. High turnover predicted for Tonight.</p>
+</div>
+</div>
+</div>
+<!-- Bar Zone (Amber/Warning) -->
+<div class="absolute bottom-[10%] right-[10%] w-[40%] h-[35%] bg-secondary/10 border-2 border-secondary/40 rounded-xl animate-pulse-slow cursor-pointer hover:bg-secondary/20 transition-all flex items-center justify-center amber-glow" id="zone-bar" onclick="openPanel('bar')">
+<div class="text-center">
+<span class="font-headline-md text-headline-md text-secondary block">Member's Bar</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Restock Suggested</span>
+</div>
+</div>
+<!-- Problem Detected Card: Bar -->
+<div class="absolute bottom-[20%] right-[40%] z-20 smoked-glass p-4 rounded-xl border-l-4 border-secondary w-64 shadow-xl transform rotate-1">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary">inventory_2</span>
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">Inventory Alert</h4>
+<p class="text-xs text-on-surface-variant mt-1">Macallan 25 Reserve: Reaching threshold. 3 pending VIP reservations.</p>
+</div>
+</div>
+</div>
+<!-- Interactive Map Elements -->
+<div class="absolute top-[60%] left-[10%] w-12 h-12 rounded-full border border-primary/40 flex items-center justify-center text-primary bg-primary/5 cursor-help" title="Entrance">
+<span class="material-symbols-outlined">meeting_room</span>
+</div>
+</div>
+</div>
+<!-- Side Intelligence Panel (Hidden by default, slides in) -->
+<div class="absolute right-0 top-0 h-full w-[450px] smoked-glass border-l border-primary/20 transform translate-x-full transition-transform duration-500 ease-in-out z-30 p-10 flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.5)]" id="intel-panel">
+<button class="absolute top-6 left-6 text-on-surface-variant hover:text-primary transition-colors" onclick="closePanel()">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="mt-8 flex-grow overflow-y-auto pr-2 custom-scrollbar" id="panel-content">
+<!-- Dynamic Content Injected Here -->
+<div class="space-y-8">
+<div>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em]">Stock Intelligence</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mt-2" id="panel-title">Humidor Zone A1</h2>
+</div>
+<!-- E.A.T. Intelligence Snippet -->
+<div class="bg-primary/5 border border-primary/20 rounded-xl p-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2 opacity-10">
+<span class="material-symbols-outlined text-6xl">psychology</span>
+</div>
+<h3 class="font-label-lg text-label-lg text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+                                E.A.T. Risk Analysis
+                            </h3>
+<p class="body-md text-on-surface-variant mt-4 italic leading-relaxed" id="panel-eat-text">
+                                "Predictive analytics indicates a 92% stock-out probability within 4 hours based on the arrival of the 'Havana Club' private party. Supplier lead times are currently extended due to regional logistics delays."
+                            </p>
+</div>
+<!-- Item Table -->
+<div class="space-y-4">
+<h3 class="font-label-lg text-label-lg text-on-surface border-b border-outline-variant/30 pb-2">Priority Reorders</h3>
+<div class="flex justify-between items-center p-4 rounded-lg bg-surface-container-highest/30 border border-outline-variant/20">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">clear</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg">Behike 52</p>
+<p class="text-xs text-on-surface-variant">Qty: 2 Left</p>
+</div>
+</div>
+<span class="text-error font-bold">-$1,420</span>
+</div>
+</div>
+<!-- Supplier Details -->
+<div class="p-4 rounded-xl border border-outline-variant/20 bg-surface-container-low">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Preferred Supplier</p>
+<div class="flex items-center gap-3 mt-3">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">business</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg">Havana Exports Ltd.</p>
+<p class="text-xs text-on-surface-variant">Contact: Marcus Aurelius | 12m away</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="mt-10 grid grid-cols-1 gap-4">
+<button class="gold-foil text-on-primary h-14 rounded-lg font-label-lg text-label-lg shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">receipt_long</span>
+                        CREATE INVOICE
+                    </button>
+<button class="border border-primary text-primary h-14 rounded-lg font-label-lg text-label-lg hover:bg-primary/5 active:scale-95 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">swap_horiz</span>
+                        LAUNCH SUBSTITUTE
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-highest/90 backdrop-blur-2xl border-t border-primary-container/20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)] flex justify-around items-center px-8 py-4">
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">point_of_sale</span>
+<span class="font-label-sm text-label-sm">POS 3</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/70 px-6 py-2 hover:text-primary transition-colors cursor-pointer group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-2 shadow-[0_0_15px_rgba(233,193,118,0.3)] scale-105 cursor-pointer">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm">Inventory</span>
+</div>
+</nav>
+<script>
+        function openPanel(zone) {
+            const panel = document.getElementById('intel-panel');
+            const title = document.getElementById('panel-title');
+            const eatText = document.getElementById('panel-eat-text');
+            
+            if (zone === 'humidor') {
+                title.innerText = 'Humidor Zone A1';
+                eatText.innerText = '"Predictive analytics indicates a 92% stock-out probability within 4 hours based on the arrival of the \'Havana Club\' private party. Supplier lead times are currently extended due to regional logistics delays."';
+            } else if (zone === 'bar') {
+                title.innerText = "Member's Bar Central";
+                eatText.innerText = '"Macallan 25 Reserve consumption has spiked by 40% this evening. Current stock level (3) will fail to meet the requirements of the Gold Tier reservation at 10 PM. Immediate substitution recommended if delivery fails."';
+            }
+            
+            panel.classList.remove('translate-x-full');
+        }
+
+        function closePanel() {
+            const panel = document.getElementById('intel-panel');
+            panel.classList.add('translate-x-full');
+        }
+
+        // Close panel on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closePanel();
+        });
+    </script>
+</body></html>

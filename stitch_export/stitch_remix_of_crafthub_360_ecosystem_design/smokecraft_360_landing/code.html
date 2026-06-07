@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmokeCraft 360 | CraftHub 360</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#e9c176",
+                    "inverse-primary": "#775a19",
+                    "surface-container-low": "#1b1b1c",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "surface-container-high": "#2a2a2b",
+                    "secondary": "#ffb95a",
+                    "surface-dim": "#131314",
+                    "on-tertiary": "#3c2d28",
+                    "inverse-surface": "#e5e2e3",
+                    "surface-container": "#1f1f20",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-error-container": "#ffdad6",
+                    "on-error": "#690005",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#ffdea5",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "tertiary-container": "#b7a09a",
+                    "inverse-on-surface": "#303031",
+                    "on-surface": "#e5e2e3",
+                    "error-container": "#93000a",
+                    "on-secondary": "#462a00",
+                    "tertiary-fixed": "#f7ddd6",
+                    "outline-variant": "#4e4639",
+                    "on-surface-variant": "#d1c5b4",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-background": "#e5e2e3",
+                    "surface": "#131314",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface-container-highest": "#353436",
+                    "on-primary-fixed": "#261900",
+                    "background": "#131314",
+                    "primary": "#e9c176",
+                    "primary-container": "#c5a059",
+                    "outline": "#9a8f80",
+                    "on-secondary-container": "#3d2400",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "surface-bright": "#39393a",
+                    "tertiary": "#dac1bb",
+                    "surface-variant": "#353436",
+                    "on-tertiary-fixed": "#261814",
+                    "on-primary-container": "#4e3700",
+                    "on-primary": "#412d00",
+                    "secondary-container": "#c68315",
+                    "secondary-fixed": "#ffddb6",
+                    "on-tertiary-container": "#473733"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max-width": "1440px",
+                    "gutter": "32px",
+                    "unit": "8px",
+                    "card-padding": "24px",
+                    "margin": "64px"
+            },
+            "fontFamily": {
+                    "body-md": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "display-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .smoke-overlay {
+            mix-blend-mode: screen;
+            opacity: 0.4;
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(to right, #1f1f20, #1f1f20) padding-box,
+                        linear-gradient(135deg, #e9c176, #775a19, #e9c176) border-box;
+        }
+        .parallax-bg {
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden selection:bg-primary/30">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md shadow-on-secondary-fixed/10">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-variant/50 p-2 rounded-full transition-colors duration-300" data-icon="menu">menu</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim tracking-tight">CraftHub 360</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="hidden md:block font-label-lg text-label-lg text-on-surface-variant">Grand Lounge</span>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A sophisticated close-up portrait of a gentleman in his fifties with silver-streaked hair, wearing a tailored navy wool blazer. The lighting is low and warm, characteristic of an upscale private library or lounge, with soft amber highlights. The background is softly blurred, showing hints of leather-bound books and mahogany wood, maintaining a luxurious and exclusive mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzfuv2N7QgwLwkNuXvHfKNP93SVWToyEEJeln6LSaXq53InX7Wm46jAcpTSxzQSgyU-n2JsFmawpiAVF8J0H9mIoomaqIoz8SCsm1Kg-NeaFPHbuyEymDdQPuL17jjPts0ym9k7W4DO7HYjONHWwe_ghnDDz-FobZNcCN808hfiWk8bje7gYFJSTnb5E9DOWz-DSiPBtOHTM7F_0o7OZNsaClBcqE0eU06p-VuPG8Asi5qpY4vsu0G4T8EzppqAwa2y5r4gNyPag0"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative min-h-screen pt-20 pb-32">
+<!-- Hero Section with Background Video/Image Replacement -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center parallax-bg brightness-[0.4]" data-alt="A highly detailed cinematic photograph of an open premium cedar wood humidor filled with hand-rolled cigars, resting on a dark grain leather tabletop. Beside the humidor sits a heavy crystal tumbler containing amber bourbon with a large clear ice sphere. Wisps of elegant blue-grey smoke drift through the frame, illuminated by warm, atmospheric lounge lighting that casts deep shadows and golden highlights. The mood is opulent, private, and deeply sophisticated." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50"></div>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto px-gutter pt-12 md:pt-24 h-full flex flex-col justify-center">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Left Content: Brand Narrative -->
+<div class="lg:col-span-7 space-y-8 animate-fade-in">
+<div class="space-y-4">
+<span class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-label-lg text-label-lg">
+<span class="material-symbols-outlined text-[18px]" data-icon="smoking_rooms">smoking_rooms</span>
+                            SMOKECRAFT 360
+                        </span>
+<h2 class="font-display-lg text-display-lg text-on-surface leading-tight">
+                            Discover your <br/> <span class="text-primary italic font-serif">cigar profile.</span>
+</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                            Pair the perfect smoke. Earn participation stamps in your digital passport. Immerse yourself in the world of premium tobacco craftsmanship.
+                        </p>
+</div>
+<!-- Primary Actions -->
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="h-16 px-8 bg-gradient-to-br from-primary to-primary-container text-on-primary font-label-lg text-label-lg rounded-lg shadow-xl shadow-primary/20 flex items-center gap-3 hover:scale-[1.02] active:scale-95 transition-all duration-300">
+                            START SMOKECRAFT
+                            <span class="material-symbols-outlined" data-icon="play_arrow">play_arrow</span>
+</button>
+<button class="h-16 px-8 gold-foil-border text-primary font-label-lg text-label-lg rounded-lg flex items-center gap-3 backdrop-blur-md hover:bg-surface-variant/20 transition-all duration-300">
+                            RESUME SESSION
+                            <span class="material-symbols-outlined" data-icon="restore">restore</span>
+</button>
+</div>
+<!-- Secondary Quick Links -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-outline-variant/30">
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-container-high transition-colors group">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform" data-icon="stars">stars</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Rewards</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-container-high transition-colors group">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform" data-icon="leaderboard">leaderboard</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Rankings</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-container-high transition-colors group">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Passport</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-surface-container-high transition-colors group">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform" data-icon="arrow_back">arrow_back</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">CraftHub</span>
+</button>
+</div>
+</div>
+<!-- Right Content: Feature Cards (Bento Style) -->
+<div class="lg:col-span-5 grid grid-cols-1 gap-6">
+<!-- Dynamic Passport Preview -->
+<div class="relative overflow-hidden p-card-padding rounded-xl bg-surface-container-high/60 backdrop-blur-xl border border-outline-variant/20 shadow-2xl group cursor-pointer transition-all duration-500 hover:border-primary/40">
+<div class="absolute -right-12 -bottom-12 w-48 h-48 bg-primary/10 blur-[60px] rounded-full group-hover:bg-primary/20 transition-colors"></div>
+<div class="relative z-10 flex items-start gap-4">
+<div class="w-16 h-20 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="menu_book" data-weight="fill">menu_book</span>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md text-primary">360 Passport</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Connect your palate journey. 12 stamps earned this season.</p>
+<div class="mt-6 flex gap-2">
+<div class="w-8 h-8 rounded-full border border-primary/30 flex items-center justify-center text-[10px] text-primary">01</div>
+<div class="w-8 h-8 rounded-full border border-primary/30 flex items-center justify-center text-[10px] text-primary">02</div>
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-[10px] text-outline opacity-40">03</div>
+<div class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-[10px] text-outline opacity-40">04</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pairing Recommendation -->
+<div class="relative overflow-hidden p-card-padding rounded-xl bg-surface-container-high/60 backdrop-blur-xl border border-outline-variant/20 shadow-2xl group cursor-pointer transition-all duration-500 hover:border-primary/40">
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="font-label-lg text-label-lg text-primary uppercase tracking-widest">Recommended Pairing</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="star_half">star_half</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-24 h-24 rounded-lg overflow-hidden border border-outline-variant/30">
+<img alt="Cigar &amp; Bourbon" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A macro shot of a rich, dark oily cigar leaf texture leaning against a heavy crystal glass filled with dark amber rum. The lighting is low and focused, with a warm golden highlight on the liquid's rim. Background is a deep, out-of-focus mahogany wood pattern, reinforcing a tactile and premium aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6x8rr1W01nKJEp9VAXSLzXMhAPRM2KJoomxxbMnSRkpCfhTXTwunea-4_H_kJccMU_6GV4UYC1ca9Xce8A74TzgZ2ygqntBN2Jry62f84DocQC0tAAOb_qvbn9PV23ObA7Aa74Ro1dbMnSiTSoFUkdCbGHND0obaRjEJF9NpjY4NQTKNB7qbYnAJjPNQuhwBae0ihwcyQkOPdlHR40CKFZhw-m1XQF6CE5VynIvjW-p81iXrCP8xjLwnTtGY7mWVa6R8YePKXErw"/>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Padrón 1964</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Paired with 18yr Single Malt</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)] md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-container/20 rounded-full px-6 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="smoking_rooms" data-weight="fill">smoking_rooms</span>
+<span class="font-label-sm text-label-sm">SmokeCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-label-sm">Passport</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-sm text-label-sm">Assistant</span>
+</a>
+</nav>
+<!-- Atmospheric Micro-interactions -->
+<script>
+        // Parallax Effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.parallax-bg');
+            if(parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.4}px)`;
+            }
+        });
+
+        // Button Interactions
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('touchstart', () => {
+                btn.style.transform = 'scale(0.95)';
+            });
+            btn.addEventListener('touchend', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Add smooth appearance on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.animate-fade-in');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.2}s`;
+                
+                requestAnimationFrame(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body></html>

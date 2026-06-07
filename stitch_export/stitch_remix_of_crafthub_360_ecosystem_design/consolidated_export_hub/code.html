@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 | Project Export Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+        }
+        .gold-foil-border {
+            border: 1px solid transparent;
+            background: linear-gradient(theme('colors.surface-container'), theme('colors.surface-container')) padding-box,
+                        linear-gradient(135deg, #e9c176 0%, #775a19 50%, #e9c176 100%) border-box;
+        }
+        .gold-text-gradient {
+            background: linear-gradient(135deg, #ffdea5 0%, #e9c176 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        body {
+            background-color: #131314;
+            background-image: radial-gradient(circle at 50% -20%, #302410 0%, #131314 70%);
+            min-height: 100vh;
+            color: theme('colors.on-surface');
+        }
+        .haptic-press:active {
+            transform: scale(0.98);
+            filter: brightness(0.9);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#4e3700",
+                        "on-primary": "#412d00",
+                        "surface-container-high": "#2a2a2b",
+                        "primary": "#e9c176",
+                        "on-tertiary-container": "#473733",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "outline": "#9a8f80",
+                        "surface-bright": "#39393a",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "inverse-surface": "#e5e2e3",
+                        "surface-container": "#1f1f20",
+                        "secondary-container": "#c68315",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "tertiary": "#dac1bb",
+                        "on-surface": "#e5e2e3",
+                        "error": "#ffb4ab",
+                        "outline-variant": "#4e4639",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-primary-fixed": "#261900",
+                        "surface-tint": "#e9c176",
+                        "surface-container-low": "#1b1b1c",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "on-secondary-fixed": "#2a1800",
+                        "primary-fixed-dim": "#e9c176",
+                        "inverse-on-surface": "#303031",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#462a00",
+                        "on-surface-variant": "#d1c5b4",
+                        "surface-dim": "#131314",
+                        "inverse-primary": "#775a19",
+                        "tertiary-container": "#b7a09a",
+                        "surface-container-lowest": "#0e0e0f",
+                        "primary-fixed": "#ffdea5",
+                        "on-background": "#e5e2e3",
+                        "on-tertiary": "#3c2d28",
+                        "background": "#131314",
+                        "surface-container-highest": "#353436",
+                        "primary-container": "#c5a059",
+                        "secondary": "#ffb95a",
+                        "on-tertiary-fixed": "#261814",
+                        "on-secondary-container": "#3d2400",
+                        "surface-variant": "#353436",
+                        "surface": "#131314",
+                        "secondary-fixed": "#ffddb6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "container-max-width": "1440px",
+                        "card-padding": "24px",
+                        "margin": "64px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Montserrat"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="overflow-x-hidden pb-32">
+<!-- Top AppBar (from Shared Components JSON) -->
+<header class="fixed top-0 w-full bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(233,193,118,0.1)] flex items-center justify-between px-margin h-20 w-full z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="hub">hub</span>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter">CraftHub 360 Orchestration</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8 text-on-surface-variant font-label-lg text-label-lg">
+<a class="text-primary hover:text-primary-fixed transition-colors" href="#">Export Hub</a>
+<a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="hover:text-primary transition-colors" href="#">Modules</a>
+</div>
+<div class="w-12 h-12 rounded-full border border-primary/30 overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGfXtsHQH4AXQ2Dy9DoijxT00DveHAnIg9StdI8HDPSEgZsVkr1Hx13v7UWJ2KanNLU8M-A1iZi98PykmKm9Lplc6KaAiaAXRPD6wVWsUTFQRBTztnKQR6oDwhKER4jZfBKZk-A9bUVsmLipEUqPmIDJQVWLszz6dlMuy51SjP6afae1vIj1KPkQde_dQO9nMxUWABdG-dtLoiNxRx8aAqugdpGxfHYMhl0e9U9SQwFBb77lqdFPbSuSrtRdDudUJiM257Pzb4jWE"/>
+</div>
+</div>
+</header>
+<!-- Navigation Drawer (Desktop Anchor) -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col py-8 bg-surface-container-lowest/95 backdrop-blur-2xl h-full w-80 rounded-r-xl border-r border-outline-variant/20 shadow-2xl hidden lg:flex mt-20">
+<div class="px-6 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Command Center</h2>
+</div>
+<nav class="flex flex-col gap-1">
+<div class="bg-secondary-container text-on-secondary-container rounded-lg mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dashboard_customize">dashboard_customize</span>
+<span class="font-label-lg text-label-lg">Orchestration</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-label-lg text-label-lg">Connectivity Map</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="auto_awesome_motion">auto_awesome_motion</span>
+<span class="font-label-lg text-label-lg">Guest Journeys</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="liquor">liquor</span>
+<span class="font-label-lg text-label-lg">Craft Modules</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+<span class="font-label-lg text-label-lg">Passport Networking</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-label-lg text-label-lg">POS 3 Integration</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-lg text-label-lg">E.A.T. Intelligence</span>
+</div>
+<div class="text-on-surface-variant hover:text-primary mx-2 flex items-center px-4 py-3 gap-4 haptic-press cursor-pointer transition-colors">
+<span class="material-symbols-outlined" data-icon="conveyor_belt">conveyor_belt</span>
+<span class="font-label-lg text-label-lg">Logistics</span>
+</div>
+</nav>
+</aside>
+<main class="lg:ml-80 mt-28 px-6 lg:px-12 max-w-7xl mx-auto">
+<!-- Hero Logo Section -->
+<div class="flex flex-col items-center justify-center mb-16 space-y-6 text-center">
+<img alt="CraftHub 360 Logo" class="w-48 h-48 md:w-56 md:h-56 rounded-full shadow-2xl border-4 border-primary/20" src="https://lh3.googleusercontent.com/aida/AP1WRLv-WT_Bhw2ld_-7coeQl5lSAmzG-a8eS6dmO1Id8jZeV5Srx423k25GIXg-uzEh6wqgYlKkjCisEnOAaMtbW7hA3Xd7GnZU4mNExMhXwejqW98agvB-halqurypgG--nwZB38i8bMZAY1sdrBzwh2noBnz6gvfsSHgi7OAflXgWhmunnbaAqB2CFrGaUhGaDeawkHJZh41TOhhkNACwBRjyLal2fUVy-Ep4smzNsiGrAhDq71mrhzb-Rw"/>
+<div class="space-y-2">
+<h2 class="font-display-lg text-display-lg gold-text-gradient">Project Export Hub</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                    Consolidate your environment and finalize the deployment manifest for the global CraftHub 360 Ecosystem.
+                </p>
+</div>
+</div>
+<!-- Section 1: Core Repository Bundle -->
+<section class="mb-16">
+<div class="gold-foil-border p-1 rounded-2xl shadow-2xl overflow-hidden bg-surface-container">
+<div class="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 glass-panel rounded-2xl">
+<div class="space-y-4 text-center md:text-left">
+<div class="flex items-center gap-3 justify-center md:justify-start">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="inventory_2">inventory_2</span>
+<h3 class="font-headline-xl text-headline-xl text-on-surface">Core Repository Bundle</h3>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                            The definitive 'GitHub Ready' project structure containing your package.json, tailwind.config, routes.js, and core index.html logic.
+                        </p>
+<div class="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
+<span class="bg-surface-variant px-4 py-2 rounded-full font-label-sm text-label-sm border border-outline-variant/50">package.json</span>
+<span class="bg-surface-variant px-4 py-2 rounded-full font-label-sm text-label-sm border border-outline-variant/50">tailwind.config.js</span>
+<span class="bg-surface-variant px-4 py-2 rounded-full font-label-sm text-label-sm border border-outline-variant/50">routes.js</span>
+</div>
+</div>
+<button class="min-w-[240px] h-[72px] bg-primary text-on-primary font-label-lg text-label-lg rounded-xl haptic-press flex items-center justify-center gap-3 shadow-lg hover:shadow-primary/20 transition-all">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                        DOWNLOAD BUNDLE
+                    </button>
+</div>
+</div>
+</section>
+<!-- Section 2: Operational Pillars (Grid) -->
+<section class="mb-16">
+<div class="flex items-center gap-4 mb-8">
+<h3 class="font-headline-lg text-headline-lg gold-text-gradient">Operational Pillars</h3>
+<div class="h-px flex-1 bg-gradient-to-r from-primary/30 to-transparent"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Pillar 1: Guest Journeys -->
+<div class="glass-panel p-6 rounded-2xl border border-outline-variant/20 flex flex-col gap-6 hover:border-primary/40 transition-all group">
+<div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="auto_awesome_motion">auto_awesome_motion</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-2">Guest Journeys</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Omnichannel hospitality flow including SmokeCraft and PourCraft modules.</p>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between p-3 bg-surface-variant/40 rounded-lg">
+<span class="font-label-sm text-label-sm">SmokeCraft Engine</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-variant/40 rounded-lg">
+<span class="font-label-sm text-label-sm">PourCraft Logic</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pillar 2: Staff Mastery -->
+<div class="glass-panel p-6 rounded-2xl border border-outline-variant/20 flex flex-col gap-6 hover:border-primary/40 transition-all group">
+<div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="school">school</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-2">Staff Mastery</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Operational excellence via POS 3 integration and Training Academy data.</p>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between p-3 bg-surface-variant/40 rounded-lg">
+<span class="font-label-sm text-label-sm">POS 3 Manifest</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-variant/40 rounded-lg">
+<span class="font-label-sm text-label-sm">Training API Hub</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pillar 3: Venue Command -->
+<div class="glass-panel p-6 rounded-2xl border border-outline-variant/20 flex flex-col gap-6 hover:border-primary/40 transition-all group">
+<div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="business_center">business_center</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-2">Venue Command</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Real-time control through E.A.T. Intelligence and Floor Plan Builder.</p>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between p-3 bg-surface-variant/40 rounded-lg">
+<span class="font-label-sm text-label-sm">E.A.T. Insights</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-variant/40 rounded-lg">
+<span class="font-label-sm text-label-sm">Spatial Orchestrator</span>
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Technical Codex & Manifest -->
+<section class="mb-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="glass-panel p-8 rounded-2xl flex items-center gap-6 cursor-pointer haptic-press hover:bg-surface-variant/40 transition-all border border-outline-variant/10">
+<div class="w-16 h-16 flex-shrink-0 bg-secondary/10 rounded-full flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-4xl" data-icon="description">description</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Production Codex</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Access the technical specifications and build standards.</p>
+</div>
+<span class="material-symbols-outlined text-primary ml-auto" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="glass-panel p-8 rounded-2xl flex items-center gap-6 cursor-pointer haptic-press hover:bg-surface-variant/40 transition-all border border-outline-variant/10">
+<div class="w-16 h-16 flex-shrink-0 bg-tertiary/10 rounded-full flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-4xl" data-icon="menu_book">menu_book</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Ecosystem Manifest</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">View the full hierarchical structure of CraftHub 360.</p>
+</div>
+<span class="material-symbols-outlined text-primary ml-auto" data-icon="chevron_right">chevron_right</span>
+</div>
+</section>
+<!-- Export Action Footer -->
+<div class="py-12 flex flex-col items-center gap-6">
+<div class="w-full h-px bg-outline-variant/20 mb-6"></div>
+<button class="w-full max-w-2xl h-[72px] rounded-full gold-foil-border bg-gradient-to-r from-primary to-secondary text-on-primary-fixed font-label-lg text-label-lg haptic-press flex items-center justify-center gap-4 shadow-[0_10px_40px_rgba(233,193,118,0.2)] hover:shadow-primary/40 transition-all uppercase tracking-widest">
+<span class="material-symbols-outlined text-2xl" data-icon="upload">upload</span>
+                Export Complete Build to GitHub
+            </button>
+<p class="font-label-sm text-label-sm text-on-surface-variant/60 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+                Build will be pushed to the 'main' branch of craft-hub-prod repository
+            </p>
+</div>
+</main>
+<!-- Bottom Nav Bar (Mobile - from Shared Components JSON) -->
+<nav class="fixed bottom-0 w-full h-20 flex justify-around items-center px-4 z-50 bg-surface-container-high/90 backdrop-blur-lg border-t border-primary/20 shadow-[0_-8px_32px_rgba(0,0,0,0.5)] md:hidden">
+<div class="flex flex-col items-center justify-center text-primary scale-110 haptic-press">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 haptic-press hover:text-secondary">
+<span class="material-symbols-outlined" data-icon="extension">extension</span>
+<span class="font-label-sm text-label-sm">Modules</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 haptic-press hover:text-secondary">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+<span class="font-label-sm text-label-sm">Floor Plan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 haptic-press hover:text-secondary">
+<span class="material-symbols-outlined" data-icon="error">error</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 haptic-press hover:text-secondary">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for tactile haptic feedback
+        document.querySelectorAll('.haptic-press').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
+            });
+        });
+
+        // Simple Parallax Effect for the background glow
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            document.body.style.backgroundPosition = `${x * 10}% ${y * 10}%`;
+        });
+    </script>
+</body></html>

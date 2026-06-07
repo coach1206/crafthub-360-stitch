@@ -1,0 +1,23 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer components {
+  .glass-premium {
+    @apply bg-surface/80 backdrop-blur-glass border border-outline-variant/30 shadow-tactile;
+  }
+  
+  .btn-tactile {
+    @apply h-18 px-8 rounded-premium font-display font-bold uppercase tracking-widest transition-all duration-300 active:scale-95;
+  }
+
+  .haptic-pulse {
+    animation: haptic-pulse 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@keyframes haptic-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.98); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 1; }
+}

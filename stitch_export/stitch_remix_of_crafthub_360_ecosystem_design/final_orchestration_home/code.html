@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 Orchestration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            overflow-x: hidden;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel:hover {
+            border-color: rgba(233, 193, 118, 0.4);
+            box-shadow: 0 0 30px rgba(233, 193, 118, 0.1);
+            transform: translateY(-4px);
+        }
+        .amber-glow {
+            text-shadow: 0 0 12px rgba(233, 193, 118, 0.5);
+        }
+        .tech-grid {
+            background-image: 
+                linear-gradient(rgba(233, 193, 118, 0.03) 1px, transparent 1px),
+                linear-gradient(90px, rgba(233, 193, 118, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .status-badge {
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#3d2400",
+                        "surface-tint": "#e9c176",
+                        "outline-variant": "#4e4639",
+                        "tertiary-fixed-dim": "#dac1bb",
+                        "inverse-on-surface": "#303031",
+                        "inverse-primary": "#775a19",
+                        "surface-dim": "#131314",
+                        "on-tertiary": "#3c2d28",
+                        "background": "#131314",
+                        "on-tertiary-fixed-variant": "#54433e",
+                        "surface-container": "#1f1f20",
+                        "surface-bright": "#39393a",
+                        "secondary": "#ffb95a",
+                        "on-background": "#e5e2e3",
+                        "on-tertiary-container": "#473733",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#f7ddd6",
+                        "on-surface-variant": "#d1c5b4",
+                        "secondary-fixed": "#ffddb6",
+                        "primary-container": "#c5a059",
+                        "error": "#ffb4ab",
+                        "tertiary": "#dac1bb",
+                        "secondary-fixed-dim": "#ffb95a",
+                        "surface-container-high": "#2a2a2b",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#0e0e0f",
+                        "inverse-surface": "#e5e2e3",
+                        "on-tertiary-fixed": "#261814",
+                        "on-primary-container": "#4e3700",
+                        "surface-container-low": "#1b1b1c",
+                        "tertiary-container": "#b7a09a",
+                        "surface-container-highest": "#353436",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-surface": "#e5e2e3",
+                        "on-secondary-fixed": "#2a1800",
+                        "on-secondary-fixed-variant": "#643f00",
+                        "primary-fixed": "#ffdea5",
+                        "surface": "#131314",
+                        "surface-variant": "#353436",
+                        "on-secondary": "#462a00",
+                        "secondary-container": "#c68315",
+                        "primary": "#e9c176",
+                        "on-primary-fixed": "#261900",
+                        "outline": "#9a8f80",
+                        "on-primary": "#412d00"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "label-lg": ["Montserrat"],
+                        "headline-xl": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="tech-grid min-h-screen">
+<!-- Top Navigation -->
+<header class="bg-surface/80 backdrop-blur-xl text-primary font-headline-md text-headline-md fixed top-0 w-full border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(233,193,118,0.1)] flex items-center justify-between px-16 h-20 w-full z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-4xl">hub</span>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter">CraftHub 360 Orchestration</h1>
+</div>
+<div class="flex items-center gap-8">
+<nav class="hidden md:flex gap-6 font-label-lg text-label-lg">
+<a class="text-primary hover:bg-primary/10 px-4 py-2 rounded transition-all" href="#">Orchestration</a>
+<a class="text-on-surface-variant hover:text-primary px-4 py-2 rounded transition-all" href="#">Command</a>
+<a class="text-on-surface-variant hover:text-primary px-4 py-2 rounded transition-all" href="#">Logs</a>
+</nav>
+<div class="h-10 w-10 rounded-full border border-primary/30 overflow-hidden bg-surface-container">
+<img alt="Member Profile" class="w-full h-full object-cover" data-alt="A sophisticated close-up portrait of a senior tech executive with silver hair, wearing a high-end charcoal suit, set against a blurred background of a luxury dark lounge with warm amber backlighting. The aesthetic is professional, refined, and cinematic, reflecting an atmosphere of elite membership and high-stakes command." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3_RiMSuej35Nec7uozvPKbzOEbG_Zslk0nbbSvxZiy0Tya1PX_IPbjSGu75UBkG-Q13OHVf4dTmUrf3SZPjnyabeJ7MXUWhshKXRuxTeVmRwz1lVRYaHStT_A97eogiVGHnkRCiZj8iN4VXYXjvbeSwc5-FavFJNqmrprM3W0hxHBZQX2NtuQsryla5cNDBruPy4sylnRRm2IKXpo6G3ksMdOdbClADIMDsD8IxNBXoXaNXJjwe8IvqZHxKt9XNjpb7Gttm7z8Cg"/>
+</div>
+</div>
+</header>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full z-40 flex flex-col py-8 w-80 bg-surface-container-lowest/95 backdrop-blur-2xl border-r border-outline-variant/20 shadow-2xl pt-24">
+<div class="px-8 mb-8">
+<h2 class="font-headline-md text-headline-md text-primary amber-glow">Command Center</h2>
+<div class="h-1 w-12 bg-primary mt-2"></div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="bg-secondary-container text-on-secondary-container rounded-lg mx-2 px-6 py-4 flex items-center gap-4 font-label-lg text-label-lg active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard_customize</span> Orchestration
+            </a>
+<a class="text-on-surface-variant hover:text-primary mx-2 px-6 py-4 flex items-center gap-4 font-label-lg text-label-lg hover:bg-surface-variant/50 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">hub</span> Connectivity Map
+            </a>
+<a class="text-on-surface-variant hover:text-primary mx-2 px-6 py-4 flex items-center gap-4 font-label-lg text-label-lg hover:bg-surface-variant/50 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">auto_awesome_motion</span> Guest Journeys
+            </a>
+<a class="text-on-surface-variant hover:text-primary mx-2 px-6 py-4 flex items-center gap-4 font-label-lg text-label-lg hover:bg-surface-variant/50 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">liquor</span> Craft Modules
+            </a>
+<a class="text-on-surface-variant hover:text-primary mx-2 px-6 py-4 flex items-center gap-4 font-label-lg text-label-lg hover:bg-surface-variant/50 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">badge</span> Passport Networking
+            </a>
+<a class="text-on-surface-variant hover:text-primary mx-2 px-6 py-4 flex items-center gap-4 font-label-lg text-label-lg hover:bg-surface-variant/50 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">point_of_sale</span> POS 3 Integration
+            </a>
+<a class="text-on-surface-variant hover:text-primary mx-2 px-6 py-4 flex items-center gap-4 font-label-lg text-label-lg hover:bg-surface-variant/50 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">psychology</span> E.A.T. Intelligence
+            </a>
+<a class="text-on-surface-variant hover:text-primary mx-2 px-6 py-4 flex items-center gap-4 font-label-lg text-label-lg hover:bg-surface-variant/50 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">conveyor_belt</span> Logistics
+            </a>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="ml-80 pt-32 pb-24 px-16">
+<!-- Hero Section -->
+<section class="mb-16">
+<h1 class="font-headline-xl text-headline-xl text-primary mb-4 amber-glow">Final System Orchestration Review</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-4xl">
+                Comprehensive overview of how CraftHub 360, POS 3, E.A.T., and the complete venue ecosystem harmonize. 
+                Review guest flows, inventory intelligence, and environmental controls from a single pane of glass.
+            </p>
+</section>
+<!-- Bento Grid of System Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<!-- Card 1: Guest Journey -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">person_pin</span>
+<span class="status-badge bg-primary/20 text-primary border border-primary/30">Connected</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">Guest Journey</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Orchestrating end-to-end luxury touchpoints from entry to checkout.</p>
+</div>
+<div class="flex items-center gap-2 text-primary text-sm font-semibold">
+<span>Analyze Flow</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 2: Staff Journey -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary text-4xl">assignment_ind</span>
+<span class="status-badge bg-primary/20 text-primary border border-primary/30">Ready</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">Staff Journey</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Managing staff rotations, task assignments, and premium service metrics.</p>
+</div>
+<div class="flex items-center gap-2 text-primary text-sm font-semibold">
+<span>Manage Staff</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 3: Manager Journey -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-tertiary text-4xl">supervisor_account</span>
+<span class="status-badge bg-primary/20 text-primary border border-primary/30">Connected</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">Manager Journey</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Executive oversight of daily operations and service quality control.</p>
+</div>
+<div class="flex items-center gap-2 text-primary text-sm font-semibold">
+<span>Open Dashboard</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 4: Owner Journey -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer border-primary/50">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+<span class="status-badge bg-primary/20 text-primary border border-primary/30">Connected</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">Owner Journey</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Revenue analytics, long-term ROI, and portfolio scaling metrics.</p>
+</div>
+<div class="flex items-center gap-2 text-primary text-sm font-semibold">
+<span>View Financials</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 5: Craft Modules -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer bg-[url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&amp;w=2070&amp;auto=format&amp;fit=crop')] bg-cover bg-center" data-alt="A macro photograph of a crystal whiskey glass being filled with a golden amber liquid, with a soft ice cube splash and smoke swirling in the background. The lighting is low and moody, characteristic of a high-end private club. The image is seen through a smoked glass overlay, creating a textured and luxurious feel.">
+<div class="bg-surface/80 p-4 rounded-lg backdrop-blur-md">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-primary">liquor</span>
+<span class="status-badge bg-secondary-container/80 text-on-secondary-container">Needs Review</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary">Craft Modules</h3>
+<p class="font-body-md text-body-md text-white/80 text-xs mt-1">Cigars, Wines, Whiskeys</p>
+</div>
+</div>
+<!-- Card 6: 360 Passport -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-4xl">travel_explore</span>
+<span class="status-badge bg-primary/20 text-primary border border-primary/30">Connected</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">360 Passport</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Global membership sync and exclusive tasting history networking.</p>
+</div>
+<div class="flex items-center gap-2 text-primary text-sm font-semibold">
+<span>Sync Members</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 7: POS 3 -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-4xl">point_of_sale</span>
+<span class="status-badge bg-primary/20 text-primary border border-primary/30">Connected</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">POS 3</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Real-time transaction processing and ledger reconciliation.</p>
+</div>
+<div class="flex items-center gap-2 text-primary text-sm font-semibold">
+<span>Terminal Status</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 8: E.A.T. System -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-4xl">psychology</span>
+<span class="status-badge bg-primary/20 text-primary border border-primary/30">Ready</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">E.A.T. System</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Engagement, Analytics, and Tasting intelligence engine.</p>
+</div>
+<div class="flex items-center gap-2 text-primary text-sm font-semibold">
+<span>Insights Engine</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 9: Admin Setup -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-on-surface-variant text-4xl">admin_panel_settings</span>
+<span class="status-badge bg-surface-variant text-on-surface-variant border border-outline-variant/30">Connected</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">Admin Setup</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Core system configuration and security permission mapping.</p>
+</div>
+<div class="flex items-center gap-2 text-primary text-sm font-semibold">
+<span>Configure Core</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 10: Inventory / Restock -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-error text-4xl">inventory_2</span>
+<span class="status-badge bg-error-container text-on-error-container border border-error/30">Missing</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">Inventory</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Stock levels for premium cigars and vintage reserves.</p>
+</div>
+<div class="flex items-center gap-2 text-error text-sm font-semibold">
+<span>Restock Alert</span>
+<span class="material-symbols-outlined text-sm">priority_high</span>
+</div>
+</div>
+<!-- Card 11: Floor Plan -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer bg-[url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&amp;w=2070&amp;auto=format&amp;fit=crop')] bg-cover bg-center" data-alt="A detailed architectural blueprint of a luxury lounge floor plan, showing circular leather seating areas and a grand central bar. The image is stylized with golden lines on a deep charcoal background, looking like a sophisticated touchscreen interface. Warm lighting highlights specific zones on the map, suggesting active occupancy.">
+<div class="bg-surface/90 p-4 rounded-lg backdrop-blur-md">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-primary">layers</span>
+<span class="status-badge bg-primary/20 text-primary border border-primary/30">Connected</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary">Floor Plan</h3>
+<p class="font-body-md text-body-md text-white/80 text-xs mt-1">Live Occupancy &amp; Environment</p>
+</div>
+</div>
+<!-- Card 12: Voice / Help Coach -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-4xl">record_voice_over</span>
+<span class="status-badge bg-primary/20 text-primary border border-primary/30">Ready</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">Voice Coach</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">AI-driven assistance for staff and guest concierge services.</p>
+</div>
+<div class="flex items-center gap-2 text-primary text-sm font-semibold">
+<span>Listen Mode</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 13: Security / Fraud -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-4xl">shield_person</span>
+<span class="status-badge bg-primary/20 text-primary border border-primary/30">Connected</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">Security</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Biometric access control and anti-fraud transaction monitoring.</p>
+</div>
+<div class="flex items-center gap-2 text-primary text-sm font-semibold">
+<span>View Monitors</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Card 14: Final Readiness -->
+<div class="glass-panel p-6 rounded-xl flex flex-col justify-between h-64 group cursor-pointer bg-primary-container/20 border-primary">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-4xl">rocket_launch</span>
+<span class="status-badge bg-error-container text-on-error-container border border-error/30">Blocked</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:amber-glow transition-all">Final Readiness</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 text-sm">Launch checklist verification and final system handshake.</p>
+</div>
+<div class="flex items-center gap-2 text-error text-sm font-semibold">
+<span>Resolve Blockers</span>
+<span class="material-symbols-outlined text-sm">warning</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile View) -->
+<nav class="md:hidden fixed bottom-0 w-full h-20 flex justify-around items-center px-4 z-50 bg-surface-container-high/90 backdrop-blur-lg border-t border-primary/20 shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center text-primary scale-110 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">extension</span>
+<span class="font-label-sm text-label-sm">Modules</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-sm text-label-sm">Floor Plan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">error</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for glass panels
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Subtle lighting effect could go here
+            });
+        });
+
+        // Background movement for parallax feel
+        window.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            document.body.style.backgroundPosition = `${x * 10}px ${y * 10}px`;
+        });
+    </script>
+</body></html>

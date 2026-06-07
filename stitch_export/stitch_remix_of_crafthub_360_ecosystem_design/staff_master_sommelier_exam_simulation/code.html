@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Master Sommelier Final Exam | Reserve Lounge</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600&amp;family=Hanken+Grotesk:wght@600;700&amp;family=JetBrains+Mono:wght@500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Hanken+Grotesk:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 193, 118, 0.1);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+        .gold-border {
+            border: 1px solid #d4af37;
+        }
+        .obsidian-base {
+            background-color: #010101;
+        }
+        .telemetry-pulse {
+            position: relative;
+        }
+        .telemetry-pulse::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #D4AF37;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #D4AF37;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#2a2a2a",
+                      "on-primary-fixed": "#241a00",
+                      "on-surface-variant": "#d0c5af",
+                      "on-tertiary-fixed-variant": "#474646",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "outline": "#99907c",
+                      "on-error-container": "#ffdad6",
+                      "error": "#ffb4ab",
+                      "on-secondary-container": "#b6b5b5",
+                      "tertiary": "#d0cecd",
+                      "secondary-container": "#464747",
+                      "error-container": "#93000a",
+                      "on-tertiary": "#313030",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "surface-container-low": "#1c1b1b",
+                      "primary-fixed-dim": "#e9c349",
+                      "on-primary-fixed-variant": "#574500",
+                      "on-error": "#690005",
+                      "primary-fixed": "#ffe088",
+                      "inverse-surface": "#e5e2e1",
+                      "on-primary-container": "#554300",
+                      "primary-container": "#d4af37",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "tertiary-container": "#b5b2b2",
+                      "primary": "#f2ca50",
+                      "surface-tint": "#e9c349",
+                      "inverse-primary": "#735c00",
+                      "on-primary": "#3c2f00",
+                      "on-background": "#e5e2e1",
+                      "surface": "#141313",
+                      "surface-container-lowest": "#0e0e0e",
+                      "surface-container": "#201f1f",
+                      "surface-bright": "#3a3939",
+                      "on-secondary": "#303031",
+                      "on-surface": "#e5e2e1",
+                      "surface-variant": "#353434",
+                      "surface-dim": "#141313",
+                      "background": "#141313",
+                      "surface-container-highest": "#353434",
+                      "secondary": "#c7c6c6",
+                      "tertiary-fixed-dim": "#c8c6c5",
+                      "tertiary-fixed": "#e5e2e1",
+                      "outline-variant": "#4d4635",
+                      "on-secondary-fixed-variant": "#464747",
+                      "inverse-on-surface": "#313030",
+                      "secondary-fixed": "#e3e2e2",
+                      "on-tertiary-container": "#454545"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-desktop": "40px",
+                      "gutter": "24px",
+                      "unit": "4px",
+                      "margin-mobile": "16px",
+                      "container-padding": "20px"
+              },
+              "fontFamily": {
+                      "body-sm": ["Geist"],
+                      "body-md": ["Geist"],
+                      "display-lg": ["Hanken Grotesk"],
+                      "telemetry-data": ["JetBrains Mono"],
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "label-caps": ["JetBrains Mono"],
+                      "headline-lg": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "telemetry-data": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="obsidian-base text-on-surface font-body-md selection:bg-primary selection:text-on-primary-fixed overflow-x-hidden">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 backdrop-blur-xl bg-surface/80 border-b border-outline-variant shadow-md flex justify-between items-center px-gutter h-20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl">menu</span>
+<h1 class="font-headline-lg text-headline-lg tracking-widest text-primary uppercase">RESERVE LOUNGE</h1>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-label-caps text-primary tracking-widest">EXAM IN PROGRESS</span>
+<span class="font-telemetry-data text-telemetry-data text-on-surface">Question 1 of 20</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex flex-col items-right text-right mr-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">TIMER</span>
+<span class="font-telemetry-data text-telemetry-data text-primary" id="timer">44:59</span>
+</div>
+<img alt="Member Digital Passport" class="w-12 h-12 rounded-full border border-primary/30 object-cover" data-alt="A professional portrait of a distinguished male sommelier in a sharp dark suit. He has a warm yet authoritative expression, captured in high-end studio lighting with a deep obsidian background. Subtle gold light highlights his features, evoking a sense of elite status and deep expertise in the luxury wine world." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU4PQsXLPyDE3wt4yfxy3z9FKObdhblvYFqw-MhylQ__fzNQ-hlYBOFm1AQcw-ZT20H8pR5Eh0REwZapGyEwo8CUpVJ5Ed4yTwEMQFleoVw5d2e1y9LWde6NJBp05RpBLRVAkCc8_ihLH_g1qljxELAJ_wPXHQIO9dOWq8tgwvJ-sUSx-tHtiRQz3-CcrGLRKx1TTqLJ8ak6oPIef0679lq6Sla9rOrHv9bDOvxH2RmXFe09m643n_VNhMoyxDT7Mz4Q6KeVYIZ4k"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-32 pb-40 px-margin-desktop max-w-[1400px] mx-auto min-h-screen">
+<!-- Progress Bar -->
+<div class="w-full h-1 bg-surface-container-highest rounded-full mb-12 relative overflow-hidden">
+<div class="absolute left-0 top-0 h-full w-[5%] bg-primary shadow-[0_0_10px_rgba(242,202,80,0.5)] transition-all duration-1000"></div>
+</div>
+<!-- Hero: Cinematic Cellar Background -->
+<section class="relative rounded-xl overflow-hidden h-[400px] mb-12 shadow-2xl">
+<img alt="Luxury Wine Cellar" class="w-full h-full object-cover opacity-60" data-alt="A cinematic, low-angle shot of a high-end private wine cellar at night. Rows of vintage bottles are nestled in dark brushed titanium racks. The scene is illuminated by soft, warm gold spotlights that catch the glass and create deep obsidian shadows. A hazy, atmospheric mood with subtle lens flares from the golden light sources." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5jaiDCRvGOIs_9ECi_EEm9IjzYy-Bg1DHWNnbrR3Ws4qV-RL4MkNLzo004BeqyOBRv-UGQ0gvuwbAiKZgvpQukJs_0kJioVku-36R6e0b-um3tpem6XIuddXr5pyxbTtgmtCdMdV6s0tYjs44tjD5AchGrhzVXo2XEziNOLy7rB1AyVogKqyeLwKMj9do015wQVD7kug_gqfeztonRFxwFAGYht0P_xiQI01xVETbEkdkLDZ-RvYh0tkHeWLjAQyECOH6D62ROXo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
+<div class="absolute bottom-8 left-8">
+<h2 class="font-display-lg text-display-lg text-primary uppercase mb-2">Blind Tasting Challenge</h2>
+<p class="font-body-md text-on-surface-variant max-w-xl">Phase I: Visual and Olfactory Assessment. Analyze the three structural components before final identification.</p>
+</div>
+</section>
+<!-- Tasting Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-12">
+<!-- Glass A -->
+<div class="glass-panel p-6 rounded-xl group transition-all hover:border-primary/40">
+<div class="flex justify-between items-center mb-6">
+<span class="font-label-caps text-label-caps text-primary tracking-[0.2em]">SAMPLE A</span>
+<div class="telemetry-pulse mr-4"></div>
+</div>
+<div class="aspect-[3/4] rounded-lg overflow-hidden mb-6 relative">
+<img alt="Wine Glass A" class="w-full h-full object-cover grayscale-[0.2] group-hover:scale-105 transition-transform duration-700" data-alt="A macro close-up of a premium crystal wine glass filled with a deep garnet red wine. The lighting is dramatic, highlighting the 'legs' of the wine as they streak down the side of the glass. The background is a velvety true obsidian black. Subtle golden reflections dance on the rim of the glass, creating a high-stakes luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7rLatCODnQJzi-pE747mDrYw-0vYcWvmlCXkB1EP2QQobD7oV2hCJNCNOgY6zAJ0g3hLBGnZRYBvb-6QGqRaw-TxEjBg1ebRCLQuLKhc9qMr6dfHsvWhnxUl3wQp6QwgYeV9xhVwmWF5TMhnSgWPYxOaiE2pgDHR789jW5JO2lafZHe9eToHpjk-vjSCLulMlX5bXNH4xRR5sGh1OMeUaavZ2bYBAQJul1p7ei_yCTbF2Qnwsjm_QHGG6CpwHrvg4b82bCnNB3Ls"/>
+</div>
+<div class="space-y-4">
+<button class="w-full h-[72px] rounded-lg border border-outline-variant flex items-center justify-between px-6 hover:bg-surface-variant transition-colors group/btn">
+<span class="font-label-caps text-label-caps group-hover/btn:text-primary">COLOR / RIM</span>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+<button class="w-full h-[72px] rounded-lg border border-outline-variant flex items-center justify-between px-6 hover:bg-surface-variant transition-colors group/btn">
+<span class="font-label-caps text-label-caps group-hover/btn:text-primary">AROMA PROFILE</span>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Glass B -->
+<div class="glass-panel p-6 rounded-xl group transition-all hover:border-primary/40">
+<div class="flex justify-between items-center mb-6">
+<span class="font-label-caps text-label-caps text-primary tracking-[0.2em]">SAMPLE B</span>
+<span class="font-telemetry-data text-label-caps text-on-surface-variant italic">Active Analysis</span>
+</div>
+<div class="aspect-[3/4] rounded-lg overflow-hidden mb-6 relative">
+<img alt="Wine Glass B" class="w-full h-full object-cover grayscale-[0.2] group-hover:scale-105 transition-transform duration-700" data-alt="A focused high-fidelity shot of a glass of ruby red wine held against a clean, lit white background for color inspection. The wine is bright and translucent at the rim. The surrounding environment is a dark, executive lounge with brushed titanium surfaces. The mood is scientific and precise, focusing on the clarity and hue of the liquid." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEJRJ4c_K7iI4MawWVoV8hBoaZISUmoGE0lGtC8I8Nt94a-Rn-4G3n8JriqWrI2J0c1ZsmW8hjxKrrMBNXo8PvYV3iCGQCZqXZ-7GWfAiAPLFUTfOCg7FT9P_qxGACNBq4s1ZYRQw41aHyhnjIkrC7ZWUQDDcGtZRctHSXWbo1R53kIhiMQ4Ttbn77aQK802MIJl3dZFX5mJsMvQ88MUbGYRTfaFaVvQ7s2U2kh4CC_81EC7CruPYvMp0n9A2mliasiIn6Usf8GGw"/>
+</div>
+<div class="space-y-4">
+<button class="w-full h-[72px] rounded-lg border border-primary/50 bg-primary/5 flex items-center justify-between px-6">
+<span class="font-label-caps text-label-caps text-primary">COLOR / RIM</span>
+<span class="font-body-sm text-primary">Deep Ruby</span>
+</button>
+<button class="w-full h-[72px] rounded-lg border border-outline-variant flex items-center justify-between px-6 hover:bg-surface-variant transition-colors group/btn">
+<span class="font-label-caps text-label-caps group-hover/btn:text-primary">AROMA PROFILE</span>
+<span class="material-symbols-outlined text-on-surface-variant">add</span>
+</button>
+</div>
+</div>
+<!-- Glass C -->
+<div class="glass-panel p-6 rounded-xl group transition-all hover:border-primary/40">
+<div class="flex justify-between items-center mb-6">
+<span class="font-label-caps text-label-caps text-primary tracking-[0.2em]">SAMPLE C</span>
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+</div>
+<div class="aspect-[3/4] rounded-lg overflow-hidden mb-6 relative opacity-60">
+<img alt="Wine Glass C" class="w-full h-full object-cover" data-alt="A moody, atmospheric shot of a single empty wine glass standing on a dark, reflective granite surface. In the background, a blur of golden lights from a prestigious wine cellar creates a bokeh effect. The aesthetic is extremely minimal and high-end, using deep blacks and metallic reflections to suggest a moment of intense concentration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxdWj20JohpABtGeqqB5MlD7Ln8_W-Kt7aYexW_BKmHK5ENcQnBJdrRIs5V_rgSzINlsglj740EBnUuyRznuf9RJMcdZIuoGJvztQWFeKsDCzLL8jVutBYBKggyL9ouIefDnIC8UqGWGCFuFfzeYIigblBzRFNuSzEA3sSrwgCJ0CSHVUB4k0lZbflDKKj-vtJp_yD3ZgHFbyOswMRrJWk_tNqSnx_shp2AyMtbZiQYoWUmA5VP8DClHW3c2yvEr6LRMHD_hH33RA"/>
+</div>
+<div class="space-y-4">
+<button class="w-full h-[72px] rounded-lg border border-outline-variant/30 flex items-center justify-between px-6 cursor-not-allowed" disabled="">
+<span class="font-label-caps text-label-caps text-on-surface-variant/50">COLOR / RIM</span>
+<span class="material-symbols-outlined text-on-surface-variant/30">lock</span>
+</button>
+<button class="w-full h-[72px] rounded-lg border border-outline-variant/30 flex items-center justify-between px-6 cursor-not-allowed" disabled="">
+<span class="font-label-caps text-label-caps text-on-surface-variant/50">PALATE / TANNINS</span>
+<span class="material-symbols-outlined text-on-surface-variant/30">lock</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Final Identification Card -->
+<section class="glass-panel rounded-xl p-8 lg:p-12 gold-border relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]">verified</span>
+</div>
+<div class="relative z-10">
+<h3 class="font-headline-lg text-headline-lg text-primary uppercase mb-8">Final Identification - Sample B</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Region Selection -->
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-4 block">REGION / APPELLATION</label>
+<div class="grid grid-cols-2 gap-4">
+<button class="h-[72px] rounded-lg border border-outline hover:border-primary transition-all flex items-center justify-center font-body-md">Bordeaux, FR</button>
+<button class="h-[72px] rounded-lg border border-primary bg-primary/10 flex items-center justify-center font-body-md text-primary">Tuscany, IT</button>
+<button class="h-[72px] rounded-lg border border-outline hover:border-primary transition-all flex items-center justify-center font-body-md">Napa Valley, US</button>
+<button class="h-[72px] rounded-lg border border-outline hover:border-primary transition-all flex items-center justify-center font-body-md">Rioja, ES</button>
+</div>
+</div>
+<!-- Vintage Selection -->
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant mb-4 block">VINTAGE</label>
+<div class="grid grid-cols-3 gap-4">
+<button class="h-[72px] rounded-lg border border-outline hover:border-primary transition-all flex items-center justify-center font-telemetry-data">2015</button>
+<button class="h-[72px] rounded-lg border border-outline hover:border-primary transition-all flex items-center justify-center font-telemetry-data">2016</button>
+<button class="h-[72px] rounded-lg border border-outline hover:border-primary transition-all flex items-center justify-center font-telemetry-data">2018</button>
+<button class="h-[72px] rounded-lg border border-outline hover:border-primary transition-all flex items-center justify-center font-telemetry-data">2019</button>
+<button class="h-[72px] rounded-lg border border-outline hover:border-primary transition-all flex items-center justify-center font-telemetry-data">2020</button>
+<button class="h-[72px] rounded-lg border border-outline hover:border-primary transition-all flex items-center justify-center font-telemetry-data">2021</button>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">info</span>
+<p class="font-body-sm text-on-surface-variant italic">Note: Analysis must be finalized for all samples before Master Submission is unlocked.</p>
+</div>
+<button class="w-full md:w-auto px-12 h-[72px] bg-primary text-on-primary-fixed font-headline-lg text-headline-lg rounded-lg shadow-[0_0_20px_rgba(242,202,80,0.3)] hover:scale-105 active:scale-95 transition-all duration-300 uppercase tracking-widest">
+                        Submit Analysis
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl backdrop-blur-20px bg-surface-container-low/90 border-t border-outline-variant shadow-[0_-4px_20px_rgba(233,193,118,0.15)] flex justify-around items-center h-24 px-gutter pb-safe">
+<a class="flex flex-col items-center justify-center text-primary font-bold gap-1 scale-110" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">liquor</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">PourCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all" href="#">
+<span class="material-symbols-outlined">sports_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">BeerCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all" href="#">
+<span class="material-symbols-outlined">wine_bar</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">WineCraft</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant gap-1 hover:text-secondary-fixed transition-all" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Passport</span>
+</a>
+</nav>
+<!-- Micro-interactions Script -->
+<script>
+        // Simple Timer Logic
+        let timeLeft = 45 * 60 - 1;
+        const timerDisplay = document.getElementById('timer');
+        
+        setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            timerDisplay.innerHTML = `${minutes}:${seconds}`;
+            if (timeLeft > 0) timeLeft--;
+        }, 1000);
+
+        // Haptic feedback simulation on buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (window.navigator.vibrate) {
+                    window.navigator.vibrate(20);
+                }
+                // Visual feedback
+                btn.classList.add('brightness-125');
+                setTimeout(() => btn.classList.remove('brightness-125'), 150);
+            });
+        });
+    </script>
+</body></html>

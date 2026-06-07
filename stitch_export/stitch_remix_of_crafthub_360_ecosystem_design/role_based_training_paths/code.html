@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CraftHub 360 | Role-Based Training Paths</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&amp;family=Montserrat:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#ffdea5",
+                    "on-tertiary-fixed": "#261814",
+                    "surface-container-high": "#2a2a2b",
+                    "on-surface-variant": "#d1c5b4",
+                    "on-background": "#e5e2e3",
+                    "on-primary": "#412d00",
+                    "inverse-surface": "#e5e2e3",
+                    "primary": "#e9c176",
+                    "on-tertiary-fixed-variant": "#54433e",
+                    "outline": "#9a8f80",
+                    "background": "#131314",
+                    "error": "#ffb4ab",
+                    "on-secondary-fixed": "#2a1800",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "inverse-primary": "#775a19",
+                    "surface": "#131314",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#643f00",
+                    "on-tertiary": "#3c2d28",
+                    "tertiary-container": "#b7a09a",
+                    "on-surface": "#e5e2e3",
+                    "secondary-fixed-dim": "#ffb95a",
+                    "error-container": "#93000a",
+                    "surface-container-low": "#1b1b1c",
+                    "tertiary-fixed": "#f7ddd6",
+                    "surface-dim": "#131314",
+                    "secondary-container": "#c68315",
+                    "tertiary": "#dac1bb",
+                    "surface-variant": "#353436",
+                    "inverse-on-surface": "#303031",
+                    "secondary": "#ffb95a",
+                    "outline-variant": "#4e4639",
+                    "on-secondary-container": "#3d2400",
+                    "on-secondary": "#462a00",
+                    "surface-tint": "#e9c176",
+                    "surface-bright": "#39393a",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-tertiary-container": "#473733",
+                    "primary-container": "#c5a059",
+                    "surface-container-highest": "#353436",
+                    "secondary-fixed": "#ffddb6",
+                    "surface-container": "#1f1f20",
+                    "on-primary-container": "#4e3700",
+                    "on-error": "#690005",
+                    "on-primary-fixed": "#261900",
+                    "tertiary-fixed-dim": "#dac1bb",
+                    "surface-container-lowest": "#0e0e0f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "32px",
+                    "container-max-width": "1440px",
+                    "unit": "8px",
+                    "margin": "64px",
+                    "card-padding": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Montserrat"],
+                    "label-lg": ["Montserrat"],
+                    "headline-xl": ["Playfair Display"],
+                    "label-sm": ["Montserrat"],
+                    "headline-lg": ["Playfair Display"],
+                    "body-md": ["Montserrat"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>body {
+    background-color: #131314;
+    color: #e5e2e3;
+    -webkit-font-smoothing: antialiased
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.glass-panel {
+    background: rgba(31, 31, 32, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(233, 193, 118, 0.1)
+    }
+.gold-foil-stroke {
+    border: 1px solid rgba(233, 193, 118, 0.3)
+    }
+.amber-glow:hover {
+    box-shadow: 0 0 25px rgba(233, 193, 118, 0.15);
+    border-color: rgba(233, 193, 118, 0.5);
+    transform: translatey(-4px)
+    }
+.parallax-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAdNz8wVJRfzAoXEKGRO31Kq0o2PHH6utGgoD6siWHBVo-NwOGmQIRrKLNT53JYpmWtZqOsG-hR976HyTHAsndb0bsBycpPN7yL3OCYEpmo6fysdP_-i-gc27Ti8d1tfTr0_xwObnZmLE9xP3NSqUP8pY4NITmwhfhFg1wMEypnsOhxNQgrZexImWODaOCkb8imRvtTRJ0g1kF6CzTJx9mwPmJZV44NZv12Pq5IwneGRZu4O1jZasyR2N6XI1ET0AtMtJSVYUhKJ2o);
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center
+    }
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px
+    }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e9c176;
+    border-radius: 10px
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="bg-surface/80 backdrop-blur-xl dark:bg-surface/80 text-primary dark:text-primary w-full top-0 sticky border-b border-outline-variant/30 shadow-lg shadow-on-secondary-fixed/20 z-50 flex justify-between items-center px-gutter py-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-primary/30">
+<img alt="Executive Curator Profile" class="w-full h-full object-cover" data-alt="A professional portrait of a senior curator in a high-end luxury lounge. He wears a tailored charcoal suit and a silk tie, looking directly at the camera with a warm, confident expression. The background features blurred shelves of aged spirits and leather-bound books, illuminated by soft amber task lighting. The aesthetic is sophisticated, moody, and exclusive." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTYQOa5LPxrWnz-WQMCLVA0GH_hZbYmXrkpFbOjmdmBto0bHdrVj7RCAHHqXxLQUjro5yYsPIvpD2s_oPcFDSZLffRnrzCckjHvJBgB9KJXz52aNQs0rJuh5aED8QFxcvrA3UFlHtWHB3Owf8F-5QWRvHp6hHHBi7Xe9P99e_ZrZgvSylrIYNLjxe-PRk6teNG_H6uerygCpprTzbWelIcUO5pcMRJN45Y-T15U3kOV-W2C0gM8NRynFALDIbY97I0bOACVtmtdZU"/>
+</div>
+<span class="font-display-lg text-headline-md text-primary-fixed drop-shadow-[0_0_10px_rgba(233,193,118,0.5)]">CraftHub 360</span>
+</div>
+<div class="flex gap-8 items-center">
+<nav class="hidden md:flex gap-6">
+<a class="text-primary-fixed-dim font-bold font-label-lg transition-all duration-300" href="#">Training Paths</a>
+<a class="text-on-surface-variant font-medium font-label-lg hover:bg-surface-bright/20 transition-all duration-300 px-3 py-1 rounded" href="#">Curriculum</a>
+<a class="text-on-surface-variant font-medium font-label-lg hover:bg-surface-bright/20 transition-all duration-300 px-3 py-1 rounded" href="#">Performance</a>
+</nav>
+<button class="material-symbols-outlined text-primary hover:bg-surface-bright/20 p-2 rounded-full transition-all duration-300" data-icon="settings">settings</button>
+</div>
+</header>
+<main class="min-h-screen relative pb-32">
+<!-- Subtle Parallax Background Layer -->
+<div class="fixed inset-0 parallax-bg opacity-10 pointer-events-none" data-alt="Close-up macro photography of a crystal whiskey glass with amber liquid and a single large ice sphere. The lighting is low and cinematic, capturing the intricate reflections and golden hues within the glass. Deep espresso shadows and warm highlights dominate the composition, creating an atmosphere of quiet luxury and sensory indulgence."></div>
+<div class="relative z-10 max-w-[container-max-width] mx-auto px-margin pt-16">
+<!-- Header Section -->
+<div class="mb-12 text-center md:text-left">
+<h1 class="font-display-lg text-headline-xl text-primary-fixed mb-4">Select Your Command Path</h1>
+<p class="font-body-lg text-on-surface-variant max-w-2xl">Access tailored training modules designed for your specific operational sphere. Master your role through guided cinematic instruction.</p>
+</div>
+<!-- Role Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Role Card: Owner -->
+<div class="glass-panel rounded-xl overflow-hidden group amber-glow transition-all duration-500 cursor-pointer flex flex-col">
+<div class="h-48 relative overflow-hidden">
+<img alt="Owner View" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="An expansive view of a luxury rooftop lounge at dusk, overlooking a glowing metropolitan skyline. The scene is dominated by plush leather seating, polished mahogany tables, and discrete accent lighting. The mood is triumphant and authoritative, featuring a palette of deep blues, warm ambers, and charcoal grays, representing the vision and oversight of an owner." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsR58FTkF5Al0534BL0zUzw1hKMTQPrIRFmhUibqllXmmSLgLVrZ8QxovLFNQkqIh7oDrhg46eQfaI6zScd1RO0xkUBbhHqFj-OPXrcqKPpJubyb55YjT9rZheLq2CeNg3Dtnbpx3nKGW-VnW-Jv4-HbiE_Tampn02DOMIj9c3eC7nbqATUW6OxGPRpodxoILbKbDQAL0c9BlzrlVDStd21F_MjCctTTzDAo1Mxqmei4Yehk1xtu-lUZ8VbpdlXR8RVcBLnKOkZWY"/>
+<div class="absolute top-4 right-4 bg-primary-container/90 text-on-primary-container px-3 py-1 rounded-full font-label-sm backdrop-blur-md border border-primary-fixed/30">
+                            Certified: Master
+                        </div>
+</div>
+<div class="p-card-padding flex-1 flex flex-col">
+<h2 class="font-headline-md text-primary mb-2">Owner</h2>
+<p class="text-on-surface-variant font-label-sm uppercase tracking-widest mb-4">Strategic Oversight</p>
+<ul class="space-y-3 mb-6 flex-1">
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="analytics">analytics</span>
+                                Financial Compliance
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="policy">policy</span>
+                                Brand Integrity Standards
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="groups">groups</span>
+                                Executive Leadership
+                            </li>
+</ul>
+<button class="w-full py-3 bg-primary text-on-primary font-label-lg rounded hover:bg-primary-fixed transition-colors">ENTER PATH</button>
+</div>
+</div>
+<!-- Role Card: Admin -->
+<div class="glass-panel rounded-xl overflow-hidden group amber-glow transition-all duration-500 cursor-pointer flex flex-col">
+<div class="h-48 relative overflow-hidden">
+<img alt="Admin View" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A meticulously organized high-tech back office with multiple sleek monitors displaying data visualizations and scheduling interfaces. The environment is clean, professional, and quiet, with soft glow from the screens illuminating the textured dark walls. The lighting is cool white mixed with warm amber accents, suggesting efficient and precise administrative control in a premium setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNMEyp-VrKj_qKVUXqvSGMGxLEUahON-hK25TKNws3VcM2dN5F4DqQvZfSABQHXHhyiT1W-0CH3FPxYy5Zv6yjXBsW_K71DIntz1MnSNnuHJVzBg8HR50CGe2FGJANHpRjAfsyCc3ydfGQ-88kRNTyo4UnMk089rVz8yYYzJLGKCaBtH7tsFCtb-LqmDUGvOGhDOWn-yPur20p-Jl_2R-kHGhZsQao_so3aJYUteBdhiTJZSunIrSwNQdQPN-ehCO35if0oS0b4A8"/>
+<div class="absolute top-4 right-4 bg-primary-container/90 text-on-primary-container px-3 py-1 rounded-full font-label-sm backdrop-blur-md border border-primary-fixed/30">
+                            Certified: Senior
+                        </div>
+</div>
+<div class="p-card-padding flex-1 flex flex-col">
+<h2 class="font-headline-md text-primary mb-2">Admin</h2>
+<p class="text-on-surface-variant font-label-sm uppercase tracking-widest mb-4">Operations Engine</p>
+<ul class="space-y-3 mb-6 flex-1">
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="calendar_month">calendar_month</span>
+                                Workforce Scheduling
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="inventory_2">inventory_2</span>
+                                Inventory Control
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="security">security</span>
+                                Security Protocols
+                            </li>
+</ul>
+<button class="w-full py-3 bg-primary text-on-primary font-label-lg rounded hover:bg-primary-fixed transition-colors">ENTER PATH</button>
+</div>
+</div>
+<!-- Role Card: Humidor Specialist -->
+<div class="glass-panel rounded-xl overflow-hidden group amber-glow transition-all duration-500 cursor-pointer flex flex-col">
+<div class="h-48 relative overflow-hidden">
+<img alt="Humidor Specialist" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Inside a climate-controlled cedar-lined humidor, rows of premium hand-rolled cigars are perfectly arranged in wooden trays. Soft, warm lighting catches the oily sheen of the tobacco leaves and the gold-embossed bands. A light mist of humidity is barely visible in the air, creating a rich, tactile atmosphere of heritage and meticulous craftsmanship in deep browns and warm golds." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm9fqetDtWKNxd-qVlENH3bzon54xElTdCOjpAlJZvQOmIzG0Sa1t8MlRBxWBKNihRCHFhtRd3KisQFViV86hkDauCBzJo1QKkd4XQJb-C0p7rQEgB8CDCRqRX3VuyINTR_9HU0kZPDq-x83ZxcnVnWUpQ2n186ycyh1r3yQrI1HecyQlyWZZ37T_gJ0ttiTdvaMo60zOJG5nfaNIhwmE7ujkB8Sdp_AMfNuE2msqCFeUdSsm2OjUi9F_qxJXs0ke4bf-Ei00dEDg"/>
+<div class="absolute top-4 right-4 bg-secondary-container/90 text-on-secondary-container px-3 py-1 rounded-full font-label-sm backdrop-blur-md border border-primary-fixed/30">
+                            Renewal Due
+                        </div>
+</div>
+<div class="p-card-padding flex-1 flex flex-col">
+<h2 class="font-headline-md text-primary mb-2">Humidor Specialist</h2>
+<p class="text-on-surface-variant font-label-sm uppercase tracking-widest mb-4">Heritage Curator</p>
+<ul class="space-y-3 mb-6 flex-1">
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="thermostat">thermostat</span>
+                                Climate Calibration
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="history_edu">history_edu</span>
+                                Tobacco Terroir
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="content_cut">content_cut</span>
+                                Precision Cutting
+                            </li>
+</ul>
+<button class="w-full py-3 bg-primary text-on-primary font-label-lg rounded hover:bg-primary-fixed transition-colors">ENTER PATH</button>
+</div>
+</div>
+<!-- Role Card: Bartender -->
+<div class="glass-panel rounded-xl overflow-hidden group amber-glow transition-all duration-500 cursor-pointer flex flex-col">
+<div class="h-48 relative overflow-hidden">
+<img alt="Bartender View" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A high-contrast macro shot of a crystal mixing glass being stirred with a long silver spoon. The movement creates a vortex in the amber liquid, with a large ice cube catching the spotlight. The background shows a dark, blurred wall of rare spirits on illuminated glass shelves. The mood is precise, kinetic, and sophisticated, emphasizing the art of the cocktail in a luxury lounge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFddoUu7gwJCEdiEyJzb_vQyewOxrc06l3HReaQVY5uLpodYv593gf9HZpP0mzc0VstKW57qV1gv33RCHZ4V62rD2klK0R1XNPn5XgD15MAeoBtzI3LBX0rfjnd46l13XpsfQnA2uG4CxyDShcF3DOEVdzomGmZjg14NrnwURf5pKDg73km2oNV9b6xtU7VjVt7weK7TOfX5E35sTULxLs7d9Tfv5wcwFR70Aqw7HGA64Mle8Ziw-ePdiRjxShOyOqx-kgVYcrH0c"/>
+<div class="absolute top-4 right-4 bg-primary-container/90 text-on-primary-container px-3 py-1 rounded-full font-label-sm backdrop-blur-md border border-primary-fixed/30">
+                            Certified: Expert
+                        </div>
+</div>
+<div class="p-card-padding flex-1 flex flex-col">
+<h2 class="font-headline-md text-primary mb-2">Bartender</h2>
+<p class="text-on-surface-variant font-label-sm uppercase tracking-widest mb-4">Liquid Alchemy</p>
+<ul class="space-y-3 mb-6 flex-1">
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="liquor">liquor</span>
+                                Rare Spirits Catalog
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="wine_bar">wine_bar</span>
+                                Signature Mixology
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="speed">speed</span>
+                                Peak Hour Flow
+                            </li>
+</ul>
+<button class="w-full py-3 bg-primary text-on-primary font-label-lg rounded hover:bg-primary-fixed transition-colors">ENTER PATH</button>
+</div>
+</div>
+<!-- Role Card: Server -->
+<div class="glass-panel rounded-xl overflow-hidden group amber-glow transition-all duration-500 cursor-pointer flex flex-col">
+<div class="h-48 relative overflow-hidden">
+<img alt="Server View" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A focused image of a server's hands elegantly presenting a white leather-bound menu to a guest at a dimly lit mahogany table. The lighting is extremely soft and localized, highlighting the texture of the menu and the polished surface of the table. The aesthetic is one of understated grace and high-end service, with a palette of deep browns, creams, and warm highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvFCldLgnXx8lavyyX8t33KJXV7J7PJvPyeK5u18tYGQVPI61Qd2ajoutuFrwsoI9sdqEOuQt21hyXfUtp3y4dZEz6t48n4rot1VMb86vFfPpf2Cy43FeUjRk46IjEGnNBWWV6iyquB-uiyr3Fe3RXHlwqbsk2ky7xjLbODxJrFwRqrPA4ymYYaruEpantktvesIxLOF7UMUkZT29-qBqGKH8tHaz9XpqG-A3Z903lWtKe91sgne-ntf67jw8L2fRtRdqgcqqxo_s"/>
+<div class="absolute top-4 right-4 bg-primary-container/90 text-on-primary-container px-3 py-1 rounded-full font-label-sm backdrop-blur-md border border-primary-fixed/30">
+                            Certified: Professional
+                        </div>
+</div>
+<div class="p-card-padding flex-1 flex flex-col">
+<h2 class="font-headline-md text-primary mb-2">Server</h2>
+<p class="text-on-surface-variant font-label-sm uppercase tracking-widest mb-4">Guest Experience</p>
+<ul class="space-y-3 mb-6 flex-1">
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="handshake">handshake</span>
+                                Guest Handoff
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="point_of_sale">point_of_sale</span>
+                                POS 3 Basics
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="verified">verified</span>
+                                Reward Verification
+                            </li>
+</ul>
+<button class="w-full py-3 bg-primary text-on-primary font-label-lg rounded hover:bg-primary-fixed transition-colors">ENTER PATH</button>
+</div>
+</div>
+<!-- Role Card: Kitchen Staff -->
+<div class="glass-panel rounded-xl overflow-hidden group amber-glow transition-all duration-500 cursor-pointer flex flex-col">
+<div class="h-48 relative overflow-hidden">
+<img alt="Kitchen View" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A clean, cinematic view of a professional high-end kitchen. Stainless steel surfaces reflect the glow of overhead heat lamps and warm ambient lights. A focused chef is plating a delicate hors d'oeuvre with precision tweezers. The atmosphere is intense but controlled, with a palette of metallic silver, deep shadows, and vibrant colors from fresh ingredients." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSRgsQzcHDYZD1xN7bfXLWvEttKuDcOjqD9j2rrZVbMzRbWYCQfyM4WpVlbmiFC0V8z3cro-7yQxhUcXwABisa2cWLVxc6aIiosOjRNjYdv-nHUN7Oyf1jhDnpjlfpGI7SzcbYjPQ5JXDoMHu0eXypcsqgPaB53EBVFK8O3oODLLItrjwazxZ9ou3i3piXVLSFXOYWdL1wpfQ_VFWeSQy1c2SQUeE6rndRcDKvg-sWUq1rI8qfWWXU3BE7--QrEt7TbGNyvhpY_ys"/>
+<div class="absolute top-4 right-4 bg-tertiary-container/90 text-on-tertiary-container px-3 py-1 rounded-full font-label-sm backdrop-blur-md border border-primary-fixed/30">
+                            Level 2 Pending
+                        </div>
+</div>
+<div class="p-card-padding flex-1 flex flex-col">
+<h2 class="font-headline-md text-primary mb-2">Kitchen Staff</h2>
+<p class="text-on-surface-variant font-label-sm uppercase tracking-widest mb-4">Culinary Excellence</p>
+<ul class="space-y-3 mb-6 flex-1">
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="restaurant">restaurant</span>
+                                Pairing Menus
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="health_and_safety">health_and_safety</span>
+                                Sanitation Audit
+                            </li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="timer">timer</span>
+                                Service Speed Benchmarks
+                            </li>
+</ul>
+<button class="w-full py-3 bg-primary text-on-primary font-label-lg rounded hover:bg-primary-fixed transition-colors">ENTER PATH</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-center items-center gap-12 px-margin pb-4 bg-surface-container-highest/90 backdrop-blur-2xl dark:bg-surface-container-highest/90 border-t border-primary/20 shadow-[0_-8px_32px_rgba(0,0,0,0.8)] h-24">
+<div class="bg-primary-container text-on-primary-container rounded-xl flex flex-col items-center justify-center w-32 py-2 cursor-pointer active:translate-y-1 active:shadow-inner transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="model_training">model_training</span>
+<span class="font-label-lg mt-1">Practice</span>
+</div>
+<div class="text-on-surface-variant flex flex-col items-center justify-center w-32 py-2 cursor-pointer hover:text-primary-fixed active:translate-y-1 active:shadow-inner transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+<span class="font-label-lg mt-1">Replay</span>
+</div>
+<div class="text-on-surface-variant flex flex-col items-center justify-center w-32 py-2 cursor-pointer hover:text-primary-fixed active:translate-y-1 active:shadow-inner transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="navigate_next">navigate_next</span>
+<span class="font-label-lg mt-1">Next</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction: Subtle hover glow follows mouse on glass cards
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Simulating the "sink" interaction on tap for touchscreen feel
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98) translateY(2px)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = '';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+    </script>
+</body></html>

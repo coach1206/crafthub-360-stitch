@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>CraftHub 360 | NOVEE OS v1.0.4</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#131314",
+                        "surface-container-lowest": "#0e0e0f",
+                        "primary": "#e9c176",
+                        "gold-foil": "#c5a059",
+                        "on-surface-variant": "#d1c5b4",
+                        "surface-variant": "#353436",
+                        "surface-container": "#1f1f20",
+                        "outline": "#9a8f80",
+                    },
+                    fontFamily: {
+                        "display": ["Playfair Display", "serif"],
+                        "label": ["Montserrat", "sans-serif"],
+                        "body": ["Montserrat", "sans-serif"],
+                    },
+                    spacing: {
+                        "gutter": "32px",
+                        "card-padding": "24px",
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        @layer base {
+            body { 
+                background: #131314; 
+                color: #e5e2e3; 
+                font-family: 'Montserrat', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+        }
+
+        .glass-panel {
+            background: rgba(31, 31, 32, 0.7);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(197, 160, 89, 0.15);
+        }
+
+        .gold-shimmer {
+            background: linear-gradient(
+                45deg,
+                #c5a059 0%,
+                #ffdea5 50%,
+                #c5a059 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        .boot-scan {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .boot-scan::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(197, 160, 89, 0.1), transparent);
+            animation: scan 3s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+            0% { top: -100%; }
+            100% { top: 100%; }
+        }
+
+        .haptic-touch {
+            transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .haptic-touch:active {
+            transform: scale(0.96);
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(197, 160, 89, 0.2); border-radius: 10px; }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden select-none">
+<!-- System Status Bar (iOS Style) -->
+<header class="h-12 flex items-center justify-between px-6 z-[60]">
+<div class="text-[13px] font-semibold text-on-surface-variant">9:41</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px]">battery_very_low</span>
+</div>
+</header>
+<!-- Main Viewport Context -->
+<main class="flex-1 relative overflow-hidden" id="app-root">
+<!-- OS Boot Screen (Default State) -->
+<section class="absolute inset-0 z-50 bg-background flex flex-col items-center justify-center p-gutter transition-opacity duration-1000" id="boot-sequence">
+<div class="relative group">
+<!-- Branding Aura -->
+<div class="absolute -inset-8 bg-gold-foil/10 blur-3xl rounded-full opacity-50 animate-pulse"></div>
+<!-- Core Logo -->
+<div class="relative w-48 h-48 mb-8 boot-scan rounded-xl overflow-hidden border border-gold-foil/20">
+<img alt="CraftHub 360" class="w-full h-full object-cover grayscale contrast-125 opacity-80" src="https://lh3.googleusercontent.com/aida/AP1WRLv-WT_Bhw2ld_-7coeQl5lSAmzG-a8eS6dmO1Id8jZeV5Srx423k25GIXg-uzEh6wqgYlKkjCisEnOAaMtbW7hA3Xd7GnZU4mNExMhXwejqW98agvB-halqurypgG--nwZB38i8bMZAY1sdrBzwh2noBnz6gvfsSHgi7OAflXgWhmunnbaAqB2CFrGaUhGaDeawkHJZh41TOhhkNACwBRjyLal2fUVy-Ep4smzNsiGrAhDq71mrhzb-Rw"/>
+</div>
+</div>
+<div class="text-center">
+<h1 class="font-display text-4xl tracking-widest gold-shimmer font-bold mb-4">NOVEE OS</h1>
+<!-- Dynamic Boot Progress -->
+<div class="w-64 h-1 bg-surface-container rounded-full overflow-hidden mb-3">
+<div class="h-full bg-gold-foil w-0 transition-all duration-[3000ms] ease-out" id="boot-progress"></div>
+</div>
+<p class="font-label text-[10px] uppercase tracking-[0.3em] text-on-surface-variant animate-pulse" id="boot-status">
+                    Initializing Core Engine...
+                </p>
+</div>
+<div class="absolute bottom-12 text-[9px] uppercase tracking-widest text-outline opacity-40">
+                © 2024 CraftHub 360 Premium Hospitality Systems
+            </div>
+</section>
+<!-- Dynamic Content Router Container -->
+<section class="h-full w-full opacity-0 transition-opacity duration-700" id="router-view">
+<!-- Content will be injected here via micro-frontend architecture -->
+<div class="p-gutter h-full flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-gold-foil text-6xl mb-6">dashboard_customize</span>
+<h2 class="font-display text-2xl mb-2 text-primary">System Ready</h2>
+<p class="text-on-surface-variant max-w-xs text-sm">Welcome to your command center. Access the ecosystem using the navigation below.</p>
+</div>
+</section>
+</main>
+<!-- Global Luxury Navigation -->
+<nav class="fixed bottom-0 left-0 w-full h-24 glass-panel border-t border-gold-foil/10 flex justify-around items-center px-4 z-[100]">
+<button class="haptic-touch flex flex-col items-center gap-1.5 transition-colors group" data-nav-id="dashboard" onclick="navigate('dashboard')">
+<div class="relative p-2 rounded-xl group-active:bg-gold-foil/5">
+<span class="material-symbols-outlined text-[28px] text-gold-foil font-light transition-all duration-300">dashboard</span>
+<div class="nav-indicator absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-gold-foil"></div>
+</div>
+<span class="font-label text-[9px] uppercase tracking-[0.15em] font-semibold text-gold-foil">Dashboard</span>
+</button>
+<button class="haptic-touch flex flex-col items-center gap-1.5 transition-colors group opacity-60 hover:opacity-100" data-nav-id="explore" onclick="navigate('explore')">
+<div class="relative p-2 rounded-xl">
+<span class="material-symbols-outlined text-[28px] text-on-surface-variant font-light group-hover:text-gold-foil/70 transition-colors">explore</span>
+</div>
+<span class="font-label text-[9px] uppercase tracking-[0.15em] font-medium text-on-surface-variant">Explore</span>
+</button>
+<button class="haptic-touch flex flex-col items-center gap-1.5 transition-colors group opacity-60 hover:opacity-100" data-nav-id="passport" onclick="navigate('passport')">
+<div class="relative p-2 rounded-xl">
+<span class="material-symbols-outlined text-[28px] text-on-surface-variant font-light group-hover:text-gold-foil/70 transition-colors">account_balance_wallet</span>
+</div>
+<span class="font-label text-[9px] uppercase tracking-[0.15em] font-medium text-on-surface-variant">Passport</span>
+</button>
+<button class="haptic-touch flex flex-col items-center gap-1.5 transition-colors group opacity-60 hover:opacity-100" data-nav-id="admin" onclick="navigate('admin')">
+<div class="relative p-2 rounded-xl">
+<span class="material-symbols-outlined text-[28px] text-on-surface-variant font-light group-hover:text-gold-foil/70 transition-colors">admin_panel_settings</span>
+</div>
+<span class="font-label text-[9px] uppercase tracking-[0.15em] font-medium text-on-surface-variant">Admin</span>
+</button>
+</nav>
+<!-- Routing and Boot Logic -->
+<script>
+        const BOOT_SEQUENCE_DURATION = 3500;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('boot-progress');
+            const bootStatus = document.getElementById('boot-status');
+            const bootScreen = document.getElementById('boot-sequence');
+            const routerView = document.getElementById('router-view');
+
+            // 1. Progress Bar Logic
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 100);
+
+            // 2. Status Updates
+            const statuses = [
+                "Linking Secure Nodes...",
+                "Synthesizing Luxury Tokens...",
+                "Loading 130+ Interaction Layers...",
+                "System Verified. Welcome."
+            ];
+
+            statuses.forEach((status, index) => {
+                setTimeout(() => {
+                    bootStatus.textContent = status;
+                }, (BOOT_SEQUENCE_DURATION / statuses.length) * index);
+            });
+
+            // 3. Complete Boot
+            setTimeout(() => {
+                bootScreen.classList.add('opacity-0');
+                routerView.classList.remove('opacity-0');
+                setTimeout(() => {
+                    bootScreen.style.display = 'none';
+                }, 1000);
+            }, BOOT_SEQUENCE_DURATION);
+        });
+
+        /**
+         * Simple SPA Router Mockup
+         */
+        function navigate(route) {
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(btn => {
+                const isSelected = btn.getAttribute('data-nav-id') === route;
+                btn.classList.toggle('opacity-100', isSelected);
+                btn.classList.toggle('opacity-60', !isSelected);
+                
+                const icon = btn.querySelector('.material-symbols-outlined');
+                const label = btn.querySelector('span:last-child');
+                const indicator = btn.querySelector('.nav-indicator');
+
+                if(isSelected) {
+                    icon.classList.replace('text-on-surface-variant', 'text-gold-foil');
+                    label.classList.replace('text-on-surface-variant', 'text-gold-foil');
+                    label.classList.replace('font-medium', 'font-semibold');
+                    if(!indicator) {
+                        const div = btn.querySelector('.relative');
+                        const newInd = document.createElement('div');
+                        newInd.className = 'nav-indicator absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-gold-foil';
+                        div.appendChild(newInd);
+                    }
+                } else {
+                    icon.classList.replace('text-gold-foil', 'text-on-surface-variant');
+                    label.classList.replace('text-gold-foil', 'text-on-surface-variant');
+                    label.classList.replace('font-semibold', 'font-medium');
+                    if(indicator) indicator.remove();
+                }
+            });
+
+            console.log(`NOVEE OS: Navigating to [${route.toUpperCase()}]`);
+            // Here you would hook into your actual page loader/fetcher logic
+        }
+    </script>
+</body></html>
