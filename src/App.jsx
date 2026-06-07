@@ -15,7 +15,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index           element={<Home />} />
           <Route path="crafthub"   element={<CraftHub />} />
           <Route path="smokecraft" element={<SmokeCraft />} />
           <Route path="pourcraft"  element={<PourCraft />} />

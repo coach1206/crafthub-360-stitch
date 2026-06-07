@@ -1,112 +1,200 @@
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { ChevronRight } from 'lucide-react'
 
-const FADE = { hidden: { opacity: 0, scale: 0.97 }, show: { opacity: 1, scale: 1, transition: { duration: 0.35, ease: 'easeOut' } } }
-const STAGGER = { show: { transition: { staggerChildren: 0.07 } } }
+const MEMBER_AVATAR =
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuAVHJ2SzxRud4TlDpwaxtX3u9n40Q6_8d5BLZfa64d_WnZotERlYnufPIsu6-9aSejlf7hY9jDhosQvHPJFJzOB2bsJ32ziJNwxTLQ6cz79j9nd79IvKOPXYe_U7OJy5wt-xdsL8joikKRPXYAi7TSQCkkUH4CI0ziETptnyOUcgAir2E2MHLOcI0dklaL6Fhysc3E6hSZx_OiE8VCcCDhm4r3PomHCoiWQrlVfEYUOC0GzlPPXwfQ_41OGRNiNywCPNsZC7lByNx4'
 
-const modules = [
-  { path: '/smokecraft', img: '/smokecraft.jpg',  label: 'SmokeCraft 360',   tag: 'CIGAR INTELLIGENCE',  screens: 28, active: true  },
-  { path: '/pourcraft',  img: '/pourcraft.jpg',   label: 'PourCraft 360',    tag: 'COCKTAIL COMMAND',    screens: 22, active: true  },
-  { path: '/beercraft',  img: '/beercraft.jpg',   label: 'BeerCraft 360',    tag: 'TAP & BREW',          screens: 18, active: true  },
-  { path: '/winecraft',  img: '/winecraft.jpg',   label: 'WineCraft 360',    tag: 'CELLAR INTELLIGENCE', screens: 24, active: true  },
-  { path: '/passport',   img: '/passport.jpg',    label: '360 Passport',     tag: 'NFC MEMBER ACCESS',   screens: 16, active: true  },
-  { path: '/pos',        img: '/pos3.jpg',         label: 'POS 3 Terminal',  tag: 'UNIFIED CHECKOUT',    screens: 14, active: true  },
-  { path: '/eat',        img: '/eat-command.jpg', label: 'E.A.T. Command',   tag: 'VENUE INTELLIGENCE',  screens: 12, active: true  },
+const MODULES = [
+  {
+    id:    'smokecraft',
+    title: 'SmokeCraft 360',
+    desc:  'Curated tobacco selections, humidor tracking, and tasting rituals.',
+    icon:  'chair',
+    route: '/smokecraft',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBibwIn3K4im-7feOc6MbE0qrLgoKLyluRCrG3hjStuvfdpV18KH3A62G-Qz_6SVfNrj8RmOIz4hgjZbsiGf5vrfo17Uf0QYtARmYGCz3AONU-8UZEcE8OSFgxjJwc2qzjNic1fMb52TVcCBU_2QQ-yDTSHGdEzFFXRQYmR_R8lGcWMHEeM5hpoR4wpZFsjtro1GAI7dOrXg5xHk9gr32bXN3Vbzy7Ng-LmBNF7rU_vEhH3psYZXs9IvOT6qmbzmAV5Jtgn4Cdo8XQ',
+  },
+  {
+    id:    'pourcraft',
+    title: 'PourCraft 360',
+    desc:  'Bespoke spirit flights, rare bottle access, and cocktail mixology.',
+    icon:  'liquor',
+    route: '/pourcraft',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjHHIqUqm4IOBASD9e2CFzmQ4Vt8WRSqfeXFt8t_1i2pPsfxMn84WFBCXRIk_Bd1AjSxcXHBCeNc41pSby-goSyKfSuQe5AOAaLaBlpi6JnD_7fhr1sPy6VbWBiTzmjmFzEwjw8z5kQIVkiKACQgwi-HzB-sAbPIleq_5tachES6TA9xVwf7i_1v1HOewxIVMzGkOsmiCHglJ001ONH5Cj1WC3TTNUZGDRHqfeKBppL49vwAMhY09pzWoCB-KDVF6TYDa-xhKCOS8',
+  },
+  {
+    id:    'beercraft',
+    title: 'BeerCraft 360',
+    desc:  'Micro-brewery discovery, cask ale tracking, and artisan pairings.',
+    icon:  'sports_bar',
+    route: '/beercraft',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD7VKTY8DSDP4GuM4QjYR6EUZ4LubDo2yCakN2HYV6KyES6tx4THIbwtZKTJGP7jwwJa0Y6Mpwe7t4lB4Z6ZrtkphJapCLIUjlAPK5yHz-y4rHZPgVcmGAqu2dBojUcETurbHllrTS7OdYNtG59QmMelXGI4jLltYxca6qYZFERSoyNOPC51Er70AmYxHA9cNjDpdI-4qDJHTY_Buz0AhxIxquJ5jyxJLlm9k4VqSjh11zr9yTQ5djQ81CEGXwI41JwzsUu5pAUzB4',
+  },
+  {
+    id:    'winecraft',
+    title: 'WineCraft 360',
+    desc:  'Sommelier-led cellar tours, vintage alerts, and terroir insights.',
+    icon:  'wine_bar',
+    route: '/winecraft',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDN-VSDDSik_99uYcdNQK9qplzBEeBHFI5GylQ4yLuTVURyE09ShNJzs5TFDa5QWyyJqQjK9XXkZtTSgGc3zY8-pfx1LHbrOayvxB1x5xOIbt0i472thBGJ6WOX3Jl2NwrYJNbGUYOeMCs-mohmkNWfHVU7VLntJ1SjdlDhqth5FyEiWKPI00krkamgowHVvovuXEXO1EBTHCDeFDRxeFFSoRI5OGRdtY96RyQbRrtNMWUqWI7x4AuazZYNAIqroB1vsEBlsjx7su8',
+  },
 ]
 
 export default function CraftHub() {
-  const navigate = useNavigate()
+  const navigate  = useNavigate()
+  const cardRefs  = useRef([])
+
+  /* Parallax: card images shift with mouse position */
+  useEffect(() => {
+    const onMove = (e) => {
+      const cx = window.innerWidth  / 2
+      const cy = window.innerHeight / 2
+      const rx = (e.clientX - cx) / cx
+      const ry = (e.clientY - cy) / cy
+
+      cardRefs.current.forEach((card) => {
+        if (!card) return
+        const img = card.querySelector('.parallax-bg')
+        if (img) img.style.transform = `scale(1.1) translate(${rx * 10}px, ${ry * 10}px)`
+      })
+    }
+    document.addEventListener('mousemove', onMove)
+    return () => document.removeEventListener('mousemove', onMove)
+  }, [])
+
+  const onCardDown  = (i) => { if (cardRefs.current[i]) cardRefs.current[i].style.transform = 'scale(0.97)' }
+  const onCardReset = (i) => { if (cardRefs.current[i]) cardRefs.current[i].style.transform = 'scale(1)' }
 
   return (
-    <motion.div initial="hidden" animate="show" variants={STAGGER}
-      style={{ padding: '24px 16px' }}
-    >
-      {/* Header */}
-      <motion.div variants={FADE} style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <img src="/crafthub-gold.jpg" alt="CraftHub"
-            style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: '50%', border: '2px solid rgba(212,175,55,0.5)', boxShadow: '0 0 20px rgba(212,175,55,0.25)', flexShrink: 0 }}
-          />
-          <div>
-            <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 28, color: '#D4AF37', letterSpacing: '-0.02em', lineHeight: 1 }}>
-              CRAFTHUB 360
-            </div>
-            <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 4 }}>
-              7 Modules · 134 Screens · All Systems Live
-            </div>
-          </div>
-        </div>
-      </motion.div>
+    <div className="bg-background text-on-background min-h-screen selection:bg-primary selection:text-on-primary overflow-hidden">
 
-      {/* Stats strip */}
-      <motion.div variants={FADE} style={{ display: 'flex', gap: 10, marginBottom: 24, overflowX: 'auto', paddingBottom: 4 }}>
-        {[['134','Screens'],['7','Modules'],['100%','Sync'],['14ms','Latency']].map(([v,l]) => (
-          <div key={l} className="glass-card" style={{ padding: '12px 20px', flexShrink: 0, textAlign: 'center', minWidth: 88 }}>
-            <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 600, fontSize: 22, color: '#D4AF37', lineHeight: 1, marginBottom: 4 }}>{v}</div>
-            <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{l}</div>
-          </div>
-        ))}
-      </motion.div>
+      {/* ── Top App Bar ──────────────────────────────────────── */}
+      <header className="w-full top-0 sticky bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)] z-50">
+        <div className="flex justify-between items-center h-24 px-gutter max-w-container-max-width mx-auto">
 
-      {/* Module portal grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-        {modules.map(({ path, img, label, tag, screens, active }) => (
-          <motion.div key={path} variants={FADE}>
-            <motion.div
-              whileTap={{ scale: 0.96 }}
-              onClick={() => navigate(path)}
-              style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', cursor: 'pointer', height: 200 }}
+          {/* Left: menu button */}
+          <div className="flex items-center">
+            <button className="material-symbols-outlined text-primary text-3xl hover:bg-primary/10 transition-colors p-3 rounded-full active:scale-95 duration-300 ease-out">
+              menu
+            </button>
+          </div>
+
+          {/* Center: brand wordmark */}
+          <h1 className="font-display-lg text-headline-xl tracking-widest uppercase text-primary">
+            THE RESERVE
+          </h1>
+
+          {/* Right: member avatar */}
+          <div className="flex items-center">
+            <div
+              onClick={() => navigate('/passport')}
+              className="w-12 h-12 rounded-full border-2 border-primary overflow-hidden hover:opacity-80 transition-opacity cursor-pointer active:scale-95 duration-300 ease-out"
             >
-              {/* Image */}
-              <img src={img} alt={label}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              />
-              {/* Gradient overlay */}
-              <div style={{
-                position: 'absolute', inset: 0,
-                background: 'linear-gradient(to top, rgba(1,1,1,0.95) 0%, rgba(1,1,1,0.3) 60%, transparent 100%)',
-              }} />
+              <img src={MEMBER_AVATAR} alt="Member Passport" className="w-full h-full object-cover" />
+            </div>
+          </div>
 
-              {/* Active badge */}
-              {active && (
-                <div style={{
-                  position: 'absolute', top: 12, right: 12,
-                  display: 'flex', alignItems: 'center', gap: 5,
-                  background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)',
-                  padding: '4px 10px', borderRadius: 20,
-                  border: '1px solid rgba(212,175,55,0.3)',
-                }}>
-                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#D4AF37', boxShadow: '0 0 6px rgba(212,175,55,0.8)' }} />
-                  <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase' }}>LIVE</span>
-                </div>
-              )}
+        </div>
+      </header>
 
-              {/* Screen count badge */}
-              <div style={{
-                position: 'absolute', top: 12, left: 12,
-                background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)',
-                padding: '4px 10px', borderRadius: 20,
-                border: '1px solid rgba(122,122,122,0.25)',
-              }}>
-                <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', letterSpacing: '0.06em' }}>{screens} screens</span>
+      {/* ── Main Content ─────────────────────────────────────── */}
+      <main className="max-w-container-max-width mx-auto px-gutter py-12 h-[calc(100vh-96px)] overflow-y-auto scroll-smooth hide-scrollbar">
+
+        {/* Section heading */}
+        <div className="mb-12 text-center">
+          <p className="font-label-lg text-label-lg tracking-[0.3em] uppercase text-primary mb-2">
+            Select Your Journey
+          </p>
+          <h2 className="font-headline-xl text-headline-xl text-on-surface">CRAFTHUB MODULES</h2>
+        </div>
+
+        {/* 2-column module card grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-32">
+          {MODULES.map((mod, idx) => (
+            <div
+              key={mod.id}
+              ref={(el) => (cardRefs.current[idx] = el)}
+              onClick={() => navigate(mod.route)}
+              onMouseDown={() => onCardDown(idx)}
+              onMouseUp={() => onCardReset(idx)}
+              onMouseLeave={() => onCardReset(idx)}
+              className="group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer shadow-2xl transition-all duration-500 hover:shadow-primary/20 card-container"
+            >
+              {/* Full-bleed background image with parallax */}
+              <div className="absolute inset-0 z-0">
+                <img
+                  src={mod.image}
+                  alt={mod.title}
+                  className="w-full h-full object-cover parallax-bg group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
               </div>
 
-              {/* Bottom content */}
-              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 16px 14px' }}>
-                <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 17, color: '#E5E2E1', lineHeight: 1.1, marginBottom: 4 }}>{label}</div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{tag}</div>
-                  <ChevronRight size={16} style={{ color: '#D4AF37' }} />
+              {/* Gold border on hover */}
+              <div className="absolute inset-0 border-2 border-transparent group-hover:border-primary/50 transition-colors duration-500 rounded-2xl z-10" />
+
+              {/* Glass-panel footer */}
+              <div className="absolute bottom-0 left-0 w-full glass-panel p-8 flex justify-between items-end z-20">
+                <div>
+                  <h3 className="font-headline-lg text-headline-lg text-primary mb-1">{mod.title}</h3>
+                  <p className="font-body-md text-body-md text-on-surface-variant max-w-xs">{mod.desc}</p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="font-label-sm text-label-sm text-primary mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    TAP TO ENTER
+                  </span>
+                  <div className="w-16 h-16 rounded-full border border-primary/30 flex items-center justify-center bg-surface-container/50 group-hover:bg-primary transition-all duration-500">
+                    <span className="material-symbols-outlined text-primary group-hover:text-on-primary transition-colors">
+                      {mod.icon}
+                    </span>
+                  </div>
                 </div>
               </div>
+            </div>
+          ))}
+        </div>
 
-              {/* Gold border */}
-              <div style={{ position: 'absolute', inset: 0, borderRadius: 16, border: '1px solid rgba(212,175,55,0.2)', pointerEvents: 'none' }} />
-            </motion.div>
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
+      </main>
+
+      {/* ── Bottom Navigation Bar — always visible ─────────── */}
+      <nav className="fixed bottom-0 w-full h-[100px] z-50 bg-surface-container-low/90 backdrop-blur-2xl border-t border-primary/20 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
+        <div className="flex justify-around items-center w-full max-w-4xl mx-auto h-full">
+
+          {/* Lounge — active (this is the hub screen) */}
+          <button
+            onClick={() => navigate('/')}
+            className="flex flex-col items-center justify-center gap-1 text-primary-fixed-dim bg-primary-container/20 rounded-xl px-8 py-4 active:translate-y-1 transition-all shadow-[0_0_15px_rgba(233,193,118,0.3)]"
+          >
+            <span className="material-symbols-outlined">chair</span>
+            <span className="font-label-lg text-label-lg tracking-widest uppercase">Lounge</span>
+          </button>
+
+          <button
+            onClick={() => navigate('/smokecraft')}
+            className="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-8 py-4 hover:text-primary duration-500 active:translate-y-1 transition-all"
+          >
+            <span className="material-symbols-outlined">liquor</span>
+            <span className="font-label-lg text-label-lg tracking-widest uppercase">Humidor</span>
+          </button>
+
+          <button
+            onClick={() => navigate('/winecraft')}
+            className="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-8 py-4 hover:text-primary duration-500 active:translate-y-1 transition-all"
+          >
+            <span className="material-symbols-outlined">wine_bar</span>
+            <span className="font-label-lg text-label-lg tracking-widest uppercase">Cellar</span>
+          </button>
+
+          <button
+            onClick={() => navigate('/passport')}
+            className="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-8 py-4 hover:text-primary duration-500 active:translate-y-1 transition-all"
+          >
+            <span className="material-symbols-outlined">menu_book</span>
+            <span className="font-label-lg text-label-lg tracking-widest uppercase">Passport</span>
+          </button>
+
+        </div>
+      </nav>
+
+    </div>
   )
 }
