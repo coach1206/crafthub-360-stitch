@@ -1,0 +1,81 @@
+EXECUTE FINAL LAUNCH VALIDATION PASS FOR NOVEE OS
+
+PHASE 13 IS COMPLETE.
+
+DO NOT add new features.
+DO NOT redesign the app.
+DO NOT create duplicate screens.
+DO NOT connect live POS credentials.
+DO NOT weaken auth.
+DO NOT expose secrets.
+DO NOT change the premium visual direction.
+DO NOT start a new phase.
+
+MISSION:
+Run a final launch validation pass to confirm NOVEE OS is ready for a founder-led pilot demo.
+
+This is not a build phase.
+This is a launch-readiness audit.
+
+Validate the following:
+
+1. Founder can log in.
+2. Founder can open /founder-demo.
+3. Founder can start and end a demo.
+4. Founder can open /investor-demo.
+5. Manager can open /venue-demo.
+6. Admin can open /pilot-onboarding.
+7. Pilot partner form saves.
+8. /api/pilot/package exports safely.
+9. Guest cannot access founder/admin/demo routes.
+10. No secrets appear in public exports.
+11. SmokeCraft guest journey works from boot to Passport stamp.
+12. Mentor voice works with mute and read mode.
+13. POS 3 prototype provider works.
+14. E.A.T. Command works for manager+.
+15. Kiosk mode works.
+16. Offline mode exists and explains what works.
+17. Venue test summary still works.
+18. Founder-only routes remain protected.
+19. npm run build passes.
+20. Backend starts cleanly.
+
+Also verify:
+
+* No fake live claims.
+* No fake revenue claims.
+* Prototype data is labeled clearly.
+* All demo pages have Back/Home.
+* Tablet buttons are large enough.
+* The founder demo can be explained in under 5 minutes.
+* The venue owner demo can be explained in under 15 minutes.
+
+Final report required:
+
+A. Founder login result
+B. Founder demo result
+C. Investor demo result
+D. Venue demo result
+E. Pilot onboarding result
+F. Pilot package export result
+G. Guest journey result
+H. Voice result
+I. POS 3 result
+J. E.A.T. result
+K. Kiosk/offline result
+L. Security result
+M. Build result
+N. Server result
+O. Launch recommendation
+P. Any blocker that must be fixed before showing this to a venue
+
+Do not claim launch-ready unless:
+
+* build passes
+* backend starts
+* founder demo works
+* venue demo works
+* pilot package export works
+* guest route protection holds
+* no secrets are exposed
+* no fake live claims are present
