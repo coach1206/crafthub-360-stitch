@@ -1,363 +1,373 @@
-import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import ScoreRing from '../components/ScoreRing.jsx'
+import {
+  Activity, Thermometer, Volume2, Users, Flame, CheckCircle2,
+  LayoutGrid, BarChart3, Users2, MessageSquare, ListTodo, Plus,
+  Bell, Send, RotateCcw, ChefHat, ClipboardList, UserPlus,
+  MoreVertical, Clock, Radio, Utensils, ShieldCheck, Sparkles,
+} from 'lucide-react'
 import { useSecurity } from '../context/SecurityContext.jsx'
-import { getEATFeed } from '../services/pos3IntegrationApiService.js'
 
-const FADE    = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
-const STAGGER = { show: { transition: { staggerChildren: 0.08 } } }
-
-const courses = [
-  { name: 'Amuse-Bouche',      dish: 'Wagyu A5 Nigiri',        status: 'SERVED',  statusColor: '#5A9A5A', time: '7:14 PM', xp: 80  },
-  { name: 'Course I',          dish: 'Black Truffle Cappellaci',status: 'SERVED',  statusColor: '#5A9A5A', time: '7:26 PM', xp: 120 },
-  { name: 'Course II',         dish: 'Dry-Aged Duck Confit',    status: 'FIRING',  statusColor: '#D4AF37', time: '7:52 PM', xp: 160 },
-  { name: 'Course III',        dish: 'Wagyu Tenderloin A5',     status: 'PENDING', statusColor: '#7A7A7A', time: '8:15 PM', xp: 200 },
-  { name: 'Dessert',           dish: 'Miso Chocolate Tart',     status: 'PENDING', statusColor: '#7A7A7A', time: '8:40 PM', xp: 100 },
+const telemetry = [
+  { label: 'Occupancy',    value: '68%',  change: '+12%', icon: <Users size={24} />,       tone: 'gold'  },
+  { label: 'Foot Traffic', value: '142',  change: '+8%',  icon: <Users2 size={24} />,      tone: 'amber' },
+  { label: 'Temp',         value: '21°C', change: '0%',   icon: <Thermometer size={24} />, tone: 'green' },
+  { label: 'Noise',        value: '62dB', change: '-3%',  icon: <Volume2 size={24} />,     tone: 'gold'  },
 ]
 
-const tables = [
-  { id: 1, emoji: '🟡', guests: 2, status: 'Dessert',   color: '#D4AF37', spend: 520 },
-  { id: 2, emoji: '🟠', guests: 4, status: 'Course II', color: '#C88B3A', spend: 340 },
-  { id: 3, emoji: '🟢', guests: 6, status: 'Ordering',  color: '#5A9A5A', spend: 0   },
-  { id: 4, emoji: '⚫', guests: 2, status: 'Reserved',  color: '#7A7A7A', spend: 0   },
+const activeOrders = [
+  { id: 1, title: 'Wagyu A5 Nigiri',          type: 'Amuse-Bouche', status: 'SERVED',  time: '7:14 PM', xp: '+80 XP',  image: 'https://images.unsplash.com/photo-1625943553852-781c6dd46faa?auto=format&fit=crop&q=90&w=600', tags: ['VIP TABLE', 'CHEF SPECIAL'] },
+  { id: 2, title: 'Black Truffle Cappellaci',  type: 'Course I',     status: 'SERVED',  time: '7:26 PM', xp: '+120 XP', image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&q=90&w=600', tags: ['TABLE 3', 'ALLERGY SAFE'] },
+  { id: 3, title: 'Dry-Aged Duck Confit',      type: 'Course II',    status: 'FIRING',  time: '7:52 PM', xp: '+60 XP',  image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=90&w=600', tags: ['TABLE 3', 'MEDIUM RARE'] },
 ]
 
-const sensors = [
-  { label: 'Occupancy',    value: '68%',  trend: '+12%', color: '#D4AF37' },
-  { label: 'Foot Traffic', value: '142',  trend: '+8%',  color: '#C88B3A' },
-  { label: 'Temp',         value: '21°C', trend: '0%',   color: '#5A9A5A' },
-  { label: 'Noise',        value: '62dB', trend: '+3%',  color: '#D4AF37' },
+const feedItems = [
+  { label: '7 messages & 22 actions',  sub: '18 min ago', status: 'pulse'   },
+  { label: 'Checkpoint made',          sub: '17 min ago', status: 'done'    },
+  { label: 'Worked for 1 minute',      sub: 'now',        status: 'working' },
+  { label: 'Pasted visually',          sub: '6 min ago',  status: 'doc'     },
+  { label: '13 messages & 42 actions', sub: '6 min ago',  status: 'pulse'   },
+  { label: 'Checkpoint made',          sub: '2 min ago',  status: 'done'    },
 ]
 
-const pacingSteps = [
-  { label: 'Arrival',    done: true  },
-  { label: 'Amuse',     done: true  },
-  { label: 'Courses',   done: false },
-  { label: 'Dessert',   done: false },
-  { label: 'Departure', done: false },
+const dockActions = [
+  { label: 'Floor Map',    sub: 'Live View',  icon: <LayoutGrid size={24} />    },
+  { label: 'Table Status', sub: 'Real-time',  icon: <ClipboardList size={24} /> },
+  { label: 'Waitlist',     sub: '8 Guests',   icon: <Users2 size={24} />        },
+  { label: 'Staff Comms',  sub: 'Team Chat',  icon: <MessageSquare size={24} /> },
+  { label: 'Tasks',        sub: '12 Active',  icon: <ListTodo size={24} />      },
 ]
 
-const pressureColor = { HIGH: '#E05A5A', MEDIUM: '#D4AF37', LOW: '#5A9A5A', STRETCHED: '#E05A5A', BUSY: '#D4AF37', NORMAL: '#5A9A5A', LIGHT: '#5A9A5A', UNKNOWN: '#7A7A7A' }
+function TouchButton({ label, icon, badge, gold = false }) {
+  return (
+    <button className={`haptic-ready relative flex h-[64px] items-center gap-3 rounded-2xl border px-5 text-sm font-bold transition-all active:scale-95 ${
+      gold
+        ? 'border-[#f3cf7a]/45 bg-[#d9ad55]/20 text-[#f3cf7a] shadow-[0_0_24px_rgba(217,173,85,0.18)]'
+        : 'border-white/10 bg-black/45 text-[#f7ead4] hover:border-[#d9ad55]/35 hover:text-[#f3cf7a]'
+    }`}>
+      <span className="text-[#f3cf7a]">{icon}</span>
+      {label}
+      {badge && (
+        <span className="absolute -right-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-[#d9ad55] text-xs font-black text-black">{badge}</span>
+      )}
+    </button>
+  )
+}
+
+function OrderButton({ label, icon, gold = false }) {
+  return (
+    <button className={`haptic-ready flex min-h-[82px] flex-col items-center justify-center gap-2 rounded-2xl border px-3 text-xs font-bold transition-all active:scale-95 ${
+      gold
+        ? 'border-[#f3cf7a]/45 bg-[#d9ad55]/15 text-[#f3cf7a]'
+        : 'border-white/10 bg-black/45 text-[#f7ead4]/80 hover:border-[#d9ad55]/35 hover:text-[#f3cf7a]'
+    }`}>
+      {icon}
+      {label}
+    </button>
+  )
+}
 
 export default function EATCommand() {
-  const navigate = useNavigate()
-  const { role } = useSecurity()
-  const isManager = ['manager','admin','founder_level_0'].includes(role)
+  const navigate   = useNavigate()
+  const { role }   = useSecurity()
+  const isManager  = ['manager', 'admin', 'founder_level_0'].includes(role)
 
-  const [eatFeed,    setEatFeed]    = useState(null)
-  const [feedLoading, setFeedLoading] = useState(false)
-
-  useEffect(() => {
-    if (!isManager) return
-    setFeedLoading(true)
-    getEATFeed('prototype')
-      .then(r => setEatFeed(r?.success ? r : null))
-      .catch(() => setEatFeed(null))
-      .finally(() => setFeedLoading(false))
-  }, [role])
+  if (!isManager) {
+    return (
+      <div className="min-h-screen bg-[#050403] flex items-center justify-center p-8">
+        <div className="text-center max-w-sm">
+          <div className="w-16 h-16 rounded-full border border-[#d9ad55]/40 bg-[#d9ad55]/10 flex items-center justify-center mx-auto mb-6">
+            <ShieldCheck size={32} className="text-[#f3cf7a]" />
+          </div>
+          <h2 className="text-2xl font-bold text-[#f3cf7a] mb-3">Access Restricted</h2>
+          <p className="text-[#a89b86] mb-6">E.A.T. Command requires manager-level access or higher.</p>
+          <button onClick={() => navigate(-1)} className="flex items-center gap-2 mx-auto px-6 py-3 rounded-xl border border-[#d9ad55]/30 bg-[#d9ad55]/10 text-[#f3cf7a] font-bold transition-all hover:bg-[#d9ad55]/20 active:scale-95">
+            ← Go Back
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <motion.div initial="hidden" animate="show" variants={STAGGER}>
+    <div className="relative min-h-screen overflow-hidden bg-[#050403] text-[#f7ead4]">
 
-      {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <motion.div variants={FADE} style={{ position: 'relative', height: 260, background: '#050302', overflow: 'hidden' }}>
-        <img src="/eat-logo-nobg.png" alt=""
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', opacity: 0.50 }}
-        />
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 40%, rgba(212,175,55,0.08) 0%, transparent 65%)' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.0) 30%, rgba(1,1,1,0.95) 100%)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 20px 20px' }}>
-          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>Venue Intelligence System</div>
-          <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 34, color: '#E5E2E1', letterSpacing: '-0.02em', lineHeight: 1 }}>E.A.T. Command</div>
-        </div>
-        <button onClick={() => navigate(-1)} style={{ position: 'absolute', top: 16, left: 16, display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)', cursor: 'pointer', zIndex: 2 }}>
-          <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#D4AF37' }}>arrow_back</span>
-          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase' }}>BACK</span>
-        </button>
-        <div style={{ position: 'absolute', top: 16, right: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)' }}>
-            <span className="status-dot" style={{ width: 6, height: 6 }} />
-            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase' }}>KITCHEN LIVE</span>
+      {/* Cinematic Background */}
+      <div className="absolute inset-0 bg-cover bg-center scale-105"
+        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=90&w=2400')" }}
+      />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(218,165,70,0.26),transparent_30%),linear-gradient(90deg,rgba(0,0,0,0.82),rgba(0,0,0,0.48),rgba(0,0,0,0.86)),linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.92))]" />
+
+      {/* Main 3-column frame */}
+      <div className="relative z-10 grid min-h-screen grid-cols-[104px_320px_minmax(0,1fr)] gap-4 p-4 pb-6">
+
+        {/* ── Icon Rail ─────────────────────────────────────────────── */}
+        <aside className="hidden xl:flex flex-col items-center rounded-[28px] border border-[#d9ad55]/25 bg-black/55 backdrop-blur-2xl shadow-[0_30px_90px_rgba(0,0,0,0.65)]">
+          {/* EAT logo at top of rail */}
+          <div className="mt-5 mb-3 w-16 h-16 flex items-center justify-center">
+            <img src="/eat-logo-nobg.png" alt="E.A.T." style={{ width: 52, height: 52, objectFit: 'contain' }} />
           </div>
-        </div>
-      </motion.div>
-
-      {/* ── Sensor telemetry (unchanged) ─────────────────────────────── */}
-      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
-        <div className="glass-card-gold" style={{ padding: '20px 24px' }}>
-          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>Live Venue Telemetry</div>
-          <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 12 }}>
-            {sensors.map(({ label, value, trend, color }) => (
-              <div key={label} style={{ textAlign: 'center' }}>
-                <div style={{
-                  width: 80, height: 80, borderRadius: '50%', margin: '0 auto 8px',
-                  background: `linear-gradient(135deg, ${color}22, ${color}08)`,
-                  border: `2px solid ${color}44`,
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: `0 0 16px ${color}22`,
-                }}>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 18, color, lineHeight: 1 }}>{value}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: color + '99', marginTop: 2 }}>{trend}</div>
-                </div>
-                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{label}</div>
-              </div>
-            ))}
+          <div className="mb-5 grid h-12 w-12 place-items-center rounded-xl border border-[#d9ad55]/40 bg-[#d9ad55]/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_0_26px_rgba(217,173,85,0.22)]">
+            <ShieldCheck className="text-[#f3cf7a]" size={22} />
           </div>
-        </div>
-      </motion.div>
 
-      {/* ── Fire order (unchanged) ───────────────────────────────────── */}
-      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
-        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
-          Fire Order — Table 3 Active
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {courses.map(({ name, dish, status, statusColor, time, xp }) => (
-            <motion.div key={name} whileTap={{ scale: 0.98 }}>
-              <div className="glass-card" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16, cursor: 'pointer', border: status === 'FIRING' ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(122,122,122,0.2)', boxShadow: status === 'FIRING' ? '0 0 16px rgba(212,175,55,0.1)' : 'none' }}>
-                <div style={{
-                  width: 14, height: 14, borderRadius: '50%', flexShrink: 0,
-                  background: statusColor,
-                  boxShadow: status === 'FIRING' ? `0 0 10px ${statusColor}99` : 'none',
-                  animation: status === 'FIRING' ? 'gold-pulse 1.5s ease-in-out infinite' : 'none',
-                }} />
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>{name}</div>
-                  <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 600, fontSize: 16, color: '#E5E2E1' }}>{dish}</div>
-                </div>
-                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '3px 10px', borderRadius: 20, background: `${statusColor}18`, color: statusColor, border: `1px solid ${statusColor}44`, marginBottom: 4 }}>{status}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A' }}>{time}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF3799', marginTop: 2 }}>+{xp} XP</div>
-                </div>
-              </div>
-            </motion.div>
+          {[<LayoutGrid size={26} />, <Utensils size={26} />, <Clock size={26} />, <Users2 size={26} />, <BarChart3 size={26} />, <MessageSquare size={26} />].map((icon, index) => (
+            <button key={index} className={`haptic-ready mb-4 grid h-[72px] w-[72px] place-items-center rounded-2xl border transition-all active:scale-95 ${
+              index === 0
+                ? 'border-[#f3cf7a]/60 bg-[#d9ad55]/20 text-[#f3cf7a] shadow-[0_0_28px_rgba(217,173,85,0.26)]'
+                : 'border-white/10 bg-white/[0.035] text-[#d8c8ad] hover:border-[#d9ad55]/40 hover:text-[#f3cf7a]'
+            }`}>{icon}</button>
           ))}
-        </div>
-      </motion.div>
 
-      {/* ── Floor map (unchanged) ────────────────────────────────────── */}
-      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
-        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
-          Floor Status
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          {tables.map(({ id, emoji, guests, status, color, spend }) => (
-            <motion.div key={id} whileTap={{ scale: 0.96 }}>
-              <div className="glass-card" style={{ padding: '20px 18px', cursor: 'pointer', border: `1px solid ${color}33`, textAlign: 'center' }}>
-                <div style={{ fontSize: 28, marginBottom: 8 }}>{emoji}</div>
-                <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 18, color: '#E5E2E1', marginBottom: 4 }}>Table {id}</div>
-                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', marginBottom: 8 }}>{guests} guests</div>
-                <div style={{ display: 'inline-flex', padding: '4px 12px', borderRadius: 20, background: `${color}18`, border: `1px solid ${color}44`, fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: spend ? 8 : 0 }}>{status}</div>
-                {spend > 0 && <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 600, fontSize: 20, color: '#D4AF37', display: 'block', marginTop: 8 }}>${spend}</div>}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* ── Experience pacing arc (unchanged) ───────────────────────── */}
-      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
-        <div className="glass-card" style={{ padding: '20px 24px' }}>
-          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20 }}>Experience Arc — Pacing</div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
-            <div style={{ position: 'absolute', left: 20, right: 20, top: 11, height: 2, background: 'rgba(122,122,122,0.1)' }} />
-            {pacingSteps.map(({ label, done }) => (
-              <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, position: 'relative', zIndex: 1 }}>
-                <div style={{
-                  width: 24, height: 24, borderRadius: '50%',
-                  background: done ? '#D4AF37' : '#1A1A1A',
-                  border: `2px solid ${done ? '#D4AF37' : 'rgba(122,122,122,0.3)'}`,
-                  boxShadow: done ? '0 0 12px rgba(212,175,55,0.5)' : 'none',
-                }} />
-                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: done ? '#D4AF37' : '#7A7A7A', textAlign: 'center' }}>{label}</div>
-              </div>
-            ))}
+          {/* Back button at bottom of rail */}
+          <div className="mt-auto mb-5">
+            <button onClick={() => navigate(-1)} className="haptic-ready grid h-[72px] w-[72px] place-items-center rounded-2xl border border-white/10 bg-white/[0.035] text-[#d8c8ad] hover:border-[#d9ad55]/40 hover:text-[#f3cf7a] transition-all active:scale-95" title="Back">
+              <span className="material-symbols-outlined" style={{ fontSize: 26 }}>arrow_back</span>
+            </button>
           </div>
-        </div>
-      </motion.div>
+        </aside>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          PHASE 9 POS 3 FEED SECTIONS — Manager+ only
-      ══════════════════════════════════════════════════════════════════ */}
-
-      {isManager && (
-        <>
-          {/* ── POS 3 Feed Header ────────────────────────────────────── */}
-          <motion.div variants={FADE} style={{ margin: '24px 16px 0' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-              <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 16 }}>point_of_sale</span>
-              <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase' }}>POS 3 Live Feed</span>
-              <div style={{ flex: 1, height: 1, background: 'rgba(212,175,55,0.15)', marginLeft: 8 }} />
+        {/* ── Operations Feed ────────────────────────────────────────── */}
+        <aside className="hidden lg:flex flex-col rounded-[28px] border border-[#d9ad55]/25 bg-black/55 backdrop-blur-2xl shadow-[0_30px_90px_rgba(0,0,0,0.62)]">
+          <div className="border-b border-[#d9ad55]/20 p-5">
+            <div className="flex items-center gap-3">
+              <div className="grid h-12 w-12 place-items-center rounded-xl border border-[#d9ad55]/35 bg-[#d9ad55]/15 overflow-hidden">
+                <img src="/eat-logo-nobg.png" alt="EAT" style={{ width: 36, height: 36, objectFit: 'contain' }} />
+              </div>
+              <div>
+                <h2 className="font-serif text-xl font-bold tracking-wide text-[#f3cf7a]">E.A.T. COMMAND</h2>
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#d9ad55]">Venue OS</p>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
-          {feedLoading && (
-            <motion.div variants={FADE} style={{ margin: '0 16px' }}>
-              <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A', padding: '16px 0' }}>Loading POS 3 feed…</div>
-            </motion.div>
-          )}
+          <div className="flex-1 p-5">
+            <div className="mb-5 flex items-center justify-between">
+              <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[#d9ad55]">Operations Feed</p>
+              <span className="flex items-center gap-2 text-xs text-[#c9f7c5]">
+                <span className="h-2 w-2 rounded-full bg-[#52dd68] shadow-[0_0_16px_rgba(82,221,104,0.8)]" />
+                Live
+              </span>
+            </div>
 
-          {eatFeed && !feedLoading && (
-            <>
-              {/* ── Venue Opportunity Score ──────────────────────────── */}
-              <motion.div variants={FADE} style={{ margin: '0 16px 0' }}>
-                <div className="glass-card-gold" style={{ padding: '20px 24px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div>
-                      <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Venue Opportunity Score</div>
-                      <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 52, color: '#D4AF37', lineHeight: 1 }}>
-                        {eatFeed.opportunityScore}<span style={{ fontSize: 18, color: '#D4AF3799' }}>/100</span>
-                      </div>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                      {[
-                        { label: 'Active Recs',  value: eatFeed.transactions?.upsellOpportunities || 0, color: '#D4AF37' },
-                        { label: 'Inv Alerts',   value: eatFeed.assets?.lowStockCount              || 0, color: '#E07B39' },
-                        { label: 'Open Checks',  value: eatFeed.transactions?.openCheckCount        || 0, color: '#5A9A5A' },
-                        { label: 'Occupancy',    value: `${eatFeed.environment?.occupancyPct || 0}%`, color: '#C88B3A' },
-                      ].map(({ label, value, color }) => (
-                        <div key={label} style={{ padding: '8px 10px', borderRadius: 8, background: 'rgba(212,175,55,0.04)', border: '1px solid rgba(212,175,55,0.12)', textAlign: 'center' }}>
-                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 16, color, marginBottom: 2 }}>{value}</div>
-                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 7, color: '#7A7A7A', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{label}</div>
-                        </div>
-                      ))}
+            <div className="space-y-3">
+              {feedItems.map((item, index) => (
+                <motion.button key={item.label + index}
+                  initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }}
+                  className="haptic-ready w-full rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all hover:border-[#d9ad55]/35 hover:bg-[#d9ad55]/10 active:scale-[0.98]"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`grid h-9 w-9 place-items-center rounded-full border ${
+                      item.status === 'done'
+                        ? 'border-green-400/30 bg-green-500/10 text-green-300'
+                        : item.status === 'doc'
+                        ? 'border-[#d9ad55]/30 bg-[#d9ad55]/10 text-[#f3cf7a]'
+                        : 'border-white/15 bg-black/30 text-[#d8c8ad]'
+                    }`}>
+                      {item.status === 'done' ? <CheckCircle2 size={16} /> : item.status === 'doc' ? <ClipboardList size={16} /> : <Radio size={16} />}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold text-[#f7ead4]">{item.label}</p>
+                      <p className="mt-1 text-xs text-[#a89b86]">{item.sub}</p>
                     </div>
                   </div>
+                </motion.button>
+              ))}
+            </div>
+
+            <button className="haptic-ready mt-5 h-14 w-full rounded-2xl border border-[#d9ad55]/25 bg-black/35 text-sm font-bold text-[#d9ad55] transition-all hover:bg-[#d9ad55]/10 active:scale-[0.98]">
+              Scroll to latest
+            </button>
+          </div>
+
+          <div className="m-5 rounded-3xl border border-[#d9ad55]/25 bg-[#120d06]/75 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.55)]">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#d9ad55]">Operation Queue</p>
+              <span className="grid h-7 w-7 place-items-center rounded-full bg-[#d9ad55]/25 text-xs font-black text-[#f3cf7a]">3</span>
+            </div>
+            <p className="mb-4 text-sm leading-relaxed text-[#f7ead4]/80">Premium tactile command mode active. All systems nominal.</p>
+            <div className="flex gap-2">
+              <button className="haptic-ready h-12 flex-1 rounded-xl border border-white/10 bg-black/40 text-xs font-bold text-[#d8c8ad] active:scale-95">Plan</button>
+              <button className="haptic-ready h-12 w-14 rounded-xl bg-gradient-to-br from-[#f3cf7a] to-[#9c6420] text-black shadow-[0_0_24px_rgba(217,173,85,0.28)] active:scale-95 flex items-center justify-center">
+                <Send size={18} />
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        {/* ── Main Content ───────────────────────────────────────────── */}
+        <main className="col-span-3 lg:col-span-2 xl:col-span-1 overflow-hidden rounded-[32px] border border-[#d9ad55]/25 bg-black/45 backdrop-blur-2xl shadow-[0_35px_120px_rgba(0,0,0,0.72)]">
+
+          {/* Hero Header */}
+          <header className="relative overflow-hidden border-b border-[#d9ad55]/20">
+            <div className="absolute inset-0 bg-cover bg-center opacity-80"
+              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=90&w=1800')" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 to-black/35" />
+
+            <div className="relative z-10 flex min-h-[220px] flex-col justify-between p-6 md:p-8">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  {/* Mobile back button */}
+                  <button onClick={() => navigate(-1)} className="xl:hidden mb-4 flex items-center gap-2 px-4 py-2 rounded-xl border border-[#d9ad55]/30 bg-black/50 text-[#f3cf7a] text-sm font-bold active:scale-95 transition-all">
+                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_back</span>
+                    BACK
+                  </button>
+                  <p className="mb-2 text-[11px] font-black uppercase tracking-[0.36em] text-[#d9ad55]">Venue Intelligence System</p>
+                  <h1 className="font-serif text-5xl font-semibold leading-none text-[#fff5df] md:text-7xl">
+                    E.A.T. <span className="text-[#f3cf7a]">Command</span>
+                  </h1>
+                  <p className="mt-3 flex items-center gap-2 text-sm font-medium text-[#f7ead4]/80 md:text-base">
+                    <span className="h-2 w-2 rounded-full bg-[#f3cf7a]" />
+                    Executive Venue Operations Dashboard
+                  </p>
                 </div>
-              </motion.div>
 
-              {/* ── Environment Feed ─────────────────────────────────── */}
-              <motion.div variants={FADE} style={{ margin: '12px 16px 0' }}>
-                <div className="glass-card" style={{ padding: '20px 24px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-                    <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 16 }}>sensors</span>
-                    <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Environment</span>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                    {[
-                      { label: 'Tables',   value: `${eatFeed.environment?.occupiedTables}/${eatFeed.environment?.tableCount}` },
-                      { label: 'Staff',    value: `${eatFeed.environment?.activeStaff}/${eatFeed.environment?.totalStaff}` },
-                      { label: 'Pressure', value: eatFeed.environment?.venuePressure, color: pressureColor[eatFeed.environment?.venuePressure] },
-                      { label: 'Pace',     value: eatFeed.environment?.servicePace,   color: pressureColor[eatFeed.environment?.servicePace] },
-                      { label: 'Reserved', value: eatFeed.environment?.reservedTables || 0 },
-                      { label: 'Occ %',    value: `${eatFeed.environment?.occupancyPct || 0}%`, color: '#D4AF37' },
-                    ].map(({ label, value, color = '#E5E2E1' }) => (
-                      <div key={label} style={{ padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(122,122,122,0.12)', textAlign: 'center' }}>
-                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 14, color, marginBottom: 2 }}>{value}</div>
-                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 7, color: '#7A7A7A', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{label}</div>
-                      </div>
-                    ))}
-                  </div>
-                  {eatFeed.environment?.zoneBreakdown && (
-                    <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      {Object.entries(eatFeed.environment.zoneBreakdown).map(([zone, data]) => (
-                        <div key={zone} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', width: 90 }}>{zone}</div>
-                          <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'rgba(122,122,122,0.15)', overflow: 'hidden' }}>
-                            <div style={{ height: '100%', borderRadius: 3, background: '#D4AF37', width: `${data.total > 0 ? (data.occupied / data.total) * 100 : 0}%`, transition: 'width 0.5s' }} />
-                          </div>
-                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', width: 36, textAlign: 'right' }}>{data.occupied}/{data.total}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                <div className="flex flex-wrap gap-3">
+                  <TouchButton label="Alerts"    icon={<Bell size={18} />}      badge="3" />
+                  <TouchButton label="Invite"    icon={<UserPlus size={18} />}            />
+                  <TouchButton label="Republish" icon={<Sparkles size={18} />}  gold      />
+                  <button className="haptic-ready grid h-[64px] w-[64px] place-items-center rounded-2xl border border-[#d9ad55]/30 bg-black/45 text-[#f3cf7a] backdrop-blur-xl active:scale-95">
+                    <MoreVertical size={22} />
+                  </button>
                 </div>
-              </motion.div>
-
-              {/* ── Asset Feed ───────────────────────────────────────── */}
-              <motion.div variants={FADE} style={{ margin: '12px 16px 0' }}>
-                <div className="glass-card" style={{ padding: '20px 24px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 16 }}>inventory_2</span>
-                      <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Asset Feed</span>
-                    </div>
-                    {eatFeed.assets?.lowStockCount > 0 && (
-                      <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#E07B39', background: 'rgba(224,123,57,0.12)', padding: '2px 10px', borderRadius: 12, border: '1px solid rgba(224,123,57,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                        {eatFeed.assets.lowStockCount} Alerts
-                      </span>
-                    )}
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {(eatFeed.assets?.reorderAlerts || []).slice(0, 4).map((item, i) => (
-                      <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: 8, background: 'rgba(224,123,57,0.05)', border: '1px solid rgba(224,123,57,0.15)' }}>
-                        <div>
-                          <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 12, color: '#E5E2E1' }}>{item.name}</div>
-                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#7A7A7A' }}>{item.category}</div>
-                        </div>
-                        <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 16, color: item.stock <= 2 ? '#E05A5A' : '#E07B39' }}>{item.stock}</div>
-                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#7A7A7A' }}>min {item.threshold}</div>
-                        </div>
-                      </div>
-                    ))}
-                    {eatFeed.assets?.featuredItems?.slice(0, 2).map((item, i) => (
-                      <div key={`feat-${i}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 8, background: 'rgba(90,154,90,0.04)', border: '1px solid rgba(90,154,90,0.12)' }}>
-                        <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 11, color: '#9A9A9A' }}>{item.name}</div>
-                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#5A9A5A' }}>{item.currentStock} left</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* ── Transaction Feed ─────────────────────────────────── */}
-              <motion.div variants={FADE} style={{ margin: '12px 16px 0' }}>
-                <div className="glass-card" style={{ padding: '20px 24px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-                    <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 16 }}>payments</span>
-                    <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Transaction Feed</span>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 14 }}>
-                    {[
-                      { label: 'Open Checks',    value: eatFeed.transactions?.openCheckCount,           color: '#E5E2E1' },
-                      { label: 'Open Value',     value: `$${eatFeed.transactions?.totalOpenValue || 0}`, color: '#D4AF37' },
-                      { label: 'Avg Check',      value: `$${eatFeed.transactions?.averageCheckValue || 0}`, color: '#C88B3A' },
-                      { label: 'High Value',     value: eatFeed.transactions?.highValueOrders,           color: '#5A9A5A' },
-                    ].map(({ label, value, color }) => (
-                      <div key={label} style={{ padding: '12px 14px', borderRadius: 8, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(122,122,122,0.12)' }}>
-                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 18, color, marginBottom: 4 }}>{value}</div>
-                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#7A7A7A', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{label}</div>
-                      </div>
-                    ))}
-                  </div>
-                  {(eatFeed.transactions?.upsellDetails || []).map((u, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: 8, background: 'rgba(212,175,55,0.04)', border: '1px solid rgba(212,175,55,0.1)', marginBottom: 6 }}>
-                      <div>
-                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', marginBottom: 2 }}>Table {u.table}</div>
-                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#7A7A7A' }}>Upsell opportunity</div>
-                      </div>
-                      <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 14, color: '#D4AF37' }}>${u.currentTotal}</div>
-                    </div>
-                  ))}
-                  {(eatFeed.transactions?.staffOpportunities || []).map(s => (
-                    <div key={s.staffId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 8, background: 'rgba(90,154,90,0.04)', border: '1px solid rgba(90,154,90,0.1)', marginBottom: 4 }}>
-                      <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 12, color: '#E5E2E1' }}>{s.staffName}</div>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#5A9A5A' }}>${s.totalValue}</div>
-                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#7A7A7A' }}>{s.orderCount} orders</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            </>
-          )}
-
-          {!feedLoading && !eatFeed && (
-            <motion.div variants={FADE} style={{ margin: '0 16px' }}>
-              <div className="glass-card" style={{ padding: '20px 24px', textAlign: 'center' }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 32, color: '#7A7A7A', marginBottom: 10, display: 'block' }}>cloud_off</span>
-                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A' }}>POS 3 feed unavailable</div>
               </div>
-            </motion.div>
-          )}
-        </>
-      )}
 
-      <div style={{ height: 32 }} />
-    </motion.div>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <span className="rounded-full border border-green-400/30 bg-green-500/10 px-4 py-2 text-sm font-bold text-green-300">● Live</span>
+                <span className="rounded-full border border-white/10 bg-black/35 px-4 py-2 text-sm font-bold text-[#f7ead4]/80">
+                  {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} · {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                </span>
+                <span className="rounded-full border border-[#d9ad55]/25 bg-[#d9ad55]/10 px-4 py-2 text-sm font-bold text-[#f3cf7a]">Grand Lounge</span>
+              </div>
+            </div>
+          </header>
+
+          <div className="space-y-5 p-5 md:p-6">
+
+            {/* Telemetry */}
+            <section className="rounded-[28px] border border-[#d9ad55]/25 bg-black/50 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-2xl">
+              <div className="mb-5 flex items-center justify-between">
+                <h2 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.26em] text-[#d9ad55]">
+                  <Activity size={16} /> Live Venue Telemetry
+                </h2>
+                <button className="haptic-ready hidden h-12 rounded-2xl border border-[#d9ad55]/25 bg-black/35 px-5 text-sm font-bold text-[#f3cf7a] active:scale-95 md:flex md:items-center md:gap-2">
+                  <BarChart3 size={18} /> View Analytics
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+                {telemetry.map((item, i) => (
+                  <motion.div key={item.label}
+                    initial={{ opacity: 0, y: 16, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: i * 0.08 }}
+                    className="haptic-ready group rounded-3xl border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_55px_rgba(0,0,0,0.48)] transition-all hover:border-[#d9ad55]/40 hover:bg-[#d9ad55]/10 active:scale-[0.98]"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="relative grid h-24 w-24 place-items-center rounded-full border border-[#d9ad55]/30 bg-black/45 shadow-[inset_0_0_30px_rgba(217,173,85,0.12),0_0_30px_rgba(217,173,85,0.12)] flex-shrink-0">
+                        <div className="absolute inset-2 rounded-full border-4 border-[#d9ad55]/35 border-t-[#f3cf7a]" />
+                        <span className="font-serif text-xl font-bold text-[#f3cf7a]">{item.value}</span>
+                      </div>
+                      <div className="min-w-0">
+                        <div className="mb-2 text-[#d9ad55]">{item.icon}</div>
+                        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#f7ead4]/70">{item.label}</p>
+                        <p className={`mt-2 text-sm font-black ${item.change.startsWith('-') ? 'text-[#f3cf7a]' : item.change.startsWith('+') ? 'text-green-300' : 'text-[#a89b86]'}`}>
+                          {item.change}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+
+            {/* Fire Orders */}
+            <section className="rounded-[28px] border border-[#d9ad55]/25 bg-black/50 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-2xl">
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                <h2 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.24em] text-[#d9ad55]">
+                  <Flame size={16} /> Fire Order — Table 3 Active
+                </h2>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-black uppercase tracking-[0.2em] text-sky-300">3 Items</span>
+                  <span className="rounded-full border border-[#d9ad55]/25 bg-[#d9ad55]/10 px-3 py-2 text-xs font-bold text-[#f3cf7a]">Auto Priority</span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {activeOrders.map((order, i) => (
+                  <motion.article key={order.id}
+                    initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.35 + i * 0.08 }}
+                    className="group grid gap-4 rounded-3xl border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.018))] p-4 shadow-[0_20px_55px_rgba(0,0,0,0.5)] transition-all hover:border-[#d9ad55]/35 hover:bg-[#d9ad55]/[0.07] md:grid-cols-[72px_180px_minmax(0,1fr)_150px_280px]"
+                  >
+                    <div className={`grid h-[72px] w-[72px] place-items-center rounded-full border text-2xl font-black flex-shrink-0 ${
+                      order.status === 'FIRING'
+                        ? 'border-[#f3a33a]/50 bg-[#f3a33a]/15 text-[#ffbd67] shadow-[0_0_26px_rgba(243,163,58,0.25)]'
+                        : 'border-green-400/40 bg-green-500/15 text-green-300 shadow-[0_0_26px_rgba(82,221,104,0.16)]'
+                    }`}>
+                      {order.id}
+                    </div>
+
+                    <div className="h-[112px] overflow-hidden rounded-2xl border border-[#d9ad55]/20 bg-black/40">
+                      <img src={order.image} alt={order.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    </div>
+
+                    <div className="flex min-w-0 flex-col justify-center">
+                      <p className="text-[10px] font-black uppercase tracking-[0.24em] text-[#d9ad55]/80">{order.type}</p>
+                      <h3 className="mt-1 font-serif text-2xl font-semibold text-[#fff5df]">{order.title}</h3>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {order.tags.map(tag => (
+                          <span key={tag} className="rounded-full border border-[#d9ad55]/25 bg-[#d9ad55]/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#f3cf7a]">{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col justify-center gap-2">
+                      <span className={`w-fit rounded-full border px-4 py-2 text-xs font-black uppercase tracking-[0.18em] ${
+                        order.status === 'SERVED'
+                          ? 'border-green-400/25 bg-green-500/10 text-green-300'
+                          : 'border-[#f3a33a]/30 bg-[#f3a33a]/10 text-[#ffbd67]'
+                      }`}>
+                        {order.status}
+                      </span>
+                      <p className="text-sm text-[#a89b86]">{order.time}</p>
+                      <p className="text-xs font-black text-[#d9ad55]">{order.xp}</p>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3">
+                      <OrderButton label="Details"    icon={<ClipboardList size={20} />}  />
+                      <OrderButton label="Message"    icon={<MessageSquare size={20} />}  />
+                      <OrderButton label="Mark Again" icon={<RotateCcw size={20} />} gold />
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </section>
+
+            {/* Bottom Command Dock */}
+            <section className="grid gap-4 xl:grid-cols-[1fr_260px]">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+                {dockActions.map(action => (
+                  <button key={action.label} className="haptic-ready min-h-[86px] rounded-3xl border border-[#d9ad55]/25 bg-black/50 p-4 text-left shadow-[0_18px_45px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)] transition-all hover:border-[#f3cf7a]/50 hover:bg-[#d9ad55]/10 active:scale-[0.98]">
+                    <div className="mb-2 text-[#f3cf7a]">{action.icon}</div>
+                    <p className="font-bold text-[#fff5df]">{action.label}</p>
+                    <p className="text-xs text-[#a89b86]">{action.sub}</p>
+                  </button>
+                ))}
+              </div>
+
+              <button className="haptic-ready min-h-[86px] rounded-3xl border border-[#f3cf7a]/45 bg-gradient-to-br from-[#f3cf7a] via-[#d9ad55] to-[#8b5b1f] p-5 text-left text-black shadow-[0_0_40px_rgba(217,173,85,0.28)] transition-all hover:brightness-110 active:scale-[0.98]">
+                <div className="flex items-center gap-4">
+                  <Plus size={34} />
+                  <div>
+                    <p className="font-serif text-2xl font-bold">New Order</p>
+                    <p className="text-sm font-black uppercase tracking-[0.18em] text-black/60">Quick Create</p>
+                  </div>
+                </div>
+              </button>
+            </section>
+
+          </div>
+        </main>
+      </div>
+    </div>
   )
 }
