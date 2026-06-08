@@ -27,9 +27,15 @@ import pos3IntegrationRoutes, {
   syncRouter       as pos3SyncRouter,
 }                            from './routes/pos3IntegrationRoutes.js'
 import voiceRoutes            from './routes/voiceRoutes.js'
-import { errorHandler }  from './middleware/errorHandler.js'
+import deviceRoutes           from './routes/deviceRoutes.js'
+import deploymentRoutes       from './routes/deploymentRoutes.js'
+import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { startPOS3AutoSync }  from './services/pos3AutoSyncService.js'
+import { validateEnv }        from './config/envValidator.js'
+
+// Validate environment variables on startup
+validateEnv()
 
 const app  = express()
 const PORT = parseInt(process.env.PORT || '3001', 10)
@@ -56,6 +62,8 @@ app.use('/api/pos3/providers',    pos3IntegrationRoutes)
 app.use('/api/pos3/eat-feed',     pos3EatFeedRouter)
 app.use('/api/pos3/founder',      pos3FounderRouter)
 app.use('/api/voice',             voiceRoutes)
+app.use('/api/device',            deviceRoutes)
+app.use('/api/deployment',        deploymentRoutes)
 app.use('/api/eat',               eatRoutes)
 app.use('/api/audit',       auditRoutes)
 app.use('/api/admin',       adminRoutes)

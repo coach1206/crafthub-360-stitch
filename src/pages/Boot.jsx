@@ -8,7 +8,10 @@ export default function Boot() {
   const [holding, setHolding] = useState(false)
   const [activating, setActivating] = useState(false)
   const [cursor, setCursor] = useState({ x: -80, y: -80 })
-  const holdTimer = useRef(null)
+  // Phase 11: boot hardening — show fallback button if boot hangs > 8s
+  const [showFallback, setShowFallback] = useState(false)
+  const holdTimer    = useRef(null)
+  const fallbackTimer = useRef(null)
 
   useEffect(() => {
     if (sessionStorage.getItem('novee_booted')) {
@@ -23,8 +26,18 @@ export default function Boot() {
     const onMove = (e) => setCursor({ x: e.clientX - 20, y: e.clientY - 20 })
     document.addEventListener('mousemove', onMove)
     document.body.style.cursor = 'none'
+
+    // Phase 11 boot hardening: if still on boot after 8s, show Activate button prominently
+    fallbackTimer.current = setTimeout(() => {
+      setShowFallback(true)
+      if (import.meta.env.DEV) {
+        console.warn('[NOVEE Boot] Boot animation exceeded 8s — fallback button shown')
+      }
+    }, 8000)
+
     return () => {
       clearTimeout(fadeTimer)
+      clearTimeout(fallbackTimer.current)
       document.removeEventListener('mousemove', onMove)
       document.body.style.cursor = ''
     }
@@ -193,6 +206,59 @@ export default function Boot() {
         style={{ background: "url('https://www.transparenttextures.com/patterns/carbon-fibre.png')" }}
       />
       <div className="pointer-events-none fixed inset-0 z-40 bg-gradient-to-b from-black/20 via-transparent to-black/90" />
+
+      {/* Phase 11: Boot fallback — shown after 8s if still on boot screen */}
+      {showFallback && (
+        <div
+          style={{
+            position:        'fixed',
+            bottom:          '2rem',
+            left:            '50%',
+            transform:       'translateX(-50%)',
+            zIndex:          200,
+            background:      'rgba(5,5,5,0.92)',
+            border:          '1px solid rgba(201,168,76,0.4)',
+            borderRadius:    '12px',
+            padding:         '1.25rem 2rem',
+            textAlign:       'center',
+            backdropFilter:  'blur(12px)',
+            fontFamily:      'Georgia, serif',
+            minWidth:        '320px',
+          }}
+        >
+          <p style={{ color: 'rgba(201,168,76,0.6)', fontSize: '0.78rem', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>
+            NOVEE OS is preparing your experience.
+          </p>
+          <button
+            onClick={() => {
+              clearTimeout(fallbackTimer.current)
+              sessionStorage.setItem('novee_booted', '1')
+              const returnPath = sessionStorage.getItem('novee_boot_return')
+                || loadSession()?.system?.lastVisitedRoute
+                || '/'
+              sessionStorage.removeItem('novee_boot_return')
+              navigate(returnPath, { replace: true })
+            }}
+            style={{
+              background:    '#C9A84C',
+              color:         '#050505',
+              border:        'none',
+              padding:       '0.875rem 2.5rem',
+              borderRadius:  '6px',
+              fontFamily:    'Georgia, serif',
+              fontSize:      '0.88rem',
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              cursor:        'pointer',
+              fontWeight:    600,
+              minHeight:     '52px',
+              width:         '100%',
+            }}
+          >
+            Continue
+          </button>
+        </div>
+      )}
     </div>
   )
 }

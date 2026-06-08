@@ -1,0 +1,45 @@
+{
+  "name": "NOVEE OS",
+  "short_name": "NOVEE",
+  "description": "NOVEE OS — CraftHub 360 Connected Hospitality Intelligence",
+  "display": "standalone",
+  "orientation": "landscape",
+  "theme_color": "#050505",
+  "background_color": "#050505",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "lang": "en",
+  "categories": ["business", "entertainment"],
+  "icons": [
+    {
+      "src": "/icons/novee-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/novee-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Guest Experience",
+      "short_name": "CraftHub",
+      "description": "Enter the guest SmokeCraft journey",
+      "url": "/boot",
+      "icons": [{ "src": "/icons/novee-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Staff POS",
+      "short_name": "POS 3",
+      "description": "Staff point-of-sale terminal",
+      "url": "/staff-login",
+      "icons": [{ "src": "/icons/novee-192.svg", "sizes": "192x192" }]
+    }
+  ]
+}

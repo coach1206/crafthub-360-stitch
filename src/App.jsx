@@ -54,6 +54,13 @@ const FounderControl= lazy(() => import('./pages/FounderControl.jsx'))
 
 import ProtectedRoute  from './components/security/ProtectedRoute.jsx'
 import DevRoleSwitcher from './components/security/DevRoleSwitcher.jsx'
+import KioskShell      from './components/kiosk/KioskShell.jsx'
+
+// ── Phase 11: Kiosk / deployment pages — lazy ─────────────────
+const KioskSetup   = lazy(() => import('./pages/KioskSetup.jsx'))
+const DeviceStatus = lazy(() => import('./pages/DeviceStatus.jsx'))
+const OfflineMode  = lazy(() => import('./pages/OfflineMode.jsx'))
+const InstallHelp  = lazy(() => import('./pages/InstallHelp.jsx'))
 
 /** Premium loading fallback shown while lazy chunks load. */
 function NOVEELoader() {
@@ -116,6 +123,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <RouteTracker />
+      <KioskShell>
       <Suspense fallback={<NOVEELoader />}>
         <Routes>
           {/* ── Boot — always accessible ─────────────────────── */}
@@ -226,6 +234,47 @@ export default function App() {
               </ProtectedRoute>
             } />
 
+            {/* ── Phase 11: Kiosk / Deployment pages ──────────── */}
+
+            {/* /offline — public, no boot required */}
+            <Route path="offline" element={<OfflineMode />} />
+
+            {/* /device-status — staff+ */}
+            <Route path="device-status" element={
+              <ProtectedRoute
+                allowedRoles={['staff','manager','admin','founder_level_0']}
+                loginRoute="/staff-login"
+                loginLabel="Staff Login"
+                lockedMessage="Device status requires staff-level access or higher."
+              >
+                <DeviceStatus />
+              </ProtectedRoute>
+            } />
+
+            {/* /kiosk-setup — manager+ */}
+            <Route path="kiosk-setup" element={
+              <ProtectedRoute
+                allowedRoles={['manager','admin','founder_level_0']}
+                loginRoute="/admin-login"
+                loginLabel="Manager Login"
+                lockedMessage="Kiosk setup requires manager-level access or higher."
+              >
+                <KioskSetup />
+              </ProtectedRoute>
+            } />
+
+            {/* /install-help — manager+ */}
+            <Route path="install-help" element={
+              <ProtectedRoute
+                allowedRoles={['manager','admin','founder_level_0']}
+                loginRoute="/admin-login"
+                loginLabel="Manager Login"
+                lockedMessage="Install help requires manager-level access or higher."
+              >
+                <InstallHelp />
+              </ProtectedRoute>
+            } />
+
             {/* Route aliases */}
             <Route path="craft-hub"    element={<Navigate to="/crafthub" replace />} />
             <Route path="craft-modules" element={<Navigate to="/crafthub" replace />} />
@@ -244,6 +293,7 @@ export default function App() {
 
       {/* Dev-only floating role switcher — stripped in production by import.meta.env.DEV */}
       <DevRoleSwitcher />
+      </KioskShell>
     </BrowserRouter>
   )
 }
