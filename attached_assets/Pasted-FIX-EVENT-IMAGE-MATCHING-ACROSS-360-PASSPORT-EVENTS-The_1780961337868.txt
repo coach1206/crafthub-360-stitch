@@ -1,0 +1,302 @@
+FIX EVENT IMAGE MATCHING ACROSS 360 PASSPORT EVENTS.
+
+The current event cards are using images that do not match the event descriptions.
+
+This is not acceptable.
+
+DO NOT use random lifestyle images.
+DO NOT use generic dark photos.
+DO NOT use leaf images for whiskey events.
+DO NOT use random portraits for networking mixers.
+DO NOT use unrelated object shots just because they look premium.
+DO NOT leave event images disconnected from the event title and description.
+
+OBJECTIVE:
+Every event card must use a relevant, accurate, cinematic image that visually matches the event type, title, venue, and description.
+
+==================================================
+EVENT IMAGE MATCHING RULES
+==================================================
+
+Each event must have:
+
+- eventImageUrl
+- eventImageAlt
+- eventType
+- imageCategory
+- fallbackImage
+- onError fallback
+
+Images must match the meaning of the event.
+
+If the event is:
+Cigar & Cognac Collectors Night
+Use imagery of:
+- premium cigar burning
+- cognac glass
+- cigar lounge table
+- amber lighting
+- luxury smoke atmosphere
+- cigar + cognac together
+
+Do NOT use:
+- random smoke with scissors
+- generic lounge blur only
+- unrelated leaf image
+
+If the event is:
+Capital & Culture Private Dinner
+Use imagery of:
+- private dinner table
+- luxury plated dining
+- executives at dinner
+- candlelit table
+- wine/cognac service
+- private dining room
+
+Do NOT use:
+- random dessert ball
+- cigar leaf
+- empty object closeup with no dinner context
+
+If the event is:
+Whiskey Society Tasting
+Use imagery of:
+- whiskey glasses
+- whiskey bottles
+- tasting flight
+- barrel room
+- warm oak bar
+- premium bourbon/scotch setup
+
+Do NOT use:
+- tobacco leaf
+- cigar-only image
+- generic event crowd
+
+If the event is:
+Business Mixer & Passport Kickoff
+Use imagery of:
+- professionals networking
+- luxury business mixer
+- diverse members talking
+- event lounge atmosphere
+- people scanning QR / exchanging digital passport
+- premium networking room
+
+Do NOT use:
+- random close-up face
+- AI portrait headshot
+- unrelated abstract image
+
+==================================================
+CREATE EVENT IMAGE MAP
+==================================================
+
+Create or update:
+
+src/lib/eventImages.js
+
+Use a clear mapping system like:
+
+const eventImageMap = {
+  cigarCognac: {
+    keywords: ["cigar", "cognac", "smokecraft", "collectors"],
+    imageUrl: "...premium cigar and cognac image...",
+    fallback: "...cigar cognac fallback..."
+  },
+  privateDinner: {
+    keywords: ["dinner", "private", "capital", "culture", "vip"],
+    imageUrl: "...luxury private dinner image...",
+    fallback: "...private dinner fallback..."
+  },
+  whiskeyTasting: {
+    keywords: ["whiskey", "bourbon", "scotch", "tasting"],
+    imageUrl: "...whiskey tasting image...",
+    fallback: "...whiskey fallback..."
+  },
+  businessMixer: {
+    keywords: ["business", "mixer", "networking", "passport kickoff"],
+    imageUrl: "...professional networking event image...",
+    fallback: "...networking fallback..."
+  }
+};
+
+Create a function:
+
+getEventImage(event)
+
+It must:
+- inspect event.title
+- inspect event.category
+- inspect event.description
+- inspect event.type
+- return the best matching event image
+- use fallback if no match
+- never return a broken image
+
+==================================================
+EVENT DATA REQUIREMENTS
+==================================================
+
+Every event object must include:
+
+- id
+- title
+- category
+- type
+- description
+- venue
+- city
+- state
+- date
+- time
+- stampsAvailable
+- attendingCount
+- capacity
+- status
+- eventImageUrl
+- eventImageAlt
+- imageCategory
+
+Example:
+
+Cigar & Cognac Collectors Night:
+imageCategory: cigarCognac
+eventImageAlt: Premium cigar with cognac glass in a luxury lounge
+
+Capital & Culture Private Dinner:
+imageCategory: privateDinner
+eventImageAlt: Private executive dinner with candlelit table and premium service
+
+Whiskey Society Tasting:
+imageCategory: whiskeyTasting
+eventImageAlt: Whiskey tasting flight with bottles in warm barrel room
+
+Business Mixer & Passport Kickoff:
+imageCategory: businessMixer
+eventImageAlt: Diverse professionals networking at a luxury business mixer
+
+==================================================
+FIX EVENT CARD DESIGN
+==================================================
+
+Each event card must show:
+
+- large cinematic image header
+- image must be at least 240px tall on mobile
+- image must be object-cover
+- no broken images
+- no mismatched images
+- dark gradient overlay for readability
+- event category badge
+- date badge
+- event title
+- venue
+- time
+- description
+- stamps available
+- attending count
+- RSVP button
+- See Attendees button
+- View Stamp Rewards button
+
+==================================================
+MAKE EVENT CARDS FUNCTIONAL
+==================================================
+
+Every event card must be clickable and responsive.
+
+On tap:
+- card lifts slightly
+- haptic-ready class triggers
+- open event detail modal or drawer
+
+Event detail modal must show:
+- large matching event image
+- title
+- description
+- venue
+- date/time
+- stamps available
+- attendees
+- RSVP button
+- Scan at Event button
+- View Attendees
+- Add to Calendar
+
+RSVP button must:
+- toggle RSVP state
+- change label from RSVP NOW to ATTENDING
+- show confirmation toast:
+  “You’re attending. This event has been added to your Passport journey.”
+
+==================================================
+IMAGE QUALITY RULES
+==================================================
+
+Images must feel:
+- cinematic
+- warm
+- premium
+- realistic
+- hospitality-focused
+- connected to the event title
+
+Images must not feel:
+- random
+- abstract
+- unrelated
+- cheap
+- placeholder
+- AI headshot only
+- flat stock-photo filler
+
+==================================================
+NO BROKEN IMAGES
+==================================================
+
+Every event image must use:
+
+- onError fallback
+- category fallback
+- eventImageAlt
+
+If the image fails:
+- use matching category fallback
+- never show blank image
+- never show broken image icon
+
+==================================================
+TOUCHSCREEN REQUIREMENTS
+==================================================
+
+Every event card and button must have:
+
+- haptic-ready class
+- tactile-card class
+- tactile-button class for buttons
+- 64px minimum touch target
+- 72px preferred
+- active press state
+- selected/attending state
+- no hover-only behavior
+
+==================================================
+FINAL CHECK
+==================================================
+
+Before saying complete, verify:
+
+1. Cigar & Cognac image shows cigar and cognac.
+2. Capital & Culture image shows private dinner / executive dining.
+3. Whiskey Society image shows whiskey tasting.
+4. Business Mixer image shows people networking.
+5. No event uses unrelated leaf images.
+6. No event uses random portrait closeups.
+7. No broken images appear.
+8. Event cards are clickable.
+9. RSVP works.
+10. Event detail modal opens.
+11. Touchscreen press behavior works.
+12. Event images visually match the descriptions.
