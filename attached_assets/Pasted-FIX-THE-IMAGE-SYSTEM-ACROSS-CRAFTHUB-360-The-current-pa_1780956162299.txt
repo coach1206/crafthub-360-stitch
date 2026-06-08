@@ -1,0 +1,405 @@
+FIX THE IMAGE SYSTEM ACROSS CRAFTHUB 360.
+
+The current pages still have image problems.
+
+Some screens are missing images.
+Some thumbnails are broken.
+Some images are too small.
+Some pages are mostly flat dark panels instead of image-led premium experiences.
+The bottom navigation still uses glyph icons instead of realistic badge medallions.
+
+DO NOT rebuild the whole app.
+DO NOT remove current working routes.
+DO NOT remove the current layout improvements.
+DO NOT leave broken images.
+DO NOT leave glyph icons as the main visual.
+DO NOT use small thumbnail images where a hero image or product image is needed.
+
+This is a global image-system correction pass.
+
+==================================================
+CORE PROBLEM TO FIX
+==================================================
+
+Every CraftHub screen must use a consistent image system.
+
+Create one shared image handling system that controls:
+- hero backgrounds
+- product images
+- badge images
+- passport images
+- card thumbnails
+- fallback images
+- broken image replacement
+- clickable image behavior
+
+No screen should manage images randomly by itself.
+
+==================================================
+GLOBAL IMAGE RULES
+==================================================
+
+Every image must have:
+
+- src
+- alt text
+- fallback image
+- onError fallback handler
+- loading behavior
+- object-fit cover
+- responsive sizing
+- no broken image icon
+- no blank image box
+
+If an image fails, immediately swap to the correct fallback.
+
+Fallback categories:
+- cigar
+- tobacco leaf
+- mentor
+- passport
+- beer
+- wine
+- cocktail
+- whiskey
+- food
+- lounge
+- cellar
+- humidor
+- taproom
+- POS
+- EAT
+- default
+
+==================================================
+CREATE GLOBAL IMAGE FILE
+==================================================
+
+Create or update:
+
+src/lib/craftImages.js
+
+This file must include all image maps and fallbacks.
+
+Example structure:
+
+const craftImages = {
+  backgrounds: {
+    smokecraft: "...",
+    beercraft: "...",
+    winecraft: "...",
+    pourcraft: "...",
+    passport: "...",
+    eat: "...",
+    pos3: "..."
+  },
+  fallbacks: {
+    cigar: "...",
+    leaf: "...",
+    mentor: "...",
+    passport: "...",
+    beer: "...",
+    wine: "...",
+    cocktail: "...",
+    whiskey: "...",
+    food: "...",
+    lounge: "...",
+    cellar: "...",
+    taproom: "...",
+    default: "..."
+  },
+  badges: {
+    home: "...",
+    passport: "...",
+    scan: "...",
+    directory: "...",
+    events: "...",
+    connections: "...",
+    messages: "...",
+    profile: "...",
+    smokecraft: "...",
+    beercraft: "...",
+    pourcraft: "...",
+    winecraft: "...",
+    eat: "...",
+    pos3: "..."
+  }
+}
+
+==================================================
+CREATE RESPONSIVE IMAGE COMPONENT
+==================================================
+
+Create:
+
+src/components/common/CraftImage.jsx
+
+This component must:
+- accept src
+- accept fallback
+- accept type
+- accept alt
+- use onError fallback
+- never show broken image icon
+- support className
+- support object-cover
+- support loading lazy
+- support full bleed hero images
+- support card images
+- support badge images
+
+Use this image component everywhere.
+
+==================================================
+FIX BOTTOM NAVIGATION
+==================================================
+
+The bottom navigation still looks like glyph icons.
+
+Replace bottom nav icons with realistic badge medallions.
+
+Bottom nav items:
+- Home
+- Passport
+- Directory
+- Scan
+- Events
+- Connections
+- Messages
+- Profile
+
+Each item must use a realistic badge image:
+- Home = gold CraftHub crest badge
+- Passport = passport booklet badge
+- Directory = member dossier badge
+- Scan = QR credential badge
+- Events = ticket / invitation badge
+- Connections = network medallion badge
+- Messages = sealed envelope badge
+- Profile = member portrait badge
+
+The Scan button must be:
+- larger
+- centered
+- circular
+- raised
+- glowing
+- haptic-ready
+- tactile-button
+- clickable
+
+No plain glyphs as the main visual.
+
+==================================================
+FIX LEFT SIDEBAR NAVIGATION
+==================================================
+
+The CraftHub ecosystem sidebar must use realistic badge medallions, not glyphs.
+
+Items:
+- SmokeCraft
+- BeerCraft
+- PourCraft
+- WineCraft
+- 360 Passport
+- E.A.T.
+- POS 3
+
+Each must have:
+- realistic badge image
+- label
+- short subtitle
+- active state
+- raised border
+- glow when selected
+- click route
+- haptic-ready
+- tactile-button
+
+No lucide glyph should be the main visible icon.
+
+==================================================
+FIX BEERCRAFT PAGE
+==================================================
+
+Current issue:
+BeerCraft looks like a data dashboard with small weak visuals.
+
+Fix:
+BeerCraft must become an image-led Tap Room experience.
+
+Add:
+- cinematic brewery / taproom hero background
+- beer glass / tap handle imagery
+- live tap cards with beer images
+- keg level visual
+- ABV and IBU
+- beer style
+- tasting notes
+- order button
+- pairing button
+
+Each beer card must show a real beer image:
+- Barrel Stout
+- Gold Haze IPA
+- Amber Protocol
+- Obsidian Lager
+
+If any beer image is missing, use beer fallback.
+
+Every beer card must be clickable:
+- tap opens beer detail modal
+- order from bar
+- save to passport
+- view pairing
+
+==================================================
+FIX WINECRAFT PAGE
+==================================================
+
+Current issue:
+WineCraft uses a strong background but the product cards are too flat and image-poor.
+
+Fix:
+WineCraft must show real wine bottle/card imagery.
+
+Add:
+- cellar background
+- wine bottle images
+- region imagery
+- vintage labels
+- decant/order buttons
+
+Each wine card must show:
+- bottle image
+- wine name
+- region
+- grape blend
+- price
+- rating
+- cellar status
+- order button
+- view details button
+
+If wine image is missing, use wine fallback.
+
+==================================================
+FIX PASSPORT PAGE IMAGES
+==================================================
+
+Passport page is closer but still needs better object imagery below the hero.
+
+Fix:
+- keep realistic passport booklet hero
+- brighten the surrounding panels slightly
+- add passport texture to all section cards
+- replace bottom glyphs with badges
+- Directory card must show member portraits
+- Connections card must show match portraits
+- Events card must show invitation/event images
+- Benefits card must show reward badge imagery
+- Recent Activity must show stamp images, not glyphs
+
+No section should feel like a tiny text panel.
+
+==================================================
+FIX ALL STAMP IMAGES
+==================================================
+
+Stamps must be real stamp visuals, not small icon symbols.
+
+Use stamp-style graphics:
+- Event Stamp
+- Connection Stamp
+- Verified Stamp
+- Craft Stamp
+- VIP Stamp
+- Profile Stamp
+
+Each stamp should look like:
+- ink stamp
+- wax seal
+- passport stamp
+- embossed seal
+
+No glyph-only stamp icons.
+
+==================================================
+FIX SMALL THUMBNAIL ISSUE
+==================================================
+
+Some images are too small and look like broken thumbnails.
+
+Any product, member, passport, beer, wine, cigar, or pairing image must be at least:
+
+- card image height: 160px minimum
+- hero image height: 280px minimum
+- badge image: 48px minimum
+- medallion badge: 64px preferred
+- product detail image: 320px minimum
+
+Do not use tiny 24px or 32px images as main content.
+
+==================================================
+CLICKABLE IMAGE REQUIREMENT
+==================================================
+
+Every image card must be clickable.
+
+Clickable images include:
+- beer cards
+- wine cards
+- cigar cards
+- passport cards
+- member cards
+- event cards
+- connection cards
+- stamp cards
+- sidebar badges
+- bottom nav badges
+
+Each must:
+- open detail
+- navigate
+- select state
+- add to order
+- save to passport
+- or trigger modal
+
+No decorative-only image cards unless they are background images.
+
+==================================================
+TOUCHSCREEN + HAPTIC REQUIREMENT
+==================================================
+
+Every image card, badge, and button must be touchscreen-ready:
+
+- 64px minimum touch target
+- 72px preferred
+- haptic-ready class
+- tactile-button or tactile-card class
+- active press state
+- selected state
+- card lift on touch
+- visible feedback
+- no hover-only behavior
+
+==================================================
+FINAL CHECK
+==================================================
+
+Before saying complete, verify:
+
+1. No broken images anywhere.
+2. No blank image boxes anywhere.
+3. Bottom nav glyphs are replaced by realistic badges.
+4. Sidebar glyphs are replaced by realistic badges.
+5. BeerCraft has real beer/taproom imagery.
+6. WineCraft has real wine/bottle imagery.
+7. Passport lower cards have portraits/stamps/event images.
+8. Stamps look like real stamps, not icons.
+9. Every image card is clickable.
+10. Every image card has fallback handling.
+11. Every image card has haptic/tactile movement.
+12. Pages feel image-led, not flat data panels.
+13. The system still looks premium and cinematic.

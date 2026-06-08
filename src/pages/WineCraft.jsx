@@ -1,16 +1,22 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import ScoreRing from '../components/ScoreRing.jsx'
 import AchievementBadge from '../components/AchievementBadge.jsx'
+import craftImages from '../lib/craftImages.js'
 
 const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
 const STAGGER = { show: { transition: { staggerChildren: 0.08 } } }
 
 const cellar = [
-  { name: 'Opus One 2018',        region: 'Napa Valley', varietal: 'Cab Blend', score: 98, peak: '2028–2040', price: '$320' },
-  { name: 'Barolo Riserva 2016',  region: 'Piedmont',    varietal: 'Nebbiolo',  score: 96, peak: '2026–2035', price: '$185' },
-  { name: 'Pomerol Reserve 2019', region: 'Bordeaux',    varietal: 'Merlot',    score: 94, peak: '2025–2030', price: '$140' },
-  { name: 'Sassicaia 2017',       region: 'Tuscany',     varietal: 'Cab Sauv',  score: 97, peak: '2027–2038', price: '$260' },
+  { name: 'Opus One 2018',        region: 'Napa Valley', varietal: 'Cab Blend', score: 98, peak: '2028–2040', price: '$320',
+    accentColor: '#8B1A3C', img: craftImages.wines.opusOne },
+  { name: 'Barolo Riserva 2016',  region: 'Piedmont',    varietal: 'Nebbiolo',  score: 96, peak: '2026–2035', price: '$185',
+    accentColor: '#6B1414', img: craftImages.wines.barolo },
+  { name: 'Pomerol Reserve 2019', region: 'Bordeaux',    varietal: 'Merlot',    score: 94, peak: '2025–2030', price: '$140',
+    accentColor: '#5C1A2E', img: craftImages.wines.pomerol },
+  { name: 'Sassicaia 2017',       region: 'Tuscany',     varietal: 'Cab Sauv',  score: 97, peak: '2027–2038', price: '$260',
+    accentColor: '#7A2020', img: craftImages.wines.sassicaia },
 ]
 
 const regions = [
@@ -27,31 +33,124 @@ const badges = [
   { icon: '🥇', label: 'Parker 100',  earned: false          },
 ]
 
+function WineCard({ wine }) {
+  const [pressed, setPressed] = useState(false)
+
+  return (
+    <motion.div whileTap={{ scale: 0.96 }} style={{ flexShrink: 0, width: 200, cursor: 'pointer' }}>
+      <div
+        className="glass-card overflow-hidden"
+        style={{ borderRadius: 16, border: `1px solid ${wine.accentColor}44` }}
+        onMouseDown={() => setPressed(true)}
+        onMouseUp={() => setPressed(false)}
+        onTouchStart={() => setPressed(true)}
+        onTouchEnd={() => setPressed(false)}
+      >
+        {/* Wine image */}
+        <div style={{ position: 'relative', height: 160, overflow: 'hidden' }}>
+          <img
+            src={wine.img}
+            alt={wine.name}
+            loading="lazy"
+            onError={e => { e.currentTarget.src = craftImages.fallbacks.wine }}
+            style={{ width:'100%', height:'100%', objectFit:'cover', transition:'transform 0.4s', transform: pressed ? 'scale(1.06)' : 'scale(1)' }}
+          />
+          <div style={{ position:'absolute', inset:0, background:`linear-gradient(to bottom, ${wine.accentColor}22 0%, rgba(6,4,2,0.9) 100%)` }} />
+          {/* Price badge */}
+          <div style={{
+            position:'absolute', top:10, right:10,
+            background:'rgba(6,4,2,0.82)', backdropFilter:'blur(8px)',
+            padding:'4px 10px', borderRadius:20,
+            border:`1px solid ${wine.accentColor}66`,
+          }}>
+            <span style={{ fontFamily:'"Hanken Grotesk",sans-serif', fontWeight:700, fontSize:13, color:'#D4AF37' }}>{wine.price}</span>
+          </div>
+          {/* Region tag */}
+          <div style={{
+            position:'absolute', top:10, left:10,
+            background:'rgba(6,4,2,0.75)', backdropFilter:'blur(8px)',
+            padding:'3px 8px', borderRadius:20,
+            border:`1px solid ${wine.accentColor}44`,
+          }}>
+            <span style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8, color:`${wine.accentColor}dd`, letterSpacing:'0.08em', textTransform:'uppercase', fontWeight:700 }}>{wine.region}</span>
+          </div>
+        </div>
+
+        {/* Card content */}
+        <div style={{ padding: '14px 14px 16px' }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:8 }}>
+            <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ fontFamily:'"Hanken Grotesk",sans-serif', fontWeight:700, fontSize:13, color:'#E5E2E1', lineHeight:1.2, marginBottom:3 }}>{wine.name}</div>
+              <div style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8.5, color:'rgba(212,175,55,0.55)', letterSpacing:'0.05em' }}>{wine.varietal}</div>
+              <div style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8.5, color:'rgba(212,175,55,0.4)', marginTop:2 }}>Peak {wine.peak}</div>
+            </div>
+            <ScoreRing score={wine.score} label="pts" size={52} strokeWidth={4} />
+          </div>
+
+          {/* Cellar status badge */}
+          <div style={{ display:'flex', alignItems:'center', gap:5, marginBottom:10, padding:'5px 8px', borderRadius:8, background:`${wine.accentColor}12`, border:`1px solid ${wine.accentColor}30` }}>
+            <span className="material-symbols-outlined" style={{ fontSize:11, color:wine.accentColor, fontVariationSettings:"'FILL' 1" }}>wine_bar</span>
+            <span style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8, color:`${wine.accentColor}cc`, letterSpacing:'0.08em', textTransform:'uppercase' }}>In Cellar · Available</span>
+          </div>
+
+          {/* Buttons */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:6 }}>
+            {['Decant', 'Order'].map(lbl => (
+              <button
+                key={lbl}
+                onTouchStart={e => e.currentTarget.style.transform='scale(0.93)'}
+                onTouchEnd={e => e.currentTarget.style.transform=''}
+                style={{
+                  height: 38, borderRadius: 8, cursor:'pointer',
+                  background: lbl === 'Decant'
+                    ? `linear-gradient(135deg,${wine.accentColor}cc,${wine.accentColor})`
+                    : 'rgba(212,175,55,0.07)',
+                  border: lbl === 'Order' ? '1px solid rgba(212,175,55,0.22)' : 'none',
+                  fontFamily:'"JetBrains Mono",monospace', fontWeight:700, fontSize:9,
+                  color: lbl === 'Decant' ? 'rgba(255,255,255,0.95)' : '#D4AF37',
+                  letterSpacing:'0.1em', textTransform:'uppercase',
+                  transition:'transform 0.1s',
+                }}
+              >
+                {lbl}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 export default function WineCraft() {
   const navigate = useNavigate()
+
   return (
     <motion.div initial="hidden" animate="show" variants={STAGGER}>
 
       {/* Hero */}
-      <motion.div variants={FADE} style={{ position: 'relative', height: 260 }}>
-        <img src="/winecraft.jpg" alt="WineCraft"
+      <motion.div variants={FADE} style={{ position: 'relative', height: 280 }}>
+        <img
+          src={craftImages.backgrounds.winecraft}
+          alt="WineCraft Cellar"
+          onError={e => { e.currentTarget.src = craftImages.fallbacks.cellar }}
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }}
         />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.0) 30%, rgba(1,1,1,0.95) 100%)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 20px 20px' }}>
-          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>Cellar Management System</div>
-          <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 34, color: '#E5E2E1', letterSpacing: '-0.02em', lineHeight: 1 }}>WineCraft 360</div>
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.0) 20%, rgba(1,1,1,0.97) 100%)' }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 20px 24px' }}>
+          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 5 }}>
+            Cellar Management System · 142 Bottles
+          </div>
+          <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 36, color: '#E5E2E1', letterSpacing: '-0.02em', lineHeight: 1 }}>WineCraft 360</div>
+          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color:'rgba(212,175,55,0.55)', marginTop: 6, letterSpacing:'0.06em' }}>
+            Vintage Selections · Peak Drinking Windows · Cellar Intelligence
+          </div>
         </div>
-        <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} style={{ position: 'absolute', top: 16, left: 16, display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)', cursor: 'pointer', zIndex: 2 }}>
+        <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')}
+          style={{ position: 'absolute', top: 16, left: 16, display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)', cursor: 'pointer', zIndex: 2 }}>
           <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#D4AF37' }}>arrow_back</span>
           <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase' }}>BACK</span>
         </button>
-        <div style={{ position: 'absolute', top: 16, right: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)' }}>
-            <span className="status-dot" style={{ width: 6, height: 6 }} />
-            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase' }}>142 BOTTLES</span>
-          </div>
-        </div>
       </motion.div>
 
       {/* Score + stats */}
@@ -72,27 +171,13 @@ export default function WineCraft() {
         </div>
       </motion.div>
 
-      {/* Cellar cards — horizontal scroll */}
-      <motion.div variants={FADE} style={{ margin: '20px 16px 0' }}>
-        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
+      {/* Wine cellar cards */}
+      <motion.div variants={FADE} style={{ margin: '20px 0 0' }}>
+        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 14, paddingLeft: 16 }}>
           Cellar Selection — Tap to Decant
         </div>
-        <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 8 }}>
-          {cellar.map(({ name, region, varietal, score, peak, price }) => (
-            <motion.div key={name} whileTap={{ scale: 0.96 }}
-              style={{ flexShrink: 0, width: 180, cursor: 'pointer' }}
-            >
-              <div className="glass-card" style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-                <ScoreRing score={score} label="pts" size={84} strokeWidth={7} />
-                <div style={{ textAlign: 'center', width: '100%' }}>
-                  <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 14, color: '#E5E2E1', marginBottom: 4, lineHeight: 1.2 }}>{name}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', marginBottom: 2 }}>{region} · {varietal}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', marginBottom: 8 }}>Peak {peak}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 600, fontSize: 16, color: '#D4AF37' }}>{price}</div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+        <div style={{ display: 'flex', gap: 14, overflowX: 'auto', paddingLeft: 16, paddingRight: 16, paddingBottom: 8, scrollbarWidth:'none' }}>
+          {cellar.map(wine => <WineCard key={wine.name} wine={wine} />)}
         </div>
       </motion.div>
 
@@ -126,7 +211,7 @@ export default function WineCraft() {
       </motion.div>
 
       {/* Achievements */}
-      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
+      <motion.div variants={FADE} style={{ margin: '16px 16px 24px' }}>
         <div className="glass-card" style={{ padding: '20px 24px' }}>
           <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>
             WineCraft Achievements

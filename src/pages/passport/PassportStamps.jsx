@@ -10,31 +10,65 @@ const GOLD = {
   WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text',
 }
 
-function InkStamp({ color, icon, title, type, date, venue, locked, size = 66 }) {
+function InkStamp({ color, icon, title, type, date, locked, size = 66, rotation }) {
+  const rot = rotation || 0
   return (
     <div className="flex flex-col items-center gap-1.5">
-      <div className="relative flex items-center justify-center"
-        style={{
-          width:size, height:size, borderRadius:'50%',
-          border:`3px solid ${locked ? 'rgba(100,80,50,0.2)' : color}`,
-          boxShadow: locked ? 'none' : `0 0 0 2px ${color}35, 0 0 16px ${color}25`,
-          background: locked ? 'rgba(100,80,50,0.04)' : `${color}0c`,
-          opacity: locked ? 0.4 : 1,
-        }}>
-        <div className="absolute rounded-full" style={{ inset:7, border:`1px solid ${locked ? 'rgba(100,80,50,0.15)' : color+'50'}` }} />
-        <span className="material-symbols-outlined" style={{ fontSize:size*0.37, color: locked ? 'rgba(100,80,50,0.3)' : color, ...FILL1 }}>
-          {locked ? 'lock' : icon}
-        </span>
-        {!locked && (
-          <div className="absolute" style={{ bottom:3, right:3, width:17, height:17, borderRadius:'50%', background:color, display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <span className="material-symbols-outlined" style={{ fontSize:10, color:'#fff', ...FILL1 }}>check</span>
-          </div>
-        )}
+      <div style={{ transform:`rotate(${rot}deg)`, transition:'transform 0.2s' }}>
+        <div className="relative flex items-center justify-center"
+          style={{
+            width:size, height:size, borderRadius:'50%',
+            border:`3px solid ${locked ? 'rgba(100,80,50,0.18)' : color}`,
+            boxShadow: locked
+              ? 'none'
+              : `0 0 0 2px ${color}28, 0 0 18px ${color}30, inset 0 1px 0 rgba(255,255,255,0.08)`,
+            background: locked
+              ? 'rgba(100,80,50,0.04)'
+              : `radial-gradient(circle at 40% 35%, ${color}18 0%, ${color}06 70%)`,
+            opacity: locked ? 0.38 : 1,
+          }}>
+          {/* Inner concentric ring — classic stamp feel */}
+          <div className="absolute rounded-full" style={{ inset:5, border:`1.5px solid ${locked ? 'rgba(100,80,50,0.12)' : color+'60'}` }} />
+          <div className="absolute rounded-full" style={{ inset:10, border:`1px dashed ${locked ? 'rgba(100,80,50,0.08)' : color+'30'}` }} />
+
+          {/* Icon — filled and bold */}
+          <span className="material-symbols-outlined" style={{
+            fontSize: size * 0.4,
+            color: locked ? 'rgba(100,80,50,0.25)' : color,
+            ...FILL1,
+            filter: locked ? 'none' : `drop-shadow(0 0 4px ${color}60)`,
+          }}>
+            {locked ? 'lock' : icon}
+          </span>
+
+          {/* Earned check badge */}
+          {!locked && (
+            <div className="absolute" style={{
+              bottom: 2, right: 2, width: 18, height: 18, borderRadius:'50%',
+              background: `linear-gradient(135deg,${color},${color}cc)`,
+              display:'flex', alignItems:'center', justifyContent:'center',
+              boxShadow:`0 1px 6px ${color}60, 0 0 0 1.5px rgba(255,255,255,0.25)`,
+            }}>
+              <span className="material-symbols-outlined" style={{ fontSize:10, color:'#fff', ...FILL1 }}>check</span>
+            </div>
+          )}
+
+          {/* Subtle ink bleed ring for earned */}
+          {!locked && (
+            <div className="absolute rounded-full pointer-events-none" style={{
+              inset: -2,
+              borderRadius:'50%',
+              background:'transparent',
+              boxShadow:`inset 0 0 8px ${color}20`,
+            }} />
+          )}
+        </div>
       </div>
-      <p className="text-center font-bold text-[11px] leading-tight" style={{ color: locked ? 'rgba(100,80,50,0.35)' : '#3d2510' }}>{title}</p>
-      <p className="text-center text-[8.5px] uppercase tracking-wider" style={{ color: locked ? 'rgba(100,80,50,0.22)' : `${color}90` }}>{type}</p>
-      {!locked && date && <p className="text-[8px] text-center" style={{ color:'rgba(80,50,20,0.5)' }}>{date}</p>}
-      {locked && <p className="text-[8px] text-center" style={{ color:'rgba(100,80,50,0.25)' }}>Locked</p>}
+
+      <p className="text-center font-bold text-[11px] leading-tight" style={{ color: locked ? 'rgba(100,80,50,0.3)' : '#3d2510', maxWidth: size + 8 }}>{title}</p>
+      <p className="text-center text-[8.5px] uppercase tracking-wider" style={{ color: locked ? 'rgba(100,80,50,0.18)' : `${color}90` }}>{type}</p>
+      {!locked && date && <p className="text-[8px] text-center" style={{ color:'rgba(80,50,20,0.45)' }}>{date}</p>}
+      {locked && <p className="text-[8px] text-center" style={{ color:'rgba(100,80,50,0.22)' }}>Locked</p>}
     </div>
   )
 }
@@ -195,7 +229,8 @@ export default function PassportStamps() {
               <div className="relative grid grid-cols-3 gap-y-5 gap-x-2">
                 {cat.stamps.map((s, i) => (
                   <InkStamp key={i} color={cat.color} icon={cat.icon}
-                    title={s.title} type={s.type} date={s.date} locked={s.locked} size={62} />
+                    title={s.title} type={s.type} date={s.date} locked={s.locked} size={62}
+                    rotation={s.locked ? 0 : [-3, 2, -1.5, 3, -2, 1][i % 6]} />
                 ))}
               </div>
             </div>

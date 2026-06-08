@@ -1,12 +1,19 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PassportBottomNav from '../../components/PassportBottomNav.jsx'
+import craftImages from '../../lib/craftImages.js'
 
 const FILL1 = { fontVariationSettings:"'FILL' 1" }
 
+const EVENT_IMGS = {
+  cgc: craftImages.events.cigarcognac,
+  ccd: craftImages.fallbacks.food,
+  ws:  craftImages.events.whiskey,
+  bm:  craftImages.events.mixer,
+}
+
 const EVENTS = [
-  {
-    id:'cgc', featured:true, vip:false,
+  { id:'cgc', featured:true, vip:false,
     mon:'JUN', day:'14', year:'2026', time:'7:00 PM',
     title:'Cigar & Cognac Collectors Night',
     venue:'Grand Lounge · New York, NY',
@@ -16,8 +23,7 @@ const EVENTS = [
     rsvpStatus:'attending',
     bg:'#1a0e00', accent:'#ffb74d',
   },
-  {
-    id:'ccd', featured:false, vip:true,
+  { id:'ccd', featured:false, vip:true,
     mon:'JUN', day:'22', year:'2026', time:'6:30 PM',
     title:'Capital & Culture Private Dinner',
     venue:'Bottle House · New York, NY',
@@ -27,8 +33,7 @@ const EVENTS = [
     rsvpStatus:'none',
     bg:'#0a1a00', accent:'#8bc34a',
   },
-  {
-    id:'ws', featured:false, vip:false,
+  { id:'ws', featured:false, vip:false,
     mon:'JUL', day:'5', year:'2026', time:'5:00 PM',
     title:'Whiskey Society Tasting',
     venue:'Barrel Room · Brooklyn, NY',
@@ -38,8 +43,7 @@ const EVENTS = [
     rsvpStatus:'none',
     bg:'#1a0a00', accent:'#ff8f00',
   },
-  {
-    id:'bm', featured:false, vip:false,
+  { id:'bm', featured:false, vip:false,
     mon:'JUL', day:'12', year:'2026', time:'6:00 PM',
     title:'Business Mixer & Passport Kickoff',
     venue:'The Atrium · Manhattan, NY',
@@ -52,7 +56,6 @@ const EVENTS = [
 ]
 
 const CATS = ['All', 'Featured', 'VIP Only', 'Craft', 'Networking', 'Attending']
-
 const RSVP_COLORS = { attending:'#66bb6a', waitlist:'#ffb74d', none:'rgba(255,183,77,0.5)' }
 const RSVP_LABELS = { attending:'Attending ✓', waitlist:'Waitlisted', none:'RSVP Now' }
 
@@ -75,56 +78,31 @@ export default function PassportEvents() {
     <div className="min-h-screen pb-28 overflow-x-hidden"
       style={{ background:'linear-gradient(160deg,#0e0a02,#140e04,#0a0802)' }}>
 
-      {/* Amber lounge ambient */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute inset-0" style={{ background:'radial-gradient(ellipse 70% 45% at 60% 0%, rgba(140,80,10,0.18) 0%, transparent 65%)' }} />
-        <div className="absolute inset-0" style={{ background:'repeating-linear-gradient(45deg,rgba(255,255,255,0.005) 0,rgba(255,255,255,0.005) 1px,transparent 0,transparent 6px)' }} />
       </div>
 
-      {/* ── Header ── */}
+      {/* Header */}
       <header className="sticky top-0 z-50 flex items-center gap-3 px-4 border-b backdrop-blur-2xl"
-        style={{ height:68, background:'rgba(10,7,2,0.97)', borderColor:'rgba(255,183,77,0.2)' }}>
+        style={{ height:68, background:'rgba(12,8,2,0.97)', borderColor:'rgba(255,183,77,0.2)' }}>
         <button onClick={() => navigate('/passport')}
           className="w-10 h-10 flex items-center justify-center rounded-full active:scale-90 transition-transform flex-shrink-0"
           style={{ background:'rgba(255,183,77,0.08)', border:'1px solid rgba(255,183,77,0.2)' }}>
           <span className="material-symbols-outlined" style={{ fontSize:20, color:'#ffb74d' }}>arrow_back</span>
         </button>
         <div className="flex-1">
-          <p className="font-bold text-[16px] leading-none" style={{ color:'#ffd580', fontFamily:'"Playfair Display",serif' }}>Events</p>
-          <p className="text-[9px] uppercase tracking-[0.25em] mt-0.5" style={{ color:'rgba(255,183,77,0.35)' }}>Upcoming passport experiences</p>
+          <p className="font-bold text-[16px] leading-none" style={{ color:'#ffe0b2', fontFamily:'"Playfair Display",serif' }}>Events</p>
+          <p className="text-[9px] uppercase tracking-[0.25em] mt-0.5" style={{ color:'rgba(255,224,178,0.35)' }}>Curated Experiences</p>
         </div>
-        <button onClick={() => navigate('/passport/scan')}
-          className="flex items-center gap-2 px-3 rounded-full active:opacity-70 transition-opacity"
-          style={{ height:40, background:'rgba(255,183,77,0.1)', border:'1px solid rgba(255,183,77,0.25)' }}>
-          <span className="material-symbols-outlined" style={{ fontSize:16, color:'#ffb74d', ...FILL1 }}>qr_code_scanner</span>
-          <span className="text-[11px] font-bold" style={{ color:'#ffb74d' }}>Scan In</span>
-        </button>
+        <div className="px-3 py-1.5 rounded-full"
+          style={{ background:'rgba(255,183,77,0.1)', border:'1px solid rgba(255,183,77,0.25)' }}>
+          <span className="font-bold text-[11px]" style={{ color:'#ffb74d' }}>4 Upcoming</span>
+        </div>
       </header>
 
       <main className="relative z-10 max-w-2xl mx-auto px-4 pt-5 space-y-4">
 
-        {/* ── Invitation folder cover ── */}
-        <section>
-          <div className="rounded-2xl overflow-hidden"
-            style={{ background:'linear-gradient(155deg,#1f1200,#281700,#1a1000)', border:'2px solid rgba(255,183,77,0.3)', boxShadow:'0 10px 40px rgba(0,0,0,0.7)' }}>
-            <div className="absolute inset-0 pointer-events-none" style={{ background:'repeating-linear-gradient(45deg,rgba(255,255,255,0.006) 0,rgba(255,255,255,0.006) 1px,transparent 0,transparent 5px)' }} />
-            <div className="h-1" style={{ background:'linear-gradient(90deg,#5c3000,#ffb74d,#ff8f00,#ffb74d,#5c3000)' }} />
-            <div className="p-5 relative flex items-start gap-4">
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background:'rgba(255,183,77,0.1)', border:'1.5px solid rgba(255,183,77,0.3)', boxShadow:'0 4px 12px rgba(0,0,0,0.4)' }}>
-                <span className="material-symbols-outlined" style={{ fontSize:28, color:'#ffb74d', ...FILL1 }}>event</span>
-              </div>
-              <div>
-                <p className="font-bold text-[20px] leading-none mb-1.5" style={{ color:'#ffd580', fontFamily:'"Playfair Display",serif' }}>Events</p>
-                <p className="text-[11px] leading-relaxed" style={{ color:'rgba(255,183,77,0.45)' }}>
-                  Events are where your passport comes alive. Attend passport-enabled experiences to meet people, earn stamps, and unlock access.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Filter tabs ── */}
+        {/* Category filters */}
         <section>
           <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth:'none' }}>
             {CATS.map(c => (
@@ -134,7 +112,7 @@ export default function PassportEvents() {
                 className="flex-shrink-0 px-4 rounded-full font-bold text-[11px] uppercase tracking-wider active:scale-94 transition-all"
                 style={{
                   height:36,
-                  background: cat === c ? 'rgba(255,183,77,0.18)' : 'rgba(255,255,255,0.04)',
+                  background: cat === c ? 'rgba(255,183,77,0.2)' : 'rgba(255,255,255,0.04)',
                   border: cat === c ? '1.5px solid rgba(255,183,77,0.5)' : '1px solid rgba(255,255,255,0.08)',
                   color: cat === c ? '#ffb74d' : 'rgba(255,255,255,0.4)',
                 }}>
@@ -144,94 +122,95 @@ export default function PassportEvents() {
           </div>
         </section>
 
-        {/* ── Event invitation cards ── */}
+        {/* Event cards */}
         <section className="space-y-4 pb-2">
           {filtered.map(e => (
             <div key={e.id} className="rounded-2xl overflow-hidden"
-              style={{ background:`linear-gradient(155deg,${e.bg},${e.bg}dd)`, border:`1.5px solid ${e.accent}30`, boxShadow:'0 8px 32px rgba(0,0,0,0.65)' }}>
+              style={{ background:`linear-gradient(155deg,${e.bg},${e.bg}dd)`, border:`1px solid ${e.accent}35`, boxShadow:'0 8px 32px rgba(0,0,0,0.6)' }}>
 
-              {/* Featured/VIP badge */}
-              {(e.featured || e.vip) && (
-                <div className="px-4 py-2 flex items-center gap-2"
-                  style={{ background:`${e.accent}10`, borderBottom:`1px solid ${e.accent}20` }}>
-                  <span className="material-symbols-outlined" style={{ fontSize:13, color:e.accent, ...FILL1 }}>{e.vip ? 'workspace_premium' : 'star'}</span>
-                  <span className="text-[9px] uppercase tracking-[0.25em] font-bold" style={{ color:e.accent }}>{e.vip ? 'VIP · Invite Only' : 'Featured Event'}</span>
+              {/* Event hero image */}
+              <div style={{ position:'relative', height: e.featured ? 200 : 140, overflow:'hidden' }}>
+                <img
+                  src={EVENT_IMGS[e.id]}
+                  alt={e.title}
+                  loading="lazy"
+                  onError={ev => { ev.currentTarget.src = craftImages.fallbacks.lounge }}
+                  style={{ width:'100%', height:'100%', objectFit:'cover', filter:'brightness(0.7) saturate(0.8)' }}
+                />
+                <div style={{ position:'absolute', inset:0, background:`linear-gradient(to bottom, ${e.accent}15 0%, rgba(6,4,2,0.88) 100%)` }} />
+
+                {/* Top badges */}
+                <div style={{ position:'absolute', top:12, left:12, display:'flex', gap:6 }}>
+                  {e.featured && (
+                    <div style={{ padding:'3px 10px', borderRadius:20, background:'rgba(6,4,2,0.82)', backdropFilter:'blur(8px)', border:`1px solid ${e.accent}66` }}>
+                      <span style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8, color:e.accent, letterSpacing:'0.12em', textTransform:'uppercase', fontWeight:700 }}>Featured</span>
+                    </div>
+                  )}
+                  {e.vip && (
+                    <div style={{ padding:'3px 10px', borderRadius:20, background:'rgba(6,4,2,0.82)', backdropFilter:'blur(8px)', border:'1px solid rgba(233,193,118,0.5)' }}>
+                      <span style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8, color:'#e9c176', letterSpacing:'0.12em', textTransform:'uppercase', fontWeight:700 }}>VIP Only</span>
+                    </div>
+                  )}
                 </div>
-              )}
 
-              <div className="p-4">
-                {/* Date + title row */}
-                <div className="flex items-start gap-3 mb-3">
-                  {/* Invitation date badge */}
-                  <div className="rounded-xl flex flex-col items-center justify-center flex-shrink-0"
-                    style={{ width:52, height:56, background:`${e.accent}14`, border:`1.5px solid ${e.accent}40`, boxShadow:`0 2px 8px ${e.accent}20` }}>
-                    <span className="text-[9px] font-bold uppercase tracking-wider leading-none" style={{ color:e.accent }}>{e.mon}</span>
-                    <span className="font-black text-[20px] leading-none" style={{ color:e.accent, fontFamily:'"Playfair Display",serif' }}>{e.day}</span>
-                    <span className="text-[8px] leading-none" style={{ color:`${e.accent}70` }}>{e.year}</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-[15px] leading-tight" style={{ color:'#fff5e0', fontFamily:'"Playfair Display",serif' }}>{e.title}</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <span className="material-symbols-outlined" style={{ fontSize:11, color:`${e.accent}70` }}>location_on</span>
-                      <p className="text-[10px]" style={{ color:`${e.accent}70` }}>{e.venue}</p>
-                    </div>
-                    <div className="flex items-center gap-1 mt-0.5">
-                      <span className="material-symbols-outlined" style={{ fontSize:11, color:`${e.accent}50` }}>schedule</span>
-                      <p className="text-[10px]" style={{ color:`${e.accent}55` }}>{e.time}</p>
-                    </div>
+                {/* Date badge */}
+                <div style={{ position:'absolute', top:10, right:12, textAlign:'center' }}>
+                  <div style={{ background:'rgba(6,4,2,0.85)', backdropFilter:'blur(8px)', borderRadius:10, border:`1px solid ${e.accent}44`, padding:'5px 10px', minWidth:50 }}>
+                    <div style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:9, color:e.accent, letterSpacing:'0.1em', textTransform:'uppercase', fontWeight:700 }}>{e.mon}</div>
+                    <div style={{ fontFamily:'"Playfair Display",serif', fontWeight:700, fontSize:22, color:'#fff', lineHeight:1 }}>{e.day}</div>
                   </div>
                 </div>
 
                 {/* Category */}
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3"
-                  style={{ background:`${e.accent}10`, border:`1px solid ${e.accent}30` }}>
-                  <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color:e.accent }}>{e.category}</span>
+                <div style={{ position:'absolute', bottom:10, left:12 }}>
+                  <span style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8, color:`${e.accent}cc`, letterSpacing:'0.1em', textTransform:'uppercase' }}>{e.category}</span>
                 </div>
+              </div>
 
-                {/* Description */}
-                <p className="text-[11px] leading-relaxed mb-3" style={{ color:'rgba(255,230,180,0.5)' }}>{e.desc}</p>
+              {/* Card content */}
+              <div style={{ padding:'16px 16px 18px' }}>
+                <p className="font-bold text-[17px] leading-tight mb-1" style={{ color:'#fff0d8', fontFamily:'"Playfair Display",serif' }}>{e.title}</p>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <span className="material-symbols-outlined" style={{ fontSize:12, color:`${e.accent}88` }}>location_on</span>
+                  <p className="text-[10px]" style={{ color:'rgba(255,255,255,0.4)' }}>{e.venue} · {e.time}</p>
+                </div>
+                <p className="text-[12px] leading-relaxed mb-4" style={{ color:'rgba(255,255,255,0.5)' }}>{e.desc}</p>
 
-                {/* Stamps + attendees row */}
-                <div className="grid grid-cols-3 gap-2 mb-3">
+                {/* Stats row */}
+                <div className="flex gap-3 mb-4">
                   {[
-                    { icon:'workspace_premium', val:`${e.stamps} Stamps`, label:'Available' },
-                    { icon:'people',            val:`${e.attendees} Going`, label:'Attending' },
-                    { icon:'event_seat',        val:`${e.capacity - e.attendees} Left`, label:'Capacity' },
+                    { icon:'workspace_premium', val:`+${e.stamps}`, label:'Stamps' },
+                    { icon:'group', val:`${e.attendees}/${e.capacity}`, label:'Attending' },
                   ].map(s => (
-                    <div key={s.label} className="rounded-xl flex flex-col items-center justify-center gap-0.5 py-2.5"
-                      style={{ background:'rgba(0,0,0,0.25)', border:`1px solid ${e.accent}18` }}>
-                      <span className="material-symbols-outlined" style={{ fontSize:15, color:e.accent, ...FILL1 }}>{s.icon}</span>
-                      <span className="font-bold text-[11px]" style={{ color:'#fff5e0' }}>{s.val}</span>
-                      <span className="text-[8.5px] uppercase tracking-wider" style={{ color:`${e.accent}50` }}>{s.label}</span>
+                    <div key={s.label} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
+                      style={{ background:`${e.accent}10`, border:`1px solid ${e.accent}25` }}>
+                      <span className="material-symbols-outlined" style={{ fontSize:13, color:e.accent, ...FILL1 }}>{s.icon}</span>
+                      <span style={{ fontFamily:'"JetBrains Mono",monospace', fontWeight:700, fontSize:11, color:e.accent }}>{s.val}</span>
+                      <span style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:9, color:`${e.accent}80`, textTransform:'uppercase', letterSpacing:'0.08em' }}>{s.label}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* RSVP + actions */}
-                <div className="grid grid-cols-3 gap-2">
-                  <button
-                    onTouchStart={x => x.currentTarget.style.transform='scale(0.95)'}
-                    onTouchEnd={x => { x.currentTarget.style.transform=''; setRsvp(r => ({ ...r, [e.id]: r[e.id] === 'attending' ? 'none' : 'attending' })) }}
-                    className="col-span-1 flex items-center justify-center rounded-xl font-bold text-[11px] active:scale-95 transition-all"
-                    style={{
-                      height:52,
-                      background: rsvp[e.id] === 'attending' ? `${e.accent}22` : `linear-gradient(135deg,${e.accent},${e.accent}bb)`,
-                      border: `1.5px solid ${e.accent}${rsvp[e.id] === 'attending' ? '50' : ''}`,
-                      color: rsvp[e.id] === 'attending' ? e.accent : '#0a0802',
-                      boxShadow: rsvp[e.id] === 'attending' ? 'none' : `0 3px 14px ${e.accent}30`,
-                    }}>
-                    {RSVP_LABELS[rsvp[e.id]]}
-                  </button>
-                  {['See Attendees','Stamps'].map(lbl => (
-                    <button key={lbl}
-                      onTouchStart={x => x.currentTarget.style.transform='scale(0.95)'}
-                      onTouchEnd={x => x.currentTarget.style.transform=''}
-                      className="flex items-center justify-center rounded-xl font-bold text-[10px] active:scale-95 transition-all"
-                      style={{ height:52, background:`${e.accent}08`, border:`1px solid ${e.accent}22`, color:e.accent }}>
-                      {lbl}
-                    </button>
-                  ))}
-                </div>
+                {/* RSVP button */}
+                <button
+                  onClick={() => setRsvp(prev => ({ ...prev, [e.id]: prev[e.id] === 'none' ? 'attending' : 'none' }))}
+                  onTouchStart={ev => ev.currentTarget.style.transform='scale(0.97)'}
+                  onTouchEnd={ev => ev.currentTarget.style.transform=''}
+                  className="w-full flex items-center justify-center gap-2 rounded-xl font-bold text-[12px] uppercase tracking-wider active:scale-97 transition-all"
+                  style={{
+                    height:52,
+                    background: rsvp[e.id] === 'attending'
+                      ? `linear-gradient(135deg,rgba(102,187,106,0.8),rgba(76,175,80,0.9))`
+                      : `linear-gradient(135deg,${e.accent}cc,${e.accent})`,
+                    color: '#0a0605',
+                    boxShadow: `0 4px 16px ${rsvp[e.id] === 'attending' ? 'rgba(102,187,106,0.35)' : e.accent + '44'}`,
+                    border: 'none',
+                  }}>
+                  <span className="material-symbols-outlined" style={{ fontSize:18, ...FILL1 }}>
+                    {rsvp[e.id] === 'attending' ? 'check_circle' : 'calendar_add_on'}
+                  </span>
+                  {RSVP_LABELS[rsvp[e.id]]}
+                </button>
               </div>
             </div>
           ))}
