@@ -119,7 +119,9 @@ function RouteTracker() {
 
 function BootGuard({ children }) {
   const booted = sessionStorage.getItem('novee_booted')
-  if (!booted) {
+  const devBypass = import.meta.env.DEV && new URLSearchParams(window.location.search).get('preview') === '1'
+  if (devBypass) { sessionStorage.setItem('novee_booted', '1') }
+  if (!booted && !devBypass) {
     const intended = window.location.pathname + window.location.search
     if (intended !== '/boot' && intended !== '/') {
       sessionStorage.setItem('novee_boot_return', intended)
