@@ -249,9 +249,9 @@ export default function Art() {
                   style={{
                     width: '42%',
                     minHeight: 320,
-                    backgroundImage: "url('/smokecraft.jpg')",
+                    backgroundImage: "url('/cigar-anatomy.png')",
                     backgroundSize: 'cover',
-                    backgroundPosition: '62% center',
+                    backgroundPosition: 'center center',
                   }}
                 >
                   {/* gold tint overlay */}
