@@ -5,6 +5,7 @@
 
 import { useState } from 'react'
 import { useAuth }  from '../context/AuthContext.jsx'
+import PinPad       from '../components/ui/PinPad.jsx'
 
 const GOLD   = '#C9A84C'
 const DARK   = '#060402'
@@ -148,20 +149,16 @@ export default function AdminLogin() {
             color:         'rgba(201,168,76,0.4)',
             fontSize:      '10px',
             letterSpacing: '0.18em',
-            marginBottom:  '0.5rem',
+            marginBottom:  '0.75rem',
             textTransform: 'uppercase',
           }}>
             PIN
           </label>
-          <input
-            type="password"
+          <PinPad
             value={pin}
-            onChange={e => { setPin(e.target.value); setError('') }}
-            autoComplete="current-password"
-            inputMode="numeric"
+            onChange={(v) => { setPin(v); setError('') }}
             maxLength={8}
-            placeholder="••••"
-            style={INPUT_STYLE}
+            disabled={loading}
           />
         </div>
 

@@ -6,6 +6,7 @@
 
 import { useState } from 'react'
 import { useAuth }  from '../context/AuthContext.jsx'
+import PinPad       from '../components/ui/PinPad.jsx'
 
 const GOLD   = '#C9A84C'
 const RED    = '#cc3333'
@@ -168,20 +169,16 @@ export default function FounderLogin() {
             color:         'rgba(201,168,76,0.3)',
             fontSize:      '10px',
             letterSpacing: '0.18em',
-            marginBottom:  '0.45rem',
+            marginBottom:  '0.75rem',
             textTransform: 'uppercase',
           }}>
             Founder PIN
           </label>
-          <input
-            type="password"
+          <PinPad
             value={pin}
-            onChange={e => { setPin(e.target.value); clearError() }}
-            autoComplete="off"
-            inputMode="numeric"
+            onChange={(v) => { setPin(v); clearError() }}
             maxLength={8}
-            placeholder="••••"
-            style={INPUT_STYLE}
+            disabled={loading}
           />
         </div>
 
