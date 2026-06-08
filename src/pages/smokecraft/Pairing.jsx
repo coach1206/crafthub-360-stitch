@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { XP_AWARDS } from '../../constants/session.js'
 
 const PAIRINGS = [
   {
@@ -49,24 +50,29 @@ const PROG_BARS = 12
 
 export default function Pairing() {
   const navigate = useNavigate()
-  const { addXP, completeStep, addSmokecraftStamp, addPendingOrder } = useGuestSession()
+  const { addXP, completeStep, addSmokecraftStamp, addPendingOrder, session } = useGuestSession()
 
   const [selectedPairing, setSelectedPairing] = useState(null)
-  const [showStamp, setShowStamp] = useState(true)
+  const [showStamp, setShowStamp] = useState(false)
   const [sideNavOpen, setSideNavOpen] = useState(false)
 
   function handleAddToOrder() {
-    if (selectedPairing) {
-      addPendingOrder({ id: selectedPairing.id, name: selectedPairing.name, type: 'pairing' })
+    if (!selectedPairing) return
+    addPendingOrder({ id: selectedPairing.id, name: selectedPairing.name, type: 'pairing' })
+    if (!session.completedSteps.includes('pairing')) {
+      addXP(XP_AWARDS.PAIRING_COMPLETE)
+      completeStep('pairing')
+      addSmokecraftStamp({ id: 'pairing-specialist', name: 'Pairing Specialist', icon: 'workspace_premium' })
     }
-    addXP(200)
-    completeStep('pairing')
-    addSmokecraftStamp({ id: 'pairing-specialist', name: 'Pairing Specialist', icon: 'workspace_premium' })
+    setShowStamp(true)
     navigate('/smokecraft/available')
   }
 
   function handleContinue() {
-    completeStep('pairing')
+    if (!session.completedSteps.includes('pairing')) {
+      addXP(XP_AWARDS.PAIRING_COMPLETE)
+      completeStep('pairing')
+    }
     navigate('/smokecraft/available')
   }
 
@@ -102,7 +108,7 @@ export default function Pairing() {
         <div className="flex items-center justify-between mb-8">
           <div className="flex flex-col">
             <span className="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-1">Cigar Experience Architect</span>
-            <h2 className="font-headline-lg text-headline-lg text-on-surface">Step 11 of 12: The Art of Pairing</h2>
+            <h2 className="font-headline-lg text-headline-lg text-on-surface">Step 11 of 20: The Art of Pairing</h2>
           </div>
           <div className="flex gap-2">
             {Array.from({ length: PROG_BARS }, (_, i) => (

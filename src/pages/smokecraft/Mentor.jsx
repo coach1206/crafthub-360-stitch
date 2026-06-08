@@ -93,7 +93,7 @@ export default function Mentor() {
           <h1 className="font-headline-md text-headline-md font-bold text-primary drop-shadow-[0_2px_2px_rgba(233,193,118,0.5)]">CraftHub 360</h1>
         </div>
         <div className="flex items-center gap-6">
-          <span className="font-label-lg text-label-lg text-on-surface-variant tracking-widest uppercase opacity-70">Step 6 of 12</span>
+          <span className="font-label-lg text-label-lg text-on-surface-variant tracking-widest uppercase opacity-70">Step 4 of 20</span>
           <button className="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-lg text-label-lg shadow-lg hover:brightness-110 transition-all active:scale-95">
             Grand Lounge
           </button>

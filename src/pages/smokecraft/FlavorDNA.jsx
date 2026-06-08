@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { XP_AWARDS } from '../../constants/session.js'
 
 const CHARACTERS = ['Sweet', 'Spicy', 'Earthy', 'Creamy', 'Woody', 'Peppery']
 const AROMATICS = [
@@ -44,7 +45,7 @@ export default function FlavorDNA() {
 
   function handleFinalize() {
     addSmokecraftStamp({ id: 'taste-profile', name: 'Taste Profile Completion', icon: 'stars' })
-    addXP(150)
+    addXP(XP_AWARDS.FLAVOR_DNA_COMPLETE)
     completeStep('flavor-dna')
     setShowModal(true)
   }
@@ -99,7 +100,7 @@ export default function FlavorDNA() {
         {/* Progress */}
         <div className="mb-12 max-w-3xl mx-auto text-center">
           <div className="flex justify-between items-end mb-4">
-            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em]">Step 7 of 12</p>
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em]">Step 10 of 20</p>
             <p className="text-[16px] text-on-surface-variant italic font-body-md">Sensory Mapping</p>
           </div>
           <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">

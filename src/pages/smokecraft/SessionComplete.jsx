@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { XP_AWARDS } from '../../constants/session.js'
 
 const STAMPS = [
   { icon: 'workspace_premium', label: 'Mentor',      earned: true },
@@ -15,10 +16,12 @@ const TASTE_TAGS = ['Dark Cocoa', 'Cedar Smoke', 'Leather', 'Toasted Almond']
 export default function SessionComplete() {
   const navigate = useNavigate()
   const { session, addXP, completeStep, addSmokecraftStamp } = useGuestSession()
+  const [summarySent, setSummarySent] = useState(false)
 
   useEffect(() => {
+    if (session.completedSteps.includes('session-complete')) return
     completeStep('session-complete')
-    addXP(500)
+    addXP(XP_AWARDS.SESSION_1_COMPLETE)
     addSmokecraftStamp({ id: 'journey-complete', name: 'Journey Complete', icon: 'diamond' })
   }, [])
 
@@ -187,9 +190,13 @@ export default function SessionComplete() {
 
         {/* Action Buttons */}
         <div className="mt-16 flex flex-wrap justify-center gap-6">
-          <button className="px-10 py-5 bg-primary text-on-primary font-headline-md text-headline-md rounded-lg shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-4 gold-foil-inner">
-            <span className="material-symbols-outlined">send</span>
-            Send Summary
+          <button
+            onClick={() => setSummarySent(true)}
+            disabled={summarySent}
+            className={`px-10 py-5 font-headline-md text-headline-md rounded-lg shadow-xl transition-all flex items-center gap-4 gold-foil-inner ${summarySent ? 'bg-surface-container text-on-surface-variant opacity-60 cursor-default' : 'bg-primary text-on-primary hover:scale-105 active:scale-95'}`}
+          >
+            <span className="material-symbols-outlined">{summarySent ? 'check_circle' : 'send'}</span>
+            {summarySent ? 'Summary Sent' : 'Send Summary'}
           </button>
           <button
             onClick={() => navigate('/passport')}

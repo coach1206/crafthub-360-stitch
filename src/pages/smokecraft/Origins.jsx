@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
 
+
 const SEED_PATHS = [
   { label: 'Smooth Starter', desc: 'Gentle introduction with silky, cream-forward genetics.', accent: 'primary', border: true },
   { label: 'Bold Explorer',  desc: 'Robust, full-bodied heirloom strains for the seasoned palate.', accent: null, border: false },
@@ -40,16 +41,22 @@ const SOIL_ROWS = [
 
 export default function Origins() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { completeStep, addXP, addSmokecraftStamp, session } = useGuestSession()
   const [stampVisible, setStampVisible] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
   const [selectedSeed, setSelectedSeed] = useState(null)
   const stampTimers = useRef([])
 
   useEffect(() => {
-    const t1 = setTimeout(() => setStampVisible(true), 2500)
-    const t2 = setTimeout(() => setStampVisible(false), 8500)
-    stampTimers.current = [t1, t2]
+    const alreadyStamped = session.smokecraftStamps?.some(s => s.id === 'seed-soil')
+    if (!alreadyStamped) {
+      const t1 = setTimeout(() => {
+        setStampVisible(true)
+        addSmokecraftStamp({ id: 'seed-soil', name: 'Seed & Soil', icon: 'landscape' })
+      }, 2500)
+      const t2 = setTimeout(() => setStampVisible(false), 8500)
+      stampTimers.current = [t1, t2]
+    }
     return () => stampTimers.current.forEach(clearTimeout)
   }, [])
 
@@ -73,7 +80,7 @@ export default function Origins() {
           <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
         </div>
         <div className="flex items-center gap-6">
-          <span className="font-label-lg text-label-lg text-on-surface-variant">Step 9 of 12</span>
+          <span className="font-label-lg text-label-lg text-on-surface-variant">Step 5 of 20</span>
           <button className="bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-label-lg text-label-lg hover:bg-primary transition-colors active:scale-95">
             Grand Lounge
           </button>

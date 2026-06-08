@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { XP_AWARDS } from '../../constants/session.js'
 
 const CIGARS = [
   {
@@ -65,12 +66,16 @@ export default function Available() {
   const navigate = useNavigate()
   const { addXP, completeStep, addFavorite } = useGuestSession()
   const [selectedCigar, setSelectedCigar] = useState(null)
+  const xpAwarded = useRef(false)
 
   function handleSelect(cigar) {
     setSelectedCigar(cigar.id)
     addFavorite({ id: cigar.id, name: cigar.name, price: cigar.price, type: 'cigar' })
-    addXP(100)
-    completeStep('available')
+    if (!xpAwarded.current) {
+      xpAwarded.current = true
+      addXP(XP_AWARDS.CIGAR_SELECTED)
+      completeStep('available')
+    }
   }
 
   return (
@@ -215,17 +220,16 @@ export default function Available() {
           ))}
         </div>
 
-        {selectedCigar && (
-          <div className="flex justify-center mt-8">
-            <button
-              onClick={() => { completeStep('available'); navigate('/smokecraft/session-complete') }}
-              className="flex items-center gap-3 bg-primary text-on-primary px-12 py-5 rounded-xl font-label-lg uppercase tracking-widest hover:shadow-[0_0_30px_rgba(233,193,118,0.4)] transition-all active:scale-95"
-            >
-              Continue to Session Summary
-              <span className="material-symbols-outlined">arrow_forward</span>
-            </button>
-          </div>
-        )}
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={() => navigate('/smokecraft/session-complete')}
+            disabled={!selectedCigar}
+            className={`flex items-center gap-3 px-12 py-5 rounded-xl font-label-lg uppercase tracking-widest transition-all active:scale-95 ${selectedCigar ? 'bg-primary text-on-primary hover:shadow-[0_0_30px_rgba(233,193,118,0.4)]' : 'bg-surface-container-high text-on-surface-variant opacity-50 cursor-not-allowed'}`}
+          >
+            {selectedCigar ? 'Continue to Session Summary' : 'Select a cigar above to continue'}
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </div>
       </main>
 
       {/* Bottom Navigation (Mobile) */}

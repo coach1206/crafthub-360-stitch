@@ -23,6 +23,7 @@ export const XP_AWARDS = {
   BLEND_CREATED:          150,
   FLAVOR_DNA_COMPLETE:    100,
   PAIRING_COMPLETE:        75,
+  CIGAR_SELECTED:         100,
   POS_ORDERED:             25,
   SESSION_1_COMPLETE:     200,
   TERROIR_COMPLETE:       100,

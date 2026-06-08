@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { XP_AWARDS } from '../../constants/session.js'
 
 const WRAPPERS = [
   {
@@ -56,7 +57,7 @@ export default function Blend() {
   }
 
   function handleSubmit() {
-    addXP(200)
+    addXP(XP_AWARDS.BLEND_CREATED)
     completeStep('blend')
     addSmokecraftStamp({ id: 'master-blend-challenge', name: 'Master Blend', icon: 'token' })
     navigate('/smokecraft/flavor-dna')
