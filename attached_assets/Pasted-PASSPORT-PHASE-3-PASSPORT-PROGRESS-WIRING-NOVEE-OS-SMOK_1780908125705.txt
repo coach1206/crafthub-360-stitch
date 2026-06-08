@@ -1,0 +1,295 @@
+PASSPORT PHASE 3 — PASSPORT PROGRESS WIRING
+NOVEE OS / SMOKECRAFT 360 / 360 PASSPORT CONNECTIONS
+NO REDESIGN. NO NEW SCREENS. NO PLACEHOLDERS. BUILD MUST PASS.
+
+Phase 2 is complete:
+
+* Shared Passport catalog exists at `src/data/passportCatalog.js`
+* PassportStamps imports from shared catalog
+* PassportProfile imports from shared catalog
+* All seals now display correctly
+* Mobile booklet layout fixed
+* Bottom nav locked states fixed
+* Touchscreen CTA sizing verified
+* GuestSessionContext now has `SCHEMA_VERSION = 2`
+* Build passes with zero errors
+
+Now execute Phase 3.
+
+==================================================
+PRIMARY OBJECTIVE
+=================
+
+Create one clean Passport progress system that controls how stamps, XP, badges, completed steps, ceremony unlocks, and Golden Box progress are awarded.
+
+The goal is to stop Passport progress from being scattered across random files.
+
+Do not redesign anything.
+Do not create new screens.
+Do not rename brands.
+Do not remove existing visuals.
+Do not break SmokeCraft.
+Do not break Passport.
+Do not replace the current localStorage system yet.
+Do not add a real backend in this phase.
+
+This phase is backend-ready frontend wiring.
+
+==================================================
+
+1. CREATE A PASSPORT PROGRESS ENGINE
+   ==================================================
+
+Create a shared utility file:
+
+`src/utils/passportProgress.js`
+
+This file should export clean helper functions such as:
+
+* `awardPassportStamp(session, stampId, source)`
+* `hasPassportStamp(session, stampId)`
+* `getEarnedPassportStamps(session)`
+* `getPassportProgress(session)`
+* `calculatePassportRank(session)`
+* `calculatePassportXP(session)`
+* `unlockPassportCeremony(session, stampId)`
+* `recordCompletedStep(session, stepId)`
+* `recordGoldenBoxProgress(session, payload)`
+
+Use the existing session shape from `GuestSessionContext.jsx`.
+
+Do not invent a conflicting state shape.
+
+All functions must be safe:
+
+* no crashes if session is missing
+* no crashes if stamps array is missing
+* no duplicate stamp awards
+* no unknown stamp IDs awarded
+* no malformed completedSteps crashes
+* return predictable updated session objects
+
+==================================================
+2. CONNECT TO SHARED CATALOG
+============================
+
+The progress engine must import from:
+
+`src/data/passportCatalog.js`
+
+Rules:
+
+* A stamp can only be awarded if it exists in `STAMP_CATALOG`.
+* A seal can only display if its stamp exists in the catalog.
+* Unknown IDs should be ignored safely and logged only in development if useful.
+* Duplicate stamp IDs should not be added twice.
+* Earned stamp count must always match the catalog-backed earned stamp list.
+
+==================================================
+3. CONNECT GUESTSESSIONCONTEXT
+==============================
+
+Update `GuestSessionContext.jsx` so it exposes clean Passport actions through context.
+
+Add context actions such as:
+
+* `awardStamp(stampId, source)`
+* `completeStep(stepId)`
+* `unlockCeremony(stampId)`
+* `updateGoldenBoxProgress(payload)`
+* `resetGuestSession()`
+
+These should use the helper functions from `passportProgress.js`.
+
+Do not scatter logic inside page components.
+
+Keep localStorage persistence.
+Keep `SCHEMA_VERSION = 2`.
+Keep stale-data reset protection.
+Keep try/catch JSON safety.
+
+==================================================
+4. UPDATE SMOKECRAFT AWARD POINTS
+=================================
+
+Search for every place SmokeCraft currently awards or references Passport stamps.
+
+Inspect files such as:
+
+* `src/pages/smokecraft/PassportStamp.jsx`
+* `src/pages/smokecraft/Blend.jsx`
+* `src/pages/smokecraft/LeafRecognition.jsx`
+* `src/pages/smokecraft/GoldenBox.jsx`
+* any SmokeCraft session or challenge component
+* any completion button
+* any ceremony trigger
+
+Replace scattered or hardcoded stamp mutation logic with:
+
+`awardStamp(stampId, source)`
+
+Examples:
+
+* Blend challenge should award `master-blend`
+* Leaf recognition should award `leaf-recognition`
+* Golden Box should award `golden-box`
+* SmokeCraft session completion should award the correct catalog-backed stamp
+
+Do not change the visual screens unless required for functionality.
+
+==================================================
+5. UPDATE PASSPORT DISPLAYS TO USE ENGINE RESULTS
+=================================================
+
+Update Passport pages so display logic reads from the unified session/progress state.
+
+Check:
+
+* PassportStamps
+* PassportProfile
+* PassportCeremony
+* PassportConnection
+* PassportStamp
+
+Make sure:
+
+* earned stamps show correctly
+* locked stamps remain locked
+* profile seals match earned stamps
+* ceremony uses the latest awarded stamp when possible
+* progress count is consistent across screens
+* rank or XP does not show fake mismatched numbers
+
+==================================================
+6. CEREMONY UNLOCK LOGIC
+========================
+
+Add clean ceremony unlock behavior.
+
+Rules:
+
+* If a stamp is awarded, ceremony can unlock for that stamp.
+* Ceremony page should know which stamp triggered it if available.
+* If no latest stamp exists, ceremony should safely show current overall progress instead of crashing.
+* No blank ceremony screen.
+* No undefined title.
+* No missing image/icon crashes.
+
+==================================================
+7. GOLDEN BOX PROGRESS
+======================
+
+If Golden Box is already present, wire it into the same progress engine.
+
+Rules:
+
+* Golden Box progress should live in session state.
+* Golden Box completion should award `golden-box`.
+* Golden Box status should survive refresh.
+* Golden Box should not duplicate stamp awards.
+* If Golden Box files are not present, do not create a new screen. Just prepare safe progress support.
+
+==================================================
+8. TOUCHSCREEN SAFETY
+=====================
+
+Do not reduce CTA sizes.
+
+Keep:
+
+* main CTAs at least 72px tall
+* nav/back buttons at least 48px minimum
+* no hover-only actions
+* no tiny clickable targets
+* no dead tap zones
+
+==================================================
+9. TESTING REQUIREMENTS
+=======================
+
+Run these tests manually in the app:
+
+1. Start a fresh guest session.
+2. Complete a SmokeCraft step.
+3. Confirm correct stamp award.
+4. Open PassportStamps.
+5. Confirm stamp appears.
+6. Open PassportProfile.
+7. Confirm seal appears.
+8. Open PassportCeremony.
+9. Confirm correct ceremony state.
+10. Refresh browser.
+11. Confirm progress persists.
+12. Repeat same action.
+13. Confirm duplicate stamp is not added.
+14. Click locked nav buttons.
+15. Confirm they do not route to `/`.
+
+Then run:
+
+`npm run build`
+
+Fix all errors before reporting done.
+
+==================================================
+10. REQUIRED FINAL REPORT
+=========================
+
+Return this exact report:
+
+PASSPORT PHASE 3 PROGRESS WIRING REPORT
+
+1. Files changed:
+
+* list all changed files
+
+2. New utility created:
+
+* `src/utils/passportProgress.js`: yes/no
+
+3. Context actions added:
+
+* awardStamp:
+* completeStep:
+* unlockCeremony:
+* updateGoldenBoxProgress:
+* resetGuestSession:
+
+4. Stamp award points updated:
+
+* Blend:
+* Leaf Recognition:
+* Golden Box:
+* SmokeCraft session completion:
+* Other:
+
+5. Duplicate protection:
+   Pass/Fail
+   Notes:
+
+6. Unknown stamp ID protection:
+   Pass/Fail
+   Notes:
+
+7. Ceremony unlock:
+   Pass/Fail
+   Notes:
+
+8. localStorage persistence:
+   Pass/Fail
+   Refresh test:
+   Schema guard:
+
+9. Touchscreen integrity:
+   Pass/Fail
+   Main CTAs still 72px:
+   Nav/back buttons:
+
+10. Build status:
+    `npm run build`:
+    Console errors:
+    Warnings:
+
+11. Remaining issues:
+    Only list real issues.
+    Do not invent future features.

@@ -50,7 +50,7 @@ const PROG_BARS = 12
 
 export default function Pairing() {
   const navigate = useNavigate()
-  const { addXP, completeStep, addSmokecraftStamp, addPendingOrder, session } = useGuestSession()
+  const { addXP, completeStep, awardStamp, addPendingOrder, session } = useGuestSession()
 
   const [selectedPairing, setSelectedPairing] = useState(null)
   const [showStamp, setShowStamp] = useState(false)
@@ -62,7 +62,7 @@ export default function Pairing() {
     if (!session.completedSteps.includes('pairing')) {
       addXP(XP_AWARDS.PAIRING_COMPLETE)
       completeStep('pairing')
-      addSmokecraftStamp({ id: 'pairing-specialist', name: 'Pairing Specialist', icon: 'workspace_premium' })
+      awardStamp('pairing-specialist', 'pairing')
     }
     setShowStamp(true)
     navigate('/smokecraft/available')

@@ -172,7 +172,7 @@ function TierCard({ tier, isUnlocked, isActive, onSelect, selected }) {
 
 export default function GoldenBoxStatus() {
   const navigate = useNavigate()
-  const { session, addXP, addBadge, addSmokecraftStamp, completeStep } = useGuestSession()
+  const { session, addXP, addBadge, awardStamp, updateGoldenBoxProgress, completeStep } = useGuestSession()
 
   const [mounted,   setMounted]   = useState(false)
   const [selected,  setSelected]  = useState(null)
@@ -205,7 +205,8 @@ export default function GoldenBoxStatus() {
     setClaimed(true)
     addXP(50)
     addBadge({ id: `golden-box-${currentTier.id}`, name: currentTier.badge, icon: currentTier.icon })
-    addSmokecraftStamp({ id: 'golden-box', name: 'Golden Box Claimed', icon: 'inventory_2' })
+    awardStamp('golden-box', 'golden-box-status')
+    updateGoldenBoxProgress({ tier: currentTier.id, claimed: true, badge: currentTier.badge })
     completeStep('golden-box-status')
     setTimeout(() => navigate('/smokecraft/passport-stamp'), 600)
   }

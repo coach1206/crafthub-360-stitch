@@ -41,7 +41,7 @@ const SOIL_ROWS = [
 
 export default function Origins() {
   const navigate = useNavigate()
-  const { completeStep, addXP, addSmokecraftStamp, session } = useGuestSession()
+  const { completeStep, addXP, awardStamp, session } = useGuestSession()
   const [stampVisible, setStampVisible] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
   const [selectedSeed, setSelectedSeed] = useState(null)
@@ -52,7 +52,7 @@ export default function Origins() {
     if (!alreadyStamped) {
       const t1 = setTimeout(() => {
         setStampVisible(true)
-        addSmokecraftStamp({ id: 'seed-soil', name: 'Seed & Soil', icon: 'landscape' })
+        awardStamp('seed-soil', 'origins')
       }, 2500)
       const t2 = setTimeout(() => setStampVisible(false), 8500)
       stampTimers.current = [t1, t2]

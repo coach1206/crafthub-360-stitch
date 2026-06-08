@@ -42,7 +42,7 @@ const FILLERS = [
 
 export default function Blend() {
   const navigate = useNavigate()
-  const { addXP, completeStep, addSmokecraftStamp } = useGuestSession()
+  const { addXP, completeStep, awardStamp } = useGuestSession()
 
   const [selectedWrapper, setSelectedWrapper] = useState(0)
   const [selectedBinder, setSelectedBinder] = useState(0)
@@ -59,7 +59,7 @@ export default function Blend() {
   function handleSubmit() {
     addXP(XP_AWARDS.BLEND_CREATED)
     completeStep('blend')
-    addSmokecraftStamp({ id: 'master-blend', name: 'Master Blend', icon: 'token' })
+    awardStamp('master-blend', 'blend')
     navigate('/smokecraft/flavor-dna')
   }
 

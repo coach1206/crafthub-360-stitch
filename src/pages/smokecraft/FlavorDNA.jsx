@@ -24,7 +24,7 @@ const OCCASIONS = [
 
 export default function FlavorDNA() {
   const navigate = useNavigate()
-  const { addXP, completeStep, addSmokecraftStamp } = useGuestSession()
+  const { addXP, completeStep, awardStamp } = useGuestSession()
 
   const [intensity, setIntensity] = useState(null)
   const [characters, setCharacters] = useState(new Set())
@@ -44,7 +44,7 @@ export default function FlavorDNA() {
   }
 
   function handleFinalize() {
-    addSmokecraftStamp({ id: 'taste-profile', name: 'Taste Profile Completion', icon: 'stars' })
+    awardStamp('taste-profile', 'flavor-dna')
     addXP(XP_AWARDS.FLAVOR_DNA_COMPLETE)
     completeStep('flavor-dna')
     setShowModal(true)

@@ -84,7 +84,7 @@ function EmptySlot({ label }) {
 
 export default function PassportStamp() {
   const navigate = useNavigate()
-  const { session, addXP, completeStep, addSmokecraftStamp, addBadge } = useGuestSession()
+  const { session, addXP, completeStep, awardStamp, addBadge } = useGuestSession()
   const [revealed, setRevealed] = useState(false)
 
   useEffect(() => {
@@ -96,7 +96,7 @@ export default function PassportStamp() {
     if (session.completedSteps.includes('passport-stamp')) return
     completeStep('passport-stamp')
     addXP(XP_AWARDS.PASSPORT_STAMP)
-    addSmokecraftStamp({ id: 'passport-stamp', name: 'Passport Certified', icon: 'verified_user' })
+    awardStamp('passport-stamp', 'passport-stamp')
     addBadge({ id: 'passport-certified', label: 'Passport Certified', icon: 'menu_book' })
   }, [])
 

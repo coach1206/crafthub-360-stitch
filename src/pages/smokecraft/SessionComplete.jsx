@@ -15,14 +15,14 @@ const TASTE_TAGS = ['Dark Cocoa', 'Cedar Smoke', 'Leather', 'Toasted Almond']
 
 export default function SessionComplete() {
   const navigate = useNavigate()
-  const { session, addXP, completeStep, addSmokecraftStamp } = useGuestSession()
+  const { session, addXP, completeStep, awardStamp } = useGuestSession()
   const [summarySent, setSummarySent] = useState(false)
 
   useEffect(() => {
     if (session.completedSteps.includes('session-complete')) return
     completeStep('session-complete')
     addXP(XP_AWARDS.SESSION_1_COMPLETE)
-    addSmokecraftStamp({ id: 'journey-complete', name: 'Journey Complete', icon: 'diamond' })
+    awardStamp('journey-complete', 'session-complete')
   }, [])
 
   const FILL1 = { fontVariationSettings: "'FILL' 1" }

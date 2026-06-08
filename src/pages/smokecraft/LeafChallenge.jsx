@@ -29,7 +29,7 @@ function getResultsData(score) {
 
 export default function LeafChallenge() {
   const navigate = useNavigate()
-  const { addXP, addBadge, addSmokecraftStamp, completeStep } = useGuestSession()
+  const { addXP, addBadge, awardStamp, completeStep } = useGuestSession()
   const timerRef = useRef(null)
 
   const [phase,           setPhase]           = useState('challenge')  // 'challenge' | 'results'
@@ -83,7 +83,7 @@ export default function LeafChallenge() {
         if (finalScore === 5) {
           addBadge({ id: 'leaf-scholar', name: 'Leaf Scholar', icon: 'eco' })
         }
-        addSmokecraftStamp({ id: 'leaf-recognition', name: 'Leaf Recognition', icon: 'eco' })
+        awardStamp('leaf-recognition', 'leaf-challenge')
         completeStep('leaf-challenge')
       }
     }, 2000)
