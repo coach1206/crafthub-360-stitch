@@ -226,7 +226,7 @@ export default function GoldenBoxStatus() {
       {/* Top App Bar */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/20">
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-primary text-[22px]" style={FILL1}>shield_person</span>
+          <button onClick={() => navigate(-1)} className="material-symbols-outlined text-primary p-2 hover:bg-surface-variant/50 transition-colors rounded-full active:scale-95">arrow_back</button>
           <span className="font-headline-md text-[18px] font-bold text-primary tracking-tighter">CRAFTHUB 360</span>
         </div>
         <div className="flex items-center gap-4">

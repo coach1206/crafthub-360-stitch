@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import ScoreRing from '../components/ScoreRing.jsx'
 import { useSecurity } from '../context/SecurityContext.jsx'
@@ -40,6 +41,7 @@ const pacingSteps = [
 const pressureColor = { HIGH: '#E05A5A', MEDIUM: '#D4AF37', LOW: '#5A9A5A', STRETCHED: '#E05A5A', BUSY: '#D4AF37', NORMAL: '#5A9A5A', LIGHT: '#5A9A5A', UNKNOWN: '#7A7A7A' }
 
 export default function EATCommand() {
+  const navigate = useNavigate()
   const { role } = useSecurity()
   const isManager = ['manager','admin','founder_level_0'].includes(role)
 
@@ -69,6 +71,10 @@ export default function EATCommand() {
           <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>Venue Intelligence System</div>
           <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 34, color: '#E5E2E1', letterSpacing: '-0.02em', lineHeight: 1 }}>E.A.T. Command</div>
         </div>
+        <button onClick={() => navigate(-1)} style={{ position: 'absolute', top: 16, left: 16, display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)', cursor: 'pointer', zIndex: 2 }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#D4AF37' }}>arrow_back</span>
+          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.1em', textTransform: 'uppercase' }}>BACK</span>
+        </button>
         <div style={{ position: 'absolute', top: 16, right: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(1,1,1,0.7)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)' }}>
             <span className="status-dot" style={{ width: 6, height: 6 }} />

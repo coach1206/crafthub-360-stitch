@@ -69,8 +69,8 @@ export default function Enroll() {
         <div className="flex items-center gap-4">
           <button
             className="material-symbols-outlined text-primary hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 duration-200"
-            onClick={() => navigate('/smokecraft')}
-          >menu</button>
+            onClick={() => navigate(-1)}
+          >arrow_back</button>
           <h1 className="font-headline-md text-headline-md font-bold text-primary drop-shadow-[0_2px_2px_rgba(233,193,118,0.5)]">CraftHub 360</h1>
         </div>
         <div className="flex items-center gap-4">

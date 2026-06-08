@@ -73,9 +73,9 @@ export default function Origins() {
         <div className="flex items-center gap-4">
           <button
             className="p-2 hover:bg-surface-variant/50 transition-colors duration-300 rounded-full active:scale-95"
-            onClick={() => setNavOpen(true)}
+            onClick={() => navigate(-1)}
           >
-            <span className="material-symbols-outlined text-primary">menu</span>
+            <span className="material-symbols-outlined text-primary">arrow_back</span>
           </button>
           <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
         </div>

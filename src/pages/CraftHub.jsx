@@ -90,7 +90,7 @@ export default function CraftHub() {
               onClick={() => navigate('/')}
               aria-label="Back to Lounge"
             >
-              menu
+              arrow_back
             </button>
           </div>
 

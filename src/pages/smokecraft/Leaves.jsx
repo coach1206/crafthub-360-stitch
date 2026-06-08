@@ -235,7 +235,7 @@ export default function Leaves() {
       {/* Top App Bar */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/20">
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-primary cursor-pointer p-2 hover:bg-surface-variant/50 rounded-full transition-colors">menu</span>
+          <button onClick={() => navigate(-1)} className="material-symbols-outlined text-primary cursor-pointer p-2 hover:bg-surface-variant/50 rounded-full transition-colors active:scale-95">arrow_back</button>
           <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight" style={{ fontSize: '18px' }}>
             CraftHub 360
           </h1>
