@@ -239,13 +239,160 @@ export default function Art() {
             className={`lg:col-span-5 lg:sticky lg:top-28 transition-all duration-700 ease-out ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
             style={{ transitionDelay: '240ms' }}
           >
-            <div className="glass-panel rounded-2xl overflow-hidden titanium-border">
-              <img
-                src="/cigar-anatomy.png"
-                alt="Cigar Anatomy"
-                className="w-full block"
-                style={{ display: 'block', width: '100%', height: 'auto' }}
-              />
+            <div className="glass-panel rounded-2xl overflow-hidden titanium-border" style={{ background: '#0b0804' }}>
+
+              {/* ── Header ─────────────────────────────────────── */}
+              <div className="pt-6 pb-2 text-center">
+                <p className="font-label-sm text-[11px] uppercase tracking-[0.32em] text-primary">Cigar Anatomy</p>
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <div className="h-px w-12" style={{ background: 'linear-gradient(to right, transparent, rgba(233,193,118,0.5))' }} />
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+                  <div className="h-px w-12" style={{ background: 'linear-gradient(to left, transparent, rgba(233,193,118,0.5))' }} />
+                </div>
+              </div>
+
+              {/* ── Cigar + Labels ─────────────────────────────── */}
+              <div className="flex items-stretch justify-center px-6 pt-4 pb-2" style={{ gap: 0 }}>
+
+                {/* Cigar SVG */}
+                <div className="flex-shrink-0" style={{ width: 110 }}>
+                  <svg viewBox="0 0 110 400" width="110" height="400" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="capGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#c8903a" />
+                        <stop offset="40%" stopColor="#f0cf7a" />
+                        <stop offset="100%" stopColor="#9a6820" />
+                      </linearGradient>
+                      <linearGradient id="wrapperGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#b87d2a" />
+                        <stop offset="35%" stopColor="#e8c060" />
+                        <stop offset="65%" stopColor="#d4a840" />
+                        <stop offset="100%" stopColor="#8a5c18" />
+                      </linearGradient>
+                      <linearGradient id="binderGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#7a5018" />
+                        <stop offset="35%" stopColor="#c08030" />
+                        <stop offset="65%" stopColor="#a06820" />
+                        <stop offset="100%" stopColor="#5a3810" />
+                      </linearGradient>
+                      <linearGradient id="fillerGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#3a2008" />
+                        <stop offset="35%" stopColor="#6a4018" />
+                        <stop offset="65%" stopColor="#503010" />
+                        <stop offset="100%" stopColor="#281408" />
+                      </linearGradient>
+                      <linearGradient id="shineLeft" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="rgba(255,255,255,0.18)" />
+                        <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+                      </linearGradient>
+                      <linearGradient id="shineRight" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="rgba(0,0,0,0)" />
+                        <stop offset="100%" stopColor="rgba(0,0,0,0.35)" />
+                      </linearGradient>
+                      <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                      </filter>
+                    </defs>
+
+                    {/* Cap — rounded top */}
+                    <path d="M28,52 Q28,10 55,4 Q82,10 82,52 Z" fill="url(#capGrad)" />
+                    <path d="M28,52 Q28,10 55,4 Q82,10 82,52 Z" fill="url(#shineLeft)" opacity="0.5" />
+
+                    {/* Wrapper zone */}
+                    <rect x="28" y="50" width="54" height="130" fill="url(#wrapperGrad)" />
+                    <rect x="28" y="50" width="12" height="130" fill="url(#shineLeft)" />
+                    <rect x="28" y="50" width="54" height="130" fill="url(#shineRight)" />
+                    {/* Wrapper band ring */}
+                    <rect x="28" y="155" width="54" height="8" fill="#2a1800" opacity="0.6" />
+                    <rect x="28" y="156" width="54" height="2" fill="rgba(233,193,118,0.5)" />
+                    <rect x="28" y="160" width="54" height="2" fill="rgba(233,193,118,0.3)" />
+
+                    {/* Binder zone */}
+                    <rect x="28" y="178" width="54" height="110" fill="url(#binderGrad)" />
+                    <rect x="28" y="178" width="12" height="110" fill="url(#shineLeft)" />
+                    <rect x="28" y="178" width="54" height="110" fill="url(#shineRight)" />
+                    {/* Subtle seam */}
+                    <rect x="28" y="178" width="54" height="1" fill="rgba(233,193,118,0.2)" />
+
+                    {/* Filler zone */}
+                    <rect x="28" y="288" width="54" height="90" fill="url(#fillerGrad)" />
+                    <rect x="28" y="288" width="12" height="90" fill="url(#shineLeft)" />
+                    <rect x="28" y="288" width="54" height="90" fill="url(#shineRight)" />
+                    <rect x="28" y="288" width="54" height="1" fill="rgba(233,193,118,0.15)" />
+
+                    {/* Foot */}
+                    <rect x="28" y="378" width="54" height="6" fill="#1a0c04" />
+                    <rect x="28" y="378" width="54" height="1" fill="rgba(233,193,118,0.35)" />
+
+                    {/* Left highlight edge */}
+                    <rect x="28" y="50" width="2" height="328" fill="rgba(255,255,255,0.1)" />
+                    {/* Right shadow edge */}
+                    <rect x="80" y="50" width="2" height="328" fill="rgba(0,0,0,0.3)" />
+
+                    {/* Annotation dots + lines — Wrapper */}
+                    <circle cx="82" cy="115" r="3.5" fill="#e9c176" filter="url(#glow)" />
+                    <line x1="82" y1="115" x2="110" y2="115" stroke="rgba(233,193,118,0.55)" strokeWidth="1" />
+
+                    {/* Annotation dots + lines — Binder */}
+                    <circle cx="82" cy="233" r="3.5" fill="#c5a059" filter="url(#glow)" />
+                    <line x1="82" y1="233" x2="110" y2="233" stroke="rgba(197,160,89,0.55)" strokeWidth="1" />
+
+                    {/* Annotation dots + lines — Filler */}
+                    <circle cx="82" cy="333" r="3.5" fill="#9a7030" filter="url(#glow)" />
+                    <line x1="82" y1="333" x2="110" y2="333" stroke="rgba(154,112,48,0.55)" strokeWidth="1" />
+                  </svg>
+                </div>
+
+                {/* Labels column */}
+                <div className="flex flex-col" style={{ paddingTop: 58, gap: 0 }}>
+                  {[
+                    { zone: 'wrapper', label: 'Wrapper', pct: '40%', color: '#e9c176', top: 57 },
+                    { zone: 'binder',  label: 'Binder',  pct: '25%', color: '#c5a059', top: 118 },
+                    { zone: 'filler',  label: 'Filler',  pct: '35%', color: '#9a7030', top: 100 },
+                  ].map(({ zone, label, pct, color, top }) => (
+                    <button
+                      key={zone}
+                      onMouseEnter={() => setHovered(zone)}
+                      onMouseLeave={() => setHovered(null)}
+                      onTouchStart={() => setHovered(zone)}
+                      onTouchEnd={() => setHovered(null)}
+                      className="flex flex-col justify-center pl-3 pr-4 rounded-lg transition-all duration-200 active:scale-95 text-left"
+                      style={{
+                        height: top,
+                        background: hovered === zone ? 'rgba(233,193,118,0.07)' : 'transparent',
+                      }}
+                    >
+                      <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 16, fontWeight: hovered === zone ? 600 : 400, color: hovered === zone ? '#f7ead4' : '#d4c4a0', lineHeight: 1.2 }}>
+                        {label}
+                      </p>
+                      <p className="text-[12px] font-bold uppercase tracking-wider mt-0.5" style={{ color }}>
+                        {pct}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Hint */}
+              <p className="text-center text-[10px] text-on-surface-variant/30 italic px-6 pb-4">
+                Tap each zone to explore its role
+              </p>
+
+              {/* ── Stats Row ──────────────────────────────────── */}
+              <div className="border-t mx-0 grid grid-cols-3 text-center" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+                {[
+                  { stat: '2–4',  label: 'Leaf\nVarieties' },
+                  { stat: '200+', label: 'Days\nAged'      },
+                  { stat: '1',    label: 'Master\nBlender' },
+                ].map(({ stat, label }, i) => (
+                  <div key={stat} className="py-5" style={{ borderRight: i < 2 ? '1px solid rgba(255,255,255,0.07)' : 'none' }}>
+                    <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 22, fontWeight: 700, color: '#e9c176' }}>{stat}</p>
+                    <p className="text-[10px] uppercase tracking-wider mt-1 whitespace-pre-line leading-relaxed text-on-surface-variant/50">{label}</p>
+                  </div>
+                ))}
+              </div>
+
             </div>
           </div>
 
