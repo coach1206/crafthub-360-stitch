@@ -1,0 +1,441 @@
+REPLIT BUILD DIRECTIVE
+PROJECT: 360 Passport Connections
+SCREEN: Functional Connections Dashboard
+REFERENCE IMAGE: Use the uploaded image/mockup as the exact visual design reference.
+IMAGE FILE TO USE AS VISUAL TARGET:
+"/mnt/data/a_widescreen_ui_mockup_screenshot_concept_art_of.png"
+
+IMPORTANT:
+Do not simply place the image as a static background and call it done. Recreate the interface as real functional React components that match the uploaded image as closely as possible. The uploaded image is the visual blueprint. Build the page with real clickable buttons, working modals, state changes, responsive layout, animations, and reusable components.
+
+==================================================
+PRIMARY GOAL
+==================================================
+
+Build a fully functional, responsive, touchscreen-first “360 Passport Connections” dashboard in React.
+
+The page must visually match the uploaded reference image:
+- Obsidian black background
+- Deep purple glassmorphism cards
+- Gold passport stamp energy
+- Premium private club / luxury networking atmosphere
+- Realistic profile images
+- Purple and gold glow effects
+- Large responsive cards
+- Touch-friendly buttons
+- No flat generic UI
+- No emoji
+- No placeholder gray boxes
+- No broken/cut-off content
+
+The screen must feel like a premium professional networking passport system where users scan, connect, verify introductions, view passports, and build trusted relationships.
+
+==================================================
+TECH STACK
+==================================================
+
+Use:
+- React
+- Vite
+- Tailwind CSS
+- Framer Motion
+- Lucide React icons only where needed, but avoid making the screen look icon-heavy
+- Local component state for prototype behavior
+- Optional: use browser vibration API for haptic feedback
+
+Install if missing:
+npm install framer-motion lucide-react
+
+==================================================
+FILES TO CREATE OR UPDATE
+==================================================
+
+Create or update these files:
+
+src/App.jsx
+src/main.jsx
+src/index.css
+src/components/PassportConnections.jsx
+src/components/ConnectionHero.jsx
+src/components/MatchCard.jsx
+src/components/ProfileStack.jsx
+src/components/ScanConnectModal.jsx
+src/components/StampVerificationModal.jsx
+src/components/MuteToggle.jsx
+src/data/connectionsData.js
+
+If the project already has routes, add this page as:
+/passport-connections
+or make it the default home screen if no routing exists.
+
+==================================================
+VISUAL REQUIREMENTS
+==================================================
+
+Use the uploaded reference image as the visual source.
+
+The page must include:
+
+1. BACKGROUND
+- Full-screen cinematic dark luxury lounge background.
+- Use layered radial gradients, soft purple glow, dark vignette, and subtle background blur.
+- Add faint silhouettes or abstract lounge lighting if image assets are not available.
+- The background must not be plain black.
+- The interface must feel deep, atmospheric, and premium.
+
+2. TOP HEADER
+Left side:
+- Circular back button
+- Page title: “360 Passport Connections”
+- Subtitle: “Grow your trusted network”
+
+Right side:
+- Mute button
+- Primary CTA button: “Scan to Connect”
+
+Behavior:
+- Back button should call window.history.back() if possible.
+- Mute button toggles all UI sound state.
+- Scan to Connect opens QR/camera modal.
+
+3. HERO CONNECTION CARD
+Create a large glass card on the left side with:
+- Heading: “Connections”
+- Subtext: “Turns introductions into verified relationships.”
+- Three stat tiles:
+  - 12 Verified Connections
+  - 94% Top Match
+  - 8/10 Social Goal
+- Large gold passport stamp visual that says:
+  “360 PASSPORT CONNECTIONS”
+  “VERIFIED INTRODUCTION”
+- Animated gold spark/glow around the stamp.
+- Profile stack with 5 realistic diverse professional headshots.
+- “+7 New Contacts” bubble.
+
+The stamp should be CSS-built if no image asset exists. It can be a circular gold border with rotated inner text and glowing stamp effect.
+
+4. TAB SECTION
+Create functional tabs:
+- Best Matches
+- People You Met
+- Suggested
+
+Behavior:
+- Clicking each tab changes the list below.
+- Active tab gets purple gradient glow.
+- Add smooth animated transition between tab content.
+
+5. MATCH LIST
+Under tabs, show “TOP MATCHES FOR YOU”.
+
+Best Matches should include:
+- Rachel Kim, CEO @ Maison Collective, New York, NY, 92% Match
+- Marcus Bell, Investor @ Blackbridge Capital, Miami, FL, 89% Match
+- Ariana Cole, Creative Director @ Cole Studio, Los Angeles, CA, 87% Match
+
+People You Met should include:
+- David Harper, Founder @ North & Co., Austin, TX, 94% Match
+- Olivia Santos, Hospitality Strategist, Atlanta, GA, 90% Match
+- Terrence Brooks, Brand Partner, Chicago, IL, 86% Match
+
+Suggested should include:
+- Elena Rivera, Event Curator, Miami, FL, 88% Match
+- James Whitmore, Private Club Consultant, Dallas, TX, 84% Match
+- Nia Thompson, Community Builder, Atlanta, GA, 81% Match
+
+Behavior:
+- Clicking a person updates the large detail card on the right.
+- The selected person should have a stronger glow.
+- Arrow button should also select/view that person.
+- “View All Matches” expands the list to show all available contacts.
+- If already expanded, clicking again collapses it.
+
+6. RIGHT DETAIL CARD
+Create a large premium detail card for the selected person.
+
+Default selected person:
+David Harper
+
+Card must include:
+- Verified badge
+- Large realistic profile photo with purple/gold ring
+- Name
+- Role
+- Location
+- Circular animated match meter showing percentage
+- Why You Match section
+- Shared Interests chips
+- Shared Event card
+- Best Next Move card
+- Buttons:
+  - View Passport
+  - Connect Now
+
+Behavior:
+- View Passport opens a passport modal or panel.
+- Connect Now triggers verification flow.
+- Match meter animates from 0 to the selected match percent.
+- Selecting a new person updates all card content.
+
+7. CONNECT NOW FLOW
+When user clicks “Connect Now”:
+
+Step 1:
+Show modal overlay:
+“Verifying Connection…”
+- Smoke/frost animation
+- Gold loading ring
+- 1-second delay
+- Optional soft stamp sound if sound is not muted
+
+Step 2:
+After 1 second, show:
+“Connection Verified”
+“Passport Updated”
+- Show stamped badge
+- Show selected person’s name
+- Button: “View Passport”
+- Button: “Close”
+
+Add haptic feedback on mobile tap:
+if (navigator.vibrate) navigator.vibrate(35)
+
+8. SCAN TO CONNECT MODAL
+When user clicks “Scan to Connect”:
+Open modal with:
+- Title: “Scan to Connect”
+- Text: “Point your camera at a guest passport QR code.”
+- A simulated camera frame
+- Animated scanning line
+- Button: “Simulate Successful Scan”
+- Button: “Close”
+
+Behavior:
+- Clicking “Simulate Successful Scan” creates a new verified connection event.
+- Show “Connection Found”
+- Then allow user to click “Verify Connection”
+- Verification uses the same stamp animation flow.
+
+9. PASSPORT MODAL
+When user clicks “View Passport” or “See Passport”:
+Open modal showing:
+- Mini realistic passport booklet card
+- Title: “360 Passport Connections”
+- Owner: “Professional Network Passport”
+- Current selected connection
+- Event stamp:
+  “Cigar & Cognac Night”
+- Status:
+  “Verified Introduction”
+- Relationship Value:
+  “High”
+- Buttons:
+  - “Close”
+  - “Connect Now” if not already connected
+
+10. MUTE BUTTON
+The mute button should:
+- Toggle between “Mute” and “Sound On”
+- Prevent stamp sound from playing when muted
+- Show clear active/inactive visual state
+
+Do not rely on external audio files unless already available. If no audio file exists, create a tiny Web Audio API stamp sound effect when not muted.
+
+11. RESPONSIVE REQUIREMENTS
+Desktop:
+- Two-column layout
+- Left column: hero, tabs, match list
+- Right column: detail card and passport reminder card
+
+Tablet:
+- Stack hero and detail card
+- Buttons large
+- Touch targets minimum 72px where possible
+
+Mobile:
+- Single column
+- Sticky bottom action bar with:
+  - Scan
+  - Passport
+  - Connect
+- No horizontal scrolling
+- No content cut off
+- Cards full width
+
+12. BUTTON FUNCTIONALITY CHECKLIST
+Every button must work:
+
+Back button:
+- window.history.back()
+
+Mute:
+- toggles muted state
+
+Scan to Connect:
+- opens QR modal
+
+Best Matches:
+- switches tab
+
+People You Met:
+- switches tab
+
+Suggested:
+- switches tab
+
+Match row:
+- selects person
+
+Arrow in match row:
+- selects person
+
+View All Matches:
+- expands/collapses list
+
+View Passport:
+- opens passport modal
+
+Connect Now:
+- opens verification animation then success modal
+
+See Passport:
+- opens passport modal
+
+Close buttons:
+- close modals
+
+Simulate Successful Scan:
+- shows found connection state
+
+Verify Connection:
+- runs verification animation
+
+13. ANIMATION REQUIREMENTS
+Use Framer Motion for:
+- Page entrance fade
+- Hero card entrance
+- Match card hover lift
+- Tab transition
+- Modal fade/scale
+- Stamp verification bounce
+- Match meter animation
+- Scan line animation
+- Button press animation
+
+Keep animation smooth and premium, not childish.
+
+14. ACCESSIBILITY
+- Buttons must have aria-labels where needed.
+- Modals must be keyboard dismissible with Escape.
+- Use readable contrast.
+- Do not make purple text too dark.
+- Support keyboard tab navigation.
+
+15. DATA STRUCTURE
+Create reusable data in:
+src/data/connectionsData.js
+
+Each connection object should include:
+id
+name
+role
+company
+location
+matchScore
+image
+verified
+whyYouMatch
+sharedInterests
+sharedEvent
+bestNextMove
+passportStatus
+
+Use image URLs from reliable placeholder portrait services if no local assets exist, but they must look realistic and professional.
+
+Use diverse professional profile images:
+- Black men
+- White men
+- Black women
+- Hispanic/Latina women
+- Asian women
+- Middle-aged professionals
+- Different working-class and executive looks
+
+Do not use cartoon avatars.
+
+==================================================
+BACKEND / API PROTOTYPE REQUIREMENT
+==================================================
+
+Even if this is frontend-first, create a simple mock backend layer so the page can later connect to real NOVEE OS data.
+
+Create:
+
+src/api/passportConnectionsApi.js
+
+Include these mock async functions:
+
+getConnections()
+getConnectionById(id)
+verifyConnection(id)
+scanConnection(qrPayload)
+getPassport(id)
+updatePassportStamp(id, stamp)
+
+Each function should return promises with sample data and simulated delay.
+
+Use this mock API inside the React components instead of hardcoding every action directly into the component.
+
+Example behavior:
+- verifyConnection(id) returns:
+{
+  success: true,
+  status: "verified",
+  stamp: "Verified Introduction",
+  passportUpdated: true
+}
+
+- scanConnection(qrPayload) returns a simulated matched profile.
+
+This is important because later this will connect to the NOVEE OS backend, Passport database, QR scanning engine, and event analytics.
+
+==================================================
+DO NOT DO THIS
+==================================================
+
+Do not make this a static image.
+Do not use the uploaded image as the only UI.
+Do not leave buttons dead.
+Do not use placeholder buttons that do nothing.
+Do not make the page flat.
+Do not use emojis.
+Do not use tiny unreadable text.
+Do not cut off the lower cards.
+Do not remove the premium passport look.
+Do not forget mobile responsiveness.
+Do not forget modals.
+Do not forget verification animation.
+Do not forget the stamp reward moment.
+
+==================================================
+FINAL RESULT EXPECTATION
+==================================================
+
+The final result should look like the uploaded image, but rebuilt as a real working React interface.
+
+It should feel like a luxury private-club networking passport system where every connection has value.
+
+The user should be able to:
+- Scan to connect
+- Select people
+- View match details
+- Switch tabs
+- Verify a connection
+- Hear or mute stamp sounds
+- Feel mobile haptic feedback
+- View a passport
+- Expand all matches
+- Use it on desktop, tablet, or phone
+
+Build this cleanly, with reusable components and no broken buttons.
