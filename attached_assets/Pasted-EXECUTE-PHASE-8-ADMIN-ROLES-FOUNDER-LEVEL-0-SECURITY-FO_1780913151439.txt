@@ -1,0 +1,655 @@
+EXECUTE PHASE 8 ADMIN ROLES + FOUNDER LEVEL 0 SECURITY FOR NOVEE OS / CRAFTHUB 360 / SMOKECRAFT 360 / 360 PASSPORT CONNECTIONS / POS 3 / E.A.T. COMMAND
+
+PHASE 7 IS COMPLETE.
+
+DO NOT redesign the app.
+DO NOT change the premium UI.
+DO NOT create duplicate screens.
+DO NOT break existing guest routes.
+DO NOT remove localStorage fallback.
+DO NOT expose secrets in frontend code.
+DO NOT build unnecessary enterprise complexity.
+
+MISSION:
+Add the first real security and permission layer for NOVEE OS.
+
+The system must separate guest access, staff access, manager access, admin access, and Founder Level 0 access.
+
+Founder Level 0 must be the highest authority in the system.
+
+The purpose of this phase is not full production authentication yet. The purpose is to create the permission foundation, protected routes, audit logging, and safe admin control gates so NOVEE OS cannot be casually accessed or modified by the wrong role.
+
+==================================================
+PHASE 8 PRIMARY GOAL
+
+Create a role-based access control foundation for:
+
+* Founder Level 0
+* Admin
+* Manager
+* Staff
+* Guest
+
+Guest users may access:
+
+* Boot
+* Home
+* CraftHub
+* SmokeCraft
+* PourCraft
+* BeerCraft
+* WineCraft
+* 360 Passport Connection
+* Passport ceremony
+* Leaderboard guest views
+
+Staff users may access:
+
+* POS 3 staff view
+* Coach Help
+* table/session handoff views
+* guest activity summaries assigned to them
+
+Managers may access:
+
+* E.A.T. Command
+* POS 3 management view
+* leaderboard management
+* inventory signal views
+* session analytics
+* staff performance views
+
+Admins may access:
+
+* system configuration
+* venue settings
+* module settings
+* user management
+* integration settings
+
+Founder Level 0 may access everything, including:
+
+* revenue settings
+* API configuration visibility placeholders
+* role elevation
+* system lock controls
+* audit logs
+* export controls
+* override controls
+* deployment controls
+* emergency shutdown controls
+
+==================================================
+
+1. UPDATE DATABASE SCHEMA
+    ==================================================
+
+Update PostgreSQL schema and migrations safely.
+
+Create migration:
+
+/server/db/migrations/002_admin_roles_security.sql
+
+Add tables:
+
+A. system_users
+
+Fields:
+
+id
+user_id
+email
+display_name
+role
+status
+created_at
+updated_at
+last_login_at
+
+Allowed roles:
+
+founder_level_0
+admin
+manager
+staff
+guest
+
+Allowed status:
+
+active
+inactive
+suspended
+
+B. role_permissions
+
+Fields:
+
+id
+role
+permission_key
+enabled
+created_at
+updated_at
+
+C. founder_controls
+
+Fields:
+
+id
+control_key
+control_value JSONB
+locked
+updated_by
+updated_at
+
+D. protected_route_rules
+
+Fields:
+
+id
+route_path
+required_role
+permission_key
+created_at
+updated_at
+
+E. security_events
+
+Fields:
+
+id
+actor_id
+actor_role
+event_type
+route_path
+metadata JSONB
+created_at
+
+Do not destroy existing Phase 7 tables.
+
+Do not wipe existing guest session data.
+
+==================================================
+2. DEFINE PERMISSION KEYS
+
+Create:
+
+/server/config/permissions.js
+
+Define permission keys:
+
+view_guest_modules
+start_guest_session
+view_passport
+earn_passport_stamp
+view_leaderboard
+
+access_pos3_staff
+access_pos3_manager
+view_pos3_payloads
+modify_pos3_settings
+
+access_eat_command
+view_eat_analytics
+modify_eat_settings
+trigger_staff_assist
+
+view_command_center
+view_audit_logs
+export_data
+manage_staff
+manage_roles
+manage_integrations
+manage_revenue_settings
+manage_deployment
+emergency_system_lock
+founder_override
+
+==================================================
+3. DEFINE ROLE PERMISSION MAP
+
+Create:
+
+/server/config/roleMap.js
+
+Permissions:
+
+guest:
+
+* view_guest_modules
+* start_guest_session
+* view_passport
+* earn_passport_stamp
+* view_leaderboard
+
+staff:
+
+* access_pos3_staff
+* trigger_staff_assist
+
+manager:
+
+* access_pos3_staff
+* access_pos3_manager
+* view_pos3_payloads
+* access_eat_command
+* view_eat_analytics
+* trigger_staff_assist
+* view_leaderboard
+
+admin:
+
+* all manager permissions
+* view_command_center
+* view_audit_logs
+* export_data
+* manage_staff
+* manage_integrations
+* modify_pos3_settings
+* modify_eat_settings
+
+founder_level_0:
+
+* every permission
+* manage_roles
+* manage_revenue_settings
+* manage_deployment
+* emergency_system_lock
+* founder_override
+
+==================================================
+4. HARDEN AUTH MIDDLEWARE
+
+Update:
+
+/server/middleware/authMiddleware.js
+/server/middleware/roleMiddleware.js
+
+Requirements:
+
+* Continue supporting prototype mode.
+* Do not require full login yet.
+* Accept safe dev headers only in development:
+
+x-novee-user-id
+x-novee-user-role
+x-novee-user-email
+
+* In production mode, reject missing authentication.
+* Never allow frontend localStorage alone to grant founder authority.
+* Founder Level 0 cannot be spoofed in production mode.
+
+Create helper:
+
+requireAuth()
+requireRole(role)
+requirePermission(permissionKey)
+requireFounderLevel0()
+
+==================================================
+5. PROTECT BACKEND ROUTES
+
+Update route protection:
+
+Guest-safe routes remain public or guest-safe:
+
+GET /api/health
+POST /api/sessions
+GET /api/sessions/:sessionId
+PUT /api/sessions/:sessionId
+POST /api/sessions/:sessionId/profile
+POST /api/sessions/:sessionId/complete-smokecraft-session
+GET /api/passport/:passportId
+POST /api/passport/:passportId/stamps
+PUT /api/passport/:passportId/ceremony-seen
+GET /api/leaderboard
+POST /api/leaderboard
+
+Protected routes:
+
+POST /api/pos3/activity
+GET /api/pos3/session/:sessionId/payload
+Requires:
+access_pos3_staff or access_pos3_manager
+
+POST /api/eat/analytics
+GET /api/eat/session/:sessionId/payload
+Requires:
+access_eat_command or view_eat_analytics
+
+GET /api/audit/session/:sessionId
+Requires:
+view_audit_logs
+
+Add future protected route group:
+
+/api/admin/*
+Requires:
+admin or founder_level_0
+
+/api/founder/*
+Requires:
+founder_level_0 only
+
+==================================================
+6. CREATE ADMIN ROUTES
+
+Create:
+
+/server/routes/adminRoutes.js
+/server/controllers/adminController.js
+/server/services/adminService.js
+
+Endpoints:
+
+GET /api/admin/me
+GET /api/admin/permissions
+GET /api/admin/users
+POST /api/admin/users
+PUT /api/admin/users/:userId
+GET /api/admin/security-events
+
+All require admin or founder_level_0.
+
+==================================================
+7. CREATE FOUNDER ROUTES
+
+Create:
+
+/server/routes/founderRoutes.js
+/server/controllers/founderController.js
+/server/services/founderService.js
+
+Endpoints:
+
+GET /api/founder/status
+GET /api/founder/controls
+PUT /api/founder/controls/:controlKey
+POST /api/founder/emergency-lock
+POST /api/founder/override
+GET /api/founder/audit
+
+All require founder_level_0.
+
+Founder routes must never be accessible by:
+
+* guest
+* staff
+* manager
+* admin
+
+Only founder_level_0.
+
+==================================================
+8. CREATE SECURITY EVENT LOGGING
+
+Create:
+
+/server/services/securityEventService.js
+
+Functions:
+
+recordSecurityEvent()
+recordAccessGranted()
+recordAccessDenied()
+recordRoleChange()
+recordFounderAction()
+recordEmergencyLock()
+
+Every denied protected route must write a security event.
+
+Every founder action must write a security event.
+
+Every role change must write a security event.
+
+==================================================
+9. FRONTEND ADMIN CLIENT
+
+Create:
+
+src/services/adminApiService.js
+src/services/founderApiService.js
+src/services/securityService.js
+
+Functions:
+
+getCurrentAdminUser()
+getPermissions()
+getAdminUsers()
+createAdminUser()
+updateAdminUser()
+getSecurityEvents()
+
+getFounderStatus()
+getFounderControls()
+updateFounderControl()
+triggerEmergencyLock()
+triggerFounderOverride()
+
+Rules:
+
+* Use apiClient.js from Phase 7.
+* Fail safely if backend is unavailable.
+* Do not show founder controls to non-founder roles.
+* Do not store founder authority in localStorage as truth.
+
+==================================================
+10. FRONTEND PROTECTED ROUTE WRAPPER
+
+Create:
+
+src/components/security/ProtectedRoute.jsx
+src/components/security/RoleGate.jsx
+src/components/security/PermissionGate.jsx
+
+Requirements:
+
+ProtectedRoute must support:
+
+* allowedRoles
+* requiredPermission
+* fallbackRoute
+* lockedMessage
+
+If access denied, show premium blocked access screen:
+
+Title:
+Access Restricted
+
+Body:
+This area requires elevated NOVEE OS permissions.
+
+Buttons:
+Return Home
+Request Access
+
+Do not show ugly default errors.
+
+==================================================
+11. PROTECT FRONTEND ROUTES
+
+Protect these routes:
+
+/pos3
+/eat-command
+/command-center
+/admin
+/founder
+
+Guest should not casually access management screens.
+
+Route behavior:
+
+Guest attempting /eat-command:
+show Access Restricted screen.
+
+Staff attempting /eat-command:
+show Access Restricted unless manager permission exists.
+
+Manager attempting /founder:
+show Access Restricted.
+
+Admin attempting /founder:
+show Access Restricted.
+
+Founder Level 0:
+full access.
+
+==================================================
+12. CREATE ADMIN SHELL SCREEN
+
+Create or update:
+
+src/pages/Admin.jsx
+
+Must include:
+
+* current role display
+* permission summary
+* system user list placeholder connected to API
+* security events list placeholder connected to API
+* access to management areas based on permissions
+
+Keep visual style premium and consistent.
+
+Do not redesign entire app.
+
+==================================================
+13. CREATE FOUNDER CONTROL SCREEN
+
+Create or update:
+
+src/pages/FounderControl.jsx
+
+Must include:
+
+* Founder Level 0 status
+* system lock status
+* emergency lock button
+* override log placeholder
+* revenue settings locked placeholder
+* integration control placeholder
+* deployment control placeholder
+* audit trail preview
+
+This screen must be protected by requireFounderLevel0 on backend and frontend.
+
+Do not make dangerous actions destructive yet.
+
+Emergency lock may be prototype-only and must clearly mark:
+
+Prototype lock active
+
+==================================================
+14. UPDATE AUDIT LOGGING
+
+Connect major admin/security actions to:
+
+audit_logs
+security_events
+
+Log:
+
+* access denied
+* admin viewed users
+* user role changed
+* founder viewed controls
+* founder updated control
+* emergency lock triggered
+* protected payload accessed
+
+==================================================
+15. TEST MATRIX
+
+Test these roles in development using dev headers or prototype role switcher if available:
+
+guest
+staff
+manager
+admin
+founder_level_0
+
+Expected behavior:
+
+guest:
+
+* can use CraftHub and Passport
+* cannot access POS 3 management
+* cannot access E.A.T.
+* cannot access Admin
+* cannot access Founder
+
+staff:
+
+* can access POS 3 staff views
+* cannot access E.A.T.
+* cannot access Admin
+* cannot access Founder
+
+manager:
+
+* can access E.A.T.
+* can access POS 3 management
+* cannot access Founder
+
+admin:
+
+* can access Admin
+* can access Command Center
+* cannot access Founder
+
+founder_level_0:
+
+* can access everything
+
+==================================================
+16. BUILD + SERVER VERIFICATION
+
+Run:
+
+npm run build
+npm run dev:server
+
+Verify:
+
+GET /api/health still works
+GET /api/admin/me works for admin/founder in development mode
+GET /api/founder/status only works for founder_level_0
+Guest cannot access founder endpoints
+Admin cannot access founder endpoints
+Denied access creates security event
+Frontend still works if backend is unavailable
+Guest journey still works from Boot to Passport stamp
+
+==================================================
+17. FINAL REPORT REQUIRED
+
+Return a report with:
+
+A. Files created
+B. Files changed
+C. Database migration status
+D. Roles created
+E. Permission keys created
+F. Backend route protection status
+G. Admin API status
+H. Founder API status
+I. Security event logging status
+J. Frontend protected route status
+K. Admin screen status
+L. Founder screen status
+M. Guest route safety status
+N. POS 3 route protection status
+O. E.A.T. route protection status
+P. Build result
+Q. Server result
+R. Remaining risks
+
+Do not claim Phase 8 is complete unless:
+
+* npm run build passes
+* backend starts
+* /api/health works
+* admin routes are protected
+* founder routes reject non-founder roles
+* guest journey still works

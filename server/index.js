@@ -17,6 +17,7 @@ import leaderboardRoutes from './routes/leaderboardRoutes.js'
 import pos3Routes        from './routes/pos3Routes.js'
 import eatRoutes         from './routes/eatRoutes.js'
 import auditRoutes       from './routes/auditRoutes.js'
+import adminRoutes       from './routes/adminRoutes.js'
 import { errorHandler }  from './middleware/errorHandler.js'
 
 dotenv.config()
@@ -41,6 +42,7 @@ app.use('/api/leaderboard', leaderboardRoutes)
 app.use('/api/pos3',       pos3Routes)
 app.use('/api/eat',        eatRoutes)
 app.use('/api/audit',      auditRoutes)
+app.use('/api/admin',      adminRoutes)
 
 // ── 404 handler ───────────────────────────────────────────────
 app.use((_req, res) => {

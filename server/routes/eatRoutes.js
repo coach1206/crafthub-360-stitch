@@ -1,12 +1,12 @@
 import { Router } from 'express'
-import { requireStaff } from '../middleware/roleMiddleware.js'
+import { canAccessEAT } from '../middleware/roleMiddleware.js'
 import * as ctrl from '../controllers/eatController.js'
 
 const router = Router()
 
-// E.A.T. Command data is management-only — never guest-facing
-router.post( '/analytics',                  ctrl.saveAnalytics)
-router.get(  '/session/:sessionId/payload', ctrl.getSessionPayload)
-router.get(  '/dashboard',                  ctrl.getDashboard)
+// E.A.T. Command — manager-level minimum. Never guest-facing.
+router.post( '/analytics',                  canAccessEAT, ctrl.saveAnalytics)
+router.get(  '/session/:sessionId/payload', canAccessEAT, ctrl.getSessionPayload)
+router.get(  '/dashboard',                  canAccessEAT, ctrl.getDashboard)
 
 export default router

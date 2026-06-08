@@ -1,38 +1,124 @@
 /**
- * Role Middleware — placeholder for future role-based access control.
- * Currently uses prototype/bypass mode. Real roles will be: guest, staff, manager, admin.
+ * Role Middleware — enforces role-based access control for all protected routes.
+ *
+ * Roles (ascending): guest → staff → manager → admin → founder
+ *
+ * Usage:
+ *   import { requireRole, requirePermission } from './roleMiddleware.js'
+ *
+ *   router.get('/dashboard', requireRole('manager'), ctrl.getDashboard)
+ *   router.post('/billing',  requirePermission('money.settings'), ctrl.updateBilling)
+ *   router.delete('/wipe',   founderOnly, ctrl.wipeData)
+ *
+ * In prototype/development mode all checks pass automatically.
+ * Set NODE_ENV=production to enforce roles.
  */
 
-const ROLE_HIERARCHY = { guest: 0, staff: 1, manager: 2, admin: 3 }
+import { ROLES, hasPermission, meetsMinRole } from '../config/permissions.js'
+
+// ── Core gate ─────────────────────────────────────────────────
 
 /**
- * Returns a middleware that requires the authenticated user to have
- * at minimum the specified role.
+ * Requires the requesting user to hold at minimum `minRoleName`.
+ * In prototype mode (NODE_ENV !== 'production'), all requests pass through
+ * with a synthetic role attached to req.user.
+ *
+ * @param {'guest'|'staff'|'manager'|'admin'|'founder'} minRoleName
  */
-export function requireRole(minRole) {
+export function requireRole(minRoleName) {
   return (req, res, next) => {
-    // Prototype bypass — all requests pass in non-production
     if (process.env.NODE_ENV !== 'production') {
+      req.user = req.user || _protoUser(minRoleName)
       return next()
     }
-    const userRole  = req.user?.role || 'guest'
-    const userLevel = ROLE_HIERARCHY[userRole] ?? 0
-    const minLevel  = ROLE_HIERARCHY[minRole]  ?? 0
-    if (userLevel < minLevel) {
-      return res.status(403).json({
-        success: false,
-        message: `Access denied — requires role: ${minRole}`,
-      })
+    const user = req.user
+    if (!user) {
+      return _deny(res, 'Authentication required', 401)
+    }
+    if (!meetsMinRole(user.role, minRoleName)) {
+      return _deny(res, `Access denied — requires role: ${minRoleName}`)
     }
     next()
   }
 }
 
-/** Convenience: staff or higher. */
+/**
+ * Requires the requesting user to hold a specific named permission.
+ * Founder-only permissions are enforced even in development mode.
+ *
+ * @param {string} permissionSlug  — e.g. 'money.settings', 'eat.access'
+ */
+export function requirePermission(permissionSlug) {
+  return (req, res, next) => {
+    const isDev = process.env.NODE_ENV !== 'production'
+    const user  = req.user || (isDev ? _protoUser('admin') : null)
+
+    if (!user) return _deny(res, 'Authentication required', 401)
+
+    if (!hasPermission(user.role, permissionSlug)) {
+      const isFounderOnly = permissionSlug.startsWith('founder.') ||
+        ['money.settings', 'billing.manage', 'data.wipe', 'license.manage',
+         'user.manage.founder'].includes(permissionSlug)
+
+      return _deny(
+        res,
+        isFounderOnly
+          ? 'This action is restricted to Founder accounts'
+          : `Access denied — missing permission: ${permissionSlug}`,
+        isFounderOnly ? 403 : 403
+      )
+    }
+    next()
+  }
+}
+
+// ── Convenience exports ───────────────────────────────────────
+
+/** Only staff and above. */
 export const requireStaff   = requireRole('staff')
 
-/** Convenience: manager or higher. */
+/** Only managers and above. */
 export const requireManager = requireRole('manager')
 
-/** Convenience: admin only. */
+/** Only admins and above. */
 export const requireAdmin   = requireRole('admin')
+
+/**
+ * Founder-only gate — enforced in ALL environments, including development.
+ * Nothing — not even admin — bypasses this.
+ */
+export function founderOnly(req, res, next) {
+  const user = req.user
+  if (!user || user.role !== 'founder') {
+    return _deny(res, 'This action is restricted to Founder accounts', 403)
+  }
+  next()
+}
+
+// ── Route-specific permission guards ─────────────────────────
+export const canAccessPOS3         = requirePermission('pos3.access')
+export const canAccessEAT          = requirePermission('eat.access')
+export const canExportData         = requirePermission('data.export')
+export const canManageStaff        = requirePermission('staff.manage')
+export const canOverrideSession    = requirePermission('session.override')
+export const canChangeMoneySettings = requirePermission('money.settings')
+export const canViewAuditLogs      = requirePermission('audit.view')
+
+// ── Private helpers ───────────────────────────────────────────
+
+function _deny(res, message, status = 403) {
+  return res.status(status).json({ success: false, message })
+}
+
+/**
+ * Prototype identity — used in development so routes work without a real auth system.
+ * Level is set to `minRoleName` so only the minimum required access is simulated.
+ */
+function _protoUser(roleName) {
+  return {
+    id:    'proto-user',
+    role:  roleName || 'staff',
+    mode:  'prototype',
+    venue: process.env.VENUE_ID || 'novee-grand-lounge',
+  }
+}
