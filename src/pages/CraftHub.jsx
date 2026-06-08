@@ -67,22 +67,15 @@ export default function CraftHub() {
   return (
     <div className="bg-background text-on-background min-h-screen selection:bg-primary selection:text-on-primary overflow-hidden" style={{ position: 'relative' }}>
 
-      {/* ── Cinematic background + logo watermark ────────────── */}
+      {/* ── CH logo full background ───────────────────────────── */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
         <img
-          src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=1400&auto=format&fit=crop&q=80"
+          src="/ch-logo.jpeg"
           alt=""
-          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.18 }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.22 }}
         />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(6,4,2,0.88) 0%, rgba(14,9,3,0.72) 50%, rgba(6,4,2,0.90) 100%)' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.055) 0%, transparent 65%)' }} />
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <img
-            src="/crafthub-logo.jpeg"
-            alt=""
-            style={{ width: '62%', maxWidth: 460, opacity: 0.055, filter: 'grayscale(20%)' }}
-          />
-        </div>
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(4,3,1,0.82) 0%, rgba(10,7,2,0.65) 50%, rgba(4,3,1,0.84) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 60%)' }} />
       </div>
 
       {/* ── Top App Bar ──────────────────────────────────────── */}

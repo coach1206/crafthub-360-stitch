@@ -78,8 +78,21 @@ export default function Home() {
       {/* ── Main Content ─────────────────────────────────────── */}
       <main className="flex-1 flex flex-col items-center justify-center relative p-gutter">
 
+        {/* CH logo background watermark */}
+        <div style={{
+          position: 'absolute', inset: 0, display: 'flex',
+          alignItems: 'center', justifyContent: 'center',
+          pointerEvents: 'none', zIndex: 0,
+        }}>
+          <img
+            src="/ch-logo.jpeg"
+            alt=""
+            style={{ width: '55%', maxWidth: 480, opacity: 0.12, filter: 'brightness(1.1)' }}
+          />
+        </div>
+
         {/* Ambient glow overlay (mouse-tracking) */}
-        <div ref={glowRef} className="ambient-glow" style={{ zIndex: -1 }} />
+        <div ref={glowRef} className="ambient-glow" style={{ zIndex: 1 }} />
 
         {/* Welcome title — floating animation */}
         <div className="text-center mb-16 floating relative z-10">

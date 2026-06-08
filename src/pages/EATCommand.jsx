@@ -59,13 +59,11 @@ export default function EATCommand() {
     <motion.div initial="hidden" animate="show" variants={STAGGER}>
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <motion.div variants={FADE} style={{ position: 'relative', height: 260 }}>
-        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&auto=format&fit=crop&q=80" alt="EAT Command"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%', display: 'block' }}
+      <motion.div variants={FADE} style={{ position: 'relative', height: 260, background: '#050302', overflow: 'hidden' }}>
+        <img src="/eat-logo-nobg.png" alt=""
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', opacity: 0.28 }}
         />
-        <img src="/crafthub-logo.jpeg" alt=""
-          style={{ position: 'absolute', top: 14, left: 14, width: 52, height: 52, borderRadius: 10, objectFit: 'cover', opacity: 0.85, border: '1px solid rgba(212,175,55,0.35)' }}
-        />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 40%, rgba(212,175,55,0.08) 0%, transparent 65%)' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.0) 30%, rgba(1,1,1,0.95) 100%)' }} />
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 20px 20px' }}>
           <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>Venue Intelligence System</div>
