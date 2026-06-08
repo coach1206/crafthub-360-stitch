@@ -3,7 +3,69 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
 
-const CHARACTERS = ['Sweet', 'Spicy', 'Earthy', 'Creamy', 'Woody', 'Peppery']
+const OCCASIONS = [
+  {
+    label: 'Relaxing',
+    sub: 'Unwind & Enjoy',
+    img: 'https://images.unsplash.com/photo-1517511620798-cec17d428bc0?w=200&auto=format&fit=crop&q=80',
+    color: '#8B4513',
+  },
+  {
+    label: 'Celebrating',
+    sub: 'Raise a Glass',
+    img: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=200&auto=format&fit=crop&q=80',
+    color: '#C4860A',
+  },
+  {
+    label: 'Business',
+    sub: 'Focus & Achieve',
+    img: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=200&auto=format&fit=crop&q=80',
+    color: '#4A4A4A',
+  },
+  {
+    label: 'Date Night',
+    sub: 'Intimate Moments',
+    img: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200&auto=format&fit=crop&q=80',
+    color: '#8B1A3A',
+  },
+  {
+    label: 'Sports',
+    sub: 'Game Day Energy',
+    img: 'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=200&auto=format&fit=crop&q=80',
+    color: '#1A4A1A',
+  },
+  {
+    label: 'VIP',
+    sub: 'Exclusive Access',
+    img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&auto=format&fit=crop&q=80',
+    color: '#2A1A5A',
+  },
+]
+
+const INTENSITY_OPTIONS = [
+  {
+    v: 'smooth',
+    label: 'Smooth',
+    sub: 'Mild · Silky · Easy draw',
+    img: 'https://images.unsplash.com/photo-1585504198199-20277593b31f?w=400&auto=format&fit=crop&q=80',
+  },
+  {
+    v: 'bold',
+    label: 'Bold',
+    sub: 'Full · Robust · Complex',
+    img: 'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=400&auto=format&fit=crop&q=80',
+  },
+]
+
+const CHARACTERS = [
+  { label: 'Sweet',   img: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&auto=format&fit=crop&q=80' },
+  { label: 'Spicy',   img: 'https://images.unsplash.com/photo-1583119022894-919a68a3d0e3?w=200&auto=format&fit=crop&q=80' },
+  { label: 'Earthy',  img: 'https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=200&auto=format&fit=crop&q=80' },
+  { label: 'Creamy',  img: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=200&auto=format&fit=crop&q=80' },
+  { label: 'Woody',   img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&auto=format&fit=crop&q=80' },
+  { label: 'Peppery', img: 'https://images.unsplash.com/photo-1518977822534-7049a61ee0c2?w=200&auto=format&fit=crop&q=80' },
+]
+
 const AROMATICS = [
   { label: 'Coffee',    icon: 'coffee' },
   { label: 'Chocolate', icon: 'cookie' },
@@ -13,32 +75,24 @@ const AROMATICS = [
   { label: 'Fruit',     icon: 'nutrition' },
   { label: 'Spice',     icon: 'flare' },
 ]
-const OCCASIONS = [
-  { label: 'Relaxing',    icon: 'self_improvement' },
-  { label: 'Celebrating', icon: 'celebration' },
-  { label: 'Business',    icon: 'work' },
-  { label: 'Date Night',  icon: 'favorite' },
-  { label: 'Sports',      icon: 'sports_score' },
-  { label: 'VIP',         icon: 'stars' },
-]
+
+const GOLD = 'linear-gradient(135deg,#8b6914,#e9c176,#f5d98a,#c5a059,#8b6914)'
 
 export default function FlavorDNA() {
   const navigate = useNavigate()
   const { addXP, completeStep, awardStamp } = useGuestSession()
 
-  const [intensity, setIntensity] = useState(null)
+  const [intensity, setIntensity]   = useState(null)
   const [characters, setCharacters] = useState(new Set())
-  const [aromatics, setAromatics] = useState(new Set())
-  const [body, setBody] = useState(2)
-  const [bodyLabel, setBodyLabel] = useState('Medium')
-  const [experience, setExperience] = useState(null)
-  const [occasion, setOccasion] = useState(null)
-  const [showModal, setShowModal] = useState(false)
+  const [aromatics, setAromatics]   = useState(new Set())
+  const [bodyLabel, setBodyLabel]   = useState('Medium')
+  const [occasion, setOccasion]     = useState('Relaxing')
+  const [showModal, setShowModal]   = useState(false)
 
   function toggleSet(setter, key) {
     setter(prev => {
       const next = new Set(prev)
-      if (next.has(key)) { next.delete(key) } else { next.add(key) }
+      if (next.has(key)) next.delete(key); else next.add(key)
       return next
     })
   }
@@ -55,255 +109,303 @@ export default function FlavorDNA() {
     navigate('/smokecraft/pairing')
   }
 
-  const FILL1 = { fontVariationSettings: "'FILL' 1" }
+  const S = {
+    page:    { minHeight: '100dvh', background: '#0A0705', color: '#E5E2E1', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' },
+    header:  { position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', background: 'rgba(10,7,5,0.82)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(212,175,55,0.12)' },
+    main:    { position: 'relative', zIndex: 10, paddingTop: 100, paddingBottom: 120, maxWidth: 1100, margin: '0 auto', padding: '100px 28px 120px' },
+    section: { marginBottom: 40 },
+    label:   { fontFamily: '"JetBrains Mono",monospace', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#D4AF37', marginBottom: 6 },
+    sectionTitle: { fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#EDE8DF', display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 },
+  }
 
   return (
-    <div
-      className="font-body-md min-h-screen flex flex-col bg-background text-on-surface overflow-x-hidden relative"
-      style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/black-leather.png')" }}
-    >
-      {/* Ambient Effects */}
-      <div className="absolute inset-0 amber-spotlight pointer-events-none z-0" />
-      <img
-        alt=""
-        className="fixed top-0 left-0 w-full h-full object-cover grayscale opacity-10 pointer-events-none z-0"
-        style={{ mixBlendMode: 'screen' }}
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT8AoImWr7lkCUxh9oOvIhM7b9b1fE2tITl6a5C_gfeMTGWefb35buqhuPqsauy_GTNlO4wSr37hsuXVYszrJhVTbZqQ2mJZmqhCpbLbNhe_FXGWeN1lPEg7BLtr6KhMkn-yhinhDFNbZVHcxBGy-rZdYt2urnOdiHftli_wiT2csl_hbghgmProYwvxPXkJzd4QXGnSiw-N4FPcHyOPBwEXc3UlaffLpoLrQNPdVfQ4btSLLyOU35m80_dKCv9SzYk_LKHIOM66U"
-      />
+    <div style={S.page}>
+      {/* Smoke texture overlay */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundImage: "url('https://www.transparenttextures.com/patterns/black-leather.png')", opacity: 0.15, pointerEvents: 'none' }} />
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, background: 'radial-gradient(ellipse at 20% 60%, rgba(212,175,55,0.05) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
-      {/* Top App Bar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md">
-        <div className="flex items-center gap-4">
-          <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} className="material-symbols-outlined text-primary cursor-pointer p-2 hover:bg-surface-variant/50 rounded-full transition-colors active:scale-95">arrow_back</button>
-          <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
+      {/* ── Top Bar ─────────────────────────────────────────── */}
+      <header style={S.header}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#D4AF37', display: 'flex', alignItems: 'center' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 22 }}>arrow_back</span>
+          </button>
+          <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 18, fontWeight: 700, color: '#D4AF37' }}>CraftHub 360</span>
         </div>
-        <div className="hidden md:flex gap-8 items-center">
-          {['Explore', 'Inventory'].map(l => (
-            <span key={l} className="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors cursor-pointer">{l}</span>
+        <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+          {['Explore', 'Inventory', 'Passport', 'Assistant'].map((l, i) => (
+            <span key={l} style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 14, color: i === 2 ? '#D4AF37' : '#6A5A40', cursor: 'pointer', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.target.style.color = '#D4AF37'} onMouseLeave={e => e.target.style.color = i === 2 ? '#D4AF37' : '#6A5A40'}
+            >{l}</span>
           ))}
-          <span className="font-label-lg text-label-lg text-primary cursor-pointer">Passport</span>
-          <span className="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Assistant</span>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="text-right hidden sm:block">
-            <p className="font-label-lg text-primary">Julian Sterling</p>
-            <p className="text-[10px] text-on-surface-variant uppercase tracking-widest">Platinum Member</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: 13, color: '#D4AF37', fontWeight: 600 }}>Julian Sterling</div>
+            <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#6A5A40', letterSpacing: '0.16em', textTransform: 'uppercase' }}>Platinum Member</div>
           </div>
-          <button className="px-6 py-2 bg-primary-container text-on-primary-container font-label-lg rounded-full hover:opacity-90 transition-all">
-            Grand Lounge
+          <button style={{ padding: '8px 18px', borderRadius: 20, background: 'rgba(212,175,55,0.12)', border: '1px solid rgba(212,175,55,0.35)', color: '#D4AF37', fontFamily: '"JetBrains Mono",monospace', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', cursor: 'pointer' }}>
+            👑 Grand Lounge
           </button>
         </div>
       </header>
 
-      {/* Main Content Canvas */}
-      <main className="flex-grow pt-32 pb-32 px-gutter max-w-[1440px] mx-auto w-full relative z-10">
+      {/* ── Main ──────────────────────────────────────────────── */}
+      <main style={S.main}>
+
         {/* Progress */}
-        <div className="mb-12 max-w-3xl mx-auto text-center">
-          <div className="flex justify-between items-end mb-4">
-            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em]">Step 10 of 20</p>
-            <p className="text-[16px] text-on-surface-variant italic font-body-md">Sensory Mapping</p>
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>Step 10 of 20</span>
+            <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 14, color: '#6A5A40', fontStyle: 'italic' }}>Sensory Mapping</span>
           </div>
-          <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-            <div className="h-full bg-primary w-[58%] progress-glow transition-all duration-700 ease-in-out" />
+          <div style={{ height: 3, background: 'rgba(212,175,55,0.15)', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ width: '50%', height: '100%', background: GOLD, borderRadius: 4, transition: 'width 0.8s ease' }} />
           </div>
         </div>
 
-        <div className="max-w-5xl mx-auto">
-          <h2 className="font-headline-xl text-headline-xl text-center mb-16 text-on-surface drop-shadow-lg">Sensory Profile</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {/* Title */}
+        <div style={{ textAlign: 'center', marginBottom: 36 }}>
+          <h2 style={{ fontFamily: '"Playfair Display",serif', fontSize: 'clamp(32px,5vw,52px)', fontWeight: 700, color: '#EDE8DF', marginBottom: 10 }}>Sensory Profile</h2>
+          <p style={{ fontSize: 15, color: '#7A6A50' }}>Build your Flavor DNA to unlock personalized cigar experiences.</p>
+        </div>
 
-            {/* Q1: Smooth or bold? */}
-            <section className="space-y-6">
-              <h3 className="font-headline-md text-headline-md text-primary flex items-center gap-3">
-                <span className="material-symbols-outlined">air</span>
-                Smooth or bold?
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                {[{ v: 'smooth', icon: 'waves', label: 'Smooth' }, { v: 'bold', icon: 'bolt', label: 'Bold' }].map(({ v, icon, label }) => (
-                  <button
-                    key={v}
-                    onClick={() => setIntensity(v)}
-                    className={`gold-foil-border smoked-glass p-8 rounded-xl flex flex-col items-center gap-4 transition-all hover:scale-[1.02] ${intensity === v ? '!bg-primary/20 border-primary' : ''}`}
-                  >
-                    <span className="material-symbols-outlined text-4xl text-primary">{icon}</span>
-                    <span className="font-label-lg text-label-lg uppercase tracking-widest">{label}</span>
-                  </button>
-                ))}
+        {/* ── Atmosphere Card ──────────────────────────────── */}
+        <div style={{ borderRadius: 16, border: '1px solid rgba(212,175,55,0.18)', background: 'rgba(18,12,6,0.85)', overflow: 'hidden', marginBottom: 36 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: 200 }}>
+            <div style={{ padding: '28px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 14, padding: '4px 10px', borderRadius: 12, border: '1px solid rgba(212,175,55,0.3)', background: 'rgba(212,175,55,0.06)', width: 'fit-content' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#D4AF37' }}>radio_button_checked</span>
+                <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.18em', textTransform: 'uppercase' }}>Occasion Influence</span>
               </div>
-            </section>
+              <h3 style={{ fontFamily: '"Playfair Display",serif', fontSize: 26, fontWeight: 700, color: '#D4AF37', marginBottom: 12, lineHeight: 1.2 }}>Atmosphere Shapes Flavor</h3>
+              <p style={{ fontSize: 13, color: '#7A6A50', lineHeight: 1.7, marginBottom: 16, maxWidth: 340 }}>
+                Your occasion influences mood, pace, and palate. Selecting today's occasion helps us recommend cigars and pairings that match the moment.
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 13, color: '#6A5A40' }}>Selected:</span>
+                <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 15, color: '#D4AF37', fontStyle: 'italic', fontWeight: 700 }}>{occasion}</span>
+              </div>
+            </div>
+            <div style={{ position: 'relative', overflow: 'hidden', minHeight: 200 }}>
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts"
+                alt="SmokeCraft atmosphere"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(14,8,2,0.6) 0%, transparent 40%)' }} />
+              {/* SmokeCraft badge overlay */}
+              <div style={{ position: 'absolute', top: 16, right: 16, padding: '6px 12px', borderRadius: 8, background: 'rgba(10,7,5,0.75)', border: '1px solid rgba(212,175,55,0.4)', backdropFilter: 'blur(8px)' }}>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.14em', textTransform: 'uppercase', textAlign: 'center' }}>SMOKECRAFT</div>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: 'rgba(212,175,55,0.6)', letterSpacing: '0.1em', textAlign: 'center' }}>360</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            {/* Q2: Character? */}
-            <section className="space-y-6">
-              <h3 className="font-headline-md text-headline-md text-primary flex items-center gap-3">
-                <span className="material-symbols-outlined">psychology</span>
-                Character?
-              </h3>
-              <div className="grid grid-cols-3 gap-3">
-                {CHARACTERS.map(c => (
-                  <button
-                    key={c}
-                    onClick={() => toggleSet(setCharacters, c)}
-                    className={`gold-foil-border smoked-glass py-4 rounded-lg font-label-sm text-center transition-all hover:bg-surface-variant/50 ${characters.has(c) ? '!bg-primary/20 border-primary text-primary' : ''}`}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            {/* Q3: Aromatic Nuances? (full-width) */}
-            <section className="md:col-span-2 space-y-6">
-              <h3 className="font-headline-md text-headline-md text-primary flex items-center gap-3">
-                <span className="material-symbols-outlined">tune</span>
-                Aromatic Nuances?
-              </h3>
-              <div className="flex flex-wrap gap-4">
-                {AROMATICS.map(({ label, icon }) => (
-                  <button
-                    key={label}
-                    onClick={() => toggleSet(setAromatics, label)}
-                    className={`gold-foil-border smoked-glass px-8 py-5 rounded-full flex items-center gap-3 transition-all hover:translate-y-[-2px] ${aromatics.has(label) ? '!bg-primary/20 text-primary' : ''}`}
-                  >
-                    <span className="material-symbols-outlined text-primary">{icon}</span>
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            {/* Q4: Body Preference? */}
-            <section className="space-y-6">
-              <h3 className="font-headline-md text-headline-md text-primary flex items-center gap-3">
-                <span className="material-symbols-outlined">fitness_center</span>
-                Body Preference?
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between gap-4">
-                  <span className="font-label-sm text-label-sm text-on-surface-variant">Mild</span>
-                  <input
-                    type="range" min="1" max="3" value={body}
-                    onChange={e => setBody(Number(e.target.value))}
-                    className="flex-grow accent-primary h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer"
-                  />
-                  <span className="font-label-sm text-label-sm text-on-surface-variant">Full-bodied</span>
-                </div>
-                <div className="flex justify-around pt-2">
-                  {[['Mild', 1], ['Medium', 2], ['Full', 3]].map(([lbl, val]) => (
-                    <button
-                      key={lbl}
-                      onClick={() => { setBody(Number(val)); setBodyLabel(lbl) }}
-                      className={`text-xs uppercase tracking-widest pb-1 border-b transition-colors ${bodyLabel === lbl ? 'text-primary border-primary' : 'text-on-surface-variant border-transparent hover:border-primary'}`}
-                    >
-                      {lbl}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            {/* Q5: Experience Level? */}
-            <section className="space-y-6">
-              <h3 className="font-headline-md text-headline-md text-primary flex items-center gap-3">
-                <span className="material-symbols-outlined">verified</span>
-                Experience Level?
-              </h3>
-              <div className="grid grid-cols-2 gap-3">
-                {['New', 'Casual', 'Experienced', 'Expert'].map(e => (
-                  <button
-                    key={e}
-                    onClick={() => setExperience(e)}
-                    className={`gold-foil-border smoked-glass py-4 rounded-lg font-label-sm transition-all ${experience === e ? '!bg-primary/20 text-primary' : ''}`}
-                  >
-                    {e}
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            {/* Q6: Today's Occasion? (full-width) */}
-            <section className="md:col-span-2 space-y-6">
-              <h3 className="font-headline-md text-headline-md text-primary flex items-center gap-3">
-                <span className="material-symbols-outlined">event</span>
-                {"Today's Occasion?"}
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                {OCCASIONS.map(({ label, icon }) => (
-                  <button
-                    key={label}
-                    onClick={() => setOccasion(label)}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all border border-outline-variant/30 hover:bg-surface-variant/30 ${occasion === label ? 'bg-primary/20 border-primary/60' : ''}`}
-                  >
-                    <span className="material-symbols-outlined text-3xl">{icon}</span>
-                    <span className="font-label-sm text-label-sm">{label}</span>
-                  </button>
-                ))}
-              </div>
-            </section>
+        {/* ── Today's Occasion ─────────────────────────────── */}
+        <div style={S.section}>
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#D4AF37' }}>event</span>
+              <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#EDE8DF' }}>Today's Occasion</span>
+            </div>
+            <p style={{ fontSize: 13, color: '#6A5A40', marginLeft: 30 }}>Choose the occasion that best fits your moment.</p>
           </div>
 
-          {/* Passport Milestone Alert */}
-          <div className="mt-20 p-8 rounded-2xl bg-primary/5 border border-primary/20 flex flex-col md:flex-row items-center gap-8 smoked-glass">
-            <div className="relative flex-shrink-0 w-24 h-24">
-              <div className="w-24 h-24 rounded-full border-2 border-primary border-dashed" />
-              <span
-                className="material-symbols-outlined text-5xl text-primary absolute inset-0 flex items-center justify-center"
-                style={FILL1}
-              >
-                approval
-              </span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 12 }}>
+            {OCCASIONS.map(occ => {
+              const active = occasion === occ.label
+              return (
+                <button
+                  key={occ.label}
+                  onClick={() => setOccasion(occ.label)}
+                  style={{ background: active ? 'rgba(212,175,55,0.1)' : 'rgba(18,12,6,0.7)', border: `1px solid ${active ? 'rgba(212,175,55,0.6)' : 'rgba(212,175,55,0.15)'}`, borderRadius: 14, padding: '16px 8px 14px', cursor: 'pointer', transition: 'all 0.25s', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}
+                  onMouseEnter={e => { if (!active) { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.35)'; e.currentTarget.style.transform = 'translateY(-2px)' } }}
+                  onMouseLeave={e => { if (!active) { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.15)'; e.currentTarget.style.transform = 'translateY(0)' } }}
+                >
+                  {/* Medallion coin */}
+                  <div style={{ position: 'relative', width: 72, height: 72 }}>
+                    {/* Outer laurel ring */}
+                    <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: active ? GOLD : 'linear-gradient(135deg,#4A3A18,#8B6914,#4A3A18)', padding: 3 }}>
+                      <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: `rgba(${occ.color === '#8B4513' ? '139,69,19' : occ.color === '#C4860A' ? '196,134,10' : occ.color === '#4A4A4A' ? '74,74,74' : occ.color === '#8B1A3A' ? '139,26,58' : occ.color === '#1A4A1A' ? '26,74,26' : '42,26,90'},0.25)` }}>
+                      </div>
+                    </div>
+                    {/* Inner photo circle */}
+                    <div style={{ position: 'absolute', inset: 4, borderRadius: '50%', overflow: 'hidden', border: '1px solid rgba(212,175,55,0.3)' }}>
+                      <img src={occ.img} alt={occ.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(160deg, rgba(0,0,0,0.2), rgba(0,0,0,0.5))` }} />
+                    </div>
+                    {/* Active glow ring */}
+                    {active && <div style={{ position: 'absolute', inset: -2, borderRadius: '50%', boxShadow: '0 0 16px rgba(212,175,55,0.5)', pointerEvents: 'none' }} />}
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 13, fontWeight: active ? 700 : 500, color: active ? '#D4AF37' : '#C8BAA2', textAlign: 'center', marginBottom: 2 }}>{occ.label}</div>
+                    <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: active ? 'rgba(212,175,55,0.7)' : '#4A3A20', letterSpacing: '0.06em', textAlign: 'center' }}>{occ.sub}</div>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* ── Smooth or Bold ───────────────────────────────── */}
+        <div style={S.section}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#D4AF37' }}>air</span>
+            <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#EDE8DF' }}>Smooth or bold?</span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            {INTENSITY_OPTIONS.map(opt => {
+              const active = intensity === opt.v
+              return (
+                <button
+                  key={opt.v}
+                  onClick={() => setIntensity(opt.v)}
+                  style={{ position: 'relative', borderRadius: 14, overflow: 'hidden', border: `1px solid ${active ? 'rgba(212,175,55,0.6)' : 'rgba(212,175,55,0.18)'}`, cursor: 'pointer', height: 160, transition: 'all 0.25s', outline: 'none' }}
+                >
+                  <img src={opt.img} alt={opt.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  <div style={{ position: 'absolute', inset: 0, background: active ? 'rgba(10,7,2,0.45)' : 'rgba(10,7,2,0.65)', transition: 'background 0.25s' }} />
+                  {active && <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 0 2px rgba(212,175,55,0.6)', borderRadius: 13, pointerEvents: 'none' }} />}
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                    <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 24, fontWeight: 700, color: active ? '#D4AF37' : '#EDE8DF', letterSpacing: '-0.01em' }}>{opt.label}</span>
+                    <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: active ? 'rgba(212,175,55,0.8)' : '#7A6A50', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{opt.sub}</span>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* ── Character ────────────────────────────────────── */}
+        <div style={S.section}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#D4AF37' }}>psychology</span>
+            <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#EDE8DF' }}>Character?</span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
+            {CHARACTERS.map(c => {
+              const active = characters.has(c.label)
+              return (
+                <button
+                  key={c.label}
+                  onClick={() => toggleSet(setCharacters, c.label)}
+                  style={{ position: 'relative', borderRadius: 12, overflow: 'hidden', border: `1px solid ${active ? 'rgba(212,175,55,0.6)' : 'rgba(212,175,55,0.15)'}`, cursor: 'pointer', height: 90, transition: 'all 0.2s', outline: 'none' }}
+                >
+                  <img src={c.img} alt={c.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  <div style={{ position: 'absolute', inset: 0, background: active ? 'rgba(8,5,2,0.4)' : 'rgba(8,5,2,0.6)', transition: 'background 0.2s' }} />
+                  {active && <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 0 2px rgba(212,175,55,0.6)', borderRadius: 11, pointerEvents: 'none' }} />}
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 14, fontWeight: 700, color: active ? '#D4AF37' : '#C8BAA2', letterSpacing: '0.02em' }}>{c.label}</span>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* ── Aromatic Nuances ─────────────────────────────── */}
+        <div style={{ ...S.section, marginBottom: 36 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#D4AF37' }}>tune</span>
+            <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#EDE8DF' }}>Aromatic Nuances?</span>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+            {AROMATICS.map(({ label, icon }) => {
+              const active = aromatics.has(label)
+              return (
+                <button
+                  key={label}
+                  onClick={() => toggleSet(setAromatics, label)}
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', borderRadius: 50, border: `1px solid ${active ? 'rgba(212,175,55,0.6)' : 'rgba(212,175,55,0.2)'}`, background: active ? 'rgba(212,175,55,0.12)' : 'rgba(18,12,6,0.6)', color: active ? '#D4AF37' : '#8A7A60', fontSize: 14, fontWeight: active ? 700 : 400, cursor: 'pointer', transition: 'all 0.2s', outline: 'none' }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 16, color: active ? '#D4AF37' : '#6A5A40' }}>{icon}</span>
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* ── Body Preference ──────────────────────────────── */}
+        <div style={{ ...S.section, marginBottom: 36 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#D4AF37' }}>fitness_center</span>
+            <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#EDE8DF' }}>Body Preference?</span>
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            {['Mild', 'Medium', 'Full'].map(lbl => (
+              <button
+                key={lbl}
+                onClick={() => setBodyLabel(lbl)}
+                style={{ flex: 1, padding: '14px 0', borderRadius: 10, border: `1px solid ${bodyLabel === lbl ? 'rgba(212,175,55,0.6)' : 'rgba(212,175,55,0.18)'}`, background: bodyLabel === lbl ? 'rgba(212,175,55,0.12)' : 'rgba(18,12,6,0.6)', color: bodyLabel === lbl ? '#D4AF37' : '#6A5A40', fontFamily: '"JetBrains Mono",monospace', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s', outline: 'none' }}
+              >{lbl}</button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Passport Milestone Banner ────────────────────── */}
+        <div style={{ borderRadius: 16, border: '1px solid rgba(212,175,55,0.25)', background: 'rgba(18,12,6,0.9)', overflow: 'hidden', display: 'flex', alignItems: 'center', gap: 0 }}>
+          {/* Passport book */}
+          <div style={{ width: 110, flexShrink: 0, background: 'linear-gradient(160deg,#2D1A0A,#1A0D04)', display: 'flex', alignItems: 'center', justifyContent: 'center', alignSelf: 'stretch', position: 'relative' }}>
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg,rgba(255,255,255,0.02) 0px,rgba(255,255,255,0.02) 1px,transparent 1px,transparent 8px)' }} />
+            <div style={{ width: 60, height: 80, borderRadius: 4, background: 'linear-gradient(160deg,#1A0F06,#2D1A0A)', border: '2px solid rgba(212,175,55,0.55)', boxShadow: '4px 4px 16px rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-evenly', padding: '8px 6px', position: 'relative', zIndex: 1 }}>
+              <div style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#D4AF37' }}>public</span>
+              </div>
+              <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#D4AF37', letterSpacing: '0.1em', textAlign: 'center', lineHeight: 1.5 }}>CH360</div>
             </div>
-            <div className="flex-grow text-center md:text-left">
-              <h4 className="font-headline-md text-headline-md text-primary mb-1">Passport Milestone</h4>
-              <p className="font-body-md text-body-md text-on-surface-variant">
-                {"You're about to earn the "}
-                <strong className="text-primary">'Taste Profile Completion Stamp'</strong>
-                {". Complete this profile to unlock personalized humidor curation and exclusive cellar access."}
-              </p>
+          </div>
+
+          {/* Text */}
+          <div style={{ flex: 1, padding: '24px 24px' }}>
+            <h4 style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#EDE8DF', marginBottom: 8 }}>Passport Milestone</h4>
+            <p style={{ fontSize: 13, color: '#7A6A50', lineHeight: 1.65 }}>
+              {"You're about to earn the "}
+              <strong style={{ color: '#D4AF37', fontWeight: 700 }}>Taste Profile Completion Stamp</strong>
+              {". Complete this profile to unlock personalized humidors, pairing recommendations, and exclusive cellar access."}
+            </p>
+          </div>
+
+          {/* Stamp circle + button */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: '24px 28px', flexShrink: 0 }}>
+            <div style={{ width: 56, height: 56, borderRadius: '50%', border: '2px dashed rgba(212,175,55,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 28, color: 'rgba(212,175,55,0.5)', fontVariationSettings: "'FILL' 1" }}>approval</span>
             </div>
             <button
               onClick={handleFinalize}
-              className="w-full md:w-auto px-12 py-5 bg-primary text-on-primary font-label-lg rounded-xl hover:shadow-[0_0_30px_rgba(233,193,118,0.4)] transition-all active:scale-95"
+              style={{ padding: '12px 24px', borderRadius: 10, border: 'none', background: GOLD, color: '#0A0705', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer', boxShadow: '0 0 20px rgba(212,175,55,0.3)', whiteSpace: 'nowrap', transition: 'all 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
             >
-              Finalize Profile
+              Finalize Profile →
             </button>
+            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#4A3A20', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Save &amp; Continue</span>
           </div>
         </div>
+
       </main>
 
-      {/* Success Modal */}
+      {/* ── Stamp Modal ─────────────────────────────────────── */}
       {showModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-gutter">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleContinue} />
-          <div className="smoked-glass gold-foil-border p-12 rounded-3xl max-w-lg w-full relative text-center">
-            <span className="material-symbols-outlined text-8xl text-primary mb-6 block" style={FILL1}>stars</span>
-            <h3 className="font-headline-xl text-headline-xl text-primary mb-4">Stamp Earned</h3>
-            <p className="font-body-lg text-body-lg text-on-surface-variant mb-10">
-              Your Sensory Profile is now mapped. Your personalized CraftHub Passport has been updated with the Taste Profile Completion Stamp.
-            </p>
-            <button onClick={handleContinue} className="w-full py-4 bg-primary text-on-primary font-label-lg rounded-xl">
+        <div onClick={handleContinue} style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+          <div onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: 460, borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)', background: 'rgba(14,10,5,0.97)', backdropFilter: 'blur(24px)', padding: '44px 36px', textAlign: 'center', boxShadow: '0 40px 120px rgba(0,0,0,0.7)' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 72, color: '#D4AF37', fontVariationSettings: "'FILL' 1", display: 'block', marginBottom: 20 }}>stars</span>
+            <h3 style={{ fontFamily: '"Playfair Display",serif', fontSize: 28, fontWeight: 700, color: '#D4AF37', marginBottom: 12 }}>Stamp Earned</h3>
+            <p style={{ fontSize: 15, color: '#7A6A50', lineHeight: 1.7, marginBottom: 32 }}>Your Sensory Profile is now mapped. Your CraftHub Passport has been updated with the Taste Profile Completion Stamp.</p>
+            <button onClick={handleContinue} style={{ width: '100%', padding: '14px 0', borderRadius: 12, border: 'none', background: GOLD, color: '#0A0705', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 900, letterSpacing: '0.14em', textTransform: 'uppercase', cursor: 'pointer' }}>
               Continue Journey
             </button>
           </div>
         </div>
       )}
 
-      {/* Bottom Navigation Bar (Mobile) */}
-      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)] md:hidden">
-        {[
-          { icon: 'explore',      label: 'Explore',   active: false },
-          { icon: 'inventory_2',  label: 'Inventory', active: false },
-          { icon: 'menu_book',    label: 'Passport',  active: true  },
-          { icon: 'auto_awesome', label: 'Assistant', active: false },
-        ].map(({ icon, label, active }) => (
-          <div
-            key={label}
-            className={`flex flex-col items-center justify-center transition-colors ${active ? 'text-primary bg-primary-container/20 rounded-full px-6 py-2' : 'text-on-surface-variant hover:text-primary'}`}
-          >
-            <span className="material-symbols-outlined">{icon}</span>
-            <span className="font-label-sm text-label-sm">{label}</span>
-          </div>
-        ))}
-      </nav>
+      <style>{`
+        @media (max-width: 768px) {
+          .smokecraft-grid-6 { grid-template-columns: repeat(3,1fr) !important; }
+          .smokecraft-grid-2 { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   )
 }
