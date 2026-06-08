@@ -138,8 +138,8 @@ export default function PassportConnection() {
   const rank        = getRankFromXP(xp)
   const fname       = session.profile?.firstName
   const lname       = session.profile?.lastName
-  const displayName = fname ? `${fname} ${lname || ''}`.trim() : 'John M Collins'
-  const initials    = `${fname?.[0] || 'J'}${lname?.[0] || 'C'}`
+  const displayName = fname ? `${fname} ${lname || ''}`.trim() : 'Passport Member'
+  const initials    = fname ? `${fname[0]}${lname?.[0] || ''}` : 'PM'
   const venue       = getVenueDisplayName(session.venueId)
   const TIER_C      = { Novice:'#c5a059', Bronze:'#cd7f32', Silver:'#c0c0c0', Gold:'#e9c176', Diamond:'#4fc3f7' }
   const tc          = TIER_C[rank.name] || '#e9c176'

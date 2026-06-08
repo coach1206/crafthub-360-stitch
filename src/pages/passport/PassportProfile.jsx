@@ -32,10 +32,10 @@ export default function PassportProfile() {
   const { session } = useGuestSession()
   const xp    = session.xp ?? 0
   const rank  = getRankFromXP(xp)
-  const fname = session.profile?.firstName || 'John'
-  const lname = session.profile?.lastName  || 'M Collins'
-  const displayName = `${fname} ${lname}`.trim()
-  const initials    = `${fname[0]}${lname?.[0] || ''}`
+  const fname = session.profile?.firstName || ''
+  const lname = session.profile?.lastName  || ''
+  const displayName = `${fname} ${lname}`.trim() || 'Passport Member'
+  const initials    = fname ? `${fname[0]}${lname?.[0] || ''}` : 'PM'
   const tc   = TIER_COLORS[rank.name] || '#e9c176'
   const nextXP = TIER_NEXT[rank.name] || 300
   const pct  = Math.min(100, Math.round((xp / nextXP) * 100))
