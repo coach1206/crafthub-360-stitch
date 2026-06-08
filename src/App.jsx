@@ -40,6 +40,7 @@ import PassportConnections from './pages/passport/PassportConnections.jsx'
 import PassportEvents      from './pages/passport/PassportEvents.jsx'
 import PassportBenefits    from './pages/passport/PassportBenefits.jsx'
 import PassportScan        from './pages/passport/PassportScan.jsx'
+import PassportHowItWorks  from './pages/passport/PassportHowItWorks.jsx'
 
 // ── Craft modules — moderate size, eager ─────────────────────
 import PourCraft from './pages/PourCraft.jsx'
@@ -199,6 +200,7 @@ export default function App() {
               <Route path="events"          element={<PassportEvents />} />
               <Route path="benefits"        element={<PassportBenefits />} />
               <Route path="scan"            element={<PassportScan />} />
+              <Route path="how-it-works"    element={<PassportHowItWorks />} />
               <Route path="ceremony"        element={<Navigate to="/smokecraft/passport-stamp" replace />} />
               <Route path="leaderboard"     element={<Navigate to="/smokecraft/leaderboard" replace />} />
             </Route>
