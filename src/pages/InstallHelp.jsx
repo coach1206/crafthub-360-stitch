@@ -69,7 +69,7 @@ export default function InstallHelp() {
 
         <div style={{ marginBottom: '2rem' }}>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')}
             style={{ background: 'transparent', border: 'none', color: `${GOLD}44`, cursor: 'pointer', fontFamily: 'Georgia, serif', fontSize: '0.8rem', letterSpacing: '0.1em', padding: 0, marginBottom: '1.25rem' }}
           >
             ← Back

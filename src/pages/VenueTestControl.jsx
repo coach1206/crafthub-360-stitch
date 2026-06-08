@@ -278,7 +278,7 @@ export default function VenueTestControl() {
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <button onClick={() => navigate(-1)} style={{ background: 'transparent', border: 'none', color: `${GOLD}55`, fontSize: '0.72rem', letterSpacing: '0.15em', cursor: 'pointer', padding: 0, marginBottom: '0.75rem', display: 'block', textTransform: 'uppercase' }}>← Back</button>
+            <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} style={{ background: 'transparent', border: 'none', color: `${GOLD}55`, fontSize: '0.72rem', letterSpacing: '0.15em', cursor: 'pointer', padding: 0, marginBottom: '0.75rem', display: 'block', textTransform: 'uppercase' }}>← Back</button>
             <div style={{ fontSize: '0.55rem', letterSpacing: '0.3em', color: `${GOLD}44`, textTransform: 'uppercase', marginBottom: '0.35rem' }}>NOVEE OS · Phase 12</div>
             <h1 style={{ margin: 0, fontSize: 'clamp(1.3rem, 3vw, 1.7rem)', fontWeight: 400, letterSpacing: '0.05em', lineHeight: 1.2 }}>Venue Test Control</h1>
           </div>

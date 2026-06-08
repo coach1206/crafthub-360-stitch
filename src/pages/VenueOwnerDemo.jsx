@@ -45,7 +45,7 @@ export default function VenueOwnerDemo() {
 
         {/* Header */}
         <div style={{ marginBottom:'2rem' }}>
-          <button onClick={()=>navigate(-1)} style={{background:'transparent',border:'none',color:`${GOLD}55`,fontSize:'0.72rem',letterSpacing:'0.15em',cursor:'pointer',padding:0,marginBottom:'0.75rem',textTransform:'uppercase'}}>← Back</button>
+          <button onClick={()=>window.history.length > 1 ? navigate(-1) : navigate('/')} style={{background:'transparent',border:'none',color:`${GOLD}55`,fontSize:'0.72rem',letterSpacing:'0.15em',cursor:'pointer',padding:0,marginBottom:'0.75rem',textTransform:'uppercase'}}>← Back</button>
           <div style={{fontSize:'0.55rem',letterSpacing:'0.3em',color:`${GOLD}44`,textTransform:'uppercase',marginBottom:'0.3rem'}}>NOVEE OS · Venue Owner Walkthrough</div>
           <h1 style={{margin:0,fontSize:'clamp(1.3rem,3vw,1.8rem)',fontWeight:400,letterSpacing:'0.04em'}}>What NOVEE OS Does for Your Venue</h1>
           <div style={{marginTop:'0.875rem'}}>

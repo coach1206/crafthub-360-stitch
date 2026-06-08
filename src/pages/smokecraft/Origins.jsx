@@ -73,7 +73,7 @@ export default function Origins() {
         <div className="flex items-center gap-4">
           <button
             className="p-2 hover:bg-surface-variant/50 transition-colors duration-300 rounded-full active:scale-95"
-            onClick={() => navigate(-1)}
+            onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')}
           >
             <span className="material-symbols-outlined text-primary">arrow_back</span>
           </button>

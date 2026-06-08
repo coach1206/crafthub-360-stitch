@@ -74,7 +74,7 @@ export default function FlavorDNA() {
       {/* Top App Bar */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate(-1)} className="material-symbols-outlined text-primary cursor-pointer p-2 hover:bg-surface-variant/50 rounded-full transition-colors active:scale-95">arrow_back</button>
+          <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} className="material-symbols-outlined text-primary cursor-pointer p-2 hover:bg-surface-variant/50 rounded-full transition-colors active:scale-95">arrow_back</button>
           <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
         </div>
         <div className="hidden md:flex gap-8 items-center">

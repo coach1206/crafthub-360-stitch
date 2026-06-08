@@ -112,7 +112,7 @@ export default function KioskSetup() {
         {/* Header */}
         <div style={{ marginBottom: '2.5rem' }}>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')}
             style={{ background: 'transparent', border: 'none', color: `${GOLD}55`, cursor: 'pointer', fontFamily: 'Georgia, serif', fontSize: '0.8rem', letterSpacing: '0.1em', padding: 0, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
           >
             ← Back

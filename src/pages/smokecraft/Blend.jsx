@@ -78,7 +78,7 @@ export default function Blend() {
       {/* Top Navigation Shell */}
       <header className="fixed top-0 w-full z-50 flex justify-between items-center px-margin py-unit bg-surface/5 backdrop-blur-[40px] border-b border-white/20">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate(-1)} className="material-symbols-outlined text-primary p-2 hover:bg-white/10 transition-colors rounded-full active:scale-95">arrow_back</button>
+          <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} className="material-symbols-outlined text-primary p-2 hover:bg-white/10 transition-colors rounded-full active:scale-95">arrow_back</button>
           <span className="font-headline-md text-headline-md font-bold text-primary tracking-tighter">CRAFTHUB 360</span>
         </div>
         <div className="flex items-center gap-8">
