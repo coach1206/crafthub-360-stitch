@@ -15,79 +15,25 @@ import {
   DEFAULT_DEVICE_ID,
   DEFAULT_ENTRY_SOURCE,
 } from '../data/passportEntryConfig.js'
+import {
+  loadSession,
+  saveSession,
+  createNewSession,
+} from '../services/sessionStorageService.js'
+import { calculateScore, getRankLabel } from '../services/leaderboardService.js'
 
-const STORAGE_KEY    = 'novee_guest_session'
-const SCHEMA_VERSION = 3   // 2→3: added Phase 4 entry identity fields
-
-function genGuestId() {
-  const now = Date.now()
-  return `g_${now.toString(36)}_${Math.random().toString(36).slice(2, 8)}`
-}
-
-function loadFromStorage() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
-    if (!parsed || typeof parsed !== 'object' || parsed.__version !== SCHEMA_VERSION) return null
-    return parsed
-  } catch {
-    return null
-  }
-}
-
-function saveToStorage(state) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, __version: SCHEMA_VERSION }))
-  } catch { /* storage unavailable — silently continue */ }
-}
-
-const defaultState = {
-  profile: {
-    firstName: '', lastName: '', nickname: '', email: '', phone: '',
-    city: '', state: '', zip: '', photo: null, ageConfirmed: false,
-  },
-  completedSteps:        [],
-  xp:                    0,
-  rank:                  'Novice',
-  badges:                [],
-  smokecraftStamps:      [],
-  mentors:               [],
-  favorites:             [],
-  pendingOrders:         [],
-  currentSmokecraftStep: null,
-  sessionId:             null,
-  latestStampId:         null,
-  goldenBoxProgress:     null,
-  // Phase 4 — entry identity
-  guestId:               null,
-  venueId:               DEFAULT_VENUE_ID,
-  deviceId:              DEFAULT_DEVICE_ID,
-  entrySource:           DEFAULT_ENTRY_SOURCE,
-  entryStartedAt:        null,
-  lastActiveAt:          null,
-  guestProfile:          null,
-  profileComplete:       false,
-  resumeToken:           null,
-  // Preferences & routing
-  audioEnabled:          true,
-  hapticsEnabled:        true,
-  lastVisitedRoute:      null,
-  leaderboardScore:      0,
-}
+// SCHEMA_VERSION is now managed in sessionStorageService (v4)
 
 const GuestSessionContext = createContext(null)
 
 export function GuestSessionProvider({ children }) {
-  const [session, setSession] = useState(() => {
-    const saved = loadFromStorage()
-    return saved || { ...defaultState, sessionId: Date.now().toString() }
-  })
+  const [session, setSession] = useState(() => loadSession() || createNewSession())
 
+  /** Atomic update: applies updater, saves to localStorage, returns next state. */
   const update = useCallback((updater) => {
     setSession(prev => {
       const next = typeof updater === 'function' ? updater(prev) : { ...prev, ...updater }
-      saveToStorage(next)
+      saveSession(next)
       return next
     })
   }, [])
@@ -170,39 +116,25 @@ export function GuestSessionProvider({ children }) {
 
   // ── Phase 4: Entry identity ───────────────────────────────────────────────
 
-  /**
-   * Called on QR scan / kiosk launch.
-   * Sets venue, device, entry source, and initialises guestId if not present.
-   * Never wipes stamps, XP, or completedSteps.
-   */
   const startPassportEntry = useCallback((payload = {}) => {
     update(prev => {
       const now = Date.now()
       return {
         ...prev,
-        guestId:        prev.guestId        || payload.guestId      || genGuestId(),
+        guestId:        prev.guestId        || payload.guestId      || `g_${now.toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
         venueId:        payload.venueId      || prev.venueId         || DEFAULT_VENUE_ID,
         deviceId:       payload.deviceId     || prev.deviceId        || DEFAULT_DEVICE_ID,
         entrySource:    payload.entrySource  || prev.entrySource     || DEFAULT_ENTRY_SOURCE,
         entryStartedAt: prev.entryStartedAt  || now,
         lastActiveAt:   now,
-        // stamps, XP, completedSteps: untouched
       }
     })
   }, [update])
 
-  /**
-   * Updates guestProfile and mirrors core display fields to session.profile.
-   * Does NOT set profileComplete — use completeGuestProfile for that.
-   */
   const updateGuestProfile = useCallback((profile) => {
     update(prev => mergeGuestProfile(prev, profile))
   }, [update])
 
-  /**
-   * Marks profile complete, merges fields, generates a resumeToken.
-   * Replaces the separate updateProfile call for final form submission.
-   */
   const completeGuestProfile = useCallback((profile) => {
     update(prev => {
       const merged = mergeGuestProfile(prev, profile)
@@ -211,50 +143,24 @@ export function GuestSessionProvider({ children }) {
         ...merged,
         profileComplete: true,
         resumeToken:     token,
+        leaderboard: {
+          ...merged.leaderboard,
+          displayName: merged.leaderboard?.displayName || merged.profile?.nickname || null,
+        },
       }
     })
   }, [update])
 
-  /** Stamps the session with the current time as lastActiveAt. */
   const refreshLastActive = useCallback(() => {
     update(prev => ({ ...prev, lastActiveAt: Date.now() }))
   }, [update])
 
-  /**
-   * Validates a resume token and, if valid, stores it and refreshes lastActiveAt.
-   * Silent no-op if token is invalid.
-   */
   const resumePassportSession = useCallback((token) => {
     const parsed = validateResumeToken(token)
     if (!parsed) return
-    update(prev => ({
-      ...prev,
-      resumeToken:  token,
-      lastActiveAt: Date.now(),
-    }))
+    update(prev => ({ ...prev, resumeToken: token, lastActiveAt: Date.now() }))
   }, [update])
 
-  /** Enables or disables audio (used by voice service + mentor screens). */
-  const setAudioEnabled = useCallback((val) => {
-    update(prev => ({ ...prev, audioEnabled: !!val }))
-  }, [update])
-
-  /** Enables or disables haptic feedback (used by haptics utility). */
-  const setHapticsEnabled = useCallback((val) => {
-    update(prev => ({ ...prev, hapticsEnabled: !!val }))
-  }, [update])
-
-  /** Records the last meaningful route the guest visited, for back-button logic. */
-  const trackRoute = useCallback((route) => {
-    if (route && typeof route === 'string') {
-      update(prev => ({ ...prev, lastVisitedRoute: route }))
-    }
-  }, [update])
-
-  /**
-   * Clears venue/device/entry identity only.
-   * Stamps, XP, completedSteps, and session.profile are preserved.
-   */
   const clearPassportIdentity = useCallback(() => {
     update(prev => ({
       ...prev,
@@ -270,10 +176,206 @@ export function GuestSessionProvider({ children }) {
     }))
   }, [update])
 
+  // ── Preferences & routing (Phase 4 Part 2) ───────────────────────────────
+  const setAudioEnabled = useCallback((val) => {
+    update(prev => ({
+      ...prev,
+      audioEnabled: !!val,
+      preferences:  { ...prev.preferences, audioEnabled: !!val },
+    }))
+  }, [update])
+
+  const setHapticsEnabled = useCallback((val) => {
+    update(prev => ({
+      ...prev,
+      hapticsEnabled: !!val,
+      preferences:    { ...prev.preferences, hapticsEnabled: !!val },
+    }))
+  }, [update])
+
+  const trackRoute = useCallback((route) => {
+    if (!route || typeof route !== 'string') return
+    update(prev => ({
+      ...prev,
+      lastVisitedRoute: route,
+      system: { ...prev.system, lastVisitedRoute: route },
+    }))
+  }, [update])
+
+  // ── Phase 6: Selection tracking ───────────────────────────────────────────
+
+  /** Records the craft the guest entered (e.g. "SmokeCraft 360"). */
+  const setSelectedCraft = useCallback((craft) => {
+    update(prev => ({
+      ...prev,
+      selectedCraft: craft,
+      system: { ...prev.system, sourceModule: craft || prev.system?.sourceModule },
+    }))
+  }, [update])
+
+  /** Records the selected mentor and their origin country. */
+  const setSelectedMentor = useCallback((mentorId, country) => {
+    update(prev => ({
+      ...prev,
+      selectedMentor:        mentorId,
+      selectedMentorCountry: country || null,
+    }))
+  }, [update])
+
+  /** Records the selected experience level (Novice / Enthusiast / Connoisseur / Aficionado). */
+  const setSelectedLevel = useCallback((level) => {
+    update(prev => ({ ...prev, selectedLevel: level }))
+  }, [update])
+
+  // ── Phase 6: SmokeCraft Session 1 completion ──────────────────────────────
+
+  /**
+   * Atomic action that wires all Phase 6 data on session completion:
+   *  - Awards SmokeCraft 360 Initiation Stamp to passport.earnedStamps
+   *  - Updates leaderboard score + rank
+   *  - Adds to smokeCraft.completedSessions
+   *  - Calculates eatCommand.engagementScore
+   *  - Populates pos3.suggestedPairings
+   *
+   * Call this ALONGSIDE the existing addXP / completeStep / awardStamp calls
+   * in SessionComplete — it handles the NEW data fields only, so nothing doubles.
+   */
+  const completeSmokeCraftSession = useCallback((sessionData = {}) => {
+    update(prev => {
+      const now = Date.now()
+
+      // Rich initiation stamp for the new passport model
+      const initiationStamp = {
+        stampId:       'smokecraft-session-1-initiation',
+        title:         'SmokeCraft 360 Initiation Stamp',
+        craft:         'SmokeCraft 360',
+        sessionNumber: 1,
+        eventName:     prev.passport?.eventName || 'The Grand Lounge',
+        earnedAt:      now,
+        visualTheme:   'gold',
+        points:        150,
+        sourceModule:  'smokecraft-session-1',
+      }
+
+      const prevEarned     = prev.passport?.earnedStamps || []
+      const alreadyEarned  = prevEarned.find(s => s.stampId === initiationStamp.stampId)
+      const newEarned      = alreadyEarned ? prevEarned : [...prevEarned, initiationStamp]
+
+      const completedSessions  = prev.smokeCraft?.completedSessions || []
+      const alreadyLogged      = completedSessions.find(s => s.sessionId === prev.sessionId)
+
+      // Build partial next state for score calculation
+      const partialNext = {
+        ...prev,
+        completedSteps: prev.completedSteps.includes('session-complete')
+          ? prev.completedSteps
+          : [...prev.completedSteps, 'session-complete'],
+        passport: {
+          ...prev.passport,
+          earnedStamps:  newEarned,
+          latestStampId: initiationStamp.stampId,
+          passportId:    prev.passport?.passportId || `PP-${now.toString(36).toUpperCase()}`,
+        },
+      }
+
+      const lbScore = calculateScore(partialNext)
+      const lbRank  = getRankLabel(lbScore)
+
+      return {
+        ...partialNext,
+        leaderboardScore: lbScore,
+        leaderboard: {
+          ...prev.leaderboard,
+          score:       lbScore,
+          rank:        lbRank,
+          displayName: prev.leaderboard?.displayName || prev.profile?.nickname || null,
+        },
+        smokeCraft: {
+          ...prev.smokeCraft,
+          completedSessions: alreadyLogged
+            ? completedSessions
+            : [...completedSessions, {
+                sessionId:   prev.sessionId,
+                completedAt: now,
+                craft:       prev.selectedCraft || 'SmokeCraft 360',
+                mentor:      prev.selectedMentor,
+                level:       prev.selectedLevel,
+                xpEarned:    prev.xp,
+                ...sessionData,
+              }],
+          currentSession: null,
+        },
+        eatCommand: {
+          ...prev.eatCommand,
+          engagementScore: Math.round(
+            Math.min(
+              (partialNext.completedSteps.length * 15) +
+              (newEarned.length * 50) +
+              ((prev.xp || 0) * 0.1),
+              500
+            )
+          ),
+          sessionValue: (prev.smokeCraft?.pairingSelections?.length || 0) * 8 + 45,
+        },
+        pos3: {
+          ...prev.pos3,
+          suggestedPairings: prev.pos3?.suggestedPairings?.length ? prev.pos3.suggestedPairings : [
+            { type: 'spirit',   name: 'Single Malt Scotch', reason: 'Full-body complement' },
+            { type: 'spirit',   name: 'Añejo Rum',          reason: 'Tropical harmony' },
+            { type: 'beverage', name: 'Dark Espresso',       reason: 'Earthy contrast' },
+            { type: 'food',     name: 'Dark Chocolate 72%', reason: 'Bitter-sweet pairing' },
+          ],
+        },
+      }
+    })
+  }, [update])
+
+  // ── Phase 6: Activity sync ────────────────────────────────────────────────
+
+  /** Refreshes POS 3 pairings from current session state. */
+  const syncPos3Activity = useCallback(() => {
+    update(prev => ({
+      ...prev,
+      pos3: {
+        ...prev.pos3,
+        suggestedPairings: prev.pos3?.suggestedPairings?.length ? prev.pos3.suggestedPairings : [
+          { type: 'spirit',   name: 'Single Malt Scotch', reason: 'Full-body complement' },
+          { type: 'spirit',   name: 'Añejo Rum',          reason: 'Tropical harmony' },
+          { type: 'beverage', name: 'Dark Espresso',       reason: 'Earthy contrast' },
+          { type: 'food',     name: 'Dark Chocolate 72%', reason: 'Bitter-sweet pairing' },
+        ],
+      },
+    }))
+  }, [update])
+
+  /** Recalculates E.A.T. engagement score from current session state. */
+  const syncEATActivity = useCallback(() => {
+    update(prev => {
+      const score = Math.round(
+        Math.min(
+          (prev.completedSteps?.length || 0) * 15 +
+          (prev.xp || 0) * 0.1 +
+          (prev.profileComplete ? 30 : 0) +
+          ((prev.passport?.earnedStamps?.length || prev.smokecraftStamps?.length || 0) * 50),
+          500
+        )
+      )
+      return {
+        ...prev,
+        eatCommand: {
+          ...prev.eatCommand,
+          engagementScore: score,
+          sessionValue:    (prev.smokeCraft?.pairingSelections?.length || 0) * 8 +
+                           (prev.completedSteps?.includes('session-complete') ? 45 : 0),
+        },
+      }
+    })
+  }, [update])
+
   // ── Session reset ─────────────────────────────────────────────────────────
   const resetGuestSession = useCallback(() => {
-    const fresh = { ...defaultState, sessionId: Date.now().toString() }
-    saveToStorage(fresh)
+    const fresh = createNewSession()
+    saveSession(fresh)
     setSession(fresh)
   }, [])
 
@@ -285,13 +387,13 @@ export function GuestSessionProvider({ children }) {
       session,
       // Profile
       updateProfile,
-      // SmokeCraft
+      // SmokeCraft steps
       completeStep,
       addXP,
       addBadge,
       // Stamps
       awardStamp,
-      addSmokecraftStamp,       // legacy alias
+      addSmokecraftStamp,
       unlockCeremony,
       updateGoldenBoxProgress,
       // Social
@@ -305,13 +407,21 @@ export function GuestSessionProvider({ children }) {
       refreshLastActive,
       resumePassportSession,
       clearPassportIdentity,
-      // Preferences & routing
+      // Phase 4 Part 2: Preferences & routing
       setAudioEnabled,
       setHapticsEnabled,
       trackRoute,
+      // Phase 6: Selection tracking
+      setSelectedCraft,
+      setSelectedMentor,
+      setSelectedLevel,
+      // Phase 6: Session completion
+      completeSmokeCraftSession,
+      syncPos3Activity,
+      syncEATActivity,
       // Reset
       resetGuestSession,
-      resetSession,             // legacy alias
+      resetSession,
     }}>
       {children}
     </GuestSessionContext.Provider>

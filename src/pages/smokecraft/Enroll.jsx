@@ -5,7 +5,7 @@ import { XP_AWARDS } from '../../constants/session.js'
 
 export default function Enroll() {
   const navigate = useNavigate()
-  const { updateProfile, completeGuestProfile, completeStep, addXP } = useGuestSession()
+  const { updateProfile, completeGuestProfile, completeStep, addXP, setSelectedCraft } = useGuestSession()
   const fileInputRef = useRef(null)
   const [avatarSrc, setAvatarSrc] = useState(null)
   const [form, setForm] = useState({
@@ -41,6 +41,7 @@ export default function Enroll() {
       photo:        avatarSrc,
     }
     completeGuestProfile(profilePayload)
+    setSelectedCraft('SmokeCraft 360')
     completeStep('enroll')
     addXP(XP_AWARDS.PROFILE_COMPLETE)
     navigate('/smokecraft/golden-box')

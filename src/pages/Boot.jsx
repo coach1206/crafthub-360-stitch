@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { loadSession } from '../services/sessionStorageService.js'
 
 export default function Boot() {
   const navigate = useNavigate()
@@ -11,7 +12,9 @@ export default function Boot() {
 
   useEffect(() => {
     if (sessionStorage.getItem('novee_booted')) {
-      const returnPath = sessionStorage.getItem('novee_boot_return') || '/'
+      const returnPath = sessionStorage.getItem('novee_boot_return')
+        || loadSession()?.system?.lastVisitedRoute
+        || '/'
       sessionStorage.removeItem('novee_boot_return')
       navigate(returnPath, { replace: true })
       return
@@ -33,7 +36,9 @@ export default function Boot() {
       setActivating(true)
       setTimeout(() => {
         sessionStorage.setItem('novee_booted', '1')
-        const returnPath = sessionStorage.getItem('novee_boot_return') || '/'
+        const returnPath = sessionStorage.getItem('novee_boot_return')
+          || loadSession()?.system?.lastVisitedRoute
+          || '/'
         sessionStorage.removeItem('novee_boot_return')
         navigate(returnPath)
       }, 800)

@@ -2,4 +2,5 @@
 - [PostCSS CJS vs ESM](postcss-cjs-esm.md) — when package.json has "type":"module", use postcss.config.cjs (not .js) to avoid "Cannot find module" PostCSS plugin errors.
 - [Vite dep cache dual-React](vite-dep-cache.md) — mid-session dep optimization creates mismatched React version hashes; fix: clear node_modules/.vite, add optimizeDeps.include for all key deps, restart.
 - [Stitch HTML quote gotcha](stitch-quote-gotcha.md) — Stitch exports use curly/smart quotes in bio strings; single-quoted JSX strings break on apostrophes like 'Criollo '98 — always use double quotes or backticks for bio/label copy.
-- [Passport catalog pattern](passport-catalog.md) — single source of truth for stamp/seal defs lives in src/data/passportCatalog.js; GuestSessionContext uses SCHEMA_VERSION (currently 2) to reset stale localStorage on schema changes.
+- [Passport catalog pattern](passport-catalog.md) — stamp defs in src/data/passportCatalog.js; SCHEMA_VERSION is now 4 (managed in src/services/sessionStorageService.js, NOT in the context). Migration v1→v4 handled there.
+- [Nullish-coalesce vs logical-or mixing](rollup-nullish-or.md) — mixing ?? and || in the same expression without parens causes a Rollup build error; use ?? consistently (x ?? y ?? null) instead of (x ?? y || null).

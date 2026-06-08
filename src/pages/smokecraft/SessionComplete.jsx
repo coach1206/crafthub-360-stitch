@@ -16,15 +16,22 @@ const TASTE_TAGS = ['Dark Cocoa', 'Cedar Smoke', 'Leather', 'Toasted Almond']
 
 export default function SessionComplete() {
   const navigate = useNavigate()
-  const { session, addXP, completeStep, awardStamp } = useGuestSession()
+  const { session, addXP, completeStep, awardStamp, completeSmokeCraftSession, syncPos3Activity, syncEATActivity } = useGuestSession()
   const [summarySent, setSummarySent] = useState(false)
 
   useEffect(() => {
-    if (session.completedSteps.includes('session-complete')) return
-    completeStep('session-complete')
-    addXP(XP_AWARDS.SESSION_1_COMPLETE)
-    awardStamp('journey-complete', 'session-complete')
-    triggerHaptic('success')
+    const alreadyDone = session.completedSteps.includes('session-complete')
+    // Legacy XP / step / stamp (runs once)
+    if (!alreadyDone) {
+      completeStep('session-complete')
+      addXP(XP_AWARDS.SESSION_1_COMPLETE)
+      awardStamp('journey-complete', 'session-complete')
+      triggerHaptic('success')
+    }
+    // Phase 6: rich data wiring (idempotent — safe to call on every mount)
+    completeSmokeCraftSession({ tasteProfile: TASTE_TAGS })
+    syncPos3Activity()
+    syncEATActivity()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -207,11 +214,11 @@ export default function SessionComplete() {
             {summarySent ? 'Summary Sent' : 'Send Summary'}
           </button>
           <button
-            onClick={() => navigate('/passport')}
+            onClick={() => navigate('/smokecraft/passport-stamp')}
             className="px-10 py-5 border-2 border-primary/50 text-primary font-headline-md text-headline-md rounded-lg hover:bg-primary/10 active:scale-95 transition-all flex items-center gap-4"
           >
             <span className="material-symbols-outlined">menu_book</span>
-            Open 360 Passport
+            Passport Ceremony
           </button>
           <button
             onClick={() => navigate('/crafthub')}

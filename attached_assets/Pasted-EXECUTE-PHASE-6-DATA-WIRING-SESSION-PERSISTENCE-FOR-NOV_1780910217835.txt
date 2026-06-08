@@ -1,0 +1,494 @@
+EXECUTE PHASE 6 DATA WIRING + SESSION PERSISTENCE FOR NOVEE OS / CRAFTHUB 360 / SMOKECRAFT 360 / 360 PASSPORT CONNECTIONS / POS 3 / E.A.T. COMMAND
+
+DO NOT redesign the app.
+DO NOT add new visual concepts.
+DO NOT create duplicate screens.
+DO NOT replace existing premium UI.
+DO NOT break existing routes.
+
+MISSION:
+Wire the system so the guest journey is no longer just visual. The app must now remember the guest, save session progress, award Passport stamps, track leaderboard points, and prepare clean data for POS 3 and E.A.T. Command.
+
+==================================================
+PHASE 6 PRIMARY GOAL
+==================================================
+
+Create a working local data layer first.
+
+Use localStorage or IndexedDB for the prototype unless a backend already exists.
+
+The prototype must persist:
+
+1. Guest profile
+2. Selected craft
+3. Selected mentor
+4. Selected experience level
+5. Current SmokeCraft session
+6. Completed sessions
+7. Earned Passport stamps
+8. Latest stamp ID
+9. Golden Box progress
+10. Leaderboard score
+11. Audio preference
+12. Haptic preference
+13. Last visited route
+14. POS 3 activity hooks
+15. E.A.T. Command analytics hooks
+
+Refresh must not erase the journey.
+
+==================================================
+1. CREATE DATA STRUCTURE
+==================================================
+
+Create or update:
+
+src/state/GuestSessionContext.jsx
+
+The session object must include:
+
+{
+  sessionId,
+  createdAt,
+  updatedAt,
+
+  guest: {
+    firstName,
+    lastName,
+    nickname,
+    ageRange,
+    phone,
+    email,
+    city,
+    state,
+    zip,
+    profileImage,
+    imageModerationStatus
+  },
+
+  selectedCraft,
+  selectedMentor,
+  selectedMentorCountry,
+  selectedLevel,
+
+  smokeCraft: {
+    currentSession,
+    completedSessions,
+    sessionScores,
+    flavorPreferences,
+    strengthTolerance,
+    aromaInterests,
+    vitolaPreferences,
+    pairingSelections,
+    soilSeedSelections,
+    mentorNotes
+  },
+
+  passport: {
+    passportId,
+    earnedStamps,
+    latestStampId,
+    connectionCount,
+    eventName,
+    ceremonySeen
+  },
+
+  goldenBox: {
+    eligible,
+    progress,
+    entries,
+    lastReveal
+  },
+
+  leaderboard: {
+    score,
+    rank,
+    submitted,
+    displayName
+  },
+
+  preferences: {
+    audioEnabled,
+    hapticsEnabled,
+    readInstead,
+    language
+  },
+
+  system: {
+    lastVisitedRoute,
+    schemaVersion,
+    kioskMode,
+    sourceModule
+  },
+
+  pos3: {
+    activeTicketId,
+    tableNumber,
+    staffId,
+    suggestedPairings,
+    upsellRecommendations,
+    inventorySignals
+  },
+
+  eatCommand: {
+    engagementScore,
+    guestMoodSignal,
+    sessionValue,
+    staffAssistTriggered,
+    environmentNotes
+  }
+}
+
+==================================================
+2. CREATE STORAGE SERVICE
+==================================================
+
+Create:
+
+src/services/sessionStorageService.js
+
+Functions required:
+
+createNewSession()
+loadSession()
+saveSession(session)
+updateSession(partialData)
+clearSession()
+validateSessionSchema()
+migrateSessionIfNeeded()
+
+Rules:
+
+- Use schemaVersion.
+- If schema is old, migrate safely.
+- If data is corrupted, create a new clean session.
+- Never crash the app because localStorage data is broken.
+
+==================================================
+3. CREATE PASSPORT STAMP SERVICE
+==================================================
+
+Create:
+
+src/services/passportService.js
+
+Functions required:
+
+createPassportId()
+awardStamp(stampData)
+getEarnedStamps()
+getLatestStamp()
+markCeremonySeen()
+syncCraftStampToPassport()
+
+Stamp object must include:
+
+{
+  stampId,
+  title,
+  craft,
+  sessionNumber,
+  eventName,
+  earnedAt,
+  visualTheme,
+  points,
+  sourceModule
+}
+
+SmokeCraft Session 1 completion must award:
+
+Title:
+SmokeCraft 360 Initiation Stamp
+
+Craft:
+SmokeCraft 360
+
+Source:
+smokecraft-session-1
+
+After award, set:
+
+passport.latestStampId
+
+Then route to:
+
+/passport/ceremony
+
+==================================================
+4. CREATE LEADERBOARD SERVICE
+==================================================
+
+Create:
+
+src/services/leaderboardService.js
+
+Functions required:
+
+calculateScore()
+submitScore()
+getLocalLeaderboard()
+updateRank()
+resetLeaderboardForDemo()
+
+Use local prototype leaderboard data for now.
+
+Leaderboard score should include:
+
+- session completion
+- mentor selection
+- pairing choices
+- Passport stamps
+- Golden Box progress
+- engagement actions
+
+Do not use fake online API unless backend exists.
+
+==================================================
+5. CREATE POS 3 ACTIVITY HOOKS
+==================================================
+
+Create:
+
+src/services/pos3ActivityService.js
+
+Functions required:
+
+recordGuestActivity()
+recordPairingInterest()
+recordUpsellSignal()
+recordInventorySignal()
+getSuggestedPairingsForPOS()
+preparePOS3Payload()
+
+POS 3 payload must include:
+
+{
+  sessionId,
+  guestNickname,
+  selectedCraft,
+  selectedLevel,
+  selectedMentor,
+  flavorPreferences,
+  pairingSelections,
+  suggestedPairings,
+  upsellRecommendations,
+  timestamp
+}
+
+This does not need to connect to Clover, Toast, Square, Shopify yet.
+
+It only needs to prepare clean payloads for future integration.
+
+==================================================
+6. CREATE E.A.T. COMMAND ANALYTICS HOOKS
+==================================================
+
+Create:
+
+src/services/eatAnalyticsService.js
+
+Functions required:
+
+recordEnvironmentSignal()
+recordAssetSignal()
+recordTransactionSignal()
+calculateEngagementScore()
+prepareCommandCenterPayload()
+
+E.A.T. Command must be able to read:
+
+- guest session progress
+- active craft
+- Passport activity
+- leaderboard score
+- pairing interests
+- Golden Box progress
+- POS 3 suggested upsells
+- staff assist triggers
+- session value estimate
+
+Do not expose E.A.T. Command to guest screens.
+
+Management-only route remains:
+
+/eat-command
+
+==================================================
+7. WIRE PROFILE SCREEN
+==================================================
+
+On guest profile submit, save:
+
+- firstName
+- lastName
+- nickname
+- ageRange
+- phone
+- email
+- city
+- state
+- zip
+- profileImage if present
+- imageModerationStatus
+
+After save, route to the next SmokeCraft step.
+
+Do not allow profile submit to crash if optional fields are empty.
+
+Required minimum:
+
+nickname or firstName
+
+==================================================
+8. WIRE MENTOR SELECTION
+==================================================
+
+When mentor is selected, save:
+
+selectedMentor
+selectedMentorCountry
+
+Mentor countries must support:
+
+- Dominican Republic
+- Colombia
+- Nicaragua
+- Honduras
+- Ecuador
+- Mexico
+- Brazil
+
+After save, route to level selection or session start.
+
+==================================================
+9. WIRE LEVEL SELECTION
+==================================================
+
+When level is selected, save:
+
+selectedLevel
+
+Levels must be:
+
+- Novice
+- Enthusiast
+- Connoisseur
+- Aficionado
+
+After save, route to SmokeCraft Session 1.
+
+==================================================
+10. WIRE SMOKECRAFT SESSION 1 COMPLETION
+==================================================
+
+When Session 1 completes:
+
+- Save completed session
+- Add session score
+- Save flavor selections
+- Save pairing selections
+- Award Passport stamp
+- Update Golden Box progress
+- Update leaderboard score
+- Record POS 3 activity
+- Record E.A.T. Command analytics
+- Route to Passport Ceremony
+
+No dead end after session completion.
+
+==================================================
+11. WIRE PASSPORT CEREMONY
+==================================================
+
+Passport ceremony must load:
+
+passport.latestStampId
+
+Show:
+
+- stamp title
+- craft
+- event name
+- points earned
+- earned date
+- continue button
+- back button
+- home button
+
+Continue button should route to:
+
+/passport
+
+or
+
+/passport/leaderboard
+
+depending on current flow.
+
+==================================================
+12. WIRE REFRESH RECOVERY
+==================================================
+
+If user refreshes the app:
+
+- restore session
+- restore last route
+- restore current craft
+- restore selected mentor
+- restore completed sessions
+- restore Passport stamps
+- restore audio and haptic preferences
+
+If lastVisitedRoute is invalid, send user to:
+
+/craft-hub
+
+Do not send user to blank screen.
+
+==================================================
+13. BUILD VERIFICATION
+==================================================
+
+Run:
+
+npm run build
+
+Then test:
+
+1. Start new guest session
+2. Fill profile
+3. Select mentor
+4. Select level
+5. Complete Session 1
+6. Confirm stamp appears
+7. Refresh app
+8. Confirm data remains
+9. Open Passport
+10. Confirm stamp still exists
+11. Open POS 3
+12. Confirm activity payload exists
+13. Open E.A.T. Command
+14. Confirm analytics payload exists
+
+==================================================
+14. FINAL REPORT REQUIRED
+==================================================
+
+Return a report with:
+
+A. Files created
+B. Files changed
+C. Session persistence status
+D. Profile save status
+E. Mentor save status
+F. Level save status
+G. SmokeCraft Session 1 save status
+H. Passport stamp status
+I. Leaderboard status
+J. POS 3 payload status
+K. E.A.T. Command payload status
+L. Refresh recovery status
+M. Build result
+N. Remaining risks
+
+Do not claim completion unless npm run build passes.

@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useGuestSession } from './context/GuestSessionContext.jsx'
 import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import CraftHub from './pages/CraftHub.jsx'
@@ -34,6 +36,19 @@ import Identity from './pages/smokecraft/Identity.jsx'
 import Leaderboard from './pages/smokecraft/Leaderboard.jsx'
 import PassportStamp from './pages/smokecraft/PassportStamp.jsx'
 
+/** Silently records the current route in session state for refresh recovery. */
+function RouteTracker() {
+  const location = useLocation()
+  const { trackRoute } = useGuestSession()
+  useEffect(() => {
+    if (location.pathname !== '/boot') {
+      trackRoute(location.pathname)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname])
+  return null
+}
+
 function BootGuard({ children }) {
   const booted = sessionStorage.getItem('novee_booted')
   if (!booted) {
@@ -49,6 +64,7 @@ function BootGuard({ children }) {
 export default function App() {
   return (
     <BrowserRouter>
+      <RouteTracker />
       <Routes>
         {/* Boot screen — outside BootGuard so it's always accessible */}
         <Route path="boot" element={<Boot />} />

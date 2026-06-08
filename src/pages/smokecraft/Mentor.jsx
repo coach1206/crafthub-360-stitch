@@ -64,7 +64,7 @@ const MAX_SELECTIONS = 2
 
 export default function Mentor() {
   const navigate = useNavigate()
-  const { setMentors, completeStep, addXP } = useGuestSession()
+  const { setMentors, setSelectedMentor, completeStep, addXP } = useGuestSession()
   const [selected, setSelected] = useState([])
 
   function toggle(id) {
@@ -78,6 +78,13 @@ export default function Mentor() {
   function handleProceed() {
     triggerHaptic('medium')
     setMentors(selected)
+    // Save primary mentor (first selection) with country for POS 3 + E.A.T. payloads
+    const primaryId = selected[0]
+    if (primaryId) {
+      const allMentors = [...PRIMARY_MENTORS, ...SPECIALTY_REGIONS]
+      const found      = allMentors.find(m => m.id === primaryId)
+      setSelectedMentor(primaryId, found?.country || null)
+    }
     completeStep('mentor')
     addXP(XP_AWARDS.MENTOR_SELECTED)
     navigate('/smokecraft/origins')
