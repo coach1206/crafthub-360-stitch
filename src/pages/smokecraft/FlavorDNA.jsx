@@ -7,37 +7,43 @@ const OCCASIONS = [
   {
     label: 'Relaxing',
     sub: 'Unwind & Enjoy',
-    img: 'https://images.unsplash.com/photo-1517511620798-cec17d428bc0?w=200&auto=format&fit=crop&q=80',
+    // leather armchair / lounge chair
+    img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&auto=format&fit=crop&q=80',
     color: '#8B4513',
   },
   {
     label: 'Celebrating',
     sub: 'Raise a Glass',
-    img: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=200&auto=format&fit=crop&q=80',
+    // champagne glasses clinking
+    img: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=200&auto=format&fit=crop&q=80',
     color: '#C4860A',
   },
   {
     label: 'Business',
     sub: 'Focus & Achieve',
-    img: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=200&auto=format&fit=crop&q=80',
+    // briefcase / executive desk
+    img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=200&auto=format&fit=crop&q=80',
     color: '#4A4A4A',
   },
   {
     label: 'Date Night',
     sub: 'Intimate Moments',
+    // roses / romantic candles
     img: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200&auto=format&fit=crop&q=80',
     color: '#8B1A3A',
   },
   {
     label: 'Sports',
     sub: 'Game Day Energy',
-    img: 'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=200&auto=format&fit=crop&q=80',
+    // american football
+    img: 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=200&auto=format&fit=crop&q=80',
     color: '#1A4A1A',
   },
   {
     label: 'VIP',
     sub: 'Exclusive Access',
-    img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&auto=format&fit=crop&q=80',
+    // gold crown / luxury
+    img: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=200&auto=format&fit=crop&q=80',
     color: '#2A1A5A',
   },
 ]
@@ -47,23 +53,26 @@ const INTENSITY_OPTIONS = [
     v: 'smooth',
     label: 'Smooth',
     sub: 'Mild · Silky · Easy draw',
+    // light coloured mild cigar with smoke
     img: 'https://images.unsplash.com/photo-1585504198199-20277593b31f?w=400&auto=format&fit=crop&q=80',
   },
   {
     v: 'bold',
     label: 'Bold',
     sub: 'Full · Robust · Complex',
+    // dark maduro cigar close-up
     img: 'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=400&auto=format&fit=crop&q=80',
   },
 ]
 
 const CHARACTERS = [
-  { label: 'Sweet',   img: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&auto=format&fit=crop&q=80' },
-  { label: 'Spicy',   img: 'https://images.unsplash.com/photo-1583119022894-919a68a3d0e3?w=200&auto=format&fit=crop&q=80' },
-  { label: 'Earthy',  img: 'https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=200&auto=format&fit=crop&q=80' },
-  { label: 'Creamy',  img: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=200&auto=format&fit=crop&q=80' },
-  { label: 'Woody',   img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&auto=format&fit=crop&q=80' },
-  { label: 'Peppery', img: 'https://images.unsplash.com/photo-1518977822534-7049a61ee0c2?w=200&auto=format&fit=crop&q=80' },
+  // each card: a close-up ingredient/material that represents the tasting note
+  { label: 'Sweet',   img: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&auto=format&fit=crop&q=80' }, // caramel/honey drizzle
+  { label: 'Spicy',   img: 'https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=200&auto=format&fit=crop&q=80' }, // red chilli peppers
+  { label: 'Earthy',  img: 'https://images.unsplash.com/photo-1445348305923-4a5af1efc2e8?w=200&auto=format&fit=crop&q=80' }, // dark soil / earth
+  { label: 'Creamy',  img: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=200&auto=format&fit=crop&q=80' }, // cream/latte art
+  { label: 'Woody',   img: 'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=200&auto=format&fit=crop&q=80' }, // dark wood grain
+  { label: 'Peppery', img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&auto=format&fit=crop&q=80' }, // black pepper close-up
 ]
 
 const AROMATICS = [

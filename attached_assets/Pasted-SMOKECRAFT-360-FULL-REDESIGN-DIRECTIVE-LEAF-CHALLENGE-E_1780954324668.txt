@@ -1,0 +1,674 @@
+SMOKECRAFT 360 — FULL REDESIGN DIRECTIVE
+LEAF CHALLENGE END FLOW + PREMIUM RESULT CELEBRATION
+FOR REPLIT / STITCH / CODEX
+
+Rebuild the SmokeCraft 360 Leaf Challenge end experience so it no longer jumps from quiz completion to a flat result screen.
+
+Right now the ending feels emotionally dead.
+It shows the score, but it does not feel rewarding, premium, cinematic, or memorable.
+
+This must be rebuilt into a luxury end-of-challenge experience with:
+
+- a better transition out of the challenge
+- a 1-second premium calculation screen
+- smoke atmosphere
+- gold loading ring
+- stamp sound
+- animated score reveal
+- badge reveal
+- passport stamp reveal
+- XP reward reveal
+- challenge recap
+- clear next actions
+- working buttons
+- no placeholders
+- no glyphs
+- no dead space
+
+The user should feel like they completed something meaningful.
+
+==================================================
+PRIMARY GOAL
+==================================================
+
+Fix the full end-of-challenge journey for the Know Your Leaves experience.
+
+The flow must become:
+
+1. User completes final leaf recognition question
+2. Challenge submission locks in
+3. Screen transitions to a premium “Calculating Your Leaf Eye...” screen
+4. That transition screen lasts about 1 second
+5. Soft smoke animation plays
+6. Gold loading ring animates
+7. Stamp sound plays
+8. Optional haptic pulse fires
+9. Then the final celebration / score screen is revealed
+10. The score, badge, XP, and passport stamp animate in
+
+This whole experience should feel luxurious, elegant, and satisfying.
+
+NOT like a plain app score page.
+
+==================================================
+FLOW STRUCTURE
+==================================================
+
+ROUTE FLOW:
+
+`/smokecraft/leaf-challenge`
+→ submit final answer
+→ `/smokecraft/leaf-challenge-calculating`
+→ `/smokecraft/leaf-challenge-result`
+
+==================================================
+PART 1 — CHALLENGE PAGE FIX
+==================================================
+
+Route:
+`/smokecraft/leaf-challenge`
+
+The current challenge page needs a better ending transition.
+
+When the user answers the final question and taps submit:
+
+- disable repeated taps
+- show a short “Submitting your recognition...” state
+- lock the interface for a moment
+- save final score and answer data
+- route into the new transition screen
+- do not instantly jump to the result page
+
+The challenge page must feel connected to the reward page.
+
+Add a smoother challenge completion state with:
+
+- button loading state
+- soft smoke overlay fade
+- fade-down of challenge content
+- transition to the premium calculating screen
+
+The last action on the challenge page should feel intentional and polished.
+
+==================================================
+PART 2 — NEW CALCULATING TRANSITION SCREEN
+==================================================
+
+Create a new transition screen.
+
+Route:
+`/smokecraft/leaf-challenge-calculating`
+
+This page should last about 1 second before automatically routing to the result page.
+
+Purpose:
+Build anticipation and make the result reveal feel more premium.
+
+Page title:
+`Calculating Your Leaf Eye...`
+
+Subtitle:
+`Reviewing your recognition accuracy and preparing your reward moment.`
+
+VISUAL STYLE:
+
+- dark obsidian background
+- cinematic smoke drifting slowly across screen
+- subtle warm amber glow
+- frosted glass center panel or center focus area
+- elegant luxury typography
+- gold animated circular loading ring
+- small embossed stamp graphic or seal graphic in the background
+- faint tobacco leaf texture in the background
+- no empty black void
+- no cheap spinner
+- no plain loader
+
+ANIMATION:
+
+- loading ring animates for about 1 second
+- smoke drifts behind content
+- light glow pulse behind ring
+- optional subtle gold particle shimmer
+- stamp sound plays once near the end of the 1-second screen
+- optional soft haptic pulse when routing to the celebration screen
+
+AUDIO / HAPTIC HOOKS:
+
+- `playStampSound()`
+- `triggerHapticPulse()`
+
+If audio/haptic is not wired yet, create safe placeholder hooks that do not break the experience.
+
+AUTO TRANSITION:
+
+After about 1 second:
+- read saved result data
+- route automatically to:
+`/smokecraft/leaf-challenge-result`
+
+==================================================
+PART 3 — RESULT SCREEN FULL REDESIGN
+==================================================
+
+Route:
+`/smokecraft/leaf-challenge-result`
+
+This page must become a premium celebration screen.
+
+Current issue:
+The existing result page looks like a plain summary card, not a reward moment.
+
+That needs to change.
+
+PAGE TITLE:
+`Leaf Challenge Complete`
+
+Main performance heading should change depending on the score.
+
+Performance tiers:
+
+- 5/5 = `Master Leaf Eye`
+- 4/5 = `Aficionado Level`
+- 3/5 = `Developing Connoisseur`
+- 2/5 = `A Learning Journey`
+- 1/5 = `Novice Recognition`
+- 0/5 = `Start With The Leaf`
+
+For the current example score of 2/5, use:
+
+`A Learning Journey`
+
+SUPPORTING COPY:
+`You identified 2 out of 5 leaf profiles. Every master blender starts by training the eye. Review the study deck, sharpen your recognition, and continue your cultivation journey.`
+
+The tone should be encouraging, not punishing.
+
+==================================================
+BACKGROUND REQUIREMENT
+==================================================
+
+Replace the flat dark background with a premium cinematic setting.
+
+Use:
+
+- soft-focus luxury cigar lounge background
+- warm amber and gold lighting
+- smoke atmosphere
+- dark wood or tobacco table texture
+- blurred tobacco leaves or leaf study environment
+- frosted-glass overlay
+- subtle particle shimmer
+- premium dark obsidian color system
+
+The background must support the content, not overpower it.
+
+No plain black background.
+No generic empty gradient.
+No dead space.
+
+==================================================
+CELEBRATION EXPERIENCE
+==================================================
+
+When the result page loads, animate the reward reveal.
+
+Sequence:
+
+1. score ring animates from 0 to final score
+2. soft gold particles bloom behind the score
+3. performance title fades in
+4. XP reward card appears
+5. badge reveal animates in
+6. passport stamp reveal animates in
+7. challenge recap cards appear
+8. buttons fade in last
+
+Style:
+Elegant and premium.
+
+Do NOT use:
+- cartoon confetti
+- emoji
+- childish visuals
+- generic icon bursts
+
+Use:
+- luxury gold effects
+- smoke sweep
+- subtle shimmer
+- embossed-style reveals
+- cinematic pacing
+
+==================================================
+SCORE PRESENTATION
+==================================================
+
+Make the score the hero of the screen.
+
+Top center:
+Large animated circular score ring
+
+Inside the ring:
+`2 / 5`
+
+Label below:
+`Leaf Recognition Score`
+
+Under it:
+dynamic performance heading
+example:
+`A Learning Journey`
+
+Score ring style:
+- warm gold arc
+- dark obsidian ring background
+- crisp elegant type
+- subtle glow
+- premium finish
+
+This needs to feel like an achievement meter, not a plain dashboard circle.
+
+==================================================
+AWARDS EARNED CARD
+==================================================
+
+Replace the weak basic list with a premium reveal card.
+
+Section title:
+`Awards Earned This Round`
+
+Use a frosted obsidian glass card with:
+- gold border
+- soft shadow
+- subtle inner glow
+- realistic reward images
+- generous spacing
+- touchscreen-friendly layout
+
+Reward items:
+
+1. XP REWARD
+Image:
+realistic gold XP medallion or embossed coin
+Text:
+`+75 XP`
+Subtext:
+`Participation and completion reward`
+
+2. BADGE REWARD
+Image:
+realistic botanical / tobacco leaf badge
+Text:
+`Botanist Badge`
+Subtext:
+`Awarded for completing the Know Your Leaves challenge`
+
+3. PASSPORT STAMP REWARD
+Image:
+realistic passport-style circular ink stamp
+Text:
+`Leaf Recognition Stamp`
+Subtext:
+`Added to your SmokeCraft 360 Passport`
+
+No glyphs.
+No emoji.
+No thin line icons.
+No broken image placeholders.
+
+All rewards must feel collectible and real.
+
+==================================================
+BADGE REVEAL MOMENT
+==================================================
+
+Create a dedicated badge reveal moment.
+
+Label:
+`New Badge Unlocked`
+
+Badge name:
+`Botanist Badge`
+
+Description:
+`You completed your first leaf recognition challenge and began building your blender’s eye.`
+
+Animation:
+- badge begins slightly dimmed or locked
+- after a short delay, gold shimmer passes over it
+- badge scales in subtly
+- text reveals after image appears
+
+The badge should feel earned.
+
+==================================================
+PASSPORT STAMP REVEAL
+==================================================
+
+Create a passport stamp reward moment.
+
+Show either:
+- a small passport preview card
+or
+- a passport stamp panel
+or
+- a modal preview trigger
+
+Stamp text should include:
+`SMOKECRAFT 360`
+`LEAF RECOGNITION`
+`360 PASSPORT CONNECTIONS`
+`POWERED BY NOVEE OS`
+
+Animation:
+- stamp presses down visually
+- ink texture appears
+- slight glow or settled finish after stamping
+- sound-ready hook available
+- haptic-ready hook available
+
+Hooks:
+- `awardPassportStamp("leaf-recognition")`
+- `playStampSound()`
+- `triggerHapticPulse()`
+
+==================================================
+CHALLENGE RECAP SECTION
+==================================================
+
+Add a clean recap section below rewards.
+
+Section title:
+`Challenge Recap`
+
+Show premium stat cards for:
+
+- `Leaves Studied: 6`
+- `Questions Completed: 5`
+- `Correct Answers: 2`
+- `XP Earned: 75`
+- `Passport Progress: +1 Stamp`
+
+Each stat card must include:
+- frosted glass look
+- gold accent
+- readable number
+- clear label
+- spacing built for touchscreen use
+
+This gives the user closure and a clear sense of progress.
+
+==================================================
+CALL TO ACTION BUTTONS
+==================================================
+
+Replace the single weak button with 3 clear working actions.
+
+PRIMARY:
+`Continue to Cultivation`
+
+SECONDARY:
+`Review Leaves Again`
+
+SECONDARY:
+`View Passport Stamp`
+
+BUTTON LOGIC:
+
+`Continue to Cultivation`
+Route to the next SmokeCraft step
+
+`Review Leaves Again`
+Route back to:
+`/smokecraft/leaves`
+
+`View Passport Stamp`
+Open the user’s SmokeCraft Passport stamp panel or modal
+
+All buttons must work.
+No dead buttons.
+No fake UI.
+
+==================================================
+NAVIGATION REQUIREMENTS
+==================================================
+
+Keep the top CraftHub 360 header.
+
+Back arrow must work.
+
+On result page:
+back arrow returns to:
+`/smokecraft/leaves`
+
+On calculating page:
+back arrow may be disabled or hidden because it is an automatic transition state
+
+Admin button may remain bottom right, but it must not overlap main content or call-to-action buttons.
+
+Support:
+- home route
+- CraftHub route
+- resume session state
+- persistent user context
+
+==================================================
+FUNCTIONAL REQUIREMENTS
+==================================================
+
+Create or connect the following logic:
+
+- `calculateLeafChallengeResult()`
+- `saveChallengeResult(userId, resultData)`
+- `awardXP(userId, xpAmount)`
+- `awardBadge(userId, badgeId)`
+- `awardPassportStamp(userId, stampId)`
+- `playCelebrationSound()`
+- `playStampSound()`
+- `triggerHapticPulse()`
+- `navigateToNextStep()`
+- `navigateBackToLeaves()`
+- `openPassportStampModal()`
+
+On challenge completion:
+
+1. calculate result
+2. persist result data
+3. route to calculating screen
+4. after 1 second route to result screen
+5. animate reward reveal
+6. award XP, badge, and passport stamp safely
+
+If backend is not yet connected, create safe local mock state with clean TODO markers.
+
+==================================================
+DATA REQUIREMENTS
+==================================================
+
+The flow must support:
+
+- `finalScore`
+- `totalQuestions`
+- `correctAnswers`
+- `xpEarned`
+- `badgeEarned`
+- `passportStampEarned`
+- `nextRoute`
+- `previousRoute`
+
+Fallback example values:
+
+- `finalScore: 2`
+- `totalQuestions: 5`
+- `correctAnswers: 2`
+- `xpEarned: 75`
+- `badgeEarned: "Botanist Badge"`
+- `passportStampEarned: "Leaf Recognition Stamp"`
+- `nextRoute: "/smokecraft/cultivation"`
+- `previousRoute: "/smokecraft/leaves"`
+
+Must be ready to accept real session data.
+
+==================================================
+BACKEND / API READY STRUCTURE
+==================================================
+
+Create or wire service support for:
+
+POST `/api/smokecraft/challenges/leaf/result`
+Save the result payload
+
+POST `/api/users/:userId/xp`
+Award XP
+
+POST `/api/users/:userId/badges`
+Award badge
+
+POST `/api/users/:userId/passport/stamps`
+Award passport stamp
+
+GET `/api/users/:userId/passport`
+Fetch user passport progress
+
+Suggested data model:
+
+ChallengeResult:
+- id
+- userId
+- craftType
+- challengeType
+- score
+- totalQuestions
+- correctAnswers
+- xpEarned
+- badgeEarned
+- stampEarned
+- completedAt
+
+Badge:
+- id
+- name
+- imageUrl
+- description
+- craftType
+- rarity
+
+PassportStamp:
+- id
+- userId
+- stampType
+- craftType
+- label
+- eventName
+- imageUrl
+- earnedAt
+
+==================================================
+MOBILE / TABLET / KIOSK
+==================================================
+
+The flow must work on:
+- tablet kiosk
+- desktop preview
+- mobile phone layout
+
+Responsive rules:
+- score ring stacks cleanly above the rewards card
+- buttons stack vertically on small screens
+- no horizontal overflow
+- badge and stamp remain visible
+- loading ring remains centered
+- admin button never blocks primary buttons
+
+Touch targets:
+minimum 72px where appropriate
+
+==================================================
+VISUAL STANDARD
+==================================================
+
+Maintain the SmokeCraft / CraftHub luxury look:
+
+- obsidian dark theme
+- warm gold accents
+- frosted glass surfaces
+- realistic imagery
+- tobacco textures
+- cigar lounge atmosphere
+- cinematic lighting
+- serif premium headings
+- readable modern body text
+- high-end hospitality look
+
+Avoid:
+- busy clutter
+- weak placeholder UI
+- empty voids
+- cheap icon sets
+- generic loaders
+- flat boring outcomes
+
+==================================================
+NO GLYPHS / NO PLACEHOLDERS
+==================================================
+
+Replace all glyphs and placeholder iconography.
+
+Do not use:
+- glyph icons
+- emoji
+- broken image placeholders
+- thin generic line icon circles
+- blank cards
+- unfinished rewards
+
+Use:
+- realistic badge image
+- realistic passport stamp image
+- realistic XP coin image
+- cinematic lounge or leaf-based background
+- clean visual fallbacks if an asset fails
+
+If an image fails, show a styled fallback tile with label text, not a broken image icon.
+
+==================================================
+ACCEPTANCE CHECKLIST
+==================================================
+
+This work is only complete if:
+
+- the challenge page has a smooth end-state transition
+- a new 1-second “Calculating Your Leaf Eye...” screen exists
+- smoke animation appears on the calculating screen
+- the gold loading ring animates
+- stamp sound hook exists
+- result page feels celebratory
+- score is large and animated
+- performance label is clear
+- XP reward is visible
+- badge reward is visible
+- passport stamp reward is visible
+- challenge recap exists
+- all 3 buttons work
+- back button works where appropriate
+- no glyphs remain
+- no broken images remain
+- no empty dead space remains
+- the full experience feels premium, cinematic, and rewarding
+
+==================================================
+FINAL INTENT
+==================================================
+
+Rebuild this entire end-of-challenge journey so the user does not go from challenge to a lifeless score page.
+
+The end of the Know Your Leaves challenge must feel like a premium recognition moment inside SmokeCraft 360.
+
+The user should feel:
+- acknowledged
+- rewarded
+- excited
+- motivated to continue
+
+Make it feel like a luxury cigar lounge achievement ceremony, not a plain app result screen.
