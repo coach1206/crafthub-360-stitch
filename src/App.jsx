@@ -32,9 +32,14 @@ import Leaderboard      from './pages/smokecraft/Leaderboard.jsx'
 import PassportStamp    from './pages/smokecraft/PassportStamp.jsx'
 
 // ── Passport — guest-accessible, eager ───────────────────────
-import PassportConnection from './pages/PassportConnection.jsx'
-import PassportProfile    from './pages/passport/PassportProfile.jsx'
-import PassportStamps     from './pages/passport/PassportStamps.jsx'
+import PassportConnection  from './pages/PassportConnection.jsx'
+import PassportProfile     from './pages/passport/PassportProfile.jsx'
+import PassportStamps      from './pages/passport/PassportStamps.jsx'
+import PassportDirectory   from './pages/passport/PassportDirectory.jsx'
+import PassportConnections from './pages/passport/PassportConnections.jsx'
+import PassportEvents      from './pages/passport/PassportEvents.jsx'
+import PassportBenefits    from './pages/passport/PassportBenefits.jsx'
+import PassportScan        from './pages/passport/PassportScan.jsx'
 
 // ── Craft modules — moderate size, eager ─────────────────────
 import PourCraft from './pages/PourCraft.jsx'
@@ -186,11 +191,16 @@ export default function App() {
 
             {/* 360 Passport — guest-accessible */}
             <Route path="passport">
-              <Route index              element={<PassportConnection />} />
-              <Route path="profile"     element={<PassportProfile />} />
-              <Route path="stamps"      element={<PassportStamps />} />
-              <Route path="ceremony"    element={<Navigate to="/smokecraft/passport-stamp" replace />} />
-              <Route path="leaderboard" element={<Navigate to="/smokecraft/leaderboard" replace />} />
+              <Route index                  element={<PassportConnection />} />
+              <Route path="profile"         element={<PassportProfile />} />
+              <Route path="stamps"          element={<PassportStamps />} />
+              <Route path="directory"       element={<PassportDirectory />} />
+              <Route path="connections"     element={<PassportConnections />} />
+              <Route path="events"          element={<PassportEvents />} />
+              <Route path="benefits"        element={<PassportBenefits />} />
+              <Route path="scan"            element={<PassportScan />} />
+              <Route path="ceremony"        element={<Navigate to="/smokecraft/passport-stamp" replace />} />
+              <Route path="leaderboard"     element={<Navigate to="/smokecraft/leaderboard" replace />} />
             </Route>
 
             <Route path="passport-networking" element={<PassportConnection />} />

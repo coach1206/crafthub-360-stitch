@@ -1,0 +1,447 @@
+FULL 360 PASSPORT CONNECTION REDESIGN REQUIRED.
+
+The current Passport pages are too dark, too flat, too unclear, and too lifeless.
+They do not feel like a real passport experience.
+They do not explain the product clearly.
+They do not show the value of stamps, directory, or connections.
+They do not feel collectible, social, or exciting.
+
+DO NOT make minor edits only.
+DO NOT keep the current flat black card-dashboard approach.
+DO NOT leave Directory or Connections as dead or “coming soon.”
+DO NOT break the route structure or existing logic.
+DO NOT remove touchscreen behavior.
+
+OBJECTIVE:
+Redesign the entire 360 Passport Connection experience so it feels like:
+- a luxury digital passport
+- a networking movement
+- a collectible stamp journey
+- a live connection ecosystem
+- a guided user experience
+- a private-club style relationship engine
+
+BRAND:
+Use:
+360 Passport Connection
+by Profound Innovations LLC
+Powered by NOVEE OS / CraftHub 360
+
+Do not use Brotherhood 360 or Legacy Passport as the main product name.
+
+==================================================
+GLOBAL VISUAL REDESIGN RULES
+==================================================
+
+1. ADD COLOR-CODED PASSPORT IDENTITY
+Different major sections must use distinct passport-book color moods:
+
+- Hub / Main Passport = deep navy + gold
+- Profile / Identity = black leather + warm gold
+- Stamps = tan paper + red/blue/green stamp tones
+- Directory = forest green + gold
+- Connections = deep burgundy/plum + gold
+- Events = warm amber + gold
+- Rewards / Benefits = black + platinum gold accents
+
+These colors should appear in:
+- tab headers
+- section cards
+- booklet thumbnails
+- stamp visuals
+- badges
+- passport page tabs
+- action buttons
+- mini covers / tiles
+
+2. ADD REALISTIC PASSPORT ENERGY
+Every page must feel like a passport experience, not a SaaS dashboard.
+
+Use:
+- passport booklet visuals
+- paper textures
+- leather textures
+- visible stamp marks
+- embossed gold lettering
+- page tabs
+- stamp rings / seals
+- event badge visuals
+- realistic passport page sections
+- section dividers inspired by booklet pages
+
+3. ADD EXPLANATION / USER GUIDANCE
+Every key page must clearly explain:
+- what the page is
+- what the user can do here
+- what they gain
+- what to do next
+
+Every page needs a short instruction block near the top, such as:
+- “What this does”
+- “How to use this”
+- “What you unlock”
+- “Next step”
+
+Do not assume the user already understands the system.
+
+4. ADD TOUCHSCREEN-FRIENDLY EXCITEMENT
+All action buttons must be raised, bright, tactile, and easy to understand.
+
+Buttons must:
+- be 64px minimum height
+- preferably 72px touch target
+- have visible label text
+- have raised styling
+- have active press state
+- have haptic-ready class
+- have better contrast
+- not look dead or hidden
+
+==================================================
+CORE EXPERIENCE STRUCTURE
+==================================================
+
+REDESIGN THESE PASSPORT AREAS:
+
+1. PASSPORT HUB
+2. MY PROFILE / IDENTITY PAGE
+3. DIGITAL STAMPS PAGE
+4. DIRECTORY PAGE
+5. CONNECTIONS PAGE
+6. EVENTS PAGE
+7. BENEFITS / REWARDS PAGE
+8. SCAN TO CONNECT FLOW
+
+==================================================
+1. PASSPORT HUB REDESIGN
+==================================================
+
+The Hub must become a guided landing experience.
+
+Top of page must clearly explain:
+- what 360 Passport Connection is
+- what the user gets
+- how to start
+
+Add a hero section with:
+- realistic 360 Passport booklet
+- welcome message
+- tier
+- XP
+- current venue / event
+- stamps earned
+- progress to next level
+
+Add a short “How It Works” strip with 4 clear steps:
+1. Scan In
+2. Build Your Passport
+3. Meet People
+4. Earn Stamps & Unlock Access
+
+Each step should be visual and easy to understand.
+
+Add a “Start Here” / “Next Best Action” section:
+- Complete Profile
+- Scan to Connect
+- Explore Directory
+- View Matches
+- Join Event
+
+This section should feel obvious and action-based.
+
+==================================================
+2. PROFILE / IDENTITY PAGE
+==================================================
+
+This page must feel like a passport identity page.
+
+Use:
+- portrait
+- name
+- title / profession
+- city
+- interests
+- goals
+- expertise
+- industries
+- looking for / offering
+- passport tier
+- member since
+- event history
+- personal brand tags
+
+Add a “How your profile helps you” instruction section:
+Explain that completing the profile improves matches and connection quality.
+
+Layout should resemble:
+- passport identity page
+- profile booklet spread
+- premium member dossier
+
+==================================================
+3. DIGITAL STAMPS PAGE
+==================================================
+
+This page must feel fun, collectible, and rewarding.
+
+Show real colored stamp styles:
+- Event Stamp
+- Connection Stamp
+- Craft Stamp
+- VIP Stamp
+- Achievement Stamp
+- Verified Stamp
+- Legacy Stamp
+
+Use visible stamp colors:
+- red
+- blue
+- green
+- gold
+- purple
+- black ink
+- bronze
+
+Each stamp should show:
+- name
+- earned date
+- where earned
+- why earned
+- unlock value
+- tap for detail
+
+Add guidance:
+“What are stamps?”
+“Why they matter”
+“What stamps unlock”
+
+Make it feel collectible and exciting.
+
+==================================================
+4. DIRECTORY PAGE
+==================================================
+
+DIRECTORY MUST BE LIVE.
+
+No coming soon.
+No dead page.
+
+This page should help users discover people, brands, vendors, speakers, and event participants.
+
+Add:
+- search bar
+- filter chips
+- category tabs
+- creative profile cards
+- organization cards
+- featured member cards
+- “met at event” labels
+- verified badges
+- “add to passport”
+- “request intro”
+- “save contact”
+- “view profile”
+
+Directory categories:
+- Entrepreneurs
+- Executives
+- Creators
+- Investors
+- Hospitality
+- Speakers
+- Artisans
+- Brands
+- Mentors
+- Vendors
+
+Each card should show:
+- portrait
+- name
+- role
+- company
+- city
+- industry tags
+- goals
+- shared interests
+- mutual event
+- action buttons
+
+Add top explanation:
+“Use Directory to discover members, brands, and opportunities that match your interests.”
+
+Make Directory visually exciting and alive.
+
+==================================================
+5. CONNECTIONS PAGE
+==================================================
+
+CONNECTIONS MUST BE LIVE.
+
+No coming soon.
+No dead grid.
+
+This page should feel like a relationship engine.
+
+Show:
+- suggested matches
+- recent connections
+- pending intros
+- tables / circles / cohorts
+- mutual interests
+- event-based match cards
+- relationship progress
+
+Connection cards should show:
+- portrait
+- name
+- profession
+- why they match
+- mutual interests
+- mutual events
+- suggested reason to connect
+- compatibility tags
+- action buttons:
+  - Connect
+  - Scan to Link
+  - Message
+  - Save
+  - View Profile
+
+Add sections:
+- Best Matches For You
+- People You Met
+- Suggested Tables
+- Recommended Intros
+- Recent Verified Connections
+
+Add guidance:
+“This page helps you turn event moments into real relationships.”
+
+==================================================
+6. EVENTS PAGE
+==================================================
+
+This page should show:
+- upcoming events
+- RSVP status
+- featured experiences
+- availability
+- venue
+- date/time
+- event type
+- event stamps available
+- join buttons
+
+Use more color and atmosphere.
+Event cards should feel premium and cinematic.
+
+==================================================
+7. BENEFITS / REWARDS PAGE
+==================================================
+
+This page should show what the user gets from being part of the ecosystem.
+
+Examples:
+- VIP Access
+- Priority Reservations
+- Exclusive Event Entry
+- Private Lounge Access
+- Matchmaking Priority
+- Member Pricing
+- Early Invitations
+- Brand Introductions
+
+Add a “Why this matters” section.
+Make benefits feel valuable and aspirational.
+
+==================================================
+8. SCAN TO CONNECT FLOW
+==================================================
+
+Make Scan central and important.
+
+Add a hero Scan card with:
+- QR code visual
+- “Scan to Connect”
+- “Build real connections beyond business cards”
+- large Open Scanner button
+
+Make scan flow easy to understand:
+- Scan someone’s code
+- View profile preview
+- Confirm connection
+- Earn connection stamp
+- Save to passport
+
+==================================================
+PAGE-BY-PAGE CLARITY
+==================================================
+
+Every page must start with:
+1. clear title
+2. one-sentence explanation
+3. what the user can do here
+4. next action
+
+Examples:
+Directory:
+“Discover members, brands, and professionals that match your interests and goals.”
+
+Connections:
+“Turn meetings into verified relationships, saved contacts, and future opportunities.”
+
+Digital Stamps:
+“Track your verified activity, achievements, and milestone unlocks.”
+
+==================================================
+INTERACTIVE DESIGN REQUIREMENTS
+==================================================
+
+Use framer-motion and tactile interaction for:
+- card lift
+- press state
+- tab switching
+- stamp reveal
+- passport page switching
+- scan button pulse
+- tier progress ring
+- hover/touch glow
+- booklet open animations where appropriate
+
+==================================================
+BOTTOM NAV
+==================================================
+
+Bottom nav must be brighter, raised, and fully responsive.
+
+Include:
+- Hub
+- Passport
+- Scan
+- Directory
+- Connections
+- Events
+- Rewards
+- Settings
+
+The Scan button should be visually emphasized.
+
+==================================================
+FINAL VISUAL GOAL
+==================================================
+
+The finished experience should feel:
+- colorful
+- premium
+- guided
+- collectible
+- social
+- exciting
+- self-explanatory
+- alive
+
+It should not feel like:
+- a dead black dashboard
+- a plain profile portal
+- an admin system
+- a placeholder app
