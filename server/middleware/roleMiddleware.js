@@ -1,124 +1,124 @@
 /**
- * Role Middleware — enforces role-based access control for all protected routes.
+ * Role Middleware — enforces role-based access control.
  *
- * Roles (ascending): guest → staff → manager → admin → founder
+ * Roles (ascending): guest → staff → manager → admin → founder_level_0
  *
- * Usage:
- *   import { requireRole, requirePermission } from './roleMiddleware.js'
+ * requireAuth() must run BEFORE any role check to populate req.user.
+ * In development, use x-novee-user-role header to simulate any role.
  *
- *   router.get('/dashboard', requireRole('manager'), ctrl.getDashboard)
- *   router.post('/billing',  requirePermission('money.settings'), ctrl.updateBilling)
- *   router.delete('/wipe',   founderOnly, ctrl.wipeData)
- *
- * In prototype/development mode all checks pass automatically.
- * Set NODE_ENV=production to enforce roles.
+ * requireFounderLevel0() is the absolute ceiling — it is enforced in
+ * ALL environments. No dev bypass. No admin exemption. Ever.
  */
 
-import { ROLES, hasPermission, meetsMinRole } from '../config/permissions.js'
+import { meetsMinRole, roleHasPermission, ROLE_LEVELS } from '../config/roleMap.js'
+import { recordAccessDenied, recordAccessGranted } from '../services/securityEventService.js'
 
-// ── Core gate ─────────────────────────────────────────────────
+// ── Identity helper ───────────────────────────────────────────
+
+/**
+ * Ensures req.user exists. If no requireAuth() ran upstream, attaches a
+ * prototype guest identity (development only).
+ */
+function ensureUser(req) {
+  if (!req.user) {
+    if (process.env.NODE_ENV !== 'production') {
+      req.user = { id: 'proto-guest', role: 'guest', mode: 'prototype' }
+    }
+  }
+  return req.user
+}
+
+// ── Core gates ────────────────────────────────────────────────
 
 /**
  * Requires the requesting user to hold at minimum `minRoleName`.
- * In prototype mode (NODE_ENV !== 'production'), all requests pass through
- * with a synthetic role attached to req.user.
+ * Logs denied attempts as security events.
  *
- * @param {'guest'|'staff'|'manager'|'admin'|'founder'} minRoleName
+ * @param {'guest'|'staff'|'manager'|'admin'|'founder_level_0'} minRoleName
  */
 export function requireRole(minRoleName) {
-  return (req, res, next) => {
-    if (process.env.NODE_ENV !== 'production') {
-      req.user = req.user || _protoUser(minRoleName)
-      return next()
-    }
-    const user = req.user
-    if (!user) {
-      return _deny(res, 'Authentication required', 401)
-    }
+  return async (req, res, next) => {
+    const user = ensureUser(req)
+
     if (!meetsMinRole(user.role, minRoleName)) {
-      return _deny(res, `Access denied — requires role: ${minRoleName}`)
+      await recordAccessDenied(user.id, user.role, req.path, minRoleName)
+      return res.status(403).json({
+        success: false,
+        message: `Access denied — requires role: ${minRoleName}`,
+      })
     }
     next()
   }
 }
 
 /**
- * Requires the requesting user to hold a specific named permission.
- * Founder-only permissions are enforced even in development mode.
+ * Requires the requesting user to hold a specific named permission key.
+ * Logs all denied attempts.
  *
- * @param {string} permissionSlug  — e.g. 'money.settings', 'eat.access'
+ * @param {string} permissionKey — e.g. 'access_eat_command'
  */
-export function requirePermission(permissionSlug) {
-  return (req, res, next) => {
-    const isDev = process.env.NODE_ENV !== 'production'
-    const user  = req.user || (isDev ? _protoUser('admin') : null)
+export function requirePermission(permissionKey) {
+  return async (req, res, next) => {
+    const user = ensureUser(req)
 
-    if (!user) return _deny(res, 'Authentication required', 401)
+    if (!roleHasPermission(user.role, permissionKey)) {
+      const isFounderOnly = [
+        'manage_roles', 'manage_revenue_settings', 'manage_deployment',
+        'emergency_system_lock', 'founder_override',
+      ].includes(permissionKey)
 
-    if (!hasPermission(user.role, permissionSlug)) {
-      const isFounderOnly = permissionSlug.startsWith('founder.') ||
-        ['money.settings', 'billing.manage', 'data.wipe', 'license.manage',
-         'user.manage.founder'].includes(permissionSlug)
-
-      return _deny(
-        res,
-        isFounderOnly
-          ? 'This action is restricted to Founder accounts'
-          : `Access denied — missing permission: ${permissionSlug}`,
-        isFounderOnly ? 403 : 403
-      )
+      await recordAccessDenied(user.id, user.role, req.path, permissionKey)
+      return res.status(403).json({
+        success: false,
+        message: isFounderOnly
+          ? 'This action is restricted to Founder Level 0 accounts'
+          : `Access denied — missing permission: ${permissionKey}`,
+      })
     }
     next()
   }
 }
 
-// ── Convenience exports ───────────────────────────────────────
-
-/** Only staff and above. */
-export const requireStaff   = requireRole('staff')
-
-/** Only managers and above. */
-export const requireManager = requireRole('manager')
-
-/** Only admins and above. */
-export const requireAdmin   = requireRole('admin')
-
 /**
- * Founder-only gate — enforced in ALL environments, including development.
- * Nothing — not even admin — bypasses this.
+ * Founder Level 0 gate — absolute ceiling.
+ * Enforced in ALL environments. No prototype bypass. No dev override.
+ * Only a request with role === 'founder_level_0' passes.
  */
-export function founderOnly(req, res, next) {
-  const user = req.user
-  if (!user || user.role !== 'founder') {
-    return _deny(res, 'This action is restricted to Founder accounts', 403)
+export async function requireFounderLevel0(req, res, next) {
+  const user = ensureUser(req)
+
+  if (user.role !== 'founder_level_0') {
+    await recordAccessDenied(user.id, user.role, req.path, 'founder_level_0')
+    return res.status(403).json({
+      success: false,
+      message: 'Founder Level 0 access required — this action cannot be delegated',
+    })
   }
+
+  await recordAccessGranted(user.id, user.role, req.path)
   next()
 }
 
+// ── Convenience guards (named exports) ───────────────────────
+
+/** Staff or higher. */
+export const requireStaff   = requireRole('staff')
+
+/** Manager or higher. */
+export const requireManager = requireRole('manager')
+
+/** Admin or higher. */
+export const requireAdmin   = requireRole('admin')
+
+/** Founder Level 0 only (alias for requireFounderLevel0). */
+export const founderOnly    = requireFounderLevel0
+
 // ── Route-specific permission guards ─────────────────────────
-export const canAccessPOS3         = requirePermission('pos3.access')
-export const canAccessEAT          = requirePermission('eat.access')
-export const canExportData         = requirePermission('data.export')
-export const canManageStaff        = requirePermission('staff.manage')
-export const canOverrideSession    = requirePermission('session.override')
-export const canChangeMoneySettings = requirePermission('money.settings')
-export const canViewAuditLogs      = requirePermission('audit.view')
-
-// ── Private helpers ───────────────────────────────────────────
-
-function _deny(res, message, status = 403) {
-  return res.status(status).json({ success: false, message })
-}
-
-/**
- * Prototype identity — used in development so routes work without a real auth system.
- * Level is set to `minRoleName` so only the minimum required access is simulated.
- */
-function _protoUser(roleName) {
-  return {
-    id:    'proto-user',
-    role:  roleName || 'staff',
-    mode:  'prototype',
-    venue: process.env.VENUE_ID || 'novee-grand-lounge',
-  }
-}
+export const canAccessPOS3          = requirePermission('access_pos3_staff')
+export const canAccessEAT           = requirePermission('access_eat_command')
+export const canExportData          = requirePermission('export_data')
+export const canManageStaff         = requirePermission('manage_staff')
+export const canOverrideSession     = requirePermission('founder_override')
+export const canChangeMoneySettings = requirePermission('manage_revenue_settings')
+export const canViewAuditLogs       = requirePermission('view_audit_logs')
+export const canViewCommandCenter   = requirePermission('view_command_center')

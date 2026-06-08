@@ -1,30 +1,35 @@
 /**
- * Admin Routes — system-level and founder-only endpoints.
+ * Admin Routes — /api/admin/*
  *
- * Access matrix:
- *   GET  /api/admin/my-permissions   → any authenticated user
- *   GET  /api/admin/roles            → admin+
- *   GET  /api/admin/permissions      → admin+
- *   GET  /api/admin/staff            → manager+
- *   POST /api/admin/money-settings   → founder ONLY
- *   DELETE /api/admin/data-wipe      → founder ONLY
+ * /api/admin/my-permissions — any authenticated user (no role gate)
+ * /api/admin/roles          — any authenticated user
+ * /api/admin/* (rest)       — admin or founder_level_0
+ * /api/admin/money-settings — founder_level_0 only
+ * /api/admin/data-wipe      — founder_level_0 only
  */
 
 import { Router } from 'express'
-import {
-  requireAdmin,
-  requireManager,
-  founderOnly,
-} from '../middleware/roleMiddleware.js'
-import * as ctrl from '../controllers/adminController.js'
+import { requireAuth }                       from '../middleware/authMiddleware.js'
+import { requireAdmin, requireFounderLevel0 } from '../middleware/roleMiddleware.js'
+import * as ac from '../controllers/adminController.js'
 
 const router = Router()
 
-router.get(    '/my-permissions',   ctrl.getMyPermissions)
-router.get(    '/roles',            requireAdmin,   ctrl.getRoles)
-router.get(    '/permissions',      requireAdmin,   ctrl.getPermissionMatrix)
-router.get(    '/staff',            requireManager, ctrl.listStaff)
-router.post(   '/money-settings',   founderOnly,    ctrl.updateMoneySettings)
-router.delete( '/data-wipe',        founderOnly,    ctrl.dataWipe)
+// ── Open (any authenticated user) ────────────────────────────
+router.get('/my-permissions',  requireAuth,                       ac.getMyPermissions)
+router.get('/roles',           requireAuth,                       ac.getRoles)
+
+// ── Admin-gated ───────────────────────────────────────────────
+router.get('/permissions',     requireAuth, requireAdmin,         ac.getPermissionMatrix)
+router.get('/me',              requireAuth, requireAdmin,         ac.getMe)
+router.get('/users',           requireAuth, requireAdmin,         ac.getUsers)
+router.post('/users',          requireAuth, requireAdmin,         ac.createUser)
+router.put('/users/:userId',   requireAuth, requireAdmin,         ac.updateUser)
+router.get('/security-events', requireAuth, requireAdmin,         ac.getSecurityEvents)
+router.get('/staff',           requireAuth, requireAdmin,         ac.listStaff)
+
+// ── Founder-only ──────────────────────────────────────────────
+router.post('/money-settings', requireAuth, requireFounderLevel0, ac.updateMoneySettings)
+router.delete('/data-wipe',    requireAuth, requireFounderLevel0, ac.dataWipe)
 
 export default router

@@ -12,6 +12,8 @@ import PassportProfile from './pages/passport/PassportProfile.jsx'
 import PassportStamps from './pages/passport/PassportStamps.jsx'
 import POS3 from './pages/POS3.jsx'
 import EATCommand from './pages/EATCommand.jsx'
+import Admin from './pages/Admin.jsx'
+import FounderControl from './pages/FounderControl.jsx'
 
 import Boot from './pages/Boot.jsx'
 import SmokeCraft from './pages/SmokeCraft.jsx'
@@ -35,6 +37,9 @@ import Vitola from './pages/smokecraft/Vitola.jsx'
 import Identity from './pages/smokecraft/Identity.jsx'
 import Leaderboard from './pages/smokecraft/Leaderboard.jsx'
 import PassportStamp from './pages/smokecraft/PassportStamp.jsx'
+
+import ProtectedRoute from './components/security/ProtectedRoute.jsx'
+import DevRoleSwitcher from './components/security/DevRoleSwitcher.jsx'
 
 /** Silently records the current route in session state for refresh recovery. */
 function RouteTracker() {
@@ -80,7 +85,7 @@ export default function App() {
           <Route index           element={<Home />} />
           <Route path="crafthub" element={<CraftHub />} />
 
-          {/* SmokeCraft 360 journey */}
+          {/* SmokeCraft 360 journey — guest-accessible */}
           <Route path="smokecraft">
             <Route index element={<SmokeCraft />} />
             <Route path="enroll"          element={<Enroll />} />
@@ -107,24 +112,62 @@ export default function App() {
             <Route path="passport-stamp"  element={<PassportStamp />} />
           </Route>
 
-          {/* 360 Passport */}
+          {/* 360 Passport — guest-accessible */}
           <Route path="passport">
             <Route index              element={<PassportConnection />} />
             <Route path="profile"     element={<PassportProfile />} />
             <Route path="stamps"      element={<PassportStamps />} />
-            {/* Redirect aliases */}
             <Route path="ceremony"    element={<Navigate to="/smokecraft/passport-stamp" replace />} />
             <Route path="leaderboard" element={<Navigate to="/smokecraft/leaderboard" replace />} />
           </Route>
 
-          {/* Passport Networking — QR / kiosk entry alias */}
+          {/* Passport Networking alias */}
           <Route path="passport-networking" element={<PassportConnection />} />
 
+          {/* Guest craft modules */}
           <Route path="pourcraft"  element={<PourCraft />} />
           <Route path="beercraft"  element={<BeerCraft />} />
           <Route path="winecraft"  element={<WineCraft />} />
-          <Route path="pos"        element={<POS3 />} />
-          <Route path="eat"        element={<EATCommand />} />
+
+          {/* ── Protected staff+ routes ── */}
+          <Route path="pos" element={
+            <ProtectedRoute
+              requiredPermission="access_pos3_staff"
+              lockedMessage="POS 3 requires staff-level access or higher."
+            >
+              <POS3 />
+            </ProtectedRoute>
+          } />
+
+          {/* ── Protected manager+ routes ── */}
+          <Route path="eat" element={
+            <ProtectedRoute
+              requiredPermission="access_eat_command"
+              lockedMessage="E.A.T. Command requires manager-level access or higher."
+            >
+              <EATCommand />
+            </ProtectedRoute>
+          } />
+
+          {/* ── Protected admin+ routes ── */}
+          <Route path="admin" element={
+            <ProtectedRoute
+              allowedRoles={['admin', 'founder_level_0']}
+              lockedMessage="NOVEE OS Admin requires admin-level access or higher."
+            >
+              <Admin />
+            </ProtectedRoute>
+          } />
+
+          {/* ── Founder Level 0 only ── */}
+          <Route path="founder" element={
+            <ProtectedRoute
+              allowedRoles={['founder_level_0']}
+              lockedMessage="Founder Level 0 access required. This area cannot be delegated."
+            >
+              <FounderControl />
+            </ProtectedRoute>
+          } />
 
           {/* Route aliases & redirects */}
           <Route path="craft-hub"              element={<Navigate to="/crafthub" replace />} />
@@ -140,6 +183,9 @@ export default function App() {
           <Route path="*"          element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
+
+      {/* Dev-only floating role switcher */}
+      <DevRoleSwitcher />
     </BrowserRouter>
   )
 }
