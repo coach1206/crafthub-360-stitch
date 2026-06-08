@@ -108,7 +108,7 @@ export default function PassportConnection() {
       {/* Top App Bar */}
       <header className="fixed top-0 w-full z-50 bg-surface/60 backdrop-blur-xl border-b border-primary/10 shadow-sm flex justify-between items-center px-card-padding" style={{ height: 80 }}>
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate(-1)} className="material-symbols-outlined text-primary p-2 hover:bg-primary/10 transition-colors rounded-full active:scale-95 flex-shrink-0">arrow_back</button>
+          <button onClick={() => navigate('/')} className="material-symbols-outlined text-primary p-2 hover:bg-primary/10 transition-colors rounded-full active:scale-95 flex-shrink-0">arrow_back</button>
           <div className="w-12 h-12 rounded-full border border-primary/30 p-0.5 overflow-hidden flex-shrink-0">
             {profilePhoto
               ? <img className="w-full h-full object-cover rounded-full" src={profilePhoto} alt="Profile" />
