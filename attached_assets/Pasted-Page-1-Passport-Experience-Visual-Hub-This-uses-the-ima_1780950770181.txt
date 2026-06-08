@@ -1,0 +1,393 @@
+Page 1: Passport Experience / Visual Hub
+
+This uses the image as the hero reference.
+
+Purpose:
+
+Show the feeling.
+Show the passport.
+Show the stamps.
+Show the QR scan.
+Show the value visually.
+
+Main buttons:
+
+Start Passport Session
+How It Works
+Scan to Connect
+Explore Directory
+Page 2: How 360 Passport Connection Works
+
+This explains everything clearly.
+
+Purpose:
+
+Teach users what this is.
+Show what they do first.
+Explain scanning.
+Explain stamps.
+Explain Directory.
+Explain Connections.
+Explain rewards.
+
+Main buttons:
+
+Start with Scan
+Complete Profile
+View Directory
+View Matches
+View Stamps
+Paste this into Replit
+CREATE A TWO-PAGE 360 PASSPORT CONNECTION EXPERIENCE USING THE PROVIDED IMAGE AND EXPLANATION.
+
+DO NOT rebuild the whole app.
+DO NOT break existing routes.
+DO NOT remove current touchscreen behavior.
+DO NOT make this a flat dashboard.
+DO NOT use the image as a dead screenshot with fake UI only.
+
+OBJECTIVE:
+Use the new 360 Passport Connection image as the premium visual direction for the Passport experience, and create a second page that clearly explains what the system does and how users use it.
+
+This should be split into two connected pages:
+
+PAGE 1:
+360 Passport Connection Hub
+
+PAGE 2:
+How 360 Passport Connection Works
+
+Both pages must feel premium, cinematic, touchscreen-first, and self-explanatory.
+
+==================================================
+PAGE 1: 360 PASSPORT CONNECTION HUB
+==================================================
+
+Route:
+Use the existing /passport route if that is the current Passport Hub route.
+
+Purpose:
+This page is the visual landing experience. It should immediately feel like a luxury digital passport, not a basic dashboard.
+
+Use the provided image as the visual reference and/or hero background.
+
+The page should include:
+- 360 Passport Connection branding
+- by Profound Innovations LLC
+- Powered by NOVEE OS
+- realistic passport booklet visual
+- stamp collection visual
+- QR Scan to Connect visual
+- luxury networking lounge atmosphere
+- warm amber lighting
+- leather, paper, gold foil, and stamp textures
+
+Main hero copy:
+
+Title:
+360 Passport Connection
+
+Subtitle:
+Your digital networking passport for verified connections, collectible stamps, member status, and private access.
+
+Short value line:
+Scan in. Meet people. Earn stamps. Unlock access.
+
+Hero explanation:
+360 Passport Connection turns live events, lounges, tastings, business mixers, and private experiences into verified relationship history, collectible stamps, rewards, and real follow-up opportunities.
+
+Primary buttons:
+- Start Passport Session
+- Scan to Connect
+- How It Works
+- Explore Directory
+
+Visual sections on Page 1:
+1. Passport Hero
+Show the passport booklet, open stamp pages, QR credential card, and active venue/session information.
+
+2. Start Here
+Show clear action cards:
+- Scan to Connect
+- Complete Profile
+- Explore Directory
+- View Matches
+- Earn Stamps
+
+3. Passport Progress
+Show:
+- Stamps Earned
+- Connections Verified
+- Events Attended
+- XP to Next Tier
+- Next Unlock
+
+4. Color-Coded Section Cards
+Use premium passport color identities:
+- Navy = Identity / Main Passport
+- Forest Green = Directory / Discovery
+- Burgundy = Connections / Growth
+- Tan Paper = Digital Stamps
+- Amber/Bronze = Events
+- Deep Plum = Rewards / Legacy
+- Black/Gold = VIP / Executive
+
+Each card must include:
+- title
+- short description
+- clear action button
+
+5. Bottom Navigation
+Include:
+- Home
+- Passport
+- Directory
+- Scan
+- Events
+- Connections
+- Profile
+
+The Scan button should be larger, centered, raised, and visually important.
+
+==================================================
+PAGE 2: HOW 360 PASSPORT CONNECTION WORKS
+==================================================
+
+Route:
+Create a route such as:
+/passport/how-it-works
+
+Add a button from Page 1 that opens this page.
+
+Purpose:
+This page explains the product clearly. The user should understand the whole system within 30 seconds.
+
+Page title:
+How 360 Passport Connection Works
+
+Intro copy:
+360 Passport Connection helps you turn live event moments into verified connections, collectible stamps, profile history, rewards, and future opportunities.
+
+Add this main explanation:
+
+What is 360 Passport Connection?
+360 Passport Connection is your digital networking passport. It gives each member a living record of who they meet, where they connected, what events they attended, what experiences they completed, and what access they unlocked.
+
+Add the simple value line:
+Scan in. Meet people. Earn stamps. Unlock access.
+
+==================================================
+HOW IT WORKS STEPS
+==================================================
+
+Create large premium step cards with visuals and touchscreen buttons:
+
+STEP 1: Scan In
+When you arrive at a venue or event, scan the QR code to activate your passport session.
+
+What happens:
+- Your event session opens
+- Your profile becomes active
+- You can discover people nearby
+- Your passport is ready to collect stamps
+
+Button:
+Start Scan
+
+STEP 2: Build Your Passport
+Complete your profile so the system understands who you are, what you do, what you are looking for, and what you can offer.
+
+What users add:
+- name
+- profession
+- industry
+- city
+- goals
+- interests
+- expertise
+- what they are looking for
+- what they can offer
+
+Button:
+Complete Profile
+
+STEP 3: Discover Members
+Use Directory to find people, brands, vendors, speakers, mentors, and professionals connected to the event or ecosystem.
+
+Directory helps users:
+- search by industry
+- filter by interest
+- view profiles
+- save members
+- request intros
+- see shared events
+- add people to passport
+
+Button:
+Explore Directory
+
+STEP 4: Match & Connect
+Use Connections to see suggested matches based on your profile, goals, interests, event attendance, and shared opportunities.
+
+Connections should show:
+- why you match
+- mutual interests
+- shared event
+- suggested reason to connect
+- connect button
+- message button
+- save to passport button
+- scan to link button
+
+Button:
+View Matches
+
+STEP 5: Earn Stamps
+Stamps are verified proof of participation. They show what you attended, who you connected with, and what milestones you reached.
+
+Stamp types:
+- Event Stamp
+- Connection Stamp
+- Craft Stamp
+- VIP Stamp
+- Achievement Stamp
+- Verified Profile Stamp
+
+Button:
+View My Stamps
+
+STEP 6: Unlock Access
+As your passport grows, you unlock rewards, status, and private opportunities.
+
+Unlock examples:
+- VIP access
+- member pricing
+- private lounge access
+- priority reservations
+- exclusive events
+- curated introductions
+- brand partner perks
+
+Button:
+See Rewards
+
+==================================================
+WHY IT MATTERS SECTION
+==================================================
+
+Add a premium section called:
+Why This Matters
+
+Copy:
+Most networking dies after the handshake. 360 Passport Connection turns those moments into verified relationship history, follow-up opportunities, event memories, and unlockable access.
+
+Show four benefit cards:
+1. Remember who you met and where you met them
+2. Build a verified relationship record over time
+3. Discover better matches before and during events
+4. Unlock rewards, status, and private access through real participation
+
+==================================================
+SCAN FLOW SECTION
+==================================================
+
+Add a clear Scan to Connect flow:
+
+1. Open Scanner
+2. Scan Member QR
+3. Preview Profile
+4. Confirm Connection
+5. Earn Connection Stamp
+6. Save to Passport
+
+This section must be visual, simple, and touchscreen-friendly.
+
+==================================================
+DIRECTORY AND CONNECTIONS MUST FEEL LIVE
+==================================================
+
+Do not show Directory or Connections as coming soon.
+
+Add sample live content:
+
+Directory sample cards:
+- member portrait
+- name
+- role
+- company
+- city
+- industry tags
+- shared interests
+- buttons:
+  - View Profile
+  - Save
+  - Request Intro
+  - Add to Passport
+
+Connections sample cards:
+- suggested match
+- why you match
+- mutual interests
+- shared event
+- compatibility tags
+- buttons:
+  - Connect
+  - Message
+  - Scan to Link
+  - Save
+
+==================================================
+VISUAL REQUIREMENTS
+==================================================
+
+Both pages must use:
+- premium passport object design
+- leather texture
+- paper texture
+- gold foil
+- colored stamp ink
+- realistic passport booklet visuals
+- raised tactile buttons
+- cinematic lounge background
+- warm amber lighting
+- clear hierarchy
+- large readable type
+- touchscreen-safe spacing
+
+Do not use:
+- flat black boxes
+- cheap colored rectangles
+- tiny labels
+- dead buttons
+- coming soon cards
+- generic dashboard layout
+
+==================================================
+TOUCHSCREEN REQUIREMENTS
+==================================================
+
+All buttons must:
+- be at least 64px tall
+- preferably 72px
+- have raised styling
+- have active press state
+- use haptic-ready class
+- be clearly labeled
+- work on touch, not only mouse hover
+
+==================================================
+FINAL CHECK
+==================================================
+
+Before saying complete, test that a new user can answer:
+
+1. What is 360 Passport Connection?
+2. What do I do first?
+3. What happens when I scan?
+4. How do I earn stamps?
+5. What is Directory for?
+6. What are Connections for?
+7. What do I unlock?
+8. Why should I keep using it?
+
+If the answer is not clear on the page, keep improving.
