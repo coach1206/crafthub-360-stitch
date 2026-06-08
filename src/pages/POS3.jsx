@@ -98,7 +98,7 @@ export default function POS3() {
 
       {/* ── Hero (unchanged) ─────────────────────────────────────────── */}
       <motion.div variants={FADE} style={{ position: 'relative', height: 220 }}>
-        <img src="/pos3.jpg" alt="POS3"
+        <img src="/pos3-device.jpeg" alt="POS3"
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 50%', display: 'block' }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.0) 30%, rgba(1,1,1,0.95) 100%)' }} />

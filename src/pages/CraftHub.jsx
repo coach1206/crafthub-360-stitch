@@ -65,7 +65,19 @@ export default function CraftHub() {
   const onCardReset = (i) => { if (cardRefs.current[i]) cardRefs.current[i].style.transform = 'scale(1)' }
 
   return (
-    <div className="bg-background text-on-background min-h-screen selection:bg-primary selection:text-on-primary overflow-hidden">
+    <div className="bg-background text-on-background min-h-screen selection:bg-primary selection:text-on-primary overflow-hidden" style={{ position: 'relative' }}>
+
+      {/* ── Full-page logo watermark ─────────────────────────── */}
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <img
+          src="/crafthub-logo.jpeg"
+          alt=""
+          style={{ width: '70%', maxWidth: 520, opacity: 0.06, filter: 'grayscale(30%)' }}
+        />
+      </div>
 
       {/* ── Top App Bar ──────────────────────────────────────── */}
       <header className="w-full top-0 sticky bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)] z-50">

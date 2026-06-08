@@ -60,7 +60,7 @@ export default function EATCommand() {
 
       {/* ── Hero (unchanged) ─────────────────────────────────────────── */}
       <motion.div variants={FADE} style={{ position: 'relative', height: 260 }}>
-        <img src="/eat-command.jpg" alt="EAT Command"
+        <img src="/crafthub-logo.jpeg" alt="EAT Command"
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%', display: 'block' }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.0) 30%, rgba(1,1,1,0.95) 100%)' }} />
