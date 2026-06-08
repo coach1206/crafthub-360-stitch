@@ -32,6 +32,7 @@ import deploymentRoutes       from './routes/deploymentRoutes.js'
 import venueTestRoutes        from './routes/venueTestRoutes.js'
 import demoRoutes             from './routes/demoRoutes.js'
 import pilotRoutes            from './routes/pilotRoutes.js'
+import pairingOrderRoutes    from './routes/pairingOrderRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { startPOS3AutoSync }  from './services/pos3AutoSyncService.js'
@@ -71,6 +72,7 @@ app.use('/api/eat',               eatRoutes)
 app.use('/api/venue-test',        venueTestRoutes)
 app.use('/api/demo',              demoRoutes)
 app.use('/api/pilot',             pilotRoutes)
+app.use('/api/pairings',          pairingOrderRoutes)
 app.use('/api/audit',       auditRoutes)
 app.use('/api/admin',       adminRoutes)
 app.use('/api/founder',     founderRoutes)

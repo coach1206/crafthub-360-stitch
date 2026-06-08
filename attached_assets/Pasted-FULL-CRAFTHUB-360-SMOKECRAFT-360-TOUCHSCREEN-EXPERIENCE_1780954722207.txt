@@ -1,0 +1,654 @@
+FULL CRAFTHUB 360 / SMOKECRAFT 360 TOUCHSCREEN EXPERIENCE CORRECTION
+
+STOP. The current screens are not acceptable.
+
+The SmokeCraft sensory page is using random images that do not match the choices.
+The UI still feels flat, inconsistent, and not tactile enough.
+Some pages have missing images, broken image placeholders, empty boxes, glyph icons, weak buttons, and disconnected visual direction.
+
+This must be corrected across the entire CraftHub 360 / SmokeCraft 360 / Passport / POS 3 / E.A.T. Command experience.
+
+DO NOT rebuild the app from scratch.
+DO NOT remove working routes or logic.
+DO NOT break existing navigation.
+DO NOT keep random placeholder images.
+DO NOT use glyphs as final visual assets.
+DO NOT leave empty boxes.
+DO NOT leave dead buttons.
+DO NOT use generic lifestyle photos that do not match the meaning of the choice.
+
+This is a full visual, interaction, touchscreen, haptic, and image-correction pass.
+
+==================================================
+GLOBAL TOUCHSCREEN DIRECTIVE
+==================================================
+
+EVERY SCREEN must be touchscreen-first.
+
+This applies to:
+
+- CraftHub home
+- SmokeCraft home
+- SmokeCraft mentor selection
+- Seed & Soil
+- Know Your Leaves
+- Leaf Challenge
+- Sensory Profile
+- Flavor DNA
+- Pairings
+- Results
+- Passport
+- Directory
+- Connections
+- Events
+- Rewards
+- POS 3
+- E.A.T. Command
+- All modals
+- All drawers
+- All cards
+- All bottom navigation
+- All side navigation
+- All role/admin panels
+
+Every interactive element must have:
+
+- minimum 64px touch target
+- preferred 72px touch target
+- haptic-ready class
+- active press animation
+- visible selected state
+- raised tactile styling
+- shadow depth
+- hover state for desktop
+- touch state for tablet
+- no hover-only behavior
+- no tiny invisible controls
+- no dead buttons
+
+All buttons must feel like physical controls:
+- raised
+- beveled
+- softly glowing
+- pressed-down animation on tap
+- slight scale movement
+- tactile shadow change
+- clear label text
+
+Use these classes globally:
+- haptic-ready
+- tactile-button
+- tactile-card
+- tactile-press
+- raised-control
+- premium-selected
+- touch-feedback
+
+==================================================
+GLOBAL HAPTIC / TACTILE MOVEMENT REQUIREMENT
+==================================================
+
+Every screen must include tactile movement.
+
+Use Framer Motion or CSS transitions for:
+
+- button press down
+- card lift
+- selected card glow
+- modal entrance
+- page transition
+- stamp press
+- passport page curl
+- scan pulse
+- progress reveal
+- badge unlock
+- result celebration
+- smoke drift
+- gold ring loading
+- carousel slide
+- drawer open / close
+
+Tactile behavior examples:
+
+On tap:
+- scale to 0.97
+- shadow compresses
+- gold border brightens
+- selected state locks in
+
+On selection:
+- card lifts slightly
+- realistic badge lights up
+- soft gold glow appears
+- haptic-ready class triggers
+
+On page transition:
+- fade + slide
+- slight depth movement
+- no abrupt dead screen
+
+==================================================
+GLOBAL IMAGE DIRECTIVE
+==================================================
+
+Every screen must have relevant imagery.
+
+No screen may have:
+- missing images
+- broken image icons
+- empty image boxes
+- generic gradients only
+- flat black backgrounds
+- random unrelated photos
+- plain placeholder blocks
+
+Every image must match the content.
+
+If image fails:
+- show premium fallback image
+- never show broken image icon
+
+Create image fallback logic:
+- cigarFallback
+- humidorFallback
+- loungeFallback
+- mentorFallback
+- seedSoilFallback
+- leafFallback
+- pairingFallback
+- passportFallback
+- POSFallback
+- EATFallback
+- eventFallback
+- profileFallback
+
+All image components must use onError fallback.
+
+==================================================
+NO GLYPHS AS FINAL VISUAL ASSETS
+==================================================
+
+Do not use simple glyph icons as the final premium visual.
+
+Replace glyphs with realistic badges, medallions, stamps, seals, or image-based icons.
+
+For navigation and sections, use:
+- realistic gold badge medallions
+- embossed leather badges
+- passport stamps
+- wax seals
+- country flag badges
+- realistic category tokens
+- craft emblems
+
+Do not rely on plain line icons only.
+
+Icons may remain for accessibility or support, but the main visual must be badge-based.
+
+==================================================
+SCREEN-SPECIFIC CORRECTIONS
+==================================================
+
+1. SMOKECRAFT HOME
+
+Current issue:
+The secondary button next to START SMOKECRAFT is blank.
+
+Fix:
+Primary button:
+START SMOKECRAFT
+
+Secondary button:
+HOW IT WORKS
+
+Add helper copy:
+Begin your guided cigar profile, earn passport stamps, and unlock personalized pairings.
+
+Right card:
+Must show a realistic 360 Passport booklet image, not a flat icon.
+
+Bottom nav:
+Replace glyphs with realistic badge medallions:
+- Rewards badge
+- Rankings badge
+- Passport badge
+- CraftHub badge
+
+All must be clickable.
+
+==================================================
+2. MENTOR SELECTION SCREEN
+
+Current issue:
+Two mentor images are missing.
+Country identity is weak.
+Sidebar icons are glyphs.
+Cards need more premium detail.
+
+Fix:
+Every mentor card must have:
+- realistic portrait image
+- country flag badge
+- country name
+- mentor name
+- specialty
+- flavor/style tags
+- selected state
+- tap-to-select action
+- fallback image if missing
+
+Required mentor countries:
+- Dominican Republic
+- Nicaragua
+- Honduras
+- Mexico
+- Colombia
+- Ecuador
+- Brazil
+
+Each country must show its flag somewhere on the card.
+
+Example mentor card:
+Dominican Republic flag
+Don Alejandro
+Master of volcanic soil nutrients and rich, balanced cigar profiles.
+Tags: Complexity, Balance
+
+No broken images.
+No empty portrait boxes.
+
+Sidebar:
+Replace glyphs with realistic badges:
+- Cellar badge
+- Humidor badge
+- Lounge badge
+- Passport badge
+
+All sidebar items must be clickable and route correctly.
+
+==================================================
+3. SEED & SOIL SCREEN
+
+Current issue:
+Seed and Soil page has empty boxes and missing visuals.
+
+Fix:
+This page must show realistic imagery for every concept.
+
+Use a cinematic tobacco farm background with frost overlay.
+
+Required sections:
+
+Left:
+Seed & Soil title
+Explanation:
+Every great cigar begins with where it comes from. Seed genetics, soil composition, climate, and curing shape flavor, strength, aroma, and burn.
+
+Profile cards:
+- Smooth Starter
+- Bold Explorer
+- Sweet Finish
+- Earth and Spice
+- Luxury Reserve
+- Rare Leaf
+- Social Smoke
+- Celebration Smoke
+
+Each card must have:
+- realistic small image or badge
+- title
+- description
+- selected state
+- tap behavior
+
+Right visual education panel:
+Must have realistic images for:
+- Premium Tobacco Seeds
+- Nutrient-Rich Soil
+- Ideal Growing Conditions
+- Curing & Fermentation
+- Terroir & Tradition
+
+No empty boxes.
+
+Next button:
+NEXT: CURATION
+
+==================================================
+4. KNOW YOUR LEAVES SCREEN
+
+Current issue:
+The page looks heavy and dull.
+It needs frost/image background.
+Leaf cards need more atmosphere.
+
+Fix:
+Use a cinematic tobacco curing barn background.
+Add frosted overlay so text is readable.
+Use real leaf macro images.
+
+The page must include:
+- Step progress
+- Title: Know Your Leaves
+- Explanation of why leaves matter
+- 3 to 6 large leaf cards
+- Each card must have realistic leaf image
+- Strength, aroma, body dots
+- flavor tags
+- tap-to-flip or tap-to-learn behavior
+
+Required leaf cards:
+- Habano Colorado
+- Corojo Rosado
+- Criollo ’98
+- Connecticut Shade
+- Sumatra Maduro
+- Broadleaf Maduro
+
+Every card must have:
+- real image
+- country origin
+- tasting profile
+- strength/aroma/body indicators
+- selected/learned state
+
+==================================================
+5. LEAF CHALLENGE SCREEN
+
+Current issue:
+Images are missing or broken.
+The main question image is blank.
+Answer options have missing images.
+
+Fix:
+Use the premium quiz design:
+- cinematic lounge background
+- giant realistic leaf image
+- question panel
+- answer cards with thumbnail images
+- round score
+- progress dots
+- haptic answer selection
+- correct/wrong feedback
+
+If image fails, use leaf fallback image.
+No broken image icons.
+
+Answer cards must be large and touch-friendly.
+
+==================================================
+6. SENSORY PROFILE / FLAVOR DNA SCREEN
+
+Current issue:
+Images are random and wrong.
+A couch does not represent Bold.
+Food photos do not represent sensory choices.
+The page feels like random tiles.
+
+Fix:
+Replace all random lifestyle images with cigar-relevant sensory visuals.
+
+Smooth or Bold section:
+Smooth image:
+- creamy smoke
+- light wrapper cigar
+- silky draw
+- soft lounge light
+
+Bold image:
+- dark wrapper cigar
+- strong smoke plume
+- barrel-aged whiskey
+- deep tobacco leaf texture
+
+Character section:
+Sweet:
+- natural tobacco sweetness
+- dried fruit / molasses / sweet wrapper visual
+
+Spicy:
+- peppercorn, cedar, spice, dark tobacco visual
+
+Earthy:
+- soil, tobacco field, cured leaf, mineral earth visual
+
+Creamy:
+- cream-toned smoke, light wrapper, smooth coffee crema visual
+
+Woody:
+- cedar humidor, cigar box, oak barrel visual
+
+Peppery:
+- black pepper, dark leaf veins, spice visual
+
+Aromatic Nuances:
+Replace simple glyph chips with realistic mini-badges or stamp tokens for:
+- Coffee
+- Chocolate
+- Vanilla
+- Oak
+- Leather
+- Fruit
+- Spice
+
+Today’s Occasion:
+Replace all glyphs with realistic badges:
+- Relaxing = leather lounge chair badge
+- Celebrating = champagne/glass badge
+- Business = briefcase badge
+- Date Night = rose badge
+- Sports = game badge
+- VIP = crown badge
+
+Each badge must:
+- be raised
+- have gold rim
+- be selected on tap
+- have haptic-ready class
+- show label and short subtitle
+
+Add a meaningful hero image behind the section:
+- cigar lounge table
+- open humidor
+- whiskey glass
+- smoke
+- amber lighting
+
+==================================================
+7. PAIRING SCREEN
+
+Current issue:
+Some pairing cards are missing images and look flat.
+
+Fix:
+Every pairing card must show a real product image.
+
+Cards:
+- Old Rip Van Winkle
+- Zacapa Centenario
+- Blue Mountain
+- Cacao Noir 85%
+- selected cigar
+
+If product image is missing:
+- show category fallback
+- never show blank or broken image
+
+Every pairing card must be functional:
+- tap card opens detail modal
+- Add Drink to Bar Order
+- Add Cigar to Humidor Order
+- Add Pairing Bundle
+- Save to Passport
+- Ask Staff
+
+Cards must show:
+- name
+- category
+- image
+- description
+- match score
+- price
+- inventory status
+- destination: BAR / HUMIDOR / KITCHEN
+
+==================================================
+8. CULTIVATION EXPERIENCE SCREEN
+
+Current issue:
+It says the screen does not exist.
+That is not acceptable.
+
+Fix:
+Create the Cultivation Experience screen.
+
+Visual:
+- tobacco farm background
+- seedling imagery
+- curing barn
+- soil and leaf closeups
+- premium education panels
+
+Purpose:
+Teach the user how cultivation affects cigar identity.
+
+Sections:
+- Seed Selection
+- Soil Character
+- Climate
+- Harvesting
+- Curing
+- Fermentation
+- Aging
+
+Buttons:
+- Back
+- Continue Journey
+- Save to Passport
+
+No placeholder message saying screen does not exist.
+
+==================================================
+9. PASSPORT SCREEN
+
+Current issue:
+Passport needs to use real passport imagery, not flat screen cards.
+
+Fix:
+Use realistic 360 Passport booklet visuals.
+Show:
+- closed passport
+- open passport
+- stamp page
+- QR credential
+- progress
+- stamps earned
+
+Every passport tile must use:
+- leather texture
+- paper texture
+- stamp visuals
+- raised badge controls
+
+No flat glyph-only passport card.
+
+==================================================
+10. RESULT / CELEBRATION SCREEN
+
+Add required premium transition:
+
+Before revealing result:
+- 1-second “Calculating Your Leaf Eye…” screen
+- smoke animation
+- gold loading ring
+- stamp sound hook
+- haptic pulse hook
+
+Then reveal:
+- celebration
+- score
+- earned stamp
+- reward animation
+- passport update
+- next action
+
+==================================================
+GLOBAL FUNCTIONALITY REQUIREMENT
+==================================================
+
+All pages must have working buttons.
+
+No placeholder buttons.
+
+Every clickable item must either:
+- navigate
+- open modal
+- select state
+- add to cart/order
+- save to passport
+- show detail
+- update progress
+- trigger toast
+- submit action
+
+No dead UI.
+
+==================================================
+ORDERING REQUIREMENT FOR PAIRINGS
+==================================================
+
+Pairing cards must allow ordering.
+
+User can:
+- order drink from bar
+- order cigar from humidor
+- order food/dessert from kitchen
+- order full pairing bundle
+
+Order must create payload with:
+- guestId
+- venueId
+- tableId
+- sessionId
+- itemId
+- itemName
+- category
+- destination
+- price
+- quantity
+- notes
+- timestamp
+- status
+
+Destinations:
+- BAR
+- HUMIDOR
+- KITCHEN
+- POS3
+
+==================================================
+FINAL CHECK BEFORE SAYING COMPLETE
+==================================================
+
+Do not say complete until:
+
+1. Every screen is touchscreen-ready.
+2. Every button has haptic-ready tactile behavior.
+3. Every card has touch movement.
+4. No glyphs remain as final main visuals.
+5. Badges replace simple glyph icons.
+6. Every screen has relevant images.
+7. No broken images appear.
+8. Mentor cards show images and country flags.
+9. Seed & Soil has realistic content images.
+10. Know Your Leaves has background image or frost atmosphere.
+11. Leaf Challenge has working images.
+12. Sensory Profile uses cigar-relevant images.
+13. Today’s Occasion uses realistic badges.
+14. Passport uses real passport imagery.
+15. Pairing cards have dynamic images.
+16. Pairing ordering works.
+17. All buttons have actual functions.
+18. No screen has empty placeholder boxes.
+19. No screen says “does not exist.”
+20. Every page feels premium, tactile, and alive.
