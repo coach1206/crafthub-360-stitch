@@ -98,38 +98,87 @@ export default function Blend() {
       </header>
 
       {/* Navigation Drawer */}
-      <aside className="fixed left-0 top-0 h-full z-40 pt-20 px-4 w-80 bg-surface/5 backdrop-blur-[40px] border-r border-white/10 hidden lg:block">
-        <div className="mb-10 px-4">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 rounded-lg gold-foil flex items-center justify-center text-on-primary">
-              <span className="material-symbols-outlined font-bold">token</span>
+      <aside className="fixed left-0 top-0 h-full z-40 pt-20 w-72 bg-surface/5 backdrop-blur-[40px] border-r border-white/10 hidden lg:flex flex-col">
+        {/* Brand block */}
+        <div className="px-5 py-5 border-b border-white/8">
+          <div className="flex items-center gap-3 mb-1">
+            <div className="w-9 h-9 rounded-lg gold-foil flex items-center justify-center text-on-primary flex-shrink-0">
+              <span className="material-symbols-outlined text-[18px] font-bold">token</span>
             </div>
-            <div>
-              <p className="text-primary font-headline-md text-[16px]">NOVEE OS</p>
-              <p className="text-secondary-fixed-dim text-[12px] opacity-70">Founder 0 Authority</p>
+            <div style={{ minWidth: 0 }}>
+              <p className="text-primary font-bold text-[13px] tracking-[0.12em] uppercase" style={{ whiteSpace: 'nowrap' }}>CraftHub 360</p>
+              <p className="text-[9px] tracking-[0.14em] uppercase opacity-50" style={{ color: '#D4AF37', whiteSpace: 'nowrap' }}>Orchestrate · Curate · Elevate</p>
             </div>
-          </div>
-          <div className="p-3 bg-primary/10 rounded-lg titanium-border">
-            <p className="text-primary text-[10px] font-bold tracking-[0.2em]">V.3.60.0 • ECOSYSTEM MASTER</p>
           </div>
         </div>
-        <nav className="space-y-1">
+
+        {/* Module nav */}
+        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
           {[
-            { icon: 'smoke_free', label: 'SmokeCraft', active: true },
-            { icon: 'sports_bar', label: 'BeerCraft' },
-            { icon: 'liquor', label: 'PourCraft' },
-            { icon: 'wine_bar', label: 'WineCraft' },
-            { icon: 'badge', label: '360 Passport' },
-            { icon: 'restaurant', label: 'E.A.T.' },
-            { icon: 'point_of_sale', label: 'POS 3' },
-          ].map(({ icon, label, active }) => (
-            <div
+            {
+              label: 'SmokeCraft', sub: 'Signature Blends', active: true, to: '/smokecraft',
+              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBibwIn3K4im-7feOc6MbE0qrLgoKLyluRCrG3hjStuvfdpV18KH3A62G-Qz_6SVfNrj8RmOIz4hgjZbsiGf5vrfo17Uf0QYtARmYGCz3AONU-8UZEcE8OSFgxjJwc2qzjNic1fMb52TVcCBU_2QQ-yDTSHGdEzFFXRQYmR_R8lGcWMHEeM5hpoR4wpZFsjtro1GAI7dOrXg5xHk9gr32bXN3Vbzy7Ng-LmBNF7rU_vEhH3psYZXs9IvOT6qmbzmAV5Jtgn4Cdo8XQ',
+            },
+            {
+              label: 'BeerCraft', sub: 'Artisan Pairings', active: false, to: '/beercraft',
+              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD7VKTY8DSDP4GuM4QjYR6EUZ4LubDo2yCakN2HYV6KyES6tx4THIbwtZKTJGP7jwwJa0Y6Mpwe7t4lB4Z6ZrtkphJapCLIUjlAPK5yHz-y4rHZPgVcmGAqu2dBojUcETurbHllrTS7OdYNtG59QmMelXGI4jLltYxca6qYZFERSoyNOPC51Er70AmYxHA9cNjDpdI-4qDJHTY_Buz0AhxIxquJ5jyxJLlm9k4VqSjh11zr9yTQ5djQ81CEGXwI41JwzsUu5pAUzB4',
+            },
+            {
+              label: 'PourCraft', sub: 'Mixology Curated', active: false, to: '/pourcraft',
+              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjHHIqUqm4IOBASD9e2CFzmQ4Vt8WRSqfeXFt8t_1i2pPsfxMn84WFBCXRIk_Bd1AjSxcXHBCeNc41pSby-goSyKfSuQe5AOAaLaBlpi6JnD_7fhr1sPy6VbWBiTzmjmFzEwjw8z5kQIVkiKACQgwi-HzB-sAbPIleq_5tachES6TA9xVwf7i_1v1HOewxIVMzGkOsmiCHglJ001ONH5Cj1WC3TTNUZGDRHqfeKBppL49vwAMhY09pzWoCB-KDVF6TYDa-xhKCOS8',
+            },
+            {
+              label: 'WineCraft', sub: 'Vintage Selections', active: false, to: '/winecraft',
+              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDN-VSDDSik_99uYcdNQK9qplzBEeBHFI5GylQ4yLuTVURyE09ShNJzs5TFDa5QWyyJqQjK9XXkZtTSgGc3zY8-pfx1LHbrOayvxB1x5xOIbt0i472thBGJ6WOX3Jl2NwrYJNbGUYOeMCs-mohmkNWfHVU7VLntJ1SjdlDhqth5FyEiWKPI00krkamgowHVvovuXEXO1EBTHCDeFDRxeFFSoRI5OGRdtY96RyQbRrtNMWUqWI7x4AuazZYNAIqroB1vsEBlsjx7su8',
+            },
+            {
+              label: '360 Passport', sub: 'Global Access', active: false, to: '/passport',
+              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts',
+            },
+            {
+              label: 'E.A.T.', sub: 'Culinary Journeys', active: false, to: '/',
+              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBkj1vyr57VqCSvkAIytKCP-dMimzcM6Bkfpo2BogqBmXvJno7XWBIkFHJP0uTjIRf43VMB4VT0fAzPe56ohr59HTYYKsym0J2JV6xGqZPzbw5OHeK9oQVklLm-rTkus0D_QeG5AsW_i3r95SxCCtkda_GbYOLo3MnRfTZ3tRjOehK1rR6yLCjtmEhkAfL3RPm8SEoj5khmFowDyNMdG5WO2fYsQ3Jh34sFkF3uM5Rql5d_S8_0z_f_osUhL3uDZji89YvLMFPAia4',
+            },
+            {
+              label: 'POS 3', sub: 'Hospitality Ops', active: false, to: '/pos3',
+              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC-wFKd36V8Kte15q8k8B-07-DyWINrytg3jtB6nOkc55ovBl4NALS6YptCCnVeaf3H0BiZaFZyCPhdpRz6cJuFHWafpHgA0bqZij04ksDjTgbbT5XRZzsSojqvCQVT5O8jsyto4qMMBNy06XdXMxckzv0jbOT8tWEt9Nt1Z6g8UILoCRPg0EX6hSOgzhvRWrHCdvSBENZGQ1W5nkASD5aX019MPiabFOQUvieuxQyNse6-qHGoiBrr39deuAFKC3uxypdFhGZN_8U',
+            },
+          ].map(({ label, sub, active, to, img }) => (
+            <button
               key={label}
-              className={`flex items-center gap-4 px-4 py-3 rounded-lg cursor-pointer transition-colors ${active ? 'text-primary bg-primary-container/10 border-l-2 border-primary-container' : 'text-secondary-fixed-dim hover:bg-white/5'}`}
+              onClick={() => navigate(to)}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                padding: '10px 12px',
+                borderRadius: 12,
+                border: active ? '1px solid rgba(212,175,55,0.45)' : '1px solid transparent',
+                background: active ? 'rgba(212,175,55,0.1)' : 'transparent',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                textAlign: 'left',
+              }}
+              onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
+              onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}
             >
-              <span className="material-symbols-outlined">{icon}</span>
-              <span className="font-body-md text-body-md">{label}</span>
-            </div>
+              {/* Image medallion */}
+              <div style={{
+                width: 48, height: 48, borderRadius: 10, overflow: 'hidden', flexShrink: 0,
+                border: active ? '1px solid rgba(212,175,55,0.6)' : '1px solid rgba(255,255,255,0.1)',
+                boxShadow: active ? '0 0 12px rgba(212,175,55,0.2)' : 'none',
+              }}>
+                <img src={img} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: active ? 'none' : 'brightness(0.5) saturate(0.6)' }} />
+              </div>
+              {/* Labels */}
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: active ? 700 : 500, fontSize: 14, color: active ? '#D4AF37' : 'rgba(255,255,255,0.5)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</div>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: active ? 'rgba(212,175,55,0.6)' : 'rgba(255,255,255,0.22)', marginTop: 2 }}>{sub}</div>
+              </div>
+              {/* Active indicator */}
+              {active && <div style={{ marginLeft: 'auto', width: 5, height: 5, borderRadius: '50%', background: '#D4AF37', flexShrink: 0 }} />}
+            </button>
           ))}
         </nav>
       </aside>
