@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation, Suspense, lazy } from 'react-router-dom'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useGuestSession } from './context/GuestSessionContext.jsx'
 import Layout from './components/Layout.jsx'
 

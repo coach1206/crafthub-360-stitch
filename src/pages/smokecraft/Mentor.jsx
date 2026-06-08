@@ -1,88 +1,117 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { XP_AWARDS } from '../../constants/session.js'
-import { triggerHaptic } from '../../utils/haptics.js'
+import { useState, useEffect } from 'react'
+import { useNavigate }         from 'react-router-dom'
+import { useGuestSession }     from '../../context/GuestSessionContext.jsx'
+import { XP_AWARDS }           from '../../constants/session.js'
+import { triggerHaptic }       from '../../utils/haptics.js'
+import { useMentorVoice }      from '../../hooks/useMentorVoice.js'
+import VoiceButton             from '../../components/voice/VoiceButton.jsx'
 
 const PRIMARY_MENTORS = [
   {
-    id: 'dominican',
-    country: 'Dominican Republic',
-    name: 'Don Alejandro',
-    bio: 'Master of volcanic soil nutrients and the delicate art of Olor wrapper fermentation.',
-    tags: ['Complexity', 'Floral Notes'],
+    id:       'dominican',
+    country:  'Dominican Republic',
+    name:     'Don Alejandro',
+    bio:      'Master of volcanic soil nutrients and the delicate art of Olor wrapper fermentation.',
+    tags:     ['Complexity', 'Floral Notes'],
+    greeting: 'I am Don Alejandro. Volcanic soil and the patience of centuries — I will teach you to read the earth within a single Olor wrapper.',
     img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAW0kKp2a_4GazxkwcITfOrEAllIhzdB5Y94YI3GOF4UY_h5x3WXU2pbG40AbZ6ihlpZtaj4UtlO3jZZa3RG7zxsThDh7FmhduBj24ZARTD5K1R7U8MLRDXOnONMqyfI2KIeMMdHkMpT8935igPG_sxJb8OJRHjuKGDLwPzGN19Kt8ZfwQ69SFlzvaxfS-a9dbIpMP6nYSLM-rsa-YkNC1nuvScNfx71c8wnLnyTkUBvOK-hxauZz5t5no9zgFaKX07ODHEsIS-as4',
   },
   {
-    id: 'nicaragua',
-    country: 'Nicaragua',
-    name: 'Javier Estelí',
-    bio: "Specialist in sun-grown Criollo '98 and the robust spice profiles of Jalapa Valley.",
-    tags: ['Bold', 'Earth / Spice'],
+    id:       'nicaragua',
+    country:  'Nicaragua',
+    name:     'Javier Estelí',
+    bio:      "Specialist in sun-grown Criollo '98 and the robust spice profiles of Jalapa Valley.",
+    tags:     ['Bold', 'Earth / Spice'],
+    greeting: 'Javier Estelí. My valley demands boldness. The spice you taste in Jalapa tobacco is the result of relentless sun and uncompromising craft.',
     img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDzBPCTkkOTqC2zVjLURPTau1pgZIFLC5Co6Y0y-jLHTi3MPuPrcBjDTt0wv45iGgQO1r45o_qnlU6lhp7knFWyi9IbZdaNHSCEUCE9M7cTmVXenKhOnVtMBo4CcP12_nkaUl8Xi3d_E0-CLrlrb8x7OTohO40ZTh80kNnvB_k0ZLieO6i5oQbfWkXaferMudU-whcjP3lV-bd6ZwWDcz3bVcC5SmoiTg9Lh863jYjA4vSWFOdvZXkuJ9qi7DkgSLYyk8W-V9T1V4c',
   },
   {
-    id: 'honduras',
-    country: 'Honduras',
-    name: 'Elena Jamastran',
-    bio: 'Legacy grower of authentic Corojo seed and the intense, full-bodied traditions of Danlí.',
-    tags: ['Authentic', 'Rich Cedar'],
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAPtp4Y9j-CA6V2A2YUzioHki9r4HgYAXpga25qi9M1COUPn-mESIwesmKG0oI1E6h2va2KG9i2KujziGRyVXJcsACvoLXVtwp-FjXh_vZcGVZaIQs_fyC5Jz9dVH9liVvvuWVAKMoycLpyvukC9824JvSdMKn6zZRZBUs7asdrOGdsLoVEguXkh9FjXAyhwuX3EAC311hlF-IFrr7DDbm8mXSqzWdf456BB2x8YTJH5-TiHWqLKN1JQAV65ylwgaoAIF8IfBY049s',
+    id:       'honduras',
+    country:  'Honduras',
+    name:     'Elena Jamastran',
+    bio:      'Legacy grower of authentic Corojo seed and the intense, full-bodied traditions of Danlí.',
+    tags:     ['Authentic', 'Rich Cedar'],
+    greeting: 'I am Elena Jamastran. Five generations of Corojo in the highlands of Danlí. My family\'s legacy is in every leaf — I will pass it on to you.',
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAPtp4Y9j-CA6V2A2YUzioHki9r4HgYAXpga25qi9M1COUPn-mESIwesmKG0oI1E6h2va2KujziGRyVXJcsACvoLXVtwp-FjXh_vZcGVZaIQs_fyC5Jz9dVH9liVvvuWVAKMoycLpyvukC9824JvSdMKn6zZRZBUs7asdrOGdsLoVEguXkh9FjXAyhwuX3EAC311hlF-IFrr7DDbm8mXSqzWdf456BB2x8YTJH5-TiHWqLKN1JQAV65ylwgaoAIF8IfBY049s',
   },
   {
-    id: 'mexico',
-    country: 'Mexico',
-    name: 'Mateo San Andrés',
-    bio: 'Guardian of the Negro San Andrés leaf, the world\'s most sought-after Maduro wrapper.',
-    tags: ['Dark Cocoa', 'Maduro Expert'],
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCRshyXQNX_PtXBeEOJebDZFDGsJZ5uA2dzNwMLRsCFEHxT1dxYrfE5P0XDhj6_lw-OlVzTLz8oucgpbQUqYWCyOe__QJfEViUfjY24ntUQaYfqyZnKLPkSBlh6yVIspYyuh9MjP__1IumCEggADaqIzmMfDG3grDYXSqi0Oa6WXnvKK35jmG__D7M7KHVIjwuFaIuMUzNtccxbgr8VUF_FKJN3iLKUzdgs8U0qcuMjvQtLwAgBIoJ4CY_2rdjXUUUrWyfwMQ-CrLg',
+    id:       'mexico',
+    country:  'Mexico',
+    name:     'Mateo San Andrés',
+    bio:      'Guardian of the Negro San Andrés leaf, the world\'s most sought-after Maduro wrapper.',
+    tags:     ['Dark Cocoa', 'Maduro Expert'],
+    greeting: 'Mateo San Andrés. The Negro Maduro wrapper holds the darkest secrets in tobacco. Complex, honest, and alive. Your education starts now.',
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCRshyXQNX_PtXBeEOJebDZFDGsJZ5uA2dzNwMLRsCFEHxT1dxYrfE5P0XDhj6_lw-OlVzTLz8oucgpbQUqYWCyOe__QJfEViUfjY24ntUQaYfqeIuMUzNtccxbgr8VUF_FKJN3iLKUzdgs8U0qcuMjvQtLwAgBIoJ4CY_2rdjXUUUrWyfwMQ-CrLg',
   },
 ]
 
 const SPECIALTY_REGIONS = [
   {
-    id: 'brazil',
-    country: 'Brazil (Mata Fina)',
-    desc: 'Sweet & Earthy Profiles',
+    id:       'brazil',
+    country:  'Brazil (Mata Fina)',
+    desc:     'Sweet & Earthy Profiles',
+    greeting: 'From the Mata Fina forests, I bring sweetness drawn from deep red earth. Brazil\'s leaf is rare and unmistakable. Let us explore it together.',
     img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA96E-i-V5iTX1UcpiMqbc_VWvmkAzNT6IXZTWyHrnST3_e-F48lk4dZcQt6tnY3-FS8SRN9eitwotUIR2p0CbKKivcTEKxmGgznzCNEX3KLcYGf38oD4XGmclAy2Q4jDvglWAW0T574-61oF2onZkUfmc4FquVGHheV_lYKdEPyv8LeMGLGcNlQmQZiN-rDd2yoYLL1XGs80WOuOsHnwif63374-0j713oPLTw3MQ2Ff7QNQzXtmmTZ3UtN0wJI9yGD0ubbxwDk4g',
   },
   {
-    id: 'ecuador',
-    country: 'Ecuador (Habano)',
-    desc: 'Silky Cloud-Grown Texture',
+    id:       'ecuador',
+    country:  'Ecuador (Habano)',
+    desc:     'Silky Cloud-Grown Texture',
+    greeting: 'High in the Andean clouds, gentle light creates a wrapper unlike any other. Ecuador\'s silky texture speaks in whispers — learn to listen.',
     img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCDinqiRd53IenZj6Dg4uDGjKf7GNFR89-xAI4t2-68wH-BtJVVKUsZMoTibHD5nB2uI61lEqWTKBzcx6fUO83UUDbqCLxufZvXkYwXkxnOvzLpFpOCdbPr3M95R49mvK2G6Wm2V-erAzikJa6EXqtaeZ4RT1Tjq9ANJsNobQ4TZRDYIwxX1xdFGkGHk0QSyvjOIAzrMG8ia4rPhXcUczk9X_nbwCvyVETSYlkbNZdC-KqHYQhoIteDqdb9tGkwvNhs1IeNtBh2Q4Y',
   },
   {
-    id: 'colombia',
-    country: 'Colombia (Ica Mazupa)',
-    desc: 'Exotic & Pungent Nuances',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB6_wI8m77sJd7RbYhPEKJZHPeLKjW9-hiycbmJjyP6rJ6L_7-sgj00VR1w8kzQ9FVVhk7hbkk_ZCCDhbOv8kZoVEguXkh9FjXAyhwuX3EAC311hlF-IFrr7DDbm8mXSqzWdf456BB2x8YTJH5-TiHWqLKN1JQAV65ylwgaoAIF8IfBY049s',
+    id:       'colombia',
+    country:  'Colombia (Ica Mazupa)',
+    desc:     'Exotic & Pungent Nuances',
+    greeting: 'The Ica Mazupa valley holds flavors older than memory. Exotic, pungent, and full of character — only the most curious palates venture here.',
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB6_wI8m77sJd7RbYhPEKJZHPeLKjW9-hiycbmJjyP6rJ6L_7-sgj00VR1w8kzQ9FVVhk7hbkk_ZMcohyEguXkh9FjXAyhwuX3EAC311hlF-IFrr7DDbm8mXSqzWdf456BB2x8YTJH5-TiHWqLKN1JQAV65ylwgaoAIF8IfBY049s',
   },
 ]
 
+const ALL_MENTORS = [...PRIMARY_MENTORS, ...SPECIALTY_REGIONS]
 const MAX_SELECTIONS = 2
 
 export default function Mentor() {
   const navigate = useNavigate()
   const { setMentors, setSelectedMentor, completeStep, addXP } = useGuestSession()
   const [selected, setSelected] = useState([])
+  const voice = useMentorVoice()
+
+  // Speak the intro line on first mount (after a short delay so the page settles)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      voice.speak(
+        'Welcome to the Mentor Selection. Choose two masters from the world\'s great tobacco regions to guide your tasting journey.',
+        'default'
+      )
+    }, 900)
+    return () => clearTimeout(t)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function toggle(id) {
+    triggerHaptic('medium')
     setSelected(prev => {
-      if (prev.includes(id)) return prev.filter(m => m !== id)
+      if (prev.includes(id)) {
+        // Deselecting — nothing to speak
+        return prev.filter(m => m !== id)
+      }
       if (prev.length >= MAX_SELECTIONS) return prev
+      // Selecting — speak greeting
+      const mentor = ALL_MENTORS.find(m => m.id === id)
+      if (mentor?.greeting) voice.speak(mentor.greeting, id)
       return [...prev, id]
     })
   }
 
   function handleProceed() {
+    voice.stop()
     triggerHaptic('medium')
     setMentors(selected)
-    // Save primary mentor (first selection) with country for POS 3 + E.A.T. payloads
     const primaryId = selected[0]
     if (primaryId) {
-      const allMentors = [...PRIMARY_MENTORS, ...SPECIALTY_REGIONS]
-      const found      = allMentors.find(m => m.id === primaryId)
+      const found = ALL_MENTORS.find(m => m.id === primaryId)
       setSelectedMentor(primaryId, found?.country || null)
     }
     completeStep('mentor')
@@ -101,12 +130,20 @@ export default function Mentor() {
           >menu</button>
           <h1 className="font-headline-md text-headline-md font-bold text-primary drop-shadow-[0_2px_2px_rgba(233,193,118,0.5)]">CraftHub 360</h1>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3">
           <span className="font-label-lg text-label-lg text-on-surface-variant tracking-widest uppercase opacity-70">Step 4 of 20</span>
+
+          {/* ── Voice control ── */}
+          <VoiceButton
+            isMuted={voice.isMuted}
+            isSpeaking={voice.isSpeaking}
+            onToggle={voice.toggleMute}
+          />
+
           <button
             className="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-lg text-label-lg shadow-lg hover:brightness-110 transition-all active:scale-95"
             style={{ minHeight: 48 }}
-            onClick={() => navigate('/')}
+            onClick={() => { voice.stop(); navigate('/') }}
           >
             Grand Lounge
           </button>
@@ -140,6 +177,14 @@ export default function Mentor() {
               The mastery of tobacco is a lineage of fire and soil. Select two mentors from the world's most
               prestigious growing regions to curate your personalized tasting journey and masterclass curriculum.
             </p>
+
+            {/* Read-mode label — always visible so users know text is always there */}
+            {voice.isMuted && (
+              <div className="mt-4 flex items-center gap-2">
+                <span className="material-symbols-outlined text-[14px]" style={{ color: 'rgba(255,255,255,0.3)' }}>menu_book</span>
+                <span className="font-label-sm text-[11px] uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.3)' }}>Read mode — mentor bios visible below</span>
+              </div>
+            )}
           </div>
           <div className="md:col-span-5 flex justify-end">
             <div className="relative w-48 h-48 flex items-center justify-center">
@@ -193,6 +238,11 @@ export default function Mentor() {
                       <span key={tag} className="px-2 py-1 bg-surface-container-high rounded text-[10px] uppercase font-bold text-outline">{tag}</span>
                     ))}
                   </div>
+
+                  {/* Greeting preview — always readable */}
+                  <p className="font-body-sm text-[11px] text-on-surface-variant/50 italic leading-relaxed border-t border-outline-variant/30 pt-3 line-clamp-2">
+                    "{mentor.greeting}"
+                  </p>
                 </div>
               </div>
             )
@@ -242,7 +292,7 @@ export default function Mentor() {
           </div>
           <div className="flex gap-4">
             <button
-              onClick={() => navigate('/smokecraft/enroll')}
+              onClick={() => { voice.stop(); navigate('/smokecraft/enroll') }}
               className="px-8 py-3 rounded-lg font-label-lg text-label-lg text-on-surface border border-outline hover:bg-surface-container transition-all"
             >
               Save Draft

@@ -1,52 +1,85 @@
 /**
- * Voice Service — safe architecture stub for mentor audio.
- * Uses Web Speech API where available.
- * Phase 5 can swap the implementation for ElevenLabs or another TTS provider.
- * No API keys are stored or referenced here.
+ * NOVEE OS — Frontend Voice Service
+ *
+ * Prototype mode:  Web Speech API (no config needed, always works).
+ * ElevenLabs mode: Calls /api/voice/speak (backend holds the key).
+ *
+ * Mute state is persisted to localStorage so it survives page refreshes.
+ * Nothing here ever exposes an API key.
  */
 
-let muted = false
+const MUTE_KEY = 'novee_voice_muted'
+
+// ── Mute state (module-level, initialised from localStorage) ──────────────
+let _muted = (() => {
+  try { return localStorage.getItem(MUTE_KEY) === 'true' } catch { return false }
+})()
+
+function _persistMute(val) {
+  try { localStorage.setItem(MUTE_KEY, String(val)) } catch { /* ignore */ }
+}
+
+// ── Capability cache (one fetch per page-load) ────────────────────────────
+let _capabilityCache = null
+let _capabilityFlight = null
+
+export async function fetchCapability() {
+  if (_capabilityCache) return _capabilityCache
+  if (_capabilityFlight) return _capabilityFlight
+  _capabilityFlight = fetch('/api/voice/capability')
+    .then(r => r.json())
+    .then(d => {
+      _capabilityCache = d?.data ?? { provider: 'webspeech', elevenlabs: false, available: true }
+      return _capabilityCache
+    })
+    .catch(() => {
+      _capabilityCache = { provider: 'webspeech', elevenlabs: false, available: true }
+      return _capabilityCache
+    })
+  return _capabilityFlight
+}
+
+// ── Web Speech API helpers ────────────────────────────────────────────────
+export function isWebSpeechAvailable() {
+  return typeof window !== 'undefined' && 'speechSynthesis' in window
+}
 
 /**
- * Speaks a mentor line using Web Speech API if available and not muted.
- * Fails silently if the API is unsupported.
+ * Speaks text via the browser's built-in speechSynthesis.
+ * Fails silently if unavailable or muted.
  */
 export function speakMentorLine(text, { rate = 0.88, pitch = 1.0 } = {}) {
-  if (muted || !text || typeof text !== 'string') return
+  if (_muted || !text || typeof text !== 'string') return
   stopMentorVoice()
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
+  if (!isWebSpeechAvailable()) return
   try {
     const utterance      = new SpeechSynthesisUtterance(text)
     utterance.rate       = rate
     utterance.pitch      = pitch
     utterance.volume     = 1
     window.speechSynthesis.speak(utterance)
-  } catch {
-    // silent fallback
-  }
+  } catch { /* silent */ }
 }
 
-/** Stops any currently playing mentor voice. */
+/** Stops any currently playing mentor voice (Web Speech or Audio element). */
 export function stopMentorVoice() {
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+  if (isWebSpeechAvailable()) {
     try { window.speechSynthesis.cancel() } catch { /* ignore */ }
   }
 }
 
-/** Toggles mute state. Returns the new muted value. */
-export function toggleMute() {
-  muted = !muted
-  if (muted) stopMentorVoice()
-  return muted
-}
+/** Returns current mute state. */
+export function isMuted() { return _muted }
 
-/** Returns current mute state without changing it. */
-export function isMuted() {
-  return muted
-}
-
-/** Programmatically sets mute state. */
+/** Sets mute state programmatically (also persists). */
 export function setMuted(value) {
-  muted = !!value
-  if (muted) stopMentorVoice()
+  _muted = !!value
+  _persistMute(_muted)
+  if (_muted) stopMentorVoice()
+}
+
+/** Toggles mute. Returns the new value. */
+export function toggleMute() {
+  setMuted(!_muted)
+  return _muted
 }

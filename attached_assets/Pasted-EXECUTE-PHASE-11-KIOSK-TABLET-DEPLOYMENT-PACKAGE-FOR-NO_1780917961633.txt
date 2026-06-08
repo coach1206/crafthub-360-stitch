@@ -1,0 +1,620 @@
+EXECUTE PHASE 11 KIOSK / TABLET DEPLOYMENT PACKAGE FOR NOVEE OS
+
+PHASE 10 IS COMPLETE OR READY FOR DEPLOYMENT WRAP.
+
+DO NOT redesign the app.
+DO NOT change premium UI.
+DO NOT create duplicate screens.
+DO NOT break guest routes.
+DO NOT weaken auth.
+DO NOT expose secrets.
+DO NOT connect live POS credentials.
+DO NOT remove prototype provider mode.
+DO NOT remove local fallback behavior.
+
+MISSION:
+Prepare NOVEE OS for real kiosk and tablet deployment.
+
+The system must be able to run cleanly on:
+
+* iPad
+* Android tablet
+* touchscreen kiosk
+* browser-based venue demo
+* PWA installed to home screen
+* controlled prototype hardware
+
+This phase must create the deployment structure, PWA support, kiosk mode behavior, environment checks, device identity, offline fallback, install instructions, and field-test readiness.
+
+==================================================
+PHASE 11 PRIMARY GOAL
+
+Make NOVEE OS deployable outside the development environment.
+
+The system must support:
+
+1. PWA installation
+2. Tablet/kiosk full-screen use
+3. Device ID assignment
+4. Venue ID assignment
+5. Kiosk mode route locking
+6. Safe boot recovery
+7. Offline mode screen
+8. Backend health monitoring
+9. Touchscreen-only navigation
+10. Staff/admin login separation
+11. Environment variable validation
+12. Deployment documentation
+
+==================================================
+
+1. CREATE PWA CONFIG
+    ==================================================
+
+Add or update:
+
+public/manifest.webmanifest
+public/icons/
+public/offline.html
+
+Manifest must include:
+
+{
+“name”: “NOVEE OS”,
+“short_name”: “NOVEE”,
+“display”: “standalone”,
+“orientation”: “landscape”,
+“theme_color”: “#050505”,
+“background_color”: “#050505”,
+“start_url”: “/”,
+“scope”: “/”
+}
+
+Add icons:
+
+192x192
+512x512
+
+Use existing brand-safe assets if available.
+Do not generate cheap placeholder icons.
+If no icons exist, create neutral premium placeholder using existing NOVEE branding style only.
+
+==================================================
+2. SERVICE WORKER
+
+Create or update:
+
+src/serviceWorkerRegistration.js
+public/sw.js
+
+Service worker must support:
+
+* app shell caching
+* offline fallback page
+* safe cache versioning
+* no caching of sensitive API responses
+* no caching of auth tokens
+* no caching of founder/admin endpoints
+* no caching of POS provider secrets
+* graceful update handling
+
+Cache safe assets only:
+
+* app shell
+* static CSS/JS
+* public images
+* offline page
+
+Do not cache:
+
+/api/auth/*
+/api/admin/*
+/api/founder/*
+/api/pos3/*
+/api/eat/*
+/api/audit/*
+
+==================================================
+3. DEVICE CONFIG SYSTEM
+
+Create:
+
+src/services/deviceConfigService.js
+server/routes/deviceRoutes.js
+server/controllers/deviceController.js
+server/services/deviceService.js
+
+Device config fields:
+
+{
+deviceId,
+venueId,
+deviceName,
+deviceType,
+kioskMode,
+assignedModule,
+allowedRoutes,
+lastSeenAt,
+appVersion,
+environment
+}
+
+Device types:
+
+* tablet
+* kiosk
+* staff_terminal
+* manager_terminal
+* founder_terminal
+* demo_browser
+
+Create endpoints:
+
+GET /api/device/config
+POST /api/device/register
+PUT /api/device/:deviceId
+POST /api/device/:deviceId/heartbeat
+
+Permissions:
+
+Guest device can heartbeat only.
+Manager/admin/founder can configure devices.
+Founder can lock/unlock device assignment.
+
+==================================================
+4. DATABASE MIGRATION
+
+Create migration:
+
+/server/db/migrations/007_device_deployment.sql
+
+Add tables:
+
+A. venue_devices
+
+Fields:
+
+id
+device_id
+venue_id
+device_name
+device_type
+kiosk_mode
+assigned_module
+allowed_routes JSONB
+status
+last_seen_at
+app_version
+created_at
+updated_at
+
+B. device_events
+
+Fields:
+
+id
+device_id
+venue_id
+event_type
+route_path
+payload JSONB
+created_at
+
+C. deployment_checks
+
+Fields:
+
+id
+check_key
+status
+message
+metadata JSONB
+created_at
+
+Do not wipe existing data.
+
+==================================================
+5. KIOSK MODE BEHAVIOR
+
+Create:
+
+src/context/KioskContext.jsx
+src/components/kiosk/KioskShell.jsx
+src/components/kiosk/KioskExitGate.jsx
+src/pages/KioskSetup.jsx
+src/pages/OfflineMode.jsx
+src/pages/DeviceStatus.jsx
+
+Kiosk mode rules:
+
+* Hide browser-style navigation.
+* Use large touchscreen buttons only.
+* Prevent user from landing on admin/founder routes unless authenticated.
+* Guest kiosk should route to Boot or CraftHub.
+* Staff terminal can route to POS 3 after login.
+* Manager terminal can route to E.A.T. after login.
+* Kiosk exit requires staff/admin/founder PIN.
+* No accidental exit from guest journey.
+* Back button must stay within allowed route map.
+
+==================================================
+6. ROUTE LOCKING
+
+Update route guard logic.
+
+If kioskMode is active:
+
+Guest kiosk allowed routes:
+
+/
+/boot
+/craft-hub
+/craft-modules
+/smokecraft/*
+/passport/*
+/leaderboard
+
+Staff terminal allowed routes:
+
+/staff-login
+/pos3
+/device-status
+
+Manager terminal allowed routes:
+
+/admin-login
+/eat-command
+/pos3
+/device-status
+
+Founder terminal allowed routes:
+
+/founder-login
+/founder
+/admin
+/command-center
+/device-status
+
+If user attempts a blocked route:
+
+Show premium restricted screen:
+
+Title:
+Route Locked for This Device
+
+Body:
+This device is assigned to a specific NOVEE OS experience.
+
+Buttons:
+Return to Assigned Experience
+Staff Unlock
+
+==================================================
+7. BOOT RECOVERY HARDENING
+
+Update BootGuard / boot recovery behavior:
+
+* Boot screen should never blank forever.
+* Add max boot animation timeout.
+* If boot animation hangs past 8 seconds, show Activate button.
+* If sessionStorage novee_booted is missing, route to /boot.
+* If /boot fails to render, fallback to /device-status or /.
+* Add boot diagnostic console warning in development only.
+* Do not show ugly errors to guests.
+
+Add visual fallback:
+
+“NOVEE OS is preparing your experience.”
+
+Button:
+
+Continue
+
+==================================================
+8. BACKEND HEALTH MONITORING
+
+Create:
+
+src/services/healthMonitorService.js
+src/components/system/SystemHealthBadge.jsx
+
+Monitor:
+
+GET /api/health
+GET /api/voice/status
+GET /api/pos3/providers/prototype/status
+
+Show status only on admin/manager/founder/device-status screens.
+
+Do not show technical health panels to guests.
+
+States:
+
+* Online
+* Offline
+* Degraded
+* Prototype Mode
+* Sync Pending
+
+==================================================
+9. OFFLINE MODE
+
+Create:
+
+src/pages/OfflineMode.jsx
+
+Offline behavior:
+
+Guest can continue basic SmokeCraft session locally if backend is unavailable.
+Passport stamps queue locally.
+Leaderboard submissions queue locally.
+POS 3 management shows offline restricted mode.
+E.A.T. Command shows backend unavailable.
+Admin/founder actions require backend online.
+
+Offline page must show:
+
+* connection status
+* what still works
+* what is paused
+* retry button
+* return to guest experience button
+
+==================================================
+10. INSTALLATION HELP SCREEN
+
+Create:
+
+src/pages/InstallHelp.jsx
+
+Include instructions for:
+
+iPad Safari:
+
+* Open app URL
+* Share
+* Add to Home Screen
+* Open from home screen
+
+Android Chrome:
+
+* Open app URL
+* Menu
+* Add to Home Screen / Install App
+
+Kiosk browser:
+
+* Use full-screen browser mode
+* Assign device
+* Set start route
+* Enable kiosk mode
+
+Do not overcomplicate.
+Make it readable for non-technical venue staff.
+
+==================================================
+11. DEPLOYMENT CHECKLIST API
+
+Create:
+
+server/routes/deploymentRoutes.js
+server/controllers/deploymentController.js
+server/services/deploymentService.js
+
+Endpoints:
+
+GET /api/deployment/checklist
+POST /api/deployment/run-checks
+
+Checks:
+
+* backend health
+* database connected
+* auth configured
+* JWT secret not default in production
+* founder challenge configured
+* PWA manifest present
+* service worker present
+* device config available
+* POS 3 provider prototype available
+* voice status available
+* offline fallback available
+* required env vars present
+
+Permissions:
+
+Manager can view checklist.
+Admin can run checks.
+Founder can view full risk details.
+
+==================================================
+12. ENVIRONMENT VALIDATION
+
+Create:
+
+server/config/envValidator.js
+
+Validate:
+
+NODE_ENV
+DATABASE_URL
+JWT_SECRET
+FOUNDER_CHALLENGE_SECRET
+CORS_ORIGIN
+AUTH_COOKIE_NAME
+ELEVENLABS_API_KEY optional
+POS provider keys optional
+
+In production mode:
+
+* reject default JWT_SECRET
+* reject missing FOUNDER_CHALLENGE_SECRET
+* warn if CORS_ORIGIN is wildcard
+* warn if AUTH_COOKIE_SECURE is false
+
+Do not block development mode unless fatal.
+
+==================================================
+13. FRONTEND ROUTES
+
+Add routes:
+
+/kiosk-setup
+/device-status
+/offline
+/install-help
+
+Protect:
+
+/kiosk-setup manager+
+/device-status staff+
+/install-help manager+
+/offline public
+
+Founder sees full deployment details.
+Guest only sees simple offline help.
+
+==================================================
+14. TABLET TOUCHSCREEN AUDIT
+
+Apply final touchscreen standards:
+
+* no primary button below 48px height
+* no hover-only navigation
+* no tiny text links for critical actions
+* every restricted screen has Return Home
+* every login screen has Back/Home
+* every kiosk screen has large controls
+* no dead clicks
+* no blank states
+
+Do not redesign.
+Only fix touch usability problems.
+
+==================================================
+15. BUILD OPTIMIZATION
+
+Continue lazy loading from Phase 9.5.
+
+Add bundle analysis if available:
+
+npm run build
+
+Look for obvious heavy imports.
+Do not over-optimize.
+Do not rewrite architecture.
+Goal is stable deployment, not perfection.
+
+==================================================
+16. DOCUMENTATION
+
+Create:
+
+DEPLOYMENT_GUIDE.md
+KIOSK_SETUP_GUIDE.md
+VENUE_TEST_CHECKLIST.md
+
+DEPLOYMENT_GUIDE.md must include:
+
+* environment variables
+* dev startup commands
+* production warnings
+* backend/frontend ports
+* database notes
+* auth notes
+* PWA notes
+
+KIOSK_SETUP_GUIDE.md must include:
+
+* iPad install
+* Android tablet install
+* kiosk browser setup
+* device assignment
+* staff/admin unlock
+* troubleshooting
+
+VENUE_TEST_CHECKLIST.md must include:
+
+* boot test
+* guest journey test
+* Passport stamp test
+* staff POS 3 test
+* manager E.A.T. test
+* offline test
+* audio mute/read instead test
+* PIN login test
+* route lock test
+
+==================================================
+17. TEST MATRIX
+
+Test:
+
+A. npm run build passes.
+B. Backend starts.
+C. /api/health works.
+D. PWA manifest loads.
+E. Service worker registers without breaking app.
+F. Offline page exists.
+G. Device config endpoint works.
+H. Device heartbeat works.
+I. Kiosk setup route protected manager+.
+J. Guest kiosk cannot access admin/founder.
+K. Staff terminal can reach POS 3 after login.
+L. Manager terminal can reach E.A.T. after login.
+M. BootGuard does not blank indefinitely.
+N. Boot fallback appears if delayed.
+O. Offline mode explains what still works.
+P. Deployment checklist endpoint works.
+Q. Env validator warns safely in development.
+R. Install help page renders.
+S. Guest SmokeCraft journey still works.
+T. Passport stamp still awards.
+U. POS 3 still works.
+V. E.A.T. still works.
+W. Voice controls still work.
+X. Auth still works.
+Y. Founder-only routes still protected.
+Z. No secrets exposed in frontend.
+
+==================================================
+18. FINAL REPORT REQUIRED
+
+Return a report with:
+
+A. Files created
+B. Files changed
+C. PWA manifest status
+D. Service worker status
+E. Device config status
+F. Device database migration status
+G. Kiosk mode status
+H. Route locking status
+I. Boot recovery status
+J. Offline mode status
+K. Health monitor status
+L. Install help status
+M. Deployment checklist API status
+N. Environment validation status
+O. Documentation created
+P. Touchscreen audit result
+Q. Guest journey regression
+R. Staff/POS 3 regression
+S. Manager/E.A.T. regression
+T. Founder/security regression
+U. Voice regression
+V. Build result
+W. Server result
+X. Remaining risks
+
+Do not claim Phase 11 is complete unless:
+
+* npm run build passes
+* backend starts
+* PWA manifest works
+* service worker does not break app
+* device config exists
+* kiosk route locking works
+* offline mode exists
+* guest journey still works
+* founder-only routes still protected
