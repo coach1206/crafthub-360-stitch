@@ -240,111 +240,12 @@ export default function Art() {
             style={{ transitionDelay: '240ms' }}
           >
             <div className="glass-panel rounded-2xl overflow-hidden titanium-border">
-
-              {/* ── Photo + Annotation Row ─────────────────────── */}
-              <div className="relative flex items-stretch" style={{ minHeight: 320 }}>
-                {/* Real cigar photo — CSS bg so it loads reliably */}
-                <div
-                  className="relative flex-shrink-0"
-                  style={{
-                    width: '42%',
-                    minHeight: 320,
-                    backgroundImage: "url('/cigar-anatomy.png')",
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center center',
-                  }}
-                >
-                  {/* gold tint overlay */}
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.10) 0%, transparent 55%, rgba(0,0,0,0.45) 100%)' }} />
-                  {/* Label caption */}
-                  <div className="absolute top-0 left-0 right-0 p-4">
-                    <p className="font-label-sm text-[10px] text-primary uppercase tracking-[0.25em] text-center">Cigar Anatomy</p>
-                  </div>
-                </div>
-
-                {/* Annotation table */}
-                <div className="flex-1 flex flex-col justify-center p-5 gap-1">
-                  {[
-                    { zone: 'wrapper', label: 'Wrapper', pct: '40%', color: '#e9c176', top: '22%' },
-                    { zone: 'binder',  label: 'Binder',  pct: '25%', color: '#c5a059', top: '50%' },
-                    { zone: 'filler',  label: 'Filler',  pct: '35%', color: '#9a7030', top: '75%' },
-                  ].map(({ zone, label, pct, color }) => (
-                    <button
-                      key={zone}
-                      onMouseEnter={() => setHovered(zone)}
-                      onMouseLeave={() => setHovered(null)}
-                      onTouchStart={() => setHovered(zone)}
-                      onTouchEnd={() => setHovered(null)}
-                      className="flex items-center gap-3 rounded-xl px-3 transition-all duration-200 active:scale-[0.97] text-left"
-                      style={{
-                        minHeight: 72,
-                        background: hovered === zone ? 'rgba(233,193,118,0.08)' : 'transparent',
-                        border: hovered === zone ? '1px solid rgba(233,193,118,0.25)' : '1px solid transparent',
-                      }}
-                    >
-                      {/* Connector dot + line */}
-                      <div className="flex items-center gap-1 flex-shrink-0">
-                        <div
-                          className="h-px transition-all duration-200"
-                          style={{ width: hovered === zone ? 18 : 10, background: hovered === zone ? color : 'rgba(233,193,118,0.3)' }}
-                        />
-                        <div
-                          className="rounded-full flex-shrink-0 transition-all duration-200"
-                          style={{ width: 8, height: 8, background: color, boxShadow: hovered === zone ? `0 0 8px ${color}` : 'none' }}
-                        />
-                      </div>
-                      <div className="min-w-0">
-                        <p
-                          className="transition-colors duration-200 leading-tight"
-                          style={{
-                            fontFamily: '"Playfair Display", serif',
-                            fontSize: 16,
-                            fontWeight: hovered === zone ? 600 : 400,
-                            color: hovered === zone ? '#f7ead4' : '#c8b898',
-                          }}
-                        >
-                          {label}
-                        </p>
-                        <p className="text-[11px] uppercase tracking-widest mt-0.5" style={{ color }}>
-                          {pct}
-                        </p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* ── Stats Table ────────────────────────────────── */}
-              <div className="border-t border-white/8">
-                <table className="w-full text-center" style={{ borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                      {['Leaf Varieties', 'Days Aged', 'Master Blender'].map(h => (
-                        <th key={h} className="py-3 px-2 font-label-sm text-[10px] uppercase tracking-wider text-on-surface-variant/50"
-                          style={{ borderRight: '1px solid rgba(255,255,255,0.06)' }}>
-                          {h}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      {['2–4', '200+', '1'].map((val, i) => (
-                        <td key={val} className="py-4 px-2"
-                          style={{ borderRight: i < 2 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-                          <p
-                            className="text-primary font-bold"
-                            style={{ fontFamily: '"Playfair Display", serif', fontSize: 22 }}
-                          >
-                            {val}
-                          </p>
-                        </td>
-                      ))}
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
+              <img
+                src="/cigar-anatomy.png"
+                alt="Cigar Anatomy"
+                className="w-full block"
+                style={{ display: 'block', width: '100%', height: 'auto' }}
+              />
             </div>
           </div>
 
