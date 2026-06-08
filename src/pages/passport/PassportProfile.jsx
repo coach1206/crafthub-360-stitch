@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getRankFromXP } from '../../constants/session.js'
+import { STAMP_CATALOG } from '../../data/passportCatalog.js'
 
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
@@ -17,19 +18,8 @@ const GLASS_PANEL = {
   border: '1px solid rgba(233,193,118,0.15)',
 }
 
-const SEAL_CATALOG = [
-  { id: 'seed-soil',          name: 'Origins',            icon: 'landscape',         desc: 'Completed the Tobacco Origins heritage pathway in SmokeCraft 360.' },
-  { id: 'master-blend',       name: 'Master Blend',       icon: 'token',             desc: 'Crafted a signature blend at the Blending Studio session.' },
-  { id: 'taste-profile',      name: 'Flavor Profile',     icon: 'stars',             desc: 'FlavorDNA analysis completed. Exceptional palate verified.' },
-  { id: 'pairing-specialist', name: 'Pairing Specialist', icon: 'workspace_premium', desc: 'Mastery of sensory synergy between rare botanicals and aged tobacco.' },
-  { id: 'journey-complete',   name: 'Journey Complete',   icon: 'diamond',           desc: 'SmokeCraft Session I completed in full. Achievement authenticated.' },
-  { id: 'passport-stamp',     name: 'Passport Certified', icon: 'verified_user',     desc: 'Passport certified and registered in the 360 Grand Lounge network.' },
-  { id: 'leaf-recognition',   name: 'Leaf Recognition',   icon: 'eco',               desc: 'Identified rare tobacco leaf varieties in the LeafChallenge assessment.' },
-  { id: 'golden-box',         name: 'Golden Box',         icon: 'inventory_2',       desc: 'Claimed exclusive membership perks through the Golden Box status event.' },
-]
-
 function SealCard({ stamp }) {
-  const meta = SEAL_CATALOG.find(c => c.id === stamp.id) || { name: stamp.name, icon: stamp.icon, desc: 'Certified craft achievement.' }
+  const meta = STAMP_CATALOG.find(c => c.id === stamp.id) || { name: stamp.name, icon: stamp.icon, desc: 'Certified craft achievement.' }
   return (
     <div
       className="p-6 rounded-xl flex flex-col items-center text-center group backdrop-blur-xl"
@@ -80,7 +70,7 @@ export default function PassportProfile() {
     ? `${session.profile.firstName} ${session.profile.lastName || ''}`.trim()
     : 'Grand Member'
 
-  const initials = `${session.profile?.firstName?.[0] || 'G'}${session.profile?.lastName?.[0] || 'M'}`
+  const initials     = `${session.profile?.firstName?.[0] || 'G'}${session.profile?.lastName?.[0] || 'M'}`
   const profilePhoto = session.profile?.photo
 
   const interests = [
@@ -94,9 +84,8 @@ export default function PassportProfile() {
     setTimeout(() => setShared(false), 2500)
   }
 
-  const sealsToShow = 3
-  const earnedSeals = stamps.slice(0, sealsToShow)
-  const emptySlots  = Math.max(0, sealsToShow - earnedSeals.length)
+  const earnedSeals = stamps
+  const emptySlots  = Math.max(0, 3 - earnedSeals.length)
 
   return (
     <div
@@ -114,13 +103,15 @@ export default function PassportProfile() {
       >
         <div className="flex items-center gap-4">
           <button
-            className="material-symbols-outlined text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-300"
+            className="material-symbols-outlined text-primary hover:bg-primary/10 active:bg-primary/20 p-2 rounded-full transition-colors duration-300"
+            style={{ minWidth: 48, minHeight: 48 }}
             onClick={() => navigate('/passport')}
           >arrow_back</button>
           <span className="font-display-lg text-primary uppercase tracking-widest" style={{ fontSize: 20, lineHeight: 1 }}>The 360 Passport</span>
         </div>
         <button
-          className="font-label-lg text-label-lg text-primary px-6 py-2 border border-primary/30 rounded-full hover:bg-primary/10 transition-all duration-300"
+          className="font-label-lg text-label-lg text-primary px-6 py-3 border border-primary/30 rounded-full hover:bg-primary/10 active:bg-primary/20 transition-all duration-300"
+          style={{ minHeight: 48 }}
           onClick={() => navigate('/passport')}
         >Grand Lounge</button>
       </nav>
@@ -152,7 +143,7 @@ export default function PassportProfile() {
               </div>
 
               <h1 className="font-headline-xl text-primary mb-2" style={{ fontSize: 32, lineHeight: 1.2 }}>{displayName}</h1>
-              <p className="font-label-lg text-label-lg uppercase tracking-[0.2em] mb-6" style={{ color: '#ffb95a', letterSpacing: '0.2em' }}>
+              <p className="font-label-lg text-label-lg uppercase tracking-[0.2em] mb-6" style={{ color: '#ffb95a' }}>
                 {rank.name} Member
               </p>
 
@@ -175,7 +166,7 @@ export default function PassportProfile() {
                   <span className="font-label-lg text-label-lg text-on-surface-variant">Passport Tier</span>
                   <span className="font-headline-md text-primary" style={{ fontSize: 20 }}>{rank.name}</span>
                 </div>
-                <div className="flex justify-between items-center p-4 rounded-lg bg-primary/5" style={GOLD_FOIL_BORDER}>
+                <div className="flex justify-between items-center p-4 rounded-lg" style={GOLD_FOIL_BORDER}>
                   <span className="font-label-lg text-label-lg text-primary flex items-center gap-2">
                     <span className="material-symbols-outlined" style={{ fontSize: 18 }}>verified</span>
                     SmokeCraft Verified
@@ -229,10 +220,11 @@ export default function PassportProfile() {
                 : (
                   <div className="rounded-xl p-12 flex flex-col items-center text-center" style={GLASS_PANEL}>
                     <span className="material-symbols-outlined text-on-surface-variant/30 mb-4" style={{ fontSize: 48 }}>workspace_premium</span>
-                    <p className="font-body-lg text-body-lg text-on-surface-variant mb-4">No seals earned yet.</p>
+                    <p className="font-body-lg text-body-lg text-on-surface-variant mb-6">No seals earned yet.</p>
                     <button
                       onClick={() => navigate('/smokecraft')}
-                      className="flex items-center gap-2 text-primary font-label-lg text-label-lg border border-primary/30 px-6 py-3 rounded-full hover:bg-primary/10 transition-all"
+                      className="flex items-center gap-2 text-primary font-label-lg text-label-lg border border-primary/30 px-8 rounded-full hover:bg-primary/10 active:bg-primary/20 transition-all"
+                      style={{ minHeight: 56 }}
                     >
                       Begin SmokeCraft
                       <span className="material-symbols-outlined">arrow_forward</span>
@@ -263,7 +255,7 @@ export default function PassportProfile() {
               </div>
               <button
                 onClick={handleShare}
-                className="flex items-center gap-3 text-on-primary font-label-lg text-label-lg px-8 py-4 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex-shrink-0"
+                className="flex items-center gap-3 text-on-primary font-label-lg text-label-lg px-8 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex-shrink-0"
                 style={{
                   height: 72,
                   background: shared ? 'linear-gradient(135deg, #ffb95a, #c68315)' : 'linear-gradient(135deg, #e9c176, #c5a059)',
@@ -281,25 +273,28 @@ export default function PassportProfile() {
         </div>
       </main>
 
-      {/* Bottom Nav (mobile) */}
-      <nav className="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-margin py-4 bg-surface-container-low/95 backdrop-blur-2xl border-t border-primary/30 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl" style={{ height: 80 }}>
+      {/* Bottom Nav (mobile only) */}
+      <nav className="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-margin bg-surface-container-low/95 backdrop-blur-2xl border-t border-primary/30 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl" style={{ height: 80 }}>
         {[
-          { icon: 'explore',       label: 'Explore',   to: '/'        },
-          { icon: 'inventory_2',   label: 'Inventory', to: '/'        },
-          { icon: 'menu_book',     label: 'Passport',  to: '/passport', active: true },
-          { icon: 'support_agent', label: 'Assistant', to: '/'        },
-        ].map(({ icon, label, to, active }) => (
+          { icon: 'explore',       label: 'Explore',   to: '/',        locked: false },
+          { icon: 'inventory_2',   label: 'Inventory', to: null,       locked: true  },
+          { icon: 'menu_book',     label: 'Passport',  to: '/passport', active: true  },
+          { icon: 'support_agent', label: 'Assistant', to: null,       locked: true  },
+        ].map(({ icon, label, to, active, locked }) => (
           <button
             key={label}
-            onClick={() => navigate(to)}
-            className={`flex flex-col items-center justify-center px-6 py-2 transition-all ${
-              active
-                ? 'text-primary bg-primary-container/20 rounded-xl shadow-[0_0_15px_rgba(233,193,118,0.3)] -translate-y-1'
-                : 'text-on-surface-variant/70 opacity-60'
+            onClick={() => { if (!locked && to) navigate(to) }}
+            className={`flex flex-col items-center justify-center px-4 py-2 transition-all ${
+              locked
+                ? 'cursor-not-allowed opacity-30'
+                : active
+                  ? 'text-primary bg-primary-container/20 rounded-xl shadow-[0_0_15px_rgba(233,193,118,0.3)] -translate-y-1'
+                  : 'text-on-surface-variant/70 opacity-60 active:scale-90'
             }`}
+            style={{ minHeight: 56 }}
           >
             <span className="material-symbols-outlined" style={{ ...(active ? FILL1 : {}), fontSize: 22 }}>{icon}</span>
-            <span className="font-label-sm text-label-sm mt-1">{label}</span>
+            <span className="font-label-sm text-label-sm mt-1">{locked ? 'Soon' : label}</span>
           </button>
         ))}
       </nav>

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../context/GuestSessionContext.jsx'
-import { RANKS, getRankFromXP } from '../constants/session.js'
+import { getRankFromXP } from '../constants/session.js'
 
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
@@ -15,16 +15,21 @@ const STAMP_IMAGES = [
   'https://lh3.googleusercontent.com/aida-public/AB6AXuCkFsx-srl59Hp0iT1IkjJvju5YMrEj3iD3Ku922Qmi3Yli5yMPgHK2pl5K-gb_Ex8kka98pk4BP8LnVool8lxfyVS6L72aXwK49Q_rHJ7LCy-uK9z9rElFOBLZawQUB9-uDcHRLNcVd9HKm77Y8gMnXvD2JqXqyBHMoCoEDoSQQ4DjAr-yim7H0',
 ]
 
-function NavTab({ icon, label, active, onClick }) {
+function NavTab({ icon, label, active, locked, onClick }) {
   return (
     <button
-      onClick={onClick}
-      className={`flex flex-col items-center gap-1 transition-all active:scale-90 ${
-        active ? 'text-primary scale-110' : 'text-on-surface-variant/60 hover:text-primary/80'
+      onClick={locked ? undefined : onClick}
+      className={`flex flex-col items-center gap-1 transition-all ${
+        locked
+          ? 'cursor-not-allowed opacity-35 text-on-surface-variant/40'
+          : active
+            ? 'text-primary scale-110 active:scale-90'
+            : 'text-on-surface-variant/60 hover:text-primary/80 active:scale-90'
       }`}
+      style={{ minHeight: 56 }}
     >
       <span className="material-symbols-outlined" style={active ? FILL1 : undefined}>{icon}</span>
-      <span className="font-label-sm text-label-sm">{label}</span>
+      <span className="font-label-sm text-label-sm">{locked ? 'Soon' : label}</span>
     </button>
   )
 }
@@ -340,7 +345,7 @@ export default function PassportConnection() {
       >
         <NavTab icon="dashboard"       label="Hub"      active onClick={() => navigate('/passport')} />
         <NavTab icon="menu_book"       label="Passport" onClick={() => navigate('/passport/stamps')} />
-        <NavTab icon="temp_preferences_custom" label="Artisans" onClick={() => navigate('/')} />
+        <NavTab icon="temp_preferences_custom" label="Artisans" locked onClick={() => navigate('/')} />
         <NavTab icon="settings_accessibility"  label="Settings" onClick={() => navigate('/passport/profile')} />
       </nav>
 

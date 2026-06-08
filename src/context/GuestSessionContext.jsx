@@ -1,12 +1,17 @@
 import { createContext, useContext, useState, useCallback } from 'react'
 import { getRankFromXP } from '../constants/session.js'
 
-const STORAGE_KEY = 'novee_guest_session'
+const STORAGE_KEY    = 'novee_guest_session'
+const SCHEMA_VERSION = 2   // bump when defaultState shape changes
 
 function loadFromStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : null
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    // Schema version guard — stale or malformed data resets to default
+    if (!parsed || typeof parsed !== 'object' || parsed.__version !== SCHEMA_VERSION) return null
+    return parsed
   } catch {
     return null
   }
@@ -14,8 +19,8 @@ function loadFromStorage() {
 
 function saveToStorage(state) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  } catch { /* storage unavailable */ }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, __version: SCHEMA_VERSION }))
+  } catch { /* storage unavailable — silently continue */ }
 }
 
 const defaultState = {

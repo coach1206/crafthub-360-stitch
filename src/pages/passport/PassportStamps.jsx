@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { STAMP_CATALOG } from '../../data/passportCatalog.js'
 
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
@@ -19,17 +20,6 @@ const PARCHMENT = {
 const SPINE = {
   background: 'linear-gradient(to right, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.15) 100%)',
 }
-
-const STAMP_CATALOG = [
-  { id: 'seed-soil',          name: 'Seed & Soil',          icon: 'landscape',         rotation: -3,  shape: 'rect'   },
-  { id: 'master-blend',       name: 'Master Blend',         icon: 'token',             rotation: 8,   shape: 'circle' },
-  { id: 'taste-profile',      name: 'Flavor DNA',           icon: 'stars',             rotation: -5,  shape: 'rect'   },
-  { id: 'pairing-specialist', name: 'Pairing Specialist',   icon: 'workspace_premium', rotation: 12,  shape: 'rect'   },
-  { id: 'journey-complete',   name: 'Journey Complete',     icon: 'diamond',           rotation: -2,  shape: 'circle' },
-  { id: 'passport-stamp',     name: 'Passport Certified',   icon: 'verified_user',     rotation: 6,   shape: 'rect'   },
-  { id: 'leaf-recognition',   name: 'Leaf Recognition',     icon: 'eco',               rotation: -8,  shape: 'circle' },
-  { id: 'golden-box',         name: 'Golden Box',           icon: 'inventory_2',       rotation: 4,   shape: 'rect'   },
-]
 
 function StampRect({ stamp, earned }) {
   return (
@@ -125,9 +115,9 @@ export default function PassportStamps() {
   const navigate = useNavigate()
   const { session } = useGuestSession()
 
-  const earnedIds = new Set((session.smokecraftStamps ?? []).map(s => s.id))
+  const earnedIds   = new Set((session.smokecraftStamps ?? []).map(s => s.id))
   const totalEarned = earnedIds.size
-  const pct = Math.min(100, Math.round((totalEarned / STAMP_CATALOG.length) * 100))
+  const pct         = Math.min(100, Math.round((totalEarned / STAMP_CATALOG.length) * 100))
 
   const displayName = session.profile?.firstName
     ? `${session.profile.firstName} ${session.profile.lastName || ''}`.trim()
@@ -149,7 +139,8 @@ export default function PassportStamps() {
       >
         <div className="flex items-center gap-4">
           <button
-            className="material-symbols-outlined text-primary p-2 hover:bg-primary/10 rounded-full transition-colors duration-300"
+            className="material-symbols-outlined text-primary p-2 hover:bg-primary/10 active:bg-primary/20 rounded-full transition-colors duration-300"
+            style={{ minWidth: 48, minHeight: 48 }}
             onClick={() => navigate('/passport')}
           >arrow_back</button>
           <h1 className="font-display-lg text-primary uppercase tracking-widest" style={{ fontSize: 20 }}>The 360 Passport</h1>
@@ -158,11 +149,11 @@ export default function PassportStamps() {
           <span className="hidden md:block font-label-lg text-label-lg text-primary tracking-widest uppercase">Grand Lounge</span>
           <button
             onClick={() => navigate('/passport/profile')}
-            className="w-10 h-10 rounded-full border border-primary/30 overflow-hidden bg-surface-variant shadow-lg active:scale-95 duration-200 flex items-center justify-center"
+            className="w-12 h-12 rounded-full border border-primary/30 overflow-hidden bg-surface-variant shadow-lg active:scale-95 duration-200 flex items-center justify-center"
           >
             {session.profile?.photo
               ? <img className="w-full h-full object-cover" src={session.profile.photo} alt="Profile" />
-              : <span className="material-symbols-outlined text-primary" style={{ fontSize: 20, ...FILL1 }}>person</span>
+              : <span className="material-symbols-outlined text-primary" style={{ fontSize: 22, ...FILL1 }}>person</span>
             }
           </button>
         </div>
@@ -182,33 +173,36 @@ export default function PassportStamps() {
           </div>
         </div>
 
-        {/* Passport Booklet */}
+        {/* Passport Booklet — stacks vertically on mobile, side-by-side on sm+ */}
         <div
-          className="relative w-full max-w-6xl rounded-2xl shadow-2xl flex overflow-hidden"
+          className="relative w-full max-w-6xl rounded-2xl shadow-2xl flex flex-col sm:flex-row overflow-hidden"
           style={{
             background: '#2a1800',
-            padding: 'clamp(12px, 2vw, 32px)',
+            padding: 'clamp(8px, 2vw, 32px)',
             minHeight: 540,
           }}
         >
           {/* Left Page */}
-          <div className="relative flex-1 rounded-l-lg border-r border-black/10 p-8 md:p-12 overflow-hidden" style={PARCHMENT}>
+          <div
+            className="relative flex-1 p-6 sm:p-8 md:p-12 overflow-hidden border-b border-black/10 sm:border-b-0 sm:border-r rounded-t-lg sm:rounded-tl-lg sm:rounded-bl-lg sm:rounded-tr-none"
+            style={PARCHMENT}
+          >
             <div className="absolute inset-0 pointer-events-none" style={SPINE} />
-            <div className="relative z-10 flex flex-col h-full gap-8">
+            <div className="relative z-10 flex flex-col h-full gap-6 sm:gap-8">
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
                   <p className="font-label-sm text-label-sm uppercase tracking-widest" style={{ color: 'rgba(60,45,40,0.55)' }}>Member Records</p>
                   <h3 className="font-headline-md italic" style={{ color: '#3c2d28', fontSize: 22 }}>Networking Journey</h3>
                 </div>
-                <div className="select-none" style={{ color: 'rgba(60,45,40,0.13)', fontFamily: 'Playfair Display', fontSize: 17, transform: 'rotate(-12deg)' }}>PAGE 36</div>
+                <div className="select-none hidden sm:block" style={{ color: 'rgba(60,45,40,0.13)', fontFamily: 'Playfair Display', fontSize: 17, transform: 'rotate(-12deg)' }}>PAGE 36</div>
               </div>
 
-              <div className="flex flex-col gap-8 items-start">
+              <div className="flex flex-col gap-6 sm:gap-8 items-start">
                 {leftStamps.map(stamp => (
                   <div key={stamp.id}>
                     {stamp.shape === 'circle'
                       ? <StampCircle stamp={stamp} earned={earnedIds.has(stamp.id)} />
-                      : <StampRect  stamp={stamp} earned={earnedIds.has(stamp.id)} />
+                      : <StampRect   stamp={stamp} earned={earnedIds.has(stamp.id)} />
                     }
                   </div>
                 ))}
@@ -217,12 +211,15 @@ export default function PassportStamps() {
           </div>
 
           {/* Right Page */}
-          <div className="relative flex-1 rounded-r-lg border-l border-white/40 p-8 md:p-12 overflow-hidden" style={PARCHMENT}>
+          <div
+            className="relative flex-1 p-6 sm:p-8 md:p-12 overflow-hidden border-t border-white/20 sm:border-t-0 sm:border-l rounded-b-lg sm:rounded-tr-lg sm:rounded-br-lg sm:rounded-bl-none"
+            style={PARCHMENT}
+          >
             <div
               className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-3xl z-20 pointer-events-none"
               style={{ background: 'linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.1) 100%)' }}
             />
-            <div className="relative z-10 flex flex-col h-full gap-8">
+            <div className="relative z-10 flex flex-col h-full gap-6 sm:gap-8">
               <div className="flex justify-end">
                 <div className="text-right">
                   <p className="font-label-sm text-label-sm uppercase tracking-widest" style={{ color: 'rgba(60,45,40,0.55)' }}>Entry Log</p>
@@ -230,12 +227,12 @@ export default function PassportStamps() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-8 items-start">
+              <div className="flex flex-col gap-6 sm:gap-8 items-start">
                 {rightStamps.map(stamp => (
                   <div key={stamp.id}>
                     {stamp.shape === 'circle'
                       ? <StampCircle stamp={stamp} earned={earnedIds.has(stamp.id)} />
-                      : <StampRect  stamp={stamp} earned={earnedIds.has(stamp.id)} />
+                      : <StampRect   stamp={stamp} earned={earnedIds.has(stamp.id)} />
                     }
                   </div>
                 ))}
@@ -259,7 +256,7 @@ export default function PassportStamps() {
         </div>
 
         {/* Legend */}
-        <div className="w-full max-w-6xl flex items-center justify-center gap-10">
+        <div className="w-full max-w-6xl flex flex-wrap items-center justify-center gap-6 sm:gap-10">
           <div className="flex items-center gap-3">
             <div style={{ width: 20, height: 20, border: '2px solid rgba(197,160,89,0.45)', borderRadius: 3, background: 'rgba(255,255,255,0.06)' }} />
             <span className="font-label-sm text-label-sm text-on-surface-variant">Earned Seal</span>
@@ -270,7 +267,8 @@ export default function PassportStamps() {
           </div>
           <button
             onClick={() => navigate('/smokecraft')}
-            className="flex items-center gap-2 text-primary font-label-lg text-label-lg hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 text-primary font-label-lg text-label-lg hover:opacity-80 active:opacity-60 transition-opacity"
+            style={{ minHeight: 44 }}
           >
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add_circle</span>
             Earn More in SmokeCraft
@@ -278,7 +276,7 @@ export default function PassportStamps() {
         </div>
       </main>
 
-      {/* FAB */}
+      {/* FAB — back to SmokeCraft to earn more stamps */}
       <button
         className="fixed z-50 w-16 h-16 rounded-full text-on-primary flex items-center justify-center active:scale-95 transition-all duration-300 group overflow-hidden"
         style={{
@@ -295,25 +293,28 @@ export default function PassportStamps() {
       {/* Bottom Nav */}
       <nav
         className="fixed bottom-0 w-full z-50 flex justify-around items-center bg-surface-container-low/95 backdrop-blur-2xl border-t border-primary/30 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl"
-        style={{ height: 80, paddingInline: 64, paddingBottom: 4 }}
+        style={{ height: 80, paddingBottom: 4 }}
       >
         {[
-          { icon: 'explore',       label: 'Explore',   to: '/'        },
-          { icon: 'inventory_2',   label: 'Inventory', to: '/'        },
-          { icon: 'menu_book',     label: 'Passport',  to: '/passport', active: true },
-          { icon: 'support_agent', label: 'Assistant', to: '/'        },
-        ].map(({ icon, label, to, active }) => (
+          { icon: 'explore',       label: 'Explore',   to: '/',        locked: false },
+          { icon: 'inventory_2',   label: 'Inventory', to: null,       locked: true  },
+          { icon: 'menu_book',     label: 'Passport',  to: '/passport', active: true  },
+          { icon: 'support_agent', label: 'Assistant', to: null,       locked: true  },
+        ].map(({ icon, label, to, active, locked }) => (
           <button
             key={label}
-            onClick={() => navigate(to)}
-            className={`flex flex-col items-center justify-center px-6 py-2 transition-all duration-300 ${
-              active
-                ? 'text-primary bg-primary-container/20 rounded-xl shadow-[0_0_15px_rgba(233,193,118,0.3)] -translate-y-1'
-                : 'text-on-surface-variant/70 opacity-60 hover:text-primary hover:opacity-100'
+            onClick={() => { if (!locked && to) navigate(to) }}
+            className={`flex flex-col items-center justify-center px-4 py-2 transition-all duration-300 ${
+              locked
+                ? 'text-on-surface-variant/30 cursor-not-allowed opacity-40'
+                : active
+                  ? 'text-primary bg-primary-container/20 rounded-xl shadow-[0_0_15px_rgba(233,193,118,0.3)] -translate-y-1'
+                  : 'text-on-surface-variant/70 opacity-60 hover:text-primary hover:opacity-100 active:scale-90'
             }`}
+            style={{ minHeight: 56 }}
           >
             <span className="material-symbols-outlined" style={active ? FILL1 : undefined}>{icon}</span>
-            <span className="font-label-lg text-label-lg">{label}</span>
+            <span className="font-label-sm text-label-sm mt-0.5">{locked ? 'Soon' : label}</span>
           </button>
         ))}
       </nav>

@@ -259,22 +259,25 @@ export default function PassportStamp() {
       {/* Bottom Nav */}
       <nav className="fixed bottom-0 w-full z-50 flex justify-around items-center bg-surface-container-low/95 backdrop-blur-2xl border-t border-primary/30 shadow-[0_-4px_20px_rgba(233,193,118,0.15)] rounded-t-xl" style={{ height: 80, paddingBottom: 4 }}>
         {[
-          { icon: 'explore',       label: 'Explore',   to: '/'        },
-          { icon: 'inventory_2',   label: 'Inventory', to: '/'        },
-          { icon: 'menu_book',     label: 'Passport',  to: '/passport', active: true },
-          { icon: 'support_agent', label: 'Assistant', to: '/'        },
-        ].map(({ icon, label, to, active }) => (
+          { icon: 'explore',       label: 'Explore',   to: '/',        locked: false },
+          { icon: 'inventory_2',   label: 'Inventory', to: null,       locked: true  },
+          { icon: 'menu_book',     label: 'Passport',  to: '/passport', active: true  },
+          { icon: 'support_agent', label: 'Assistant', to: null,       locked: true  },
+        ].map(({ icon, label, to, active, locked }) => (
           <button
             key={label}
-            onClick={() => navigate(to)}
-            className={`flex flex-col items-center justify-center px-6 py-2 transition-all duration-300 ${
-              active
-                ? 'text-primary bg-primary-container/20 rounded-xl shadow-[0_0_15px_rgba(233,193,118,0.3)] -translate-y-1'
-                : 'text-on-surface-variant/70 opacity-60 hover:text-primary hover:opacity-100'
+            onClick={() => { if (!locked && to) navigate(to) }}
+            className={`flex flex-col items-center justify-center px-4 py-2 transition-all duration-300 ${
+              locked
+                ? 'text-on-surface-variant/30 cursor-not-allowed opacity-40'
+                : active
+                  ? 'text-primary bg-primary-container/20 rounded-xl shadow-[0_0_15px_rgba(233,193,118,0.3)] -translate-y-1'
+                  : 'text-on-surface-variant/70 opacity-60 hover:text-primary hover:opacity-100 active:scale-90'
             }`}
+            style={{ minHeight: 56 }}
           >
             <span className="material-symbols-outlined" style={active ? FILL1 : undefined}>{icon}</span>
-            <span className="font-label-lg text-label-lg">{label}</span>
+            <span className="font-label-sm text-label-sm mt-0.5">{locked ? 'Soon' : label}</span>
           </button>
         ))}
       </nav>

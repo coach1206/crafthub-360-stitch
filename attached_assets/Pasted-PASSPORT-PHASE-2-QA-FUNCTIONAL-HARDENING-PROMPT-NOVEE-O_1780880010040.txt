@@ -1,0 +1,459 @@
+PASSPORT PHASE 2 QA + FUNCTIONAL HARDENING PROMPT
+NOVEE OS / SMOKECRAFT 360 / 360 PASSPORT CONNECTIONS
+TOUCHSCREEN-FIRST. NO PLACEHOLDERS. NO DEAD ROUTES. NO VISUAL REGRESSION.
+
+You are continuing from Passport Phase 1 QA where these bugs were already fixed:
+
+P-01 master-blend-challenge ID mismatch fixed. Blend.jsx now awards id: `master-blend`.
+P-02 leaf-recognition and golden-box added to STAMP_CATALOG and SEAL_CATALOG.
+P-03 invalid colab icon replaced with `manage_accounts`.
+P-04 PassportStamps FAB now routes to `/smokecraft`.
+P-05 stampReveal animation now reveals stamps in place without forcing -3 degree rotation.
+P-06 Share button gold gradient fixed by removing GOLD_FOIL_BORDER override.
+P-07 dead `nextRank` variable removed.
+P-08 Artisan Directory and Connections tiles locked as Coming Soon instead of silently routing to `/`.
+
+NOW EXECUTE PASSPORT PHASE 2.
+
+==================================================
+PRIMARY OBJECTIVE
+=================
+
+Audit, repair, and harden the entire Passport experience so the 360 Passport Connection layer feels complete, premium, responsive, touchscreen-ready, and fully connected to SmokeCraft 360.
+
+Do not redesign the whole system.
+Do not flatten the premium look.
+Do not replace realistic luxury visuals with cheap icons.
+Do not create fake placeholder screens.
+Do not break existing routes.
+Do not remove working features.
+Do not create duplicate pages.
+Do not leave console errors.
+Do not leave dead buttons.
+
+This phase is about stability, continuity, navigation, visual polish, and data/state consistency.
+
+==================================================
+PHASE 2 QA CHECKLIST
+====================
+
+1. ROUTE AUDIT
+
+Check every Passport-related route and button:
+
+* `/passport`
+* `/passport-networking`
+* `/passport-stamps`
+* `/passport-profile`
+* `/passport-ceremony`
+* `/smokecraft`
+* any route used by Passport FABs
+* any route used by SmokeCraft completion actions
+* any route used by stamp reveal or profile actions
+
+Every clickable button must either:
+
+A. route to a real working screen, or
+B. be visibly locked with:
+
+* lock icon
+* opacity reduced
+* cursor-not-allowed
+* subtitle: “Coming Soon”
+* blocked onClick behavior
+
+No button is allowed to silently route to `/`.
+No tile is allowed to look active if it is not functional.
+
+==================================================
+2. GLOBAL BACK + HOME NAVIGATION
+================================
+
+Every Passport screen must have clear touchscreen navigation.
+
+Add or verify:
+
+* Back button on every Passport interface
+* Home button or NOVEE OS return button on every major Passport interface
+* Back button must return to the previous relevant screen, not randomly to `/`
+* Home button should return to main NOVEE OS / CraftHub entry depending on existing route structure
+* Buttons must be minimum 72px touch-friendly where possible
+* Buttons must have visible hover, active, and pressed states
+
+Screens that need this verified:
+
+* PassportConnection
+* PassportStamps
+* PassportProfile
+* PassportCeremony
+* any Passport onboarding page
+* any Passport scan / QR / arrival page
+* any SmokeCraft-to-Passport result page
+
+==================================================
+3. PASSPORT STAMP DATA CONSISTENCY
+==================================
+
+Audit all stamp IDs across the full app.
+
+Find every place that awards, displays, counts, unlocks, or references stamps.
+
+Make sure these files agree:
+
+* SmokeCraft challenge completion files
+* Blend.jsx
+* LeafRecognition.jsx if present
+* GoldenBox.jsx if present
+* PassportStamps
+* PassportProfile
+* PassportCeremony
+* PassportConnection
+* any mock user/session data file
+* any stamp/seal catalog file
+
+Rules:
+
+* Every awarded stamp ID must exist in STAMP_CATALOG.
+* Every visible profile seal must exist in SEAL_CATALOG.
+* Every catalog stamp must have:
+
+  * id
+  * title
+  * subtitle or description
+  * category
+  * status or unlock rules
+  * visual treatment
+* No invisible earned stamps.
+* No earned stamp missing from profile count.
+* No profile count mismatch.
+* No ceremony page showing different totals than PassportProfile.
+* No duplicate stamp IDs.
+* No orphan stamp IDs.
+
+If needed, create one shared source of truth:
+
+`src/data/passportCatalog.js`
+
+Use it to export:
+
+* STAMP_CATALOG
+* SEAL_CATALOG
+* PASSPORT_RANKS
+* PASSPORT_REWARDS
+
+Then import from this shared file wherever needed.
+
+Do not create conflicting duplicate catalogs in multiple files.
+
+==================================================
+4. SMOKECRAFT TO PASSPORT CONNECTION FLOW
+=========================================
+
+Make sure SmokeCraft 360 properly feeds Passport 360.
+
+When a guest completes a SmokeCraft challenge, session, or ceremony step, Passport must be able to recognize it.
+
+Required flow:
+
+1. Guest enters SmokeCraft.
+2. Guest completes SmokeCraft activity or challenge.
+3. System awards correct Passport stamp.
+4. Guest sees a premium stamp reveal animation.
+5. Guest can open Passport booklet.
+6. Passport booklet shows earned stamp.
+7. PassportProfile reflects the same earned stamp.
+8. Ceremony page reflects the same earned stamp.
+9. Leaderboard or rank progress updates correctly if present.
+10. Guest can return to SmokeCraft or CraftHub without getting trapped.
+
+Do not allow Passport to feel like a separate disconnected app.
+360 Passport Connection is a core experience layer inside NOVEE OS.
+
+==================================================
+5. PASSPORT BOOKLET VISUAL POLISH
+=================================
+
+Keep the realistic premium passport booklet look.
+
+Improve only where needed:
+
+* make stamps readable
+* make gold foil buttons visible
+* make page states clear
+* make locked items clearly locked
+* prevent text from crowding
+* prevent overlapping stamps
+* make page split balanced
+* preserve realistic luxury passport energy
+* keep the “360 Passport Connection” identity visible
+* powered by NOVEE OS should remain visible where already used
+
+Booklet behavior:
+
+* earned stamps should look alive, embossed, inked, or sealed
+* locked stamps should look faint but still readable
+* reveal animation should happen in place
+* no forced universal rotation
+* no broken stamp count
+* no missing visuals
+
+==================================================
+6. TOUCHSCREEN-FIRST REQUIREMENTS
+=================================
+
+This system is for tablets and kiosks.
+
+Apply touchscreen rules:
+
+* primary buttons minimum 72px height where practical
+* cards need generous spacing
+* no tiny close buttons
+* no hover-only functionality
+* no hidden desktop-only controls
+* no cramped grid
+* important text must be readable from kiosk distance
+* action buttons should be reachable with thumbs
+* avoid tiny text under 14px unless secondary metadata
+* all main actions need clear pressed / active feedback
+
+Do not make it look like a normal website.
+This must feel like a luxury touchscreen hospitality interface.
+
+==================================================
+7. RESPONSIVE QA
+================
+
+Test and adjust layouts for:
+
+* tablet portrait
+* tablet landscape
+* kiosk landscape
+* desktop preview
+* mobile QR entry
+
+Fix:
+
+* overflow
+* clipped buttons
+* hidden FABs
+* overlapping cards
+* stamps stacking wrong
+* passport booklet too wide
+* text too small
+* scroll traps
+* fixed elements covering content
+
+Do not break the current desktop layout while improving tablet/kiosk behavior.
+
+==================================================
+8. STATE PERSISTENCE
+====================
+
+Passport progress should not disappear instantly when navigating.
+
+If the app currently uses mock/local state, persist Passport progress with localStorage until backend wiring exists.
+
+Create or verify:
+
+* earned stamps persist after refresh
+* profile progress persists after refresh
+* rank progress persists after refresh
+* ceremony unlock state persists after refresh
+* Golden Box state persists after refresh if already implemented
+
+Use safe localStorage helpers.
+
+Example requirements:
+
+* no crash if localStorage is unavailable
+* no crash if saved data is malformed
+* fallback to default state
+* keep data shape predictable
+
+Do not build a full backend in this phase unless one already exists.
+Prepare clean integration points for future backend wiring.
+
+==================================================
+9. PROFILE COMPLETION CHECK
+===========================
+
+PassportProfile must clearly show:
+
+* guest identity area
+* Passport rank
+* earned stamps
+* locked stamps or seals
+* progress toward next rank if currently part of the app
+* SmokeCraft-related achievements
+* Golden Box / challenge achievement if earned
+* clear action to continue exploring
+* clear action to return to SmokeCraft or CraftHub
+
+Remove dead variables.
+Remove unused imports.
+Remove broken props.
+Remove console warnings.
+
+==================================================
+10. CEREMONY PAGE CHECK
+=======================
+
+Passport ceremony should feel like an achievement moment, not a random page.
+
+Verify:
+
+* correct earned stamp appears
+* correct title appears
+* correct guest progression appears
+* animation does not distort layout
+* button routes are correct
+* share button is readable and gold
+* continue button works
+* back/home buttons exist
+* no hardcoded wrong stamp data
+
+If ceremony is not fully needed yet, keep it functional and premium. Do not delete it.
+
+==================================================
+11. COMING SOON LOCK SYSTEM
+===========================
+
+Create a reusable locked tile pattern if needed.
+
+Locked features must show:
+
+* lock icon
+* “Coming Soon”
+* short subtitle explaining feature is not active yet
+* no route change
+* no silent redirect
+* no fake empty page
+
+Use this for:
+
+* Artisan Directory
+* Connections
+* any future Passport feature not active
+* any dashboard feature not wired yet
+
+==================================================
+12. CONSOLE + BUILD CLEANUP
+===========================
+
+Run full QA:
+
+* npm run build
+* npm run dev if needed
+* check browser console
+* remove unused imports
+* remove unused variables
+* fix invalid icons
+* fix React key warnings
+* fix route warnings
+* fix missing dependency warnings where safe
+* no new package unless absolutely necessary
+
+Do not introduce dependency bloat.
+
+==================================================
+13. FILES TO INSPECT
+====================
+
+Inspect and repair all relevant files, including but not limited to:
+
+* src/App.jsx
+* src/main.jsx
+* src/pages/PassportConnection.jsx
+* src/pages/PassportStamps.jsx
+* src/pages/PassportProfile.jsx
+* src/pages/PassportCeremony.jsx
+* src/pages/SmokeCraft.jsx
+* src/pages/Blend.jsx
+* src/pages/LeafRecognition.jsx
+* src/pages/GoldenBox.jsx
+* src/components/TopNav.jsx
+* src/components/BackButton.jsx if present
+* src/components/LockedTile.jsx if present
+* src/data/passportCatalog.js if present
+* any route config file
+* any mock data file connected to Passport or SmokeCraft
+
+If filenames differ, search the codebase and apply the same logic to the correct files.
+
+==================================================
+14. DO NOT DO THESE THINGS
+==========================
+
+Do not create a second Passport system.
+Do not create duplicate routes.
+Do not rename core brands.
+Do not delete SmokeCraft.
+Do not delete Passport.
+Do not send locked features to `/`.
+Do not replace premium visuals with emoji.
+Do not add fake backend claims.
+Do not remove the realistic passport identity.
+Do not remove NOVEE OS connection language.
+Do not remove touchscreen sizing.
+Do not create dead buttons.
+Do not create placeholder pages.
+Do not say completed unless the app builds successfully.
+
+==================================================
+15. REQUIRED FINAL REPORT
+=========================
+
+After completing the work, provide a QA report with this format:
+
+PASSPORT PHASE 2 QA REPORT
+
+1. Files changed:
+
+* list every file changed
+
+2. Routes verified:
+
+* list every route tested
+
+3. Bugs fixed:
+
+* P2-01
+* P2-02
+* P2-03
+  continue numbering clearly
+
+4. Stamp catalog status:
+
+* total stamps
+* total seals
+* any shared catalog created: yes/no
+* duplicate IDs found: yes/no
+* orphan IDs found: yes/no
+
+5. Touchscreen readiness:
+
+* tablet portrait: pass/fail
+* tablet landscape: pass/fail
+* kiosk landscape: pass/fail
+* mobile QR entry: pass/fail
+
+6. State persistence:
+
+* earned stamps persist: yes/no
+* profile progress persists: yes/no
+* ceremony state persists: yes/no
+* fallback safety added: yes/no
+
+7. Build status:
+
+* npm run build: pass/fail
+* console errors: yes/no
+* warnings remaining: list them
+
+8. Remaining items:
+
+* only list true remaining items
+* do not invent problems
+* do not say “future backend needed” unless backend is actually not present
+
+EXECUTE NOW.
