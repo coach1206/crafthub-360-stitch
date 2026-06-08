@@ -4,3 +4,4 @@
 - [ESM dotenv hoisting](esm-dotenv.md) — in ESM, `import dotenv from 'dotenv'; dotenv.config()` is too late; use `import 'dotenv/config'` as the FIRST import statement so env vars load before any other module initializes.
 - [Phase 8.5 auth architecture](phase85-auth.md) — JWT cookie sessions, founder triple-factor, blockDevFounderSpoofing, AuthContext→SecurityContext precedence chain.
 - [Phase 9 POS3 architecture](phase9-pos3.md) — provider-agnostic POS bridge, 8 adapters, prototype fully live, requireAuth lives in authMiddleware (not roleMiddleware).
+- [lh3 URL truncation breaks images](lh3-url-truncation.md) — lh3.googleusercontent.com/aida-public/ URLs that are copy-pasted can be silently truncated; verify full URL length vs working peers — truncated ones show alt text only in img tags.

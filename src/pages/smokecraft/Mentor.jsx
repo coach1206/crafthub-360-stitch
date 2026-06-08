@@ -32,7 +32,7 @@ const PRIMARY_MENTORS = [
     bio:      'Legacy grower of authentic Corojo seed and the intense, full-bodied traditions of Danlí.',
     tags:     ['Authentic', 'Rich Cedar'],
     greeting: 'I am Elena Jamastran. Five generations of Corojo in the highlands of Danlí. My family\'s legacy is in every leaf — I will pass it on to you.',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAPtp4Y9j-CA6V2A2YUzioHki9r4HgYAXpga25qi9M1COUPn-mESIwesmKG0oI1E6h2va2KujziGRyVXJcsACvoLXVtwp-FjXh_vZcGVZaIQs_fyC5Jz9dVH9liVvvuWVAKMoycLpyvukC9824JvSdMKn6zZRZBUs7asdrOGdsLoVEguXkh9FjXAyhwuX3EAC311hlF-IFrr7DDbm8mXSqzWdf456BB2x8YTJH5-TiHWqLKN1JQAV65ylwgaoAIF8IfBY049s',
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAMxHg5VUIQz2opEFUOvAZaHkGnvXKQ9yDFdsq3RUowHT7ozQeGhkOj4CtmRKiM64Y--LZWrD2SfEqNVNEH5IZUbCwfEJYQpQwwcdMQAeOyCUeYQg-zVwzE-DvSbMRj8Cw_DUs1wIH-vZ_9HgSCJd4UG2wAR0buIJt-vZYQA8hg9avSf8LT23EFKEFs-MFFo7yLtpvTd-wvvXzkeo0sNBrWfsPNQiHid4U8fxXVVtkjV2jsMDW_0AsjU-Q3UH0N9nSdOOHzqSQuD9U',
   },
   {
     id:       'mexico',
@@ -41,7 +41,7 @@ const PRIMARY_MENTORS = [
     bio:      'Guardian of the Negro San Andrés leaf, the world\'s most sought-after Maduro wrapper.',
     tags:     ['Dark Cocoa', 'Maduro Expert'],
     greeting: 'Mateo San Andrés. The Negro Maduro wrapper holds the darkest secrets in tobacco. Complex, honest, and alive. Your education starts now.',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCRshyXQNX_PtXBeEOJebDZFDGsJZ5uA2dzNwMLRsCFEHxT1dxYrfE5P0XDhj6_lw-OlVzTLz8oucgpbQUqYWCyOe__QJfEViUfjY24ntUQaYfqeIuMUzNtccxbgr8VUF_FKJN3iLKUzdgs8U0qcuMjvQtLwAgBIoJ4CY_2rdjXUUUrWyfwMQ-CrLg',
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7N47zDRsd9xrna2FHDxZmmuHa9zMDEUx9pMH9OCchjzHa3TdmwiSK8rUNWCu3tQGc-DAewn13cJY0epAJPIuDmMkZDOxrSVbOlyqVToXKvvjL6eG_DDV4N_NgC9R-umyF3Ju6St0MmAbi63vwiC983oWNNS-xjiFcTNM2U0WpVcTXm-UZIbkyIPsqPC1U2cXP_tBIdctZFXNXkmSZml4JE2zbuDf4hyFSqmaSAAOlPQFZcXaAVWIcu0KFWBuNqFEsHk7jQouxUVY',
   },
 ]
 

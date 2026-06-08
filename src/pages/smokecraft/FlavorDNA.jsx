@@ -3,47 +3,48 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
 
+// All images are lh3.googleusercontent.com (reliable, proven working in this app)
 const OCCASIONS = [
   {
     label: 'Relaxing',
     sub: 'Unwind & Enjoy',
-    // leather armchair / lounge chair
-    img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&auto=format&fit=crop&q=80',
+    // cigar box + rising smoke + whiskey — the quintessential lounge moment
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts',
     color: '#8B4513',
   },
   {
     label: 'Celebrating',
     sub: 'Raise a Glass',
-    // champagne glasses clinking
-    img: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=200&auto=format&fit=crop&q=80',
+    // premium bourbon bottle — classic celebration pour
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJZsse0-OBgJv-XDIDBT6z6JK8iL9blzeC9kleK1PDkKrj0FsBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo',
     color: '#C4860A',
   },
   {
     label: 'Business',
     sub: 'Focus & Achieve',
-    // briefcase / executive desk
-    img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=200&auto=format&fit=crop&q=80',
+    // Blue Mountain coffee — executive morning ritual
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD1whB9ENQS5yVK7-ZSqInf3ufx2FPgTfXCAe0K8akvyRBTB8moMmSAgsHEzZ4MYuCnY9j0tQgp47LYcOwkut7yCtM8yNlqQzVSDPo6ZhSwqZTybS3LM2MThzggnviBsIffUKi6bI0EIBwm5NfbYc65os7cs9PsiRlSBgG7mGWiMC7afsuN_5riLlpYp9P4_wxIhBHuluPPJwTxtNoqBaJ6IlJFFJUp61Pc',
     color: '#4A4A4A',
   },
   {
     label: 'Date Night',
     sub: 'Intimate Moments',
-    // roses / romantic candles
-    img: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200&auto=format&fit=crop&q=80',
+    // Zacapa Centenario rum — warm, intimate, amber light
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJ82XKQyntwTgn3xxDjYrawzeTtaASYwT_mcTIkMxzqs-6J3Yr-oTLECNP_mzZqFX4uiBg5B-ERa8lDXQy8ny1te9sIfRsA0ww6Ncn0vk4uK05iZgQ5uwKriVqA6ZyXNNadhHdOSMIFP81qtdrhm_NNZOj7KrRSR0tHJ-Cs-nG_Ra9vQout-3ik-TFNOnqj6rXMeuiO9lCUk2-4Vc1r0tO3UQr9meCFsldeQqNnSxutvMgBSsIMYii2N7hjYmhy0sdQY9DvL2sP00',
     color: '#8B1A3A',
   },
   {
     label: 'Sports',
     sub: 'Game Day Energy',
-    // american football
-    img: 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=200&auto=format&fit=crop&q=80',
+    // dark cacao / dessert — victory celebration indulgence
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBkj1vyr57VqCSvkAIytKCP-dMimzcM6Bkfpo2BogqBmXvJno7XWBIkFHJP0uTjIRf43VMB4VT0fAzPe56ohr59HTYYKsym0J2JV6xGqZPzbw5OHeK9oQVklLm-rTkus0D_QeG5AsW_i3r95SxCCtkda_GbYOLo3MnRfTZ3tRjOehK1rR6yLCjtmEhkAfL3RPm8SEoj5khmFowDyNMdG5WO2fYsQ3Jh34sFkF3uM5Rql5d_S8_0z_f_osUhL3uDZji89YvLMFPAia4',
     color: '#1A4A1A',
   },
   {
     label: 'VIP',
     sub: 'Exclusive Access',
-    // gold crown / luxury
-    img: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=200&auto=format&fit=crop&q=80',
+    // Arturo Fuente OpusX — the pinnacle premium cigar
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCBjb17tZGWhWOsbXW8XcEiR4WIW8SRdSpM3JbzTootwik0rNdnLOw7S9JZ3EXsRrWIwqWrDXTd8Pvkve7yk0Djguo_fc3IWZ5D9c7ECY5EDcu6g5JsWk0HLo-pS1P0Sp_kNEtMoJ7_UWd-u_nKBePg_hyVmOWBd7C9H9b16E7bHFZlxdXVSBDqmCktK_b7wsck7DeYbjNOVSSREGTNzZg89N6q8Zqmzw_ubYO5Nur2k8euqiBLwOh-CQCTEjFfzzYA0LEgqcCTY6g',
     color: '#2A1A5A',
   },
 ]
@@ -53,26 +54,26 @@ const INTENSITY_OPTIONS = [
     v: 'smooth',
     label: 'Smooth',
     sub: 'Mild · Silky · Easy draw',
-    // light coloured mild cigar with smoke
-    img: 'https://images.unsplash.com/photo-1585504198199-20277593b31f?w=400&auto=format&fit=crop&q=80',
+    // Connecticut Shade — the lightest, silkiest wrapper in the world
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZfnH-MsSB9L3fIvUmuB2jydCCAwvaAMEPJRNZecV6PKAJjHl8HulsTrHI7spXAr_AUXO1qSOOPo_DW4VdixxR-ayV4PnjVm2xiPhwWoFuWAF5PXCEsSlxekHHk-9vi2U4TZZT_qBdTVZ_-asuKsewgotaUAHMpqQqbSTlWGbxa8cyI7OPGMqVK5UT3jPVfaKM9X6uqMaQVfu-wFOCMZ_jY166IMOq2LWncgNMBJG-6FojwRTZejpcpIJ7mK8e1pi_2SjsjN9CTYo',
   },
   {
     v: 'bold',
     label: 'Bold',
     sub: 'Full · Robust · Complex',
-    // dark maduro cigar close-up
-    img: 'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=400&auto=format&fit=crop&q=80',
+    // Arturo Fuente OpusX — the darkest, most complex full-bodied experience
+    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCBjb17tZGWhWOsbXW8XcEiR4WIW8SRdSpM3JbzTootwik0rNdnLOw7S9JZ3EXsRrWIwqWrDXTd8Pvkve7yk0Djguo_fc3IWZ5D9c7ECY5EDcu6g5JsWk0HLo-pS1P0Sp_kNEtMoJ7_UWd-u_nKBePg_hyVmOWBd7C9H9b16E7bHFZlxdXVSBDqmCktK_b7wsck7DeYbjNOVSSREGTNzZg89N6q8Zqmzw_ubYO5Nur2k8euqiBLwOh-CQCTEjFfzzYA0LEgqcCTY6g',
   },
 ]
 
 const CHARACTERS = [
-  // each card: a close-up ingredient/material that represents the tasting note
-  { label: 'Sweet',   img: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&auto=format&fit=crop&q=80' }, // caramel/honey drizzle
-  { label: 'Spicy',   img: 'https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=200&auto=format&fit=crop&q=80' }, // red chilli peppers
-  { label: 'Earthy',  img: 'https://images.unsplash.com/photo-1445348305923-4a5af1efc2e8?w=200&auto=format&fit=crop&q=80' }, // dark soil / earth
-  { label: 'Creamy',  img: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=200&auto=format&fit=crop&q=80' }, // cream/latte art
-  { label: 'Woody',   img: 'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=200&auto=format&fit=crop&q=80' }, // dark wood grain
-  { label: 'Peppery', img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&auto=format&fit=crop&q=80' }, // black pepper close-up
+  // Using lh3 images whose tone & color match the sensory note
+  { label: 'Sweet',   img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJZsse0-OBgJv-XDIDBT6z6JK8iL9blzeC9kleK1PDkKrj0FsBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo' },   // bourbon — warm amber/caramel sweetness
+  { label: 'Spicy',   img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBxTg65Wt9uZIkpBqyy4dP-yfpAOzZbz2z5ZkV13oVaJ2SAkBidZBFP7grSXlnvgp0rzviZQ5z2QkEdoI5kL1JIAKOIeQwpBh6JQcEGoYgi9hWq5KktjPbu0JFnOgOPJQVxxQ5dzEyYiC6zZsnAzdfCzfC2_n70T7Il7VU5QitXotLyl-tyuOyPD8qOjumx5OXXmnAYMXRe-yumHpuykGEynj_dpEkroC7aiLKuXGRVBObPXsvZ5CI4Og0tcI5Qts4m648an1iWXHk' }, // Corojo Rosado — red-brown intense spice
+  { label: 'Earthy',  img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCDinqiRd53IenZj6Dg4uDGjKf7GNFR89-xAI4t2-68wH-BtJVVKUsZMoTibHD5nB2uI61lEqWTKBzcx6fUO83UUDbqCLxufZvXkYwXkxnOvzLpFpOCdbPr3M95R49mvK2G6Wm2V-erAzikJa6EXqtaeZ4RT1Tjq9ANJsNobQ4TZRDYIwxX1xdFGkGHk0QSyvjOIAzrMG8ia4rPhXcUczk9X_nbwCvyVETSYlkbNZdC-KqHYQhoIteDqdb9tGkwvNhs1IeNtBh2Q4Y' }, // Ecuador Andean — earthy highland terroir
+  { label: 'Creamy',  img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZfnH-MsSB9L3fIvUmuB2jydCCAwvaAMEPJRNZecV6PKAJjHl8HulsTrHI7spXAr_AUXO1qSOOPo_DW4VdixxR-ayV4PnjVm2xiPhwWoFuWAF5PXCEsSlxekHHk-9vi2U4TZZT_qBdTVZ_-asuKsewgotaUAHMpqQqbSTlWGbxa8cyI7OPGMqVK5UT3jPVfaKM9X6uqMaQVfu-wFOCMZ_jY166IMOq2LWncgNMBJG-6FojwRTZejpcpIJ7mK8e1pi_2SjsjN9CTYo' }, // Connecticut Shade — silky pale wrapper = creamy
+  { label: 'Woody',   img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts' },   // cedar humidor box — woody cedar
+  { label: 'Peppery', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBktRXv3px18iAdmk-FIbB6ajfhPahwqk9W_JP8Z3CMm5d75I1D5sQYn3y5CtixAGzZo0bWs5yXhZQ8TGcBZxfdlOrRy-X2jzZpEocDLKB-z48LeV4PdnPkWAu1EF0aLxDcp6N-JXmverp_fSYWKdujWH1FrWoLUY1CgVrJguJJeILwvw4JN5SLy70oWxWGRHWFymEXJ3FzmzsY93qIxljsbG1ANTGrbqwoIcmIQ6eUZnCsPhFk08_Z55717Itp90HwmP1ssOO0o' },   // Sumatra Maduro — dark intense pepper
 ]
 
 const AROMATICS = [

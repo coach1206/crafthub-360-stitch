@@ -23,8 +23,8 @@ export default function SmokeCraft() {
 
   const bottomNav = [
     {
-      icon: 'https://images.unsplash.com/photo-1533577726674-3e5e3e7e9f63?w=80&auto=format&fit=crop&q=80',
-      iconType: 'img',
+      icon: 'emoji_events',
+      iconType: 'material',
       label: 'REWARDS',
       sub: 'Earn. Unlock. Enjoy.',
       to: '/smokecraft/leaderboard',
@@ -203,7 +203,7 @@ export default function SmokeCraft() {
                 <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
                   <div style={{ width: 100, height: 80, borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.2)', flexShrink: 0 }}>
                     <img
-                      src="https://images.unsplash.com/photo-1585504198199-20277593b31f?auto=format&fit=crop&q=90&w=200"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBjb17tZGWhWOsbXW8XcEiR4WIW8SRdSpM3JbzTootwik0rNdnLOw7S9JZ3EXsRrWIwqWrDXTd8Pvkve7yk0Djguo_fc3IWZ5D9c7ECY5EDcu6g5JsWk0HLo-pS1P0Sp_kNEtMoJ7_UWd-u_nKBePg_hyVmOWBd7C9H9b16E7bHFZlxdXVSBDqmCktK_b7wsck7DeYbjNOVSSREGTNzZg89N6q8Zqmzw_ubYO5Nur2k8euqiBLwOh-CQCTEjFfzzYA0LEgqcCTY6g"
                       alt="Padrón 1964"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
