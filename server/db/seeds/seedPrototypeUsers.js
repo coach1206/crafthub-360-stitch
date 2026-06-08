@@ -9,7 +9,7 @@
  *   staff    — PIN: 1234
  *   manager  — PIN: 5678
  *   admin    — admin@novee.dev / PIN: 9999
- *   founder  — jccollins1206@yahoo.com / PIN: 0000 / challenge: FOUNDER_CHALLENGE_SECRET env var
+ *   founder  — jccollins1206@yahoo.com / PIN: 2501 / challenge: FOUNDER_CHALLENGE_SECRET env var
  */
 
 import bcrypt from 'bcrypt'
@@ -51,7 +51,7 @@ const DEMO_USERS = [
     role:         'founder_level_0',
     status:       'active',
     email:        'jccollins1206@yahoo.com',
-    pin:          '0000',
+    pin:          '2501',
     type:         'founder_challenge',
   },
 ]
