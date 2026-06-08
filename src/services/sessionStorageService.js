@@ -4,8 +4,13 @@
  * Safe to use outside React — reads/writes localStorage directly.
  */
 
+import { syncSessionToBackend } from './syncService.js'
+
 export const STORAGE_KEY    = 'novee_guest_session'
 export const SCHEMA_VERSION = 4
+
+// Debounce timer — batches rapid saves into one backend sync every 2s
+let _syncTimer = null
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -188,6 +193,11 @@ export function saveSession(session) {
       updatedAt:  Date.now(),
       __version:  SCHEMA_VERSION,
     }))
+    // Debounced backend sync — fires 2s after the last save in a burst
+    clearTimeout(_syncTimer)
+    _syncTimer = setTimeout(() => {
+      syncSessionToBackend(session).catch(() => {})
+    }, 2000)
   } catch { /* storage full or unavailable */ }
 }
 

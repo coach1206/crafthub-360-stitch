@@ -1,7 +1,10 @@
 /**
  * Leaderboard Service — local prototype leaderboard for NOVEE OS.
- * Score is derived from session activity; no remote API is used.
+ * Score is derived from session activity; syncs to backend when available.
  */
+
+import { loadSession } from './sessionStorageService.js'
+import { syncLeaderboardToBackend } from './syncService.js'
 
 const LOCAL_LB_KEY = 'novee_leaderboard'
 
@@ -68,6 +71,14 @@ export function submitScore(displayName, score) {
       board.push({ displayName, score, rank: getRankLabel(score), submittedAt: Date.now() })
     }
     localStorage.setItem(LOCAL_LB_KEY, JSON.stringify(board))
+    // Fire-and-forget backend sync after local save
+    const session = loadSession()
+    if (session?.sessionId) {
+      syncLeaderboardToBackend({
+        sessionId:   session.sessionId,
+        leaderboard: { score, displayName },
+      }).catch(() => {})
+    }
     return getLocalLeaderboard()
   } catch {
     return DEMO_PLAYERS.map((p, i) => ({ ...p, position: i + 1 }))

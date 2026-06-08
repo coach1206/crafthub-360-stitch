@@ -1,0 +1,529 @@
+EXECUTE PHASE 7 BACKEND DATABASE + API FOUNDATION FOR NOVEE OS / CRAFTHUB 360 / SMOKECRAFT 360 / 360 PASSPORT CONNECTIONS / POS 3 / E.A.T. COMMAND
+
+PHASE 6 IS COMPLETE.
+
+DO NOT redesign the app.
+DO NOT change the premium UI.
+DO NOT create duplicate screens.
+DO NOT remove working localStorage prototype behavior.
+DO NOT break existing routes.
+DO NOT expose secrets in frontend code.
+
+MISSION:
+Upgrade NOVEE OS from local prototype persistence into a real backend-ready software system.
+
+The frontend must keep working exactly as it does now, but the data layer must be prepared to sync with a backend database and API.
+
+Primary goal:
+Create the backend foundation for guest sessions, Passport stamps, SmokeCraft progress, leaderboard scoring, POS 3 activity payloads, and E.A.T. Command analytics.
+
+==================================================
+PHASE 7 CORE REQUIREMENTS
+
+1. CREATE BACKEND STRUCTURE
+
+Create backend folder structure if it does not already exist:
+
+/server
+/server/index.js
+/server/routes
+/server/controllers
+/server/services
+/server/models
+/server/middleware
+/server/db
+/server/utils
+
+If the project already has a backend, do not replace it. Extend it safely.
+
+Use Node.js + Express unless the project already uses another backend framework.
+
+==================================================
+2. CREATE ENVIRONMENT CONFIG
+
+Create:
+
+.env.example
+
+Required variables:
+
+PORT=5000
+NODE_ENV=development
+DATABASE_URL=
+SESSION_SECRET=
+CORS_ORIGIN=http://localhost:5173
+ELEVENLABS_API_KEY=
+POS3_PROVIDER_MODE=prototype
+
+Rules:
+
+* Do not create real secrets.
+* Do not hardcode API keys.
+* Do not expose backend secrets to frontend.
+* Frontend should only use safe public variables.
+
+==================================================
+3. DATABASE DECISION
+
+Use PostgreSQL as the target database.
+
+If PostgreSQL is not installed locally, still create the schema files and mock-safe API layer.
+
+Create:
+
+/server/db/schema.sql
+/server/db/migrations/001_initial_novee_schema.sql
+/server/db/connection.js
+
+The database must support:
+
+* guest_sessions
+* guest_profiles
+* craft_sessions
+* passport_records
+* passport_stamps
+* leaderboard_entries
+* pos3_activity
+* eat_analytics
+* audit_logs
+* system_events
+
+==================================================
+4. DATABASE TABLE REQUIREMENTS
+
+Create schema for:
+
+A. guest_sessions
+
+Fields:
+
+id
+session_id
+created_at
+updated_at
+selected_craft
+selected_mentor
+selected_mentor_country
+selected_level
+current_session
+completed_sessions JSONB
+last_visited_route
+schema_version
+kiosk_mode
+source_module
+
+B. guest_profiles
+
+Fields:
+
+id
+session_id
+first_name
+last_name
+nickname
+age_range
+phone
+email
+city
+state
+zip
+profile_image_url
+image_moderation_status
+created_at
+updated_at
+
+C. craft_sessions
+
+Fields:
+
+id
+session_id
+craft
+session_number
+score
+flavor_preferences JSONB
+strength_tolerance
+aroma_interests JSONB
+vitola_preferences JSONB
+pairing_selections JSONB
+soil_seed_selections JSONB
+mentor_notes JSONB
+completed_at
+
+D. passport_records
+
+Fields:
+
+id
+passport_id
+session_id
+connection_count
+event_name
+ceremony_seen
+created_at
+updated_at
+
+E. passport_stamps
+
+Fields:
+
+id
+stamp_id
+passport_id
+session_id
+title
+craft
+session_number
+event_name
+earned_at
+visual_theme
+points
+source_module
+created_at
+
+F. leaderboard_entries
+
+Fields:
+
+id
+session_id
+display_name
+score
+rank
+submitted
+created_at
+updated_at
+
+G. pos3_activity
+
+Fields:
+
+id
+session_id
+guest_nickname
+selected_craft
+selected_level
+selected_mentor
+flavor_preferences JSONB
+pairing_selections JSONB
+suggested_pairings JSONB
+upsell_recommendations JSONB
+inventory_signals JSONB
+provider_mode
+created_at
+
+H. eat_analytics
+
+Fields:
+
+id
+session_id
+engagement_score
+guest_mood_signal
+session_value
+staff_assist_triggered
+environment_notes JSONB
+asset_signals JSONB
+transaction_signals JSONB
+command_payload JSONB
+created_at
+
+I. audit_logs
+
+Fields:
+
+id
+actor_type
+actor_id
+action
+target_type
+target_id
+metadata JSONB
+created_at
+
+J. system_events
+
+Fields:
+
+id
+event_type
+source_module
+session_id
+payload JSONB
+created_at
+
+==================================================
+5. CREATE API ROUTES
+
+Create route files:
+
+/server/routes/sessionRoutes.js
+/server/routes/passportRoutes.js
+/server/routes/leaderboardRoutes.js
+/server/routes/pos3Routes.js
+/server/routes/eatRoutes.js
+/server/routes/auditRoutes.js
+/server/routes/healthRoutes.js
+
+Required endpoints:
+
+GET /api/health
+
+POST /api/sessions
+GET /api/sessions/:sessionId
+PUT /api/sessions/:sessionId
+POST /api/sessions/:sessionId/profile
+POST /api/sessions/:sessionId/complete-smokecraft-session
+
+GET /api/passport/:passportId
+POST /api/passport/:passportId/stamps
+PUT /api/passport/:passportId/ceremony-seen
+
+GET /api/leaderboard
+POST /api/leaderboard
+
+POST /api/pos3/activity
+GET /api/pos3/session/:sessionId/payload
+
+POST /api/eat/analytics
+GET /api/eat/session/:sessionId/payload
+
+GET /api/audit/session/:sessionId
+
+==================================================
+6. CREATE BACKEND CONTROLLERS
+
+Create:
+
+/server/controllers/sessionController.js
+/server/controllers/passportController.js
+/server/controllers/leaderboardController.js
+/server/controllers/pos3Controller.js
+/server/controllers/eatController.js
+/server/controllers/auditController.js
+/server/controllers/healthController.js
+
+Controllers must:
+
+* validate incoming data
+* avoid crashes on missing optional fields
+* return clean JSON responses
+* write audit logs for major events
+* never expose secrets
+* never return stack traces to the client
+
+==================================================
+7. CREATE BACKEND SERVICES
+
+Create:
+
+/server/services/sessionService.js
+/server/services/passportService.js
+/server/services/leaderboardService.js
+/server/services/pos3Service.js
+/server/services/eatService.js
+/server/services/auditService.js
+
+Backend services must mirror the frontend services created in Phase 6.
+
+The backend must understand:
+
+* session creation
+* guest profile save
+* mentor selection
+* level selection
+* SmokeCraft session completion
+* Passport stamp award
+* leaderboard score submission
+* POS 3 payload preparation
+* E.A.T. Command payload preparation
+* audit logging
+
+==================================================
+8. CREATE SAFE FRONTEND API CLIENT
+
+Create:
+
+src/services/apiClient.js
+
+Functions:
+
+apiGet(path)
+apiPost(path, data)
+apiPut(path, data)
+apiDelete(path)
+
+Rules:
+
+* Use fetch.
+* Add timeout handling.
+* Handle offline mode.
+* If backend is unavailable, keep using localStorage.
+* Do not crash the app if API fails.
+* Console warn only in development.
+
+==================================================
+9. CREATE SYNC SERVICE
+
+Create:
+
+src/services/syncService.js
+
+Functions:
+
+syncSessionToBackend(session)
+syncPassportToBackend(session)
+syncLeaderboardToBackend(session)
+syncPOS3ToBackend(session)
+syncEATToBackend(session)
+syncAll(session)
+queueOfflineSync(payload)
+flushOfflineQueue()
+
+Rules:
+
+* LocalStorage remains the fallback.
+* Backend sync should be additive, not destructive.
+* If backend fails, queue the sync attempt locally.
+* When backend returns, flush the queue.
+* Do not block the guest journey because sync fails.
+
+==================================================
+10. WIRE PHASE 6 SERVICES TO SYNC
+
+Update existing frontend services carefully:
+
+sessionStorageService.js
+passportService.js
+leaderboardService.js
+pos3ActivityService.js
+eatAnalyticsService.js
+
+After local save, attempt backend sync.
+
+Example behavior:
+
+1. Save locally first.
+2. Attempt backend sync.
+3. If sync succeeds, mark synced.
+4. If sync fails, queue for later.
+5. Continue guest flow without interruption.
+
+==================================================
+11. ADMIN SAFETY RULES
+
+E.A.T. Command and POS 3 data must not be exposed to guest screens.
+
+Management-only routes:
+
+/eat-command
+/pos3
+/command-center
+
+Add middleware placeholder for future role-based access:
+
+/server/middleware/authMiddleware.js
+/server/middleware/roleMiddleware.js
+
+For now, use safe prototype mode.
+
+Do not build full login unless already present.
+
+==================================================
+12. HEALTH CHECK
+
+GET /api/health must return:
+
+{
+status: “ok”,
+service: “NOVEE OS Backend”,
+version: “phase-7”,
+timestamp: current timestamp
+}
+
+==================================================
+13. ERROR HANDLING
+
+Create:
+
+/server/middleware/errorHandler.js
+
+All backend errors must return:
+
+{
+success: false,
+message: “Safe public error message”
+}
+
+Never expose raw stack traces in production mode.
+
+==================================================
+14. PACKAGE SCRIPTS
+
+Update package.json scripts safely.
+
+Required scripts:
+
+“dev”
+“build”
+“preview”
+“server”
+“dev:server”
+“dev:full”
+
+If using concurrently, add it properly.
+
+Do not break the existing frontend dev command.
+
+==================================================
+15. BUILD + RUN VERIFICATION
+
+Run:
+
+npm run build
+
+Then verify backend startup:
+
+npm run dev:server
+
+Then verify health route:
+
+GET /api/health
+
+Then test frontend fallback:
+
+* app still works if backend is off
+* app syncs if backend is on
+* guest session still persists
+* Passport stamp still awards
+* POS 3 payload still prepares
+* E.A.T. Command payload still prepares
+
+==================================================
+16. FINAL REPORT REQUIRED
+
+Return a report with:
+
+A. Backend files created
+B. Backend files changed
+C. Database schema status
+D. API routes created
+E. Controllers created
+F. Services created
+G. Frontend API client status
+H. Sync service status
+I. Offline fallback status
+J. POS 3 payload backend status
+K. E.A.T. analytics backend status
+L. Health check status
+M. Build result
+N. Server run result
+O. Remaining risks
+
+Do not claim Phase 7 is complete unless:
+
+* npm run build passes
+* backend server starts
+* /api/health returns status ok
+* frontend still works without backend
+* localStorage fallback still works

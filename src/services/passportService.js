@@ -4,6 +4,7 @@
  */
 
 import { loadSession, saveSession } from './sessionStorageService.js'
+import { syncPassportToBackend } from './syncService.js'
 
 function genPassportId() {
   return `PP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
@@ -50,7 +51,7 @@ export function awardStamp(stampData) {
     return earned.find(s => s.stampId === stamp.stampId)
   }
 
-  saveSession({
+  const updatedSession = {
     ...session,
     passport: {
       ...session.passport,
@@ -59,7 +60,10 @@ export function awardStamp(stampData) {
       passportId:    session.passport?.passportId || genPassportId(),
     },
     latestStampId: stamp.stampId,
-  })
+  }
+  saveSession(updatedSession)
+  // Fire-and-forget passport sync after local save
+  syncPassportToBackend(updatedSession).catch(() => {})
   return stamp
 }
 
