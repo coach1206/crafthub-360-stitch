@@ -1,0 +1,635 @@
+EXECUTE PHASE 12 REAL-WORLD VENUE TESTING MODE FOR NOVEE OS / CRAFTHUB 360 / SMOKECRAFT 360 / 360 PASSPORT CONNECTIONS / POS 3 / E.A.T. COMMAND
+
+PHASE 11 IS COMPLETE.
+
+DO NOT redesign the app.
+DO NOT add new major features.
+DO NOT create duplicate screens.
+DO NOT connect live POS credentials.
+DO NOT weaken auth.
+DO NOT expose secrets.
+DO NOT remove prototype mode.
+DO NOT remove kiosk mode.
+DO NOT remove offline fallback.
+DO NOT change the premium visual direction unless a test result proves it is causing confusion.
+
+MISSION:
+Prepare NOVEE OS for a controlled real-world venue test.
+
+This phase must create test mode, demo reset tools, venue testing scripts, observer notes, session export, issue logging, and pilot-readiness reporting.
+
+The goal is to test NOVEE OS in a real hospitality environment with real people touching the tablet/kiosk.
+
+==================================================
+PHASE 12 PRIMARY GOAL
+
+Create a venue testing system that allows the founder/team to run a structured pilot test and answer:
+
+1. Can guests complete SmokeCraft without help?
+2. Do guests understand mentor voice, mute, and read mode?
+3. Does Passport feel valuable and clear?
+4. Do staff understand POS 3 activity feeds?
+5. Do managers understand E.A.T. Command?
+6. Does kiosk mode prevent accidental navigation?
+7. Does offline fallback behave correctly?
+8. Are touch targets large enough?
+9. Are any screens confusing, slow, or visually stressful?
+10. Is the system ready to demo to venues, investors, or pilot partners?
+
+==================================================
+
+1. CREATE TEST MODE CONFIG
+    ==================================================
+
+Create:
+
+server/config/testModeConfig.js
+src/config/testModeConfig.js
+
+Test mode fields:
+
+{
+enabled,
+venueTestId,
+venueName,
+testDate,
+testType,
+resetBetweenGuests,
+captureObserverNotes,
+exportEnabled,
+prototypeMode,
+allowedModules
+}
+
+Test types:
+
+* founder_demo
+* venue_walkthrough
+* guest_usability_test
+* staff_training_test
+* manager_dashboard_test
+* full_pilot_rehearsal
+
+Allowed modules:
+
+* SmokeCraft 360
+* 360 Passport Connection
+* POS 3
+* E.A.T. Command
+* Mentor Voice
+* Kiosk Mode
+* Offline Mode
+
+==================================================
+2. DATABASE MIGRATION
+
+Create migration:
+
+/server/db/migrations/008_venue_testing.sql
+
+Add tables:
+
+A. venue_tests
+
+Fields:
+
+id
+venue_test_id
+venue_name
+test_type
+test_date
+status
+created_by
+created_at
+updated_at
+
+B. venue_test_sessions
+
+Fields:
+
+id
+venue_test_id
+guest_session_id
+participant_label
+participant_type
+start_time
+end_time
+completion_status
+notes JSONB
+created_at
+
+C. observer_notes
+
+Fields:
+
+id
+venue_test_id
+guest_session_id
+screen_name
+event_type
+note
+severity
+created_by
+created_at
+
+D. venue_test_issues
+
+Fields:
+
+id
+venue_test_id
+guest_session_id
+issue_type
+screen_name
+description
+severity
+status
+created_by
+created_at
+updated_at
+
+E. venue_test_exports
+
+Fields:
+
+id
+venue_test_id
+export_type
+file_path
+created_by
+created_at
+
+Do not wipe existing data.
+
+==================================================
+3. BACKEND TEST MODE SERVICES
+
+Create:
+
+server/services/venueTestService.js
+server/controllers/venueTestController.js
+server/routes/venueTestRoutes.js
+
+Mount route:
+
+/api/venue-test
+
+Endpoints:
+
+GET /api/venue-test/status
+POST /api/venue-test/start
+POST /api/venue-test/end
+POST /api/venue-test/session/start
+POST /api/venue-test/session/end
+POST /api/venue-test/observer-note
+POST /api/venue-test/issue
+GET /api/venue-test/issues
+GET /api/venue-test/summary
+POST /api/venue-test/reset-demo-data
+GET /api/venue-test/export/json
+GET /api/venue-test/export/csv
+
+Permissions:
+
+Manager:
+
+* start/end test
+* add notes
+* add issues
+* view summary
+* export limited data
+
+Admin:
+
+* reset demo data
+* export full test data
+
+Founder:
+
+* full access
+* delete/reset test records
+* view all summaries
+
+Guest:
+
+* no access to venue-test API directly
+
+==================================================
+4. TEST SESSION TRACKING
+
+Update GuestSessionContext and backend sync if needed to include:
+
+testMode: {
+enabled,
+venueTestId,
+participantLabel,
+participantType,
+startedAt,
+completedAt,
+observerNotesCount,
+issueCount
+}
+
+Participant types:
+
+* guest
+* staff
+* manager
+* founder
+* observer
+
+Do not expose internal testing controls to normal guests.
+
+==================================================
+5. CREATE OBSERVER PANEL
+
+Create:
+
+src/pages/VenueTestControl.jsx
+src/components/testing/ObserverNotePanel.jsx
+src/components/testing/IssueLogger.jsx
+src/components/testing/TestSessionTimer.jsx
+src/components/testing/TestProgressChecklist.jsx
+
+Route:
+
+/venue-test
+
+Protected:
+
+manager+
+
+VenueTestControl must include:
+
+* active test status
+* start/end test button
+* test type selector
+* participant label
+* session timer
+* observer notes
+* issue logger
+* quick severity buttons
+* export buttons
+* reset demo data button for admin/founder only
+
+Severity levels:
+
+* low
+* medium
+* high
+* blocker
+
+Issue types:
+
+* navigation
+* visual
+* performance
+* audio
+* passport
+* POS 3
+* E.A.T.
+* auth
+* kiosk
+* offline
+* touchscreen
+* content
+* other
+
+==================================================
+6. FIELD TEST CHECKLIST UI
+
+Add checklist inside VenueTestControl:
+
+Guest flow test:
+
+* Boot loads
+* Guest understands activation
+* CraftHub opens
+* SmokeCraft starts
+* Mentor selection clear
+* Voice listen works
+* Mute works
+* Read mode works
+* Session completes
+* Passport stamp appears
+* Leaderboard visible
+* Return home works
+
+Staff flow test:
+
+* Staff login works
+* POS 3 opens
+* Active orders visible
+* Table status visible
+* Recommendation preview visible
+* Staff cannot access manager-only panels
+
+Manager flow test:
+
+* Manager login works
+* E.A.T. opens
+* Environment feed visible
+* Asset feed visible
+* Transaction feed visible
+* Deployment/device status visible
+* Export works
+
+Kiosk flow test:
+
+* Route lock works
+* Staff unlock works
+* Back buttons stay in kiosk map
+* Offline page works
+* Boot fallback works
+
+==================================================
+7. DEMO DATA RESET
+
+Create safe reset service:
+
+server/services/demoResetService.js
+
+Function:
+
+resetDemoData({ venueTestId, preserveUsers = true })
+
+Reset only prototype/demo data:
+
+* guest sessions
+* passport stamps
+* leaderboard demo entries
+* POS 3 prototype sync runs
+* observer notes for current test if requested
+
+Do not delete:
+
+* users
+* auth credentials
+* founder controls
+* role permissions
+* system config
+* real provider credentials
+* audit/security logs unless founder explicitly requests separate archive
+
+Admin may reset demo guest data.
+Founder may reset broader test data.
+
+No destructive full wipe.
+
+==================================================
+8. EXPORT SERVICE
+
+Create:
+
+server/services/venueTestExportService.js
+
+Export formats:
+
+CSV:
+
+* venue test sessions
+* observer notes
+* issue log
+* leaderboard
+* guest completion summary
+
+JSON:
+
+* full venue test summary
+* session data
+* Passport activity
+* POS 3 activity
+* E.A.T. analytics
+* issues
+* observer notes
+
+Do not export raw auth credentials.
+Do not export secrets.
+Do not export founder controls.
+
+==================================================
+9. TEST SUMMARY REPORT
+
+Create summary output:
+
+GET /api/venue-test/summary
+
+Must include:
+
+{
+venueTestId,
+venueName,
+testType,
+totalSessions,
+completedGuestJourneys,
+averageCompletionTime,
+voiceUsageCount,
+muteUsageCount,
+readModeUsageCount,
+passportStampCount,
+leaderboardSubmissions,
+pos3StaffChecks,
+eatManagerChecks,
+offlineEvents,
+routeLockEvents,
+issueCountsBySeverity,
+issueCountsByType,
+topScreensWithIssues,
+readinessScore,
+recommendation
+}
+
+Readiness score:
+
+0–59 = not ready
+60–74 = needs fixes before pilot
+75–89 = pilot-ready with caution
+90–100 = pilot-ready
+
+==================================================
+10. FRONTEND EXPORT BUTTONS
+
+VenueTestControl must include:
+
+* Export CSV
+* Export JSON
+* Download issue log
+* Download pilot summary
+
+If download cannot create a file directly, show export payload in a copyable modal.
+
+==================================================
+11. REAL-WORLD TESTING DOCUMENTS
+
+Update or create:
+
+VENUE_TEST_CHECKLIST.md
+PILOT_OBSERVER_SCRIPT.md
+STAFF_TRAINING_SCRIPT.md
+GUEST_TEST_SCRIPT.md
+MANAGER_DEMO_SCRIPT.md
+
+PILOT_OBSERVER_SCRIPT.md must include:
+
+* what to watch
+* what not to explain too early
+* when to intervene
+* what to record
+* how to score confusion
+* how to score excitement
+* how to score staff usability
+
+GUEST_TEST_SCRIPT.md must include simple language:
+
+“Walk up to the screen and begin the SmokeCraft experience.”
+
+Do not overcoach the guest.
+
+STAFF_TRAINING_SCRIPT.md must explain:
+
+* staff login
+* POS 3 active orders
+* table status
+* recommendations
+* what staff should not touch
+
+MANAGER_DEMO_SCRIPT.md must explain:
+
+* E.A.T. Command
+* Environment
+* Asset
+* Transaction
+* why it matters
+* what to look for during a live shift
+
+==================================================
+12. REAL-WORLD PILOT SAFETY
+
+Add disclaimers where appropriate in testing docs only:
+
+* prototype system
+* no live payments
+* no live POS credentials
+* tasting education only
+* venue must follow local tobacco/alcohol laws
+* staff must control actual service decisions
+* NOVEE OS provides guidance, not legal or health advice
+
+Do not plaster disclaimers all over the guest UI.
+Keep UI premium.
+
+==================================================
+13. FRONTEND ROUTES
+
+Add route:
+
+/venue-test
+
+Protected:
+
+manager+
+
+Add link to VenueTestControl from:
+
+DeviceStatus
+Admin
+FounderControl
+
+Only show based on permission.
+
+==================================================
+14. PERFORMANCE + FIELD RELIABILITY CHECK
+
+During Phase 12, verify:
+
+* boot under poor network
+* offline fallback
+* tablet orientation
+* landscape layout
+* touch targets
+* voice fallback
+* route lock
+* staff login
+* manager login
+* founder protection
+* backend reconnect
+* data export
+
+Do not do major optimization unless something fails.
+
+==================================================
+15. TEST MATRIX
+
+Test:
+
+A. npm run build passes.
+B. Backend starts.
+C. /api/health works.
+D. /api/venue-test/status works for manager+.
+E. Guest cannot access venue-test API.
+F. Manager can start venue test.
+G. Manager can add observer note.
+H. Manager can log issue.
+I. Admin can reset demo data.
+J. Founder can access full test summary.
+K. Export JSON works.
+L. Export CSV works.
+M. VenueTestControl renders.
+N. Checklist can be marked.
+O. Guest SmokeCraft journey still works.
+P. Mentor voice still works.
+Q. Passport stamp still awards.
+R. POS 3 staff flow still works.
+S. E.A.T. manager flow still works.
+T. Kiosk route lock still works.
+U. Offline mode still works.
+V. Auth still works.
+W. Founder-only routes still protected.
+X. No secrets exported.
+Y. Readiness score calculates.
+Z. Build and server both clean.
+
+==================================================
+16. FINAL REPORT REQUIRED
+
+Return a report with:
+
+A. Files created
+B. Files changed
+C. Database migration status
+D. Venue test API status
+E. Venue test permissions status
+F. Observer note status
+G. Issue logger status
+H. Demo reset status
+I. Export CSV status
+J. Export JSON status
+K. Summary/readiness score status
+L. VenueTestControl UI status
+M. Guest flow checklist status
+N. Staff flow checklist status
+O. Manager flow checklist status
+P. Kiosk/offline checklist status
+Q. Testing documents created
+R. Guest journey regression
+S. Mentor voice regression
+T. Passport regression
+U. POS 3 regression
+V. E.A.T. regression
+W. Auth/security regression
+X. Build result
+Y. Server result
+Z. Remaining risks
+
+Do not claim Phase 12 is complete unless:
+
+* npm run build passes
+* backend starts
+* venue-test routes work
+* manager can start a test
+* observer notes work
+* issues can be logged
+* export works
+* readiness score calculates
+* guest journey still works
+* founder-only routes remain protected

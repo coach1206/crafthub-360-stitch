@@ -436,8 +436,9 @@ export default function FounderControl() {
           fontSize:   '11px',
           letterSpacing: '0.1em',
         }}>
-          <span>NOVEE OS · Founder Level 0 · Phase 8</span>
+          <span>NOVEE OS · Founder Level 0 · Phase 12</span>
           <span>Actor: {user.id || 'unknown'}</span>
+          <a href="/venue-test" style={{ color: '#2a1c08', textDecoration: 'underline', cursor: 'pointer' }}>Venue Test Control</a>
           <span style={{ marginLeft: 'auto', color: '#1a1008' }}>This panel is not visible to any other role</span>
         </div>
       </div>

@@ -62,6 +62,9 @@ const DeviceStatus = lazy(() => import('./pages/DeviceStatus.jsx'))
 const OfflineMode  = lazy(() => import('./pages/OfflineMode.jsx'))
 const InstallHelp  = lazy(() => import('./pages/InstallHelp.jsx'))
 
+// ── Phase 12: Venue testing — lazy ────────────────────────────
+const VenueTestControl = lazy(() => import('./pages/VenueTestControl.jsx'))
+
 /** Premium loading fallback shown while lazy chunks load. */
 function NOVEELoader() {
   return (
@@ -272,6 +275,18 @@ export default function App() {
                 lockedMessage="Install help requires manager-level access or higher."
               >
                 <InstallHelp />
+              </ProtectedRoute>
+            } />
+
+            {/* /venue-test — Phase 12: Venue Test Control, manager+ */}
+            <Route path="venue-test" element={
+              <ProtectedRoute
+                allowedRoles={['manager','admin','founder_level_0']}
+                loginRoute="/admin-login"
+                loginLabel="Manager Login"
+                lockedMessage="Venue testing requires manager-level access or higher."
+              >
+                <VenueTestControl />
               </ProtectedRoute>
             } />
 

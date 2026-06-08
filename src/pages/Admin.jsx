@@ -303,6 +303,9 @@ export default function Admin() {
           <PermissionGate permission="manage_integrations">
             <NavTile icon="hub" label="Integrations" href="#" color={DIM} />
           </PermissionGate>
+          <RoleGate allowedRoles={['manager','admin','founder_level_0']}>
+            <NavTile icon="science" label="Venue Test Control" href="/venue-test" color="#a3e635" />
+          </RoleGate>
           <RoleGate allowedRoles={['founder_level_0']}>
             <NavTile icon="shield_lock" label="Founder Controls" href="/founder" color={GOLD} highlight />
           </RoleGate>

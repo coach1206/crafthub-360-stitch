@@ -155,6 +155,11 @@ export default function DeviceStatus() {
           <button onClick={() => navigate('/offline')} style={{ flex: '1 1 160px', background: 'transparent', border: `1px solid ${GOLD}25`, color: `${GOLD}66`, padding: '0.875rem', borderRadius: '6px', fontFamily: 'Georgia, serif', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', minHeight: '48px' }}>
             Offline Mode
           </button>
+          {canSeeChecklist && (
+            <button onClick={() => navigate('/venue-test')} style={{ flex: '1 1 160px', background: 'transparent', border: `1px solid rgba(163,230,53,0.25)`, color: 'rgba(163,230,53,0.66)', padding: '0.875rem', borderRadius: '6px', fontFamily: 'Georgia, serif', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', minHeight: '48px' }}>
+              Venue Test
+            </button>
+          )}
           <button onClick={() => navigate('/')} style={{ flex: '1 1 160px', background: GOLD, color: DARK, border: 'none', padding: '0.875rem', borderRadius: '6px', fontFamily: 'Georgia, serif', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', fontWeight: 600, minHeight: '48px' }}>
             Return Home
           </button>

@@ -101,6 +101,7 @@ Run through these tests before going live at a venue. Mark each ✅ Pass or ❌ 
 - [ ] Device configuration values are shown
 - [ ] System health badge shows current backend status
 - [ ] Manager/admin sees deployment checklist section
+- [ ] Manager/admin sees **Venue Test** button (links to `/venue-test`)
 
 ---
 
@@ -124,6 +125,23 @@ Run through these tests before going live at a venue. Mark each ✅ Pass or ❌ 
 
 ---
 
+## M. Venue Test Control (Phase 12)
+
+- [ ] Navigate to `/venue-test` as manager+ — page loads
+- [ ] Start a test with a venue name and test type
+- [ ] Start a participant session — timer runs
+- [ ] Add an observer note with screen + severity
+- [ ] Log an issue with type + severity
+- [ ] End the participant session (Completed / Partial / Abandoned)
+- [ ] Summary tab shows readiness score after data collected
+- [ ] Export JSON works — no credentials or secrets in output
+- [ ] Export CSV (summary) works
+- [ ] Reset demo data works (admin+)
+- [ ] Guest cannot reach `/api/venue-test/status` (no auth → 401)
+- [ ] End test cleanly
+
+---
+
 ## Final Sign-Off
 
 | Area | Result | Notes |
@@ -139,6 +157,7 @@ Run through these tests before going live at a venue. Mark each ✅ Pass or ❌ 
 | Route Locking | | |
 | PWA Install | | |
 | Device Status | | |
+| Venue Test Control | | |
 | Admin / Founder Security | | |
 
 **Venue:** ___________________
@@ -147,4 +166,10 @@ Run through these tests before going live at a venue. Mark each ✅ Pass or ❌ 
 
 ---
 
-*NOVEE OS v4.2.0 — Phase 11 Kiosk/Tablet Deployment*
+*NOVEE OS — Phase 12 Venue Testing Mode*
+
+Related documents:
+- `PILOT_OBSERVER_SCRIPT.md` — what to watch, when to intervene, how to score
+- `GUEST_TEST_SCRIPT.md` — setup line, hints, debrief questions
+- `STAFF_TRAINING_SCRIPT.md` — staff login, POS 3, what not to touch
+- `MANAGER_DEMO_SCRIPT.md` — E.A.T. Command, transaction feed, export
