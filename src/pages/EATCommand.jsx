@@ -81,7 +81,7 @@ export default function EATCommand() {
           </div>
           <h2 className="text-2xl font-bold text-[#f3cf7a] mb-3">Access Restricted</h2>
           <p className="text-[#a89b86] mb-6">E.A.T. Command requires manager-level access or higher.</p>
-          <button onClick={() => navigate(-1)} className="flex items-center gap-2 mx-auto px-6 py-3 rounded-xl border border-[#d9ad55]/30 bg-[#d9ad55]/10 text-[#f3cf7a] font-bold transition-all hover:bg-[#d9ad55]/20 active:scale-95">
+          <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} className="flex items-center gap-2 mx-auto px-6 py-3 rounded-xl border border-[#d9ad55]/30 bg-[#d9ad55]/10 text-[#f3cf7a] font-bold transition-all hover:bg-[#d9ad55]/20 active:scale-95">
             ← Go Back
           </button>
         </div>
@@ -121,7 +121,7 @@ export default function EATCommand() {
 
           {/* Back button at bottom of rail */}
           <div className="mt-auto mb-5">
-            <button onClick={() => navigate(-1)} className="haptic-ready grid h-[72px] w-[72px] place-items-center rounded-2xl border border-white/10 bg-white/[0.035] text-[#d8c8ad] hover:border-[#d9ad55]/40 hover:text-[#f3cf7a] transition-all active:scale-95" title="Back">
+            <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} className="haptic-ready grid h-[72px] w-[72px] place-items-center rounded-2xl border border-white/10 bg-white/[0.035] text-[#d8c8ad] hover:border-[#d9ad55]/40 hover:text-[#f3cf7a] transition-all active:scale-95" title="Back">
               <span className="material-symbols-outlined" style={{ fontSize: 26 }}>arrow_back</span>
             </button>
           </div>
@@ -209,7 +209,7 @@ export default function EATCommand() {
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   {/* Mobile back button */}
-                  <button onClick={() => navigate(-1)} className="xl:hidden mb-4 flex items-center gap-2 px-4 py-2 rounded-xl border border-[#d9ad55]/30 bg-black/50 text-[#f3cf7a] text-sm font-bold active:scale-95 transition-all">
+                  <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} className="xl:hidden mb-4 flex items-center gap-2 px-4 py-2 rounded-xl border border-[#d9ad55]/30 bg-black/50 text-[#f3cf7a] text-sm font-bold active:scale-95 transition-all">
                     <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_back</span>
                     BACK
                   </button>
