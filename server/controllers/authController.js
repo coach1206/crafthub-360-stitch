@@ -113,15 +113,22 @@ export async function adminLogin(req, res) {
     const user = await authService.getActiveUserByEmail(email, ['manager', 'admin'])
 
     if (!user) {
+      // Check if this email belongs to a founder — give a helpful redirect instead of a silent fail
+      const founderUser = await authService.getActiveUserByEmail(email, ['founder_level_0'])
       await authService.recordLoginAttempt({
         email,
         roleAttempted: 'manager_or_admin',
         success:       false,
-        failureReason: 'user_not_found',
+        failureReason: founderUser ? 'founder_requires_separate_login' : 'user_not_found',
         req,
       })
-      // Constant-time response to prevent user enumeration
       await bcryptDelay()
+      if (founderUser) {
+        return fail(res,
+          'Founder Level 0 accounts require a separate login with three-factor authentication. ' +
+          'Please use the Founder Login page (/founder-login) with your email, PIN, and founder challenge.',
+          403)
+      }
       return fail(res, 'Invalid credentials', 401)
     }
 

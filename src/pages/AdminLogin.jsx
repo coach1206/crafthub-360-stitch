@@ -34,7 +34,8 @@ export default function AdminLogin() {
   const [error,   setError]   = useState('')
 
   const redirectAfterLogin = (role) => {
-    if (role === 'manager') window.location.href = '/eat'
+    if (role === 'founder_level_0') window.location.href = '/founder-demo'
+    else if (role === 'manager') window.location.href = '/eat'
     else if (role === 'admin') window.location.href = '/admin'
     else window.location.href = '/'
   }
@@ -175,8 +176,16 @@ export default function AdminLogin() {
             letterSpacing: '0.05em',
             padding:       '8px 12px',
             marginBottom:  '1.25rem',
+            lineHeight:    1.6,
           }}>
-            {error}
+            {error.includes('Founder Level 0') ? (
+              <>
+                Founder Level 0 accounts use a separate login.{' '}
+                <a href="/founder-login" style={{ color: '#C9A84C', fontWeight: 600 }}>
+                  Sign in here →
+                </a>
+              </>
+            ) : error}
           </div>
         )}
 
@@ -204,10 +213,23 @@ export default function AdminLogin() {
         </button>
       </form>
 
+      {/* Founder link */}
+      <div style={{ marginTop: '1.25rem', textAlign: 'center' }}>
+        <a href="/founder-login" style={{
+          color:          'rgba(201,168,76,0.30)',
+          fontSize:       '11px',
+          letterSpacing:  '0.1em',
+          textDecoration: 'none',
+          textTransform:  'uppercase',
+        }}>
+          Founder Level 0? Sign in here →
+        </a>
+      </div>
+
       {/* Dev hint */}
       {import.meta.env.DEV && (
         <div style={{
-          marginTop:  '1.5rem',
+          marginTop:  '1rem',
           color:      '#2a2218',
           fontSize:   '10px',
           letterSpacing: '0.1em',

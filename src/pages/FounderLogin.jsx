@@ -269,7 +269,7 @@ export default function FounderLogin() {
           textAlign:  'center',
           lineHeight: 1.9,
         }}>
-          DEV: founder@novee.dev / 0000<br />
+          DEV: jccollins1206@yahoo.com / 2501<br />
           Challenge = value of FOUNDER_CHALLENGE_SECRET env var
         </div>
       )}
