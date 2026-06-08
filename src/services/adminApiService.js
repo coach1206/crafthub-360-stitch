@@ -37,3 +37,14 @@ export const getSecurityEvents = (params = {}) => {
 
 /** GET /api/admin/staff — staff list, admin+. */
 export const listStaff = () => apiGet(`${BASE}/staff`)
+
+/** POST /api/admin/users/:userId/reset-pin — manager+ resets a user's PIN. */
+export const resetUserPin = (userId, newPin, confirmPin) =>
+  apiPost(`${BASE}/users/${userId}/reset-pin`, { newPin, confirmPin })
+
+/** GET /api/pos3/sync/status — manager+ POS sync status. */
+export const getPOS3SyncStatus = () => apiGet('/api/pos3/sync/status')
+
+/** POST /api/pos3/sync/run — admin+ trigger manual sync. */
+export const runPOS3SyncNow = (providerKey = 'prototype') =>
+  apiPost('/api/pos3/sync/run', { providerKey })

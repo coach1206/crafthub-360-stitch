@@ -10,7 +10,7 @@
 
 import { Router } from 'express'
 import { requireAuth }                       from '../middleware/authMiddleware.js'
-import { requireAdmin, requireFounderLevel0, blockDevFounderSpoofing } from '../middleware/roleMiddleware.js'
+import { requireAdmin, requireManager, requireFounderLevel0, blockDevFounderSpoofing } from '../middleware/roleMiddleware.js'
 import * as ac from '../controllers/adminController.js'
 
 const router = Router()
@@ -27,6 +27,9 @@ router.post('/users',          requireAuth, requireAdmin,         ac.createUser)
 router.put('/users/:userId',   requireAuth, requireAdmin,         ac.updateUser)
 router.get('/security-events', requireAuth, requireAdmin,         ac.getSecurityEvents)
 router.get('/staff',           requireAuth, requireAdmin,         ac.listStaff)
+
+// ── Manager+ (PIN reset — manager can reset staff only, enforced in controller) ─
+router.post('/users/:userId/reset-pin', requireAuth, requireManager, ac.resetUserPin)
 
 // ── Founder-only (triple-gated: JWT + anti-spoof + role) ─────
 router.post('/money-settings', requireAuth, blockDevFounderSpoofing, requireFounderLevel0, ac.updateMoneySettings)

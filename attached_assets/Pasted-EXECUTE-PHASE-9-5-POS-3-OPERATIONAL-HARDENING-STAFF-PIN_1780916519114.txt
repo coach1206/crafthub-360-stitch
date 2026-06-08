@@ -1,0 +1,458 @@
+EXECUTE PHASE 9.5 POS 3 OPERATIONAL HARDENING + STAFF PIN RESET + PERFORMANCE CLEANUP FOR NOVEE OS
+
+PHASE 9 IS COMPLETE.
+
+DO NOT redesign the app.
+DO NOT change premium UI.
+DO NOT create duplicate screens.
+DO NOT break guest routes.
+DO NOT weaken Founder Level 4 permissions.
+DO NOT weaken real auth.
+DO NOT connect live POS credentials yet.
+DO NOT connect ElevenLabs yet.
+DO NOT expose secrets in frontend code.
+DO NOT remove prototype provider mode.
+
+MISSION:
+Close the remaining Phase 9 operational risks before moving to ElevenLabs mentor voice integration.
+
+The POS 3 provider layer is built, but now it needs operational reliability:
+
+1. Auto-sync trigger for POS 3 prototype/provider data
+2. Manager/admin staff PIN reset flow
+3. Safer provider sync logs
+4. Frontend loading/error states for POS 3 and E.A.T. panels
+5. Bundle/performance cleanup using route-level lazy loading
+6. Final regression test across guest, staff, manager, admin, and founder roles
+
+==================================================
+PHASE 9.5 PRIMARY GOAL
+
+Make POS 3 feel reliable, not just connected.
+
+The system must:
+
+* Automatically sync prototype POS 3 data on server boot or interval
+* Allow managers/admins to reset staff PINs safely
+* Log provider sync attempts
+* Show graceful loading and unavailable states
+* Avoid crashing if provider APIs fail
+* Reduce initial frontend bundle load where practical
+* Preserve all Phase 6, 7, 8, 8.5, and 9 behavior
+
+==================================================
+
+1. POS 3 AUTO-SYNC TRIGGER
+    ==================================================
+
+Update or create:
+
+/server/services/pos3AutoSyncService.js
+
+Functions:
+
+startPOS3AutoSync()
+stopPOS3AutoSync()
+runPOS3SyncNow(providerKey = “prototype”)
+getPOS3SyncStatus()
+recordPOS3SyncRun(result)
+
+Behavior:
+
+* On backend startup, run one initial prototype sync.
+* Add safe interval sync in development/prototype mode.
+* Default interval: every 5 minutes.
+* Do not run aggressive polling.
+* Do not block server startup if sync fails.
+* If sync fails, log error safely and continue.
+* Never expose provider credentials.
+
+Update:
+
+/server/index.js
+
+Call:
+
+startPOS3AutoSync()
+
+only after database connection is ready.
+
+==================================================
+2. POS 3 SYNC LOGGING TABLE
+
+Create migration:
+
+/server/db/migrations/005_pos3_operational_hardening.sql
+
+Add table:
+
+pos3_sync_runs
+
+Fields:
+
+id
+provider_key
+sync_type
+status
+orders_count
+inventory_count
+tables_count
+staff_count
+started_at
+finished_at
+duration_ms
+error_message
+created_at
+
+Allowed status:
+
+started
+success
+failed
+partial
+
+Do not destroy existing tables.
+
+Do not wipe data.
+
+==================================================
+3. POS 3 SYNC STATUS ROUTES
+
+Create or update:
+
+/server/routes/pos3IntegrationRoutes.js
+/server/controllers/pos3IntegrationController.js
+/server/services/pos3IntegrationService.js
+
+Add endpoints:
+
+GET /api/pos3/sync/status
+POST /api/pos3/sync/run
+
+Permissions:
+
+GET /api/pos3/sync/status:
+manager level 2 and above
+
+POST /api/pos3/sync/run:
+admin level 3 and above
+
+Founder can access both.
+
+Staff cannot trigger sync.
+Guest cannot view sync.
+
+==================================================
+4. STAFF PIN RESET BACKEND
+
+Create or update:
+
+/server/routes/adminRoutes.js
+/server/controllers/adminController.js
+/server/services/adminService.js
+/server/services/authService.js
+
+Add endpoint:
+
+POST /api/admin/users/:userId/reset-pin
+
+Permission:
+
+manager level 2 and above may reset staff PINs only.
+
+admin level 3 may reset staff and manager PINs.
+
+founder level 4 may reset staff, manager, and admin PINs.
+
+No one except founder can reset founder credentials.
+
+Request body:
+
+{
+newPin,
+confirmPin
+}
+
+Rules:
+
+* PIN must be 4 to 8 digits.
+* newPin and confirmPin must match.
+* Hash the PIN using the same authService method.
+* Never store raw PIN.
+* Never log raw PIN.
+* Never return PIN hash.
+* Write security event.
+* Write audit log.
+* Return safe success response.
+
+Expected response:
+
+{
+success: true,
+message: “PIN reset successfully.”
+}
+
+==================================================
+5. STAFF PIN RESET FRONTEND
+
+Update:
+
+src/pages/Admin.jsx
+
+Add staff PIN reset controls based on role permission.
+
+Manager sees:
+
+* staff users only
+* reset PIN button for staff
+
+Admin sees:
+
+* staff and manager users
+* reset PIN button
+
+Founder sees:
+
+* staff, manager, admin users
+* reset PIN button
+
+No one sees founder credential reset except founder-only future control.
+
+Create or update:
+
+src/services/adminApiService.js
+
+Add:
+
+resetUserPin(userId, newPin, confirmPin)
+
+Create reusable component if helpful:
+
+src/components/admin/PinResetModal.jsx
+
+Requirements:
+
+* touchscreen-friendly keypad or large inputs
+* confirm PIN field
+* clear validation messages
+* no raw PIN displayed after submit
+* no PIN stored in localStorage
+
+==================================================
+6. POS 3 FRONTEND LOADING + ERROR STATES
+
+Update:
+
+src/pages/POS3.jsx
+src/pages/EATCommand.jsx
+
+Add graceful states:
+
+* Loading provider data
+* Provider unavailable
+* Sync not yet run
+* Inventory temporarily unavailable
+* Orders temporarily unavailable
+* Permission restricted
+* Prototype provider mode active
+
+No blank panels.
+
+No crash if endpoint returns null.
+
+No ugly default JavaScript errors.
+
+Every POS 3 panel must show either:
+
+* data
+* loading state
+* restricted state
+* unavailable state
+
+==================================================
+7. FRONTEND PERFORMANCE CLEANUP
+
+Update:
+
+src/App.jsx
+
+Use route-level lazy loading for heavy pages:
+
+* POS3
+* EATCommand
+* Admin
+* FounderControl
+* StaffLogin
+* AdminLogin
+* FounderLogin
+
+Use:
+
+React.lazy
+Suspense
+
+Add premium loading fallback:
+
+“Loading NOVEE OS module…”
+
+Do not lazy load critical boot screen if it causes delay.
+
+Do not break routes.
+
+Goal:
+
+* reduce initial app load pressure
+* keep boot screen fast
+* keep guest flow smooth
+
+==================================================
+8. DEVROLE SWITCHER SAFETY CHECK
+
+Verify:
+
+DevRoleSwitcher only appears when NODE_ENV=development.
+
+It must not appear in production build.
+
+If production mode is detected, force disable it.
+
+Founder simulation must remain blocked unless ALLOW_DEV_FOUNDER=true in development only.
+
+Do not weaken Phase 8.5 founder hardening.
+
+==================================================
+9. AUTH + PERMISSION REGRESSION
+
+Verify:
+
+Guest:
+
+* can complete SmokeCraft guest journey
+* cannot access POS 3
+* cannot access E.A.T.
+* cannot access Admin
+* cannot access Founder
+
+Staff:
+
+* can access POS 3 staff panels
+* cannot view inventory payload previews if manager-only
+* cannot trigger sync
+* cannot reset PINs
+
+Manager:
+
+* can access E.A.T.
+* can view POS 3 sync status
+* can reset staff PINs
+* cannot reset manager/admin/founder PINs
+
+Admin:
+
+* can run POS 3 sync manually
+* can reset staff and manager PINs
+* cannot reset founder credentials
+* cannot access founder-only money/license/data wipe
+
+Founder:
+
+* can access everything
+* can run sync
+* can reset staff/manager/admin PINs
+* founder controls remain exclusive
+
+==================================================
+10. TEST MATRIX
+
+Test these:
+
+A. Backend starts.
+B. /api/health returns ok.
+C. POS 3 auto-sync runs on startup.
+D. pos3_sync_runs records sync result.
+E. GET /api/pos3/sync/status works for manager+.
+F. POST /api/pos3/sync/run works for admin+.
+G. Staff cannot trigger POS sync.
+H. Guest cannot view POS sync.
+I. Manager can reset staff PIN.
+J. Manager cannot reset admin PIN.
+K. Admin can reset manager PIN.
+L. Admin cannot reset founder credentials.
+M. Founder can reset admin PIN.
+N. Reset PIN logs audit/security event.
+O. Staff login works with new PIN after reset.
+P. Staff old PIN fails after reset.
+Q. POS 3 UI shows loading/unavailable states instead of blank panels.
+R. E.A.T. POS 3 feed handles missing data safely.
+S. Lazy-loaded routes still open correctly.
+T. Guest SmokeCraft journey still works.
+U. Passport stamp still awards.
+V. Leaderboard still works.
+W. Founder dev-header spoofing still blocked.
+X. npm run build passes.
+Y. Backend server starts after build.
+
+==================================================
+11. BUILD + SERVER VERIFICATION
+
+Run:
+
+npm run build
+npm run dev:server
+
+Verify:
+
+GET /api/health
+GET /api/pos3/sync/status
+POST /api/pos3/sync/run
+POST /api/admin/users/:userId/reset-pin
+
+Also verify:
+
+* guest journey still works
+* staff login still works
+* admin login still works
+* founder login still works
+* POS 3 provider routes still work
+* prototype provider still returns normalized data
+* E.A.T. Command still receives POS 3 feed
+* no real POS secrets exposed
+
+==================================================
+12. FINAL REPORT REQUIRED
+
+Return a report with:
+
+A. Files created
+B. Files changed
+C. Database migration status
+D. POS 3 auto-sync status
+E. POS 3 sync logging status
+F. Sync status route result
+G. Manual sync route result
+H. Staff PIN reset backend status
+I. Staff PIN reset frontend status
+J. PIN reset audit/security logging status
+K. POS 3 UI loading/error state status
+L. E.A.T. loading/error state status
+M. Lazy-loading/performance status
+N. DevRoleSwitcher production safety status
+O. Guest regression result
+P. Staff regression result
+Q. Manager regression result
+R. Admin regression result
+S. Founder regression result
+T. Build result
+U. Server result
+V. Remaining risks
+
+Do not claim Phase 9.5 is complete unless:
+
+* npm run build passes
+* backend starts
+* POS 3 auto-sync runs
+* sync logs are written
+* manager can reset staff PIN
+* admin cannot reset founder credentials
+* guest journey still works
+* founder-only protections still hold

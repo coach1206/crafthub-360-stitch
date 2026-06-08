@@ -76,6 +76,51 @@ export async function createAdminUser(data, actorId) {
   return record
 }
 
+/**
+ * Resets a user's PIN with full role-permission enforcement.
+ *
+ * Permission matrix:
+ *   manager     → may reset staff only
+ *   admin       → may reset staff + manager
+ *   founder_level_0 → may reset staff + manager + admin
+ *   No one resets founder_level_0 credentials via this method.
+ *
+ * Returns { success, message }. Never returns PIN hash.
+ */
+export async function resetUserPinWithPermissionCheck(actorRole, targetUserId, newPin) {
+  const { resetUserPin } = await import('./authService.js')
+
+  const target = await getUserById(targetUserId)
+  if (!target) return { success: false, message: 'User not found.' }
+
+  const targetRole = target.role
+
+  // Founder credentials can never be reset via this API
+  if (targetRole === 'founder_level_0') {
+    return { success: false, message: 'Founder Level 0 credentials cannot be reset via this endpoint.' }
+  }
+
+  // Enforce who can reset whom
+  const RESET_PERMISSION = {
+    manager:         ['staff'],
+    admin:           ['staff', 'manager'],
+    founder_level_0: ['staff', 'manager', 'admin'],
+  }
+
+  const allowed = RESET_PERMISSION[actorRole] || []
+  if (!allowed.includes(targetRole)) {
+    return {
+      success: false,
+      message: `Your role (${actorRole}) cannot reset credentials for role: ${targetRole}.`,
+    }
+  }
+
+  const ok = await resetUserPin(targetUserId, newPin)
+  if (!ok) return { success: false, message: 'PIN reset failed — database error.' }
+
+  return { success: true, message: 'PIN reset successfully.' }
+}
+
 export async function updateAdminUser(userId, updates, actorId, actorRole) {
   const existing = await getUserById(userId)
   if (!existing) return null

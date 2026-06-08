@@ -15,6 +15,11 @@ import {
 } from '../services/pos3RecommendationService.js'
 import { syncPOS3ToEAT }            from '../services/eatPos3BridgeService.js'
 import { query, isDbAvailable }      from '../db/connection.js'
+import {
+  getPOS3SyncStatus,
+  runPOS3SyncNow,
+  getPOS3SyncHistory,
+} from '../services/pos3AutoSyncService.js'
 
 // ── GET /api/pos3/providers ───────────────────────────────────
 export async function getProviders(req, res) {
@@ -185,6 +190,29 @@ export async function receiveWebhook(req, res) {
     }
 
     return ok(res, { received: true, provider: providerKey, result: normalized })
+  } catch (err) {
+    return serverError(res, err)
+  }
+}
+
+// ── GET /api/pos3/sync/status ─────────────────────────────────
+export async function getSyncStatus(req, res) {
+  try {
+    const status  = getPOS3SyncStatus()
+    const history = await getPOS3SyncHistory(10)
+    return ok(res, { ...status, history })
+  } catch (err) {
+    return serverError(res, err)
+  }
+}
+
+// ── POST /api/pos3/sync/run ───────────────────────────────────
+export async function runSyncNow(req, res) {
+  try {
+    const providerKey = req.body?.providerKey || 'prototype'
+    if (!isKnownProvider(providerKey)) return fail(res, `Unknown provider: ${providerKey}`, 404)
+    const result = await runPOS3SyncNow(providerKey, 'manual')
+    return ok(res, result)
   } catch (err) {
     return serverError(res, err)
   }

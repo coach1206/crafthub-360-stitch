@@ -1,13 +1,14 @@
 /**
  * Admin — NOVEE OS Administration Screen
- * Accessible to admin and founder_level_0 only.
- * Shows current identity, permissions, system users, and security events.
+ * Phase 9.5: Staff PIN reset + POS 3 sync status panels added.
+ * Accessible to admin and founder_level_0 only (manager can use PIN reset via /api route).
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useSecurity } from '../context/SecurityContext.jsx'
 import RoleGate from '../components/security/RoleGate.jsx'
 import PermissionGate from '../components/security/PermissionGate.jsx'
+import PinResetModal from '../components/admin/PinResetModal.jsx'
 import * as adminApi from '../services/adminApiService.js'
 
 // ── Design tokens ─────────────────────────────────────────────
@@ -16,6 +17,7 @@ const DARK    = '#0a0603'
 const CARD    = 'rgba(18,12,5,0.97)'
 const BORDER  = 'rgba(201,168,76,0.18)'
 const DIM     = 'rgba(201,168,76,0.45)'
+const ERR     = '#E05A5A'
 
 const ROLE_BADGE = {
   guest:           { bg: 'rgba(100,100,100,0.15)', color: '#888',    label: 'Guest' },
@@ -23,6 +25,13 @@ const ROLE_BADGE = {
   manager:         { bg: 'rgba(69,183,209,0.12)',  color: '#45B7D1', label: 'Manager' },
   admin:           { bg: 'rgba(150,206,180,0.12)', color: '#96CEB4', label: 'Admin' },
   founder_level_0: { bg: 'rgba(201,168,76,0.15)',  color: GOLD,      label: 'Founder Level 0' },
+}
+
+// Which roles each actor can reset PINs for
+const RESET_SCOPE = {
+  manager:         ['staff'],
+  admin:           ['staff', 'manager'],
+  founder_level_0: ['staff', 'manager', 'admin'],
 }
 
 function SectionTitle({ icon, label }) {
@@ -83,6 +92,23 @@ function PermBadge({ permission }) {
   )
 }
 
+function SyncStatusDot({ status }) {
+  const colors = { success: '#4CAF50', failed: ERR, partial: '#D4AF37', started: '#45B7D1' }
+  return (
+    <span style={{
+      display:       'inline-flex',
+      alignItems:    'center',
+      gap:           '5px',
+      fontSize:      '11px',
+      color:         colors[status] || '#666',
+      letterSpacing: '0.06em',
+    }}>
+      <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: colors[status] || '#555' }} />
+      {status || 'unknown'}
+    </span>
+  )
+}
+
 export default function Admin() {
   const { user, role, roleLabel, permissions, isFounder } = useSecurity()
   const badge = ROLE_BADGE[role] || ROLE_BADGE.guest
@@ -92,7 +118,21 @@ export default function Admin() {
   const [loadingUsers,  setLoadingUsers]  = useState(false)
   const [loadingEvents, setLoadingEvents] = useState(false)
 
-  useEffect(() => {
+  // ── Sync state ────────────────────────────────────────────
+  const [syncStatus,   setSyncStatus]   = useState(null)
+  const [syncLoading,  setSyncLoading]  = useState(false)
+  const [syncRunning,  setSyncRunning]  = useState(false)
+  const [syncMsg,      setSyncMsg]      = useState('')
+  const canViewSync = ['manager','admin','founder_level_0'].includes(role)
+  const canRunSync  = ['admin','founder_level_0'].includes(role)
+
+  // ── PIN Reset state ───────────────────────────────────────
+  const [resetTarget, setResetTarget] = useState(null)
+  const [resetSuccess, setResetSuccess] = useState('')
+  const canResetPin = ['manager','admin','founder_level_0'].includes(role)
+  const resetScope  = RESET_SCOPE[role] || []
+
+  const loadData = useCallback(() => {
     setLoadingUsers(true)
     adminApi.getAdminUsers()
       .then(r => { if (r?.data) setUsers(r.data) })
@@ -102,7 +142,17 @@ export default function Admin() {
     adminApi.getSecurityEvents({ limit: 20 })
       .then(r => { if (r?.data) setEvents(r.data) })
       .finally(() => setLoadingEvents(false))
-  }, [])
+
+    if (canViewSync) {
+      setSyncLoading(true)
+      adminApi.getPOS3SyncStatus()
+        .then(r => { if (r?.success) setSyncStatus(r.data) })
+        .catch(() => setSyncStatus(null))
+        .finally(() => setSyncLoading(false))
+    }
+  }, [canViewSync])
+
+  useEffect(() => { loadData() }, [loadData])
 
   function formatTime(ts) {
     if (!ts) return '—'
@@ -110,19 +160,46 @@ export default function Admin() {
     catch { return ts }
   }
 
+  function formatDuration(ms) {
+    if (!ms) return '—'
+    return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`
+  }
+
   const EVENT_COLORS = {
-    'access.denied':     '#e05',
-    'access.granted':    '#4CAF50',
-    'role.changed':      '#45B7D1',
-    'founder.':          GOLD,
-    'emergency.lock':    '#ff4444',
-    'admin.':            '#96CEB4',
+    'access.denied':   ERR,
+    'access.granted':  '#4CAF50',
+    'role.changed':    '#45B7D1',
+    'founder.':        GOLD,
+    'emergency.lock':  '#ff4444',
+    'admin.pin-reset': '#D4AF37',
+    'admin.':          '#96CEB4',
   }
   function eventColor(type = '') {
     for (const [prefix, color] of Object.entries(EVENT_COLORS)) {
       if (type.startsWith(prefix)) return color
     }
     return '#666'
+  }
+
+  async function handleRunSync() {
+    if (syncRunning) return
+    setSyncRunning(true)
+    setSyncMsg('')
+    try {
+      const r = await adminApi.runPOS3SyncNow('prototype')
+      if (r?.success) {
+        setSyncMsg(`Sync complete — ${r.data?.status || 'ok'} in ${formatDuration(r.data?.durationMs)}`)
+        // Refresh sync status
+        const s = await adminApi.getPOS3SyncStatus()
+        if (s?.success) setSyncStatus(s.data)
+      } else {
+        setSyncMsg(r?.message || 'Sync failed.')
+      }
+    } catch {
+      setSyncMsg('Network error running sync.')
+    } finally {
+      setSyncRunning(false)
+    }
   }
 
   return (
@@ -132,9 +209,9 @@ export default function Admin() {
       padding:     'clamp(1.5rem, 4vw, 2.5rem)',
       fontFamily:  'Georgia, serif',
     }}>
-      {/* ── Header ─────────────────────────────────────────── */}
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
+        {/* ── Header ─────────────────────────────────────────── */}
         <div style={{ marginBottom: '2.5rem' }}>
           <div style={{ color: DIM, fontSize: '10px', letterSpacing: '0.25em', marginBottom: '0.5rem' }}>
             NOVEE OS
@@ -150,7 +227,7 @@ export default function Admin() {
             Admin Control
           </h1>
           <div style={{ color: '#444', fontSize: '12px', letterSpacing: '0.08em' }}>
-            System management — Phase 8 Security Layer
+            System management — Phase 9.5
           </div>
         </div>
 
@@ -230,6 +307,182 @@ export default function Admin() {
             <NavTile icon="shield_lock" label="Founder Controls" href="/founder" color={GOLD} highlight />
           </RoleGate>
         </div>
+
+        {/* ── POS 3 Sync Status (manager+) ─────────────────── */}
+        {canViewSync && (
+          <Card style={{ marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
+              <SectionTitle icon="sync" label="POS 3 Auto-Sync Status" />
+              {canRunSync && (
+                <button
+                  onClick={handleRunSync}
+                  disabled={syncRunning}
+                  style={{
+                    background:    syncRunning ? 'rgba(201,168,76,0.05)' : 'rgba(201,168,76,0.10)',
+                    border:        `1px solid ${GOLD}44`,
+                    borderRadius:  '6px',
+                    color:         syncRunning ? '#555' : GOLD,
+                    padding:       '6px 14px',
+                    cursor:        syncRunning ? 'not-allowed' : 'pointer',
+                    fontSize:      '11px',
+                    letterSpacing: '0.1em',
+                    display:       'flex',
+                    alignItems:    'center',
+                    gap:           '6px',
+                  }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>
+                    {syncRunning ? 'hourglass_empty' : 'play_arrow'}
+                  </span>
+                  {syncRunning ? 'Running…' : 'Run Sync Now'}
+                </button>
+              )}
+            </div>
+
+            {syncMsg && (
+              <div style={{ color: syncMsg.includes('fail') || syncMsg.includes('error') ? ERR : '#4CAF50', fontSize: '11px', marginBottom: '0.75rem', letterSpacing: '0.04em' }}>
+                {syncMsg}
+              </div>
+            )}
+
+            {syncLoading ? (
+              <div style={{ color: '#444', fontSize: '12px' }}>Loading sync status…</div>
+            ) : !syncStatus ? (
+              <div style={{ color: '#333', fontSize: '12px' }}>Sync status unavailable. Backend may still be initializing.</div>
+            ) : (
+              <>
+                <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                  <div>
+                    <div style={{ color: '#444', fontSize: '9px', letterSpacing: '0.15em', marginBottom: '3px' }}>AUTO-SYNC</div>
+                    <StatusDot active={syncStatus.autoSyncActive} label={syncStatus.autoSyncActive ? 'Active' : 'Inactive'} />
+                  </div>
+                  <div>
+                    <div style={{ color: '#444', fontSize: '9px', letterSpacing: '0.15em', marginBottom: '3px' }}>INTERVAL</div>
+                    <span style={{ color: DIM, fontSize: '12px' }}>{Math.round((syncStatus.intervalMs || 300000) / 60000)} min</span>
+                  </div>
+                  <div>
+                    <div style={{ color: '#444', fontSize: '9px', letterSpacing: '0.15em', marginBottom: '3px' }}>LAST STATUS</div>
+                    <SyncStatusDot status={syncStatus.lastResult?.status} />
+                  </div>
+                  {syncStatus.lastResult && (
+                    <div>
+                      <div style={{ color: '#444', fontSize: '9px', letterSpacing: '0.15em', marginBottom: '3px' }}>LAST RUN</div>
+                      <span style={{ color: '#555', fontSize: '11px' }}>
+                        {formatTime(syncStatus.lastResult.timestamp)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Sync history */}
+                {syncStatus.history?.length > 0 && (
+                  <div style={{ maxHeight: '180px', overflowY: 'auto' }}>
+                    <div style={{ color: '#333', fontSize: '9px', letterSpacing: '0.15em', marginBottom: '6px' }}>RECENT RUNS</div>
+                    {syncStatus.history.map((run, i) => (
+                      <div key={run.id || i} style={{
+                        display:      'flex',
+                        gap:          '12px',
+                        padding:      '6px 0',
+                        borderBottom: `1px solid ${BORDER}`,
+                        fontSize:     '11px',
+                        flexWrap:     'wrap',
+                      }}>
+                        <SyncStatusDot status={run.status} />
+                        <span style={{ color: '#444', fontFamily: 'monospace' }}>{run.provider_key}</span>
+                        <span style={{ color: '#333' }}>{run.sync_type}</span>
+                        <span style={{ color: '#444' }}>
+                          {run.orders_count ?? '—'}↑ orders ·
+                          {run.inventory_count ?? '—'} inv ·
+                          {run.tables_count ?? '—'} tables
+                        </span>
+                        <span style={{ color: '#333', marginLeft: 'auto' }}>
+                          {formatDuration(run.duration_ms)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </Card>
+        )}
+
+        {/* ── Staff PIN Reset (manager+) ────────────────────── */}
+        {canResetPin && (
+          <Card style={{ marginBottom: '1.5rem' }}>
+            <SectionTitle icon="lock_reset" label="Staff PIN Reset" />
+
+            {resetSuccess && (
+              <div style={{ color: '#4CAF50', fontSize: '11px', marginBottom: '0.75rem', letterSpacing: '0.04em' }}>
+                ✓ {resetSuccess}
+              </div>
+            )}
+
+            <div style={{ color: '#444', fontSize: '11px', marginBottom: '1rem', letterSpacing: '0.04em' }}>
+              Your role ({ROLE_BADGE[role]?.label}) can reset PINs for:{' '}
+              {resetScope.map(r => (
+                <span key={r} style={{ color: ROLE_BADGE[r]?.color || DIM, marginRight: '6px' }}>
+                  {ROLE_BADGE[r]?.label}
+                </span>
+              ))}
+            </div>
+
+            {loadingUsers ? (
+              <div style={{ color: '#444', fontSize: '12px' }}>Loading users…</div>
+            ) : users.filter(u => resetScope.includes(u.role)).length === 0 ? (
+              <div style={{ color: '#333', fontSize: '12px' }}>No users in your reset scope yet.</div>
+            ) : (
+              <div style={{
+                display:             'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                gap:                 '0.75rem',
+              }}>
+                {users
+                  .filter(u => resetScope.includes(u.role))
+                  .map((u, i) => {
+                    const rb = ROLE_BADGE[u.role] || ROLE_BADGE.guest
+                    return (
+                      <div key={u.user_id || i} style={{
+                        background:   'rgba(255,255,255,0.02)',
+                        border:       `1px solid ${BORDER}`,
+                        borderRadius: '6px',
+                        padding:      '12px',
+                        display:      'flex',
+                        alignItems:   'center',
+                        justifyContent: 'space-between',
+                        gap:          '0.75rem',
+                      }}>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ color: DIM, fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {u.display_name || u.email || u.user_id}
+                          </div>
+                          <div style={{ color: rb.color, fontSize: '10px', letterSpacing: '0.1em', marginTop: '2px', textTransform: 'uppercase' }}>
+                            {rb.label}
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => { setResetTarget(u); setResetSuccess('') }}
+                          style={{
+                            background:    'rgba(201,168,76,0.08)',
+                            border:        `1px solid ${GOLD}33`,
+                            borderRadius:  '5px',
+                            color:         GOLD,
+                            padding:       '6px 12px',
+                            cursor:        'pointer',
+                            fontSize:      '10px',
+                            letterSpacing: '0.1em',
+                            flexShrink:    0,
+                          }}
+                        >
+                          Reset PIN
+                        </button>
+                      </div>
+                    )
+                  })}
+              </div>
+            )}
+          </Card>
+        )}
 
         {/* ── Users + Events (side by side on wide screens) ─ */}
         <div style={{
@@ -345,11 +598,23 @@ export default function Admin() {
           fontSize:   '11px',
           letterSpacing: '0.08em',
         }}>
-          <span>NOVEE OS · Phase 8</span>
+          <span>NOVEE OS · Phase 9.5</span>
           <span>Admin Role: {roleLabel}</span>
           <span>Permissions: {permissions.length}</span>
         </div>
       </div>
+
+      {/* ── PIN Reset Modal ───────────────────────────────── */}
+      {resetTarget && (
+        <PinResetModal
+          user={resetTarget}
+          onClose={() => setResetTarget(null)}
+          onSuccess={(u) => {
+            setResetTarget(null)
+            setResetSuccess(`PIN reset for ${u.display_name || u.user_id}.`)
+          }}
+        />
+      )}
     </div>
   )
 }

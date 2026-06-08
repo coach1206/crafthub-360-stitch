@@ -286,6 +286,31 @@ export function clearAuthCookie(res) {
   res.clearCookie(authConfig.AUTH_COOKIE_NAME, { path: authConfig.AUTH_COOKIE_PATH })
 }
 
+// ── PIN Reset ─────────────────────────────────────────────────
+
+/**
+ * Resets a user's PIN hash. Never logs or returns the raw PIN.
+ * @param {string} userId
+ * @param {string} newPin — raw PIN (4–8 digits). Hashed here; never stored raw.
+ * @returns {boolean} success
+ */
+export async function resetUserPin(userId, newPin) {
+  if (!isDbAvailable()) return false
+  const hashed = await hashPin(newPin)
+  try {
+    await query(
+      `UPDATE auth_credentials
+       SET pin_hash = $1, failed_attempts = 0, locked_until = NULL, updated_at = NOW()
+       WHERE user_id = $2`,
+      [hashed, userId]
+    )
+    return true
+  } catch (err) {
+    console.error('[authService] resetUserPin failed:', err.message)
+    return false
+  }
+}
+
 // ── Private ───────────────────────────────────────────────────
 
 function getExpiresIn(role) {

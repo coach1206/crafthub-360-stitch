@@ -8,6 +8,8 @@ import { buildPermissionMatrix, getEffectivePermissions, ROLE_LEVELS } from '../
 import { PERMISSION_GROUPS, PERMISSION_DESCRIPTIONS } from '../config/permissions.js'
 import { ok, created, fail, notFound, serverError } from '../utils/response.js'
 
+const ROLE_LEVELS_MAP = { guest: 0, staff: 1, manager: 2, admin: 3, founder_level_0: 4 }
+
 /** GET /api/admin/me — current user identity + permissions. */
 export function getMe(req, res) {
   try {
@@ -130,6 +132,43 @@ export async function getSecurityEvents(req, res) {
     ok(res, events)
   } catch (err) {
     serverError(res, err, 'getSecurityEvents')
+  }
+}
+
+/**
+ * POST /api/admin/users/:userId/reset-pin
+ * Manager+ resets a lower-role user's PIN.
+ * Permission matrix enforced in adminService.resetUserPinWithPermissionCheck.
+ */
+export async function resetUserPin(req, res) {
+  try {
+    const { userId }              = req.params
+    const { newPin, confirmPin }  = req.body || {}
+    const actorRole               = req.user?.role
+
+    if (!userId) return fail(res, 'userId is required')
+    if (!newPin || !confirmPin) return fail(res, 'newPin and confirmPin are required')
+    if (newPin !== confirmPin)  return fail(res, 'newPin and confirmPin do not match')
+
+    const raw = String(newPin).trim()
+    if (!/^\d{4,8}$/.test(raw)) return fail(res, 'PIN must be 4–8 digits (numbers only)')
+
+    const result = await adminService.resetUserPinWithPermissionCheck(actorRole, userId, raw)
+
+    if (!result.success) {
+      return res.status(403).json({ success: false, message: result.message })
+    }
+
+    // Security event: PIN reset
+    await securityEventService.recordSecurityEvent(
+      req.user?.id, actorRole,
+      'admin.pin-reset',
+      `user:${userId} role:${(await adminService.getUserById(userId))?.role || 'unknown'}`
+    ).catch(() => {})
+
+    return ok(res, { message: result.message })
+  } catch (err) {
+    serverError(res, err, 'resetUserPin')
   }
 }
 

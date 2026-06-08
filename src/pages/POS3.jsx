@@ -276,6 +276,13 @@ export default function POS3() {
                 <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 18 }}>table_restaurant</span>
                 <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Table Status</span>
               </div>
+              {loadingMgmt && <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A' }}>Loading tables…</div>}
+              {!loadingMgmt && tables.length === 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 0' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#5A5A5A' }}>table_restaurant</span>
+                  <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#5A5A5A' }}>Table data temporarily unavailable</span>
+                </div>
+              )}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {tables.map(t => (
                   <div key={t.tableId} style={{
@@ -359,13 +366,20 @@ export default function POS3() {
       )}
 
       {/* ── Staff Activity Feed (Manager+) ───────────────────────────── */}
-      {isManager && staffList.length > 0 && (
+      {isManager && (
         <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
           <div className="glass-card" style={{ padding: '20px 24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
               <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 18 }}>badge</span>
               <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Staff on Floor</span>
             </div>
+            {loadingMgmt && <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A' }}>Loading staff…</div>}
+            {!loadingMgmt && staffList.length === 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#5A5A5A' }}>person_off</span>
+                <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#5A5A5A' }}>Staff data temporarily unavailable</span>
+              </div>
+            )}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {staffList.map(s => (
                 <div key={s.staffId} style={{
@@ -389,13 +403,20 @@ export default function POS3() {
       )}
 
       {/* ── Provider Config Placeholders (Admin+) ────────────────────── */}
-      {isAdmin && providers.length > 0 && (
+      {isAdmin && (
         <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
           <div className="glass-card" style={{ padding: '20px 24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
               <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 18 }}>settings_ethernet</span>
               <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Provider Configuration</span>
             </div>
+            {loadingMgmt && <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A' }}>Loading providers…</div>}
+            {!loadingMgmt && providers.length === 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#5A5A5A' }}>hub</span>
+                <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#5A5A5A' }}>Provider data temporarily unavailable</span>
+              </div>
+            )}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {providers.map(p => (
                 <div key={p.key} style={{

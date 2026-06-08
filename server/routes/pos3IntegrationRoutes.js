@@ -25,6 +25,8 @@ import {
   receiveWebhook,
   getEATFeed,
   getFounderLicensePanel,
+  getSyncStatus,
+  runSyncNow,
 } from '../controllers/pos3IntegrationController.js'
 import { requireAuth }                 from '../middleware/authMiddleware.js'
 import {
@@ -101,6 +103,9 @@ router.post('/:providerKey/webhook',
   receiveWebhook
 )
 
+export { router as pos3SyncRouter }
+// handled via syncRouter exported below (mounted at /api/pos3/sync)
+
 export default router
 
 // ── E.A.T. and Founder routes are mounted separately from server/index.js ──
@@ -111,6 +116,13 @@ import { Router as ExpressRouter } from 'express'
 export const eatFeedRouter = (() => {
   const r = ExpressRouter()
   r.get('/', requireAuth, requireManager, getEATFeed)
+  return r
+})()
+
+export const syncRouter = (() => {
+  const r = ExpressRouter()
+  r.get('/status', requireAuth, requireManager, getSyncStatus)
+  r.post('/run',   requireAuth, requireAdmin,   runSyncNow)
   return r
 })()
 
