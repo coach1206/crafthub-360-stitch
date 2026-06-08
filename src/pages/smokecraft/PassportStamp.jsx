@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
+import { STAMP_CATALOG } from '../../data/passportCatalog.js'
 
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
@@ -136,6 +137,7 @@ export default function PassportStamp() {
         <div className="flex items-center gap-4">
           <button
             className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-primary/10 transition-colors duration-300"
+            style={{ minWidth: 48, minHeight: 48 }}
             onClick={() => navigate('/smokecraft/session-complete')}
           >arrow_back</button>
           <h1 className="font-display-lg text-primary uppercase tracking-widest" style={{ fontSize: 20 }}>The 360 Passport</h1>
@@ -170,6 +172,17 @@ export default function PassportStamp() {
             <span className="material-symbols-outlined text-primary" style={{ ...FILL1, fontSize: 20 }}>stars</span>
             <span className="font-label-lg text-label-lg text-primary">+{XP_AWARDS.PASSPORT_STAMP} XP &mdash; PASSPORT CERTIFIED</span>
           </div>
+          {(() => {
+            const latestEntry = STAMP_CATALOG.find(c => c.id === session.latestStampId)
+            if (!latestEntry) return null
+            return (
+              <div className="mt-5 inline-flex items-center gap-3 px-5 py-2.5 rounded-full" style={{ background: 'rgba(233,193,118,0.08)', border: '1px solid rgba(233,193,118,0.22)' }}>
+                <span className="material-symbols-outlined text-primary" style={{ ...FILL1, fontSize: 18 }}>{latestEntry.icon}</span>
+                <span className="font-label-lg text-label-lg text-primary">{latestEntry.name}</span>
+                <span className="font-label-sm text-label-sm text-on-surface-variant/60 uppercase tracking-widest">Latest Seal</span>
+              </div>
+            )
+          })()}
         </section>
 
         {/* Passport Booklet */}

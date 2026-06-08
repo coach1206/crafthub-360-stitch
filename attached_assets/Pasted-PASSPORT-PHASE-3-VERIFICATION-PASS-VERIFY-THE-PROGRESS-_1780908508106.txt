@@ -1,0 +1,319 @@
+PASSPORT PHASE 3 VERIFICATION PASS
+VERIFY THE PROGRESS ENGINE BEFORE MOVING TO PHASE 4.
+DO NOT ADD NEW FEATURES. DO NOT REDESIGN. DO NOT CREATE NEW SCREENS.
+
+Phase 3 is complete and build passes:
+
+* `src/utils/passportProgress.js` created
+* `GuestSessionContext.jsx` now exposes `awardStamp`, `unlockCeremony`, `updateGoldenBoxProgress`, and `resetGuestSession`
+* SmokeCraft award points now use `awardStamp(stampId, source)`
+* `latestStampId` added
+* `goldenBoxProgress` added
+* duplicate guard added
+* unknown stamp ID protection added
+* build passes with 1517 modules transformed and 0 errors
+
+Now perform a full functional verification pass.
+
+==================================================
+PRIMARY OBJECTIVE
+=================
+
+Verify the Passport Progress Engine works across the actual user experience.
+
+Do not create new features.
+Do not redesign.
+Do not add backend.
+Do not change visual styling unless a verified bug requires it.
+Do not mark complete unless the full flow works.
+
+==================================================
+
+1. TEST FRESH SESSION FLOW
+   ==================================================
+
+Clear the local app session or use the existing reset guest/session flow.
+
+Then verify:
+
+1. App boots cleanly.
+2. Guest can enter SmokeCraft.
+3. Guest can complete a SmokeCraft action.
+4. Correct Passport stamp is awarded.
+5. No crash.
+6. No blank screen.
+7. No undefined stamp title.
+8. No console error.
+
+==================================================
+2. VERIFY EVERY STAMP AWARD POINT
+=================================
+
+Test each wired SmokeCraft award point:
+
+* Blend → `master-blend`
+* Origins → `seed-soil`
+* LeafChallenge → `leaf-recognition`
+* FlavorDNA → `taste-profile`
+* Pairing → `pairing-specialist`
+* GoldenBoxStatus → `golden-box`
+* SessionComplete → `journey-complete`
+* PassportStamp ceremony → `passport-stamp`
+
+For each one verify:
+
+* award fires once
+* stamp ID exists in `src/data/passportCatalog.js`
+* duplicate award is blocked
+* `latestStampId` updates correctly
+* PassportStamps reflects the earned stamp
+* PassportProfile reflects the earned seal
+* PassportCeremony can display the latest stamp
+* app survives refresh
+
+==================================================
+3. VERIFY DUPLICATE PROTECTION
+==============================
+
+Run the same award action twice.
+
+Expected result:
+
+* stamp should not duplicate
+* earned count should not increase twice
+* profile count should remain correct
+* ceremony should not break
+* no duplicate visual stamp cards
+
+==================================================
+4. VERIFY UNKNOWN STAMP PROTECTION
+==================================
+
+Inspect the code and confirm unknown stamp IDs are ignored safely.
+
+If practical, test or temporarily simulate an unknown stamp ID in development only.
+
+Expected result:
+
+* app does not crash
+* bad ID does not enter earned stamps
+* catalog-backed list remains clean
+* no orphaned seal appears
+
+Do not leave test code in the app.
+
+==================================================
+5. VERIFY PASSPORTSTAMPS
+========================
+
+Open PassportStamps after earning stamps.
+
+Confirm:
+
+* earned stamps show
+* locked stamps remain visible but inactive
+* stamp reveal looks correct
+* no stamp jumps or rotates incorrectly
+* no overlap
+* mobile layout stacks properly
+* kiosk landscape stays premium
+* booklet count matches actual earned stamps
+
+==================================================
+6. VERIFY PASSPORTPROFILE
+=========================
+
+Open PassportProfile after earning stamps.
+
+Confirm:
+
+* all earned seals show
+* no 3-seal cap returned
+* empty locked slots show correctly
+* profile progress matches PassportStamps
+* XP/rank display does not show fake or mismatched data
+* no undefined values
+* no visual crowding
+
+==================================================
+7. VERIFY PASSPORTCEREMONY
+==========================
+
+Open PassportCeremony after earning a stamp.
+
+Confirm:
+
+* latest earned stamp displays
+* correct stamp title appears
+* correct stamp description appears
+* no blank ceremony state
+* no undefined title
+* no missing image/icon crash
+* share button still looks gold/readable
+* back/home buttons work
+* continue button works
+
+If no latest stamp exists, ceremony should safely show overall progress or a clean fallback.
+
+==================================================
+8. VERIFY GOLDEN BOX
+====================
+
+Test Golden Box status if available.
+
+Confirm:
+
+* Golden Box progress writes into session state
+* Golden Box completion awards `golden-box`
+* duplicate award does not happen
+* progress survives refresh
+* PassportStamps shows it
+* PassportProfile shows it
+* ceremony can display it
+
+If Golden Box is only partially present, do not build a new screen. Only report what is present and what is not.
+
+==================================================
+9. VERIFY LOCALSTORAGE PERSISTENCE
+==================================
+
+After earning at least two stamps:
+
+1. Refresh browser.
+2. Confirm earned stamps remain.
+3. Confirm profile seals remain.
+4. Confirm completedSteps remain.
+5. Confirm latestStampId remains or safely falls back.
+6. Confirm goldenBoxProgress remains if tested.
+7. Confirm schema guard does not create a boot loop.
+
+==================================================
+10. VERIFY LOCKED NAV
+=====================
+
+Click locked Passport nav items:
+
+* Artisans
+* Inventory
+* Assistant
+* any other locked tabs
+
+Expected:
+
+* no navigation to `/`
+* no blank page
+* lock state remains visible
+* click is blocked
+* user stays on current screen
+
+==================================================
+11. TOUCHSCREEN QA
+==================
+
+Confirm nothing regressed:
+
+* main CTAs are still at least 72px tall
+* nav/back buttons are at least 48px
+* no tiny tap targets
+* no hover-only actions
+* no cramped mobile layout
+* no clipped tablet portrait layout
+
+==================================================
+12. BUILD + CONSOLE
+===================
+
+Run:
+
+`npm run build`
+
+Then check the browser console.
+
+Fix:
+
+* React errors
+* import errors
+* undefined property errors
+* invalid route behavior
+* key warnings if present
+* unused imports
+* dead variables
+
+==================================================
+REQUIRED FINAL REPORT
+=====================
+
+Return this exact report:
+
+PASSPORT PHASE 3 VERIFICATION REPORT
+
+1. Build status:
+
+* `npm run build`:
+* modules transformed:
+* errors:
+* warnings:
+
+2. Fresh session test:
+   Pass/Fail
+   Notes:
+
+3. Stamp award tests:
+
+* `master-blend`:
+* `seed-soil`:
+* `leaf-recognition`:
+* `taste-profile`:
+* `pairing-specialist`:
+* `golden-box`:
+* `journey-complete`:
+* `passport-stamp`:
+
+4. Duplicate protection:
+   Pass/Fail
+   Notes:
+
+5. Unknown stamp protection:
+   Pass/Fail
+   Notes:
+
+6. PassportStamps:
+   Pass/Fail
+   Notes:
+
+7. PassportProfile:
+   Pass/Fail
+   Notes:
+
+8. PassportCeremony:
+   Pass/Fail
+   Notes:
+
+9. Golden Box:
+   Pass/Fail/Partial
+   Notes:
+
+10. localStorage persistence:
+    Pass/Fail
+    Refresh test:
+    Schema guard:
+    latestStampId:
+    completedSteps:
+    goldenBoxProgress:
+
+11. Locked nav:
+    Pass/Fail
+    Artisans:
+    Inventory:
+    Assistant:
+
+12. Touchscreen readiness:
+    Pass/Fail
+    Main CTAs 72px:
+    Nav/back buttons 48px:
+    Mobile/tablet layout:
+
+13. Remaining real issues:
+    Only list real issues found during verification.
+    Do not invent future work.
+    Do not add new features.
