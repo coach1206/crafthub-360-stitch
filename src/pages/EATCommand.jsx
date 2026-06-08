@@ -63,7 +63,7 @@ export default function EATCommand() {
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <motion.div variants={FADE} style={{ position: 'relative', height: 260, background: '#050302', overflow: 'hidden' }}>
         <img src="/eat-logo-nobg.png" alt=""
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', opacity: 0.28 }}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', opacity: 0.50 }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 40%, rgba(212,175,55,0.08) 0%, transparent 65%)' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.0) 30%, rgba(1,1,1,0.95) 100%)' }} />

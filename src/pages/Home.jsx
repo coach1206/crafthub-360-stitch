@@ -151,12 +151,16 @@ export default function Home() {
             </div>
           </button>
 
-          {/* ③ OPEN CRAFTHUB — glassmorphism */}
+          {/* ③ OPEN CRAFTHUB — glassmorphism + CH logo */}
           <button
             onClick={() => navigate('/crafthub')}
             className="group haptic-pulse relative overflow-hidden flex items-center justify-center rounded-xl glass-morphism h-24 md:h-[140px] px-12 transition-all duration-500 hover:border-primary/60 active:translate-y-1"
           >
             <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+            <img src="/ch-logo.jpeg" alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" style={{ opacity: 0.09 }} />
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none" style={{ opacity: 0.55 }}>
+              <img src="/ch-logo.jpeg" alt="" style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 8 }} />
+            </div>
             <div className="flex flex-col items-center gap-1 text-primary">
               <span className="font-headline-md text-headline-md font-medium tracking-widest">
                 OPEN CRAFTHUB
@@ -170,7 +174,7 @@ export default function Home() {
             </div>
           </button>
 
-          {/* ④ E.A.T. COMMAND — industrial steel / copper */}
+          {/* ④ E.A.T. COMMAND — industrial steel / copper + EAT logo */}
           <button
             onClick={() => navigate('/eat')}
             className="group haptic-pulse relative overflow-hidden flex items-center justify-center rounded-xl industrial-steel h-24 md:h-[140px] px-12 transition-all duration-300 hover:brightness-110 active:translate-y-1"
@@ -179,6 +183,10 @@ export default function Home() {
               className="absolute inset-0 opacity-10 pointer-events-none"
               style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/brushed-alum.png')" }}
             />
+            <img src="/eat-logo-nobg.png" alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" style={{ opacity: 0.10, objectFit: 'contain' }} />
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none" style={{ opacity: 0.65 }}>
+              <img src="/eat-logo-nobg.png" alt="" style={{ width: 52, height: 52, objectFit: 'contain' }} />
+            </div>
             <div className="flex flex-col items-center gap-1">
               <span className="font-headline-md text-headline-md font-bold tracking-widest text-secondary">
                 E.A.T. COMMAND
