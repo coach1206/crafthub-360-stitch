@@ -15,12 +15,16 @@ import healthRoutes      from './routes/healthRoutes.js'
 import sessionRoutes     from './routes/sessionRoutes.js'
 import passportRoutes    from './routes/passportRoutes.js'
 import leaderboardRoutes from './routes/leaderboardRoutes.js'
-import pos3Routes        from './routes/pos3Routes.js'
-import eatRoutes         from './routes/eatRoutes.js'
-import auditRoutes       from './routes/auditRoutes.js'
-import adminRoutes       from './routes/adminRoutes.js'
-import founderRoutes     from './routes/founderRoutes.js'
-import authRoutes        from './routes/authRoutes.js'
+import pos3Routes            from './routes/pos3Routes.js'
+import eatRoutes             from './routes/eatRoutes.js'
+import auditRoutes           from './routes/auditRoutes.js'
+import adminRoutes           from './routes/adminRoutes.js'
+import founderRoutes         from './routes/founderRoutes.js'
+import authRoutes            from './routes/authRoutes.js'
+import pos3IntegrationRoutes, {
+  eatFeedRouter   as pos3EatFeedRouter,
+  founderPosRouter as pos3FounderRouter,
+}                            from './routes/pos3IntegrationRoutes.js'
 import { errorHandler }  from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 
@@ -43,8 +47,11 @@ app.use('/api/auth',        authRoutes)
 app.use('/api/sessions',    sessionRoutes)
 app.use('/api/passport',    passportRoutes)
 app.use('/api/leaderboard', leaderboardRoutes)
-app.use('/api/pos3',        pos3Routes)
-app.use('/api/eat',         eatRoutes)
+app.use('/api/pos3',              pos3Routes)
+app.use('/api/pos3/providers',    pos3IntegrationRoutes)
+app.use('/api/pos3/eat-feed',     pos3EatFeedRouter)
+app.use('/api/pos3/founder',      pos3FounderRouter)
+app.use('/api/eat',               eatRoutes)
 app.use('/api/audit',       auditRoutes)
 app.use('/api/admin',       adminRoutes)
 app.use('/api/founder',     founderRoutes)

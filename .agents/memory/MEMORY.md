@@ -2,4 +2,5 @@
 - [PostCSS CJS vs ESM](postcss-cjs-esm.md) — when package.json has "type":"module", use postcss.config.cjs (not .js) to avoid "Cannot find module" PostCSS plugin errors.
 - [Vite dep cache dual-React](vite-dep-cache.md) — mid-session dep optimization creates mismatched React version hashes; fix: clear node_modules/.vite, add optimizeDeps.include for all key deps, restart.
 - [ESM dotenv hoisting](esm-dotenv.md) — in ESM, `import dotenv from 'dotenv'; dotenv.config()` is too late; use `import 'dotenv/config'` as the FIRST import statement so env vars load before any other module initializes.
-- [Phase 8.5 auth architecture](phase85-auth.md) — JWT cookie-based auth, founder triple-factor, blockDevFounderSpoofing, AuthContext→SecurityContext precedence chain.
+- [Phase 8.5 auth architecture](phase85-auth.md) — JWT cookie sessions, founder triple-factor, blockDevFounderSpoofing, AuthContext→SecurityContext precedence chain.
+- [Phase 9 POS3 architecture](phase9-pos3.md) — provider-agnostic POS bridge, 8 adapters, prototype fully live, requireAuth lives in authMiddleware (not roleMiddleware).

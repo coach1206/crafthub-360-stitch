@@ -1,7 +1,10 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import ScoreRing from '../components/ScoreRing.jsx'
+import { useSecurity } from '../context/SecurityContext.jsx'
+import { getEATFeed } from '../services/pos3IntegrationApiService.js'
 
-const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
+const FADE    = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
 const STAGGER = { show: { transition: { staggerChildren: 0.08 } } }
 
 const courses = [
@@ -34,11 +37,28 @@ const pacingSteps = [
   { label: 'Departure', done: false },
 ]
 
+const pressureColor = { HIGH: '#E05A5A', MEDIUM: '#D4AF37', LOW: '#5A9A5A', STRETCHED: '#E05A5A', BUSY: '#D4AF37', NORMAL: '#5A9A5A', LIGHT: '#5A9A5A', UNKNOWN: '#7A7A7A' }
+
 export default function EATCommand() {
+  const { role } = useSecurity()
+  const isManager = ['manager','admin','founder_level_0'].includes(role)
+
+  const [eatFeed,    setEatFeed]    = useState(null)
+  const [feedLoading, setFeedLoading] = useState(false)
+
+  useEffect(() => {
+    if (!isManager) return
+    setFeedLoading(true)
+    getEATFeed('prototype')
+      .then(r => setEatFeed(r?.success ? r : null))
+      .catch(() => setEatFeed(null))
+      .finally(() => setFeedLoading(false))
+  }, [role])
+
   return (
     <motion.div initial="hidden" animate="show" variants={STAGGER}>
 
-      {/* Hero */}
+      {/* ── Hero (unchanged) ─────────────────────────────────────────── */}
       <motion.div variants={FADE} style={{ position: 'relative', height: 260 }}>
         <img src="/eat-command.jpg" alt="EAT Command"
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%', display: 'block' }}
@@ -56,7 +76,7 @@ export default function EATCommand() {
         </div>
       </motion.div>
 
-      {/* Sensor telemetry — 4 rings */}
+      {/* ── Sensor telemetry (unchanged) ─────────────────────────────── */}
       <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
         <div className="glass-card-gold" style={{ padding: '20px 24px' }}>
           <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>Live Venue Telemetry</div>
@@ -80,7 +100,7 @@ export default function EATCommand() {
         </div>
       </motion.div>
 
-      {/* Fire order — course timeline */}
+      {/* ── Fire order (unchanged) ───────────────────────────────────── */}
       <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
         <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
           Fire Order — Table 3 Active
@@ -89,7 +109,6 @@ export default function EATCommand() {
           {courses.map(({ name, dish, status, statusColor, time, xp }) => (
             <motion.div key={name} whileTap={{ scale: 0.98 }}>
               <div className="glass-card" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16, cursor: 'pointer', border: status === 'FIRING' ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(122,122,122,0.2)', boxShadow: status === 'FIRING' ? '0 0 16px rgba(212,175,55,0.1)' : 'none' }}>
-                {/* Status dot */}
                 <div style={{
                   width: 14, height: 14, borderRadius: '50%', flexShrink: 0,
                   background: statusColor,
@@ -111,7 +130,7 @@ export default function EATCommand() {
         </div>
       </motion.div>
 
-      {/* Floor map — table grid */}
+      {/* ── Floor map (unchanged) ────────────────────────────────────── */}
       <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
         <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
           Floor Status
@@ -131,13 +150,13 @@ export default function EATCommand() {
         </div>
       </motion.div>
 
-      {/* Experience pacing arc */}
+      {/* ── Experience pacing arc (unchanged) ───────────────────────── */}
       <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
         <div className="glass-card" style={{ padding: '20px 24px' }}>
           <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20 }}>Experience Arc — Pacing</div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
             <div style={{ position: 'absolute', left: 20, right: 20, top: 11, height: 2, background: 'rgba(122,122,122,0.1)' }} />
-            {pacingSteps.map(({ label, done }, i) => (
+            {pacingSteps.map(({ label, done }) => (
               <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, position: 'relative', zIndex: 1 }}>
                 <div style={{
                   width: 24, height: 24, borderRadius: '50%',
@@ -152,6 +171,186 @@ export default function EATCommand() {
         </div>
       </motion.div>
 
+      {/* ══════════════════════════════════════════════════════════════════
+          PHASE 9 POS 3 FEED SECTIONS — Manager+ only
+      ══════════════════════════════════════════════════════════════════ */}
+
+      {isManager && (
+        <>
+          {/* ── POS 3 Feed Header ────────────────────────────────────── */}
+          <motion.div variants={FADE} style={{ margin: '24px 16px 0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+              <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 16 }}>point_of_sale</span>
+              <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase' }}>POS 3 Live Feed</span>
+              <div style={{ flex: 1, height: 1, background: 'rgba(212,175,55,0.15)', marginLeft: 8 }} />
+            </div>
+          </motion.div>
+
+          {feedLoading && (
+            <motion.div variants={FADE} style={{ margin: '0 16px' }}>
+              <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A', padding: '16px 0' }}>Loading POS 3 feed…</div>
+            </motion.div>
+          )}
+
+          {eatFeed && !feedLoading && (
+            <>
+              {/* ── Venue Opportunity Score ──────────────────────────── */}
+              <motion.div variants={FADE} style={{ margin: '0 16px 0' }}>
+                <div className="glass-card-gold" style={{ padding: '20px 24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Venue Opportunity Score</div>
+                      <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 52, color: '#D4AF37', lineHeight: 1 }}>
+                        {eatFeed.opportunityScore}<span style={{ fontSize: 18, color: '#D4AF3799' }}>/100</span>
+                      </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                      {[
+                        { label: 'Active Recs',  value: eatFeed.transactions?.upsellOpportunities || 0, color: '#D4AF37' },
+                        { label: 'Inv Alerts',   value: eatFeed.assets?.lowStockCount              || 0, color: '#E07B39' },
+                        { label: 'Open Checks',  value: eatFeed.transactions?.openCheckCount        || 0, color: '#5A9A5A' },
+                        { label: 'Occupancy',    value: `${eatFeed.environment?.occupancyPct || 0}%`, color: '#C88B3A' },
+                      ].map(({ label, value, color }) => (
+                        <div key={label} style={{ padding: '8px 10px', borderRadius: 8, background: 'rgba(212,175,55,0.04)', border: '1px solid rgba(212,175,55,0.12)', textAlign: 'center' }}>
+                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 16, color, marginBottom: 2 }}>{value}</div>
+                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 7, color: '#7A7A7A', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* ── Environment Feed ─────────────────────────────────── */}
+              <motion.div variants={FADE} style={{ margin: '12px 16px 0' }}>
+                <div className="glass-card" style={{ padding: '20px 24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+                    <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 16 }}>sensors</span>
+                    <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Environment</span>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                    {[
+                      { label: 'Tables',   value: `${eatFeed.environment?.occupiedTables}/${eatFeed.environment?.tableCount}` },
+                      { label: 'Staff',    value: `${eatFeed.environment?.activeStaff}/${eatFeed.environment?.totalStaff}` },
+                      { label: 'Pressure', value: eatFeed.environment?.venuePressure, color: pressureColor[eatFeed.environment?.venuePressure] },
+                      { label: 'Pace',     value: eatFeed.environment?.servicePace,   color: pressureColor[eatFeed.environment?.servicePace] },
+                      { label: 'Reserved', value: eatFeed.environment?.reservedTables || 0 },
+                      { label: 'Occ %',    value: `${eatFeed.environment?.occupancyPct || 0}%`, color: '#D4AF37' },
+                    ].map(({ label, value, color = '#E5E2E1' }) => (
+                      <div key={label} style={{ padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(122,122,122,0.12)', textAlign: 'center' }}>
+                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 14, color, marginBottom: 2 }}>{value}</div>
+                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 7, color: '#7A7A7A', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{label}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {eatFeed.environment?.zoneBreakdown && (
+                    <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {Object.entries(eatFeed.environment.zoneBreakdown).map(([zone, data]) => (
+                        <div key={zone} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', width: 90 }}>{zone}</div>
+                          <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'rgba(122,122,122,0.15)', overflow: 'hidden' }}>
+                            <div style={{ height: '100%', borderRadius: 3, background: '#D4AF37', width: `${data.total > 0 ? (data.occupied / data.total) * 100 : 0}%`, transition: 'width 0.5s' }} />
+                          </div>
+                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', width: 36, textAlign: 'right' }}>{data.occupied}/{data.total}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+
+              {/* ── Asset Feed ───────────────────────────────────────── */}
+              <motion.div variants={FADE} style={{ margin: '12px 16px 0' }}>
+                <div className="glass-card" style={{ padding: '20px 24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 16 }}>inventory_2</span>
+                      <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Asset Feed</span>
+                    </div>
+                    {eatFeed.assets?.lowStockCount > 0 && (
+                      <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#E07B39', background: 'rgba(224,123,57,0.12)', padding: '2px 10px', borderRadius: 12, border: '1px solid rgba(224,123,57,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                        {eatFeed.assets.lowStockCount} Alerts
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {(eatFeed.assets?.reorderAlerts || []).slice(0, 4).map((item, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: 8, background: 'rgba(224,123,57,0.05)', border: '1px solid rgba(224,123,57,0.15)' }}>
+                        <div>
+                          <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 12, color: '#E5E2E1' }}>{item.name}</div>
+                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#7A7A7A' }}>{item.category}</div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 16, color: item.stock <= 2 ? '#E05A5A' : '#E07B39' }}>{item.stock}</div>
+                          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#7A7A7A' }}>min {item.threshold}</div>
+                        </div>
+                      </div>
+                    ))}
+                    {eatFeed.assets?.featuredItems?.slice(0, 2).map((item, i) => (
+                      <div key={`feat-${i}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 8, background: 'rgba(90,154,90,0.04)', border: '1px solid rgba(90,154,90,0.12)' }}>
+                        <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 11, color: '#9A9A9A' }}>{item.name}</div>
+                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#5A9A5A' }}>{item.currentStock} left</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* ── Transaction Feed ─────────────────────────────────── */}
+              <motion.div variants={FADE} style={{ margin: '12px 16px 0' }}>
+                <div className="glass-card" style={{ padding: '20px 24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+                    <span className="material-symbols-outlined" style={{ color: '#D4AF37', fontSize: 16 }}>payments</span>
+                    <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Transaction Feed</span>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 14 }}>
+                    {[
+                      { label: 'Open Checks',    value: eatFeed.transactions?.openCheckCount,           color: '#E5E2E1' },
+                      { label: 'Open Value',     value: `$${eatFeed.transactions?.totalOpenValue || 0}`, color: '#D4AF37' },
+                      { label: 'Avg Check',      value: `$${eatFeed.transactions?.averageCheckValue || 0}`, color: '#C88B3A' },
+                      { label: 'High Value',     value: eatFeed.transactions?.highValueOrders,           color: '#5A9A5A' },
+                    ].map(({ label, value, color }) => (
+                      <div key={label} style={{ padding: '12px 14px', borderRadius: 8, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(122,122,122,0.12)' }}>
+                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 18, color, marginBottom: 4 }}>{value}</div>
+                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#7A7A7A', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{label}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {(eatFeed.transactions?.upsellDetails || []).map((u, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: 8, background: 'rgba(212,175,55,0.04)', border: '1px solid rgba(212,175,55,0.1)', marginBottom: 6 }}>
+                      <div>
+                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', marginBottom: 2 }}>Table {u.table}</div>
+                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#7A7A7A' }}>Upsell opportunity</div>
+                      </div>
+                      <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 14, color: '#D4AF37' }}>${u.currentTotal}</div>
+                    </div>
+                  ))}
+                  {(eatFeed.transactions?.staffOpportunities || []).map(s => (
+                    <div key={s.staffId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 8, background: 'rgba(90,154,90,0.04)', border: '1px solid rgba(90,154,90,0.1)', marginBottom: 4 }}>
+                      <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 12, color: '#E5E2E1' }}>{s.staffName}</div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#5A9A5A' }}>${s.totalValue}</div>
+                        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#7A7A7A' }}>{s.orderCount} orders</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </>
+          )}
+
+          {!feedLoading && !eatFeed && (
+            <motion.div variants={FADE} style={{ margin: '0 16px' }}>
+              <div className="glass-card" style={{ padding: '20px 24px', textAlign: 'center' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 32, color: '#7A7A7A', marginBottom: 10, display: 'block' }}>cloud_off</span>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A' }}>POS 3 feed unavailable</div>
+              </div>
+            </motion.div>
+          )}
+        </>
+      )}
+
+      <div style={{ height: 32 }} />
     </motion.div>
   )
 }

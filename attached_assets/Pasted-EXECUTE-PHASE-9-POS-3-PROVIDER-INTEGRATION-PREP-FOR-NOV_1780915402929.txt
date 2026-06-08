@@ -1,0 +1,793 @@
+EXECUTE PHASE 9 POS 3 PROVIDER INTEGRATION PREP FOR NOVEE OS / POS 3 / E.A.T. COMMAND / CRAFTHUB 360 / SMOKECRAFT 360 / 360 PASSPORT CONNECTIONS
+
+PHASE 8.5 IS COMPLETE.
+
+DO NOT redesign the app.
+DO NOT change premium UI.
+DO NOT create duplicate screens.
+DO NOT break guest routes.
+DO NOT weaken Founder Level 4 permissions.
+DO NOT weaken real auth.
+DO NOT connect live payment processing yet.
+DO NOT store real POS credentials in frontend code.
+DO NOT expose secrets in client-side files.
+DO NOT allow guest users to access POS 3 or E.A.T. management data.
+
+MISSION:
+Prepare POS 3 for real provider integrations without locking NOVEE OS into one vendor.
+
+POS 3 must become a provider-agnostic transaction, activity, inventory, and recommendation layer that can later connect to Clover, Toast, Square, Shopify, Lightspeed, NCR, Micros, and other hospitality POS systems.
+
+This phase is not full live integration.
+This phase creates the integration architecture, adapters, normalized data models, test provider mode, protected management controls, and E.A.T. bridge.
+
+==================================================
+PHASE 9 PRIMARY GOAL
+
+Build the POS 3 integration bridge so NOVEE OS can:
+
+1. Read active checks/orders from a POS provider
+2. Read menus and inventory
+3. Read table and staff data
+4. Match guest sessions to tables, seats, tickets, or staff
+5. Send pairing suggestions to staff
+6. Generate upsell recommendations
+7. Prepare clean payloads for Clover, Toast, Square, Shopify, Lightspeed, NCR, and Micros
+8. Feed E.A.T. Command with Environment, Asset, and Transaction intelligence
+9. Protect POS management controls behind staff/manager/admin/founder roles
+10. Stay functional in prototype mode even without real provider credentials
+
+==================================================
+
+1. CREATE POS 3 PROVIDER ARCHITECTURE
+    ==================================================
+
+Create backend folder:
+
+/server/integrations/pos3
+/server/integrations/pos3/providers
+/server/integrations/pos3/adapters
+/server/integrations/pos3/utils
+
+Create files:
+
+/server/integrations/pos3/pos3ProviderRegistry.js
+/server/integrations/pos3/pos3Normalizer.js
+/server/integrations/pos3/pos3WebhookVerifier.js
+/server/integrations/pos3/pos3CredentialVault.js
+/server/integrations/pos3/pos3SyncEngine.js
+
+Provider adapter files:
+
+/server/integrations/pos3/providers/prototypeProvider.js
+/server/integrations/pos3/providers/cloverProvider.js
+/server/integrations/pos3/providers/toastProvider.js
+/server/integrations/pos3/providers/squareProvider.js
+/server/integrations/pos3/providers/shopifyProvider.js
+/server/integrations/pos3/providers/lightspeedProvider.js
+/server/integrations/pos3/providers/ncrProvider.js
+/server/integrations/pos3/providers/microsProvider.js
+
+Only prototypeProvider should be fully functional right now.
+
+All other provider files must expose safe adapter functions with clear not_configured responses.
+
+No fake live claims.
+
+==================================================
+2. PROVIDER ADAPTER CONTRACT
+
+Every POS provider adapter must export the same functions:
+
+getProviderName()
+getConnectionStatus()
+validateCredentials()
+fetchLocations()
+fetchMenus()
+fetchInventory()
+fetchActiveOrders()
+fetchOrderById(orderId)
+fetchTables()
+fetchStaff()
+pushGuestSignal(payload)
+pushPairingRecommendation(payload)
+pushUpsellRecommendation(payload)
+receiveWebhook(payload, headers)
+normalizeOrder(rawOrder)
+normalizeMenuItem(rawItem)
+normalizeInventoryItem(rawItem)
+normalizeStaffMember(rawStaff)
+normalizeTable(rawTable)
+
+If a provider is not live yet, it must return:
+
+{
+success: false,
+provider: “[provider name]”,
+mode: “not_configured”,
+message: “Provider adapter prepared but credentials are not configured.”
+}
+
+==================================================
+3. NORMALIZED POS 3 DATA MODELS
+
+Create normalized models in:
+
+/server/integrations/pos3/pos3Normalizer.js
+
+Normalized order model:
+
+{
+provider,
+providerOrderId,
+venueId,
+locationId,
+tableNumber,
+seatNumber,
+staffId,
+staffName,
+guestSessionId,
+status,
+items,
+subtotal,
+tax,
+total,
+currency,
+openedAt,
+updatedAt
+}
+
+Normalized item model:
+
+{
+provider,
+providerItemId,
+name,
+category,
+subcategory,
+price,
+sku,
+tags,
+allergens,
+imageUrl,
+available,
+inventoryCount
+}
+
+Normalized table model:
+
+{
+provider,
+tableId,
+tableNumber,
+zone,
+seats,
+status,
+assignedStaffId,
+activeOrderId
+}
+
+Normalized staff model:
+
+{
+provider,
+staffId,
+displayName,
+role,
+active,
+assignedZone
+}
+
+Normalized inventory model:
+
+{
+provider,
+itemId,
+name,
+category,
+currentStock,
+lowStockThreshold,
+reorderRecommended,
+locationId,
+updatedAt
+}
+
+==================================================
+4. PROTOTYPE PROVIDER
+
+Create a fully working prototype provider.
+
+prototypeProvider must return demo-safe data for:
+
+* locations
+* menus
+* inventory
+* active orders
+* tables
+* staff
+* order details
+
+Use realistic hospitality data:
+
+* lounge tables
+* bar seats
+* patio zones
+* cigar inventory
+* whiskey/bourbon inventory
+* cocktail menu
+* food menu
+* staff assignments
+* open checks
+
+Do not use childish placeholder data.
+
+Use believable but fake data.
+
+Example categories:
+
+* Premium Cigars
+* Bourbon
+* Whiskey
+* Cocktails
+* Small Plates
+* Desserts
+* VIP Pairings
+* Low Stock Alerts
+* Featured Upsells
+
+==================================================
+5. POS 3 DATABASE TABLES
+
+Create migration:
+
+/server/db/migrations/004_pos3_provider_prep.sql
+
+Add or update tables:
+
+A. pos3_provider_connections
+
+Fields:
+
+id
+provider_key
+provider_name
+venue_id
+location_id
+status
+mode
+credentials_ref
+last_sync_at
+created_at
+updated_at
+
+B. pos3_provider_events
+
+Fields:
+
+id
+provider_key
+event_type
+external_id
+session_id
+payload JSONB
+received_at
+processed_at
+status
+
+C. pos3_normalized_orders
+
+Fields:
+
+id
+provider
+provider_order_id
+venue_id
+location_id
+table_number
+seat_number
+staff_id
+staff_name
+guest_session_id
+status
+items JSONB
+subtotal
+tax
+total
+currency
+opened_at
+updated_at
+created_at
+
+D. pos3_normalized_inventory
+
+Fields:
+
+id
+provider
+provider_item_id
+name
+category
+subcategory
+current_stock
+low_stock_threshold
+reorder_recommended
+location_id
+updated_at
+created_at
+
+E. pos3_recommendations
+
+Fields:
+
+id
+session_id
+provider
+provider_order_id
+recommendation_type
+title
+description
+items JSONB
+confidence_score
+sent_to_staff
+accepted
+created_at
+updated_at
+
+F. pos3_table_mapping
+
+Fields:
+
+id
+venue_id
+provider
+table_id
+table_number
+zone
+seats
+assigned_staff_id
+active_order_id
+status
+created_at
+updated_at
+
+Do not destroy existing Phase 7, Phase 8, or Phase 8.5 tables.
+
+==================================================
+6. BACKEND ROUTES
+
+Create or update:
+
+/server/routes/pos3IntegrationRoutes.js
+/server/controllers/pos3IntegrationController.js
+/server/services/pos3IntegrationService.js
+
+Add endpoints:
+
+GET /api/pos3/providers
+GET /api/pos3/providers/:providerKey/status
+POST /api/pos3/providers/:providerKey/test-connection
+GET /api/pos3/providers/:providerKey/locations
+GET /api/pos3/providers/:providerKey/menu
+GET /api/pos3/providers/:providerKey/inventory
+GET /api/pos3/providers/:providerKey/orders/active
+GET /api/pos3/providers/:providerKey/orders/:orderId
+GET /api/pos3/providers/:providerKey/tables
+GET /api/pos3/providers/:providerKey/staff
+POST /api/pos3/providers/:providerKey/recommendation
+POST /api/pos3/providers/:providerKey/webhook
+
+Permissions:
+
+Staff level 1 may access:
+
+* active orders
+* tables
+* recommendations
+* activity feed
+
+Manager level 2 may access:
+
+* inventory
+* provider status
+* payload previews
+* sync status
+
+Admin level 3 may access:
+
+* test connection
+* provider configuration placeholders
+
+Founder level 4 may access:
+
+* license-linked provider controls
+* billing-related provider controls
+* revenue-related integration settings
+
+Guest level 0:
+
+* blocked from all POS 3 management/provider routes
+
+==================================================
+7. PROVIDER REGISTRY
+
+Create registry with these provider keys:
+
+prototype
+clover
+toast
+square
+shopify
+lightspeed
+ncr
+micros
+
+Each registry entry must include:
+
+{
+key,
+name,
+status,
+mode,
+supportsWebhooks,
+supportsInventory,
+supportsMenu,
+supportsOrders,
+supportsTables,
+supportsStaff,
+credentialsRequired,
+liveReady
+}
+
+For Phase 9:
+
+prototype liveReady: true
+all others liveReady: false
+
+==================================================
+8. POS 3 RECOMMENDATION ENGINE
+
+Create:
+
+/server/services/pos3RecommendationService.js
+
+Functions:
+
+buildPairingRecommendation(session, order)
+buildUpsellRecommendation(session, order, inventory)
+buildInventoryAwareRecommendation(session, inventory)
+calculateRecommendationConfidence(session, order)
+prepareStaffRecommendationPayload(session, order)
+
+Recommendations must use:
+
+* selected craft
+* guest level
+* mentor country
+* flavor preferences
+* pairing selections
+* active order items
+* available inventory
+* low stock signals
+* margin opportunity placeholder
+* venue zone
+
+Example output:
+
+{
+recommendationType: “pairing”,
+title: “Recommend a medium-bodied Dominican cigar with bourbon pairing”,
+description: “Guest selected SmokeCraft 360, Novice level, Dominican mentor, and warm spice notes.”,
+items: […],
+confidenceScore: 0.82,
+reasonCodes: [
+“guest_flavor_match”,
+“inventory_available”,
+“order_pairing_match”
+]
+}
+
+==================================================
+9. E.A.T. COMMAND FEED
+
+Update E.A.T. analytics so POS 3 provider data can feed:
+
+Environment:
+
+* table zone
+* guest density
+* active sessions
+* service pace
+* venue pressure
+
+Asset:
+
+* inventory
+* low stock
+* reorder recommendations
+* featured items
+* overstock specials
+
+Transaction:
+
+* open checks
+* upsell opportunities
+* accepted recommendations
+* average check signals
+* staff opportunity signals
+
+Create:
+
+/server/services/eatPos3BridgeService.js
+
+Functions:
+
+syncPOS3ToEAT()
+prepareEnvironmentFeed()
+prepareAssetFeed()
+prepareTransactionFeed()
+calculateVenueOpportunityScore()
+
+E.A.T. Command must remain management-only.
+
+No guest should see E.A.T. data.
+
+==================================================
+10. FRONTEND POS 3 API SERVICE
+
+Create:
+
+src/services/pos3IntegrationApiService.js
+
+Functions:
+
+getPOS3Providers()
+getProviderStatus(providerKey)
+testProviderConnection(providerKey)
+getProviderLocations(providerKey)
+getProviderMenu(providerKey)
+getProviderInventory(providerKey)
+getActiveOrders(providerKey)
+getOrderById(providerKey, orderId)
+getTables(providerKey)
+getStaff(providerKey)
+sendRecommendation(providerKey, payload)
+
+Must use existing apiClient.js.
+
+Must fail safely if backend is unavailable.
+
+==================================================
+11. FRONTEND POS 3 MANAGEMENT VIEW
+
+Create or update:
+
+src/pages/POS3.jsx
+
+Do not redesign the whole screen.
+
+Add management panels only if route permission allows:
+
+* Provider status panel
+* Active orders panel
+* Table mapping panel
+* Inventory signal panel
+* Recommendation preview panel
+* Staff activity feed
+* Payload preview drawer
+
+Staff sees only:
+
+* assigned tables
+* active orders
+* recommendations
+* activity feed
+
+Manager sees:
+
+* staff view plus inventory signals and payload previews
+
+Admin sees:
+
+* manager view plus provider configuration placeholders
+
+Founder sees:
+
+* everything plus license/revenue/billing lock panels
+
+Use role gates from Phase 8.
+
+==================================================
+12. FRONTEND E.A.T. POS 3 PANEL
+
+Update:
+
+src/pages/EATCommand.jsx
+
+Add POS 3 feed sections:
+
+* Environment feed
+* Asset feed
+* Transaction feed
+* Venue opportunity score
+* Active recommendation count
+* Inventory alert count
+* Open check summary
+
+Only visible to manager level 2 and above.
+
+Do not expose to guests or staff unless permission allows.
+
+==================================================
+13. WEBHOOK SAFETY
+
+Webhook endpoint must exist but remain safe.
+
+POST /api/pos3/providers/:providerKey/webhook
+
+Rules:
+
+* Verify provider exists.
+* In prototype mode, accept fake signed payloads.
+* For live providers, reject without configured verifier.
+* Store webhook event in pos3_provider_events.
+* Never trust incoming payload without normalization.
+* Never mutate orders directly from unknown webhook data.
+
+==================================================
+14. CREDENTIAL SAFETY
+
+Create:
+
+/server/integrations/pos3/pos3CredentialVault.js
+
+For Phase 9:
+
+* Do not store real secrets.
+* Return config status only.
+* Support future environment variable lookup.
+* Never return raw credentials to frontend.
+* Never log credentials.
+
+Expected output:
+
+{
+providerKey,
+configured: false,
+mode: “prototype”,
+missingKeys: […]
+}
+
+==================================================
+15. AUTH + ROLE PROTECTION RULES
+
+Do not use frontend localStorage as authority for backend POS access.
+
+Backend POS provider routes must use verified JWT/session from Phase 8.5.
+
+Expected behavior:
+
+Guest:
+
+* cannot access POS 3 provider routes
+* cannot access E.A.T. provider feed
+* can still complete CraftHub / SmokeCraft / Passport journey
+
+Staff:
+
+* can access staff-level POS 3 routes
+* cannot access E.A.T. dashboard
+* cannot access provider configuration
+
+Manager:
+
+* can access E.A.T.
+* can view POS 3 inventory and payload previews
+* cannot access founder-only license/revenue controls
+
+Admin:
+
+* can access provider configuration placeholders
+* cannot access founder-only license/revenue/billing controls
+
+Founder:
+
+* can access everything
+
+==================================================
+16. TEST MATRIX
+
+Test these:
+
+A. GET /api/pos3/providers returns all providers.
+B. prototype provider status returns liveReady true.
+C. Clover, Toast, Square, Shopify, Lightspeed, NCR, Micros return not_configured.
+D. prototype active orders return normalized orders.
+E. prototype inventory returns normalized inventory.
+F. prototype tables return normalized tables.
+G. prototype staff returns normalized staff.
+H. recommendation endpoint builds pairing payload.
+I. E.A.T. Command receives POS 3 feed.
+J. Staff can access staff-level POS 3 routes after PIN login.
+K. Guest cannot access POS 3 provider routes.
+L. Manager can view inventory and payload previews.
+M. Admin can view provider config placeholders.
+N. Founder can view locked license/revenue panels.
+O. Admin cannot access founder-only POS controls.
+P. Build passes.
+Q. Backend server starts.
+R. Existing SmokeCraft guest journey still works.
+S. Auth from Phase 8.5 still works.
+T. Founder-only routes still reject dev-header spoofing.
+
+==================================================
+17. BUILD + SERVER VERIFICATION
+
+Run:
+
+npm run build
+npm run dev:server
+
+Verify:
+
+GET /api/health
+GET /api/pos3/providers
+GET /api/pos3/providers/prototype/status
+GET /api/pos3/providers/prototype/orders/active
+GET /api/pos3/providers/prototype/inventory
+GET /api/pos3/providers/prototype/tables
+GET /api/pos3/providers/prototype/staff
+
+Also verify:
+
+* Guest journey still works
+* Passport stamp still awards
+* Leaderboard still works
+* Staff PIN login still works
+* Admin login still works
+* Founder login still works
+* Founder-only routes remain protected
+* Admin cannot access founder-only routes
+* POS 3 does not expose secrets
+
+==================================================
+18. FINAL REPORT REQUIRED
+
+Return a report with:
+
+A. Files created
+B. Files changed
+C. Provider registry status
+D. Prototype provider status
+E. Clover adapter status
+F. Toast adapter status
+G. Square adapter status
+H. Shopify adapter status
+I. Lightspeed adapter status
+J. NCR adapter status
+K. Micros adapter status
+L. Normalized order model status
+M. Normalized inventory model status
+N. POS 3 routes status
+O. POS 3 database migration status
+P. Recommendation engine status
+Q. E.A.T. POS 3 bridge status
+R. Frontend POS 3 management status
+S. Frontend E.A.T. feed status
+T. Role protection status
+U. Credential safety status
+V. Auth compatibility status
+W. Build result
+X. Server result
+Y. Remaining risks
+
+Do not claim Phase 9 is complete unless:
+
+* npm run build passes
+* backend starts
+* /api/health works
+* /api/pos3/providers works
+* prototype provider returns normalized data
+* staff PIN login can access staff POS 3 routes
+* guest access is blocked from POS 3 management
+* founder-only permissions still hold
+* no real POS secrets are exposed
