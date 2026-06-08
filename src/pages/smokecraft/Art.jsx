@@ -249,7 +249,7 @@ export default function Art() {
                   style={{
                     width: '42%',
                     minHeight: 320,
-                    backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBktRXv3px18iAdmk-FIbB6ajfhPahwqk9W_JP8Z3CMm5d75I1D5sQYn3y5CtixAGzZo0bWs5yXhZQ8TGcBZxfdlOrRy-X2jzZpEocDLKB-z48LeV4PdnPkWAu1EF0aLxDcp6N-JXmverp_fSYWKdujWH1FrWoLUY1CgVrJguJJeILwvw4JN5SLy70oWxWGRHWFymEXJ3FzmzsY93qIxljsbG1ANTGrbqwoIcmIQ6eUZnCsPhFk08_Z55717Itp90HwmP1ssOO0o')",
+                    backgroundImage: "url('/smokecraft.jpg')",
                     backgroundSize: 'cover',
                     backgroundPosition: '62% center',
                   }}
