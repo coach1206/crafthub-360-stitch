@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { triggerHaptic } from '../../utils/haptics.js'
 
 const PHASES = [
   { label: 'Mentor',      icon: 'person'         },
@@ -33,6 +34,7 @@ export default function GoldenBox() {
   function handleAccept() {
     if (accepted) return
     setAccepted(true)
+    triggerHaptic('success')
     addXP(25)
     addBadge({ id: 'golden-box-invitation', name: 'Golden Invitation', icon: 'inventory_2' })
     completeStep('golden-box')
@@ -73,6 +75,12 @@ export default function GoldenBox() {
       {/* ── Minimal Header ───────────────────────────────────── */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-20">
         <div className="flex items-center gap-3">
+          <button
+            className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-primary/10 active:bg-primary/20 transition-colors duration-300"
+            style={{ minWidth: 48, minHeight: 48 }}
+            onClick={() => navigate('/smokecraft/enroll')}
+            aria-label="Back to Enroll"
+          >arrow_back</button>
           <span className="material-symbols-outlined text-primary text-[22px]" style={FILL1}>shield_person</span>
           <span className="font-headline-md text-[18px] font-bold text-primary tracking-tighter">CRAFTHUB 360</span>
         </div>

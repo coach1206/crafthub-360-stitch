@@ -34,7 +34,12 @@ export default function Home() {
 
           {/* Left: menu icon + brand wordmark */}
           <div className="flex items-center gap-6">
-            <span className="material-symbols-outlined text-primary text-3xl cursor-pointer select-none">menu</span>
+            <button
+              className="material-symbols-outlined text-primary text-3xl hover:bg-primary/10 active:bg-primary/20 transition-colors p-2 rounded-full"
+              style={{ minWidth: 48, minHeight: 48 }}
+              onClick={() => navigate('/crafthub')}
+              aria-label="Open CraftHub"
+            >menu</button>
             <h1 className="font-display-lg text-headline-xl tracking-widest uppercase text-primary">
               THE RESERVE
             </h1>
@@ -57,9 +62,14 @@ export default function Home() {
                 Cellar
               </button>
             </div>
-            <div className="w-12 h-12 rounded-full border-2 border-primary/50 overflow-hidden bg-surface-container-high cursor-pointer">
+            <button
+              className="w-12 h-12 rounded-full border-2 border-primary/50 overflow-hidden bg-surface-container-high cursor-pointer hover:opacity-80 transition-opacity active:scale-95"
+              onClick={() => navigate('/passport')}
+              aria-label="View Passport"
+              style={{ minWidth: 48, minHeight: 48 }}
+            >
               <img src={MEMBER_AVATAR} alt="Member Passport" className="w-full h-full object-cover" />
-            </div>
+            </button>
           </div>
 
         </div>
@@ -111,7 +121,7 @@ export default function Home() {
 
           {/* ② CONTINUE SESSION — glassmorphism */}
           <button
-            onClick={() => navigate('/crafthub')}
+            onClick={() => navigate('/smokecraft')}
             className="group haptic-pulse relative overflow-hidden flex items-center justify-center rounded-xl glass-morphism h-24 md:h-[140px] px-12 transition-all duration-500 hover:border-primary/60 active:translate-y-1"
           >
             <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />

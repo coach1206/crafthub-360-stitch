@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
 import { STAMP_CATALOG } from '../../data/passportCatalog.js'
+import { triggerHaptic } from '../../utils/haptics.js'
 
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
@@ -99,6 +100,8 @@ export default function PassportStamp() {
     addXP(XP_AWARDS.PASSPORT_STAMP)
     awardStamp('passport-stamp', 'passport-stamp')
     addBadge({ id: 'passport-certified', label: 'Passport Certified', icon: 'menu_book' })
+    triggerHaptic('success')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const stamps = session.smokecraftStamps ?? []
@@ -174,12 +177,20 @@ export default function PassportStamp() {
           </div>
           {(() => {
             const latestEntry = STAMP_CATALOG.find(c => c.id === session.latestStampId)
-            if (!latestEntry) return null
             return (
               <div className="mt-5 inline-flex items-center gap-3 px-5 py-2.5 rounded-full" style={{ background: 'rgba(233,193,118,0.08)', border: '1px solid rgba(233,193,118,0.22)' }}>
-                <span className="material-symbols-outlined text-primary" style={{ ...FILL1, fontSize: 18 }}>{latestEntry.icon}</span>
-                <span className="font-label-lg text-label-lg text-primary">{latestEntry.name}</span>
-                <span className="font-label-sm text-label-sm text-on-surface-variant/60 uppercase tracking-widest">Latest Seal</span>
+                {latestEntry ? (
+                  <>
+                    <span className="material-symbols-outlined text-primary" style={{ ...FILL1, fontSize: 18 }}>{latestEntry.icon}</span>
+                    <span className="font-label-sm text-label-sm text-primary/70 uppercase tracking-widest">Stamp Earned:</span>
+                    <span className="font-label-lg text-label-lg text-primary">{latestEntry.name}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-primary" style={{ ...FILL1, fontSize: 18 }}>verified</span>
+                    <span className="font-label-lg text-label-lg text-primary">Passport milestone unlocked</span>
+                  </>
+                )}
               </div>
             )
           })()}

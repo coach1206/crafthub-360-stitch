@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
+import { triggerHaptic } from '../../utils/haptics.js'
 
 const PRIMARY_MENTORS = [
   {
@@ -75,6 +76,7 @@ export default function Mentor() {
   }
 
   function handleProceed() {
+    triggerHaptic('medium')
     setMentors(selected)
     completeStep('mentor')
     addXP(XP_AWARDS.MENTOR_SELECTED)
@@ -94,7 +96,11 @@ export default function Mentor() {
         </div>
         <div className="flex items-center gap-6">
           <span className="font-label-lg text-label-lg text-on-surface-variant tracking-widest uppercase opacity-70">Step 4 of 20</span>
-          <button className="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-lg text-label-lg shadow-lg hover:brightness-110 transition-all active:scale-95">
+          <button
+            className="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-lg text-label-lg shadow-lg hover:brightness-110 transition-all active:scale-95"
+            style={{ minHeight: 48 }}
+            onClick={() => navigate('/')}
+          >
             Grand Lounge
           </button>
         </div>

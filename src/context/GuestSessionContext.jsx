@@ -69,6 +69,11 @@ const defaultState = {
   guestProfile:          null,
   profileComplete:       false,
   resumeToken:           null,
+  // Preferences & routing
+  audioEnabled:          true,
+  hapticsEnabled:        true,
+  lastVisitedRoute:      null,
+  leaderboardScore:      0,
 }
 
 const GuestSessionContext = createContext(null)
@@ -229,6 +234,23 @@ export function GuestSessionProvider({ children }) {
     }))
   }, [update])
 
+  /** Enables or disables audio (used by voice service + mentor screens). */
+  const setAudioEnabled = useCallback((val) => {
+    update(prev => ({ ...prev, audioEnabled: !!val }))
+  }, [update])
+
+  /** Enables or disables haptic feedback (used by haptics utility). */
+  const setHapticsEnabled = useCallback((val) => {
+    update(prev => ({ ...prev, hapticsEnabled: !!val }))
+  }, [update])
+
+  /** Records the last meaningful route the guest visited, for back-button logic. */
+  const trackRoute = useCallback((route) => {
+    if (route && typeof route === 'string') {
+      update(prev => ({ ...prev, lastVisitedRoute: route }))
+    }
+  }, [update])
+
   /**
    * Clears venue/device/entry identity only.
    * Stamps, XP, completedSteps, and session.profile are preserved.
@@ -283,6 +305,10 @@ export function GuestSessionProvider({ children }) {
       refreshLastActive,
       resumePassportSession,
       clearPassportIdentity,
+      // Preferences & routing
+      setAudioEnabled,
+      setHapticsEnabled,
+      trackRoute,
       // Reset
       resetGuestSession,
       resetSession,             // legacy alias

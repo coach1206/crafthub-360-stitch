@@ -246,6 +246,12 @@ export default function Identity() {
       {/* Minimal header */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-20 bg-surface-container/70 backdrop-blur-xl border-b border-outline-variant/15">
         <div className="flex items-center gap-3">
+          <button
+            className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-primary/10 active:bg-primary/20 transition-colors duration-300"
+            style={{ minWidth: 48, minHeight: 48, color: archetype.color }}
+            onClick={() => navigate('/smokecraft/leaderboard')}
+            aria-label="Back to Leaderboard"
+          >arrow_back</button>
           <span className="material-symbols-outlined text-[20px]" style={{ color: archetype.color, fontVariationSettings: "'FILL' 1" }}>shield_person</span>
           <span className="font-headline-md text-[18px] font-bold tracking-tighter" style={{ color: archetype.color }}>CRAFTHUB 360</span>
         </div>

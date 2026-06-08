@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
+import { triggerHaptic } from '../../utils/haptics.js'
 
 const STAMPS = [
   { icon: 'workspace_premium', label: 'Mentor',      earned: true },
@@ -23,6 +24,8 @@ export default function SessionComplete() {
     completeStep('session-complete')
     addXP(XP_AWARDS.SESSION_1_COMPLETE)
     awardStamp('journey-complete', 'session-complete')
+    triggerHaptic('success')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const FILL1 = { fontVariationSettings: "'FILL' 1" }
@@ -52,7 +55,12 @@ export default function SessionComplete() {
       {/* Top Navigation */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md">
         <div className="flex items-center gap-4">
-          <button className="material-symbols-outlined text-primary p-2 hover:bg-surface-variant/50 transition-colors duration-300 rounded-full">menu</button>
+          <button
+            className="material-symbols-outlined text-primary p-2 hover:bg-surface-variant/50 transition-colors duration-300 rounded-full"
+            style={{ minWidth: 48, minHeight: 48 }}
+            onClick={() => navigate('/smokecraft')}
+            aria-label="Back to SmokeCraft"
+          >arrow_back</button>
           <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
         </div>
         <div className="flex items-center gap-6">
@@ -218,18 +226,26 @@ export default function SessionComplete() {
       {/* Bottom Navigation Bar (Mobile) */}
       <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)] md:hidden">
         {[
-          { icon: 'explore',      label: 'Explore',   active: false },
-          { icon: 'inventory_2',  label: 'Inventory', active: false },
-          { icon: 'menu_book',    label: 'Passport',  active: true,  fill: true },
-          { icon: 'auto_awesome', label: 'Assistant', active: false },
-        ].map(({ icon, label, active, fill }) => (
-          <div
+          { icon: 'explore',      label: 'Explore',   active: false, to: '/'        },
+          { icon: 'inventory_2',  label: 'Inventory', active: false, locked: true   },
+          { icon: 'menu_book',    label: 'Passport',  active: true,  to: '/passport', fill: true },
+          { icon: 'auto_awesome', label: 'Assistant', active: false, locked: true   },
+        ].map(({ icon, label, active, fill, to, locked }) => (
+          <button
             key={label}
-            className={`flex flex-col items-center justify-center transition-colors ${active ? 'text-primary bg-primary-container/20 rounded-full px-6 py-2 scale-90 duration-300' : 'text-on-surface-variant hover:text-primary'}`}
+            onClick={() => { if (!locked && to) navigate(to) }}
+            className={`flex flex-col items-center justify-center transition-colors active:scale-95 ${
+              locked
+                ? 'text-on-surface-variant/30 cursor-not-allowed opacity-40'
+                : active
+                  ? 'text-primary bg-primary-container/20 rounded-full px-6 py-2 scale-90 duration-300'
+                  : 'text-on-surface-variant hover:text-primary'
+            }`}
+            style={{ minHeight: 56 }}
           >
             <span className="material-symbols-outlined" style={fill ? { fontVariationSettings: "'FILL' 1" } : undefined}>{icon}</span>
-            <span className="font-label-sm text-label-sm">{label}</span>
-          </div>
+            <span className="font-label-sm text-label-sm">{locked ? 'Soon' : label}</span>
+          </button>
         ))}
       </nav>
     </div>

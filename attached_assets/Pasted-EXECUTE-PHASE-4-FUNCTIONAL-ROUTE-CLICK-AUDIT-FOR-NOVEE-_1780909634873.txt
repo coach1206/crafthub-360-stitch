@@ -1,0 +1,271 @@
+EXECUTE PHASE 4 FUNCTIONAL ROUTE + CLICK AUDIT FOR NOVEE OS / CRAFTHUB 360 / 360 PASSPORT CONNECTIONS
+
+DO NOT redesign the app.
+DO NOT add new visual concepts.
+DO NOT create new duplicate pages.
+DO NOT replace existing premium screens.
+DO NOT remove working routes.
+
+MISSION:
+Audit and repair every clickable path so the touchscreen kiosk experience works from boot to session completion.
+
+PRIMARY GOAL:
+Every button, tile, back button, resume button, session button, Passport stamp, mentor selection, audio toggle, mute button, leaderboard link, and E.A.T. Command entry must either:
+
+1. Navigate to the correct existing screen
+2. Trigger the correct state change
+3. Open the correct modal
+4. Be intentionally disabled with a visible “Coming Soon” / “Locked” state
+
+No dead clicks are allowed.
+
+==================================================
+PHASE 4 REQUIREMENTS
+==================================================
+
+1. ROUTE MAP AUDIT
+
+Audit all routes in:
+
+src/App.jsx
+src/main.jsx
+src/routes
+src/pages
+src/components
+
+Create or repair route mappings for:
+
+/
+ /craft-hub
+ /craft-modules
+ /smokecraft
+ /smokecraft/session-1
+ /smokecraft/session-2
+ /smokecraft/session-3
+ /smokecraft/session-4
+ /pourcraft
+ /beercraft
+ /winecraft
+ /passport-networking
+ /passport
+ /passport/ceremony
+ /passport/profile
+ /passport/leaderboard
+ /eat-command
+ /pos3
+ /dashboard
+ /command-center
+
+If duplicate routes point to the same wrong page, consolidate them without destroying existing imports.
+
+==================================================
+2. CLICK WIRING AUDIT
+
+Find every button, card, tile, tab, menu item, CTA, and back button.
+
+Every clickable item must have:
+
+- onClick
+- Link
+- NavLink
+- aria-label
+- touchscreen-safe hit area
+- minHeight: 48px minimum
+- visible focus state
+- active/pressed state
+
+No clickable element may be decorative only unless marked:
+
+aria-hidden="true"
+
+==================================================
+3. TOUCHSCREEN-FIRST STANDARD
+
+Every screen must support kiosk/tablet usage.
+
+Apply these standards globally:
+
+- Minimum tap target: 48px
+- Preferred primary CTA height: 56px to 72px
+- Back buttons must appear on every inner screen
+- Home button must be available from every major module
+- No hover-only interactions
+- No tiny text links as primary actions
+- No hidden menus that require desktop behavior
+- No page should trap the user
+
+==================================================
+4. PASSPORT CEREMONY FIX
+
+PassportStamp.jsx must read:
+
+session.latestStampId
+
+The ceremony screen must visibly show which specific stamp triggered the ceremony.
+
+Add a callout:
+
+“Stamp Earned: [stamp title]”
+
+If latestStampId is null, show:
+
+“Passport milestone unlocked”
+
+Do not crash if stamp data is missing.
+
+Back button on Passport ceremony must have:
+
+minHeight: 48px
+
+==================================================
+5. SESSION STATE AUDIT
+
+Verify GuestSessionContext includes and persists:
+
+- sessionId
+- guest profile
+- selected craft
+- selected mentor
+- selected level
+- currentSession
+- completedSessions
+- earnedStamps
+- latestStampId
+- goldenBoxProgress
+- leaderboardScore
+- audioEnabled
+- hapticsEnabled
+- lastVisitedRoute
+
+Make sure refresh does not wipe the guest journey unless schema version is invalid.
+
+==================================================
+6. BACK BUTTON LOGIC
+
+Back buttons should return to the previous meaningful screen, not always home.
+
+Use:
+
+session.lastVisitedRoute
+
+or safe fallback route.
+
+Fallback order:
+
+1. Previous route
+2. Parent module route
+3. /craft-hub
+4. /
+
+No back button may lead to a blank screen.
+
+==================================================
+7. AUDIO + MUTE BUTTON AUDIT
+
+Add global audio state if missing:
+
+audioEnabled: true/false
+
+Every mentor voice screen must include:
+
+- Listen button
+- Mute button
+- Read instead button
+- Visual “voice muted” state
+
+Do not connect real ElevenLabs API yet unless credentials already exist.
+
+Create safe architecture hooks only:
+
+src/services/voiceService.js
+
+Functions:
+
+speakMentorLine()
+stopMentorVoice()
+toggleMute()
+
+Use mock/local audio fallback if no ElevenLabs key exists.
+
+Do not expose API keys in frontend code.
+
+==================================================
+8. HAPTIC FEEDBACK AUDIT
+
+Add safe haptic helper:
+
+src/utils/haptics.js
+
+Function:
+
+triggerHaptic(type)
+
+Support:
+
+- light
+- medium
+- success
+- warning
+
+Use navigator.vibrate where available.
+Fail silently where unsupported.
+
+Apply haptic feedback to:
+
+- major tile taps
+- session completion
+- stamp award
+- Golden Box reveal
+- leaderboard submission
+- mentor selection
+
+==================================================
+9. DUPLICATE SCREEN CLEANUP
+
+Identify duplicate screens, duplicate cards, and duplicate route outputs.
+
+Do not delete blindly.
+
+Mark duplicates as deprecated only if they are unused.
+
+Create report showing:
+
+- active screen
+- duplicate screen
+- route using it
+- recommendation
+
+Only remove duplicate imports if build confirms safe.
+
+==================================================
+10. BUILD VERIFICATION
+
+Run:
+
+npm run build
+
+Then verify:
+
+- zero errors
+- no blank screens
+- no dead routes
+- no console crash from undefined session data
+
+==================================================
+11. FINAL REPORT REQUIRED
+
+Return a report with:
+
+A. Files inspected
+B. Files changed
+C. Routes repaired
+D. Buttons wired
+E. Back buttons fixed
+F. Passport ceremony latestStampId result
+G. Audio/mute status
+H. Haptic status
+I. Duplicate screens found
+J. Build result
+K. Remaining risks
+
+DO NOT claim completion unless build passes.

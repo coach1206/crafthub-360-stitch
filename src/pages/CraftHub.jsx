@@ -73,7 +73,12 @@ export default function CraftHub() {
 
           {/* Left: menu button */}
           <div className="flex items-center">
-            <button className="material-symbols-outlined text-primary text-3xl hover:bg-primary/10 transition-colors p-3 rounded-full active:scale-95 duration-300 ease-out">
+            <button
+              className="material-symbols-outlined text-primary text-3xl hover:bg-primary/10 transition-colors p-3 rounded-full active:scale-95 duration-300 ease-out"
+              style={{ minWidth: 48, minHeight: 48 }}
+              onClick={() => navigate('/')}
+              aria-label="Back to Lounge"
+            >
               menu
             </button>
           </div>

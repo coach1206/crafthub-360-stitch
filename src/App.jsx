@@ -93,9 +93,12 @@ export default function App() {
 
           {/* 360 Passport */}
           <Route path="passport">
-            <Route index           element={<PassportConnection />} />
-            <Route path="profile"  element={<PassportProfile />} />
-            <Route path="stamps"   element={<PassportStamps />} />
+            <Route index              element={<PassportConnection />} />
+            <Route path="profile"     element={<PassportProfile />} />
+            <Route path="stamps"      element={<PassportStamps />} />
+            {/* Redirect aliases */}
+            <Route path="ceremony"    element={<Navigate to="/smokecraft/passport-stamp" replace />} />
+            <Route path="leaderboard" element={<Navigate to="/smokecraft/leaderboard" replace />} />
           </Route>
 
           {/* Passport Networking — QR / kiosk entry alias */}
@@ -106,6 +109,18 @@ export default function App() {
           <Route path="winecraft"  element={<WineCraft />} />
           <Route path="pos"        element={<POS3 />} />
           <Route path="eat"        element={<EATCommand />} />
+
+          {/* Route aliases & redirects */}
+          <Route path="craft-hub"              element={<Navigate to="/crafthub" replace />} />
+          <Route path="craft-modules"          element={<Navigate to="/crafthub" replace />} />
+          <Route path="dashboard"              element={<Navigate to="/crafthub" replace />} />
+          <Route path="command-center"         element={<Navigate to="/eat" replace />} />
+          <Route path="eat-command"            element={<Navigate to="/eat" replace />} />
+          <Route path="smokecraft/session-1"   element={<Navigate to="/smokecraft" replace />} />
+          <Route path="smokecraft/session-2"   element={<Navigate to="/smokecraft" replace />} />
+          <Route path="smokecraft/session-3"   element={<Navigate to="/smokecraft" replace />} />
+          <Route path="smokecraft/session-4"   element={<Navigate to="/smokecraft" replace />} />
+
           <Route path="*"          element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
