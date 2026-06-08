@@ -65,6 +65,13 @@ const InstallHelp  = lazy(() => import('./pages/InstallHelp.jsx'))
 // ── Phase 12: Venue testing — lazy ────────────────────────────
 const VenueTestControl = lazy(() => import('./pages/VenueTestControl.jsx'))
 
+// ── Phase 13: Founder demo / investor / pilot — lazy ──────────
+const FounderDemo    = lazy(() => import('./pages/FounderDemo.jsx'))
+const InvestorDemo   = lazy(() => import('./pages/InvestorDemo.jsx'))
+const VenueOwnerDemo = lazy(() => import('./pages/VenueOwnerDemo.jsx'))
+const PilotOnboarding = lazy(() => import('./pages/PilotOnboarding.jsx'))
+const SystemOverview = lazy(() => import('./pages/SystemOverview.jsx'))
+
 /** Premium loading fallback shown while lazy chunks load. */
 function NOVEELoader() {
   return (
@@ -287,6 +294,58 @@ export default function App() {
                 lockedMessage="Venue testing requires manager-level access or higher."
               >
                 <VenueTestControl />
+              </ProtectedRoute>
+            } />
+
+            {/* ── Phase 13: Founder demo / investor / pilot ────── */}
+            <Route path="founder-demo" element={
+              <ProtectedRoute
+                allowedRoles={['founder_level_0']}
+                loginRoute="/founder-login"
+                loginLabel="Founder Login"
+                lockedMessage="Founder demo requires founder-level access."
+              >
+                <FounderDemo />
+              </ProtectedRoute>
+            } />
+            <Route path="investor-demo" element={
+              <ProtectedRoute
+                allowedRoles={['founder_level_0']}
+                loginRoute="/founder-login"
+                loginLabel="Founder Login"
+                lockedMessage="Investor demo requires founder-level access."
+              >
+                <InvestorDemo />
+              </ProtectedRoute>
+            } />
+            <Route path="venue-demo" element={
+              <ProtectedRoute
+                allowedRoles={['manager','admin','founder_level_0']}
+                loginRoute="/admin-login"
+                loginLabel="Manager Login"
+                lockedMessage="Venue demo requires manager-level access or higher."
+              >
+                <VenueOwnerDemo />
+              </ProtectedRoute>
+            } />
+            <Route path="pilot-onboarding" element={
+              <ProtectedRoute
+                allowedRoles={['admin','founder_level_0']}
+                loginRoute="/admin-login"
+                loginLabel="Admin Login"
+                lockedMessage="Pilot onboarding requires admin-level access or higher."
+              >
+                <PilotOnboarding />
+              </ProtectedRoute>
+            } />
+            <Route path="system-overview" element={
+              <ProtectedRoute
+                allowedRoles={['manager','admin','founder_level_0']}
+                loginRoute="/admin-login"
+                loginLabel="Manager Login"
+                lockedMessage="System overview requires manager-level access or higher."
+              >
+                <SystemOverview />
               </ProtectedRoute>
             } />
 

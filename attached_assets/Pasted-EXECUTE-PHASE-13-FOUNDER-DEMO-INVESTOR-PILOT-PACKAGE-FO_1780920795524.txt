@@ -1,0 +1,670 @@
+EXECUTE PHASE 13 FOUNDER DEMO / INVESTOR / PILOT PACKAGE FOR NOVEE OS
+
+PHASE 12 IS COMPLETE.
+
+DO NOT redesign the app.
+DO NOT add new major features.
+DO NOT create duplicate screens.
+DO NOT weaken auth.
+DO NOT expose secrets.
+DO NOT connect live POS credentials.
+DO NOT remove prototype mode.
+DO NOT remove kiosk mode.
+DO NOT remove offline fallback.
+DO NOT remove venue testing mode.
+
+MISSION:
+Package NOVEE OS into a polished founder demo, investor-ready pilot presentation, and venue pilot onboarding system.
+
+The system already has:
+
+* CraftHub 360
+* SmokeCraft 360
+* 360 Passport Connection
+* POS 3
+* E.A.T. Command
+* Mentor Voice
+* Kiosk / Tablet deployment
+* Real-world venue testing tools
+* Backend, auth, roles, PostgreSQL, and security layers
+
+Now it needs to be explainable, demo-ready, and sellable.
+
+==================================================
+PHASE 13 PRIMARY GOAL
+
+Create the final demo and pilot package so a founder can walk into a room and explain NOVEE OS clearly in under 5 minutes, then run a controlled tablet/kiosk demo.
+
+The package must include:
+
+1. Founder demo mode
+2. Investor demo route
+3. Venue owner walkthrough route
+4. Pilot partner onboarding flow
+5. Demo script
+6. One-page system overview
+7. Pilot checklist
+8. Pricing / pilot package placeholder
+9. Founder pitch narrative
+10. Live demo safety reset
+11. Exportable pilot summary
+12. No fake live claims
+
+==================================================
+
+1. CREATE DEMO MODE CONFIG
+    ==================================================
+
+Create:
+
+server/config/demoModeConfig.js
+src/config/demoModeConfig.js
+
+Demo mode fields:
+
+{
+enabled,
+demoId,
+demoType,
+audienceType,
+venueName,
+presenterName,
+modulesShown,
+resetOnStart,
+prototypeDisclosure,
+showInvestorMetrics,
+showVenueValue,
+showFounderControls
+}
+
+Demo types:
+
+* founder_walkthrough
+* investor_pitch
+* venue_owner_demo
+* staff_training_demo
+* pilot_partner_demo
+* hardware_vendor_demo
+
+Audience types:
+
+* investor
+* venue_owner
+* manager
+* staff
+* technical_partner
+* hardware_partner
+* founder_only
+
+==================================================
+2. DATABASE MIGRATION
+
+Create migration:
+
+/server/db/migrations/009_demo_pilot_package.sql
+
+Add tables:
+
+A. demo_sessions
+
+Fields:
+
+id
+demo_id
+demo_type
+audience_type
+venue_name
+presenter_name
+status
+started_at
+ended_at
+created_by
+created_at
+updated_at
+
+B. demo_events
+
+Fields:
+
+id
+demo_id
+event_type
+screen_name
+module_name
+payload JSONB
+created_at
+
+C. pilot_partners
+
+Fields:
+
+id
+partner_id
+venue_name
+contact_name
+contact_email
+contact_phone
+city
+state
+status
+pilot_tier
+notes JSONB
+created_at
+updated_at
+
+D. pilot_requirements
+
+Fields:
+
+id
+partner_id
+requirement_key
+status
+notes
+created_at
+updated_at
+
+E. pilot_demo_exports
+
+Fields:
+
+id
+demo_id
+export_type
+payload JSONB
+created_by
+created_at
+
+Do not wipe existing data.
+
+==================================================
+3. BACKEND DEMO / PILOT SERVICES
+
+Create:
+
+server/services/demoSessionService.js
+server/services/pilotPartnerService.js
+server/services/founderPackageService.js
+server/controllers/demoController.js
+server/controllers/pilotController.js
+server/routes/demoRoutes.js
+server/routes/pilotRoutes.js
+
+Mount:
+
+/api/demo
+/api/pilot
+
+Endpoints:
+
+GET /api/demo/status
+POST /api/demo/start
+POST /api/demo/end
+POST /api/demo/event
+GET /api/demo/summary
+POST /api/demo/reset
+
+GET /api/pilot/partners
+POST /api/pilot/partners
+GET /api/pilot/partners/:partnerId
+PUT /api/pilot/partners/:partnerId
+POST /api/pilot/partners/:partnerId/requirement
+GET /api/pilot/package
+
+Permissions:
+
+Manager:
+
+* view demo status
+* run venue/staff demo
+
+Admin:
+
+* manage pilot partner records
+* export demo package
+
+Founder:
+
+* full demo/pilot access
+* founder/investor package
+* pilot pricing placeholder
+* export full summary
+
+Guest:
+
+* no access to demo/pilot APIs directly
+
+==================================================
+4. CREATE FOUNDER DEMO ROUTE
+
+Create:
+
+src/pages/FounderDemo.jsx
+
+Route:
+
+/founder-demo
+
+Protected:
+
+founder_level_0
+
+FounderDemo must include:
+
+* demo launch panel
+* audience selector
+* 5-minute walkthrough mode
+* module jump buttons
+* demo reset button
+* talking points panel
+* prototype disclosure toggle
+* investor value highlights
+* venue value highlights
+* pilot readiness score from Phase 12
+* export demo summary button
+
+Demo sections:
+
+1. What NOVEE OS is
+2. Guest journey
+3. SmokeCraft experience
+4. Passport relationship engine
+5. POS 3 intelligence layer
+6. E.A.T. Command management layer
+7. Kiosk/tablet deployment
+8. Venue testing/readiness score
+9. Pilot ask
+
+==================================================
+5. CREATE INVESTOR DEMO ROUTE
+
+Create:
+
+src/pages/InvestorDemo.jsx
+
+Route:
+
+/investor-demo
+
+Protected:
+
+founder_level_0 or admin if explicitly allowed
+
+InvestorDemo must show:
+
+* problem
+* solution
+* product modules
+* market angle
+* hospitality use case
+* data advantage
+* recurring revenue model placeholder
+* pilot roadmap
+* traction placeholder
+* moat / defensibility
+* demo start button
+
+Do not make fake revenue claims.
+Use placeholder language where numbers are not verified.
+
+Add clear label:
+
+“Prototype / pilot-ready system. Live venue data not connected unless configured.”
+
+==================================================
+6. CREATE VENUE OWNER WALKTHROUGH ROUTE
+
+Create:
+
+src/pages/VenueOwnerDemo.jsx
+
+Route:
+
+/venue-demo
+
+Protected:
+
+manager+
+
+VenueOwnerDemo must explain:
+
+* how guests enter
+* how SmokeCraft increases engagement
+* how Passport captures relationship data
+* how POS 3 supports staff
+* how E.A.T. Command supports management
+* how kiosk/tablet install works
+* what is prototype mode
+* what a pilot requires
+
+Tone:
+clear, premium, non-technical.
+
+==================================================
+7. CREATE PILOT PARTNER ONBOARDING ROUTE
+
+Create:
+
+src/pages/PilotOnboarding.jsx
+
+Route:
+
+/pilot-onboarding
+
+Protected:
+
+admin+
+
+PilotOnboarding must include:
+
+* venue information form
+* contact information
+* pilot tier selector
+* device needs
+* Wi-Fi needs
+* staff training needs
+* module selection
+* POS provider currently used
+* tobacco/alcohol compliance reminder
+* pilot readiness checklist
+* notes field
+
+Pilot tiers:
+
+* Founder Demo
+* Single Tablet Pilot
+* Kiosk Experience Pilot
+* Staff + POS 3 Pilot
+* Full Venue Intelligence Pilot
+
+Do not process payments.
+Pricing can be placeholder only.
+
+==================================================
+8. CREATE SYSTEM OVERVIEW PAGE
+
+Create:
+
+src/pages/SystemOverview.jsx
+
+Route:
+
+/system-overview
+
+Protected:
+
+manager+
+
+This should be a clean internal overview of:
+
+* NOVEE OS
+* CraftHub 360
+* SmokeCraft 360
+* PourCraft / BeerCraft / WineCraft future expansion
+* 360 Passport Connection
+* POS 3
+* E.A.T. Command
+* Mentor Voice
+* Kiosk deployment
+* Venue testing
+
+This is for showing people what the system does without exposing admin controls.
+
+==================================================
+9. ADD NAVIGATION LINKS SAFELY
+
+Add links based on permission only:
+
+FounderControl:
+
+* Founder Demo
+* Investor Demo
+* Pilot Onboarding
+* System Overview
+
+Admin:
+
+* Venue Demo
+* Pilot Onboarding
+* System Overview
+
+DeviceStatus:
+
+* Venue Test
+* Venue Demo
+* Install Help
+
+Do not show these links to guests.
+
+==================================================
+10. CREATE PILOT PACKAGE EXPORT
+
+Create backend export:
+
+GET /api/pilot/package
+
+Returns:
+
+{
+systemName,
+version,
+modules,
+pilotTiers,
+requiredHardware,
+requiredEnvironment,
+setupSteps,
+staffTrainingSteps,
+venueTestingSteps,
+prototypeDisclosures,
+risks,
+nextSteps
+}
+
+No secrets.
+No credentials.
+No private founder controls.
+
+==================================================
+11. CREATE DOCUMENTS
+
+Create:
+
+FOUNDER_DEMO_SCRIPT.md
+INVESTOR_PITCH_NARRATIVE.md
+VENUE_OWNER_DEMO_SCRIPT.md
+PILOT_PARTNER_ONBOARDING.md
+NOVEE_OS_ONE_PAGE_OVERVIEW.md
+PILOT_PACKAGE_CHECKLIST.md
+
+FOUNDER_DEMO_SCRIPT.md must include:
+
+* 5-minute version
+* 15-minute version
+* what to click
+* what to say
+* what not to over-explain
+
+INVESTOR_PITCH_NARRATIVE.md must include:
+
+* problem
+* solution
+* why now
+* product
+* market entry
+* pilot strategy
+* revenue model placeholder
+* moat
+* founder vision
+* ask placeholder
+
+VENUE_OWNER_DEMO_SCRIPT.md must include:
+
+* simple venue-owner language
+* why guests care
+* why staff cares
+* why managers care
+* what pilot looks like
+
+NOVEE_OS_ONE_PAGE_OVERVIEW.md must be crisp and non-technical.
+
+==================================================
+12. DEMO RESET SAFETY
+
+Create or reuse safe reset flow:
+
+POST /api/demo/reset
+
+Rules:
+
+* reset demo sessions
+* reset demo events
+* reset current guest prototype session
+* reset venue test demo state if requested
+* do not delete users
+* do not delete auth credentials
+* do not delete founder controls
+* do not delete audit/security logs
+* do not delete real provider configuration
+* do not touch money/license controls
+
+Founder can do full demo reset.
+Admin can reset pilot/demo data only.
+Manager can reset local walkthrough only.
+
+==================================================
+13. PILOT READINESS DASHBOARD
+
+Add to FounderDemo or create component:
+
+src/components/demo/PilotReadinessDashboard.jsx
+
+Show:
+
+* last venue test readiness score
+* unresolved blocker issues
+* unresolved high issues
+* guest completion rate
+* voice usage
+* mute/read mode usage
+* POS 3 staff checks
+* E.A.T. manager checks
+* kiosk/offline checks
+* recommendation:
+    * not ready
+    * needs fixes
+    * pilot-ready with caution
+    * pilot-ready
+
+Use Phase 12 summary data.
+
+==================================================
+14. PROTOTYPE DISCLOSURE CONTROL
+
+Add reusable component:
+
+src/components/demo/PrototypeDisclosure.jsx
+
+Use it on:
+
+InvestorDemo
+VenueOwnerDemo
+PilotOnboarding
+FounderDemo when toggle is active
+
+Text:
+
+“This demo uses prototype provider data unless live integrations are configured. No live payments or live POS credentials are active in this environment.”
+
+Keep it clean.
+Do not make it scary.
+
+==================================================
+15. FINAL UI SAFETY
+
+Do a final pass:
+
+* no guest sees founder demo
+* no guest sees investor demo
+* no guest sees pilot onboarding
+* no secrets shown
+* no fake live claims
+* no fake revenue claims
+* prototype data labeled properly
+* all demo pages have Back/Home
+* all demo pages use touchscreen-safe buttons
+
+==================================================
+16. TEST MATRIX
+
+Test:
+
+A. npm run build passes.
+B. Backend starts.
+C. /api/health works.
+D. /api/demo/status works for manager+.
+E. Guest blocked from demo APIs.
+F. Founder can open /founder-demo.
+G. Founder can open /investor-demo.
+H. Manager can open /venue-demo.
+I. Admin can open /pilot-onboarding.
+J. Guest cannot open demo/pilot routes.
+K. Demo start/end works.
+L. Demo reset works safely.
+M. Pilot partner create works.
+N. Pilot package export works.
+O. System overview renders.
+P. Prototype disclosure visible where needed.
+Q. Pilot readiness dashboard reads Phase 12 summary.
+R. Founder-only protections still hold.
+S. Auth still works.
+T. Kiosk mode still works.
+U. Offline mode still works.
+V. Mentor voice still works.
+W. POS 3 still works.
+X. E.A.T. still works.
+Y. No secrets exported.
+Z. Build and server both clean.
+
+==================================================
+17. FINAL REPORT REQUIRED
+
+Return a report with:
+
+A. Files created
+B. Files changed
+C. Database migration status
+D. Demo API status
+E. Pilot API status
+F. FounderDemo status
+G. InvestorDemo status
+H. VenueOwnerDemo status
+I. PilotOnboarding status
+J. SystemOverview status
+K. Pilot package export status
+L. Demo reset safety status
+M. Pilot readiness dashboard status
+N. Prototype disclosure status
+O. Documents created
+P. Guest route protection
+Q. Admin/founder protection
+R. Venue test integration
+S. POS 3 regression
+T. E.A.T. regression
+U. Voice regression
+V. Kiosk/offline regression
+W. Build result
+X. Server result
+Y. Remaining risks
+Z. Founder launch recommendation
+
+Do not claim Phase 13 is complete unless:
+
+* npm run build passes
+* backend starts
+* founder demo works
+* venue demo works
+* pilot onboarding works
+* pilot package export works
+* guest routes remain protected
+* no fake live claims are present
+* founder-only protections remain intact

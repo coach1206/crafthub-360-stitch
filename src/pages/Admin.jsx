@@ -304,10 +304,19 @@ export default function Admin() {
             <NavTile icon="hub" label="Integrations" href="#" color={DIM} />
           </PermissionGate>
           <RoleGate allowedRoles={['manager','admin','founder_level_0']}>
-            <NavTile icon="science" label="Venue Test Control" href="/venue-test" color="#a3e635" />
+            <NavTile icon="science"      label="Venue Test Control" href="/venue-test"       color="#a3e635" />
+          </RoleGate>
+          <RoleGate allowedRoles={['manager','admin','founder_level_0']}>
+            <NavTile icon="storefront"   label="Venue Demo"         href="/venue-demo"        color="#60a5fa" />
+          </RoleGate>
+          <RoleGate allowedRoles={['admin','founder_level_0']}>
+            <NavTile icon="assignment"   label="Pilot Onboarding"   href="/pilot-onboarding"  color="#c084fc" />
+          </RoleGate>
+          <RoleGate allowedRoles={['manager','admin','founder_level_0']}>
+            <NavTile icon="dashboard"    label="System Overview"    href="/system-overview"   color="#fbbf24" />
           </RoleGate>
           <RoleGate allowedRoles={['founder_level_0']}>
-            <NavTile icon="shield_lock" label="Founder Controls" href="/founder" color={GOLD} highlight />
+            <NavTile icon="shield_lock"  label="Founder Controls"   href="/founder"           color={GOLD} highlight />
           </RoleGate>
         </div>
 
