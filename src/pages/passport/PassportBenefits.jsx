@@ -4,319 +4,271 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getRankFromXP } from '../../constants/session.js'
 import PassportBottomNav from '../../components/PassportBottomNav.jsx'
 
-const FILL1 = { fontVariationSettings: "'FILL' 1" }
+const FILL1 = { fontVariationSettings:"'FILL' 1" }
+const GOLD = {
+  background:'linear-gradient(135deg,#8b6914 0%,#e9c176 40%,#f5d98a 55%,#c5a059 75%,#8b6914 100%)',
+  WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text',
+}
 
 const TIERS = [
-  { name: 'Novice',  xp: 0,    color: '#c5a059', bg: '#1a1208' },
-  { name: 'Bronze',  xp: 500,  color: '#cd7f32', bg: '#1a0e00' },
-  { name: 'Silver',  xp: 1500, color: '#c0c0c0', bg: '#141414' },
-  { name: 'Gold',    xp: 3000, color: '#e9c176', bg: '#1a1400' },
-  { name: 'Diamond', xp: 6000, color: '#4fc3f7', bg: '#0d1a2a' },
+  { name:'Novice',  xp:0,    color:'#c5a059', desc:'Entry passport'       },
+  { name:'Bronze',  xp:100,  color:'#cd7f32', desc:'Active member'        },
+  { name:'Silver',  xp:300,  color:'#c0c0c0', desc:'Verified networker'   },
+  { name:'Gold',    xp:600,  color:'#e9c176', desc:'Community leader'     },
+  { name:'Diamond', xp:1200, color:'#4fc3f7', desc:'Elite passport'       },
 ]
 
 const BENEFITS = [
   {
-    id: 1,
-    title: 'Priority Lounge Reservations',
-    desc: 'Skip the queue. Gold tier members get first access to Grand Lounge reservations 72 hours before general release.',
-    icon: 'table_restaurant',
-    category: 'Access',
-    tier: 'Gold',
-    color: '#e9c176',
-    detail: 'Available at all 360 Passport partner venues. Show your QR at the host stand.',
-    locked: false,
+    id:'club360', icon:'workspace_premium', title:'The 360 Club', sub:'Priority access to all events',
+    tier:'Gold', xpReq:600, color:'#e9c176',
+    desc:'Gain priority entry to every 360 Passport event, reserved seating, and advance notice of private experiences.',
+    how:'Reach Gold tier (600 XP) to unlock. XP is earned by attending events, making verified connections, and completing craft experiences.',
+    unlocked:false,
   },
   {
-    id: 2,
-    title: 'Private Event Invitations',
-    desc: 'Exclusive invites to invite-only member dinners, showcase tastings, and partner brand nights.',
-    icon: 'mail',
-    category: 'Events',
-    tier: 'Silver',
-    color: '#c0c0c0',
-    detail: 'Delivered directly to your Passport notifications. RSVP within 48 hours to confirm your seat.',
-    locked: false,
+    id:'partner', icon:'percent', title:'Partner Discounts', sub:'Curated savings on premium products',
+    tier:'Bronze', xpReq:100, color:'#cd7f32',
+    desc:'Exclusive discounts from our partner brands across spirits, cigars, apparel, hospitality, and lifestyle.',
+    how:'Reach Bronze tier (100 XP) to activate. Show your passport QR at checkout.',
+    unlocked:false,
   },
   {
-    id: 3,
-    title: 'Complimentary First Pairing',
-    desc: 'One complimentary curated cigar or spirit pairing on your first verified visit to any partner venue.',
-    icon: 'local_bar',
-    category: 'Hospitality',
-    tier: 'Bronze',
-    color: '#cd7f32',
-    detail: 'Valid once per venue. Present your Passport QR to the staff member.',
-    locked: false,
+    id:'drops', icon:'local_offer', title:'Exclusive Drops', sub:'Members-only product access',
+    tier:'Silver', xpReq:300, color:'#c0c0c0',
+    desc:'First access to limited product releases, curated collaborations, and exclusive brand drops before they go public.',
+    how:'Reach Silver tier (300 XP) and check the Drops section in your Benefits page.',
+    unlocked:false,
   },
   {
-    id: 4,
-    title: 'Verified Connection Badge',
-    desc: 'Your profile displays a "Verified Member" badge in the Directory, increasing match quality and connection requests.',
-    icon: 'verified',
-    category: 'Identity',
-    tier: 'Novice',
-    color: '#4caf50',
-    detail: 'Automatically applied when you earn your first 3 stamps.',
-    locked: false,
+    id:'concierge', icon:'support_agent', title:'Concierge Access', sub:'On-demand member services',
+    tier:'Gold', xpReq:600, color:'#e9c176',
+    desc:'Personal concierge for reservations, introductions, event logistics, and private access requests.',
+    how:'Reach Gold tier. Submit requests via the Concierge button on your hub.',
+    unlocked:false,
   },
   {
-    id: 5,
-    title: 'Diamond Concierge Access',
-    desc: 'Personal concierge service for venue reservations, event coordination, and curated member introductions.',
-    icon: 'support_agent',
-    category: 'VIP',
-    tier: 'Diamond',
-    color: '#4fc3f7',
-    detail: 'Activate via direct message to your dedicated concierge. Response within 2 hours.',
-    locked: true,
+    id:'lounge', icon:'meeting_room', title:'Private Lounge Access', sub:'Exclusive member spaces',
+    tier:'Silver', xpReq:300, color:'#c0c0c0',
+    desc:'Unlock access to private lounge areas and VIP spaces at select 360 venues. Scan your passport at the door.',
+    how:'Reach Silver tier and present your QR passport at designated private entrances.',
+    unlocked:false,
   },
   {
-    id: 6,
-    title: 'Partner Venue Network',
-    desc: 'Access to 30+ premium cigar lounges, wine bars, and private dining rooms in the 360 Passport partner network.',
-    icon: 'location_city',
-    category: 'Access',
-    tier: 'Silver',
-    color: '#c0c0c0',
-    detail: 'Network map available in the Benefits section. Show QR at any partner location.',
-    locked: false,
+    id:'priority', icon:'calendar_add_on', title:'Priority Reservations', sub:'Skip the waitlist at partner venues',
+    tier:'Bronze', xpReq:100, color:'#cd7f32',
+    desc:'Priority reservation windows at partner restaurants, lounges, and private dining experiences.',
+    how:'Reach Bronze tier. Use the Reserve button from any Event or Venue card.',
+    unlocked:false,
   },
   {
-    id: 7,
-    title: 'Leaderboard Recognition',
-    desc: 'Top 10 members on the leaderboard are featured in the monthly "Grand Circle" spotlight.',
-    icon: 'emoji_events',
-    category: 'Status',
-    tier: 'Gold',
-    color: '#e9c176',
-    detail: 'Leaderboard resets monthly. XP earned through stamps, events, and verified connections.',
-    locked: false,
+    id:'intros', icon:'record_voice_over', title:'Curated Introductions', sub:'Vetted connections from the 360 team',
+    tier:'Gold', xpReq:600, color:'#e9c176',
+    desc:'Receive personally curated connection requests from the 360 team based on your goals, expertise, and event history.',
+    how:'Reach Gold tier. The team reviews your profile and sends curated introductions monthly.',
+    unlocked:false,
   },
   {
-    id: 8,
-    title: 'Annual Passport Summit Ticket',
-    desc: 'Complimentary attendance to the 360 Annual Passport Summit — the flagship member gathering of the year.',
-    icon: 'celebration',
-    category: 'Events',
-    tier: 'Diamond',
-    color: '#4fc3f7',
-    detail: 'Includes full summit access, meals, craft sessions, and exclusive member networking. Value: $750.',
-    locked: true,
+    id:'scan', icon:'qr_code_scanner', title:'Scan & Connect Verified', sub:'Green verified badge on your passport',
+    tier:'Novice', xpReq:0, color:'#66bb6a',
+    desc:'Complete your first scan-to-connect to earn the Verified badge on your passport QR card.',
+    how:'Scan any member\'s passport QR using the Scan tab. Verification is instant.',
+    unlocked:true,
   },
 ]
 
-const TIER_COLORS = { Novice: '#c5a059', Bronze: '#cd7f32', Silver: '#c0c0c0', Gold: '#e9c176', Diamond: '#4fc3f7' }
-
-function BenefitCard({ benefit }) {
-  const [expanded, setExpanded] = useState(false)
-  const tc = TIER_COLORS[benefit.tier] || '#e9c176'
-
+function BenefitCard({ b, currentXP }) {
+  const [open, setOpen] = useState(false)
+  const isUnlocked = currentXP >= b.xpReq
   return (
-    <button
-      onClick={() => setExpanded(e => !e)}
-      onTouchStart={x => x.currentTarget.style.transform = 'scale(0.99)'}
-      onTouchEnd={x => x.currentTarget.style.transform = ''}
-      className="w-full text-left rounded-2xl overflow-hidden transition-all duration-300 active:scale-[0.99]"
+    <div className="rounded-2xl overflow-hidden"
       style={{
-        background: benefit.locked ? 'rgba(255,255,255,0.03)' : 'rgba(20,16,8,0.9)',
-        border: `1px solid ${benefit.locked ? 'rgba(255,255,255,0.06)' : benefit.color + '30'}`,
-        opacity: benefit.locked ? 0.5 : 1,
-        boxShadow: benefit.locked ? 'none' : `0 2px 16px ${benefit.color}10`,
+        background:`linear-gradient(155deg,${isUnlocked ? '#0d0d0d' : '#080808'},${isUnlocked ? '#141414' : '#0a0a0a'})`,
+        border:`1.5px solid ${isUnlocked ? b.color+'50' : 'rgba(255,255,255,0.07)'}`,
+        boxShadow: isUnlocked ? `0 6px 24px ${b.color}15` : '0 4px 16px rgba(0,0,0,0.5)',
+        opacity: isUnlocked ? 1 : 0.65,
       }}>
-
-      <div className="flex items-start gap-4 p-4">
+      {isUnlocked && <div className="h-0.5" style={{ background:`linear-gradient(90deg,transparent,${b.color}80,transparent)` }} />}
+      <button
+        onClick={() => setOpen(o => !o)}
+        onTouchStart={e => e.currentTarget.style.opacity='0.8'}
+        onTouchEnd={e => { e.currentTarget.style.opacity=''; setOpen(o => !o) }}
+        className="w-full flex items-center gap-4 px-4 active:opacity-80 transition-opacity"
+        style={{ minHeight:72 }}>
         <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: benefit.locked ? 'rgba(255,255,255,0.05)' : `${benefit.color}15`, border: `1px solid ${benefit.locked ? 'rgba(255,255,255,0.08)' : benefit.color + '30'}` }}>
-          <span className="material-symbols-outlined" style={{ fontSize: 22, color: benefit.locked ? 'rgba(255,255,255,0.2)' : benefit.color, ...(benefit.locked ? {} : FILL1) }}>
-            {benefit.locked ? 'lock' : benefit.icon}
-          </span>
+          style={{ background:`${b.color}12`, border:`1.5px solid ${isUnlocked ? b.color+'55' : 'rgba(255,255,255,0.1)'}` }}>
+          <span className="material-symbols-outlined" style={{ fontSize:22, color: isUnlocked ? b.color : 'rgba(255,255,255,0.2)', ...FILL1 }}>{isUnlocked ? b.icon : 'lock'}</span>
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap mb-1">
-            <span className="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full"
-              style={{ background: `${tc}15`, color: tc, border: `1px solid ${tc}30` }}>
-              {benefit.tier}
-            </span>
-            <span className="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full"
-              style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.35)' }}>
-              {benefit.category}
-            </span>
+        <div className="flex-1 text-left">
+          <div className="flex items-center gap-2">
+            <p className="font-bold text-[15px] leading-tight" style={{ color: isUnlocked ? '#f5ead0' : 'rgba(255,255,255,0.3)', fontFamily:'"Playfair Display",serif' }}>{b.title}</p>
+            {isUnlocked && (
+              <div className="w-4 h-4 rounded-full flex items-center justify-center"
+                style={{ background:b.color }}>
+                <span className="material-symbols-outlined" style={{ fontSize:10, color:'#0a0805', ...FILL1 }}>check</span>
+              </div>
+            )}
           </div>
-          <p className="font-bold text-[14px] leading-tight mb-1" style={{ color: benefit.locked ? 'rgba(255,255,255,0.3)' : '#f0e6d0', fontFamily: '"Playfair Display", serif' }}>
-            {benefit.title}
-          </p>
-          <p className="text-[12px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.4)' }}>{benefit.desc}</p>
+          <p className="text-[10px] mt-0.5" style={{ color: isUnlocked ? `${b.color}70` : 'rgba(255,255,255,0.2)' }}>{isUnlocked ? b.sub : `Unlocks at ${b.tier} tier · ${b.xpReq} XP`}</p>
         </div>
-        <span className="material-symbols-outlined flex-shrink-0 mt-1 transition-transform duration-300"
-          style={{ fontSize: 18, color: 'rgba(255,255,255,0.2)', transform: expanded ? 'rotate(180deg)' : 'none' }}>
+        <span className="material-symbols-outlined flex-shrink-0 transition-transform duration-300"
+          style={{ fontSize:18, color:`${b.color}40`, transform: open ? 'rotate(180deg)' : 'none' }}>
           expand_more
         </span>
-      </div>
+      </button>
 
-      {expanded && (
-        <div className="px-4 pb-4 pt-0">
-          <div className="rounded-xl p-3 ml-16" style={{ background: `${benefit.color}08`, border: `1px solid ${benefit.color}20` }}>
-            <p className="text-[9px] uppercase tracking-wider mb-1" style={{ color: `${benefit.color}70` }}>How to use this benefit</p>
-            <p className="text-[12px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>{benefit.detail}</p>
+      {open && (
+        <div className="px-4 pb-4 space-y-3">
+          <div className="h-px" style={{ background:`${b.color}15` }} />
+          <p className="text-[12px] leading-relaxed" style={{ color:'rgba(255,255,255,0.5)' }}>{b.desc}</p>
+          <div className="rounded-xl p-3" style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.06)' }}>
+            <p className="text-[9px] uppercase tracking-wider mb-1.5" style={{ color:'rgba(255,255,255,0.25)' }}>How to unlock</p>
+            <p className="text-[11px] leading-relaxed" style={{ color:'rgba(255,255,255,0.4)' }}>{b.how}</p>
           </div>
-        </div>
-      )}
-    </button>
-  )
-}
-
-export default function PassportBenefits() {
-  const navigate   = useNavigate()
-  const { session } = useGuestSession()
-  const xp         = session.xp ?? 0
-  const rank       = getRankFromXP(xp)
-  const tierColor  = TIER_COLORS[rank.name] || '#e9c176'
-  const currentTier = TIERS.find(t => t.name === rank.name) || TIERS[0]
-  const nextTier    = TIERS[TIERS.findIndex(t => t.name === rank.name) + 1]
-  const xpToNext    = nextTier ? nextTier.xp - xp : 0
-  const [filter, setFilter] = useState('All')
-  const categories = ['All', 'Access', 'Events', 'Hospitality', 'Identity', 'Status', 'VIP']
-  const filtered   = filter === 'All' ? BENEFITS : BENEFITS.filter(b => b.category === filter)
-
-  return (
-    <div className="min-h-screen font-body-md pb-28 text-on-surface overflow-x-hidden"
-      style={{ background: 'linear-gradient(160deg, #0d0d0d 0%, #060606 100%)' }}>
-
-      {/* Platinum ambient glow */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/4 left-1/2 w-96 h-96 rounded-full blur-[150px]" style={{ background: `${tierColor}08` }} />
-      </div>
-
-      {/* Top Bar */}
-      <header className="sticky top-0 z-50 flex flex-col px-5 backdrop-blur-xl border-b"
-        style={{ background: 'rgba(6,6,6,0.95)', borderColor: 'rgba(233,193,118,0.18)' }}>
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center gap-3">
-            <button onClick={() => navigate('/passport')} className="material-symbols-outlined p-2 rounded-full active:bg-white/10 transition-colors"
-              style={{ color: '#e9c176', minWidth: 44, minHeight: 44 }}>arrow_back</button>
-            <div>
-              <p className="font-bold text-[15px] leading-none" style={{ color: '#e9c176', fontFamily: '"Playfair Display", serif' }}>Benefits</p>
-              <p className="text-[10px] uppercase tracking-[0.25em] mt-0.5" style={{ color: 'rgba(233,193,118,0.4)' }}>Member Rewards & Access</p>
+          {isUnlocked ? (
+            <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl"
+              style={{ background:`${b.color}12`, border:`1px solid ${b.color}35` }}>
+              <span className="material-symbols-outlined" style={{ fontSize:16, color:b.color, ...FILL1 }}>check_circle</span>
+              <span className="font-bold text-[12px]" style={{ color:b.color }}>Unlocked · Active</span>
             </div>
-          </div>
-          <div className="flex items-center gap-2 px-3 rounded-full"
-            style={{ height: 36, background: `${tierColor}15`, border: `1px solid ${tierColor}35` }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 14, color: tierColor, ...FILL1 }}>stars</span>
-            <span className="text-[11px] font-bold" style={{ color: tierColor }}>{rank.name} Tier</span>
-          </div>
-        </div>
-
-        {/* Category chips */}
-        <div className="flex gap-2 pb-3 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-          {categories.map(c => (
-            <button key={c} onClick={() => setFilter(c)}
-              onTouchStart={e => e.currentTarget.style.transform = 'scale(0.93)'}
-              onTouchEnd={e => { e.currentTarget.style.transform = ''; setFilter(c) }}
-              className="flex-shrink-0 rounded-full px-4 text-[11px] font-bold uppercase tracking-wider transition-all active:scale-95"
-              style={{
-                height: 34,
-                background: filter === c ? '#e9c176' : 'rgba(233,193,118,0.08)',
-                color: filter === c ? '#060606' : 'rgba(233,193,118,0.6)',
-                border: `1px solid ${filter === c ? '#e9c176' : 'rgba(233,193,118,0.15)'}`,
-              }}>
-              {c}
-            </button>
-          ))}
-        </div>
-      </header>
-
-      <main className="relative z-10 max-w-2xl mx-auto px-4 pt-5 space-y-6">
-
-        {/* ── Tier Status Card ─────────────────────────────────── */}
-        <div className="rounded-2xl p-5" style={{ background: `${currentTier.bg}`, border: `1px solid ${tierColor}30` }}>
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: `${tierColor}60` }}>Your Current Tier</p>
-              <p className="font-bold text-3xl mt-1" style={{ color: tierColor, fontFamily: '"Playfair Display", serif' }}>{rank.name}</p>
-              <p className="text-[12px] mt-1" style={{ color: 'rgba(255,255,255,0.4)' }}>{xp.toLocaleString()} XP earned</p>
-            </div>
-            <div className="text-right">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center"
-                style={{ background: `${tierColor}15`, border: `2px solid ${tierColor}40` }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 30, color: tierColor, ...FILL1 }}>stars</span>
+          ) : (
+            <div className="rounded-xl p-3" style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.06)' }}>
+              <div className="flex justify-between mb-1.5">
+                <span className="text-[10px] font-bold" style={{ color:'rgba(255,255,255,0.3)' }}>Your XP: {currentXP}</span>
+                <span className="text-[10px]" style={{ color:'rgba(255,255,255,0.2)' }}>Need: {b.xpReq} XP</span>
               </div>
-            </div>
-          </div>
-
-          {/* Progress to next tier */}
-          {nextTier && (
-            <div>
-              <div className="flex justify-between text-[11px] mb-2">
-                <span style={{ color: 'rgba(255,255,255,0.4)' }}>Progress to {nextTier.name}</span>
-                <span style={{ color: tierColor }}>{xpToNext.toLocaleString()} XP needed</span>
-              </div>
-              <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
-                <div className="h-full rounded-full"
-                  style={{ width: `${Math.round((xp / nextTier.xp) * 100)}%`, background: `linear-gradient(90deg, ${tierColor}, ${TIER_COLORS[nextTier.name]})` }} />
+              <div className="rounded-full overflow-hidden" style={{ height:5, background:'rgba(255,255,255,0.08)' }}>
+                <div className="h-full rounded-full" style={{ width:`${Math.min(100, Math.round((currentXP/b.xpReq)*100))}%`, background:`linear-gradient(90deg,${b.color}50,${b.color})` }} />
               </div>
             </div>
           )}
         </div>
+      )}
+    </div>
+  )
+}
 
-        {/* ── Tier Ladder ─────────────────────────────────────── */}
-        <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(16,12,4,0.9)', border: '1px solid rgba(233,193,118,0.1)' }}>
-          <div className="px-5 py-4" style={{ borderBottom: '1px solid rgba(233,193,118,0.08)' }}>
-            <p className="font-bold text-[13px]" style={{ color: '#e9c176' }}>Tier Progression</p>
-          </div>
-          <div className="flex items-stretch">
-            {TIERS.map((tier, i) => {
-              const isCurrentTier = tier.name === rank.name
-              const isPastTier    = TIERS.findIndex(t => t.name === rank.name) > i
-              return (
-                <div key={tier.name} className="flex-1 p-3 text-center relative"
-                  style={{ borderRight: i < TIERS.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
-                    background: isCurrentTier ? `${tier.color}10` : 'transparent' }}>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-1.5"
-                    style={{ background: (isPastTier || isCurrentTier) ? `${tier.color}20` : 'rgba(255,255,255,0.04)', border: `1.5px solid ${(isPastTier || isCurrentTier) ? tier.color : 'rgba(255,255,255,0.08)'}` }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 14, color: (isPastTier || isCurrentTier) ? tier.color : 'rgba(255,255,255,0.15)', ...((isPastTier || isCurrentTier) ? FILL1 : {}) }}>
-                      {isPastTier ? 'check' : 'stars'}
-                    </span>
+export default function PassportBenefits() {
+  const navigate = useNavigate()
+  const { session } = useGuestSession()
+  const xp   = session.xp ?? 0
+  const rank = getRankFromXP(xp)
+  const tc   = { Novice:'#c5a059', Bronze:'#cd7f32', Silver:'#c0c0c0', Gold:'#e9c176', Diamond:'#4fc3f7' }[rank.name] || '#e9c176'
+  const unlocked = BENEFITS.filter(b => xp >= b.xpReq).length
+
+  return (
+    <div className="min-h-screen pb-28 overflow-x-hidden"
+      style={{ background:'linear-gradient(160deg,#060406,#080608,#050306)' }}>
+
+      {/* Deep plum ambient */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute inset-0" style={{ background:'radial-gradient(ellipse 65% 40% at 50% 0%, rgba(60,10,80,0.22) 0%, transparent 65%)' }} />
+        <div className="absolute inset-0" style={{ background:'repeating-linear-gradient(135deg,rgba(255,255,255,0.005) 0,rgba(255,255,255,0.005) 1px,transparent 0,transparent 6px)' }} />
+      </div>
+
+      {/* ── Header ── */}
+      <header className="sticky top-0 z-50 flex items-center gap-3 px-4 border-b backdrop-blur-2xl"
+        style={{ height:68, background:'rgba(5,3,6,0.97)', borderColor:'rgba(233,193,118,0.18)' }}>
+        <button onClick={() => navigate('/passport')}
+          className="w-10 h-10 flex items-center justify-center rounded-full active:scale-90 transition-transform flex-shrink-0"
+          style={{ background:'rgba(233,193,118,0.08)', border:'1px solid rgba(233,193,118,0.2)' }}>
+          <span className="material-symbols-outlined" style={{ fontSize:20, color:'#c5a059' }}>arrow_back</span>
+        </button>
+        <div className="flex-1">
+          <p className="font-bold text-[16px] leading-none" style={{ ...GOLD, fontFamily:'"Playfair Display",serif' }}>Benefits</p>
+          <p className="text-[9px] uppercase tracking-[0.25em] mt-0.5" style={{ color:'rgba(233,193,118,0.35)' }}>Member privileges & rewards</p>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+          style={{ background:'rgba(233,193,118,0.08)', border:'1px solid rgba(233,193,118,0.22)' }}>
+          <span className="material-symbols-outlined" style={{ fontSize:13, color:'#c5a059', ...FILL1 }}>lock_open</span>
+          <span className="font-bold text-[11px]" style={{ color:'#c5a059' }}>{unlocked}/{BENEFITS.length}</span>
+        </div>
+      </header>
+
+      <main className="relative z-10 max-w-2xl mx-auto px-4 pt-5 space-y-5">
+
+        {/* ── Vault cover ── */}
+        <section>
+          <div className="rounded-2xl overflow-hidden"
+            style={{ background:'linear-gradient(155deg,#100810,#14091a,#0c0610)', border:'2px solid rgba(233,193,118,0.25)', boxShadow:'0 10px 40px rgba(0,0,0,0.75)' }}>
+            <div className="absolute inset-0 pointer-events-none" style={{ background:'repeating-linear-gradient(135deg,rgba(255,255,255,0.005) 0,rgba(255,255,255,0.005) 1px,transparent 0,transparent 6px)' }} />
+            <div className="h-1.5" style={{ background:'linear-gradient(90deg,#3c1060,#c5a059,#e9c176,#c5a059,#3c1060)' }} />
+            <div className="p-5 relative flex items-start gap-4">
+              <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background:'rgba(233,193,118,0.08)', border:'1.5px solid rgba(233,193,118,0.3)', boxShadow:'0 4px 12px rgba(0,0,0,0.5)' }}>
+                <span className="material-symbols-outlined" style={{ fontSize:28, color:'#e9c176', ...FILL1 }}>stars</span>
+              </div>
+              <div>
+                <p className="font-bold text-[20px] leading-none mb-1.5" style={{ ...GOLD, fontFamily:'"Playfair Display",serif' }}>Member Benefits</p>
+                <p className="text-[11px] leading-relaxed" style={{ color:'rgba(233,193,118,0.4)' }}>
+                  Benefits are unlocked through real participation. The more you attend, connect, and earn stamps, the more access you receive.
+                </p>
+                <div className="flex gap-4 mt-3">
+                  <div>
+                    <p className="font-black text-[18px] leading-none" style={{ color:tc, fontFamily:'"Playfair Display",serif' }}>{unlocked}</p>
+                    <p className="text-[9px] uppercase tracking-wider" style={{ color:`${tc}50` }}>Unlocked</p>
                   </div>
-                  <p className="text-[9px] font-bold uppercase tracking-wider" style={{ color: isCurrentTier ? tier.color : 'rgba(255,255,255,0.25)' }}>{tier.name}</p>
-                  <p className="text-[8px] mt-0.5" style={{ color: 'rgba(255,255,255,0.2)' }}>{tier.xp >= 1000 ? `${tier.xp / 1000}k` : tier.xp} XP</p>
-                  {isCurrentTier && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: `linear-gradient(90deg, transparent, ${tier.color}, transparent)` }} />
-                  )}
+                  <div>
+                    <p className="font-black text-[18px] leading-none" style={{ color:'rgba(255,255,255,0.3)', fontFamily:'"Playfair Display",serif' }}>{BENEFITS.length - unlocked}</p>
+                    <p className="text-[9px] uppercase tracking-wider" style={{ color:'rgba(255,255,255,0.2)' }}>Locked</p>
+                  </div>
+                  <div>
+                    <p className="font-black text-[18px] leading-none" style={{ color:'#e9c176', fontFamily:'"Playfair Display",serif' }}>{xp}</p>
+                    <p className="text-[9px] uppercase tracking-wider" style={{ color:'rgba(233,193,118,0.4)' }}>Current XP</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Tier ladder ── */}
+        <section>
+          <p className="text-[9px] uppercase tracking-[0.3em] mb-3 px-1" style={{ color:'rgba(255,255,255,0.2)' }}>Tier Ladder · Earn XP to Advance</p>
+          <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth:'none' }}>
+            {TIERS.map((t, i) => {
+              const isCurrent = rank.name === t.name
+              const isDone = xp >= t.xp
+              return (
+                <div key={t.name} className="flex-shrink-0 rounded-xl flex flex-col items-center gap-1.5 py-3 px-4"
+                  style={{
+                    background: isCurrent ? `${t.color}18` : 'rgba(255,255,255,0.03)',
+                    border: isCurrent ? `1.5px solid ${t.color}55` : '1px solid rgba(255,255,255,0.07)',
+                    minWidth:80,
+                    boxShadow: isCurrent ? `0 0 16px ${t.color}20` : 'none',
+                  }}>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center"
+                    style={{ background: isDone ? `${t.color}20` : 'rgba(255,255,255,0.04)', border: `1.5px solid ${isDone ? t.color+'60' : 'rgba(255,255,255,0.1)'}` }}>
+                    <span className="material-symbols-outlined" style={{ fontSize:16, color: isDone ? t.color : 'rgba(255,255,255,0.2)', ...FILL1 }}>{isDone ? 'star' : 'lock'}</span>
+                  </div>
+                  <p className="font-bold text-[11px]" style={{ color: isCurrent ? t.color : isDone ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.2)' }}>{t.name}</p>
+                  <p className="text-[8.5px] text-center" style={{ color:'rgba(255,255,255,0.2)' }}>{t.xp} XP</p>
+                  {isCurrent && <div className="w-1.5 h-1.5 rounded-full" style={{ background:t.color }} />}
                 </div>
               )
             })}
           </div>
-        </div>
+        </section>
 
-        {/* ── Benefits explanation ─────────────────────────────── */}
-        <div className="rounded-xl p-4" style={{ background: 'rgba(233,193,118,0.06)', border: '1px solid rgba(233,193,118,0.12)' }}>
-          <p className="text-[11px] uppercase tracking-widest mb-1" style={{ color: 'rgba(233,193,118,0.5)' }}>How benefits work</p>
-          <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
-            Benefits unlock automatically as you earn XP and advance tiers. Tap any benefit to see how to use it. Locked benefits show what you're working toward.
-          </p>
-        </div>
+        {/* ── Benefit vault cards ── */}
+        <section className="space-y-3 pb-2">
+          <p className="text-[9px] uppercase tracking-[0.3em] px-1" style={{ color:'rgba(255,255,255,0.2)' }}>Your Reward Vault</p>
+          {BENEFITS.map(b => <BenefitCard key={b.id} b={b} currentXP={xp} />)}
+        </section>
 
-        {/* ── Benefits list ────────────────────────────────────── */}
-        <div className="space-y-3">
-          {filtered.map(b => <BenefitCard key={b.id} benefit={b} />)}
-        </div>
-
-        {/* ── Earn more CTA ─────────────────────────────────────── */}
-        <button onClick={() => navigate('/smokecraft')}
-          onTouchStart={e => e.currentTarget.style.transform = 'scale(0.98)'}
-          onTouchEnd={e => { e.currentTarget.style.transform = ''; navigate('/smokecraft') }}
-          className="w-full flex items-center gap-4 px-6 rounded-2xl active:scale-[0.98] transition-all"
-          style={{ background: 'linear-gradient(135deg, #1a1400, #2a2000)', border: '1px solid rgba(233,193,118,0.25)', minHeight: 80 }}>
-          <span className="material-symbols-outlined" style={{ fontSize: 32, color: '#e9c176', ...FILL1 }}>workspace_premium</span>
-          <div className="text-left">
-            <p className="font-bold text-[15px]" style={{ color: '#f0e6d0' }}>Earn More XP · Advance Your Tier</p>
-            <p className="text-[12px] mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>Complete SmokeCraft sessions to earn stamps and XP</p>
-          </div>
-          <span className="material-symbols-outlined ml-auto" style={{ fontSize: 20, color: 'rgba(233,193,118,0.4)' }}>arrow_forward_ios</span>
-        </button>
+        {/* ── CTA ── */}
+        <section className="pb-2">
+          <button onClick={() => navigate('/passport/scan')}
+            onTouchStart={e => e.currentTarget.style.transform='scale(0.97)'}
+            onTouchEnd={e => { e.currentTarget.style.transform=''; navigate('/passport/scan') }}
+            className="w-full flex items-center justify-center gap-3 rounded-xl font-bold text-[13px] uppercase tracking-wider active:scale-97 transition-all"
+            style={{ height:68, background:'linear-gradient(135deg,#e9c176,#c5a059)', color:'#0a0805', boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
+            <span className="material-symbols-outlined" style={{ fontSize:20, ...FILL1 }}>qr_code_scanner</span>
+            Earn XP · Attend Events · Scan to Connect
+          </button>
+        </section>
 
       </main>
-
       <PassportBottomNav active="benefits" />
     </div>
   )

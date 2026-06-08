@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   Activity, Thermometer, Volume2, Users, Flame, CheckCircle2,
-  LayoutGrid, BarChart3, Users2, MessageSquare, ListTodo, Plus,
+  LayoutGrid, BarChart3, Users2, MessageSquare, Plus,
   Bell, Send, RotateCcw, ChefHat, ClipboardList, UserPlus,
   MoreVertical, Clock, Radio, Utensils, ShieldCheck, Sparkles,
 } from 'lucide-react'
@@ -35,7 +35,7 @@ const dockActions = [
   { label: 'Table Status', sub: 'Real-time',  icon: <ClipboardList size={24} /> },
   { label: 'Waitlist',     sub: '8 Guests',   icon: <Users2 size={24} />        },
   { label: 'Staff Comms',  sub: 'Team Chat',  icon: <MessageSquare size={24} /> },
-  { label: 'Tasks',        sub: '12 Active',  icon: <ListTodo size={24} />      },
+  { label: 'Tasks',        sub: '12 Active',  icon: <ClipboardList size={24} />  },
 ]
 
 function TouchButton({ label, icon, badge, gold = false }) {

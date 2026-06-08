@@ -1,0 +1,579 @@
+STOP. THE CURRENT PASSPORT PAGES ARE NOT ACCEPTABLE.
+
+The Passport Hub, Stamps, Directory, Events, Connections, and Profile screens still look cheap, flat, empty, and low-budget.
+
+They do not match the luxury 360 Passport Connection reference image.
+They do not feel like a passport.
+They do not feel collectible.
+They do not feel alive.
+They do not feel high-premium.
+They do not clearly explain the product.
+They are too dark, too empty, and too basic.
+
+DO NOT keep polishing the current layout.
+DO NOT keep making centered black screens.
+DO NOT use small cards floating in empty dark space.
+DO NOT make each page feel disconnected.
+DO NOT make the subpages look like plain forms or basic app panels.
+DO NOT say complete until every page looks premium.
+
+THIS IS A FULL PASSPORT VISUAL SYSTEM REBUILD.
+
+==================================================
+MASTER VISUAL STANDARD
+==================================================
+
+All Passport pages must match the provided luxury 360 Passport Connection reference image.
+
+The design must feel like:
+
+- a luxury digital passport
+- a private club credential
+- a collectible stamp journey
+- a real networking engine
+- a premium event access system
+- a live member ecosystem
+- a cinematic hospitality experience
+
+Use visual language from:
+
+- leather passport books
+- gold foil embossing
+- open passport pages
+- page curl effects
+- colorful ink stamps
+- aged paper
+- wax seals
+- executive lounge lighting
+- warm amber glow
+- dark wood table
+- cigar lounge / networking event atmosphere
+- premium membership objects
+
+This must NOT feel like:
+
+- a black SaaS dashboard
+- a basic profile page
+- a cheap mobile app
+- a flat UI kit
+- an admin panel
+- a placeholder prototype
+
+==================================================
+GLOBAL PAGE REQUIREMENT
+==================================================
+
+Every Passport page must have:
+
+1. Cinematic background image
+2. Passport object or page texture
+3. Clear explanation of what the page does
+4. Clear next action
+5. Color-coded section identity
+6. Raised touchscreen buttons
+7. Live-looking content
+8. No empty black space
+9. No dead “coming soon” cards
+10. No tiny text as the main explanation
+11. No vague icons without labels
+12. No flat boxes
+
+Every page must answer:
+
+- What is this page?
+- What can the user do here?
+- Why does it matter?
+- What should they tap next?
+- What do they earn or unlock?
+
+==================================================
+GLOBAL COLOR SYSTEM
+==================================================
+
+Use a passport-book color story across all screens:
+
+1. Hub / Main Passport
+Deep navy leather + antique gold
+
+2. Digital Stamps
+Aged tan paper + red, blue, green, purple, gold stamp ink
+
+3. Directory
+Forest green leather + gold foil
+
+4. Connections
+Burgundy / oxblood leather + gold
+
+5. Events
+Tobacco amber / bronze + gold
+
+6. Rewards / Benefits
+Deep plum + black + platinum gold
+
+7. Profile / Identity
+Black leather + navy passport page + gold identity seals
+
+Do not use flat bright digital colors.
+Colors must feel rich, textured, material, and collectible.
+
+==================================================
+PAGE 1: PASSPORT HUB
+==================================================
+
+Route:
+/passport
+
+This page must be rebuilt to match the full reference image, not the simplified current screen.
+
+Required layout:
+
+TOP LEFT:
+- 360 Passport Connection logo
+- by Profound Innovations LLC
+- Powered by NOVEE OS
+- Welcome back, John M Collins
+- Tier: Enthusiast
+- 225 XP
+- Active Venue: Grand Lounge
+- Upcoming Event
+- Product explanation:
+  “Your digital passport for verified experiences, meaningful connections, collectible stamps, and private access.”
+
+CENTER HERO:
+- Large realistic 360 Passport Connection booklet
+- Open passport page with colorful stamps
+- Page curl
+- QR scan credential card
+- Gold foil details
+- Tagline:
+  “Every stamp tells a story. Every connection builds legacy.”
+
+RIGHT SIDE:
+- How It Works panel:
+  1. Scan In
+  2. Build Profile
+  3. Meet People
+  4. Earn Stamps
+  5. Unlock Access
+
+- Start Here panel:
+  - Scan to Connect
+  - Explore Directory
+  - View Matches
+  - Join Event
+  - Explore Benefits
+
+MIDDLE:
+Six rich object-based cards:
+
+1. Digital Stamps
+Tan paper texture, colorful stamp visuals, button: View My Stamps
+
+2. Directory
+Forest green leather, real member previews, button: Browse Members
+
+3. Connections
+Burgundy leather, suggested matches, button: View Matches
+
+4. Events
+Amber/bronze, event cards with RSVP, button: Browse Events
+
+5. Benefits
+Deep plum/black, unlocks and rewards, button: View Benefits
+
+6. My Profile
+Navy/black passport identity card, portrait, XP, button: View Profile
+
+LOWER:
+- Recent Activity timeline
+- Progress & Rewards
+- Who’s Here Now active member strip
+
+BOTTOM NAV:
+- Home
+- Passport
+- Directory
+- Scan
+- Events
+- Connections
+- Messages
+- Profile
+
+The Scan button must be large, circular, centered, glowing, and raised.
+
+==================================================
+PAGE 2: DIGITAL STAMPS
+==================================================
+
+Route:
+/passport/stamps
+
+Current page is terrible. It looks empty and dead.
+
+Rebuild it as a real stamp collection page.
+
+Visual direction:
+- aged passport paper background
+- ink stamp colors
+- physical stamp grid
+- passport page tabs
+- collectible energy
+
+Top explanation:
+“Stamps are verified proof of your journey. You earn them by attending events, making connections, completing experiences, and unlocking milestones.”
+
+Show stamp categories:
+
+- Event Stamps
+- Connection Stamps
+- Craft Stamps
+- VIP Stamps
+- Achievement Stamps
+- Verified Profile Stamps
+
+Each stamp card must show:
+
+- colorful stamp graphic
+- stamp name
+- type
+- earned date
+- where earned
+- what it unlocks
+- detail button
+
+Add an “How to Earn More” section:
+
+- Attend events
+- Scan to connect
+- Complete profile
+- Finish craft experiences
+- Join premium sessions
+
+Do not show empty locked cards as the main content.
+Locked stamps are allowed only after visible earned stamps.
+
+==================================================
+PAGE 3: DIRECTORY
+==================================================
+
+Route:
+/passport/directory
+
+Current Directory page looks like cheap colored member cards.
+
+Rebuild it as a premium live member directory.
+
+Visual direction:
+- forest green leather
+- gold foil headers
+- member dossier cards
+- realistic portraits
+- premium filters
+
+Top explanation:
+“Directory helps you discover verified members, brands, vendors, speakers, mentors, and professionals who match your goals.”
+
+Add search and filters:
+
+- Industry
+- City
+- Event
+- Interests
+- Looking For
+- Offers
+- Verified Members
+- Active Now
+
+Member cards must include:
+
+- real portrait image
+- name
+- role
+- company
+- city
+- industry tags
+- interests
+- goals
+- shared event
+- why they may matter
+- active/verified badge
+
+Buttons:
+
+- View Profile
+- Save
+- Request Intro
+- Add to Passport
+- Scan to Connect
+
+Directory must feel alive.
+No generic initials-only cards as the main design.
+No dead blue rectangles.
+
+==================================================
+PAGE 4: CONNECTIONS
+==================================================
+
+Route:
+/passport/connections
+
+Current Connections page looks cheap and flat.
+
+Rebuild it as a relationship engine.
+
+Visual direction:
+- burgundy / oxblood leather
+- gold connection lines
+- member match cards
+- social graph feel
+- high-end private networking room
+
+Top explanation:
+“Connections turns event introductions into verified relationships you can track, revisit, and grow.”
+
+Sections:
+
+1. Best Matches For You
+2. People You Met
+3. Suggested Intros
+4. Table Circles
+5. Pending Requests
+6. Recent Verified Connections
+
+Each match card must include:
+
+- portrait
+- name
+- role
+- city
+- match score
+- why you match
+- mutual interests
+- shared event
+- recommended opening line
+- action buttons
+
+Buttons:
+
+- Connect
+- Message
+- Scan to Link
+- Request Intro
+- Save
+- View Profile
+
+No flat blue cards.
+No empty space.
+No weak button rows.
+
+==================================================
+PAGE 5: EVENTS
+==================================================
+
+Route:
+/passport/events
+
+Current Events page looks plain and empty.
+
+Rebuild as a premium event passport access page.
+
+Visual direction:
+- amber / tobacco / bronze
+- lounge event photography
+- invitation cards
+- event pass style
+- RSVP buttons
+
+Top explanation:
+“Events are where your passport comes alive. Attend passport-enabled experiences to meet people, earn stamps, and unlock access.”
+
+Event cards must include:
+
+- event image
+- title
+- date
+- time
+- venue
+- category
+- stamp rewards available
+- expected attendees
+- VIP availability
+- RSVP status
+- button: RSVP
+- button: See Attendees
+- button: View Stamps Available
+
+Show sections:
+
+- Featured Event
+- Upcoming Events
+- VIP Experiences
+- Craft Experiences
+- Networking Mixers
+- Invite-Only
+
+No single lonely event card in the middle of an empty page.
+
+==================================================
+PAGE 6: PROFILE / IDENTITY
+==================================================
+
+Route:
+/passport/profile
+
+Current Profile page feels like a generic black profile page.
+
+Rebuild it like a real passport identity spread.
+
+Visual direction:
+- open passport identity page
+- portrait
+- official member details
+- gold seals
+- paper texture
+- member dossier
+- signature area
+
+Show:
+
+- portrait
+- full name
+- nickname
+- city
+- profession
+- company
+- industries
+- interests
+- goals
+- expertise
+- looking for
+- offering
+- member since
+- tier
+- XP
+- stamps earned
+- connections verified
+- events attended
+- profile completion
+
+Add explanation:
+“Your profile powers your matches. The more complete your passport identity is, the better Directory, Connections, and event recommendations become.”
+
+Buttons:
+
+- Edit Profile
+- Edit Interests
+- View Public Passport
+- Share QR
+- Update Goals
+
+==================================================
+PAGE 7: BENEFITS / REWARDS
+==================================================
+
+Route:
+/passport/benefits
+
+Build this if it does not exist.
+
+Visual direction:
+- deep plum / black / platinum gold
+- reward vault
+- private club access
+- unlock ladder
+
+Top explanation:
+“Benefits are unlocked through real participation. The more you attend, connect, and earn stamps, the more access you receive.”
+
+Show rewards:
+
+- VIP Access
+- Member Pricing
+- Priority Reservations
+- Private Lounge Access
+- Exclusive Events
+- Curated Introductions
+- Brand Partner Perks
+- Concierge Access
+
+Each benefit must show:
+
+- unlock requirement
+- current status
+- progress
+- what it gives the user
+- button: View Details
+
+==================================================
+GLOBAL TOUCHSCREEN REQUIREMENTS
+==================================================
+
+All buttons must:
+
+- be minimum 64px tall
+- preferably 72px
+- have raised style
+- have active press state
+- use haptic-ready class
+- have clear labels
+- not depend on mouse hover
+- work on touchscreen
+
+Cards must lift on touch.
+Buttons must visibly press.
+Scan button must glow and pulse subtly.
+
+==================================================
+DESIGN IMPLEMENTATION REQUIREMENTS
+==================================================
+
+Create or update a shared Passport design system:
+
+- PassportShell
+- PassportHero
+- PassportSectionCard
+- PassportStampCard
+- PassportMemberCard
+- PassportConnectionCard
+- PassportEventCard
+- PassportBenefitCard
+- PassportBottomNav
+- PassportInstructionPanel
+
+Create shared style tokens:
+
+- leather texture
+- aged paper texture
+- gold foil text
+- raised button
+- stamp ink
+- page curl
+- cinematic background
+- card depth
+- object shadows
+
+Do not style every page randomly.
+All pages must feel related but have their own color identity.
+
+==================================================
+DO NOT MARK COMPLETE UNTIL
+==================================================
+
+Do not say complete until these are true:
+
+1. Hub looks like the full luxury reference image.
+2. Stamps page feels like a real stamp collection.
+3. Directory feels live with real member cards.
+4. Connections feels like a relationship engine.
+5. Events feels like premium invitation access.
+6. Profile feels like a passport identity page.
+7. Benefits feels like unlockable private club rewards.
+8. All pages explain what they do.
+9. All pages have clear next actions.
+10. All buttons are touchscreen-ready.
+11. No page is mostly empty black space.
+12. No page looks like cheap colored rectangles.
+13. No page says coming soon as the main content.
+14. Scan is clear and important across the system.
+
+If any of these fail, keep rebuilding.
