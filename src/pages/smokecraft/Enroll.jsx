@@ -5,7 +5,7 @@ import { XP_AWARDS } from '../../constants/session.js'
 
 export default function Enroll() {
   const navigate = useNavigate()
-  const { updateProfile, completeStep, addXP } = useGuestSession()
+  const { updateProfile, completeGuestProfile, completeStep, addXP } = useGuestSession()
   const fileInputRef = useRef(null)
   const [avatarSrc, setAvatarSrc] = useState(null)
   const [form, setForm] = useState({
@@ -28,18 +28,19 @@ export default function Enroll() {
 
   function handleContinue() {
     const [firstName, ...rest] = (form.fullName || '').trim().split(' ')
-    updateProfile({
-      firstName: firstName || '',
-      lastName: rest.join(' '),
-      nickname: form.nickname,
-      email: form.email,
-      phone: form.phone,
-      city: form.city,
-      state: form.state,
-      zip: form.zip,
+    const profilePayload = {
+      firstName:    firstName || '',
+      lastName:     rest.join(' '),
+      nickname:     form.nickname,
+      email:        form.email,
+      phone:        form.phone,
+      city:         form.city,
+      state:        form.state,
+      zip:          form.zip,
       ageConfirmed: form.ageConfirmed,
-      photo: avatarSrc,
-    })
+      photo:        avatarSrc,
+    }
+    completeGuestProfile(profilePayload)
     completeStep('enroll')
     addXP(XP_AWARDS.PROFILE_COMPLETE)
     navigate('/smokecraft/golden-box')

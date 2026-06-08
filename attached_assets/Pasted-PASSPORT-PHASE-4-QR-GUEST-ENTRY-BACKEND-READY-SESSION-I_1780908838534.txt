@@ -1,0 +1,404 @@
+PASSPORT PHASE 4 — QR GUEST ENTRY + BACKEND-READY SESSION IDENTITY
+NOVEE OS / SMOKECRAFT 360 / 360 PASSPORT CONNECTIONS
+NO REDESIGN. NO NEW SCREENS UNLESS REQUIRED FOR ENTRY FLOW. BUILD MUST PASS.
+
+Phase 3 is complete and verified:
+
+* Passport Progress Engine exists at `src/utils/passportProgress.js`
+* All stamp awards now use `awardStamp(stampId, source)`
+* Duplicate protection works
+* Unknown stamp ID protection works
+* latestStampId works and now displays in ceremony
+* Golden Box progress is wired
+* localStorage persistence works
+* PassportStamps, PassportProfile, and Passport ceremony are clean
+* Build passes with 1517 modules transformed and 0 errors
+
+Now execute Phase 4.
+
+==================================================
+PRIMARY OBJECTIVE
+=================
+
+Create a backend-ready guest entry identity layer for 360 Passport Connection.
+
+The system must support:
+
+* QR guest entry
+* kiosk/tablet entry
+* session identity
+* venue identity
+* device identity
+* guest profile capture
+* resume session behavior
+* future backend sync
+
+Do not add a real backend yet unless one already exists.
+Do not redesign the app.
+Do not remove the premium Passport look.
+Do not break SmokeCraft.
+Do not break existing Passport progress.
+Do not create fake disconnected placeholder pages.
+
+This is frontend/session architecture that prepares the app for real venue deployment.
+
+==================================================
+
+1. CREATE PASSPORT ENTRY CONFIG
+   ==================================================
+
+Create:
+
+`src/data/passportEntryConfig.js`
+
+Export constants for:
+
+* DEFAULT_VENUE_ID
+* DEFAULT_DEVICE_ID
+* DEFAULT_ENTRY_SOURCE
+* PASSPORT_ENTRY_TYPES
+* REQUIRED_GUEST_PROFILE_FIELDS
+* OPTIONAL_GUEST_PROFILE_FIELDS
+
+Suggested fields:
+
+REQUIRED:
+
+* firstName
+* lastName or displayName
+* phone or email
+* ageRange
+* consentAccepted
+
+OPTIONAL:
+
+* city
+* state
+* zip
+* profession
+* industry
+* interests
+* goals
+* expertise
+* preferredCraft
+
+Do not collect unnecessary sensitive information.
+Do not add fields that are not useful for Passport, networking, SmokeCraft, or venue analytics.
+
+==================================================
+2. CREATE ENTRY SESSION UTILS
+=============================
+
+Create:
+
+`src/utils/passportEntry.js`
+
+Export safe helper functions:
+
+* `createPassportEntrySession(payload)`
+* `parsePassportEntryParams(searchParams)`
+* `getEntrySourceFromUrl(searchParams)`
+* `getVenueIdFromUrl(searchParams)`
+* `getDeviceIdFromUrl(searchParams)`
+* `mergeGuestProfile(session, profile)`
+* `isGuestProfileComplete(session)`
+* `getGuestDisplayName(session)`
+* `createResumeToken(session)`
+* `validateResumeToken(token)`
+
+Rules:
+
+* No crashes if URL params are missing.
+* No crashes if profile is incomplete.
+* No unsafe JSON parsing.
+* No duplicate guest identity creation.
+* No overwriting earned stamps when profile updates.
+* Existing Passport progress must remain intact.
+
+==================================================
+3. UPDATE GUESTSESSIONCONTEXT
+=============================
+
+Update `GuestSessionContext.jsx` to support entry identity.
+
+Add to default state:
+
+* `guestId`
+* `venueId`
+* `deviceId`
+* `entrySource`
+* `entryStartedAt`
+* `lastActiveAt`
+* `guestProfile`
+* `profileComplete`
+* `resumeToken`
+
+Add context actions:
+
+* `startPassportEntry(payload)`
+* `updateGuestProfile(profile)`
+* `completeGuestProfile(profile)`
+* `refreshLastActive()`
+* `resumePassportSession(token)`
+* `clearPassportIdentity()`
+
+Rules:
+
+* Do not reset earned stamps when profile changes.
+* Do not reset XP when identity changes.
+* Do not wipe completedSteps unless resetGuestSession is called.
+* Preserve SCHEMA_VERSION = 2 unless the state shape requires bumping to 3.
+* If schema version is bumped, make sure stale sessions reset safely.
+
+==================================================
+4. ADD QR PARAM SUPPORT
+=======================
+
+The app should support QR-style URLs like:
+
+`/passport-networking?venue=demo-lounge&device=kiosk-01&source=qr`
+
+and:
+
+`/smokecraft?venue=demo-lounge&device=tablet-02&source=staff`
+
+Behavior:
+
+* Read venue from URL param.
+* Read device from URL param.
+* Read source from URL param.
+* Store these in session state.
+* Do not crash if params are absent.
+* If params are absent, use safe defaults.
+* Do not create broken redirects.
+
+==================================================
+5. GUEST PROFILE CAPTURE CHECK
+==============================
+
+Inspect existing Passport or SmokeCraft profile capture flow.
+
+If a profile screen already exists:
+
+* connect it to `updateGuestProfile`
+* connect completion to `completeGuestProfile`
+* make sure required fields are validated
+* make sure consentAccepted is captured if present
+
+If no profile capture screen exists:
+
+* do not build a large new onboarding system
+* add a minimal premium inline guest identity panel only where entry already begins
+* keep it touchscreen-first
+* keep main CTA 72px
+* do not create a cheap form page
+
+Fields must be kiosk-friendly:
+
+* big inputs
+* clear labels
+* no tiny checkboxes
+* no hover-only controls
+* easy continue button
+
+==================================================
+6. RESUME SESSION SUPPORT
+=========================
+
+Add resume-safe behavior.
+
+Rules:
+
+* If a session exists in localStorage, continue it.
+* If URL params change venue/device, update venue/device but do not wipe progress.
+* If resumeToken exists, preserve it.
+* If resumeToken is invalid, fall back safely.
+* If no session exists, create a new guest session.
+* No boot loop.
+* No blank screen.
+
+==================================================
+7. PASSPORT CONNECTION DISPLAY UPDATE
+=====================================
+
+Update PassportConnection or the main Passport entry screen to show session identity gently.
+
+Show small premium status text such as:
+
+* Venue: Demo Lounge
+* Entry: QR / Kiosk / Staff / Direct
+* Passport Session Active
+* Profile: Complete / Needs Info
+
+Do not clutter the page.
+Do not make it look like a developer dashboard.
+Keep it luxury and guest-facing.
+
+==================================================
+8. SMOKECRAFT CONNECTION UPDATE
+===============================
+
+Make sure SmokeCraft can read the same session identity.
+
+SmokeCraft should know:
+
+* venueId
+* deviceId
+* entrySource
+* guestProfile if present
+* sessionId
+
+Do not change SmokeCraft visuals unless needed.
+Do not break stamp award flow.
+Do not reset Passport progress.
+
+==================================================
+9. BACKEND-READY SYNC SHAPE
+===========================
+
+Create a clean exportable session payload helper.
+
+In either `passportEntry.js` or a new utility file, add:
+
+* `buildPassportSyncPayload(session)`
+
+The payload should include:
+
+* sessionId
+* guestId
+* venueId
+* deviceId
+* entrySource
+* guestProfile
+* profileComplete
+* smokecraftStamps
+* completedSteps
+* xp
+* badges
+* latestStampId
+* goldenBoxProgress
+* createdAt / entryStartedAt
+* lastActiveAt
+* schemaVersion
+
+Do not actually POST to a backend yet.
+Just prepare the shape for Phase 5.
+
+==================================================
+10. TOUCHSCREEN REQUIREMENTS
+============================
+
+Maintain kiosk standards:
+
+* main CTAs at least 72px
+* inputs at least 56px high
+* nav/back buttons at least 48px
+* no hover-only behavior
+* no tiny checkboxes
+* no cramped mobile layout
+* readable on tablet portrait and kiosk landscape
+
+==================================================
+11. TESTING REQUIREMENTS
+========================
+
+Manually test:
+
+1. Open `/passport-networking?venue=demo-lounge&device=kiosk-01&source=qr`
+2. Confirm venue/device/source save to session.
+3. Go to SmokeCraft.
+4. Earn a stamp.
+5. Confirm stamp persists.
+6. Return to Passport.
+7. Confirm Passport still shows same session identity.
+8. Refresh the browser.
+9. Confirm profile/session/progress persists.
+10. Open with different device param.
+11. Confirm device updates without wiping stamps.
+12. Test direct route without params.
+13. Confirm defaults work.
+14. Run `npm run build`.
+
+==================================================
+REQUIRED FINAL REPORT
+=====================
+
+Return this exact report:
+
+PASSPORT PHASE 4 QR ENTRY + SESSION IDENTITY REPORT
+
+1. Files changed:
+
+* list all files changed
+
+2. New files created:
+
+* `src/data/passportEntryConfig.js`:
+* `src/utils/passportEntry.js`:
+
+3. Context identity fields added:
+
+* guestId:
+* venueId:
+* deviceId:
+* entrySource:
+* entryStartedAt:
+* lastActiveAt:
+* guestProfile:
+* profileComplete:
+* resumeToken:
+
+4. Context actions added:
+
+* startPassportEntry:
+* updateGuestProfile:
+* completeGuestProfile:
+* refreshLastActive:
+* resumePassportSession:
+* clearPassportIdentity:
+
+5. QR param support:
+   Pass/Fail
+   Tested URL:
+   Venue:
+   Device:
+   Source:
+
+6. Profile capture:
+   Pass/Fail/Partial
+   Fields connected:
+   Required fields validated:
+   Consent handled:
+
+7. Resume behavior:
+   Pass/Fail
+   Refresh persistence:
+   Venue/device update without wiping progress:
+   No boot loop:
+
+8. SmokeCraft connection:
+   Pass/Fail
+   SmokeCraft reads session identity:
+   Stamp awards still work:
+
+9. Backend-ready sync payload:
+   Pass/Fail
+   Helper created:
+   Payload includes session/progress/profile:
+
+10. Touchscreen readiness:
+    Pass/Fail
+    Main CTAs 72px:
+    Inputs 56px:
+    Nav/back buttons 48px:
+
+11. Build status:
+    `npm run build`:
+    Modules transformed:
+    Errors:
+    Warnings:
+
+12. Remaining real issues:
+    Only list real issues found.
+    Do not invent future features.
+    Do not add backend yet.

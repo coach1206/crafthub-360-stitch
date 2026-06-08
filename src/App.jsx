@@ -36,7 +36,13 @@ import PassportStamp from './pages/smokecraft/PassportStamp.jsx'
 
 function BootGuard({ children }) {
   const booted = sessionStorage.getItem('novee_booted')
-  if (!booted) return <Navigate to="/boot" replace />
+  if (!booted) {
+    const intended = window.location.pathname + window.location.search
+    if (intended !== '/boot' && intended !== '/') {
+      sessionStorage.setItem('novee_boot_return', intended)
+    }
+    return <Navigate to="/boot" replace />
+  }
   return children
 }
 
@@ -91,6 +97,9 @@ export default function App() {
             <Route path="profile"  element={<PassportProfile />} />
             <Route path="stamps"   element={<PassportStamps />} />
           </Route>
+
+          {/* Passport Networking — QR / kiosk entry alias */}
+          <Route path="passport-networking" element={<PassportConnection />} />
 
           <Route path="pourcraft"  element={<PourCraft />} />
           <Route path="beercraft"  element={<BeerCraft />} />

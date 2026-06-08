@@ -5,16 +5,30 @@ import {
   recordGoldenBoxProgress,
   unlockPassportCeremony,
 } from '../utils/passportProgress.js'
+import {
+  mergeGuestProfile,
+  createResumeToken,
+  validateResumeToken,
+} from '../utils/passportEntry.js'
+import {
+  DEFAULT_VENUE_ID,
+  DEFAULT_DEVICE_ID,
+  DEFAULT_ENTRY_SOURCE,
+} from '../data/passportEntryConfig.js'
 
 const STORAGE_KEY    = 'novee_guest_session'
-const SCHEMA_VERSION = 2   // bump when defaultState shape changes
+const SCHEMA_VERSION = 3   // 2→3: added Phase 4 entry identity fields
+
+function genGuestId() {
+  const now = Date.now()
+  return `g_${now.toString(36)}_${Math.random().toString(36).slice(2, 8)}`
+}
 
 function loadFromStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw)
-    // Schema version guard — stale or malformed data resets to default
     if (!parsed || typeof parsed !== 'object' || parsed.__version !== SCHEMA_VERSION) return null
     return parsed
   } catch {
@@ -43,8 +57,18 @@ const defaultState = {
   pendingOrders:         [],
   currentSmokecraftStep: null,
   sessionId:             null,
-  latestStampId:         null,   // which stamp last triggered a ceremony visit
-  goldenBoxProgress:     null,   // { tier, claimed, badge, updatedAt }
+  latestStampId:         null,
+  goldenBoxProgress:     null,
+  // Phase 4 — entry identity
+  guestId:               null,
+  venueId:               DEFAULT_VENUE_ID,
+  deviceId:              DEFAULT_DEVICE_ID,
+  entrySource:           DEFAULT_ENTRY_SOURCE,
+  entryStartedAt:        null,
+  lastActiveAt:          null,
+  guestProfile:          null,
+  profileComplete:       false,
+  resumeToken:           null,
 }
 
 const GuestSessionContext = createContext(null)
@@ -63,7 +87,7 @@ export function GuestSessionProvider({ children }) {
     })
   }, [])
 
-  // ── Profile ──────────────────────────────────────────────────────────────
+  // ── Profile (display) ─────────────────────────────────────────────────────
   const updateProfile = useCallback((fields) => {
     update(prev => ({ ...prev, profile: { ...prev.profile, ...fields } }))
   }, [update])
@@ -79,7 +103,7 @@ export function GuestSessionProvider({ children }) {
     }))
   }, [update])
 
-  // ── XP ───────────────────────────────────────────────────────────────────
+  // ── XP ────────────────────────────────────────────────────────────────────
   const addXP = useCallback((amount) => {
     update(prev => {
       const newXP = prev.xp + amount
@@ -87,7 +111,7 @@ export function GuestSessionProvider({ children }) {
     })
   }, [update])
 
-  // ── Badges ───────────────────────────────────────────────────────────────
+  // ── Badges ────────────────────────────────────────────────────────────────
   const addBadge = useCallback((badge) => {
     update(prev => ({
       ...prev,
@@ -98,30 +122,22 @@ export function GuestSessionProvider({ children }) {
   }, [update])
 
   // ── Passport stamps ───────────────────────────────────────────────────────
-  /**
-   * Primary stamp award method — validates against STAMP_CATALOG, prevents duplicates,
-   * sets latestStampId for ceremony pages.
-   */
+  /** Primary stamp award — validates against catalog, prevents duplicates, sets latestStampId. */
   const awardStamp = useCallback((stampId, source = 'unknown') => {
     update(prev => awardPassportStamp(prev, stampId, source))
   }, [update])
 
-  /**
-   * Legacy alias — kept for backward compat. Delegates to awardStamp logic.
-   * New code should use awardStamp(stampId, source) instead.
-   */
+  /** @deprecated Use awardStamp(stampId, source). Kept for backward compat. */
   const addSmokecraftStamp = useCallback((stamp) => {
     update(prev => awardPassportStamp(prev, stamp.id, stamp.source || 'legacy'))
   }, [update])
 
   // ── Ceremony ──────────────────────────────────────────────────────────────
-  /** Sets latestStampId so the ceremony page knows which stamp triggered it. */
   const unlockCeremony = useCallback((stampId) => {
     update(prev => unlockPassportCeremony(prev, stampId))
   }, [update])
 
   // ── Golden Box ────────────────────────────────────────────────────────────
-  /** Records Golden Box claim progress into session state. */
   const updateGoldenBoxProgress = useCallback((payload) => {
     update(prev => recordGoldenBoxProgress(prev, payload))
   }, [update])
@@ -147,6 +163,91 @@ export function GuestSessionProvider({ children }) {
     }))
   }, [update])
 
+  // ── Phase 4: Entry identity ───────────────────────────────────────────────
+
+  /**
+   * Called on QR scan / kiosk launch.
+   * Sets venue, device, entry source, and initialises guestId if not present.
+   * Never wipes stamps, XP, or completedSteps.
+   */
+  const startPassportEntry = useCallback((payload = {}) => {
+    update(prev => {
+      const now = Date.now()
+      return {
+        ...prev,
+        guestId:        prev.guestId        || payload.guestId      || genGuestId(),
+        venueId:        payload.venueId      || prev.venueId         || DEFAULT_VENUE_ID,
+        deviceId:       payload.deviceId     || prev.deviceId        || DEFAULT_DEVICE_ID,
+        entrySource:    payload.entrySource  || prev.entrySource     || DEFAULT_ENTRY_SOURCE,
+        entryStartedAt: prev.entryStartedAt  || now,
+        lastActiveAt:   now,
+        // stamps, XP, completedSteps: untouched
+      }
+    })
+  }, [update])
+
+  /**
+   * Updates guestProfile and mirrors core display fields to session.profile.
+   * Does NOT set profileComplete — use completeGuestProfile for that.
+   */
+  const updateGuestProfile = useCallback((profile) => {
+    update(prev => mergeGuestProfile(prev, profile))
+  }, [update])
+
+  /**
+   * Marks profile complete, merges fields, generates a resumeToken.
+   * Replaces the separate updateProfile call for final form submission.
+   */
+  const completeGuestProfile = useCallback((profile) => {
+    update(prev => {
+      const merged = mergeGuestProfile(prev, profile)
+      const token  = createResumeToken(merged)
+      return {
+        ...merged,
+        profileComplete: true,
+        resumeToken:     token,
+      }
+    })
+  }, [update])
+
+  /** Stamps the session with the current time as lastActiveAt. */
+  const refreshLastActive = useCallback(() => {
+    update(prev => ({ ...prev, lastActiveAt: Date.now() }))
+  }, [update])
+
+  /**
+   * Validates a resume token and, if valid, stores it and refreshes lastActiveAt.
+   * Silent no-op if token is invalid.
+   */
+  const resumePassportSession = useCallback((token) => {
+    const parsed = validateResumeToken(token)
+    if (!parsed) return
+    update(prev => ({
+      ...prev,
+      resumeToken:  token,
+      lastActiveAt: Date.now(),
+    }))
+  }, [update])
+
+  /**
+   * Clears venue/device/entry identity only.
+   * Stamps, XP, completedSteps, and session.profile are preserved.
+   */
+  const clearPassportIdentity = useCallback(() => {
+    update(prev => ({
+      ...prev,
+      guestId:         null,
+      venueId:         DEFAULT_VENUE_ID,
+      deviceId:        DEFAULT_DEVICE_ID,
+      entrySource:     DEFAULT_ENTRY_SOURCE,
+      entryStartedAt:  null,
+      lastActiveAt:    null,
+      guestProfile:    null,
+      profileComplete: false,
+      resumeToken:     null,
+    }))
+  }, [update])
+
   // ── Session reset ─────────────────────────────────────────────────────────
   const resetGuestSession = useCallback(() => {
     const fresh = { ...defaultState, sessionId: Date.now().toString() }
@@ -160,19 +261,31 @@ export function GuestSessionProvider({ children }) {
   return (
     <GuestSessionContext.Provider value={{
       session,
+      // Profile
       updateProfile,
+      // SmokeCraft
       completeStep,
       addXP,
       addBadge,
+      // Stamps
       awardStamp,
-      addSmokecraftStamp,      // legacy alias
+      addSmokecraftStamp,       // legacy alias
       unlockCeremony,
       updateGoldenBoxProgress,
+      // Social
       setMentors,
       addFavorite,
       addPendingOrder,
+      // Phase 4: Entry identity
+      startPassportEntry,
+      updateGuestProfile,
+      completeGuestProfile,
+      refreshLastActive,
+      resumePassportSession,
+      clearPassportIdentity,
+      // Reset
       resetGuestSession,
-      resetSession,            // legacy alias
+      resetSession,             // legacy alias
     }}>
       {children}
     </GuestSessionContext.Provider>

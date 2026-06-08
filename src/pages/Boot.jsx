@@ -11,7 +11,9 @@ export default function Boot() {
 
   useEffect(() => {
     if (sessionStorage.getItem('novee_booted')) {
-      navigate('/', { replace: true })
+      const returnPath = sessionStorage.getItem('novee_boot_return') || '/'
+      sessionStorage.removeItem('novee_boot_return')
+      navigate(returnPath, { replace: true })
       return
     }
     const fadeTimer = setTimeout(() => setHeaderVisible(true), 800)
@@ -31,7 +33,9 @@ export default function Boot() {
       setActivating(true)
       setTimeout(() => {
         sessionStorage.setItem('novee_booted', '1')
-        navigate('/')
+        const returnPath = sessionStorage.getItem('novee_boot_return') || '/'
+        sessionStorage.removeItem('novee_boot_return')
+        navigate(returnPath)
       }, 800)
     }, 1500)
   }

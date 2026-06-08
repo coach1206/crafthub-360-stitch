@@ -1,7 +1,12 @@
 import { useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useGuestSession } from '../context/GuestSessionContext.jsx'
 import { getRankFromXP } from '../constants/session.js'
+import {
+  parsePassportEntryParams,
+  getVenueDisplayName,
+  getEntrySourceLabel,
+} from '../utils/passportEntry.js'
 
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
@@ -36,8 +41,22 @@ function NavTab({ icon, label, active, locked, onClick }) {
 
 export default function PassportConnection() {
   const navigate = useNavigate()
-  const { session } = useGuestSession()
-  const bgRef = useRef(null)
+  const [searchParams]  = useSearchParams()
+  const { session, startPassportEntry, refreshLastActive } = useGuestSession()
+  const bgRef            = useRef(null)
+  const entryInitRef     = useRef(false)
+
+  // ── Capture QR / kiosk entry params on mount (or when URL params change) ──
+  useEffect(() => {
+    if (entryInitRef.current) return
+    entryInitRef.current = true
+    const params = parsePassportEntryParams(searchParams)
+    if (params.venueId || params.deviceId || params.entrySource) {
+      startPassportEntry(params)
+    }
+    refreshLastActive()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const stamps    = session.smokecraftStamps ?? []
   const xp        = session.xp ?? 0
@@ -48,6 +67,10 @@ export default function PassportConnection() {
   const displayName = session.profile?.firstName
     ? `${session.profile.firstName} ${session.profile.lastName || ''}`.trim()
     : 'Grand Member'
+
+  const venueLabel       = getVenueDisplayName(session.venueId)
+  const entryLabel       = getEntrySourceLabel(session.entrySource)
+  const profileStatusTxt = session.profileComplete ? 'Complete' : 'Needs Info'
 
   useEffect(() => {
     function handleMove(e) {
@@ -61,7 +84,6 @@ export default function PassportConnection() {
   }, [])
 
   const profilePhoto = session.profile?.photo
-
   const initials = `${session.profile?.firstName?.[0] || 'G'}${session.profile?.lastName?.[0] || 'M'}`
 
   return (
@@ -109,6 +131,7 @@ export default function PassportConnection() {
           </div>
           <button
             className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 text-primary hover:opacity-80 transition-opacity active:scale-95 duration-300"
+            style={{ minWidth: 48, minHeight: 48 }}
             onClick={() => navigate('/passport/profile')}
           >
             <span className="material-symbols-outlined">manage_accounts</span>
@@ -123,13 +146,49 @@ export default function PassportConnection() {
       >
 
         {/* Welcome Hero */}
-        <section className="mb-12" style={{ animation: 'fadeUp 0.8s ease both' }}>
+        <section className="mb-10" style={{ animation: 'fadeUp 0.8s ease both' }}>
           <h1 className="font-display-lg text-primary leading-tight mb-2" style={{ fontSize: 'clamp(32px, 5vw, 64px)', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
             Welcome back, {displayName}
           </h1>
-          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-5">
             Your journey through the world&apos;s finest collections continues. Explore your digital portfolio and upcoming artisan events.
           </p>
+
+          {/* Session Identity Status — subtle, premium */}
+          <div className="flex flex-wrap items-center gap-x-7 gap-y-2">
+            <div className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-primary/70" style={{ fontSize: 13 }}>location_on</span>
+              <span className="font-label-sm text-label-sm text-on-surface-variant/60 uppercase tracking-widest" style={{ fontSize: 11 }}>
+                {venueLabel}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-primary/70" style={{ fontSize: 13 }}>qr_code_scanner</span>
+              <span className="font-label-sm text-label-sm text-on-surface-variant/60 uppercase tracking-widest" style={{ fontSize: 11 }}>
+                Entry: {entryLabel}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span
+                className="inline-block rounded-full"
+                style={{ width: 6, height: 6, background: '#e9c176', boxShadow: '0 0 6px rgba(233,193,118,0.7)', flexShrink: 0 }}
+              />
+              <span className="font-label-sm text-label-sm text-primary/70 uppercase tracking-widest" style={{ fontSize: 11 }}>
+                Passport Session Active
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: 13, color: session.profileComplete ? '#e9c176' : 'rgba(255,255,255,0.25)' }}
+              >
+                {session.profileComplete ? 'check_circle' : 'pending'}
+              </span>
+              <span className="font-label-sm text-label-sm text-on-surface-variant/60 uppercase tracking-widest" style={{ fontSize: 11 }}>
+                Profile: {profileStatusTxt}
+              </span>
+            </div>
+          </div>
         </section>
 
         {/* Bento Grid */}
@@ -206,10 +265,10 @@ export default function PassportConnection() {
           {/* Nav Tiles 2×2 */}
           <div className="col-span-12 md:col-span-7 grid grid-cols-2 gap-8" style={{ height: 400 }}>
             {[
-              { icon: 'person',    title: 'My Profile',       sub: 'Preferences & Tastes',   to: '/passport/profile', locked: false },
-              { icon: 'qr_code_2', title: 'Digital Stamps',   sub: 'Verification Center',    to: '/passport/stamps',  locked: false },
-              { icon: 'storefront',title: 'Artisan Directory', sub: 'Exclusive Partners',     to: null,                locked: true  },
-              { icon: 'hub',       title: 'Connections',       sub: 'Member Network',         to: null,                locked: true  },
+              { icon: 'person',     title: 'My Profile',        sub: 'Preferences & Tastes',  to: '/passport/profile', locked: false },
+              { icon: 'qr_code_2',  title: 'Digital Stamps',    sub: 'Verification Center',   to: '/passport/stamps',  locked: false },
+              { icon: 'storefront', title: 'Artisan Directory',  sub: 'Exclusive Partners',    to: null,                locked: true  },
+              { icon: 'hub',        title: 'Connections',        sub: 'Member Network',        to: null,                locked: true  },
             ].map(({ icon, title, sub, to, locked }) => (
               <div
                 key={title}
@@ -286,11 +345,10 @@ export default function PassportConnection() {
                 </div>
               ))
               : (
-                /* Placeholder cards when no stamps earned */
                 [
                   { title: 'Master Blend Challenge', sub: 'Authenticated at the Havana Room. Achievement unlocked.', when: 'Complete SmokeCraft' },
-                  { title: 'Seed & Soil', sub: 'Origins heritage tour completed. Exclusive badge awarded.', when: 'Complete Origins' },
-                  { title: "The Alchemist's Pour", sub: 'Mixology masterclass participation. Signature cocktail verified.', when: 'Complete Pairing' },
+                  { title: 'Seed & Soil',             sub: 'Origins heritage tour completed. Exclusive badge awarded.',  when: 'Complete Origins' },
+                  { title: "The Alchemist's Pour",    sub: 'Mixology masterclass participation. Signature cocktail verified.', when: 'Complete Pairing' },
                 ].map((c, i) => (
                   <div
                     key={c.title}
@@ -343,10 +401,10 @@ export default function PassportConnection() {
         className="fixed bottom-0 w-full z-50 backdrop-blur-2xl border-t border-primary/20 shadow-[0_-4px_24px_rgba(233,193,118,0.1)] rounded-t-xl flex justify-around items-center px-8"
         style={{ background: 'rgba(14,14,15,0.8)', height: 80, paddingBottom: 16 }}
       >
-        <NavTab icon="dashboard"       label="Hub"      active onClick={() => navigate('/passport')} />
-        <NavTab icon="menu_book"       label="Passport" onClick={() => navigate('/passport/stamps')} />
-        <NavTab icon="temp_preferences_custom" label="Artisans" locked onClick={() => navigate('/')} />
-        <NavTab icon="settings_accessibility"  label="Settings" onClick={() => navigate('/passport/profile')} />
+        <NavTab icon="dashboard"                      label="Hub"      active onClick={() => navigate('/passport')} />
+        <NavTab icon="menu_book"                      label="Passport" onClick={() => navigate('/passport/stamps')} />
+        <NavTab icon="temp_preferences_custom"        label="Artisans" locked onClick={() => {}} />
+        <NavTab icon="settings_accessibility"         label="Settings" onClick={() => navigate('/passport/profile')} />
       </nav>
 
       <style>{`
