@@ -1,0 +1,499 @@
+Images should come from a replaceable image source
+Either:
+
+1. Internet image URL
+2. Uploaded image from admin/media library
+3. Local public assets folder
+4. Inventory database image field
+
+And every pairing card should be clickable so the user can:
+
+- View details
+- Add drink to bar order
+- Add cigar to humidor order
+- Add full pairing bundle
+- Send order to POS 3 / E.A.T.
+- Notify staff
+
+Paste this into Replit:
+
+MAKE THE CIGAR PAIRING SCREEN FUNCTIONAL AND IMAGE-DRIVEN.
+
+The current pairing screen looks visually better, but it must not be static.
+
+DO NOT use fixed images that cannot be changed.
+DO NOT make the pairing cards decorative only.
+DO NOT leave buttons or cards dead.
+DO NOT hardcode everything permanently.
+
+OBJECTIVE:
+Turn the pairing screen into a functional product ordering interface where admins can change images, users can tap cards, and orders can be sent to the bar or humidor.
+
+==================================================
+CORE FUNCTIONAL REQUIREMENTS
+==================================================
+
+1. Image Source System
+
+Every cigar, drink, dessert, coffee, and pairing card must support dynamic images from:
+
+- internet image URL
+- uploaded image path
+- local public assets
+- admin media directory
+- inventory image field
+
+Each item must have an image field:
+
+imageUrl: string
+
+If imageUrl is missing or broken, show a premium fallback image instead of a blank box.
+
+Fallbacks:
+- cigar fallback image
+- whiskey fallback image
+- coffee fallback image
+- dessert fallback image
+- pairing fallback image
+
+Never show a broken image icon.
+
+==================================================
+2. Admin / Data Editable Items
+==================================================
+
+The pairing data should be stored in a structured array or API-ready format.
+
+Each item must include:
+
+- id
+- name
+- category
+- type
+- source
+- imageUrl
+- shortDescription
+- tastingNotes
+- matchScore
+- price
+- inventoryStatus
+- available
+- orderDestination
+- tags
+- pairingReason
+
+Example categories:
+
+- Cigar
+- Whiskey
+- Bourbon
+- Rum
+- Coffee
+- Dessert
+- Wine
+- Cocktail
+- Pairing Bundle
+
+Order destinations:
+
+- HUMIDOR
+- BAR
+- KITCHEN
+- POS3
+
+==================================================
+3. Clickable Pairing Cards
+==================================================
+
+Every pairing card must be clickable.
+
+When a user taps a card:
+
+- open item detail modal
+- show larger image
+- show name
+- show match score
+- show tasting notes
+- show pairing reason
+- show price
+- show availability
+- show action buttons
+
+Action buttons:
+
+- Add Drink to Bar Order
+- Add Cigar to Humidor Order
+- Add Pairing Bundle
+- Ask Staff
+- Save to Passport
+
+If the item is out of stock, disable order button and show:
+“Currently unavailable. Ask staff for substitute.”
+
+==================================================
+4. Order From Bar / Humidor
+==================================================
+
+If item category is drink, send order to BAR.
+
+If item category is cigar, send order to HUMIDOR.
+
+If item is dessert or food, send order to KITCHEN.
+
+If item is a pairing bundle, send each item to its correct destination and create one grouped order.
+
+Example:
+
+Pairing Bundle:
+- Arturo Fuente OpusX → HUMIDOR
+- Zacapa Centenario → BAR
+- Cacao Noir 85% → KITCHEN
+
+The screen must show confirmation:
+
+“Pairing sent to staff.”
+
+Then show:
+- order number
+- destination
+- item count
+- estimated wait time
+
+==================================================
+5. POS 3 / E.A.T. Integration Ready
+==================================================
+
+Do not fake the order flow as only visual.
+
+Create the function:
+
+createPairingOrder(item)
+
+And for bundles:
+
+createPairingBundleOrder(bundle)
+
+For now, use local React state and mock API logic.
+Later this should connect to POS 3 / E.A.T. Command.
+
+Order payload must include:
+
+- guestId
+- venueId
+- tableId
+- sessionId
+- itemId
+- itemName
+- category
+- destination
+- price
+- quantity
+- notes
+- timestamp
+- status
+
+Status options:
+
+- pending
+- sent_to_bar
+- sent_to_humidor
+- sent_to_kitchen
+- preparing
+- delivered
+- unavailable
+
+==================================================
+6. Image Management
+==================================================
+
+Add ability for admin/data layer to change image URLs.
+
+Create a helper function:
+
+getImageUrl(item)
+
+It should return:
+- item.imageUrl if valid
+- category fallback if missing
+- general fallback if category fallback missing
+
+Add image error handling:
+
+onError should replace failed image with fallback.
+
+No broken images allowed.
+
+==================================================
+7. UI / UX Requirements
+==================================================
+
+The screen must keep the premium look:
+- cinematic cigar lounge background
+- raised pairing cards
+- frosted glass panels
+- real product images
+- gold borders
+- match score meter
+- tactile buttons
+- haptic-ready active state
+
+Every card must clearly show:
+
+- image
+- name
+- category
+- match score
+- short description
+- price
+- available / low stock / out of stock
+- tap instruction
+
+Example microcopy:
+“Tap to view pairing and order.”
+
+==================================================
+8. Buttons Must Work
+==================================================
+
+These buttons must be functional:
+
+- View Pairing
+- Add to Bar Order
+- Add to Humidor Order
+- Add Pairing Bundle
+- Ask Staff
+- Save to Passport
+- View Cart
+- Send Order
+
+No placeholder buttons.
+No dead buttons.
+
+==================================================
+9. Cart / Order Tray
+==================================================
+
+Add a small order tray or cart drawer.
+
+Cart should show:
+
+- selected items
+- destination badge
+- quantity
+- price
+- subtotal
+- notes
+- remove button
+- send order button
+
+When order is sent, clear cart and show confirmation toast/modal.
+
+==================================================
+10. Touchscreen Requirements
+==================================================
+
+Every card and button must be touchscreen-ready:
+
+- 64px minimum touch target
+- preferably 72px
+- raised press state
+- haptic-ready class
+- clear label
+- no tiny controls
+- no hover-only behavior
+
+==================================================
+FINAL RESULT
+==================================================
+
+The pairing page must become a live functional ordering screen.
+
+Users should be able to:
+1. See realistic images
+2. Tap a pairing card
+3. View details
+4. Add drink to bar order
+5. Add cigar to humidor order
+6. Add full pairing bundle
+7. Send order to staff/POS 3
+8. See confirmation
+
+Admins/developers should be able to:
+1. Change images using URLs
+2. Pull images from a directory
+3. Replace broken images automatically
+4. Add new products to the pairing data
+5. Connect the order payload to POS 3 later
+
+Here’s the frontend data structure Replit should use:
+
+const pairingItems = [
+  {
+    id: "drink-old-rip",
+    name: "Old Rip Van Winkle",
+    category: "Bourbon",
+    type: "drink",
+    source: "bar",
+    imageUrl: "https://example.com/old-rip-van-winkle.jpg",
+    shortDescription: "The classic spirit",
+    tastingNotes: "Sweet caramel, baking spice, oak, and warm vanilla.",
+    pairingReason: "Pairs with full-bodied cigars that carry leather, cocoa, and spice.",
+    matchScore: 98,
+    price: 42,
+    inventoryStatus: "available",
+    available: true,
+    orderDestination: "BAR",
+    tags: ["Bourbon", "Full Body", "Premium"]
+  },
+  {
+    id: "drink-zacapa",
+    name: "Zacapa Centenario",
+    category: "Rum",
+    type: "drink",
+    source: "bar",
+    imageUrl: "https://example.com/zacapa-centenario.jpg",
+    shortDescription: "The tropical depth",
+    tastingNotes: "Molasses, dried fruit, spice, and earth.",
+    pairingReason: "Works with cigars that have sweet spice, cedar, and toasted notes.",
+    matchScore: 94,
+    price: 28,
+    inventoryStatus: "available",
+    available: true,
+    orderDestination: "BAR",
+    tags: ["Rum", "Sweet Spice", "Tropical"]
+  },
+  {
+    id: "coffee-blue-mountain",
+    name: "Blue Mountain",
+    category: "Coffee",
+    type: "drink",
+    source: "bar",
+    imageUrl: "https://example.com/blue-mountain-coffee.jpg",
+    shortDescription: "The morning ritual",
+    tastingNotes: "Bright acidity, smooth body, clean finish.",
+    pairingReason: "Pairs with medium-bodied cigars and creamy wrapper profiles.",
+    matchScore: 91,
+    price: 12,
+    inventoryStatus: "available",
+    available: true,
+    orderDestination: "BAR",
+    tags: ["Coffee", "Medium Body", "Smooth"]
+  },
+  {
+    id: "dessert-cacao-noir",
+    name: "Cacao Noir 85%",
+    category: "Dessert",
+    type: "food",
+    source: "kitchen",
+    imageUrl: "https://example.com/cacao-noir.jpg",
+    shortDescription: "The dark indulgence",
+    tastingNotes: "Bitter cocoa solids, roasted depth, subtle sweetness.",
+    pairingReason: "Mirrors charred tobacco notes and dark cocoa cigar profiles.",
+    matchScore: 96,
+    price: 16,
+    inventoryStatus: "available",
+    available: true,
+    orderDestination: "KITCHEN",
+    tags: ["Chocolate", "Dark Cocoa", "Dessert"]
+  },
+  {
+    id: "cigar-opusx",
+    name: "Arturo Fuente OpusX",
+    category: "Cigar",
+    type: "cigar",
+    source: "humidor",
+    imageUrl: "https://example.com/arturo-fuente-opusx.jpg",
+    shortDescription: "Full-bodied selection",
+    tastingNotes: "Leather, cedar, spice, cocoa, and long finish.",
+    pairingReason: "The core cigar selection for this pairing path.",
+    matchScore: 100,
+    price: 34,
+    inventoryStatus: "low_stock",
+    available: true,
+    orderDestination: "HUMIDOR",
+    tags: ["Cigar", "Full Bodied", "Premium"]
+  }
+];
+
+Backend/API-ready order route:
+
+// server/routes/pairingOrders.js
+
+import express from "express";
+
+const router = express.Router();
+
+const pairingOrders = [];
+
+router.post("/orders", (req, res) => {
+  const {
+    guestId,
+    venueId,
+    tableId,
+    sessionId,
+    items,
+    notes
+  } = req.body;
+
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({
+      ok: false,
+      error: "Order must include at least one item."
+    });
+  }
+
+  const order = {
+    id: `PAIR-${Date.now()}`,
+    guestId: guestId || "guest-demo",
+    venueId: venueId || "grand-lounge",
+    tableId: tableId || null,
+    sessionId: sessionId || "smokecraft-session",
+    items: items.map((item) => ({
+      itemId: item.id,
+      itemName: item.name,
+      category: item.category,
+      destination: item.orderDestination,
+      price: item.price,
+      quantity: item.quantity || 1,
+      status:
+        item.orderDestination === "BAR"
+          ? "sent_to_bar"
+          : item.orderDestination === "HUMIDOR"
+          ? "sent_to_humidor"
+          : item.orderDestination === "KITCHEN"
+          ? "sent_to_kitchen"
+          : "pending"
+    })),
+    notes: notes || "",
+    subtotal: items.reduce(
+      (sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 1),
+      0
+    ),
+    status: "submitted",
+    createdAt: new Date().toISOString()
+  };
+
+  pairingOrders.push(order);
+
+  res.json({
+    ok: true,
+    message: "Pairing order sent to staff.",
+    order
+  });
+});
+
+router.get("/orders", (req, res) => {
+  res.json({
+    ok: true,
+    orders: pairingOrders
+  });
+});
+
+export default router;
+
+Mount it:
+
+import pairingOrderRoutes from "./routes/pairingOrders.js";
+
+app.use(express.json());
+app.use("/api/pairings", pairingOrderRoutes);

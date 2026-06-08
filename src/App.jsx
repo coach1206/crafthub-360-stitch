@@ -17,7 +17,9 @@ import Art              from './pages/smokecraft/Art.jsx'
 import Mentor           from './pages/smokecraft/Mentor.jsx'
 import Origins          from './pages/smokecraft/Origins.jsx'
 import Leaves           from './pages/smokecraft/Leaves.jsx'
-import LeafChallenge    from './pages/smokecraft/LeafChallenge.jsx'
+import LeafChallenge            from './pages/smokecraft/LeafChallenge.jsx'
+import LeafChallengeCalculating from './pages/smokecraft/LeafChallengeCalculating.jsx'
+import LeafChallengeResult      from './pages/smokecraft/LeafChallengeResult.jsx'
 import Cultivation      from './pages/smokecraft/Cultivation.jsx'
 import Blend            from './pages/smokecraft/Blend.jsx'
 import FlavorDNA        from './pages/smokecraft/FlavorDNA.jsx'
@@ -175,7 +177,9 @@ export default function App() {
               <Route path="mentor"         element={<Mentor />} />
               <Route path="origins"        element={<Origins />} />
               <Route path="leaves"         element={<Leaves />} />
-              <Route path="leaf-challenge" element={<LeafChallenge />} />
+              <Route path="leaf-challenge"             element={<LeafChallenge />} />
+              <Route path="leaf-challenge-calculating" element={<LeafChallengeCalculating />} />
+              <Route path="leaf-challenge-result"      element={<LeafChallengeResult />} />
               <Route path="cultivation"    element={<Cultivation />} />
               <Route path="blend"          element={<Blend />} />
               <Route path="flavor-dna"     element={<FlavorDNA />} />

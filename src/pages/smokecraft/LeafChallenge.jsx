@@ -32,14 +32,12 @@ export default function LeafChallenge() {
   const { addXP, addBadge, awardStamp, completeStep } = useGuestSession()
   const timerRef = useRef(null)
 
-  const [phase,           setPhase]           = useState('challenge')  // 'challenge' | 'results'
   const [round,           setRound]           = useState(0)
   const [score,           setScore]           = useState(0)
   const [selectedId,      setSelectedId]      = useState(null)
   const [answered,        setAnswered]        = useState(false)
   const [cardMounted,     setCardMounted]     = useState(false)
-  const [resultsMounted,  setResultsMounted]  = useState(false)
-  const [claimed,         setClaimed]         = useState(false)
+  const [submitting,      setSubmitting]      = useState(false)
 
   useEffect(() => {
     const t = setTimeout(() => setCardMounted(true), 80)
@@ -59,7 +57,7 @@ export default function LeafChallenge() {
   }, [round])
 
   function handleAnswer(leafId) {
-    if (answered) return
+    if (answered || submitting) return
     const currentRound = ROUNDS[round]
     const isCorrect    = leafId === currentRound.correct
 
@@ -73,164 +71,33 @@ export default function LeafChallenge() {
         setAnswered(false)
         setRound(r => r + 1)
       } else {
+        // Final round — award session XP/badge/stamp then route to calculating screen
         const finalScore = isCorrect ? score + 1 : score
-        setPhase('results')
-        setTimeout(() => setResultsMounted(true), 120)
-        // Award here using finalScore directly
-        const xpAmt = finalScore === 5 ? 125 : finalScore >= 3 ? 100 : 75
+        const xpAmt      = finalScore === 5 ? 125 : finalScore >= 3 ? 100 : 75
+
         addXP(xpAmt)
-        addBadge({ id: 'botanist', name: 'Botanist', icon: 'nature' })
-        if (finalScore === 5) {
-          addBadge({ id: 'leaf-scholar', name: 'Leaf Scholar', icon: 'eco' })
-        }
+        addBadge({ id: 'botanist', name: 'Botanist Badge', icon: 'nature' })
+        if (finalScore === 5) addBadge({ id: 'leaf-scholar', name: 'Leaf Scholar', icon: 'eco' })
         awardStamp('leaf-recognition', 'leaf-challenge')
         completeStep('leaf-challenge')
+
+        // Persist result for the result screen
+        sessionStorage.setItem('leafChallengeResult', JSON.stringify({
+          score:      finalScore,
+          total:      ROUNDS.length,
+          xpEarned:   xpAmt,
+          badgeEarned: 'Botanist Badge',
+          stampEarned: 'Leaf Recognition Stamp',
+        }))
+
+        setSubmitting(true)
+        setTimeout(() => navigate('/smokecraft/leaf-challenge-calculating'), 600)
       }
     }, 2000)
   }
 
-  function handleContinue() {
-    if (claimed) return
-    setClaimed(true)
-    setTimeout(() => navigate('/smokecraft/cultivation'), 400)
-  }
-
   const FILL1 = { fontVariationSettings: "'FILL' 1" }
   const currentRound = ROUNDS[round]
-
-  /* ── RESULTS PHASE ──────────────────────────────────────── */
-  if (phase === 'results') {
-    const { headline, sub, xp, perfect } = getResultsData(score)
-    const dashOffset = Math.round(553 * (1 - score / 5))
-
-    return (
-      <div className="min-h-screen bg-background text-on-surface font-body-md flex flex-col items-center justify-center px-gutter py-16 relative overflow-hidden">
-        {/* Background glow */}
-        <div
-          className="fixed inset-0 pointer-events-none -z-10"
-          style={{ background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(233,193,118,0.07) 0%, transparent 70%)' }}
-        />
-
-        {/* Perfect score ring pulse */}
-        {perfect && (
-          <div className="fixed inset-0 pointer-events-none -z-10 flex items-center justify-center">
-            <div className="w-96 h-96 rounded-full border border-primary/20 animate-ping-gold" />
-          </div>
-        )}
-
-        <div
-          className={`w-full max-w-xl text-center transition-all duration-700 ease-out ${resultsMounted ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-        >
-          {/* Score Gauge */}
-          <div className="relative w-44 h-44 mx-auto mb-8">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 192 192">
-              <circle cx="96" cy="96" r="88" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8" />
-              <circle
-                cx="96" cy="96" r="88"
-                fill="none"
-                stroke="#e9c176"
-                strokeWidth="12"
-                strokeLinecap="round"
-                strokeDasharray="553"
-                strokeDashoffset={dashOffset}
-                style={{ transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)', filter: perfect ? 'drop-shadow(0 0 8px rgba(233,193,118,0.6))' : 'none' }}
-              />
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span
-                className="text-primary font-bold"
-                style={{ fontFamily: '"Playfair Display", serif', fontSize: '40px', lineHeight: 1 }}
-              >
-                {score}<span className="text-[22px] text-primary/60">/{ROUNDS.length}</span>
-              </span>
-              <span className="font-label-sm text-[11px] text-on-surface-variant uppercase tracking-[0.2em] mt-1">Score</span>
-            </div>
-          </div>
-
-          {/* Headline */}
-          <h2
-            className={`mb-3 ${perfect ? 'text-primary' : 'text-on-surface'}`}
-            style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 600, lineHeight: 1.2 }}
-          >
-            {headline}
-          </h2>
-          <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed mb-10 max-w-md mx-auto">
-            {sub}
-          </p>
-
-          {/* Awards earned */}
-          <div className="glass-panel rounded-2xl p-6 titanium-border mb-8 text-left space-y-4">
-            <p className="font-label-sm text-[11px] text-primary uppercase tracking-[0.2em] mb-4">Awards Earned This Round</p>
-
-            {/* XP */}
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <span className="material-symbols-outlined text-primary text-[18px]" style={FILL1}>stars</span>
-              </div>
-              <div>
-                <p className="font-label-lg text-label-lg text-primary">+{xp} XP</p>
-                <p className="font-label-sm text-[11px] text-on-surface-variant">
-                  {score === 5 ? 'Perfect score bonus' : score >= 3 ? 'Strong performance' : 'Participation award'}
-                </p>
-              </div>
-            </div>
-
-            {/* Leaf Scholar (perfect only) */}
-            {perfect && (
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 border border-primary/30">
-                  <span className="material-symbols-outlined text-primary text-[18px]" style={FILL1}>eco</span>
-                </div>
-                <div>
-                  <p className="font-label-lg text-label-lg text-primary">Leaf Scholar Badge</p>
-                  <p className="font-label-sm text-[11px] text-on-surface-variant">Awarded for a perfect 5/5 identification</p>
-                </div>
-              </div>
-            )}
-
-            {/* Botanist (always) */}
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center flex-shrink-0">
-                <span className="material-symbols-outlined text-on-surface-variant text-[18px]">nature</span>
-              </div>
-              <div>
-                <p className="font-label-lg text-label-lg text-on-surface">Botanist Badge</p>
-                <p className="font-label-sm text-[11px] text-on-surface-variant">Awarded for completing the challenge</p>
-              </div>
-            </div>
-
-            {/* Stamp */}
-            <div className="flex items-center gap-4 pt-2 border-t border-outline-variant/20">
-              <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-                <span className="material-symbols-outlined text-primary text-[18px]" style={FILL1}>approval</span>
-              </div>
-              <div>
-                <p className="font-label-lg text-label-lg text-primary">Leaf Recognition Stamp</p>
-                <p className="font-label-sm text-[11px] text-on-surface-variant">Added to your SmokeCraft Passport</p>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <button
-            onClick={handleContinue}
-            disabled={claimed}
-            className="group relative w-full py-5 rounded-xl gold-foil overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(233,193,118,0.35)] active:scale-[0.98] disabled:opacity-60"
-          >
-            <div className="absolute inset-0 bg-white/15 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12" />
-            <div className="relative flex items-center justify-center gap-3">
-              <span className="material-symbols-outlined text-on-primary" style={FILL1}>
-                {claimed ? 'check_circle' : 'arrow_forward'}
-              </span>
-              <span className="font-headline-md text-headline-md text-on-primary font-bold tracking-tight">
-                {claimed ? 'Continuing…' : 'Continue to Cultivation'}
-              </span>
-            </div>
-          </button>
-        </div>
-      </div>
-    )
-  }
 
   /* ── CHALLENGE PHASE ────────────────────────────────────── */
   const challengeLeaf    = LEAVES[currentRound.correct]
@@ -242,11 +109,33 @@ export default function LeafChallenge() {
       className="min-h-screen bg-background text-on-surface font-body-md flex flex-col relative overflow-hidden"
       style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/black-linen.png')" }}
     >
+      {/* Submitting overlay — fades in on final answer */}
+      {submitting && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 100,
+          background: 'rgba(8,5,2,0.85)',
+          backdropFilter: 'blur(12px)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          gap: 20,
+          animation: 'fadeInOverlay 0.5s ease forwards',
+        }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 48, color: '#D4AF37', fontVariationSettings: "'FILL' 1", animation: 'leafSpin 1s linear infinite' }}>eco</span>
+          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#D4AF37', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+            Recording your result…
+          </div>
+        </div>
+      )}
+
       {/* Tighter amber spotlight for drama */}
       <div
         className="fixed inset-0 pointer-events-none -z-10"
         style={{ background: 'radial-gradient(ellipse 50% 55% at 50% 40%, rgba(233,193,118,0.11) 0%, transparent 65%)' }}
       />
+
+      <style>{`
+        @keyframes fadeInOverlay { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes leafSpin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+      `}</style>
 
       {/* Top App Bar */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/20">
