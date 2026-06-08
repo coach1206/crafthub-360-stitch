@@ -39,9 +39,10 @@ export default function Art() {
   const navigate = useNavigate()
   const { addXP, addBadge, completeStep } = useGuestSession()
 
-  const [mounted, setMounted]   = useState(false)
-  const [accepted, setAccepted] = useState(false)
-  const [hovered, setHovered]   = useState(null)
+  const [mounted, setMounted]     = useState(false)
+  const [accepted, setAccepted]   = useState(false)
+  const [hovered, setHovered]     = useState(null)
+  const [activeTag, setActiveTag] = useState(null)
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 80)
@@ -127,10 +128,16 @@ export default function Art() {
               {LAYERS.map((layer, i) => (
                 <div
                   key={layer.phase}
-                  className={`glass-panel rounded-xl overflow-hidden titanium-border cursor-default transition-all duration-700 ease-out hover:border-primary/30 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                  style={{ transitionDelay: `${160 + i * 140}ms` }}
+                  className={`glass-panel rounded-xl overflow-hidden titanium-border transition-all duration-700 ease-out ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                  style={{
+                    transitionDelay: `${160 + i * 140}ms`,
+                    border: hovered === layer.zone ? '1px solid rgba(233,193,118,0.30)' : undefined,
+                  }}
                   onMouseEnter={() => setHovered(layer.zone)}
                   onMouseLeave={() => setHovered(null)}
+                  onTouchStart={() => setHovered(layer.zone)}
+                  onTouchEnd={() => setHovered(null)}
+                  onTouchCancel={() => setHovered(null)}
                 >
                   <div className="flex items-stretch">
                     {/* Phase accent bar */}
@@ -185,16 +192,33 @@ export default function Art() {
                         </div>
                       </div>
 
-                      {/* Tags */}
+                      {/* Tags — fully touchscreen interactive */}
                       <div className="flex flex-wrap gap-2">
-                        {layer.tags.map(tag => (
-                          <span
-                            key={tag}
-                            className="px-3 py-1 rounded-full font-label-sm text-[11px] uppercase tracking-wider border border-outline-variant/30 text-on-surface-variant"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                        {layer.tags.map(tag => {
+                          const tagKey = `${layer.phase}-${tag}`
+                          const isActive = activeTag === tagKey
+                          return (
+                            <button
+                              key={tag}
+                              onMouseEnter={() => setActiveTag(tagKey)}
+                              onMouseLeave={() => setActiveTag(null)}
+                              onTouchStart={() => setActiveTag(tagKey)}
+                              onTouchEnd={() => setTimeout(() => setActiveTag(null), 300)}
+                              onTouchCancel={() => setActiveTag(null)}
+                              onClick={() => setActiveTag(isActive ? null : tagKey)}
+                              className="px-3 py-1.5 rounded-full font-label-sm text-[11px] uppercase tracking-wider transition-all duration-200 active:scale-95 select-none"
+                              style={{
+                                border: isActive ? '1px solid rgba(233,193,118,0.7)' : '1px solid rgba(255,255,255,0.15)',
+                                background: isActive ? 'rgba(233,193,118,0.14)' : 'transparent',
+                                color: isActive ? '#e9c176' : 'rgba(255,255,255,0.45)',
+                                minHeight: 36,
+                                minWidth: 44,
+                              }}
+                            >
+                              {tag}
+                            </button>
+                          )
+                        })}
                       </div>
                     </div>
                   </div>
