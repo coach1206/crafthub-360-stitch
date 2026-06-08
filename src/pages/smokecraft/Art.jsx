@@ -239,149 +239,112 @@ export default function Art() {
             className={`lg:col-span-5 lg:sticky lg:top-28 transition-all duration-700 ease-out ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
             style={{ transitionDelay: '240ms' }}
           >
-            <div className="glass-panel rounded-2xl p-8 titanium-border">
-              <p className="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] mb-8 text-center">Cigar Anatomy</p>
+            <div className="glass-panel rounded-2xl overflow-hidden titanium-border">
 
-              <div className="flex justify-center items-start gap-8">
-                {/* Cigar Cross-Section */}
-                <div className="relative flex flex-col items-center" style={{ width: '72px' }}>
-                  {/* Cap (rounded tip) */}
-                  <div
-                    className="w-full rounded-t-full"
-                    style={{ height: '32px', background: 'linear-gradient(180deg, #d4a86a 0%, #c5a059 100%)', boxShadow: hovered === 'wrapper' ? '0 0 20px rgba(233,193,118,0.4)' : 'none', transition: 'box-shadow 0.3s' }}
-                  />
-
-                  {/* Wrapper Zone */}
-                  <div
-                    className="w-full relative transition-all duration-300 cursor-pointer"
-                    style={{
-                      height: '110px',
-                      background: hovered === 'wrapper'
-                        ? 'linear-gradient(180deg, #e9c176 0%, #c5a059 100%)'
-                        : 'linear-gradient(180deg, #c5a059 0%, #b08040 100%)',
-                      borderLeft: '2px solid rgba(255,255,255,0.06)',
-                      borderRight: '2px solid rgba(255,255,255,0.06)',
-                      boxShadow: hovered === 'wrapper' ? '0 0 24px rgba(233,193,118,0.35)' : 'none',
-                    }}
-                    onMouseEnter={() => setHovered('wrapper')}
-                    onMouseLeave={() => setHovered(null)}
-                  >
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-on-primary/30 text-[18px]">layers</span>
-                    </div>
+              {/* ── Photo + Annotation Row ─────────────────────── */}
+              <div className="relative flex items-stretch" style={{ minHeight: 320 }}>
+                {/* Real cigar photo — CSS bg so it loads reliably */}
+                <div
+                  className="relative flex-shrink-0"
+                  style={{
+                    width: '42%',
+                    minHeight: 320,
+                    backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBktRXv3px18iAdmk-FIbB6ajfhPahwqk9W_JP8Z3CMm5d75I1D5sQYn3y5CtixAGzZo0bWs5yXhZQ8TGcBZxfdlOrRy-X2jzZpEocDLKB-z48LeV4PdnPkWAu1EF0aLxDcp6N-JXmverp_fSYWKdujWH1FrWoLUY1CgVrJguJJeILwvw4JN5SLy70oWxWGRHWFymEXJ3FzmzsY93qIxljsbG1ANTGrbqwoIcmIQ6eUZnCsPhFk08_Z55717Itp90HwmP1ssOO0o')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: '62% center',
+                  }}
+                >
+                  {/* gold tint overlay */}
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.10) 0%, transparent 55%, rgba(0,0,0,0.45) 100%)' }} />
+                  {/* Label caption */}
+                  <div className="absolute top-0 left-0 right-0 p-4">
+                    <p className="font-label-sm text-[10px] text-primary uppercase tracking-[0.25em] text-center">Cigar Anatomy</p>
                   </div>
-
-                  {/* Binder Zone */}
-                  <div
-                    className="w-full relative transition-all duration-300 cursor-pointer"
-                    style={{
-                      height: '80px',
-                      background: hovered === 'binder'
-                        ? 'linear-gradient(180deg, #c5a059 0%, #a07840 100%)'
-                        : 'linear-gradient(180deg, #9a7030 0%, #7a5820 100%)',
-                      borderLeft: '2px solid rgba(255,255,255,0.06)',
-                      borderRight: '2px solid rgba(255,255,255,0.06)',
-                      borderTop: '1px solid rgba(233,193,118,0.15)',
-                      boxShadow: hovered === 'binder' ? '0 0 24px rgba(197,160,89,0.3)' : 'none',
-                    }}
-                    onMouseEnter={() => setHovered('binder')}
-                    onMouseLeave={() => setHovered(null)}
-                  >
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-white/20 text-[18px]">texture</span>
-                    </div>
-                  </div>
-
-                  {/* Filler Zone */}
-                  <div
-                    className="w-full relative transition-all duration-300 cursor-pointer"
-                    style={{
-                      height: '90px',
-                      background: hovered === 'filler'
-                        ? 'linear-gradient(180deg, #a07840 0%, #8a6230 100%)'
-                        : 'linear-gradient(180deg, #6a4820 0%, #5a3818 100%)',
-                      borderLeft: '2px solid rgba(255,255,255,0.06)',
-                      borderRight: '2px solid rgba(255,255,255,0.06)',
-                      borderTop: '1px solid rgba(233,193,118,0.10)',
-                      boxShadow: hovered === 'filler' ? '0 0 24px rgba(160,120,64,0.3)' : 'none',
-                    }}
-                    onMouseEnter={() => setHovered('filler')}
-                    onMouseLeave={() => setHovered(null)}
-                  >
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-white/20 text-[18px]">grass</span>
-                    </div>
-                  </div>
-
-                  {/* Foot (cut end) */}
-                  <div
-                    className="w-full"
-                    style={{ height: '8px', background: '#2a1a08', borderTop: '1px solid rgba(233,193,118,0.3)' }}
-                  />
                 </div>
 
-                {/* Zone Labels */}
-                <div className="flex flex-col justify-start" style={{ paddingTop: '28px', gap: 0 }}>
+                {/* Annotation table */}
+                <div className="flex-1 flex flex-col justify-center p-5 gap-1">
                   {[
-                    { label: 'Wrapper',      zone: 'wrapper', height: '110px', pct: '40%', top: '0px' },
-                    { label: 'Binder',       zone: 'binder',  height: '80px',  pct: '25%', top: '0px' },
-                    { label: 'Filler',       zone: 'filler',  height: '90px',  pct: '35%', top: '0px' },
-                  ].map(({ label, zone, height, pct }) => (
-                    <div
+                    { zone: 'wrapper', label: 'Wrapper', pct: '40%', color: '#e9c176', top: '22%' },
+                    { zone: 'binder',  label: 'Binder',  pct: '25%', color: '#c5a059', top: '50%' },
+                    { zone: 'filler',  label: 'Filler',  pct: '35%', color: '#9a7030', top: '75%' },
+                  ].map(({ zone, label, pct, color }) => (
+                    <button
                       key={zone}
-                      className={`flex items-center gap-3 cursor-pointer transition-colors duration-200 ${hovered === zone ? 'text-primary' : 'text-on-surface-variant'}`}
-                      style={{ height }}
                       onMouseEnter={() => setHovered(zone)}
                       onMouseLeave={() => setHovered(null)}
+                      onTouchStart={() => setHovered(zone)}
+                      onTouchEnd={() => setHovered(null)}
+                      className="flex items-center gap-3 rounded-xl px-3 transition-all duration-200 active:scale-[0.97] text-left"
+                      style={{
+                        minHeight: 72,
+                        background: hovered === zone ? 'rgba(233,193,118,0.08)' : 'transparent',
+                        border: hovered === zone ? '1px solid rgba(233,193,118,0.25)' : '1px solid transparent',
+                      }}
                     >
-                      {/* Connector line */}
-                      <div className="flex items-center gap-1">
+                      {/* Connector dot + line */}
+                      <div className="flex items-center gap-1 flex-shrink-0">
                         <div
                           className="h-px transition-all duration-200"
-                          style={{ width: hovered === zone ? '20px' : '12px', background: hovered === zone ? '#e9c176' : 'rgba(233,193,118,0.25)' }}
+                          style={{ width: hovered === zone ? 18 : 10, background: hovered === zone ? color : 'rgba(233,193,118,0.3)' }}
                         />
                         <div
-                          className="w-1.5 h-1.5 rounded-full transition-all duration-200"
-                          style={{ background: hovered === zone ? '#e9c176' : 'rgba(233,193,118,0.25)' }}
+                          className="rounded-full flex-shrink-0 transition-all duration-200"
+                          style={{ width: 8, height: 8, background: color, boxShadow: hovered === zone ? `0 0 8px ${color}` : 'none' }}
                         />
                       </div>
-                      <div>
+                      <div className="min-w-0">
                         <p
-                          className="font-label-lg text-label-lg transition-colors duration-200"
-                          style={{ fontFamily: '"Playfair Display", serif', fontSize: '15px', fontWeight: hovered === zone ? 600 : 400 }}
+                          className="transition-colors duration-200 leading-tight"
+                          style={{
+                            fontFamily: '"Playfair Display", serif',
+                            fontSize: 16,
+                            fontWeight: hovered === zone ? 600 : 400,
+                            color: hovered === zone ? '#f7ead4' : '#c8b898',
+                          }}
                         >
                           {label}
                         </p>
-                        <p className="font-label-sm text-[11px] text-primary/60 uppercase tracking-widest">{pct}</p>
+                        <p className="text-[11px] uppercase tracking-widest mt-0.5" style={{ color }}>
+                          {pct}
+                        </p>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
 
-              {/* Hover hint */}
-              <p className="text-center mt-8 font-label-sm text-[11px] text-on-surface-variant/40 italic">
-                Hover each zone to explore its role
-              </p>
-
-              {/* Total blend stat */}
-              <div className="mt-6 pt-6 border-t border-white/5 grid grid-cols-3 gap-4 text-center">
-                {[
-                  { stat: '2–4', label: 'Leaf\nVarieties' },
-                  { stat: '200+', label: 'Days\nAged' },
-                  { stat: '1', label: 'Master\nBlender' },
-                ].map(({ stat, label }) => (
-                  <div key={stat}>
-                    <p
-                      className="text-primary font-bold"
-                      style={{ fontFamily: '"Playfair Display", serif', fontSize: '24px' }}
-                    >
-                      {stat}
-                    </p>
-                    <p className="font-label-sm text-[10px] text-on-surface-variant/60 uppercase tracking-wider whitespace-pre-line leading-relaxed">{label}</p>
-                  </div>
-                ))}
+              {/* ── Stats Table ────────────────────────────────── */}
+              <div className="border-t border-white/8">
+                <table className="w-full text-center" style={{ borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                      {['Leaf Varieties', 'Days Aged', 'Master Blender'].map(h => (
+                        <th key={h} className="py-3 px-2 font-label-sm text-[10px] uppercase tracking-wider text-on-surface-variant/50"
+                          style={{ borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      {['2–4', '200+', '1'].map((val, i) => (
+                        <td key={val} className="py-4 px-2"
+                          style={{ borderRight: i < 2 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+                          <p
+                            className="text-primary font-bold"
+                            style={{ fontFamily: '"Playfair Display", serif', fontSize: 22 }}
+                          >
+                            {val}
+                          </p>
+                        </td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
               </div>
+
             </div>
           </div>
 
