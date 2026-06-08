@@ -91,7 +91,13 @@ export default function Enroll() {
         </section>
 
         {/* Form card */}
-        <div className="leather-card p-10 rounded-xl shadow-2xl space-y-12">
+        <div className="p-10 rounded-2xl shadow-2xl space-y-12" style={{
+          background: 'rgba(14,10,4,0.72)',
+          backdropFilter: 'blur(28px)',
+          WebkitBackdropFilter: 'blur(28px)',
+          border: '1px solid rgba(212,175,55,0.2)',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(212,175,55,0.08)',
+        }}>
           {/* Photo upload */}
           <div className="flex flex-col items-center">
             <div className="relative group">

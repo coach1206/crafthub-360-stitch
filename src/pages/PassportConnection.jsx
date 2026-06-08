@@ -198,10 +198,11 @@ export default function PassportConnection() {
           <div
             className="col-span-12 md:col-span-5 rounded-xl p-8 flex flex-col justify-between group cursor-pointer relative overflow-hidden"
             style={{
-              background: 'rgba(19,19,20,0.4)',
-              backdropFilter: 'blur(24px)',
-              WebkitBackdropFilter: 'blur(24px)',
-              border: '1px solid rgba(233,193,118,0.15)',
+              background: 'rgba(14,9,3,0.55)',
+              backdropFilter: 'blur(28px)',
+              WebkitBackdropFilter: 'blur(28px)',
+              border: '1px solid rgba(212,175,55,0.22)',
+              boxShadow: '0 4px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(212,175,55,0.07)',
               height: 400,
               transition: 'border-color 0.5s',
             }}
@@ -274,10 +275,11 @@ export default function PassportConnection() {
                 key={title}
                 className={`rounded-xl p-8 flex flex-col justify-between transition-all ${locked ? 'cursor-not-allowed opacity-50' : 'group active:scale-95 cursor-pointer'}`}
                 style={{
-                  background: 'rgba(19,19,20,0.4)',
-                  backdropFilter: 'blur(24px)',
-                  WebkitBackdropFilter: 'blur(24px)',
-                  border: '1px solid rgba(233,193,118,0.15)',
+                  background: 'rgba(14,9,3,0.52)',
+                  backdropFilter: 'blur(28px)',
+                  WebkitBackdropFilter: 'blur(28px)',
+                  border: '1px solid rgba(212,175,55,0.18)',
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(212,175,55,0.06)',
                 }}
                 onClick={() => { if (!locked && to) navigate(to) }}
               >

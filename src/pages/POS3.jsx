@@ -94,7 +94,18 @@ export default function POS3() {
   const lowStockItems = inventory.filter(i => i.reorderRecommended)
 
   return (
-    <motion.div initial="hidden" animate="show" variants={STAGGER}>
+    <motion.div initial="hidden" animate="show" variants={STAGGER} style={{ position: 'relative' }}>
+
+      {/* ── Fixed atmospheric background ─────────────────────────────── */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none' }}>
+        <img
+          src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=1400&auto=format&fit=crop&q=80"
+          alt=""
+          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.14 }}
+        />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(4,3,2,0.82) 0%, rgba(8,6,3,0.70) 50%, rgba(4,3,2,0.88) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 20%, rgba(212,175,55,0.06) 0%, transparent 60%)' }} />
+      </div>
 
       {/* ── Hero (unchanged) ─────────────────────────────────────────── */}
       <motion.div variants={FADE} style={{ position: 'relative', height: 220 }}>

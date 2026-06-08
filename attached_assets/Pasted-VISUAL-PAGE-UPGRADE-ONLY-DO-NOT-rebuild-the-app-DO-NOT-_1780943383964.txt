@@ -1,0 +1,104 @@
+VISUAL PAGE UPGRADE ONLY.
+
+DO NOT rebuild the app.
+DO NOT change the touchscreen system.
+DO NOT change the routes.
+DO NOT change the existing navigation logic.
+DO NOT change the form logic.
+DO NOT change the role switcher logic.
+DO NOT change the backend.
+DO NOT remove any existing working functionality.
+
+The app is already touchscreen-first. Keep the current touchscreen behavior in place.
+
+ONLY update the visual design of the existing pages so they match the premium “Where Science Meets Soul” look.
+
+CURRENT PROBLEM:
+Some pages still look too heavy, too dark, too empty, and too flat.
+The interface has black blank areas instead of relevant cinematic atmosphere.
+The pages need more visual depth, background imagery, frosted-glass overlays, and luxury hospitality energy.
+
+VISUAL TARGET:
+Use the “Where Science Meets Soul” screen as the master reference.
+
+Every updated page must feel like:
+- premium cigar lounge
+- warm amber lighting
+- obsidian black and antique gold
+- realistic background photography
+- soft smoke atmosphere
+- frosted glass panels
+- elegant gold dividers
+- luxury serif headings
+- readable spacing
+- touchscreen-friendly without changing the touchscreen system
+
+DO NOT make the pages darker.
+DO NOT use plain black background sections.
+DO NOT use generic gradients as the main background.
+DO NOT make the screens busy.
+DO NOT add cartoon graphics.
+DO NOT add emoji/glyph-style visuals.
+DO NOT redesign the system architecture.
+
+UPDATE THESE EXISTING PAGES ONLY:
+
+1. SmokeCraft Anatomy / Education page
+Make it look like the “Where Science Meets Soul” screen.
+Use a realistic cigar lounge background with cigar, whiskey glass, smoke, humidor lighting, and tobacco detail.
+Keep the existing Binder and Filler cards.
+Add visual depth behind the cards.
+Make the right side feel alive, not empty.
+Add or restore a clear Back button.
+
+2. SmokeCraft Intake / Enrollment page
+Keep the existing form fields and flow.
+Add a relevant cinematic background:
+private lounge intake, humidor wall, member concierge desk, warm lamp lighting.
+Keep the portrait upload, private identity, lounge persona, legal smoking age checkbox, and continue button.
+Make the form sit inside a frosted-glass luxury panel.
+The page should not look like a black empty page.
+
+3. CraftHub main page
+Keep the existing module cards and navigation.
+Add a subtle CraftHub 360 logo watermark/background image if already available.
+Make the page feel like a premium command lounge, not a basic dashboard.
+Cards should feel glassy, layered, and cinematic.
+
+4. E.A.T. Command page
+Keep existing functionality.
+Add a restaurant command background:
+premium dining room, floor plan atmosphere, kitchen/bar management feeling.
+Use frosted command panels.
+Make it feel operational and management-level.
+
+5. POS 3 page
+Keep existing POS behavior.
+Make it cleaner and less visually stressful.
+Use more breathing room.
+Use a premium bar/POS background with a soft frost overlay.
+Keep buttons large and readable.
+Do not overcrowd the interface.
+
+6. Passport page
+Keep existing passport flow.
+Add a realistic passport/networking event background.
+Use premium passport booklet visuals, stamps, executive lounge atmosphere, and frosted cards.
+No cartoon style.
+
+GLOBAL VISUAL RULES:
+- Every page must have a relevant image background.
+- Every page must use a subtle dark overlay so text stays readable.
+- Every page must use frosted glass panels instead of flat black boxes.
+- Every page must keep touchscreen spacing.
+- Every inner page must have a visible back button.
+- Bottom navigation must remain easy to tap.
+- Existing UI should be upgraded, not replaced.
+- Keep all current logic intact.
+
+IMPORTANT:
+This is a visual polish pass only.
+Do not rebuild the touchscreen framework.
+Do not replace working components unless absolutely necessary.
+Do not remove any current user flow.
+Do not break the app.

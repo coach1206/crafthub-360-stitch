@@ -67,16 +67,20 @@ export default function Art() {
         <img
           alt=""
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuBktRXv3px18iAdmk-FIbB6ajfhPahwqk9W_JP8Z3CMm5d75I1D5sQYn3y5CtixAGzZo0bWs5yXhZQ8TGcBZxfdlOrRy-X2jzZpEocDLKB-z48LeV4PdnPkWAu1EF0aLxDcp6N-JXmverp_fSYWKdujWH1FrWoLUY1CgVrJguJJeILwvw4JN5SLy70oWxWGRHWFymEXJ3FzmzsY93qIxljsbG1ANTGrbqwoIcmIQ6eUZnCsPhFk08_Z55717Itp90HwmP1ssOO0o"
-          className="w-full h-full object-cover opacity-25"
+          className="w-full h-full object-cover" style={{ opacity: 0.42 }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/40" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background/90" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(8,5,2,0.85) 0%, rgba(20,12,4,0.6) 50%, rgba(8,5,2,0.78) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 70% 35%, rgba(212,175,55,0.09) 0%, transparent 65%)" }} />
       </div>
 
       {/* ── Top App Bar ──────────────────────────────────────── */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-20 bg-surface-container/70 backdrop-blur-xl border-b border-outline-variant/20">
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-primary text-[22px]" style={FILL1}>shield_person</span>
+          <button
+            className="material-symbols-outlined text-primary text-[22px] hover:bg-primary/10 p-2 rounded-full transition-colors active:scale-95 duration-200"
+            onClick={() => navigate('/smokecraft')}
+            aria-label="Back"
+          >arrow_back</button>
           <span className="font-headline-md text-[18px] font-bold text-primary tracking-tighter">CRAFTHUB 360</span>
         </div>
         <div className="flex items-center gap-4">
