@@ -1,148 +1,354 @@
-import { motion } from 'framer-motion'
-import XPBar from '../components/XPBar.jsx'
-import AchievementBadge from '../components/AchievementBadge.jsx'
-import ScoreRing from '../components/ScoreRing.jsx'
+import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useGuestSession } from '../context/GuestSessionContext.jsx'
+import { RANKS, getRankFromXP } from '../constants/session.js'
 
-const FADE = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
-const STAGGER = { show: { transition: { staggerChildren: 0.08 } } }
+const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
-const stamps = [
-  { module: 'SmokeCraft', emoji: '🔥', date: 'Jun 5',  xp: 480, score: 96 },
-  { module: 'PourCraft',  emoji: '🥃', date: 'Jun 3',  xp: 320, score: 94 },
-  { module: 'WineCraft',  emoji: '🍷', date: 'May 30', xp: 560, score: 98 },
-  { module: 'BeerCraft',  emoji: '🍺', date: 'May 28', xp: 240, score: 91 },
-  { module: 'E.A.T.',     emoji: '🍽️', date: 'May 22', xp: 180, score: 89 },
-  { module: 'POS3',       emoji: '💳', date: 'May 20', xp: 120, score: 92 },
+const TOTAL_STAMPS = 15
+const RING_R = 56
+const RING_CIRC = Math.round(2 * Math.PI * RING_R)
+
+const STAMP_IMAGES = [
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuCiPi_TIOFEfvgZSxUsCess2N9TlBAjCwLjuoAk_9hLbxzFRjXa39iwPd6bVTRg3HLVFhwLiDYPuOv5W9vak0mAYyRcg3MFmLBnzQV-mJJG3ADIUdtg0gm_bnqzQKDBpGCfU6_9pU5DL2Kup',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuDcj9TELem3h8ECWE4_CL8RYK8-zAk21jLR3VtM1XplKYt6ZR33EXmgoktKzg7Prdn3szqk43DAgElFa_i53qG8pnKZax7zKnnlDp-ieFmVTVh0KXOsdPqtlmclZvtfG6kpMB6NaNHWuQek4pRjGj2SqwrWhiGOuNKm8IrImx3C8_2tGvo-4BvwLMf28XVWuaqyqd7vi9mSMrwslgk07HPdRoXvAvTVeV2SVE-fj-0RRktyRPBtOennDWK5yoY7NoTOhqHs_we4-FE',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuCkFsx-srl59Hp0iT1IkjJvju5YMrEj3iD3Ku922Qmi3Yli5yMPgHK2pl5K-gb_Ex8kka98pk4BP8LnVool8lxfyVS6L72aXwK49Q_rHJ7LCy-uK9z9rElFOBLZawQUB9-uDcHRLNcVd9HKm77Y8gMnXvD2JqXqyBHMoCoEDoSQQ4DjAr-yim7H0',
 ]
 
-const tiers = [
-  { name: 'Connoisseur', level: '01', color: '#7A7A7A', active: false },
-  { name: 'Artisan',     level: '02', color: '#C88B3A', active: false },
-  { name: 'Founder',     level: '00', color: '#D4AF37', active: true  },
-]
-
-const achievements = [
-  { icon: '👑', label: 'Founder',     earned: true            },
-  { icon: '🏆', label: 'Grand Tour',  earned: true, count: 12 },
-  { icon: '⚡', label: 'Speed Pass',  earned: true, count: 3  },
-  { icon: '🌟', label: 'Elite',       earned: true            },
-  { icon: '🔮', label: 'Obsidian',    earned: true            },
-  { icon: '🎯', label: 'Perfect',     earned: false           },
-]
+function NavTab({ icon, label, active, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex flex-col items-center gap-1 transition-all active:scale-90 ${
+        active ? 'text-primary scale-110' : 'text-on-surface-variant/60 hover:text-primary/80'
+      }`}
+    >
+      <span className="material-symbols-outlined" style={active ? FILL1 : undefined}>{icon}</span>
+      <span className="font-label-sm text-label-sm">{label}</span>
+    </button>
+  )
+}
 
 export default function PassportConnection() {
+  const navigate = useNavigate()
+  const { session } = useGuestSession()
+  const bgRef = useRef(null)
+
+  const stamps    = session.smokecraftStamps ?? []
+  const xp        = session.xp ?? 0
+  const rank      = getRankFromXP(xp)
+  const nextRank  = RANKS[Math.min(RANKS.indexOf(rank) + 1, RANKS.length - 1)]
+  const pct       = Math.min(100, Math.round((stamps.length / TOTAL_STAMPS) * 100))
+  const offset    = RING_CIRC * (1 - pct / 100)
+
+  const displayName = session.profile?.firstName
+    ? `${session.profile.firstName} ${session.profile.lastName || ''}`.trim()
+    : 'Grand Member'
+
+  useEffect(() => {
+    function handleMove(e) {
+      if (!bgRef.current) return
+      const x = (window.innerWidth  / 2 - e.pageX) / 100
+      const y = (window.innerHeight / 2 - e.pageY) / 100
+      bgRef.current.style.transform = `translate(${x}px, ${y}px) scale(1.1)`
+    }
+    window.addEventListener('mousemove', handleMove)
+    return () => window.removeEventListener('mousemove', handleMove)
+  }, [])
+
+  const profilePhoto = session.profile?.photo
+
+  const initials = `${session.profile?.firstName?.[0] || 'G'}${session.profile?.lastName?.[0] || 'M'}`
+
   return (
-    <motion.div initial="hidden" animate="show" variants={STAGGER}>
+    <div className="bg-background text-on-surface font-body-md h-screen overflow-hidden select-none">
 
-      {/* Hero */}
-      <motion.div variants={FADE} style={{ position: 'relative', height: 260 }}>
-        <img src="/passport.jpg" alt="360 Passport"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%', display: 'block' }}
-        />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(1,1,1,0.0) 30%, rgba(1,1,1,0.95) 100%)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 20px 20px' }}>
-          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>NFC Member Identity</div>
-          <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 34, color: '#E5E2E1', letterSpacing: '-0.02em', lineHeight: 1 }}>360 Passport</div>
+      {/* Parallax background */}
+      <div className="fixed inset-0 z-0 scale-110 overflow-hidden">
+        <div
+          ref={bgRef}
+          className="w-full h-full"
+          style={{ transition: 'transform 0.1s ease-out' }}
+        >
+          <img
+            alt="Lounge Interior"
+            className="w-full h-full object-cover"
+            style={{ opacity: 0.55, filter: 'brightness(0.5)' }}
+            src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"
+          />
         </div>
-      </motion.div>
+      </div>
 
-      {/* Member card */}
-      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
-        <div className="glass-card-gold" style={{ padding: '24px 24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 20 }}>
-            {/* Avatar */}
-            <div style={{
-              width: 68, height: 68, borderRadius: '50%', flexShrink: 0,
-              background: 'linear-gradient(135deg, #D4AF37, #B8962E)',
-              border: '2px solid rgba(212,175,55,0.6)',
-              boxShadow: '0 0 24px rgba(212,175,55,0.3)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 26, color: '#010101',
-            }}>F</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 20, color: '#E5E2E1', lineHeight: 1, marginBottom: 4 }}>Founder Member</div>
-              <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 2 }}>Level 12 · Obsidian Tier</div>
-              <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#7A7A7A', letterSpacing: '0.06em' }}>CH360-FNDX-7A2E-∞</div>
-            </div>
-            {/* NFC pulse animation */}
-            <div style={{ position: 'relative', width: 48, height: 48, flexShrink: 0 }}>
-              <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px solid rgba(212,175,55,0.6)', animation: 'ping-gold 1.8s ease-out infinite' }} />
-              <div style={{ position: 'absolute', inset: 6, borderRadius: '50%', border: '2px solid rgba(212,175,55,0.4)', animation: 'ping-gold 1.8s ease-out 0.3s infinite' }} />
-              <div style={{ position: 'absolute', inset: 14, borderRadius: '50%', background: '#D4AF37', boxShadow: '0 0 12px rgba(212,175,55,0.6)' }} />
-            </div>
-          </div>
-          <XPBar current={2400} max={3000} level={12} tierLabel="FOUNDER" tierColor="#D4AF37" />
-        </div>
-      </motion.div>
-
-      {/* Membership tiers */}
-      <motion.div variants={FADE} style={{ margin: '20px 16px 0' }}>
-        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>Membership Tiers</div>
-        <div style={{ display: 'flex', gap: 12 }}>
-          {tiers.map(({ name, level, color, active }) => (
-            <div key={name} style={{
-              flex: 1, padding: '20px 16px', borderRadius: 14, textAlign: 'center',
-              background: active ? `linear-gradient(135deg, ${color}18, ${color}08)` : 'rgba(15,15,15,0.6)',
-              border: `2px solid ${active ? color + '55' : 'rgba(122,122,122,0.15)'}`,
-              backdropFilter: 'blur(20px)',
-              boxShadow: active ? `0 0 24px ${color}22` : 'none',
-            }}>
-              <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 700, fontSize: 24, color, lineHeight: 1, marginBottom: 6 }}>{level}</div>
-              <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 600, fontSize: 14, color: active ? color : '#7A7A7A', marginBottom: 6 }}>{name}</div>
-              {active && (
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 10px', borderRadius: 20, background: `${color}22`, border: `1px solid ${color}44` }}>
-                  <div style={{ width: 5, height: 5, borderRadius: '50%', background: color, boxShadow: `0 0 6px ${color}` }} />
-                  <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color, letterSpacing: '0.1em', textTransform: 'uppercase' }}>ACTIVE</span>
+      {/* Top App Bar */}
+      <header className="fixed top-0 w-full z-50 bg-surface/60 backdrop-blur-xl border-b border-primary/10 shadow-sm flex justify-between items-center px-card-padding" style={{ height: 80 }}>
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full border border-primary/30 p-0.5 overflow-hidden flex-shrink-0">
+            {profilePhoto
+              ? <img className="w-full h-full object-cover rounded-full" src={profilePhoto} alt="Profile" />
+              : (
+                <div className="w-full h-full rounded-full flex items-center justify-center text-on-primary font-bold"
+                  style={{ background: 'linear-gradient(135deg, #e9c176, #c5a059)', fontSize: 16 }}>
+                  {initials}
                 </div>
-              )}
-            </div>
-          ))}
+              )
+            }
+          </div>
+          <div className="flex flex-col">
+            <span className="font-headline-md text-headline-md text-primary tracking-tighter leading-none">The Lounge</span>
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-[0.2em]">Passport Hub</span>
+          </div>
         </div>
-      </motion.div>
+        <div className="flex items-center gap-6">
+          <div className="text-right">
+            <span className="block font-label-sm text-label-sm text-primary uppercase">{xp.toLocaleString()} XP</span>
+            <span className="block font-label-sm text-label-sm text-on-surface-variant">{rank.name} Tier</span>
+          </div>
+          <button
+            className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 text-primary hover:opacity-80 transition-opacity active:scale-95 duration-300"
+            onClick={() => navigate('/passport/profile')}
+          >
+            <span className="material-symbols-outlined">colab</span>
+          </button>
+        </div>
+      </header>
 
-      {/* Session stamps */}
-      <motion.div variants={FADE} style={{ margin: '20px 16px 0' }}>
-        <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
-          Session Stamps — History Vault
-        </div>
-        <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 8 }}>
-          {stamps.map(({ module, emoji, date, xp, score }) => (
-            <motion.div key={module} whileTap={{ scale: 0.96 }}
-              style={{ flexShrink: 0, width: 130, cursor: 'pointer' }}
-            >
-              <div className="glass-card" style={{ padding: '16px 14px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-                {/* Stamp ring */}
-                <div style={{
-                  width: 56, height: 56, borderRadius: '50%',
-                  background: 'linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.05))',
-                  border: '2px solid rgba(212,175,55,0.4)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 24, boxShadow: '0 0 12px rgba(212,175,55,0.15)',
-                }}>{emoji}</div>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontWeight: 700, fontSize: 13, color: '#E5E2E1', marginBottom: 2 }}>{module}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', marginBottom: 6 }}>{date}</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontWeight: 600, fontSize: 14, color: '#D4AF37' }}>+{xp} XP</div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A7A7A', marginTop: 2 }}>{score} pts</div>
+      {/* Main scroll canvas */}
+      <main
+        className="relative z-10 pt-28 pb-24 px-12 h-full flex flex-col max-w-[1440px] mx-auto overflow-y-auto"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+
+        {/* Welcome Hero */}
+        <section className="mb-12" style={{ animation: 'fadeUp 0.8s ease both' }}>
+          <h1 className="font-display-lg text-primary leading-tight mb-2" style={{ fontSize: 'clamp(32px, 5vw, 64px)', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+            Welcome back, {displayName}
+          </h1>
+          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+            Your journey through the world&apos;s finest collections continues. Explore your digital portfolio and upcoming artisan events.
+          </p>
+        </section>
+
+        {/* Bento Grid */}
+        <div className="grid grid-cols-12 gap-8 mb-12 flex-grow">
+
+          {/* Passport Progress Panel */}
+          <div
+            className="col-span-12 md:col-span-5 rounded-xl p-8 flex flex-col justify-between group cursor-pointer relative overflow-hidden"
+            style={{
+              background: 'rgba(19,19,20,0.4)',
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
+              border: '1px solid rgba(233,193,118,0.15)',
+              height: 400,
+              transition: 'border-color 0.5s',
+            }}
+            onClick={() => navigate('/passport/stamps')}
+          >
+            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full blur-3xl transition-colors pointer-events-none"
+              style={{ background: 'rgba(233,193,118,0.06)' }} />
+            <div>
+              <div className="flex justify-between items-start mb-6">
+                <span className="material-symbols-outlined text-primary text-4xl" style={FILL1}>menu_book</span>
+                <span className="font-label-lg text-label-lg text-primary bg-primary/10 px-4 py-1 rounded-full">Season 01</span>
+              </div>
+              <h2 className="font-headline-lg text-headline-lg text-on-surface mb-2">Passport Progress</h2>
+              <p className="font-body-md text-body-md text-on-surface-variant mb-8">
+                {stamps.length > 0
+                  ? `You've collected ${stamps.length} artisanal seal${stamps.length !== 1 ? 's' : ''} this season.${stamps.length < TOTAL_STAMPS ? ` ${TOTAL_STAMPS - stamps.length} more to reach Diamond status.` : ' Diamond status unlocked!'}`
+                  : 'Complete SmokeCraft sessions to earn artisanal seals and unlock Diamond status.'
+                }
+              </p>
+            </div>
+            <div className="space-y-6">
+              <div className="flex justify-between items-end">
+                <div className="flex flex-col">
+                  <span className="font-display-lg text-primary leading-none" style={{ fontSize: 52 }}>{stamps.length}</span>
+                  <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-2">Stamps Earned</span>
+                </div>
+                <div className="relative" style={{ width: 128, height: 128 }}>
+                  <svg className="w-full h-full" style={{ transform: 'rotate(-90deg)' }}>
+                    <circle cx="64" cy="64" r={RING_R} fill="transparent" stroke="rgba(233,193,118,0.12)" strokeWidth="4" />
+                    <circle
+                      cx="64" cy="64" r={RING_R}
+                      fill="transparent"
+                      stroke="#e9c176"
+                      strokeWidth="4"
+                      strokeDasharray={RING_CIRC}
+                      strokeDashoffset={offset}
+                      strokeLinecap="round"
+                      style={{ transition: 'stroke-dashoffset 1s ease' }}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="font-headline-md text-headline-md text-primary">{pct}%</span>
+                  </div>
                 </div>
               </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Achievements */}
-      <motion.div variants={FADE} style={{ margin: '16px 16px 0' }}>
-        <div className="glass-card" style={{ padding: '20px 24px' }}>
-          <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>
-            All Achievements
+              <button
+                onClick={(e) => { e.stopPropagation(); navigate('/passport/stamps') }}
+                className="w-full flex items-center justify-center gap-3 text-on-primary font-label-lg text-label-lg uppercase tracking-[0.2em] rounded-lg active:scale-95 transition-all"
+                style={{
+                  height: 72,
+                  background: 'linear-gradient(135deg, #e9c176, #c5a059)',
+                  boxShadow: '0 4px 20px rgba(233,193,118,0.3)',
+                }}
+              >
+                View All Stamps
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </button>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: 16, justifyContent: 'space-around', flexWrap: 'wrap', rowGap: 20 }}>
-            {achievements.map(b => <AchievementBadge key={b.label} {...b} />)}
+
+          {/* Nav Tiles 2×2 */}
+          <div className="col-span-12 md:col-span-7 grid grid-cols-2 gap-8" style={{ height: 400 }}>
+            {[
+              { icon: 'person',    title: 'My Profile',       sub: 'Preferences & Tastes',   to: '/passport/profile' },
+              { icon: 'qr_code_2', title: 'Digital Stamps',   sub: 'Verification Center',    to: '/passport/stamps'  },
+              { icon: 'storefront',title: 'Artisan Directory', sub: 'Exclusive Partners',     to: '/'                 },
+              { icon: 'hub',       title: 'Connections',       sub: 'Member Network',         to: '/'                 },
+            ].map(({ icon, title, sub, to }) => (
+              <div
+                key={title}
+                className="rounded-xl p-8 flex flex-col justify-between group active:scale-95 transition-all cursor-pointer"
+                style={{
+                  background: 'rgba(19,19,20,0.4)',
+                  backdropFilter: 'blur(24px)',
+                  WebkitBackdropFilter: 'blur(24px)',
+                  border: '1px solid rgba(233,193,118,0.15)',
+                }}
+                onClick={() => navigate(to)}
+              >
+                <span className="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">{icon}</span>
+                <div>
+                  <h3 className="font-headline-md text-headline-md text-on-surface">{title}</h3>
+                  <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">{sub}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </motion.div>
 
-    </motion.div>
+        {/* Recent Achievements Scroller */}
+        <section className="mb-24">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="font-headline-lg text-headline-lg text-on-surface">Recent Achievements</h3>
+            <button
+              className="text-primary font-label-lg text-label-lg flex items-center gap-2 hover:opacity-80 transition-opacity"
+              onClick={() => navigate('/passport/stamps')}
+            >
+              Full History <span className="material-symbols-outlined">history</span>
+            </button>
+          </div>
+          <div
+            className="flex gap-8 pb-8 px-2 -mx-2"
+            style={{ overflowX: 'auto', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {stamps.length > 0
+              ? stamps.map((stamp, i) => (
+                <div
+                  key={stamp.id}
+                  className="rounded-xl overflow-hidden group cursor-pointer transition-all"
+                  style={{
+                    minWidth: 380,
+                    background: 'rgba(19,19,20,0.4)',
+                    backdropFilter: 'blur(24px)',
+                    border: '1px solid rgba(233,193,118,0.12)',
+                  }}
+                  onClick={() => navigate('/passport/stamps')}
+                >
+                  <div className="relative overflow-hidden" style={{ height: 192 }}>
+                    <img
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      src={STAMP_IMAGES[i % STAMP_IMAGES.length]}
+                      alt={stamp.name}
+                    />
+                    <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #131314, transparent)' }} />
+                    <div className="absolute bottom-4 left-6">
+                      <span
+                        className="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] px-3 py-1 rounded"
+                        style={{ background: 'rgba(19,19,20,0.8)', backdropFilter: 'blur(4px)' }}
+                      >
+                        {new Date(stamp.earnedAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h4 className="font-headline-md text-headline-md text-on-surface mb-2">{stamp.name}</h4>
+                    <p className="font-body-md text-body-md text-on-surface-variant">SmokeCraft 360 seal authenticated and recorded.</p>
+                  </div>
+                </div>
+              ))
+              : (
+                /* Placeholder cards when no stamps earned */
+                [
+                  { title: 'Master Blend Challenge', sub: 'Authenticated at the Havana Room. Achievement unlocked.', when: 'Complete SmokeCraft' },
+                  { title: 'Seed & Soil', sub: 'Origins heritage tour completed. Exclusive badge awarded.', when: 'Complete Origins' },
+                  { title: "The Alchemist's Pour", sub: 'Mixology masterclass participation. Signature cocktail verified.', when: 'Complete Pairing' },
+                ].map((c, i) => (
+                  <div
+                    key={c.title}
+                    className="rounded-xl overflow-hidden group cursor-pointer transition-all"
+                    style={{ minWidth: 380, background: 'rgba(19,19,20,0.4)', backdropFilter: 'blur(24px)', border: '1px solid rgba(233,193,118,0.08)', opacity: 0.6 }}
+                    onClick={() => navigate('/smokecraft')}
+                  >
+                    <div className="relative overflow-hidden" style={{ height: 192 }}>
+                      <img className="w-full h-full object-cover" style={{ filter: 'grayscale(0.6)' }} src={STAMP_IMAGES[i]} alt={c.title} />
+                      <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #131314, transparent)' }} />
+                      <div className="absolute bottom-4 left-6">
+                        <span className="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] px-3 py-1 rounded"
+                          style={{ background: 'rgba(19,19,20,0.8)' }}>{c.when}</span>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h4 className="font-headline-md text-headline-md text-on-surface mb-2">{c.title}</h4>
+                      <p className="font-body-md text-body-md text-on-surface-variant">{c.sub}</p>
+                    </div>
+                  </div>
+                ))
+              )
+            }
+          </div>
+        </section>
+      </main>
+
+      {/* AI Concierge FAB */}
+      <div className="fixed z-[60]" style={{ bottom: 96, right: 32 }}>
+        <button
+          className="flex items-center justify-center text-on-primary shadow-2xl hover:scale-110 active:scale-90 transition-transform group relative rounded-full"
+          style={{
+            width: 72, height: 72,
+            background: 'linear-gradient(135deg, #e9c176, #c5a059)',
+            boxShadow: '0 4px 20px rgba(233,193,118,0.3)',
+          }}
+        >
+          <span className="material-symbols-outlined" style={{ fontSize: 30 }}>smart_toy</span>
+          <div
+            className="absolute right-full mr-4 border border-primary/20 px-4 py-2 rounded-lg font-label-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+            style={{ background: 'rgba(19,19,20,0.8)', backdropFilter: 'blur(8px)', color: '#e9c176', fontSize: 12 }}
+          >
+            AI Concierge Available
+          </div>
+        </button>
+      </div>
+
+      {/* Bottom Navigation */}
+      <nav
+        className="fixed bottom-0 w-full z-50 backdrop-blur-2xl border-t border-primary/20 shadow-[0_-4px_24px_rgba(233,193,118,0.1)] rounded-t-xl flex justify-around items-center px-8"
+        style={{ background: 'rgba(14,14,15,0.8)', height: 80, paddingBottom: 16 }}
+      >
+        <NavTab icon="dashboard"       label="Hub"      active onClick={() => navigate('/passport')} />
+        <NavTab icon="menu_book"       label="Passport" onClick={() => navigate('/passport/stamps')} />
+        <NavTab icon="temp_preferences_custom" label="Artisans" onClick={() => navigate('/')} />
+        <NavTab icon="settings_accessibility"  label="Settings" onClick={() => navigate('/passport/profile')} />
+      </nav>
+
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        ::-webkit-scrollbar { display: none; }
+      `}</style>
+    </div>
   )
 }

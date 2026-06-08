@@ -6,6 +6,8 @@ import PourCraft from './pages/PourCraft.jsx'
 import BeerCraft from './pages/BeerCraft.jsx'
 import WineCraft from './pages/WineCraft.jsx'
 import PassportConnection from './pages/PassportConnection.jsx'
+import PassportProfile from './pages/passport/PassportProfile.jsx'
+import PassportStamps from './pages/passport/PassportStamps.jsx'
 import POS3 from './pages/POS3.jsx'
 import EATCommand from './pages/EATCommand.jsx'
 
@@ -83,10 +85,16 @@ export default function App() {
             <Route path="passport-stamp"  element={<PassportStamp />} />
           </Route>
 
+          {/* 360 Passport */}
+          <Route path="passport">
+            <Route index           element={<PassportConnection />} />
+            <Route path="profile"  element={<PassportProfile />} />
+            <Route path="stamps"   element={<PassportStamps />} />
+          </Route>
+
           <Route path="pourcraft"  element={<PourCraft />} />
           <Route path="beercraft"  element={<BeerCraft />} />
           <Route path="winecraft"  element={<WineCraft />} />
-          <Route path="passport"   element={<PassportConnection />} />
           <Route path="pos"        element={<POS3 />} />
           <Route path="eat"        element={<EATCommand />} />
           <Route path="*"          element={<Navigate to="/" replace />} />
