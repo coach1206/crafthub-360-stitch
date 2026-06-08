@@ -59,7 +59,7 @@ export default function Blend() {
   function handleSubmit() {
     addXP(XP_AWARDS.BLEND_CREATED)
     completeStep('blend')
-    addSmokecraftStamp({ id: 'master-blend-challenge', name: 'Master Blend', icon: 'token' })
+    addSmokecraftStamp({ id: 'master-blend', name: 'Master Blend', icon: 'token' })
     navigate('/smokecraft/flavor-dna')
   }
 

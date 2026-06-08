@@ -37,7 +37,6 @@ export default function PassportConnection() {
   const stamps    = session.smokecraftStamps ?? []
   const xp        = session.xp ?? 0
   const rank      = getRankFromXP(xp)
-  const nextRank  = RANKS[Math.min(RANKS.indexOf(rank) + 1, RANKS.length - 1)]
   const pct       = Math.min(100, Math.round((stamps.length / TOTAL_STAMPS) * 100))
   const offset    = RING_CIRC * (1 - pct / 100)
 
@@ -107,7 +106,7 @@ export default function PassportConnection() {
             className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 text-primary hover:opacity-80 transition-opacity active:scale-95 duration-300"
             onClick={() => navigate('/passport/profile')}
           >
-            <span className="material-symbols-outlined">colab</span>
+            <span className="material-symbols-outlined">manage_accounts</span>
           </button>
         </div>
       </header>
@@ -202,26 +201,29 @@ export default function PassportConnection() {
           {/* Nav Tiles 2×2 */}
           <div className="col-span-12 md:col-span-7 grid grid-cols-2 gap-8" style={{ height: 400 }}>
             {[
-              { icon: 'person',    title: 'My Profile',       sub: 'Preferences & Tastes',   to: '/passport/profile' },
-              { icon: 'qr_code_2', title: 'Digital Stamps',   sub: 'Verification Center',    to: '/passport/stamps'  },
-              { icon: 'storefront',title: 'Artisan Directory', sub: 'Exclusive Partners',     to: '/'                 },
-              { icon: 'hub',       title: 'Connections',       sub: 'Member Network',         to: '/'                 },
-            ].map(({ icon, title, sub, to }) => (
+              { icon: 'person',    title: 'My Profile',       sub: 'Preferences & Tastes',   to: '/passport/profile', locked: false },
+              { icon: 'qr_code_2', title: 'Digital Stamps',   sub: 'Verification Center',    to: '/passport/stamps',  locked: false },
+              { icon: 'storefront',title: 'Artisan Directory', sub: 'Exclusive Partners',     to: null,                locked: true  },
+              { icon: 'hub',       title: 'Connections',       sub: 'Member Network',         to: null,                locked: true  },
+            ].map(({ icon, title, sub, to, locked }) => (
               <div
                 key={title}
-                className="rounded-xl p-8 flex flex-col justify-between group active:scale-95 transition-all cursor-pointer"
+                className={`rounded-xl p-8 flex flex-col justify-between transition-all ${locked ? 'cursor-not-allowed opacity-50' : 'group active:scale-95 cursor-pointer'}`}
                 style={{
                   background: 'rgba(19,19,20,0.4)',
                   backdropFilter: 'blur(24px)',
                   WebkitBackdropFilter: 'blur(24px)',
                   border: '1px solid rgba(233,193,118,0.15)',
                 }}
-                onClick={() => navigate(to)}
+                onClick={() => { if (!locked && to) navigate(to) }}
               >
-                <span className="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">{icon}</span>
+                <div className="flex justify-between items-start">
+                  <span className={`material-symbols-outlined text-3xl transition-transform ${locked ? 'text-on-surface-variant/40' : 'text-primary group-hover:scale-110'}`}>{icon}</span>
+                  {locked && <span className="material-symbols-outlined text-on-surface-variant/30" style={{ fontSize: 16 }}>lock</span>}
+                </div>
                 <div>
-                  <h3 className="font-headline-md text-headline-md text-on-surface">{title}</h3>
-                  <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">{sub}</p>
+                  <h3 className={`font-headline-md text-headline-md ${locked ? 'text-on-surface/40' : 'text-on-surface'}`}>{title}</h3>
+                  <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">{locked ? 'Coming Soon' : sub}</p>
                 </div>
               </div>
             ))}

@@ -24,6 +24,8 @@ const SEAL_CATALOG = [
   { id: 'pairing-specialist', name: 'Pairing Specialist', icon: 'workspace_premium', desc: 'Mastery of sensory synergy between rare botanicals and aged tobacco.' },
   { id: 'journey-complete',   name: 'Journey Complete',   icon: 'diamond',           desc: 'SmokeCraft Session I completed in full. Achievement authenticated.' },
   { id: 'passport-stamp',     name: 'Passport Certified', icon: 'verified_user',     desc: 'Passport certified and registered in the 360 Grand Lounge network.' },
+  { id: 'leaf-recognition',   name: 'Leaf Recognition',   icon: 'eco',               desc: 'Identified rare tobacco leaf varieties in the LeafChallenge assessment.' },
+  { id: 'golden-box',         name: 'Golden Box',         icon: 'inventory_2',       desc: 'Claimed exclusive membership perks through the Golden Box status event.' },
 ]
 
 function SealCard({ stamp }) {
@@ -268,7 +270,6 @@ export default function PassportProfile() {
                   boxShadow: '0 4px 20px rgba(233,193,118,0.4)',
                   minWidth: 200,
                   justifyContent: 'center',
-                  ...GOLD_FOIL_BORDER,
                 }}
               >
                 <span className="material-symbols-outlined" style={FILL1}>{shared ? 'check_circle' : 'share'}</span>

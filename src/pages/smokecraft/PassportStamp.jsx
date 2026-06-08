@@ -111,7 +111,7 @@ export default function PassportStamp() {
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden" style={{ minHeight: 'max(884px, 100dvh)' }}>
       <style>{`
         @keyframes stampReveal {
-          from { opacity: 0; transform: rotate(${ROTATIONS[0]}deg) scale(0.85); }
+          from { opacity: 0; }
           to   { opacity: 1; }
         }
         @keyframes fadeUp {

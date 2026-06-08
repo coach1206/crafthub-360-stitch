@@ -27,6 +27,8 @@ const STAMP_CATALOG = [
   { id: 'pairing-specialist', name: 'Pairing Specialist',   icon: 'workspace_premium', rotation: 12,  shape: 'rect'   },
   { id: 'journey-complete',   name: 'Journey Complete',     icon: 'diamond',           rotation: -2,  shape: 'circle' },
   { id: 'passport-stamp',     name: 'Passport Certified',   icon: 'verified_user',     rotation: 6,   shape: 'rect'   },
+  { id: 'leaf-recognition',   name: 'Leaf Recognition',     icon: 'eco',               rotation: -8,  shape: 'circle' },
+  { id: 'golden-box',         name: 'Golden Box',           icon: 'inventory_2',       rotation: 4,   shape: 'rect'   },
 ]
 
 function StampRect({ stamp, earned }) {
@@ -131,8 +133,8 @@ export default function PassportStamps() {
     ? `${session.profile.firstName} ${session.profile.lastName || ''}`.trim()
     : 'Grand Member'
 
-  const leftStamps  = STAMP_CATALOG.slice(0, 3)
-  const rightStamps = STAMP_CATALOG.slice(3)
+  const leftStamps  = STAMP_CATALOG.slice(0, 4)
+  const rightStamps = STAMP_CATALOG.slice(4)
 
   return (
     <div
@@ -285,7 +287,7 @@ export default function PassportStamps() {
           background: 'linear-gradient(135deg, #e9c176, #c5a059)',
           boxShadow: '0 0 20px rgba(233,193,118,0.5)',
         }}
-        onClick={() => navigate('/smokecraft/passport-stamp')}
+        onClick={() => navigate('/smokecraft')}
       >
         <span className="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform" style={FILL1}>add</span>
       </button>
