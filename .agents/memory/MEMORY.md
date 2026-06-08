@@ -1,7 +1,5 @@
 - [Lucide-react icon validation](lucide-react-icons.md) — always verify icon names exist before using; non-existent named imports silently crash React mount with blank white page.
 - [PostCSS CJS vs ESM](postcss-cjs-esm.md) — when package.json has "type":"module", use postcss.config.cjs (not .js) to avoid "Cannot find module" PostCSS plugin errors.
 - [Vite dep cache dual-React](vite-dep-cache.md) — mid-session dep optimization creates mismatched React version hashes; fix: clear node_modules/.vite, add optimizeDeps.include for all key deps, restart.
-- [Stitch HTML quote gotcha](stitch-quote-gotcha.md) — Stitch exports use curly/smart quotes in bio strings; single-quoted JSX strings break on apostrophes like 'Criollo '98 — always use double quotes or backticks for bio/label copy.
-- [Passport catalog pattern](passport-catalog.md) — stamp defs in src/data/passportCatalog.js; SCHEMA_VERSION is now 4 (managed in src/services/sessionStorageService.js, NOT in the context). Migration v1→v4 handled there.
-- [Nullish-coalesce vs logical-or mixing](rollup-nullish-or.md) — mixing ?? and || in the same expression without parens causes a Rollup build error; use ?? consistently (x ?? y ?? null) instead of (x ?? y || null).
-- [Phase 8 RBAC architecture](phase8-rbac.md) — role names, permission key format, apiClient pattern, and security layer structure for Phase 8+.
+- [ESM dotenv hoisting](esm-dotenv.md) — in ESM, `import dotenv from 'dotenv'; dotenv.config()` is too late; use `import 'dotenv/config'` as the FIRST import statement so env vars load before any other module initializes.
+- [Phase 8.5 auth architecture](phase85-auth.md) — JWT cookie-based auth, founder triple-factor, blockDevFounderSpoofing, AuthContext→SecurityContext precedence chain.

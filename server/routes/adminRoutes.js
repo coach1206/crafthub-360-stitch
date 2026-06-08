@@ -10,7 +10,7 @@
 
 import { Router } from 'express'
 import { requireAuth }                       from '../middleware/authMiddleware.js'
-import { requireAdmin, requireFounderLevel0 } from '../middleware/roleMiddleware.js'
+import { requireAdmin, requireFounderLevel0, blockDevFounderSpoofing } from '../middleware/roleMiddleware.js'
 import * as ac from '../controllers/adminController.js'
 
 const router = Router()
@@ -28,8 +28,8 @@ router.put('/users/:userId',   requireAuth, requireAdmin,         ac.updateUser)
 router.get('/security-events', requireAuth, requireAdmin,         ac.getSecurityEvents)
 router.get('/staff',           requireAuth, requireAdmin,         ac.listStaff)
 
-// ── Founder-only ──────────────────────────────────────────────
-router.post('/money-settings', requireAuth, requireFounderLevel0, ac.updateMoneySettings)
-router.delete('/data-wipe',    requireAuth, requireFounderLevel0, ac.dataWipe)
+// ── Founder-only (triple-gated: JWT + anti-spoof + role) ─────
+router.post('/money-settings', requireAuth, blockDevFounderSpoofing, requireFounderLevel0, ac.updateMoneySettings)
+router.delete('/data-wipe',    requireAuth, blockDevFounderSpoofing, requireFounderLevel0, ac.dataWipe)
 
 export default router

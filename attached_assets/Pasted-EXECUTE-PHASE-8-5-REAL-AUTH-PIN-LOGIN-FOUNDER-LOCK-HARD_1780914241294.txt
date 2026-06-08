@@ -1,0 +1,565 @@
+EXECUTE PHASE 8.5 REAL AUTH + PIN LOGIN + FOUNDER LOCK HARDENING FOR NOVEE OS
+
+PHASE 8 IS COMPLETE.
+
+DO NOT redesign the app.
+DO NOT change premium UI.
+DO NOT create duplicate screens.
+DO NOT weaken Founder Level 0 security.
+DO NOT remove the guest kiosk journey.
+DO NOT connect POS providers yet.
+DO NOT connect ElevenLabs yet.
+DO NOT expose secrets in frontend code.
+DO NOT allow frontend localStorage to be the source of truth for role authority.
+
+MISSION:
+Replace prototype-only role simulation with a real authentication foundation suitable for kiosk, staff, manager, admin, and founder access.
+
+The guest kiosk flow must remain frictionless.
+Staff and management areas must require secure access.
+Founder-only routes must remain blocked unless a real founder identity is verified by the backend.
+
+==================================================
+PHASE 8.5 PRIMARY GOAL
+
+Build a secure prototype authentication layer with:
+
+1. Guest kiosk access without login
+2. Staff PIN login
+3. Manager PIN login
+4. Admin email + PIN login
+5. Founder Level 0 email + PIN + founder secret challenge
+6. JWT session tokens issued by backend
+7. HttpOnly cookie support if possible
+8. Backend role verification
+9. Frontend protected routes reading verified backend session
+10. DevRoleSwitcher disabled outside development
+11. Full audit/security event logging
+
+==================================================
+
+1. UPDATE DATABASE
+    ==================================================
+
+Create migration:
+
+/server/db/migrations/003_auth_hardening.sql
+
+Add or update tables:
+
+A. auth_credentials
+
+Fields:
+
+id
+user_id
+credential_type
+credential_hash
+pin_hash
+founder_secret_hash
+mfa_enabled
+failed_attempts
+locked_until
+created_at
+updated_at
+
+Allowed credential_type:
+
+pin
+email_pin
+founder_challenge
+
+B. auth_sessions
+
+Fields:
+
+id
+session_token_id
+user_id
+role
+issued_at
+expires_at
+revoked
+revoked_at
+ip_address
+user_agent
+created_at
+
+C. pin_login_attempts
+
+Fields:
+
+id
+user_id
+email
+role_attempted
+success
+failure_reason
+ip_address
+user_agent
+created_at
+
+D. founder_access_events
+
+Fields:
+
+id
+founder_user_id
+event_type
+metadata JSONB
+ip_address
+user_agent
+created_at
+
+Do not destroy existing tables.
+Do not wipe existing role data.
+Do not wipe guest session data.
+
+==================================================
+2. CREATE AUTH CONFIG
+
+Create:
+
+/server/config/authConfig.js
+
+Include:
+
+JWT_EXPIRES_IN
+STAFF_PIN_EXPIRES_IN
+ADMIN_SESSION_EXPIRES_IN
+FOUNDER_SESSION_EXPIRES_IN
+MAX_FAILED_ATTEMPTS
+LOCKOUT_MINUTES
+FOUNDER_CHALLENGE_REQUIRED
+
+Use environment variables where appropriate.
+
+Add to .env.example:
+
+JWT_SECRET=
+FOUNDER_CHALLENGE_SECRET=
+AUTH_COOKIE_NAME=novee_auth
+AUTH_COOKIE_SECURE=false
+AUTH_COOKIE_SAMESITE=lax
+
+Do not create real secrets.
+Do not hardcode secrets.
+
+==================================================
+3. CREATE AUTH SERVICE
+
+Create:
+
+/server/services/authService.js
+
+Functions:
+
+hashPin(pin)
+verifyPin(pin, hash)
+hashFounderSecret(secret)
+verifyFounderSecret(secret, hash)
+createJwtForUser(user)
+verifyJwtToken(token)
+createAuthSession(user, req)
+revokeAuthSession(sessionTokenId)
+getAuthenticatedUserFromRequest(req)
+recordLoginAttempt(data)
+lockUserIfNeeded(userId)
+clearFailedAttempts(userId)
+
+Rules:
+
+* Use bcrypt or argon2 if available.
+* Never store raw PINs.
+* Never log raw PINs.
+* Never return credential hashes to frontend.
+* Never allow founder login with PIN only.
+* Founder must require email + PIN + founder challenge.
+
+==================================================
+4. CREATE AUTH ROUTES
+
+Create:
+
+/server/routes/authRoutes.js
+/server/controllers/authController.js
+
+Endpoints:
+
+POST /api/auth/staff-pin-login
+POST /api/auth/admin-login
+POST /api/auth/founder-login
+POST /api/auth/logout
+GET /api/auth/me
+POST /api/auth/refresh
+POST /api/auth/revoke-session
+
+Access rules:
+
+staff-pin-login:
+
+* accepts staff PIN
+* returns user role if valid
+* minimum role: staff
+
+admin-login:
+
+* accepts email + PIN
+* allowed roles: manager, admin
+* founder cannot use this endpoint
+
+founder-login:
+
+* accepts email + PIN + founderChallenge
+* only founder_level_0
+* must log founder_access_event
+
+logout:
+
+* revokes session
+
+me:
+
+* returns verified backend identity
+
+refresh:
+
+* refreshes valid session only
+
+revoke-session:
+
+* admin/founder only
+
+==================================================
+5. UPDATE AUTH MIDDLEWARE
+
+Update:
+
+/server/middleware/authMiddleware.js
+/server/middleware/roleMiddleware.js
+
+Requirements:
+
+* In development, dev headers may remain only when NODE_ENV=development.
+* In production, dev headers must be ignored.
+* Backend must read JWT from Authorization header or HttpOnly cookie.
+* Founder-only routes must never allow dev headers unless explicit ALLOW_DEV_FOUNDER=true in development only.
+* Frontend localStorage role must never authorize backend access.
+* requireFounderLevel0 must validate backend identity only.
+
+Create middleware:
+
+requireAuthenticatedUser
+requireMinimumRole(level)
+requirePermission(permissionKey)
+requireFounderOnly
+blockDevFounderSpoofing
+
+==================================================
+6. SEED FIRST USERS SAFELY
+
+Create:
+
+/server/db/seeds/seedPrototypeUsers.js
+
+Seed users only in development mode:
+
+staff demo user
+manager demo user
+admin demo user
+founder demo user
+
+Do not seed production users automatically.
+
+Use fake PINs only in development and clearly log:
+
+“Prototype auth users seeded for development only.”
+
+Do not print founder secret in logs.
+
+==================================================
+7. FRONTEND AUTH SERVICE
+
+Create:
+
+src/services/authApiService.js
+
+Functions:
+
+staffPinLogin(pin)
+adminLogin(email, pin)
+founderLogin(email, pin, founderChallenge)
+logout()
+getMe()
+refreshSession()
+revokeSession(sessionId)
+
+Use apiClient.js.
+
+No raw PIN should be stored in localStorage.
+No founder challenge should be stored in localStorage.
+No auth token should be stored in localStorage if HttpOnly cookie mode is available.
+
+==================================================
+8. FRONTEND AUTH CONTEXT
+
+Update or create:
+
+src/context/AuthContext.jsx
+
+It must track:
+
+user
+role
+permissions
+isAuthenticated
+isFounder
+isLoading
+authError
+
+Functions:
+
+loginStaff(pin)
+loginAdmin(email, pin)
+loginFounder(email, pin, founderChallenge)
+logout()
+refreshMe()
+
+SecurityContext should use AuthContext as the verified identity source.
+
+DevRoleSwitcher must only show when:
+
+NODE_ENV=development
+
+and must display:
+
+DEV MODE ONLY — NOT REAL AUTH
+
+==================================================
+9. CREATE LOGIN SCREENS
+
+Create or update:
+
+src/pages/StaffLogin.jsx
+src/pages/AdminLogin.jsx
+src/pages/FounderLogin.jsx
+
+StaffLogin:
+
+* PIN keypad
+* large touchscreen buttons
+* no tiny inputs
+* back/home button
+* failed attempt message
+
+AdminLogin:
+
+* email
+* PIN
+* login button
+* back/home button
+
+FounderLogin:
+
+* email
+* PIN
+* founder challenge
+* warning: Founder Level 0 restricted access
+* no autocomplete on founder challenge if possible
+* back/home button
+
+Keep visual style premium.
+Do not redesign the whole system.
+
+==================================================
+10. UPDATE FRONTEND ROUTES
+
+Add routes:
+
+/staff-login
+/admin-login
+/founder-login
+
+Protected route behavior:
+
+If guest tries /pos3:
+
+* redirect to /staff-login or show Access Restricted with Staff Login button.
+
+If guest tries /eat-command:
+
+* redirect to /admin-login or show Access Restricted with Manager/Admin Login button.
+
+If admin tries /founder:
+
+* show Access Restricted and Founder Login button.
+
+If unauthenticated user tries /founder:
+
+* redirect to /founder-login.
+
+Guest kiosk journey remains public:
+
+/
+/craft-hub
+/smokecraft/*
+/passport/*
+/leaderboard guest view
+
+==================================================
+11. HARDEN FOUNDER ROUTES
+
+Founder-only endpoints must require verified backend founder session:
+
+/api/founder/*
+/api/admin/money-settings
+/api/admin/billing
+/api/admin/licenses
+/api/admin/data-wipe
+/api/admin/founder-access
+
+Add test endpoint if needed:
+
+GET /api/founder/status
+
+Expected:
+
+Guest: 403
+Staff: 403
+Manager: 403
+Admin: 403
+Founder: 200
+
+==================================================
+12. DATA WIPE SAFETY
+
+If data wipe route exists or is created:
+
+POST /api/admin/data-wipe
+
+Require:
+
+* founder_level_0
+* valid founder session
+* header X-Confirm-Wipe: CONFIRM
+* body confirmationText: CONFIRM
+* security event log
+* audit log
+
+For now, do not actually wipe data.
+Return:
+
+{
+success: true,
+mode: “prototype”,
+message: “Data wipe request validated but destructive wipe is disabled in prototype mode.”
+}
+
+==================================================
+13. AUDIT + SECURITY LOGGING
+
+Log:
+
+* successful staff login
+* failed staff login
+* successful admin login
+* failed admin login
+* successful founder login
+* failed founder login
+* founder route access
+* founder route denial
+* session revoked
+* user locked from failed attempts
+* suspicious dev founder spoof attempt
+
+Write to:
+
+security_events
+pin_login_attempts
+founder_access_events
+audit_logs where appropriate
+
+==================================================
+14. TEST MATRIX
+
+Test:
+
+A. Guest kiosk journey still works without login.
+B. Guest cannot access /pos3 without staff login.
+C. Staff PIN login grants POS 3 access.
+D. Staff cannot access E.A.T.
+E. Manager can access E.A.T.
+F. Admin can access /admin.
+G. Admin cannot access /founder.
+H. Founder login requires email + PIN + founder challenge.
+I. Founder can access /founder.
+J. Founder-only API rejects admin.
+K. Data wipe route requires X-Confirm-Wipe: CONFIRM.
+L. Failed PIN attempts are logged.
+M. Logout removes access.
+N. DevRoleSwitcher only appears in development.
+O. Build passes.
+P. Backend starts.
+Q. /api/auth/me returns verified identity when logged in.
+
+==================================================
+15. BUILD + SERVER VERIFICATION
+
+Run:
+
+npm run build
+npm run dev:server
+
+Verify:
+
+GET /api/health
+GET /api/auth/me
+POST /api/auth/staff-pin-login
+POST /api/auth/admin-login
+POST /api/auth/founder-login
+GET /api/founder/status
+
+Also verify:
+
+* guest journey still works
+* Phase 6 session persistence still works
+* Phase 7 backend sync still works
+* Phase 8 role gates still work
+* founderOnly is stronger than before
+
+==================================================
+16. FINAL REPORT REQUIRED
+
+Return a report with:
+
+A. Files created
+B. Files changed
+C. Database migration status
+D. Auth service status
+E. Auth routes status
+F. Staff PIN login status
+G. Admin login status
+H. Founder login status
+I. JWT/session status
+J. Frontend AuthContext status
+K. Login screens status
+L. Protected route behavior
+M. Founder-only hardening status
+N. Data wipe safety status
+O. Security logging status
+P. DevRoleSwitcher safety status
+Q. Guest journey status
+R. Build result
+S. Server result
+T. Remaining risks
+
+Do not claim Phase 8.5 is complete unless:
+
+* npm run build passes
+* backend starts
+* guest journey still works
+* staff login works
+* admin login works
+* founder login requires founder challenge
+* admin cannot access founder routes
+* frontend localStorage role does not authorize backend access

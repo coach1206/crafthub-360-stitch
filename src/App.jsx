@@ -14,6 +14,9 @@ import POS3 from './pages/POS3.jsx'
 import EATCommand from './pages/EATCommand.jsx'
 import Admin from './pages/Admin.jsx'
 import FounderControl from './pages/FounderControl.jsx'
+import StaffLogin from './pages/StaffLogin.jsx'
+import AdminLogin from './pages/AdminLogin.jsx'
+import FounderLogin from './pages/FounderLogin.jsx'
 
 import Boot from './pages/Boot.jsx'
 import SmokeCraft from './pages/SmokeCraft.jsx'
@@ -38,7 +41,7 @@ import Identity from './pages/smokecraft/Identity.jsx'
 import Leaderboard from './pages/smokecraft/Leaderboard.jsx'
 import PassportStamp from './pages/smokecraft/PassportStamp.jsx'
 
-import ProtectedRoute from './components/security/ProtectedRoute.jsx'
+import ProtectedRoute  from './components/security/ProtectedRoute.jsx'
 import DevRoleSwitcher from './components/security/DevRoleSwitcher.jsx'
 
 /** Silently records the current route in session state for refresh recovery. */
@@ -46,9 +49,7 @@ function RouteTracker() {
   const location = useLocation()
   const { trackRoute } = useGuestSession()
   useEffect(() => {
-    if (location.pathname !== '/boot') {
-      trackRoute(location.pathname)
-    }
+    if (location.pathname !== '/boot') trackRoute(location.pathname)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
   return null
@@ -71,10 +72,15 @@ export default function App() {
     <BrowserRouter>
       <RouteTracker />
       <Routes>
-        {/* Boot screen — outside BootGuard so it's always accessible */}
+        {/* ── Boot — always accessible ─────────────────────── */}
         <Route path="boot" element={<Boot />} />
 
-        {/* All app routes — guarded by boot + pass-through Layout */}
+        {/* ── Login screens — accessible without boot ──────── */}
+        <Route path="staff-login"   element={<StaffLogin />} />
+        <Route path="admin-login"   element={<AdminLogin />} />
+        <Route path="founder-login" element={<FounderLogin />} />
+
+        {/* ── All app routes — guarded by boot + Layout ─────── */}
         <Route
           element={
             <BootGuard>
@@ -85,31 +91,31 @@ export default function App() {
           <Route index           element={<Home />} />
           <Route path="crafthub" element={<CraftHub />} />
 
-          {/* SmokeCraft 360 journey — guest-accessible */}
+          {/* SmokeCraft 360 — guest-accessible */}
           <Route path="smokecraft">
             <Route index element={<SmokeCraft />} />
-            <Route path="enroll"          element={<Enroll />} />
+            <Route path="enroll"           element={<Enroll />} />
             <Route path="golden-box">
-              <Route index              element={<GoldenBox />} />
-              <Route path="status"      element={<GoldenBoxStatus />} />
+              <Route index             element={<GoldenBox />} />
+              <Route path="status"     element={<GoldenBoxStatus />} />
             </Route>
-            <Route path="art"             element={<Art />} />
-            <Route path="mentor"          element={<Mentor />} />
-            <Route path="origins"         element={<Origins />} />
-            <Route path="leaves"          element={<Leaves />} />
-            <Route path="leaf-challenge"  element={<LeafChallenge />} />
-            <Route path="cultivation"     element={<Cultivation />} />
-            <Route path="blend"           element={<Blend />} />
-            <Route path="flavor-dna"      element={<FlavorDNA />} />
-            <Route path="pairing"         element={<Pairing />} />
-            <Route path="available"       element={<Available />} />
-            <Route path="session-complete"element={<SessionComplete />} />
-            <Route path="terroir"         element={<Terroir />} />
+            <Route path="art"            element={<Art />} />
+            <Route path="mentor"         element={<Mentor />} />
+            <Route path="origins"        element={<Origins />} />
+            <Route path="leaves"         element={<Leaves />} />
+            <Route path="leaf-challenge" element={<LeafChallenge />} />
+            <Route path="cultivation"    element={<Cultivation />} />
+            <Route path="blend"          element={<Blend />} />
+            <Route path="flavor-dna"     element={<FlavorDNA />} />
+            <Route path="pairing"        element={<Pairing />} />
+            <Route path="available"      element={<Available />} />
+            <Route path="session-complete" element={<SessionComplete />} />
+            <Route path="terroir"        element={<Terroir />} />
             <Route path="pairing-mastery" element={<PairingMastery />} />
-            <Route path="vitola"          element={<Vitola />} />
-            <Route path="identity"        element={<Identity />} />
-            <Route path="leaderboard"     element={<Leaderboard />} />
-            <Route path="passport-stamp"  element={<PassportStamp />} />
+            <Route path="vitola"         element={<Vitola />} />
+            <Route path="identity"       element={<Identity />} />
+            <Route path="leaderboard"    element={<Leaderboard />} />
+            <Route path="passport-stamp" element={<PassportStamp />} />
           </Route>
 
           {/* 360 Passport — guest-accessible */}
@@ -121,66 +127,71 @@ export default function App() {
             <Route path="leaderboard" element={<Navigate to="/smokecraft/leaderboard" replace />} />
           </Route>
 
-          {/* Passport Networking alias */}
           <Route path="passport-networking" element={<PassportConnection />} />
-
-          {/* Guest craft modules */}
           <Route path="pourcraft"  element={<PourCraft />} />
           <Route path="beercraft"  element={<BeerCraft />} />
           <Route path="winecraft"  element={<WineCraft />} />
 
-          {/* ── Protected staff+ routes ── */}
+          {/* ── Protected: staff+ ────────────────────────────── */}
           <Route path="pos" element={
             <ProtectedRoute
               requiredPermission="access_pos3_staff"
-              lockedMessage="POS 3 requires staff-level access or higher."
+              loginRoute="/staff-login"
+              loginLabel="Staff Login"
+              lockedMessage="POS 3 requires staff-level access. Please sign in with your staff PIN."
             >
               <POS3 />
             </ProtectedRoute>
           } />
 
-          {/* ── Protected manager+ routes ── */}
+          {/* ── Protected: manager+ ──────────────────────────── */}
           <Route path="eat" element={
             <ProtectedRoute
               requiredPermission="access_eat_command"
+              loginRoute="/admin-login"
+              loginLabel="Manager / Admin Login"
               lockedMessage="E.A.T. Command requires manager-level access or higher."
             >
               <EATCommand />
             </ProtectedRoute>
           } />
 
-          {/* ── Protected admin+ routes ── */}
+          {/* ── Protected: admin+ ────────────────────────────── */}
           <Route path="admin" element={
             <ProtectedRoute
               allowedRoles={['admin', 'founder_level_0']}
+              loginRoute="/admin-login"
+              loginLabel="Admin Login"
               lockedMessage="NOVEE OS Admin requires admin-level access or higher."
             >
               <Admin />
             </ProtectedRoute>
           } />
 
-          {/* ── Founder Level 0 only ── */}
+          {/* ── Protected: founder_level_0 only ──────────────── */}
           <Route path="founder" element={
             <ProtectedRoute
               allowedRoles={['founder_level_0']}
+              loginRoute="/founder-login"
+              loginLabel="Founder Login"
               lockedMessage="Founder Level 0 access required. This area cannot be delegated."
             >
               <FounderControl />
             </ProtectedRoute>
           } />
 
-          {/* Route aliases & redirects */}
-          <Route path="craft-hub"              element={<Navigate to="/crafthub" replace />} />
-          <Route path="craft-modules"          element={<Navigate to="/crafthub" replace />} />
-          <Route path="dashboard"              element={<Navigate to="/crafthub" replace />} />
-          <Route path="command-center"         element={<Navigate to="/eat" replace />} />
-          <Route path="eat-command"            element={<Navigate to="/eat" replace />} />
-          <Route path="smokecraft/session-1"   element={<Navigate to="/smokecraft" replace />} />
-          <Route path="smokecraft/session-2"   element={<Navigate to="/smokecraft" replace />} />
-          <Route path="smokecraft/session-3"   element={<Navigate to="/smokecraft" replace />} />
-          <Route path="smokecraft/session-4"   element={<Navigate to="/smokecraft" replace />} />
+          {/* Route aliases */}
+          <Route path="craft-hub"    element={<Navigate to="/crafthub" replace />} />
+          <Route path="craft-modules" element={<Navigate to="/crafthub" replace />} />
+          <Route path="dashboard"    element={<Navigate to="/crafthub" replace />} />
+          <Route path="command-center" element={<Navigate to="/eat" replace />} />
+          <Route path="eat-command"  element={<Navigate to="/eat" replace />} />
+          <Route path="smokecraft/session-1" element={<Navigate to="/smokecraft" replace />} />
+          <Route path="smokecraft/session-2" element={<Navigate to="/smokecraft" replace />} />
+          <Route path="smokecraft/session-3" element={<Navigate to="/smokecraft" replace />} />
+          <Route path="smokecraft/session-4" element={<Navigate to="/smokecraft" replace />} />
 
-          <Route path="*"          element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
 

@@ -1,15 +1,19 @@
 /**
- * Security Context — provides role-based access control state to the React tree.
+ * Security Context — Phase 8.5
+ * Provides role-based access control state to the React tree.
  *
- * In prototype mode, the "current admin session" is stored in localStorage
- * under `novee_admin_session`. Default role is `guest`.
+ * Identity resolution (first match wins):
+ *   1. Real JWT session from AuthContext (backend-verified)
+ *   2. localStorage prototype session (dev / prototype only)
+ *   3. Guest default
  *
- * In production, this would be backed by a real JWT or session cookie.
- * Never use this alone to gate server-side operations.
+ * IMPORTANT: This context is for UI rendering decisions only.
+ * Backend middleware enforces actual security — never rely on this alone.
  */
 
 import { createContext, useContext, useState, useCallback } from 'react'
 import { ROLE_MAP, ROLE_LEVELS, ROLE_LABELS, roleHasPermission, meetsMinRole } from '../config/roleMap.js'
+import { AuthContext } from './AuthContext.jsx'
 
 const ADMIN_SESSION_KEY = 'novee_admin_session'
 
@@ -26,55 +30,73 @@ function readStoredSession() {
 const SecurityContext = createContext(null)
 
 export function SecurityProvider({ children }) {
-  const [user, setUser] = useState(() =>
+  // Try to consume AuthContext (real JWT session) if it's available above in the tree.
+  const authCtx = useContext(AuthContext)
+
+  // Prototype localStorage role (dev / no real auth)
+  const [localUser, setLocalUser] = useState(() =>
     readStoredSession() || { role: 'guest', userId: null, email: null, displayName: 'Guest' }
   )
 
-  /** Returns true if the current user holds the given permission key. */
+  // ── Effective identity ────────────────────────────────────
+  // Real JWT-authenticated user takes precedence over localStorage.
+  const user = (authCtx?.isAuthenticated && authCtx?.authUser)
+    ? {
+        role:        authCtx.authUser.role,
+        userId:      authCtx.authUser.userId,
+        email:       authCtx.authUser.email,
+        displayName: authCtx.authUser.displayName || authCtx.authUser.role,
+        mode:        'jwt',
+      }
+    : localUser
+
+  // ── Permission helpers ────────────────────────────────────
   const hasPermission = useCallback((permKey) =>
     roleHasPermission(user.role, permKey),
   [user.role])
 
-  /** Returns true if the current user meets or exceeds a minimum role level. */
   const atLeast = useCallback((minRole) =>
     meetsMinRole(user.role, minRole),
   [user.role])
 
-  const isGuest     = () => user.role === 'guest'
-  const isStaff     = () => meetsMinRole(user.role, 'staff')
-  const isManager   = () => meetsMinRole(user.role, 'manager')
-  const isAdmin     = () => meetsMinRole(user.role, 'admin')
-  const isFounder   = () => user.role === 'founder_level_0'
+  const isGuest   = () => user.role === 'guest'
+  const isStaff   = () => meetsMinRole(user.role, 'staff')
+  const isManager = () => meetsMinRole(user.role, 'manager')
+  const isAdmin   = () => meetsMinRole(user.role, 'admin')
+  const isFounder = () => user.role === 'founder_level_0'
 
-  /** Updates the stored session role (prototype/dev only — never the production gate). */
+  // ── Prototype role setter (localStorage, dev only) ────────
+  // Used by DevRoleSwitcher when no real JWT session exists.
   const setRole = useCallback((role, meta = {}) => {
-    if (!ROLE_MAP[role]) {
-      console.warn('[SecurityContext] Unknown role:', role)
+    if (!ROLE_MAP[role]) { console.warn('[SecurityContext] Unknown role:', role); return }
+    // If a real auth session exists, don't override it via localStorage
+    if (authCtx?.isAuthenticated) {
+      console.warn('[SecurityContext] Cannot override real JWT session via setRole. Log out first.')
       return
     }
     const session = {
-      ...user,
+      ...localUser,
       role,
-      userId:      meta.userId      || user.userId,
-      email:       meta.email       || user.email,
+      userId:      meta.userId      || localUser.userId,
+      email:       meta.email       || localUser.email,
       displayName: meta.displayName || ROLE_LABELS[role] || role,
       grantedAt:   Date.now(),
     }
     try { localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(session)) } catch {}
-    setUser(session)
-  }, [user])
+    setLocalUser(session)
+  }, [localUser, authCtx])
 
-  /** Clears the admin session and reverts to guest. */
   const clearAdminSession = useCallback(() => {
     try { localStorage.removeItem(ADMIN_SESSION_KEY) } catch {}
-    setUser({ role: 'guest', userId: null, email: null, displayName: 'Guest' })
+    setLocalUser({ role: 'guest', userId: null, email: null, displayName: 'Guest' })
   }, [])
 
   const value = {
     user,
-    role:        user.role,
-    roleLabel:   ROLE_LABELS[user.role] || user.role,
-    permissions: ROLE_MAP[user.role] || [],
+    role:              user.role,
+    roleLabel:         ROLE_LABELS[user.role] || user.role,
+    permissions:       ROLE_MAP[user.role] || [],
+    isRealSession:     authCtx?.isAuthenticated ?? false,
     hasPermission,
     atLeast,
     isGuest,

@@ -4,6 +4,7 @@
  * Rules:
  *  - Uses Vite proxy: /api/* → http://localhost:3001
  *  - 5 second timeout via AbortController
+ *  - credentials: 'include' — sends HttpOnly auth cookie on every /api request
  *  - Returns null if offline, timed out, or backend unavailable
  *  - Never throws — never crashes the guest journey
  *  - Console warns in dev only
@@ -34,8 +35,9 @@ async function apiFetch(method, path, data) {
   try {
     const opts = {
       method,
-      headers: { 'Content-Type': 'application/json' },
-      signal:  controller.signal,
+      headers:     { 'Content-Type': 'application/json' },
+      signal:      controller.signal,
+      credentials: 'include',   // Sends HttpOnly novee_auth cookie on every /api request
     }
     if (data !== undefined && method !== 'GET') {
       opts.body = JSON.stringify(data)

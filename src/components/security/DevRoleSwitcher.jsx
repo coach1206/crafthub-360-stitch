@@ -1,11 +1,14 @@
 /**
- * Dev Role Switcher — floating role simulator for development only.
- * Renders only when import.meta.env.DEV is true.
- * Uses SecurityContext.setRole() to switch the current prototype role.
+ * Dev Role Switcher — Phase 8.5
+ * Floating role simulator — visible ONLY when import.meta.env.DEV is true.
+ * Shows "DEV MODE ONLY — NOT REAL AUTH" warning.
+ * Disabled when user has a real JWT session (shows logout button instead).
  */
 
 import { useState } from 'react'
 import { useSecurity } from '../../context/SecurityContext.jsx'
+import { useContext }   from 'react'
+import { AuthContext }  from '../../context/AuthContext.jsx'
 import { ALL_ROLES, ROLE_LABELS, ROLE_LEVELS } from '../../config/roleMap.js'
 
 const ROLE_COLORS = {
@@ -17,59 +20,125 @@ const ROLE_COLORS = {
 }
 
 export default function DevRoleSwitcher() {
-  const [open, setOpen]   = useState(false)
-  const { role, setRole } = useSecurity()
+  const [open, setOpen] = useState(false)
+  const { role, setRole, isRealSession } = useSecurity()
+  const authCtx = useContext(AuthContext)
 
   if (!import.meta.env.DEV) return null
 
+  const color = ROLE_COLORS[role] || '#888'
+
+  const handleLogout = async () => {
+    if (authCtx?.logout) await authCtx.logout()
+    setOpen(false)
+  }
+
   return (
-    <div
-      style={{
-        position:  'fixed',
-        bottom:    '1.25rem',
-        right:     '1.25rem',
-        zIndex:    9999,
-        fontFamily: 'monospace',
-        fontSize:  '11px',
-      }}
-    >
+    <div style={{
+      position:  'fixed',
+      bottom:    '1.25rem',
+      right:     '1.25rem',
+      zIndex:    9999,
+      fontFamily: 'monospace',
+      fontSize:  '11px',
+    }}>
       {open && (
         <div style={{
-          background:   '#111',
-          border:       '1px solid #C9A84C44',
+          background:   '#0d0d0d',
+          border:       '1px solid #C9A84C33',
           borderRadius: '8px',
           padding:      '12px',
           marginBottom: '8px',
-          minWidth:     '180px',
-          boxShadow:    '0 4px 20px rgba(0,0,0,0.8)',
+          minWidth:     '210px',
+          boxShadow:    '0 4px 20px rgba(0,0,0,0.9)',
         }}>
-          <div style={{ color: '#888', marginBottom: '8px', letterSpacing: '0.08em', fontSize: '10px' }}>
-            DEV ROLE SWITCHER
+          {/* DEV warning banner */}
+          <div style={{
+            background:    'rgba(204,51,51,0.10)',
+            border:        '1px solid rgba(204,51,51,0.3)',
+            borderRadius:  '3px',
+            color:         'rgba(204,51,51,0.8)',
+            fontSize:      '9px',
+            letterSpacing: '0.12em',
+            padding:       '4px 8px',
+            marginBottom:  '10px',
+            textAlign:     'center',
+          }}>
+            DEV MODE ONLY — NOT REAL AUTH
           </div>
-          {ALL_ROLES.map(r => (
-            <button
-              key={r}
-              onClick={() => { setRole(r); setOpen(false) }}
-              style={{
-                display:      'block',
-                width:        '100%',
-                background:   role === r ? '#1a1a1a' : 'transparent',
-                border:       `1px solid ${role === r ? ROLE_COLORS[r] : '#333'}`,
-                borderRadius: '4px',
-                color:        ROLE_COLORS[r] || '#aaa',
-                padding:      '5px 8px',
-                marginBottom: '4px',
-                cursor:       'pointer',
-                textAlign:    'left',
-                letterSpacing: '0.04em',
-              }}
-            >
-              {role === r ? '▶ ' : '  '}{ROLE_LABELS[r]}
-              <span style={{ float: 'right', color: '#555' }}>lv{ROLE_LEVELS[r]}</span>
-            </button>
-          ))}
-          <div style={{ borderTop: '1px solid #222', marginTop: '8px', paddingTop: '8px', color: '#555', fontSize: '10px' }}>
-            Saved in localStorage
+
+          {isRealSession ? (
+            // Real JWT session active — show identity + logout
+            <>
+              <div style={{ color: '#555', fontSize: '10px', letterSpacing: '0.08em', marginBottom: '8px' }}>
+                REAL SESSION ACTIVE
+              </div>
+              <div style={{
+                color:         ROLE_COLORS[role] || '#888',
+                fontSize:      '12px',
+                marginBottom:  '10px',
+                letterSpacing: '0.06em',
+              }}>
+                {ROLE_LABELS[role]}
+              </div>
+              <button
+                onClick={handleLogout}
+                style={{
+                  display:       'block',
+                  width:         '100%',
+                  background:    'rgba(204,51,51,0.1)',
+                  border:        '1px solid rgba(204,51,51,0.3)',
+                  borderRadius:  '4px',
+                  color:         'rgba(204,51,51,0.8)',
+                  padding:       '6px 8px',
+                  cursor:        'pointer',
+                  letterSpacing: '0.08em',
+                  fontSize:      '11px',
+                }}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            // Prototype mode — show role switcher
+            <>
+              <div style={{ color: '#444', letterSpacing: '0.08em', fontSize: '10px', marginBottom: '8px' }}>
+                PROTOTYPE ROLE SWITCHER
+              </div>
+              {ALL_ROLES.map(r => (
+                <button
+                  key={r}
+                  onClick={() => { setRole(r); setOpen(false) }}
+                  style={{
+                    display:      'block',
+                    width:        '100%',
+                    background:   role === r ? '#1a1a1a' : 'transparent',
+                    border:       `1px solid ${role === r ? ROLE_COLORS[r] : '#2a2a2a'}`,
+                    borderRadius: '4px',
+                    color:        ROLE_COLORS[r] || '#aaa',
+                    padding:      '5px 8px',
+                    marginBottom: '4px',
+                    cursor:       'pointer',
+                    textAlign:    'left',
+                    letterSpacing: '0.04em',
+                  }}
+                >
+                  {role === r ? '▶ ' : '  '}{ROLE_LABELS[r]}
+                  <span style={{ float: 'right', color: '#444' }}>lv{ROLE_LEVELS[r]}</span>
+                </button>
+              ))}
+            </>
+          )}
+
+          <div style={{
+            borderTop:     '1px solid #1a1a1a',
+            marginTop:     '8px',
+            paddingTop:    '8px',
+            color:         '#333',
+            fontSize:      '9px',
+            letterSpacing: '0.08em',
+          }}>
+            {isRealSession ? 'JWT · HttpOnly cookie' : 'localStorage · prototype only'}
           </div>
         </div>
       )}
@@ -77,20 +146,21 @@ export default function DevRoleSwitcher() {
       <button
         onClick={() => setOpen(o => !o)}
         style={{
-          background:   '#111',
-          border:       `1px solid ${ROLE_COLORS[role] || '#555'}`,
+          background:   '#0d0d0d',
+          border:       `1px solid ${color}`,
           borderRadius: '20px',
-          color:        ROLE_COLORS[role] || '#888',
+          color,
           padding:      '6px 12px',
           cursor:       'pointer',
           letterSpacing: '0.06em',
-          boxShadow:    '0 2px 12px rgba(0,0,0,0.6)',
+          boxShadow:    '0 2px 12px rgba(0,0,0,0.7)',
           display:      'flex',
           alignItems:   'center',
           gap:          '6px',
+          fontSize:     '11px',
         }}
       >
-        <span style={{ fontSize: '9px' }}>●</span>
+        <span style={{ fontSize: '8px' }}>{isRealSession ? '🔐' : '●'}</span>
         {ROLE_LABELS[role]}
       </button>
     </div>

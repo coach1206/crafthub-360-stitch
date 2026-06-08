@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import { GuestSessionProvider } from './context/GuestSessionContext.jsx'
+import { AuthProvider }         from './context/AuthContext.jsx'
 import { SecurityProvider }     from './context/SecurityContext.jsx'
+import { GuestSessionProvider } from './context/GuestSessionContext.jsx'
 import { flushOfflineQueue }    from './services/syncService.js'
 import './styles.css'
 
@@ -11,10 +12,12 @@ flushOfflineQueue().catch(() => {})
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <SecurityProvider>
-      <GuestSessionProvider>
-        <App />
-      </GuestSessionProvider>
-    </SecurityProvider>
+    <AuthProvider>
+      <SecurityProvider>
+        <GuestSessionProvider>
+          <App />
+        </GuestSessionProvider>
+      </SecurityProvider>
+    </AuthProvider>
   </React.StrictMode>
 )

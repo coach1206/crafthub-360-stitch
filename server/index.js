@@ -1,14 +1,15 @@
 /**
  * NOVEE OS — Express Backend
- * Phase 8: Admin Roles + Founder Level 0 Security
+ * Phase 8.5: Real Auth + PIN Login + Founder Lock Hardening
  *
  * Runs on PORT (default 3001).
  * Frontend (Vite, port 5000) proxies /api/* to this server.
  */
 
-import express    from 'express'
-import cors       from 'cors'
-import dotenv     from 'dotenv'
+import 'dotenv/config'
+import express      from 'express'
+import cors         from 'cors'
+import cookieParser from 'cookie-parser'
 
 import healthRoutes      from './routes/healthRoutes.js'
 import sessionRoutes     from './routes/sessionRoutes.js'
@@ -19,24 +20,26 @@ import eatRoutes         from './routes/eatRoutes.js'
 import auditRoutes       from './routes/auditRoutes.js'
 import adminRoutes       from './routes/adminRoutes.js'
 import founderRoutes     from './routes/founderRoutes.js'
+import authRoutes        from './routes/authRoutes.js'
 import { errorHandler }  from './middleware/errorHandler.js'
-
-dotenv.config()
+import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 
 const app  = express()
 const PORT = parseInt(process.env.PORT || '3001', 10)
 
 // ── Middleware ────────────────────────────────────────────────
 app.use(cors({
-  origin:      process.env.CORS_ORIGIN || '*',
+  origin:      process.env.CORS_ORIGIN || true,
   credentials: true,
   methods:     ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 }))
+app.use(cookieParser())
 app.use(express.json({ limit: '1mb' }))
 app.use(express.urlencoded({ extended: true }))
 
 // ── Routes ────────────────────────────────────────────────────
 app.use('/api',             healthRoutes)
+app.use('/api/auth',        authRoutes)
 app.use('/api/sessions',    sessionRoutes)
 app.use('/api/passport',    passportRoutes)
 app.use('/api/leaderboard', leaderboardRoutes)
@@ -55,12 +58,18 @@ app.use((_req, res) => {
 app.use(errorHandler)
 
 // ── Start ─────────────────────────────────────────────────────
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, '0.0.0.0', async () => {
   console.log(`\n🥃 NOVEE OS Backend — port ${PORT}`)
   console.log(`   Health:  http://localhost:${PORT}/api/health`)
+  console.log(`   Auth:    http://localhost:${PORT}/api/auth/me`)
   console.log(`   Admin:   http://localhost:${PORT}/api/admin/my-permissions`)
   console.log(`   Founder: http://localhost:${PORT}/api/founder/status  [founder_level_0 only]`)
   console.log(`   Mode:    ${process.env.NODE_ENV || 'development'}\n`)
+
+  // Auto-seed prototype users in development only
+  if (process.env.NODE_ENV !== 'production') {
+    await seedPrototypeUsers()
+  }
 })
 
 export default app

@@ -1,24 +1,31 @@
 /**
- * Role Middleware — enforces role-based access control.
+ * Role Middleware — Phase 8.5
  *
  * Roles (ascending): guest → staff → manager → admin → founder_level_0
  *
  * requireAuth() must run BEFORE any role check to populate req.user.
- * In development, use x-novee-user-role header to simulate any role.
  *
- * requireFounderLevel0() is the absolute ceiling — it is enforced in
- * ALL environments. No dev bypass. No admin exemption. Ever.
+ * requireFounderLevel0 / founderOnly:
+ *   - Checks real role from req.user (set by JWT-verified requireAuth)
+ *   - In dev: BLOCKS founder via dev headers unless ALLOW_DEV_FOUNDER=true
+ *   - Enforced in ALL environments — no exceptions
+ *
+ * blockDevFounderSpoofing:
+ *   - Specifically blocks x-novee-user-role: founder_level_0 in dev headers
+ *   - Logs every attempt as a security event
+ *   - Add to any route group that requires extra hardening
  */
 
 import { meetsMinRole, roleHasPermission, ROLE_LEVELS } from '../config/roleMap.js'
-import { recordAccessDenied, recordAccessGranted } from '../services/securityEventService.js'
+import { authConfig }                                    from '../config/authConfig.js'
+import {
+  recordAccessDenied,
+  recordAccessGranted,
+  recordSecurityEvent,
+} from '../services/securityEventService.js'
 
 // ── Identity helper ───────────────────────────────────────────
 
-/**
- * Ensures req.user exists. If no requireAuth() ran upstream, attaches a
- * prototype guest identity (development only).
- */
 function ensureUser(req) {
   if (!req.user) {
     if (process.env.NODE_ENV !== 'production') {
@@ -28,18 +35,48 @@ function ensureUser(req) {
   return req.user
 }
 
+// ── blockDevFounderSpoofing ───────────────────────────────────
+
+/**
+ * Blocks requests where a dev header has set role to founder_level_0
+ * unless ALLOW_DEV_FOUNDER=true in development.
+ *
+ * Use on any route group that must prevent casual founder spoofing.
+ */
+export async function blockDevFounderSpoofing(req, res, next) {
+  const user = ensureUser(req)
+
+  if (user.mode === 'dev-header' && user.role === 'founder_level_0') {
+    if (!authConfig.ALLOW_DEV_FOUNDER) {
+      await recordSecurityEvent(
+        user.id, user.role,
+        'security.dev_founder_spoof_blocked', req.path,
+        { blocked: true, mode: user.mode }
+      )
+      return res.status(403).json({
+        success: false,
+        message: 'Founder access via dev headers is blocked. ' +
+                 'Use real founder authentication or set ALLOW_DEV_FOUNDER=true in .env (development only).',
+      })
+    }
+    // Allow but log it
+    await recordSecurityEvent(
+      user.id, user.role,
+      'security.dev_founder_allowed', req.path,
+      { note: 'ALLOW_DEV_FOUNDER=true is set — dev mode founder bypass active' }
+    )
+  }
+  next()
+}
+
 // ── Core gates ────────────────────────────────────────────────
 
 /**
  * Requires the requesting user to hold at minimum `minRoleName`.
- * Logs denied attempts as security events.
- *
- * @param {'guest'|'staff'|'manager'|'admin'|'founder_level_0'} minRoleName
  */
 export function requireRole(minRoleName) {
   return async (req, res, next) => {
     const user = ensureUser(req)
-
     if (!meetsMinRole(user.role, minRoleName)) {
       await recordAccessDenied(user.id, user.role, req.path, minRoleName)
       return res.status(403).json({
@@ -53,14 +90,10 @@ export function requireRole(minRoleName) {
 
 /**
  * Requires the requesting user to hold a specific named permission key.
- * Logs all denied attempts.
- *
- * @param {string} permissionKey — e.g. 'access_eat_command'
  */
 export function requirePermission(permissionKey) {
   return async (req, res, next) => {
     const user = ensureUser(req)
-
     if (!roleHasPermission(user.role, permissionKey)) {
       const isFounderOnly = [
         'manage_roles', 'manage_revenue_settings', 'manage_deployment',
@@ -81,8 +114,9 @@ export function requirePermission(permissionKey) {
 
 /**
  * Founder Level 0 gate — absolute ceiling.
- * Enforced in ALL environments. No prototype bypass. No dev override.
- * Only a request with role === 'founder_level_0' passes.
+ * Enforced in ALL environments.
+ * Dev headers are blocked by blockDevFounderSpoofing (applied before this).
+ * Only a real JWT-verified founder_level_0 identity passes.
  */
 export async function requireFounderLevel0(req, res, next) {
   const user = ensureUser(req)
@@ -99,19 +133,13 @@ export async function requireFounderLevel0(req, res, next) {
   next()
 }
 
-// ── Convenience guards (named exports) ───────────────────────
-
-/** Staff or higher. */
-export const requireStaff   = requireRole('staff')
-
-/** Manager or higher. */
-export const requireManager = requireRole('manager')
-
-/** Admin or higher. */
-export const requireAdmin   = requireRole('admin')
-
-/** Founder Level 0 only (alias for requireFounderLevel0). */
+// ── Aliases ───────────────────────────────────────────────────
 export const founderOnly    = requireFounderLevel0
+
+// ── Convenience role guards ───────────────────────────────────
+export const requireStaff   = requireRole('staff')
+export const requireManager = requireRole('manager')
+export const requireAdmin   = requireRole('admin')
 
 // ── Route-specific permission guards ─────────────────────────
 export const canAccessPOS3          = requirePermission('access_pos3_staff')
