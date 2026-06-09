@@ -1,0 +1,92 @@
+const badges = [
+  {
+    id: "gold-crown",
+    name: "Gold Crown",
+    category: "Ranking",
+    description: "Awarded to the top ranked member of the night.",
+    unlockRequirement: "Reach #1 on the Grand Lounge leaderboard.",
+    earned: true,
+    earnedAt: "Tonight",
+    xpValue: 250,
+    visualType: "metallic-gold"
+  },
+  {
+    id: "silver-medal",
+    name: "Silver Medal",
+    category: "Ranking",
+    description: "Awarded to the second ranked member.",
+    unlockRequirement: "Reach #2 on the leaderboard.",
+    earned: true,
+    earnedAt: "Tonight",
+    xpValue: 150,
+    visualType: "metallic-silver"
+  },
+  {
+    id: "bronze-medal",
+    name: "Bronze Medal",
+    category: "Ranking",
+    description: "Awarded to the third ranked member.",
+    unlockRequirement: "Reach #3 on the leaderboard.",
+    earned: true,
+    earnedAt: "Tonight",
+    xpValue: 100,
+    visualType: "metallic-bronze"
+  },
+  {
+    id: "event-entry",
+    name: "Event Entry",
+    category: "Event",
+    description: "Earned by checking into a verified Grand Lounge event.",
+    unlockRequirement: "Scan an event QR code.",
+    earned: true,
+    earnedAt: "34 min ago",
+    xpValue: 50,
+    visualType: "navy-gold"
+  },
+  {
+    id: "connection-verified",
+    name: "Connection Verified",
+    category: "Connection",
+    description: "Earned when a Passport connection is verified.",
+    unlockRequirement: "Scan or confirm another member’s Passport.",
+    earned: true,
+    earnedAt: "1 hr ago",
+    xpValue: 75,
+    visualType: "green-gold"
+  },
+  {
+    id: "profile-check",
+    name: "Profile Check",
+    category: "Profile",
+    description: "Earned when another verified member views your Passport.",
+    unlockRequirement: "Receive a verified Passport profile visit.",
+    earned: true,
+    earnedAt: "1 hr ago",
+    xpValue: 25,
+    visualType: "slate-gold"
+  },
+  {
+    id: "craft-stamp",
+    name: "Craft Stamp Earned",
+    category: "Craft",
+    description: "Earned after completing a SmokeCraft tasting or pairing.",
+    unlockRequirement: "Complete a verified craft session.",
+    earned: true,
+    earnedAt: "2 hr ago",
+    xpValue: 100,
+    visualType: "bronze-gold"
+  },
+  {
+    id: "vip-stamp",
+    name: "VIP Stamp Unlocked",
+    category: "VIP",
+    description: "Earned by unlocking VIP-level access at the venue.",
+    unlockRequirement: "Qualify for VIP access or scan a VIP credential.",
+    earned: true,
+    earnedAt: "2 hr ago",
+    xpValue: 150,
+    visualType: "burgundy-gold"
+  }
+];
+
+module.exports = badges;

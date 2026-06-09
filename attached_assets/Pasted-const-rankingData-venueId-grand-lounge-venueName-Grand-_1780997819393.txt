@@ -1,0 +1,175 @@
+const rankingData = {
+  venueId: "grand-lounge",
+  venueName: "Grand Lounge",
+  sessionName: "Tonight's Ranking",
+  currentUserId: "user-john-collins",
+  updatedAt: new Date().toISOString(),
+  users: [
+    {
+      id: "user-sebastian-harrow",
+      rank: 1,
+      name: "Sebastian Harrow",
+      initials: "SH",
+      xp: 1740,
+      tier: "Connoisseur",
+      avatar: null,
+      badgeType: "gold-crown",
+      progressPercent: 88,
+      isCurrentUser: false,
+      recentActions: ["Won top ranking", "Craft stamp earned"]
+    },
+    {
+      id: "user-marco-del-valle",
+      rank: 2,
+      name: "Marco Del Valle",
+      initials: "MD",
+      xp: 1580,
+      tier: "Aficionado",
+      avatar: null,
+      badgeType: "silver-medal",
+      progressPercent: 78,
+      isCurrentUser: false,
+      recentActions: ["Event entry", "Verified connection"]
+    },
+    {
+      id: "user-vincent-ashworth",
+      rank: 3,
+      name: "Vincent Ashworth",
+      initials: "VA",
+      xp: 1285,
+      tier: "Aficionado",
+      avatar: null,
+      badgeType: "bronze-medal",
+      progressPercent: 68,
+      isCurrentUser: false,
+      recentActions: ["Humidor check-in"]
+    },
+    {
+      id: "user-rafael-cienfuegos",
+      rank: 4,
+      name: "Rafael Cienfuegos",
+      initials: "RC",
+      xp: 1100,
+      tier: "Aficionado",
+      avatar: null,
+      badgeType: "bronze-ring",
+      progressPercent: 57,
+      isCurrentUser: false,
+      recentActions: ["Profile check"]
+    },
+    {
+      id: "user-john-collins",
+      rank: 5,
+      name: "John M Collins",
+      initials: "JC",
+      xp: 950,
+      tier: "Aficionado",
+      avatar: null,
+      badgeType: "current-user-gold",
+      progressPercent: 47,
+      isCurrentUser: true,
+      recentActions: ["Connection verified", "Craft stamp earned"]
+    },
+    {
+      id: "user-adrian-moreau",
+      rank: 6,
+      name: "Adrian Moreau",
+      initials: "AM",
+      xp: 820,
+      tier: "Aficionado",
+      avatar: null,
+      badgeType: "aficionado",
+      progressPercent: 41,
+      isCurrentUser: false,
+      recentActions: []
+    },
+    {
+      id: "user-daniel-torres",
+      rank: 7,
+      name: "Daniel Torres",
+      initials: "DT",
+      xp: 730,
+      tier: "Aficionado",
+      avatar: null,
+      badgeType: "aficionado",
+      progressPercent: 36,
+      isCurrentUser: false,
+      recentActions: []
+    },
+    {
+      id: "user-luca-santoro",
+      rank: 8,
+      name: "Luca Santoro",
+      initials: "LS",
+      xp: 610,
+      tier: "Aficionado",
+      avatar: null,
+      badgeType: "aficionado",
+      progressPercent: 30,
+      isCurrentUser: false,
+      recentActions: []
+    },
+    {
+      id: "user-james-whitaker",
+      rank: 9,
+      name: "James Whitaker",
+      initials: "JW",
+      xp: 540,
+      tier: "Aficionado",
+      avatar: null,
+      badgeType: "aficionado",
+      progressPercent: 27,
+      isCurrentUser: false,
+      recentActions: []
+    },
+    {
+      id: "user-patrick-bishop",
+      rank: 10,
+      name: "Patrick Bishop",
+      initials: "PB",
+      xp: 420,
+      tier: "Aficionado",
+      avatar: null,
+      badgeType: "aficionado",
+      progressPercent: 21,
+      isCurrentUser: false,
+      recentActions: []
+    }
+  ],
+  tiers: [
+    {
+      id: "tier-aficionado",
+      name: "Aficionado",
+      minXp: 0,
+      maxXp: 999,
+      badge: "aficionado",
+      description: "Entry rank for verified Grand Lounge participants."
+    },
+    {
+      id: "tier-connoisseur",
+      name: "Connoisseur",
+      minXp: 1000,
+      maxXp: 2499,
+      badge: "connoisseur",
+      description: "Recognized member with deeper tasting and pairing access."
+    },
+    {
+      id: "tier-sommelier",
+      name: "Sommelier",
+      minXp: 2500,
+      maxXp: 4999,
+      badge: "sommelier",
+      description: "Elite member with curated pairing and event privileges."
+    },
+    {
+      id: "tier-patron",
+      name: "Patron",
+      minXp: 5000,
+      maxXp: null,
+      badge: "patron",
+      description: "Highest status tier with premium access and private benefits."
+    }
+  ]
+};
+
+module.exports = rankingData;
