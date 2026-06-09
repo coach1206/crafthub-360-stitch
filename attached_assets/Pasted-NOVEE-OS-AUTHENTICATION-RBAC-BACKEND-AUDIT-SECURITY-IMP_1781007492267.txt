@@ -1,0 +1,598 @@
+NOVEE OS AUTHENTICATION + RBAC + BACKEND AUDIT + SECURITY IMPLEMENTATION DIRECTIVE
+
+APPROVED ARCHITECTURE
+
+Proceed with a full backend and security audit of NOVEE OS before implementation.
+
+DO NOT redesign any screens.
+DO NOT remove any screens.
+DO NOT remove routes.
+DO NOT remove TicketTicker.
+DO NOT remove SmokeCraft.
+DO NOT remove DayOne360 Travel.
+DO NOT remove 360 Passport Connection.
+DO NOT remove E.A.T. Command.
+DO NOT remove POS 3.
+DO NOT simplify NOVEE OS.
+
+==================================================
+PHASE 1 — BACKEND AUDIT
+
+Audit the existing backend and report:
+
+1. Existing authentication routes
+2. Existing JWT/session handling
+3. Existing password/PIN hashing
+4. Existing role middleware
+5. Existing Founder Level 0 protections
+6. Existing user database model
+7. Existing passport profile model
+8. Existing audit log model
+9. Existing access request model
+10. Existing security event model
+11. Existing E.A.T. protected routes
+12. Existing POS 3 protected routes
+13. Existing developer protections
+14. Existing .env usage
+15. Existing exposed secrets or vulnerabilities
+
+Return:
+
+* Existing backend files
+* Missing backend files
+* Existing API routes
+* Missing API routes
+* Existing database models
+* Missing database models
+* Security risks
+* Recommended implementation order
+
+Do not code until the audit is complete.
+
+==================================================
+PHASE 2 — ROLE-BASED ACCESS CONTROL
+
+Implement Role-Based Access Control (RBAC).
+
+ROLES:
+
+1. FOUNDER_LEVEL_0
+2. ADMIN
+3. MANAGER
+4. STAFF
+5. HUMAN_MENTOR
+6. PASSPORT_MEMBER
+7. GUEST
+8. DEVELOPER
+
+==================================================
+FOUNDER_LEVEL_0
+
+Founder Level 0 is supreme authority.
+
+No role may:
+
+* Modify Founder account
+* Delete Founder account
+* Transfer ownership
+* Create another Founder account
+* Change Founder permissions
+* Override Founder restrictions
+* Change production secrets
+* Change payment controls
+* Delete audit logs
+
+Founder Level 0 only:
+
+* Ownership transfer approval
+* Developer approval
+* Payment configuration approval
+* Security override approval
+* System lock controls
+
+Login:
+
+/founder-login
+
+Requirements:
+
+* Email
+* PIN
+* Founder Challenge Secret
+
+JWT Lifetime:
+
+2 Hours
+
+==================================================
+ADMIN
+
+Login:
+
+/admin-login
+
+Permissions:
+
+* Manage users below Admin
+* Manage events
+* Manage TicketTicker
+* Manage venue settings
+* Manage inventory
+* View analytics
+* View audit logs
+* Approve Human Mentors
+* Review access requests
+
+Cannot:
+
+* Change Founder settings
+* Create Founder
+* Transfer ownership
+* Modify payment authority
+* Delete audit logs
+
+JWT:
+
+8 Hours
+
+==================================================
+MANAGER
+
+Login:
+
+/admin-login
+
+Permissions:
+
+* Manage staff
+* Manage floor operations
+* Manage E.A.T.
+* Manage TicketTicker
+* Manage event operations
+* View inventory status
+
+Cannot:
+
+* Modify Founder
+* Change ownership
+* Change payment settings
+* Create Admins
+
+JWT:
+
+8 Hours
+
+==================================================
+STAFF
+
+Prototype:
+
+PIN only
+
+Production:
+
+Staff ID + PIN
+
+Permissions:
+
+* POS 3 access
+* Table management
+* Session assistance
+* Guest support
+* Coach Help
+
+Cannot:
+
+* Access Admin
+* Access Founder
+* Modify inventory rules
+* Modify permissions
+
+JWT:
+
+4 Hours
+
+==================================================
+HUMAN_MENTOR
+
+Human Mentor is a real role.
+
+Separate from AI Mentor Personas.
+
+Login:
+
+/mentor-login
+
+Permissions:
+
+* View assigned learners
+* View session progress
+* Add guidance notes
+* Trigger approved mentor content
+* View pairing recommendations
+
+Cannot:
+
+* Access Founder
+* Access Admin
+* Modify users
+* Modify scoring systems
+
+JWT:
+
+6 Hours
+
+==================================================
+AI MENTOR PERSONAS
+
+AI Mentors are NOT user accounts.
+
+No login.
+
+Used inside:
+
+* SmokeCraft
+* PourCraft
+* BeerCraft
+* WineCraft
+
+Voice:
+
+ElevenLabs
+
+Features:
+
+* Mute
+* Volume
+* Pause
+* Resume
+
+==================================================
+PASSPORT_MEMBER
+
+Passport Members require a real profile.
+
+Production Requirements:
+
+* Email
+* Phone
+* Passport Profile
+* QR Identity
+* Resume Token
+* Server Profile
+
+Data Stored:
+
+* Stamps
+* XP
+* Legacy Score
+* Rewards
+* Travel History
+* Event History
+* Connections
+* Mentor History
+
+JWT:
+
+30 Days
+
+==================================================
+GUEST
+
+No login.
+
+Can:
+
+* Preview experiences
+* Scan public QR codes
+* Begin onboarding
+
+Cannot:
+
+* Access private data
+* Access Admin
+* Access E.A.T.
+* Access POS 3
+
+Promotion Rules:
+
+Guest automatically upgrades to Passport Member when:
+
+* Claiming Passport
+* Joining Event
+* Earning Stamp
+* Requesting Travel
+* Creating Connection
+
+Local data must merge into Passport Member profile.
+
+==================================================
+DEVELOPER
+
+Dedicated login:
+
+/dev-login
+
+Developer cannot use:
+
+/admin-login
+
+Developer access must never be self-assigned.
+
+Developer accounts require Founder Level 0 approval.
+
+Permissions:
+
+* Diagnostics
+* Logs
+* Integration testing
+
+Cannot:
+
+* Change Founder
+* Change ownership
+* Change payments
+* Change secrets
+* Delete audit logs
+
+JWT:
+
+1 Hour
+
+==================================================
+PHASE 3 — DASHBOARDS
+
+Create and protect:
+
+Founder Command
+/founder
+
+Admin Command
+/admin
+
+Manager E.A.T. Command
+/eat-command
+
+Staff POS 3
+/pos3
+
+Coach Help
+/coach-help
+
+Human Mentor Console
+/mentor-console
+
+Passport Member Profile
+/passport
+
+Developer Diagnostics
+/dev-diagnostics
+
+Guest Preview
+/
+
+Access Denied
+/access-denied
+
+==================================================
+PHASE 4 — DATABASE MODELS
+
+Required Models:
+
+users
+roles
+permissions
+user_roles
+sessions
+passport_profiles
+passport_stamps
+legacy_scores
+craft_xp
+rewards
+travel_history
+event_history
+connections
+audit_logs
+admin_actions
+access_requests
+security_events
+
+==================================================
+PHASE 5 — API ROUTES
+
+Authentication:
+
+POST /api/auth/login
+POST /api/auth/logout
+GET /api/auth/me
+
+Founder:
+
+GET /api/founder/dashboard
+
+Admin:
+
+GET /api/admin/users
+POST /api/admin/users
+PATCH /api/admin/users/:id/role
+PATCH /api/admin/users/:id/status
+
+Audit:
+
+GET /api/admin/audit-logs
+
+Security:
+
+GET /api/admin/security-events
+
+Access Requests:
+
+POST /api/access-requests
+GET /api/admin/access-requests
+PATCH /api/admin/access-requests/:id
+
+Passport:
+
+GET /api/passport/:id
+POST /api/passport/stamp
+POST /api/passport/promote-guest
+
+E.A.T.:
+
+GET /api/eat/status
+
+POS 3:
+
+GET /api/pos3/status
+
+Developer:
+
+GET /api/developer/diagnostics
+
+==================================================
+PHASE 6 — REQUIRED MIDDLEWARE
+
+Create:
+
+requireAuth
+requireRole
+requirePermission
+requireFounderLevel0
+
+Security Middleware:
+
+blockDevHeadersInProduction
+preventSelfPromotion
+preventFounderModification
+preventOwnershipTransfer
+auditAction
+
+==================================================
+PHASE 7 — AUDIT LOGGING
+
+Every privileged action must create an audit record.
+
+Track:
+
+* Login
+* Failed login
+* Role change
+* Access request
+* Admin change
+* Founder action
+* POS override
+* E.A.T. action
+* Inventory update
+* TicketTicker update
+* Payment setting attempt
+* Developer access attempt
+
+Audit Event Shape:
+
+{
+id,
+timestamp,
+actorId,
+actorRole,
+action,
+target,
+meta,
+ipMasked,
+result
+}
+
+Audit retention:
+
+INDEFINITE
+
+Append-only
+
+No deletion allowed.
+
+==================================================
+PHASE 8 — ACCESS DENIED EXPERIENCE
+
+Create a premium NOVEE OS screen.
+
+Style:
+
+* Obsidian
+* Frosted glass
+* Gold accents
+* Matches boot screen
+
+Required Content:
+
+ACCESS RESTRICTED
+
+Current Role Display
+
+Message:
+“Your current role does not permit access to this NOVEE OS command layer.”
+
+Buttons:
+
+* Back
+* Home
+* Request Access
+
+Request Access:
+
+Creates access_requests record.
+
+Routes to Admin Command inbox.
+
+Founder receives alerts only for:
+
+* Admin elevation
+* Developer elevation
+* Founder requests
+* Ownership requests
+* Payment authority requests
+
+==================================================
+PHASE 9 — SECURITY REVIEW
+
+Verify:
+
+* bcrypt password hashing
+* JWT security
+* Secure sessions
+* .env protection
+* No frontend secrets
+* No production dev bypasses
+* No self-promotion
+* No Founder override
+* No ownership transfer exploits
+
+Hard Requirement:
+
+NODE_ENV === “production”
+
+Must completely disable:
+
+* Dev headers
+* Debug bypasses
+* Local elevation shortcuts
+
+==================================================
+PHASE 10 — IMPLEMENTATION MAP
+
+Before coding:
+
+Return:
+
+1. Files to create
+2. Files to modify
+3. Database schema
+4. API route map
+5. Middleware map
+6. Dashboard route map
+7. Route guard plan
+8. Audit logging plan
+9. Security risk report
+10. Testing checklist
+
+WAIT FOR APPROVAL.
+
+Do not write code until the implementation map is approved.
