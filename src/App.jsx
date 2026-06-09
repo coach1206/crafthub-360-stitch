@@ -211,6 +211,7 @@ export default function App() {
             </Route>
 
             <Route path="passport-networking" element={<PassportConnection />} />
+            <Route path="grand-lounge-ranking" element={<Leaderboard />} />
             <Route path="pourcraft"  element={<PourCraft />} />
             <Route path="beercraft"  element={<BeerCraft />} />
             <Route path="winecraft"  element={<WineCraft />} />

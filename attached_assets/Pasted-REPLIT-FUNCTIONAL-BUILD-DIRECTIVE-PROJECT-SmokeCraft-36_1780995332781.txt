@@ -1,0 +1,1091 @@
+REPLIT FUNCTIONAL BUILD DIRECTIVE
+PROJECT: SmokeCraft 360 / 360 Passport Connections
+SCREEN: Grand Lounge Ranking / Leaderboard
+REFERENCE IMAGE: Use the latest uploaded ranking image as the exact visual blueprint.
+REFERENCE IMAGE PATH: `/mnt/data/a_dark_luxurious_ui_dashboard_screenshot_overall.png`
+
+CRITICAL:
+Do not use the image as a static screenshot.
+Do not place the image as the UI background and call it finished.
+Recreate the entire screen as real React components that visually match the uploaded image, with every card, badge, button, scroll action, ranking row, bottom nav item, and admin action wired and functional.
+
+==================================================
+PRIMARY GOAL
+============
+
+Build a premium, cinematic, touchscreen-first “Grand Lounge Ranking” screen.
+
+The screen must feel exciting, rewarding, and luxury-level.
+
+Users should feel like:
+
+“I’m ranked inside a private cigar society, my XP matters, my badge means something, and I want to move up.”
+
+This is not a flat leaderboard.
+This is a premium rank-status experience.
+
+==================================================
+VISUAL TARGET
+=============
+
+Match the uploaded reference image closely.
+
+Visual style:
+
+* Dark obsidian black
+* Champagne gold
+* Warm cigar lounge amber
+* Smoky premium background
+* Cognac glass and cigar imagery
+* Leather lounge atmosphere
+* Gold ranking medals
+* Premium badge system
+* Strong visual hierarchy
+* Cinematic shadows
+* Refined glow
+* Tactile card depth
+* Bottom navigation with center gold scan button
+
+Do not use:
+
+* flat gray leaderboard rows
+* cheap icon badges
+* cartoon purple/green accents
+* plain dark blocks
+* weak progress bars
+* tiny unreadable labels
+* dead buttons
+* static screenshot UI
+
+==================================================
+SCREEN STRUCTURE
+================
+
+Build the screen in this order:
+
+1. Top header
+2. Hero ranking intro
+3. User position card
+4. Top 3 ranked member cards
+5. Full leaderboard list
+6. Ranking tier education section
+7. Recent activity section
+8. Profile rank card
+9. Fixed bottom navigation
+10. Floating admin button
+
+==================================================
+TOP HEADER
+==========
+
+Header must include:
+
+Left:
+
+* Back button
+* Venue label: GRAND LOUNGE
+
+Right:
+
+* About Rankings button
+* My Rank button
+* Scan QR button
+
+Button behavior:
+
+Back button:
+
+* Uses window.history.back()
+* If no history, route to `/passport`
+
+About Rankings:
+
+* Opens RankingInfoModal
+
+My Rank:
+
+* Scrolls smoothly to the user’s ranking row
+* Highlights the user row with gold glow
+* Triggers haptic feedback
+
+Scan QR:
+
+* Opens ScanRankingQrModal
+* Used for checking into ranking sessions or claiming XP
+
+==================================================
+HERO SECTION
+============
+
+Hero must match the image:
+
+Title:
+Tonight’s Ranking
+
+Subtitle:
+Ranked by SmokeCraft XP earned across all sessions. You enter the Grand Lounge as a ranked member of this cigar society.
+
+Background:
+
+* dark cigar lounge
+* cigar smoke
+* cognac glass
+* premium table
+* warm amber light
+* subtle city/lounge depth
+
+Important:
+The cigar/cognac image must be visible, not buried under black overlay.
+
+==================================================
+USER POSITION CARD
+==================
+
+Create the large position card:
+
+Left:
+
+* gold square badge with number 5
+
+Text:
+YOUR POSITION
+5th in the Grand Lounge
+
+Right:
+
+* rank badge: AFICIONADO
+
+Behavior:
+
+* Clicking position card opens MyRankModal
+* Shows user rank details, XP, next tier, and how to move up
+* Haptic feedback on tap
+
+==================================================
+LEADERBOARD DATA
+================
+
+Create:
+
+src/data/rankingData.js
+
+Data structure:
+
+{
+venueId,
+venueName,
+sessionName,
+currentUserId,
+updatedAt,
+users: [
+{
+id,
+rank,
+name,
+initials,
+xp,
+tier,
+avatar,
+badgeType,
+progressPercent,
+isCurrentUser,
+recentActions
+}
+],
+tiers: [
+{
+id,
+name,
+minXp,
+maxXp,
+badge,
+description
+}
+]
+}
+
+Use this ranking data:
+
+1. Sebastian Harrow
+   rank: 1
+   initials: SH
+   xp: 1740
+   tier: Connoisseur
+   progressPercent: 88
+   badgeType: gold-crown
+
+2. Marco Del Valle
+   rank: 2
+   initials: MD
+   xp: 1580
+   tier: Aficionado
+   progressPercent: 78
+   badgeType: silver-medal
+
+3. Vincent Ashworth
+   rank: 3
+   initials: VA
+   xp: 1285
+   tier: Aficionado
+   progressPercent: 68
+   badgeType: bronze-medal
+
+4. Rafael Cienfuegos
+   rank: 4
+   initials: RC
+   xp: 1100
+   tier: Aficionado
+   progressPercent: 57
+   badgeType: bronze-ring
+
+5. John M Collins
+   rank: 5
+   initials: JC
+   xp: 950
+   tier: Aficionado
+   progressPercent: 47
+   badgeType: current-user-gold
+   isCurrentUser: true
+
+6. Adrian Moreau
+   rank: 6
+   initials: AM
+   xp: 820
+   tier: Aficionado
+   progressPercent: 41
+
+7. Daniel Torres
+   rank: 7
+   initials: DT
+   xp: 730
+   tier: Aficionado
+   progressPercent: 36
+
+8. Luca Santoro
+   rank: 8
+   initials: LS
+   xp: 610
+   tier: Aficionado
+   progressPercent: 30
+
+9. James Whitaker
+   rank: 9
+   initials: JW
+   xp: 540
+   tier: Aficionado
+   progressPercent: 27
+
+10. Patrick Bishop
+    rank: 10
+    initials: PB
+    xp: 420
+    tier: Aficionado
+    progressPercent: 21
+
+Ranking tiers:
+
+Aficionado:
+0 - 999 XP
+
+Connoisseur:
+1000 - 2499 XP
+
+Sommelier:
+2500 - 4999 XP
+
+Patron:
+5000+ XP
+
+==================================================
+TOP 3 RANKING CARDS
+===================
+
+Create premium top 3 cards like the reference image.
+
+Each top 3 card must include:
+
+* large medal number
+* avatar or initials
+* name
+* tier badge
+* XP total
+* progress bar
+* medal/badge treatment
+
+Special:
+Rank 1 card should feel elevated:
+
+* center card larger
+* gold crown
+* stronger glow
+* animated gold particles
+* subtle crown shimmer
+* click opens MemberRankDetailModal
+
+Rank 2:
+
+* silver medal styling
+
+Rank 3:
+
+* bronze medal styling
+
+All top cards:
+
+* clickable
+* haptic feedback
+* open member detail modal
+* show rank history and XP sources
+
+==================================================
+FULL LEADERBOARD ROWS
+=====================
+
+Rows 4 through 10 must be shown below top 3.
+
+Each row includes:
+
+* rank number
+* avatar/initials
+* name
+* tier badge
+* XP progress bar
+* XP amount
+* chevron/arrow
+
+Current user row:
+John M Collins
+
+Must be highlighted:
+
+* gold border
+* soft glow
+* “YOU” pill
+* stronger background
+* haptic feedback when tapped
+
+Clicking any row:
+
+* opens MemberRankDetailModal
+* shows member name, rank, XP, tier, recent XP actions, and connection/passport status
+
+==================================================
+BADGE SYSTEM MUST WORK
+======================
+
+Badges are not decorative only. They must be functional.
+
+Create:
+
+src/data/badges.js
+src/api/badgeApi.js
+
+Badge types:
+
+gold-crown
+silver-medal
+bronze-medal
+aficionado
+connoisseur
+sommelier
+patron
+current-user-gold
+event-entry
+connection-verified
+profile-check
+craft-stamp
+vip-stamp
+
+Each badge must include:
+
+* id
+* name
+* category
+* description
+* unlockRequirement
+* image or CSS seal style
+* earned boolean
+* earnedAt
+* xpValue
+
+Badge behavior:
+
+* Clicking a badge opens BadgeDetailModal
+* BadgeDetailModal shows:
+
+  * badge name
+  * meaning
+  * how it was earned
+  * XP value
+  * unlock requirement
+  * status
+  * related event/session
+  * Close button
+
+Badge visual:
+
+* premium metallic seal style
+* gold, silver, bronze, navy, or burgundy only
+* no generic glyph icons
+* no cartoon badges
+* no random purple/green colors
+
+==================================================
+RECENT ACTIVITY SECTION
+=======================
+
+Create recent activity section like the lower reference.
+
+Title:
+Your Recent Activity
+
+Right:
+View All
+
+Rows:
+
+1. Event Entry
+   Cigar & Cognac Collectors Night
+   +50 XP
+   34 min ago
+
+2. Connection Verified
+   Connected with David Harper
+   +75 XP
+   1 hr ago
+
+3. Profile Check
+   Alicia Chen viewed your passport
+   +25 XP
+   1 hr ago
+
+4. Craft Stamp Earned
+   Collector Night Stamp
+   +100 XP
+   2 hr ago
+
+5. VIP Stamp Unlocked
+   VIP access unlocked - Grand Lounge
+   +150 XP
+   2 hr ago
+
+Each row:
+
+* has premium badge seal
+* title
+* description
+* XP gained
+* time
+* arrow
+
+Click behavior:
+
+* opens ActivityDetailModal
+* shows details
+* related badge
+* related XP
+* related passport update
+
+View All:
+
+* opens FullActivityModal
+
+==================================================
+PROFILE RANK CARD
+=================
+
+Create bottom profile rank card:
+
+Left:
+
+* circular JC avatar badge
+
+Text:
+John M Collins
+Aficionado Member • #1206
+
+Progress:
+950 / 2,000 XP
+47% to next tier
+
+Buttons:
+
+* Edit Profile
+* View Profile
+
+Behavior:
+Edit Profile:
+
+* Opens EditProfileModal
+
+View Profile:
+
+* Routes to `/profile` or opens ProfileModal
+
+Progress bar:
+
+* gold fill
+* tactile premium look
+* shows next tier target
+
+==================================================
+RANKING TIER EDUCATION SECTION
+==============================
+
+Add a section:
+
+Title:
+Rank Up. Earn Recognition.
+
+Copy:
+The higher you rank, the deeper your access and experience.
+
+Button:
+How Rankings Work
+
+Tier cards:
+
+* Aficionado: 0 - 999 XP
+* Connoisseur: 1,000 - 2,499 XP
+* Sommelier: 2,500 - 4,999 XP
+* Patron: 5,000+ XP
+
+Each tier card:
+
+* has premium badge seal
+* clickable
+* opens TierDetailModal
+* shows benefits and unlock requirements
+
+==================================================
+SCAN QR FUNCTIONALITY
+=====================
+
+Create ScanRankingQrModal.
+
+When user taps Scan QR or center bottom scan button:
+
+Open modal:
+Title:
+Scan Ranking QR
+
+Text:
+Scan a session, event, or activity QR code to earn SmokeCraft XP and update your ranking.
+
+Visual:
+
+* camera frame
+* animated scan line
+* QR + NFC ready label
+* smoke/gold scanner treatment
+
+Buttons:
+
+* Simulate Session Check-In
+* Simulate Event Entry
+* Simulate Connection Verified
+* Simulate Craft Stamp Earned
+* Simulate VIP Stamp Unlock
+* Close
+
+Each scan must:
+
+* call mock API
+* add XP
+* update user ranking if needed
+* add recent activity
+* unlock badge if applicable
+* show PassportStampOverlay
+* play sound if not muted
+* trigger success haptic
+* show toast
+
+==================================================
+SCAN PAYLOAD LOGIC
+==================
+
+Create:
+
+src/utils/rankingQrPayloads.js
+
+Payload format:
+
+{
+sourceType: "session" | "event" | "connection" | "craft_stamp" | "vip_stamp",
+sourceId: "string",
+xpValue: number,
+venueId: "grand-lounge",
+issuedBy: "smokecraft-360",
+signature: "mock-signature"
+}
+
+Create sample payloads:
+
+sessionCheckInPayload:
+sourceType: session
+sourceId: session-grand-lounge-tonight
+xpValue: 25
+
+eventEntryPayload:
+sourceType: event
+sourceId: event-cigar-cognac
+xpValue: 50
+
+connectionVerifiedPayload:
+sourceType: connection
+sourceId: member-david-harper
+xpValue: 75
+
+craftStampPayload:
+sourceType: craft_stamp
+sourceId: stamp-collector-night
+xpValue: 100
+
+vipStampPayload:
+sourceType: vip_stamp
+sourceId: stamp-vip-grand-lounge
+xpValue: 150
+
+==================================================
+RANKING API LAYER
+=================
+
+Create:
+
+src/api/rankingApi.js
+
+Functions:
+
+getLeaderboard(venueId)
+getCurrentUserRank(userId, venueId)
+getMemberRankDetail(memberId)
+getRankingTiers()
+getRecentRankingActivity(userId)
+processRankingScan(qrPayload)
+addXpToUser(userId, xpValue, sourceType)
+unlockBadge(userId, badgeId)
+getBadgeDetail(badgeId)
+getTierDetail(tierId)
+
+Every function should return a Promise with simulated delay.
+
+processRankingScan(qrPayload) should:
+
+* validate payload
+* determine XP value
+* add XP to current user
+* create activity entry
+* unlock correct badge if needed
+* recalculate leaderboard order
+* return updated leaderboard, updated user, activity, badge, and toast message
+
+==================================================
+RANK CHANGE ANIMATION
+=====================
+
+When XP is added:
+
+* animate XP number counting up
+* animate progress bar filling
+* if rank changes, show:
+  “Rank Updated”
+  “You moved to #X in the Grand Lounge”
+* highlight user row
+* play success sound
+* trigger success haptic
+
+If badge unlocks:
+
+* show BadgeUnlockedOverlay
+* badge seal expands with gold shine
+* text:
+  “Badge Unlocked”
+  badge name
+
+==================================================
+HAPTIC TOUCHSCREEN FEEL
+=======================
+
+This must be touchscreen-first.
+
+Create:
+
+src/utils/haptics.js
+
+Functions:
+triggerTapHaptic()
+triggerSuccessHaptic()
+triggerWarningHaptic()
+triggerScrollHaptic()
+
+Use:
+
+triggerTapHaptic:
+if (navigator.vibrate) navigator.vibrate(25)
+
+triggerSuccessHaptic:
+if (navigator.vibrate) navigator.vibrate([20, 40, 20])
+
+triggerWarningHaptic:
+if (navigator.vibrate) navigator.vibrate([60, 30, 60])
+
+triggerScrollHaptic:
+if (navigator.vibrate) navigator.vibrate(8)
+
+Apply haptics to:
+
+* back button
+* about rankings
+* my rank
+* scan QR
+* top 3 cards
+* leaderboard rows
+* badge taps
+* tier cards
+* activity rows
+* profile buttons
+* bottom nav
+* modal close buttons
+* scan result actions
+
+Touch target rules:
+
+* primary buttons at least 64px high
+* nav items at least 56px
+* leaderboard rows at least 72px
+* badge tap area at least 48px
+* no hover-only actions
+
+==================================================
+TACTILE SCROLL FEEL
+===================
+
+Add a tactile scroll feel without being annoying.
+
+Implement:
+
+* subtle scroll shadow at top/bottom
+* sticky bottom nav
+* gentle scroll snap only for major sections if it feels natural
+* optional haptic tick every time user scrolls into a major section
+
+Important:
+Do not vibrate constantly while scrolling.
+Only trigger scroll haptic when entering major sections:
+
+* Hero
+* Top 3
+* Full Leaderboard
+* Recent Activity
+* Profile Card
+* Rank Tiers
+
+Use IntersectionObserver to detect section entry and triggerScrollHaptic once per section per visit.
+
+==================================================
+SOUND SYSTEM
+============
+
+Create:
+
+src/utils/sound.js
+
+Functions:
+playTapSound()
+playScanSound()
+playXpGainSound()
+playBadgeUnlockSound()
+playRankUpSound()
+playScrollTickSound()
+
+Use Web Audio API.
+Do not require external sound files.
+
+Add muted state.
+If muted = true, no sound plays.
+
+Add a small mute toggle in top or admin/settings area.
+
+Sound behavior:
+
+* tap sound on button press
+* scan sound when scan completes
+* XP gain sound when XP added
+* badge unlock sound when badge unlocks
+* rank up sound when user rank improves
+* soft scroll tick when entering a new major section
+
+==================================================
+BOTTOM NAVIGATION
+=================
+
+Bottom nav must match the image.
+
+Items:
+
+* Home
+* Directory
+* Scan
+* Events
+* Benefits
+
+Behavior:
+Home:
+
+* routes to `/passport`
+
+Directory:
+
+* routes to `/directory`
+
+Center Scan:
+
+* opens ScanRankingQrModal
+
+Events:
+
+* routes to `/passport-events`
+
+Benefits:
+
+* routes to `/benefits`
+
+Active:
+Ranking screen should show Ranking or Home active depending on app navigation.
+If adding Ranking as a nav item is better, use:
+Home, Humidor, Ranking, Social, Profile
+but preserve the overall app route logic.
+
+The center scan button:
+
+* gold circular button
+* opens scan modal
+* haptic feedback
+* sound effect
+
+Bottom nav must not cover content.
+Add bottom padding to the page.
+
+==================================================
+ADMIN BUTTON
+============
+
+Keep floating Admin button bottom right.
+
+Admin button opens RankingAdminPanel.
+
+RankingAdminPanel features:
+
+* Edit leaderboard users
+* Add XP to a user
+* Reset leaderboard
+* Edit badge data
+* Edit tier thresholds
+* Replace hero background image
+* Queue OpenAI image replacement request
+* Close
+
+Image replacement:
+Do not call OpenAI in the frontend.
+Use mock function:
+requestOpenAIImageReplacement(assetId, prompt)
+
+Return:
+{
+success: true,
+status: "queued",
+message: "Image replacement request queued for secure backend generation."
+}
+
+Code comment:
+Real OpenAI image generation must happen on the backend. Never expose API keys in frontend code.
+
+==================================================
+IMAGE SOURCE SYSTEM
+===================
+
+Create:
+
+src/api/imageSourceApi.js
+
+Functions:
+getRankingHeroImage()
+updateRankingHeroImage(newImageUrl)
+getBadgeImage(badgeId)
+updateBadgeImage(badgeId, newImageUrl)
+requestOpenAIImageReplacement(assetId, prompt)
+
+Hero image:
+
+* cigar lounge
+* cognac glass
+* smoke
+* leather seating
+* warm amber lighting
+* premium private club
+
+Badges:
+
+* metallic seal style
+* not glyph icons
+* gold/silver/bronze/navy/burgundy premium styling
+
+==================================================
+MODALS TO CREATE
+================
+
+Create or update:
+
+RankingInfoModal
+MyRankModal
+MemberRankDetailModal
+BadgeDetailModal
+ActivityDetailModal
+FullActivityModal
+TierDetailModal
+ScanRankingQrModal
+EditProfileModal
+ProfileModal
+RankingAdminPanel
+BadgeUnlockedOverlay
+PassportStampOverlay
+Toast
+
+All modals:
+
+* open
+* close
+* support Escape key
+* are touchscreen-friendly
+* match premium black/gold styling
+* have haptic feedback on actions
+
+==================================================
+FILES TO CREATE OR UPDATE
+=========================
+
+src/screens/GrandLoungeRanking.jsx
+
+src/components/ranking/RankingHero.jsx
+src/components/ranking/UserPositionCard.jsx
+src/components/ranking/TopThreePodium.jsx
+src/components/ranking/LeaderboardRow.jsx
+src/components/ranking/RankingTierSection.jsx
+src/components/ranking/RecentActivityList.jsx
+src/components/ranking/ProfileRankCard.jsx
+src/components/ranking/RankingBottomNav.jsx
+
+src/components/ranking/modals/RankingInfoModal.jsx
+src/components/ranking/modals/MyRankModal.jsx
+src/components/ranking/modals/MemberRankDetailModal.jsx
+src/components/ranking/modals/BadgeDetailModal.jsx
+src/components/ranking/modals/ActivityDetailModal.jsx
+src/components/ranking/modals/FullActivityModal.jsx
+src/components/ranking/modals/TierDetailModal.jsx
+src/components/ranking/modals/ScanRankingQrModal.jsx
+src/components/ranking/modals/RankingAdminPanel.jsx
+
+src/components/common/Toast.jsx
+src/components/common/BadgeUnlockedOverlay.jsx
+src/components/common/PassportStampOverlay.jsx
+
+src/data/rankingData.js
+src/data/badges.js
+src/data/recentRankingActivity.js
+src/data/rankingTiers.js
+
+src/api/rankingApi.js
+src/api/badgeApi.js
+src/api/imageSourceApi.js
+
+src/utils/haptics.js
+src/utils/sound.js
+src/utils/rankingQrPayloads.js
+
+src/index.css
+
+==================================================
+ROUTING
+=======
+
+Create or connect route:
+
+/grand-lounge-ranking
+
+Also allow this screen to be reachable from:
+
+* SmokeCraft session results
+* Passport profile
+* Events
+* Grand Lounge venue page
+
+Navigation actions:
+
+* Leaderboard row click → member ranking detail
+* Badge click → badge detail
+* Activity click → activity detail
+* About Rankings → ranking guide
+* My Rank → user rank detail
+* Scan → ranking scan modal
+* Bottom nav → correct route
+
+==================================================
+ACCEPTANCE CHECKLIST
+====================
+
+Before finishing, verify:
+
+Visual:
+
+* screen matches uploaded image closely
+* looks exciting and premium
+* cigar/cognac background is visible
+* top 3 rankings feel special
+* user row is highlighted
+* badges look like premium seals, not glyphs
+* bottom nav does not cover content
+
+Functionality:
+
+* Back button works
+* About Rankings works
+* My Rank works
+* Scan QR works
+* Top 3 cards open member details
+* Leaderboard rows open member details
+* Badge taps open badge details
+* Tier cards open tier details
+* Recent activity rows open activity details
+* View All works
+* Edit Profile works
+* View Profile works
+* Admin panel works
+
+XP / badge logic:
+
+* simulated scans add XP
+* XP total updates
+* progress bar updates
+* recent activity updates
+* badges unlock
+* rank recalculates if XP changes
+* user row highlights after XP change
+
+Touch / sound:
+
+* haptics trigger where supported
+* scroll section haptics work without over-triggering
+* sounds play when not muted
+* muted state blocks sounds
+* buttons have tactile press states
+
+Data:
+
+* leaderboard comes from rankingData or rankingApi
+* badges come from badge data
+* recent activity comes from data source
+* QR payloads exist
+* APIs are backend-ready
+
+FINAL EXPECTATION:
+This must be a real functional Grand Lounge Ranking screen, not a static leaderboard. It should feel like a premium cigar society ranking experience where XP, badges, scans, and rank movement all matter.
