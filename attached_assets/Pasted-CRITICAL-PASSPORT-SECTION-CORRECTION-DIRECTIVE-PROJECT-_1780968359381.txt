@@ -1,0 +1,456 @@
+CRITICAL PASSPORT SECTION CORRECTION DIRECTIVE
+PROJECT: 360 Passport Connections
+SCREEN AREA: Passport Sections + Digital Stamps + Start Here tiles
+
+MAIN FAILURE:
+The Passport Sections area still looks cheap, flat, and generic.
+It uses glyph-like icons, weak flat tiles, and random purple/green colors that do not match a premium passport brand.
+
+THIS IS NOT ACCEPTABLE.
+
+This section must be rebuilt so it feels like a premium passport interface, not a template dashboard.
+
+DO NOT BREAK EXISTING FUNCTIONALITY.
+KEEP ALL BUTTONS, MODALS, ROUTES, SCAN LOGIC, STAMP LOGIC, HAPTICS, AND DATA SOURCES WORKING.
+
+Only rebuild the visual language and component styling for:
+- Passport Sections
+- Start Here action cards
+- Digital Stamps
+- supporting badge/icon language in these sections
+
+==================================================
+CORE DESIGN DIRECTION
+==================================================
+
+The Passport Sections must feel like:
+
+- a luxury passport booklet
+- an executive credential system
+- a premium private club identity layer
+- a document-grade membership interface
+- a refined tactile experience
+
+It must NOT feel like:
+- a dashboard template
+- a flat admin panel
+- a neon mobile app
+- a generic icon card grid
+- a startup SaaS tile menu
+
+==================================================
+REMOVE THESE PROBLEMS
+==================================================
+
+Remove or replace:
+- flat square tile cards
+- thin generic line icons
+- glyph-looking symbols
+- cartoon badge shapes
+- random purple cards
+- random green cards
+- oversaturated accent colors
+- low-depth plain blocks
+- cheap shortcut-card styling
+
+Do not use:
+- bright purple
+- bright green
+- playful icon colors
+- generic Material-style tile look
+
+==================================================
+NEW COLOR SYSTEM
+==================================================
+
+Use a disciplined premium palette only:
+
+Primary neutrals:
+- Ivory paper: #F7F1E4
+- Warm parchment: #EFE1C4
+- Soft sand: #E6D5B2
+
+Primary premium accents:
+- Champagne gold: #B88A3B
+- Antique gold: #9F742E
+- Deep navy: #112B45
+- Ink charcoal: #241D16
+- Rich bronze: #7A5A2A
+
+Optional restrained accents only when needed:
+- Forest ink: #395E47
+- Burgundy ink: #6B3A34
+- Slate blue-gray: #5A6C7D
+
+RULE:
+Do not use purple and green as dominant tile colors.
+If accent colors appear, they must be subtle and secondary only.
+
+==================================================
+PASSPORT SECTION CARD REDESIGN
+==================================================
+
+Rebuild the 4 Passport Section cards:
+
+- Directory
+- Connections
+- Events
+- Benefits
+
+These must no longer be flat tiles.
+
+Each card must feel like a premium passport panel with:
+
+1. layered document-like surface
+2. faint watermark background image
+3. embossed border
+4. subtle gold inner line
+5. premium category badge
+6. title
+7. short descriptor
+8. right-side directional arrow
+9. card press state
+10. touch-friendly size
+
+==================================================
+REPLACE GLYPHS WITH PREMIUM BADGES
+==================================================
+
+Do NOT use glyph icons.
+
+Instead, every section card should have a premium badge / seal / credential marker.
+
+Examples:
+
+Directory:
+- Use a small ID-card style badge or verified-member credential emblem
+- Can include a framed ID silhouette
+- Feels like a membership registry marker
+
+Connections:
+- Use a relationship/network seal
+- Small circular premium badge with linked-node motif
+- Must feel like a trust-network credential, not a generic people icon
+
+Events:
+- Use a premium event admission badge or calendar credential plaque
+- Elegant ticket / invitation seal styling
+- Not a plain calendar icon
+
+Benefits:
+- Use a premium privilege seal, ribbon badge, or medallion
+- Should feel like access privileges, not a star glyph
+
+Badge style:
+- embossed
+- metallic
+- navy/gold
+- seal-like
+- realistic
+- elegant
+- tactile
+
+No flat emoji-like symbols.
+No app-store icon style.
+No generic outlined glyphs.
+
+==================================================
+CARD BACKGROUND ART
+==================================================
+
+Each Passport Section card must have subtle background art.
+
+Directory:
+- faint passport ID page / registry texture
+- maybe subtle portrait watermark
+- low opacity
+
+Connections:
+- faint connection lines / elegant network pattern / document portrait watermark
+- subtle and refined
+
+Events:
+- faint event invitation / passport stamp / cigar lounge or premium event watermark
+- very low opacity
+
+Benefits:
+- faint medal / ribbon / access seal watermark
+- elegant paper credential texture
+
+These images must stay subtle.
+They support the card, not dominate it.
+
+==================================================
+CARD SHAPE + STRUCTURE
+==================================================
+
+Use:
+- rounded corners 20px to 24px
+- embossed outer border
+- subtle inner line
+- soft paper gradient
+- layered shadow
+- overflow hidden
+- premium spacing
+
+Do not use plain flat beige rectangles.
+
+Suggested structure:
+
+[ badge ]
+[ Title ]
+[ Descriptor ]
+[ faint watermark art in background ]
+[ small arrow on right ]
+
+==================================================
+TITLE + COPY SYSTEM
+==================================================
+
+Titles:
+- darker navy or charcoal
+- premium serif or elegant display font if already used elsewhere
+- strong hierarchy
+
+Descriptors:
+- muted soft brown / slate text
+- smaller size
+- readable
+- not too faint
+
+Examples:
+Directory
+Verified members, brands & more
+
+Connections
+Your trusted network & conversations
+
+Events
+Curated experiences & private invitations
+
+Benefits
+Access privileges, perks & rewards
+
+==================================================
+START HERE TILE FIX
+==================================================
+
+The “Start Here” row also needs correction.
+
+Cards:
+- Scan to Connect
+- Explore Directory
+- View Matches
+- Join an Event
+- Explore Benefits
+
+These must no longer look like cheap flat shortcut buttons.
+
+Fix them:
+- same premium card family as passport sections
+- more compact
+- elegant badge markers
+- subtle watermark backing
+- better spacing
+- no loud accent colors
+- no glyph look
+
+Each card should feel like a mini passport action module.
+
+Scan to Connect:
+- premium QR/credential badge
+
+Explore Directory:
+- member credential badge
+
+View Matches:
+- trusted-connection badge
+
+Join an Event:
+- invitation / RSVP badge
+
+Explore Benefits:
+- privilege seal badge
+
+==================================================
+DIGITAL STAMPS SECTION FIX
+==================================================
+
+This section especially must stop looking generic.
+
+The Digital Stamps section should look like:
+- a real passport stamp collection page
+- authentication record
+- premium seal archive
+
+Fix all stamp visuals.
+
+Current problems:
+- weak icon circles
+- flat design
+- not enough badge realism
+- no collectible feel
+
+New stamp design rules:
+- each stamp should look like a real seal or authentication stamp
+- circular ring border
+- inner emblem
+- category name underneath
+- embossed / inked look
+- subtle depth
+- collectible quality
+
+Stamp categories:
+- Event
+- Connect
+- Verified
+- Craft
+- VIP
+
+These should not use random bright colors.
+
+Use restrained palette:
+Event:
+- navy + gold
+
+Connect:
+- antique gold + deep ink
+
+Verified:
+- deep navy seal with gold trim
+
+Craft:
+- bronze + deep gold
+
+VIP:
+- champagne gold + ivory
+
+If a slight accent tone is needed, keep it very muted and document-like.
+No loud purple.
+No loud green.
+No bright candy color.
+
+==================================================
+STAMP STATES
+==================================================
+
+Earned stamps:
+- stronger contrast
+- clear embossed seal styling
+- ring detail
+- authentication feel
+
+Locked stamps:
+- reduced opacity 35% to 45%
+- still visible
+- look unavailable, not disabled by accident
+
+Authenticated row:
+- subtle horizontal divider
+- passport-page line styling
+- official record feel
+
+Buttons:
+- View All
+- View My Stamp Collection
+must remain functional and styled like premium document buttons
+
+==================================================
+INTERACTION FEEL
+==================================================
+
+All cards and badges must feel tactile.
+
+Add:
+- active scale 0.98
+- subtle inset shadow on press
+- refined hover glow
+- gold edge highlight on hover/focus
+- soft haptic feedback on touch devices
+- no cheap bounce effects
+
+Use haptics on:
+- Passport Section card tap
+- Start Here card tap
+- Stamp tap
+- View All
+- View My Stamp Collection
+
+==================================================
+BOTTOM LINE VISUAL EXPECTATION
+==================================================
+
+When someone sees the Passport Sections area, they should think:
+
+“This looks like a premium passport ecosystem with real modules, verified access, and executive-level polish.”
+
+They should NOT think:
+“This looks like generic tiles with icons.”
+
+==================================================
+FUNCTIONALITY TO PRESERVE
+==================================================
+
+Do not break:
+- Directory card click
+- Connections card click
+- Events card click
+- Benefits card click
+- Scan to Connect
+- Explore Directory
+- View Matches
+- Join an Event
+- Explore Benefits
+- Stamp detail modals
+- View All
+- View My Stamp Collection
+- Haptics
+- Routing
+- Modals
+- Source logic
+
+==================================================
+FILES / COMPONENTS TO UPDATE
+==================================================
+
+Check and update the components powering these areas, such as:
+
+src/components/passport/PassportSections.jsx
+src/components/passport/NextActionCards.jsx
+src/components/passport/DigitalStamps.jsx
+src/components/common/BadgeSeal.jsx
+src/components/common/PremiumCard.jsx
+src/index.css
+
+If different file names exist, adapt to the real structure.
+
+Create reusable shared UI patterns:
+- PremiumPassportCard
+- PassportSectionBadge
+- StampSeal
+- CredentialBadge
+
+Do not style each card randomly.
+Use one consistent design system.
+
+==================================================
+FINAL ACCEPTANCE CHECKLIST
+==================================================
+
+Before finishing, verify:
+
+- No glyph-looking icons remain in Passport Sections
+- No flat cheap tile cards remain
+- Purple and green are no longer dominant visual colors
+- Section cards feel premium and tactile
+- Cards include proper badges/seals
+- Subtle watermark background art exists
+- Digital stamps feel collectible and authentic
+- Buttons still work
+- Modals still work
+- Routing still works
+- Haptics still work
+- Screen now feels luxury, refined, and professional
+
+FINAL EXPECTATION:
+The Passport Sections and Digital Stamps must look like premium passport modules with real badges, real hierarchy, and executive-level polish, not flat glyph cards.
