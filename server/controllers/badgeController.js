@@ -9,6 +9,7 @@ import {
   loadJson, saveJson,
   serializeMapOfSets, deserializeMapOfSets,
 } from '../utils/persist.js'
+import { appendResetAudit } from '../utils/resetAudit.js'
 
 // ── Load persisted state ──────────────────────────────────────────────────────
 const userBadges = deserializeMapOfSets(loadJson('badge_user_badges.json', {}))
@@ -70,9 +71,10 @@ export function checkEligible(req, res) {
 
 // ── Admin: reset persisted badge data ─────────────────────────────────────────
 
-export function resetBadges(_req, res) {
+export function resetBadges(req, res) {
   userBadges.clear()
   unlockLog.splice(0, unlockLog.length)
   saveState()
+  appendResetAudit('badges', req.user)
   success(res, { cleared: true }, 'All badge progress reset')
 }

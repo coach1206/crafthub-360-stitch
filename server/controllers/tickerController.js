@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { success, error } from '../utils/responseHelpers.js'
 import { TICKER_FEED, SOURCE_COLORS, PRIORITY_ORDER } from '../data/tickerFeed.js'
 import { loadJson, saveJson } from '../utils/persist.js'
+import { appendResetAudit } from '../utils/resetAudit.js'
 
 // Runtime additions persisted across restarts; seed data is always prepended
 const persistedAdditions = loadJson('ticker_additions.json', [])
@@ -65,7 +66,7 @@ export function deactivateFeedItem(req, res) {
 
 // ── Admin: reset persisted runtime additions ──────────────────────────────────
 
-export function resetFeed(_req, res) {
+export function resetFeed(req, res) {
   const seedIds = new Set(TICKER_FEED.map(i => i.id))
   // Remove all runtime (non-seed) entries from the in-memory feed
   const runtimeIndices = []
@@ -74,5 +75,6 @@ export function resetFeed(_req, res) {
   }
   for (const i of runtimeIndices) feed.splice(i, 1)
   saveJson('ticker_additions.json', [])
+  appendResetAudit('ticker-feed', req.user)
   success(res, { cleared: runtimeIndices.length }, 'Ticker additions cleared — seed data restored')
 }

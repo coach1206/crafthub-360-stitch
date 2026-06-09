@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { success, error } from '../utils/responseHelpers.js'
 import { recentActivity } from '../data/recentActivity.js'
 import { loadJson, saveJson } from '../utils/persist.js'
+import { appendResetAudit } from '../utils/resetAudit.js'
 
 // ── Tier definitions ──────────────────────────────────────────────────────────
 const TIERS = [
@@ -233,6 +234,7 @@ export function resetXp(req, res) {
     member.xp = seed ? seed.xp : 0
   }
   saveState()
+  appendResetAudit('ranking-xp', req.user)
   success(res, { leaderboard: buildLeaderboard() }, 'XP reset to seed values')
 }
 
@@ -240,6 +242,7 @@ export function resetActivity(req, res) {
   // Clear all runtime activity entries (keep in-memory seedLog untouched)
   activityLog.splice(0, activityLog.length, ...seedLog)
   saveJson('ranking_activity.json', [])
+  appendResetAudit('ranking-activity', req.user)
   success(res, { cleared: true }, 'Activity log cleared')
 }
 
@@ -248,6 +251,7 @@ export function resetMembers(req, res) {
   MEMBERS.splice(0, MEMBERS.length, ...SEED_MEMBERS.map(m => ({ ...m })))
   saveMembers()
   saveState()
+  appendResetAudit('ranking-members', req.user)
   success(res, { leaderboard: buildLeaderboard() }, 'Member roster reset to seed')
 }
 

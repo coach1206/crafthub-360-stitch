@@ -1,0 +1,29 @@
+[
+  {
+    "id": "fdefca0b-3821-4c31-8ca2-95e450259cad",
+    "timestamp": "2026-06-09T12:21:35.867Z",
+    "store": "badges",
+    "actorId": "admin-01",
+    "actorRole": "admin",
+    "actorEmail": null,
+    "actorName": null
+  },
+  {
+    "id": "5679b8bf-334a-4616-9b08-0998fda851d8",
+    "timestamp": "2026-06-09T12:21:35.728Z",
+    "store": "ranking-xp",
+    "actorId": "admin-01",
+    "actorRole": "admin",
+    "actorEmail": "admin@novee.io",
+    "actorName": null
+  },
+  {
+    "id": "8c41e063-d1f3-4098-ba55-d26450cf8697",
+    "timestamp": "2026-06-09T12:18:58.506Z",
+    "store": "ranking-activity",
+    "actorId": "test-admin-01",
+    "actorRole": "admin",
+    "actorEmail": "admin@test.com",
+    "actorName": null
+  }
+]

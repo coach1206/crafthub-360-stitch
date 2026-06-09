@@ -35,4 +35,7 @@ router.post('/users/:userId/reset-pin', requireAuth, requireManager, ac.resetUse
 router.post('/money-settings', requireAuth, blockDevFounderSpoofing, requireFounderLevel0, ac.updateMoneySettings)
 router.delete('/data-wipe',    requireAuth, blockDevFounderSpoofing, requireFounderLevel0, ac.dataWipe)
 
+// ── Reset audit log (admin+) ───────────────────────────────────
+router.get('/reset-audit',     requireAuth, requireAdmin,            ac.getResetAudit)
+
 export default router

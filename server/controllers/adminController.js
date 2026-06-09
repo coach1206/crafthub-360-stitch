@@ -7,6 +7,7 @@ import * as securityEventService from '../services/securityEventService.js'
 import { buildPermissionMatrix, getEffectivePermissions, ROLE_LEVELS } from '../config/permissions.js'
 import { PERMISSION_GROUPS, PERMISSION_DESCRIPTIONS } from '../config/permissions.js'
 import { ok, created, fail, notFound, serverError } from '../utils/response.js'
+import { getResetAuditLog, getResetAuditTotal } from '../utils/resetAudit.js'
 
 const ROLE_LEVELS_MAP = { guest: 0, staff: 1, manager: 2, admin: 3, founder_level_0: 4 }
 
@@ -211,5 +212,17 @@ export function dataWipe(req, res) {
     ok(res, { acknowledged: true, message: 'Wipe acknowledged — not executed in prototype mode', prototype: true })
   } catch (err) {
     serverError(res, err, 'dataWipe')
+  }
+}
+
+/** GET /api/admin/reset-audit — last N reset events, admin+. */
+export function getResetAudit(req, res) {
+  try {
+    const limit       = Math.min(Number(req.query.limit) || 50, 200)
+    const log         = getResetAuditLog(limit)
+    const totalStored = getResetAuditTotal()
+    ok(res, { log, returned: log.length, totalStored })
+  } catch (err) {
+    serverError(res, err, 'getResetAudit')
   }
 }

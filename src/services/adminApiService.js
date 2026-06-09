@@ -71,3 +71,7 @@ export const resetTickerFeed = () => apiDelete('/api/ticker/admin/reset')
 
 /** DELETE /api/badges/admin/reset — clear all badge progress and unlock log. */
 export const resetBadges = () => apiDelete('/api/badges/admin/reset')
+
+/** GET /api/admin/reset-audit — fetch the last N reset audit log entries, admin+. */
+export const getResetAudit = (limit = 50) =>
+  apiGet(`${BASE}/reset-audit?limit=${limit}`)

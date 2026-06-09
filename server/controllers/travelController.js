@@ -9,6 +9,7 @@ import {
   loadJson, saveJson,
   serializeMapOfArrays, deserializeMapOfArrays,
 } from '../utils/persist.js'
+import { appendResetAudit } from '../utils/resetAudit.js'
 
 // ── Load persisted state ──────────────────────────────────────────────────────
 const conciergeRequests = loadJson('travel_concierge.json', [])
@@ -70,14 +71,16 @@ export function getConciergeRequests(_req, res) {
 
 // ── Admin: reset persisted state ──────────────────────────────────────────────
 
-export function resetConcierge(_req, res) {
+export function resetConcierge(req, res) {
   conciergeRequests.splice(0, conciergeRequests.length)
   saveState()
+  appendResetAudit('travel-concierge', req.user)
   success(res, { cleared: true }, 'Concierge requests cleared')
 }
 
-export function resetStamps(_req, res) {
+export function resetStamps(req, res) {
   userStamps.clear()
   saveState()
+  appendResetAudit('travel-stamps', req.user)
   success(res, { cleared: true }, 'Travel stamps cleared')
 }

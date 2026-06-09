@@ -138,6 +138,13 @@ export default function Admin() {
   const [dataResetPending, setDataResetPending] = useState(null)
   const [dataResetMsg,     setDataResetMsg]     = useState('')
   const [dataResetBusy,    setDataResetBusy]    = useState(false)
+  const [resetAuditLog,    setResetAuditLog]    = useState([])
+
+  function loadResetAudit() {
+    adminApi.getResetAudit(25)
+      .then(r => { if (r?.data?.log) setResetAuditLog(r.data.log) })
+      .catch(() => {})
+  }
 
   // ── Access Requests Inbox — T019 ──────────────────────────
   const [accessRequests,   setAccessRequests]   = useState([])
@@ -181,7 +188,9 @@ export default function Admin() {
       })
       .catch(() => setAccessRequests(PROTOTYPE_ACCESS_REQUESTS))
       .finally(() => setLoadingRequests(false))
-  }, [canViewSync]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    if (canDataReset) loadResetAudit()
+  }, [canViewSync, canDataReset]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { loadData() }, [loadData])
 
@@ -230,6 +239,7 @@ export default function Admin() {
       const r = await action.fn()
       if (r?.success) {
         setDataResetMsg(`✓ ${r.message || action.label + ' complete'}`)
+        loadResetAudit()
       } else {
         setDataResetMsg(`✗ ${r?.message || 'Reset failed — check backend.'}`)
       }
@@ -667,6 +677,64 @@ export default function Admin() {
                   )}
                 </div>
               ))}
+            </div>
+
+            {/* ── Reset History Log ─────────────────────────── */}
+            <div style={{ marginTop: '1.5rem' }}>
+              <div style={{ color: '#333', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
+                Reset History
+              </div>
+              {resetAuditLog.length === 0 ? (
+                <div style={{ color: '#333', fontSize: '11px', letterSpacing: '0.04em' }}>
+                  No resets recorded yet.
+                </div>
+              ) : (
+                <div style={{ maxHeight: '220px', overflowY: 'auto' }}>
+                  {resetAuditLog.map((entry, i) => {
+                    const storeLabels = {
+                      'ranking-xp':       'Leaderboard XP',
+                      'ranking-activity': 'Activity Log',
+                      'ranking-members':  'Member Roster',
+                      'travel-concierge': 'Concierge Requests',
+                      'travel-stamps':    'Travel Stamps',
+                      'ticker-feed':      'Ticker Feed',
+                      'badges':           'Badge Progress',
+                    }
+                    const storeLabel = storeLabels[entry.store] || entry.store
+                    const actor = entry.actorName || entry.actorEmail || entry.actorId || 'unknown'
+                    const roleLabel = ROLE_BADGE[entry.actorRole]?.label || entry.actorRole
+                    let dateStr = '—'
+                    try { dateStr = new Date(entry.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) } catch {}
+                    return (
+                      <div key={entry.id || i} style={{
+                        display:       'flex',
+                        gap:           '10px',
+                        alignItems:    'flex-start',
+                        padding:       '7px 0',
+                        borderBottom:  `1px solid ${BORDER}`,
+                        fontSize:      '11px',
+                        flexWrap:      'wrap',
+                      }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: '13px', color: '#444', marginTop: '1px', flexShrink: 0 }}>
+                          history
+                        </span>
+                        <span style={{ color: DIM, minWidth: '120px' }}>{storeLabel}</span>
+                        <span style={{ color: '#444', flex: 1, minWidth: '80px' }}>
+                          {actor}
+                          {entry.actorRole && (
+                            <span style={{ color: ROLE_BADGE[entry.actorRole]?.color || '#555', marginLeft: '6px', fontSize: '10px', letterSpacing: '0.06em' }}>
+                              {roleLabel}
+                            </span>
+                          )}
+                        </span>
+                        <span style={{ color: '#333', fontFamily: 'monospace', fontSize: '10px', whiteSpace: 'nowrap' }}>
+                          {dateStr}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           </Card>
         )}
