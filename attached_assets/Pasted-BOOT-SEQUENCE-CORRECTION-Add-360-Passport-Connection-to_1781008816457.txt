@@ -1,0 +1,214 @@
+BOOT SEQUENCE CORRECTION
+
+Add 360 Passport Connection to the official NOVEE OS startup sequence.
+
+The boot process should not end at E.A.T. and should not jump directly into the main operating screen.
+
+OFFICIAL STARTUP ORDER:
+
+1. Profound Innovations LLC
+2. NOVEE OS
+3. CraftHub 360
+4. E.A.T. System
+5. 360 Passport Connection
+6. Main NOVEE OS Home Screen
+
+Each stage must:
+
+* Fade in
+* Hold briefly
+* Fade out
+* Transition smoothly into the next layer
+
+No hard cuts.
+
+==================================================
+STAGE 1
+
+PROFOUND INNOVATIONS LLC
+
+Purpose:
+
+Corporate parent company.
+
+Visual:
+
+* Premium black obsidian background
+* Gold logo
+* Ambient glow
+* Subtle particle movement
+
+==================================================
+STAGE 2
+
+NOVEE OS
+
+Purpose:
+
+Operating system layer.
+
+Visual:
+
+* NOVEE OS logo
+* System initialization
+* Premium operating system startup feel
+
+Display:
+
+SYSTEM INITIALIZING
+
+==================================================
+STAGE 3
+
+CRAFTHUB 360
+
+Purpose:
+
+Craft experience ecosystem.
+
+Display:
+
+Loading:
+
+* SmokeCraft 360
+* PourCraft 360
+* BeerCraft 360
+* WineCraft 360
+
+Visual:
+
+* Craft imagery
+* Premium atmospheric transitions
+
+==================================================
+STAGE 4
+
+E.A.T. SYSTEM
+
+Environment
+Asset
+Transaction
+
+Display:
+
+Connecting:
+
+* Kitchen
+* Humidor
+* Bar
+* POS 3
+
+Visual:
+
+* Operational intelligence feel
+* Premium command center atmosphere
+
+==================================================
+STAGE 5
+
+360 PASSPORT CONNECTION
+
+Purpose:
+
+Relationship and networking layer.
+
+Display:
+
+Connecting:
+
+* Members
+* Events
+* Mentors
+* Experiences
+* Venues
+* Travel
+
+Visual:
+
+* Passport opening effect
+* Luxury passport pages
+* Gold stamp animation
+* Connection network lines
+* Global networking atmosphere
+
+This screen must clearly establish that 360 Passport Connection is a core layer of NOVEE OS.
+
+It is not a separate app.
+
+It is not a loyalty card.
+
+It is the networking, relationship, and engagement engine of the ecosystem.
+
+==================================================
+STAGE 6
+
+MAIN NOVEE OS HOME SCREEN
+
+Only after all startup stages complete.
+
+Display:
+
+* START EXPERIENCE
+* CONTINUE SESSION
+* OPEN CRAFTHUB
+* E.A.T. COMMAND
+* 360 PASSPORT CONNECTION
+* DAYONE360 TRAVEL
+
+Also display:
+
+DEMO MODE button
+
+And:
+
+HOLD TO ACTIVATE
+
+==================================================
+LOGO REQUIREMENT
+
+Use actual uploaded logo assets.
+
+Do not use placeholder text logos.
+
+Audit all logo paths first.
+
+Report:
+
+* Missing assets
+* Incorrect asset references
+* Incorrect file paths
+
+before implementation.
+
+==================================================
+TECHNICAL REQUIREMENT
+
+Create startup sequence as a configurable boot array.
+
+Each stage should support:
+
+* Logo
+* Title
+* Subtitle
+* Background
+* Duration
+* Animation
+
+This allows future modules to be inserted without rebuilding the boot system.
+
+==================================================
+NON-DESTRUCTIVE RULE
+
+Do not remove:
+
+* Existing boot visuals
+* Existing authentication
+* Demo Mode
+* TicketTicker
+* Passport
+* CraftHub
+* E.A.T.
+* POS 3
+* DayOne360 Travel
+
+Enhance the startup sequence while preserving the current premium NOVEE OS experience.

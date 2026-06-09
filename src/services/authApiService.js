@@ -13,11 +13,12 @@ import { apiPost, apiGet } from './apiClient.js'
 const BASE = '/api/auth'
 
 /**
- * Staff PIN login — no email required.
- * Returns { data: { userId, role, displayName, permissions } } or null.
+ * Staff PIN login.
+ * When staffId is provided → targeted lookup (prevents lockout amplification).
+ * When staffId is absent   → legacy PIN-only scan.
  */
-export const staffPinLogin = (pin) =>
-  apiPost(`${BASE}/staff-pin-login`, { pin })
+export const staffPinLogin = (pin, staffId = null) =>
+  apiPost(`${BASE}/staff-pin-login`, staffId ? { pin, staffId } : { pin })
 
 /**
  * Admin/Manager login — email + PIN.
@@ -33,7 +34,35 @@ export const founderLogin = (email, pin, founderChallenge) =>
   apiPost(`${BASE}/founder-login`, { email, pin, founderChallenge })
 
 /**
- * Logout — revokes session cookie.
+ * Human Mentor login — email + PIN.
+ * Mentor accounts are created by Admin only — no self-registration.
+ */
+export const mentorLogin = (email, pin) =>
+  apiPost(`${BASE}/mentor-login`, { email, pin })
+
+/**
+ * Developer login — email + PIN.
+ * Requires an active dev access grant issued by Founder L0.
+ */
+export const devLogin = (email, pin) =>
+  apiPost(`${BASE}/dev-login`, { email, pin })
+
+/**
+ * Promote a guest session to a verified Passport Member account.
+ * Body: { passportId, email?, phone?, displayName? }
+ */
+export const promoteGuestToMember = (data) =>
+  apiPost(`${BASE}/promote-member`, data)
+
+/**
+ * Rotate the Passport Member refresh token (long-lived session).
+ * Called automatically on the client when the 14-day JWT expires.
+ */
+export const passportRefresh = () =>
+  apiPost(`${BASE}/passport-refresh`, {})
+
+/**
+ * Logout — revokes session cookie and refresh token.
  */
 export const logout = () =>
   apiPost(`${BASE}/logout`, {})
@@ -47,6 +76,7 @@ export const getMe = () =>
 
 /**
  * Refresh the current session (extends expiry).
+ * Not for Passport Members — they use passportRefresh().
  */
 export const refreshSession = () =>
   apiPost(`${BASE}/refresh`, {})

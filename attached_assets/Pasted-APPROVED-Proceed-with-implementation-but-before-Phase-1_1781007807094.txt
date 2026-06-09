@@ -1,0 +1,167 @@
+APPROVED.
+
+Proceed with implementation, but before Phase 1 migration begins, update the migration plan to include the following additional foundation tables and security changes.
+
+ADD THESE TABLES:
+
+passport_connections
+
+* Stores networking relationships created through 360 Passport Connection.
+
+venues
+
+* Stores venue records for cigar lounges, bars, restaurants, hotels, resorts, private clubs, and event venues.
+
+venue_memberships
+
+* Connects users to venues.
+
+venue_permissions
+
+* Venue-level permissions and access controls.
+
+founder_recovery_codes
+
+* Emergency Founder Level 0 recovery.
+
+founder_security_events
+
+* Founder security tracking and recovery events.
+
+inventory_items
+
+* Inventory records for Humidor, Bar, Kitchen, Retail.
+
+inventory_movements
+
+* Inventory additions, removals, corrections, transfers, and usage tracking.
+
+inventory_alerts
+
+* Low stock, reorder, overstock, and status alerts.
+
+ticker_items
+
+* TicketTicker messages.
+
+ticker_schedules
+
+* Scheduled ticker content by venue and time.
+
+ticker_history
+
+* Historical display tracking for TicketTicker.
+
+system_settings
+
+* Founder-controlled NOVEE OS platform settings.
+
+feature_flags
+
+* Module enable/disable controls.
+
+environment_settings
+
+* Environment-specific platform configuration.
+
+PASSPORT MEMBER SECURITY UPDATE:
+
+Replace:
+
+30-day Passport Member JWT
+
+With:
+
+14-day Passport Member JWT
++
+Refresh Token Rotation Architecture
+
+Requirements:
+
+* Secure refresh tokens
+* Token rotation
+* Session revocation
+* Multi-device support
+
+SECURITY FIXES MUST BE INCLUDED IN IMPLEMENTATION:
+
+1. Fix system_users role constraint to support:
+
+* HUMAN_MENTOR
+* PASSPORT_MEMBER
+* DEVELOPER
+
+2. Hard-block all development headers when:
+    NODE_ENV === “production”
+3. Remove any production path that allows founder spoofing.
+4. Fix Staff PIN login lockout amplification issue by implementing Staff ID + PIN support.
+5. Require explicit CORS_ORIGIN in production.
+6. Match cookie lifetime to JWT lifetime by role.
+7. Add:
+
+* preventSelfPromotion
+* preventFounderModification
+* preventOwnershipTransfer
+* auditAction middleware
+
+8. Expand audit logging to include:
+
+* AUTH
+* ROLE
+* ADMIN
+* POS
+* E.A.T.
+* INVENTORY
+* TICKER
+* PAYMENT
+* DEVELOPER
+* FOUNDER
+* MENTOR
+* PASSPORT_CONNECTION
+* VENUE
+* SYSTEM_SETTINGS
+* FEATURE_FLAGS
+
+AUDIT LOGS MUST BE:
+
+* Append only
+* No deletion
+* Export and archive only by Founder Level 0
+
+IMPLEMENTATION ORDER:
+
+1. Update migration plan with all newly approved tables.
+2. Update dependency map.
+3. Execute Migration Phase.
+4. Execute Security Hardening Phase.
+5. Execute Role and Permission Phase.
+6. Execute Authentication Phase.
+7. Execute Passport Member Phase.
+8. Execute Human Mentor Phase.
+9. Execute Developer Access Phase.
+10. Execute Audit Logging Phase.
+11. Execute Frontend Route Protection Phase.
+12. Execute Dashboard Integration Phase.
+13. Execute Testing Phase.
+
+Maintain full compatibility with:
+
+* NOVEE OS
+* CraftHub 360
+* SmokeCraft 360
+* PourCraft 360
+* BeerCraft 360
+* WineCraft 360
+* 360 Passport Connection
+* DayOne360 Travel
+* E.A.T. Command
+* POS 3
+* TicketTicker
+* Leaderboards
+
+Do not redesign any screens.
+Do not remove any routes.
+Do not remove any modules.
+Do not simplify the architecture.
+
+Proceed according to the approved build order.

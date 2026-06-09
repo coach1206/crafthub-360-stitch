@@ -1,0 +1,95 @@
+BOOT SEQUENCE IMPLEMENTATION REQUIREMENT
+
+The current boot-up process is incomplete.
+
+Implement the full NOVEE OS cinematic boot sequence before the user reaches the main operating screen.
+
+BOOT ORDER:
+
+1. Profound Innovations LLC
+2. NOVEE OS
+3. CraftHub 360
+4. E.A.T. System
+5. Main NOVEE OS Home Screen
+
+Each boot stage must fade into the next stage smoothly.
+
+Each stage must use the correct logo/brand asset.
+
+Required brand loadout:
+
+* Profound Innovations LLC logo appears first
+* NOVEE OS logo appears second
+* CraftHub 360 logo appears third
+* E.A.T. System logo appears fourth
+* Then transition into the main screen where all modules are available
+
+VISUAL STANDARD:
+
+* Obsidian luxury background
+* Gold atmospheric glow
+* Cinematic fade transitions
+* Subtle smoke or frost movement
+* Premium loading feel
+* No generic spinner
+* No plain blank screen
+* No emojis
+* No glyph placeholder logos
+
+FUNCTIONAL REQUIREMENTS:
+
+* Boot sequence must run before the main home screen
+* Boot sequence must not skip directly to CraftHub
+* Boot sequence must not skip E.A.T.
+* Boot sequence must support Demo Mode button after boot completes
+* Boot sequence must support Hold to Activate
+* Boot sequence must respect preview mode
+* Boot sequence must not break existing auth, demo mode, or route guards
+
+LOGO REQUIREMENTS:
+
+Use the existing uploaded logo assets already inside the project.
+
+If any logo asset is missing, do not use placeholder text.
+Instead, report the missing asset name and expected file path.
+
+Expected logo asset groups:
+
+* Profound Innovations LLC
+* NOVEE OS
+* CraftHub 360
+* E.A.T. System
+
+IMPLEMENTATION REQUIREMENTS:
+
+Audit the current boot screen files first.
+
+Identify:
+
+* Current boot component
+* Current logo paths
+* Missing logo assets
+* Current transition logic
+* Where the final redirect/home activation occurs
+
+Then implement:
+
+* Multi-stage boot array
+* Timed fade transitions
+* Logo rendering per stage
+* Final transition to main NOVEE OS home screen
+* Demo Mode button after boot completion
+* Hold to Activate button after boot completion
+
+Do not redesign the whole app.
+Do not remove current boot visuals.
+Do not remove existing premium style.
+Do not remove auth work.
+Do not remove demo mode.
+Do not remove TicketTicker.
+Do not remove CraftHub.
+Do not remove E.A.T.
+Do not remove POS 3.
+Do not remove Passport.
+
+This boot sequence must feel like a premium operating system startup, not a website splash page.

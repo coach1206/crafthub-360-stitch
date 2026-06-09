@@ -1,10 +1,11 @@
 /**
  * Staff Login — PIN keypad for POS 3 staff access.
+ * T016: Staff ID field added above PIN pad for targeted lookup.
  * Large touchscreen-friendly buttons. No keyboard input required.
  * Prototype credentials: PIN 1234
  */
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useAuth }  from '../context/AuthContext.jsx'
 
 const GOLD  = '#C9A84C'
@@ -17,9 +18,11 @@ const MAX_DIGITS = 6
 
 export default function StaffLogin() {
   const { loginStaff } = useAuth()
+  const [staffId, setStaffId] = useState('')
   const [pin,     setPin]     = useState('')
   const [loading, setLoading] = useState(false)
   const [error,   setError]   = useState('')
+  const staffIdRef = useRef(null)
 
   const append = (d) => {
     if (pin.length >= MAX_DIGITS) return
@@ -36,12 +39,11 @@ export default function StaffLogin() {
     if (pin.length < 4) { setError('PIN must be at least 4 digits'); return }
     setLoading(true)
     setError('')
-    const result = await loginStaff(pin)
+    const result = await loginStaff(pin, staffId.trim() || null)
     if (result.success) {
-      const returnTo = sessionStorage.getItem('novee_boot_return') || '/pos'
-      window.location.href = returnTo.startsWith('/pos') ? '/pos' : '/pos'
+      window.location.href = '/pos'
     } else {
-      setError(result.error || 'Invalid PIN. Please try again.')
+      setError(result.error || 'Invalid credentials. Please try again.')
       setPin('')
     }
     setLoading(false)
@@ -105,7 +107,7 @@ export default function StaffLogin() {
           POS 3 Staff Access
         </h1>
         <div style={{ color: 'rgba(201,168,76,0.25)', fontSize: '11px', marginTop: '0.5rem', letterSpacing: '0.1em' }}>
-          Enter your staff PIN
+          Enter your Staff ID and PIN
         </div>
       </div>
 
@@ -117,12 +119,62 @@ export default function StaffLogin() {
         width:        '100%',
         maxWidth:     '320px',
       }}>
+        {/* Staff ID field */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label style={{
+            display:       'block',
+            color:         'rgba(201,168,76,0.35)',
+            fontSize:      '9px',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            marginBottom:  '6px',
+            fontFamily:    '"JetBrains Mono", monospace',
+          }}>
+            Staff ID <span style={{ color: 'rgba(201,168,76,0.2)' }}>(optional)</span>
+          </label>
+          <input
+            ref={staffIdRef}
+            type="text"
+            inputMode="text"
+            autoComplete="off"
+            placeholder="e.g. STF-001"
+            value={staffId}
+            onChange={e => { setStaffId(e.target.value); setError('') }}
+            style={{
+              width:         '100%',
+              background:    'rgba(255,255,255,0.03)',
+              border:        `1px solid ${staffId ? 'rgba(201,168,76,0.35)' : 'rgba(201,168,76,0.12)'}`,
+              borderRadius:  '6px',
+              color:         GOLD,
+              fontSize:      '13px',
+              fontFamily:    '"JetBrains Mono", monospace',
+              letterSpacing: '0.08em',
+              padding:       '10px 12px',
+              outline:       'none',
+              boxSizing:     'border-box',
+              transition:    'border-color 0.15s',
+            }}
+            onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
+            onBlur={e  => e.target.style.borderColor = staffId ? 'rgba(201,168,76,0.35)' : 'rgba(201,168,76,0.12)'}
+          />
+          <div style={{ color: 'rgba(201,168,76,0.2)', fontSize: '9px', letterSpacing: '0.1em', marginTop: '4px' }}>
+            Speeds up lookup — enter ID shown on your staff card
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div style={{
+          height:       '1px',
+          background:   'rgba(201,168,76,0.08)',
+          margin:       '0 0 1.25rem',
+        }} />
+
         {/* PIN dots display */}
         <div style={{
           display:        'flex',
           justifyContent: 'center',
           gap:            '0.75rem',
-          marginBottom:   '2rem',
+          marginBottom:   '1.25rem',
           minHeight:      '24px',
           alignItems:     'center',
         }}>
@@ -214,12 +266,11 @@ export default function StaffLogin() {
               padding:       '4px',
             }}
           >
-            Clear
+            Clear PIN
           </button>
         )}
       </div>
 
-      {/* Dev hint */}
       {import.meta.env.DEV && (
         <div style={{
           marginTop:     '1.5rem',
@@ -228,7 +279,7 @@ export default function StaffLogin() {
           letterSpacing: '0.1em',
           textAlign:     'center',
         }}>
-          DEV: staff PIN is 1234
+          DEV: PIN 1234 · Staff ID optional
         </div>
       )}
     </div>

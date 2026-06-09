@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDemoMode } from '../context/DemoModeContext.jsx'
 
 const MEMBER_AVATAR =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuAgWXglzb_WYKEWLzx_GP2htMAmylt3mc4x271sR6Sgl-GSMFBDFFhp6UUSJ2p60KWwRXW1GJBT4BMHdiVk08RE8Q3Hqc0qlOGLkQ_-JOa7PIyCTDdIKun_viSNQVYI9HPXOQTsapFdp4Z7pFymCG7xoMHqziC0aay19DnTmthayXgUzViZ9CJ6o9n6ckNjypwlfJgv5k_Zae8mCfcyk6TKoenHMSe54VO9On3spC7zVcWvFUCHaTaJan02aA5niZ-u5z7nEY3caQw'
@@ -7,14 +8,13 @@ const MEMBER_AVATAR =
 export default function Home() {
   const navigate  = useNavigate()
   const glowRef   = useRef(null)
+  const { isDemoMode, enterDemoMode } = useDemoMode()
 
-  /* Apply leather texture to the body while this page is mounted */
   useEffect(() => {
     document.body.classList.add('leather-texture')
     return () => document.body.classList.remove('leather-texture')
   }, [])
 
-  /* Ambient glow tracks the mouse */
   useEffect(() => {
     const onMove = (e) => {
       if (!glowRef.current) return
@@ -45,9 +45,9 @@ export default function Home() {
             </h1>
           </div>
 
-          {/* Right: desktop section links + member avatar */}
+          {/* Right: desktop section links + demo button + member avatar */}
           <div className="flex items-center gap-8">
-            <div className="hidden md:flex gap-8">
+            <div className="hidden md:flex items-center gap-8">
               <button className="font-label-lg text-label-lg text-primary">Lounge</button>
               <button
                 onClick={() => navigate('/smokecraft')}
@@ -61,7 +61,46 @@ export default function Home() {
               >
                 Cellar
               </button>
+
+              {/* Demo Mode button — header (desktop) */}
+              {!isDemoMode && (
+                <button
+                  onClick={enterDemoMode}
+                  style={{
+                    display:       'flex',
+                    alignItems:    'center',
+                    gap:           6,
+                    height:        32,
+                    padding:       '0 14px',
+                    borderRadius:  16,
+                    background:    'rgba(201,168,76,0.06)',
+                    border:        '1px solid rgba(201,168,76,0.2)',
+                    cursor:        'pointer',
+                    fontFamily:    '"JetBrains Mono", monospace',
+                    fontSize:      9,
+                    fontWeight:    700,
+                    letterSpacing: '0.15em',
+                    color:         'rgba(201,168,76,0.5)',
+                    textTransform: 'uppercase',
+                    transition:    'all 0.2s ease',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background  = 'rgba(201,168,76,0.12)'
+                    e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
+                    e.currentTarget.style.color       = 'rgba(201,168,76,0.85)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background  = 'rgba(201,168,76,0.06)'
+                    e.currentTarget.style.borderColor = 'rgba(201,168,76,0.2)'
+                    e.currentTarget.style.color       = 'rgba(201,168,76,0.5)'
+                  }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 12 }}>visibility</span>
+                  DEMO
+                </button>
+              )}
             </div>
+
             <button
               className="w-12 h-12 rounded-full border-2 border-primary/50 overflow-hidden bg-surface-container-high cursor-pointer hover:opacity-80 transition-opacity active:scale-95"
               onClick={() => navigate('/passport')}
@@ -202,6 +241,46 @@ export default function Home() {
 
         </div>
 
+        {/* Demo Mode CTA — below the grid, subtle */}
+        {!isDemoMode && (
+          <div className="mt-10 relative z-10">
+            <button
+              onClick={enterDemoMode}
+              style={{
+                display:       'flex',
+                alignItems:    'center',
+                gap:           8,
+                height:        38,
+                padding:       '0 18px',
+                borderRadius:  20,
+                background:    'rgba(201,168,76,0.05)',
+                border:        '1px solid rgba(201,168,76,0.15)',
+                cursor:        'pointer',
+                fontFamily:    '"JetBrains Mono", monospace',
+                fontSize:      9,
+                fontWeight:    700,
+                letterSpacing: '0.18em',
+                color:         'rgba(201,168,76,0.4)',
+                textTransform: 'uppercase',
+                transition:    'all 0.2s ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background  = 'rgba(201,168,76,0.1)'
+                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.35)'
+                e.currentTarget.style.color       = 'rgba(201,168,76,0.75)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background  = 'rgba(201,168,76,0.05)'
+                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.15)'
+                e.currentTarget.style.color       = 'rgba(201,168,76,0.4)'
+              }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 13 }}>visibility</span>
+              EXPLORE IN DEMO MODE
+            </button>
+          </div>
+        )}
+
         {/* Subtle footer detail */}
         <div className="mt-auto py-8 text-center opacity-40 relative z-10">
           <span className="font-label-sm text-label-sm uppercase tracking-[0.4em] text-on-surface">
@@ -215,7 +294,6 @@ export default function Home() {
       <nav className="md:hidden fixed bottom-0 w-full h-[100px] z-50 bg-surface-container-low/90 backdrop-blur-2xl border-t border-primary/20 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
         <div className="flex justify-around items-center w-full max-w-4xl mx-auto h-full">
 
-          {/* Lounge — active state */}
           <button className="flex flex-col items-center justify-center gap-1 text-primary-fixed-dim bg-primary-container/20 rounded-xl px-8 py-4 transition-all">
             <span
               className="material-symbols-outlined text-2xl"
@@ -249,6 +327,17 @@ export default function Home() {
             <span className="material-symbols-outlined text-2xl">menu_book</span>
             <span className="font-label-lg text-label-lg tracking-widest uppercase">Passport</span>
           </button>
+
+          {/* Demo Mode — mobile nav */}
+          {!isDemoMode && (
+            <button
+              onClick={enterDemoMode}
+              className="flex flex-col items-center justify-center gap-1 text-on-surface-variant px-6 py-4 hover:text-primary duration-500"
+            >
+              <span className="material-symbols-outlined text-2xl">visibility</span>
+              <span className="font-label-lg text-label-lg tracking-widest uppercase" style={{ fontSize: 9 }}>Demo</span>
+            </button>
+          )}
 
         </div>
       </nav>

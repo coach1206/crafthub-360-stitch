@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { loadSession } from '../services/sessionStorageService.js'
+import { useDemoMode } from '../context/DemoModeContext.jsx'
 
 export default function Boot() {
-  const navigate = useNavigate()
+  const navigate  = useNavigate()
+  const { enterDemoMode } = useDemoMode()
+
   const [headerVisible, setHeaderVisible] = useState(false)
-  const [holding, setHolding] = useState(false)
-  const [activating, setActivating] = useState(false)
-  const [cursor, setCursor] = useState({ x: -80, y: -80 })
-  // Phase 11: boot hardening — show fallback button if boot hangs > 8s
-  const [showFallback, setShowFallback] = useState(false)
-  const holdTimer    = useRef(null)
+  const [holding,       setHolding]       = useState(false)
+  const [activating,    setActivating]    = useState(false)
+  const [cursor,        setCursor]        = useState({ x: -80, y: -80 })
+  const [showFallback,  setShowFallback]  = useState(false)
+
+  const holdTimer     = useRef(null)
   const fallbackTimer = useRef(null)
 
   useEffect(() => {
@@ -27,7 +30,6 @@ export default function Boot() {
     document.addEventListener('mousemove', onMove)
     document.body.style.cursor = 'none'
 
-    // Phase 11 boot hardening: if still on boot after 8s, show Activate button prominently
     fallbackTimer.current = setTimeout(() => {
       setShowFallback(true)
       if (import.meta.env.DEV) {
@@ -63,14 +65,20 @@ export default function Boot() {
     setHolding(false)
   }
 
+  function handleDemoMode() {
+    clearTimeout(fallbackTimer.current)
+    enterDemoMode()
+    navigate('/', { replace: true })
+  }
+
   return (
     <div
       className="relative w-full overflow-hidden bg-background text-on-background"
       style={{
-        minHeight: 'max(884px, 100dvh)',
+        minHeight:  'max(884px, 100dvh)',
         transition: 'opacity 0.8s cubic-bezier(0.7,0,0.3,1), transform 0.8s cubic-bezier(0.7,0,0.3,1)',
-        opacity: activating ? 0 : 1,
-        transform: activating ? 'scale(1.1)' : 'scale(1)',
+        opacity:    activating ? 0 : 1,
+        transform:  activating ? 'scale(1.1)' : 'scale(1)',
       }}
     >
       {/* Custom cursor dot */}
@@ -158,15 +166,16 @@ export default function Boot() {
           </div>
         </aside>
 
-        {/* Bottom: Hold to Activate + stats */}
-        <div className="flex flex-col items-center gap-12 pb-4">
+        {/* Bottom: Hold to Activate + Demo Mode + stats */}
+        <div className="flex flex-col items-center gap-6 pb-4">
+          {/* Primary CTA — Hold to Activate */}
           <button
             className="group relative outline-none flex flex-col items-center justify-center h-[72px] w-[320px] rounded-2xl glass-panel border border-primary/30 amber-glow animate-pulse-gold transition-all duration-500 select-none"
             style={{
-              transform: holding ? 'scale(0.94)' : 'scale(1)',
-              background: holding ? 'rgba(233,193,118,0.15)' : 'rgba(31,31,32,0.4)',
+              transform:   holding ? 'scale(0.94)' : 'scale(1)',
+              background:  holding ? 'rgba(233,193,118,0.15)' : 'rgba(31,31,32,0.4)',
               borderColor: holding ? 'rgba(233,193,118,1)' : undefined,
-              boxShadow: holding ? '0 0 60px rgba(233,193,118,0.3)' : undefined,
+              boxShadow:   holding ? '0 0 60px rgba(233,193,118,0.3)' : undefined,
             }}
             onMouseDown={startHold}
             onMouseUp={endHold}
@@ -185,7 +194,45 @@ export default function Boot() {
             </div>
           </button>
 
-          <div className="flex gap-16">
+          {/* Demo Mode — secondary action */}
+          <button
+            onClick={handleDemoMode}
+            style={{
+              display:        'flex',
+              alignItems:     'center',
+              gap:            8,
+              height:         40,
+              padding:        '0 20px',
+              borderRadius:   20,
+              background:     'rgba(201,168,76,0.06)',
+              border:         '1px solid rgba(201,168,76,0.2)',
+              cursor:         'pointer',
+              fontFamily:     '"JetBrains Mono", monospace',
+              fontSize:       10,
+              fontWeight:     700,
+              letterSpacing:  '0.18em',
+              color:          'rgba(201,168,76,0.55)',
+              textTransform:  'uppercase',
+              transition:     'all 0.2s ease',
+              backdropFilter: 'blur(8px)',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background     = 'rgba(201,168,76,0.12)'
+              e.currentTarget.style.borderColor    = 'rgba(201,168,76,0.4)'
+              e.currentTarget.style.color          = 'rgba(201,168,76,0.85)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background  = 'rgba(201,168,76,0.06)'
+              e.currentTarget.style.borderColor = 'rgba(201,168,76,0.2)'
+              e.currentTarget.style.color       = 'rgba(201,168,76,0.55)'
+            }}
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>visibility</span>
+            PREVIEW DEMO
+          </button>
+
+          {/* Stats */}
+          <div className="flex gap-16 mt-2">
             {[
               { label: 'TEMPERATURE',     value: '68°F / 20°C' },
               { label: 'HUMIDITY',        value: '70% RH' },
@@ -207,56 +254,76 @@ export default function Boot() {
       />
       <div className="pointer-events-none fixed inset-0 z-40 bg-gradient-to-b from-black/20 via-transparent to-black/90" />
 
-      {/* Phase 11: Boot fallback — shown after 8s if still on boot screen */}
+      {/* Phase 11: Boot fallback */}
       {showFallback && (
         <div
           style={{
-            position:        'fixed',
-            bottom:          '2rem',
-            left:            '50%',
-            transform:       'translateX(-50%)',
-            zIndex:          200,
-            background:      'rgba(5,5,5,0.92)',
-            border:          '1px solid rgba(201,168,76,0.4)',
-            borderRadius:    '12px',
-            padding:         '1.25rem 2rem',
-            textAlign:       'center',
-            backdropFilter:  'blur(12px)',
-            fontFamily:      'Georgia, serif',
-            minWidth:        '320px',
+            position:       'fixed',
+            bottom:         '2rem',
+            left:           '50%',
+            transform:      'translateX(-50%)',
+            zIndex:         200,
+            background:     'rgba(5,5,5,0.92)',
+            border:         '1px solid rgba(201,168,76,0.4)',
+            borderRadius:   '12px',
+            padding:        '1.25rem 2rem',
+            textAlign:      'center',
+            backdropFilter: 'blur(12px)',
+            fontFamily:     'Georgia, serif',
+            minWidth:       '320px',
           }}
         >
           <p style={{ color: 'rgba(201,168,76,0.6)', fontSize: '0.78rem', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>
             NOVEE OS is preparing your experience.
           </p>
-          <button
-            onClick={() => {
-              clearTimeout(fallbackTimer.current)
-              sessionStorage.setItem('novee_booted', '1')
-              const returnPath = sessionStorage.getItem('novee_boot_return')
-                || loadSession()?.system?.lastVisitedRoute
-                || '/'
-              sessionStorage.removeItem('novee_boot_return')
-              navigate(returnPath, { replace: true })
-            }}
-            style={{
-              background:    '#C9A84C',
-              color:         '#050505',
-              border:        'none',
-              padding:       '0.875rem 2.5rem',
-              borderRadius:  '6px',
-              fontFamily:    'Georgia, serif',
-              fontSize:      '0.88rem',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              cursor:        'pointer',
-              fontWeight:    600,
-              minHeight:     '52px',
-              width:         '100%',
-            }}
-          >
-            Continue
-          </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <button
+              onClick={() => {
+                clearTimeout(fallbackTimer.current)
+                sessionStorage.setItem('novee_booted', '1')
+                const returnPath = sessionStorage.getItem('novee_boot_return')
+                  || loadSession()?.system?.lastVisitedRoute
+                  || '/'
+                sessionStorage.removeItem('novee_boot_return')
+                navigate(returnPath, { replace: true })
+              }}
+              style={{
+                background:    '#C9A84C',
+                color:         '#050505',
+                border:        'none',
+                padding:       '0.875rem 2.5rem',
+                borderRadius:  '6px',
+                fontFamily:    'Georgia, serif',
+                fontSize:      '0.88rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                cursor:        'pointer',
+                fontWeight:    600,
+                minHeight:     '52px',
+                width:         '100%',
+              }}
+            >
+              Continue
+            </button>
+            <button
+              onClick={handleDemoMode}
+              style={{
+                background:    'transparent',
+                color:         'rgba(201,168,76,0.5)',
+                border:        '1px solid rgba(201,168,76,0.25)',
+                padding:       '0.625rem 2.5rem',
+                borderRadius:  '6px',
+                fontFamily:    '"JetBrains Mono", monospace',
+                fontSize:      '0.72rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                cursor:        'pointer',
+                width:         '100%',
+              }}
+            >
+              Preview Demo
+            </button>
+          </div>
         </div>
       )}
     </div>

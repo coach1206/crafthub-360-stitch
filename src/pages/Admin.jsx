@@ -139,6 +139,19 @@ export default function Admin() {
   const [dataResetMsg,     setDataResetMsg]     = useState('')
   const [dataResetBusy,    setDataResetBusy]    = useState(false)
 
+  // ── Access Requests Inbox — T019 ──────────────────────────
+  const [accessRequests,   setAccessRequests]   = useState([])
+  const [loadingRequests,  setLoadingRequests]  = useState(false)
+  const [requestActionId,  setRequestActionId]  = useState(null)
+  const [requestActionMsg, setRequestActionMsg] = useState('')
+
+  const PROTOTYPE_ACCESS_REQUESTS = [
+    { id: 'AR-001', requester_name: 'Guest #8821',    requested_role: 'passport_member', reason: 'Regular lounge visitor — interested in Passport membership.',       status: 'pending',  created_at: new Date(Date.now() - 86400000).toISOString() },
+    { id: 'AR-002', requester_name: 'Staff #STF-003', requested_role: 'manager',         reason: 'Promoted to floor manager, needs manager-level POS access.',         status: 'pending',  created_at: new Date(Date.now() - 36000000).toISOString() },
+    { id: 'AR-003', requester_name: 'Guest #9102',    requested_role: 'human_mentor',    reason: 'Certified tobacconist, wants to mentor SmokeCraft sessions.',        status: 'pending',  created_at: new Date(Date.now() - 172800000).toISOString() },
+    { id: 'AR-004', requester_name: 'Guest #7755',    requested_role: 'passport_member', reason: 'Frequent visitor — has 3 passport stamps already.',                  status: 'approved', created_at: new Date(Date.now() - 259200000).toISOString() },
+  ]
+
   const loadData = useCallback(() => {
     setLoadingUsers(true)
     adminApi.getAdminUsers()
@@ -157,7 +170,18 @@ export default function Admin() {
         .catch(() => setSyncStatus(null))
         .finally(() => setSyncLoading(false))
     }
-  }, [canViewSync])
+
+    // Load access requests
+    setLoadingRequests(true)
+    fetch('/api/access-requests?status=all', { credentials: 'include' })
+      .then(r => r.json())
+      .then(body => {
+        if (Array.isArray(body?.data) && body.data.length) setAccessRequests(body.data)
+        else setAccessRequests(PROTOTYPE_ACCESS_REQUESTS)
+      })
+      .catch(() => setAccessRequests(PROTOTYPE_ACCESS_REQUESTS))
+      .finally(() => setLoadingRequests(false))
+  }, [canViewSync]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { loadData() }, [loadData])
 
@@ -760,6 +784,156 @@ export default function Admin() {
           </Card>
         </div>
 
+        {/* ── Access Requests Inbox — T019 ─────────────────── */}
+        <div style={{ marginTop: '2.5rem' }}>
+          <Card>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '18px', color: GOLD }}>inbox</span>
+              <span style={{ color: DIM, fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', flex: 1 }}>
+                Access Requests Inbox
+              </span>
+              {accessRequests.filter(r => r.status === 'pending').length > 0 && (
+                <span style={{
+                  background: GOLD, color: '#0a0603', borderRadius: 10,
+                  fontSize: 8, fontWeight: 700, padding: '2px 7px',
+                  fontFamily: '"JetBrains Mono", monospace',
+                }}>
+                  {accessRequests.filter(r => r.status === 'pending').length} PENDING
+                </span>
+              )}
+            </div>
+
+            {requestActionMsg && (
+              <div style={{
+                marginBottom: '1rem', padding: '7px 12px', borderRadius: 4,
+                background: requestActionMsg.startsWith('✓') ? 'rgba(76,175,80,0.08)' : 'rgba(204,51,51,0.08)',
+                border: `1px solid ${requestActionMsg.startsWith('✓') ? '#4caf5044' : '#cc333344'}`,
+                color:  requestActionMsg.startsWith('✓') ? '#4caf80' : 'rgba(220,80,80,0.9)',
+                fontSize: 11, letterSpacing: '0.06em',
+              }}>
+                {requestActionMsg}
+              </div>
+            )}
+
+            {loadingRequests ? (
+              <div style={{ color: '#444', fontSize: '12px', padding: '1rem 0' }}>Loading access requests…</div>
+            ) : accessRequests.length === 0 ? (
+              <div style={{ color: '#444', fontSize: '12px', padding: '0.5rem 0' }}>No access requests on file.</div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {accessRequests.map(req => {
+                  const isPending = req.status === 'pending'
+                  const statusColors = { pending: GOLD, approved: '#4caf50', denied: ERR }
+                  const sc = statusColors[req.status] || '#666'
+                  return (
+                    <div key={req.id} style={{
+                      padding:      '12px 14px',
+                      background:   isPending ? 'rgba(201,168,76,0.04)' : 'rgba(255,255,255,0.01)',
+                      border:       `1px solid ${isPending ? 'rgba(201,168,76,0.15)' : BORDER}`,
+                      borderRadius: 6,
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 8, marginBottom: 6 }}>
+                        <div>
+                          <span style={{ color: GOLD, fontSize: 12, letterSpacing: '0.06em', marginRight: 8 }}>
+                            {req.requester_name || req.requester_email || 'Unknown'}
+                          </span>
+                          <span style={{
+                            background: sc + '15', border: `1px solid ${sc}33`,
+                            borderRadius: 8, color: sc + 'cc', fontSize: 9,
+                            letterSpacing: '0.14em', padding: '2px 7px',
+                            fontFamily: '"JetBrains Mono", monospace', textTransform: 'uppercase',
+                          }}>
+                            {req.status}
+                          </span>
+                        </div>
+                        <span style={{ color: '#444', fontSize: 10, fontFamily: 'monospace' }}>
+                          {req.created_at ? new Date(req.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : '—'}
+                        </span>
+                      </div>
+
+                      <div style={{ color: '#555', fontSize: 10, fontFamily: 'monospace', marginBottom: req.reason ? 8 : 0 }}>
+                        Requesting: <span style={{ color: DIM }}>{req.requested_role}</span>
+                      </div>
+
+                      {req.reason && (
+                        <div style={{
+                          color: '#4a4030', fontSize: 11, lineHeight: 1.6,
+                          padding: '6px 10px', background: 'rgba(201,168,76,0.02)',
+                          border: `1px solid ${BORDER}`, borderRadius: 4, marginBottom: isPending ? 10 : 0,
+                        }}>
+                          "{req.reason}"
+                        </div>
+                      )}
+
+                      {isPending && (
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          <button
+                            disabled={requestActionId === req.id}
+                            onClick={async () => {
+                              setRequestActionId(req.id)
+                              setRequestActionMsg('')
+                              try {
+                                const r = await fetch(`/api/access-requests/${req.id}/approve`, { method: 'POST', credentials: 'include' })
+                                const b = await r.json()
+                                if (b.success) {
+                                  setAccessRequests(prev => prev.map(x => x.id === req.id ? { ...x, status: 'approved' } : x))
+                                  setRequestActionMsg(`✓ Request approved — ${req.requester_name}.`)
+                                } else {
+                                  setAccessRequests(prev => prev.map(x => x.id === req.id ? { ...x, status: 'approved' } : x))
+                                  setRequestActionMsg(`✓ [Prototype] Marked approved.`)
+                                }
+                              } catch {
+                                setAccessRequests(prev => prev.map(x => x.id === req.id ? { ...x, status: 'approved' } : x))
+                                setRequestActionMsg(`✓ [Prototype] Marked approved.`)
+                              }
+                              setRequestActionId(null)
+                            }}
+                            style={{
+                              padding: '5px 12px', background: 'rgba(76,175,80,0.1)',
+                              border: '1px solid rgba(76,175,80,0.3)', borderRadius: 4,
+                              color: '#4caf80', fontSize: 10, letterSpacing: '0.12em',
+                              cursor: requestActionId === req.id ? 'not-allowed' : 'pointer',
+                              textTransform: 'uppercase', fontFamily: 'Georgia, serif',
+                            }}
+                          >
+                            {requestActionId === req.id ? '…' : 'Approve'}
+                          </button>
+                          <button
+                            disabled={requestActionId === req.id}
+                            onClick={async () => {
+                              setRequestActionId(req.id)
+                              setRequestActionMsg('')
+                              try {
+                                const r = await fetch(`/api/access-requests/${req.id}/deny`, { method: 'POST', credentials: 'include' })
+                                const b = await r.json()
+                                setAccessRequests(prev => prev.map(x => x.id === req.id ? { ...x, status: 'denied' } : x))
+                                setRequestActionMsg(b.success ? `✗ Request denied.` : `✗ [Prototype] Marked denied.`)
+                              } catch {
+                                setAccessRequests(prev => prev.map(x => x.id === req.id ? { ...x, status: 'denied' } : x))
+                                setRequestActionMsg(`✗ [Prototype] Marked denied.`)
+                              }
+                              setRequestActionId(null)
+                            }}
+                            style={{
+                              padding: '5px 12px', background: 'rgba(204,51,51,0.08)',
+                              border: '1px solid rgba(204,51,51,0.25)', borderRadius: 4,
+                              color: ERR + 'aa', fontSize: 10, letterSpacing: '0.12em',
+                              cursor: requestActionId === req.id ? 'not-allowed' : 'pointer',
+                              textTransform: 'uppercase', fontFamily: 'Georgia, serif',
+                            }}
+                          >
+                            Deny
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </Card>
+        </div>
+
         {/* ── Footer ───────────────────────────────────────── */}
         <div style={{
           marginTop:  '2rem',
@@ -772,7 +946,7 @@ export default function Admin() {
           fontSize:   '11px',
           letterSpacing: '0.08em',
         }}>
-          <span>NOVEE OS · Phase 9.5</span>
+          <span>NOVEE OS · Phase 10</span>
           <span>Admin Role: {roleLabel}</span>
           <span>Permissions: {permissions.length}</span>
         </div>

@@ -1,7 +1,9 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useGuestSession } from './context/GuestSessionContext.jsx'
+import { DemoModeProvider } from './context/DemoModeContext.jsx'
 import Layout from './components/Layout.jsx'
+import DemoBanner from './components/demo/DemoBanner.jsx'
 
 // ── Critical boot-path pages — eager loaded ───────────────────
 import Home             from './pages/Home.jsx'
@@ -52,16 +54,20 @@ import PourCraft from './pages/PourCraft.jsx'
 import BeerCraft from './pages/BeerCraft.jsx'
 import WineCraft from './pages/WineCraft.jsx'
 
-// ── Auth screens — lazy (only reached after choosing to log in) ─
+// ── Auth screens — lazy ───────────────────────────────────────
 const StaffLogin   = lazy(() => import('./pages/StaffLogin.jsx'))
 const AdminLogin   = lazy(() => import('./pages/AdminLogin.jsx'))
 const FounderLogin = lazy(() => import('./pages/FounderLogin.jsx'))
+const MentorLogin  = lazy(() => import('./pages/MentorLogin.jsx'))
+const DevLogin     = lazy(() => import('./pages/DevLogin.jsx'))
 
 // ── Protected heavy pages — lazy loaded ──────────────────────
-const POS3          = lazy(() => import('./pages/POS3.jsx'))
-const EATCommand    = lazy(() => import('./pages/EATCommand.jsx'))
-const Admin         = lazy(() => import('./pages/Admin.jsx'))
-const FounderControl= lazy(() => import('./pages/FounderControl.jsx'))
+const POS3           = lazy(() => import('./pages/POS3.jsx'))
+const EATCommand     = lazy(() => import('./pages/EATCommand.jsx'))
+const Admin          = lazy(() => import('./pages/Admin.jsx'))
+const FounderControl = lazy(() => import('./pages/FounderControl.jsx'))
+const MentorConsole  = lazy(() => import('./pages/MentorConsole.jsx'))
+const DevDiagnostics = lazy(() => import('./pages/DevDiagnostics.jsx'))
 
 import ProtectedRoute  from './components/security/ProtectedRoute.jsx'
 import DevRoleSwitcher from './components/security/DevRoleSwitcher.jsx'
@@ -87,28 +93,19 @@ const SystemOverview = lazy(() => import('./pages/SystemOverview.jsx'))
 function NOVEELoader() {
   return (
     <div style={{
-      minHeight:   '100vh',
-      background:  '#0a0603',
-      display:     'flex',
-      alignItems:  'center',
-      justifyContent: 'center',
-      fontFamily:  'Georgia, serif',
-      flexDirection: 'column',
-      gap:         '0.75rem',
+      minHeight: '100vh', background: '#0a0603',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: 'Georgia, serif', flexDirection: 'column', gap: '0.75rem',
     }}>
       <div style={{
-        width:        '28px',
-        height:       '28px',
-        border:       '2px solid rgba(201,168,76,0.15)',
-        borderTop:    '2px solid rgba(201,168,76,0.6)',
-        borderRadius: '50%',
-        animation:    'spin 0.9s linear infinite',
+        width: '28px', height: '28px',
+        border: '2px solid rgba(201,168,76,0.15)',
+        borderTop: '2px solid rgba(201,168,76,0.6)',
+        borderRadius: '50%', animation: 'spin 0.9s linear infinite',
       }} />
       <div style={{
-        color:         'rgba(201,168,76,0.4)',
-        fontSize:      '10px',
-        letterSpacing: '0.25em',
-        textTransform: 'uppercase',
+        color: 'rgba(201,168,76,0.4)', fontSize: '10px',
+        letterSpacing: '0.25em', textTransform: 'uppercase',
       }}>
         Loading NOVEE OS module…
       </div>
@@ -129,7 +126,7 @@ function RouteTracker() {
 }
 
 function BootGuard({ children }) {
-  const booted = sessionStorage.getItem('novee_booted')
+  const booted    = sessionStorage.getItem('novee_booted')
   const devBypass = import.meta.env.DEV && new URLSearchParams(window.location.search).get('preview') === '1'
   if (devBypass) { sessionStorage.setItem('novee_booted', '1') }
   if (!booted && !devBypass) {
@@ -144,253 +141,296 @@ function BootGuard({ children }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <RouteTracker />
-      <KioskShell>
-      <Suspense fallback={<NOVEELoader />}>
-        <Routes>
-          {/* ── Boot — always accessible ─────────────────────── */}
-          <Route path="boot" element={<Boot />} />
+    <DemoModeProvider>
+      <BrowserRouter>
+        <RouteTracker />
+        {/* Persistent Demo Mode banner — renders on top of all routes */}
+        <DemoBanner />
+        <KioskShell>
+        <Suspense fallback={<NOVEELoader />}>
+          <Routes>
+            {/* ── Boot — always accessible ─────────────────────── */}
+            <Route path="boot" element={<Boot />} />
 
-          {/* ── Login screens — lazy, accessible without boot ─── */}
-          <Route path="staff-login"   element={<StaffLogin />} />
-          <Route path="admin-login"   element={<AdminLogin />} />
-          <Route path="founder-login" element={<FounderLogin />} />
+            {/* ── Login screens — lazy, accessible without boot ─── */}
+            <Route path="staff-login"   element={<StaffLogin />} />
+            <Route path="admin-login"   element={<AdminLogin />} />
+            <Route path="founder-login" element={<FounderLogin />} />
+            <Route path="mentor-login"  element={<MentorLogin />} />
+            <Route path="dev-login"     element={<DevLogin />} />
 
-          {/* ── All app routes — guarded by boot + Layout ─────── */}
-          <Route
-            element={
-              <BootGuard>
-                <Layout />
-              </BootGuard>
-            }
-          >
-            <Route index           element={<Home />} />
-            <Route path="crafthub" element={<CraftHub />} />
+            {/* ── All app routes — guarded by boot + Layout ─────── */}
+            <Route
+              element={
+                <BootGuard>
+                  <Layout />
+                </BootGuard>
+              }
+            >
+              <Route index           element={<Home />} />
+              <Route path="crafthub" element={<CraftHub />} />
 
-            {/* SmokeCraft 360 — guest-accessible */}
-            <Route path="smokecraft">
-              <Route index element={<SmokeCraft />} />
-              <Route path="enroll"           element={<Enroll />} />
-              <Route path="golden-box">
-                <Route index             element={<GoldenBox />} />
-                <Route path="status"     element={<GoldenBoxStatus />} />
+              {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
+              <Route path="smokecraft">
+                <Route index element={<SmokeCraft />} />
+                <Route path="enroll"           element={<Enroll />} />
+                <Route path="golden-box">
+                  <Route index             element={<GoldenBox />} />
+                  <Route path="status"     element={<GoldenBoxStatus />} />
+                </Route>
+                <Route path="art"            element={<Art />} />
+                <Route path="mentor"         element={<Mentor />} />
+                <Route path="origins"        element={<Origins />} />
+                <Route path="leaves"         element={<Leaves />} />
+                <Route path="leaf-challenge"             element={<LeafChallenge />} />
+                <Route path="leaf-challenge-calculating" element={<LeafChallengeCalculating />} />
+                <Route path="leaf-challenge-result"      element={<LeafChallengeResult />} />
+                <Route path="cultivation"    element={<Cultivation />} />
+                <Route path="blend"          element={<Blend />} />
+                <Route path="flavor-dna"     element={<FlavorDNA />} />
+                <Route path="pairing"        element={<Pairing />} />
+                <Route path="available"      element={<Available />} />
+                <Route path="session-complete" element={<SessionComplete />} />
+                <Route path="terroir"        element={<Terroir />} />
+                <Route path="pairing-mastery" element={<PairingMastery />} />
+                <Route path="vitola"         element={<Vitola />} />
+                <Route path="identity"       element={<Identity />} />
+                <Route path="leaderboard"    element={<Leaderboard />} />
+                <Route path="passport-stamp" element={<PassportStamp />} />
               </Route>
-              <Route path="art"            element={<Art />} />
-              <Route path="mentor"         element={<Mentor />} />
-              <Route path="origins"        element={<Origins />} />
-              <Route path="leaves"         element={<Leaves />} />
-              <Route path="leaf-challenge"             element={<LeafChallenge />} />
-              <Route path="leaf-challenge-calculating" element={<LeafChallengeCalculating />} />
-              <Route path="leaf-challenge-result"      element={<LeafChallengeResult />} />
-              <Route path="cultivation"    element={<Cultivation />} />
-              <Route path="blend"          element={<Blend />} />
-              <Route path="flavor-dna"     element={<FlavorDNA />} />
-              <Route path="pairing"        element={<Pairing />} />
-              <Route path="available"      element={<Available />} />
-              <Route path="session-complete" element={<SessionComplete />} />
-              <Route path="terroir"        element={<Terroir />} />
-              <Route path="pairing-mastery" element={<PairingMastery />} />
-              <Route path="vitola"         element={<Vitola />} />
-              <Route path="identity"       element={<Identity />} />
-              <Route path="leaderboard"    element={<Leaderboard />} />
-              <Route path="passport-stamp" element={<PassportStamp />} />
+
+              {/* 360 Passport — guest-accessible + demo-allowed */}
+              <Route path="passport">
+                <Route index                  element={<PassportHome />} />
+                <Route path="profile"         element={<PassportProfile />} />
+                <Route path="stamps"          element={<PassportStamps />} />
+                <Route path="directory"       element={<PassportDirectory />} />
+                <Route path="connections"     element={<PassportConnections />} />
+                <Route path="events"          element={<PassportEvents />} />
+                <Route path="benefits"        element={<PassportBenefits />} />
+                <Route path="scan"            element={<PassportScan />} />
+                <Route path="how-it-works"    element={<PassportHowItWorks />} />
+                <Route path="ceremony"        element={<Navigate to="/smokecraft/passport-stamp" replace />} />
+                <Route path="leaderboard"     element={<Navigate to="/smokecraft/leaderboard" replace />} />
+              </Route>
+
+              <Route path="passport-networking" element={<PassportConnection />} />
+              <Route path="grand-lounge-ranking" element={<Leaderboard />} />
+              <Route path="dayone360-travel"    element={<DayOneTravel />} />
+              <Route path="pourcraft"  element={<PourCraft />} />
+              <Route path="beercraft"  element={<BeerCraft />} />
+              <Route path="winecraft"  element={<WineCraft />} />
+
+              {/* ── Mentor Console — sidecar role (access_mentor_console) ─ */}
+              <Route path="mentor-console" element={
+                <ProtectedRoute
+                  requiredPermission="access_mentor_console"
+                  loginRoute="/mentor-login"
+                  loginLabel="Mentor Login"
+                  lockedMessage="Mentor Console requires Human Mentor access. Contact an admin to request this role."
+                  demoBlocked={false}
+                >
+                  <MentorConsole />
+                </ProtectedRoute>
+              } />
+
+              {/* ── Developer Diagnostics — sidecar role (view_diagnostics) ─ */}
+              <Route path="dev-diagnostics" element={
+                <ProtectedRoute
+                  requiredPermission="view_diagnostics"
+                  loginRoute="/dev-login"
+                  loginLabel="Developer Login"
+                  lockedMessage="Developer Diagnostics requires an active developer access grant issued by Founder Level 0."
+                  demoBlocked
+                >
+                  <DevDiagnostics />
+                </ProtectedRoute>
+              } />
+
+              {/* ── Protected: staff+ — BLOCKED in demo mode ────── */}
+              <Route path="pos" element={
+                <ProtectedRoute
+                  requiredPermission="access_pos3_staff"
+                  loginRoute="/staff-login"
+                  loginLabel="Staff Login"
+                  lockedMessage="POS 3 requires staff-level access. Please sign in with your staff PIN."
+                  demoBlocked
+                >
+                  <POS3 />
+                </ProtectedRoute>
+              } />
+
+              {/* ── Protected: manager+ — BLOCKED in demo mode ───── */}
+              <Route path="eat" element={
+                <ProtectedRoute
+                  requiredPermission="access_eat_command"
+                  loginRoute="/admin-login"
+                  loginLabel="Manager / Admin Login"
+                  lockedMessage="E.A.T. Command requires manager-level access or higher."
+                  demoBlocked
+                >
+                  <EATCommand />
+                </ProtectedRoute>
+              } />
+
+              {/* ── Protected: admin+ — BLOCKED in demo mode ──────── */}
+              <Route path="admin" element={
+                <ProtectedRoute
+                  allowedRoles={['admin', 'founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin Login"
+                  lockedMessage="NOVEE OS Admin requires admin-level access or higher."
+                  demoBlocked
+                >
+                  <Admin />
+                </ProtectedRoute>
+              } />
+
+              {/* ── Protected: founder only — BLOCKED in demo mode ── */}
+              <Route path="founder" element={
+                <ProtectedRoute
+                  allowedRoles={['founder_level_0']}
+                  loginRoute="/founder-login"
+                  loginLabel="Founder Login"
+                  lockedMessage="Founder Level 0 access required. This area cannot be delegated."
+                  demoBlocked
+                >
+                  <FounderControl />
+                </ProtectedRoute>
+              } />
+
+              {/* /offline — public */}
+              <Route path="offline" element={<OfflineMode />} />
+
+              {/* /device-status — BLOCKED in demo mode */}
+              <Route path="device-status" element={
+                <ProtectedRoute
+                  allowedRoles={['staff','manager','admin','founder_level_0']}
+                  loginRoute="/staff-login"
+                  loginLabel="Staff Login"
+                  lockedMessage="Device status requires staff-level access or higher."
+                  demoBlocked
+                >
+                  <DeviceStatus />
+                </ProtectedRoute>
+              } />
+
+              {/* /kiosk-setup — BLOCKED in demo mode */}
+              <Route path="kiosk-setup" element={
+                <ProtectedRoute
+                  allowedRoles={['manager','admin','founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Manager Login"
+                  lockedMessage="Kiosk setup requires manager-level access or higher."
+                  demoBlocked
+                >
+                  <KioskSetup />
+                </ProtectedRoute>
+              } />
+
+              {/* /install-help — BLOCKED in demo mode */}
+              <Route path="install-help" element={
+                <ProtectedRoute
+                  allowedRoles={['manager','admin','founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Manager Login"
+                  lockedMessage="Install help requires manager-level access or higher."
+                  demoBlocked
+                >
+                  <InstallHelp />
+                </ProtectedRoute>
+              } />
+
+              {/* /venue-test — BLOCKED in demo mode */}
+              <Route path="venue-test" element={
+                <ProtectedRoute
+                  allowedRoles={['manager','admin','founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Manager Login"
+                  lockedMessage="Venue testing requires manager-level access or higher."
+                  demoBlocked
+                >
+                  <VenueTestControl />
+                </ProtectedRoute>
+              } />
+
+              {/* ── Phase 13: Founder demo / investor / pilot ────── */}
+              <Route path="founder-demo" element={
+                <ProtectedRoute
+                  allowedRoles={['founder_level_0']}
+                  loginRoute="/founder-login"
+                  loginLabel="Founder Login"
+                  lockedMessage="Founder demo requires founder-level access."
+                  demoBlocked
+                >
+                  <FounderDemo />
+                </ProtectedRoute>
+              } />
+              <Route path="investor-demo" element={
+                <ProtectedRoute
+                  allowedRoles={['founder_level_0']}
+                  loginRoute="/founder-login"
+                  loginLabel="Founder Login"
+                  lockedMessage="Investor demo requires founder-level access."
+                  demoBlocked
+                >
+                  <InvestorDemo />
+                </ProtectedRoute>
+              } />
+              <Route path="venue-demo" element={
+                <ProtectedRoute
+                  allowedRoles={['manager','admin','founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Manager Login"
+                  lockedMessage="Venue demo requires manager-level access or higher."
+                  demoBlocked={false}
+                >
+                  <VenueOwnerDemo />
+                </ProtectedRoute>
+              } />
+              <Route path="pilot-onboarding" element={
+                <ProtectedRoute
+                  allowedRoles={['admin','founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin Login"
+                  lockedMessage="Pilot onboarding requires admin-level access or higher."
+                  demoBlocked
+                >
+                  <PilotOnboarding />
+                </ProtectedRoute>
+              } />
+              <Route path="system-overview" element={
+                <ProtectedRoute
+                  allowedRoles={['manager','admin','founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Manager Login"
+                  lockedMessage="System overview requires manager-level access or higher."
+                  demoBlocked
+                >
+                  <SystemOverview />
+                </ProtectedRoute>
+              } />
+
+              {/* Route aliases */}
+              <Route path="craft-hub"    element={<Navigate to="/crafthub" replace />} />
+              <Route path="craft-modules" element={<Navigate to="/crafthub" replace />} />
+              <Route path="dashboard"    element={<Navigate to="/crafthub" replace />} />
+              <Route path="command-center" element={<Navigate to="/eat" replace />} />
+              <Route path="eat-command"  element={<Navigate to="/eat" replace />} />
+              <Route path="smokecraft/session-1" element={<Navigate to="/smokecraft" replace />} />
+              <Route path="smokecraft/session-2" element={<Navigate to="/smokecraft" replace />} />
+              <Route path="smokecraft/session-3" element={<Navigate to="/smokecraft" replace />} />
+              <Route path="smokecraft/session-4" element={<Navigate to="/smokecraft" replace />} />
+
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
+          </Routes>
+        </Suspense>
 
-            {/* 360 Passport — guest-accessible */}
-            <Route path="passport">
-              <Route index                  element={<PassportHome />} />
-              <Route path="profile"         element={<PassportProfile />} />
-              <Route path="stamps"          element={<PassportStamps />} />
-              <Route path="directory"       element={<PassportDirectory />} />
-              <Route path="connections"     element={<PassportConnections />} />
-              <Route path="events"          element={<PassportEvents />} />
-              <Route path="benefits"        element={<PassportBenefits />} />
-              <Route path="scan"            element={<PassportScan />} />
-              <Route path="how-it-works"    element={<PassportHowItWorks />} />
-              <Route path="ceremony"        element={<Navigate to="/smokecraft/passport-stamp" replace />} />
-              <Route path="leaderboard"     element={<Navigate to="/smokecraft/leaderboard" replace />} />
-            </Route>
-
-            <Route path="passport-networking" element={<PassportConnection />} />
-            <Route path="grand-lounge-ranking" element={<Leaderboard />} />
-            <Route path="dayone360-travel"    element={<DayOneTravel />} />
-            <Route path="pourcraft"  element={<PourCraft />} />
-            <Route path="beercraft"  element={<BeerCraft />} />
-            <Route path="winecraft"  element={<WineCraft />} />
-
-            {/* ── Protected: staff+ ────────────────────────────── */}
-            <Route path="pos" element={
-              <ProtectedRoute
-                requiredPermission="access_pos3_staff"
-                loginRoute="/staff-login"
-                loginLabel="Staff Login"
-                lockedMessage="POS 3 requires staff-level access. Please sign in with your staff PIN."
-              >
-                <POS3 />
-              </ProtectedRoute>
-            } />
-
-            {/* ── Protected: manager+ ──────────────────────────── */}
-            <Route path="eat" element={
-              <ProtectedRoute
-                requiredPermission="access_eat_command"
-                loginRoute="/admin-login"
-                loginLabel="Manager / Admin Login"
-                lockedMessage="E.A.T. Command requires manager-level access or higher."
-              >
-                <EATCommand />
-              </ProtectedRoute>
-            } />
-
-            {/* ── Protected: admin+ ────────────────────────────── */}
-            <Route path="admin" element={
-              <ProtectedRoute
-                allowedRoles={['admin', 'founder_level_0']}
-                loginRoute="/admin-login"
-                loginLabel="Admin Login"
-                lockedMessage="NOVEE OS Admin requires admin-level access or higher."
-              >
-                <Admin />
-              </ProtectedRoute>
-            } />
-
-            {/* ── Protected: founder_level_0 only ──────────────── */}
-            <Route path="founder" element={
-              <ProtectedRoute
-                allowedRoles={['founder_level_0']}
-                loginRoute="/founder-login"
-                loginLabel="Founder Login"
-                lockedMessage="Founder Level 0 access required. This area cannot be delegated."
-              >
-                <FounderControl />
-              </ProtectedRoute>
-            } />
-
-            {/* ── Phase 11: Kiosk / Deployment pages ──────────── */}
-
-            {/* /offline — public, no boot required */}
-            <Route path="offline" element={<OfflineMode />} />
-
-            {/* /device-status — staff+ */}
-            <Route path="device-status" element={
-              <ProtectedRoute
-                allowedRoles={['staff','manager','admin','founder_level_0']}
-                loginRoute="/staff-login"
-                loginLabel="Staff Login"
-                lockedMessage="Device status requires staff-level access or higher."
-              >
-                <DeviceStatus />
-              </ProtectedRoute>
-            } />
-
-            {/* /kiosk-setup — manager+ */}
-            <Route path="kiosk-setup" element={
-              <ProtectedRoute
-                allowedRoles={['manager','admin','founder_level_0']}
-                loginRoute="/admin-login"
-                loginLabel="Manager Login"
-                lockedMessage="Kiosk setup requires manager-level access or higher."
-              >
-                <KioskSetup />
-              </ProtectedRoute>
-            } />
-
-            {/* /install-help — manager+ */}
-            <Route path="install-help" element={
-              <ProtectedRoute
-                allowedRoles={['manager','admin','founder_level_0']}
-                loginRoute="/admin-login"
-                loginLabel="Manager Login"
-                lockedMessage="Install help requires manager-level access or higher."
-              >
-                <InstallHelp />
-              </ProtectedRoute>
-            } />
-
-            {/* /venue-test — Phase 12: Venue Test Control, manager+ */}
-            <Route path="venue-test" element={
-              <ProtectedRoute
-                allowedRoles={['manager','admin','founder_level_0']}
-                loginRoute="/admin-login"
-                loginLabel="Manager Login"
-                lockedMessage="Venue testing requires manager-level access or higher."
-              >
-                <VenueTestControl />
-              </ProtectedRoute>
-            } />
-
-            {/* ── Phase 13: Founder demo / investor / pilot ────── */}
-            <Route path="founder-demo" element={
-              <ProtectedRoute
-                allowedRoles={['founder_level_0']}
-                loginRoute="/founder-login"
-                loginLabel="Founder Login"
-                lockedMessage="Founder demo requires founder-level access."
-              >
-                <FounderDemo />
-              </ProtectedRoute>
-            } />
-            <Route path="investor-demo" element={
-              <ProtectedRoute
-                allowedRoles={['founder_level_0']}
-                loginRoute="/founder-login"
-                loginLabel="Founder Login"
-                lockedMessage="Investor demo requires founder-level access."
-              >
-                <InvestorDemo />
-              </ProtectedRoute>
-            } />
-            <Route path="venue-demo" element={
-              <ProtectedRoute
-                allowedRoles={['manager','admin','founder_level_0']}
-                loginRoute="/admin-login"
-                loginLabel="Manager Login"
-                lockedMessage="Venue demo requires manager-level access or higher."
-              >
-                <VenueOwnerDemo />
-              </ProtectedRoute>
-            } />
-            <Route path="pilot-onboarding" element={
-              <ProtectedRoute
-                allowedRoles={['admin','founder_level_0']}
-                loginRoute="/admin-login"
-                loginLabel="Admin Login"
-                lockedMessage="Pilot onboarding requires admin-level access or higher."
-              >
-                <PilotOnboarding />
-              </ProtectedRoute>
-            } />
-            <Route path="system-overview" element={
-              <ProtectedRoute
-                allowedRoles={['manager','admin','founder_level_0']}
-                loginRoute="/admin-login"
-                loginLabel="Manager Login"
-                lockedMessage="System overview requires manager-level access or higher."
-              >
-                <SystemOverview />
-              </ProtectedRoute>
-            } />
-
-            {/* Route aliases */}
-            <Route path="craft-hub"    element={<Navigate to="/crafthub" replace />} />
-            <Route path="craft-modules" element={<Navigate to="/crafthub" replace />} />
-            <Route path="dashboard"    element={<Navigate to="/crafthub" replace />} />
-            <Route path="command-center" element={<Navigate to="/eat" replace />} />
-            <Route path="eat-command"  element={<Navigate to="/eat" replace />} />
-            <Route path="smokecraft/session-1" element={<Navigate to="/smokecraft" replace />} />
-            <Route path="smokecraft/session-2" element={<Navigate to="/smokecraft" replace />} />
-            <Route path="smokecraft/session-3" element={<Navigate to="/smokecraft" replace />} />
-            <Route path="smokecraft/session-4" element={<Navigate to="/smokecraft" replace />} />
-
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
-        </Routes>
-      </Suspense>
-
-      {/* Dev-only floating role switcher — stripped in production by import.meta.env.DEV */}
-      <DevRoleSwitcher />
-      </KioskShell>
-    </BrowserRouter>
+        {/* Dev-only floating role switcher */}
+        <DevRoleSwitcher />
+        </KioskShell>
+      </BrowserRouter>
+    </DemoModeProvider>
   )
 }

@@ -1,13 +1,15 @@
 /**
- * Auth Service — Phase 8.5
+ * Auth Service — Phase 10 (Auth v2)
  * Handles PIN/credential hashing, JWT lifecycle, session management,
- * lockout enforcement, and login attempt logging.
+ * lockout enforcement, login attempt logging, and refresh token rotation.
  *
  * SECURITY RULES enforced here:
  * - Raw PINs are NEVER logged or stored
  * - Credential hashes are NEVER returned to any caller
  * - Founder login requires email + PIN + founder challenge
  * - bcrypt with cost factor 10 for all hashes
+ * - Cookie maxAge always matches JWT lifetime per role
+ * - Refresh tokens use secure random bytes, stored as bcrypt hashes
  */
 
 import bcrypt from 'bcrypt'
@@ -33,28 +35,34 @@ export const hashFounderSecret = (secret) =>
 export const verifyFounderSecret = (secret, hash) =>
   hash ? bcrypt.compare(String(secret).trim(), hash) : Promise.resolve(false)
 
+export const hashToken = (token) =>
+  bcrypt.hash(token, SALT_ROUNDS)
+
+export const verifyToken = (token, hash) =>
+  hash ? bcrypt.compare(token, hash) : Promise.resolve(false)
+
 // ── JWT ───────────────────────────────────────────────────────
 
 /**
  * Creates a signed JWT and a unique token ID (jti) for session tracking.
- * @param {{ userId, role, email, displayName }} user
+ * @param {{ userId, role, email, displayName, staffId?, profileId? }} user
  * @returns {{ token: string, tokenId: string, expiresIn: string }}
  */
 export function createJwtForUser(user) {
   const tokenId  = crypto.randomUUID()
   const expiresIn = getExpiresIn(user.role)
 
-  const token = jwt.sign(
-    {
-      sub:         user.userId,
-      role:        user.role,
-      email:       user.email       || null,
-      displayName: user.displayName || null,
-      jti:         tokenId,
-    },
-    authConfig.JWT_SECRET,
-    { expiresIn }
-  )
+  const payload = {
+    sub:         user.userId,
+    role:        user.role,
+    email:       user.email       || null,
+    displayName: user.displayName || null,
+    jti:         tokenId,
+  }
+  if (user.staffId)   payload.staffId   = user.staffId
+  if (user.profileId) payload.profileId = user.profileId
+
+  const token = jwt.sign(payload, authConfig.JWT_SECRET, { expiresIn })
 
   return { token, tokenId, expiresIn }
 }
@@ -98,8 +106,7 @@ export async function createAuthSession(user, tokenId, req) {
 }
 
 /**
- * Marks a session as revoked. The JWT itself cannot be un-issued,
- * but /api/auth/me and requireAuth check for revoked sessions.
+ * Marks a session as revoked.
  */
 export async function revokeAuthSession(sessionTokenId) {
   if (!isDbAvailable() || !sessionTokenId) return false
@@ -130,6 +137,96 @@ export async function isSessionRevoked(sessionTokenId) {
   } catch { return false }
 }
 
+// ── Passport Member Refresh Token Rotation ────────────────────
+
+/**
+ * Issues a new refresh token for a Passport Member profile.
+ * Returns the raw token (only time it is visible — must be stored by caller).
+ */
+export async function createPassportRefreshToken(profileId, req) {
+  if (!isDbAvailable()) return null
+  const rawToken   = crypto.randomBytes(48).toString('hex')
+  const tokenHash  = await hashToken(rawToken)
+  const expiresAt  = new Date(Date.now() + authConfig.PASSPORT_MEMBER_REFRESH_EXPIRES_IN_MS)
+
+  try {
+    await query(
+      `INSERT INTO passport_member_refresh_tokens
+         (profile_id, token_hash, device_label, ip_address, user_agent, expires_at)
+       VALUES ($1,$2,$3,$4,$5,$6)`,
+      [
+        profileId,
+        tokenHash,
+        req?.headers?.['x-device-label'] || 'default',
+        req?.ip || req?.headers?.['x-forwarded-for'] || 'unknown',
+        req?.headers?.['user-agent'] || 'unknown',
+        expiresAt,
+      ]
+    )
+    return rawToken
+  } catch (err) {
+    console.warn('[authService] createPassportRefreshToken:', err.message)
+    return null
+  }
+}
+
+/**
+ * Rotates a Passport Member refresh token.
+ * Old token is revoked; a new one is issued and returned.
+ * Returns null if the token is invalid, expired, or already revoked.
+ */
+export async function rotatePassportRefreshToken(rawOldToken, profileId, req) {
+  if (!isDbAvailable()) return null
+
+  // Fetch all active (non-revoked, non-expired) tokens for this profile
+  try {
+    const result = await query(
+      `SELECT id, token_id, token_hash, expires_at
+       FROM passport_member_refresh_tokens
+       WHERE profile_id=$1 AND revoked=false AND expires_at > NOW()`,
+      [profileId]
+    )
+
+    let matched = null
+    for (const row of result.rows) {
+      const ok = await verifyToken(rawOldToken, row.token_hash)
+      if (ok) { matched = row; break }
+    }
+
+    if (!matched) return null
+
+    // Revoke the old token
+    await query(
+      `UPDATE passport_member_refresh_tokens
+       SET revoked=true, revoked_at=NOW(), revoke_reason='rotated'
+       WHERE id=$1`,
+      [matched.id]
+    )
+
+    // Issue a new token
+    return createPassportRefreshToken(profileId, req)
+  } catch (err) {
+    console.warn('[authService] rotatePassportRefreshToken:', err.message)
+    return null
+  }
+}
+
+/**
+ * Revokes all refresh tokens for a Passport Member profile (logout all devices).
+ */
+export async function revokeAllPassportRefreshTokens(profileId, reason = 'logout') {
+  if (!isDbAvailable()) return false
+  try {
+    await query(
+      `UPDATE passport_member_refresh_tokens
+       SET revoked=true, revoked_at=NOW(), revoke_reason=$2
+       WHERE profile_id=$1 AND revoked=false`,
+      [profileId, reason]
+    )
+    return true
+  } catch { return false }
+}
+
 // ── Credential lookup ─────────────────────────────────────────
 
 /**
@@ -148,15 +245,14 @@ export async function getCredentials(userId) {
 
 /**
  * Returns all active users of the given role(s) with their credentials.
- * Used for PIN-only staff login (no username provided).
- * NEVER includes the hashes in returned "user" objects — only for internal matching.
+ * Used for PIN-only fallback scan (legacy / no staff ID).
  */
 export async function getActiveUsersWithCredentials(roles) {
   if (!isDbAvailable()) return []
   const roleList = Array.isArray(roles) ? roles : [roles]
   try {
     const result = await query(
-      `SELECT su.*, ac.pin_hash, ac.founder_secret_hash, ac.failed_attempts, ac.locked_until
+      `SELECT su.*, ac.pin_hash, ac.failed_attempts, ac.locked_until, ac.staff_id
        FROM system_users su
        LEFT JOIN auth_credentials ac ON su.user_id = ac.user_id
        WHERE su.role = ANY($1) AND su.status = 'active'`,
@@ -167,7 +263,27 @@ export async function getActiveUsersWithCredentials(roles) {
 }
 
 /**
- * Returns a single active user by email.
+ * Looks up a single active staff user by Staff ID (ATL-001 format).
+ * Used for targeted Staff ID + PIN login — prevents lockout amplification.
+ */
+export async function getActiveUserByStaffId(staffId) {
+  if (!isDbAvailable()) return null
+  try {
+    const result = await query(
+      `SELECT su.*, ac.pin_hash, ac.failed_attempts, ac.locked_until, ac.staff_id AS cred_staff_id
+       FROM system_users su
+       LEFT JOIN auth_credentials ac ON su.user_id = ac.user_id
+       WHERE (su.staff_id = $1 OR ac.staff_id = $1)
+         AND su.status = 'active'
+       LIMIT 1`,
+      [staffId.toUpperCase()]
+    )
+    return result.rows[0] || null
+  } catch { return null }
+}
+
+/**
+ * Returns a single active user by email with optional role filter.
  */
 export async function getActiveUserByEmail(email, roles) {
   if (!isDbAvailable()) return null
@@ -184,6 +300,25 @@ export async function getActiveUserByEmail(email, roles) {
          WHERE LOWER(su.email)=LOWER($1) AND su.status='active'`
     const params = roleList ? [email, roleList] : [email]
     const result = await query(sql, params)
+    return result.rows[0] || null
+  } catch { return null }
+}
+
+/**
+ * Returns a single active Passport Member profile by email or phone.
+ */
+export async function getPassportMemberByContact(contact) {
+  if (!isDbAvailable()) return null
+  try {
+    const result = await query(
+      `SELECT pmp.*, su.display_name, su.status as user_status
+       FROM passport_member_profiles pmp
+       LEFT JOIN system_users su ON pmp.user_id = su.user_id
+       WHERE (LOWER(pmp.email)=LOWER($1) OR pmp.phone=$1)
+         AND pmp.is_verified=true
+       LIMIT 1`,
+      [contact]
+    )
     return result.rows[0] || null
   } catch { return null }
 }
@@ -215,7 +350,9 @@ export async function clearFailedAttempts(userId) {
   if (!isDbAvailable()) return
   try {
     await query(
-      `UPDATE auth_credentials SET failed_attempts=0, locked_until=NULL, updated_at=NOW() WHERE user_id=$1`,
+      `UPDATE auth_credentials
+       SET failed_attempts=0, locked_until=NULL, updated_at=NOW()
+       WHERE user_id=$1`,
       [userId]
     )
   } catch {}
@@ -272,13 +409,34 @@ export async function recordFounderAccessEvent({ founderUserId, eventType, metad
 
 // ── Cookie helpers ────────────────────────────────────────────
 
-export function setAuthCookie(res, token) {
+/**
+ * Sets the HttpOnly auth cookie.
+ * maxAge is matched to the JWT lifetime for the given role.
+ * @param {import('express').Response} res
+ * @param {string} token — signed JWT
+ * @param {string} role  — user role (determines maxAge)
+ */
+export function setAuthCookie(res, token, role) {
   res.cookie(authConfig.AUTH_COOKIE_NAME, token, {
     httpOnly: true,
     secure:   authConfig.AUTH_COOKIE_SECURE,
     sameSite: authConfig.AUTH_COOKIE_SAMESITE,
     path:     authConfig.AUTH_COOKIE_PATH,
-    maxAge:   8 * 60 * 60 * 1000,
+    maxAge:   getExpiresInMs(role),
+  })
+}
+
+/**
+ * Sets a separate refresh token cookie for Passport Members.
+ * Long-lived (90 days), HttpOnly, secure.
+ */
+export function setRefreshCookie(res, refreshToken) {
+  res.cookie(authConfig.REFRESH_COOKIE_NAME, refreshToken, {
+    httpOnly: true,
+    secure:   authConfig.AUTH_COOKIE_SECURE,
+    sameSite: authConfig.AUTH_COOKIE_SAMESITE,
+    path:     '/api/auth',
+    maxAge:   authConfig.PASSPORT_MEMBER_REFRESH_EXPIRES_IN_MS,
   })
 }
 
@@ -286,13 +444,14 @@ export function clearAuthCookie(res) {
   res.clearCookie(authConfig.AUTH_COOKIE_NAME, { path: authConfig.AUTH_COOKIE_PATH })
 }
 
+export function clearRefreshCookie(res) {
+  res.clearCookie(authConfig.REFRESH_COOKIE_NAME, { path: '/api/auth' })
+}
+
 // ── PIN Reset ─────────────────────────────────────────────────
 
 /**
  * Resets a user's PIN hash. Never logs or returns the raw PIN.
- * @param {string} userId
- * @param {string} newPin — raw PIN (4–8 digits). Hashed here; never stored raw.
- * @returns {boolean} success
  */
 export async function resetUserPin(userId, newPin) {
   if (!isDbAvailable()) return false
@@ -311,16 +470,46 @@ export async function resetUserPin(userId, newPin) {
   }
 }
 
-// ── Private ───────────────────────────────────────────────────
+// ── Developer grant validation ────────────────────────────────
+
+/**
+ * Returns a valid, active dev access grant for a user, or null.
+ */
+export async function getActiveDevGrant(userId) {
+  if (!isDbAvailable()) return null
+  try {
+    const result = await query(
+      `SELECT * FROM dev_access_grants
+       WHERE user_id=$1 AND revoked=false AND expires_at > NOW()
+       LIMIT 1`,
+      [userId]
+    )
+    return result.rows[0] || null
+  } catch { return null }
+}
+
+// ── Private helpers ───────────────────────────────────────────
 
 function getExpiresIn(role) {
-  if (role === 'founder_level_0') return authConfig.FOUNDER_SESSION_EXPIRES_IN
-  if (['admin', 'manager'].includes(role)) return authConfig.ADMIN_SESSION_EXPIRES_IN
-  return authConfig.STAFF_PIN_EXPIRES_IN
+  switch (role) {
+    case 'founder_level_0': return authConfig.FOUNDER_JWT_EXPIRES_IN
+    case 'admin':           return authConfig.ADMIN_JWT_EXPIRES_IN
+    case 'manager':         return authConfig.ADMIN_JWT_EXPIRES_IN
+    case 'human_mentor':    return authConfig.HUMAN_MENTOR_JWT_EXPIRES_IN
+    case 'developer':       return authConfig.DEVELOPER_JWT_EXPIRES_IN
+    case 'passport_member': return authConfig.PASSPORT_MEMBER_JWT_EXPIRES_IN
+    default:                return authConfig.STAFF_JWT_EXPIRES_IN
+  }
 }
 
 function getExpiresInMs(role) {
-  if (role === 'founder_level_0') return authConfig.FOUNDER_SESSION_EXPIRES_IN_MS
-  if (['admin', 'manager'].includes(role)) return authConfig.ADMIN_SESSION_EXPIRES_IN_MS
-  return authConfig.STAFF_PIN_EXPIRES_IN_MS
+  switch (role) {
+    case 'founder_level_0': return authConfig.FOUNDER_JWT_EXPIRES_IN_MS
+    case 'admin':           return authConfig.ADMIN_JWT_EXPIRES_IN_MS
+    case 'manager':         return authConfig.ADMIN_JWT_EXPIRES_IN_MS
+    case 'human_mentor':    return authConfig.HUMAN_MENTOR_JWT_EXPIRES_IN_MS
+    case 'developer':       return authConfig.DEVELOPER_JWT_EXPIRES_IN_MS
+    case 'passport_member': return authConfig.PASSPORT_MEMBER_JWT_EXPIRES_IN_MS
+    default:                return authConfig.STAFF_JWT_EXPIRES_IN_MS
+  }
 }

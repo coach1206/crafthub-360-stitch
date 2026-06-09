@@ -1,12 +1,15 @@
 /**
- * Auth Context — Phase 8.5
+ * Auth Context — Phase 10 (Auth v2)
  * The verified backend identity layer for NOVEE OS.
  *
  * On mount, calls GET /api/auth/me to restore any active JWT session
  * (the HttpOnly cookie is sent automatically).
  *
- * Provides: loginStaff, loginAdmin, loginFounder, logout, refreshMe
- * Tracks:   user, role, isAuthenticated, isLoading, authError
+ * Provides:
+ *   loginStaff, loginAdmin, loginFounder, loginMentor, loginDev,
+ *   promoteMember, logout, refreshMe
+ *
+ * Tracks: user, role, isAuthenticated, isLoading, authError
  *
  * SecurityContext reads from this context to get the verified role.
  * Frontend localStorage is NOT the source of truth for role authority.
@@ -14,7 +17,7 @@
 
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import * as authApi from '../services/authApiService.js'
-import { ROLE_MAP } from '../config/roleMap.js'
+import { getEffectivePermissions } from '../config/roleMap.js'
 
 export const AuthContext = createContext(null)
 
@@ -49,9 +52,9 @@ export function AuthProvider({ children }) {
   }, [])
 
   // ── Staff PIN login ────────────────────────────────────────
-  const loginStaff = useCallback(async (pin) => {
+  const loginStaff = useCallback(async (pin, staffId = null) => {
     setAuthError(null)
-    const result = await authApi.staffPinLogin(pin)
+    const result = await authApi.staffPinLogin(pin, staffId)
     if (result?.data) {
       const user = { ...result.data, authenticated: true }
       setAuthUser(user)
@@ -90,12 +93,53 @@ export function AuthProvider({ children }) {
     return { success: false, error }
   }, [])
 
+  // ── Human Mentor login ────────────────────────────────────
+  const loginMentor = useCallback(async (email, pin) => {
+    setAuthError(null)
+    const result = await authApi.mentorLogin(email, pin)
+    if (result?.data) {
+      const user = { ...result.data, authenticated: true }
+      setAuthUser(user)
+      return { success: true, user }
+    }
+    const error = result?.message || 'Invalid credentials.'
+    setAuthError(error)
+    return { success: false, error }
+  }, [])
+
+  // ── Developer login ───────────────────────────────────────
+  const loginDev = useCallback(async (email, pin) => {
+    setAuthError(null)
+    const result = await authApi.devLogin(email, pin)
+    if (result?.data) {
+      const user = { ...result.data, authenticated: true }
+      setAuthUser(user)
+      return { success: true, user }
+    }
+    const error = result?.message || 'Invalid credentials or no active developer grant.'
+    setAuthError(error)
+    return { success: false, error }
+  }, [])
+
+  // ── Promote guest → Passport Member ──────────────────────
+  const promoteMember = useCallback(async (data) => {
+    setAuthError(null)
+    const result = await authApi.promoteGuestToMember(data)
+    if (result?.data) {
+      const user = { ...result.data, authenticated: true }
+      setAuthUser(user)
+      return { success: true, user }
+    }
+    const error = result?.message || 'Could not create Passport Member account.'
+    setAuthError(error)
+    return { success: false, error }
+  }, [])
+
   // ── Logout ────────────────────────────────────────────────
   const logout = useCallback(async () => {
     await authApi.logout()
     setAuthUser(null)
     setAuthError(null)
-    // Clear localStorage prototype session too
     try { localStorage.removeItem('novee_admin_session') } catch {}
   }, [])
 
@@ -105,10 +149,17 @@ export function AuthProvider({ children }) {
     isLoading,
     authError,
     role:        authUser?.role        || null,
-    permissions: ROLE_MAP[authUser?.role] || [],
+    email:       authUser?.email       || null,
+    displayName: authUser?.displayName || null,
+    staffId:     authUser?.staffId     || null,
+    profileId:   authUser?.profileId   || null,
+    permissions: getEffectivePermissions(authUser?.role || 'guest'),
     loginStaff,
     loginAdmin,
     loginFounder,
+    loginMentor,
+    loginDev,
+    promoteMember,
     logout,
     refreshMe,
   }
