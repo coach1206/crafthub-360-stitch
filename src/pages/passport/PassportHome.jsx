@@ -466,20 +466,18 @@ function NavBadge({ label, abbr, color, onClick, active }) {
         padding:'2px 4px', background:'none', border:'none', cursor:'pointer', minWidth:58,
         transform:pr?'scale(0.88)':'scale(1)', transition:'transform .1s' }}>
       <div style={{
-        width:50, height:40, borderRadius:12,
+        width:58, height:40, borderRadius:12,
         background: active ? color : C.ivory,
         border: active ? `2px solid ${color}` : `1.5px solid rgba(36,29,22,0.28)`,
-        display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:1,
+        display:'flex', alignItems:'center', justifyContent:'center',
         boxShadow: active
           ? `0 3px 10px ${color}50, inset 0 1px 0 rgba(255,255,255,0.3)`
           : `0 2px 6px rgba(36,29,22,0.12), inset 0 1px 0 rgba(255,255,255,0.7)`,
-        transition:'all .15s' }}>
-        <span style={{ fontFamily:MONO, fontWeight:800, fontSize:11,
+        transition:'all .15s', padding:'0 4px' }}>
+        <span style={{ fontFamily:MONO, fontWeight:800, fontSize:8,
           color: active ? '#fff' : C.charcoal,
-          letterSpacing:'0.05em', lineHeight:1 }}>{abbr}</span>
+          letterSpacing:'0.04em', lineHeight:1, textAlign:'center' }}>{label}</span>
       </div>
-      <span style={{ fontFamily:MONO, fontSize:9, letterSpacing:'0.07em', fontWeight:600,
-        color: active ? color : C.charMid, lineHeight:1 }}>{label}</span>
     </button>
   )
 }

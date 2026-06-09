@@ -84,7 +84,7 @@ export default function Boot() {
         <img
           alt="Luxury Private Lounge"
           className="w-full h-full object-cover scale-110 blur-[8px]"
-          src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"
+          src="/background-lounge-airy.jpg"
         />
         <div className="absolute inset-0 smoke-overlay" />
       </div>
@@ -203,7 +203,7 @@ export default function Boot() {
       {/* Visual polish */}
       <div
         className="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-10"
-        style={{ background: "url('https://www.transparenttextures.com/patterns/carbon-fibre.png')" }}
+        style={{ background: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='1' height='1' x='0' y='0' fill='%23fff' opacity='.08'/%3E%3Crect width='1' height='1' x='2' y='2' fill='%23fff' opacity='.05'/%3E%3C/svg%3E\")" }}
       />
       <div className="pointer-events-none fixed inset-0 z-40 bg-gradient-to-b from-black/20 via-transparent to-black/90" />
 
