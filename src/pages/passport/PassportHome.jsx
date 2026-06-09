@@ -462,19 +462,24 @@ function NavBadge({ label, abbr, color, onClick, active }) {
     <button onClick={onClick}
       onTouchStart={()=>setPr(true)} onTouchEnd={()=>setPr(false)}
       onMouseDown={()=>setPr(true)} onMouseUp={()=>setPr(false)} onMouseLeave={()=>setPr(false)}
-      style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:4, padding:'4px 2px',
-        background:'none', border:'none', cursor:'pointer', minWidth:52,
+      style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:5,
+        padding:'2px 4px', background:'none', border:'none', cursor:'pointer', minWidth:58,
         transform:pr?'scale(0.88)':'scale(1)', transition:'transform .1s' }}>
-      <div style={{ width:36, height:36, borderRadius:10,
-        background:active?color:`${color}15`,
-        border:`1.5px solid ${active?color:`${color}45`}`,
-        display:'flex', alignItems:'center', justifyContent:'center',
-        boxShadow:active?`0 2px 8px ${color}35`:'none', transition:'all .15s' }}>
-        <span style={{ fontFamily:MONO, fontWeight:700, fontSize:10,
-          color:active?'#fff':color, letterSpacing:'0.04em' }}>{abbr}</span>
+      <div style={{
+        width:50, height:40, borderRadius:12,
+        background: active ? color : C.ivory,
+        border: active ? `2px solid ${color}` : `1.5px solid rgba(36,29,22,0.28)`,
+        display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:1,
+        boxShadow: active
+          ? `0 3px 10px ${color}50, inset 0 1px 0 rgba(255,255,255,0.3)`
+          : `0 2px 6px rgba(36,29,22,0.12), inset 0 1px 0 rgba(255,255,255,0.7)`,
+        transition:'all .15s' }}>
+        <span style={{ fontFamily:MONO, fontWeight:800, fontSize:11,
+          color: active ? '#fff' : C.charcoal,
+          letterSpacing:'0.05em', lineHeight:1 }}>{abbr}</span>
       </div>
-      <span style={{ fontFamily:MONO, fontSize:8, color:active?color:C.charMid,
-        letterSpacing:'0.08em', fontWeight:active?700:400 }}>{label}</span>
+      <span style={{ fontFamily:MONO, fontSize:9, letterSpacing:'0.07em', fontWeight:600,
+        color: active ? color : C.charMid, lineHeight:1 }}>{label}</span>
     </button>
   )
 }
@@ -916,24 +921,27 @@ function BottomNav({ onScan }) {
         borderRadius:'20px 20px 0 0',
         boxShadow:'0 -6px 28px rgba(17,43,69,0.10)',
         paddingBottom:'env(safe-area-inset-bottom,10px)' }}>
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-around', padding:'10px 8px 5px' }}>
-          <NavBadge label="HOME" abbr="HM" color={C.goldDk} onClick={()=>{ triggerHaptic('light'); navigate('/passport') }} active={true}/>
-          <NavBadge label="DIRECTORY" abbr="DIR" color={C.navy} onClick={()=>{ triggerHaptic('light'); navigate('/passport/directory') }}/>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-around', padding:'12px 6px 8px' }}>
+          <NavBadge label="HOME"      abbr="HM"  color={C.goldDk}  onClick={()=>{ triggerHaptic('light'); navigate('/passport') }}            active={true}/>
+          <NavBadge label="DIRECTORY" abbr="DIR" color={C.navy}    onClick={()=>{ triggerHaptic('light'); navigate('/passport/directory') }}/>
+          {/* centre QR scan — raised gold pill */}
           <button onClick={()=>{ triggerHaptic('medium'); onScan() }}
-            onTouchStart={e=>e.currentTarget.style.transform='scale(0.9) translateY(-8px)'}
-            onTouchEnd={e=>e.currentTarget.style.transform='translateY(-14px)'}
-            style={{ width:58, height:58, borderRadius:16, border:`2.5px solid ${C.gold}`,
-              background:`linear-gradient(135deg,${C.gold},${C.goldDk})`,
-              display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:2,
-              cursor:'pointer', flexShrink:0,
-              transform:'translateY(-14px)',
-              boxShadow:`0 6px 20px rgba(184,138,59,0.42), 0 0 0 5px ${C.ivory}, 0 0 0 6.5px ${C.border}`,
+            style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:0,
+              background:'none', border:'none', cursor:'pointer', padding:0 }}>
+            <div style={{ width:60, height:56, borderRadius:16,
+              background:`linear-gradient(150deg,${C.goldLt},${C.goldDk})`,
+              border:`2.5px solid ${C.gold}`,
+              display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:1,
+              transform:'translateY(-12px)',
+              boxShadow:`0 8px 22px rgba(184,138,59,0.48), 0 0 0 5px ${C.ivory}, 0 0 0 7px ${C.border}`,
               transition:'transform .1s' }}>
-            <span style={{ fontFamily:MONO, fontWeight:900, fontSize:11, color:'#fff', letterSpacing:'0.04em', lineHeight:1 }}>QR</span>
-            <span style={{ fontFamily:MONO, fontWeight:700, fontSize:8, color:'rgba(255,255,255,0.8)', letterSpacing:'0.06em' }}>SCAN</span>
+              <span style={{ fontFamily:MONO, fontWeight:900, fontSize:13, color:'#fff', letterSpacing:'0.04em', lineHeight:1 }}>QR</span>
+              <span style={{ fontFamily:MONO, fontWeight:700, fontSize:9,  color:'rgba(255,255,255,0.85)', letterSpacing:'0.07em' }}>SCAN</span>
+            </div>
+            <span style={{ fontFamily:MONO, fontSize:9, color:C.gold, fontWeight:700, letterSpacing:'0.07em', marginTop:-6 }}>SCAN</span>
           </button>
-          <NavBadge label="EVENTS" abbr="EVT" color={C.navyMid} onClick={()=>{ triggerHaptic('light'); navigate('/passport/events') }}/>
-          <NavBadge label="BENEFITS" abbr="BNF" color={C.burg} onClick={()=>{ triggerHaptic('light'); navigate('/passport/benefits') }}/>
+          <NavBadge label="EVENTS"   abbr="EVT" color={C.navyMid} onClick={()=>{ triggerHaptic('light'); navigate('/passport/events') }}/>
+          <NavBadge label="BENEFITS" abbr="BNF" color={C.burg}    onClick={()=>{ triggerHaptic('light'); navigate('/passport/benefits') }}/>
         </div>
       </div>
     </div>
@@ -1008,11 +1016,12 @@ export default function PassportHome() {
 
         {/* top bar */}
         <div style={{ display:'flex', alignItems:'center', gap:10, padding:'14px 16px 10px', position:'relative', zIndex:3 }}>
-          <button onClick={()=>{ triggerHaptic('light'); navigate(-1) }}
-            style={{ width:36, height:36, borderRadius:10, border:`1px solid ${C.gold}40`,
-              background:`${C.gold}14`, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0 }}>
-            <svg width={18} height={18} viewBox="0 0 18 18" fill="none">
-              <path d="M11 4L6 9L11 14" stroke={C.goldLt} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/>
+          <button onClick={()=>{ triggerHaptic('light'); window.history.length > 1 ? navigate(-1) : navigate('/') }}
+            style={{ width:40, height:40, borderRadius:11, border:`1.5px solid ${C.gold}55`,
+              background:`${C.gold}20`, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0,
+              boxShadow:`0 2px 8px rgba(184,138,59,0.18)` }}>
+            <svg width={20} height={20} viewBox="0 0 20 20" fill="none">
+              <path d="M13 4L7 10L13 16" stroke={C.goldLt} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
           <div style={{ flex:1, minWidth:0 }}>
