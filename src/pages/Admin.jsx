@@ -9,6 +9,7 @@ import { useSecurity } from '../context/SecurityContext.jsx'
 import RoleGate from '../components/security/RoleGate.jsx'
 import PermissionGate from '../components/security/PermissionGate.jsx'
 import PinResetModal from '../components/admin/PinResetModal.jsx'
+import LeaderboardMembersPanel from '../components/admin/LeaderboardMembersPanel.jsx'
 import * as adminApi from '../services/adminApiService.js'
 
 // ── Design tokens ─────────────────────────────────────────────
@@ -643,6 +644,17 @@ export default function Admin() {
                 </div>
               ))}
             </div>
+          </Card>
+        )}
+
+        {/* ── Leaderboard Members (admin+) ─────────────────── */}
+        {canDataReset && (
+          <Card style={{ marginBottom: '1.5rem' }}>
+            <SectionTitle icon="leaderboard" label="Leaderboard Members" />
+            <div style={{ color: '#555', fontSize: '11px', marginBottom: '1rem', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+              Manage the Grand Lounge roster. Add new members, edit names or badges, or remove members from the leaderboard.
+            </div>
+            <LeaderboardMembersPanel />
           </Card>
         )}
 

@@ -91,3 +91,28 @@ export async function getTierDetail(tierId) {
 
 export async function unlockBadge(_userId, _badgeId) { return null }
 export async function getBadgeDetail(_badgeId)       { return null }
+
+// ── Admin: member roster management ──────────────────────────────────────────
+
+export async function addMemberAdmin(data) {
+  const result = await apiFetch('/api/ranking/admin/members', {
+    method: 'POST',
+    body:   JSON.stringify(data),
+  })
+  return { member: result.member, leaderboard: result.leaderboard || [] }
+}
+
+export async function updateMemberAdmin(memberId, data) {
+  const result = await apiFetch(`/api/ranking/admin/members/${memberId}`, {
+    method: 'PATCH',
+    body:   JSON.stringify(data),
+  })
+  return { member: result.member, leaderboard: result.leaderboard || [] }
+}
+
+export async function removeMemberAdmin(memberId) {
+  const result = await apiFetch(`/api/ranking/admin/members/${memberId}`, {
+    method: 'DELETE',
+  })
+  return { removed: result.removed, leaderboard: result.leaderboard || [] }
+}
