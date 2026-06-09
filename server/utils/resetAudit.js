@@ -11,15 +11,17 @@ const FILENAME = 'reset_audit.json'
 /**
  * Append a new entry to the reset audit log.
  * This function is strictly append-only — it never removes existing entries.
- * @param {string} store  — e.g. 'ranking-xp', 'badges', 'travel-stamps'
- * @param {object} actor  — req.user object { id, role, email?, displayName? }
+ * @param {string} store   — e.g. 'ranking-xp', 'badges', 'travel-stamps'
+ * @param {object} actor   — req.user object { id, role, email?, displayName? }
+ * @param {string} source  — 'manual' | 'scheduled' (default: 'manual')
  */
-export function appendResetAudit(store, actor = {}) {
+export function appendResetAudit(store, actor = {}, source = 'manual') {
   const log = loadJson(FILENAME, [])
   const entry = {
     id:         uuidv4(),
     timestamp:  new Date().toISOString(),
     store,
+    source,
     actorId:    actor.id    || 'unknown',
     actorRole:  actor.role  || 'unknown',
     actorEmail: actor.email || null,

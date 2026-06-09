@@ -8,6 +8,7 @@ import { buildPermissionMatrix, getEffectivePermissions, ROLE_LEVELS } from '../
 import { PERMISSION_GROUPS, PERMISSION_DESCRIPTIONS } from '../config/permissions.js'
 import { ok, created, fail, notFound, serverError } from '../utils/response.js'
 import { getResetAuditLog, getResetAuditTotal, clearResetAuditLog } from '../utils/resetAudit.js'
+import { getSchedule, setSchedule } from '../services/resetScheduleService.js'
 import { resetXpCore, resetActivityCore, resetMembersCore } from './rankingController.js'
 import { resetConciergeCore, resetStampsCore } from './travelController.js'
 import { resetFeedCore } from './tickerController.js'
@@ -238,6 +239,46 @@ export function clearResetAudit(req, res) {
     ok(res, { cleared: true })
   } catch (err) {
     serverError(res, err, 'clearResetAudit')
+  }
+}
+
+/** GET /api/admin/reset-schedule — FOUNDER ONLY. Returns the current auto-reset schedule. */
+export function getResetSchedule(_req, res) {
+  try {
+    ok(res, getSchedule())
+  } catch (err) {
+    serverError(res, err, 'getResetSchedule')
+  }
+}
+
+/** POST /api/admin/reset-schedule — FOUNDER ONLY. Saves a new auto-reset schedule. */
+export function setResetScheduleHandler(req, res) {
+  try {
+    const { enabled, dayOfWeek, hour, minute } = req.body || {}
+
+    if (enabled === undefined && dayOfWeek === undefined && hour === undefined && minute === undefined) {
+      return fail(res, 'At least one schedule field (enabled, dayOfWeek, hour, minute) is required')
+    }
+    if (dayOfWeek !== undefined && (dayOfWeek < 0 || dayOfWeek > 6)) {
+      return fail(res, 'dayOfWeek must be 0 (Sunday) – 6 (Saturday)')
+    }
+    if (hour !== undefined && (hour < 0 || hour > 23)) {
+      return fail(res, 'hour must be 0–23')
+    }
+    if (minute !== undefined && (minute < 0 || minute > 59)) {
+      return fail(res, 'minute must be 0–59')
+    }
+
+    const patch = {}
+    if (enabled   !== undefined) patch.enabled   = Boolean(enabled)
+    if (dayOfWeek !== undefined) patch.dayOfWeek  = Number(dayOfWeek)
+    if (hour      !== undefined) patch.hour       = Number(hour)
+    if (minute    !== undefined) patch.minute     = Number(minute)
+
+    const updated = setSchedule(patch, req.user)
+    ok(res, updated)
+  } catch (err) {
+    serverError(res, err, 'setResetSchedule')
   }
 }
 

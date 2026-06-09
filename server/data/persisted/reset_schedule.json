@@ -1,0 +1,9 @@
+{
+  "enabled": false,
+  "dayOfWeek": 5,
+  "hour": 18,
+  "minute": 0,
+  "lastScheduledRun": null,
+  "updatedAt": null,
+  "updatedBy": null
+}

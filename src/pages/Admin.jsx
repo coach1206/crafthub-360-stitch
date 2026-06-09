@@ -165,6 +165,57 @@ export default function Admin() {
   const [resetAllBusy,    setResetAllBusy]    = useState(false)
   const [resetAllResults, setResetAllResults] = useState(null)
 
+  // ── Auto-Reset Schedule state (founder_level_0 only) ──────
+  const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+  const [schedule,     setScheduleState] = useState(null)
+  const [schedEnabled, setSchedEnabled]  = useState(false)
+  const [schedDay,     setSchedDay]      = useState(5)
+  const [schedHour,    setSchedHour]     = useState(18)
+  const [schedMinute,  setSchedMinute]   = useState(0)
+  const [schedBusy,    setSchedBusy]     = useState(false)
+  const [schedMsg,     setSchedMsg]      = useState('')
+
+  function loadSchedule() {
+    adminApi.getResetSchedule()
+      .then(r => {
+        if (r?.success && r.data) {
+          const s = r.data
+          setScheduleState(s)
+          setSchedEnabled(!!s.enabled)
+          setSchedDay(s.dayOfWeek ?? 5)
+          setSchedHour(s.hour ?? 18)
+          setSchedMinute(s.minute ?? 0)
+        }
+      })
+      .catch(() => {})
+  }
+
+  async function handleSaveSchedule() {
+    setSchedBusy(true)
+    setSchedMsg('')
+    try {
+      const r = await adminApi.setResetSchedule({
+        enabled:   schedEnabled,
+        dayOfWeek: schedDay,
+        hour:      schedHour,
+        minute:    schedMinute,
+      })
+      if (r?.success) {
+        setScheduleState(r.data)
+        setSchedMsg(schedEnabled
+          ? `✓ Scheduled — every ${DAY_NAMES[schedDay]} at ${String(schedHour).padStart(2,'0')}:${String(schedMinute).padStart(2,'0')}`
+          : '✓ Schedule disabled.')
+      } else {
+        setSchedMsg(`✗ ${r?.message || 'Failed to save schedule.'}`)
+      }
+    } catch {
+      setSchedMsg('✗ Network error saving schedule.')
+    } finally {
+      setSchedBusy(false)
+      setTimeout(() => setSchedMsg(''), 4000)
+    }
+  }
+
   function loadResetAudit() {
     adminApi.getResetAudit(25)
       .then(r => { if (r?.data?.log) setResetAuditLog(r.data.log) })
@@ -229,6 +280,7 @@ export default function Admin() {
       .finally(() => setLoadingRequests(false))
 
     if (canDataReset) loadResetAudit()
+    if (canResetAll) loadSchedule()
   }, [canViewSync, canDataReset]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { loadData() }, [loadData])
@@ -926,6 +978,193 @@ export default function Admin() {
               </div>
             )}
 
+            {/* ── Auto-Reset Schedule (founder_level_0 only) ── */}
+            {canResetAll && (
+              <div style={{
+                marginTop:    '1.5rem',
+                border:       `1px solid rgba(201,168,76,0.25)`,
+                borderRadius: '8px',
+                padding:      '14px 16px',
+                background:   'rgba(201,168,76,0.03)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '16px', color: GOLD }}>
+                    schedule
+                  </span>
+                  <span style={{ color: GOLD, fontSize: '12px', fontWeight: 600, letterSpacing: '0.06em' }}>
+                    Auto-Reset Schedule
+                  </span>
+                  <span style={{
+                    background:    'rgba(201,168,76,0.15)',
+                    border:        `1px solid ${GOLD}44`,
+                    borderRadius:  '3px',
+                    color:         GOLD,
+                    fontSize:      '9px',
+                    padding:       '1px 5px',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                  }}>
+                    founder only
+                  </span>
+                </div>
+
+                <div style={{ color: '#555', fontSize: '11px', letterSpacing: '0.04em', lineHeight: 1.6, marginBottom: '10px' }}>
+                  Automatically run Reset All before event night — no manual step needed.
+                  Fires at the configured day + time every week.
+                </div>
+
+                {schedule && (
+                  <div style={{
+                    fontSize:      '11px',
+                    letterSpacing: '0.04em',
+                    marginBottom:  '12px',
+                    display:       'flex',
+                    alignItems:    'center',
+                    gap:           '8px',
+                    flexWrap:      'wrap',
+                  }}>
+                    <span style={{
+                      display:      'inline-flex',
+                      alignItems:   'center',
+                      gap:          '4px',
+                      background:   schedule.enabled ? 'rgba(76,175,80,0.12)' : 'rgba(100,100,100,0.12)',
+                      border:       `1px solid ${schedule.enabled ? '#4CAF5055' : '#55555533'}`,
+                      borderRadius: '4px',
+                      color:        schedule.enabled ? '#4CAF50' : '#555',
+                      padding:      '2px 8px',
+                      fontSize:     '10px',
+                    }}>
+                      <span className="material-symbols-outlined" style={{ fontSize: '11px' }}>
+                        {schedule.enabled ? 'check_circle' : 'cancel'}
+                      </span>
+                      {schedule.enabled
+                        ? `Every ${DAY_NAMES[schedule.dayOfWeek]} at ${String(schedule.hour).padStart(2,'0')}:${String(schedule.minute).padStart(2,'0')}`
+                        : 'Disabled'}
+                    </span>
+                    {schedule.lastScheduledRun && (
+                      <span style={{ color: '#444', fontSize: '10px' }}>
+                        Last run: {(() => { try { return new Date(schedule.lastScheduledRun).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) } catch { return schedule.lastScheduledRun } })()}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  <label style={{
+                    display:    'flex',
+                    alignItems: 'center',
+                    gap:        '5px',
+                    color:      schedEnabled ? '#4CAF50' : '#555',
+                    fontSize:   '11px',
+                    cursor:     'pointer',
+                    userSelect: 'none',
+                  }}>
+                    <input
+                      type="checkbox"
+                      checked={schedEnabled}
+                      onChange={e => setSchedEnabled(e.target.checked)}
+                      style={{ accentColor: '#4CAF50', width: '13px', height: '13px' }}
+                    />
+                    Enable
+                  </label>
+
+                  <select
+                    value={schedDay}
+                    onChange={e => setSchedDay(Number(e.target.value))}
+                    style={{
+                      background:    'rgba(255,255,255,0.04)',
+                      border:        `1px solid ${BORDER}`,
+                      borderRadius:  '4px',
+                      color:         DIM,
+                      padding:       '4px 8px',
+                      fontSize:      '11px',
+                      outline:       'none',
+                      cursor:        'pointer',
+                    }}
+                  >
+                    {DAY_NAMES.map((d, i) => (
+                      <option key={i} value={i} style={{ background: '#1a1008', color: DIM }}>{d}</option>
+                    ))}
+                  </select>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <select
+                      value={schedHour}
+                      onChange={e => setSchedHour(Number(e.target.value))}
+                      style={{
+                        background:    'rgba(255,255,255,0.04)',
+                        border:        `1px solid ${BORDER}`,
+                        borderRadius:  '4px',
+                        color:         DIM,
+                        padding:       '4px 6px',
+                        fontSize:      '11px',
+                        outline:       'none',
+                        cursor:        'pointer',
+                        fontFamily:    'monospace',
+                      }}
+                    >
+                      {Array.from({ length: 24 }, (_, i) => (
+                        <option key={i} value={i} style={{ background: '#1a1008', color: DIM }}>
+                          {String(i).padStart(2, '0')}
+                        </option>
+                      ))}
+                    </select>
+                    <span style={{ color: '#444', fontSize: '11px' }}>:</span>
+                    <select
+                      value={schedMinute}
+                      onChange={e => setSchedMinute(Number(e.target.value))}
+                      style={{
+                        background:    'rgba(255,255,255,0.04)',
+                        border:        `1px solid ${BORDER}`,
+                        borderRadius:  '4px',
+                        color:         DIM,
+                        padding:       '4px 6px',
+                        fontSize:      '11px',
+                        outline:       'none',
+                        cursor:        'pointer',
+                        fontFamily:    'monospace',
+                      }}
+                    >
+                      {[0,5,10,15,20,25,30,35,40,45,50,55].map(m => (
+                        <option key={m} value={m} style={{ background: '#1a1008', color: DIM }}>
+                          {String(m).padStart(2, '0')}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <button
+                    onClick={handleSaveSchedule}
+                    disabled={schedBusy}
+                    style={{
+                      background:    schedBusy ? 'rgba(201,168,76,0.05)' : 'rgba(201,168,76,0.12)',
+                      border:        `1px solid ${GOLD}44`,
+                      borderRadius:  '4px',
+                      color:         schedBusy ? '#555' : GOLD,
+                      padding:       '5px 12px',
+                      cursor:        schedBusy ? 'not-allowed' : 'pointer',
+                      fontSize:      '11px',
+                      letterSpacing: '0.06em',
+                      fontWeight:    500,
+                    }}
+                  >
+                    {schedBusy ? 'Saving…' : 'Save Schedule'}
+                  </button>
+                </div>
+
+                {schedMsg && (
+                  <div style={{
+                    marginTop:     '8px',
+                    fontSize:      '11px',
+                    color:         schedMsg.startsWith('✓') ? '#4CAF50' : ERR,
+                    letterSpacing: '0.04em',
+                  }}>
+                    {schedMsg}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* ── Reset History Log ─────────────────────────── */}
             <div style={{ marginTop: '1.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
@@ -1002,6 +1241,22 @@ export default function Admin() {
                             </span>
                           )}
                         </span>
+                        {entry.source === 'scheduled' && (
+                          <span style={{
+                            background:    'rgba(201,168,76,0.12)',
+                            border:        `1px solid ${GOLD}44`,
+                            borderRadius:  '3px',
+                            color:         GOLD,
+                            fontSize:      '9px',
+                            padding:       '1px 5px',
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                            whiteSpace:    'nowrap',
+                            flexShrink:    0,
+                          }}>
+                            scheduled
+                          </span>
+                        )}
                         <span style={{ color: '#333', fontFamily: 'monospace', fontSize: '10px', whiteSpace: 'nowrap' }}>
                           {dateStr}
                         </span>

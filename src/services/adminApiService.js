@@ -81,3 +81,9 @@ export const resetAllStores = () => apiDelete(`${BASE}/reset-all`)
 
 /** DELETE /api/admin/reset-audit — founder-only: clear the entire reset history log. */
 export const clearResetAudit = () => apiDelete(`${BASE}/reset-audit`)
+
+/** GET /api/admin/reset-schedule — founder-only: fetch the current auto-reset schedule. */
+export const getResetSchedule = () => apiGet(`${BASE}/reset-schedule`)
+
+/** POST /api/admin/reset-schedule — founder-only: save a new auto-reset schedule. */
+export const setResetSchedule = (data) => apiPost(`${BASE}/reset-schedule`, data)

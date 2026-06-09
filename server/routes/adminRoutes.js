@@ -40,4 +40,8 @@ router.delete('/reset-all',    requireAuth, blockDevFounderSpoofing, requireFoun
 router.get('/reset-audit',     requireAuth, requireAdmin,                                     ac.getResetAudit)
 router.delete('/reset-audit',  requireAuth, blockDevFounderSpoofing, requireFounderLevel0,    ac.clearResetAudit)
 
+// ── Auto-reset schedule (founder-only) ─────────────────────────
+router.get('/reset-schedule',  requireAuth, blockDevFounderSpoofing, requireFounderLevel0,    ac.getResetSchedule)
+router.post('/reset-schedule', requireAuth, blockDevFounderSpoofing, requireFounderLevel0,    ac.setResetScheduleHandler)
+
 export default router

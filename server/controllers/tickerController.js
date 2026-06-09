@@ -66,7 +66,7 @@ export function deactivateFeedItem(req, res) {
 
 // ── Admin: reset persisted runtime additions ──────────────────────────────────
 
-export function resetFeedCore(user) {
+export function resetFeedCore(user, source = 'manual') {
   const seedIds = new Set(TICKER_FEED.map(i => i.id))
   const runtimeIndices = []
   for (let i = feed.length - 1; i >= 0; i--) {
@@ -74,7 +74,7 @@ export function resetFeedCore(user) {
   }
   for (const i of runtimeIndices) feed.splice(i, 1)
   saveJson('ticker_additions.json', [])
-  appendResetAudit('ticker-feed', user)
+  appendResetAudit('ticker-feed', user, source)
   return { cleared: runtimeIndices.length }
 }
 

@@ -227,28 +227,28 @@ export function updateMember(req, res) {
 
 // ── Admin: reset persisted state to seed ──────────────────────────────────────
 
-export function resetXpCore(user) {
+export function resetXpCore(user, source = 'manual') {
   for (const member of MEMBERS) {
     const seed = SEED_MEMBERS.find(s => s.id === member.id)
     member.xp = seed ? seed.xp : 0
   }
   saveState()
-  appendResetAudit('ranking-xp', user)
+  appendResetAudit('ranking-xp', user, source)
   return { leaderboard: buildLeaderboard() }
 }
 
-export function resetActivityCore(user) {
+export function resetActivityCore(user, source = 'manual') {
   activityLog.splice(0, activityLog.length, ...seedLog)
   saveJson('ranking_activity.json', [])
-  appendResetAudit('ranking-activity', user)
+  appendResetAudit('ranking-activity', user, source)
   return { cleared: true }
 }
 
-export function resetMembersCore(user) {
+export function resetMembersCore(user, source = 'manual') {
   MEMBERS.splice(0, MEMBERS.length, ...SEED_MEMBERS.map(m => ({ ...m })))
   saveMembers()
   saveState()
-  appendResetAudit('ranking-members', user)
+  appendResetAudit('ranking-members', user, source)
   return { leaderboard: buildLeaderboard() }
 }
 

@@ -45,6 +45,7 @@ import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
 import { startPOS3AutoSync }  from './services/pos3AutoSyncService.js'
+import { initScheduler }     from './services/resetScheduleService.js'
 import { validateEnv }        from './config/envValidator.js'
 
 // Validate environment variables on startup
@@ -142,6 +143,9 @@ app.listen(PORT, '0.0.0.0', async () => {
 
   // POS 3 Auto-Sync — starts after DB seed is ready (non-blocking)
   startPOS3AutoSync('prototype')
+
+  // Auto-Reset Scheduler — loads persisted schedule and arms the cron job
+  initScheduler()
 })
 
 export default app
