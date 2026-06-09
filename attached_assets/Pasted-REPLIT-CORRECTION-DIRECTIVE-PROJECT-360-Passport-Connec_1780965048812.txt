@@ -1,0 +1,541 @@
+REPLIT CORRECTION DIRECTIVE
+PROJECT: 360 Passport Connections
+SCREEN: Professional Passport Home Dashboard
+
+THIS CURRENT VERSION IS NOT ACCEPTABLE.
+
+The screen is too flat, too beige, too spaced out, and does not look like a professional digital passport. It looks like a basic admin dashboard. Rebuild the visual layer to match a real premium passport credential while keeping all existing functionality.
+
+DO NOT REMOVE FUNCTIONALITY.
+DO NOT BREAK BUTTONS.
+DO NOT MAKE A STATIC IMAGE.
+KEEP ALL MODALS, SCAN LOGIC, MOCK APIs, HAPTICS, AND BUTTON ACTIONS.
+
+==================================================
+MAIN VISUAL CORRECTION
+==================================================
+
+The dashboard must look like a professional digital passport, not a beige web form.
+
+Use this visual direction:
+
+- Centered passport-style layout
+- Ivory textured paper background
+- Embossed gold borders
+- Navy identity accents
+- Official credential feel
+- Watermark globe patterns
+- Guilloche security lines
+- Real passport stamp styling
+- Thin dividers
+- Stronger hierarchy
+- Less empty space
+- More compact vertical rhythm
+- Premium printed-document feel
+
+Color palette:
+- Ivory paper: #F7F0DF
+- Warm parchment: #EFE1C3
+- Champagne gold: #B98A36
+- Deep navy: #102B46
+- Ink black: #201A12
+- Soft brown: #7A5A24
+- Muted green: #315F46
+- Deep burgundy: #7A2E2E
+- Border gold: rgba(185, 138, 54, 0.55)
+
+Do not use:
+- plain beige blocks
+- oversized empty rows
+- random generic icons
+- weak borders
+- flat cards
+- cartoon colors
+- dark neon purple
+- huge stretched desktop boxes
+
+==================================================
+FIX THE PAGE WIDTH
+==================================================
+
+The current page is stretched too wide.
+
+Set the main dashboard container to:
+
+max-width: 860px to 960px;
+margin: 0 auto;
+padding: 24px;
+
+On large desktop:
+- Do not stretch cards full browser width.
+- Keep the page centered like a digital passport document.
+
+On mobile:
+- Use full width with 16px padding.
+
+==================================================
+FIX THE HERO PASSPORT CARD
+==================================================
+
+The top section must become the strongest visual element.
+
+Create a large official passport credential card.
+
+It must include:
+
+Top left:
+- Gold/navy 360 logo badge
+- Title:
+  “360 PASSPORT CONNECTIONS”
+- Subtitle:
+  “Your digital passport to verified connections”
+- Small line:
+  “By Profound Innovations LLC”
+
+Main copy:
+“Building meaningful connections and a legacy of trust, impact, and opportunity.”
+
+Right side:
+- Large faint globe watermark
+- Faint passport seal
+- Signature-style “360” mark
+
+Scan credential row:
+- QR code box
+- Text:
+  “360 Passport Connection”
+  “Scan to connect • Active session”
+- Gold button:
+  “SCAN”
+
+Footer line:
+“EVERY STAMP TELLS A STORY • EVERY CONNECTION BUILDS LEGACY”
+
+The hero card must have:
+- embossed border
+- gold inner line
+- subtle paper texture
+- faint security-line background
+- soft shadow
+- rounded corners
+- not look like a plain beige rectangle
+
+==================================================
+FIX SECTION DESIGN
+==================================================
+
+Every section must look like it belongs inside a passport booklet.
+
+Section headers:
+- Small gold vertical bar
+- Letter-spaced uppercase title
+- Thin divider line
+- Right-side action link if needed
+
+Examples:
+HOW IT WORKS
+START HERE — YOUR NEXT ACTIONS
+PASSPORT SECTIONS
+DIGITAL STAMPS
+UPCOMING EVENTS
+RECENT ACTIVITY
+
+Do not make headers float with too much empty space.
+
+==================================================
+FIX HOW IT WORKS CARDS
+==================================================
+
+Cards should be compact and official.
+
+Four cards:
+1. Scan In
+2. Build Profile
+3. Meet People
+4. Earn Stamps
+
+Each card should have:
+- numbered passport step circle
+- small badge icon
+- title
+- short description
+- embossed border
+- soft parchment fill
+- hover/tap lift
+- haptic feedback
+
+Do not make them giant beige rectangles.
+
+==================================================
+FIX START HERE ACTIONS
+==================================================
+
+Five action cards:
+- Scan to Connect
+- Explore Directory
+- View Matches
+- Join an Event
+- Explore Benefits
+
+Each card must:
+- be compact
+- have strong icon badge
+- have a clear title
+- have a short action line
+- be clickable
+- trigger haptic feedback
+- open the correct modal or route
+
+Use gentle color-coded accents:
+- Scan: gold
+- Directory: green
+- Matches: plum
+- Events: amber
+- Benefits: navy
+
+But keep the overall design professional and clean.
+
+==================================================
+FIX PASSPORT SECTIONS
+==================================================
+
+The current Passport Sections are too flat and too wide.
+
+Create a 2x2 grid like a passport booklet:
+
+Directory
+Connections
+Events
+Benefits
+
+Each section card should:
+- have a faint image/watermark background
+- have a colored official badge
+- show title and subtitle
+- include arrow on right
+- feel like a passport page panel
+- be clickable
+
+Directory:
+Verified members, brands & more
+
+Connections:
+Your network & conversations
+
+Events:
+Curated experiences & invites
+
+Benefits:
+Access perks & privileges
+
+==================================================
+FIX DIGITAL STAMPS
+==================================================
+
+This section should look like the best part of the page.
+
+Make it feel like a passport stamp collection card.
+
+Design:
+- Off-white paper card
+- Thin gold border
+- Light horizontal passport page lines
+- Five circular stamp seals:
+  Event
+  Connect
+  Verified
+  Craft
+  VIP
+
+Each stamp should:
+- look like a real ink stamp/seal
+- have a ring border
+- have a category label underneath
+- show locked/unlocked state
+- be clickable
+- open Stamp Detail Modal
+
+Buttons:
+- View All
+- View My Stamp Collection
+
+Both must work.
+
+==================================================
+FIX UPCOMING EVENTS
+==================================================
+
+The event rows must feel premium.
+
+Upcoming Events card:
+- title with small calendar badge
+- See All link
+- event rows with date badge
+- title
+- venue/city/time
+- arrow
+- RSVP state if already RSVP’d
+
+Rows:
+1. Cigar & Cognac Collectors Night
+Grand Lounge • NYC • 7:00 PM
+
+2. Capital & Culture Private Dinner
+Bottle House • ATL • 6:30 PM
+
+Button:
+“RSVP TO ALL UPCOMING EVENTS”
+
+All event rows and buttons must work.
+
+==================================================
+FIX RECENT ACTIVITY
+==================================================
+
+Recent Activity should be compact and elegant.
+
+Do not use huge beige list rows.
+
+Use a clean passport log style:
+- icon seal
+- activity title
+- short description
+- time
+- thin divider
+
+Activities:
+- Event Entry
+- Connection
+- Profile Check
+- Craft Stamp
+- VIP Stamp
+
+Each item opens activity detail modal.
+
+==================================================
+FIX PROFILE CARD
+==================================================
+
+Profile card should look like a passport ID strip.
+
+Must include:
+- initials badge: JC
+- name: John M Collins
+- member type: Participant Member
+- XP or Passport ID
+- tier progress
+- buttons:
+  Edit
+  View Profile
+
+Use navy + ivory + gold.
+Do not make it look like a random blue web card.
+
+==================================================
+FIX BOTTOM NAV
+==================================================
+
+The current bottom nav overlaps the content and appears awkward.
+
+Fix it:
+
+- position fixed bottom
+- centered max-width matching main container
+- height 82px
+- ivory glass / paper card style
+- gold border
+- rounded top corners
+- center scan button floats above
+- add bottom padding to main page so nothing is covered
+
+Bottom nav items:
+- Home
+- Directory
+- Scan
+- Events
+- Benefits
+
+Each item must:
+- be clickable
+- have label
+- have active state
+- have haptic feedback
+- not cover content
+
+The center scan button:
+- gold circular button
+- larger than other nav items
+- opens Scan Passport Modal
+
+Admin button:
+- keep floating bottom right
+- must not overlap main bottom nav
+- opens Admin Source Panel
+
+==================================================
+FUNCTIONALITY MUST REMAIN
+==================================================
+
+Keep all current functionality working:
+
+Scan:
+- Opens Scan Passport Modal
+- Supports Venue scan
+- Event scan
+- Member scan
+- Stamp scan
+- Benefit scan
+- Invalid scan
+
+Scan result must route correctly:
+- Venue QR → Venue Check-In Verified
+- Event QR → Event Check-In Verified
+- Member QR → Connection Found
+- Stamp QR → Stamp Ready to Claim
+- Benefit QR → Benefit Unlocked
+
+Buttons:
+- Scan works
+- Full Guide works
+- Scan to Connect works
+- Explore Directory works
+- View Matches works
+- Join an Event works
+- Explore Benefits works
+- Directory works
+- Connections works
+- Events works
+- Benefits works
+- Stamps work
+- View All works
+- View My Stamp Collection works
+- Event rows work
+- RSVP works
+- Recent Activity works
+- Edit profile works
+- View profile works
+- Bottom nav works
+- Admin works
+- Mute works
+
+==================================================
+MODALS MUST WORK
+==================================================
+
+Keep or create:
+
+ScanPassportModal
+ScanResultModal
+GuideModal
+DirectoryModal
+ConnectionsModal
+MatchesModal
+EventsModal
+BenefitsModal
+StampDetailModal
+StampCollectionModal
+EventDetailModal
+ActivityDetailModal
+ProfileModal
+AdminSourcePanel
+PassportStampOverlay
+Toast
+
+Every modal must:
+- open
+- close
+- support Escape key
+- have working buttons
+- use the same professional passport style
+
+==================================================
+TOUCHSCREEN AND HAPTICS
+==================================================
+
+This needs to feel tactile.
+
+Every interactive element must have:
+- min 48px touch target
+- primary actions min 64px
+- active scale: 0.97
+- pressed inset shadow
+- haptic feedback if supported
+- no hover-only actions
+
+Use:
+if (navigator.vibrate) navigator.vibrate(35)
+
+Success:
+navigator.vibrate([20, 40, 20])
+
+Warning:
+navigator.vibrate([60, 30, 60])
+
+==================================================
+SCAN SOURCE LOGIC
+==================================================
+
+Keep scan source logic clean and backend-ready.
+
+QR payload format:
+
+{
+  sourceType: "venue" | "event" | "member" | "stamp" | "benefit",
+  sourceId: "string",
+  sessionId: "string",
+  issuedBy: "360-passport-connections",
+  signature: "mock-signature"
+}
+
+Create or preserve:
+src/api/passportScanApi.js
+src/utils/qrPayloads.js
+src/data/venues.js
+src/data/events.js
+src/data/members.js
+src/data/stamps.js
+src/data/benefits.js
+
+Do not fake all scan results inside one component.
+Use source APIs.
+
+==================================================
+DO NOT DO THIS
+==================================================
+
+Do not leave this as a flat beige dashboard.
+Do not stretch everything full width.
+Do not remove the passport feel.
+Do not remove the scan source logic.
+Do not use the reference image as a static UI.
+Do not leave buttons dead.
+Do not let bottom nav cover content.
+Do not use cartoon icons.
+Do not use dark neon purple.
+Do not overuse empty space.
+Do not make the card hierarchy weak.
+
+==================================================
+FINAL ACCEPTANCE CHECKLIST
+==================================================
+
+Before finishing, verify:
+
+- Looks like a professional passport dashboard
+- Main container is centered and not stretched
+- Hero card looks like an official digital passport credential
+- Sections are compact and premium
+- Digital stamps look like real passport stamps
+- Bottom nav does not overlap content
+- All buttons work
+- All modals work
+- Scan source routing works
+- Haptics work where supported
+- Toasts work
+- Admin panel works
+- Nothing is cut off
+- No dead UI
+- No static screenshot
+
+FINAL EXPECTATION:
+The user should feel like they are using a real professional digital passport system, not a beige admin dashboard.
