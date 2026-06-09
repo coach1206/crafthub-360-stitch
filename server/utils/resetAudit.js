@@ -45,3 +45,11 @@ export function getResetAuditLog(limit = 50) {
 export function getResetAuditTotal() {
   return loadJson(FILENAME, []).length
 }
+
+/**
+ * Clear the entire reset audit log (founder-only meta-action).
+ * Does NOT append an audit entry — this is intentional.
+ */
+export function clearResetAuditLog() {
+  saveJson(FILENAME, [])
+}

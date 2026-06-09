@@ -78,3 +78,6 @@ export const getResetAudit = (limit = 50) =>
 
 /** DELETE /api/admin/reset-all — founder-only bulk reset of all 7 stores at once. */
 export const resetAllStores = () => apiDelete(`${BASE}/reset-all`)
+
+/** DELETE /api/admin/reset-audit — founder-only: clear the entire reset history log. */
+export const clearResetAudit = () => apiDelete(`${BASE}/reset-audit`)

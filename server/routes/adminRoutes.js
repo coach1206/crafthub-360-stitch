@@ -36,7 +36,8 @@ router.post('/money-settings', requireAuth, blockDevFounderSpoofing, requireFoun
 router.delete('/data-wipe',    requireAuth, blockDevFounderSpoofing, requireFounderLevel0, ac.dataWipe)
 router.delete('/reset-all',    requireAuth, blockDevFounderSpoofing, requireFounderLevel0, ac.resetAll)
 
-// ── Reset audit log (admin+) ───────────────────────────────────
-router.get('/reset-audit',     requireAuth, requireAdmin,            ac.getResetAudit)
+// ── Reset audit log ────────────────────────────────────────────
+router.get('/reset-audit',     requireAuth, requireAdmin,                                     ac.getResetAudit)
+router.delete('/reset-audit',  requireAuth, blockDevFounderSpoofing, requireFounderLevel0,    ac.clearResetAudit)
 
 export default router

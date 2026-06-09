@@ -7,7 +7,7 @@ import * as securityEventService from '../services/securityEventService.js'
 import { buildPermissionMatrix, getEffectivePermissions, ROLE_LEVELS } from '../config/permissions.js'
 import { PERMISSION_GROUPS, PERMISSION_DESCRIPTIONS } from '../config/permissions.js'
 import { ok, created, fail, notFound, serverError } from '../utils/response.js'
-import { getResetAuditLog, getResetAuditTotal } from '../utils/resetAudit.js'
+import { getResetAuditLog, getResetAuditTotal, clearResetAuditLog } from '../utils/resetAudit.js'
 import { resetXpCore, resetActivityCore, resetMembersCore } from './rankingController.js'
 import { resetConciergeCore, resetStampsCore } from './travelController.js'
 import { resetFeedCore } from './tickerController.js'
@@ -228,6 +228,16 @@ export function getResetAudit(req, res) {
     ok(res, { log, returned: log.length, totalStored })
   } catch (err) {
     serverError(res, err, 'getResetAudit')
+  }
+}
+
+/** DELETE /api/admin/reset-audit — FOUNDER ONLY. Clears the entire reset history log. */
+export function clearResetAudit(req, res) {
+  try {
+    clearResetAuditLog()
+    ok(res, { cleared: true })
+  } catch (err) {
+    serverError(res, err, 'clearResetAudit')
   }
 }
 

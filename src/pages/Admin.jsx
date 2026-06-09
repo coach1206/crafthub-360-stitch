@@ -139,6 +139,8 @@ export default function Admin() {
   const [dataResetMsg,     setDataResetMsg]     = useState('')
   const [dataResetBusy,    setDataResetBusy]    = useState(false)
   const [resetAuditLog,    setResetAuditLog]    = useState([])
+  const [clearAuditBusy,   setClearAuditBusy]   = useState(false)
+  const [clearAuditMsg,    setClearAuditMsg]    = useState('')
 
   // ── Reset All state (founder_level_0 only) ────────────────
   const canResetAll      = role === 'founder_level_0'
@@ -152,6 +154,20 @@ export default function Admin() {
     adminApi.getResetAudit(25)
       .then(r => { if (r?.data?.log) setResetAuditLog(r.data.log) })
       .catch(() => {})
+  }
+
+  function handleClearAudit() {
+    if (!window.confirm('Clear the entire reset history log? This cannot be undone.')) return
+    setClearAuditBusy(true)
+    setClearAuditMsg('')
+    adminApi.clearResetAudit()
+      .then(() => {
+        setResetAuditLog([])
+        setClearAuditMsg('History cleared.')
+        setTimeout(() => setClearAuditMsg(''), 3000)
+      })
+      .catch(() => setClearAuditMsg('Failed to clear history.'))
+      .finally(() => setClearAuditBusy(false))
   }
 
   // ── Access Requests Inbox — T019 ──────────────────────────
@@ -888,8 +904,36 @@ export default function Admin() {
 
             {/* ── Reset History Log ─────────────────────────── */}
             <div style={{ marginTop: '1.5rem' }}>
-              <div style={{ color: '#333', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
-                Reset History
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
+                <div style={{ color: '#333', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+                  Reset History
+                </div>
+                {canResetAll && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {clearAuditMsg && (
+                      <span style={{ fontSize: '10px', color: clearAuditMsg.startsWith('Failed') ? '#c0392b' : '#27ae60', letterSpacing: '0.04em' }}>
+                        {clearAuditMsg}
+                      </span>
+                    )}
+                    <button
+                      onClick={handleClearAudit}
+                      disabled={clearAuditBusy || resetAuditLog.length === 0}
+                      style={{
+                        fontSize:      '10px',
+                        letterSpacing: '0.08em',
+                        padding:       '3px 10px',
+                        border:        '1px solid #ccc',
+                        borderRadius:  '4px',
+                        background:    'transparent',
+                        color:         '#555',
+                        cursor:        (clearAuditBusy || resetAuditLog.length === 0) ? 'not-allowed' : 'pointer',
+                        opacity:       (clearAuditBusy || resetAuditLog.length === 0) ? 0.45 : 1,
+                      }}
+                    >
+                      {clearAuditBusy ? 'Clearing…' : 'Clear History'}
+                    </button>
+                  </div>
+                )}
               </div>
               {resetAuditLog.length === 0 ? (
                 <div style={{ color: '#333', fontSize: '11px', letterSpacing: '0.04em' }}>
