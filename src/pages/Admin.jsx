@@ -35,13 +35,28 @@ const RESET_SCOPE = {
   founder_level_0: ['staff', 'manager', 'admin'],
 }
 
-function SectionTitle({ icon, label }) {
+function SectionTitle({ icon, label, badge }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
       <span className="material-symbols-outlined" style={{ fontSize: '18px', color: GOLD }}>{icon}</span>
       <span style={{ color: DIM, fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
         {label}
       </span>
+      {badge != null && (
+        <span style={{
+          background:   badge.recent ? 'rgba(201,168,76,0.18)' : 'rgba(100,100,100,0.18)',
+          color:        badge.recent ? '#C9A84C'               : '#888',
+          border:       `1px solid ${badge.recent ? 'rgba(201,168,76,0.4)' : 'rgba(100,100,100,0.3)'}`,
+          borderRadius: '10px',
+          fontSize:     '9px',
+          fontWeight:   700,
+          letterSpacing: '0.05em',
+          padding:      '1px 7px',
+          lineHeight:   '16px',
+        }}>
+          {badge.count} {badge.count === 1 ? 'reset' : 'resets'}
+        </span>
+      )}
     </div>
   )
 }
@@ -615,7 +630,16 @@ export default function Admin() {
         {/* ── Data Reset (admin+) ──────────────────────────── */}
         {canDataReset && (
           <Card style={{ marginBottom: '1.5rem' }}>
-            <SectionTitle icon="delete_sweep" label="Data Reset" />
+            <SectionTitle
+              icon="delete_sweep"
+              label="Data Reset"
+              badge={resetAuditLog.length > 0 ? {
+                count:  resetAuditLog.length,
+                recent: resetAuditLog.some(e => {
+                  try { return (Date.now() - new Date(e.timestamp).getTime()) < 86_400_000 } catch { return false }
+                }),
+              } : null}
+            />
 
             <div style={{ color: '#555', fontSize: '11px', marginBottom: '1rem', letterSpacing: '0.04em', lineHeight: 1.6 }}>
               Reset individual data stores to their seed state. Changes take effect immediately — no restart needed.
