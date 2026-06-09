@@ -75,3 +75,6 @@ export const resetBadges = () => apiDelete('/api/badges/admin/reset')
 /** GET /api/admin/reset-audit — fetch the last N reset audit log entries, admin+. */
 export const getResetAudit = (limit = 50) =>
   apiGet(`${BASE}/reset-audit?limit=${limit}`)
+
+/** DELETE /api/admin/reset-all — founder-only bulk reset of all 7 stores at once. */
+export const resetAllStores = () => apiDelete(`${BASE}/reset-all`)

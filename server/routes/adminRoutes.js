@@ -34,6 +34,7 @@ router.post('/users/:userId/reset-pin', requireAuth, requireManager, ac.resetUse
 // ── Founder-only (triple-gated: JWT + anti-spoof + role) ─────
 router.post('/money-settings', requireAuth, blockDevFounderSpoofing, requireFounderLevel0, ac.updateMoneySettings)
 router.delete('/data-wipe',    requireAuth, blockDevFounderSpoofing, requireFounderLevel0, ac.dataWipe)
+router.delete('/reset-all',    requireAuth, blockDevFounderSpoofing, requireFounderLevel0, ac.resetAll)
 
 // ── Reset audit log (admin+) ───────────────────────────────────
 router.get('/reset-audit',     requireAuth, requireAdmin,            ac.getResetAudit)

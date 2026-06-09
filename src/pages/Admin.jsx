@@ -140,6 +140,14 @@ export default function Admin() {
   const [dataResetBusy,    setDataResetBusy]    = useState(false)
   const [resetAuditLog,    setResetAuditLog]    = useState([])
 
+  // ── Reset All state (founder_level_0 only) ────────────────
+  const canResetAll      = role === 'founder_level_0'
+  const RESET_ALL_PHRASE = 'RESET ALL STORES'
+  const [resetAllStep,    setResetAllStep]    = useState(0) // 0=idle 1=confirm 2=results
+  const [resetAllPhrase,  setResetAllPhrase]  = useState('')
+  const [resetAllBusy,    setResetAllBusy]    = useState(false)
+  const [resetAllResults, setResetAllResults] = useState(null)
+
   function loadResetAudit() {
     adminApi.getResetAudit(25)
       .then(r => { if (r?.data?.log) setResetAuditLog(r.data.log) })
@@ -248,6 +256,28 @@ export default function Admin() {
     } finally {
       setDataResetBusy(false)
       setDataResetPending(null)
+    }
+  }
+
+  async function handleResetAll() {
+    if (resetAllPhrase !== RESET_ALL_PHRASE) return
+    setResetAllBusy(true)
+    try {
+      const r = await adminApi.resetAllStores()
+      if (r?.success) {
+        setResetAllResults(r.data)
+        setResetAllStep(2)
+        loadResetAudit()
+      } else {
+        setResetAllResults({ error: r?.message || 'Reset All failed — check backend.' })
+        setResetAllStep(2)
+      }
+    } catch {
+      setResetAllResults({ error: 'Network error during Reset All.' })
+      setResetAllStep(2)
+    } finally {
+      setResetAllBusy(false)
+      setResetAllPhrase('')
     }
   }
 
@@ -678,6 +708,183 @@ export default function Admin() {
                 </div>
               ))}
             </div>
+
+            {/* ── Reset All Stores (founder_level_0 only) ──── */}
+            {canResetAll && (
+              <div style={{
+                marginTop:    '1.5rem',
+                border:       `1px solid rgba(224,90,90,0.35)`,
+                borderRadius: '8px',
+                padding:      '14px 16px',
+                background:   'rgba(224,90,90,0.04)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '16px', color: ERR }}>
+                    emergency_home
+                  </span>
+                  <span style={{ color: ERR, fontSize: '12px', fontWeight: 600, letterSpacing: '0.06em' }}>
+                    Reset All Stores
+                  </span>
+                  <span style={{
+                    background:    'rgba(224,90,90,0.15)',
+                    border:        `1px solid ${ERR}44`,
+                    borderRadius:  '3px',
+                    color:         ERR,
+                    fontSize:      '9px',
+                    padding:       '1px 5px',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                  }}>
+                    founder only
+                  </span>
+                </div>
+
+                <div style={{ color: '#555', fontSize: '11px', letterSpacing: '0.04em', lineHeight: 1.6, marginBottom: '10px' }}>
+                  Runs all 7 resets at once — XP, activity, members, concierge, stamps, ticker, and badges.
+                  Use before event nights for a clean slate.
+                </div>
+
+                {resetAllStep === 0 && (
+                  <button
+                    onClick={() => { setResetAllStep(1); setResetAllPhrase(''); setResetAllResults(null) }}
+                    style={{
+                      background:    'rgba(224,90,90,0.10)',
+                      border:        `1px solid ${ERR}44`,
+                      borderRadius:  '4px',
+                      color:         ERR,
+                      padding:       '6px 14px',
+                      cursor:        'pointer',
+                      fontSize:      '11px',
+                      letterSpacing: '0.08em',
+                      fontWeight:    500,
+                    }}
+                  >
+                    Reset All Stores…
+                  </button>
+                )}
+
+                {resetAllStep === 1 && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ color: ERR, fontSize: '11px', letterSpacing: '0.04em' }}>
+                      Type <strong style={{ fontFamily: 'monospace' }}>{RESET_ALL_PHRASE}</strong> to confirm:
+                    </div>
+                    <input
+                      type="text"
+                      value={resetAllPhrase}
+                      onChange={e => setResetAllPhrase(e.target.value)}
+                      placeholder={RESET_ALL_PHRASE}
+                      disabled={resetAllBusy}
+                      style={{
+                        background:    'rgba(255,255,255,0.04)',
+                        border:        `1px solid ${resetAllPhrase === RESET_ALL_PHRASE ? ERR : BORDER}`,
+                        borderRadius:  '4px',
+                        color:         resetAllPhrase === RESET_ALL_PHRASE ? ERR : DIM,
+                        padding:       '6px 10px',
+                        fontSize:      '12px',
+                        fontFamily:    'monospace',
+                        outline:       'none',
+                        width:         '100%',
+                        boxSizing:     'border-box',
+                        letterSpacing: '0.08em',
+                      }}
+                    />
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      <button
+                        onClick={handleResetAll}
+                        disabled={resetAllBusy || resetAllPhrase !== RESET_ALL_PHRASE}
+                        style={{
+                          background:    resetAllPhrase === RESET_ALL_PHRASE && !resetAllBusy ? 'rgba(224,90,90,0.18)' : 'rgba(224,90,90,0.05)',
+                          border:        `1px solid ${ERR}55`,
+                          borderRadius:  '4px',
+                          color:         resetAllPhrase === RESET_ALL_PHRASE && !resetAllBusy ? ERR : '#555',
+                          padding:       '5px 14px',
+                          cursor:        resetAllPhrase === RESET_ALL_PHRASE && !resetAllBusy ? 'pointer' : 'not-allowed',
+                          fontSize:      '11px',
+                          letterSpacing: '0.08em',
+                        }}
+                      >
+                        {resetAllBusy ? 'Resetting…' : 'Confirm — Reset All'}
+                      </button>
+                      <button
+                        onClick={() => { setResetAllStep(0); setResetAllPhrase('') }}
+                        disabled={resetAllBusy}
+                        style={{
+                          background:    'rgba(255,255,255,0.04)',
+                          border:        `1px solid ${BORDER}`,
+                          borderRadius:  '4px',
+                          color:         '#555',
+                          padding:       '5px 10px',
+                          cursor:        'pointer',
+                          fontSize:      '10px',
+                          letterSpacing: '0.1em',
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {resetAllStep === 2 && resetAllResults && (
+                  <div>
+                    {resetAllResults.error ? (
+                      <div style={{ color: ERR, fontSize: '11px', letterSpacing: '0.04em', marginBottom: '8px' }}>
+                        ✗ {resetAllResults.error}
+                      </div>
+                    ) : (
+                      <>
+                        <div style={{
+                          color:         resetAllResults.summary?.failed === 0 ? '#4CAF50' : ERR,
+                          fontSize:      '11px',
+                          letterSpacing: '0.04em',
+                          marginBottom:  '8px',
+                        }}>
+                          {resetAllResults.summary?.failed === 0
+                            ? `✓ ${resetAllResults.message || 'All stores reset successfully'}`
+                            : `⚠ ${resetAllResults.message}`}
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                          {(resetAllResults.results || []).map(r => (
+                            <div key={r.store} style={{
+                              display:    'flex',
+                              alignItems: 'center',
+                              gap:        '6px',
+                              fontSize:   '10px',
+                              color:      r.success ? '#4CAF50' : ERR,
+                              letterSpacing: '0.04em',
+                            }}>
+                              <span className="material-symbols-outlined" style={{ fontSize: '11px' }}>
+                                {r.success ? 'check_circle' : 'cancel'}
+                              </span>
+                              <span>{r.label}</span>
+                              {!r.success && r.error && (
+                                <span style={{ color: '#555', marginLeft: '4px' }}>— {r.error}</span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                    <button
+                      onClick={() => { setResetAllStep(0); setResetAllResults(null) }}
+                      style={{
+                        marginTop:     '10px',
+                        background:    'rgba(255,255,255,0.04)',
+                        border:        `1px solid ${BORDER}`,
+                        borderRadius:  '4px',
+                        color:         '#555',
+                        padding:       '4px 10px',
+                        cursor:        'pointer',
+                        fontSize:      '10px',
+                        letterSpacing: '0.1em',
+                      }}
+                    >
+                      Done
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* ── Reset History Log ─────────────────────────── */}
             <div style={{ marginTop: '1.5rem' }}>

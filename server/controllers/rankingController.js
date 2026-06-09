@@ -227,32 +227,44 @@ export function updateMember(req, res) {
 
 // ── Admin: reset persisted state to seed ──────────────────────────────────────
 
-export function resetXp(req, res) {
-  // Restore every member's XP to their seed value
+export function resetXpCore(user) {
   for (const member of MEMBERS) {
     const seed = SEED_MEMBERS.find(s => s.id === member.id)
     member.xp = seed ? seed.xp : 0
   }
   saveState()
-  appendResetAudit('ranking-xp', req.user)
-  success(res, { leaderboard: buildLeaderboard() }, 'XP reset to seed values')
+  appendResetAudit('ranking-xp', user)
+  return { leaderboard: buildLeaderboard() }
 }
 
-export function resetActivity(req, res) {
-  // Clear all runtime activity entries (keep in-memory seedLog untouched)
+export function resetActivityCore(user) {
   activityLog.splice(0, activityLog.length, ...seedLog)
   saveJson('ranking_activity.json', [])
-  appendResetAudit('ranking-activity', req.user)
-  success(res, { cleared: true }, 'Activity log cleared')
+  appendResetAudit('ranking-activity', user)
+  return { cleared: true }
 }
 
-export function resetMembers(req, res) {
-  // Restore roster to seed members
+export function resetMembersCore(user) {
   MEMBERS.splice(0, MEMBERS.length, ...SEED_MEMBERS.map(m => ({ ...m })))
   saveMembers()
   saveState()
-  appendResetAudit('ranking-members', req.user)
-  success(res, { leaderboard: buildLeaderboard() }, 'Member roster reset to seed')
+  appendResetAudit('ranking-members', user)
+  return { leaderboard: buildLeaderboard() }
+}
+
+export function resetXp(req, res) {
+  const data = resetXpCore(req.user)
+  success(res, data, 'XP reset to seed values')
+}
+
+export function resetActivity(req, res) {
+  const data = resetActivityCore(req.user)
+  success(res, data, 'Activity log cleared')
+}
+
+export function resetMembers(req, res) {
+  const data = resetMembersCore(req.user)
+  success(res, data, 'Member roster reset to seed')
 }
 
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : '' }

@@ -8,6 +8,10 @@ import { buildPermissionMatrix, getEffectivePermissions, ROLE_LEVELS } from '../
 import { PERMISSION_GROUPS, PERMISSION_DESCRIPTIONS } from '../config/permissions.js'
 import { ok, created, fail, notFound, serverError } from '../utils/response.js'
 import { getResetAuditLog, getResetAuditTotal } from '../utils/resetAudit.js'
+import { resetXpCore, resetActivityCore, resetMembersCore } from './rankingController.js'
+import { resetConciergeCore, resetStampsCore } from './travelController.js'
+import { resetFeedCore } from './tickerController.js'
+import { resetBadgesCore } from './badgeController.js'
 
 const ROLE_LEVELS_MAP = { guest: 0, staff: 1, manager: 2, admin: 3, founder_level_0: 4 }
 
@@ -224,5 +228,43 @@ export function getResetAudit(req, res) {
     ok(res, { log, returned: log.length, totalStored })
   } catch (err) {
     serverError(res, err, 'getResetAudit')
+  }
+}
+
+/** DELETE /api/admin/reset-all — FOUNDER ONLY. Chains all 7 store resets and returns a per-store breakdown. */
+export function resetAll(req, res) {
+  try {
+    const user = req.user
+    const STORES = [
+      { key: 'ranking-xp',       label: 'Leaderboard XP',        fn: () => resetXpCore(user) },
+      { key: 'ranking-activity', label: 'Activity Log',           fn: () => resetActivityCore(user) },
+      { key: 'ranking-members',  label: 'Member Roster',          fn: () => resetMembersCore(user) },
+      { key: 'travel-concierge', label: 'Concierge Requests',     fn: () => resetConciergeCore(user) },
+      { key: 'travel-stamps',    label: 'Travel Stamps',          fn: () => resetStampsCore(user) },
+      { key: 'ticker-feed',      label: 'Ticker Feed',            fn: () => resetFeedCore(user) },
+      { key: 'badges',           label: 'Badge Progress',         fn: () => resetBadgesCore(user) },
+    ]
+
+    const results = []
+    for (const store of STORES) {
+      try {
+        const data = store.fn()
+        results.push({ store: store.key, label: store.label, success: true, data })
+      } catch (err) {
+        results.push({ store: store.key, label: store.label, success: false, error: err.message || 'Unknown error' })
+      }
+    }
+
+    const failed    = results.filter(r => !r.success)
+    const succeeded = results.filter(r => r.success)
+    ok(res, {
+      results,
+      summary: { total: results.length, succeeded: succeeded.length, failed: failed.length },
+      message: failed.length === 0
+        ? 'All stores reset successfully'
+        : `${succeeded.length} of ${results.length} stores reset — ${failed.length} failed`,
+    })
+  } catch (err) {
+    serverError(res, err, 'resetAll')
   }
 }

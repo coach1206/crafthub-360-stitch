@@ -71,16 +71,24 @@ export function getConciergeRequests(_req, res) {
 
 // ── Admin: reset persisted state ──────────────────────────────────────────────
 
-export function resetConcierge(req, res) {
+export function resetConciergeCore(user) {
   conciergeRequests.splice(0, conciergeRequests.length)
   saveState()
-  appendResetAudit('travel-concierge', req.user)
-  success(res, { cleared: true }, 'Concierge requests cleared')
+  appendResetAudit('travel-concierge', user)
+  return { cleared: true }
+}
+
+export function resetStampsCore(user) {
+  userStamps.clear()
+  saveState()
+  appendResetAudit('travel-stamps', user)
+  return { cleared: true }
+}
+
+export function resetConcierge(req, res) {
+  success(res, resetConciergeCore(req.user), 'Concierge requests cleared')
 }
 
 export function resetStamps(req, res) {
-  userStamps.clear()
-  saveState()
-  appendResetAudit('travel-stamps', req.user)
-  success(res, { cleared: true }, 'Travel stamps cleared')
+  success(res, resetStampsCore(req.user), 'Travel stamps cleared')
 }
