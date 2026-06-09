@@ -45,6 +45,8 @@ import PassportBenefits    from './pages/passport/PassportBenefits.jsx'
 import PassportScan        from './pages/passport/PassportScan.jsx'
 import PassportHowItWorks  from './pages/passport/PassportHowItWorks.jsx'
 
+import DayOneTravel from './pages/DayOneTravel.jsx'
+
 // ── Craft modules — moderate size, eager ─────────────────────
 import PourCraft from './pages/PourCraft.jsx'
 import BeerCraft from './pages/BeerCraft.jsx'
@@ -212,6 +214,7 @@ export default function App() {
 
             <Route path="passport-networking" element={<PassportConnection />} />
             <Route path="grand-lounge-ranking" element={<Leaderboard />} />
+            <Route path="dayone360-travel"    element={<DayOneTravel />} />
             <Route path="pourcraft"  element={<PourCraft />} />
             <Route path="beercraft"  element={<BeerCraft />} />
             <Route path="winecraft"  element={<WineCraft />} />

@@ -1,0 +1,696 @@
+LOCKED REPLIT CORRECTION DIRECTIVE
+PROJECT: NOVEE OS + CraftHub 360 + SmokeCraft 360 + PourCraft 360 + BrewCraft 360 + WineCraft 360 + 360 Passport Connections + E.A.T. Command + DayOne360 Travel
+
+CRITICAL LOCKED SCOPE:
+Fix the bottom toolbar issue, add the permanent premium ticket ticker, connect the ticker to E.A.T. Command Center, and keep the current screen from drifting.
+
+DO NOT redesign unrelated screens.
+DO NOT change the product direction.
+DO NOT create a new layout unrelated to the current screen.
+DO NOT remove existing craft cards, routes, modals, scan actions, haptics, or admin functions.
+DO NOT use static screenshots as the UI.
+
+==================================================
+MAIN ISSUE TO ACKNOWLEDGE AND FIX
+=================================
+
+The current bottom toolbar is wrong.
+
+It currently shows:
+
+* Lounge
+* Humidor
+* Cellar
+* Passport
+
+This creates confusion because the page itself already shows craft/category experiences such as:
+
+* SmokeCraft 360
+* PourCraft 360
+* BrewCraft 360
+* WineCraft 360
+
+The bottom bar is acting like a duplicate category menu instead of global app navigation.
+
+This must be fixed.
+
+The bottom toolbar should NOT repeat craft areas or operational zones.
+The bottom toolbar should be global navigation.
+
+==================================================
+BOTTOM TOOLBAR CORRECTION
+=========================
+
+Replace the current bottom toolbar labels:
+
+REMOVE:
+
+* Lounge
+* Humidor
+* Cellar
+* Passport as the only nav structure
+
+REPLACE WITH GLOBAL NAV:
+
+* Home
+* Reserve
+* Scan
+* Passport
+* Profile
+
+Active item:
+
+* Reserve when user is on The Reserve / CraftHub screen
+* Ranking when user is on Grand Lounge Ranking, if Ranking is part of nav
+* Passport when user is on Passport dashboard
+* Events when user is on Events screen
+
+Preferred universal bottom nav for Reserve / CraftHub:
+Home | Reserve | Scan | Passport | Profile
+
+Behavior:
+Home:
+
+* route to `/` or `/home`
+
+Reserve:
+
+* route to `/reserve` or `/crafthub`
+* active on The Reserve screen
+
+Scan:
+
+* opens global Scan Passport / QR modal
+* center gold button
+* haptic tap
+* sound if not muted
+
+Passport:
+
+* route to `/passport`
+
+Profile:
+
+* route to `/profile` or open ProfileModal
+
+Admin:
+
+* keep floating bottom right
+* Admin opens Admin Panel
+* Admin must not overlap the nav or block content
+
+==================================================
+WHY THIS FIX MATTERS
+====================
+
+The craft cards on the screen are experience entry points.
+
+Examples:
+
+* SmokeCraft 360
+* PourCraft 360
+* BrewCraft 360
+* WineCraft 360
+
+The bottom toolbar is app navigation.
+
+These two things must not duplicate each other.
+
+User should understand:
+
+Cards = experiences to enter
+Bottom nav = where I am in the app
+
+==================================================
+CRAFT CARD ROUTES
+=================
+
+Keep the screen cards as craft experience cards.
+
+SmokeCraft 360:
+
+* route to `/smokecraft`
+
+PourCraft 360:
+
+* route to `/pourcraft`
+
+BrewCraft 360:
+
+* route to `/brewcraft`
+
+WineCraft 360:
+
+* route to `/winecraft`
+
+Do not rename bottom nav to Humidor or Cellar on this screen.
+Humidor and Cellar are sub-areas or E.A.T. operational sources, not global navigation labels.
+
+==================================================
+BOTTOM NAV VISUAL FIX
+=====================
+
+The bottom nav must look premium and not cover content.
+
+Rules:
+
+* fixed bottom
+* full-width or centered max-width depending on screen
+* black/obsidian glass
+* champagne gold highlights
+* subtle top border
+* active item has soft gold glow
+* center Scan button is larger, circular, gold, and floating slightly above the bar
+* add bottom padding to all pages using the nav so content is not hidden behind it
+* minimum nav touch target: 56px
+* center scan touch target: 72px
+* haptic feedback on each nav tap
+* no duplicate icon-only confusion
+* every nav item must have a readable label
+
+Add CSS padding:
+Main page content must include bottom padding of at least 120px when bottom nav is fixed.
+
+Acceptance:
+No content, cards, buttons, ticker, or CTAs should sit underneath the bottom toolbar.
+
+==================================================
+ADD PERMANENT PREMIUM TICKET TICKER
+===================================
+
+Add a permanent premium ticket ticker, also called ticket tapper/ticker-tape, to every craft screen.
+
+Screens that must include the ticker:
+
+* The Reserve / CraftHub screen
+* SmokeCraft 360
+* PourCraft 360
+* BrewCraft 360
+* WineCraft 360
+* Grand Lounge Ranking screen
+* Venue dashboard screens where craft experiences appear
+
+Placement:
+
+* directly below the top header
+* above main screen content
+* does not overlap cards
+* does not overlap bottom nav
+* scrolls horizontally
+* touchscreen swipe supported
+
+The ticker should feel premium:
+
+* obsidian glass strip
+* champagne gold borders
+* subtle amber glow
+* smooth scrolling
+* clear source badges
+* readable type
+* no cheap news crawl look
+* no neon/cartoon colors
+* no emojis
+
+==================================================
+TICKER CONTENT
+==============
+
+The ticker must scroll live/mock items from:
+
+* Kitchen
+* Humidor
+* Bar
+* Events
+* Passport
+* DayOne360 Travel
+* E.A.T. Command
+* Ranking / XP opportunities
+
+Ticker content examples:
+
+* Bar: Cognac flight special available tonight
+* Humidor: Dominican Robusto pairing unlocked
+* Kitchen: Smoked short rib sliders pair with tonight’s bourbon flight
+* Events: Cigar & Cognac Collectors Night starts at 7 PM
+* Passport: Earn +2 stamps when you complete tonight’s pairing
+* Ranking: Earn +75 XP for verified Passport connections tonight
+* DayOne360 Travel: Explore Dominican Republic cigar-country experiences
+* E.A.T. Command: Rare bourbon allocation available while inventory lasts
+
+==================================================
+TICKER DATA SOURCE
+==================
+
+Create or update:
+
+src/components/common/TicketTicker.jsx
+src/data/tickerFeed.js
+src/api/tickerApi.js
+src/api/eatCommandApi.js
+
+Ticker item structure:
+
+{
+id,
+type,
+source,
+title,
+message,
+priority,
+craft,
+area,
+route,
+startsAt,
+endsAt,
+active,
+ctaLabel
+}
+
+Types:
+
+* drink_special
+* food_special
+* cigar_special
+* wine_special
+* beer_special
+* event
+* inventory_alert
+* pairing
+* passport_stamp
+* vip_offer
+* travel_offer
+* command_alert
+* ranking_bonus
+
+Sources:
+
+* Kitchen
+* Humidor
+* Bar
+* Events
+* Passport
+* DayOne360 Travel
+* E.A.T. Command
+* Ranking
+
+Areas:
+
+* kitchen
+* humidor
+* bar
+* venue
+* passport
+* travel
+* craft
+* ranking
+
+==================================================
+E.A.T. COMMAND CENTER CONNECTION
+================================
+
+The ticket ticker must pull from E.A.T. Command Center.
+
+E.A.T. Command Center connects to:
+
+* Kitchen
+* Humidor
+* Bar
+
+Create or preserve routes:
+
+* `/eat-command`
+* `/eat/kitchen`
+* `/eat/humidor`
+* `/eat/bar`
+* `/eat/inventory`
+* `/eat/specials`
+* `/eat/pairings`
+
+Ticker route mapping:
+Kitchen specials → `/eat/kitchen`
+Humidor specials → `/eat/humidor`
+Bar specials → `/eat/bar`
+Inventory alerts → `/eat/inventory`
+Pairing recommendations → `/eat/pairings`
+Events → `/passport-events`
+Passport stamps → `/passport`
+DayOne360 Travel → `/dayone360-travel`
+Ranking bonuses → `/grand-lounge-ranking`
+
+Mock API functions in `eatCommandApi.js`:
+
+getTickerFeed()
+getKitchenSpecials()
+getHumidorSpecials()
+getBarSpecials()
+getUpcomingEvents()
+getPassportStampOpportunities()
+getDayOneTravelOffers()
+getInventoryAlerts()
+getPairingRecommendations()
+getRankingBonusOpportunities()
+
+==================================================
+CRAFT-SPECIFIC TICKER FILTERING
+===============================
+
+Ticker should filter based on the craft screen.
+
+SmokeCraft 360:
+
+* cigar specials
+* humidor alerts
+* cigar events
+* craft stamps
+* ranking XP opportunities
+* DayOne360 cigar-country travel
+
+PourCraft 360:
+
+* drink specials
+* bar alerts
+* bottle events
+* pairing recommendations
+* DayOne360 nightlife/travel offers
+
+BrewCraft 360:
+
+* beer specials
+* tap list alerts
+* brewery events
+* pairing recommendations
+
+WineCraft 360:
+
+* wine specials
+* cellar/reserve events
+* reserve tastings
+* vineyard travel offers
+
+The Reserve / CraftHub:
+
+* show all priority ticker items
+
+Grand Lounge Ranking:
+
+* show ranking XP opportunities, events, humidor, bar, passport, and DayOne360 Travel items
+
+==================================================
+DAYONE360 TRAVEL PERMANENT PLACEMENT
+====================================
+
+DayOne360 Travel must have a permanent place in the ecosystem.
+
+Create route:
+`/dayone360-travel`
+
+DayOne360 Travel must appear in:
+
+* Reserve / CraftHub screen
+* Passport dashboard
+* Every craft ticker
+* Events screen
+* Benefits screen
+* E.A.T. Command promotional feed
+* Grand Lounge Ranking ticker
+
+Create or update:
+src/screens/DayOneTravel.jsx
+
+DayOne360 Travel screen includes:
+
+* premium travel hero
+* title: DayOne360 Travel
+* subtitle: Curated travel experiences connected to your Passport.
+* Dominican Republic cigar-country experience
+* Colombia cultural experience
+* Atlanta departure / local concierge placeholder
+* Passport-connected travel stamps
+* buttons:
+
+  * Explore Trips
+  * Request Travel Concierge
+  * View Travel Stamps
+
+All buttons must open functional mock modals or routes.
+
+==================================================
+TICKER FUNCTIONALITY
+====================
+
+TicketTicker behavior:
+
+* smooth horizontal scroll
+* loops continuously
+* pause on hover
+* pause on touch hold
+* swipe manually on touchscreen
+* tapping item routes to item.route
+* if route is unavailable, opens TickerItemDetailModal
+* haptic tap on item
+* sound on item tap if not muted
+* accessible pause/play control
+* supports reduced-motion mode
+
+Do not play sound constantly while scrolling.
+Only play sound when:
+
+* user taps ticker item
+* new priority alert appears
+* ticker CTA is clicked
+
+==================================================
+HAPTIC + TACTILE FEEL
+=====================
+
+Add or update:
+
+src/utils/haptics.js
+src/utils/sound.js
+
+Haptics:
+triggerTapHaptic()
+triggerSuccessHaptic()
+triggerWarningHaptic()
+triggerScrollHaptic()
+
+Use:
+if (navigator.vibrate) navigator.vibrate(25)
+
+Success:
+navigator.vibrate([20, 40, 20])
+
+Warning:
+navigator.vibrate([60, 30, 60])
+
+Apply haptics to:
+
+* bottom nav taps
+* center scan button
+* ticker tap
+* ticker swipe start
+* craft card taps
+* route changes
+* modal open/close
+* admin button
+* scan success
+* badge unlock
+* XP gain
+
+Tactile CSS:
+
+* active scale 0.97 or 0.98
+* subtle inset shadow on press
+* soft gold glow on focus/active
+* no hover-only behavior
+* all main actions must be touch-friendly
+
+==================================================
+SOUND SYSTEM
+============
+
+Sound functions:
+playTapSound()
+playScanSound()
+playTickerTapSound()
+playPriorityAlertSound()
+playSuccessSound()
+playBadgeUnlockSound()
+
+Use Web Audio API.
+No external audio files required.
+Respect global muted state.
+
+If muted is true:
+
+* no sound should play anywhere
+
+==================================================
+ADMIN CONTROL
+=============
+
+Admin panel must include:
+
+1. Bottom Nav Manager
+
+* preview current nav labels
+* confirm global nav is:
+  Home, Reserve, Scan, Passport, Profile
+* confirm active route
+* no duplicate craft labels in bottom nav
+
+2. Ticker Feed Manager
+   Admin can:
+
+* add ticker item
+* edit ticker item
+* activate/deactivate item
+* set priority
+* choose source:
+  Kitchen, Humidor, Bar, Events, Passport, DayOne360 Travel, Ranking, E.A.T. Command
+* choose route
+* choose craft filter
+* set start/end time
+* preview ticker
+
+Create mock API functions:
+createTickerItem(item)
+updateTickerItem(id, updates)
+deactivateTickerItem(id)
+getTickerItemsBySource(source)
+getTickerItemsByCraft(craft)
+
+==================================================
+LOCK REPLIT FROM DRIFTING
+=========================
+
+Do not drift.
+
+Do not:
+
+* create a different app layout
+* rename the entire system
+* remove existing craft cards
+* duplicate craft cards in bottom nav
+* turn bottom nav into operational zones
+* hide content behind the bottom nav
+* create unrelated pages beyond required routes
+* change the visual language away from premium black/gold
+* add cartoon purple or green styling
+* use emojis
+* leave buttons dead
+* remove scan functionality
+* remove admin
+* remove haptics
+* remove existing routing
+
+Only fix:
+
+1. bottom toolbar duplication issue
+2. permanent ticket ticker
+3. E.A.T. Command source connection
+4. DayOne360 Travel permanent route/placement
+5. haptic/sound/touchscreen behavior
+6. routing for nav and ticker items
+
+==================================================
+FILES TO CREATE OR UPDATE
+=========================
+
+Create or update:
+
+src/components/common/BottomNav.jsx
+src/components/common/TicketTicker.jsx
+src/components/common/TickerItemDetailModal.jsx
+
+src/data/tickerFeed.js
+
+src/api/tickerApi.js
+src/api/eatCommandApi.js
+
+src/screens/DayOneTravel.jsx
+src/screens/EatCommandCenter.jsx
+src/screens/KitchenCommand.jsx
+src/screens/HumidorCommand.jsx
+src/screens/BarCommand.jsx
+
+Update these screens to include TicketTicker:
+src/screens/Reserve.jsx
+src/screens/CraftHub.jsx
+src/screens/SmokeCraft.jsx
+src/screens/PourCraft.jsx
+src/screens/BrewCraft.jsx
+src/screens/WineCraft.jsx
+src/screens/GrandLoungeRanking.jsx
+
+Update routing:
+src/App.jsx
+
+Update utilities:
+src/utils/haptics.js
+src/utils/sound.js
+
+Update styling:
+src/index.css
+
+==================================================
+ACCEPTANCE CHECKLIST
+====================
+
+Before finishing, verify:
+
+Bottom toolbar:
+
+* no longer shows Lounge, Humidor, Cellar as global nav on Reserve screen
+* uses Home, Reserve, Scan, Passport, Profile
+* active item is correct
+* center Scan button works
+* bottom nav does not cover content
+* admin button does not overlap nav or content
+
+Craft cards:
+
+* SmokeCraft routes to `/smokecraft`
+* PourCraft routes to `/pourcraft`
+* BrewCraft routes to `/brewcraft`
+* WineCraft routes to `/winecraft`
+* cards are not duplicated in bottom nav
+
+Ticket ticker:
+
+* appears under header
+* appears on Reserve / CraftHub
+* appears on every craft screen
+* appears on Grand Lounge Ranking
+* pulls from tickerFeed or tickerApi
+* routes to E.A.T., Passport, Events, Travel, or Ranking
+* supports swipe/touch
+* has haptic feedback
+* sound respects mute
+
+E.A.T. Command:
+
+* Kitchen route exists
+* Humidor route exists
+* Bar route exists
+* ticker connects to all three
+* inventory/pairings routes exist or show functional modals
+
+DayOne360 Travel:
+
+* route exists
+* permanent placement exists
+* ticker item routes to it
+* screen has working CTAs
+
+No drift:
+
+* no unrelated redesign
+* no static screenshot UI
+* no dead buttons
+* no duplicate nav logic
+* no cartoon colors
+* no content hidden behind toolbar
+
+FINAL EXPECTATION:
+The bottom toolbar must become clean global navigation, not a duplicate craft/category menu. The craft cards remain the experience entry points. The permanent premium ticket ticker must appear across craft screens and pull from E.A.T. Command Center sources: Kitchen, Humidor, Bar, Events, Passport, Ranking, and DayOne360 Travel.
