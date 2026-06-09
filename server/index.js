@@ -34,6 +34,10 @@ import demoRoutes             from './routes/demoRoutes.js'
 import pilotRoutes            from './routes/pilotRoutes.js'
 import pairingOrderRoutes    from './routes/pairingOrderRoutes.js'
 import smokecraftOrders      from './routes/smokecraftOrders.js'
+import rankingRoutes         from './routes/rankingRoutes.js'
+import badgeRoutes           from './routes/badgeRoutes.js'
+import tickerRoutes          from './routes/tickerRoutes.js'
+import travelRoutes          from './routes/travelRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { startPOS3AutoSync }  from './services/pos3AutoSyncService.js'
@@ -78,6 +82,10 @@ app.use('/api/smokecraft',        smokecraftOrders)
 app.use('/api/audit',       auditRoutes)
 app.use('/api/admin',       adminRoutes)
 app.use('/api/founder',     founderRoutes)
+app.use('/api/ranking',     rankingRoutes)
+app.use('/api/badges',      badgeRoutes)
+app.use('/api/ticker',      tickerRoutes)
+app.use('/api/travel',      travelRoutes)
 
 // ── 404 handler ───────────────────────────────────────────────
 app.use((_req, res) => {
