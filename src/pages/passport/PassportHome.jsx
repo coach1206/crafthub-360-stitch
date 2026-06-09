@@ -13,6 +13,10 @@ import { RECENT_ACTIVITY } from '../../data/recentActivity.js'
 import { PASSPORT_PROFILE } from '../../data/passportProfile.js'
 import { ALL_PAYLOADS } from '../../utils/qrPayloads.js'
 import craftImages from '../../lib/craftImages.js'
+import {
+  WmGlobe, WmSeal, WmGuilloche, WmBooklet, WmStampRing,
+  WmLedger, WmDotGrid, WmRosette, WmTravelLines
+} from '../../lib/passportWatermarks.jsx'
 
 /* ─── Palette ─────────────────────────────────────────────── */
 const C = {
@@ -792,10 +796,14 @@ export default function PassportHome() {
   const xpPct = Math.round((profile.xp / profile.nextTierXp) * 100)
 
   return (
-    <div style={{ minHeight:'100vh', background:C.paper, paddingBottom:112, overflowX:'hidden' }}>
+    <div style={{ minHeight:'100vh', background:C.paper, paddingBottom:112, overflowX:'hidden', position:'relative' }}>
+      {/* ── Page-wide dot grid watermark ──────────────── */}
+      <div style={{ position:'fixed', inset:0, pointerEvents:'none', zIndex:0 }}>
+        <WmDotGrid opacity={0.04}/>
+      </div>
 
       {/* ── Centered container ──────────────────────────── */}
-      <div style={{ maxWidth:920, margin:'0 auto', padding:'0 16px' }}>
+      <div style={{ maxWidth:920, margin:'0 auto', padding:'0 16px', position:'relative', zIndex:1 }}>
 
         {/* ══ HERO CREDENTIAL CARD ══════════════════════ */}
         <div style={{ margin:'16px 0', position:'relative', borderRadius:14, overflow:'hidden',
@@ -804,9 +812,21 @@ export default function PassportHome() {
           {/* Paper texture + guilloche lines */}
           <div style={{ position:'absolute', inset:0, background:`linear-gradient(160deg,${C.paper} 0%,${C.parchment} 100%)`,
             backgroundImage:`repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(185,138,54,0.06) 22px,rgba(185,138,54,0.06) 23px)` }}/>
-          {/* Globe watermark */}
-          <div style={{ position:'absolute', right:-10, top:-10, pointerEvents:'none' }}>
-            <GlobeWatermark size={220} opacity={0.09}/>
+          {/* Guilloche security lines across the bottom of hero */}
+          <div style={{ position:'absolute', bottom:0, left:0, right:0, pointerEvents:'none', overflow:'hidden', height:56 }}>
+            <WmGuilloche width={960} height={56} opacity={0.055}/>
+          </div>
+          {/* Globe watermark — large, top right */}
+          <div style={{ position:'absolute', right:-18, top:-18, pointerEvents:'none' }}>
+            <WmGlobe size={230} opacity={0.09}/>
+          </div>
+          {/* Passport seal — behind scan row, bottom left area */}
+          <div style={{ position:'absolute', left:-30, bottom:-30, pointerEvents:'none' }}>
+            <WmSeal size={160} opacity={0.07}/>
+          </div>
+          {/* Passport booklet outline — center right */}
+          <div style={{ position:'absolute', right:120, top:8, pointerEvents:'none' }}>
+            <WmBooklet width={120} height={90} opacity={0.06}/>
           </div>
           {/* Inner gold border */}
           <div style={{ position:'absolute', inset:5, border:`1px solid ${C.border}`, borderRadius:10, pointerEvents:'none' }}/>
@@ -868,7 +888,15 @@ export default function PassportHome() {
           <SecHead right={<Link onClick={() => { triggerHaptic('light'); setGuideStep(1) }}>Full guide →</Link>}>
             How It Works
           </SecHead>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:9 }}>
+          {/* Guilloche background behind the 4 cards */}
+          <div style={{ position:'relative', borderRadius:12, overflow:'hidden', padding:'1px', background:`linear-gradient(${C.border},${C.border})` }}>
+            <div style={{ position:'absolute', inset:0, pointerEvents:'none', overflow:'hidden', borderRadius:12 }}>
+              <WmGuilloche width={960} height={160} opacity={0.06}/>
+            </div>
+            <div style={{ position:'absolute', right:10, top:'50%', transform:'translateY(-50%)', pointerEvents:'none' }}>
+              <WmRosette size={72} opacity={0.07}/>
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:9, padding:8, background:`${C.paper}E8`, borderRadius:11, position:'relative', zIndex:2 }}>
             {[
               { num:1, icon:'qr_code_scanner', title:'Scan In',       sub:'Enter a service or event using your QR passport.' },
               { num:2, icon:'person_edit',     title:'Build Profile',  sub:'Share your story, interests, goals, and what matters.' },
@@ -885,13 +913,22 @@ export default function PassportHome() {
                 <p style={{ fontFamily:SANS, fontSize:9, color:C.brown, lineHeight:1.45 }}>{s.sub}</p>
               </PCard>
             ))}
-          </div>
+            </div>{/* /inner grid */}
+          </div>{/* /guilloche wrapper */}
         </div>
 
         {/* ══ START HERE ════════════════════════════════ */}
         <div style={{ marginBottom:18 }}>
           <SecHead sub="Your Next Actions">Start Here</SecHead>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:8 }}>
+          {/* Credential-line background + travel routes watermark */}
+          <div style={{ position:'relative', borderRadius:12, overflow:'hidden' }}>
+            <div style={{ position:'absolute', inset:0, pointerEvents:'none' }}>
+              <WmTravelLines width={960} height={110} opacity={0.05}/>
+            </div>
+            <div style={{ position:'absolute', left:'50%', top:'50%', transform:'translate(-50%,-50%)', pointerEvents:'none' }}>
+              <WmRosette size={90} opacity={0.04}/>
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:8, position:'relative', zIndex:2 }}>
             {SECTION_ITEMS.map(a => {
               const ac = SEC_COLORS[a.key] || C.navy
               return (
@@ -906,6 +943,7 @@ export default function PassportHome() {
                 </PCard>
               )
             })}
+            </div>
           </div>
         </div>
 
@@ -918,16 +956,23 @@ export default function PassportHome() {
               { icon:'hub',          label:'Connections', sub:'Your network & conversations',    route:'/passport/connections', color:'#6B4D8A', img: craftImages.portraits?.member4 },
               { icon:'event',        label:'Events',      sub:'Curated experiences & invites',   route:'/passport/events', color:C.brown,       img: craftImages.fallbacks?.cigar },
               { icon:'redeem',       label:'Benefits',    sub:'Access perks & privileges',       route:'/passport/benefits', color:C.navy,      img: craftImages.fallbacks?.whiskey },
-            ].map(s => (
+            ].map((s, si) => (
               <PCard key={s.label} onClick={() => { triggerHaptic('light'); navigate(s.route) }}
                 style={{ padding:'0', overflow:'hidden', minHeight:88 }}>
                 <div style={{ position:'relative', height:'100%', display:'flex', alignItems:'center', gap:12, padding:'14px 12px' }}>
-                  {/* Faint watermark portrait */}
+                  {/* Faint photo watermark */}
                   {s.img && (
                     <div style={{ position:'absolute', right:0, top:0, bottom:0, width:'45%', overflow:'hidden' }}>
                       <img src={s.img} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top', filter:'saturate(0) brightness(1.1) opacity(0.12)' }}/>
                     </div>
                   )}
+                  {/* SVG watermark per card */}
+                  <div style={{ position:'absolute', right:si%2===0?8:12, bottom:si<2?-6:-10, pointerEvents:'none', zIndex:1 }}>
+                    {si === 0 && <WmBooklet width={80} height={60} opacity={0.1} color={s.color}/>}
+                    {si === 1 && <WmTravelLines width={120} height={60} opacity={0.09} color={s.color}/>}
+                    {si === 2 && <WmStampRing size={60} opacity={0.1} color={s.color} label="EVENT"/>}
+                    {si === 3 && <WmSeal size={70} opacity={0.09} color={s.color}/>}
+                  </div>
                   <div style={{ width:36, height:36, borderRadius:9, background:`${s.color}14`, border:`1px solid ${s.color}25`,
                     display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, position:'relative', zIndex:2 }}>
                     <span className="material-symbols-outlined" style={{ fontSize:19, color:s.color, ...FILL1 }}>{s.icon}</span>
@@ -948,12 +993,25 @@ export default function PassportHome() {
           <SecHead right={<Link onClick={() => { triggerHaptic('light'); navigate('/passport/stamps') }}>VIEW ALL</Link>}>
             Digital Stamps
           </SecHead>
-          <PCard style={{ padding:'14px 12px 12px' }}>
-            <p style={{ fontFamily:MONO, fontSize:7.5, color:C.brown, letterSpacing:'0.15em', textTransform:'uppercase', marginBottom:13, textAlign:'center' }}>
+          <PCard style={{ padding:'14px 12px 12px', position:'relative', overflow:'hidden' }}>
+            {/* Stamp page watermark layers */}
+            <div style={{ position:'absolute', inset:0, pointerEvents:'none' }}>
+              <WmGuilloche width={960} height={120} opacity={0.05}/>
+            </div>
+            <div style={{ position:'absolute', left:'50%', top:'50%', transform:'translate(-50%,-50%)', pointerEvents:'none' }}>
+              <WmSeal size={130} opacity={0.06}/>
+            </div>
+            <div style={{ position:'absolute', right:-10, top:-10, pointerEvents:'none' }}>
+              <WmStampRing size={80} opacity={0.08} label="AUTH"/>
+            </div>
+            <div style={{ position:'absolute', left:-10, bottom:-10, pointerEvents:'none' }}>
+              <WmRosette size={60} opacity={0.07}/>
+            </div>
+            <p style={{ fontFamily:MONO, fontSize:7.5, color:C.brown, letterSpacing:'0.15em', textTransform:'uppercase', marginBottom:13, textAlign:'center', position:'relative', zIndex:2 }}>
               COLLECT · EARN · UNLOCK
             </p>
             {/* Stamp row */}
-            <div style={{ display:'flex', justifyContent:'space-around', marginBottom:10 }}>
+            <div style={{ display:'flex', justifyContent:'space-around', marginBottom:10, position:'relative', zIndex:2 }}>
               {STAMPS.map(stamp => (
                 <button key={stamp.id} onClick={() => { triggerHaptic('light'); setSelStamp(stamp) }}
                   onTouchStart={e=>e.currentTarget.style.transform='scale(0.9)'}
@@ -978,11 +1036,13 @@ export default function PassportHome() {
               ))}
             </div>
             {/* Horizontal passport lines */}
-            {[...Array(3)].map((_,i) => (
-              <div key={i} style={{ height:'1px', background:`${C.border}50`, marginBottom:4 }}/>
-            ))}
-            <div style={{ textAlign:'center', paddingTop:4, fontFamily:MONO, fontSize:7.5, color:C.brown, letterSpacing:'0.14em', marginBottom:10 }}>
-              AUTHENTICATED
+            <div style={{ position:'relative', zIndex:2 }}>
+              {[...Array(3)].map((_,i) => (
+                <div key={i} style={{ height:'1px', background:`${C.border}50`, marginBottom:4 }}/>
+              ))}
+              <div style={{ textAlign:'center', paddingTop:4, fontFamily:MONO, fontSize:7.5, color:C.brown, letterSpacing:'0.14em', marginBottom:10 }}>
+                AUTHENTICATED
+              </div>
             </div>
           </PCard>
           <GBtn full outline onClick={() => { triggerHaptic('light'); navigate('/passport/stamps') }}
@@ -999,7 +1059,14 @@ export default function PassportHome() {
             <SecHead right={<Link onClick={() => { triggerHaptic('light'); navigate('/passport/events') }}>See All →</Link>}>
               Upcoming Events
             </SecHead>
-            <PCard style={{ padding:'10px 11px' }}>
+            <PCard style={{ padding:'10px 11px', position:'relative', overflow:'hidden' }}>
+              {/* Travel-card watermark behind events */}
+              <div style={{ position:'absolute', inset:0, pointerEvents:'none' }}>
+                <WmTravelLines width={460} height={180} opacity={0.06}/>
+              </div>
+              <div style={{ position:'absolute', right:-8, bottom:-8, pointerEvents:'none' }}>
+                <WmStampRing size={66} opacity={0.08} label="RSVP"/>
+              </div>
               {events.map((ev, i) => (
                 <div key={ev.id} onClick={() => { triggerHaptic('light'); setSelEvent(ev) }}
                   style={{ display:'flex', alignItems:'center', gap:9, padding:'8px 0',
@@ -1032,7 +1099,12 @@ export default function PassportHome() {
           {/* Recent Activity */}
           <div>
             <SecHead right={<Link>All →</Link>}>Recent Activity</SecHead>
-            <PCard style={{ padding:'10px 11px' }}>
+            <PCard style={{ padding:'10px 11px', position:'relative', overflow:'hidden' }}>
+              {/* Credential ledger watermark */}
+              <WmLedger height={220} opacity={0.055}/>
+              <div style={{ position:'absolute', right:-12, top:'30%', pointerEvents:'none' }}>
+                <WmRosette size={66} opacity={0.08}/>
+              </div>
               {RECENT_ACTIVITY.map((a, i) => (
                 <div key={a.id} onClick={() => triggerHaptic('light')}
                   style={{ display:'flex', alignItems:'center', gap:8, padding:'7px 0',
@@ -1055,7 +1127,17 @@ export default function PassportHome() {
         {/* ══ PROFILE STRIP ════════════════════════════ */}
         <div style={{ display:'flex', alignItems:'center', gap:12, padding:'11px 14px',
           background:C.parchment, border:`1.5px solid ${C.borderSt}`, borderRadius:12,
-          boxShadow:'0 2px 8px rgba(16,43,70,0.08)', marginBottom:8 }}>
+          boxShadow:'0 2px 8px rgba(16,43,70,0.08)', marginBottom:8, position:'relative', overflow:'hidden' }}>
+          {/* Security pattern + seal behind profile name area */}
+          <div style={{ position:'absolute', inset:0, pointerEvents:'none' }}>
+            <WmGuilloche width={960} height={68} opacity={0.045}/>
+          </div>
+          <div style={{ position:'absolute', right:120, top:'50%', transform:'translateY(-50%)', pointerEvents:'none' }}>
+            <WmRosette size={55} opacity={0.07}/>
+          </div>
+          <div style={{ position:'absolute', right:16, top:0, bottom:0, pointerEvents:'none', display:'flex', alignItems:'center' }}>
+            <WmSeal size={52} opacity={0.06}/>
+          </div>
           {/* Initials badge */}
           <div style={{ width:46, height:46, borderRadius:'50%', background:C.navy, flexShrink:0,
             display:'flex', alignItems:'center', justifyContent:'center', border:`2px solid ${C.goldA}` }}>

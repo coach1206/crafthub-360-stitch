@@ -1,0 +1,255 @@
+CRITICAL VISUAL CORRECTION DIRECTIVE
+PROJECT: 360 Passport Connections
+SCREEN: Professional Passport Dashboard
+
+MAIN FAILURE:
+The current build does not have the passport watermark imagery in the background.
+It looks flat and plain because the page is missing the subtle passport identity layer.
+
+This must be fixed now.
+
+DO NOT REDESIGN THE WHOLE PAGE.
+KEEP THE CURRENT FUNCTIONAL STRUCTURE, BUTTONS, MODALS, AND LAYOUT.
+ONLY UPGRADE THE VISUAL LAYER SO THE SCREEN FEELS LIKE A REAL DIGITAL PASSPORT.
+
+==================================================
+PRIMARY FIX REQUIRED
+==================================================
+
+Add subtle passport-themed watermark imagery and background art across the screen.
+
+The dashboard must feel like:
+- a professional passport document
+- an official travel credential
+- a premium digital membership passport
+- a secure stamped identity record
+
+Right now it feels too plain because there are no faded passport graphics in the background.
+
+==================================================
+ADD WATERMARK BACKGROUND SYSTEM
+==================================================
+
+Add a reusable visual background system with these elements:
+
+1. Passport booklet watermark
+- faint image of an open or closed passport
+- very low opacity
+- soft embossed feel
+- parchment-toned blending
+- can appear inside section cards or behind content blocks
+
+2. Globe watermark
+- large circular world/globe stamp style
+- faint line-art only
+- low opacity
+- top right of hero card and selected sections
+
+3. Passport seal watermark
+- faded circular official seal
+- should look like a verification/passport seal
+- can sit behind stamp areas, benefits area, and hero area
+
+4. Guilloche / security pattern lines
+- subtle banknote/passport-style curved line patterns
+- lightly repeated in the page background
+- must be elegant and not distracting
+
+5. Travel / connection line art
+- faint routing lines, arcs, coordinates, or dotted travel path graphics
+- extremely subtle
+- useful behind Connections, Directory, Events sections
+
+6. Stamp ring watermark
+- faded circular stamp ring graphics
+- can be placed in the Digital Stamps section and around the hero
+
+==================================================
+WHERE TO ADD THE WATERMARKS
+==================================================
+
+A. PAGE BACKGROUND
+Add a subtle paper-textured base background plus very faint passport line patterns across the whole page.
+This should be visible but soft.
+
+B. HERO PASSPORT CARD
+Add:
+- large globe watermark top right
+- faint passport booklet image blended into the hero background
+- subtle circular passport seal behind or near the scan section
+- delicate security-line texture throughout the hero card
+
+C. HOW IT WORKS SECTION
+Keep it lighter, but add a soft patterned watermark background behind the section container.
+Do not overpower the cards.
+
+D. START HERE ACTIONS
+Use very faint passport grid or credential-line background inside the section container.
+Do not make the cards flat.
+
+E. PASSPORT SECTIONS CARDS
+This is where visual passport identity is most needed.
+
+For each of these cards, add faint background image/watermark art:
+
+Directory:
+- faded portrait/document style background
+- passport-ID-page vibe
+
+Connections:
+- faint networking portrait or connection-document watermark
+- subtle line overlays
+
+Events:
+- faded passport booklet or stamp-page image in background
+
+Benefits:
+- faded seal, badge, or travel credential watermark in background
+
+These images must be soft and low opacity, not loud.
+
+F. DIGITAL STAMPS SECTION
+Add:
+- passport paper lines
+- circular seal watermark
+- faint authentication stamp background
+- subtle page texture
+This section should feel like a real stamp collection page.
+
+G. UPCOMING EVENTS SECTION
+Add faint date-stamp / travel-card watermark accents in the background of the section container.
+Do not leave it as a plain beige block.
+
+H. RECENT ACTIVITY SECTION
+Add light passport ledger / logbook background lines so it feels like a travel record or credential history.
+
+I. PROFILE STRIP
+Add a soft passport ID-card feel:
+- faint security pattern
+- subtle watermark behind the profile name area
+
+==================================================
+VISUAL RULES
+==================================================
+
+The watermark imagery must be:
+
+- low opacity, around 4% to 12% depending on section
+- behind the content
+- never blocking readability
+- blended softly with multiply / overlay / soft-light style treatment
+- elegant and professional
+- not cartoonish
+- not too dark
+- not too obvious
+- not random stock-photo looking
+- integrated into the card surfaces like document security art
+
+==================================================
+OPACITY / BLENDING GUIDELINES
+==================================================
+
+Use these visual rules:
+
+Main page background patterns:
+- opacity 0.04 to 0.06
+
+Hero passport imagery:
+- opacity 0.06 to 0.10
+
+Passport section card imagery:
+- opacity 0.08 to 0.14
+
+Digital stamps watermark:
+- opacity 0.06 to 0.10
+
+Security line patterns:
+- opacity 0.03 to 0.06
+
+Always keep text readable.
+
+==================================================
+TECHNICAL IMPLEMENTATION
+==================================================
+
+Create a background watermark layer system.
+
+Recommended:
+- Use absolutely positioned background layers inside section wrappers
+- Use overflow hidden on cards
+- Use z-index layering so content stays above watermark art
+- Use CSS background-image or inner decorative div layers
+- Use subtle masks or gradients so imagery fades naturally
+
+Create reusable classes such as:
+
+passport-paper-bg
+passport-watermark-globe
+passport-watermark-seal
+passport-watermark-booklet
+passport-security-lines
+passport-card-watermark
+
+If needed, create:
+src/assets/passport-watermarks/
+and store:
+- globe watermark SVG
+- passport seal SVG
+- passport booklet faint PNG or SVG
+- guilloche line SVG
+- stamp ring SVG
+
+If no assets exist, generate them using CSS/SVG shapes and patterns.
+The effect still must be visible.
+
+==================================================
+IMPORTANT SECTION-SPECIFIC REQUIREMENTS
+==================================================
+
+Hero card:
+Must visibly show a faded globe/passport watermark.
+
+Passport Sections cards:
+Must visibly show faded passport imagery in the background.
+Right now these look empty and generic. Fix that.
+
+Digital Stamps:
+Must feel like a stamp-authentication page, not a plain beige rectangle.
+
+Upcoming Events + Recent Activity:
+Must have faint document/passport-record styling in the background.
+
+==================================================
+DO NOT DO THIS
+==================================================
+
+Do not make the watermarks too strong.
+Do not make the page darker.
+Do not replace the clean ivory palette.
+Do not add random full-color photos.
+Do not place heavy image overlays on top of text.
+Do not break functionality.
+Do not move the layout around.
+Do not remove current working buttons.
+Do not leave sections flat and empty.
+
+==================================================
+FINAL ACCEPTANCE CHECKLIST
+==================================================
+
+Before finishing, verify:
+
+- The dashboard now clearly feels passport-themed
+- Hero card has globe/passport watermark imagery
+- Passport Sections cards have faded passport-style background art
+- Digital Stamps has stamp-page styling
+- Upcoming Events has subtle travel/passport watermark styling
+- Recent Activity has credential-log styling
+- Background patterns are visible but soft
+- Readability remains strong
+- No buttons or functionality are broken
+- Layout remains intact
+- The page no longer feels flat or empty
+
+FINAL EXPECTATION:
+The user should immediately feel that this is a real digital passport system because the screen now includes subtle passport watermark imagery, document-security styling, and faded passport visuals embedded into the background.
