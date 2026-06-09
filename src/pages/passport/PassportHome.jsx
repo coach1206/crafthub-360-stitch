@@ -1016,7 +1016,7 @@ export default function PassportHome() {
 
         {/* top bar */}
         <div style={{ display:'flex', alignItems:'center', gap:10, padding:'14px 16px 10px', position:'relative', zIndex:3 }}>
-          <button onClick={()=>{ triggerHaptic('light'); window.history.length > 1 ? navigate(-1) : navigate('/') }}
+          <button onClick={()=>{ triggerHaptic('light'); navigate('/crafthub') }}
             style={{ width:40, height:40, borderRadius:11, border:`1.5px solid ${C.gold}55`,
               background:`${C.gold}20`, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0,
               boxShadow:`0 2px 8px rgba(184,138,59,0.18)` }}>
