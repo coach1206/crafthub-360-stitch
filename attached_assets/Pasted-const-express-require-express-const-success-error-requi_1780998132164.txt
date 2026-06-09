@@ -1,0 +1,89 @@
+const express = require("express");
+const { success, error } = require("../utils/response");
+const rankingData = require("../data/rankingData");
+const {
+  createTickerItem,
+  updateTickerItem,
+  deactivateTickerItem
+} = require("../services/tickerService");
+const { addXpToUser, getLeaderboard } = require("../services/rankingService");
+
+const router = express.Router();
+
+router.post("/ranking/add-xp", (req, res) => {
+  const { userId, xpValue, sourceType } = req.body;
+
+  if (!userId || typeof xpValue !== "number") {
+    return error(res, "userId and xpValue are required.");
+  }
+
+  const user = addXpToUser(userId, xpValue, sourceType || "admin");
+
+  if (!user) {
+    return error(res, "User not found.", 404);
+  }
+
+  return success(
+    res,
+    {
+      user,
+      leaderboard: getLeaderboard()
+    },
+    "XP added by admin."
+  );
+});
+
+router.post("/ranking/reset", (req, res) => {
+  rankingData.users = rankingData.users.map((user, index) => ({
+    ...user,
+    xp: index === 4 ? 950 : user.xp
+  }));
+
+  return success(res, getLeaderboard(), "Leaderboard reset.");
+});
+
+router.post("/ticker", (req, res) => {
+  const item = createTickerItem(req.body);
+  return success(res, item, "Admin ticker item created.");
+});
+
+router.patch("/ticker/:id", (req, res) => {
+  const item = updateTickerItem(req.params.id, req.body);
+
+  if (!item) {
+    return error(res, "Ticker item not found.", 404);
+  }
+
+  return success(res, item, "Admin ticker item updated.");
+});
+
+router.delete("/ticker/:id", (req, res) => {
+  const item = deactivateTickerItem(req.params.id);
+
+  if (!item) {
+    return error(res, "Ticker item not found.", 404);
+  }
+
+  return success(res, item, "Admin ticker item deactivated.");
+});
+
+router.post("/image-replacement", (req, res) => {
+  const { assetId, prompt } = req.body;
+
+  if (!assetId || !prompt) {
+    return error(res, "assetId and prompt are required.");
+  }
+
+  return success(
+    res,
+    {
+      assetId,
+      status: "queued",
+      prompt,
+      message: "Image replacement request queued for secure backend generation."
+    },
+    "OpenAI image replacement queued."
+  );
+});
+
+module.exports = router;
