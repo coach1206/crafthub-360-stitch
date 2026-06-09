@@ -1,0 +1,369 @@
+REPLIT EXACT SCREEN MATCH DIRECTIVE
+PROJECT: 360 Passport Connections
+SCREEN: Passport Events
+
+IMPORTANT:
+The screen must look like the uploaded reference image exactly.
+Do not redesign it in a different layout.
+Do not reinterpret the design.
+Do not make a new version.
+Do not change the structure.
+Do not create a wide desktop dashboard.
+Do not create a different event feed.
+
+RECREATE THE UPLOADED IMAGE AS A FUNCTIONAL REACT SCREEN.
+
+The uploaded image is the final visual target.
+
+==================================================
+VISUAL MATCH REQUIREMENT
+==================================================
+
+Match the uploaded Passport Events screenshot:
+
+- Same mobile-first vertical layout
+- Same black obsidian background
+- Same gold luxury borders
+- Same compact event feed
+- Same top header placement
+- Same filter pill row
+- Same featured large event card
+- Same smaller stacked event cards below
+- Same fixed bottom navigation
+- Same glowing gold center QR button
+- Same visual rhythm, spacing, and proportions
+- Same dark cinematic event photography style
+- Same gold date badges
+- Same CTA button positions
+- Same stamp chips
+- Same attending count chips
+- Same premium cigar, bourbon, wine, networking, and humidor imagery
+
+Do not make the screen look like anything else.
+
+==================================================
+REFERENCE SCREEN STRUCTURE
+==================================================
+
+Build the screen in this exact order:
+
+1. Top header
+- Back button on far left
+- Title: Passport Events
+- Subtitle: Discover experiences. Earn stamps. Build trusted connections.
+- My Events button on top right
+- Scan QR button beside it
+
+2. Filter row
+Horizontal pill buttons:
+- All
+- Featured
+- VIP Only
+- Craft
+- Networking
+- Attending
+
+3. Featured event card
+Large hero card:
+- Background image of cigar and cognac lounge
+- Featured badge top left
+- Date badge top right: JUN 14
+- Category label: Craft Experience
+- Title: Cigar & Cognac Collectors Night
+- Location/time row
+- Description
+- Stamp chip: +3 Stamps
+- Attending chip: 48/60 Attending
+- Collector Night Stamp image/badge on the right
+- CTA button: Attending ✓
+
+4. Smaller event cards below
+Use the same stacked layout shown in the image:
+
+- Bourbon & Business Roundtable
+- WineCraft Reserve Tasting
+- Founder’s Table Networking Night
+- Private Humidor Masterclass
+
+Each card must include:
+- Left date badge
+- Event image
+- Category/VIP badge
+- Title
+- Location/time
+- Description
+- Stamp chip
+- Attending chip
+- CTA button on the right
+
+5. Bottom navigation
+Fixed at bottom:
+- Home
+- Events
+- Center Scan QR gold circle
+- Passport
+- Network
+
+Events must be active.
+
+The bottom nav must match the image and must not cover the last card.
+
+==================================================
+FUNCTIONALITY REQUIREMENT
+==================================================
+
+Everything must be clickable and usable.
+
+Back button:
+- window.history.back()
+
+My Events:
+- Filters to attending events
+
+Scan QR top button:
+- Opens QR Scan Modal
+
+Center QR bottom button:
+- Opens QR Scan Modal
+
+Filter pills:
+- All shows all
+- Featured shows featured events
+- VIP Only shows vipOnly events
+- Craft shows craft events
+- Networking shows networking events
+- Attending shows attending events
+
+Event cards:
+- Tapping the card opens Event Detail Modal
+
+Attend button:
+- Changes event state to Attending
+- Shows Passport Stamp Overlay
+- Shows toast: Passport updated. Event added.
+
+Attending button:
+- Opens Event Detail Modal
+
+Request VIP Access:
+- Opens VIP Request Modal
+
+Sold Out:
+- Disabled
+- Shows text: This experience is full.
+
+Stamp chip:
+- Opens Stamp Rewards panel/modal
+
+Attending chip:
+- Opens Attendee/Networking preview
+
+==================================================
+TOUCHSCREEN / HAPTIC REQUIREMENT
+==================================================
+
+This screen must feel touchscreen-first.
+
+Add:
+- Haptic feedback with navigator.vibrate()
+- Button press scale
+- Soft inner shadow on press
+- Gold glow on active touch
+- 56px minimum touch targets
+- 64px minimum for primary buttons
+- Smooth tap feedback
+- No hover-only interactions
+
+Use:
+
+if (navigator.vibrate) navigator.vibrate(35)
+
+For success:
+
+navigator.vibrate([20, 40, 20])
+
+Trigger haptics on:
+- Filter taps
+- Event card taps
+- Attend button
+- VIP request
+- QR scan
+- Bottom nav buttons
+- Modal close
+- Stamp unlock
+
+==================================================
+IMAGE SYSTEM REQUIREMENT
+==================================================
+
+The event cards must use real replaceable image fields.
+
+Do not bake the image into CSS only.
+Do not use one static screenshot.
+
+Create each event with:
+
+image
+imagePrompt
+imageSource
+imageVersion
+
+Create:
+
+src/api/imageSourceApi.js
+
+Functions:
+- getEventImage(eventId)
+- updateEventImage(eventId, newImageUrl)
+- generateEventImagePrompt(event)
+- requestOpenAIImageReplacement(eventId, prompt)
+- getFallbackImageForCategory(category)
+
+Important:
+OpenAI image generation must not run from the frontend.
+The frontend should only simulate or queue the request.
+
+Add this code comment:
+“Real OpenAI image generation must happen through a secure backend endpoint. Never expose API keys in the browser.”
+
+Add hidden admin shortcut:
+
+Alt + I / Option + I opens Image Manager Modal.
+
+Image Manager Modal:
+- Select event
+- Show current image
+- Show current image prompt
+- Paste replacement image URL
+- Update image
+- Generate better prompt
+- Request OpenAI replacement
+- Close
+
+==================================================
+DATA SOURCE REQUIREMENT
+==================================================
+
+Create:
+
+src/data/passportEvents.js
+src/api/passportEventsApi.js
+
+Use mock API calls instead of hardcoding everything inside one component.
+
+API functions:
+- getPassportEvents()
+- getPassportEventById(id)
+- filterPassportEvents(filter)
+- attendEvent(id)
+- requestVipAccess(id, reason)
+- scanEventQr(qrPayload)
+- unlockEventStamp(id)
+- getCraftInfo(eventId)
+- getNetworkingInfo(eventId)
+- getVipAccessInfo(eventId)
+
+This allows VIP, Craft, Networking, Featured, and Attending to connect to a real source later.
+
+==================================================
+MODALS REQUIRED
+==================================================
+
+Create working modals:
+
+1. Event Detail Modal
+Shows full event info, image, benefits, audience, stamp rewards, attending count, and CTA.
+
+2. VIP Request Modal
+Reason field.
+Submit button.
+Validation.
+Success state.
+
+3. QR Scan Modal
+Simulated camera frame.
+Animated scan line.
+Simulate Event Check-In button.
+Success state.
+
+4. Passport Stamp Overlay
+Shows:
+Adding Event to Passport…
+Then:
+Event Added
+Stamp Opportunity Unlocked
+
+Add stamp sound with Web Audio API if sound is on.
+
+5. Image Manager Modal
+For admin image replacement and OpenAI image queue simulation.
+
+==================================================
+FILES TO CREATE OR UPDATE
+==================================================
+
+src/App.jsx
+src/main.jsx
+src/index.css
+
+src/screens/PassportEvents.jsx
+
+src/components/events/EventCard.jsx
+src/components/events/EventFilterTabs.jsx
+src/components/events/EventDetailModal.jsx
+src/components/events/VipRequestModal.jsx
+src/components/events/QrScanModal.jsx
+src/components/events/PassportStampOverlay.jsx
+src/components/events/Toast.jsx
+src/components/events/ImageManagerModal.jsx
+src/components/events/BottomNav.jsx
+
+src/data/passportEvents.js
+src/api/passportEventsApi.js
+src/api/imageSourceApi.js
+src/utils/haptics.js
+src/utils/sound.js
+
+==================================================
+DO NOT DO THIS
+==================================================
+
+Do not change the layout from the uploaded image.
+Do not make it a desktop-style redesign.
+Do not create a different screen.
+Do not use a static screenshot as the UI.
+Do not leave buttons dead.
+Do not use green buttons.
+Do not remove the fixed bottom nav.
+Do not remove the center gold QR button.
+Do not make the cards huge and spread out.
+Do not use blank image areas.
+Do not hardcode images so they cannot be replaced.
+Do not expose OpenAI API keys in the frontend.
+
+==================================================
+FINAL ACCEPTANCE CHECKLIST
+==================================================
+
+Before finishing, confirm:
+
+- The screen visually matches the uploaded image
+- Same layout
+- Same card structure
+- Same header structure
+- Same filter row
+- Same bottom nav
+- Same gold center QR button
+- Same stacked event feed
+- All buttons work
+- Filters work
+- Event cards open modal
+- Attend updates state
+- VIP request works
+- QR scan works
+- Stamp overlay works
+- Haptics work where supported
+- Event images are replaceable
+- OpenAI image replacement is backend-ready
+- No static screenshot UI
+- No dead buttons
