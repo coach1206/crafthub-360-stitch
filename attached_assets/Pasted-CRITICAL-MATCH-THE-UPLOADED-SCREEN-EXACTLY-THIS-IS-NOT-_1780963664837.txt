@@ -1,0 +1,559 @@
+CRITICAL: MATCH THE UPLOADED SCREEN EXACTLY.
+THIS IS NOT A REDESIGN REQUEST.
+THIS IS NOT A “USE AS INSPIRATION” REQUEST.
+THIS IS AN EXACT FUNCTIONAL RECREATION REQUEST.
+
+PROJECT: 360 Passport Connections
+SCREEN: Connections
+REFERENCE IMAGE: Use the uploaded screenshot as the exact visual blueprint.
+
+IMPORTANT RULE:
+Do not use the screenshot itself as the interface.
+Rebuild the screen as real React components that visually match the uploaded image as closely as possible, while making every interactive element functional.
+
+PRIMARY GOAL:
+Recreate the exact “360 Passport Connections” screen shown in the uploaded image and make all buttons, tabs, rows, bottom nav items, admin actions, and modals actually work.
+
+==================================================
+EXACT VISUAL MATCH REQUIREMENT
+==================================================
+
+Recreate the screen exactly like the uploaded image:
+
+- Dark obsidian / plum / deep purple interface
+- Thin top header bar
+- Back button on top left
+- Title: “360 Passport Connections”
+- Subtitle: “Grow your trusted network”
+- Small Mute button on top right
+- Main CTA button: “Scan to Connect”
+- Large hero card with:
+  - Title: “Connections”
+  - Subtitle: “Turns introductions into verified relationships.”
+  - Stats:
+    - 12 Verified Connections
+    - 94% Top Match
+    - 8/10 Social Goal
+  - Small overlapping connection avatars on left
+  - “+7 New Contacts”
+  - Gold circular passport stamp graphic on right:
+    “360 Passport Connections”
+    “Verified Introduction”
+
+- Tab bar below hero card:
+  - Best Matches
+  - People You Met
+  - Suggested
+  - “People You Met” is active by default
+
+- Section label:
+  - “TOP MATCHES FOR YOU”
+
+- Stacked match list rows:
+  1. David Harper
+     Founder @ North & Co.
+     Austin, TX
+     94% Match
+  2. Olivia Santos
+     Hospitality Strategist @ Independent
+     Atlanta, GA
+     90% Match
+  3. Terrence Brooks
+     Brand Partner @ Brooks Global
+     Chicago, IL
+     86% Match
+
+- Each row should match the image:
+  - avatar on left
+  - text stack in middle
+  - circular match badge on right
+  - subtle chevron/arrow
+  - glass card styling
+  - slim, elegant, premium spacing
+
+- Fixed bottom navigation:
+  - 5 visible items
+  - Home
+  - Passport / stamp style item
+  - Center gold QR scan button
+  - Network / people item
+  - Profile / selected connection item
+  - Floating “Admin” button on bottom right
+  - Bottom nav must visually match the screenshot and stay fixed
+
+DO NOT:
+- Change layout
+- Turn this into a two-column dashboard
+- Add extra cards not shown
+- Reinterpret spacing
+- Replace the visual structure
+- Use a generic template
+
+==================================================
+FUNCTIONAL REQUIREMENTS
+==================================================
+
+Everything visible must work.
+
+1. BACK BUTTON
+- Clicking goes back with window.history.back()
+- If there is no history, route to the app home screen
+
+2. MUTE BUTTON
+- Toggle sound on/off
+- Visual state changes between muted and sound on
+- Controls all UI sound effects:
+  - stamp sound
+  - tap sound
+  - success tone
+
+3. SCAN TO CONNECT BUTTON
+- Opens a modal
+- Modal title: “Scan to Connect”
+- Text: “Point your camera at a guest Passport QR code to connect.”
+- Show simulated camera frame
+- Show animated scan line
+- Buttons:
+  - Simulate Successful Scan
+  - Close
+- Simulate Successful Scan should:
+  - create a mock connected user
+  - open verification flow
+  - show “Connection Verified”
+  - update connection stats if needed
+  - show toast confirmation
+
+4. HERO CARD STATS
+- These values must come from data, not hardcoded text inside only one component
+- Display:
+  - verifiedConnections
+  - topMatchPercent
+  - socialGoalScore
+  - newContactsCount
+
+5. TOP AVATAR STACK
+- Show overlapping avatars from mock connection data
+- Clicking an avatar selects that person in the list/detail state
+- Hover/touch state should glow
+- If clicked, corresponding row becomes selected
+
+6. TABS
+Tabs must work:
+- Best Matches
+- People You Met
+- Suggested
+
+Default active tab:
+- People You Met
+
+Behavior:
+- Clicking a tab filters the visible row list
+- Active tab gets highlighted with the same purple filled look as the screenshot
+- Inactive tabs match the muted style in the screenshot
+
+Use these groups:
+Best Matches:
+- David Harper
+- Rachel Kim
+- Marcus Bell
+
+People You Met:
+- David Harper
+- Olivia Santos
+- Terrence Brooks
+
+Suggested:
+- Elena Rivera
+- James Whitmore
+- Nia Thompson
+
+7. MATCH ROWS
+Each person row must be fully clickable.
+
+Click row:
+- Selects that person
+- Opens a detail drawer or modal OR navigates to a detail panel page
+- The selected row should visually glow subtly
+
+Click match badge:
+- Opens a “Why You Match” modal
+
+Click chevron/arrow:
+- Opens the same detail view
+
+8. MATCH DETAIL MODAL / PANEL
+When clicking a person, open a detail modal or slide-up panel with:
+- profile image
+- name
+- role
+- location
+- match score
+- why you match
+- shared interests
+- shared event
+- best next move
+- buttons:
+  - View Passport
+  - Connect Now
+  - Close
+
+For David Harper:
+- Name: David Harper
+- Role: Founder @ North & Co.
+- Location: Austin, TX
+- Match: 94%
+- Why you match: Shared goals in luxury hospitality and brand strategy.
+- Shared interests: Innovation, Travel, Hospitality, Brand Strategy
+- Shared event: Cigar & Cognac Night
+- Best next move: Invite David to your Gentleman’s Table conversation.
+
+For Olivia Santos:
+- Role: Hospitality Strategist @ Independent
+- Location: Atlanta, GA
+- Match: 90%
+
+For Terrence Brooks:
+- Role: Brand Partner @ Brooks Global
+- Location: Chicago, IL
+- Match: 86%
+
+9. VIEW PASSPORT BUTTON
+- Opens passport modal
+- Passport modal should show:
+  - title: 360 Passport Connections
+  - selected connection name
+  - status: Verified Introduction
+  - last event
+  - relationship score
+  - buttons:
+    - Close
+    - Connect Now
+
+10. CONNECT NOW BUTTON
+- Opens verification animation flow
+- Show overlay:
+  - “Verifying Connection…”
+  - smoke/frost effect
+  - gold loading ring
+- After 1 second:
+  - “Connection Verified”
+  - “Passport Updated”
+- Show gold stamp animation
+- If sound is on, play a stamp thump
+- If device supports it, vibrate with haptic feedback
+- Show toast:
+  - “Connection verified.”
+  - “Passport updated.”
+
+11. WHY YOU MATCH MODAL
+When user taps the match circle:
+- show modal with:
+  - Match score
+  - Why you match
+  - Shared goals
+  - Shared interests
+  - Suggested intro prompt
+  - Close button
+
+==================================================
+BOTTOM NAVIGATION REQUIREMENT
+==================================================
+
+Bottom nav must visually match the screenshot and function.
+
+Items:
+1. Home
+2. Passport / stamps item
+3. Center Scan QR button
+4. Network / people item
+5. Profile / selected connection item
+
+Also keep:
+- Floating Admin button on bottom right
+
+Behavior:
+- Home routes to /
+- Passport routes to /passport
+- Center Scan QR opens scan modal
+- Network routes to /connections or remains active
+- Profile routes to selected connection profile or /profile
+- Admin opens admin panel/modal
+
+The bottom nav must:
+- remain fixed
+- not cover content
+- have enough bottom padding above it
+- support touch
+- have glow for active item
+- have pressed state
+- have large touch targets
+
+==================================================
+ADMIN BUTTON REQUIREMENT
+==================================================
+
+The Admin button shown at bottom right must work.
+
+Clicking Admin opens Admin Panel modal.
+
+Admin Panel options:
+- Edit connection stats
+- Edit tab data
+- Edit displayed people
+- Replace connection images
+- Update hero stamp
+- Queue OpenAI image replacement request
+- Close
+
+This must support future content editing.
+
+==================================================
+OPENAI IMAGE CHANGE SYSTEM
+==================================================
+
+Create a backend-ready image management system so OpenAI or an admin can replace visuals later.
+
+Do NOT call OpenAI directly from the frontend.
+
+Create:
+src/api/imageSourceApi.js
+
+Functions:
+- getConnectionImage(personId)
+- updateConnectionImage(personId, newImageUrl)
+- generateConnectionImagePrompt(person)
+- requestOpenAIImageReplacement(personId, prompt)
+- getHeroStampImage()
+- updateHeroStampImage(newImageUrl)
+
+Simulate “Request OpenAI Image Replacement” with a mock response:
+{
+  success: true,
+  status: "queued",
+  message: "Image replacement request queued for backend generation."
+}
+
+Add code comment:
+Real OpenAI image generation must happen through a secure backend endpoint. Never expose API keys in frontend code.
+
+Admin modal should allow:
+- choose connection
+- see current image
+- paste replacement image URL
+- edit image prompt
+- request OpenAI replacement
+
+==================================================
+DATA SOURCE REQUIREMENT
+==================================================
+
+Do not hardcode everything inside one screen.
+
+Create:
+src/data/connectionsData.js
+src/api/passportConnectionsApi.js
+
+Use a reusable data structure for:
+- hero stats
+- connection lists by tab
+- connection profiles
+- match score
+- location
+- role
+- interests
+- event history
+- image
+- imagePrompt
+- verified state
+
+Create mock API functions:
+- getConnectionSummary()
+- getConnectionsByTab(tab)
+- getConnectionById(id)
+- verifyConnection(id)
+- getPassport(id)
+- updateConnectionImage(id, imageUrl)
+- requestOpenAIImageReplacement(id, prompt)
+
+==================================================
+TOUCHSCREEN + HAPTIC + TACTILE FEEL
+==================================================
+
+This screen must be touchscreen-first.
+
+Add haptic feedback using:
+if (navigator.vibrate) navigator.vibrate(35)
+
+Use success haptic:
+navigator.vibrate([20, 40, 20])
+
+Use haptic feedback on:
+- back button
+- mute button
+- scan to connect
+- tab switches
+- row tap
+- match badge tap
+- connect now
+- view passport
+- bottom nav items
+- admin button
+- modal close buttons
+
+Also add tactile CSS states:
+- active scale 0.97
+- subtle inner shadow on press
+- glow on touch
+- smooth 120ms transitions
+- no tiny tap targets
+- min 48px touch target for smaller items
+- 56px to 72px for major actions
+
+==================================================
+SOUND SYSTEM
+==================================================
+
+Create:
+src/utils/sound.js
+
+Functions:
+- playSoftTap()
+- playStampSound()
+- playSuccessTone()
+
+Use Web Audio API
+No external sound file required
+
+Muted state must prevent sound playback.
+
+==================================================
+COMPONENTS TO CREATE OR UPDATE
+==================================================
+
+Create or update:
+
+src/App.jsx
+src/main.jsx
+src/index.css
+
+src/screens/PassportConnections.jsx
+
+src/components/connections/ConnectionsHero.jsx
+src/components/connections/ConnectionTabs.jsx
+src/components/connections/ConnectionRow.jsx
+src/components/connections/ConnectionDetailModal.jsx
+src/components/connections/WhyMatchModal.jsx
+src/components/connections/PassportModal.jsx
+src/components/connections/ScanConnectModal.jsx
+src/components/connections/AdminPanelModal.jsx
+src/components/connections/Toast.jsx
+src/components/connections/BottomNav.jsx
+
+src/data/connectionsData.js
+src/api/passportConnectionsApi.js
+src/api/imageSourceApi.js
+src/utils/haptics.js
+src/utils/sound.js
+
+If the existing structure differs, adapt without breaking the project.
+
+==================================================
+ROUTE
+==================================================
+
+Create or connect the screen to:
+ /passport-connections
+or make it the active default page if no router is being used.
+
+==================================================
+RESPONSIVE REQUIREMENTS
+==================================================
+
+Even though the screen should match the screenshot, it still must be responsive.
+
+Desktop:
+- centered, same proportions as screenshot
+- fixed bottom nav still visible
+- hero card and list maintain same structure
+
+Tablet:
+- same layout, scaled properly
+- no overflow
+
+Mobile:
+- same vertical stack
+- bottom nav fixed
+- content scrolls above nav
+- buttons remain tappable
+
+Do not change the layout pattern to “make it responsive.”
+Keep the same structure and adapt it carefully.
+
+==================================================
+ANIMATION REQUIREMENTS
+==================================================
+
+Use Framer Motion if available.
+If needed:
+npm install framer-motion lucide-react
+
+Animate:
+- tab switch highlight
+- modal open/close
+- row selection glow
+- QR scan line
+- passport stamp verification overlay
+- toast entry/exit
+- button press
+- bottom nav active state
+
+Keep animation premium and subtle.
+
+==================================================
+DO NOT DO THIS
+==================================================
+
+Do not redesign the screen.
+Do not add a new layout.
+Do not turn it into a dashboard.
+Do not replace the visual structure.
+Do not use the screenshot itself as the UI.
+Do not leave buttons dead.
+Do not remove the bottom nav.
+Do not remove the Admin button.
+Do not invent random sections not shown.
+Do not expose OpenAI API keys in the frontend.
+
+==================================================
+FINAL ACCEPTANCE CHECKLIST
+==================================================
+
+Before finishing, verify all of this:
+
+- Screen visually matches uploaded screenshot closely
+- Back button works
+- Mute button works
+- Scan to Connect works
+- Hero stats come from data
+- Avatar stack works
+- Tabs switch correctly
+- Correct rows display for each tab
+- Row click works
+- Match badge click works
+- Detail modal works
+- View Passport works
+- Connect Now works
+- Verification overlay works
+- Toasts work
+- Bottom nav works
+- Admin button works
+- Image replacement system exists
+- OpenAI image replacement is backend-ready only
+- Haptic feedback works where supported
+- Touch targets are large enough
+- Screen is not static
+- No dead buttons
+- Layout remains faithful to the screenshot
+
+FINAL EXPECTATION:
+This must be an exact functional recreation of the uploaded 360 Passport Connections screen, not a redesign.
