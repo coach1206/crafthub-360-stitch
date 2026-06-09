@@ -1,0 +1,115 @@
+[
+  {
+    "id": "user-sebastian-harrow",
+    "name": "Sebastian Harrow",
+    "initials": "SH",
+    "hue": 45,
+    "xp": 1740,
+    "badgeType": "gold-crown",
+    "isCurrentUser": false,
+    "recentActions": [
+      "Won top ranking",
+      "Craft stamp earned"
+    ]
+  },
+  {
+    "id": "user-marco-del-valle",
+    "name": "Marco Del Valle",
+    "initials": "MD",
+    "hue": 30,
+    "xp": 1580,
+    "badgeType": "silver-medal",
+    "isCurrentUser": false,
+    "recentActions": [
+      "Event entry",
+      "Verified connection"
+    ]
+  },
+  {
+    "id": "user-vincent-ashworth",
+    "name": "Vincent Ashworth",
+    "initials": "VA",
+    "hue": 200,
+    "xp": 1285,
+    "badgeType": "bronze-medal",
+    "isCurrentUser": false,
+    "recentActions": [
+      "Humidor check-in"
+    ]
+  },
+  {
+    "id": "user-rafael-cienfuegos",
+    "name": "Rafael Cienfuegos",
+    "initials": "RC",
+    "hue": 160,
+    "xp": 1100,
+    "badgeType": "bronze-ring",
+    "isCurrentUser": false,
+    "recentActions": [
+      "Profile check"
+    ]
+  },
+  {
+    "id": "user-john-collins",
+    "name": "John M Collins",
+    "initials": "JC",
+    "hue": 45,
+    "xp": 1050,
+    "badgeType": "current-user-gold",
+    "isCurrentUser": true,
+    "recentActions": [
+      "Connection verified",
+      "Craft stamp earned"
+    ]
+  },
+  {
+    "id": "user-adrian-moreau",
+    "name": "Adrian Moreau",
+    "initials": "AM",
+    "hue": 290,
+    "xp": 820,
+    "badgeType": "aficionado",
+    "isCurrentUser": false,
+    "recentActions": []
+  },
+  {
+    "id": "user-daniel-torres",
+    "name": "Daniel Torres",
+    "initials": "DT",
+    "hue": 100,
+    "xp": 730,
+    "badgeType": "aficionado",
+    "isCurrentUser": false,
+    "recentActions": []
+  },
+  {
+    "id": "user-luca-santoro",
+    "name": "Luca Santoro",
+    "initials": "LS",
+    "hue": 210,
+    "xp": 610,
+    "badgeType": "aficionado",
+    "isCurrentUser": false,
+    "recentActions": []
+  },
+  {
+    "id": "user-james-whitaker",
+    "name": "James Whitaker",
+    "initials": "JW",
+    "hue": 50,
+    "xp": 540,
+    "badgeType": "aficionado",
+    "isCurrentUser": false,
+    "recentActions": []
+  },
+  {
+    "id": "user-patrick-bishop",
+    "name": "Patrick Bishop",
+    "initials": "PB",
+    "hue": 180,
+    "xp": 420,
+    "badgeType": "aficionado",
+    "isCurrentUser": false,
+    "recentActions": []
+  }
+]

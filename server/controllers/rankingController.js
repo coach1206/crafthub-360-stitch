@@ -38,8 +38,9 @@ const SEED_MEMBERS = [
 // Persist XP overrides as { memberId: xp } so seed structure stays canonical
 const persistedXp = loadJson('ranking_xp.json', {})
 
-// MEMBERS is a mutable copy of seeds with any persisted XP applied
-const MEMBERS = SEED_MEMBERS.map(m => ({
+// Member roster: use persisted list if present, otherwise seed
+const persistedMembers = loadJson('ranking_members.json', null)
+const MEMBERS = (persistedMembers || SEED_MEMBERS).map(m => ({
   ...m,
   xp: persistedXp[m.id] !== undefined ? persistedXp[m.id] : m.xp,
 }))
@@ -62,6 +63,10 @@ function saveState() {
   // Only persist runtime additions (everything before seed entries)
   const runtimeEntries = activityLog.filter(e => !seedLog.some(s => s.id === e.id))
   saveJson('ranking_activity.json', runtimeEntries)
+}
+
+function saveMembers() {
+  saveJson('ranking_members.json', MEMBERS)
 }
 
 const XP_MAP = { session: 25, event: 50, connection: 75, craftStamp: 100, vipStamp: 150 }
@@ -175,6 +180,48 @@ export function addXpAdmin(req, res) {
   target.xp += Number(amount)
   saveState()
   success(res, { userId: target.id, totalXp: target.xp, leaderboard: buildLeaderboard() }, `Added ${amount} XP`)
+}
+
+// ── Admin: member roster management ──────────────────────────────────────────
+
+export function addMember(req, res) {
+  const { name, initials, hue = 180, xp = 0, badgeType = 'aficionado', isCurrentUser = false, recentActions = [] } = req.body
+  if (!name || !initials) return error(res, 'name and initials are required')
+
+  const id = 'user-' + name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '-' + Date.now()
+  if (MEMBERS.some(m => m.id === id || (m.name.toLowerCase() === name.toLowerCase()))) {
+    return error(res, 'A member with that name already exists', 409)
+  }
+
+  const member = { id, name, initials, hue: Number(hue), xp: Number(xp), badgeType, isCurrentUser: Boolean(isCurrentUser), recentActions }
+  MEMBERS.push(member)
+  saveMembers()
+  saveState()
+  success(res, { member, leaderboard: buildLeaderboard() }, 'Member added')
+}
+
+export function removeMember(req, res) {
+  const { memberId } = req.params
+  const idx = MEMBERS.findIndex(m => m.id === memberId)
+  if (idx === -1) return error(res, 'Member not found', 404)
+  const [removed] = MEMBERS.splice(idx, 1)
+  saveMembers()
+  saveState()
+  success(res, { removed, leaderboard: buildLeaderboard() }, 'Member removed')
+}
+
+export function updateMember(req, res) {
+  const { memberId } = req.params
+  const member = MEMBERS.find(m => m.id === memberId)
+  if (!member) return error(res, 'Member not found', 404)
+
+  const { name, initials, badgeType } = req.body
+  if (name      !== undefined) member.name      = name
+  if (initials  !== undefined) member.initials  = initials
+  if (badgeType !== undefined) member.badgeType = badgeType
+
+  saveMembers()
+  success(res, { member, leaderboard: buildLeaderboard() }, 'Member updated')
 }
 
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : '' }
