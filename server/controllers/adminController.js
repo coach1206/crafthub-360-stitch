@@ -7,7 +7,7 @@ import * as securityEventService from '../services/securityEventService.js'
 import { buildPermissionMatrix, getEffectivePermissions, ROLE_LEVELS } from '../config/permissions.js'
 import { PERMISSION_GROUPS, PERMISSION_DESCRIPTIONS } from '../config/permissions.js'
 import { ok, created, fail, notFound, serverError } from '../utils/response.js'
-import { getResetAuditLog, getResetAuditTotal, clearResetAuditLog } from '../utils/resetAudit.js'
+import { getResetAuditLog, getResetAuditTotal, clearResetAuditLog, appendResetAllAudit } from '../utils/resetAudit.js'
 import { getSchedule, setSchedule } from '../services/resetScheduleService.js'
 import { resetXpCore, resetActivityCore, resetMembersCore } from './rankingController.js'
 import { resetConciergeCore, resetStampsCore } from './travelController.js'
@@ -287,13 +287,13 @@ export function resetAll(req, res) {
   try {
     const user = req.user
     const STORES = [
-      { key: 'ranking-xp',       label: 'Leaderboard XP',        fn: () => resetXpCore(user) },
-      { key: 'ranking-activity', label: 'Activity Log',           fn: () => resetActivityCore(user) },
-      { key: 'ranking-members',  label: 'Member Roster',          fn: () => resetMembersCore(user) },
-      { key: 'travel-concierge', label: 'Concierge Requests',     fn: () => resetConciergeCore(user) },
-      { key: 'travel-stamps',    label: 'Travel Stamps',          fn: () => resetStampsCore(user) },
-      { key: 'ticker-feed',      label: 'Ticker Feed',            fn: () => resetFeedCore(user) },
-      { key: 'badges',           label: 'Badge Progress',         fn: () => resetBadgesCore(user) },
+      { key: 'ranking-xp',       label: 'Leaderboard XP',        fn: () => resetXpCore(user, 'manual', true) },
+      { key: 'ranking-activity', label: 'Activity Log',           fn: () => resetActivityCore(user, 'manual', true) },
+      { key: 'ranking-members',  label: 'Member Roster',          fn: () => resetMembersCore(user, 'manual', true) },
+      { key: 'travel-concierge', label: 'Concierge Requests',     fn: () => resetConciergeCore(user, 'manual', true) },
+      { key: 'travel-stamps',    label: 'Travel Stamps',          fn: () => resetStampsCore(user, 'manual', true) },
+      { key: 'ticker-feed',      label: 'Ticker Feed',            fn: () => resetFeedCore(user, 'manual', true) },
+      { key: 'badges',           label: 'Badge Progress',         fn: () => resetBadgesCore(user, 'manual', true) },
     ]
 
     const results = []
@@ -305,6 +305,12 @@ export function resetAll(req, res) {
         results.push({ store: store.key, label: store.label, success: false, error: err.message || 'Unknown error' })
       }
     }
+
+    appendResetAllAudit(
+      results.map(r => ({ key: r.store, label: r.label, success: r.success })),
+      user,
+      'manual',
+    )
 
     const failed    = results.filter(r => !r.success)
     const succeeded = results.filter(r => r.success)

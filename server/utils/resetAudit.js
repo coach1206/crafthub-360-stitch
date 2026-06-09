@@ -49,6 +49,30 @@ export function getResetAuditTotal() {
 }
 
 /**
+ * Append a single aggregate audit entry for a "Reset All" bulk action.
+ * @param {Array<{key:string, label:string, success:boolean}>} stores — list of stores included in the reset
+ * @param {object} actor   — req.user object
+ * @param {string} source  — 'manual' | 'scheduled'
+ */
+export function appendResetAllAudit(stores, actor = {}, source = 'manual') {
+  const log = loadJson(FILENAME, [])
+  const entry = {
+    id:         uuidv4(),
+    timestamp:  new Date().toISOString(),
+    store:      'reset-all',
+    stores,
+    source,
+    actorId:    actor.id    || 'unknown',
+    actorRole:  actor.role  || 'unknown',
+    actorEmail: actor.email || null,
+    actorName:  actor.displayName || null,
+  }
+  log.unshift(entry)
+  saveJson(FILENAME, log)
+  return entry
+}
+
+/**
  * Clear the entire reset audit log (founder-only meta-action).
  * Does NOT append an audit entry — this is intentional.
  */

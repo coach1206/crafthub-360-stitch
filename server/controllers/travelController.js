@@ -71,17 +71,17 @@ export function getConciergeRequests(_req, res) {
 
 // ── Admin: reset persisted state ──────────────────────────────────────────────
 
-export function resetConciergeCore(user, source = 'manual') {
+export function resetConciergeCore(user, source = 'manual', skipAudit = false) {
   conciergeRequests.splice(0, conciergeRequests.length)
   saveState()
-  appendResetAudit('travel-concierge', user, source)
+  if (!skipAudit) appendResetAudit('travel-concierge', user, source)
   return { cleared: true }
 }
 
-export function resetStampsCore(user, source = 'manual') {
+export function resetStampsCore(user, source = 'manual', skipAudit = false) {
   userStamps.clear()
   saveState()
-  appendResetAudit('travel-stamps', user, source)
+  if (!skipAudit) appendResetAudit('travel-stamps', user, source)
   return { cleared: true }
 }
 

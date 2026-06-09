@@ -156,6 +156,7 @@ export default function Admin() {
   const [resetAuditLog,    setResetAuditLog]    = useState([])
   const [clearAuditBusy,   setClearAuditBusy]   = useState(false)
   const [clearAuditMsg,    setClearAuditMsg]    = useState('')
+  const [expandedAuditIds, setExpandedAuditIds] = useState(new Set())
 
   // ── Reset All state (founder_level_0 only) ────────────────
   const canResetAll      = role === 'founder_level_0'
@@ -1214,13 +1215,81 @@ export default function Admin() {
                       'ticker-feed':      'Ticker Feed',
                       'badges':           'Badge Progress',
                     }
-                    const storeLabel = storeLabels[entry.store] || entry.store
                     const actor = entry.actorName || entry.actorEmail || entry.actorId || 'unknown'
                     const roleLabel = ROLE_BADGE[entry.actorRole]?.label || entry.actorRole
                     let dateStr = '—'
                     try { dateStr = new Date(entry.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) } catch {}
+
+                    const isResetAll = entry.store === 'reset-all'
+                    const entryId    = entry.id || i
+                    const isExpanded = expandedAuditIds.has(entryId)
+
+                    if (isResetAll) {
+                      const subStores  = Array.isArray(entry.stores) ? entry.stores : []
+                      const storeCount = subStores.length
+                      const failCount  = subStores.filter(s => s.success === false).length
+                      return (
+                        <div key={entryId} style={{ borderBottom: `1px solid ${BORDER}`, padding: '7px 0', fontSize: '11px' }}>
+                          <div
+                            onClick={() => setExpandedAuditIds(prev => {
+                              const next = new Set(prev)
+                              next.has(entryId) ? next.delete(entryId) : next.add(entryId)
+                              return next
+                            })}
+                            style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer', flexWrap: 'wrap' }}
+                          >
+                            <span className="material-symbols-outlined" style={{ fontSize: '13px', color: '#444', marginTop: '1px', flexShrink: 0 }}>
+                              {isExpanded ? 'expand_less' : 'expand_more'}
+                            </span>
+                            <span style={{ color: DIM, minWidth: '120px', fontWeight: 600 }}>
+                              Reset All
+                              <span style={{ fontWeight: 400, marginLeft: '4px' }}>
+                                — {storeCount} store{storeCount !== 1 ? 's' : ''}
+                                {failCount > 0 && (
+                                  <span style={{ color: '#b94040', marginLeft: '4px' }}>({failCount} failed)</span>
+                                )}
+                              </span>
+                            </span>
+                            <span style={{ color: '#444', flex: 1, minWidth: '80px' }}>
+                              {actor}
+                              {entry.actorRole && (
+                                <span style={{ color: ROLE_BADGE[entry.actorRole]?.color || '#555', marginLeft: '6px', fontSize: '10px', letterSpacing: '0.06em' }}>
+                                  {roleLabel}
+                                </span>
+                              )}
+                            </span>
+                            {entry.source === 'scheduled' && (
+                              <span style={{
+                                background: 'rgba(201,168,76,0.12)', border: `1px solid ${GOLD}44`,
+                                borderRadius: '3px', color: GOLD, fontSize: '9px', padding: '1px 5px',
+                                letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap', flexShrink: 0,
+                              }}>
+                                scheduled
+                              </span>
+                            )}
+                            <span style={{ color: '#333', fontFamily: 'monospace', fontSize: '10px', whiteSpace: 'nowrap' }}>
+                              {dateStr}
+                            </span>
+                          </div>
+                          {isExpanded && subStores.length > 0 && (
+                            <div style={{ marginTop: '5px', paddingLeft: '23px', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                              {subStores.map((s, si) => (
+                                <div key={si} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '10px', color: s.success === false ? '#b94040' : '#555' }}>
+                                  <span className="material-symbols-outlined" style={{ fontSize: '11px' }}>
+                                    {s.success === false ? 'error' : 'check_circle'}
+                                  </span>
+                                  {storeLabels[s.key] || s.key}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    }
+
+                    const storeLabel = storeLabels[entry.store] || entry.store
                     return (
-                      <div key={entry.id || i} style={{
+                      <div key={entryId} style={{
                         display:       'flex',
                         gap:           '10px',
                         alignItems:    'flex-start',

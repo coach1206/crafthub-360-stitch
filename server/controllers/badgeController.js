@@ -71,11 +71,11 @@ export function checkEligible(req, res) {
 
 // ── Admin: reset persisted badge data ─────────────────────────────────────────
 
-export function resetBadgesCore(user, source = 'manual') {
+export function resetBadgesCore(user, source = 'manual', skipAudit = false) {
   userBadges.clear()
   unlockLog.splice(0, unlockLog.length)
   saveState()
-  appendResetAudit('badges', user, source)
+  if (!skipAudit) appendResetAudit('badges', user, source)
   return { cleared: true }
 }
 
