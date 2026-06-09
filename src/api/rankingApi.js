@@ -1,134 +1,93 @@
-import { RANKING_DATA, RECENT_RANKING_ACTIVITY, BADGES_DATA } from '../data/rankingData.js'
+/**
+ * Ranking API — live endpoints backed by /api/ranking.
+ * Falls back gracefully on network errors.
+ */
 
-const delay = (ms = 350) => new Promise(r => setTimeout(r, ms))
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(path, {
+    headers: { 'Content-Type': 'application/json' },
+    ...opts,
+  })
+  const json = await res.json()
+  if (!json.success) throw new Error(json.message || 'API error')
+  return json.data
+}
 
-let _leaderboard = RANKING_DATA.users.map(u => ({ ...u }))
-let _activity    = [...RECENT_RANKING_ACTIVITY]
-let _badges      = [...BADGES_DATA]
+function normalizeActivityEntry(entry) {
+  return {
+    ...entry,
+    desc: entry.description || entry.desc || '',
+    ago:  entry.timestamp   || entry.ago  || 'just now',
+  }
+}
 
 export async function getLeaderboard() {
-  await delay(200)
-  return [..._leaderboard].sort((a, b) => b.xp - a.xp).map((u, i) => ({ ...u, rank: i + 1 }))
+  const data = await apiFetch('/api/ranking')
+  return data.leaderboard || []
 }
 
-export async function getCurrentUserRank(userId = 'john-collins') {
-  await delay(150)
-  const sorted = [..._leaderboard].sort((a, b) => b.xp - a.xp)
-  const idx    = sorted.findIndex(u => u.id === userId)
-  return idx >= 0 ? { ...sorted[idx], rank: idx + 1 } : null
-}
-
-export async function getMemberRankDetail(memberId) {
-  await delay(200)
-  const sorted = [..._leaderboard].sort((a, b) => b.xp - a.xp)
-  const idx    = sorted.findIndex(u => u.id === memberId)
-  return idx >= 0 ? { ...sorted[idx], rank: idx + 1 } : null
+export async function getRecentRankingActivity(userId) {
+  const params = new URLSearchParams({ limit: 20 })
+  if (userId) params.set('userId', userId)
+  const data = await apiFetch(`/api/ranking/activity?${params}`)
+  return (data.activity || []).map(normalizeActivityEntry)
 }
 
 export async function getRankingTiers() {
-  await delay(100)
-  return [...RANKING_DATA.tiers]
+  const data = await apiFetch('/api/ranking/tiers')
+  return data.tiers || []
 }
 
-export async function getRecentRankingActivity(userId = 'john-collins') {
-  await delay(150)
-  return [..._activity]
+export async function getCurrentUserRank() {
+  const data = await apiFetch('/api/ranking/user/me')
+  return data.member || null
 }
 
-export async function addXpToUser(userId, xpValue, sourceType = 'scan') {
-  await delay(300)
-  const idx = _leaderboard.findIndex(u => u.id === userId)
-  if (idx < 0) return null
-  _leaderboard[idx] = { ..._leaderboard[idx], xp: _leaderboard[idx].xp + xpValue }
-  const newXp  = _leaderboard[idx].xp
-  const sorted = [..._leaderboard].sort((a, b) => b.xp - a.xp)
-  const rank   = sorted.findIndex(u => u.id === userId) + 1
-  const tier   = getTierForXp(newXp)
-  _leaderboard[idx].tier = tier.name
-  _leaderboard[idx].progressPercent = Math.round(((newXp - tier.minXp) / ((tier.maxXp || newXp + 1000) - tier.minXp)) * 100)
-  return { ...sorted[idx < sorted.length ? idx : 0], rank }
+export async function getMemberRankDetail(memberId) {
+  const data = await apiFetch(`/api/ranking/user/${memberId}`)
+  return data.member || null
 }
 
 export async function processRankingScan(payload) {
-  await delay(500)
-  const { sourceType, sourceId, xpValue, venueId } = payload
-  const updatedUser = await addXpToUser('john-collins', xpValue, sourceType)
-  const sorted = [..._leaderboard].sort((a, b) => b.xp - a.xp)
-  const newRank = sorted.findIndex(u => u.id === 'john-collins') + 1
-
-  const activityEntry = {
-    id:    `act-scan-${Date.now()}`,
-    type:  sourceType,
-    icon:  getIconForSource(sourceType),
-    title: getTitleForSource(sourceType),
-    desc:  getDescForSource(sourceType, sourceId),
-    xp:    xpValue,
-    ago:   'just now',
-    badgeId: getBadgeForSource(sourceType),
-  }
-  _activity = [activityEntry, ..._activity]
-
-  const badgeUnlocked = shouldUnlockBadge(sourceType, updatedUser?.xp || 0)
-
+  const { sourceType = 'session', sourceId, xpValue, venueId } = payload
+  const data = await apiFetch('/api/ranking/scan', {
+    method: 'POST',
+    body: JSON.stringify({
+      sourceType,
+      sourceId:  sourceId || sourceType,
+      xpValue,
+      venueId,
+    }),
+  })
+  const activityEntry = normalizeActivityEntry(data.activityEntry || {})
   return {
     success:       true,
-    updatedUser,
-    newRank,
-    xpAdded:       xpValue,
+    xpAdded:       data.xpAdded,
+    totalXp:       data.totalXp,
+    tierChanged:   data.tierChanged,
+    prevTier:      data.prevTier,
+    newTier:       data.newTier,
+    leaderboard:   data.leaderboard || [],
     activityEntry,
-    badgeUnlocked,
-    leaderboard:   sorted.map((u, i) => ({ ...u, rank: i + 1 })),
-    toast:         `+${xpValue} XP earned — ${getTitleForSource(sourceType)}`,
+    badgeUnlocked: null,
+    toast:         data.toast || `+${data.xpAdded} XP earned`,
+    updatedUser:   (data.leaderboard || []).find(u => u.isCurrentUser) || null,
+    newRank:       ((data.leaderboard || []).find(u => u.isCurrentUser) || {}).rank || null,
   }
 }
 
-export async function unlockBadge(userId, badgeId) {
-  await delay(200)
-  const badge = _badges.find(b => b.id === badgeId)
-  return badge ? { ...badge, earned: true, earnedAt: new Date().toISOString() } : null
-}
-
-export async function getBadgeDetail(badgeId) {
-  await delay(100)
-  return _badges.find(b => b.id === badgeId) || null
+export async function addXpAdmin(amount = 50) {
+  const data = await apiFetch('/api/ranking/admin/xp', {
+    method: 'POST',
+    body: JSON.stringify({ amount }),
+  })
+  return { leaderboard: data.leaderboard || [] }
 }
 
 export async function getTierDetail(tierId) {
-  await delay(100)
-  return RANKING_DATA.tiers.find(t => t.id === tierId) || null
+  const tiers = await getRankingTiers()
+  return tiers.find(t => t.id === tierId) || null
 }
 
-function getTierForXp(xp) {
-  const tiers = RANKING_DATA.tiers
-  for (let i = tiers.length - 1; i >= 0; i--) {
-    if (xp >= tiers[i].minXp) return tiers[i]
-  }
-  return tiers[0]
-}
-
-function getIconForSource(sourceType) {
-  const map = { session: 'qr_code_scanner', event: 'event', connection: 'handshake', craft_stamp: 'workspace_premium', vip_stamp: 'stars' }
-  return map[sourceType] || 'qr_code_scanner'
-}
-function getTitleForSource(sourceType) {
-  const map = { session: 'Session Check-In', event: 'Event Entry', connection: 'Connection Verified', craft_stamp: 'Craft Stamp Earned', vip_stamp: 'VIP Stamp Unlocked' }
-  return map[sourceType] || 'Scan Processed'
-}
-function getDescForSource(sourceType, sourceId) {
-  const map = {
-    session:     'Checked into Grand Lounge session',
-    event:       'Cigar & Cognac Collectors Night',
-    connection:  'Connection verified with a member',
-    craft_stamp: 'Collector Night Stamp earned',
-    vip_stamp:   'VIP access unlocked — Grand Lounge',
-  }
-  return map[sourceType] || sourceId
-}
-function getBadgeForSource(sourceType) {
-  const map = { session: null, event: 'event-entry', connection: 'connection-verified', craft_stamp: 'craft-stamp', vip_stamp: 'vip-stamp' }
-  return map[sourceType] || null
-}
-function shouldUnlockBadge(sourceType, currentXp) {
-  if (currentXp >= 1000 && currentXp < 1100) return BADGES_DATA.find(b => b.id === 'connoisseur')
-  return null
-}
+export async function unlockBadge(_userId, _badgeId) { return null }
+export async function getBadgeDetail(_badgeId)       { return null }

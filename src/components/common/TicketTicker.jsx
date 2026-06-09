@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TICKER_FEED, TICKER_SOURCE_COLORS } from '../../data/tickerFeed.js'
 
 const G = '#C9A84C', GL = '#E8D5A3'
 const BORDER = 'rgba(201,168,76,0.22)'
@@ -15,15 +14,29 @@ export default function TicketTicker({ craft = 'all', muted = false, items: prop
   const posRef      = useRef(0)
   const [items, setItems] = useState([])
   const [detail, setDetail] = useState(null)
+  const [error, setError]   = useState(false)
 
   useEffect(() => {
-    const feed = propItems || TICKER_FEED.filter(i => i.active && (craft === 'all' || i.craft === 'all' || i.craft === craft))
-    setItems([...feed, ...feed]) // double for seamless loop
+    if (propItems) {
+      setItems([...propItems, ...propItems])
+      return
+    }
+    const params = new URLSearchParams({ limit: 30 })
+    if (craft !== 'all') params.set('craft', craft)
+    fetch(`/api/ticker?${params}`)
+      .then(r => r.json())
+      .then(json => {
+        if (!json.success) throw new Error('API error')
+        const feed = json.data?.items || []
+        setItems([...feed, ...feed])
+        setError(false)
+      })
+      .catch(() => setError(true))
   }, [craft, propItems])
 
   useEffect(() => {
     if (!items.length || !trackRef.current) return
-    const speed = 0.6 // px per frame
+    const speed = 0.6
     const halfW = trackRef.current.scrollWidth / 2
 
     function step() {
@@ -46,7 +59,7 @@ export default function TicketTicker({ craft = 'all', muted = false, items: prop
   const pause  = () => { pausedRef.current = true }
   const resume = () => { pausedRef.current = false }
 
-  if (!items.length) return null
+  if (error || !items.length) return null
 
   return (
     <>
@@ -73,9 +86,9 @@ export default function TicketTicker({ craft = 'all', muted = false, items: prop
               }}>
               <span style={{
                 fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-                color: TICKER_SOURCE_COLORS[item.source] || G,
-                border: `1px solid ${TICKER_SOURCE_COLORS[item.source] || G}55`,
-                background: `${TICKER_SOURCE_COLORS[item.source] || G}14`,
+                color: item.sourceColor || G,
+                border: `1px solid ${(item.sourceColor || G)}55`,
+                background: `${(item.sourceColor || G)}14`,
                 padding: '2px 7px', borderRadius: 4, flexShrink: 0,
               }}>{item.source}</span>
               <span style={{ color: GL, fontSize: 12, fontWeight: 500 }}>{item.title}</span>
@@ -92,7 +105,7 @@ export default function TicketTicker({ craft = 'all', muted = false, items: prop
         <div style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           onClick={() => setDetail(null)}>
           <div style={{ background: '#181410', border: `1px solid ${BORDER}`, borderRadius: 16, padding: 24, maxWidth: 340, width: '90%' }}>
-            <div style={{ color: TICKER_SOURCE_COLORS[detail.source] || G, fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 8 }}>{detail.source}</div>
+            <div style={{ color: detail.sourceColor || G, fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 8 }}>{detail.source}</div>
             <div style={{ color: GL, fontFamily: '"Playfair Display",serif', fontSize: 18, fontWeight: 600, marginBottom: 10 }}>{detail.title}</div>
             <div style={{ color: 'rgba(200,184,154,0.8)', fontSize: 13, lineHeight: 1.6, marginBottom: 16 }}>{detail.message}</div>
             {detail.ctaLabel && (

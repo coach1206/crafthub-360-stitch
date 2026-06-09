@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { craftImages } from '../../lib/craftImages.js'
-import { getLeaderboard, processRankingScan } from '../../api/rankingApi.js'
-import { RANKING_DATA, RECENT_RANKING_ACTIVITY, BADGES_DATA } from '../../data/rankingData.js'
+import { getLeaderboard, processRankingScan, getRecentRankingActivity } from '../../api/rankingApi.js'
+import { RANKING_DATA, BADGES_DATA } from '../../data/rankingData.js'
 import {
   sessionCheckInPayload, eventEntryPayload,
   connectionVerifiedPayload, craftStampPayload, vipStampPayload,
@@ -284,7 +284,7 @@ export default function Leaderboard() {
   const { addXP, completeStep } = useGuestSession()
 
   const [board,    setBoard]    = useState([])
-  const [activity, setActivity] = useState(RECENT_RANKING_ACTIVITY)
+  const [activity, setActivity] = useState([])
   const [muted,    setMuted]    = useState(false)
   const [mounted,  setMounted]  = useState(false)
   const [animXp,   setAnimXp]   = useState(950)
@@ -298,7 +298,12 @@ export default function Leaderboard() {
 
   useEffect(() => {
     setTimeout(() => setMounted(true), 80)
-    getLeaderboard().then(b => { setBoard(b); const me = b.find(u => u.isCurrentUser); if (me) setAnimXp(me.xp) })
+    getLeaderboard()
+      .then(b => { setBoard(b); const me = b.find(u => u.isCurrentUser); if (me) setAnimXp(me.xp) })
+      .catch(() => {})
+    getRecentRankingActivity()
+      .then(entries => setActivity(entries))
+      .catch(() => {})
   }, [])
 
   function showToast(msg) {
