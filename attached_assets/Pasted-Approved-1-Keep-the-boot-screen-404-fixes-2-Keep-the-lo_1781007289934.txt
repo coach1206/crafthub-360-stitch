@@ -1,0 +1,112 @@
+Approved:
+
+1. Keep the boot screen 404 fixes.
+2. Keep the local image replacement.
+3. Keep the inline SVG texture fix.
+4. Keep Passport Legacy Score and SmokeCraft XP separate.
+5. Keep the full Passport nav labels.
+
+Do NOT implement authentication yet.
+
+Before coding authentication, revise the auth plan with these corrections:
+
+1. Mentor cannot be only a virtual persona.
+NOVEE OS needs two mentor types:
+- AI Mentor Persona for guest experience
+- Human Mentor / Venue Expert role for approved staff, trainers, cigar experts, bourbon experts, wine experts, beer experts, and event hosts
+
+Human Mentor must have a real login and limited dashboard.
+
+2. Passport Member cannot stay localStorage-only.
+For demo, localStorage is acceptable.
+For production, Passport Member needs a real server-side profile connected to:
+- QR scan
+- resume token
+- phone/email lookup
+- stamps
+- events
+- XP
+- Legacy Score
+- rewards
+- connections
+
+3. Guest can stay local-only for preview mode, but once they claim a passport, join an event, earn stamps, or request travel, they must be promoted into Passport Member.
+
+4. Founder Level 0 login is approved as separate and protected.
+
+5. Admin and Manager can share the admin login form, but dashboard access must be role-filtered after login.
+
+6. Staff PIN-only login is okay for prototype, but for production add optional Staff ID + PIN so large venues do not have slow or unsafe PIN scanning.
+
+7. Developer access must be impossible in production unless Founder Level 0 grants it.
+Confirm dev headers and dev bypasses are blocked when NODE_ENV === production.
+
+8. Add these required roles:
+- FOUNDER_LEVEL_0
+- ADMIN
+- MANAGER
+- STAFF
+- HUMAN_MENTOR
+- PASSPORT_MEMBER
+- GUEST
+- DEVELOPER
+
+9. Add these required dashboards:
+- Founder Command
+- Admin Command
+- Manager E.A.T. Command
+- Staff POS 3 / Coach Help
+- Human Mentor Session Console
+- Passport Member Profile
+- Developer Diagnostics
+
+10. Add permission boundaries:
+Founder Level 0:
+Full control.
+
+Admin:
+Can manage venue, users below admin, events, ticker, inventory, analytics.
+
+Manager:
+Can manage floor operations, staff activity, E.A.T., ticker, inventory status.
+
+Staff:
+Can use POS 3, table status, guest assistance, Coach Help.
+
+Human Mentor:
+Can view assigned sessions, add tasting notes, guide guests, trigger approved mentor content, view learner progress.
+
+Passport Member:
+Can view own passport, stamps, events, rewards, connections, travel stamps.
+
+Guest:
+Can preview, scan public QR, start onboarding.
+
+Developer:
+Can view diagnostics only in approved environment. Cannot change ownership, money, secrets, or Founder settings.
+
+11. Add audit logging for every privileged action:
+- login
+- failed login
+- role change
+- access request
+- admin change
+- POS override
+- E.A.T. action
+- inventory update
+- ticker update
+- payment setting attempt
+- developer access attempt
+
+12. Add Access Denied screen:
+Premium NOVEE OS style.
+Must include:
+- Access Restricted
+- Current role does not permit access
+- Back
+- Home
+- Request Access
+
+Return the revised authentication architecture plan first.
+
+Do not code until I approve the revised plan.
