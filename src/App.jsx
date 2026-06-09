@@ -34,6 +34,7 @@ import Leaderboard      from './pages/smokecraft/Leaderboard.jsx'
 import PassportStamp    from './pages/smokecraft/PassportStamp.jsx'
 
 // ── Passport — guest-accessible, eager ───────────────────────
+import PassportHome        from './pages/passport/PassportHome.jsx'
 import PassportConnection  from './pages/PassportConnection.jsx'
 import PassportProfile     from './pages/passport/PassportProfile.jsx'
 import PassportStamps      from './pages/passport/PassportStamps.jsx'
@@ -196,7 +197,7 @@ export default function App() {
 
             {/* 360 Passport — guest-accessible */}
             <Route path="passport">
-              <Route index                  element={<PassportConnection />} />
+              <Route index                  element={<PassportHome />} />
               <Route path="profile"         element={<PassportProfile />} />
               <Route path="stamps"          element={<PassportStamps />} />
               <Route path="directory"       element={<PassportDirectory />} />

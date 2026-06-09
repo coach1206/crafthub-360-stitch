@@ -1,0 +1,933 @@
+REPLIT FUNCTIONAL BUILD DIRECTIVE
+PROJECT: 360 Passport Connections
+SCREEN: Professional Passport Home Dashboard
+REFERENCE IMAGE: Use the uploaded clean white/gold professional passport dashboard as the exact visual target.
+
+CRITICAL:
+This screen must look like the uploaded professional passport image, not the old dark/cartoon version. Recreate the layout as real React components. Do not use the image as a static background. Every button, card, scan action, section, stamp, and navigation item must be functional.
+
+==================================================
+PRIMARY GOAL
+============
+
+Build a clean, professional digital passport dashboard for 360 Passport Connections.
+
+The screen must let users:
+
+1. Scan a Passport QR code
+2. Scan an event QR code
+3. Scan a venue QR code
+4. Scan another member’s connection QR code
+5. Build or edit their profile
+6. View directory
+7. View matches
+8. Join events
+9. Explore benefits
+10. View passport sections
+11. View stamp collection
+12. RSVP to events
+13. View recent activity
+14. Open profile
+15. Use bottom navigation
+16. Receive haptic feedback on touchscreen taps
+17. See the correct screen after scanning based on the QR source
+
+==================================================
+VISUAL REQUIREMENT
+==================
+
+Match the uploaded professional passport dashboard image.
+
+Design style:
+
+* Clean ivory passport paper background
+* Light cream and parchment tones
+* Champagne gold borders
+* Navy accents
+* Embossed passport texture
+* Fine security line pattern
+* Official credential look
+* Real passport-inspired cards
+* Professional, trustworthy, clean, readable
+* No cartoon neon
+* No overly dark gothic look
+* No confusing purple-heavy design
+* No fake static screenshot
+
+Use:
+
+* Ivory: #F8F1E3
+* Warm parchment: #EFE2C6
+* Champagne gold: #B58A3A
+* Deep navy: #15314F
+* Charcoal text: #1E1A14
+* Soft brown: #6F5524
+* Muted green: #2F6B45
+* Soft burgundy only for warning/VIP details
+* Thin elegant borders
+* Subtle shadows
+* Passport-style watermarks and guilloche line patterns
+
+==================================================
+WHAT USER SEES WHEN THEY SCAN
+=============================
+
+The scan must not be generic. The app must detect the source type and show the correct result screen.
+
+There are 5 QR/NFC source types:
+
+1. VENUE QR
+   When user scans a venue QR, they see:
+
+Screen title:
+“Venue Check-In Verified”
+
+Display:
+
+* Venue name
+* City/state
+* Current event if available
+* Available stamps at this venue
+* Recommended next actions
+
+Example:
+“You’re checked in at Grand Lounge.”
+“Available today: Event Stamp, Connection Stamp, Craft Stamp.”
+
+Buttons:
+
+* Start Passport Session
+* View Venue Events
+* Find People Here
+* Close
+
+Backend source:
+venues table or mock venue source
+
+2. EVENT QR
+   When user scans an event QR, they see:
+
+Screen title:
+“Event Check-In Verified”
+
+Display:
+
+* Event name
+* Venue
+* Date/time
+* Stamp opportunity unlocked
+* Attendee count
+* Suggested connections at event
+
+Example:
+“You’re checked in for Cigar & Cognac Collectors Night.”
+“Collector Night Stamp unlocked.”
+
+Buttons:
+
+* Claim Event Stamp
+* View Event Details
+* See People Attending
+* Close
+
+Backend source:
+events table or mock event source
+
+3. MEMBER QR
+   When user scans another member’s Passport QR, they see:
+
+Screen title:
+“Connection Found”
+
+Display:
+
+* Member name
+* Profile photo
+* Profession / industry
+* Location
+* Match percentage
+* Shared interests
+* Shared event or venue
+* Trust status
+
+Example:
+“You matched with David Harper.”
+“94% connection fit based on luxury hospitality and brand strategy.”
+
+Buttons:
+
+* Verify Connection
+* View Passport
+* Message Later
+* Close
+
+Backend source:
+members table or mock member source
+
+4. STAMP QR
+   When user scans a stamp QR, they see:
+
+Screen title:
+“Stamp Ready to Claim”
+
+Display:
+
+* Stamp name
+* Stamp category
+* Event or venue tied to stamp
+* Requirement status
+* Authentication status
+
+Example:
+“Craft Stamp unlocked from Cigar & Cognac Collectors Night.”
+
+Buttons:
+
+* Claim Stamp
+* View Stamp Collection
+* Close
+
+Backend source:
+stamps table or mock stamp source
+
+5. BENEFIT QR
+   When user scans a benefit QR, they see:
+
+Screen title:
+“Benefit Unlocked”
+
+Display:
+
+* Benefit name
+* Benefit provider
+* Expiration date
+* Eligibility
+* Redemption instructions
+
+Example:
+“VIP Lounge Access unlocked.”
+“Valid tonight at Grand Lounge.”
+
+Buttons:
+
+* Redeem Benefit
+* Save to Passport
+* Close
+
+Backend source:
+benefits table or mock benefit source
+
+==================================================
+SCAN SOURCE ROUTING LOGIC
+=========================
+
+Create QR source routing.
+
+A scanned QR payload should look like this:
+
+{
+"sourceType": "venue" | "event" | "member" | "stamp" | "benefit",
+"sourceId": "string",
+"sessionId": "string",
+"issuedBy": "360-passport-connections",
+"signature": "mock-signature"
+}
+
+When user scans:
+
+* Parse QR payload
+* Validate sourceType
+* Call correct mock API function
+* Show correct result modal
+* Trigger haptic feedback
+* Play scan success sound if sound is on
+* Log scan in recent activity
+* Update passport state if needed
+
+If QR is invalid:
+Show:
+“Invalid Passport Code”
+“This code is not connected to 360 Passport Connections.”
+
+Buttons:
+
+* Try Again
+* Close
+
+==================================================
+MOCK API SOURCE LAYER
+=====================
+
+Create:
+
+src/api/passportScanApi.js
+
+Functions:
+
+scanPassportSource(qrPayload)
+validateQrPayload(qrPayload)
+getVenueById(id)
+getEventById(id)
+getMemberById(id)
+getStampById(id)
+getBenefitById(id)
+claimStamp(stampId, memberId)
+verifyConnection(memberId)
+checkInToVenue(venueId)
+checkInToEvent(eventId)
+redeemBenefit(benefitId)
+
+Each function should return a Promise with simulated delay.
+
+Example scanPassportSource:
+
+async function scanPassportSource(qrPayload) {
+const parsed = validateQrPayload(qrPayload)
+
+switch (parsed.sourceType) {
+case "venue":
+return getVenueById(parsed.sourceId)
+case "event":
+return getEventById(parsed.sourceId)
+case "member":
+return getMemberById(parsed.sourceId)
+case "stamp":
+return getStampById(parsed.sourceId)
+case "benefit":
+return getBenefitById(parsed.sourceId)
+default:
+return {
+success: false,
+error: "Invalid Passport Code"
+}
+}
+}
+
+==================================================
+MOCK DATA SOURCES
+=================
+
+Create these files:
+
+src/data/venues.js
+src/data/events.js
+src/data/members.js
+src/data/stamps.js
+src/data/benefits.js
+src/data/passportProfile.js
+src/data/recentActivity.js
+
+VENUES DATA:
+Grand Lounge
+
+* id: venue-grand-lounge
+* city: New York
+* state: NY
+* activeEventId: event-cigar-cognac
+* availableStamps: event-stamp, connection-stamp, craft-stamp
+
+EVENTS DATA:
+Cigar & Cognac Collectors Night
+
+* id: event-cigar-cognac
+* venueId: venue-grand-lounge
+* date: Jun 14
+* time: 7:00 PM
+* stampId: stamp-collector-night
+* attendeeCount: 48
+* capacity: 60
+
+Capital & Culture Private Dinner
+
+* id: event-capital-culture
+* venueId: venue-bottle-house
+* date: Jun 22
+* time: 6:30 PM
+* stampId: stamp-vip-dinner
+* attendeeCount: 32
+* capacity: 40
+
+MEMBERS DATA:
+David Harper
+
+* id: member-david-harper
+* role: Founder @ North & Co.
+* city: Austin
+* state: TX
+* matchScore: 94
+* sharedInterests: Luxury Hospitality, Brand Strategy, Travel
+* trustStatus: Verified Member
+
+Alicia Chen
+
+* id: member-alicia-chen
+* role: Hospitality Investor
+* city: New York
+* state: NY
+* matchScore: 91
+* sharedInterests: Events, Investment, WineCraft
+* trustStatus: Verified Member
+
+STAMPS DATA:
+Collector Night Stamp
+
+* id: stamp-collector-night
+* category: craft
+* eventId: event-cigar-cognac
+* authenticated: true
+
+Event Stamp
+
+* id: stamp-event-grand-opening
+* category: event
+* venueId: venue-grand-lounge
+* authenticated: true
+
+Connection Stamp
+
+* id: stamp-connection-match
+* category: connection
+* authenticated: true
+
+BENEFITS DATA:
+VIP Lounge Access
+
+* id: benefit-vip-lounge
+* provider: Grand Lounge
+* expiration: Tonight
+* eligibility: Verified Member
+* redemption: Show Passport QR at host stand
+
+==================================================
+MAIN SCREEN FUNCTIONALITY
+=========================
+
+The dashboard must include and wire all visible areas:
+
+1. TOP PASSPORT CARD
+   Buttons:
+
+* Scan button opens Scan Passport Modal
+* QR card area also opens scan modal
+* Main card tap opens Passport Overview Modal
+
+2. HOW IT WORKS
+   Cards:
+
+* Scan In
+* Build Profile
+* Meet People
+* Earn Stamps
+
+Each card opens a guide modal explaining that step.
+
+Full Guide link opens full guide modal.
+
+3. START HERE ACTIONS
+   Cards:
+
+* Scan to Connect
+* Explore Directory
+* View Matches
+* Join an Event
+* Explore Benefits
+
+Behavior:
+Scan to Connect:
+
+* opens scan modal
+
+Explore Directory:
+
+* opens directory screen/modal with verified members and brands
+
+View Matches:
+
+* opens matches screen/modal with top connection recommendations
+
+Join an Event:
+
+* opens events screen/modal with upcoming events
+
+Explore Benefits:
+
+* opens benefits screen/modal
+
+4. PASSPORT SECTIONS
+   Cards:
+
+* Directory
+* Connections
+* Events
+* Benefits
+
+Behavior:
+Directory:
+
+* route or modal: /directory
+
+Connections:
+
+* route or modal: /connections
+
+Events:
+
+* route or modal: /passport-events
+
+Benefits:
+
+* route or modal: /benefits
+
+5. DIGITAL STAMPS
+   Stamp icons:
+
+* Event
+* Connect
+* Verified
+* Craft
+* VIP
+
+Behavior:
+Clicking each stamp opens stamp detail modal.
+
+View All:
+
+* opens full stamp collection
+
+View My Stamp Collection:
+
+* opens full stamp collection
+
+6. UPCOMING EVENTS
+   Rows:
+
+* Cigar & Cognac Collectors Night
+* Capital & Culture Private Dinner
+
+Behavior:
+Clicking event row opens event detail modal.
+See All opens full events modal/screen.
+RSVP to All Upcoming Events opens RSVP modal and confirms RSVP.
+
+7. RECENT ACTIVITY
+   Clicking activity items opens activity detail modal.
+
+All link opens full activity history.
+
+8. PROFILE CARD
+   View Profile button opens profile modal.
+   Profile card itself opens profile modal.
+   Show member status, XP, tier progress, and passport ID.
+
+9. BOTTOM NAVIGATION
+   Items:
+
+* Home
+* Directory
+* Center Scan
+* Events
+* Benefits
+
+Behavior:
+Home:
+
+* active current screen
+
+Directory:
+
+* opens directory section
+
+Center Scan:
+
+* opens scan modal
+
+Events:
+
+* opens events section
+
+Benefits:
+
+* opens benefits section
+
+Bottom nav must be fixed and must not cover content.
+Add enough bottom padding.
+
+==================================================
+SCAN MODAL
+==========
+
+Create ScanPassportModal.
+
+Visual:
+
+* Professional passport scanner
+* Cream/gold modal
+* Camera frame
+* QR corners
+* Animated scan line
+* QR + NFC Ready label
+
+Text:
+“Scan a Passport QR code or tap an NFC credential to verify a venue, event, member, stamp, or benefit.”
+
+Buttons:
+
+* Simulate Venue Scan
+* Simulate Event Scan
+* Simulate Member Scan
+* Simulate Stamp Scan
+* Simulate Benefit Scan
+* Close
+
+For future real camera:
+Add placeholder button:
+
+* Enable Camera Scanner
+
+For now:
+Enable Camera Scanner shows:
+“Camera scanner placeholder ready for device API integration.”
+
+==================================================
+SCAN RESULT MODAL
+=================
+
+Create ScanResultModal.
+
+This modal changes based on sourceType.
+
+For venue:
+Show venue check-in result.
+
+For event:
+Show event check-in result.
+
+For member:
+Show connection found result.
+
+For stamp:
+Show stamp claim result.
+
+For benefit:
+Show benefit unlock result.
+
+Every result modal must include:
+
+* Result title
+* Source name
+* Status
+* Passport impact
+* Primary action button
+* Secondary action button
+* Close button
+
+==================================================
+PASSPORT STAMP ANIMATION
+========================
+
+When claiming a stamp, verifying a connection, checking into an event, or redeeming a benefit:
+
+Show overlay:
+“Updating Passport…”
+
+Then after 1 second:
+“Passport Updated”
+“Authenticated”
+
+Show:
+
+* Gold stamp impact
+* Soft paper emboss effect
+* Haptic success vibration
+* Optional stamp sound
+
+==================================================
+HAPTIC TOUCHSCREEN FEEL
+=======================
+
+Create:
+
+src/utils/haptics.js
+
+Functions:
+triggerTapHaptic()
+triggerSuccessHaptic()
+triggerWarningHaptic()
+
+Use:
+if (navigator.vibrate) navigator.vibrate(35)
+
+Success:
+navigator.vibrate([20, 40, 20])
+
+Warning:
+navigator.vibrate([60, 30, 60])
+
+Apply haptics to:
+
+* Every card tap
+* Every button tap
+* Scan actions
+* Stamp claim
+* Connection verify
+* RSVP
+* Bottom nav
+* Modal close
+* Profile open
+
+CSS tactile feel:
+
+* Buttons press down slightly
+* active scale 0.97
+* soft inset shadow on press
+* gold border glow on active
+* all major touch targets at least 56px
+* scan button at least 72px
+
+==================================================
+SOUND SYSTEM
+============
+
+Create:
+
+src/utils/sound.js
+
+Functions:
+playTapSound()
+playStampSound()
+playSuccessSound()
+playWarningSound()
+
+Use Web Audio API.
+No external sound files required.
+
+Add global muted state.
+Mute setting must prevent all sound.
+
+==================================================
+TOAST NOTIFICATIONS
+===================
+
+Create Toast component.
+
+Toast examples:
+
+* “Venue check-in verified.”
+* “Event stamp unlocked.”
+* “Connection verified.”
+* “Benefit saved to Passport.”
+* “RSVP confirmed.”
+* “Profile updated.”
+* “Invalid Passport code.”
+
+Toast style:
+
+* Cream card
+* Gold border
+* Dark text
+* Small passport seal
+* Slides in smoothly
+
+==================================================
+ADMIN / SOURCE MANAGEMENT
+=========================
+
+Create hidden admin shortcut:
+Alt + A opens Admin Source Panel.
+
+Admin Source Panel:
+
+* View mock sources
+* Edit venue data
+* Edit event data
+* Edit member data
+* Edit stamp data
+* Edit benefit data
+* Replace hero image
+* Replace passport stamp image
+* Queue OpenAI image replacement request
+
+OpenAI note:
+Do not call OpenAI from frontend.
+Create mock function:
+
+requestOpenAIImageReplacement(assetId, prompt)
+
+Return:
+{
+success: true,
+status: "queued",
+message: "Image replacement request queued for secure backend generation."
+}
+
+Code comment:
+Real OpenAI image generation must happen on the backend. Never expose API keys in browser code.
+
+==================================================
+FILES TO CREATE OR UPDATE
+=========================
+
+src/App.jsx
+src/main.jsx
+src/index.css
+
+src/screens/PassportHome.jsx
+
+src/components/passport/PassportHeroCard.jsx
+src/components/passport/HowItWorksCards.jsx
+src/components/passport/NextActionCards.jsx
+src/components/passport/PassportSections.jsx
+src/components/passport/DigitalStamps.jsx
+src/components/passport/UpcomingEvents.jsx
+src/components/passport/RecentActivity.jsx
+src/components/passport/ProfileSummaryCard.jsx
+src/components/passport/BottomNav.jsx
+
+src/components/modals/ScanPassportModal.jsx
+src/components/modals/ScanResultModal.jsx
+src/components/modals/EventDetailModal.jsx
+src/components/modals/VenueDetailModal.jsx
+src/components/modals/MemberDetailModal.jsx
+src/components/modals/StampDetailModal.jsx
+src/components/modals/BenefitDetailModal.jsx
+src/components/modals/ProfileModal.jsx
+src/components/modals/GuideModal.jsx
+src/components/modals/AdminSourcePanel.jsx
+
+src/components/common/Toast.jsx
+src/components/common/PassportStampOverlay.jsx
+
+src/api/passportScanApi.js
+src/api/passportHomeApi.js
+src/api/imageSourceApi.js
+
+src/data/venues.js
+src/data/events.js
+src/data/members.js
+src/data/stamps.js
+src/data/benefits.js
+src/data/passportProfile.js
+src/data/recentActivity.js
+
+src/utils/haptics.js
+src/utils/sound.js
+src/utils/qrPayloads.js
+
+==================================================
+QR PAYLOAD TEST DATA
+====================
+
+Create:
+
+src/utils/qrPayloads.js
+
+Export these test payloads:
+
+venueQrPayload:
+{
+sourceType: "venue",
+sourceId: "venue-grand-lounge",
+sessionId: "session-demo-001",
+issuedBy: "360-passport-connections",
+signature: "mock-signature"
+}
+
+eventQrPayload:
+{
+sourceType: "event",
+sourceId: "event-cigar-cognac",
+sessionId: "session-demo-001",
+issuedBy: "360-passport-connections",
+signature: "mock-signature"
+}
+
+memberQrPayload:
+{
+sourceType: "member",
+sourceId: "member-david-harper",
+sessionId: "session-demo-001",
+issuedBy: "360-passport-connections",
+signature: "mock-signature"
+}
+
+stampQrPayload:
+{
+sourceType: "stamp",
+sourceId: "stamp-collector-night",
+sessionId: "session-demo-001",
+issuedBy: "360-passport-connections",
+signature: "mock-signature"
+}
+
+benefitQrPayload:
+{
+sourceType: "benefit",
+sourceId: "benefit-vip-lounge",
+sessionId: "session-demo-001",
+issuedBy: "360-passport-connections",
+signature: "mock-signature"
+}
+
+==================================================
+BACKEND READY DESIGN
+====================
+
+The scan system must be ready to connect later to a real backend.
+
+Future backend endpoints should be easy to plug in:
+
+POST /api/passport/scan
+GET /api/venues/:id
+GET /api/events/:id
+GET /api/members/:id
+GET /api/stamps/:id
+GET /api/benefits/:id
+POST /api/connections/verify
+POST /api/stamps/claim
+POST /api/events/check-in
+POST /api/benefits/redeem
+
+For now, use mock API files.
+Do not fake button behavior only inside the component.
+Use source APIs so this can scale.
+
+==================================================
+ACCEPTANCE CHECKLIST
+====================
+
+Before finishing, verify:
+
+* Screen visually matches the clean professional passport image
+* All buttons work
+* Scan button opens modal
+* Center scan button opens modal
+* Venue scan shows venue result
+* Event scan shows event result
+* Member scan shows connection result
+* Stamp scan shows stamp result
+* Benefit scan shows benefit result
+* Invalid scan shows error result
+* Claim stamp works
+* Verify connection works
+* RSVP works
+* View Profile works
+* Directory opens
+* Connections opens
+* Events opens
+* Benefits opens
+* Digital stamps open detail modals
+* Upcoming events open event detail modals
+* Recent activity opens detail modals
+* Haptic feedback works where supported
+* Sound can be muted
+* Toast notifications work
+* Admin source panel works
+* Mock APIs exist
+* QR payload test data exists
+* Bottom nav does not cover content
+* No dead buttons
+* No static screenshot UI
+* No OpenAI API keys in frontend
+
+FINAL EXPECTATION:
+The user should feel like they are holding a real professional digital passport. When they scan, the system must know whether they scanned a venue, event, member, stamp, or benefit, and show the correct result with clear next actions.
