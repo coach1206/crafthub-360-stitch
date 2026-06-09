@@ -62,3 +62,17 @@ export function deactivateFeedItem(req, res) {
   saveState()
   success(res, { item }, 'Ticker item deactivated')
 }
+
+// ── Admin: reset persisted runtime additions ──────────────────────────────────
+
+export function resetFeed(_req, res) {
+  const seedIds = new Set(TICKER_FEED.map(i => i.id))
+  // Remove all runtime (non-seed) entries from the in-memory feed
+  const runtimeIndices = []
+  for (let i = feed.length - 1; i >= 0; i--) {
+    if (!seedIds.has(feed[i].id)) runtimeIndices.push(i)
+  }
+  for (const i of runtimeIndices) feed.splice(i, 1)
+  saveJson('ticker_additions.json', [])
+  success(res, { cleared: runtimeIndices.length }, 'Ticker additions cleared — seed data restored')
+}

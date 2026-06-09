@@ -18,4 +18,9 @@ router.post(  '/admin/members',            requireAuth, requireAdmin, ctrl.addMe
 router.delete('/admin/members/:memberId',  requireAuth, requireAdmin, ctrl.removeMember)  // DELETE /api/ranking/admin/members/:memberId
 router.patch( '/admin/members/:memberId',  requireAuth, requireAdmin, ctrl.updateMember)  // PATCH  /api/ranking/admin/members/:memberId
 
+// ── Admin: data reset routes ───────────────────────────────────────────────────
+router.delete('/admin/reset-xp',       requireAuth, requireAdmin, ctrl.resetXp)       // DELETE /api/ranking/admin/reset-xp
+router.delete('/admin/reset-activity', requireAuth, requireAdmin, ctrl.resetActivity) // DELETE /api/ranking/admin/reset-activity
+router.delete('/admin/reset-members',  requireAuth, requireAdmin, ctrl.resetMembers)  // DELETE /api/ranking/admin/reset-members
+
 export default router

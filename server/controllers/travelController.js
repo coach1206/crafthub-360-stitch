@@ -67,3 +67,17 @@ export function claimStamp(req, res) {
 export function getConciergeRequests(_req, res) {
   success(res, { requests: conciergeRequests, total: conciergeRequests.length })
 }
+
+// ── Admin: reset persisted state ──────────────────────────────────────────────
+
+export function resetConcierge(_req, res) {
+  conciergeRequests.splice(0, conciergeRequests.length)
+  saveState()
+  success(res, { cleared: true }, 'Concierge requests cleared')
+}
+
+export function resetStamps(_req, res) {
+  userStamps.clear()
+  saveState()
+  success(res, { cleared: true }, 'Travel stamps cleared')
+}

@@ -4,7 +4,7 @@
  * Fails safely if the backend is unavailable.
  */
 
-import { apiGet, apiPost, apiPut } from './apiClient.js'
+import { apiGet, apiPost, apiPut, apiDelete } from './apiClient.js'
 
 const BASE = '/api/admin'
 
@@ -48,3 +48,26 @@ export const getPOS3SyncStatus = () => apiGet('/api/pos3/sync/status')
 /** POST /api/pos3/sync/run — admin+ trigger manual sync. */
 export const runPOS3SyncNow = (providerKey = 'prototype') =>
   apiPost('/api/pos3/sync/run', { providerKey })
+
+// ── Data reset endpoints (admin+) ─────────────────────────────────────────────
+
+/** DELETE /api/ranking/admin/reset-xp — restore all members' XP to seed values. */
+export const resetRankingXp = () => apiDelete('/api/ranking/admin/reset-xp')
+
+/** DELETE /api/ranking/admin/reset-activity — clear runtime activity log. */
+export const resetRankingActivity = () => apiDelete('/api/ranking/admin/reset-activity')
+
+/** DELETE /api/ranking/admin/reset-members — restore member roster to seed. */
+export const resetRankingMembers = () => apiDelete('/api/ranking/admin/reset-members')
+
+/** DELETE /api/travel/admin/concierge — clear all concierge requests. */
+export const resetTravelConcierge = () => apiDelete('/api/travel/admin/concierge')
+
+/** DELETE /api/travel/admin/stamps — clear all travel stamps. */
+export const resetTravelStamps = () => apiDelete('/api/travel/admin/stamps')
+
+/** DELETE /api/ticker/admin/reset — clear runtime ticker additions (seed data restored). */
+export const resetTickerFeed = () => apiDelete('/api/ticker/admin/reset')
+
+/** DELETE /api/badges/admin/reset — clear all badge progress and unlock log. */
+export const resetBadges = () => apiDelete('/api/badges/admin/reset')

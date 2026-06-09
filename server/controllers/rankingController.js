@@ -224,4 +224,31 @@ export function updateMember(req, res) {
   success(res, { member, leaderboard: buildLeaderboard() }, 'Member updated')
 }
 
+// ── Admin: reset persisted state to seed ──────────────────────────────────────
+
+export function resetXp(req, res) {
+  // Restore every member's XP to their seed value
+  for (const member of MEMBERS) {
+    const seed = SEED_MEMBERS.find(s => s.id === member.id)
+    member.xp = seed ? seed.xp : 0
+  }
+  saveState()
+  success(res, { leaderboard: buildLeaderboard() }, 'XP reset to seed values')
+}
+
+export function resetActivity(req, res) {
+  // Clear all runtime activity entries (keep in-memory seedLog untouched)
+  activityLog.splice(0, activityLog.length, ...seedLog)
+  saveJson('ranking_activity.json', [])
+  success(res, { cleared: true }, 'Activity log cleared')
+}
+
+export function resetMembers(req, res) {
+  // Restore roster to seed members
+  MEMBERS.splice(0, MEMBERS.length, ...SEED_MEMBERS.map(m => ({ ...m })))
+  saveMembers()
+  saveState()
+  success(res, { leaderboard: buildLeaderboard() }, 'Member roster reset to seed')
+}
+
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : '' }

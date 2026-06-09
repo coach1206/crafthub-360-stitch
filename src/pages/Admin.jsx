@@ -132,6 +132,12 @@ export default function Admin() {
   const canResetPin = ['manager','admin','founder_level_0'].includes(role)
   const resetScope  = RESET_SCOPE[role] || []
 
+  // ── Data Reset state ──────────────────────────────────────
+  const canDataReset = ['admin','founder_level_0'].includes(role)
+  const [dataResetPending, setDataResetPending] = useState(null)
+  const [dataResetMsg,     setDataResetMsg]     = useState('')
+  const [dataResetBusy,    setDataResetBusy]    = useState(false)
+
   const loadData = useCallback(() => {
     setLoadingUsers(true)
     adminApi.getAdminUsers()
@@ -179,6 +185,35 @@ export default function Admin() {
       if (type.startsWith(prefix)) return color
     }
     return '#666'
+  }
+
+  const DATA_RESET_ACTIONS = [
+    { key: 'ranking-xp',       label: 'Reset Leaderboard XP',     desc: 'Restore all members\' XP to seed values',      fn: adminApi.resetRankingXp,       danger: true  },
+    { key: 'ranking-activity', label: 'Clear Activity Log',        desc: 'Remove all runtime activity log entries',       fn: adminApi.resetRankingActivity, danger: false },
+    { key: 'ranking-members',  label: 'Reset Member Roster',       desc: 'Restore member list to the original seed data', fn: adminApi.resetRankingMembers,  danger: true  },
+    { key: 'travel-concierge', label: 'Clear Concierge Requests',  desc: 'Delete all submitted travel concierge requests',fn: adminApi.resetTravelConcierge, danger: false },
+    { key: 'travel-stamps',    label: 'Clear Travel Stamps',       desc: 'Remove all claimed travel stamps for all users',fn: adminApi.resetTravelStamps,    danger: true  },
+    { key: 'ticker-feed',      label: 'Flush Ticker Additions',    desc: 'Remove runtime ticker items — seed feed restored', fn: adminApi.resetTickerFeed,  danger: false },
+    { key: 'badges',           label: 'Reset Badge Progress',      desc: 'Clear all unlocked badges and unlock history',  fn: adminApi.resetBadges,          danger: true  },
+  ]
+
+  async function handleDataReset(action) {
+    if (!action) return
+    setDataResetBusy(true)
+    setDataResetMsg('')
+    try {
+      const r = await action.fn()
+      if (r?.success) {
+        setDataResetMsg(`✓ ${r.message || action.label + ' complete'}`)
+      } else {
+        setDataResetMsg(`✗ ${r?.message || 'Reset failed — check backend.'}`)
+      }
+    } catch {
+      setDataResetMsg('✗ Network error during reset.')
+    } finally {
+      setDataResetBusy(false)
+      setDataResetPending(null)
+    }
   }
 
   async function handleRunSync() {
@@ -493,6 +528,121 @@ export default function Admin() {
                   })}
               </div>
             )}
+          </Card>
+        )}
+
+        {/* ── Data Reset (admin+) ──────────────────────────── */}
+        {canDataReset && (
+          <Card style={{ marginBottom: '1.5rem' }}>
+            <SectionTitle icon="delete_sweep" label="Data Reset" />
+
+            <div style={{ color: '#555', fontSize: '11px', marginBottom: '1rem', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+              Reset individual data stores to their seed state. Changes take effect immediately — no restart needed.
+              <span style={{ color: ERR, marginLeft: '6px' }}>Danger actions are irreversible.</span>
+            </div>
+
+            {dataResetMsg && (
+              <div style={{
+                color:         dataResetMsg.startsWith('✓') ? '#4CAF50' : ERR,
+                fontSize:      '11px',
+                marginBottom:  '1rem',
+                letterSpacing: '0.04em',
+              }}>
+                {dataResetMsg}
+              </div>
+            )}
+
+            <div style={{
+              display:             'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap:                 '0.75rem',
+            }}>
+              {DATA_RESET_ACTIONS.map(action => (
+                <div key={action.key} style={{
+                  background:    'rgba(255,255,255,0.02)',
+                  border:        `1px solid ${action.danger ? 'rgba(224,90,90,0.2)' : BORDER}`,
+                  borderRadius:  '6px',
+                  padding:       '12px',
+                  display:       'flex',
+                  flexDirection: 'column',
+                  gap:           '8px',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <span className="material-symbols-outlined" style={{
+                      fontSize: '15px',
+                      color:    action.danger ? ERR : DIM,
+                      marginTop: '1px',
+                      flexShrink: 0,
+                    }}>
+                      {action.danger ? 'warning' : 'refresh'}
+                    </span>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ color: action.danger ? '#d97474' : DIM, fontSize: '12px', fontWeight: 500 }}>
+                        {action.label}
+                      </div>
+                      <div style={{ color: '#444', fontSize: '10px', marginTop: '2px', letterSpacing: '0.04em', lineHeight: 1.5 }}>
+                        {action.desc}
+                      </div>
+                    </div>
+                  </div>
+
+                  {dataResetPending?.key === action.key ? (
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      <button
+                        onClick={() => handleDataReset(action)}
+                        disabled={dataResetBusy}
+                        style={{
+                          flex:          1,
+                          background:    dataResetBusy ? 'rgba(224,90,90,0.05)' : 'rgba(224,90,90,0.15)',
+                          border:        `1px solid ${ERR}55`,
+                          borderRadius:  '4px',
+                          color:         dataResetBusy ? '#666' : ERR,
+                          padding:       '5px 10px',
+                          cursor:        dataResetBusy ? 'not-allowed' : 'pointer',
+                          fontSize:      '10px',
+                          letterSpacing: '0.1em',
+                        }}
+                      >
+                        {dataResetBusy ? 'Resetting…' : 'Confirm Reset'}
+                      </button>
+                      <button
+                        onClick={() => setDataResetPending(null)}
+                        disabled={dataResetBusy}
+                        style={{
+                          background:    'rgba(255,255,255,0.04)',
+                          border:        `1px solid ${BORDER}`,
+                          borderRadius:  '4px',
+                          color:         '#555',
+                          padding:       '5px 10px',
+                          cursor:        'pointer',
+                          fontSize:      '10px',
+                          letterSpacing: '0.1em',
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => { setDataResetPending(action); setDataResetMsg('') }}
+                      style={{
+                        background:    action.danger ? 'rgba(224,90,90,0.08)' : 'rgba(201,168,76,0.08)',
+                        border:        `1px solid ${action.danger ? ERR + '33' : GOLD + '33'}`,
+                        borderRadius:  '4px',
+                        color:         action.danger ? '#d97474' : GOLD,
+                        padding:       '5px 10px',
+                        cursor:        'pointer',
+                        fontSize:      '10px',
+                        letterSpacing: '0.1em',
+                        textAlign:     'left',
+                      }}
+                    >
+                      {action.label}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
           </Card>
         )}
 
