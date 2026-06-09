@@ -1,12 +1,23 @@
 /**
  * Badge Controller — enriched catalog from server/data/badges.js
+ * userBadges and unlockLog are persisted across server restarts.
  */
 import { v4 as uuidv4 } from 'uuid'
 import { success, error } from '../utils/responseHelpers.js'
 import { BADGE_CATALOG } from '../data/badges.js'
+import {
+  loadJson, saveJson,
+  serializeMapOfSets, deserializeMapOfSets,
+} from '../utils/persist.js'
 
-const userBadges = new Map() // userId → Set<badgeId>
-const unlockLog  = []
+// ── Load persisted state ──────────────────────────────────────────────────────
+const userBadges = deserializeMapOfSets(loadJson('badge_user_badges.json', {}))
+const unlockLog  = loadJson('badge_unlock_log.json', [])
+
+function saveState() {
+  saveJson('badge_user_badges.json', serializeMapOfSets(userBadges))
+  saveJson('badge_unlock_log.json', unlockLog)
+}
 
 function getOrCreateSet(userId) {
   if (!userBadges.has(userId)) userBadges.set(userId, new Set())
@@ -35,7 +46,6 @@ export function getUserBadges(req, res) {
 export function unlockBadge(req, res) {
   const { userId, badgeId } = req.body
   if (!userId || !badgeId) return error(res, 'userId and badgeId are required')
-  // Support lookup by id or legacyId
   const badge = BADGE_CATALOG.find(b => b.id === badgeId || b.legacyId === badgeId)
   if (!badge) return error(res, 'Badge not found', 404)
   const earned = getOrCreateSet(userId)
@@ -43,6 +53,7 @@ export function unlockBadge(req, res) {
   earned.add(badge.id)
   const record = { id: uuidv4(), userId, badgeId: badge.id, ts: new Date().toISOString() }
   unlockLog.push(record)
+  saveState()
   success(res, { badge, alreadyEarned: false, xpAwarded: badge.xpValue }, 'Badge unlocked')
 }
 

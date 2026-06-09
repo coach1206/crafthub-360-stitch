@@ -1,12 +1,24 @@
 /**
  * Ticker Controller — enriched feed from server/data/tickerFeed.js
+ * Runtime POST additions are persisted across server restarts.
  */
 import { v4 as uuidv4 } from 'uuid'
 import { success, error } from '../utils/responseHelpers.js'
 import { TICKER_FEED, SOURCE_COLORS, PRIORITY_ORDER } from '../data/tickerFeed.js'
+import { loadJson, saveJson } from '../utils/persist.js'
 
-// Runtime feed — copy of seed data so POST additions persist in-session
-const feed = [...TICKER_FEED]
+// Runtime additions persisted across restarts; seed data is always prepended
+const persistedAdditions = loadJson('ticker_additions.json', [])
+
+// Feed = persisted runtime additions (newest first) + seed data
+const feed = [...persistedAdditions, ...TICKER_FEED]
+
+function saveState() {
+  // Only persist runtime entries (those not from the original seed)
+  const seedIds      = new Set(TICKER_FEED.map(i => i.id))
+  const runtimeItems = feed.filter(i => !seedIds.has(i.id))
+  saveJson('ticker_additions.json', runtimeItems)
+}
 
 function enrich(item) {
   return {
@@ -39,6 +51,7 @@ export function addFeedItem(req, res) {
   if (!SOURCE_COLORS[source]) return error(res, `Unknown source: "${source}". Valid: ${Object.keys(SOURCE_COLORS).join(', ')}`)
   const item = { id: uuidv4(), source, title: title || source, message, type, area, priority, route, active: true, ctaLabel }
   feed.unshift(item)
+  saveState()
   success(res, { item: enrich(item) }, 'Ticker item added')
 }
 
@@ -46,5 +59,6 @@ export function deactivateFeedItem(req, res) {
   const item = feed.find(i => i.id === req.params.id)
   if (!item) return error(res, 'Ticker item not found', 404)
   item.active = false
+  saveState()
   success(res, { item }, 'Ticker item deactivated')
 }

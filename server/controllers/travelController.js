@@ -1,12 +1,23 @@
 /**
  * Travel Controller — DayOne360 Travel
+ * conciergeRequests and userStamps are persisted across server restarts.
  */
 import { v4 as uuidv4 } from 'uuid'
 import { success, error } from '../utils/responseHelpers.js'
 import { TRIPS } from '../data/dayOneTravel.js'
+import {
+  loadJson, saveJson,
+  serializeMapOfArrays, deserializeMapOfArrays,
+} from '../utils/persist.js'
 
-const conciergeRequests = []
-const userStamps        = new Map() // userId → stamp[]
+// ── Load persisted state ──────────────────────────────────────────────────────
+const conciergeRequests = loadJson('travel_concierge.json', [])
+const userStamps        = deserializeMapOfArrays(loadJson('travel_stamps.json', {}))
+
+function saveState() {
+  saveJson('travel_concierge.json', conciergeRequests)
+  saveJson('travel_stamps.json', serializeMapOfArrays(userStamps))
+}
 
 function getStamps(userId) {
   if (!userStamps.has(userId)) userStamps.set(userId, [])
@@ -30,6 +41,7 @@ export function submitConcierge(req, res) {
   if (!trip) return error(res, 'Trip not found', 404)
   const request = { id: uuidv4(), userId, tripId, tripName: trip.name, name, contact, notes, status: 'pending', submittedAt: new Date().toISOString() }
   conciergeRequests.push(request)
+  saveState()
   success(res, { requestId: request.id }, 'Concierge request submitted — expect contact within 24 hours.')
 }
 
@@ -48,6 +60,7 @@ export function claimStamp(req, res) {
   if (stamps.find(s => s.tripId === tripId)) return success(res, { alreadyClaimed: true, trip }, 'Stamp already claimed')
   const stamp = { id: uuidv4(), tripId, xpAwarded: trip.xpReward, ts: new Date().toISOString() }
   stamps.push(stamp)
+  saveState()
   success(res, { stamp, trip, alreadyClaimed: false }, `+${trip.xpReward} XP — ${trip.name} stamp claimed`)
 }
 

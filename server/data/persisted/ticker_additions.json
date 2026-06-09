@@ -1,0 +1,14 @@
+[
+  {
+    "id": "6038c06a-a3d1-4016-83d1-c6af1bfc0d57",
+    "source": "Bar",
+    "title": "Bar",
+    "message": "Persistence test item",
+    "type": "announcement",
+    "area": "venue",
+    "priority": "medium",
+    "route": "/crafthub",
+    "active": true,
+    "ctaLabel": "View"
+  }
+]

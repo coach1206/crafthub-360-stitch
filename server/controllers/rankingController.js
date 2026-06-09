@@ -1,10 +1,12 @@
 /**
  * Ranking Controller — Grand Lounge Leaderboard
  * Canonical roster + seeded activity log from server/data/.
+ * XP and activityLog are persisted across server restarts.
  */
 import { v4 as uuidv4 } from 'uuid'
 import { success, error } from '../utils/responseHelpers.js'
 import { recentActivity } from '../data/recentActivity.js'
+import { loadJson, saveJson } from '../utils/persist.js'
 
 // ── Tier definitions ──────────────────────────────────────────────────────────
 const TIERS = [
@@ -18,8 +20,8 @@ function resolveTier(xp) {
   return [...TIERS].reverse().find(t => xp >= t.minXp) || TIERS[0]
 }
 
-// ── Canonical roster ──────────────────────────────────────────────────────────
-const MEMBERS = [
+// ── Canonical roster (seed) ───────────────────────────────────────────────────
+const SEED_MEMBERS = [
   { id: 'user-sebastian-harrow',  name: 'Sebastian Harrow',  initials: 'SH', hue: 45,  xp: 1740, badgeType: 'gold-crown',        isCurrentUser: false, recentActions: ['Won top ranking', 'Craft stamp earned']    },
   { id: 'user-marco-del-valle',   name: 'Marco Del Valle',   initials: 'MD', hue: 30,  xp: 1580, badgeType: 'silver-medal',       isCurrentUser: false, recentActions: ['Event entry', 'Verified connection']        },
   { id: 'user-vincent-ashworth',  name: 'Vincent Ashworth',  initials: 'VA', hue: 200, xp: 1285, badgeType: 'bronze-medal',       isCurrentUser: false, recentActions: ['Humidor check-in']                         },
@@ -32,14 +34,35 @@ const MEMBERS = [
   { id: 'user-patrick-bishop',    name: 'Patrick Bishop',    initials: 'PB', hue: 180, xp: 420,  badgeType: 'aficionado',         isCurrentUser: false, recentActions: []                                           },
 ]
 
-// Seed activity log from canonical data (newest first, tagged to current user)
-const activityLog = recentActivity.map(a => ({
-  ...a,
-  userId:    'user-john-collins',
-  xpAdded:   a.xp,
-  totalXp:   950,
-  ts:        a.timestamp,
+// ── Load persisted state ──────────────────────────────────────────────────────
+// Persist XP overrides as { memberId: xp } so seed structure stays canonical
+const persistedXp = loadJson('ranking_xp.json', {})
+
+// MEMBERS is a mutable copy of seeds with any persisted XP applied
+const MEMBERS = SEED_MEMBERS.map(m => ({
+  ...m,
+  xp: persistedXp[m.id] !== undefined ? persistedXp[m.id] : m.xp,
 }))
+
+// Activity log: seed first, then persisted additions on top
+const seedLog = recentActivity.map(a => ({
+  ...a,
+  userId:  'user-john-collins',
+  xpAdded: a.xp,
+  totalXp: 950,
+  ts:      a.timestamp,
+}))
+const persistedLog = loadJson('ranking_activity.json', [])
+const activityLog  = [...persistedLog, ...seedLog]
+
+function saveState() {
+  const xpMap = {}
+  for (const m of MEMBERS) xpMap[m.id] = m.xp
+  saveJson('ranking_xp.json', xpMap)
+  // Only persist runtime additions (everything before seed entries)
+  const runtimeEntries = activityLog.filter(e => !seedLog.some(s => s.id === e.id))
+  saveJson('ranking_activity.json', runtimeEntries)
+}
 
 const XP_MAP = { session: 25, event: 50, connection: 75, craftStamp: 100, vipStamp: 150 }
 
@@ -122,6 +145,7 @@ export function processScan(req, res) {
     badgeId:     null,
   }
   activityLog.unshift(entry)
+  saveState()
 
   success(res, {
     xpAdded:      xpToAdd,
@@ -149,6 +173,7 @@ export function addXpAdmin(req, res) {
   const target = MEMBERS.find(m => userId ? m.id === userId : m.isCurrentUser)
   if (!target) return error(res, 'User not found', 404)
   target.xp += Number(amount)
+  saveState()
   success(res, { userId: target.id, totalXp: target.xp, leaderboard: buildLeaderboard() }, `Added ${amount} XP`)
 }
 

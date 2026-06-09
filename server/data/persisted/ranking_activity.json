@@ -1,0 +1,19 @@
+[
+  {
+    "id": "5a6d9ba0-1241-4099-8b20-845d8e20a4c0",
+    "userId": "user-john-collins",
+    "sourceType": "craftStamp",
+    "sourceId": "test-persist",
+    "xpAdded": 100,
+    "totalXp": 1050,
+    "tierChanged": true,
+    "prevTier": "Aficionado",
+    "newTier": "Connoisseur",
+    "ts": "2026-06-09T11:01:24.029Z",
+    "title": "CraftStamp Recorded",
+    "description": "Source: test-persist",
+    "icon": "qr_code_scanner",
+    "timestamp": "Just now",
+    "badgeId": null
+  }
+]
