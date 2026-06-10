@@ -10,7 +10,7 @@ export default function Enroll() {
   const [avatarSrc, setAvatarSrc] = useState(null)
   const [form, setForm] = useState({
     fullName: '', phone: '', email: '', nickname: '',
-    ageConfirmed: false, city: '', state: '', zip: '',
+    ageConfirmed: false, city: '', state: '', zip: '', countryRegion: '',
   })
 
   function handleChange(e) {
@@ -37,6 +37,7 @@ export default function Enroll() {
       city:         form.city,
       state:        form.state,
       zip:          form.zip,
+      countryRegion: form.countryRegion,
       ageConfirmed: form.ageConfirmed,
       photo:        avatarSrc,
     }
@@ -49,7 +50,7 @@ export default function Enroll() {
 
   function handleDraft() {
     const [firstName, ...rest] = (form.fullName || '').trim().split(' ')
-    updateProfile({ firstName: firstName || '', lastName: rest.join(' '), nickname: form.nickname, email: form.email })
+    updateProfile({ firstName: firstName || '', lastName: rest.join(' '), nickname: form.nickname, email: form.email, countryRegion: form.countryRegion })
   }
 
   return (
@@ -58,10 +59,10 @@ export default function Enroll() {
       style={{
         minHeight: 'max(884px, 100dvh)',
         position: 'relative',
-        backgroundColor: '#150e08',
-        backgroundImage: 'radial-gradient(ellipse at 50% 20%, rgba(255,218,139,0.44) 0%, rgba(233,157,58,0.24) 24%, transparent 58%), radial-gradient(ellipse at 18% 42%, rgba(255,255,255,0.24) 0%, transparent 36%), radial-gradient(ellipse at 84% 48%, rgba(255,239,202,0.18) 0%, transparent 34%), linear-gradient(180deg, rgba(44,27,12,0.38), rgba(6,4,3,0.86)), url(/background-lounge-airy.jpg)',
+        backgroundColor: '#050302',
+        backgroundImage: 'radial-gradient(ellipse at 50% 42%, rgba(222,145,42,0.22) 0%, rgba(136,69,10,0.1) 30%, transparent 58%), linear-gradient(90deg, rgba(0,0,0,0.82), rgba(0,0,0,0.34) 48%, rgba(0,0,0,0.84)), linear-gradient(180deg, rgba(4,3,2,0.34), rgba(3,2,1,0.9)), url(/smokecraft-hero.png)',
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundPosition: 'center top',
         backgroundAttachment: 'fixed',
       }}
     >
@@ -70,6 +71,8 @@ export default function Enroll() {
       <div className="smokecraft-intake-smoke-right" />
       <div className="smokecraft-intake-amber" />
       <div className="smokecraft-intake-spotlight" />
+      <div className="smokecraft-intake-left-scene" aria-hidden="true" />
+      <div className="smokecraft-intake-right-scene" aria-hidden="true" />
 
       {/* Top AppBar */}
       <header className="fixed top-0 w-full z-50 shadow-md flex justify-between items-center px-6 h-20" style={{
@@ -89,7 +92,7 @@ export default function Enroll() {
         </div>
         <div className="flex items-center gap-4">
           <span className="font-label-lg hidden md:block" style={{ color: 'rgba(248,236,214,0.82)' }}>Step 3 of 4</span>
-          <button className="text-primary font-label-lg px-6 py-2 rounded-lg transition-colors active:scale-95 duration-200" style={{
+          <button onClick={() => navigate('/')} className="text-primary font-label-lg px-6 py-2 rounded-lg transition-colors active:scale-95 duration-200" style={{
             background: 'rgba(255,255,255,0.08)',
             border: '1px solid rgba(255,232,186,0.18)',
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
@@ -99,27 +102,28 @@ export default function Enroll() {
         </div>
       </header>
 
-      <main className="relative z-10 pt-32 pb-40 px-8 max-w-[900px] mx-auto">
+      <main className="relative z-10 pt-28 pb-52 px-8 max-w-[900px] mx-auto">
         {/* Header */}
-        <section className="mb-12 text-center">
-          <h2 className="font-headline-xl text-headline-xl text-primary mb-4" style={{ color: '#ffe7ad', textShadow: '0 0 34px rgba(233,193,118,0.48), 0 10px 34px rgba(0,0,0,0.72)' }}>SmokeCraft Intake</h2>
-          <p className="font-body-lg max-w-xl mx-auto" style={{ color: 'rgba(255,247,229,0.94)', textShadow: '0 2px 18px rgba(0,0,0,0.62)' }}>
+        <section className="mb-7 text-center">
+          <div className="smokecraft-intake-kicker">SmokeCraft Journey</div>
+          <h2 className="font-headline-xl text-headline-xl text-primary mb-3" style={{ color: '#ffd889', textShadow: '0 0 28px rgba(233,193,118,0.62), 0 10px 34px rgba(0,0,0,0.82)' }}>SmokeCraft Intake</h2>
+          <p className="font-body-lg max-w-xl mx-auto" style={{ color: 'rgba(255,247,229,0.88)', textShadow: '0 2px 18px rgba(0,0,0,0.72)' }}>
             Complete your identity to join the guild. Your privacy is our priority—only your nickname enters the humidor leaderboard.
           </p>
         </section>
 
         {/* Form card */}
-        <div className="smokecraft-intake-card p-10 rounded-2xl shadow-2xl space-y-12" style={{
-          background: 'linear-gradient(145deg, rgba(255,255,255,0.34), rgba(255,239,210,0.18) 24%, rgba(74,47,23,0.34) 58%, rgba(21,13,8,0.56))',
-          backdropFilter: 'blur(42px) saturate(1.45)',
-          WebkitBackdropFilter: 'blur(42px) saturate(1.45)',
-          border: '1px solid rgba(255,236,196,0.5)',
-          boxShadow: '0 28px 92px rgba(0,0,0,0.52), 0 0 86px rgba(233,193,118,0.36), 0 0 0 1px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 -1px 0 rgba(212,175,55,0.22)',
+        <div className="smokecraft-intake-card p-8 rounded-2xl shadow-2xl space-y-8" style={{
+          background: 'linear-gradient(145deg, rgba(255,244,220,0.14), rgba(72,43,18,0.22) 34%, rgba(7,5,4,0.86) 100%)',
+          backdropFilter: 'blur(18px) saturate(1.2)',
+          WebkitBackdropFilter: 'blur(18px) saturate(1.2)',
+          border: '1px solid rgba(255,221,144,0.72)',
+          boxShadow: '0 30px 96px rgba(0,0,0,0.68), 0 0 74px rgba(233,169,68,0.48), 0 0 0 1px rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(212,175,55,0.2)',
         }}>
           {/* Photo upload */}
           <div className="flex flex-col items-center">
             <div className="relative group">
-              <div className="w-32 h-32 rounded-full border-2 border-dashed flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/60" style={{
+              <div className="w-24 h-24 rounded-full border-2 border-dashed flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/60" style={{
                 borderColor: 'rgba(255,226,166,0.48)',
                 background: 'radial-gradient(circle at 35% 25%, rgba(255,255,255,0.24), rgba(233,193,118,0.08) 45%, rgba(20,14,10,0.58))',
                 boxShadow: '0 0 34px rgba(233,193,118,0.22), inset 0 1px 0 rgba(255,255,255,0.16)',
@@ -180,7 +184,7 @@ export default function Enroll() {
             </div>
 
             <div className="gold-underline py-2 md:col-span-2">
-              <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Confidential Email</label>
+              <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Email Address</label>
               <input
                 className="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0 focus:outline-none"
                 placeholder="sterling@private.com"
@@ -198,7 +202,7 @@ export default function Enroll() {
             </div>
 
             <div className="gold-underline py-2">
-              <label className="block font-label-sm text-secondary mb-1 uppercase">Leaderboard Nickname</label>
+              <label className="block font-label-sm text-secondary mb-1 uppercase">Nickname / Leaderboard</label>
               <input
                 className="w-full bg-transparent border-none text-body-lg text-secondary placeholder:text-secondary/20 focus:ring-0 h-12 px-0 focus:outline-none"
                 placeholder="The Curator"
@@ -226,41 +230,25 @@ export default function Enroll() {
               </div>
             </div>
 
-            {/* Location */}
-            <div className="md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="gold-underline py-2 md:col-span-2">
-                <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">City</label>
-                <input
-                  className="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0 focus:outline-none"
-                  placeholder="New York"
-                  type="text"
-                  name="city"
-                  value={form.city}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="gold-underline py-2">
-                <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">State</label>
-                <input
-                  className="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0 focus:outline-none"
-                  placeholder="NY"
-                  type="text"
-                  name="state"
-                  value={form.state}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="gold-underline py-2">
-                <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Zip</label>
-                <input
-                  className="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0 focus:outline-none"
-                  placeholder="10001"
-                  type="text"
-                  name="zip"
-                  value={form.zip}
-                  onChange={handleChange}
-                />
-              </div>
+            {/* Region */}
+            <div className="gold-underline py-2 md:col-span-2">
+              <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Country / Region</label>
+              <select
+                className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none"
+                name="countryRegion"
+                value={form.countryRegion}
+                onChange={handleChange}
+              >
+                <option value="">Select your country or region</option>
+                <option value="United States">United States</option>
+                <option value="Dominican Republic">Dominican Republic</option>
+                <option value="Nicaragua">Nicaragua</option>
+                <option value="Honduras">Honduras</option>
+                <option value="Mexico">Mexico</option>
+                <option value="Cuba">Cuba</option>
+                <option value="Brazil">Brazil</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
           </form>
         </div>
@@ -292,15 +280,19 @@ export default function Enroll() {
         boxShadow: '0 -16px 48px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.08)',
       }}>
         {[
-          { icon: 'explore',         label: 'Explore',   active: false },
-          { icon: 'liquor',          label: 'Inventory', active: false },
-          { icon: 'import_contacts', label: 'Passport',  active: true  },
-          { icon: 'support_agent',   label: 'Assistant', active: false },
-        ].map(({ icon, label, active }) => (
-          <div key={label} className={`flex flex-col items-center justify-center cursor-pointer transition-all active:scale-90 duration-150 ${active ? 'text-primary font-bold scale-110' : 'text-on-surface-variant hover:text-primary'}`}>
+          { icon: 'explore',         label: 'Explore',   active: false, to: '/crafthub' },
+          { icon: 'liquor',          label: 'Inventory', active: false, to: '/smokecraft' },
+          { icon: 'import_contacts', label: 'Passport',  active: true,  to: '/passport' },
+          { icon: 'support_agent',   label: 'Assistant', active: false, to: '/' },
+        ].map(({ icon, label, active, to }) => (
+          <button
+            key={label}
+            onClick={() => navigate(to)}
+            className={`flex flex-col items-center justify-center cursor-pointer transition-all active:scale-90 duration-150 border-0 bg-transparent ${active ? 'text-primary font-bold scale-110' : 'text-on-surface-variant hover:text-primary'}`}
+          >
             <span className="material-symbols-outlined" style={active ? { fontVariationSettings: "'FILL' 1" } : {}}>{icon}</span>
             <span className="font-label-sm text-label-sm">{label}</span>
-          </div>
+          </button>
         ))}
       </nav>
       <style>{`
@@ -323,8 +315,57 @@ export default function Enroll() {
           pointer-events: none;
           z-index: 0;
           background:
-            linear-gradient(90deg, rgba(0,0,0,0.56), transparent 24%, transparent 74%, rgba(0,0,0,0.52)),
-            radial-gradient(ellipse at 50% 112%, rgba(0,0,0,0.76), transparent 48%);
+            linear-gradient(90deg, rgba(0,0,0,0.72), transparent 28%, transparent 70%, rgba(0,0,0,0.76)),
+            radial-gradient(ellipse at 50% 112%, rgba(0,0,0,0.84), transparent 48%);
+        }
+        .smokecraft-intake-kicker {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 8px;
+          color: rgba(255,218,139,0.82);
+          font-family: "JetBrains Mono", monospace;
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          text-shadow: 0 0 18px rgba(233,193,118,0.42);
+        }
+        .smokecraft-intake-kicker::before,
+        .smokecraft-intake-kicker::after {
+          content: "";
+          width: 54px;
+          height: 1px;
+          margin: 0 12px;
+          background: linear-gradient(90deg, transparent, rgba(233,193,118,0.62), transparent);
+        }
+        .smokecraft-intake-left-scene,
+        .smokecraft-intake-right-scene {
+          position: fixed;
+          top: 84px;
+          bottom: 86px;
+          width: min(36vw, 440px);
+          z-index: 0;
+          pointer-events: none;
+          opacity: 0.72;
+          background-size: cover;
+          background-position: center;
+          filter: saturate(0.92) contrast(1.18) brightness(0.62);
+          mask-image: linear-gradient(90deg, #000 0%, rgba(0,0,0,0.9) 42%, transparent 100%);
+          -webkit-mask-image: linear-gradient(90deg, #000 0%, rgba(0,0,0,0.9) 42%, transparent 100%);
+        }
+        .smokecraft-intake-left-scene {
+          left: 0;
+          background-image:
+            radial-gradient(ellipse at 40% 42%, rgba(233,193,118,0.22), transparent 42%),
+            url('/smokecraft.jpg');
+        }
+        .smokecraft-intake-right-scene {
+          right: 0;
+          transform: scaleX(-1);
+          background-image:
+            radial-gradient(ellipse at 48% 46%, rgba(233,193,118,0.2), transparent 40%),
+            url('/background-lounge-airy.jpg');
         }
         .smokecraft-intake-frost {
           position: fixed;
@@ -332,11 +373,11 @@ export default function Enroll() {
           pointer-events: none;
           z-index: 0;
           background:
-            radial-gradient(ellipse at 22% 32%, rgba(255,255,255,0.34), transparent 28%),
-            radial-gradient(ellipse at 60% 16%, rgba(255,245,222,0.28), transparent 36%),
-            radial-gradient(ellipse at 78% 62%, rgba(255,255,255,0.22), transparent 30%);
-          filter: blur(22px);
-          opacity: 1;
+            radial-gradient(ellipse at 14% 42%, rgba(255,255,255,0.28), transparent 24%),
+            radial-gradient(ellipse at 50% 22%, rgba(255,220,150,0.16), transparent 34%),
+            radial-gradient(ellipse at 88% 52%, rgba(255,255,255,0.22), transparent 26%);
+          filter: blur(12px);
+          opacity: 0.86;
           mix-blend-mode: screen;
         }
         .smokecraft-intake-smoke-left,
@@ -344,15 +385,15 @@ export default function Enroll() {
           position: fixed;
           top: 8%;
           bottom: -8%;
-          width: 45vw;
+          width: 48vw;
           pointer-events: none;
           z-index: 0;
-          opacity: 0.78;
-          filter: blur(18px);
+          opacity: 0.92;
+          filter: blur(10px);
           background:
-            radial-gradient(ellipse at 30% 18%, rgba(255,255,255,0.24), transparent 24%),
-            radial-gradient(ellipse at 52% 42%, rgba(255,255,255,0.18), transparent 34%),
-            radial-gradient(ellipse at 46% 72%, rgba(255,230,184,0.12), transparent 30%);
+            radial-gradient(ellipse at 30% 18%, rgba(255,255,255,0.24), transparent 22%),
+            radial-gradient(ellipse at 48% 42%, rgba(255,255,255,0.2), transparent 30%),
+            radial-gradient(ellipse at 52% 72%, rgba(255,230,184,0.14), transparent 28%);
           mix-blend-mode: screen;
         }
         .smokecraft-intake-smoke-left {
@@ -366,15 +407,15 @@ export default function Enroll() {
         .smokecraft-intake-amber {
           position: fixed;
           left: 50%;
-          top: 48%;
-          width: min(980px, 112vw);
-          height: min(720px, 82vh);
+          top: 43%;
+          width: min(820px, 94vw);
+          height: min(520px, 62vh);
           transform: translate(-50%, -50%);
           pointer-events: none;
           z-index: 0;
           background:
-            radial-gradient(ellipse at center, rgba(255,219,143,0.46), rgba(233,193,118,0.22) 28%, rgba(177,95,22,0.1) 50%, transparent 72%);
-          filter: blur(20px);
+            radial-gradient(ellipse at center, rgba(255,198,93,0.62), rgba(233,140,37,0.28) 30%, rgba(130,58,10,0.12) 54%, transparent 72%);
+          filter: blur(14px);
           mix-blend-mode: screen;
         }
         .smokecraft-intake-spotlight {
@@ -386,13 +427,15 @@ export default function Enroll() {
           transform: translateX(-50%);
           pointer-events: none;
           z-index: 0;
-          background: radial-gradient(circle, rgba(255,246,216,0.26), rgba(233,193,118,0.12) 34%, transparent 68%);
-          filter: blur(10px);
+          background: radial-gradient(circle, rgba(255,232,166,0.32), rgba(233,193,118,0.12) 34%, transparent 68%);
+          filter: blur(8px);
           mix-blend-mode: screen;
         }
         .smokecraft-intake-card {
           position: relative;
           overflow: hidden;
+          width: min(680px, 100%);
+          margin-inline: auto;
         }
         .smokecraft-intake-card::before {
           content: "";
@@ -400,10 +443,10 @@ export default function Enroll() {
           inset: 0;
           pointer-events: none;
           background:
-            linear-gradient(120deg, rgba(255,255,255,0.24), transparent 34%),
-            radial-gradient(ellipse at 50% -10%, rgba(255,241,206,0.24), transparent 44%),
-            radial-gradient(ellipse at 78% 0%, rgba(233,193,118,0.24), transparent 42%);
-          opacity: 0.95;
+            linear-gradient(120deg, rgba(255,255,255,0.14), transparent 34%),
+            radial-gradient(ellipse at 50% -10%, rgba(255,216,139,0.28), transparent 44%),
+            radial-gradient(ellipse at 78% 0%, rgba(233,150,52,0.2), transparent 42%);
+          opacity: 0.9;
         }
         .smokecraft-intake-card::after {
           content: "";
@@ -411,32 +454,58 @@ export default function Enroll() {
           inset: 1px;
           pointer-events: none;
           border-radius: inherit;
-          box-shadow: inset 0 0 42px rgba(255,255,255,0.08), inset 0 0 90px rgba(233,193,118,0.09);
+          box-shadow: inset 0 0 42px rgba(255,255,255,0.05), inset 0 0 90px rgba(233,193,118,0.11);
         }
         .smokecraft-intake-card > * {
           position: relative;
           z-index: 1;
         }
-        .smokecraft-intake input {
+        .smokecraft-intake input,
+        .smokecraft-intake select {
+          min-height: 44px;
+          padding: 0 12px !important;
+          border-radius: 4px;
+          background: rgba(0,0,0,0.42) !important;
+          color: rgba(255,247,229,0.94) !important;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
           text-shadow: 0 1px 10px rgba(0,0,0,0.24);
+        }
+        .smokecraft-intake select option {
+          color: #f8eee1;
+          background: #100906;
         }
         .smokecraft-intake label {
           color: rgba(255,247,229,0.78) !important;
         }
         .smokecraft-intake .gold-underline {
-          border-bottom-color: rgba(255,232,186,0.34);
+          border-bottom-color: rgba(255,205,118,0.44);
         }
         .smokecraft-intake .gold-underline:focus-within {
           border-bottom-color: rgba(255,218,139,0.88);
           box-shadow: 0 10px 24px -18px rgba(255,218,139,0.7);
         }
         @media (max-width: 720px) {
+          .smokecraft-intake-left-scene,
+          .smokecraft-intake-right-scene {
+            opacity: 0.32;
+            width: 58vw;
+          }
+          .smokecraft-intake-smoke-left,
+          .smokecraft-intake-smoke-right {
+            width: 70vw;
+          }
           .smokecraft-intake main {
             padding-left: 20px !important;
             padding-right: 20px !important;
+            padding-bottom: 210px !important;
           }
           .smokecraft-intake-card {
             padding: 28px 22px !important;
+          }
+          .smokecraft-intake nav {
+            height: 88px !important;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
           }
         }
       `}</style>
