@@ -58,15 +58,18 @@ export default function Enroll() {
       style={{
         minHeight: 'max(884px, 100dvh)',
         position: 'relative',
-        backgroundColor: '#201a15',
-        backgroundImage: 'radial-gradient(ellipse at 50% -10%, rgba(255,233,188,0.42) 0%, rgba(226,174,82,0.18) 28%, transparent 58%), radial-gradient(ellipse at 16% 20%, rgba(255,255,255,0.22) 0%, transparent 34%), radial-gradient(ellipse at 86% 42%, rgba(212,175,55,0.22) 0%, transparent 38%), linear-gradient(135deg, rgba(62,42,24,0.68), rgba(15,12,10,0.84)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuAJ09Qb4oPgovTsugDxP08oGJBDqZvjMBJXAFOH6Qn7ia0xZ8dAkzZSVGkEehm1V_CjE9AkK7Z4_jPCoDAVBGXl9ZcJ_0DRPd3QblAFfEcxeTYxT7DJdrgLcYwAcZtrm8xqaxPJy-ilaG9g3Qe1837GyxeQqWxYsLgWzhkjXZmlERbtG2c2zpBszfUOEnQDwG-5xSnh6hei70Z-NmWLnabLXItL8ypoj-_d3PeyfyMHxNkQtrLlaCSTq5HKLKoWQv8PvhGDOgP4HXQ)',
+        backgroundColor: '#150e08',
+        backgroundImage: 'radial-gradient(ellipse at 50% 20%, rgba(255,218,139,0.44) 0%, rgba(233,157,58,0.24) 24%, transparent 58%), radial-gradient(ellipse at 18% 42%, rgba(255,255,255,0.24) 0%, transparent 36%), radial-gradient(ellipse at 84% 48%, rgba(255,239,202,0.18) 0%, transparent 34%), linear-gradient(180deg, rgba(44,27,12,0.38), rgba(6,4,3,0.86)), url(/background-lounge-airy.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
       }}
     >
       <div className="smokecraft-intake-frost" />
+      <div className="smokecraft-intake-smoke-left" />
+      <div className="smokecraft-intake-smoke-right" />
       <div className="smokecraft-intake-amber" />
+      <div className="smokecraft-intake-spotlight" />
 
       {/* Top AppBar */}
       <header className="fixed top-0 w-full z-50 shadow-md flex justify-between items-center px-6 h-20" style={{
@@ -99,19 +102,19 @@ export default function Enroll() {
       <main className="relative z-10 pt-32 pb-40 px-8 max-w-[900px] mx-auto">
         {/* Header */}
         <section className="mb-12 text-center">
-          <h2 className="font-headline-xl text-headline-xl text-primary mb-4" style={{ textShadow: '0 8px 34px rgba(0,0,0,0.45)' }}>SmokeCraft Intake</h2>
-          <p className="font-body-lg max-w-xl mx-auto" style={{ color: 'rgba(248,236,214,0.86)', textShadow: '0 2px 18px rgba(0,0,0,0.42)' }}>
+          <h2 className="font-headline-xl text-headline-xl text-primary mb-4" style={{ color: '#ffe7ad', textShadow: '0 0 34px rgba(233,193,118,0.48), 0 10px 34px rgba(0,0,0,0.72)' }}>SmokeCraft Intake</h2>
+          <p className="font-body-lg max-w-xl mx-auto" style={{ color: 'rgba(255,247,229,0.94)', textShadow: '0 2px 18px rgba(0,0,0,0.62)' }}>
             Complete your identity to join the guild. Your privacy is our priority—only your nickname enters the humidor leaderboard.
           </p>
         </section>
 
         {/* Form card */}
         <div className="smokecraft-intake-card p-10 rounded-2xl shadow-2xl space-y-12" style={{
-          background: 'linear-gradient(145deg, rgba(255,255,255,0.18), rgba(74,50,31,0.28) 42%, rgba(23,17,13,0.5))',
-          backdropFilter: 'blur(34px) saturate(1.32)',
-          WebkitBackdropFilter: 'blur(34px) saturate(1.32)',
-          border: '1px solid rgba(255,236,196,0.28)',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.48), 0 0 46px rgba(233,193,118,0.2), inset 0 1px 0 rgba(255,255,255,0.24), inset 0 -1px 0 rgba(212,175,55,0.12)',
+          background: 'linear-gradient(145deg, rgba(255,255,255,0.34), rgba(255,239,210,0.18) 24%, rgba(74,47,23,0.34) 58%, rgba(21,13,8,0.56))',
+          backdropFilter: 'blur(42px) saturate(1.45)',
+          WebkitBackdropFilter: 'blur(42px) saturate(1.45)',
+          border: '1px solid rgba(255,236,196,0.5)',
+          boxShadow: '0 28px 92px rgba(0,0,0,0.52), 0 0 86px rgba(233,193,118,0.36), 0 0 0 1px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 -1px 0 rgba(212,175,55,0.22)',
         }}>
           {/* Photo upload */}
           <div className="flex flex-col items-center">
@@ -307,9 +310,21 @@ export default function Enroll() {
           inset: 0;
           pointer-events: none;
           background:
-            radial-gradient(ellipse at 50% 36%, rgba(255,255,255,0.14), transparent 42%),
-            linear-gradient(180deg, rgba(255,255,255,0.06), transparent 36%, rgba(0,0,0,0.12));
+            radial-gradient(ellipse at 50% 42%, rgba(255,238,190,0.22), transparent 38%),
+            radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.16), transparent 32%),
+            radial-gradient(ellipse at 82% 38%, rgba(255,255,255,0.13), transparent 30%),
+            linear-gradient(180deg, rgba(255,255,255,0.08), transparent 36%, rgba(0,0,0,0.24));
           z-index: 0;
+        }
+        .smokecraft-intake::after {
+          content: "";
+          position: fixed;
+          inset: 0;
+          pointer-events: none;
+          z-index: 0;
+          background:
+            linear-gradient(90deg, rgba(0,0,0,0.56), transparent 24%, transparent 74%, rgba(0,0,0,0.52)),
+            radial-gradient(ellipse at 50% 112%, rgba(0,0,0,0.76), transparent 48%);
         }
         .smokecraft-intake-frost {
           position: fixed;
@@ -317,23 +332,63 @@ export default function Enroll() {
           pointer-events: none;
           z-index: 0;
           background:
-            radial-gradient(ellipse at 28% 34%, rgba(255,255,255,0.18), transparent 30%),
-            radial-gradient(ellipse at 60% 16%, rgba(255,245,222,0.16), transparent 36%),
-            radial-gradient(ellipse at 76% 66%, rgba(255,255,255,0.08), transparent 30%);
-          filter: blur(24px);
-          opacity: 0.9;
+            radial-gradient(ellipse at 22% 32%, rgba(255,255,255,0.34), transparent 28%),
+            radial-gradient(ellipse at 60% 16%, rgba(255,245,222,0.28), transparent 36%),
+            radial-gradient(ellipse at 78% 62%, rgba(255,255,255,0.22), transparent 30%);
+          filter: blur(22px);
+          opacity: 1;
+          mix-blend-mode: screen;
+        }
+        .smokecraft-intake-smoke-left,
+        .smokecraft-intake-smoke-right {
+          position: fixed;
+          top: 8%;
+          bottom: -8%;
+          width: 45vw;
+          pointer-events: none;
+          z-index: 0;
+          opacity: 0.78;
+          filter: blur(18px);
+          background:
+            radial-gradient(ellipse at 30% 18%, rgba(255,255,255,0.24), transparent 24%),
+            radial-gradient(ellipse at 52% 42%, rgba(255,255,255,0.18), transparent 34%),
+            radial-gradient(ellipse at 46% 72%, rgba(255,230,184,0.12), transparent 30%);
+          mix-blend-mode: screen;
+        }
+        .smokecraft-intake-smoke-left {
+          left: -12vw;
+          transform: rotate(-7deg);
+        }
+        .smokecraft-intake-smoke-right {
+          right: -12vw;
+          transform: scaleX(-1) rotate(-7deg);
         }
         .smokecraft-intake-amber {
           position: fixed;
           left: 50%;
-          top: 44%;
-          width: min(760px, 92vw);
-          height: min(560px, 70vh);
+          top: 48%;
+          width: min(980px, 112vw);
+          height: min(720px, 82vh);
           transform: translate(-50%, -50%);
           pointer-events: none;
           z-index: 0;
-          background: radial-gradient(ellipse at center, rgba(233,193,118,0.24), rgba(233,193,118,0.08) 34%, transparent 68%);
-          filter: blur(18px);
+          background:
+            radial-gradient(ellipse at center, rgba(255,219,143,0.46), rgba(233,193,118,0.22) 28%, rgba(177,95,22,0.1) 50%, transparent 72%);
+          filter: blur(20px);
+          mix-blend-mode: screen;
+        }
+        .smokecraft-intake-spotlight {
+          position: fixed;
+          left: 50%;
+          top: 20%;
+          width: min(520px, 80vw);
+          height: min(520px, 56vh);
+          transform: translateX(-50%);
+          pointer-events: none;
+          z-index: 0;
+          background: radial-gradient(circle, rgba(255,246,216,0.26), rgba(233,193,118,0.12) 34%, transparent 68%);
+          filter: blur(10px);
+          mix-blend-mode: screen;
         }
         .smokecraft-intake-card {
           position: relative;
@@ -345,9 +400,18 @@ export default function Enroll() {
           inset: 0;
           pointer-events: none;
           background:
-            linear-gradient(120deg, rgba(255,255,255,0.16), transparent 32%),
-            radial-gradient(ellipse at 70% 0%, rgba(233,193,118,0.18), transparent 44%);
-          opacity: 0.85;
+            linear-gradient(120deg, rgba(255,255,255,0.24), transparent 34%),
+            radial-gradient(ellipse at 50% -10%, rgba(255,241,206,0.24), transparent 44%),
+            radial-gradient(ellipse at 78% 0%, rgba(233,193,118,0.24), transparent 42%);
+          opacity: 0.95;
+        }
+        .smokecraft-intake-card::after {
+          content: "";
+          position: absolute;
+          inset: 1px;
+          pointer-events: none;
+          border-radius: inherit;
+          box-shadow: inset 0 0 42px rgba(255,255,255,0.08), inset 0 0 90px rgba(233,193,118,0.09);
         }
         .smokecraft-intake-card > * {
           position: relative;
@@ -356,8 +420,11 @@ export default function Enroll() {
         .smokecraft-intake input {
           text-shadow: 0 1px 10px rgba(0,0,0,0.24);
         }
+        .smokecraft-intake label {
+          color: rgba(255,247,229,0.78) !important;
+        }
         .smokecraft-intake .gold-underline {
-          border-bottom-color: rgba(255,232,186,0.24);
+          border-bottom-color: rgba(255,232,186,0.34);
         }
         .smokecraft-intake .gold-underline:focus-within {
           border-bottom-color: rgba(255,218,139,0.88);
