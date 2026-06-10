@@ -79,10 +79,25 @@ function RewardsAtmosphere() {
       <div style={{
         position: 'absolute',
         inset: 0,
-        backgroundImage: 'linear-gradient(90deg,rgba(5,3,2,0.98) 0%,rgba(5,3,2,0.7) 35%,rgba(5,3,2,0.56) 62%,rgba(5,3,2,0.96) 100%), linear-gradient(180deg,rgba(5,3,2,0.65) 0%,rgba(5,3,2,0.18) 38%,rgba(5,3,2,0.94) 100%), url(/background-lounge-airy.jpg)',
+        backgroundImage: 'linear-gradient(90deg,rgba(5,3,2,0.98) 0%,rgba(5,3,2,0.74) 35%,rgba(5,3,2,0.62) 62%,rgba(5,3,2,0.97) 100%), linear-gradient(180deg,rgba(5,3,2,0.7) 0%,rgba(5,3,2,0.2) 38%,rgba(5,3,2,0.96) 100%), url(/background-lounge-airy.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        filter: 'saturate(1.08) contrast(1.08) brightness(0.72)',
+        filter: 'saturate(1.14) contrast(1.14) brightness(0.64)',
+      }} />
+      <div style={{
+        position: 'absolute',
+        right: '7%',
+        top: '7%',
+        width: '32%',
+        maxWidth: 380,
+        aspectRatio: '1.2',
+        borderRadius: 28,
+        backgroundImage: 'linear-gradient(90deg,rgba(5,3,2,0.52),rgba(5,3,2,0.12)), url(/crafthub-gold.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        opacity: 0.24,
+        filter: 'blur(1px) saturate(1.18) brightness(0.92)',
+        boxShadow: `0 0 90px rgba(201,168,76,0.18)`,
       }} />
       <div style={{
         position: 'absolute',
@@ -256,6 +271,28 @@ function ActivityModal({ open, onClose, item }) {
   )
 }
 
+function ActivityListModal({ open, onClose, activity, onSelect }) {
+  return (
+    <Modal open={open} onClose={onClose} title="All Recent Activity">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+        {activity.map(item => (
+          <button key={item.id} onClick={() => onSelect(item)}
+            style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', minHeight: 58, padding: '10px 12px', borderRadius: 12, border: `1px solid rgba(201,168,76,0.28)`, background: 'rgba(12,9,6,0.86)', color: TEXT, cursor: 'pointer', textAlign: 'left', boxShadow: '0 10px 24px rgba(0,0,0,0.22)' }}>
+            <div style={{ width: 34, height: 34, borderRadius: 10, background: `${G}18`, border: `1px solid ${G}35`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 17, color: G }}>{item.icon}</span>
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ color: TEXT, fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{item.title}</div>
+              <div style={{ color: TEXTD, fontSize: 11, lineHeight: 1.35 }}>{item.desc}</div>
+            </div>
+            <div style={{ color: G, fontWeight: 800, fontSize: 13, whiteSpace: 'nowrap' }}>+{item.xp} XP</div>
+          </button>
+        ))}
+      </div>
+    </Modal>
+  )
+}
+
 function TierModal({ open, onClose, tier }) {
   if (!tier) return null
   return (
@@ -344,7 +381,7 @@ export default function Leaderboard() {
   const [mounted,  setMounted]  = useState(false)
   const [animXp,   setAnimXp]   = useState(950)
   const [accepted, setAccepted] = useState(false)
-  const [modal,    setModal]    = useState({ scan: false, info: false, member: null, activity: null, tier: null, admin: false })
+  const [modal,    setModal]    = useState({ scan: false, info: false, member: null, activity: null, activityList: false, tier: null, admin: false })
   const [toast,    setToast]    = useState({ visible: false, message: '' })
   const [badge,    setBadge]    = useState(null)
 
@@ -396,6 +433,11 @@ export default function Leaderboard() {
     setTimeout(() => navigate('/smokecraft/golden-box/status'), 400)
   }
 
+  function handleActivityListSelect(item) {
+    haptic.tap()
+    setModal(m => ({ ...m, activityList: false, activity: item }))
+  }
+
   const me   = board.find(u => u.isCurrentUser)
   const top3 = board.slice(0, 3)
   const rest  = board.slice(3)
@@ -404,32 +446,50 @@ export default function Leaderboard() {
     <div className="smokecraft-premium-page" style={{ background: BG, color: TEXT, fontFamily: 'system-ui,sans-serif' }}>
       <RewardsAtmosphere />
 
+      <style>{`
+        @media (max-width: 720px) {
+          .smokecraft-ranking-header { min-height: 56px !important; padding: 0 10px !important; gap: 8px; flex-wrap: nowrap !important; overflow-x: auto; scrollbar-width: none; }
+          .smokecraft-ranking-header::-webkit-scrollbar { display: none; }
+          .smokecraft-ranking-actions { gap: 5px !important; flex-shrink: 0; }
+          .smokecraft-ranking-action-label { display: none; }
+        }
+        @media (max-width: 520px) {
+          .smokecraft-ranking-podium { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+
       {/* ── fixed header ── */}
-      <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'rgba(12,10,7,0.95)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${BORDER}`, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <button onClick={() => { haptic.tap(); navigate('/passport') }} style={{ width: 36, height: 36, borderRadius: 10, border: `1px solid ${BORDER}`, background: CARD, color: TEXTM, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <header className="smokecraft-ranking-header" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'linear-gradient(180deg,rgba(8,5,2,0.96),rgba(8,5,2,0.88))', backdropFilter: 'blur(14px)', borderBottom: `1px solid ${BORDERHI}`, minHeight: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px', flexWrap: 'wrap', boxShadow: '0 8px 30px rgba(0,0,0,0.34)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+          <button onClick={() => { haptic.tap(); navigate('/smokecraft') }} style={{ width: 38, height: 38, borderRadius: '50%', border: `1px solid ${G}66`, background: 'radial-gradient(circle,rgba(201,168,76,0.18),rgba(5,3,2,0.8))', color: G, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 0 16px rgba(201,168,76,0.2)` }}>
             <span className="material-symbols-outlined" style={{ fontSize: 20 }}>arrow_back</span>
           </button>
           <div>
-            <div style={{ fontSize: 8, color: TEXTD, letterSpacing: '0.25em', textTransform: 'uppercase' }}>Grand Lounge</div>
-            <div style={{ fontSize: 13, color: GL, fontWeight: 700, letterSpacing: '0.06em' }}>GRAND LOUNGE</div>
+            <div style={{ fontSize: 8, color: G, letterSpacing: '0.2em', textTransform: 'uppercase' }}>SmokeCraft Rewards</div>
+            <div style={{ fontFamily: '"Playfair Display",serif', fontSize: 17, color: GL, fontWeight: 800, letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>CraftHub 360</div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div className="smokecraft-ranking-actions" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
           <button onClick={() => { haptic.tap(); snd.tap(muted); setModal(m => ({ ...m, info: true })) }}
-            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 11px', borderRadius: 8, border: `1px solid ${BORDER}`, background: CARD, color: TEXTM, cursor: 'pointer', fontSize: 11 }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>info</span> About Rankings
+            style={{ minHeight: 38, display: 'flex', alignItems: 'center', gap: 5, padding: '8px 11px', borderRadius: 10, border: `1px solid ${BORDER}`, background: 'rgba(255,255,255,0.045)', color: TEXTM, cursor: 'pointer', fontSize: 11 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 15 }}>info</span><span className="smokecraft-ranking-action-label">About</span>
           </button>
           <button onClick={handleMyRank}
-            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 11px', borderRadius: 8, border: `1px solid ${G}55`, background: `${G}18`, color: G, cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>person</span> My Rank
+            style={{ minHeight: 38, display: 'flex', alignItems: 'center', gap: 5, padding: '8px 11px', borderRadius: 10, border: `1px solid ${G}66`, background: `${G}1f`, color: G, cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 15 }}>person</span><span className="smokecraft-ranking-action-label">My Rank</span>
           </button>
           <button onClick={() => { haptic.tap(); snd.tap(muted); setModal(m => ({ ...m, scan: true })) }}
-            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 11px', borderRadius: 8, border: `1px solid ${BORDER}`, background: CARD, color: TEXTM, cursor: 'pointer', fontSize: 11 }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>qr_code</span> Scan QR
+            style={{ minHeight: 38, display: 'flex', alignItems: 'center', gap: 5, padding: '8px 11px', borderRadius: 10, border: `1px solid ${BORDER}`, background: 'rgba(255,255,255,0.045)', color: TEXTM, cursor: 'pointer', fontSize: 11 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 15 }}>qr_code</span><span className="smokecraft-ranking-action-label">Scan QR</span>
           </button>
-          <button onClick={() => setMuted(m => !m)} style={{ width: 32, height: 32, borderRadius: 8, border: `1px solid ${BORDER}`, background: CARD, color: muted ? TEXTD : TEXTM, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={() => setMuted(m => !m)} style={{ width: 38, height: 38, borderRadius: 10, border: `1px solid ${BORDER}`, background: 'rgba(255,255,255,0.045)', color: muted ? TEXTD : TEXTM, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span className="material-symbols-outlined" style={{ fontSize: 16 }}>{muted ? 'volume_off' : 'volume_up'}</span>
+          </button>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+          <button onClick={() => { haptic.tap(); navigate('/grand-lounge-ranking') }} style={{ minHeight: 38, padding: '8px 13px', borderRadius: 99, border: `1px solid ${G}55`, background: 'linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.06))', color: GL, cursor: 'pointer', fontSize: 11, fontWeight: 700, letterSpacing: '0.06em' }}>Grand Lounge</button>
+          <button onClick={() => me && setModal(m => ({ ...m, member: me }))} style={{ width: 38, height: 38, borderRadius: '50%', border: `1px solid ${G}88`, background: 'linear-gradient(135deg,#3A2B0A,#120C04)', color: GL, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 0 18px rgba(201,168,76,0.24)`, overflow: 'hidden' }}>
+            <span style={{ fontFamily: '"Playfair Display",serif', fontWeight: 800, fontSize: 13 }}>JC</span>
           </button>
         </div>
       </header>
@@ -440,24 +500,25 @@ export default function Leaderboard() {
       </div>
 
       {/* ── main content — 2-column grid ── */}
-      <main style={{ position: 'relative', zIndex: 10, paddingTop: 96, paddingBottom: 136 }}>
+      <main className="smokecraft-ranking-main" style={{ position: 'relative', zIndex: 10, paddingTop: 96, paddingBottom: 148 }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
-          gap: 0,
+          gap: 14,
           maxWidth: 1100,
           margin: '0 auto',
           alignItems: 'start',
         }}>
 
           {/* ── LEFT COLUMN ── */}
-          <div style={{ padding: '16px 12px 16px 16px' }}>
+          <div style={{ padding: '16px 4px 16px 16px' }}>
 
             {/* hero */}
-            <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', marginBottom: 16, minHeight: 200, border: `1px solid ${BORDERHI}`, boxShadow: '0 18px 46px rgba(0,0,0,0.42), 0 0 34px rgba(201,168,76,0.13)' }}>
-              <img src="/background-lounge-airy.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%', filter: 'brightness(0.42) saturate(1.18) contrast(1.1)' }} onError={e => e.target.style.display = 'none'} />
-              <img src="/smokecraft.jpg" alt="" style={{ position: 'absolute', right: -10, bottom: -16, width: '44%', height: '86%', objectFit: 'cover', opacity: 0.56, filter: 'brightness(0.9) saturate(1.12)', borderRadius: 18 }} onError={e => e.target.style.display = 'none'} />
-              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 78% 32%,rgba(201,168,76,0.18),transparent 34%), linear-gradient(120deg,rgba(5,3,2,0.92) 0%,rgba(12,8,5,0.64) 58%,rgba(5,3,2,0.38) 100%)' }} />
+            <div style={{ position: 'relative', borderRadius: 18, overflow: 'hidden', marginBottom: 16, minHeight: 220, border: `1px solid ${BORDERHI}`, boxShadow: '0 18px 46px rgba(0,0,0,0.48), 0 0 42px rgba(201,168,76,0.18)' }}>
+              <img src="/background-lounge-airy.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 42%', filter: 'brightness(0.38) saturate(1.2) contrast(1.16)' }} onError={e => e.target.style.display = 'none'} />
+              <img src="/crafthub-gold.jpg" alt="" style={{ position: 'absolute', right: -26, top: -44, width: '54%', height: '125%', objectFit: 'cover', opacity: 0.62, filter: 'brightness(0.8) saturate(1.16)', borderRadius: 22 }} onError={e => e.target.style.display = 'none'} />
+              <div style={{ position: 'absolute', right: '12%', top: 0, width: 2, height: '100%', background: 'linear-gradient(180deg,transparent,rgba(232,213,163,0.6),transparent)', filter: 'blur(1px)', boxShadow: `0 0 40px ${G}` }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 76% 16%,rgba(232,213,163,0.28),transparent 24%), radial-gradient(circle at 70% 54%,rgba(201,118,34,0.18),transparent 36%), linear-gradient(120deg,rgba(5,3,2,0.94) 0%,rgba(12,8,5,0.72) 54%,rgba(5,3,2,0.3) 100%)' }} />
               <div style={{ position: 'relative', padding: '28px 22px 24px' }}>
                 <div style={{ fontSize: 8, color: `${G}99`, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 10 }}>SmokeCraft 360</div>
                 <h1 style={{ fontFamily: '"Playfair Display",serif', fontSize: 'clamp(24px,3vw,36px)', fontWeight: 700, margin: '0 0 10px', lineHeight: 1.15 }}>
@@ -472,7 +533,7 @@ export default function Leaderboard() {
             {/* top 3 podium */}
             <div style={{ marginBottom: 14 }}>
               <div style={{ fontSize: 8, color: TEXTD, letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 10 }}>Top Ranked Tonight</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.12fr 1fr', gap: 6 }}>
+              <div className="smokecraft-ranking-podium" style={{ display: 'grid', gridTemplateColumns: '1fr 1.12fr 1fr', gap: 8 }}>
                 {[top3[1], top3[0], top3[2]].filter(Boolean).map((m) => {
                   const r = m.rank, isC = r === 1
                   return (
@@ -528,7 +589,7 @@ export default function Leaderboard() {
           </div>
 
           {/* ── RIGHT COLUMN ── */}
-          <div style={{ padding: '16px 16px 16px 12px' }}>
+          <div style={{ padding: '16px 16px 16px 4px' }}>
 
             {/* user position card */}
             {me && (
@@ -551,7 +612,7 @@ export default function Leaderboard() {
             <div style={{ marginBottom: 14 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                 <div style={{ fontFamily: '"Playfair Display",serif', fontSize: 15, color: TEXT }}>Your Recent Activity</div>
-                <button onClick={() => haptic.tap()} style={{ color: G, fontSize: 11, background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>View All</button>
+                <button onClick={() => { haptic.tap(); setModal(m => ({ ...m, activityList: true })) }} style={{ minHeight: 34, color: G, fontSize: 11, background: `${G}10`, border: `1px solid ${G}26`, borderRadius: 999, padding: '6px 10px', cursor: 'pointer', fontWeight: 700 }}>View All</button>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 {activity.slice(0, 5).map(item => (
@@ -575,7 +636,10 @@ export default function Leaderboard() {
             </div>
 
             {/* profile rank card */}
-            <div style={{ padding: '14px 16px', borderRadius: 13, border: `1px solid ${G}55`, background: `radial-gradient(circle at 90% 10%,rgba(201,168,76,0.16),transparent 36%), linear-gradient(135deg,rgba(201,168,76,0.12) 0%,rgba(12,8,5,0.88) 100%)`, marginBottom: 14, boxShadow: '0 0 30px rgba(201,168,76,0.18), inset 0 1px 0 rgba(255,255,255,0.07)' }}>
+            <div style={{ position: 'relative', padding: '16px 18px', borderRadius: 16, border: `1px solid ${G}66`, background: `radial-gradient(circle at 86% 18%,rgba(232,213,163,0.2),transparent 34%), linear-gradient(135deg,rgba(201,168,76,0.15) 0%,rgba(12,8,5,0.91) 100%)`, marginBottom: 14, boxShadow: '0 0 34px rgba(201,168,76,0.22), inset 0 1px 0 rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+              <div aria-hidden="true" style={{ position: 'absolute', right: -18, top: -26, width: 118, height: 118, borderRadius: '50%', border: `1px solid ${G}40`, background: 'radial-gradient(circle,rgba(201,168,76,0.2),transparent 66%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span className="material-symbols-outlined" style={{ color: G, fontSize: 54, opacity: 0.38 }}>workspace_premium</span>
+              </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                 <div style={{ width: 46, height: 46, borderRadius: '50%', background: `linear-gradient(135deg,${G},#A07830)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#1A1200', fontFamily: '"Playfair Display",serif', fontSize: 18, border: `2px solid ${G}`, flexShrink: 0 }}>JC</div>
                 <div style={{ flex: 1 }}>
@@ -648,6 +712,7 @@ export default function Leaderboard() {
       <RankingInfoModal open={modal.info}    onClose={() => setModal(m => ({ ...m, info: false }))} />
       <MemberModal  open={!!modal.member}    onClose={() => setModal(m => ({ ...m, member: null }))}   member={modal.member} />
       <ActivityModal open={!!modal.activity} onClose={() => setModal(m => ({ ...m, activity: null }))} item={modal.activity} />
+      <ActivityListModal open={modal.activityList} onClose={() => setModal(m => ({ ...m, activityList: false }))} activity={activity} onSelect={handleActivityListSelect} />
       <TierModal    open={!!modal.tier}      onClose={() => setModal(m => ({ ...m, tier: null }))}     tier={modal.tier} />
       <AdminPanel   open={modal.admin}       onClose={() => setModal(m => ({ ...m, admin: false }))}   onAddXp={handleAdminAddXp} />
 
