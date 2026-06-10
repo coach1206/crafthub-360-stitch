@@ -3,6 +3,36 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../context/GuestSessionContext.jsx'
 import { getNextSmokecraftRoute, getLastSmokecraftRoute } from '../constants/session.js'
 
+function PassportCoverVisual() {
+  return (
+    <div style={{ position: 'relative', width: 112, height: 138, transform: 'rotate(-5deg)', filter: 'drop-shadow(14px 18px 24px rgba(0,0,0,0.62))' }}>
+      <div style={{ position: 'absolute', inset: 0, borderRadius: 9, background: 'linear-gradient(145deg, #201106 0%, #4A2A10 42%, #120905 100%)', border: '1px solid rgba(212,175,55,0.42)', overflow: 'hidden', boxShadow: 'inset 8px 0 16px rgba(0,0,0,0.46), inset -1px 0 0 rgba(255,230,168,0.18)' }}>
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,0.055) 0 1px, transparent 1px 9px), repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 5px)', opacity: 0.38 }} />
+        <div style={{ position: 'absolute', inset: 8, borderRadius: 6, border: '1px solid rgba(212,175,55,0.34)' }} />
+        <div style={{ position: 'absolute', left: 13, top: 10, bottom: 10, width: 7, borderRadius: 5, background: 'linear-gradient(180deg, rgba(255,225,150,0.52), rgba(104,62,18,0.18))', boxShadow: '2px 0 7px rgba(0,0,0,0.38)' }} />
+        <div style={{ position: 'absolute', left: 26, right: 14, top: 20, height: 1, background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.72), transparent)' }} />
+        <div style={{ position: 'absolute', left: 30, right: 18, top: 33, textAlign: 'center', fontFamily: '"JetBrains Mono",monospace', fontSize: 8, lineHeight: 1.35, fontWeight: 900, letterSpacing: '0.14em', color: '#E6C76A', textShadow: '0 0 12px rgba(212,175,55,0.35)' }}>
+          360<br />PASSPORT
+        </div>
+        <div style={{ position: 'absolute', left: 42, top: 66, width: 38, height: 38, borderRadius: '50%', border: '1px solid rgba(230,199,106,0.68)', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle, rgba(212,175,55,0.18), rgba(212,175,55,0.04) 62%, transparent)', boxShadow: '0 0 22px rgba(212,175,55,0.18)' }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 23, color: '#E6C76A', fontVariationSettings: "'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24" }}>public</span>
+        </div>
+        <div style={{ position: 'absolute', left: 35, right: 23, top: 59, height: 52, borderTop: '1px solid rgba(212,175,55,0.22)', borderBottom: '1px solid rgba(212,175,55,0.22)', opacity: 0.78 }} />
+        <div style={{ position: 'absolute', left: 28, right: 16, bottom: 21, display: 'flex', justifyContent: 'center', gap: 4 }}>
+          {[0, 1, 2].map(i => (
+            <span key={i} style={{ width: 12, height: 12, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.42)', background: i === 0 ? 'rgba(212,175,55,0.2)' : 'rgba(212,175,55,0.07)' }} />
+          ))}
+        </div>
+        <div style={{ position: 'absolute', left: 30, right: 18, bottom: 10, textAlign: 'center', fontFamily: '"JetBrains Mono",monospace', fontSize: 5.5, letterSpacing: '0.18em', color: 'rgba(230,199,106,0.58)', textTransform: 'uppercase' }}>
+          Member Journey
+        </div>
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg, transparent 0%, rgba(255,236,178,0.16) 42%, transparent 58%)', mixBlendMode: 'screen' }} />
+      </div>
+      <div style={{ position: 'absolute', left: 11, right: -6, bottom: -6, height: 9, borderRadius: '0 0 7px 7px', background: 'linear-gradient(90deg, rgba(246,227,178,0.52), rgba(126,92,45,0.28))', transform: 'skewX(-18deg)', opacity: 0.86 }} />
+    </div>
+  )
+}
+
 export default function SmokeCraft() {
   const navigate = useNavigate()
   const { session } = useGuestSession()
@@ -156,17 +186,10 @@ export default function SmokeCraft() {
             >
               <div style={{ display: 'flex', gap: 0 }}>
                 {/* Passport book visual */}
-                <div style={{ width: 160, flexShrink: 0, background: 'linear-gradient(160deg, #3D2B1A, #1E1208)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 160, position: 'relative', overflow: 'hidden' }}>
-                  <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg,rgba(255,255,255,0.015) 0px,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 8px)', pointerEvents: 'none' }} />
-                  <div style={{ textAlign: 'center', padding: 16 }}>
-                    <div style={{ width: 56, height: 72, margin: '0 auto 8px', borderRadius: 4, background: 'linear-gradient(160deg,#1A0F06,#2D1A0A)', border: '2px solid rgba(212,175,55,0.6)', boxShadow: '4px 4px 12px rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
-                      <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.08em', fontWeight: 700, lineHeight: 1.2, textAlign: 'center' }}>360{'\n'}PASSPORT</span>
-                      <div style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#D4AF37' }}>public</span>
-                      </div>
-                    </div>
-                    <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: 'rgba(212,175,55,0.5)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>CONNECTION</span>
-                  </div>
+                <div style={{ width: 160, flexShrink: 0, background: 'radial-gradient(circle at 50% 30%, rgba(212,175,55,0.18), transparent 45%), linear-gradient(160deg, #3D2B1A, #1E1208)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 160, position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg,rgba(255,255,255,0.018) 0px,rgba(255,255,255,0.018) 1px,transparent 1px,transparent 8px)', pointerEvents: 'none' }} />
+                  <div style={{ position: 'absolute', width: 142, height: 142, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.08)', boxShadow: 'inset 0 0 34px rgba(212,175,55,0.07)' }} />
+                  <PassportCoverVisual />
                 </div>
 
                 {/* Card text */}
