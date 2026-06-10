@@ -2,6 +2,10 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getRankFromXP } from '../../constants/session.js'
+import {
+  SmokeCraftAtmosphericBackground,
+  SmokeCraftBottomNav,
+} from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
 const ARCHETYPES = {
   diplomat: {
@@ -140,7 +144,8 @@ export default function Identity() {
   /* ── LOADING PHASE ──────────────────────────────────────── */
   if (phase === 'loading') {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-10 relative overflow-hidden">
+      <div className="smokecraft-premium-page flex flex-col items-center justify-center gap-10 relative overflow-hidden">
+        <SmokeCraftAtmosphericBackground variant="celebration" />
         <div className="fixed inset-0 -z-10" style={{ background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(233,193,118,0.07) 0%, transparent 70%)' }} />
 
         {/* Animated smoke rings */}
@@ -193,7 +198,8 @@ export default function Identity() {
   /* ── REVEAL PHASE ───────────────────────────────────────── */
   if (phase === 'reveal') {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-8 relative overflow-hidden">
+      <div className="smokecraft-premium-page flex flex-col items-center justify-center gap-8 relative overflow-hidden">
+        <SmokeCraftAtmosphericBackground variant="celebration" />
         <div
           className="fixed inset-0 -z-10"
           style={{ background: `radial-gradient(ellipse 65% 65% at 50% 50%, ${archetype.glowColor} 0%, transparent 65%)` }}
@@ -234,7 +240,8 @@ export default function Identity() {
 
   /* ── DETAILS PHASE ──────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-background text-on-surface font-body-md overflow-x-hidden">
+    <div className="smokecraft-premium-page text-on-surface font-body-md overflow-x-hidden">
+      <SmokeCraftAtmosphericBackground variant="celebration" />
 
       {/* Atmospheric background */}
       <div
@@ -268,7 +275,7 @@ export default function Identity() {
         </div>
       </header>
 
-      <main className="pt-28 pb-24 px-margin max-w-[900px] mx-auto">
+      <main className="relative z-10 pt-28 pb-36 px-margin max-w-[900px] mx-auto">
 
         {/* Hero Block */}
         <div className="text-center mb-16" style={{ animation: 'slideIn 0.6s ease-out' }}>
@@ -329,7 +336,7 @@ export default function Identity() {
           {/* Description Card */}
           <div
             className="rounded-2xl p-7 flex flex-col gap-5"
-            style={{ background: `linear-gradient(135deg, ${archetype.accent} 0%, rgba(31,31,32,0.4) 100%)`, border: `1px solid ${archetype.color}20` }}
+            style={{ background: `linear-gradient(135deg, ${archetype.accent} 0%, rgba(31,31,32,0.52) 100%)`, border: `1px solid ${archetype.color}30`, backdropFilter: 'blur(20px)' }}
           >
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-[18px]" style={{ color: archetype.color, fontVariationSettings: "'FILL' 1" }}>person</span>
@@ -349,7 +356,7 @@ export default function Identity() {
             {/* Vitola Card */}
             <div
               className="rounded-2xl p-6 flex items-start gap-4"
-              style={{ background: 'rgba(31,31,32,0.6)', border: `1px solid ${archetype.color}18` }}
+              style={{ background: 'rgba(31,31,32,0.58)', border: `1px solid ${archetype.color}26`, backdropFilter: 'blur(18px)' }}
             >
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
@@ -369,7 +376,7 @@ export default function Identity() {
             {/* Quote Card */}
             <div
               className="rounded-2xl p-6 flex-1 flex items-center"
-              style={{ background: 'rgba(31,31,32,0.4)', border: `1px solid ${archetype.color}18` }}
+              style={{ background: 'rgba(31,31,32,0.5)', border: `1px solid ${archetype.color}26`, backdropFilter: 'blur(18px)' }}
             >
               <div>
                 <span className="material-symbols-outlined text-[28px] mb-3 block" style={{ color: `${archetype.color}50` }}>format_quote</span>
@@ -438,6 +445,7 @@ export default function Identity() {
         </div>
 
       </main>
+      <SmokeCraftBottomNav active="rewards" />
     </div>
   )
 }

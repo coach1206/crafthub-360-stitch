@@ -2,6 +2,10 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
+import {
+  SmokeCraftAtmosphericBackground,
+  SmokeCraftBottomNav,
+} from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
 const WRAPPERS = [
   {
@@ -64,9 +68,10 @@ export default function Blend() {
   }
 
   return (
-    <div className="relative min-h-screen bg-background text-on-background font-body-md overflow-x-hidden selection:bg-primary/30">
+    <div className="smokecraft-premium-page relative text-on-background font-body-md overflow-x-hidden selection:bg-primary/30">
+      <SmokeCraftAtmosphericBackground variant="education" />
       {/* Atmospheric Background */}
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-[1] opacity-45 pointer-events-none">
         <img
           alt="Background"
           className="w-full h-full object-cover opacity-60"
@@ -76,7 +81,7 @@ export default function Blend() {
       </div>
 
       {/* Top Navigation Shell */}
-      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-margin py-unit bg-surface/5 backdrop-blur-[40px] border-b border-white/20">
+      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-margin py-unit bg-black/45 backdrop-blur-[40px] border-b border-primary/20">
         <div className="flex items-center gap-4">
           <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} className="material-symbols-outlined text-primary p-2 hover:bg-white/10 transition-colors rounded-full active:scale-95">arrow_back</button>
           <span className="font-headline-md text-headline-md font-bold text-primary tracking-tighter">CRAFTHUB 360</span>
@@ -98,7 +103,7 @@ export default function Blend() {
       </header>
 
       {/* Navigation Drawer */}
-      <aside className="fixed left-0 top-0 h-full z-40 pt-20 w-72 bg-surface/5 backdrop-blur-[40px] border-r border-white/10 hidden lg:flex flex-col">
+      <aside className="fixed left-0 top-0 h-full z-40 pt-20 w-72 bg-black/30 backdrop-blur-[40px] border-r border-primary/15 hidden lg:flex flex-col">
         {/* Brand block */}
         <div className="px-5 py-5 border-b border-white/8">
           <div className="flex items-center gap-3 mb-1">
@@ -397,6 +402,7 @@ export default function Blend() {
           <span className="font-label-sm text-[10px] text-on-surface-variant cursor-pointer hover:text-primary transition-colors uppercase tracking-[0.15em]">Support</span>
         </div>
       </footer>
+      <SmokeCraftBottomNav active="smokecraft" />
     </div>
   )
 }

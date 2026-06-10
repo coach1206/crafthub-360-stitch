@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import {
+  SmokeCraftAtmosphericBackground,
+  SmokeCraftBottomNav,
+  SmokeCraftPremiumHeader,
+} from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
 const GOLD = 'linear-gradient(135deg,#8b6914,#e9c176,#f5d98a,#c5a059,#8b6914)'
 
@@ -108,10 +113,11 @@ export default function Cultivation() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#070502', color: '#E5E2E1', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
+    <div className="smokecraft-premium-page" style={{ color: '#E5E2E1', fontFamily: '"Hanken Grotesk",sans-serif' }}>
+      <SmokeCraftAtmosphericBackground variant="education" />
 
       {/* Cinematic tobacco farm background */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 1, opacity: 0.32, pointerEvents: 'none' }}>
         <img
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDinqiRd53IenZj6Dg4uDGjKf7GNFR89-xAI4t2-68wH-BtJVVKUsZMoTibHD5nB2uI61lEqWTKBzcx6fUO83UUDbqCLxufZvXkYwXkxnOvzLpFpOCdbPr3M95R49mvK2G6Wm2V-erAzikJa6EXqtaeZ4RT1Tjq9ANJsNobQ4TZRDYIwxX1xdFGkGHk0QSyvjOIAzrMG8ia4rPhXcUczk9X_nbwCvyVETSYlkbNZdC-KqHYQhoIteDqdb9tGkwvNhs1IeNtBh2Q4Y"
           alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
@@ -120,23 +126,14 @@ export default function Cultivation() {
       </div>
 
       {/* Texture overlay */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 1, backgroundImage: "url('https://www.transparenttextures.com/patterns/black-linen.png')", opacity: 0.12, pointerEvents: 'none' }} />
-      <div style={{ position: 'fixed', inset: 0, zIndex: 1, background: 'radial-gradient(ellipse 55% 50% at 50% 30%, rgba(212,175,55,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+      <div style={{ position: 'fixed', inset: 0, zIndex: 2, background: 'radial-gradient(ellipse 55% 50% at 50% 30%, rgba(212,175,55,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
       {/* ── Top Bar ─────────────────────────────────────────── */}
-      <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 28px', background: 'rgba(7,5,2,0.82)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(212,175,55,0.12)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#D4AF37', display: 'flex', alignItems: 'center', padding: 8, borderRadius: '50%' }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 22 }}>arrow_back</span>
-          </button>
-          <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 18, fontWeight: 700, color: '#D4AF37' }}>CraftHub 360</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: 'rgba(212,175,55,0.6)', letterSpacing: '0.18em', textTransform: 'uppercase' }}>Cigar Experience Architect</span>
-          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700 }}>Step 12 of 20</span>
-        </div>
-      </header>
+      <SmokeCraftPremiumHeader
+        step="Step 12 of 20"
+        sessionLabel="Cigar Experience Architect"
+        onRightClick={() => navigate('/')}
+      />
 
       {/* ── Main ─────────────────────────────────────────────── */}
       <main style={{ position: 'relative', zIndex: 10, paddingTop: 96, paddingBottom: 120, maxWidth: 1100, margin: '0 auto', padding: '96px 28px 120px' }}>
@@ -299,20 +296,7 @@ export default function Cultivation() {
       )}
 
       {/* ── Bottom Nav (mobile) ──────────────────────────── */}
-      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, height: 76, display: 'flex', justifyContent: 'space-around', alignItems: 'center', padding: '0 16px', background: 'rgba(7,5,2,0.92)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(212,175,55,0.1)' }}>
-        {[
-          { icon: 'explore',      label: 'Explore',  to: '/' },
-          { icon: 'inventory_2',  label: 'Leaves',   to: '/smokecraft/leaves' },
-          { icon: 'menu_book',    label: 'Passport', to: '/passport', active: true },
-          { icon: 'auto_awesome', label: 'Assistant', to: '/' },
-        ].map(({ icon, label, to, active }) => (
-          <button key={label} onClick={() => navigate(to)}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, background: 'none', border: 'none', cursor: 'pointer', color: active ? '#D4AF37' : '#4A3A20', padding: '8px 12px', borderRadius: 10, transition: 'color 0.2s' }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 22, fontVariationSettings: active ? "'FILL' 1" : "'FILL' 0" }}>{icon}</span>
-            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{label}</span>
-          </button>
-        ))}
-      </nav>
+      <SmokeCraftBottomNav active="smokecraft" />
     </div>
   )
 }

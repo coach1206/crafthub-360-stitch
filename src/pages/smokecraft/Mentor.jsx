@@ -5,6 +5,9 @@ import { XP_AWARDS }           from '../../constants/session.js'
 import { triggerHaptic }       from '../../utils/haptics.js'
 import { useMentorVoice }      from '../../hooks/useMentorVoice.js'
 import VoiceButton             from '../../components/voice/VoiceButton.jsx'
+import {
+  SmokeCraftAtmosphericBackground,
+} from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
 const PRIMARY_MENTORS = [
   {
@@ -120,18 +123,19 @@ export default function Mentor() {
   }
 
   return (
-    <div className="bg-background text-on-background font-body-md min-h-screen" style={{ minHeight: 'max(884px, 100dvh)' }}>
+    <div className="smokecraft-premium-page text-on-background font-body-md">
+      <SmokeCraftAtmosphericBackground variant="lounge" />
       {/* TopAppBar */}
-      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-20 border-b border-outline-variant bg-surface/90 backdrop-blur-xl shadow-md">
+      <header className="smokecraft-premium-header">
         <div className="flex items-center gap-4">
           <button
-            className="material-symbols-outlined text-primary hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 duration-200"
+            className="material-symbols-outlined smokecraft-icon-button active:scale-95 duration-200"
             onClick={() => navigate('/smokecraft/enroll')}
           >menu</button>
-          <h1 className="font-headline-md text-headline-md font-bold text-primary drop-shadow-[0_2px_2px_rgba(233,193,118,0.5)]">CraftHub 360</h1>
+          <h1 className="smokecraft-premium-header__title">CraftHub 360</h1>
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-label-lg text-label-lg text-on-surface-variant tracking-widest uppercase opacity-70">Step 4 of 20</span>
+          <span className="smokecraft-premium-header__step">Step 4 of 20</span>
 
           {/* ── Voice control ── */}
           <VoiceButton
@@ -141,8 +145,7 @@ export default function Mentor() {
           />
 
           <button
-            className="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-lg text-label-lg shadow-lg hover:brightness-110 transition-all active:scale-95"
-            style={{ minHeight: 48 }}
+            className="smokecraft-premium-header__lounge active:scale-95"
             onClick={() => { voice.stop(); navigate('/') }}
           >
             Grand Lounge
@@ -151,7 +154,7 @@ export default function Mentor() {
       </header>
 
       {/* Desktop left rail nav */}
-      <nav className="hidden lg:flex fixed left-0 top-20 h-[calc(100vh-5rem)] w-24 flex-col items-center py-8 gap-8 border-r border-outline-variant bg-surface-container-low">
+      <nav className="hidden lg:flex fixed left-0 top-20 h-[calc(100vh-5rem)] w-24 flex-col items-center py-8 gap-8 border-r border-primary/15 bg-black/35 backdrop-blur-xl z-30">
         {[
           { icon: 'wine_bar',      label: 'Cellar',  active: false },
           { icon: 'smoking_rooms', label: 'Humidor', active: true  },
@@ -165,15 +168,15 @@ export default function Mentor() {
         ))}
       </nav>
 
-      <main className="pt-32 pb-40 px-8 max-w-[1440px] mx-auto lg:pl-32">
+      <main className="relative z-10 pt-32 pb-40 px-8 max-w-[1440px] mx-auto lg:pl-32">
         {/* Hero */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-16 items-end">
           <div className="md:col-span-7">
-            <h2 className="font-display-lg text-display-lg mb-4 leading-tight">
+            <h2 className="smokecraft-premium-title mb-4 leading-tight">
               SmokeCraft <br />
               <span className="gold-foil-text" style={{ WebkitTextFillColor: 'transparent' }}>Mentor Selection</span>
             </h2>
-            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+            <p className="smokecraft-premium-copy max-w-2xl">
               The mastery of tobacco is a lineage of fire and soil. Select two mentors from the world's most
               prestigious growing regions to curate your personalized tasting journey and masterclass curriculum.
             </p>
@@ -208,7 +211,7 @@ export default function Mentor() {
               <div
                 key={mentor.id}
                 onClick={() => toggle(mentor.id)}
-                className={`group relative bg-surface-container-low rounded-xl overflow-hidden transition-all duration-500 cursor-pointer ${isSelected ? 'shadow-[0_0_40px_rgba(233,193,118,0.25)] border-2 border-primary' : 'border border-primary/30 hover:shadow-[0_0_40px_rgba(233,193,118,0.15)]'}`}
+                className={`group relative smokecraft-glass-panel overflow-hidden transition-all duration-500 cursor-pointer ${isSelected ? 'shadow-[0_0_46px_rgba(233,193,118,0.28)] border-2 border-primary' : 'border border-primary/30 hover:shadow-[0_0_40px_rgba(233,193,118,0.15)]'}`}
               >
                 {/* Selection indicator */}
                 <div className="absolute top-4 right-4 z-20">
@@ -261,7 +264,7 @@ export default function Mentor() {
                 <div
                   key={region.id}
                   onClick={() => toggle(region.id)}
-                  className={`flex items-center p-6 rounded-xl border transition-all cursor-pointer group ${isSelected ? 'bg-surface-container-high border-primary' : 'bg-surface-container-high/40 border-primary/30 hover:bg-surface-container-high'}`}
+                  className={`flex items-center p-6 rounded-xl border transition-all cursor-pointer group smokecraft-glass-panel ${isSelected ? 'border-primary' : 'border-primary/30'}`}
                 >
                   <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                     <img className="w-full h-full object-cover group-hover:scale-110 transition-transform" src={region.img} alt={region.country} />
@@ -281,7 +284,7 @@ export default function Mentor() {
       </main>
 
       {/* Bottom Action Bar */}
-      <div className="fixed bottom-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-2xl border-t border-outline-variant shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
+      <div className="fixed bottom-0 w-full z-50 bg-black/80 backdrop-blur-2xl border-t border-primary/20 shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
         <div className="max-w-[1440px] mx-auto flex justify-between items-center h-24 px-8">
           <div className="flex flex-col">
             <span className="font-label-sm text-label-sm text-on-surface-variant uppercase">Selections Made</span>
@@ -293,14 +296,14 @@ export default function Mentor() {
           <div className="flex gap-4">
             <button
               onClick={() => { voice.stop(); navigate('/smokecraft/enroll') }}
-              className="px-8 py-3 rounded-lg font-label-lg text-label-lg text-on-surface border border-outline hover:bg-surface-container transition-all"
+              className="smokecraft-cta smokecraft-cta--ghost"
             >
               Save Draft
             </button>
             <button
               onClick={handleProceed}
               disabled={selected.length < MAX_SELECTIONS}
-              className="px-12 py-3 rounded-lg font-label-lg text-label-lg bg-primary text-on-primary shadow-[0_4px_15px_rgba(233,193,118,0.3)] disabled:opacity-30 disabled:grayscale transition-all active:scale-95"
+              className="smokecraft-cta smokecraft-cta--gold disabled:opacity-30 disabled:grayscale transition-all active:scale-95"
             >
               Proceed to Tasting Map
             </button>

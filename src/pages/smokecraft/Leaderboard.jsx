@@ -9,6 +9,10 @@ import {
   connectionVerifiedPayload, craftStampPayload, vipStampPayload,
 } from '../../utils/rankingQrPayloads.js'
 import TicketTicker from '../../components/common/TicketTicker.jsx'
+import {
+  SmokeCraftAtmosphericBackground,
+  SmokeCraftBottomNav,
+} from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
 /* ─── palette ─── */
 const G = '#C9A84C', GL = '#E8D5A3', GD = '#8A7030'
@@ -345,17 +349,9 @@ export default function Leaderboard() {
   const top3 = board.slice(0, 3)
   const rest  = board.slice(3)
 
-  /* bottom nav items */
-  const navItems = [
-    { label: 'Home',     icon: 'home',    route: '/crafthub' },
-    { label: 'Reserve',  icon: 'diamond', route: '/crafthub' },
-    { label: 'SCAN',     icon: null,      center: true       },
-    { label: 'Passport', icon: 'book',    route: '/passport' },
-    { label: 'Profile',  icon: 'person',  route: '/passport/profile' },
-  ]
-
   return (
-    <div style={{ background: BG, minHeight: '100vh', color: TEXT, fontFamily: 'system-ui,sans-serif' }}>
+    <div className="smokecraft-premium-page" style={{ background: BG, color: TEXT, fontFamily: 'system-ui,sans-serif' }}>
+      <SmokeCraftAtmosphericBackground variant="celebration" />
 
       {/* ── fixed header ── */}
       <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'rgba(12,10,7,0.95)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${BORDER}`, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px' }}>
@@ -393,7 +389,7 @@ export default function Leaderboard() {
       </div>
 
       {/* ── main content — 2-column grid ── */}
-      <main style={{ paddingTop: 96, paddingBottom: 120 }}>
+      <main style={{ position: 'relative', zIndex: 10, paddingTop: 96, paddingBottom: 120 }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
@@ -587,25 +583,7 @@ export default function Leaderboard() {
         </div>
       </main>
 
-      {/* ── fixed bottom nav ── */}
-      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100, background: 'rgba(12,10,7,0.96)', backdropFilter: 'blur(16px)', borderTop: `1px solid ${BORDER}`, padding: '6px 16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-        {navItems.map((item) => {
-          if (item.center) return (
-            <button key="scan" onClick={() => { haptic.tap(); snd.tap(muted); setModal(m => ({ ...m, scan: true })) }}
-              style={{ width: 58, height: 58, borderRadius: '50%', background: `linear-gradient(135deg,${G},#A07830)`, border: `2px solid ${GL}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: `0 4px 20px rgba(201,168,76,0.4)`, marginTop: -18, flexShrink: 0 }}>
-              <span className="material-symbols-outlined" style={{ fontSize: 22, color: '#1A1200', fontVariationSettings: "'FILL' 1" }}>qr_code_scanner</span>
-              <span style={{ fontSize: 7, color: '#1A1200', fontWeight: 700, marginTop: 1, letterSpacing: '0.06em' }}>SCAN</span>
-            </button>
-          )
-          return (
-            <button key={item.label} onClick={() => { haptic.tap(); navigate(item.route) }}
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, background: 'none', border: 'none', cursor: 'pointer', minWidth: 52, padding: '6px 4px' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: 22, color: TEXTD }}>{item.icon}</span>
-              <span style={{ fontSize: 9, color: TEXTD, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{item.label}</span>
-            </button>
-          )
-        })}
-      </nav>
+      <SmokeCraftBottomNav active="rewards" />
 
       {/* ── floating admin ── */}
       <button onClick={() => { haptic.tap(); setModal(m => ({ ...m, admin: true })) }}

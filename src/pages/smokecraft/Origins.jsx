@@ -2,6 +2,11 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
+import {
+  SmokeCraftAtmosphericBackground,
+  SmokeCraftBottomNav,
+  SmokeCraftPremiumHeader,
+} from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
 
 const SEED_PATHS = [
@@ -67,25 +72,13 @@ export default function Origins() {
   }
 
   return (
-    <div className="font-body-md text-on-surface bg-background" style={{ minHeight: 'max(884px, 100dvh)' }}>
+    <div className="smokecraft-premium-page font-body-md text-on-surface">
+      <SmokeCraftAtmosphericBackground variant="education" />
       {/* Top App Bar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md">
-        <div className="flex items-center gap-4">
-          <button
-            className="p-2 hover:bg-surface-variant/50 transition-colors duration-300 rounded-full active:scale-95"
-            onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')}
-          >
-            <span className="material-symbols-outlined text-primary">arrow_back</span>
-          </button>
-          <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
-        </div>
-        <div className="flex items-center gap-6">
-          <span className="font-label-lg text-label-lg text-on-surface-variant">Step 5 of 20</span>
-          <button className="bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-label-lg text-label-lg hover:bg-primary transition-colors active:scale-95">
-            Grand Lounge
-          </button>
-        </div>
-      </header>
+      <SmokeCraftPremiumHeader
+        step="Step 5 of 20"
+        onRightClick={() => navigate('/')}
+      />
 
       {/* Side nav drawer */}
       {navOpen && (
@@ -134,9 +127,9 @@ export default function Origins() {
       </nav>
 
       {/* Main content */}
-      <main className="pt-20 pb-32 min-h-screen relative overflow-hidden">
+      <main className="relative z-10 pt-20 pb-32 min-h-screen overflow-hidden">
         {/* Background atmosphere */}
-        <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
           <img
             className="w-full h-full object-cover grayscale"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4XuG6QKkVNzr-9aeajIcp0PKMEh2jzM0pZa9DNSs97MCQY6ixQkI3NWV0GCGPnIGei-U81g8xkT9iTwuciUtcTNOLPDAL3pCkQ_HUeY6M2sV5p5DVOLzuN7FMp4CdmT8PO2JDHVFIm1Yk_EwHqf-TgJqQOhxGgS7K5gk0CfuCDqCdGi4-h88fq-1ARfDFg8LXZ5i2f6nqe7HtmBqz-gUkA2E1NzN_RLCGuzwQW5i0p5YCqiMQk3a_HvRcvkMEa1VBjK5-1Q"
@@ -146,8 +139,8 @@ export default function Origins() {
 
         <div className="container mx-auto px-8 relative z-10 py-12 max-w-[1440px]">
           <header className="mb-12 text-center">
-            <h2 className="font-headline-xl text-headline-xl gold-text-gradient mb-4">Seed &amp; Soil Exploration</h2>
-            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+            <h2 className="smokecraft-premium-title mb-4">Seed &amp; Soil Exploration</h2>
+            <p className="smokecraft-premium-copy max-w-2xl mx-auto">
               The journey of a masterpiece begins deep within the earth. Explore the synergy between genetic heritage
               and the minerals that breathe life into every leaf.
             </p>
@@ -170,7 +163,7 @@ export default function Origins() {
                     <div
                       key={label}
                       onClick={() => setSelectedSeed(isActive ? null : label)}
-                      className={`smoked-glass p-6 rounded-xl cursor-pointer group transition-all ${border ? `border-l-4 ${borderColor}` : ''} ${isActive ? 'scale-[1.02]' : 'hover:scale-[1.02]'}`}
+                      className={`smokecraft-glass-panel p-6 rounded-xl cursor-pointer group transition-all ${border ? `border-l-4 ${borderColor}` : ''} ${isActive ? 'scale-[1.02]' : 'hover:scale-[1.02]'}`}
                     >
                       <h4 className={`font-label-lg mb-2 ${accent === 'primary' ? 'text-primary' : accent === 'secondary' ? 'text-secondary' : accent === 'tertiary' ? 'text-tertiary' : 'text-on-surface'}`}>
                         {label}
@@ -192,7 +185,7 @@ export default function Origins() {
               <div className="space-y-4">
                 {SOIL_ROWS.map(({ label, desc, img, icon }) => (
                   <div key={label} className="leather-texture p-1 rounded-xl gold-foil-border overflow-hidden group cursor-pointer">
-                    <div className="smoked-glass p-5 rounded-lg flex items-center gap-6 transition-transform group-hover:translate-x-2">
+                    <div className="smokecraft-glass-panel p-5 rounded-lg flex items-center gap-6 transition-transform group-hover:translate-x-2">
                       <div className="w-16 h-16 rounded-full bg-surface-container-highest flex-shrink-0 overflow-hidden border border-outline/30 flex items-center justify-center">
                         {img
                           ? <img className="w-full h-full object-cover" src={img} alt={label} />
@@ -213,14 +206,14 @@ export default function Origins() {
                     { label: 'Mexican San Andrés', sub: 'Dark depth' },
                     { label: 'Brazilian Mata Fina', sub: 'Natural sweetness' },
                   ].map(({ label, sub }) => (
-                    <div key={label} className="smoked-glass p-4 rounded-lg text-center border border-outline-variant/20 hover:bg-primary/10 transition-colors cursor-pointer">
+                    <div key={label} className="smokecraft-glass-panel p-4 rounded-lg text-center border border-outline-variant/20 hover:bg-primary/10 transition-colors cursor-pointer">
                       <h5 className="font-label-sm text-on-surface">{label}</h5>
                       <p className="text-xs text-on-surface-variant">{sub}</p>
                     </div>
                   ))}
                 </div>
 
-                <div className="smoked-glass p-4 rounded-lg text-center border border-dashed border-primary/40 hover:border-primary transition-colors cursor-pointer">
+                <div className="smokecraft-glass-panel p-4 rounded-lg text-center border border-dashed border-primary/40 hover:border-primary transition-colors cursor-pointer">
                   <h5 className="font-label-sm text-primary">Colombian experimental profile</h5>
                   <p className="text-xs text-on-surface-variant">Untamed highland minerals</p>
                 </div>
@@ -235,7 +228,7 @@ export default function Origins() {
           style={{ opacity: stampVisible ? 1 : 0, transform: stampVisible ? 'translateY(0)' : 'translateY(40px)' }}
         >
           <div className="leather-texture p-1 rounded-2xl shadow-2xl overflow-hidden gold-foil-border">
-            <div className="smoked-glass p-6 rounded-xl flex items-center gap-6">
+            <div className="smokecraft-glass-panel p-6 rounded-xl flex items-center gap-6">
               <div className="w-20 h-20 flex-shrink-0 flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping" />
                 <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center stamp-reveal">
@@ -252,19 +245,7 @@ export default function Origins() {
       </main>
 
       {/* Bottom nav (mobile) */}
-      <footer className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface-container-low/90 backdrop-blur-2xl border-t border-outline-variant/20 shadow-[0_-8px_24px_rgba(0,0,0,0.4)] rounded-t-xl md:hidden">
-        {[
-          { icon: 'explore',     label: 'Explore',   active: false },
-          { icon: 'inventory_2', label: 'Inventory', active: false },
-          { icon: 'menu_book',   label: 'Passport',  active: true  },
-          { icon: 'auto_awesome',label: 'Assistant', active: false },
-        ].map(({ icon, label, active }) => (
-          <div key={label} className={`flex flex-col items-center justify-center cursor-pointer transition-colors ${active ? 'text-primary bg-primary-container/20 rounded-full px-6 py-2 scale-90' : 'text-on-surface-variant hover:text-primary'}`}>
-            <span className="material-symbols-outlined" style={active ? { fontVariationSettings: "'FILL' 1" } : {}}>{icon}</span>
-            <span className="font-label-sm text-label-sm mt-1">{label}</span>
-          </div>
-        ))}
-      </footer>
+      <SmokeCraftBottomNav active="smokecraft" />
 
       {/* FAB */}
       <button
