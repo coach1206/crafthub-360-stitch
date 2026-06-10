@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../context/GuestSessionContext.jsx'
 import { getNextSmokecraftRoute, getLastSmokecraftRoute } from '../constants/session.js'
@@ -38,33 +38,24 @@ export default function SmokeCraft() {
   const { session } = useGuestSession()
   const [howItWorksOpen, setHowItWorksOpen] = useState(false)
 
-  useEffect(() => {
-    const handler = () => {
-      const el = document.querySelector('.smokecraft-parallax')
-      if (el) el.style.transform = `translateY(${window.pageYOffset * 0.35}px)`
-    }
-    window.addEventListener('scroll', handler)
-    return () => window.removeEventListener('scroll', handler)
-  }, [])
-
   function handleStart() {
     navigate(getNextSmokecraftRoute(session.completedSteps))
   }
 
   const bottomNav = [
     {
+      icon: 'smoking_rooms',
+      iconType: 'material',
+      label: 'SMOKECRAFT',
+      sub: 'Current journey.',
+      to: '/smokecraft',
+      active: true,
+    },
+    {
       icon: 'emoji_events',
       iconType: 'material',
       label: 'REWARDS',
       sub: 'Earn. Unlock. Enjoy.',
-      to: '/smokecraft/leaderboard',
-      active: false,
-    },
-    {
-      icon: 'leaderboard',
-      iconType: 'material',
-      label: 'RANKINGS',
-      sub: 'See how you rank.',
       to: '/smokecraft/leaderboard',
       active: false,
     },
@@ -80,25 +71,25 @@ export default function SmokeCraft() {
       icon: 'smoking_rooms',
       iconType: 'material',
       label: 'CRAFTHUB',
-      sub: 'Learn. Create. Connect.',
-      to: '/',
+      sub: 'Module grid.',
+      to: '/crafthub',
       active: false,
     },
   ]
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#0A0705', color: '#E5E2E1', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
+    <div style={{ minHeight: '100dvh', background: 'linear-gradient(180deg, #080503 0%, #0A0705 46%, #050302 100%)', color: '#E5E2E1', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
 
-      {/* ── Hero Background ───────────────────────────────────────── */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
+      {/* ── Single cinematic hero background ─────────────────────── */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 720, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
         <img
           src="/smokecraft-hero.png"
           alt=""
-          className="smokecraft-parallax"
-          style={{ width: '100%', height: '115%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', opacity: 0.54 }}
         />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(8,5,2,0.88) 0%, rgba(8,5,2,0.72) 45%, rgba(8,5,2,0.80) 100%)' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 20% 50%, rgba(212,175,55,0.08) 0%, transparent 55%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(8,5,2,0.92) 0%, rgba(8,5,2,0.72) 45%, rgba(8,5,2,0.9) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(8,5,2,0.16) 0%, rgba(10,7,5,0.78) 72%, #0A0705 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 24% 42%, rgba(212,175,55,0.12) 0%, transparent 48%)' }} />
       </div>
 
       {/* ── Top Bar ───────────────────────────────────────────────── */}
@@ -250,10 +241,11 @@ export default function SmokeCraft() {
       </main>
 
       {/* ── Bottom Nav Bar ─────────────────────────────────────────── */}
-      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, height: 100, display: 'flex', alignItems: 'center', background: 'rgba(10,7,5,0.92)', backdropFilter: 'blur(24px)', borderTop: '1px solid rgba(212,175,55,0.12)' }}>
+      <nav className="smokecraft-bottom-nav" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, height: 100, display: 'flex', alignItems: 'center', background: 'rgba(10,7,5,0.92)', backdropFilter: 'blur(24px)', borderTop: '1px solid rgba(212,175,55,0.12)' }}>
         {bottomNav.map((item, i) => (
           <button
             key={item.label}
+            className="smokecraft-bottom-nav-item"
             onClick={() => navigate(item.to)}
             style={{
               flex: 1,
@@ -281,12 +273,12 @@ export default function SmokeCraft() {
               }
             </div>
             {/* Label */}
-            <div style={{ textAlign: 'left', minWidth: 0 }}>
-              <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color: item.active ? '#D4AF37' : '#5A4A30', marginBottom: 3, whiteSpace: 'nowrap' }}>{item.label}</div>
-              <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 11, color: item.active ? '#A89B86' : '#3A3020', whiteSpace: 'nowrap' }}>{item.sub}</div>
+            <div className="smokecraft-bottom-nav-copy" style={{ textAlign: 'left', minWidth: 0 }}>
+              <div className="smokecraft-bottom-nav-label" style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color: item.active ? '#D4AF37' : '#5A4A30', marginBottom: 3, whiteSpace: 'nowrap' }}>{item.label}</div>
+              <div className="smokecraft-bottom-nav-sub" style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 11, color: item.active ? '#A89B86' : '#3A3020', whiteSpace: 'nowrap' }}>{item.sub}</div>
             </div>
             {/* Arrow */}
-            <span className="material-symbols-outlined" style={{ fontSize: 16, color: item.active ? '#D4AF37' : '#3A3020', marginLeft: 4, flexShrink: 0 }}>chevron_right</span>
+            <span className="material-symbols-outlined smokecraft-bottom-nav-arrow" style={{ fontSize: 16, color: item.active ? '#D4AF37' : '#3A3020', marginLeft: 4, flexShrink: 0 }}>chevron_right</span>
           </button>
         ))}
       </nav>
@@ -339,6 +331,27 @@ export default function SmokeCraft() {
         @media (min-width: 1024px) {
           .smokecraft-grid {
             grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 760px) {
+          .smokecraft-bottom-nav {
+            height: 82px !important;
+          }
+          .smokecraft-bottom-nav-item {
+            flex-direction: column !important;
+            gap: 5px !important;
+            padding: 8px 6px !important;
+          }
+          .smokecraft-bottom-nav-copy {
+            text-align: center !important;
+          }
+          .smokecraft-bottom-nav-label {
+            font-size: 8px !important;
+            letter-spacing: 0.08em !important;
+          }
+          .smokecraft-bottom-nav-sub,
+          .smokecraft-bottom-nav-arrow {
+            display: none !important;
           }
         }
       `}</style>
