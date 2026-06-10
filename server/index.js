@@ -10,6 +10,8 @@ import 'dotenv/config'
 import express      from 'express'
 import cors         from 'cors'
 import cookieParser from 'cookie-parser'
+import path         from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import healthRoutes          from './routes/healthRoutes.js'
 import sessionRoutes         from './routes/sessionRoutes.js'
@@ -54,6 +56,8 @@ validateEnv()
 const app    = express()
 const PORT   = parseInt(process.env.PORT || '3001', 10)
 const IS_PROD = process.env.NODE_ENV === 'production'
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const CLIENT_DIST = path.resolve(__dirname, '../dist')
 
 // ── CORS ──────────────────────────────────────────────────────
 // In production, CORS_ORIGIN must be explicitly set.
@@ -115,6 +119,13 @@ app.use('/api/travel',            travelRoutes)
 app.use('/api/mentor',            mentorRoutes)
 app.use('/api/developer',         developerRoutes)
 app.use('/api/access-requests',   accessRequestsRoutes)
+
+// ── Frontend static app ──────────────────────────────────────
+app.use(express.static(CLIENT_DIST))
+
+app.get(/^\/(?!api\/?).*/, (_req, res) => {
+  res.sendFile(path.join(CLIENT_DIST, 'index.html'))
+})
 
 // ── 404 handler ───────────────────────────────────────────────
 app.use((_req, res) => {
