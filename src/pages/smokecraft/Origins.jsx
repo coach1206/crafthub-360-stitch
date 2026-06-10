@@ -12,57 +12,49 @@ const SEED_PATHS = [
     id: 'smooth-starter',
     label: 'Smooth Starter',
     desc: 'Gentle introduction with silky, cream-forward genetics.',
-    visual: 'radial-gradient(circle at 24% 34%, #f4d68c 0 7%, transparent 8%), radial-gradient(circle at 38% 62%, #d6aa62 0 9%, transparent 10%), linear-gradient(135deg, rgba(244,214,140,0.32), rgba(42,26,10,0.62)), url(/crafthub-gold.jpg)',
-    position: '34% 48%',
+    visualClass: 'seed-visual-smooth',
   },
   {
     id: 'bold-explorer',
     label: 'Bold Explorer',
     desc: 'Robust, full-bodied heirloom strains for the seasoned palate.',
-    visual: 'radial-gradient(circle at 74% 32%, rgba(0,0,0,0.52), transparent 20%), linear-gradient(135deg, rgba(26,15,7,0.42), rgba(0,0,0,0.38)), url(/smokecraft.jpg)',
-    position: 'center 32%',
+    visualClass: 'seed-visual-bold',
   },
   {
     id: 'sweet-finish',
     label: 'Sweet Finish',
     desc: 'Natural sugars preserved through unique high-altitude aging.',
-    visual: 'radial-gradient(circle at 28% 56%, rgba(255,222,137,0.72) 0 7%, transparent 8%), radial-gradient(circle at 42% 34%, rgba(202,142,56,0.58) 0 9%, transparent 10%), linear-gradient(135deg, rgba(232,176,73,0.3), rgba(37,19,6,0.66)), url(/background-lounge-airy.jpg)',
-    position: 'left bottom',
+    visualClass: 'seed-visual-sweet',
   },
   {
     id: 'earth-spice',
     label: 'Earth and Spice',
     desc: 'Complex notes of cinnamon, cedar, and mineral soil.',
-    visual: 'repeating-linear-gradient(45deg, transparent 0 18px, rgba(230,175,88,0.2) 19px 22px), radial-gradient(circle at 72% 40%, rgba(114,63,24,0.72), transparent 22%), url(/smokecraft.jpg)',
-    position: 'right center',
+    visualClass: 'seed-visual-earth',
   },
   {
     id: 'luxury-reserve',
     label: 'Luxury Reserve',
     desc: 'A limited hybrid developed for ultra-premium wrappers.',
-    visual: 'linear-gradient(135deg, rgba(210,167,82,0.22), rgba(0,0,0,0.42)), url(/crafthub-gold.jpg)',
-    position: 'center',
+    visualClass: 'seed-visual-luxury',
   },
   {
     id: 'rare-leaf',
     label: 'Rare Leaf',
     desc: 'Small-batch cultivation of nearly extinct tobacco varietals.',
-    visual: 'radial-gradient(ellipse at 72% 42%, rgba(84,122,54,0.72), transparent 42%), repeating-linear-gradient(118deg, rgba(216,190,111,0.2) 0 2px, transparent 3px 22px), url(/background-lounge-airy.jpg)',
-    position: 'right center',
+    visualClass: 'seed-visual-rare',
   },
   {
     id: 'social-smoke',
     label: 'Social Smoke',
     desc: 'Light, airy aromatics designed for conversation and ease.',
-    visual: 'radial-gradient(ellipse at 32% 32%, rgba(255,255,255,0.22), transparent 34%), radial-gradient(ellipse at 48% 64%, rgba(255,255,255,0.14), transparent 38%), url(/smokecraft.jpg)',
-    position: 'left 42%',
+    visualClass: 'seed-visual-social',
   },
   {
     id: 'celebration-smoke',
     label: 'Celebration Smoke',
     desc: 'Festive, dynamic flavors with a long-lasting, memorable finish.',
-    visual: 'radial-gradient(circle at 78% 25%, rgba(255,218,132,0.52), transparent 22%), linear-gradient(135deg, rgba(230,164,47,0.24), rgba(0,0,0,0.42)), url(/background-lounge-airy.jpg)',
-    position: 'right bottom',
+    visualClass: 'seed-visual-celebration',
   },
 ]
 
@@ -73,8 +65,7 @@ const SOIL_PATHS = [
     subtitle: 'Dark depth',
     desc: 'Volcanic richness with a grounding, earthy core.',
     icon: 'location_on',
-    visual: 'radial-gradient(circle at 36% 52%, rgba(65,45,31,0.88), transparent 24%), linear-gradient(135deg, rgba(21,15,10,0.42), rgba(0,0,0,0.5)), url(/crafthub-gold.jpg)',
-    position: 'center 58%',
+    visualClass: 'soil-visual-mexico',
   },
   {
     id: 'brazilian-mata-fina',
@@ -82,8 +73,7 @@ const SOIL_PATHS = [
     subtitle: 'Natural sweetness',
     desc: 'Nutrient-rich loam for smooth, balanced leaves.',
     icon: 'eco',
-    visual: 'radial-gradient(circle at 58% 30%, rgba(65,104,47,0.55), transparent 23%), linear-gradient(135deg, rgba(33,25,14,0.34), rgba(0,0,0,0.48)), url(/background-lounge-airy.jpg)',
-    position: 'center 44%',
+    visualClass: 'soil-visual-brazil',
   },
   {
     id: 'colombian-highland',
@@ -91,8 +81,7 @@ const SOIL_PATHS = [
     subtitle: 'Untamed highland minerals',
     desc: 'Innovative micro-terroirs for complex, layered character.',
     icon: 'terrain',
-    visual: 'linear-gradient(135deg, rgba(20,51,37,0.24), rgba(0,0,0,0.5)), url(/background-lounge-airy.jpg)',
-    position: 'center',
+    visualClass: 'soil-visual-colombia',
   },
   {
     id: 'nicaraguan-esteli',
@@ -100,8 +89,7 @@ const SOIL_PATHS = [
     subtitle: 'Bold and structured',
     desc: 'Mineral-dense soil for strength and spice-driven depth.',
     icon: 'shield',
-    visual: 'radial-gradient(circle at 42% 50%, rgba(26,20,16,0.8), transparent 30%), linear-gradient(135deg, rgba(54,34,18,0.28), rgba(0,0,0,0.52)), url(/crafthub-gold.jpg)',
-    position: '58% 42%',
+    visualClass: 'soil-visual-nicaragua',
   },
   {
     id: 'peruvian-valley',
@@ -109,8 +97,7 @@ const SOIL_PATHS = [
     subtitle: 'Bright and aromatic',
     desc: 'Andean air and stone for lifted complexity.',
     icon: 'psychiatry',
-    visual: 'linear-gradient(135deg, rgba(43,75,47,0.24), rgba(0,0,0,0.44)), url(/background-lounge-airy.jpg)',
-    position: 'left center',
+    visualClass: 'soil-visual-peru',
     compact: true,
   },
   {
@@ -119,8 +106,7 @@ const SOIL_PATHS = [
     subtitle: 'Earthy and exotic',
     desc: 'Island soils for rare, exotic undertones.',
     icon: 'forest',
-    visual: 'linear-gradient(135deg, rgba(57,82,42,0.24), rgba(0,0,0,0.44)), url(/background-lounge-airy.jpg)',
-    position: 'right center',
+    visualClass: 'soil-visual-java',
     compact: true,
   },
 ]
@@ -148,9 +134,21 @@ export default function Origins() {
 
   function handleNext() {
     if (!selectedSeed || !selectedSoil) return
+    const seed = SEED_PATHS.find(path => path.id === selectedSeed)
+    const soil = SOIL_PATHS.find(path => path.id === selectedSoil)
+    const curation = {
+      seedId: selectedSeed,
+      seedLabel: seed?.label || 'Selected Seed Path',
+      seedDesc: seed?.desc || '',
+      soilId: selectedSoil,
+      soilLabel: soil?.label || 'Selected Soil Path',
+      soilSubtitle: soil?.subtitle || '',
+      soilDesc: soil?.desc || '',
+    }
+    window.sessionStorage?.setItem('smokecraft-curation-selection', JSON.stringify(curation))
     completeStep('origins')
     addXP(XP_AWARDS.ORIGINS_COMPLETE)
-    navigate('/smokecraft/leaves')
+    navigate('/smokecraft/curation', { state: curation })
   }
 
   const canContinue = Boolean(selectedSeed && selectedSoil)
@@ -250,10 +248,40 @@ export default function Origins() {
           box-shadow: 0 0 0 1px rgba(255,232,161,0.34), 0 0 34px rgba(233,193,118,0.32), 0 18px 46px rgba(0,0,0,0.48);
         }
         .path-visual {
+          position: relative;
           background-size: cover;
           background-position: center;
           min-height: 100%;
         }
+        .path-visual::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(circle at 28% 26%, rgba(255,232,161,0.22), transparent 22%),
+            linear-gradient(135deg, rgba(233,193,118,0.12), rgba(0,0,0,0.36));
+          mix-blend-mode: screen;
+        }
+        .path-visual::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, rgba(0,0,0,0.08), rgba(0,0,0,0.42));
+        }
+        .seed-visual-smooth { background-image: radial-gradient(circle at 32% 32%, #eed49a 0 9%, transparent 10%), radial-gradient(circle at 56% 58%, #c9954e 0 9%, transparent 10%), linear-gradient(135deg, #6d4b22, #130b04); }
+        .seed-visual-bold { background-image: radial-gradient(circle at 62% 42%, #1b0d06 0 12%, transparent 13%), radial-gradient(circle at 38% 64%, #4a2612 0 10%, transparent 11%), linear-gradient(135deg, #3b2413, #070403); }
+        .seed-visual-sweet { background-image: radial-gradient(circle at 31% 63%, #f0d184 0 10%, transparent 11%), radial-gradient(circle at 60% 28%, #b8792d 0 11%, transparent 12%), linear-gradient(135deg, #7c481d, #150805); }
+        .seed-visual-earth { background-image: repeating-linear-gradient(48deg, transparent 0 16px, rgba(236,181,86,0.2) 17px 20px), radial-gradient(circle at 70% 50%, #74411e 0 22%, transparent 23%), linear-gradient(135deg, #473019, #0a0503); }
+        .seed-visual-luxury { background-image: repeating-linear-gradient(118deg, transparent 0 22px, rgba(236,181,86,0.2) 23px 26px), linear-gradient(135deg, #9f7a35, #1a1005 58%, #060302); }
+        .seed-visual-rare { background-image: radial-gradient(ellipse at 70% 42%, #5f7c3b 0 30%, transparent 31%), repeating-linear-gradient(120deg, transparent 0 18px, rgba(222,194,116,0.18) 19px 21px), linear-gradient(135deg, #293619, #070403); }
+        .seed-visual-social { background-image: radial-gradient(ellipse at 35% 32%, rgba(255,255,255,0.36), transparent 26%), radial-gradient(ellipse at 56% 62%, rgba(255,255,255,0.18), transparent 28%), linear-gradient(135deg, #402b17, #070403); }
+        .seed-visual-celebration { background-image: radial-gradient(circle at 72% 24%, rgba(255,224,150,0.72), transparent 18%), radial-gradient(circle at 42% 58%, #71411e 0 20%, transparent 21%), linear-gradient(135deg, #6c3b16, #080403); }
+        .soil-visual-mexico { background-image: radial-gradient(circle at 32% 58%, #6a4931 0 22%, transparent 23%), repeating-linear-gradient(12deg, #20160f 0 10px, #332215 11px 18px, #100906 19px 26px); }
+        .soil-visual-brazil { background-image: radial-gradient(circle at 56% 28%, #58833c 0 18%, transparent 19%), repeating-linear-gradient(18deg, #15100a 0 12px, #322416 13px 22px, #0b0704 23px 31px); }
+        .soil-visual-colombia { background-image: linear-gradient(145deg, rgba(55,87,59,0.72), rgba(0,0,0,0.3)), linear-gradient(24deg, transparent 0 42%, #314d35 43% 55%, transparent 56%), linear-gradient(150deg, #1c301f, #080503); }
+        .soil-visual-nicaragua { background-image: radial-gradient(circle at 42% 54%, #1d1712 0 25%, transparent 26%), repeating-linear-gradient(18deg, #0f0905 0 10px, #2d1e13 11px 20px, #080403 21px 28px); }
+        .soil-visual-peru { background-image: linear-gradient(145deg, rgba(84,112,62,0.58), rgba(0,0,0,0.36)), linear-gradient(28deg, transparent 0 38%, #405d35 39% 54%, transparent 55%), linear-gradient(150deg, #22361f, #080503); }
+        .soil-visual-java { background-image: radial-gradient(circle at 66% 28%, #5a773b 0 20%, transparent 21%), linear-gradient(145deg, #263d22, #080503); }
         .seed-card__content,
         .soil-card__content {
           position: relative;
@@ -378,12 +406,27 @@ export default function Origins() {
         }
         .connection__orb::before { right: 100%; }
         .connection__orb::after { left: 100%; }
+        .origins-cta-panel {
+          margin: 26px auto 0;
+          max-width: 760px;
+          border: 1px solid rgba(233,193,118,0.28);
+          border-radius: 18px;
+          padding: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          background: linear-gradient(135deg, rgba(18,13,8,0.92), rgba(7,5,3,0.88));
+          box-shadow: 0 18px 46px rgba(0,0,0,0.32);
+        }
+        .origins-cta-panel p {
+          margin: 0;
+          color: rgba(245,234,215,0.7);
+          font-size: 13px;
+          line-height: 1.45;
+        }
         .origins-next {
-          position: fixed;
-          left: 50%;
-          bottom: 88px;
-          z-index: 80;
-          transform: translateX(-50%);
+          flex-shrink: 0;
           min-height: 58px;
           min-width: 238px;
           border: 0;
@@ -401,7 +444,7 @@ export default function Origins() {
           transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
         }
         .origins-next:active {
-          transform: translateX(-50%) scale(0.98);
+          transform: scale(0.98);
         }
         .origins-next:disabled {
           cursor: not-allowed;
@@ -419,9 +462,11 @@ export default function Origins() {
           transition: opacity 0.7s ease, transform 0.7s ease;
         }
         @media (max-width: 980px) {
-          .origins-shell { padding: 96px 18px 160px; }
+          .origins-shell { padding: 96px 18px 140px; }
           .origins-grid { grid-template-columns: 1fr; }
           .connection { display: none; }
+          .origins-cta-panel { align-items: stretch; flex-direction: column; }
+          .origins-next { width: 100%; }
         }
         @media (max-width: 640px) {
           .seed-grid,
@@ -437,10 +482,6 @@ export default function Origins() {
             position: absolute;
             right: 8px;
             bottom: 8px;
-          }
-          .origins-next {
-            bottom: 92px;
-            min-width: min(86vw, 320px);
           }
         }
       `}</style>
@@ -478,14 +519,13 @@ export default function Origins() {
                   >
                     <span className="path-check material-symbols-outlined" aria-hidden="true">check</span>
                     <span
-                      className="path-visual"
-                      style={{ backgroundImage: seed.visual, backgroundPosition: seed.position }}
+                      className={`path-visual ${seed.visualClass}`}
                       aria-hidden="true"
                     />
-                    <span className="seed-card__content">
+                    <div className="seed-card__content">
                       <h3>{seed.label}</h3>
                       <p>{seed.desc}</p>
-                    </span>
+                    </div>
                   </button>
                 )
               })}
@@ -516,15 +556,14 @@ export default function Origins() {
                   >
                     <span className="path-check material-symbols-outlined" aria-hidden="true">check</span>
                     <span
-                      className="path-visual"
-                      style={{ backgroundImage: soil.visual, backgroundPosition: soil.position }}
+                      className={`path-visual ${soil.visualClass}`}
                       aria-hidden="true"
                     />
-                    <span className="soil-card__content">
+                    <div className="soil-card__content">
                       <h3>{soil.label}</h3>
                       <span className="soil-card__subtitle">{soil.subtitle}</span>
                       <p>{soil.desc}</p>
-                    </span>
+                    </div>
                     <span className="soil-card__icon" aria-hidden="true">
                       <span className="material-symbols-outlined">{soil.icon}</span>
                     </span>
@@ -544,15 +583,14 @@ export default function Origins() {
                     >
                       <span className="path-check material-symbols-outlined" aria-hidden="true">check</span>
                       <span
-                        className="path-visual"
-                        style={{ backgroundImage: soil.visual, backgroundPosition: soil.position }}
+                        className={`path-visual ${soil.visualClass}`}
                         aria-hidden="true"
                       />
-                      <span className="soil-card__content">
+                      <div className="soil-card__content">
                         <h3>{soil.label}</h3>
                         <span className="soil-card__subtitle">{soil.subtitle}</span>
                         <p>{soil.desc}</p>
-                      </span>
+                      </div>
                       <span className="soil-card__icon" aria-hidden="true">
                         <span className="material-symbols-outlined">{soil.icon}</span>
                       </span>
@@ -563,6 +601,22 @@ export default function Origins() {
             </div>
           </section>
         </div>
+
+        <section className="origins-cta-panel">
+          <p>
+            Select one seed path and one soil path to build your curation profile. Your choices will shape the next
+            SmokeCraft learning step.
+          </p>
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={!canContinue}
+            className="origins-next"
+          >
+            <span className="material-symbols-outlined">local_library</span>
+            <span>Next: Curation</span>
+          </button>
+        </section>
 
         <div
           className="stamp-toast"
@@ -579,16 +633,6 @@ export default function Origins() {
           </div>
         </div>
       </main>
-
-      <button
-        type="button"
-        onClick={handleNext}
-        disabled={!canContinue}
-        className="origins-next"
-      >
-        <span className="material-symbols-outlined">local_library</span>
-        <span>Next: Curation</span>
-      </button>
 
       <SmokeCraftBottomNav active="smokecraft" />
     </div>

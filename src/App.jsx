@@ -18,6 +18,7 @@ import GoldenBoxStatus  from './pages/smokecraft/GoldenBoxStatus.jsx'
 import Art              from './pages/smokecraft/Art.jsx'
 import Mentor           from './pages/smokecraft/Mentor.jsx'
 import Origins          from './pages/smokecraft/Origins.jsx'
+import Curation         from './pages/smokecraft/Curation.jsx'
 import Leaves           from './pages/smokecraft/Leaves.jsx'
 import LeafChallenge            from './pages/smokecraft/LeafChallenge.jsx'
 import LeafChallengeCalculating from './pages/smokecraft/LeafChallengeCalculating.jsx'
@@ -182,6 +183,7 @@ export default function App() {
                 <Route path="art"            element={<Art />} />
                 <Route path="mentor"         element={<Mentor />} />
                 <Route path="origins"        element={<Origins />} />
+                <Route path="curation"       element={<Curation />} />
                 <Route path="leaves"         element={<Leaves />} />
                 <Route path="leaf-challenge"             element={<LeafChallenge />} />
                 <Route path="leaf-challenge-calculating" element={<LeafChallengeCalculating />} />
