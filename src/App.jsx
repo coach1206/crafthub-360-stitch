@@ -27,6 +27,7 @@ import Blend            from './pages/smokecraft/Blend.jsx'
 import FlavorDNA        from './pages/smokecraft/FlavorDNA.jsx'
 import Pairing          from './pages/smokecraft/Pairing.jsx'
 import Available        from './pages/smokecraft/Available.jsx'
+import Assistant        from './pages/smokecraft/Assistant.jsx'
 import SessionComplete  from './pages/smokecraft/SessionComplete.jsx'
 import Terroir          from './pages/smokecraft/Terroir.jsx'
 import PairingMastery   from './pages/smokecraft/PairingMastery.jsx'
@@ -190,6 +191,7 @@ export default function App() {
                 <Route path="flavor-dna"     element={<FlavorDNA />} />
                 <Route path="pairing"        element={<Pairing />} />
                 <Route path="available"      element={<Available />} />
+                <Route path="assistant"      element={<Assistant />} />
                 <Route path="session-complete" element={<SessionComplete />} />
                 <Route path="terroir"        element={<Terroir />} />
                 <Route path="pairing-mastery" element={<PairingMastery />} />

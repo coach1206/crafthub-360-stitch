@@ -280,10 +280,10 @@ export default function Enroll() {
         boxShadow: '0 -16px 48px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.08)',
       }}>
         {[
-          { icon: 'explore',         label: 'Explore',   active: false, to: '/crafthub' },
-          { icon: 'liquor',          label: 'Inventory', active: false, to: '/smokecraft' },
+          { icon: 'explore',         label: 'Explore',   active: false, to: '/smokecraft' },
+          { icon: 'liquor',          label: 'Inventory', active: false, to: '/smokecraft/available' },
           { icon: 'import_contacts', label: 'Passport',  active: true,  to: '/passport' },
-          { icon: 'support_agent',   label: 'Assistant', active: false, to: '/' },
+          { icon: 'support_agent',   label: 'Assistant', active: false, to: '/smokecraft/assistant' },
         ].map(({ icon, label, active, to }) => (
           <button
             key={label}
