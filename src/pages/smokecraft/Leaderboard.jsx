@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { craftImages } from '../../lib/craftImages.js'
 import { getLeaderboard, processRankingScan, getRecentRankingActivity } from '../../api/rankingApi.js'
 import { RANKING_DATA, BADGES_DATA } from '../../data/rankingData.js'
 import {
@@ -9,14 +8,11 @@ import {
   connectionVerifiedPayload, craftStampPayload, vipStampPayload,
 } from '../../utils/rankingQrPayloads.js'
 import TicketTicker from '../../components/common/TicketTicker.jsx'
-import {
-  SmokeCraftAtmosphericBackground,
-  SmokeCraftBottomNav,
-} from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import { SmokeCraftBottomNav } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
 /* ─── palette ─── */
 const G = '#C9A84C', GL = '#E8D5A3', GD = '#8A7030'
-const BG = '#0C0A07', SURF = '#181410', CARD = 'rgba(255,255,255,0.045)'
+const BG = '#050302', SURF = '#181410', CARD = 'rgba(255,255,255,0.045)'
 const TEXT = '#F5E8C8', TEXTM = '#C8B89A', TEXTD = '#7A6B55'
 const BORDER = 'rgba(201,168,76,0.18)', BORDERHI = 'rgba(201,168,76,0.45)'
 const MEDAL = { 1: '#C9A84C', 2: '#B8B8B8', 3: '#A0714C' }
@@ -71,8 +67,63 @@ function TierPill({ tier, small }) {
 
 function XpBar({ pct, color = G, h = 3 }) {
   return (
-    <div style={{ height: h, background: 'rgba(255,255,255,0.06)', borderRadius: 99, overflow: 'hidden', flex: 1, minWidth: 40 }}>
-      <div style={{ height: '100%', width: `${Math.min(100, pct)}%`, background: `linear-gradient(90deg,${color},${GL})`, borderRadius: 99, transition: 'width 0.8s ease' }} />
+    <div style={{ height: h, background: 'rgba(255,255,255,0.09)', border: `1px solid rgba(201,168,76,${h > 3 ? 0.24 : 0.12})`, borderRadius: 99, overflow: 'hidden', flex: 1, minWidth: 40, boxShadow: 'inset 0 0 10px rgba(0,0,0,0.65)' }}>
+      <div style={{ height: '100%', width: `${Math.min(100, pct)}%`, background: `linear-gradient(90deg,${color},${GL},${color})`, borderRadius: 99, transition: 'width 0.8s ease', boxShadow: `0 0 ${h > 3 ? 18 : 10}px ${color}aa` }} />
+    </div>
+  )
+}
+
+function RewardsAtmosphere() {
+  return (
+    <div aria-hidden="true" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden', background: BG }}>
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: 'linear-gradient(90deg,rgba(5,3,2,0.98) 0%,rgba(5,3,2,0.7) 35%,rgba(5,3,2,0.56) 62%,rgba(5,3,2,0.96) 100%), linear-gradient(180deg,rgba(5,3,2,0.65) 0%,rgba(5,3,2,0.18) 38%,rgba(5,3,2,0.94) 100%), url(/background-lounge-airy.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        filter: 'saturate(1.08) contrast(1.08) brightness(0.72)',
+      }} />
+      <div style={{
+        position: 'absolute',
+        left: '-12%',
+        top: '8%',
+        width: '42%',
+        height: '78%',
+        background: 'radial-gradient(ellipse at center, rgba(232,213,163,0.16), rgba(201,168,76,0.08) 32%, transparent 68%)',
+        filter: 'blur(38px)',
+      }} />
+      <div style={{
+        position: 'absolute',
+        right: '-10%',
+        top: '10%',
+        width: '38%',
+        height: '72%',
+        background: 'radial-gradient(ellipse at center, rgba(201,118,34,0.22), rgba(201,168,76,0.08) 34%, transparent 70%)',
+        filter: 'blur(42px)',
+      }} />
+      <div style={{
+        position: 'absolute',
+        left: '18%',
+        top: '6%',
+        width: '58%',
+        height: '36%',
+        background: 'radial-gradient(ellipse at center, rgba(201,168,76,0.2), rgba(201,168,76,0.08) 36%, transparent 70%)',
+        filter: 'blur(34px)',
+      }} />
+      <div style={{
+        position: 'absolute',
+        inset: '-8% -2%',
+        opacity: 0.34,
+        backgroundImage: 'radial-gradient(ellipse at 12% 34%, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 18%, transparent 43%), radial-gradient(ellipse at 92% 28%, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.05) 18%, transparent 43%), radial-gradient(ellipse at 50% 88%, rgba(201,168,76,0.11) 0%, transparent 46%)',
+        filter: 'blur(22px)',
+        mixBlendMode: 'screen',
+      }} />
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'radial-gradient(ellipse at center, transparent 0%, transparent 48%, rgba(0,0,0,0.74) 100%), linear-gradient(180deg,rgba(0,0,0,0.42),transparent 24%,rgba(0,0,0,0.68) 100%)',
+      }} />
     </div>
   )
 }
@@ -351,7 +402,7 @@ export default function Leaderboard() {
 
   return (
     <div className="smokecraft-premium-page" style={{ background: BG, color: TEXT, fontFamily: 'system-ui,sans-serif' }}>
-      <SmokeCraftAtmosphericBackground variant="celebration" />
+      <RewardsAtmosphere />
 
       {/* ── fixed header ── */}
       <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: 'rgba(12,10,7,0.95)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${BORDER}`, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px' }}>
@@ -389,7 +440,7 @@ export default function Leaderboard() {
       </div>
 
       {/* ── main content — 2-column grid ── */}
-      <main style={{ position: 'relative', zIndex: 10, paddingTop: 96, paddingBottom: 120 }}>
+      <main style={{ position: 'relative', zIndex: 10, paddingTop: 96, paddingBottom: 136 }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
@@ -403,10 +454,10 @@ export default function Leaderboard() {
           <div style={{ padding: '16px 12px 16px 16px' }}>
 
             {/* hero */}
-            <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', marginBottom: 16, minHeight: 200 }}>
-              <img src={craftImages.fallbacks.lounge} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', filter: 'brightness(0.45) saturate(1.2)' }} onError={e => e.target.style.display = 'none'} />
-              <img src={craftImages.fallbacks.cigar} alt="" style={{ position: 'absolute', right: 0, top: 0, height: '100%', objectFit: 'contain', opacity: 0.5 }} onError={e => e.target.style.display = 'none'} />
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(120deg,rgba(12,10,7,0.85) 0%,rgba(12,10,7,0.3) 70%,transparent 100%)' }} />
+            <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', marginBottom: 16, minHeight: 200, border: `1px solid ${BORDERHI}`, boxShadow: '0 18px 46px rgba(0,0,0,0.42), 0 0 34px rgba(201,168,76,0.13)' }}>
+              <img src="/background-lounge-airy.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%', filter: 'brightness(0.42) saturate(1.18) contrast(1.1)' }} onError={e => e.target.style.display = 'none'} />
+              <img src="/smokecraft.jpg" alt="" style={{ position: 'absolute', right: -10, bottom: -16, width: '44%', height: '86%', objectFit: 'cover', opacity: 0.56, filter: 'brightness(0.9) saturate(1.12)', borderRadius: 18 }} onError={e => e.target.style.display = 'none'} />
+              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 78% 32%,rgba(201,168,76,0.18),transparent 34%), linear-gradient(120deg,rgba(5,3,2,0.92) 0%,rgba(12,8,5,0.64) 58%,rgba(5,3,2,0.38) 100%)' }} />
               <div style={{ position: 'relative', padding: '28px 22px 24px' }}>
                 <div style={{ fontSize: 8, color: `${G}99`, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 10 }}>SmokeCraft 360</div>
                 <h1 style={{ fontFamily: '"Playfair Display",serif', fontSize: 'clamp(24px,3vw,36px)', fontWeight: 700, margin: '0 0 10px', lineHeight: 1.15 }}>
@@ -426,7 +477,7 @@ export default function Leaderboard() {
                   const r = m.rank, isC = r === 1
                   return (
                     <div key={m.id} onClick={() => { haptic.tap(); snd.tap(muted); setModal(mo => ({ ...mo, member: m })) }}
-                      style={{ padding: isC ? '18px 10px 14px' : '14px 8px 12px', borderRadius: 12, border: `1.5px solid ${MEDAL[r]}44`, background: `linear-gradient(180deg,${MEDAL[r]}10 0%,${CARD} 100%)`, textAlign: 'center', cursor: 'pointer', boxShadow: isC ? `0 6px 24px ${MEDAL[1]}22` : 'none', position: 'relative', opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateY(10px)', transition: `all 0.5s ease ${isC ? '0.1s' : '0.2s'}` }}>
+                      style={{ padding: isC ? '18px 10px 14px' : '14px 8px 12px', borderRadius: 12, border: `1.5px solid ${MEDAL[r]}77`, background: isC ? `radial-gradient(circle at 50% 0%,${MEDAL[r]}38,transparent 42%), linear-gradient(180deg,rgba(201,168,76,0.22) 0%,rgba(14,9,5,0.92) 100%)` : `linear-gradient(180deg,${MEDAL[r]}1f 0%,rgba(12,8,5,0.9) 100%)`, textAlign: 'center', cursor: 'pointer', boxShadow: isC ? `0 6px 28px ${MEDAL[1]}38, inset 0 1px 0 rgba(255,255,255,0.08)` : `0 0 18px ${MEDAL[r]}18`, position: 'relative', opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateY(10px)', transition: `all 0.5s ease ${isC ? '0.1s' : '0.2s'}` }}>
                       {isC && <div style={{ position: 'absolute', top: -6, left: '50%', transform: 'translateX(-50%)', width: 12, height: 12, borderRadius: '50%', background: G, boxShadow: `0 0 6px ${G}` }} />}
                       <MedalIcon rank={r} size={isC ? 32 : 26} />
                       <div style={{ margin: '8px auto 6px' }}>
@@ -454,7 +505,7 @@ export default function Leaderboard() {
                 return (
                   <div key={m.id} ref={isUser ? userRowRef : null}
                     onClick={() => { haptic.tap(); snd.tap(muted); setModal(mo => ({ ...mo, member: m })) }}
-                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 12px', borderRadius: 10, minHeight: 60, cursor: 'pointer', border: isUser ? `1.5px solid ${G}66` : `1px solid ${BORDER}`, background: isUser ? `linear-gradient(90deg,rgba(201,168,76,0.1) 0%,rgba(201,168,76,0.03) 100%)` : CARD, boxShadow: isUser ? `0 2px 12px rgba(201,168,76,0.18)` : 'none', opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateX(-6px)', transition: `all 0.45s ease ${i * 35}ms` }}>
+                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 12px', borderRadius: 10, minHeight: 60, cursor: 'pointer', border: isUser ? `1.5px solid ${G}88` : `1px solid rgba(201,168,76,0.24)`, background: isUser ? `linear-gradient(90deg,rgba(201,168,76,0.28) 0%,rgba(201,168,76,0.1) 100%)` : 'rgba(12,9,6,0.82)', boxShadow: isUser ? `0 0 24px rgba(201,168,76,0.28), inset 0 1px 0 rgba(255,255,255,0.08)` : '0 8px 22px rgba(0,0,0,0.16)', opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateX(-6px)', transition: `all 0.45s ease ${i * 35}ms` }}>
                     <div style={{ width: 24, textAlign: 'center', flexShrink: 0, color: TEXTD, fontSize: 12, fontWeight: 700 }}>{m.rank}</div>
                     <Avatar initials={m.initials} hue={m.hue} size={36} isUser={isUser} />
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -482,7 +533,7 @@ export default function Leaderboard() {
             {/* user position card */}
             {me && (
               <div onClick={() => { haptic.tap(); setModal(m => ({ ...m, member: me })) }}
-                style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px', borderRadius: 13, border: `1.5px solid ${G}55`, background: `linear-gradient(135deg,rgba(201,168,76,0.12) 0%,rgba(201,168,76,0.04) 100%)`, marginBottom: 14, cursor: 'pointer', boxShadow: `0 4px 18px rgba(201,168,76,0.14)`, opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateY(8px)', transition: 'all 0.6s ease' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px', borderRadius: 13, border: `1.5px solid ${G}70`, background: `radial-gradient(circle at 12% 50%,rgba(232,213,163,0.18),transparent 36%), linear-gradient(135deg,rgba(201,168,76,0.2) 0%,rgba(18,12,6,0.86) 100%)`, marginBottom: 14, cursor: 'pointer', boxShadow: `0 0 26px rgba(201,168,76,0.22), inset 0 1px 0 rgba(255,255,255,0.08)`, opacity: mounted ? 1 : 0, transform: mounted ? 'none' : 'translateY(8px)', transition: 'all 0.6s ease' }}>
                 <div style={{ width: 44, height: 44, borderRadius: 10, background: `linear-gradient(135deg,${G},#A07830)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <span style={{ color: '#1A1200', fontWeight: 800, fontFamily: '"Playfair Display",serif', fontSize: 20 }}>{me.rank}</span>
                 </div>
@@ -505,7 +556,7 @@ export default function Leaderboard() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 {activity.slice(0, 5).map(item => (
                   <div key={item.id} onClick={() => { haptic.tap(); setModal(m => ({ ...m, activity: item })) }}
-                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 10, border: `1px solid ${BORDER}`, background: CARD, cursor: 'pointer', minHeight: 52 }}>
+                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 10, border: `1px solid rgba(201,168,76,0.24)`, background: 'rgba(12,9,6,0.84)', cursor: 'pointer', minHeight: 52, boxShadow: '0 8px 24px rgba(0,0,0,0.18)' }}>
                     <div style={{ width: 30, height: 30, borderRadius: 8, background: `${G}18`, border: `1px solid ${G}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <span className="material-symbols-outlined" style={{ fontSize: 15, color: G }}>{item.icon}</span>
                     </div>
@@ -524,7 +575,7 @@ export default function Leaderboard() {
             </div>
 
             {/* profile rank card */}
-            <div style={{ padding: '14px 16px', borderRadius: 13, border: `1px solid ${G}33`, background: `linear-gradient(135deg,rgba(201,168,76,0.07) 0%,${CARD} 100%)`, marginBottom: 14 }}>
+            <div style={{ padding: '14px 16px', borderRadius: 13, border: `1px solid ${G}55`, background: `radial-gradient(circle at 90% 10%,rgba(201,168,76,0.16),transparent 36%), linear-gradient(135deg,rgba(201,168,76,0.12) 0%,rgba(12,8,5,0.88) 100%)`, marginBottom: 14, boxShadow: '0 0 30px rgba(201,168,76,0.18), inset 0 1px 0 rgba(255,255,255,0.07)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                 <div style={{ width: 46, height: 46, borderRadius: '50%', background: `linear-gradient(135deg,${G},#A07830)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#1A1200', fontFamily: '"Playfair Display",serif', fontSize: 18, border: `2px solid ${G}`, flexShrink: 0 }}>JC</div>
                 <div style={{ flex: 1 }}>
