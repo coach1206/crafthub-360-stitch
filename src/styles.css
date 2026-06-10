@@ -858,3 +858,671 @@
     height: 50px;
   }
 }
+
+/* ─── SmokeCraft Mentor Selection ─────────────────────── */
+.smokecraft-mentor-page {
+  min-height: max(884px, 100dvh);
+  padding-bottom: 132px;
+}
+
+.smokecraft-mentor-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 72% 16%, rgba(233,193,118,0.18), transparent 34%),
+    radial-gradient(ellipse at 20% 62%, rgba(255,255,255,0.08), transparent 24%),
+    linear-gradient(90deg, rgba(0,0,0,0.68), transparent 48%, rgba(0,0,0,0.48));
+}
+
+.smokecraft-mentor-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 90;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  background: rgba(4,3,2,0.76);
+  border-bottom: 1px solid rgba(233,193,118,0.2);
+  backdrop-filter: blur(26px) saturate(1.2);
+  -webkit-backdrop-filter: blur(26px) saturate(1.2);
+}
+
+.smokecraft-mentor-header__brand,
+.smokecraft-mentor-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.smokecraft-mentor-icon-btn,
+.smokecraft-mentor-avatar {
+  width: 56px;
+  height: 56px;
+  border: 1px solid rgba(233,193,118,0.24);
+  border-radius: 999px;
+  color: #e9c176;
+  background: rgba(233,193,118,0.08);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.smokecraft-mentor-brand {
+  font-family: "Playfair Display", serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #e9c176;
+}
+
+.smokecraft-mentor-step {
+  color: rgba(233,193,118,0.72);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.smokecraft-mentor-lounge-btn {
+  min-height: 52px;
+  border: 1px solid rgba(233,193,118,0.34);
+  border-radius: 999px;
+  padding: 0 22px;
+  color: #e9c176;
+  background: linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04));
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.smokecraft-mentor-avatar {
+  overflow: hidden;
+  padding: 0;
+}
+
+.smokecraft-mentor-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.72) brightness(0.9);
+}
+
+.smokecraft-mentor-rail {
+  position: fixed;
+  z-index: 70;
+  top: 76px;
+  left: 0;
+  bottom: 0;
+  width: 104px;
+  padding: 28px 12px 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  background: rgba(5,4,3,0.68);
+  border-right: 1px solid rgba(233,193,118,0.16);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.smokecraft-mentor-rail button {
+  width: 78px;
+  min-height: 72px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: transparent;
+  color: rgba(237,232,223,0.46);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.smokecraft-mentor-rail button.is-active {
+  color: #e9c176;
+  border-color: rgba(233,193,118,0.32);
+  background: rgba(233,193,118,0.1);
+  box-shadow: 0 0 28px rgba(233,193,118,0.12);
+}
+
+.smokecraft-mentor-rail button span:last-child,
+.smokecraft-mentor-rail__badge {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.smokecraft-mentor-rail__badge {
+  margin-top: auto;
+  width: 78px;
+  min-height: 94px;
+  border: 1px solid rgba(233,193,118,0.32);
+  border-radius: 16px;
+  color: #e9c176;
+  background: radial-gradient(circle at 50% 10%, rgba(233,193,118,0.2), rgba(233,193,118,0.05));
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 10px 6px;
+}
+
+.smokecraft-mentor-rail__badge strong,
+.smokecraft-mentor-rail__badge small {
+  display: block;
+}
+
+.smokecraft-mentor-main {
+  position: relative;
+  z-index: 10;
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: 116px 32px 26px 136px;
+}
+
+.smokecraft-mentor-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 34px;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.smokecraft-mentor-hero__copy {
+  max-width: 860px;
+}
+
+.smokecraft-mentor-eyebrow {
+  display: inline-flex;
+  color: #e9c176;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.smokecraft-mentor-hero h1 {
+  margin: 0;
+  color: #ede8df;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(48px, 6vw, 86px);
+  line-height: 1;
+  font-weight: 800;
+  text-shadow: 0 16px 48px rgba(0,0,0,0.72);
+}
+
+.smokecraft-mentor-hero h2 {
+  margin: 14px 0 0;
+  color: #e9c176;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(24px, 3vw, 42px);
+  font-style: italic;
+  font-weight: 700;
+}
+
+.smokecraft-mentor-hero p {
+  margin: 18px 0 0;
+  max-width: 720px;
+  color: rgba(237,232,223,0.72);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.smokecraft-mentor-stamp {
+  justify-self: end;
+  width: 220px;
+  min-height: 220px;
+  border: 1px solid rgba(233,193,118,0.24);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(233,193,118,0.2), transparent 34%),
+    rgba(10,7,4,0.64);
+  box-shadow: inset 0 0 34px rgba(233,193,118,0.1), 0 0 46px rgba(233,193,118,0.12);
+}
+
+.smokecraft-mentor-stamp__ring {
+  width: 164px;
+  height: 164px;
+  border: 2px dashed rgba(233,193,118,0.46);
+  border-radius: 999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #e9c176;
+}
+
+.smokecraft-mentor-stamp__ring .material-symbols-outlined {
+  font-size: 42px;
+  font-variation-settings: "FILL" 1;
+}
+
+.smokecraft-mentor-stamp__ring strong {
+  margin-top: 8px;
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  line-height: 1.05;
+}
+
+.smokecraft-mentor-stamp__ring small,
+.smokecraft-mentor-stamp p {
+  color: rgba(237,232,223,0.56);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.smokecraft-mentor-instructions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.86fr);
+  gap: 22px;
+  margin-bottom: 26px;
+  padding: 22px;
+  border: 1px solid rgba(233,193,118,0.2);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(10,6,3,0.72));
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 22px 58px rgba(0,0,0,0.32);
+}
+
+.smokecraft-mentor-instructions > div:first-child {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.smokecraft-mentor-instructions > div:first-child > .material-symbols-outlined {
+  width: 62px;
+  height: 62px;
+  border: 1px solid rgba(233,193,118,0.34);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: #e9c176;
+  background: rgba(233,193,118,0.09);
+  flex-shrink: 0;
+}
+
+.smokecraft-mentor-instructions h3 {
+  margin: 0 0 6px;
+  color: #ede8df;
+  font-family: "Playfair Display", serif;
+  font-size: 28px;
+}
+
+.smokecraft-mentor-instructions p {
+  margin: 0;
+  color: rgba(237,232,223,0.66);
+  line-height: 1.55;
+}
+
+.smokecraft-mentor-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.smokecraft-mentor-stats article {
+  min-height: 86px;
+  border: 1px solid rgba(233,193,118,0.18);
+  border-radius: 16px;
+  background: rgba(233,193,118,0.06);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.smokecraft-mentor-stats strong {
+  color: #e9c176;
+  font-family: "Playfair Display", serif;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.smokecraft-mentor-stats span {
+  color: rgba(237,232,223,0.62);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.smokecraft-mentor-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.smokecraft-mentor-card {
+  position: relative;
+  min-height: 444px;
+  border: 1px solid rgba(233,193,118,0.25);
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 0;
+  color: #ede8df;
+  background: #0a0603;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 18px 52px rgba(0,0,0,0.38);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.smokecraft-mentor-card:active {
+  transform: scale(0.985);
+}
+
+.smokecraft-mentor-card:hover,
+.smokecraft-mentor-card.is-selected {
+  border-color: rgba(233,193,118,0.82);
+  box-shadow: 0 0 0 1px rgba(233,193,118,0.24), 0 0 44px rgba(233,193,118,0.22), 0 24px 70px rgba(0,0,0,0.52);
+}
+
+.smokecraft-mentor-card__image,
+.smokecraft-mentor-card__shade,
+.smokecraft-mentor-card__body {
+  position: absolute;
+  inset: 0;
+}
+
+.smokecraft-mentor-card__image {
+  background-size: cover;
+  filter: saturate(0.9) contrast(1.08) brightness(0.72);
+  transform: scale(1.02);
+  transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+.smokecraft-mentor-card:hover .smokecraft-mentor-card__image,
+.smokecraft-mentor-card.is-selected .smokecraft-mentor-card__image {
+  transform: scale(1.08);
+  filter: saturate(1.05) contrast(1.12) brightness(0.84);
+}
+
+.smokecraft-mentor-card__shade {
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(233,193,118,0.14), transparent 38%),
+    linear-gradient(180deg, rgba(4,2,1,0.08) 0%, rgba(4,2,1,0.3) 42%, rgba(4,2,1,0.92) 100%);
+}
+
+.smokecraft-mentor-card__body {
+  top: auto;
+  padding: 0 20px 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.smokecraft-mentor-card__country {
+  color: #e9c176;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.smokecraft-mentor-card strong {
+  font-family: "Playfair Display", serif;
+  font-size: 25px;
+  line-height: 1.08;
+  margin-bottom: 9px;
+}
+
+.smokecraft-mentor-card__bio {
+  min-height: 62px;
+  color: rgba(237,232,223,0.72);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.smokecraft-mentor-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.smokecraft-mentor-card__tags span {
+  border: 1px solid rgba(233,193,118,0.2);
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: rgba(237,232,223,0.66);
+  background: rgba(0,0,0,0.26);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.smokecraft-mentor-card__check {
+  position: absolute;
+  z-index: 4;
+  top: 16px;
+  right: 16px;
+  width: 54px;
+  height: 54px;
+  border: 2px solid rgba(237,232,223,0.42);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: rgba(237,232,223,0.54);
+  background: rgba(0,0,0,0.34);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.22s ease;
+}
+
+.smokecraft-mentor-card.is-selected .smokecraft-mentor-card__check {
+  border-color: rgba(255,238,173,0.95);
+  color: #120805;
+  background: linear-gradient(135deg, #e9c176, #fff0aa 48%, #b98527);
+  box-shadow: 0 0 34px rgba(233,193,118,0.4);
+}
+
+.smokecraft-mentor-actionbar {
+  position: fixed;
+  z-index: 92;
+  left: 104px;
+  right: 0;
+  bottom: 0;
+  min-height: 106px;
+  padding: 16px 32px;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) auto;
+  gap: 22px;
+  align-items: center;
+  background: rgba(5,3,2,0.88);
+  border-top: 1px solid rgba(233,193,118,0.22);
+  backdrop-filter: blur(26px) saturate(1.2);
+  -webkit-backdrop-filter: blur(26px) saturate(1.2);
+  box-shadow: 0 -24px 70px rgba(0,0,0,0.46);
+}
+
+.smokecraft-mentor-actionbar__status span,
+.smokecraft-mentor-actionbar__selected {
+  color: rgba(237,232,223,0.52);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.smokecraft-mentor-actionbar__status strong {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: #e9c176;
+  font-family: "Playfair Display", serif;
+  font-size: 34px;
+}
+
+.smokecraft-mentor-actionbar__status small {
+  color: rgba(237,232,223,0.56);
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.smokecraft-mentor-actionbar__selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.smokecraft-mentor-actionbar__selected span {
+  border: 1px solid rgba(233,193,118,0.26);
+  border-radius: 999px;
+  padding: 10px 14px;
+  color: rgba(237,232,223,0.78);
+  background: rgba(233,193,118,0.07);
+}
+
+.smokecraft-mentor-actionbar__buttons {
+  display: flex;
+  gap: 14px;
+}
+
+.smokecraft-mentor-draft-btn,
+.smokecraft-mentor-proceed-btn {
+  min-height: 64px;
+  border-radius: 14px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.smokecraft-mentor-draft-btn {
+  border: 1px solid rgba(233,193,118,0.34);
+  color: #e9c176;
+  background: rgba(233,193,118,0.08);
+}
+
+.smokecraft-mentor-proceed-btn {
+  border: 0;
+  color: #130806;
+  background: linear-gradient(135deg, #e9c176, #fff0aa 48%, #b98527);
+  box-shadow: 0 0 34px rgba(233,193,118,0.28);
+}
+
+.smokecraft-mentor-proceed-btn:disabled {
+  cursor: not-allowed;
+  filter: grayscale(1);
+  opacity: 0.38;
+  box-shadow: none;
+}
+
+@media (max-width: 1180px) {
+  .smokecraft-mentor-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .smokecraft-mentor-instructions,
+  .smokecraft-mentor-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .smokecraft-mentor-stamp {
+    justify-self: start;
+  }
+
+  .smokecraft-mentor-actionbar {
+    grid-template-columns: 180px 1fr;
+  }
+
+  .smokecraft-mentor-actionbar__buttons {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 820px) {
+  .smokecraft-mentor-header {
+    height: auto;
+    min-height: 76px;
+    padding: 10px 14px;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .smokecraft-mentor-header__actions {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .smokecraft-mentor-step {
+    width: 100%;
+    text-align: right;
+  }
+
+  .smokecraft-mentor-lounge-btn {
+    min-height: 46px;
+    padding: 0 14px;
+  }
+
+  .smokecraft-mentor-avatar {
+    display: none;
+  }
+
+  .smokecraft-mentor-rail {
+    display: none;
+  }
+
+  .smokecraft-mentor-main {
+    padding: 124px 18px 22px;
+  }
+
+  .smokecraft-mentor-grid,
+  .smokecraft-mentor-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .smokecraft-mentor-card {
+    min-height: 420px;
+  }
+
+  .smokecraft-mentor-actionbar {
+    left: 0;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  .smokecraft-mentor-actionbar__selected {
+    display: none;
+  }
+
+  .smokecraft-mentor-actionbar__buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .smokecraft-mentor-draft-btn,
+  .smokecraft-mentor-proceed-btn {
+    width: 100%;
+  }
+}

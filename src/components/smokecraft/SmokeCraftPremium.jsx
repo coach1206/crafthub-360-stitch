@@ -51,7 +51,7 @@ export function SmokeCraftPremiumHeader({
         </button>
         {showAvatar && (
           <div className="smokecraft-premium-header__avatar" title={sessionLabel}>
-            <img alt="" src="/ch-logo.jpeg" />
+            <img alt="" src="/passport.jpg" />
           </div>
         )}
       </div>
