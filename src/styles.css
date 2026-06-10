@@ -1260,6 +1260,31 @@
     linear-gradient(180deg, rgba(4,2,1,0.08) 0%, rgba(4,2,1,0.3) 42%, rgba(4,2,1,0.92) 100%);
 }
 
+.smokecraft-mentor-card__flag {
+  position: absolute;
+  z-index: 3;
+  left: 18px;
+  bottom: 151px;
+  width: 38px;
+  height: 28px;
+  border: 1px solid rgba(233,193,118,0.42);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  line-height: 1;
+  background: linear-gradient(135deg, rgba(10,6,3,0.82), rgba(54,36,12,0.72));
+  box-shadow: 0 10px 24px rgba(0,0,0,0.34), 0 0 18px rgba(233,193,118,0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.smokecraft-mentor-card.is-selected .smokecraft-mentor-card__flag {
+  border-color: rgba(255,238,173,0.82);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.36), 0 0 24px rgba(233,193,118,0.28);
+}
+
 .smokecraft-mentor-card__body {
   top: auto;
   padding: 0 20px 22px;
