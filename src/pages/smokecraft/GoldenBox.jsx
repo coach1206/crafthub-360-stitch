@@ -18,7 +18,7 @@ const CONTENTS = [
   { icon: 'workspace_premium', label: 'Exclusive Lounge Privileges',  desc: 'Priority access, premium humidor reservations, and private sommelier sessions.' },
 ]
 
-function GoldenTreasureBox() {
+function GoldenTreasureBox({ memberName = 'Julian Sterling' }) {
   return (
     <div className="golden-box-stage" aria-hidden="true">
       <div className="golden-box-rays" />
@@ -26,30 +26,35 @@ function GoldenTreasureBox() {
       <div className="golden-box-smoke golden-box-smoke-right" />
       <div className="golden-box-table-glow" />
 
-      <div className="golden-lockbox">
-        <div className="golden-lockbox-lid">
-          <div className="golden-lockbox-top-plate" />
-          <div className="golden-lockbox-highlight" />
-          <div className="golden-lockbox-lid-band" />
-          <span className="golden-lockbox-rivet golden-lockbox-rivet-a" />
-          <span className="golden-lockbox-rivet golden-lockbox-rivet-b" />
-          <span className="golden-lockbox-rivet golden-lockbox-rivet-c" />
-          <span className="golden-lockbox-rivet golden-lockbox-rivet-d" />
+      <div className="mahogany-humidor">
+        <div className="mahogany-humidor-lid">
+          <div className="mahogany-lid-interior">
+            <div className="mahogany-brand-mark">
+              <span className="material-symbols-outlined">shield_person</span>
+              <strong>CRAFTHUB 360</strong>
+              <small>Private SmokeCraft Reserve</small>
+            </div>
+          </div>
+          <span className="mahogany-hinge mahogany-hinge-left" />
+          <span className="mahogany-hinge mahogany-hinge-right" />
         </div>
 
-        <div className="golden-lockbox-body">
-          <div className="golden-lockbox-side golden-lockbox-side-left" />
-          <div className="golden-lockbox-side golden-lockbox-side-right" />
-          <div className="golden-lockbox-front">
-            <div className="golden-lockbox-front-band" />
-            <div className="golden-lockbox-panel golden-lockbox-panel-left" />
-            <div className="golden-lockbox-panel golden-lockbox-panel-right" />
-            <div className="golden-lockbox-lock">
-              <span className="golden-lockbox-keyhole" />
-            </div>
-            {[0, 1, 2, 3, 4, 5].map(i => (
-              <span key={i} className={`golden-lockbox-front-rivet golden-lockbox-front-rivet-${i}`} />
+        <div className="mahogany-humidor-tray">
+          <div className="mahogany-cigar-bed">
+            {Array.from({ length: 8 }, (_, index) => (
+              <span key={index} className={`mahogany-cigar mahogany-cigar-${index + 1}`}>
+                <i />
+              </span>
             ))}
+          </div>
+          <div className="mahogany-humidor-front">
+            <div className="mahogany-nameplate">
+              <small>Reserved For</small>
+              <strong>{memberName}</strong>
+            </div>
+            <div className="mahogany-lock">
+              <span className="mahogany-keyhole" />
+            </div>
           </div>
         </div>
       </div>
@@ -59,11 +64,12 @@ function GoldenTreasureBox() {
 
 export default function GoldenBox() {
   const navigate = useNavigate()
-  const { addXP, addBadge, completeStep } = useGuestSession()
+  const { session, addXP, addBadge, completeStep } = useGuestSession()
 
   const [revealed, setRevealed]         = useState(false)
   const [contentsOpen, setContentsOpen] = useState(false)
   const [accepted, setAccepted]         = useState(false)
+  const displayName = session?.profile?.nickname || session?.profile?.firstName || session?.leaderboard?.displayName || 'Julian Sterling'
 
   useEffect(() => {
     const t = setTimeout(() => setRevealed(true), 120)
@@ -119,21 +125,21 @@ export default function GoldenBox() {
             <img
               alt="Member"
               className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq4_EpkSpYVcHVlVxnKXJacUbdRmQWEovF-KvyMHM6dJqnGjPivNcRVqPojva00dcFw-6BVVfhI1gFLcaSclOfplLXr3i6MUVX4P-hkoIEfJTKgiHqRbMzmwdN_3t5yChLEGMio7Do167r-rCSqyVByUbYjQFGK9oISPUctIdJqwIGb-QKw2h3XuvSYjbpmyaRpt-JnoQzW41fw_DgeBRzjFoBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo"
+              src="/passport.jpg"
             />
           </div>
         </div>
       </header>
 
       {/* ── Main Stage ───────────────────────────────────────── */}
-      <main className="w-full max-w-[980px] mx-auto px-gutter flex flex-col items-center text-center gap-7 pt-24 pb-16">
+      <main className="w-full max-w-[1080px] mx-auto px-gutter flex flex-col items-center text-center gap-7 pt-24 pb-16">
 
         {/* Box Illustration */}
         <div
           className={`transition-all duration-1000 ease-out ${revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
           style={{ transitionDelay: '0ms' }}
         >
-          <GoldenTreasureBox />
+          <GoldenTreasureBox memberName={displayName} />
         </div>
 
         {/* Headline Block */}
@@ -235,19 +241,23 @@ export default function GoldenBox() {
 
         .golden-box-bg {
           background:
-            radial-gradient(ellipse at 50% 7%, rgba(255,198,73,0.34) 0%, rgba(177,101,18,0.12) 26%, transparent 56%),
-            radial-gradient(ellipse at 15% 47%, rgba(203,126,43,0.12) 0%, transparent 34%),
-            radial-gradient(ellipse at 88% 38%, rgba(255,208,115,0.12) 0%, transparent 30%),
-            linear-gradient(180deg, #090502 0%, #030201 74%, #010101 100%);
+            radial-gradient(ellipse at 50% 10%, rgba(255,207,99,0.42) 0%, rgba(177,101,18,0.18) 28%, transparent 58%),
+            radial-gradient(ellipse at 12% 58%, rgba(167,92,32,0.26) 0%, rgba(44,20,6,0.28) 24%, transparent 40%),
+            radial-gradient(ellipse at 88% 50%, rgba(255,205,113,0.2) 0%, rgba(48,23,8,0.32) 22%, transparent 38%),
+            linear-gradient(180deg, rgba(28,12,3,0.9) 0%, rgba(8,4,2,0.94) 74%, #020101 100%),
+            url(/background-lounge-airy.jpg);
+          background-size: cover;
+          background-position: center;
+          filter: saturate(1.16) contrast(1.1) brightness(0.88);
         }
 
         .golden-box-lounge-silhouette {
           position: absolute;
           inset: 0;
           background:
-            radial-gradient(ellipse at 14% 66%, rgba(161,91,27,0.22) 0%, rgba(28,14,5,0.2) 20%, transparent 34%),
-            radial-gradient(ellipse at 85% 61%, rgba(145,76,23,0.2) 0%, rgba(20,9,4,0.28) 22%, transparent 34%),
-            radial-gradient(ellipse at 94% 12%, rgba(223,164,67,0.14) 0%, transparent 25%),
+            radial-gradient(ellipse at 13% 70%, rgba(117,55,18,0.38) 0%, rgba(20,9,4,0.24) 22%, transparent 36%),
+            radial-gradient(ellipse at 86% 66%, rgba(178,94,28,0.32) 0%, rgba(20,9,4,0.34) 22%, transparent 36%),
+            radial-gradient(ellipse at 94% 12%, rgba(223,164,67,0.2) 0%, transparent 25%),
             linear-gradient(90deg, rgba(0,0,0,0.62), transparent 26%, transparent 72%, rgba(0,0,0,0.68));
           opacity: 0.95;
         }
@@ -262,8 +272,9 @@ export default function GoldenBox() {
 
         .golden-box-ambient {
           background:
-            radial-gradient(ellipse 42% 34% at 50% 21%, rgba(255,219,120,0.36), transparent 64%),
-            radial-gradient(ellipse 55% 46% at 50% 58%, rgba(127,69,19,0.22), transparent 72%);
+            conic-gradient(from 178deg at 50% 0%, transparent 0deg, rgba(255,217,111,0.12) 12deg, transparent 26deg, rgba(255,192,70,0.12) 38deg, transparent 54deg),
+            radial-gradient(ellipse 44% 34% at 50% 18%, rgba(255,219,120,0.42), transparent 64%),
+            radial-gradient(ellipse 62% 48% at 50% 60%, rgba(151,77,18,0.28), transparent 72%);
         }
 
         .golden-box-page-smoke {
@@ -281,12 +292,12 @@ export default function GoldenBox() {
 
         .golden-box-stage {
           position: relative;
-          width: min(560px, 90vw);
-          height: clamp(245px, 34vw, 350px);
+          width: min(820px, 94vw);
+          height: clamp(330px, 43vw, 500px);
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-top: 8px;
+          margin-top: 0;
           isolation: isolate;
         }
 
@@ -294,12 +305,12 @@ export default function GoldenBox() {
           position: absolute;
           top: -22%;
           left: 50%;
-          width: 58%;
-          height: 74%;
+          width: 72%;
+          height: 86%;
           transform: translateX(-50%);
           background:
-            conic-gradient(from 165deg at 50% 0%, transparent 0deg, rgba(255,229,134,0.18) 14deg, transparent 28deg, rgba(255,204,76,0.15) 38deg, transparent 54deg),
-            radial-gradient(ellipse at 50% 0%, rgba(255,243,184,0.48), transparent 58%);
+            conic-gradient(from 160deg at 50% 0%, transparent 0deg, rgba(255,229,134,0.24) 14deg, transparent 28deg, rgba(255,204,76,0.18) 40deg, transparent 56deg),
+            radial-gradient(ellipse at 50% 0%, rgba(255,243,184,0.58), transparent 58%);
           filter: blur(1px);
           opacity: 0.86;
           mix-blend-mode: screen;
@@ -308,9 +319,9 @@ export default function GoldenBox() {
 
         .golden-box-smoke {
           position: absolute;
-          width: 40%;
-          height: 45%;
-          top: 34%;
+          width: 44%;
+          height: 50%;
+          top: 28%;
           background:
             radial-gradient(ellipse at 30% 48%, rgba(255,255,255,0.13), transparent 28%),
             radial-gradient(ellipse at 65% 34%, rgba(233,193,118,0.09), transparent 36%);
@@ -332,8 +343,8 @@ export default function GoldenBox() {
           position: absolute;
           bottom: 13%;
           left: 50%;
-          width: 74%;
-          height: 19%;
+          width: 84%;
+          height: 22%;
           transform: translateX(-50%);
           border-radius: 999px;
           background: radial-gradient(ellipse at center, rgba(255,190,70,0.42), rgba(118,62,14,0.18) 42%, transparent 72%);
@@ -341,169 +352,221 @@ export default function GoldenBox() {
           z-index: 1;
         }
 
-        .golden-lockbox {
+        .mahogany-humidor {
           position: relative;
-          width: clamp(260px, 48vw, 430px);
-          height: clamp(160px, 28vw, 248px);
-          transform: perspective(920px) rotateX(3deg);
-          filter: drop-shadow(0 32px 42px rgba(0,0,0,0.72)) drop-shadow(0 0 46px rgba(255,190,68,0.24));
+          width: clamp(330px, 72vw, 720px);
+          height: clamp(260px, 39vw, 430px);
+          transform: perspective(980px) rotateX(2deg);
+          filter: drop-shadow(0 42px 48px rgba(0,0,0,0.76)) drop-shadow(0 0 58px rgba(255,177,60,0.22));
           z-index: 3;
         }
 
-        .golden-lockbox-lid {
+        .mahogany-humidor-lid {
           position: absolute;
-          left: 7%;
-          top: 0;
-          width: 86%;
-          height: 36%;
-          transform: skewX(-7deg);
-          border-radius: 7px 7px 2px 2px;
-          background: linear-gradient(145deg, #fff0a0 0%, #d9982b 28%, #7b3b0b 72%, #2e1303 100%);
-          border: 1px solid rgba(255,226,135,0.88);
+          left: 8%;
+          top: 2%;
+          width: 84%;
+          height: 48%;
+          transform: perspective(900px) rotateX(58deg) translateY(-18%);
+          transform-origin: bottom center;
+          border-radius: 13px 13px 4px 4px;
+          border: 2px solid rgba(243,189,85,0.78);
+          background:
+            linear-gradient(105deg, rgba(255,255,255,0.16), transparent 18%, rgba(255,220,128,0.1) 50%, transparent 82%),
+            repeating-linear-gradient(92deg, rgba(255,225,159,0.08) 0 2px, transparent 2px 28px),
+            linear-gradient(135deg, #6f2d0d 0%, #321004 34%, #8a4316 62%, #260b03 100%);
           box-shadow:
-            inset 0 2px 0 rgba(255,255,220,0.66),
-            inset 0 -12px 28px rgba(60,22,0,0.5),
-            0 0 38px rgba(255,183,48,0.28);
+            inset 0 2px 0 rgba(255,232,164,0.34),
+            inset 0 -22px 38px rgba(16,5,1,0.6),
+            0 0 42px rgba(255,177,60,0.2);
           overflow: hidden;
         }
 
-        .golden-lockbox-top-plate {
+        .mahogany-lid-interior {
           position: absolute;
-          inset: 14% 7% 24%;
-          border-radius: 4px;
-          border: 1px solid rgba(255,241,176,0.36);
+          inset: 8% 8% 15%;
+          border-radius: 10px;
+          display: grid;
+          place-items: center;
+          border: 1px solid rgba(255,220,127,0.36);
           background:
-            linear-gradient(90deg, rgba(255,255,255,0.16), transparent 36%, rgba(0,0,0,0.16)),
-            repeating-linear-gradient(90deg, rgba(65,28,5,0.18) 0 2px, transparent 2px 28px);
+            radial-gradient(circle at 50% 36%, rgba(255,201,82,0.16), transparent 32%),
+            repeating-linear-gradient(0deg, rgba(255,218,143,0.07) 0 2px, transparent 2px 22px),
+            linear-gradient(135deg, #441708, #1a0803 58%, #5d260b);
         }
 
-        .golden-lockbox-highlight {
-          position: absolute;
-          left: 50%;
-          top: -44%;
-          width: 32%;
-          height: 94%;
-          transform: translateX(-50%);
-          background: radial-gradient(ellipse at center, rgba(255,255,225,0.94), rgba(255,220,92,0.34) 34%, transparent 72%);
-          filter: blur(5px);
-          mix-blend-mode: screen;
+        .mahogany-brand-mark {
+          display: grid;
+          place-items: center;
+          gap: 5px;
+          color: #f2d184;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          text-shadow: 0 0 16px rgba(242,209,132,0.36);
         }
 
-        .golden-lockbox-lid-band {
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 14%;
-          height: 12%;
-          background: linear-gradient(90deg, rgba(64,25,3,0.52), rgba(255,232,126,0.42), rgba(64,25,3,0.52));
-          border-top: 1px solid rgba(255,235,151,0.38);
-          border-bottom: 1px solid rgba(65,28,5,0.5);
+        .mahogany-brand-mark .material-symbols-outlined {
+          font-size: 34px;
+          color: #f2d184;
         }
 
-        .golden-lockbox-rivet,
-        .golden-lockbox-front-rivet {
+        .mahogany-brand-mark strong {
+          font-family: "Playfair Display", serif;
+          font-size: clamp(18px, 2.1vw, 28px);
+        }
+
+        .mahogany-brand-mark small {
+          font-family: "JetBrains Mono", monospace;
+          font-size: clamp(8px, 1vw, 11px);
+          color: rgba(242,209,132,0.74);
+        }
+
+        .mahogany-hinge {
           position: absolute;
-          width: 7px;
-          height: 7px;
+          bottom: -5px;
+          width: 64px;
+          height: 12px;
           border-radius: 999px;
-          background: radial-gradient(circle at 34% 30%, #fff3ac, #bd7621 58%, #4a1f05 100%);
-          box-shadow: 0 0 10px rgba(255,204,89,0.34);
+          background: linear-gradient(90deg, #6a350a, #ffe18a, #b36d17, #4b2105);
+          border: 1px solid rgba(255,226,138,0.74);
+          box-shadow: 0 0 14px rgba(255,196,73,0.32);
         }
 
-        .golden-lockbox-rivet-a { left: 8%; top: 24%; }
-        .golden-lockbox-rivet-b { right: 8%; top: 24%; }
-        .golden-lockbox-rivet-c { left: 8%; bottom: 20%; }
-        .golden-lockbox-rivet-d { right: 8%; bottom: 20%; }
+        .mahogany-hinge-left { left: 17%; }
+        .mahogany-hinge-right { right: 17%; }
 
-        .golden-lockbox-body {
+        .mahogany-humidor-tray {
           position: absolute;
           left: 3%;
           right: 3%;
-          bottom: 0;
-          height: 68%;
-          transform: perspective(620px) rotateX(-3deg);
+          bottom: 1%;
+          height: 60%;
+          transform: perspective(780px) rotateX(-5deg);
         }
 
-        .golden-lockbox-front {
+        .mahogany-cigar-bed {
           position: absolute;
-          inset: 0 8%;
-          border-radius: 3px 3px 8px 8px;
+          left: 7%;
+          right: 7%;
+          top: 0;
+          height: 55%;
+          border-radius: 12px 12px 3px 3px;
+          border: 1px solid rgba(243,189,85,0.42);
           background:
-            linear-gradient(110deg, rgba(255,255,255,0.22), transparent 22%),
-            linear-gradient(160deg, #eaa236 0%, #8f470d 44%, #3a1604 100%);
-          border: 1px solid rgba(255,224,128,0.78);
-          box-shadow:
-            inset 0 1px 0 rgba(255,246,190,0.56),
-            inset 0 -22px 34px rgba(30,8,0,0.52),
-            0 0 24px rgba(255,174,40,0.16);
+            radial-gradient(ellipse at 50% 5%, rgba(255,224,138,0.18), transparent 42%),
+            linear-gradient(180deg, rgba(28,9,2,0.42), rgba(7,2,1,0.7)),
+            repeating-linear-gradient(90deg, #2d1105 0 36px, #421907 37px 71px);
+          box-shadow: inset 0 18px 30px rgba(0,0,0,0.58);
           overflow: hidden;
         }
 
-        .golden-lockbox-front::before {
+        .mahogany-cigar {
+          position: absolute;
+          width: 15%;
+          height: 82%;
+          top: 11%;
+          border-radius: 999px;
+          transform: rotate(90deg);
+          background:
+            radial-gradient(circle at 22% 48%, rgba(255,233,173,0.35), transparent 10%),
+            repeating-linear-gradient(108deg, rgba(255,231,174,0.08) 0 7px, rgba(44,18,7,0.16) 8px 14px),
+            linear-gradient(90deg, #4a210e, #9f5f2c 20%, #6a3217 52%, #c0803e 72%, #381608);
+          box-shadow: inset 0 2px 8px rgba(255,235,184,0.18), inset 0 -6px 8px rgba(0,0,0,0.34), 0 9px 12px rgba(0,0,0,0.38);
+        }
+
+        .mahogany-cigar i {
+          position: absolute;
+          left: 48%;
+          top: -5px;
+          width: 18px;
+          height: calc(100% + 10px);
+          border-radius: 3px;
+          background: linear-gradient(90deg, rgba(59,27,8,0.88), rgba(236,199,117,0.95), rgba(78,39,12,0.92));
+          border: 1px solid rgba(255,224,148,0.48);
+        }
+
+        .mahogany-cigar-1 { left: 6%; }
+        .mahogany-cigar-2 { left: 16%; top: 15%; }
+        .mahogany-cigar-3 { left: 27%; }
+        .mahogany-cigar-4 { left: 38%; top: 15%; }
+        .mahogany-cigar-5 { left: 49%; }
+        .mahogany-cigar-6 { left: 60%; top: 15%; }
+        .mahogany-cigar-7 { left: 71%; }
+        .mahogany-cigar-8 { left: 82%; top: 15%; }
+
+        .mahogany-humidor-front {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 62%;
+          border-radius: 6px 6px 16px 16px;
+          border: 2px solid rgba(243,189,85,0.68);
+          background:
+            linear-gradient(105deg, rgba(255,255,255,0.13), transparent 20%, rgba(255,215,122,0.08) 46%, transparent 82%),
+            repeating-linear-gradient(0deg, rgba(255,225,159,0.08) 0 2px, transparent 2px 24px),
+            linear-gradient(145deg, #6d2c0d 0%, #2a0c03 44%, #8b4213 78%, #230802 100%);
+          box-shadow:
+            inset 0 2px 0 rgba(255,232,164,0.28),
+            inset 0 -28px 42px rgba(13,4,1,0.62),
+            0 0 30px rgba(255,177,60,0.16);
+          overflow: hidden;
+        }
+
+        .mahogany-humidor-front::before,
+        .mahogany-humidor-front::after {
           content: "";
           position: absolute;
-          inset: 0;
-          background:
-            repeating-linear-gradient(0deg, rgba(255,242,180,0.06) 0 1px, transparent 1px 23px),
-            linear-gradient(90deg, rgba(0,0,0,0.34), transparent 18%, transparent 82%, rgba(0,0,0,0.3));
+          top: 16%;
+          bottom: 16%;
+          width: 27%;
+          border: 1px solid rgba(255,222,127,0.22);
+          border-radius: 7px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(36,11,3,0.08));
         }
 
-        .golden-lockbox-side {
-          position: absolute;
-          top: 7%;
-          bottom: 7%;
-          width: 13%;
-          background: linear-gradient(160deg, #b96018, #3f1704);
-          border: 1px solid rgba(255,211,107,0.48);
-          filter: brightness(0.82);
-        }
+        .mahogany-humidor-front::before { left: 8%; }
+        .mahogany-humidor-front::after { right: 8%; }
 
-        .golden-lockbox-side-left {
-          left: 0;
-          transform: skewY(8deg);
-          border-radius: 4px 0 0 7px;
-        }
-
-        .golden-lockbox-side-right {
-          right: 0;
-          transform: skewY(-8deg);
-          border-radius: 0 4px 7px 0;
-        }
-
-        .golden-lockbox-front-band {
-          position: absolute;
-          left: 0;
-          right: 0;
-          top: 27%;
-          height: 16%;
-          background: linear-gradient(90deg, rgba(64,25,3,0.62), rgba(255,226,118,0.44), rgba(64,25,3,0.62));
-          border-top: 1px solid rgba(255,238,155,0.38);
-          border-bottom: 1px solid rgba(61,24,4,0.72);
-          z-index: 2;
-        }
-
-        .golden-lockbox-panel {
-          position: absolute;
-          top: 13%;
-          bottom: 13%;
-          width: 33%;
-          border: 1px solid rgba(255,228,130,0.28);
-          border-radius: 3px;
-          background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(50,17,2,0.12));
-          z-index: 1;
-        }
-
-        .golden-lockbox-panel-left { left: 9%; }
-        .golden-lockbox-panel-right { right: 9%; }
-
-        .golden-lockbox-lock {
+        .mahogany-nameplate {
           position: absolute;
           left: 50%;
-          top: 36%;
-          width: 17%;
-          height: 40%;
+          top: 18%;
+          min-width: 190px;
           transform: translateX(-50%);
-          border-radius: 4px 4px 10px 10px;
+          padding: 8px 20px;
+          border-radius: 999px;
+          display: grid;
+          gap: 1px;
+          place-items: center;
+          z-index: 4;
+          color: #1b0d02;
+          background: linear-gradient(135deg, #ffe296, #bd812e 62%, #805014);
+          border: 1px solid rgba(255,239,171,0.82);
+          box-shadow: 0 0 24px rgba(255,196,73,0.28), inset 0 1px 0 rgba(255,255,230,0.54);
+        }
+
+        .mahogany-nameplate small {
+          font-family: "JetBrains Mono", monospace;
+          font-size: 8px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+        }
+
+        .mahogany-nameplate strong {
+          font-family: "Playfair Display", serif;
+          font-size: clamp(14px, 1.6vw, 18px);
+          color: #1b0d02;
+        }
+
+        .mahogany-lock {
+          position: absolute;
+          left: 50%;
+          bottom: 12%;
+          width: 64px;
+          height: 58px;
+          transform: translateX(-50%);
+          border-radius: 7px 7px 14px 14px;
           background: linear-gradient(160deg, #ffe28a, #b66d19 52%, #4a1b04);
           border: 1px solid rgba(255,241,176,0.8);
           box-shadow:
@@ -513,10 +576,10 @@ export default function GoldenBox() {
           z-index: 4;
         }
 
-        .golden-lockbox-keyhole {
+        .mahogany-keyhole {
           position: absolute;
           left: 50%;
-          top: 32%;
+          top: 30%;
           width: 14px;
           height: 14px;
           transform: translateX(-50%);
@@ -524,13 +587,6 @@ export default function GoldenBox() {
           background: #160804;
           box-shadow: 0 16px 0 -4px #160804;
         }
-
-        .golden-lockbox-front-rivet-0 { left: 5%; top: 12%; }
-        .golden-lockbox-front-rivet-1 { right: 5%; top: 12%; }
-        .golden-lockbox-front-rivet-2 { left: 5%; bottom: 12%; }
-        .golden-lockbox-front-rivet-3 { right: 5%; bottom: 12%; }
-        .golden-lockbox-front-rivet-4 { left: 28%; top: 36%; }
-        .golden-lockbox-front-rivet-5 { right: 28%; top: 36%; }
 
         .golden-box-kicker::before,
         .golden-box-kicker::after {
