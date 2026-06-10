@@ -103,7 +103,7 @@ export default function SmokeCraft() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#A89B86', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Grand Lounge</span>
           <button onClick={() => navigate('/')} style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.25)', overflow: 'hidden', cursor: 'pointer', background: 'rgba(212,175,55,0.08)' }}>
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80" alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="/passport.jpg" alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </button>
         </div>
       </header>
@@ -217,7 +217,7 @@ export default function SmokeCraft() {
                 <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
                   <div style={{ width: 100, height: 80, borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.2)', flexShrink: 0 }}>
                     <img
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBjb17tZGWhWOsbXW8XcEiR4WIW8SRdSpM3JbzTootwik0rNdnLOw7S9JZ3EXsRrWIwqWrDXTd8Pvkve7yk0Djguo_fc3IWZ5D9c7ECY5EDcu6g5JsWk0HLo-pS1P0Sp_kNEtMoJ7_UWd-u_nKBePg_hyVmOWBd7C9H9b16E7bHFZlxdXVSBDqmCktK_b7wsck7DeYbjNOVSSREGTNzZg89N6q8Zqmzw_ubYO5Nur2k8euqiBLwOh-CQCTEjFfzzYA0LEgqcCTY6g"
+                      src="/smokecraft.jpg"
                       alt="Padrón 1964"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
@@ -287,50 +287,419 @@ export default function SmokeCraft() {
       {howItWorksOpen && (
         <div
           onClick={() => setHowItWorksOpen(false)}
-          style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
+          className="smokecraft-how-overlay"
         >
           <div
             onClick={e => e.stopPropagation()}
-            style={{ width: '100%', maxWidth: 520, borderRadius: 20, border: '1px solid rgba(212,175,55,0.25)', background: 'rgba(14,10,5,0.97)', backdropFilter: 'blur(24px)', padding: '36px 32px', boxShadow: '0 40px 120px rgba(0,0,0,0.7)' }}
+            className="smokecraft-how-modal"
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
-              <h3 style={{ fontFamily: '"Playfair Display",serif', fontSize: 26, fontWeight: 700, color: '#D4AF37' }}>How It Works</h3>
-              <button onClick={() => setHowItWorksOpen(false)} style={{ width: 36, height: 36, borderRadius: '50%', border: '1px solid rgba(122,100,60,0.4)', background: 'rgba(122,100,60,0.1)', color: '#7A6A50', cursor: 'pointer', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
-            </div>
+            <div className="smokecraft-how-atmosphere" aria-hidden="true" />
+            <button
+              className="smokecraft-how-close"
+              onClick={() => setHowItWorksOpen(false)}
+              aria-label="Close How It Works"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+
+            <header className="smokecraft-how-header">
+              <div className="smokecraft-how-feather" aria-hidden="true">
+                <span className="material-symbols-outlined">eco</span>
+              </div>
+              <h3>How It Works</h3>
+            </header>
 
             {[
-              { num: '01', title: 'Enroll & Discover', desc: 'Answer a few guided questions about your palate. We build your personal cigar profile from your preferences.', icon: 'person_search' },
-              { num: '02', title: 'Learn the Craft',   desc: 'Explore origins, tobacco leaves, vitola shapes, and the art of blending through interactive modules.', icon: 'school' },
-              { num: '03', title: 'Earn Passport Stamps', desc: 'Complete each chapter to stamp your 360 Passport. Stamps unlock exclusive pairings and member benefits.', icon: 'menu_book' },
-              { num: '04', title: 'Unlock Your Pairing', desc: 'Your profile generates a personalized cigar and spirit pairing, curated to your flavour DNA.', icon: 'local_bar' },
+              {
+                num: '01',
+                title: 'Enroll & Discover',
+                desc: 'Answer a few guided questions about your palate. We build your personal cigar profile from your preferences.',
+                image: '/passport.jpg',
+                icon: 'assignment',
+              },
+              {
+                num: '02',
+                title: 'Learn the Craft',
+                desc: 'Explore origins, tobacco leaves, vitola shapes, and the art of blending through interactive modules.',
+                image: '/smokecraft.jpg',
+                icon: 'school',
+              },
+              {
+                num: '03',
+                title: 'Earn Passport Stamps',
+                desc: 'Complete each chapter to stamp your 360 Passport. Stamps unlock exclusive pairings and member benefits.',
+                image: '/crafthub-gold.jpg',
+                icon: 'workspace_premium',
+              },
+              {
+                num: '04',
+                title: 'Unlock Your Pairing',
+                desc: 'Your profile generates a personalized cigar and spirit pairing, curated to your flavour DNA.',
+                image: '/background-lounge-airy.jpg',
+                icon: 'local_bar',
+              },
             ].map(step => (
-              <div key={step.num} style={{ display: 'flex', gap: 18, marginBottom: 22, alignItems: 'flex-start' }}>
-                <div style={{ width: 44, height: 44, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.35)', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#D4AF37' }}>{step.icon}</span>
+              <article key={step.num} className="smokecraft-how-step">
+                <div className="smokecraft-how-image">
+                  <img src={step.image} alt="" />
+                  <span className="material-symbols-outlined">{step.icon}</span>
                 </div>
-                <div>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: 'rgba(212,175,55,0.6)', letterSpacing: '0.2em', marginBottom: 4 }}>STEP {step.num}</div>
-                  <div style={{ fontFamily: '"Playfair Display",serif', fontSize: 16, fontWeight: 700, color: '#EDE8DF', marginBottom: 4 }}>{step.title}</div>
-                  <div style={{ fontSize: 13, color: '#7A6A50', lineHeight: 1.6 }}>{step.desc}</div>
+                <div className="smokecraft-how-step-copy">
+                  <div className="smokecraft-how-step-kicker">
+                    <strong>{Number(step.num)}</strong>
+                    <span>Step {step.num}</span>
+                  </div>
+                  <h4>{step.title}</h4>
+                  <p>{step.desc}</p>
                 </div>
-              </div>
+              </article>
             ))}
 
             <button
-              onClick={() => { setHowItWorksOpen(false); handleStart() }}
-              style={{ width: '100%', height: 52, marginTop: 8, borderRadius: 10, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #D4AF37, #B8952A)', color: '#0A0705', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 900, letterSpacing: '0.16em', textTransform: 'uppercase', boxShadow: '0 0 24px rgba(212,175,55,0.3)' }}
+              onClick={() => { setHowItWorksOpen(false); navigate('/smokecraft/enroll') }}
+              className="smokecraft-how-start"
             >
-              Start SmokeCraft →
+              <span>Start SmokeCraft</span>
+              <span className="material-symbols-outlined">arrow_forward</span>
             </button>
+
+            <div className="smokecraft-how-mark" aria-hidden="true">SC</div>
           </div>
         </div>
       )}
 
       {/* Desktop grid responsive style */}
       <style>{`
+        .smokecraft-how-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 200;
+          min-height: 100dvh;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          padding: 20px 18px 28px;
+          overflow-y: auto;
+          background:
+            radial-gradient(ellipse at 50% 12%, rgba(212,175,55,0.16), transparent 34%),
+            radial-gradient(ellipse at 16% 45%, rgba(255,255,255,0.08), transparent 24%),
+            rgba(0,0,0,0.88);
+          backdrop-filter: blur(7px);
+          -webkit-backdrop-filter: blur(7px);
+        }
+        .smokecraft-how-modal {
+          position: relative;
+          width: min(640px, 100%);
+          min-height: min-content;
+          border-radius: 28px;
+          border: 1.5px solid rgba(233,193,118,0.82);
+          padding: 28px 40px 28px;
+          overflow: hidden;
+          color: #f4ead7;
+          background:
+            linear-gradient(180deg, rgba(16,14,13,0.96), rgba(8,5,3,0.98)),
+            url('/background-lounge-airy.jpg');
+          background-size: cover;
+          background-position: center;
+          box-shadow:
+            0 0 0 1px rgba(255,246,216,0.08),
+            0 0 42px rgba(233,193,118,0.3),
+            0 32px 110px rgba(0,0,0,0.78),
+            inset 0 0 70px rgba(233,193,118,0.08);
+        }
+        .smokecraft-how-modal::before,
+        .smokecraft-how-modal::after,
+        .smokecraft-how-atmosphere {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+        }
+        .smokecraft-how-modal::before {
+          background:
+            radial-gradient(ellipse at 50% 6%, rgba(255,226,150,0.22), transparent 34%),
+            radial-gradient(ellipse at 50% 78%, rgba(233,193,118,0.13), transparent 32%),
+            linear-gradient(90deg, rgba(0,0,0,0.38), transparent 26%, transparent 72%, rgba(0,0,0,0.34));
+          z-index: 0;
+        }
+        .smokecraft-how-modal::after {
+          z-index: 0;
+          border-radius: inherit;
+          box-shadow: inset 0 0 30px rgba(255,233,166,0.11), inset 0 -70px 80px rgba(0,0,0,0.42);
+        }
+        .smokecraft-how-atmosphere {
+          z-index: 0;
+          background:
+            radial-gradient(ellipse at 4% 32%, rgba(255,255,255,0.15), transparent 30%),
+            radial-gradient(ellipse at 92% 40%, rgba(255,255,255,0.12), transparent 28%),
+            radial-gradient(ellipse at 18% 92%, rgba(255,255,255,0.11), transparent 28%);
+          filter: blur(18px);
+          mix-blend-mode: screen;
+          opacity: 0.86;
+        }
+        .smokecraft-how-header,
+        .smokecraft-how-step,
+        .smokecraft-how-start,
+        .smokecraft-how-close,
+        .smokecraft-how-mark {
+          position: relative;
+          z-index: 1;
+        }
+        .smokecraft-how-close {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          width: 48px;
+          height: 48px;
+          border-radius: 999px;
+          border: 1.5px solid rgba(233,193,118,0.72);
+          color: #e9c176;
+          background: rgba(0,0,0,0.28);
+          display: grid;
+          place-items: center;
+          cursor: pointer;
+          box-shadow: 0 0 20px rgba(233,193,118,0.12);
+        }
+        .smokecraft-how-header {
+          text-align: center;
+          padding: 0 54px 18px;
+        }
+        .smokecraft-how-feather {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 18px;
+          color: #f3cb72;
+          margin-bottom: 2px;
+        }
+        .smokecraft-how-feather::before,
+        .smokecraft-how-feather::after {
+          content: "";
+          width: 64px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(233,193,118,0.48), transparent);
+        }
+        .smokecraft-how-feather .material-symbols-outlined {
+          font-size: 34px;
+          transform: rotate(-24deg);
+          filter: drop-shadow(0 0 12px rgba(233,193,118,0.5));
+        }
+        .smokecraft-how-header h3 {
+          margin: 0;
+          font-family: "Playfair Display", serif;
+          font-size: clamp(48px, 7vw, 72px);
+          line-height: 1;
+          color: #f7d88a;
+          letter-spacing: 0;
+          text-shadow:
+            0 0 8px rgba(255,236,178,0.68),
+            0 0 28px rgba(233,193,118,0.42),
+            0 6px 18px rgba(0,0,0,0.82);
+        }
+        .smokecraft-how-header h3::after {
+          content: "";
+          display: block;
+          width: 150px;
+          height: 13px;
+          margin: 4px auto 0;
+          background:
+            radial-gradient(circle, rgba(255,226,150,0.85) 0 2px, transparent 3px),
+            linear-gradient(90deg, transparent, rgba(233,193,118,0.5), transparent);
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+        .smokecraft-how-step {
+          min-height: 130px;
+          margin-bottom: 12px;
+          padding: 12px 18px 12px 12px;
+          border: 1px solid rgba(233,193,118,0.36);
+          border-radius: 16px;
+          display: grid;
+          grid-template-columns: 116px minmax(0, 1fr);
+          gap: 18px;
+          align-items: center;
+          overflow: hidden;
+          background:
+            radial-gradient(ellipse at 20% 50%, rgba(233,193,118,0.16), transparent 36%),
+            linear-gradient(135deg, rgba(255,255,255,0.07), rgba(13,9,5,0.72));
+          box-shadow: 0 0 22px rgba(233,193,118,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+          backdrop-filter: blur(18px);
+          -webkit-backdrop-filter: blur(18px);
+        }
+        .smokecraft-how-step::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(ellipse at 88% 32%, rgba(255,255,255,0.08), transparent 28%),
+            linear-gradient(90deg, transparent, rgba(233,193,118,0.04), transparent);
+        }
+        .smokecraft-how-image {
+          position: relative;
+          width: 104px;
+          height: 104px;
+          border-radius: 999px;
+          border: 1.5px solid rgba(233,193,118,0.68);
+          overflow: hidden;
+          box-shadow: 0 0 26px rgba(233,193,118,0.24), inset 0 0 20px rgba(0,0,0,0.58);
+        }
+        .smokecraft-how-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          filter: saturate(0.95) contrast(1.08) brightness(0.74);
+        }
+        .smokecraft-how-image::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at 36% 24%, rgba(255,230,170,0.2), transparent 32%), linear-gradient(180deg, transparent, rgba(0,0,0,0.42));
+        }
+        .smokecraft-how-image .material-symbols-outlined {
+          position: absolute;
+          right: 9px;
+          bottom: 8px;
+          z-index: 1;
+          width: 28px;
+          height: 28px;
+          border-radius: 999px;
+          display: grid;
+          place-items: center;
+          color: #130905;
+          background: linear-gradient(135deg, #e9c176, #fff0aa 48%, #b98527);
+          font-size: 17px;
+        }
+        .smokecraft-how-step-kicker {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          margin-bottom: 4px;
+        }
+        .smokecraft-how-step-kicker strong {
+          width: 32px;
+          height: 32px;
+          border-radius: 999px;
+          border: 1px solid rgba(233,193,118,0.72);
+          display: grid;
+          place-items: center;
+          color: #f7d88a;
+          font-family: "Playfair Display", serif;
+          font-size: 22px;
+          line-height: 1;
+          box-shadow: 0 0 16px rgba(233,193,118,0.25);
+        }
+        .smokecraft-how-step-kicker span {
+          color: #e9c176;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+        }
+        .smokecraft-how-step h4 {
+          margin: 0 0 4px;
+          color: #f8eee1;
+          font-family: "Playfair Display", serif;
+          font-size: 26px;
+          line-height: 1.08;
+          text-shadow: 0 3px 16px rgba(0,0,0,0.72);
+        }
+        .smokecraft-how-step p {
+          margin: 0;
+          color: rgba(248,238,225,0.72);
+          font-size: 13px;
+          line-height: 1.48;
+        }
+        .smokecraft-how-start {
+          width: 100%;
+          min-height: 68px;
+          margin-top: 14px;
+          border: 1px solid rgba(255,236,180,0.78);
+          border-radius: 14px;
+          color: #130905;
+          background:
+            linear-gradient(180deg, rgba(255,242,191,0.95), rgba(217,145,37,0.94) 55%, rgba(163,86,15,0.95)),
+            radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.5), transparent 48%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 18px;
+          cursor: pointer;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 15px;
+          font-weight: 950;
+          letter-spacing: 0.32em;
+          text-transform: uppercase;
+          box-shadow: 0 0 38px rgba(233,193,118,0.48), inset 0 2px 0 rgba(255,255,255,0.48), inset 0 -3px 10px rgba(88,34,0,0.34);
+        }
+        .smokecraft-how-start:active,
+        .smokecraft-how-close:active {
+          transform: scale(0.97);
+        }
+        .smokecraft-how-start .material-symbols-outlined {
+          font-size: 22px;
+          letter-spacing: 0;
+        }
+        .smokecraft-how-mark {
+          width: 46px;
+          height: 30px;
+          margin: 13px auto 0;
+          color: rgba(233,193,118,0.62);
+          font-family: "Playfair Display", serif;
+          font-size: 15px;
+          display: grid;
+          place-items: center;
+          text-shadow: 0 0 14px rgba(233,193,118,0.36);
+        }
         @media (min-width: 1024px) {
           .smokecraft-grid {
             grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 760px) {
+          .smokecraft-how-overlay {
+            padding: 12px;
+          }
+          .smokecraft-how-modal {
+            border-radius: 22px;
+            padding: 24px 18px 22px;
+          }
+          .smokecraft-how-close {
+            width: 42px;
+            height: 42px;
+            top: 14px;
+            right: 14px;
+          }
+          .smokecraft-how-header {
+            padding: 6px 40px 14px;
+          }
+          .smokecraft-how-feather::before,
+          .smokecraft-how-feather::after {
+            width: 42px;
+          }
+          .smokecraft-how-step {
+            grid-template-columns: 82px minmax(0, 1fr);
+            gap: 12px;
+            min-height: 112px;
+            padding: 10px;
+          }
+          .smokecraft-how-image {
+            width: 78px;
+            height: 78px;
+          }
+          .smokecraft-how-step h4 {
+            font-size: 21px;
+          }
+          .smokecraft-how-step p {
+            font-size: 12px;
+            line-height: 1.38;
+          }
+          .smokecraft-how-start {
+            min-height: 62px;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            gap: 10px;
           }
         }
         @media (max-width: 760px) {
