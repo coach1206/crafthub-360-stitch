@@ -4,10 +4,10 @@ import { SmokeCraftBottomNav, SmokeCraftPremiumHeader } from '../../components/s
 
 const FALLBACK_SELECTION = {
   seedLabel: 'Seed Path Pending',
-  seedDesc: 'Return to Step 5 to choose the seed genetics that best match your palate.',
+  seedDesc: 'Return to Step 6 to choose the seed genetics that best match your palate.',
   soilLabel: 'Soil Path Pending',
   soilSubtitle: 'Terroir profile',
-  soilDesc: 'Return to Step 5 to choose the soil terroir that will shape your curation.',
+  soilDesc: 'Return to Step 6 to choose the soil terroir that will shape your curation.',
 }
 
 export default function Curation() {
@@ -162,7 +162,7 @@ export default function Curation() {
       `}</style>
 
       <SmokeCraftPremiumHeader
-        step="Step 5 of 20"
+        step="Step 6 of 20"
         backTo="/smokecraft/origins"
         onRightClick={() => navigate('/grand-lounge-ranking')}
       />

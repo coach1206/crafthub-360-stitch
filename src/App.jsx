@@ -17,6 +17,7 @@ import GoldenBox        from './pages/smokecraft/GoldenBox.jsx'
 import GoldenBoxStatus  from './pages/smokecraft/GoldenBoxStatus.jsx'
 import Art              from './pages/smokecraft/Art.jsx'
 import Mentor           from './pages/smokecraft/Mentor.jsx'
+import Format           from './pages/smokecraft/Format.jsx'
 import Origins          from './pages/smokecraft/Origins.jsx'
 import Curation         from './pages/smokecraft/Curation.jsx'
 import Leaves           from './pages/smokecraft/Leaves.jsx'
@@ -182,6 +183,7 @@ export default function App() {
                 </Route>
                 <Route path="art"            element={<Art />} />
                 <Route path="mentor"         element={<Mentor />} />
+                <Route path="format"         element={<Format />} />
                 <Route path="origins"        element={<Origins />} />
                 <Route path="curation"       element={<Curation />} />
                 <Route path="leaves"         element={<Leaves />} />

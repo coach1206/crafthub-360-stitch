@@ -222,6 +222,46 @@ export function GuestSessionProvider({ children }) {
     }))
   }, [update])
 
+  /** Records the cigar format selected before seed, soil, and leaf work. */
+  const setSmokeCraftFormat = useCallback((format, awardXp = 0) => {
+    update(prev => {
+      const previousFormat = prev.smokeCraft?.selectedFormat
+      const alreadyAwarded = Boolean(prev.smokeCraft?.formatXpAwarded)
+      const xpToAward = alreadyAwarded ? 0 : awardXp
+      const newXP = (prev.xp || 0) + xpToAward
+      return {
+        ...prev,
+        xp:   newXP,
+        rank: getRankFromXP(newXP).name,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          selectedFormat: {
+            ...format,
+            savedAt: Date.now(),
+          },
+          formatHistory: [
+            ...(prev.smokeCraft?.formatHistory || []),
+            { ...format, savedAt: Date.now() },
+          ].slice(-6),
+          formatXpAwarded: alreadyAwarded || xpToAward > 0,
+          formatXpAwardedFor: alreadyAwarded
+            ? prev.smokeCraft?.formatXpAwardedFor
+            : format.id,
+          pendingPassportStamp: {
+            id: 'format-guide-completed',
+            name: 'Format Guide Completed',
+            source: 'format',
+            preparedAt: Date.now(),
+          },
+        },
+        selectedFormat: format.id,
+        selectedFormatName: format.name,
+        currentSmokecraftStep: 'format',
+        lastFormatChanged: previousFormat?.id !== format.id ? Date.now() : prev.lastFormatChanged,
+      }
+    })
+  }, [update])
+
   /** Records the selected experience level (Novice / Enthusiast / Connoisseur / Aficionado). */
   const setSelectedLevel = useCallback((level) => {
     update(prev => ({ ...prev, selectedLevel: level }))
@@ -414,6 +454,7 @@ export function GuestSessionProvider({ children }) {
       // Phase 6: Selection tracking
       setSelectedCraft,
       setSelectedMentor,
+      setSmokeCraftFormat,
       setSelectedLevel,
       // Phase 6: Session completion
       completeSmokeCraftSession,

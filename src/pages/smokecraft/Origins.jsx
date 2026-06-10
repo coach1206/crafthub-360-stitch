@@ -489,8 +489,8 @@ export default function Origins() {
       <div className="smokecraft-origins-bg" aria-hidden="true" />
 
       <SmokeCraftPremiumHeader
-        step="Step 5 of 20"
-        backTo="/smokecraft/mentor"
+        step="Step 6 of 20"
+        backTo="/smokecraft/format"
         onRightClick={() => navigate('/grand-lounge-ranking')}
       />
 

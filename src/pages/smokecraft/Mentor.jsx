@@ -148,7 +148,7 @@ export default function Mentor() {
     if (primaryId) setSelectedMentor(primaryId, found?.country || null)
     completeStep('mentor')
     addXP(XP_AWARDS.MENTOR_SELECTED)
-    navigate('/smokecraft/origins')
+    navigate('/smokecraft/format')
   }
 
   function handleSaveDraft() {

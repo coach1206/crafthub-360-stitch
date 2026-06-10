@@ -742,7 +742,7 @@ export default function Leaves() {
 
       <header className="leaf-header">
         <div className="leaf-header__brand">
-          <button className="leaf-back material-symbols-outlined" onClick={() => navigate('/smokecraft/origins')} aria-label="Back to seed and soil">
+          <button className="leaf-back material-symbols-outlined" onClick={() => navigate('/smokecraft/curation')} aria-label="Back to curation map">
             arrow_back
           </button>
           <span className="material-symbols-outlined text-[#e9c176]">eco</span>
@@ -751,11 +751,11 @@ export default function Leaves() {
 
         <div className="leaf-progress">
           <div className="leaf-progress__labels">
-            <span>Step 6 of 12</span>
+            <span>Step 7 of 20</span>
             <span className="leaf-progress__label">Leaf Education</span>
           </div>
           <div className="leaf-progress__bar" aria-hidden="true">
-            {Array.from({ length: 12 }, (_, i) => <span key={i} className={i < 6 ? 'is-filled' : ''} />)}
+            {Array.from({ length: 20 }, (_, i) => <span key={i} className={i < 7 ? 'is-filled' : ''} />)}
           </div>
         </div>
 
