@@ -17,6 +17,7 @@
 import { createContext, useContext, useState, useCallback } from 'react'
 
 const SESSION_KEY = 'novee_demo_mode'
+const PUBLIC_SESSION_KEY = 'demoMode'
 
 const DemoModeContext = createContext(null)
 
@@ -25,6 +26,10 @@ export const DEMO_BLOCKED_PATHS = new Set([
   '/admin',
   '/eat',
   '/pos',
+  '/ultra-command-center',
+  '/novee-vault',
+  '/remote-software-control',
+  '/venue-mirror',
   '/dev-diagnostics',
   '/developer',
   '/staff-login',
@@ -43,11 +48,12 @@ export const DEMO_BLOCKED_PATHS = new Set([
 
 export function DemoModeProvider({ children }) {
   const [isDemoMode, setIsDemoMode] = useState(() =>
-    sessionStorage.getItem(SESSION_KEY) === '1'
+    sessionStorage.getItem(SESSION_KEY) === '1' || sessionStorage.getItem(PUBLIC_SESSION_KEY) === 'true'
   )
 
   const enterDemoMode = useCallback(() => {
     sessionStorage.setItem(SESSION_KEY, '1')
+    sessionStorage.setItem(PUBLIC_SESSION_KEY, 'true')
     // Ensure boot is marked so BootGuard doesn't redirect back to /boot
     sessionStorage.setItem('novee_booted', '1')
     setIsDemoMode(true)
@@ -55,6 +61,7 @@ export function DemoModeProvider({ children }) {
 
   const exitDemoMode = useCallback(() => {
     sessionStorage.removeItem(SESSION_KEY)
+    sessionStorage.removeItem(PUBLIC_SESSION_KEY)
     setIsDemoMode(false)
   }, [])
 

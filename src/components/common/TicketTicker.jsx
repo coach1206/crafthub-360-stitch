@@ -64,10 +64,11 @@ export default function TicketTicker({ craft = 'all', muted = false, items: prop
   return (
     <>
       <div style={{
-        position: 'relative', height: 40, overflow: 'hidden',
+        position: 'relative', minHeight: 58, overflow: 'hidden',
         background: 'rgba(10,8,5,0.92)', backdropFilter: 'blur(8px)',
         borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`,
-        cursor: 'pointer', userSelect: 'none',
+        cursor: 'pointer', userSelect: 'none', display: 'grid',
+        gridTemplateColumns: 'minmax(168px, 230px) 1fr',
       }}
         onMouseEnter={pause} onMouseLeave={resume}
         onTouchStart={pause} onTouchEnd={resume}
@@ -75,13 +76,33 @@ export default function TicketTicker({ craft = 'all', muted = false, items: prop
         {/* glow strip */}
         <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(90deg,rgba(10,8,5,0.95) 0%,transparent 4%,transparent 96%,rgba(10,8,5,0.95) 100%)`, zIndex: 2, pointerEvents: 'none' }} />
 
-        <div ref={trackRef} style={{ display: 'flex', alignItems: 'center', height: '100%', willChange: 'transform', gap: 0 }}>
+        <div style={{
+          position: 'relative', zIndex: 3, display: 'flex', flexDirection: 'column',
+          justifyContent: 'center', padding: '8px 14px 8px clamp(14px, 4vw, 28px)',
+          borderRight: `1px solid ${BORDER}`, background: 'rgba(0,0,0,0.25)',
+        }}>
+          <span style={{
+            color: G, fontSize: 10, lineHeight: 1.1, fontWeight: 900,
+            letterSpacing: '0.18em', textTransform: 'uppercase',
+          }}>
+            Live Venue Ticker
+          </span>
+          <span style={{
+            color: 'rgba(232,213,163,0.72)', fontSize: 10, lineHeight: 1.35,
+            letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 4,
+          }}>
+            Live from E.A.T. Command Center
+          </span>
+        </div>
+
+        <div style={{ position: 'relative', overflow: 'hidden', minWidth: 0 }}>
+        <div ref={trackRef} style={{ display: 'flex', alignItems: 'center', minHeight: 58, willChange: 'transform', gap: 0 }}>
           {items.map((item, i) => (
             <button key={`${item.id}-${i}`}
               onClick={() => handleItemTap(item)}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 7, flexShrink: 0,
-                padding: '0 20px', height: '100%', background: 'none', border: 'none',
+                padding: '0 20px', minHeight: 58, background: 'none', border: 'none',
                 cursor: 'pointer', whiteSpace: 'nowrap',
               }}>
               <span style={{
@@ -97,6 +118,7 @@ export default function TicketTicker({ craft = 'all', muted = false, items: prop
               <span style={{ color: 'rgba(201,168,76,0.25)', fontSize: 14, marginLeft: 8 }}>◆</span>
             </button>
           ))}
+        </div>
         </div>
       </div>
 

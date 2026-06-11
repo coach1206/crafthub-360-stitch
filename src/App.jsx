@@ -51,6 +51,7 @@ import PassportScan        from './pages/passport/PassportScan.jsx'
 import PassportHowItWorks  from './pages/passport/PassportHowItWorks.jsx'
 
 import DayOneTravel from './pages/DayOneTravel.jsx'
+import ModulePlaceholder from './pages/ModulePlaceholder.jsx'
 
 // ── Craft modules — moderate size, eager ─────────────────────
 import PourCraft from './pages/PourCraft.jsx'
@@ -171,6 +172,7 @@ export default function App() {
               }
             >
               <Route index           element={<Home />} />
+              <Route path="home"     element={<Home />} />
               <Route path="crafthub" element={<CraftHub />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
@@ -223,9 +225,78 @@ export default function App() {
               <Route path="passport-networking" element={<PassportConnection />} />
               <Route path="grand-lounge-ranking" element={<Leaderboard />} />
               <Route path="dayone360-travel"    element={<DayOneTravel />} />
+              <Route path="dayone360"           element={<DayOneTravel />} />
+              <Route path="leaderboard"         element={<Leaderboard />} />
               <Route path="pourcraft"  element={<PourCraft />} />
               <Route path="beercraft"  element={<BeerCraft />} />
               <Route path="winecraft"  element={<WineCraft />} />
+              <Route path="demo" element={
+                <ModulePlaceholder
+                  title="Demo Mode"
+                  purpose="Safe preview mode is available from the NOVEE OS home screen. It previews guest-facing modules without real server calls, payments, inventory changes, audit events, or role changes."
+                  phases={['Keep safe preview routing visible', 'Expand guided demo scripts', 'Add operator-specific walkthrough presets']}
+                />
+              } />
+              <Route path="ultra-command-center" element={
+                <ProtectedRoute
+                  allowedRoles={['admin', 'founder_level_0', 'developer']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin / Founder Login"
+                  lockedMessage="NOVEE OS Ultra Command Center requires founder, admin, or developer access."
+                  demoBlocked
+                >
+                  <ModulePlaceholder
+                    title="NOVEE OS Ultra Command Center"
+                    purpose="Master control system for venues, licenses, modules, deployments, vault data, diagnostics, users, roles, security, analytics, and remote updates."
+                    phases={['Connect global venue registry', 'Wire deployment and vault APIs', 'Add founder-only control actions']}
+                  />
+                </ProtectedRoute>
+              } />
+              <Route path="novee-vault" element={
+                <ProtectedRoute
+                  allowedRoles={['admin', 'founder_level_0', 'developer']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin / Founder Login"
+                  lockedMessage="NOVEE Vault requires elevated system access."
+                  demoBlocked
+                >
+                  <ModulePlaceholder
+                    title="NOVEE Vault"
+                    purpose="Secure system of record for venue accounts, licenses, identities, profiles, E.A.T., POS, assets, legal, deployments, audit logs, support, and release records."
+                    phases={['Create vault domain browser', 'Attach tenant-safe record filters', 'Add audit and legal document controls']}
+                  />
+                </ProtectedRoute>
+              } />
+              <Route path="remote-software-control" element={
+                <ProtectedRoute
+                  allowedRoles={['admin', 'founder_level_0', 'developer']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin / Founder Login"
+                  lockedMessage="Remote Software Control requires authorized master system access."
+                  demoBlocked
+                >
+                  <ModulePlaceholder
+                    title="Remote Software Control"
+                    purpose="Deployment control for UI updates, module releases, content pushes, E.A.T., POS 3, ticker, legal, demo mode, and role access updates."
+                    phases={['Wire deployment queue', 'Add rollback and maintenance actions', 'Connect venueId-scoped release history']}
+                  />
+                </ProtectedRoute>
+              } />
+              <Route path="venue-mirror" element={
+                <ProtectedRoute
+                  allowedRoles={['manager', 'admin', 'founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Venue Manager Login"
+                  lockedMessage="Venue Mirror Command Hub requires venue owner, manager, admin, or founder access."
+                  demoBlocked
+                >
+                  <ModulePlaceholder
+                    title="Venue Mirror Command Hub"
+                    purpose="Establishment-level command hub for local E.A.T., POS 3, CraftHub, Passport members, staff activity, events, specials, ticker, reports, and venue settings scoped by venueId."
+                    phases={['Bind selected venueId', 'Connect local E.A.T. and POS 3 data', 'Add tenant-safe manager actions']}
+                  />
+                </ProtectedRoute>
+              } />
 
               {/* ── Mentor Console — sidecar role (access_mentor_console) ─ */}
               <Route path="mentor-console" element={
@@ -423,6 +494,9 @@ export default function App() {
               <Route path="dashboard"    element={<Navigate to="/crafthub" replace />} />
               <Route path="command-center" element={<Navigate to="/eat" replace />} />
               <Route path="eat-command"  element={<Navigate to="/eat" replace />} />
+              <Route path="pos3"         element={<Navigate to="/pos" replace />} />
+              <Route path="founder-command" element={<Navigate to="/founder" replace />} />
+              <Route path="admin-command" element={<Navigate to="/admin" replace />} />
               <Route path="smokecraft/session-1" element={<Navigate to="/smokecraft" replace />} />
               <Route path="smokecraft/session-2" element={<Navigate to="/smokecraft" replace />} />
               <Route path="smokecraft/session-3" element={<Navigate to="/smokecraft" replace />} />
