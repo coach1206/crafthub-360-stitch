@@ -15,6 +15,9 @@ const DATA_LINES = [
  * BootScreen — cinematic full-screen stage card used during the boot intro.
  *
  * Props
+ *   fullBleedImage  – when true, render backgroundImage edge-to-edge with no
+ *                     overlaid logo/title/status panels; only subtle scan lines
+ *                     remain. Use when the image itself IS the designed screen.
  *   brandName       – display name shown as the large gold title
  *   brandSubtitle   – small blue tracking text below the divider
  *   logo            – src path for the brand logo image
@@ -27,6 +30,7 @@ const DATA_LINES = [
  *   itemsRevealed   – how many items (status or connection) are visible
  */
 export default function BootScreen({
+  fullBleedImage  = false,
   brandName       = '',
   brandSubtitle   = '',
   logo,
@@ -38,6 +42,38 @@ export default function BootScreen({
   connectionItems = [],
   itemsRevealed   = 999,
 }) {
+  // ── Full-bleed mode: image IS the designed screen, minimal overlays only ──
+  if (fullBleedImage && backgroundImage) {
+    return (
+      <div className="boot-screen" style={{ background: '#010b1e' }}>
+        {/* Hero image — full opacity, no blur, no heavy overlay */}
+        <img
+          src={backgroundImage}
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          style={{
+            position:   'absolute', inset: 0,
+            width:      '100%', height: '100%',
+            objectFit:  'cover', objectPosition: 'center',
+            userSelect: 'none',
+          }}
+        />
+        {/* Very light edge vignette only — preserves image design */}
+        <div style={{
+          position:   'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(1,11,30,0.18) 0%, transparent 15%, transparent 80%, rgba(1,11,30,0.45) 100%), linear-gradient(to right, rgba(1,11,30,0.20) 0%, transparent 12%, transparent 88%, rgba(1,11,30,0.20) 100%)',
+          pointerEvents: 'none',
+        }} />
+        {/* Subtle scan lines */}
+        <div className="boot-screen__data-lines" aria-hidden="true">
+          {DATA_LINES.map(({ top, duration, delay }, i) => (
+            <div key={i} className="boot-screen__data-line" style={{ top, animationDuration: duration, animationDelay: delay, opacity: 0.4 }} />
+          ))}
+        </div>
+      </div>
+    )
+  }
   // Split statusItems evenly between left and right side panels
   const half       = Math.ceil(statusItems.length / 2)
   const leftItems  = statusItems.slice(0, half)

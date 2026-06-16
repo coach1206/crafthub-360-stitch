@@ -122,13 +122,11 @@ export default function Boot() {
   const [searchParams]    = useSearchParams()
   const { enterDemoMode } = useDemoMode()
 
-  // ── Intro sequence state ──────────────────────────────────────────────────
-  const [introPhase,    setIntroPhase]    = useState('playing') // 'playing' | 'done'
+  const [introPhase,    setIntroPhase]    = useState('playing')
   const [stageIndex,    setStageIndex]    = useState(0)
   const [stageVisible,  setStageVisible]  = useState(false)
   const [itemsRevealed, setItemsRevealed] = useState(0)
 
-  // ── Boot UI state (Hold to Activate screen) ───────────────────────────────
   const [bootVisible,   setBootVisible]   = useState(false)
   const [headerVisible, setHeaderVisible] = useState(false)
   const [holding,       setHolding]       = useState(false)
@@ -141,7 +139,6 @@ export default function Boot() {
   const introTimers   = useRef([])
   const skipped       = useRef(false)
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
   const clearIntroTimers = useCallback(() => {
     introTimers.current.forEach(t => clearTimeout(t))
     introTimers.current = []
@@ -153,7 +150,6 @@ export default function Boot() {
     return t
   }, [])
 
-  // ── Transition: intro → boot UI ───────────────────────────────────────────
   const startBootUI = useCallback(() => {
     setIntroPhase('done')
     setStageVisible(false)
@@ -164,7 +160,6 @@ export default function Boot() {
     })
   }, [after])
 
-  // ── Skip intro on click ───────────────────────────────────────────────────
   const skipIntro = useCallback(() => {
     if (skipped.current || introPhase === 'done') return
     skipped.current = true
@@ -172,7 +167,6 @@ export default function Boot() {
     startBootUI()
   }, [introPhase, clearIntroTimers, startBootUI])
 
-  // ── Play one stage recursively ────────────────────────────────────────────
   const playStage = useCallback((idx) => {
     if (skipped.current) return
     if (idx >= BOOT_STAGES.length) { startBootUI(); return }
@@ -201,7 +195,6 @@ export default function Boot() {
     })
   }, [after, startBootUI])
 
-  // ── Boot entry ────────────────────────────────────────────────────────────
   useEffect(() => {
     if (sessionStorage.getItem('novee_booted')) {
       const returnPath = sessionStorage.getItem('novee_boot_return')
@@ -233,7 +226,6 @@ export default function Boot() {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── Hold to Activate ──────────────────────────────────────────────────────
   function startHold() {
     setHolding(true)
     holdTimer.current = setTimeout(() => {
@@ -281,22 +273,17 @@ export default function Boot() {
         transform:  activating ? 'scale(1.1)' : 'scale(1)',
       }}
     >
-      {/* Custom cursor dot */}
       <div
         className="fixed w-10 h-10 rounded-full border border-primary/30 pointer-events-none z-[100] mix-blend-screen transition-all duration-150"
         style={{ left: cursor.x, top: cursor.y, boxShadow: '0 0 15px rgba(233,193,118,0.2)' }}
       />
 
-      {/* ══════════════════════════════════════════════════════════════════════
-          STAGES 1–5 — CINEMATIC INTRO SEQUENCE
-      ══════════════════════════════════════════════════════════════════════ */}
       {introPhase === 'playing' && (
         <div
           className="fixed inset-0 z-50 select-none"
           style={{ cursor: 'none' }}
           onClick={skipIntro}
         >
-          {/* Stage fade wrapper */}
           <div
             style={{
               width:      '100%',
@@ -319,17 +306,16 @@ export default function Boot() {
             />
           </div>
 
-          {/* Stage progress dots */}
           <div
             style={{
-              position:  'absolute',
-              bottom:    44,
-              left:      '50%',
-              transform: 'translateX(-50%)',
-              display:   'flex',
-              gap:       10,
+              position:   'absolute',
+              bottom:     44,
+              left:       '50%',
+              transform:  'translateX(-50%)',
+              display:    'flex',
+              gap:        10,
               alignItems: 'center',
-              zIndex:    20,
+              zIndex:     20,
             }}
           >
             {BOOT_STAGES.map((s, i) => (
@@ -351,7 +337,6 @@ export default function Boot() {
             ))}
           </div>
 
-          {/* Skip hint */}
           <div
             style={{
               position:      'absolute',
@@ -370,9 +355,6 @@ export default function Boot() {
         </div>
       )}
 
-      {/* ══════════════════════════════════════════════════════════════════════
-          STAGE 6 — CINEMATIC ACTIVATION SCREEN (Hold to Activate)
-      ══════════════════════════════════════════════════════════════════════ */}
       <div
         style={{
           opacity:       bootVisible ? 1 : 0,
@@ -380,243 +362,164 @@ export default function Boot() {
           pointerEvents: bootVisible ? 'auto' : 'none',
         }}
       >
-        {/* ── Cinematic background ─────────────────────────────────────────── */}
-        <div style={{ position: 'fixed', inset: 0, zIndex: 0, background: '#010b1e', overflow: 'hidden' }}>
+        <div className="fixed inset-0 z-0 overflow-hidden">
           <img
-            src="/boot/crafthub-boot.png"
-            alt=""
-            aria-hidden="true"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-            onError={e => { e.currentTarget.style.display = 'none' }}
+            alt="Luxury Private Lounge"
+            className="w-full h-full object-cover scale-110 blur-[8px]"
+            src="/background-lounge-airy.jpg"
           />
-          {/* Edge vignette */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to bottom, rgba(1,11,30,0.60) 0%, rgba(1,11,30,0.20) 30%, rgba(1,11,30,0.45) 65%, rgba(1,11,30,0.95) 100%), linear-gradient(to right, rgba(1,11,30,0.65) 0%, transparent 22%, transparent 78%, rgba(1,11,30,0.65) 100%)',
-          }} />
-          {/* Data grid texture */}
-          <div aria-hidden="true" style={{
-            position: 'absolute', inset: 0, opacity: 0.05,
-            backgroundImage: 'linear-gradient(rgba(56,189,248,0.9) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.9) 1px, transparent 1px)',
-            backgroundSize: '58px 58px',
-            WebkitMaskImage: 'radial-gradient(ellipse 75% 65% at 50% 50%, black 20%, transparent 80%)',
-            maskImage: 'radial-gradient(ellipse 75% 65% at 50% 50%, black 20%, transparent 80%)',
-          }} />
+          <div className="absolute inset-0 smoke-overlay" />
         </div>
 
-        {/* ── Moving data lines ────────────────────────────────────────────── */}
-        <div aria-hidden="true" className="boot-screen__data-lines" style={{ position: 'fixed', zIndex: 2 }}>
-          {[
-            { top: '15%', animationDuration: '5.1s', animationDelay: '0.2s'  },
-            { top: '32%', animationDuration: '4.3s', animationDelay: '1.0s'  },
-            { top: '50%', animationDuration: '6.6s', animationDelay: '0.5s'  },
-            { top: '67%', animationDuration: '3.9s', animationDelay: '1.8s'  },
-            { top: '82%', animationDuration: '5.5s', animationDelay: '0.0s'  },
-          ].map((s, i) => (
-            <div key={i} className="boot-screen__data-line" style={s} />
-          ))}
-        </div>
+        <main className="relative z-10 w-full h-screen flex flex-col items-center justify-between py-16 px-8">
+          <header
+            className="w-full flex justify-between items-center h-20 transition-opacity duration-1000"
+            style={{ opacity: headerVisible ? 1 : 0 }}
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full glass-panel flex items-center justify-center border border-primary/20">
+                <span className="material-symbols-outlined text-primary">terminal</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-label-lg text-label-lg text-primary tracking-widest">SYSTEM INITIALIZED</span>
+                <span className="font-body-md text-body-md text-on-surface-variant/60">V.4.2.0. PREMIUM_CORE</span>
+              </div>
+            </div>
+            <div className="glass-panel px-6 py-2 rounded-full border border-primary/10">
+              <span className="font-label-lg text-label-lg text-primary">SECURE LINK: ACTIVE</span>
+            </div>
+          </header>
 
-        {/* ── Concentric glow rings ────────────────────────────────────────── */}
-        <div aria-hidden="true" className="boot-screen__rings" style={{ position: 'fixed', zIndex: 3 }}>
-          {[
-            { size: 300, border: '1px solid rgba(201,168,76,0.22)', animationDelay: '0.0s', animationDuration: '3.6s' },
-            { size: 410, border: '1px solid rgba(56,189,248,0.13)', animationDelay: '0.9s', animationDuration: '4.5s' },
-            { size: 520, border: '1px solid rgba(56,189,248,0.07)', animationDelay: '1.8s', animationDuration: '5.4s' },
-          ].map(({ size, border, animationDelay, animationDuration }) => (
-            <div key={size} className="boot-screen__ring" style={{ width: size, height: size, border, animationDelay, animationDuration }} />
-          ))}
-        </div>
+          <div className="flex flex-col items-center text-center">
+            <div className="mb-12 animate-pulse-gold">
+              <h1 className="font-display-lg text-display-lg gold-foil-text tracking-tighter mb-2">NOVEE OS</h1>
+              <div className="h-[1px] w-64 bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto" />
+              <h2 className="font-headline-md text-headline-md text-on-surface-variant mt-4 tracking-widest uppercase">CRAFTHUB 360</h2>
+            </div>
+            <p className="font-body-lg text-body-lg text-on-surface/40 uppercase tracking-[0.4em] text-sm">
+              Connected Hospitality Intelligence
+            </p>
+          </div>
 
-        {/* ── Blue center glow ─────────────────────────────────────────────── */}
-        <div aria-hidden="true" style={{
-          position: 'fixed', inset: 0, zIndex: 4, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 48% 45% at 50% 42%, rgba(14,80,200,0.20) 0%, rgba(56,189,248,0.06) 55%, transparent 80%)',
-        }} />
+          <aside className="fixed left-8 top-1/2 -translate-y-1/2">
+            <div className="glass-panel p-6 rounded-xl space-y-6 w-72 shadow-2xl shadow-black/50 border-l-2 border-l-primary/40 relative overflow-hidden scan-effect">
+              <h3 className="font-label-lg text-label-lg text-on-surface-variant/50 border-b border-outline-variant pb-2">
+                SERVICE REGISTRY
+              </h3>
+              <div className="space-y-4">
+                {[
+                  { icon: 'point_of_sale', label: 'POS 3' },
+                  { icon: 'restaurant',    label: 'E.A.T.' },
+                  { icon: 'smoking_rooms', label: 'SmokeCraft' },
+                  { icon: 'wine_bar',      label: 'Cellar-Sync' },
+                ].map(({ icon, label }) => (
+                  <div key={label} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="material-symbols-outlined text-primary/80">{icon}</span>
+                      <span className="font-label-lg text-label-lg text-on-surface">{label}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_8px_#e9c176]" />
+                      <span className="font-label-sm text-label-sm text-primary/80">READY</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="pt-4 border-t border-outline-variant">
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+                    <div className="h-full bg-primary origin-left animate-progress-finish" />
+                  </div>
+                  <span className="font-label-sm text-label-sm text-primary font-bold">100%</span>
+                </div>
+              </div>
+            </div>
+          </aside>
 
-        {/* ── Header bar ──────────────────────────────────────────────────── */}
+          <div className="flex flex-col items-center gap-6 pb-4">
+            <button
+              className="group relative outline-none flex flex-col items-center justify-center h-[72px] w-[320px] rounded-2xl glass-panel border border-primary/30 amber-glow animate-pulse-gold transition-all duration-500 select-none"
+              style={{
+                transform:   holding ? 'scale(0.94)' : 'scale(1)',
+                background:  holding ? 'rgba(233,193,118,0.15)' : 'rgba(31,31,32,0.4)',
+                borderColor: holding ? 'rgba(233,193,118,1)' : undefined,
+                boxShadow:   holding ? '0 0 60px rgba(233,193,118,0.3)' : undefined,
+              }}
+              onMouseDown={startHold}
+              onMouseUp={endHold}
+              onMouseLeave={endHold}
+              onTouchStart={(e) => { e.preventDefault(); startHold() }}
+              onTouchEnd={endHold}
+            >
+              <div className="absolute -inset-1 bg-primary/5 rounded-2xl blur-xl group-hover:bg-primary/10 transition-all duration-700" />
+              <div className="relative flex flex-col items-center">
+                <span className="font-headline-md text-headline-md text-primary tracking-[0.2em] font-bold text-lg">
+                  HOLD TO ACTIVATE
+                </span>
+                <span className="material-symbols-outlined text-primary/60 text-sm animate-bounce mt-1">
+                  keyboard_double_arrow_down
+                </span>
+              </div>
+            </button>
+
+            <button
+              onClick={handleDemoMode}
+              style={{
+                display:        'flex',
+                alignItems:     'center',
+                gap:            8,
+                height:         40,
+                padding:        '0 20px',
+                borderRadius:   20,
+                background:     'rgba(201,168,76,0.06)',
+                border:         '1px solid rgba(201,168,76,0.2)',
+                cursor:         'pointer',
+                fontFamily:     '"JetBrains Mono", monospace',
+                fontSize:       10,
+                fontWeight:     700,
+                letterSpacing:  '0.18em',
+                color:          'rgba(201,168,76,0.55)',
+                textTransform:  'uppercase',
+                transition:     'all 0.2s ease',
+                backdropFilter: 'blur(8px)',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background  = 'rgba(201,168,76,0.12)'
+                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
+                e.currentTarget.style.color       = 'rgba(201,168,76,0.85)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background  = 'rgba(201,168,76,0.06)'
+                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.2)'
+                e.currentTarget.style.color       = 'rgba(201,168,76,0.55)'
+              }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 14 }}>visibility</span>
+              PREVIEW DEMO
+            </button>
+
+            <div className="flex gap-16 mt-2">
+              {[
+                { label: 'TEMPERATURE',     value: '68°F / 20°C' },
+                { label: 'HUMIDITY',        value: '70% RH' },
+                { label: 'LOUNGE CAPACITY', value: '12 MEMBERS' },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex flex-col items-center">
+                  <span className="font-label-sm text-label-sm text-on-surface-variant/40">{label}</span>
+                  <span className="font-body-md text-body-md text-on-surface">{value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </main>
+
         <div
-          style={{
-            position:   'fixed', top: '1.5rem', left: 0, right: 0,
-            zIndex:     20, display: 'flex', justifyContent: 'space-between',
-            alignItems: 'center', padding: '0 2rem',
-            opacity:    headerVisible ? 1 : 0,
-            transition: 'opacity 1s ease',
-          }}
-        >
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '0.75rem',
-            background: 'rgba(2,16,52,0.72)', border: '1px solid rgba(56,189,248,0.18)',
-            borderLeft: '2px solid rgba(56,189,248,0.55)', borderRadius: 4,
-            padding: '0.4rem 0.9rem', backdropFilter: 'blur(10px)',
-          }}>
-            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.48)' }}>Status</span>
-            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(56,189,248,0.92)', fontWeight: 700 }}>System Ready</span>
-          </div>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '0.75rem',
-            background: 'rgba(2,16,52,0.72)', border: '1px solid rgba(56,189,248,0.18)',
-            borderRight: '2px solid rgba(56,189,248,0.55)', borderRadius: 4,
-            padding: '0.4rem 0.9rem', backdropFilter: 'blur(10px)',
-          }}>
-            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.48)' }}>Secure Link</span>
-            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(56,189,248,0.92)', fontWeight: 700 }}>Active</span>
-          </div>
-        </div>
-
-        {/* ── Left status panel ────────────────────────────────────────────── */}
-        <div className="boot-screen__side-panel boot-screen__side-panel--left" style={{ position: 'fixed', zIndex: 10 }}>
-          {[
-            { label: 'SmokeCraft 360', value: 'Connected' },
-            { label: 'PourCraft 360',  value: 'Connected' },
-            { label: 'BeerCraft 360',  value: 'Connected' },
-            { label: 'WineCraft 360',  value: 'Connected' },
-          ].map(({ label, value }) => (
-            <div key={label} className="boot-screen__status-panel">
-              <span className="boot-screen__status-label">{label}</span>
-              <span className="boot-screen__status-value">{value}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Right status panel ───────────────────────────────────────────── */}
-        <div className="boot-screen__side-panel boot-screen__side-panel--right" style={{ position: 'fixed', zIndex: 10 }}>
-          {[
-            { label: 'POS 3',     value: 'Online'  },
-            { label: 'E.A.T.',    value: 'Online'  },
-            { label: 'Inventory', value: 'Synced'  },
-            { label: 'Network',   value: 'Secured' },
-          ].map(({ label, value }) => (
-            <div key={label} className="boot-screen__status-panel">
-              <span className="boot-screen__status-label">{label}</span>
-              <span className="boot-screen__status-value">{value}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Center content ───────────────────────────────────────────────── */}
-        <div style={{
-          position:       'fixed', inset: 0, zIndex: 10,
-          display:        'flex', flexDirection: 'column',
-          alignItems:     'center', justifyContent: 'center',
-          gap:            '1.25rem', padding: '0 2rem',
-          textAlign:      'center',
-        }}>
-          {/* Logo */}
-          <div className="boot-screen__logo">
-            <img
-              src="/logos/crafthub.png"
-              alt="CraftHub 360"
-              draggable={false}
-              style={{ height: 160, width: 'auto', maxWidth: 400, objectFit: 'contain', userSelect: 'none' }}
-            />
-          </div>
-
-          {/* Brand */}
-          <h1 className="boot-screen__title">CRAFTHUB 360</h1>
-          <div className="boot-screen__divider" />
-          <p className="boot-screen__subtitle">Connected Hospitality Intelligence</p>
-
-          {/* Hold to Activate */}
-          <button
-            style={{
-              position:       'relative',
-              display:        'flex',
-              flexDirection:  'column',
-              alignItems:     'center',
-              justifyContent: 'center',
-              height:         72,
-              width:          320,
-              borderRadius:   16,
-              border:         holding ? '1.5px solid rgba(201,168,76,1)' : '1.5px solid rgba(201,168,76,0.35)',
-              background:     holding ? 'rgba(201,168,76,0.15)' : 'rgba(2,16,52,0.65)',
-              boxShadow:      holding ? '0 0 60px rgba(201,168,76,0.30), inset 0 0 30px rgba(201,168,76,0.08)' : '0 0 30px rgba(56,189,248,0.08)',
-              backdropFilter: 'blur(12px)',
-              cursor:         'pointer',
-              outline:        'none',
-              transform:      holding ? 'scale(0.94)' : 'scale(1)',
-              transition:     'all 0.2s ease',
-              userSelect:     'none',
-            }}
-            onMouseDown={startHold}
-            onMouseUp={endHold}
-            onMouseLeave={endHold}
-            onTouchStart={(e) => { e.preventDefault(); startHold() }}
-            onTouchEnd={endHold}
-          >
-            <span style={{
-              fontFamily:    '"JetBrains Mono", monospace',
-              fontSize:      '0.9rem',
-              fontWeight:    700,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color:         'rgba(201,168,76,0.92)',
-            }}>
-              HOLD TO ACTIVATE
-            </span>
-            <span style={{
-              fontFamily:    '"JetBrains Mono", monospace',
-              fontSize:      '0.58rem',
-              letterSpacing: '0.16em',
-              textTransform: 'uppercase',
-              color:         'rgba(56,189,248,0.55)',
-              marginTop:     4,
-            }}>
-              {holding ? 'Activating...' : 'Press and hold to enter'}
-            </span>
-          </button>
-
-          {/* Preview Demo */}
-          <button
-            onClick={handleDemoMode}
-            style={{
-              display:        'flex',
-              alignItems:     'center',
-              gap:            8,
-              height:         38,
-              padding:        '0 20px',
-              borderRadius:   20,
-              background:     'rgba(56,189,248,0.06)',
-              border:         '1px solid rgba(56,189,248,0.18)',
-              cursor:         'pointer',
-              fontFamily:     '"JetBrains Mono", monospace',
-              fontSize:       '0.6rem',
-              fontWeight:     700,
-              letterSpacing:  '0.18em',
-              color:          'rgba(56,189,248,0.55)',
-              textTransform:  'uppercase',
-              transition:     'all 0.2s ease',
-              backdropFilter: 'blur(8px)',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.background  = 'rgba(56,189,248,0.12)'
-              e.currentTarget.style.borderColor = 'rgba(56,189,248,0.4)'
-              e.currentTarget.style.color       = 'rgba(56,189,248,0.9)'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background  = 'rgba(56,189,248,0.06)'
-              e.currentTarget.style.borderColor = 'rgba(56,189,248,0.18)'
-              e.currentTarget.style.color       = 'rgba(56,189,248,0.55)'
-            }}
-          >
-            PREVIEW DEMO
-          </button>
-
-          {/* Footer version line */}
-          <p style={{
-            fontFamily:    '"JetBrains Mono", monospace',
-            fontSize:      '0.55rem',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color:         'rgba(255,255,255,0.18)',
-            marginTop:     '0.25rem',
-          }}>
-            V.4.2.0 · Premium Core · Secure Link Active
-          </p>
-        </div>
+          className="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-10"
+          style={{ background: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='1' height='1' x='0' y='0' fill='%23fff' opacity='.08'/%3E%3Crect width='1' height='1' x='2' y='2' fill='%23fff' opacity='.05'/%3E%3C/svg%3E\")" }}
+        />
+        <div className="pointer-events-none fixed inset-0 z-40 bg-gradient-to-b from-black/20 via-transparent to-black/90" />
       </div>
 
-      {/* ── Boot fallback ─────────────────────────────────────────────────── */}
       {showFallback && (
         <div
           style={{
