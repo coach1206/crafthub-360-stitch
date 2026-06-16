@@ -20,6 +20,7 @@ const BOOT_STAGES = [
     title:          'PROFOUND INNOVATIONS',
     subtitle:       'Software & Systems Development Company',
     backgroundImage: '/boot/profound-boot.png',
+    fullBleedImage: true,
     bootMessage:    'Initializing systems',
     progress:       92,
     statusItems: [
@@ -40,6 +41,7 @@ const BOOT_STAGES = [
     title:          'NOVEE OS',
     subtitle:       'Powering Core Systems',
     backgroundImage: '/boot/novee-boot.png',
+    fullBleedImage: true,
     bootMessage:    'Initializing system',
     progress:       87,
     statusItems: [
@@ -61,6 +63,7 @@ const BOOT_STAGES = [
     title:          'CRAFTHUB',
     subtitle:       'Integrate · Connect · Elevate',
     backgroundImage: '/boot/crafthub-boot.png',
+    fullBleedImage: true,
     bootMessage:    'Loading CraftHub network',
     progress:       78,
     statusItems:    [],
@@ -80,6 +83,7 @@ const BOOT_STAGES = [
     title:          'E.A.T. System',
     subtitle:       'Enterprise · Automate · Transform',
     backgroundImage: '/boot/eat-system-boot.png',
+    fullBleedImage: true,
     bootMessage:    'System boot sequence',
     progress:       82,
     statusItems:    [],
@@ -101,6 +105,7 @@ const BOOT_STAGES = [
     title:          '360 Passport Connection',
     subtitle:       'Networking · Relationships · Experiences',
     backgroundImage: '/boot/passport-boot.png',
+    fullBleedImage: true,
     bootMessage:    'Activating global connection layer',
     progress:       95,
     statusItems: [
