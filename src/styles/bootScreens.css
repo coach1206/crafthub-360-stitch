@@ -1,0 +1,396 @@
+/* ── Boot screen animations ──────────────────────────────────────────────── */
+
+@keyframes bs-logo-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 28px rgba(201,168,76,0.4))
+            drop-shadow(0 0 56px rgba(56,189,248,0.18));
+  }
+  50% {
+    filter: drop-shadow(0 0 52px rgba(201,168,76,0.70))
+            drop-shadow(0 0 96px rgba(56,189,248,0.30));
+  }
+}
+
+@keyframes bs-ring-pulse {
+  0%, 100% { opacity: 0.3;  transform: scale(1);    }
+  50%       { opacity: 0.65; transform: scale(1.04); }
+}
+
+@keyframes bs-progress {
+  from { width: 0%; }
+  to   { width: var(--bs-progress, 100%); }
+}
+
+@keyframes bs-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(350%);  }
+}
+
+@keyframes bs-data-line {
+  0%   { transform: translateX(-10%); opacity: 0;   }
+  8%   { opacity: 1;                                 }
+  92%  { opacity: 0.5;                              }
+  100% { transform: translateX(110%); opacity: 0;   }
+}
+
+@keyframes bs-float {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-7px); }
+}
+
+@keyframes bs-dots-blink {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 1;   }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .boot-screen__logo,
+  .boot-screen__ring,
+  .boot-screen__data-line,
+  .boot-screen__progress-fill,
+  .boot-screen__progress-fill::after,
+  .boot-screen__pulse-dot {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── Root container ──────────────────────────────────────────────────────── */
+.boot-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #010b1e;
+}
+
+/* ── Background ──────────────────────────────────────────────────────────── */
+.boot-screen__background {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Cinematic edge vignette + depth gradient */
+.boot-screen__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(to bottom,
+      rgba(1,11,30,0.60) 0%,
+      rgba(1,11,30,0.22) 30%,
+      rgba(1,11,30,0.30) 65%,
+      rgba(1,11,30,0.90) 100%),
+    linear-gradient(to right,
+      rgba(1,11,30,0.65) 0%,
+      transparent 22%,
+      transparent 78%,
+      rgba(1,11,30,0.65) 100%);
+}
+
+/* Subtle data-grid texture */
+.boot-screen__grid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image:
+    linear-gradient(rgba(56,189,248,0.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56,189,248,0.9) 1px, transparent 1px);
+  background-size: 58px 58px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, black 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, black 20%, transparent 80%);
+}
+
+/* ── Moving horizontal data lines ────────────────────────────────────────── */
+.boot-screen__data-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.boot-screen__data-line {
+  position: absolute;
+  height: 1px;
+  left: -10%;
+  right: -10%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(56,189,248,0.10) 30%,
+    rgba(201,168,76,0.07) 50%,
+    rgba(56,189,248,0.10) 70%,
+    transparent 100%
+  );
+  animation: bs-data-line linear infinite;
+}
+
+/* ── Concentric glow rings ───────────────────────────────────────────────── */
+.boot-screen__rings {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boot-screen__ring {
+  position: absolute;
+  border-radius: 50%;
+  animation: bs-ring-pulse ease-in-out infinite;
+}
+
+/* ── Blue radial glow center ─────────────────────────────────────────────── */
+.boot-screen__center-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 48% 45% at 50% 42%,
+    rgba(14,80,200,0.22) 0%,
+    rgba(56,189,248,0.07) 55%,
+    transparent 80%
+  );
+}
+
+/* ── Side status panels ──────────────────────────────────────────────────── */
+.boot-screen__side-panel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: 220px;
+}
+
+.boot-screen__side-panel--left  { left:  max(1.25rem, 3vw); }
+.boot-screen__side-panel--right { right: max(1.25rem, 3vw); }
+
+/* ── Center content ──────────────────────────────────────────────────────── */
+.boot-screen__content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 0 2rem;
+  gap: 1.1rem;
+}
+
+/* ── Logo ────────────────────────────────────────────────────────────────── */
+.boot-screen__logo {
+  animation: bs-logo-pulse 3.5s ease-in-out infinite, bs-float 6s ease-in-out infinite;
+}
+
+/* ── Brand title ─────────────────────────────────────────────────────────── */
+.boot-screen__title {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: clamp(1.35rem, 3.2vw, 2.3rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0;
+  background: linear-gradient(135deg, #a8741e 0%, #f0d060 38%, #eec84a 60%, #a8741e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.15;
+}
+
+.boot-screen__divider {
+  width: 260px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(201,168,76,0.55),
+    rgba(56,189,248,0.45),
+    rgba(201,168,76,0.55),
+    transparent
+  );
+}
+
+.boot-screen__subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(0.58rem, 1.3vw, 0.76rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(56,189,248,0.75);
+  margin: 0;
+}
+
+/* ── Status panel (key / value row) ─────────────────────────────────────── */
+.boot-screen__status-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(2,16,52,0.75);
+  border: 1px solid rgba(56,189,248,0.18);
+  border-left: 2px solid rgba(56,189,248,0.55);
+  border-radius: 4px;
+  padding: 0.38rem 0.7rem;
+  backdrop-filter: blur(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.boot-screen__status-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.48);
+}
+
+.boot-screen__status-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(56,189,248,0.92);
+  font-weight: 700;
+}
+
+/* ── Connection list (centered below logo) ───────────────────────────────── */
+.boot-screen__connection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 360px;
+  background: rgba(2,16,52,0.68);
+  border: 1px solid rgba(56,189,248,0.16);
+  border-radius: 8px;
+  padding: 0.85rem 1.25rem;
+  backdrop-filter: blur(12px);
+}
+
+.boot-screen__connection-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.boot-screen__connection-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56,189,248,0.9), 0 0 18px rgba(56,189,248,0.5);
+  flex-shrink: 0;
+}
+
+.boot-screen__connection-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.82);
+  flex: 1;
+  text-align: left;
+}
+
+.boot-screen__connection-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(56,189,248,0.82);
+  font-weight: 700;
+}
+
+/* ── Progress + boot message ─────────────────────────────────────────────── */
+.boot-screen__progress-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.boot-screen__boot-message {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(0.58rem, 1.1vw, 0.7rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(56,189,248,0.62);
+  margin: 0;
+}
+
+.boot-screen__progress {
+  width: 100%;
+  height: 3px;
+  background: rgba(56,189,248,0.10);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.boot-screen__progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(to right, #1e3a8a 0%, #38bdf8 60%, #C9A84C 100%);
+  position: relative;
+  overflow: hidden;
+  animation: bs-progress 2.8s cubic-bezier(0.25,0.1,0.25,1) forwards;
+}
+
+.boot-screen__progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 55%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%);
+  animation: bs-shimmer 1.8s ease-in-out infinite;
+}
+
+/* ── Pulse dots (loading indicator) ─────────────────────────────────────── */
+.boot-screen__pulse-dots {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.boot-screen__pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(56,189,248,0.8);
+  animation: bs-dots-blink 1.4s ease-in-out infinite;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .boot-screen__side-panel  { display: none; }
+  .boot-screen__content     { max-width: 88vw; }
+}
+
+@media (max-width: 540px) {
+  .boot-screen__title       { letter-spacing: 0.1em; }
+  .boot-screen__divider     { width: 180px; }
+  .boot-screen__connection-list { padding: 0.625rem 0.875rem; }
+  .boot-screen__progress-wrap   { max-width: 88vw; }
+}
