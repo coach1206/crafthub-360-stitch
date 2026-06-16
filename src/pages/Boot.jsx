@@ -303,6 +303,7 @@ export default function Boot() {
               logo={stage.logo}
               logoHeight={stage.logoH}
               backgroundImage={stage.backgroundImage}
+              fullBleedImage={stage.fullBleedImage}
               bootMessage={stage.bootMessage}
               progress={stage.progress}
               statusItems={stage.statusItems}
