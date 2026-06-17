@@ -9,6 +9,8 @@ import DemoBanner from './components/demo/DemoBanner.jsx'
 import Home             from './pages/Home.jsx'
 import Boot             from './pages/Boot.jsx'
 import CraftHub         from './pages/CraftHub.jsx'
+import POS3             from './pages/POS3.jsx'
+import EATCommand       from './pages/EATCommand.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -76,8 +78,6 @@ const MentorLogin  = lazy(() => import('./pages/MentorLogin.jsx'))
 const DevLogin     = lazy(() => import('./pages/DevLogin.jsx'))
 
 // ── Protected heavy pages — lazy loaded ──────────────────────
-const POS3           = lazy(() => import('./pages/POS3.jsx'))
-const EATCommand     = lazy(() => import('./pages/EATCommand.jsx'))
 const Admin          = lazy(() => import('./pages/Admin.jsx'))
 const FounderControl = lazy(() => import('./pages/FounderControl.jsx'))
 const MentorConsole  = lazy(() => import('./pages/MentorConsole.jsx'))
