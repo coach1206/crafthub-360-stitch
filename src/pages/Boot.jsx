@@ -409,7 +409,7 @@ export default function Boot() {
           <aside className="fixed left-8 top-1/2 -translate-y-1/2">
             <div className="glass-panel p-6 rounded-xl space-y-6 w-72 shadow-2xl shadow-black/50 border-l-2 border-l-primary/40 relative overflow-hidden scan-effect">
               <h3 className="font-label-lg text-label-lg text-on-surface-variant/50 border-b border-outline-variant pb-2">
-                CRAFT SERVICE REGISTRY
+                CRAFT CRAFT SERVICE REGISTRY
               </h3>
               <div className="space-y-4">
                 {[

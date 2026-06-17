@@ -242,11 +242,11 @@ export default function App() {
                   allowedRoles={['admin', 'founder_level_0', 'developer']}
                   loginRoute="/admin-login"
                   loginLabel="Admin / Founder Login"
-                  lockedMessage="CRAFTHUB 360 NOVEE Developer Command requires founder, admin, or developer access."
+                  lockedMessage="CRAFTHUB 360 E.A.T. Command Hub requires founder, admin, or developer access."
                   demoBlocked
                 >
                   <ModulePlaceholder
-                    title="CRAFTHUB 360 NOVEE Developer Command"
+                    title="CRAFTHUB 360 E.A.T. Command Hub"
                     purpose="Master control system for venues, licenses, modules, deployments, vault data, diagnostics, users, roles, security, analytics, and remote updates."
                     phases={['Connect global venue registry', 'Wire deployment and vault APIs', 'Add founder-only control actions']}
                   />
@@ -287,11 +287,11 @@ export default function App() {
                   allowedRoles={['manager', 'admin', 'founder_level_0']}
                   loginRoute="/admin-login"
                   loginLabel="Venue Manager Login"
-                  lockedMessage="Manager Hub Command Hub requires venue owner, manager, admin, or founder access."
+                  lockedMessage="E.A.T. Manager Command Hub requires venue owner, manager, admin, or founder access."
                   demoBlocked
                 >
                   <ModulePlaceholder
-                    title="Manager Hub Command Hub"
+                    title="E.A.T. Manager Command Hub"
                     purpose="Establishment-level command hub for local E.A.T., POS 3, CraftHub, Passport members, staff activity, events, specials, ticker, reports, and venue settings scoped by venueId."
                     phases={['Bind selected venueId', 'Connect local E.A.T. and POS 3 data', 'Add tenant-safe manager actions']}
                   />

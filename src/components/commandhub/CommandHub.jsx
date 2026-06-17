@@ -612,7 +612,7 @@ export function SystemOverviewPanel({ navigate, isDemoMode, onDemo }) {
           <h2 className="mt-3 font-display-lg text-5xl uppercase tracking-[0.12em] text-primary md:text-7xl">CRAFTHUB 360</h2>
           <p className="mt-2 font-headline-xl text-2xl text-on-surface md:text-4xl">CraftHub venue/table operating experience</p>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-on-surface-variant">
-            CRAFTHUB 360 separates master software control from venue-level operations: NOVEE Developer Command controls the global platform, while Manager Hub Command Hub gives each establishment its own tenant-safe operating shell.
+            CraftHub 360 connects guest table sessions, staff handoff, POS 3 transactions, E.A.T. manager operations, inventory, events, and venue service flow.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <TouchButton onClick={() => navigate('/ultra-command-center')} variant="filled">Open Ultra Command</TouchButton>
@@ -642,13 +642,13 @@ export function SystemOverviewPanel({ navigate, isDemoMode, onDemo }) {
 
 export function TwoLayerArchitecturePanel({ navigate }) {
   return (
-    <Section eyebrow="Two-Layer Architecture" title="NOVEE Developer Command + Manager Hub Command Hub">
+    <Section eyebrow="Two-Layer Architecture" title="CraftHub 360 Venue Flow">
       <div className="grid gap-6 xl:grid-cols-2">
         <div className="glass-morphism relative overflow-hidden rounded-lg p-6 md:p-8">
           <img src="/crafthub-gold.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-10" />
           <div className="relative">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-primary/70">Layer 1 · Mothership</p>
-            <h3 className="mt-2 font-headline-xl text-4xl text-primary">CRAFTHUB 360 NOVEE Developer Command</h3>
+            <h3 className="mt-2 font-headline-xl text-4xl text-primary">CRAFTHUB 360 E.A.T. Command Hub</h3>
             <p className="mt-4 text-base leading-7 text-on-surface-variant">
               Founder, admin, and developer master control for software, venues, licenses, modules, deployments, vault data, diagnostics, users, roles, security, analytics, and remote updates.
             </p>
@@ -658,7 +658,7 @@ export function TwoLayerArchitecturePanel({ navigate }) {
               ))}
             </div>
             <div className="mt-6">
-              <TouchButton onClick={() => navigate('/ultra-command-center')} variant="filled">Open NOVEE Developer Command</TouchButton>
+              <TouchButton onClick={() => navigate('/ultra-command-center')} variant="filled">Open E.A.T. Command Hub</TouchButton>
             </div>
           </div>
         </div>
@@ -667,7 +667,7 @@ export function TwoLayerArchitecturePanel({ navigate }) {
           <img src="/background-lounge-airy.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-15" />
           <div className="relative">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-primary/70">Layer 2 · Establishment Tenant</p>
-            <h3 className="mt-2 font-headline-xl text-4xl text-on-surface">Manager Hub Command Hub</h3>
+            <h3 className="mt-2 font-headline-xl text-4xl text-on-surface">E.A.T. Manager Command Hub</h3>
             <p className="mt-4 text-base leading-7 text-on-surface-variant">
               Establishment-level management interface for licensed venues with E.A.T., POS 3, CraftHub, Passport, staff workflow, local specials, and local analytics scoped by venueId.
             </p>
@@ -688,13 +688,13 @@ export function TwoLayerArchitecturePanel({ navigate }) {
 
 export function UltraCommandCenterPanel({ navigate }) {
   return (
-    <Section eyebrow="Layer 1 · NOVEE Developer Command" title="Founder/master software control system">
+    <Section eyebrow="Layer 1 · E.A.T. Command Hub" title="Founder/master software control system">
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <div className="glass-morphism rounded-lg p-6 md:p-7">
           <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">Mothership Control</p>
           <h3 className="mt-2 font-headline-xl text-3xl text-primary">John Collins / NOVEE ownership command cockpit</h3>
           <p className="mt-4 text-base leading-7 text-on-surface-variant">
-            NOVEE Developer Command controls global software, tenant licensing, deployments, vault data, security, AMBI intelligence, analytics, support, and founder-only systems.
+            E.A.T. Command Hub controls global software, tenant licensing, deployments, vault data, security, AMBI intelligence, analytics, support, and founder-only systems.
           </p>
           <div className="mt-6">
             <TouchButton onClick={() => navigate('/ultra-command-center')} variant="filled">Open Ultra Command</TouchButton>
@@ -810,7 +810,7 @@ export function ConnectedVenuesPanel({ navigate }) {
 
 export function VenueMirrorCommandHubPanel({ navigate }) {
   return (
-    <Section eyebrow="Layer 2 · Manager Hub Command Hub" title="Establishment-level operating shell">
+    <Section eyebrow="Layer 2 · E.A.T. Manager Command Hub" title="Establishment-level operating shell">
       <div className="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
         <div className="glass-morphism rounded-lg p-6 md:p-7">
           <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">Tenant interface</p>
