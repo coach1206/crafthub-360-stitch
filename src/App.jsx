@@ -173,8 +173,8 @@ export default function App() {
                 </BootGuard>
               }
             >
-              <Route index           element={<Home />} />
-              <Route path="home" element={<CraftHub />} />
+              <Route index element={<Navigate to="/crafthub" replace />} />
+              <Route path="home" element={<Navigate to="/crafthub" replace />} />
               <Route path="crafthub" element={<CraftHub />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
