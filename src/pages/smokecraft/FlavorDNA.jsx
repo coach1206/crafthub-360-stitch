@@ -3,48 +3,72 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
 
-// All images are lh3.googleusercontent.com (reliable, proven working in this app)
+// APPROVED SMOKECRAFT VISUAL RULE:
+// No stock-photo fallback URLs, no CSS-drawn graphics, no cartoon/placeholder art.
+// If a real image is missing, render "Image pending" only.
+function FlavorDNAImage({ src, alt, className, style }) {
+  const [failed, setFailed] = useState(!src)
+  if (!failed && src) {
+    return (
+      <img
+        className={className}
+        style={style}
+        alt={alt}
+        src={src}
+        onError={() => setFailed(true)}
+      />
+    )
+  }
+  return (
+    <div
+      className={className}
+      style={{
+        ...style,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+        color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+      }}
+    >
+      Image pending
+    </div>
+  )
+}
+
 const OCCASIONS = [
   {
     label: 'Relaxing',
     sub: 'Unwind & Enjoy',
-    // cigar box + rising smoke + whiskey — the quintessential lounge moment
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts',
+    img: null,
     color: '#8B4513',
   },
   {
     label: 'Celebrating',
     sub: 'Raise a Glass',
-    // premium bourbon bottle — classic celebration pour
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJZsse0-OBgJv-XDIDBT6z6JK8iL9blzeC9kleK1PDkKrj0FsBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo',
+    img: null,
     color: '#C4860A',
   },
   {
     label: 'Business',
     sub: 'Focus & Achieve',
-    // Blue Mountain coffee — executive morning ritual
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD1whB9ENQS5yVK7-ZSqInf3ufx2FPgTfXCAe0K8akvyRBTB8moMmSAgsHEzZ4MYuCnY9j0tQgp47LYcOwkut7yCtM8yNlqQzVSDPo6ZhSwqZTybS3LM2MThzggnviBsIffUKi6bI0EIBwm5NfbYc65os7cs9PsiRlSBgG7mGWiMC7afsuN_5riLlpYp9P4_wxIhBHuluPPJwTxtNoqBaJ6IlJFFJUp61Pc',
+    img: null,
     color: '#4A4A4A',
   },
   {
     label: 'Date Night',
     sub: 'Intimate Moments',
-    // Zacapa Centenario rum — warm, intimate, amber light
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJ82XKQyntwTgn3xxDjYrawzeTtaASYwT_mcTIkMxzqs-6J3Yr-oTLECNP_mzZqFX4uiBg5B-ERa8lDXQy8ny1te9sIfRsA0ww6Ncn0vk4uK05iZgQ5uwKriVqA6ZyXNNadhHdOSMIFP81qtdrhm_NNZOj7KrRSR0tHJ-Cs-nG_Ra9vQout-3ik-TFNOnqj6rXMeuiO9lCUk2-4Vc1r0tO3UQr9meCFsldeQqNnSxutvMgBSsIMYii2N7hjYmhy0sdQY9DvL2sP00',
+    img: null,
     color: '#8B1A3A',
   },
   {
     label: 'Sports',
     sub: 'Game Day Energy',
-    // dark cacao / dessert — victory celebration indulgence
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBkj1vyr57VqCSvkAIytKCP-dMimzcM6Bkfpo2BogqBmXvJno7XWBIkFHJP0uTjIRf43VMB4VT0fAzPe56ohr59HTYYKsym0J2JV6xGqZPzbw5OHeK9oQVklLm-rTkus0D_QeG5AsW_i3r95SxCCtkda_GbYOLo3MnRfTZ3tRjOehK1rR6yLCjtmEhkAfL3RPm8SEoj5khmFowDyNMdG5WO2fYsQ3Jh34sFkF3uM5Rql5d_S8_0z_f_osUhL3uDZji89YvLMFPAia4',
+    img: null,
     color: '#1A4A1A',
   },
   {
     label: 'VIP',
     sub: 'Exclusive Access',
-    // Arturo Fuente OpusX — the pinnacle premium cigar
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCBjb17tZGWhWOsbXW8XcEiR4WIW8SRdSpM3JbzTootwik0rNdnLOw7S9JZ3EXsRrWIwqWrDXTd8Pvkve7yk0Djguo_fc3IWZ5D9c7ECY5EDcu6g5JsWk0HLo-pS1P0Sp_kNEtMoJ7_UWd-u_nKBePg_hyVmOWBd7C9H9b16E7bHFZlxdXVSBDqmCktK_b7wsck7DeYbjNOVSSREGTNzZg89N6q8Zqmzw_ubYO5Nur2k8euqiBLwOh-CQCTEjFfzzYA0LEgqcCTY6g',
+    img: null,
     color: '#2A1A5A',
   },
 ]
@@ -54,26 +78,23 @@ const INTENSITY_OPTIONS = [
     v: 'smooth',
     label: 'Smooth',
     sub: 'Mild · Silky · Easy draw',
-    // Connecticut Shade — the lightest, silkiest wrapper in the world
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZfnH-MsSB9L3fIvUmuB2jydCCAwvaAMEPJRNZecV6PKAJjHl8HulsTrHI7spXAr_AUXO1qSOOPo_DW4VdixxR-ayV4PnjVm2xiPhwWoFuWAF5PXCEsSlxekHHk-9vi2U4TZZT_qBdTVZ_-asuKsewgotaUAHMpqQqbSTlWGbxa8cyI7OPGMqVK5UT3jPVfaKM9X6uqMaQVfu-wFOCMZ_jY166IMOq2LWncgNMBJG-6FojwRTZejpcpIJ7mK8e1pi_2SjsjN9CTYo',
+    img: null,
   },
   {
     v: 'bold',
     label: 'Bold',
     sub: 'Full · Robust · Complex',
-    // Arturo Fuente OpusX — the darkest, most complex full-bodied experience
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCBjb17tZGWhWOsbXW8XcEiR4WIW8SRdSpM3JbzTootwik0rNdnLOw7S9JZ3EXsRrWIwqWrDXTd8Pvkve7yk0Djguo_fc3IWZ5D9c7ECY5EDcu6g5JsWk0HLo-pS1P0Sp_kNEtMoJ7_UWd-u_nKBePg_hyVmOWBd7C9H9b16E7bHFZlxdXVSBDqmCktK_b7wsck7DeYbjNOVSSREGTNzZg89N6q8Zqmzw_ubYO5Nur2k8euqiBLwOh-CQCTEjFfzzYA0LEgqcCTY6g',
+    img: null,
   },
 ]
 
 const CHARACTERS = [
-  // Using lh3 images whose tone & color match the sensory note
-  { label: 'Sweet',   img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJZsse0-OBgJv-XDIDBT6z6JK8iL9blzeC9kleK1PDkKrj0FsBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo' },   // bourbon — warm amber/caramel sweetness
-  { label: 'Spicy',   img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBxTg65Wt9uZIkpBqyy4dP-yfpAOzZbz2z5ZkV13oVaJ2SAkBidZBFP7grSXlnvgp0rzviZQ5z2QkEdoI5kL1JIAKOIeQwpBh6JQcEGoYgi9hWq5KktjPbu0JFnOgOPJQVxxQ5dzEyYiC6zZsnAzdfCzfC2_n70T7Il7VU5QitXotLyl-tyuOyPD8qOjumx5OXXmnAYMXRe-yumHpuykGEynj_dpEkroC7aiLKuXGRVBObPXsvZ5CI4Og0tcI5Qts4m648an1iWXHk' }, // Corojo Rosado — red-brown intense spice
-  { label: 'Earthy',  img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCDinqiRd53IenZj6Dg4uDGjKf7GNFR89-xAI4t2-68wH-BtJVVKUsZMoTibHD5nB2uI61lEqWTKBzcx6fUO83UUDbqCLxufZvXkYwXkxnOvzLpFpOCdbPr3M95R49mvK2G6Wm2V-erAzikJa6EXqtaeZ4RT1Tjq9ANJsNobQ4TZRDYIwxX1xdFGkGHk0QSyvjOIAzrMG8ia4rPhXcUczk9X_nbwCvyVETSYlkbNZdC-KqHYQhoIteDqdb9tGkwvNhs1IeNtBh2Q4Y' }, // Ecuador Andean — earthy highland terroir
-  { label: 'Creamy',  img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZfnH-MsSB9L3fIvUmuB2jydCCAwvaAMEPJRNZecV6PKAJjHl8HulsTrHI7spXAr_AUXO1qSOOPo_DW4VdixxR-ayV4PnjVm2xiPhwWoFuWAF5PXCEsSlxekHHk-9vi2U4TZZT_qBdTVZ_-asuKsewgotaUAHMpqQqbSTlWGbxa8cyI7OPGMqVK5UT3jPVfaKM9X6uqMaQVfu-wFOCMZ_jY166IMOq2LWncgNMBJG-6FojwRTZejpcpIJ7mK8e1pi_2SjsjN9CTYo' }, // Connecticut Shade — silky pale wrapper = creamy
-  { label: 'Woody',   img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts' },   // cedar humidor box — woody cedar
-  { label: 'Peppery', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBktRXv3px18iAdmk-FIbB6ajfhPahwqk9W_JP8Z3CMm5d75I1D5sQYn3y5CtixAGzZo0bWs5yXhZQ8TGcBZxfdlOrRy-X2jzZpEocDLKB-z48LeV4PdnPkWAu1EF0aLxDcp6N-JXmverp_fSYWKdujWH1FrWoLUY1CgVrJguJJeILwvw4JN5SLy70oWxWGRHWFymEXJ3FzmzsY93qIxljsbG1ANTGrbqwoIcmIQ6eUZnCsPhFk08_Z55717Itp90HwmP1ssOO0o' },   // Sumatra Maduro — dark intense pepper
+  { label: 'Sweet',   img: null },
+  { label: 'Spicy',   img: null },
+  { label: 'Earthy',  img: null },
+  { label: 'Creamy',  img: null },
+  { label: 'Woody',   img: null },
+  { label: 'Peppery', img: null },
 ]
 
 const AROMATICS = [
@@ -198,8 +219,8 @@ export default function FlavorDNA() {
               </div>
             </div>
             <div style={{ position: 'relative', overflow: 'hidden', minHeight: 200 }}>
-              <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts"
+              <FlavorDNAImage
+                src={null}
                 alt="SmokeCraft atmosphere"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
               />
@@ -243,7 +264,7 @@ export default function FlavorDNA() {
                     </div>
                     {/* Inner photo circle */}
                     <div style={{ position: 'absolute', inset: 4, borderRadius: '50%', overflow: 'hidden', border: '1px solid rgba(212,175,55,0.3)' }}>
-                      <img src={occ.img} alt={occ.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <FlavorDNAImage src={occ.img} alt={occ.label} style={{ width: '100%', height: '100%', objectFit: 'cover', fontSize: 6 }} />
                       <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(160deg, rgba(0,0,0,0.2), rgba(0,0,0,0.5))` }} />
                     </div>
                     {/* Active glow ring */}
@@ -274,7 +295,7 @@ export default function FlavorDNA() {
                   onClick={() => setIntensity(opt.v)}
                   style={{ position: 'relative', borderRadius: 14, overflow: 'hidden', border: `1px solid ${active ? 'rgba(212,175,55,0.6)' : 'rgba(212,175,55,0.18)'}`, cursor: 'pointer', height: 160, transition: 'all 0.25s', outline: 'none' }}
                 >
-                  <img src={opt.img} alt={opt.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  <FlavorDNAImage src={opt.img} alt={opt.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'flex' }} />
                   <div style={{ position: 'absolute', inset: 0, background: active ? 'rgba(10,7,2,0.45)' : 'rgba(10,7,2,0.65)', transition: 'background 0.25s' }} />
                   {active && <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 0 2px rgba(212,175,55,0.6)', borderRadius: 13, pointerEvents: 'none' }} />}
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
@@ -302,7 +323,7 @@ export default function FlavorDNA() {
                   onClick={() => toggleSet(setCharacters, c.label)}
                   style={{ position: 'relative', borderRadius: 12, overflow: 'hidden', border: `1px solid ${active ? 'rgba(212,175,55,0.6)' : 'rgba(212,175,55,0.15)'}`, cursor: 'pointer', height: 90, transition: 'all 0.2s', outline: 'none' }}
                 >
-                  <img src={c.img} alt={c.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  <FlavorDNAImage src={c.img} alt={c.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'flex' }} />
                   <div style={{ position: 'absolute', inset: 0, background: active ? 'rgba(8,5,2,0.4)' : 'rgba(8,5,2,0.6)', transition: 'background 0.2s' }} />
                   {active && <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 0 2px rgba(212,175,55,0.6)', borderRadius: 11, pointerEvents: 'none' }} />}
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

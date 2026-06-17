@@ -7,6 +7,26 @@ import {
   SmokeCraftBottomNav,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
+// APPROVED SMOKECRAFT VISUAL RULE: no stock-photo fallback URLs. If a real image is missing, render "Portrait pending" only.
+function IdentityImage({ src, alt, className, style }) {
+  const [failed, setFailed] = useState(!src)
+  if (!failed && src) {
+    return (
+      <img className={className} style={style} alt={alt} src={src} onError={() => setFailed(true)} />
+    )
+  }
+  return (
+    <div className={className} style={{
+      ...style,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+      color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+    }}>
+      Portrait pending
+    </div>
+  )
+}
+
 const ARCHETYPES = {
   diplomat: {
     key:        'diplomat',
@@ -268,9 +288,7 @@ export default function Identity() {
             <p className="text-[10px] text-on-surface-variant uppercase tracking-[0.15em] mt-0.5">Identity Ceremony</p>
           </div>
           <div className="w-9 h-9 rounded-full overflow-hidden" style={{ border: `1px solid ${archetype.color}40` }}>
-            <img alt="Member" className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq4_EpkSpYVcHVlVxnKXJacUbdRmQWEovF-KvyMHM6dJqnGjPivNcRVqPojva00dcFw-6BVVfhI1gFLcaSclOfplLXr3i6MUVX4P-hkoIEfJTKgiHqRbMzmwdN_3t5yChLEGMio7Do167r-rCSqyVByUbYjQFGK9oISPUctIdJqwIGb-QKw2h3XuvSYjbpmyaRpt-JnoQzW41fw_DgeBRzjFoBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo"
-            />
+            <IdentityImage alt="Member" className="w-full h-full object-cover" src={null} />
           </div>
         </div>
       </header>

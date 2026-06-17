@@ -3,6 +3,26 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
 
+// APPROVED SMOKECRAFT VISUAL RULE: no stock-photo fallback URLs. If a real image is missing, render the appropriate pending placeholder only.
+function AvailableImage({ src, alt, className, style, person = false }) {
+  const [failed, setFailed] = useState(!src)
+  if (!failed && src) {
+    return (
+      <img className={className} style={style} alt={alt} src={src} onError={() => setFailed(true)} />
+    )
+  }
+  return (
+    <div className={className} style={{
+      ...style,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+      color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+    }}>
+      {person ? 'Portrait pending' : 'Image pending'}
+    </div>
+  )
+}
+
 const CIGARS = [
   {
     id: 'opus-x',
@@ -16,7 +36,7 @@ const CIGARS = [
     points: '420 Available',
     notes: ['Cedar', 'Baking Spices', 'Leather'],
     quote: '"Why it matches: The spicy cedar profile perfectly cuts through the honeyed sweetness of your preferred Dalwhinnie 15."',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDsMwbhy9OH7mrMs49qD6ZFWdOteg8kUHK_o_A9iisp1PZn0q0nF3E9lgrnuIVd7PN--zIlHbSWzlwp_N8OT2PlM3h0Uhknd6U2VMvSCvP3mlL7B-59dv1ttVEVaS3A5lmYQ0vArWhfBoh9TV8FJ9DgIrTrdMPDGzk0GBBacpLITFYH7OxdjsNmod8ArdZnsrX-qpkqtg4DQCodPCqyfc6B6WwQ47QTiPZCR6pdkktf7Qw3fHpCOl_b01_g-Z_j1b9RuR3xrHjQZBg',
+    img: null,
   },
   {
     id: 'padron-1926',
@@ -30,7 +50,7 @@ const CIGARS = [
     points: '580 Available',
     notes: ['Dark Cocoa', 'Espresso', 'Black Pepper'],
     quote: '"Why it matches: This bold selection elevates your evening with its legendary complexity and uncompromising body."',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAyb9YA3jfOfvSw9r7IxeWPaG5k9MisQMwx8hC-p28eTcpenoRs4-hnrAzgmYD5WVN_V8KmGfY1dXziTulqiER4f4iqHyKCtHAZlWO_5Dr4O4I_RIkDmzlqc-XN0uqMhMKPYpTzAcLwsEiPj4a6LReFUN_OkhkKGGQXXElWMICHq9URexcDmAm2qS9VMpheut0oBcekIg9v7QE6NywdHEz1Va8AnogWw4XK6T3VO0zxPmtk4iNfRZEwABqRWMYa4m_in18E',
+    img: null,
   },
   {
     id: 'ashton-vsg',
@@ -44,7 +64,7 @@ const CIGARS = [
     points: '260 Available',
     notes: ['Cream', 'Caramel', 'Earth'],
     quote: '"Why it matches: A lighter, creamier choice that emphasizes the vanilla undertones of your selected drink profile."',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBRThkOtu8N7OpyoC648sW2_9mtr8M8PhkDr5hPMQ70RCtShr8CaewpzlgJjslzJjG-OesXH4SUHWCBKRxCnjrMlzi5Fj532ieXEAq3b4HQXcxlkjf44bGLj3bjNyAeMRnpN5-0GGMwQpWC3BKWeAX6bp1mmrJJSgu0mrySO3S_tQmgN_s3YrrTMdK8Ab0KBOlxRFsgLsLZZCHz0baANbJw8R0eFVhji9fEY5KYUn6LcKcWhos22jrIzYBegYYJdXi9NenCenfBNqA',
+    img: null,
   },
   {
     id: 'oliva-v',
@@ -58,7 +78,7 @@ const CIGARS = [
     points: '140 Available',
     notes: ['Nutty', 'Coffee', 'Spice'],
     quote: '"Why it matches: Incredible value for a complex smoke that mirrors the profile of much more expensive boutique blends."',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQo68r3iq2wVznvYyoXT2ziTbgTMszVTCU4DwRhE1WrFvwBA8CRT-Q7mS6n_SqNeOQaAZ7Bg4OaMkk4ZNbviVTJxIq2Jjv_GyGrlOxoLuAnJIWpFIS2Nw4R7BLU8rpuzEzfraIS9vFQNAU8H188YrCy8o-cAEiyfuSvaETlhgbI-RuJ8wqmVIgcRkoDl0z1hbvSGKWLui8uJeNONIz8bjOFqs353B61-aZz6XkT6hP1QiF8ehEa6aMYFfeXzYvHT3fEr9mQ63Xjrw',
+    img: null,
   },
 ]
 
@@ -84,14 +104,13 @@ export default function Available() {
       <div
         className="fixed top-0 left-0 w-full h-full -z-10"
         style={{
-          backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDiXL9qeg8wv5L7fTopfWJwNEd2NK4e2039yEZg82euPHaEhTodDs6JRxK0atAIVBg20B1M4Jy-Be4DSJcX3JFlIbhEpwbL4rVLsqhLtQobHjIBXADIEPay73nXDko8CR8SsXi8HMS5V9LBYbpMPWZnBq7cYCdw4gw0iJe12N5xvY2V60xJnlEmQiiR4FbGSSA3g09Bikp7jW0C8pmTbRvmIKvXEnpkdCKy9XPrKLOQIviVamAcrlCH8p6OtgKFHjAXxBMjnEOLDck')",
-          backgroundAttachment: 'fixed',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          opacity: 0.15,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+          color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
         }}
-      />
+      >
+        Image pending
+      </div>
 
       {/* Top Navigation */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md">
@@ -102,10 +121,11 @@ export default function Available() {
         <div className="flex items-center gap-6">
           <span className="font-label-lg text-label-lg text-primary">Grand Lounge</span>
           <div className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center overflow-hidden">
-            <img
+            <AvailableImage
               alt="Member"
               className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy2p09CHV5m5vtA3LoTicIBkq6RngmB8tRIaeD5_s6P5rVOqPwJ4FgtfHcM8thc-9YZm-8RIuYsDop97qLJGgadBY2tb93Fq-oCP-_fFds4xJWix92oChLM5pjjmQEKxtKbxbFkAVYQbU-WKQFeSeNzp_8YprM6yNrJE_uSDi1SUwohyHPfqAxWnZI7B9rLP6uI2I8ZgKaciGIboa8_bcOPg0blqYzs9eL5t4Q8FdGv4LwPC5Mxc-qOffqC1-j_rBaZja0hDvxiyY"
+              src={null}
+              person
             />
           </div>
         </div>
@@ -162,7 +182,7 @@ export default function Available() {
               className={`smoked-glass rounded-xl overflow-hidden flex flex-col md:flex-row group transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] ${selectedCigar === cigar.id ? 'ring-2 ring-primary' : ''}`}
             >
               <div className="md:w-2/5 relative overflow-hidden">
-                <img
+                <AvailableImage
                   alt={cigar.name}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   src={cigar.img}

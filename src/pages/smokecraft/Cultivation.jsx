@@ -9,6 +9,26 @@ import {
 
 const GOLD = 'linear-gradient(135deg,#8b6914,#e9c176,#f5d98a,#c5a059,#8b6914)'
 
+// APPROVED SMOKECRAFT VISUAL RULE: no stock-photo fallback URLs. If a real image is missing, render "Image pending" only.
+function CultivationImage({ src, alt, className, style }) {
+  const [failed, setFailed] = useState(!src)
+  if (!failed && src) {
+    return (
+      <img className={className} style={style} alt={alt} src={src} onError={() => setFailed(true)} />
+    )
+  }
+  return (
+    <div className={className} style={{
+      ...style,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+      color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+    }}>
+      Image pending
+    </div>
+  )
+}
+
 const STAGES = [
   {
     id:    'seed',
@@ -16,7 +36,7 @@ const STAGES = [
     title: 'Seed Selection',
     icon:  'eco',
     color: '#4CAF50',
-    img:   'https://lh3.googleusercontent.com/aida-public/AB6AXuA96E-i-V5iTX1UcpiMqbc_VWvmkAzNT6IXZTWyHrnST3_e-F48lk4dZcQt6tnY3-FS8SRN9eitwotUIR2p0CbKKivcTEKxmGgznzCNEX3KLcYGf38oD4XGmclAy2Q4jDvglWAW0T574-61oF2onZkUfmc4FquVGHheV_lYKdEPyv8LeMGLGcNlQmQZiN-rDd2yoYLL1XGs80WOuOsHnwif63374-0j713oPLTw3MQ2Ff7QNQzXtmmTZ3UtN0wJI9yGD0ubbxwDk4g',
+    img:   null,
     detail: 'Tobacco begins with genetics. Master blenders select seeds based on flavor potential, leaf size, oil content, and regional heritage. Habano, Criollo, Corojo — each seed carries centuries of flavor memory.',
     facts:  ['Seeds are smaller than a grain of sand', '6–10 weeks in nursery before transplanting', 'Genetic purity determines wrapper quality'],
   },
@@ -26,7 +46,7 @@ const STAGES = [
     title: 'Soil Character',
     icon:  'landscape',
     color: '#8B6914',
-    img:   'https://lh3.googleusercontent.com/aida-public/AB6AXuCDinqiRd53IenZj6Dg4uDGjKf7GNFR89-xAI4t2-68wH-BtJVVKUsZMoTibHD5nB2uI61lEqWTKBzcx6fUO83UUDbqCLxufZvXkYwXkxnOvzLpFpOCdbPr3M95R49mvK2G6Wm2V-erAzikJa6EXqtaeZ4RT1Tjq9ANJsNobQ4TZRDYIwxX1xdFGkGHk0QSyvjOIAzrMG8ia4rPhXcUczk9X_nbwCvyVETSYlkbNZdC-KqHYQhoIteDqdb9tGkwvNhs1IeNtBh2Q4Y',
+    img:   null,
     detail: 'Soil is terroir. Volcanic mineral soils of Nicaragua create pepper and spice. Sandy Ecuadorian cloud soil creates silk. Dominican red clay imparts floral sweetness. The earth speaks through every draw.',
     facts:  ['pH 5.5–6.5 is ideal for tobacco', 'Mineral content shapes combustion quality', 'Cuban red-earth (vuelta abajo) is world-famous'],
   },
@@ -36,7 +56,7 @@ const STAGES = [
     title: 'Climate & Sun',
     icon:  'wb_sunny',
     color: '#E9C176',
-    img:   'https://lh3.googleusercontent.com/aida-public/AB6AXuC-wFKd36V8Kte15q8k8B-07-DyWINrytg3jtB6nOkc55ovBl4NALS6YptCCnVeaf3H0BiZaFZyCPhdpRz6cJuFHWafpHgA0bqZij04ksDjTgbbT5XRZzsSojqvCQVT5O8jsyto4qMMBNy06XdXMxckzv0jbOT8tWEt9Nt1Z6g8UILoCRPg0EX6hSOgzhvRWrHCdvSBENZGQ1W5nkASD5aX019MPiabFOQUvieuxQyNse6-qHGoiBrr39deuAFKC3uxypdFhGZN_8U',
+    img:   null,
     detail: 'Sun intensity governs nicotine concentration and wrapper texture. Shade-grown under cheesecloth creates thin, silky wrappers. Sun-grown wrappers develop intensity and oil. Temperature swings add complexity.',
     facts:  ['Shade cloth reduces UV by 30–50%', 'Altitude slows growth, concentrates flavor', 'Consistent humidity prevents leaf cracking'],
   },
@@ -46,7 +66,7 @@ const STAGES = [
     title: 'Harvesting',
     icon:  'agriculture',
     color: '#A0522D',
-    img:   'https://lh3.googleusercontent.com/aida-public/AB6AXuAW0kKp2a_4GazxkwcITfOrEAllIhzdB5Y94YI3GOF4UY_h5x3WXU2pbG40AbZ6ihlpZtaj4UtlO3jZZa3RG7zxsThDh7FmhduBj24ZARTD5K1R7U8MLRDXOnONMqyfI2KIeMMdHkMpT8935igPG_sxJb8OJRHjuKGDLwPzGN19Kt8ZfwQ69SFlzvaxfS-a9dbIpMP6nYSLM-rsa-YkNC1nuvScNfx71c8wnLnyTkUBvOK-hxauZz5t5no9zgFaKX07ODHEsIS-as4',
+    img:   null,
     detail: 'Leaves are harvested in passes (primings) from the bottom of the plant upward over weeks. Bottom leaves (volado) provide combustion. Middle (seco) gives body. Top (ligero) delivers strength and complexity.',
     facts:  ['3–6 primings per plant over 4–6 weeks', 'Ligero leaves are thickest and slowest to burn', 'Each position on the stalk has a different role'],
   },
@@ -56,7 +76,7 @@ const STAGES = [
     title: 'Curing',
     icon:  'local_fire_department',
     color: '#CD5C5C',
-    img:   'https://lh3.googleusercontent.com/aida-public/AB6AXuDzBPCTkkOTqC2zVjLURPTau1pgZIFLC5Co6Y0y-jLHTi3MPuPrcBjDTt0wv45iGgQO1r45o_qnlU6lhp7knFWyi9IbZdaNHSCEUCE9M7cTmVXenKhOnVtMBo4CcP12_nkaUl8Xi3d_E0-CLrlrb8x7OTohO40ZTh80kNnvB_k0ZLieO6i5oQbfWkXaferMudU-whcjP3lV-bd6ZwWDcz3bVcC5SmoiTg9Lh863jYjA4vSWFOdvZXkuJ9qi7DkgSLYyk8W-V9T1V4c',
+    img:   null,
     detail: 'Freshly harvested leaves cure for 4–8 weeks in barns. Air-curing removes moisture slowly. Flue-curing uses controlled heat. Fire-curing adds smoky character. This phase locks in the leaf\'s color and early flavor.',
     facts:  ['Barn temperature must stay 65–85°F', 'Chlorophyll breaks down, revealing brown pigments', 'Green "grassy" notes disappear during curing'],
   },
@@ -66,7 +86,7 @@ const STAGES = [
     title: 'Fermentation',
     icon:  'science',
     color: '#6B4A2A',
-    img:   'https://lh3.googleusercontent.com/aida-public/AB6AXuCBjb17tZGWhWOsbXW8XcEiR4WIW8SRdSpM3JbzTootwik0rNdnLOw7S9JZ3EXsRrWIwqWrDXTd8Pvkve7yk0Djguo_fc3IWZ5D9c7ECY5EDcu6g5JsWk0HLo-pS1P0Sp_kNEtMoJ7_UWd-u_nKBePg_hyVmOWBd7C9H9b16E7bHFZlxdXVSBDqmCktK_b7wsck7DeYbjNOVSSREGTNzZg89N6q8Zqmzw_ubYO5Nur2k8euqiBLwOh-CQCTEjFfzzYA0LEgqcCTY6g',
+    img:   null,
     detail: 'Stacked in pilones (piles), leaves generate heat. Natural enzymes and bacteria transform harsh compounds into complex flavor molecules — like aging wine or whiskey. Multiple fermentation rounds build depth.',
     facts:  ['Pilón temperatures reach 120–140°F at core', 'Ammonia (harshness) is expelled as gas', 'Premium cigars ferment for 2–5 years or more'],
   },
@@ -76,7 +96,7 @@ const STAGES = [
     title: 'Aging',
     icon:  'hourglass_slow',
     color: '#D4AF37',
-    img:   'https://lh3.googleusercontent.com/aida-public/AB6AXuAPtp4Y9j-CA6V2A2YUzioHki9r4HgYAXpga25qi9M1COUPn-mESIwesmKG0oI1E6h2va2KujziGRyVXJcsACvoLXVtwp-FjXh_vZcGVZaIQs_fyC5Jz9dVH9liVvvuWVAKMoycLpyvukC9824JvSdMKn6zZRZBUs7asdrOGdsLoVEguXkh9FjXAyhwuX3EAC311hlF-IFrr7DDbm8mXSqzWdf456BB2x8YTJH5-TiHWqLKN1JQAV65ylwgaoAIF8IfBY049s',
+    img:   null,
     detail: 'After rolling, finished cigars rest in cedar-lined aging rooms. Oils migrate between wrapper, binder, and filler. Flavors marry and mellow. A 3-year aged cigar is profoundly smoother than the same cigar at 6 months.',
     facts:  ['Cedar absorbs excess moisture evenly', 'Most premium cigars age 3 months–2 years', 'Box-pressed shapes develop during aging'],
   },
@@ -118,8 +138,8 @@ export default function Cultivation() {
 
       {/* Cinematic tobacco farm background */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 1, opacity: 0.32, pointerEvents: 'none' }}>
-        <img
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDinqiRd53IenZj6Dg4uDGjKf7GNFR89-xAI4t2-68wH-BtJVVKUsZMoTibHD5nB2uI61lEqWTKBzcx6fUO83UUDbqCLxufZvXkYwXkxnOvzLpFpOCdbPr3M95R49mvK2G6Wm2V-erAzikJa6EXqtaeZ4RT1Tjq9ANJsNobQ4TZRDYIwxX1xdFGkGHk0QSyvjOIAzrMG8ia4rPhXcUczk9X_nbwCvyVETSYlkbNZdC-KqHYQhoIteDqdb9tGkwvNhs1IeNtBh2Q4Y"
+        <CultivationImage
+          src={null}
           alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(7,5,2,0.92) 0%, rgba(7,5,2,0.80) 40%, rgba(7,5,2,0.95) 100%)' }} />
@@ -180,7 +200,7 @@ export default function Cultivation() {
               >
                 {/* Card image */}
                 <div style={{ position: 'relative', height: 140, overflow: 'hidden' }}>
-                  <img src={stage.img} alt={stage.title}
+                  <CultivationImage src={stage.img} alt={stage.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease', transform: isOpen ? 'scale(1.05)' : 'scale(1)' }}
                   />
                   <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, rgba(7,5,2,0.2) 0%, rgba(7,5,2,0.75) 100%)` }} />
