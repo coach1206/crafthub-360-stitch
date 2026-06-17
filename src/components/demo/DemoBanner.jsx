@@ -17,7 +17,7 @@ export default function DemoBanner() {
     setExiting(true)
     setTimeout(() => {
       exitDemoMode()
-      window.location.href = '/'
+      window.location.href = '/home'
     }, 250)
   }
 
