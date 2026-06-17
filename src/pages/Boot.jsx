@@ -38,7 +38,7 @@ const BOOT_STAGES = [
   {
     id:             'novee-os',
     logo:           '/logos/novee-os.png',
-    title:          'NOVEE OS',
+    title:          'CRAFTHUB 360',
     subtitle:       'Powering Core Systems',
     backgroundImage: '/boot/novee-boot.png',
     fullBleedImage: true,
@@ -386,18 +386,18 @@ export default function Boot() {
                 <span className="material-symbols-outlined text-primary">terminal</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-label-lg text-label-lg text-primary tracking-widest">SYSTEM INITIALIZED</span>
+                <span className="font-label-lg text-label-lg text-primary tracking-widest">CRAFTHUB INITIALIZED</span>
                 <span className="font-body-md text-body-md text-on-surface-variant/60">V.4.2.0. PREMIUM_CORE</span>
               </div>
             </div>
             <div className="glass-panel px-6 py-2 rounded-full border border-primary/10">
-              <span className="font-label-lg text-label-lg text-primary">SECURE LINK: ACTIVE</span>
+              <span className="font-label-lg text-label-lg text-primary">CRAFTHUB LINK: ACTIVE</span>
             </div>
           </header>
 
           <div className="flex flex-col items-center text-center">
             <div className="mb-12 animate-pulse-gold">
-              <h1 className="font-display-lg text-display-lg gold-foil-text tracking-tighter mb-2">NOVEE OS</h1>
+              <h1 className="font-display-lg text-display-lg gold-foil-text tracking-tighter mb-2">CRAFTHUB 360</h1>
               <div className="h-[1px] w-64 bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto" />
               <h2 className="font-headline-md text-headline-md text-on-surface-variant mt-4 tracking-widest uppercase">CRAFTHUB 360</h2>
             </div>
@@ -409,7 +409,7 @@ export default function Boot() {
           <aside className="fixed left-8 top-1/2 -translate-y-1/2">
             <div className="glass-panel p-6 rounded-xl space-y-6 w-72 shadow-2xl shadow-black/50 border-l-2 border-l-primary/40 relative overflow-hidden scan-effect">
               <h3 className="font-label-lg text-label-lg text-on-surface-variant/50 border-b border-outline-variant pb-2">
-                SERVICE REGISTRY
+                CRAFT SERVICE REGISTRY
               </h3>
               <div className="space-y-4">
                 {[
@@ -459,7 +459,7 @@ export default function Boot() {
               <div className="absolute -inset-1 bg-primary/5 rounded-2xl blur-xl group-hover:bg-primary/10 transition-all duration-700" />
               <div className="relative flex flex-col items-center">
                 <span className="font-headline-md text-headline-md text-primary tracking-[0.2em] font-bold text-lg">
-                  HOLD TO ACTIVATE
+                  ENTER CRAFTHUB
                 </span>
                 <span className="material-symbols-outlined text-primary/60 text-sm animate-bounce mt-1">
                   keyboard_double_arrow_down
@@ -544,7 +544,7 @@ export default function Boot() {
           }}
         >
           <p style={{ color: 'rgba(201,168,76,0.6)', fontSize: '0.78rem', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>
-            NOVEE OS is preparing your experience.
+            CRAFTHUB 360 is preparing your experience.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <button
