@@ -77,6 +77,7 @@ import ProtectedRoute  from './components/security/ProtectedRoute.jsx'
 import DevRoleSwitcher from './components/security/DevRoleSwitcher.jsx'
 import KioskShell      from './components/kiosk/KioskShell.jsx'
 import PublicCraftHubLanding from './pages/PublicCraftHubLanding.jsx';
+import CraftHub from './pages/CraftHub.jsx';
 
 // ── Phase 11: Kiosk / deployment pages — lazy ─────────────────
 const KioskSetup   = lazy(() => import('./pages/KioskSetup.jsx'))
@@ -173,7 +174,7 @@ export default function App() {
               }
             >
               <Route index           element={<Home />} />
-              <Route path="home" element={<PublicCraftHubLanding />} />
+              <Route path="home" element={<CraftHub />} />
               <Route path="crafthub" element={<CraftHub />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
