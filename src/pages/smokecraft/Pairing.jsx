@@ -3,24 +3,36 @@ import { useNavigate }           from 'react-router-dom'
 import { useGuestSession }       from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS }             from '../../constants/session.js'
 
-/* ── Fallback images by category ───────────────────────────── */
-const FALLBACKS = {
-  Bourbon:  'https://lh3.googleusercontent.com/aida-public/AB6AXuCJZsse0-OBgJv-XDIDBT6z6JK8iL9blzeC9kleK1PDkKrj0FsBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo',
-  Whiskey:  'https://lh3.googleusercontent.com/aida-public/AB6AXuCJZsse0-OBgJv-XDIDBT6z6JK8iL9blzeC9kleK1PDkKrj0FsBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo',
-  Rum:      'https://lh3.googleusercontent.com/aida-public/AB6AXuCJ82XKQyntwTgn3xxDjYrawzeTtaASYwT_mcTIkMxzqs-6J3Yr-oTLECNP_mzZqFX4uiBg5B-ERa8lDXQy8ny1te9sIfRsA0ww6Ncn0vk4uK05iZgQ5uwKriVqA6ZyXNNadhHdOSMIFP81qtdrhm_NNZOj7KrRSR0tHJ-Cs-nG_Ra9vQout-3ik-TFNOnqj6rXMeuiO9lCUk2-4Vc1r0tO3UQr9meCFsldeQqNnSxutvMgBSsIMYii2N7hjYmhy0sdQY9DvL2sP00',
-  Coffee:   'https://lh3.googleusercontent.com/aida-public/AB6AXuD1whB9ENQS5yVK7-ZSqInf3ufx2FPgTfXCAe0K8akvyRBTB8moMmSAgsHEzZ4MYuCnY9j0tQgp47LYcOwkut7yCtM8yNlqQzVSDPo6ZhSwqZTybS3LM2MThzggnviBsIffUKi6bI0EIBwm5NfbYc65os7cs9PsiRlSBgG7mGWiMC7afsuN_5riLlpYp9P4_wxIhBHuluPPJwTxtNoqBaJ6IlJFFJUp61Pc',
-  Dessert:  'https://lh3.googleusercontent.com/aida-public/AB6AXuBkj1vyr57VqCSvkAIytKCP-dMimzcM6Bkfpo2BogqBmXvJno7XWBIkFHJP0uTjIRf43VMB4VT0fAzPe56ohr59HTYYKsym0J2JV6xGqZPzbw5OHeK9oQVklLm-rTkus0D_QeG5AsW_i3r95SxCCtkda_GbYOLo3MnRfTZ3tRjOehK1rR6yLCjtmEhkAfL3RPm8SEoj5khmFowDyNMdG5WO2fYsQ3Jh34sFkF3uM5Rql5d_S8_0z_f_osUhL3uDZji89YvLMFPAia4',
-  Cigar:    'https://lh3.googleusercontent.com/aida-public/AB6AXuCBjb17tZGWhWOsbXW8XcEiR4WIW8SRdSpM3JbzTootwik0rNdnLOw7S9JZ3EXsRrWIwqWrDXTd8Pvkve7yk0Djguo_fc3IWZ5D9c7ECY5EDcu6g5JsWk0HLo-pS1P0Sp_kNEtMoJ7_UWd-u_nKBePg_hyVmOWBd7C9H9b16E7bHFZlxdXVSBDqmCktK_b7wsck7DeYbjNOVSSREGTNzZg89N6q8Zqmzw_ubYO5Nur2k8euqiBLwOh-CQCTEjFfzzYA0LEgqcCTY6g',
-  default:  'https://lh3.googleusercontent.com/aida-public/AB6AXuCvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts',
-}
+// APPROVED SMOKECRAFT VISUAL RULE:
+// No stock-photo fallback URLs, no CSS-drawn graphics, no cartoon/placeholder art.
+// If a real image is missing, render "Image pending" only.
 
-function getImageUrl(item) {
-  if (item?.imageUrl && item.imageUrl.trim() && !item.imageUrl.includes('example.com')) return item.imageUrl
-  return FALLBACKS[item?.category] || FALLBACKS.default
-}
-
-function handleImgError(e, category) {
-  e.currentTarget.src = FALLBACKS[category] || FALLBACKS.default
+function PairingImage({ src, alt, className, style }) {
+  const [failed, setFailed] = useState(!src)
+  if (!failed && src) {
+    return (
+      <img
+        className={className}
+        style={style}
+        alt={alt}
+        src={src}
+        onError={() => setFailed(true)}
+      />
+    )
+  }
+  return (
+    <div
+      className={className}
+      style={{
+        ...style,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+        color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+      }}
+    >
+      Image pending
+    </div>
+  )
 }
 
 /* ── Pairing data ──────────────────────────────────────────── */
@@ -30,7 +42,7 @@ const CIGAR = {
   category:         'Cigar',
   type:             'cigar',
   source:           'humidor',
-  imageUrl:         'https://lh3.googleusercontent.com/aida-public/AB6AXuCBjb17tZGWhWOsbXW8XcEiR4WIW8SRdSpM3JbzTootwik0rNdnLOw7S9JZ3EXsRrWIwqWrDXTd8Pvkve7yk0Djguo_fc3IWZ5D9c7ECY5EDcu6g5JsWk0HLo-pS1P0Sp_kNEtMoJ7_UWd-u_nKBePg_hyVmOWBd7C9H9b16E7bHFZlxdXVSBDqmCktK_b7wsck7DeYbjNOVSSREGTNzZg89N6q8Zqmzw_ubYO5Nur2k8euqiBLwOh-CQCTEjFfzzYA0LEgqcCTY6g',
+  imageUrl:         null,
   shortDescription: 'Full-bodied Dominican masterpiece',
   tastingNotes:     'Leather, cedar, baking spice, dark cocoa, and an extraordinarily long finish.',
   pairingReason:    'The anchor of this curated pairing path — everything on this menu was selected to complement its profile.',
@@ -49,7 +61,7 @@ const PAIRING_ITEMS = [
     category:         'Bourbon',
     type:             'drink',
     source:           'bar',
-    imageUrl:         'https://lh3.googleusercontent.com/aida-public/AB6AXuCJZsse0-OBgJv-XDIDBT6z6JK8iL9blzeC9kleK1PDkKrj0FsBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo',
+    imageUrl:         null,
     shortDescription: 'The classic spirit',
     tastingNotes:     'Sweet caramel, baking spice, toasted oak, and warm vanilla with a lingering finish.',
     pairingReason:    'Its full-bodied sweetness balances the spicy pepper finish of the OpusX without overpowering.',
@@ -66,7 +78,7 @@ const PAIRING_ITEMS = [
     category:         'Rum',
     type:             'drink',
     source:           'bar',
-    imageUrl:         'https://lh3.googleusercontent.com/aida-public/AB6AXuCJ82XKQyntwTgn3xxDjYrawzeTtaASYwT_mcTIkMxzqs-6J3Yr-oTLECNP_mzZqFX4uiBg5B-ERa8lDXQy8ny1te9sIfRsA0ww6Ncn0vk4uK05iZgQ5uwKriVqA6ZyXNNadhHdOSMIFP81qtdrhm_NNZOj7KrRSR0tHJ-Cs-nG_Ra9vQout-3ik-TFNOnqj6rXMeuiO9lCUk2-4Vc1r0tO3UQr9meCFsldeQqNnSxutvMgBSsIMYii2N7hjYmhy0sdQY9DvL2sP00',
+    imageUrl:         null,
     shortDescription: 'The tropical depth',
     tastingNotes:     'Molasses, dried tropical fruit, warm spice, toasted wood, and rich earth.',
     pairingReason:    'Works with the sweet-spiced cedar notes and enhances the cigar\'s earthy mid-section.',
@@ -83,7 +95,7 @@ const PAIRING_ITEMS = [
     category:         'Coffee',
     type:             'drink',
     source:           'bar',
-    imageUrl:         'https://lh3.googleusercontent.com/aida-public/AB6AXuD1whB9ENQS5yVK7-ZSqInf3ufx2FPgTfXCAe0K8akvyRBTB8moMmSAgsHEzZ4MYuCnY9j0tQgp47LYcOwkut7yCtM8yNlqQzVSDPo6ZhSwqZTybS3LM2MThzggnviBsIffUKi6bI0EIBwm5NfbYc65os7cs9PsiRlSBgG7mGWiMC7afsuN_5riLlpYp9P4_wxIhBHuluPPJwTxtNoqBaJ6IlJFFJUp61Pc',
+    imageUrl:         null,
     shortDescription: 'The morning ritual',
     tastingNotes:     'Bright clean acidity, milk chocolate body, smooth finish — no bitterness.',
     pairingReason:    'Cleanses the palate between draws; medium body pairs with creamy wrapper profiles.',
@@ -100,7 +112,7 @@ const PAIRING_ITEMS = [
     category:         'Dessert',
     type:             'food',
     source:           'kitchen',
-    imageUrl:         'https://lh3.googleusercontent.com/aida-public/AB6AXuBkj1vyr57VqCSvkAIytKCP-dMimzcM6Bkfpo2BogqBmXvJno7XWBIkFHJP0uTjIRf43VMB4VT0fAzPe56ohr59HTYYKsym0J2JV6xGqZPzbw5OHeK9oQVklLm-rTkus0D_QeG5AsW_i3r95SxCCtkda_GbYOLo3MnRfTZ3tRjOehK1rR6yLCjtmEhkAfL3RPm8SEoj5khmFowDyNMdG5WO2fYsQ3Jh34sFkF3uM5Rql5d_S8_0z_f_osUhL3uDZji89YvLMFPAia4',
+    imageUrl:         null,
     shortDescription: 'The dark indulgence',
     tastingNotes:     'Bitter cocoa solids, roasted depth, subtle sweetness, mineral finish.',
     pairingReason:    'Mirrors the charred cedar and dark cocoa notes of the cigar\'s final third.',
@@ -315,9 +327,7 @@ export default function Pairing() {
             )}
           </button>
           <div className="w-9 h-9 rounded-full border border-primary/30 overflow-hidden hidden sm:block">
-            <img alt="Member" className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuALdfcSd50DfRFBRxkR_xMSIX-skaK-Wc_K-1fY5HOMd9bA7_pkmMPcGbTYk8zV6alnMGch-O3CqgAZTO6FzbOLa5UwjmOEzTY-KpouMz4Qr4KHXKp_-zuNKE0N4YUde2wjKfasPUw4u3ET-beGIYCsH9uLLJ2vVMHe7NLedYJ7EQDKgapByLeVXlAXm_hUaFmL8MaVHhwx6QLVyH6V7kfNgskzHEQGF1qV3xaJ3PcbrMLFrP92KKiqj2xlzR8ne2PUIclHIH40wMo"
-              onError={e => handleImgError(e, 'default')} />
+            <PairingImage alt="Member" className="w-full h-full object-cover" src={null} style={{ fontSize: 7 }} />
           </div>
         </div>
       </header>
@@ -340,9 +350,8 @@ export default function Pairing() {
         {/* ── Featured Cigar Hero ───────────────────────────────── */}
         <div className="glass-card rounded-xl overflow-hidden mb-12 flex flex-col md:flex-row shadow-2xl">
           <div className="md:w-1/3 relative h-64 md:h-auto cursor-pointer" onClick={() => setSelectedItem(CIGAR)}>
-            <img className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-              alt={CIGAR.name} src={getImageUrl(CIGAR)}
-              onError={e => handleImgError(e, CIGAR.category)} />
+            <PairingImage className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              alt={CIGAR.name} src={CIGAR.imageUrl} />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
             <div className="absolute bottom-6 left-6 right-4">
               <div className="flex items-center gap-2 mb-2">
@@ -420,9 +429,8 @@ export default function Pairing() {
 
                 {/* Image */}
                 <div className="relative h-52 overflow-hidden">
-                  <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    src={getImageUrl(item)} alt={item.name}
-                    onError={e => handleImgError(e, item.category)} />
+                  <PairingImage className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    src={item.imageUrl} alt={item.name} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
                   {/* Destination badge top-right */}
@@ -533,9 +541,8 @@ export default function Pairing() {
 
             {/* Hero image */}
             <div className="relative h-56">
-              <img className="w-full h-full object-cover"
-                src={getImageUrl(selectedItem)} alt={selectedItem.name}
-                onError={e => handleImgError(e, selectedItem.category)} />
+              <PairingImage className="w-full h-full object-cover"
+                src={selectedItem.imageUrl} alt={selectedItem.name} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
               <button onClick={() => setSelectedItem(null)}
                 className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/50 flex items-center justify-center text-white hover:bg-black/70 transition-colors">
@@ -691,9 +698,8 @@ export default function Pairing() {
                 cart.map(item => (
                   <div key={item.id} className="flex items-center gap-3 p-3 rounded-xl"
                     style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
-                    <img src={getImageUrl(item)} alt={item.name}
-                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
-                      onError={e => handleImgError(e, item.category)} />
+                    <PairingImage src={item.imageUrl} alt={item.name}
+                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0" style={{ fontSize: 8 }} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 mb-0.5">
                         <p className="text-white text-sm font-semibold truncate">{item.name}</p>

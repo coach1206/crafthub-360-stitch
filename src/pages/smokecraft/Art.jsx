@@ -38,34 +38,39 @@ const LAYERS = [
   },
 ]
 
+// APPROVED SMOKECRAFT VISUAL RULE:
+// No CSS-drawn cigar graphics, no fake cigar illustrations.
+// If a real photo is missing, render "Image pending" only.
+
 function CigarVisual({ active }) {
   const rows = [
-    { zone: 'wrapper', top: '23%', label: 'Wrapper', pct: '40%', color: '#e9c176' },
-    { zone: 'binder', top: '48%', label: 'Binder', pct: '25%', color: '#c5a059' },
-    { zone: 'filler', top: '72%', label: 'Filler', pct: '35%', color: '#a5773a' },
+    { zone: 'wrapper', label: 'Wrapper', pct: '40%', color: '#e9c176' },
+    { zone: 'binder', label: 'Binder', pct: '25%', color: '#c5a059' },
+    { zone: 'filler', label: 'Filler', pct: '35%', color: '#a5773a' },
   ]
 
   return (
-    <div className="relative min-h-[315px] overflow-hidden">
-      <div className="absolute inset-0 opacity-40" style={{ background: 'radial-gradient(circle at 46% 45%, rgba(233,193,118,0.24), transparent 34%), radial-gradient(circle at 26% 62%, rgba(255,255,255,0.08), transparent 28%)' }} />
-      <div className="absolute left-[28%] top-9 bottom-0 w-[92px] sm:w-[108px] rounded-t-full overflow-hidden shadow-[0_0_48px_rgba(233,193,118,0.18)]" style={{ transform: 'translateX(-50%)' }}>
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg,#4b2414 0%,#b77939 23%,#5a2c17 48%,#c18445 72%,#32160c 100%)' }} />
-        <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'repeating-linear-gradient(132deg, transparent 0 16px, rgba(255,255,255,0.16) 17px, transparent 20px), repeating-linear-gradient(34deg, transparent 0 28px, rgba(30,12,4,0.44) 29px, transparent 34px)' }} />
-        <div className="absolute inset-x-[17%] top-[28%] h-[23%] rounded-full border border-[#e9c17666]" style={{ background: 'radial-gradient(circle,#2a1008 0%,#5b2a15 52%,#e0a85f 55%,#2a1008 100%)' }} />
-        <div className="absolute inset-x-[17%] top-[53%] h-[23%] rounded-full border border-[#e9c17666]" style={{ background: 'radial-gradient(circle,#2a1008 0%,#5b2a15 52%,#e0a85f 55%,#2a1008 100%)' }} />
-        <div className="absolute inset-0" style={{ boxShadow: 'inset 22px 0 34px rgba(0,0,0,0.45), inset -18px 0 30px rgba(255,218,143,0.16)' }} />
+    <div className="relative min-h-[315px] overflow-hidden flex flex-col">
+      <div
+        className="mx-6 mt-6 flex flex-1 items-center justify-center rounded-xl"
+        style={{
+          background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+          color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+          minHeight: 140,
+        }}
+      >
+        Image pending
       </div>
-      <div className="absolute left-[46%] right-8 top-0 bottom-0">
+      <div className="px-6 pb-5 pt-4 space-y-1">
         {rows.map(row => {
           const hot = active === row.zone
           return (
             <button
               key={row.zone}
               type="button"
-              className="absolute left-0 right-0 flex items-center gap-3 rounded-xl px-2 py-2 text-left transition-all active:scale-[0.98]"
-              style={{ top: row.top, minHeight: 56, background: hot ? 'rgba(233,193,118,0.08)' : 'transparent' }}
+              className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition-all active:scale-[0.98]"
+              style={{ minHeight: 56, background: hot ? 'rgba(233,193,118,0.08)' : 'transparent' }}
             >
-              <span className="h-px flex-1 max-w-[88px]" style={{ background: hot ? row.color : 'rgba(233,193,118,0.36)', boxShadow: hot ? `0 0 12px ${row.color}` : 'none' }} />
               <span className="h-2.5 w-2.5 rounded-full" style={{ background: row.color, boxShadow: `0 0 ${hot ? 16 : 8}px ${row.color}` }} />
               <span>
                 <span className="block font-serif text-[17px]" style={{ color: hot ? TEXT : '#d8c8a5' }}>{row.label}</span>
