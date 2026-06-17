@@ -172,7 +172,7 @@ const commandModules = [
     route: '/founder-command',
     image: '/crafthub-gold.jpg',
     purpose: 'Top-level operating authority for system policy, access, demos, diagnostics, and venue intelligence.',
-    connected: 'All NOVEE OS systems',
+    connected: 'All CRAFTHUB 360 systems',
     access: 'Founder',
     status: 'Restricted',
   },
@@ -252,7 +252,7 @@ const sensoryProfile = [
 ]
 
 const journey = [
-  'Enter NOVEE OS',
+  'Enter CRAFTHUB 360',
   'Choose CraftHub',
   'Select Experience',
   'Receive Guidance',
@@ -342,7 +342,7 @@ const vaultSections = [
 
 const remoteControls = [
   ['Deployment status', 'Production channels monitored'],
-  ['Current software version', 'NOVEE OS 1.0.0'],
+  ['Current software version', 'CRAFTHUB 360 1.0.0'],
   ['Pending updates', '4 venue updates queued'],
   ['Venue update queue', 'Tenant-safe rollout lanes'],
   ['Last push date/time', 'Today 16:40 ET'],
@@ -401,7 +401,7 @@ const connectedVenues = [
     name: 'Cellar & Ember Club',
     venueId: 'venue_cellar_022',
     location: 'Miami, FL',
-    license: 'Venue Mirror Active',
+    license: 'Manager Hub Active',
     modules: 'WineCraft, PourCraft, E.A.T., POS 3',
     version: '1.0.0',
     sync: '8 min ago',
@@ -571,7 +571,7 @@ export function CommandHubHeader({ navigate, isDemoMode, roleLabel }) {
           </button>
           <div className="min-w-0">
             <p className="text-[0.68rem] font-black uppercase tracking-[0.28em] text-primary/70">Command Hub</p>
-            <h1 className="truncate font-display-lg text-2xl uppercase tracking-[0.18em] text-primary md:text-4xl">NOVEE OS</h1>
+            <h1 className="truncate font-display-lg text-2xl uppercase tracking-[0.18em] text-primary md:text-4xl">CRAFTHUB 360</h1>
           </div>
         </div>
 
@@ -609,14 +609,14 @@ export function SystemOverviewPanel({ navigate, isDemoMode, onDemo }) {
         <div className="absolute inset-0 bg-gradient-to-r from-[#0d0905] via-[#0d0905]/85 to-[#0d0905]/45" />
         <div className="relative flex h-full max-w-4xl flex-col justify-end">
           <p className="text-xs font-black uppercase tracking-[0.32em] text-primary/75">Private Club Operating System</p>
-          <h2 className="mt-3 font-display-lg text-5xl uppercase tracking-[0.12em] text-primary md:text-7xl">NOVEE OS</h2>
-          <p className="mt-2 font-headline-xl text-2xl text-on-surface md:text-4xl">Two-layer luxury hospitality operating system</p>
+          <h2 className="mt-3 font-display-lg text-5xl uppercase tracking-[0.12em] text-primary md:text-7xl">CRAFTHUB 360</h2>
+          <p className="mt-2 font-headline-xl text-2xl text-on-surface md:text-4xl">CraftHub venue/table operating experience</p>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-on-surface-variant">
-            NOVEE OS separates master software control from venue-level operations: Ultra Command Center controls the global platform, while Venue Mirror Command Hub gives each establishment its own tenant-safe operating shell.
+            CRAFTHUB 360 separates master software control from venue-level operations: NOVEE Developer Command controls the global platform, while Manager Hub Command Hub gives each establishment its own tenant-safe operating shell.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <TouchButton onClick={() => navigate('/ultra-command-center')} variant="filled">Open Ultra Command</TouchButton>
-            <TouchButton onClick={() => navigate('/venue-mirror')}>Open Venue Mirror</TouchButton>
+            <TouchButton onClick={() => navigate('/venue-mirror')}>Open Manager Hub</TouchButton>
             <TouchButton onClick={onDemo}>{isDemoMode ? 'Demo Active' : 'Enter Demo Mode'}</TouchButton>
           </div>
         </div>
@@ -642,13 +642,13 @@ export function SystemOverviewPanel({ navigate, isDemoMode, onDemo }) {
 
 export function TwoLayerArchitecturePanel({ navigate }) {
   return (
-    <Section eyebrow="Two-Layer Architecture" title="Ultra Command Center + Venue Mirror Command Hub">
+    <Section eyebrow="Two-Layer Architecture" title="NOVEE Developer Command + Manager Hub Command Hub">
       <div className="grid gap-6 xl:grid-cols-2">
         <div className="glass-morphism relative overflow-hidden rounded-lg p-6 md:p-8">
           <img src="/crafthub-gold.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-10" />
           <div className="relative">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-primary/70">Layer 1 · Mothership</p>
-            <h3 className="mt-2 font-headline-xl text-4xl text-primary">NOVEE OS Ultra Command Center</h3>
+            <h3 className="mt-2 font-headline-xl text-4xl text-primary">CRAFTHUB 360 NOVEE Developer Command</h3>
             <p className="mt-4 text-base leading-7 text-on-surface-variant">
               Founder, admin, and developer master control for software, venues, licenses, modules, deployments, vault data, diagnostics, users, roles, security, analytics, and remote updates.
             </p>
@@ -658,7 +658,7 @@ export function TwoLayerArchitecturePanel({ navigate }) {
               ))}
             </div>
             <div className="mt-6">
-              <TouchButton onClick={() => navigate('/ultra-command-center')} variant="filled">Open Ultra Command Center</TouchButton>
+              <TouchButton onClick={() => navigate('/ultra-command-center')} variant="filled">Open NOVEE Developer Command</TouchButton>
             </div>
           </div>
         </div>
@@ -667,17 +667,17 @@ export function TwoLayerArchitecturePanel({ navigate }) {
           <img src="/background-lounge-airy.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-15" />
           <div className="relative">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-primary/70">Layer 2 · Establishment Tenant</p>
-            <h3 className="mt-2 font-headline-xl text-4xl text-on-surface">Venue Mirror Command Hub</h3>
+            <h3 className="mt-2 font-headline-xl text-4xl text-on-surface">Manager Hub Command Hub</h3>
             <p className="mt-4 text-base leading-7 text-on-surface-variant">
               Establishment-level management interface for licensed venues with E.A.T., POS 3, CraftHub, Passport, staff workflow, local specials, and local analytics scoped by venueId.
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {['Tenant-safe data', 'Local venue tools', 'E.A.T. + POS 3 installed', 'Mirrors NOVEE OS visually'].map((item) => (
+              {['Tenant-safe data', 'Local venue tools', 'E.A.T. + POS 3 installed', 'Mirrors CRAFTHUB 360 visually'].map((item) => (
                 <div key={item} className="min-h-[70px] rounded-md border border-primary/20 bg-black/30 p-4 text-sm font-semibold text-[#ead6a6]">{item}</div>
               ))}
             </div>
             <div className="mt-6">
-              <TouchButton onClick={() => navigate('/venue-mirror')}>Open Venue Mirror</TouchButton>
+              <TouchButton onClick={() => navigate('/venue-mirror')}>Open Manager Hub</TouchButton>
             </div>
           </div>
         </div>
@@ -688,13 +688,13 @@ export function TwoLayerArchitecturePanel({ navigate }) {
 
 export function UltraCommandCenterPanel({ navigate }) {
   return (
-    <Section eyebrow="Layer 1 · Ultra Command Center" title="Founder/master software control system">
+    <Section eyebrow="Layer 1 · NOVEE Developer Command" title="Founder/master software control system">
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <div className="glass-morphism rounded-lg p-6 md:p-7">
           <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">Mothership Control</p>
           <h3 className="mt-2 font-headline-xl text-3xl text-primary">John Collins / NOVEE ownership command cockpit</h3>
           <p className="mt-4 text-base leading-7 text-on-surface-variant">
-            Ultra Command Center controls global software, tenant licensing, deployments, vault data, security, AMBI intelligence, analytics, support, and founder-only systems.
+            NOVEE Developer Command controls global software, tenant licensing, deployments, vault data, security, AMBI intelligence, analytics, support, and founder-only systems.
           </p>
           <div className="mt-6">
             <TouchButton onClick={() => navigate('/ultra-command-center')} variant="filled">Open Ultra Command</TouchButton>
@@ -726,7 +726,7 @@ export function NoveeVaultPanel({ navigate }) {
           <div>
             <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">Secure vault layer</p>
             <h3 className="mt-2 font-headline-xl text-3xl text-on-surface">Venue, identity, experience, legal, deployment, and audit records</h3>
-            <p className="mt-4 max-w-4xl text-base leading-7 text-on-surface-variant">The Vault is the premium system of record for NOVEE OS. It separates global founder data from venue-scoped tenant records and organizes sensitive operating assets by function.</p>
+            <p className="mt-4 max-w-4xl text-base leading-7 text-on-surface-variant">The Vault is the premium system of record for CRAFTHUB 360. It separates global founder data from venue-scoped tenant records and organizes sensitive operating assets by function.</p>
           </div>
           <TouchButton onClick={() => navigate('/novee-vault')}>Open Vault</TouchButton>
         </div>
@@ -799,7 +799,7 @@ export function ConnectedVenuesPanel({ navigate }) {
               ].map(([label, value]) => <StatPill key={label} label={label} value={value} />)}
             </div>
             <div className="mt-5">
-              <TouchButton onClick={() => navigate('/venue-mirror')} variant="filled">Open Venue Mirror</TouchButton>
+              <TouchButton onClick={() => navigate('/venue-mirror')} variant="filled">Open Manager Hub</TouchButton>
             </div>
           </article>
         ))}
@@ -810,14 +810,14 @@ export function ConnectedVenuesPanel({ navigate }) {
 
 export function VenueMirrorCommandHubPanel({ navigate }) {
   return (
-    <Section eyebrow="Layer 2 · Venue Mirror Command Hub" title="Establishment-level operating shell">
+    <Section eyebrow="Layer 2 · Manager Hub Command Hub" title="Establishment-level operating shell">
       <div className="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
         <div className="glass-morphism rounded-lg p-6 md:p-7">
           <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">Tenant interface</p>
-          <h3 className="mt-2 font-headline-xl text-3xl text-on-surface">A local mirror of NOVEE OS scoped to one establishment</h3>
-          <p className="mt-4 text-base leading-7 text-on-surface-variant">Venue Mirror mimics the premium NOVEE OS experience, but only exposes local tools and local data for the licensed establishment. Every operational record is scoped by venueId.</p>
+          <h3 className="mt-2 font-headline-xl text-3xl text-on-surface">A local mirror of CRAFTHUB 360 scoped to one establishment</h3>
+          <p className="mt-4 text-base leading-7 text-on-surface-variant">Manager Hub mimics the premium CRAFTHUB 360 experience, but only exposes local tools and local data for the licensed establishment. Every operational record is scoped by venueId.</p>
           <div className="mt-6">
-            <TouchButton onClick={() => navigate('/venue-mirror')} variant="filled">Open Venue Mirror</TouchButton>
+            <TouchButton onClick={() => navigate('/venue-mirror')} variant="filled">Open Manager Hub</TouchButton>
           </div>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -846,10 +846,10 @@ export function VenueMirrorCommandHubPanel({ navigate }) {
 
 export function VenueOperationsArchitecturePanel() {
   return (
-    <Section eyebrow="Venue Mirror Internals" title="E.A.T., POS 3, CraftHub, and Passport inside the venue">
+    <Section eyebrow="Manager Hub Internals" title="E.A.T., POS 3, CraftHub, and Passport inside the venue">
       <div className="grid gap-6 xl:grid-cols-2">
         <div className="glass-panel rounded-lg p-6 md:p-7">
-          <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">E.A.T. inside Venue Mirror</p>
+          <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">E.A.T. inside Manager Hub</p>
           <h3 className="mt-2 font-headline-xl text-3xl text-on-surface">Operational brain of the establishment</h3>
           <p className="mt-4 text-base leading-7 text-on-surface-variant">E.A.T. connects kitchen, bar, humidor, events, specials, ticket ticker, guest requests, inventory signals, POS 3, craft screens, and staff alerts.</p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -857,7 +857,7 @@ export function VenueOperationsArchitecturePanel() {
           </div>
         </div>
         <div className="glass-morphism rounded-lg p-6 md:p-7">
-          <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">POS 3 inside Venue Mirror</p>
+          <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">POS 3 inside Manager Hub</p>
           <h3 className="mt-2 font-headline-xl text-3xl text-on-surface">Touchscreen checkout and rewards layer</h3>
           <p className="mt-4 text-base leading-7 text-on-surface-variant">POS 3 supports food, drinks, cigars, specials, guest tabs, membership discounts, Passport rewards, staff checkout, inventory, reports, and clean touch-first service flow.</p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -873,7 +873,7 @@ export function TenantDataModelPanel() {
   return (
     <Section eyebrow="Multi-Tenant Data Model" title="Venue data stays separated by venueId">
       <div className="glass-morphism rounded-lg p-6 md:p-7">
-        <p className="max-w-4xl text-base leading-7 text-on-surface-variant">NOVEE OS is ready for multi-tenant architecture. Global founder data, vault records, and deployment controls stay separate from venue-scoped operational data. Venue Mirror reads and writes only the records allowed for its venueId.</p>
+        <p className="max-w-4xl text-base leading-7 text-on-surface-variant">CRAFTHUB 360 is ready for multi-tenant architecture. Global founder data, vault records, and deployment controls stay separate from venue-scoped operational data. Manager Hub reads and writes only the records allowed for its venueId.</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
           {dataEntities.map((entity) => (
             <div key={entity} className="min-h-[66px] rounded-md border border-primary/20 bg-black/30 p-4 text-sm font-bold text-[#ead6a6]">{entity}</div>
@@ -892,7 +892,7 @@ export function EcosystemMap() {
           <div className="flex min-h-[260px] items-center justify-center rounded-lg border border-primary/30 bg-primary/10 p-6 text-center shadow-[0_0_34px_rgba(233,193,118,0.1)]">
             <div>
               <p className="text-xs font-black uppercase tracking-[0.28em] text-primary/75">Center Node</p>
-              <h3 className="mt-3 font-display-lg text-5xl uppercase tracking-[0.14em] text-primary">NOVEE OS</h3>
+              <h3 className="mt-3 font-display-lg text-5xl uppercase tracking-[0.14em] text-primary">CRAFTHUB 360</h3>
               <p className="mt-4 text-sm leading-6 text-on-surface-variant">Parent shell for guest journeys, staff workflow, venue intelligence, membership, and command access.</p>
             </div>
           </div>
@@ -985,7 +985,7 @@ export function SensoryProfilePanel({ navigate }) {
     <div className="glass-morphism rounded-lg p-6 md:p-7">
       <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">Sensory Profile Engine</p>
       <h3 className="mt-2 font-headline-xl text-3xl text-on-surface">Personalized recommendation intelligence</h3>
-      <p className="mt-4 text-base leading-7 text-on-surface-variant">NOVEE OS translates flavor, aroma, strength, food, cigar, wine, beer, cocktail, ratings, and mentor notes into better next visits.</p>
+      <p className="mt-4 text-base leading-7 text-on-surface-variant">CRAFTHUB 360 translates flavor, aroma, strength, food, cigar, wine, beer, cocktail, ratings, and mentor notes into better next visits.</p>
       <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {sensoryProfile.map(([label, value]) => <StatPill key={label} label={label} value={value} />)}
       </div>
@@ -1069,7 +1069,7 @@ export function DayOneTravelPanel({ navigate }) {
           <div>
             <p className="text-xs font-black uppercase tracking-[0.28em] text-primary/70">Venue-to-travel connection</p>
             <h3 className="mt-2 font-headline-xl text-4xl text-on-surface">DayOne360 connects membership memory to destination experiences.</h3>
-            <p className="mt-4 text-base leading-7 text-on-surface-variant">Travel concierge, craft tourism, VIP trips, relocation support, destination experiences, member travel perks, Dominican Republic workflows, and venue-to-travel connections stay inside the NOVEE OS journey.</p>
+            <p className="mt-4 text-base leading-7 text-on-surface-variant">Travel concierge, craft tourism, VIP trips, relocation support, destination experiences, member travel perks, Dominican Republic workflows, and venue-to-travel connections stay inside the CRAFTHUB 360 journey.</p>
             <div className="mt-6">
               <TouchButton onClick={() => navigate('/dayone360')} variant="filled">Explore DayOne360</TouchButton>
             </div>

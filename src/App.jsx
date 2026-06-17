@@ -111,7 +111,7 @@ function NOVEELoader() {
         color: 'rgba(201,168,76,0.4)', fontSize: '10px',
         letterSpacing: '0.25em', textTransform: 'uppercase',
       }}>
-        Loading NOVEE OS module…
+        Loading CRAFTHUB 360 module…
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
@@ -233,7 +233,7 @@ export default function App() {
               <Route path="demo" element={
                 <ModulePlaceholder
                   title="Demo Mode"
-                  purpose="Safe preview mode is available from the NOVEE OS home screen. It previews guest-facing modules without real server calls, payments, inventory changes, audit events, or role changes."
+                  purpose="Safe preview mode is available from the CRAFTHUB 360 home screen. It previews guest-facing modules without real server calls, payments, inventory changes, audit events, or role changes."
                   phases={['Keep safe preview routing visible', 'Expand guided demo scripts', 'Add operator-specific walkthrough presets']}
                 />
               } />
@@ -242,11 +242,11 @@ export default function App() {
                   allowedRoles={['admin', 'founder_level_0', 'developer']}
                   loginRoute="/admin-login"
                   loginLabel="Admin / Founder Login"
-                  lockedMessage="NOVEE OS Ultra Command Center requires founder, admin, or developer access."
+                  lockedMessage="CRAFTHUB 360 NOVEE Developer Command requires founder, admin, or developer access."
                   demoBlocked
                 >
                   <ModulePlaceholder
-                    title="NOVEE OS Ultra Command Center"
+                    title="CRAFTHUB 360 NOVEE Developer Command"
                     purpose="Master control system for venues, licenses, modules, deployments, vault data, diagnostics, users, roles, security, analytics, and remote updates."
                     phases={['Connect global venue registry', 'Wire deployment and vault APIs', 'Add founder-only control actions']}
                   />
@@ -287,11 +287,11 @@ export default function App() {
                   allowedRoles={['manager', 'admin', 'founder_level_0']}
                   loginRoute="/admin-login"
                   loginLabel="Venue Manager Login"
-                  lockedMessage="Venue Mirror Command Hub requires venue owner, manager, admin, or founder access."
+                  lockedMessage="Manager Hub Command Hub requires venue owner, manager, admin, or founder access."
                   demoBlocked
                 >
                   <ModulePlaceholder
-                    title="Venue Mirror Command Hub"
+                    title="Manager Hub Command Hub"
                     purpose="Establishment-level command hub for local E.A.T., POS 3, CraftHub, Passport members, staff activity, events, specials, ticker, reports, and venue settings scoped by venueId."
                     phases={['Bind selected venueId', 'Connect local E.A.T. and POS 3 data', 'Add tenant-safe manager actions']}
                   />
@@ -356,7 +356,7 @@ export default function App() {
                   allowedRoles={['admin', 'founder_level_0']}
                   loginRoute="/admin-login"
                   loginLabel="Admin Login"
-                  lockedMessage="NOVEE OS Admin requires admin-level access or higher."
+                  lockedMessage="CRAFTHUB 360 Admin requires admin-level access or higher."
                   demoBlocked
                 >
                   <Admin />
