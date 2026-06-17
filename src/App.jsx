@@ -149,8 +149,8 @@ export default function App() {
         <KioskShell>
         <Suspense fallback={<NOVEELoader />}>
           <Routes>
-            {/* ── Boot — always accessible ─────────────────────── */}
-            <Route path="boot" element={<Boot />} />
+            {/* ── Boot — private NOVEE intro, public users redirected ── */}
+            <Route path="boot" element={<Navigate to="/crafthub" replace />} />
 
             {/* ── Login screens — lazy, accessible without boot ─── */}
             <Route path="staff-login"   element={<StaffLogin />} />
