@@ -45,7 +45,7 @@ export default function Enroll() {
     setSelectedCraft('SmokeCraft 360')
     completeStep('enroll')
     addXP(XP_AWARDS.PROFILE_COMPLETE)
-    navigate('/smokecraft/golden-box')
+    navigate('/smokecraft/format')
   }
 
   function handleDraft() {

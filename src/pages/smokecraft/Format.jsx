@@ -6,6 +6,29 @@ import {
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
+function CigarImage({ image, name, cigarClass }) {
+  const [failed, setFailed] = useState(false)
+  if (!failed && image) {
+    return (
+      <img
+        src={image}
+        alt={name}
+        onError={() => setFailed(true)}
+        style={{ width: '100%', height: '80px', objectFit: 'contain', objectPosition: 'center', display: 'block' }}
+      />
+    )
+  }
+  return (
+    <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '80px', gap: 4 }}>
+      <span className={`format-cigar ${cigarClass}`} />
+    </span>
+  )
+}
+
+// APPROVED SMOKECRAFT VISUAL ASSETS.
+// Do not replace cigar images with cartoon placeholders, fake cigar strips, or flat illustrations.
+// If a realistic image is missing, render "Image pending" instead of a cartoon fallback.
+
 const FORMATS = [
   {
     id: 'robusto',
@@ -23,6 +46,7 @@ const FORMATS = [
     xp: 25,
     tip: 'Robusto keeps the session focused: enough ring gauge for smoke volume, short enough to preserve intensity.',
     cigarClass: 'format-cigar--robusto',
+    image: '/assets/smokecraft/cigars/robusto.jpg',
   },
   {
     id: 'toro',
@@ -40,6 +64,7 @@ const FORMATS = [
     xp: 30,
     tip: 'Toro length lets a blend evolve gradually, making it ideal for pairings that open in stages.',
     cigarClass: 'format-cigar--toro',
+    image: '/assets/smokecraft/cigars/toro.jpg',
   },
   {
     id: 'churchill',
@@ -57,6 +82,7 @@ const FORMATS = [
     xp: 35,
     tip: 'Churchill rewards patience. Its length cools the smoke and gives subtle tobaccos more room to speak.',
     cigarClass: 'format-cigar--churchill',
+    image: '/assets/smokecraft/cigars/churchill.jpg',
   },
   {
     id: 'corona',
@@ -74,6 +100,7 @@ const FORMATS = [
     xp: 20,
     tip: 'Corona uses a slimmer ring gauge to concentrate wrapper character and keep the session crisp.',
     cigarClass: 'format-cigar--corona',
+    image: '/assets/smokecraft/cigars/corona.jpg',
   },
   {
     id: 'gordo',
@@ -91,6 +118,7 @@ const FORMATS = [
     xp: 40,
     tip: 'Gordo delivers more filler volume and a cooler burn, so the blend needs structure to avoid becoming soft.',
     cigarClass: 'format-cigar--gordo',
+    image: '/assets/smokecraft/cigars/gordo.jpg',
   },
   {
     id: 'torpedo',
@@ -108,6 +136,7 @@ const FORMATS = [
     xp: 45,
     tip: 'A tapered head focuses the draw, making Torpedo formats especially useful for layered, complex blends.',
     cigarClass: 'format-cigar--torpedo',
+    image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
   },
 ]
 
@@ -706,7 +735,7 @@ export default function Format() {
 
       <SmokeCraftPremiumHeader
         step="Step 5 of 20"
-        backTo="/smokecraft/mentor"
+        backTo="/smokecraft/enroll"
         onRightClick={() => navigate('/grand-lounge-ranking')}
       />
 
@@ -743,7 +772,7 @@ export default function Format() {
                     <span className="format-card__number">{String(index + 1).padStart(2, '0')}</span>
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
-                      <span className={`format-cigar ${format.cigarClass}`} />
+                      <CigarImage image={format.image} name={format.name} cigarClass={format.cigarClass} />
                     </span>
                     <h2>{format.name}</h2>
                     <p>{format.description}</p>
@@ -848,7 +877,7 @@ export default function Format() {
               Save Format
             </button>
             <button className="format-continue" type="button" onClick={continueNext} disabled={!selected}>
-              Continue to Leaf & Filler
+              Continue to Seed &amp; Soil
               <span className="material-symbols-outlined">arrow_forward</span>
             </button>
           </div>

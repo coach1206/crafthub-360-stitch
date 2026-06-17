@@ -169,13 +169,13 @@ export default function Mentor() {
     if (primaryId) setSelectedMentor(primaryId, found?.country || null)
     completeStep('mentor')
     addXP(XP_AWARDS.MENTOR_SELECTED)
-    navigate('/smokecraft/format')
+    navigate('/smokecraft/golden-box')
   }
 
   function handleSaveDraft() {
     voice.stop()
     triggerHaptic('light')
-    navigate('/smokecraft/golden-box')
+    navigate('/smokecraft/seed-soil')
   }
 
   return (
@@ -186,8 +186,8 @@ export default function Mentor() {
         <div className="smokecraft-mentor-header__brand">
           <button
             className="smokecraft-mentor-icon-btn material-symbols-outlined"
-            onClick={() => navigate('/smokecraft/enroll')}
-            aria-label="Open SmokeCraft intake"
+            onClick={() => navigate('/smokecraft/seed-soil')}
+            aria-label="Back to Seed &amp; Soil"
           >
             menu
           </button>

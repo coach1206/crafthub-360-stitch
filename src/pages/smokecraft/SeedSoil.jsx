@@ -24,7 +24,7 @@ export default function SeedSoil() {
     triggerHaptic('medium')
     completeStep('seed-soil')
     addXP(100)
-    navigate('/smokecraft/humidor-match')
+    navigate('/smokecraft/mentor')
   }
 
   return (

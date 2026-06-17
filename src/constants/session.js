@@ -36,10 +36,10 @@ export const XP_AWARDS = {
 
 export const SMOKECRAFT_FLOW = [
   { id: 'enroll',           route: '/smokecraft/enroll',           label: 'Profile Enrollment',        stitch: true  },
-  { id: 'golden-box',       route: '/smokecraft/golden-box',       label: 'Gold Box Rules',            stitch: false },
-  { id: 'mentor',           route: '/smokecraft/mentor',           label: 'Select Master Mentor',      stitch: true  },
   { id: 'format',           route: '/smokecraft/format',           label: 'Shape, Size & Burn Time',   stitch: false },
   { id: 'seed-soil',        route: '/smokecraft/seed-soil',        label: 'Seed & Soil Pairing',       stitch: true  },
+  { id: 'mentor',           route: '/smokecraft/mentor',           label: 'Select Master Mentor',      stitch: true  },
+  { id: 'golden-box',       route: '/smokecraft/golden-box',       label: 'Gold Box Rules',            stitch: false },
   { id: 'humidor-match',    route: '/smokecraft/humidor-match',    label: 'Humidor Match',             stitch: true  },
   { id: 'request-purchase', route: '/smokecraft/request-purchase', label: 'Request or Purchase Cigar', stitch: true  },
   { id: 'cut-toast-light',  route: '/smokecraft/cut-toast-light',  label: 'Cut, Toast & Light',        stitch: true  },

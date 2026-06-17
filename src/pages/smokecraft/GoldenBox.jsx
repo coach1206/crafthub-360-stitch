@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { smokeCraftAssets } from '../../data/smokecraftAssets.js'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
@@ -17,6 +18,21 @@ const CONTENTS = [
   { icon: 'id_card',           label: 'Cigar Identity Card',          desc: 'A shareable credential revealing your archetype — Diplomat, Scholar, Adventurer, or Señor.' },
   { icon: 'workspace_premium', label: 'Exclusive Lounge Privileges',  desc: 'Priority access, premium humidor reservations, and private sommelier sessions.' },
 ]
+
+function GoldenBoxHeroImage({ memberName }) {
+  const [failed, setFailed] = useState(false)
+  if (!failed) {
+    return (
+      <img
+        src={smokeCraftAssets.goldenBoxHero}
+        alt="Golden Box"
+        onError={() => setFailed(true)}
+        style={{ maxWidth: 480, width: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
+      />
+    )
+  }
+  return <GoldenTreasureBox memberName={memberName} />
+}
 
 function GoldenTreasureBox({ memberName = 'Julian Sterling' }) {
   return (
@@ -83,7 +99,7 @@ export default function GoldenBox() {
     addXP(25)
     addBadge({ id: 'golden-box-invitation', name: 'Golden Invitation', icon: 'inventory_2' })
     completeStep('golden-box')
-    setTimeout(() => navigate('/smokecraft/mentor'), 600)
+    setTimeout(() => navigate('/smokecraft/humidor-match'), 600)
   }
 
   const FILL1 = { fontVariationSettings: "'FILL' 1" }
@@ -110,8 +126,8 @@ export default function GoldenBox() {
           <button
             className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-primary/10 active:bg-primary/20 transition-colors duration-300"
             style={{ minWidth: 48, minHeight: 48 }}
-            onClick={() => navigate('/smokecraft/enroll')}
-            aria-label="Back to Enroll"
+            onClick={() => navigate('/smokecraft/mentor')}
+            aria-label="Back to Mentor Selection"
           >arrow_back</button>
           <span className="material-symbols-outlined text-primary text-[22px]" style={FILL1}>shield_person</span>
           <span className="font-headline-md text-[18px] font-bold text-primary tracking-tighter">CRAFTHUB 360</span>
@@ -139,7 +155,7 @@ export default function GoldenBox() {
           className={`transition-all duration-1000 ease-out ${revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
           style={{ transitionDelay: '0ms' }}
         >
-          <GoldenTreasureBox memberName={displayName} />
+          <GoldenBoxHeroImage memberName={displayName} />
         </div>
 
         {/* Headline Block */}

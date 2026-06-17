@@ -33,7 +33,7 @@ export default function HumidorMatch() {
         <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
-        <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/seed-soil')} aria-label="Back">arrow_back</button>
+        <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/golden-box')} aria-label="Back">arrow_back</button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
@@ -68,7 +68,7 @@ export default function HumidorMatch() {
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
             Continue <span className="material-symbols-outlined">arrow_forward</span>
           </button>
-          <button onClick={() => navigate('/smokecraft/seed-soil')}
+          <button onClick={() => navigate('/smokecraft/golden-box')}
             className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300"
             style={{ height:64,paddingInline:32 }}>
             <span className="material-symbols-outlined">arrow_back</span> Back
