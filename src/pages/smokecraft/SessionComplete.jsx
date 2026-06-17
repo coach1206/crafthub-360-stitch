@@ -65,8 +65,8 @@ export default function SessionComplete() {
           <button
             className="material-symbols-outlined text-primary p-2 hover:bg-surface-variant/50 transition-colors duration-300 rounded-full"
             style={{ minWidth: 48, minHeight: 48 }}
-            onClick={() => navigate('/smokecraft')}
-            aria-label="Back to SmokeCraft"
+            onClick={() => navigate('/smokecraft/management-sync')}
+            aria-label="Back"
           >arrow_back</button>
           <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
         </div>

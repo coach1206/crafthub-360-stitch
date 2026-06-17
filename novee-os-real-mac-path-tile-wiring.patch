@@ -1,0 +1,205 @@
+diff --git a/artifacts/api-server/frontend/src/pages/ConnectedModuleShell.jsx b/artifacts/api-server/frontend/src/pages/ConnectedModuleShell.jsx
+new file mode 100644
+index 0000000..ec906a4
+--- /dev/null
++++ b/artifacts/api-server/frontend/src/pages/ConnectedModuleShell.jsx
+@@ -0,0 +1,76 @@
++import { useNavigate } from 'react-router-dom'
++
++export default function ConnectedModuleShell({
++  title = 'NOVEE OS Module',
++  scope = 'System',
++  description = 'This module is connected to NOVEE OS and ready for backend wiring.',
++  status = 'CONNECTED SHELL',
++  requiredRole = 'Admin / Founder / Developer',
++  backPath = '/ultra-command-center',
++}) {
++  const navigate = useNavigate()
++
++  return (
++    <div className="leather-texture min-h-screen bg-background px-6 py-10 text-on-surface lg:px-10">
++      <div className="mx-auto flex min-h-screen max-w-5xl flex-col justify-center">
++        <div className="rounded-xl border border-primary/20 bg-surface-container/60 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl md:p-10">
++          <div className="flex flex-wrap items-center gap-3">
++            <span className="rounded-md border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-[0.68rem] font-black uppercase tracking-[0.22em] text-emerald-200">
++              {status}
++            </span>
++            <span className="rounded-md border border-primary/25 bg-primary/10 px-3 py-2 text-[0.68rem] font-black uppercase tracking-[0.22em] text-primary/70">
++              {scope}
++            </span>
++          </div>
++
++          <h1 className="mt-4 font-display-lg text-4xl uppercase tracking-[0.14em] text-primary md:text-6xl">{title}</h1>
++          <p className="mt-5 max-w-3xl text-lg leading-8 text-on-surface-variant">{description}</p>
++
++          <div className="mt-8 rounded-lg border border-primary/20 bg-black/25 p-5">
++            <h2 className="font-label-lg text-label-lg uppercase tracking-[0.22em] text-primary/70">Access / Role Control</h2>
++            <p className="mt-3 text-sm leading-6 text-on-surface-variant">
++              Required: <span className="font-bold text-primary">{requiredRole}</span>
++            </p>
++          </div>
++
++          <div className="mt-6 rounded-lg border border-primary/20 bg-black/25 p-5">
++            <h2 className="font-label-lg text-label-lg uppercase tracking-[0.22em] text-primary/70">Next Backend Wiring Needed</h2>
++            <div className="mt-4 grid gap-3 md:grid-cols-3">
++              {[
++                'Connect protected API endpoint',
++                'Wire real data layer with venueId scope',
++                'Add production controls and audit logging',
++              ].map((phase) => (
++                <div
++                  key={phase}
++                  className="min-h-[76px] rounded-md border border-primary/15 bg-primary/10 p-4 text-sm leading-6 text-on-surface-variant"
++                >
++                  {phase}
++                </div>
++              ))}
++            </div>
++          </div>
++
++          <div className="mt-8 flex flex-wrap gap-3">
++            <button
++              type="button"
++              onClick={() => navigate(backPath)}
++              aria-label="Back to parent module"
++              className="min-h-12 rounded-md border border-primary/25 bg-black/25 px-5 font-label-lg text-label-lg uppercase tracking-[0.14em] text-primary"
++            >
++              Back
++            </button>
++            <button
++              type="button"
++              onClick={() => navigate('/')}
++              aria-label="Go to NOVEE OS Home"
++              className="min-h-12 rounded-md border border-primary/25 bg-black/25 px-5 font-label-lg text-label-lg uppercase tracking-[0.14em] text-primary"
++            >
++              NOVEE OS Home
++            </button>
++          </div>
++        </div>
++      </div>
++    </div>
++  )
++}
+diff --git a/artifacts/api-server/frontend/src/pages/NoveeSystemPage.jsx b/artifacts/api-server/frontend/src/pages/NoveeSystemPage.jsx
+index 59cf69c..917b696 100644
+--- a/artifacts/api-server/frontend/src/pages/NoveeSystemPage.jsx
++++ b/artifacts/api-server/frontend/src/pages/NoveeSystemPage.jsx
+@@ -17,6 +17,7 @@ export default function NoveeSystemPage({
+   purpose,
+   sections = [],
+   blockedInDemo = false,
++  sectionRoutes = {},
+ }) {
+   const navigate = useNavigate()
+   const { isDemoMode } = useDemoMode()
+@@ -41,12 +42,22 @@ export default function NoveeSystemPage({
+         <VenueMirrorPOS3Command report={pos3Report} navigate={navigate} />
+       )}
+       <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+-        {sections.map((section) => (
+-          <div key={section} className="min-h-[112px] rounded-lg border border-primary/20 bg-black/25 p-5">
+-            <p className="font-label-lg text-label-lg uppercase tracking-[0.16em] text-primary">{section}</p>
+-            <p className="mt-3 text-sm leading-6 text-on-surface-variant">Module Ready for Buildout</p>
+-          </div>
+-        ))}
++        {sections.map((section) => {
++          const route = sectionRoutes[section]
++          return (
++            <button
++              key={section}
++              type="button"
++              onClick={() => { if (route) navigate(route) }}
++              onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && route) navigate(route) }}
++              aria-label={`Open ${section}`}
++              className={`min-h-[112px] rounded-lg border border-primary/20 bg-black/25 p-5 text-left transition-all${route ? ' cursor-pointer hover:border-primary/40 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/40 active:scale-[0.98]' : ' cursor-default'}`}
++            >
++              <p className="font-label-lg text-label-lg uppercase tracking-[0.16em] text-primary">{section}</p>
++              <p className="mt-3 text-sm leading-6 text-on-surface-variant">{route ? 'Open →' : 'Module Ready for Buildout'}</p>
++            </button>
++          )
++        })}
+       </div>
+     </Shell>
+   )
+diff --git a/artifacts/api-server/frontend/src/pages/UltraCommandCenterPage.jsx b/artifacts/api-server/frontend/src/pages/UltraCommandCenterPage.jsx
+new file mode 100644
+index 0000000..ab66aa6
+--- /dev/null
++++ b/artifacts/api-server/frontend/src/pages/UltraCommandCenterPage.jsx
+@@ -0,0 +1,76 @@
++import { useNavigate } from 'react-router-dom'
++
++const ULTRA_MODULES = [
++  { title: 'Connected Venues',        route: '/ultra/connected-venues',        description: 'Multi-tenant venue registry with health monitoring, sync status, and license control per venueId.' },
++  { title: 'Remote Software Control', route: '/ultra/remote-software-control', description: 'Deploy UI, module, content, legal, ticker, and access control updates across all connected venues.' },
++  { title: 'NOVEE Vault',             route: '/ultra/novee-vault',             description: 'Secure system of record organized by domain: identity, venue, experience, legal, and audit.' },
++  { title: 'Licenses',                route: '/ultra/licenses',                description: 'Manage venue licenses, special access codes, and module activation across all tenants.' },
++  { title: 'Modules',                 route: '/ultra/modules',                 description: 'Control module availability, rollout status, and deactivation per venue or globally.' },
++  { title: 'E.A.T. Network',          route: '/ultra/eat-network',             description: 'Global E.A.T. operations across connected venues: kitchen, bar, humidor, and events.' },
++  { title: 'POS 3 Network',           route: '/ultra/pos-3-network',           description: 'POS 3 configuration, transaction signals, and reporting across tenant venues.' },
++  { title: 'CraftHub Network',        route: '/ultra/crafthub-network',        description: 'CraftHub experience content, module updates, and craft intelligence across the network.' },
++  { title: 'Passport Network',        route: '/ultra/passport-network',        description: 'Passport member identity, XP, badges, and sensory profiles across all connected venues.' },
++  { title: 'Ambi Intelligence',       route: '/ultra/ambi-intelligence',       description: 'AMBI environment logic for ambient intelligence signals and adaptive system behavior.' },
++  { title: 'Analytics',               route: '/ultra/analytics',               description: 'System-wide usage, engagement, venue performance, and operational analytics.' },
++  { title: 'Deployments',             route: '/ultra/deployments',             description: 'Deployment history, version tracking, rollback records, and release management.' },
++  { title: 'Users',                   route: '/ultra/users',                   description: 'Manage staff, mentors, admins, developers, and venue operators across all tenants.' },
++  { title: 'Roles',                   route: '/ultra/roles',                   description: 'Role definitions, permission matrix, and access control configuration.' },
++  { title: 'Security',                route: '/ultra/security',                description: 'System security posture, audit access controls, and protected system enforcement.' },
++  { title: 'Developer Diagnostics',   route: '/ultra/developer-diagnostics',   description: 'System health, API status, logs, integration checks, and deployment readiness.' },
++  { title: 'Support / Tickets',       route: '/ultra/support-tickets',         description: 'Support ticket management, bug reports, and venue escalation handling.' },
++]
++
++export default function UltraCommandCenterPage() {
++  const navigate = useNavigate()
++
++  return (
++    <div className="leather-texture min-h-screen bg-background px-6 py-10 text-on-surface lg:px-10">
++      <div className="mx-auto max-w-7xl">
++        <div className="mb-10 flex items-center gap-4">
++          <button
++            type="button"
++            onClick={() => navigate(-1)}
++            aria-label="Back"
++            className="flex min-h-12 min-w-12 items-center justify-center rounded-md border border-primary/25 bg-black/25 text-primary"
++          >
++            <span className="material-symbols-outlined text-2xl">arrow_back</span>
++          </button>
++          <div>
++            <p className="font-label-lg text-label-lg uppercase tracking-[0.28em] text-primary/70">Layer 1 · Mothership</p>
++            <h1 className="font-display-lg text-4xl uppercase tracking-[0.14em] text-primary md:text-6xl">
++              Ultra Command Center
++            </h1>
++          </div>
++        </div>
++
++        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
++          {ULTRA_MODULES.map((mod) => (
++            <button
++              key={mod.route}
++              type="button"
++              onClick={() => navigate(mod.route)}
++              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate(mod.route) }}
++              aria-label={`Open ${mod.title}`}
++              className="min-h-[160px] cursor-pointer rounded-lg border border-primary/20 bg-black/25 p-6 text-left transition-all hover:border-primary/40 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/40 active:scale-[0.98]"
++            >
++              <p className="font-label-lg text-label-lg uppercase tracking-[0.16em] text-primary">{mod.title}</p>
++              <p className="mt-3 text-sm leading-6 text-on-surface-variant">{mod.description}</p>
++              <p className="mt-4 text-[0.68rem] font-black uppercase tracking-[0.18em] text-primary/50">Open →</p>
++            </button>
++          ))}
++        </div>
++
++        <div className="mt-10 flex flex-wrap gap-3">
++          <button
++            type="button"
++            onClick={() => navigate('/')}
++            aria-label="Go to NOVEE OS Home"
++            className="min-h-12 rounded-md border border-primary/25 bg-black/25 px-5 font-label-lg text-label-lg uppercase tracking-[0.14em] text-primary"
++          >
++            NOVEE OS Home
++          </button>
++        </div>
++      </div>
++    </div>
++  )
++}

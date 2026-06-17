@@ -83,7 +83,7 @@ export default function GoldenBox() {
     addXP(25)
     addBadge({ id: 'golden-box-invitation', name: 'Golden Invitation', icon: 'inventory_2' })
     completeStep('golden-box')
-    setTimeout(() => navigate('/smokecraft/art'), 600)
+    setTimeout(() => navigate('/smokecraft/mentor'), 600)
   }
 
   const FILL1 = { fontVariationSettings: "'FILL' 1" }

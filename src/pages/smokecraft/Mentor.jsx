@@ -154,7 +154,7 @@ export default function Mentor() {
   function handleSaveDraft() {
     voice.stop()
     triggerHaptic('light')
-    navigate('/smokecraft/enroll')
+    navigate('/smokecraft/golden-box')
   }
 
   return (

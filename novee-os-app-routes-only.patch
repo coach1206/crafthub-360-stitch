@@ -1,0 +1,62 @@
+diff --git a/artifacts/api-server/frontend/src/App.jsx b/artifacts/api-server/frontend/src/App.jsx
+index 10f4e8d..62bd4cb 100644
+--- a/artifacts/api-server/frontend/src/App.jsx
++++ b/artifacts/api-server/frontend/src/App.jsx
+@@ -70,6 +70,8 @@ const Admin          = lazy(() => import('./pages/Admin.jsx'))
+ const FounderControl = lazy(() => import('./pages/FounderControl.jsx'))
+ const MentorConsole  = lazy(() => import('./pages/MentorConsole.jsx'))
+ const DevDiagnostics = lazy(() => import('./pages/DevDiagnostics.jsx'))
++const UltraCommandCenterPage = lazy(() => import('./pages/UltraCommandCenterPage.jsx'))
++const ConnectedModuleShell   = lazy(() => import('./pages/ConnectedModuleShell.jsx'))
+ 
+ import ProtectedRoute  from './components/security/ProtectedRoute.jsx'
+ import DevRoleSwitcher from './components/security/DevRoleSwitcher.jsx'
+@@ -219,15 +221,39 @@ export default function App() {
+               <Route path="beercraft"  element={<BeerCraft />} />
+               <Route path="winecraft"  element={<WineCraft />} />
+               <Route path="command-hub" element={<Home />} />
+-              <Route path="ultra-command-center" element={
+-                <NoveeSystemPage
+-                  blockedInDemo
+-                  label="NOVEE OS ULTRA COMMAND CENTER"
+-                  title="Founder Master Control System"
+-                  purpose="Founder/admin/developer control for remote software control, connected venues, licenses, NOVEE Vault, deployments, analytics, users, roles, security, diagnostics, AMBI, support, and remote updates."
+-                  sections={['Connected Venues', 'Remote Software Control', 'NOVEE Vault', 'Licenses', 'Modules', 'E.A.T. Network', 'POS 3 Network', 'CraftHub Network', 'Passport Network', 'AMBI Intelligence', 'Analytics', 'Deployments', 'Security', 'Audit Logs', 'User Management', 'Role Management', 'Legal / Privacy', 'Assets / Media Library', 'Support / Tickets', 'Developer Diagnostics', 'Founder Command']}
+-                />
+-              } />
++              <Route path="ultra-command-center" element={<UltraCommandCenterPage />} />
++
++              {/* ── Ultra Command Center sub-module shells ── */}
++              {[
++                { path: 'ultra/connected-venues',        title: 'Connected Venues',        description: 'Multi-tenant venue registry with health monitoring, sync status, and license control per venueId.' },
++                { path: 'ultra/remote-software-control', title: 'Remote Software Control', description: 'Deploy UI, module, content, legal, ticker, and access control updates across all connected venues.' },
++                { path: 'ultra/novee-vault',             title: 'NOVEE Vault',             description: 'Secure system of record organized by domain: identity, venue, experience, legal, and audit.' },
++                { path: 'ultra/licenses',                title: 'Licenses',                description: 'Manage venue licenses, special access codes, and module activation across all tenants.' },
++                { path: 'ultra/modules',                 title: 'Modules',                 description: 'Control module availability, rollout status, and deactivation per venue or globally.' },
++                { path: 'ultra/eat-network',             title: 'E.A.T. Network',          description: 'Global E.A.T. operations across connected venues: kitchen, bar, humidor, and events.' },
++                { path: 'ultra/pos-3-network',           title: 'POS 3 Network',           description: 'POS 3 configuration, transaction signals, and reporting across tenant venues.' },
++                { path: 'ultra/crafthub-network',        title: 'CraftHub Network',        description: 'CraftHub experience content, module updates, and craft intelligence across the network.' },
++                { path: 'ultra/passport-network',        title: 'Passport Network',        description: 'Passport member identity, XP, badges, and sensory profiles across all connected venues.' },
++                { path: 'ultra/ambi-intelligence',       title: 'Ambi Intelligence',       description: 'AMBI environment logic for ambient intelligence signals and adaptive system behavior.' },
++                { path: 'ultra/analytics',               title: 'Analytics',               description: 'System-wide usage, engagement, venue performance, and operational analytics.' },
++                { path: 'ultra/deployments',             title: 'Deployments',             description: 'Deployment history, version tracking, rollback records, and release management.' },
++                { path: 'ultra/users',                   title: 'Users',                   description: 'Manage staff, mentors, admins, developers, and venue operators across all tenants.' },
++                { path: 'ultra/roles',                   title: 'Roles',                   description: 'Role definitions, permission matrix, and access control configuration.' },
++                { path: 'ultra/security',                title: 'Security',                description: 'System security posture, audit access controls, and protected system enforcement.' },
++                { path: 'ultra/developer-diagnostics',   title: 'Developer Diagnostics',   description: 'System health, API status, logs, integration checks, and deployment readiness.' },
++                { path: 'ultra/support-tickets',         title: 'Support / Tickets',       description: 'Support ticket management, bug reports, and venue escalation handling.' },
++              ].map(({ path, title, description }) => (
++                <Route key={path} path={path} element={
++                  <ConnectedModuleShell
++                    title={title}
++                    scope="Ultra Command Center"
++                    description={description}
++                    requiredRole="Admin / Founder / Developer"
++                    backPath="/ultra-command-center"
++                  />
++                } />
++              ))}
++
+               <Route path="venue-mirror" element={
+                 <NoveeSystemPage
+                   blockedInDemo

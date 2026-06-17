@@ -141,7 +141,7 @@ export default function PassportStamp() {
           <button
             className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-primary/10 transition-colors duration-300"
             style={{ minWidth: 48, minHeight: 48 }}
-            onClick={() => navigate('/smokecraft/session-complete')}
+            onClick={() => navigate('/smokecraft/scorecard')}
           >arrow_back</button>
           <h1 className="font-display-lg text-primary uppercase tracking-widest" style={{ fontSize: 20 }}>The 360 Passport</h1>
         </div>
@@ -270,11 +270,11 @@ export default function PassportStamp() {
             Open My Passport
           </button>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/smokecraft/connections')}
             className="flex items-center gap-4 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300"
             style={{ height: 72, paddingInline: 48 }}
           >
-            Return to CraftHub
+            Continue to Connections
             <span className="material-symbols-outlined">arrow_forward</span>
           </button>
         </div>

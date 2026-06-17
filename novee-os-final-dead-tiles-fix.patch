@@ -1,0 +1,32 @@
+diff --git a/artifacts/api-server/frontend/src/App.jsx b/artifacts/api-server/frontend/src/App.jsx
+index 62bd4cb..43364fa 100644
+--- a/artifacts/api-server/frontend/src/App.jsx
++++ b/artifacts/api-server/frontend/src/App.jsx
+@@ -261,6 +261,27 @@ export default function App() {
+                   title="Establishment-Level Management System"
+                   purpose="Venue-facing management interface for establishments using E.A.T. and POS 3. It mimics NOVEE OS visually while exposing only that venue's licensed local tools and venueId-scoped data."
+                   sections={['Venue Overview', 'CraftHub', 'E.A.T. Command Center', 'POS 3', 'SmokeCraft 360', 'PourCraft', 'WineCraft', 'BeerCraft', 'Kitchen / Food Experiences', 'Events', 'Ticket Ticker', 'Staff Terminal', 'Mentor Console', 'Passport Members', 'Sensory Profiles', 'Leaderboard', 'DayOne360 Travel', 'Reports', 'Venue Settings']}
++                  sectionRoutes={{
++                    'Venue Overview':             '/venue-mirror',
++                    'CraftHub':                   '/crafthub',
++                    'E.A.T. Command Center':       '/eat-command-center',
++                    'POS 3':                       '/pos-3',
++                    'SmokeCraft 360':              '/smokecraft',
++                    'PourCraft':                   '/pourcraft',
++                    'WineCraft':                   '/winecraft',
++                    'BeerCraft':                   '/beercraft',
++                    'Kitchen / Food Experiences':  '/crafthub',
++                    'Events':                      '/events',
++                    'Ticket Ticker':               '/ticket-ticker',
++                    'Staff Terminal':              '/staff-terminal',
++                    'Mentor Console':              '/mentor-console',
++                    'Passport Members':            '/passport-members',
++                    'Sensory Profiles':            '/sensory-profiles',
++                    'Leaderboard':                 '/leaderboard',
++                    'DayOne360 Travel':            '/dayone360-travel',
++                    'Reports':                     '/reports',
++                    'Venue Settings':              '/venue-settings',
++                  }}
+                 />
+               } />
+               <Route path="novee-vault" element={

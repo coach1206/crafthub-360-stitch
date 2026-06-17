@@ -192,7 +192,7 @@ export default function Format() {
   function continueNext() {
     if (!selected) return
     if (!isSaved) saveFormat()
-    navigate('/smokecraft/origins')
+    navigate('/smokecraft/seed-soil')
   }
 
   return (

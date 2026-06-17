@@ -37,6 +37,16 @@ import Vitola           from './pages/smokecraft/Vitola.jsx'
 import Identity         from './pages/smokecraft/Identity.jsx'
 import Leaderboard      from './pages/smokecraft/Leaderboard.jsx'
 import PassportStamp    from './pages/smokecraft/PassportStamp.jsx'
+import SeedSoil         from './pages/smokecraft/SeedSoil.jsx'
+import HumidorMatch     from './pages/smokecraft/HumidorMatch.jsx'
+import RequestPurchase  from './pages/smokecraft/RequestPurchase.jsx'
+import CutToastLight    from './pages/smokecraft/CutToastLight.jsx'
+import FirstThird       from './pages/smokecraft/FirstThird.jsx'
+import SecondThird      from './pages/smokecraft/SecondThird.jsx'
+import FinalThird       from './pages/smokecraft/FinalThird.jsx'
+import Scorecard        from './pages/smokecraft/Scorecard.jsx'
+import Connections      from './pages/smokecraft/Connections.jsx'
+import ManagementSync   from './pages/smokecraft/ManagementSync.jsx'
 
 // ── Passport — guest-accessible, eager ───────────────────────
 import PassportHome        from './pages/passport/PassportHome.jsx'
@@ -204,7 +214,17 @@ export default function App() {
                 <Route path="vitola"         element={<Vitola />} />
                 <Route path="identity"       element={<Identity />} />
                 <Route path="leaderboard"    element={<Leaderboard />} />
-                <Route path="passport-stamp" element={<PassportStamp />} />
+                <Route path="passport-stamp"   element={<PassportStamp />} />
+                <Route path="seed-soil"        element={<SeedSoil />} />
+                <Route path="humidor-match"    element={<HumidorMatch />} />
+                <Route path="request-purchase" element={<RequestPurchase />} />
+                <Route path="cut-toast-light"  element={<CutToastLight />} />
+                <Route path="first-third"      element={<FirstThird />} />
+                <Route path="second-third"     element={<SecondThird />} />
+                <Route path="final-third"      element={<FinalThird />} />
+                <Route path="scorecard"        element={<Scorecard />} />
+                <Route path="connections"      element={<Connections />} />
+                <Route path="management-sync"  element={<ManagementSync />} />
               </Route>
 
               {/* 360 Passport — guest-accessible + demo-allowed */}
