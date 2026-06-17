@@ -56,13 +56,25 @@ export function clearHandoff() {
 
 /** Persists safe staff session info only — never the raw PIN. */
 export function saveStaffSession({ email, role, venueId = null, staffName = null }) {
+  const isFounder = role === 'founder_level_0' || role === 'founder'
+
   const session = {
     email,
-    role,
+    role:        isFounder ? 'founder' : role,
+    accessLevel: isFounder ? 'full' : 'standard',
     authenticated:  true,
     authenticatedAt: Date.now(),
-    venueId,
-    staffName,
+    venueId: isFounder ? 'global' : venueId,
+    staffName: isFounder ? 'Founder' : staffName,
+    ...(isFounder ? {
+      canEdit:              true,
+      canManageStaff:       true,
+      canAccessPOS:         true,
+      canAccessEAT:         true,
+      canAccessNoveeOS:     true,
+      canAccessDiagnostics: true,
+      canBypassPublicLocks: true,
+    } : {}),
   }
   try { sessionStorage.setItem(STAFF_SESSION_KEY, JSON.stringify(session)) } catch {}
   return session

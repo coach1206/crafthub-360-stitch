@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams, Navigate } from 'react-router-dom'
 import { loadSession } from '../services/sessionStorageService.js'
 import { useDemoMode } from '../context/DemoModeContext.jsx'
 import { useSecurity } from '../context/SecurityContext.jsx'
+import { loadStaffSession } from '../services/staffHandoffService.js'
 import BootScreen from '../components/BootScreen.jsx'
 
 // /boot is a developer/founder/admin-only system console. Public and staff
@@ -207,7 +208,7 @@ export default function Boot() {
   }, [after, startBootUI])
 
   useEffect(() => {
-    if (!BOOT_ALLOWED_ROLES.has(role)) return
+    if (loadStaffSession()?.role !== 'founder' && !BOOT_ALLOWED_ROLES.has(role)) return
 
     if (sessionStorage.getItem('novee_booted')) {
       const returnPath = sessionStorage.getItem('novee_boot_return')
@@ -278,7 +279,8 @@ export default function Boot() {
 
   // /boot is a developer/founder/admin-only system console — never shown to
   // public, guest, or staff users. Send everyone else straight to CraftHub.
-  if (!BOOT_ALLOWED_ROLES.has(role)) {
+  const staffSession = loadStaffSession()
+  if (staffSession?.role !== 'founder' && !BOOT_ALLOWED_ROLES.has(role)) {
     return <Navigate to="/crafthub" replace />
   }
 

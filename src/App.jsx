@@ -500,6 +500,10 @@ export default function App() {
               } />
 
               {/* Route aliases */}
+              <Route path="management"   element={<Navigate to="/venue-mirror" replace />} />
+              <Route path="novee"        element={<Navigate to="/ultra-command-center" replace />} />
+              <Route path="system"       element={<Navigate to="/system-overview" replace />} />
+              <Route path="diagnostics"  element={<Navigate to="/dev-diagnostics" replace />} />
               <Route path="craft-hub"    element={<Navigate to="/crafthub" replace />} />
               <Route path="craft-modules" element={<Navigate to="/crafthub" replace />} />
               <Route path="dashboard"    element={<Navigate to="/crafthub" replace />} />

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { verifyStaffHandoffCredentials } from '../../data/staffHandoffRegistry.js'
+import { verifyStaffHandoffCredentials, verifyFounderCredentials } from '../../data/staffHandoffRegistry.js'
 
 const GOLD = '#E9C176'
 
@@ -24,6 +24,21 @@ export default function StaffHandoffLoginModal({ onUnlock, onCancel }) {
     }
 
     setChecking(true)
+
+    // Founder credentials supersede all other access — check first.
+    const founderResult = verifyFounderCredentials(email, pin)
+    if (founderResult.ok) {
+      setChecking(false)
+      onUnlock(founderResult)
+      return
+    }
+    if (founderResult.error) {
+      // Email matched the founder account but the PIN didn't.
+      setChecking(false)
+      setError(founderResult.error)
+      return
+    }
+
     const result = verifyStaffHandoffCredentials(email, pin)
     setChecking(false)
 
