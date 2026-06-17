@@ -9,6 +9,35 @@ import {
   SmokeCraftAtmosphericBackground,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
+function MentorPortrait({ image, name }) {
+  const [failed, setFailed] = useState(false)
+  return (
+    <span className="smokecraft-mentor-card__image" aria-hidden="true">
+      {!failed ? (
+        <img
+          src={image}
+          alt=""
+          onError={() => setFailed(true)}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
+        />
+      ) : (
+        <span style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          width: '100%', height: '100%', background: 'rgba(20,14,8,0.92)',
+          color: 'rgba(233,193,118,0.4)', gap: 6,
+        }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 28 }}>person</span>
+          <span style={{ fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Portrait pending</span>
+        </span>
+      )}
+    </span>
+  )
+}
+
+// APPROVED SMOKECRAFT MENTOR VISUAL RULE:
+// Mentor cards must use realistic portraits only.
+// Do not replace with cartoon avatars, placeholder faces, emoji art, or flat vector people.
+
 const MENTORS = [
   {
     id: 'dominican',
@@ -18,8 +47,7 @@ const MENTORS = [
     name: 'Don Alejandro',
     bio: 'Master of volcanic soil nutrients and the delicate art of Olor wrapper fermentation.',
     tags: ['Complexity', 'Floral Notes'],
-    img: '/mentor-don-alejandro.svg',
-    position: 'center',
+    image: '/mentors/don-alejandro.jpg',
     greeting: 'I am Don Alejandro. Volcanic soil and the patience of centuries — I will teach you to read the earth within a single Olor wrapper.',
   },
   {
@@ -30,8 +58,7 @@ const MENTORS = [
     name: 'Javier Estelí',
     bio: "Specialist in sun-grown Criollo '98 and the robust spice profiles of Jalapa Valley.",
     tags: ['Bold', 'Earth / Spice'],
-    img: '/mentor-javier-esteli.svg',
-    position: 'center',
+    image: '/mentors/javier-esteli.jpg',
     greeting: 'Javier Estelí. My valley demands boldness. The spice you taste in Jalapa tobacco is the result of relentless sun and uncompromising craft.',
   },
   {
@@ -39,12 +66,11 @@ const MENTORS = [
     country: 'Honduras',
     flag: '🇭🇳',
     flagLabel: 'Honduras flag',
-    name: 'Elena Jamastran',
+    name: 'Doña Jamastran',
     bio: 'Legacy grower of authentic Corojo seed and the intense, full-bodied traditions of Danlí.',
     tags: ['Authentic', 'Rich Cedar'],
-    img: '/mentor-elena-jamastran.svg',
-    position: 'center',
-    greeting: "I am Elena Jamastran. Five generations of Corojo in the highlands of Danlí. My family's legacy is in every leaf — I will pass it on to you.",
+    image: '/mentors/dona-jamastran.jpg',
+    greeting: "I am Doña Jamastran. Five generations of Corojo in the highlands of Danlí. My family's legacy is in every leaf — I will pass it on to you.",
   },
   {
     id: 'mexico',
@@ -54,8 +80,7 @@ const MENTORS = [
     name: 'Mateo San Andrés',
     bio: "Guardian of the Negro San Andrés leaf, the world's most sought-after Maduro wrapper.",
     tags: ['Dark Cocoa', 'Maduro Expert'],
-    img: '/mentor-mateo-san-andres.svg',
-    position: 'center',
+    image: '/mentors/mateo-san-andres.jpg',
     greeting: "Mateo San Andrés. The Negro Maduro wrapper holds the darkest secrets in tobacco. Complex, honest, and alive. Your education starts now.",
   },
   {
@@ -66,8 +91,7 @@ const MENTORS = [
     name: 'Maestro Rafael',
     bio: 'Keeper of classic Cuban-seed tradition, elegant draw discipline, and old-world rolling standards.',
     tags: ['Tradition', 'Balance'],
-    img: '/mentor-maestro-rafael.svg',
-    position: 'center',
+    image: '/mentors/maestro-rafael.jpg',
     greeting: 'Maestro Rafael. Tradition is not nostalgia. It is a standard. I will teach you how balance becomes elegance.',
   },
   {
@@ -78,8 +102,7 @@ const MENTORS = [
     name: 'Carlos Mendoza',
     bio: 'Andean curator of altitude-grown aromatics, mineral sweetness, and rare leaf experimentation.',
     tags: ['Altitude', 'Aromatics'],
-    img: '/mentor-carlos-mendoza.svg',
-    position: 'center',
+    image: '/mentors/carlos-mendoza.jpg',
     greeting: 'Carlos Mendoza. In the high valleys, tobacco learns restraint and brightness. Let us find the lift inside the leaf.',
   },
   {
@@ -90,8 +113,7 @@ const MENTORS = [
     name: 'Thomas A. Blackwell',
     bio: 'Modern lounge strategist blending hospitality, humidor discipline, and contemporary cigar service.',
     tags: ['Lounge Craft', 'Service'],
-    img: '/mentor-thomas-blackwell.svg',
-    position: 'center',
+    image: '/mentors/thomas-blackwell.jpg',
     greeting: 'Thomas Blackwell. A great cigar experience is engineered before the first light. I will guide the ritual around the smoke.',
   },
   {
@@ -102,8 +124,7 @@ const MENTORS = [
     name: 'Dr. Paulo Oliveira',
     bio: 'Mata Fina researcher focused on natural sweetness, earthy depth, and scientific tasting language.',
     tags: ['Mata Fina', 'Research'],
-    img: '/mentor-paulo-oliveira.svg',
-    position: 'center',
+    image: '/mentors/paulo-oliveira.jpg',
     greeting: "Dr. Paulo Oliveira. Brazil's leaf is generous but exacting. I will teach you to measure sweetness without losing soul.",
   },
 ]
@@ -272,11 +293,7 @@ export default function Mentor() {
                 <span className="smokecraft-mentor-card__check" aria-hidden="true">
                   <span className="material-symbols-outlined">{isSelected ? 'check' : 'add'}</span>
                 </span>
-                <span
-                  className="smokecraft-mentor-card__image"
-                  style={{ backgroundImage: `url(${mentor.img})`, backgroundPosition: mentor.position }}
-                  aria-hidden="true"
-                />
+                <MentorPortrait image={mentor.image} name={mentor.name} />
                 <span className="smokecraft-mentor-card__shade" aria-hidden="true" />
                 <span className="smokecraft-mentor-card__flag" aria-label={mentor.flagLabel} title={mentor.country}>
                   <span aria-hidden="true">{mentor.flag}</span>
