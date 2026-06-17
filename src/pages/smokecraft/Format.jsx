@@ -6,7 +6,7 @@ import {
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
-function CigarImage({ image, name, cigarClass }) {
+function CigarImage({ image, name, height = '80px' }) {
   const [failed, setFailed] = useState(false)
   if (!failed && image) {
     return (
@@ -14,13 +14,18 @@ function CigarImage({ image, name, cigarClass }) {
         src={image}
         alt={name}
         onError={() => setFailed(true)}
-        style={{ width: '100%', height: '80px', objectFit: 'contain', objectPosition: 'center', display: 'block' }}
+        style={{ width: '100%', height, objectFit: 'contain', objectPosition: 'center', display: 'block' }}
       />
     )
   }
   return (
-    <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '80px', gap: 4 }}>
-      <span className={`format-cigar ${cigarClass}`} />
+    <span style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      width: '100%', height, borderRadius: 8,
+      background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+      color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+    }}>
+      Image pending
     </span>
   )
 }
@@ -45,7 +50,6 @@ const FORMATS = [
     tags: ['Balanced', 'Everyday', 'Smooth Draw'],
     xp: 25,
     tip: 'Robusto keeps the session focused: enough ring gauge for smoke volume, short enough to preserve intensity.',
-    cigarClass: 'format-cigar--robusto',
     image: '/assets/smokecraft/cigars/robusto.jpg',
   },
   {
@@ -63,7 +67,6 @@ const FORMATS = [
     tags: ['Long Session', 'Rich Draw', 'Balanced'],
     xp: 30,
     tip: 'Toro length lets a blend evolve gradually, making it ideal for pairings that open in stages.',
-    cigarClass: 'format-cigar--toro',
     image: '/assets/smokecraft/cigars/toro.jpg',
   },
   {
@@ -81,7 +84,6 @@ const FORMATS = [
     tags: ['Long Session', 'Elegant', 'Cool Burn'],
     xp: 35,
     tip: 'Churchill rewards patience. Its length cools the smoke and gives subtle tobaccos more room to speak.',
-    cigarClass: 'format-cigar--churchill',
     image: '/assets/smokecraft/cigars/churchill.jpg',
   },
   {
@@ -99,7 +101,6 @@ const FORMATS = [
     tags: ['Lighter Draw', 'Classic', 'Quick Smoke'],
     xp: 20,
     tip: 'Corona uses a slimmer ring gauge to concentrate wrapper character and keep the session crisp.',
-    cigarClass: 'format-cigar--corona',
     image: '/assets/smokecraft/cigars/corona.jpg',
   },
   {
@@ -117,7 +118,6 @@ const FORMATS = [
     tags: ['Full Flavor', 'Slow Burn', 'Cool Smoke'],
     xp: 40,
     tip: 'Gordo delivers more filler volume and a cooler burn, so the blend needs structure to avoid becoming soft.',
-    cigarClass: 'format-cigar--gordo',
     image: '/assets/smokecraft/cigars/gordo.jpg',
   },
   {
@@ -135,7 +135,6 @@ const FORMATS = [
     tags: ['Complex', 'Focused Flavor', 'Rich Draw'],
     xp: 45,
     tip: 'A tapered head focuses the draw, making Torpedo formats especially useful for layered, complex blends.',
-    cigarClass: 'format-cigar--torpedo',
     image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
   },
 ]
@@ -391,50 +390,6 @@ export default function Format() {
           justify-content: center;
           margin: 12px 0 10px;
         }
-        .format-cigar {
-          --cigar-width: 78%;
-          --cigar-height: 28px;
-          position: relative;
-          width: var(--cigar-width);
-          height: var(--cigar-height);
-          border-radius: 999px;
-          background:
-            radial-gradient(circle at 26% 45%, rgba(255,230,170,0.4), transparent 11%),
-            repeating-linear-gradient(110deg, rgba(255,234,180,0.1) 0 7px, rgba(63,30,12,0.16) 8px 14px),
-            linear-gradient(90deg, #5d2e12, #b06b32 20%, #7b3f1c 52%, #c18443 72%, #4c220e);
-          box-shadow: inset 0 2px 8px rgba(255,235,184,0.2), inset 0 -5px 8px rgba(0,0,0,0.32), 0 12px 20px rgba(0,0,0,0.48);
-        }
-        .format-cigar::before {
-          content: "";
-          position: absolute;
-          left: 48%;
-          top: -7px;
-          width: 30px;
-          height: calc(var(--cigar-height) + 14px);
-          border-radius: 4px;
-          background:
-            linear-gradient(90deg, rgba(60,28,9,0.82), rgba(239,204,126,0.94), rgba(86,45,15,0.9));
-          border: 1px solid rgba(255,224,148,0.55);
-          box-shadow: 0 0 16px rgba(233,193,118,0.2);
-        }
-        .format-cigar::after {
-          content: "";
-          position: absolute;
-          inset: 3px 9px;
-          border-radius: inherit;
-          background: linear-gradient(90deg, transparent, rgba(255,238,188,0.22), transparent);
-          pointer-events: none;
-        }
-        .format-cigar--corona { --cigar-width: 70%; --cigar-height: 22px; }
-        .format-cigar--robusto { --cigar-width: 68%; --cigar-height: 32px; }
-        .format-cigar--toro { --cigar-width: 84%; --cigar-height: 29px; }
-        .format-cigar--churchill { --cigar-width: 92%; --cigar-height: 24px; }
-        .format-cigar--gordo { --cigar-width: 76%; --cigar-height: 38px; }
-        .format-cigar--torpedo {
-          --cigar-width: 82%;
-          --cigar-height: 30px;
-          clip-path: polygon(0 8%, 88% 0, 100% 50%, 88% 100%, 0 92%);
-        }
         .format-card h2 {
           margin: 0 0 6px;
           font-family: "Playfair Display", Georgia, serif;
@@ -514,22 +469,6 @@ export default function Format() {
           background:
             radial-gradient(circle at center, rgba(233,193,118,0.14), transparent 62%),
             linear-gradient(135deg, rgba(233,193,118,0.06), rgba(0,0,0,0.18));
-        }
-        .format-insight__cigar .format-cigar {
-          width: 50px;
-          height: 205px;
-          transform: rotate(0deg);
-          border-radius: 999px;
-          background:
-            radial-gradient(circle at 50% 18%, rgba(255,230,170,0.4), transparent 9%),
-            repeating-linear-gradient(22deg, rgba(255,234,180,0.1) 0 9px, rgba(63,30,12,0.16) 10px 18px),
-            linear-gradient(180deg, #5d2e12, #b06b32 18%, #7b3f1c 55%, #c18443 76%, #4c220e);
-        }
-        .format-insight__cigar .format-cigar::before {
-          left: -8px;
-          top: 44%;
-          width: 66px;
-          height: 34px;
         }
         .format-insight h2 {
           margin: 0 0 16px;
@@ -772,7 +711,7 @@ export default function Format() {
                     <span className="format-card__number">{String(index + 1).padStart(2, '0')}</span>
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
-                      <CigarImage image={format.image} name={format.name} cigarClass={format.cigarClass} />
+                      <CigarImage image={format.image} name={format.name} />
                     </span>
                     <h2>{format.name}</h2>
                     <p>{format.description}</p>
@@ -796,7 +735,7 @@ export default function Format() {
                 <div className="format-panel__label">Format Insight</div>
                 <div className="format-insight">
                   <div className="format-insight__cigar" aria-hidden="true">
-                    <span className={`format-cigar ${insightFormat.cigarClass}`} />
+                    <CigarImage image={insightFormat.image} name={insightFormat.name} height="200px" />
                   </div>
                   <div>
                     <h2>{insightFormat.name}</h2>
