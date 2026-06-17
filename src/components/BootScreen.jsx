@@ -42,35 +42,22 @@ export default function BootScreen({
   connectionItems = [],
   itemsRevealed   = 999,
 }) {
-  // ── Full-bleed mode: image IS the designed screen, minimal overlays only ──
-  if (fullBleedImage && backgroundImage) {
+  // ── Full-bleed mode: image IS the entire screen, no overlays of any kind ──
+  if (fullBleedImage) {
     return (
-      <div className="boot-screen" style={{ background: '#010b1e' }}>
-        {/* Hero image — full opacity, no blur, no heavy overlay */}
+      <div style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#010b1e' }}>
         <img
           src={backgroundImage}
           alt=""
           aria-hidden="true"
-          draggable={false}
           style={{
-            position:   'absolute', inset: 0,
-            width:      '100%', height: '100%',
-            objectFit:  'cover', objectPosition: 'center',
-            userSelect: 'none',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            display: 'block'
           }}
         />
-        {/* Very light edge vignette only — preserves image design */}
-        <div style={{
-          position:   'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(1,11,30,0.18) 0%, transparent 15%, transparent 80%, rgba(1,11,30,0.45) 100%), linear-gradient(to right, rgba(1,11,30,0.20) 0%, transparent 12%, transparent 88%, rgba(1,11,30,0.20) 100%)',
-          pointerEvents: 'none',
-        }} />
-        {/* Subtle scan lines */}
-        <div className="boot-screen__data-lines" aria-hidden="true">
-          {DATA_LINES.map(({ top, duration, delay }, i) => (
-            <div key={i} className="boot-screen__data-line" style={{ top, animationDuration: duration, animationDelay: delay, opacity: 0.4 }} />
-          ))}
-        </div>
       </div>
     )
   }

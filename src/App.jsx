@@ -9,6 +9,8 @@ import DemoBanner from './components/demo/DemoBanner.jsx'
 import Home             from './pages/Home.jsx'
 import Boot             from './pages/Boot.jsx'
 import CraftHub         from './pages/CraftHub.jsx'
+import POS3             from './pages/POS3.jsx'
+import EATCommand       from './pages/EATCommand.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -37,6 +39,16 @@ import Vitola           from './pages/smokecraft/Vitola.jsx'
 import Identity         from './pages/smokecraft/Identity.jsx'
 import Leaderboard      from './pages/smokecraft/Leaderboard.jsx'
 import PassportStamp    from './pages/smokecraft/PassportStamp.jsx'
+import SeedSoil         from './pages/smokecraft/SeedSoil.jsx'
+import HumidorMatch     from './pages/smokecraft/HumidorMatch.jsx'
+import RequestPurchase  from './pages/smokecraft/RequestPurchase.jsx'
+import CutToastLight    from './pages/smokecraft/CutToastLight.jsx'
+import FirstThird       from './pages/smokecraft/FirstThird.jsx'
+import SecondThird      from './pages/smokecraft/SecondThird.jsx'
+import FinalThird       from './pages/smokecraft/FinalThird.jsx'
+import Scorecard        from './pages/smokecraft/Scorecard.jsx'
+import Connections      from './pages/smokecraft/Connections.jsx'
+import ManagementSync   from './pages/smokecraft/ManagementSync.jsx'
 
 // ── Passport — guest-accessible, eager ───────────────────────
 import PassportHome        from './pages/passport/PassportHome.jsx'
@@ -66,8 +78,6 @@ const MentorLogin  = lazy(() => import('./pages/MentorLogin.jsx'))
 const DevLogin     = lazy(() => import('./pages/DevLogin.jsx'))
 
 // ── Protected heavy pages — lazy loaded ──────────────────────
-const POS3           = lazy(() => import('./pages/POS3.jsx'))
-const EATCommand     = lazy(() => import('./pages/EATCommand.jsx'))
 const Admin          = lazy(() => import('./pages/Admin.jsx'))
 const FounderControl = lazy(() => import('./pages/FounderControl.jsx'))
 const MentorConsole  = lazy(() => import('./pages/MentorConsole.jsx'))
@@ -76,8 +86,6 @@ const DevDiagnostics = lazy(() => import('./pages/DevDiagnostics.jsx'))
 import ProtectedRoute  from './components/security/ProtectedRoute.jsx'
 import DevRoleSwitcher from './components/security/DevRoleSwitcher.jsx'
 import KioskShell      from './components/kiosk/KioskShell.jsx'
-import PublicCraftHubLanding from './pages/PublicCraftHubLanding.jsx';
-import CraftHub from './pages/CraftHub.jsx';
 
 // ── Phase 11: Kiosk / deployment pages — lazy ─────────────────
 const KioskSetup   = lazy(() => import('./pages/KioskSetup.jsx'))
@@ -113,7 +121,7 @@ function NOVEELoader() {
         color: 'rgba(201,168,76,0.4)', fontSize: '10px',
         letterSpacing: '0.25em', textTransform: 'uppercase',
       }}>
-        Loading CRAFTHUB 360 module…
+        Loading NOVEE OS module…
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
@@ -131,20 +139,6 @@ function RouteTracker() {
   return null
 }
 
-function BootGuard({ children }) {
-  const booted    = sessionStorage.getItem('novee_booted')
-  const devBypass = import.meta.env.DEV && new URLSearchParams(window.location.search).get('preview') === '1'
-  if (devBypass) { sessionStorage.setItem('novee_booted', '1') }
-  if (!booted && !devBypass) {
-    const intended = window.location.pathname + window.location.search
-    if (intended !== '/boot' && intended !== '/') {
-      sessionStorage.setItem('novee_boot_return', intended)
-    }
-    return <Navigate to="/boot" replace />
-  }
-  return children
-}
-
 export default function App() {
   return (
     <DemoModeProvider>
@@ -155,8 +149,8 @@ export default function App() {
         <KioskShell>
         <Suspense fallback={<NOVEELoader />}>
           <Routes>
-            {/* ── Boot — always accessible ─────────────────────── */}
-            <Route path="boot" element={<Boot />} />
+            {/* ── Boot — private NOVEE intro, public users redirected ── */}
+            <Route path="boot" element={<Navigate to="/crafthub" replace />} />
 
             {/* ── Login screens — lazy, accessible without boot ─── */}
             <Route path="staff-login"   element={<StaffLogin />} />
@@ -165,16 +159,21 @@ export default function App() {
             <Route path="mentor-login"  element={<MentorLogin />} />
             <Route path="dev-login"     element={<DevLogin />} />
 
-            {/* ── All app routes — guarded by boot + Layout ─────── */}
-            <Route
-              element={
-                <BootGuard>
-                  <Layout />
-                </BootGuard>
-              }
-            >
-              <Route index element={<Navigate to="/crafthub" replace />} />
-              <Route path="home" element={<Navigate to="/crafthub" replace />} />
+            {/* ── All app routes — public, gated per-route where needed ── */}
+            <Route element={<Layout />}>
+              <Route index           element={<Navigate to="/crafthub" replace />} />
+              <Route path="home"     element={<Navigate to="/crafthub" replace />} />
+              <Route path="novee-home" element={
+                <ProtectedRoute
+                  allowedRoles={['admin', 'founder_level_0', 'developer']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin / Founder Login"
+                  lockedMessage="NOVEE OS Command Hub requires founder, admin, or developer access."
+                  demoBlocked
+                >
+                  <Home />
+                </ProtectedRoute>
+              } />
               <Route path="crafthub" element={<CraftHub />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
@@ -206,7 +205,17 @@ export default function App() {
                 <Route path="vitola"         element={<Vitola />} />
                 <Route path="identity"       element={<Identity />} />
                 <Route path="leaderboard"    element={<Leaderboard />} />
-                <Route path="passport-stamp" element={<PassportStamp />} />
+                <Route path="passport-stamp"   element={<PassportStamp />} />
+                <Route path="seed-soil"        element={<SeedSoil />} />
+                <Route path="humidor-match"    element={<HumidorMatch />} />
+                <Route path="request-purchase" element={<RequestPurchase />} />
+                <Route path="cut-toast-light"  element={<CutToastLight />} />
+                <Route path="first-third"      element={<FirstThird />} />
+                <Route path="second-third"     element={<SecondThird />} />
+                <Route path="final-third"      element={<FinalThird />} />
+                <Route path="scorecard"        element={<Scorecard />} />
+                <Route path="connections"      element={<Connections />} />
+                <Route path="management-sync"  element={<ManagementSync />} />
               </Route>
 
               {/* 360 Passport — guest-accessible + demo-allowed */}
@@ -235,7 +244,7 @@ export default function App() {
               <Route path="demo" element={
                 <ModulePlaceholder
                   title="Demo Mode"
-                  purpose="Safe preview mode is available from the CRAFTHUB 360 home screen. It previews guest-facing modules without real server calls, payments, inventory changes, audit events, or role changes."
+                  purpose="Safe preview mode is available from the NOVEE OS home screen. It previews guest-facing modules without real server calls, payments, inventory changes, audit events, or role changes."
                   phases={['Keep safe preview routing visible', 'Expand guided demo scripts', 'Add operator-specific walkthrough presets']}
                 />
               } />
@@ -244,11 +253,11 @@ export default function App() {
                   allowedRoles={['admin', 'founder_level_0', 'developer']}
                   loginRoute="/admin-login"
                   loginLabel="Admin / Founder Login"
-                  lockedMessage="CRAFTHUB 360 E.A.T. Command Hub requires founder, admin, or developer access."
+                  lockedMessage="NOVEE OS Ultra Command Center requires founder, admin, or developer access."
                   demoBlocked
                 >
                   <ModulePlaceholder
-                    title="CRAFTHUB 360 E.A.T. Command Hub"
+                    title="NOVEE OS Ultra Command Center"
                     purpose="Master control system for venues, licenses, modules, deployments, vault data, diagnostics, users, roles, security, analytics, and remote updates."
                     phases={['Connect global venue registry', 'Wire deployment and vault APIs', 'Add founder-only control actions']}
                   />
@@ -289,11 +298,11 @@ export default function App() {
                   allowedRoles={['manager', 'admin', 'founder_level_0']}
                   loginRoute="/admin-login"
                   loginLabel="Venue Manager Login"
-                  lockedMessage="E.A.T. Manager Command Hub requires venue owner, manager, admin, or founder access."
+                  lockedMessage="Venue Mirror Command Hub requires venue owner, manager, admin, or founder access."
                   demoBlocked
                 >
                   <ModulePlaceholder
-                    title="E.A.T. Manager Command Hub"
+                    title="Venue Mirror Command Hub"
                     purpose="Establishment-level command hub for local E.A.T., POS 3, CraftHub, Passport members, staff activity, events, specials, ticker, reports, and venue settings scoped by venueId."
                     phases={['Bind selected venueId', 'Connect local E.A.T. and POS 3 data', 'Add tenant-safe manager actions']}
                   />
@@ -338,6 +347,17 @@ export default function App() {
                   <POS3 />
                 </ProtectedRoute>
               } />
+              <Route path="pos/table/:tableId" element={
+                <ProtectedRoute
+                  requiredPermission="access_pos3_staff"
+                  loginRoute="/staff-login"
+                  loginLabel="Staff Login"
+                  lockedMessage="POS 3 requires staff-level access. Please sign in with your staff PIN."
+                  demoBlocked
+                >
+                  <POS3 />
+                </ProtectedRoute>
+              } />
 
               {/* ── Protected: manager+ — BLOCKED in demo mode ───── */}
               <Route path="eat" element={
@@ -358,7 +378,7 @@ export default function App() {
                   allowedRoles={['admin', 'founder_level_0']}
                   loginRoute="/admin-login"
                   loginLabel="Admin Login"
-                  lockedMessage="CRAFTHUB 360 Admin requires admin-level access or higher."
+                  lockedMessage="NOVEE OS Admin requires admin-level access or higher."
                   demoBlocked
                 >
                   <Admin />
@@ -491,6 +511,10 @@ export default function App() {
               } />
 
               {/* Route aliases */}
+              <Route path="management"   element={<Navigate to="/venue-mirror" replace />} />
+              <Route path="novee"        element={<Navigate to="/ultra-command-center" replace />} />
+              <Route path="system"       element={<Navigate to="/system-overview" replace />} />
+              <Route path="diagnostics"  element={<Navigate to="/dev-diagnostics" replace />} />
               <Route path="craft-hub"    element={<Navigate to="/crafthub" replace />} />
               <Route path="craft-modules" element={<Navigate to="/crafthub" replace />} />
               <Route path="dashboard"    element={<Navigate to="/crafthub" replace />} />

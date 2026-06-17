@@ -1,13 +1,19 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, Navigate } from 'react-router-dom'
 import { loadSession } from '../services/sessionStorageService.js'
 import { useDemoMode } from '../context/DemoModeContext.jsx'
+import { useSecurity } from '../context/SecurityContext.jsx'
+import { loadStaffSession } from '../services/staffHandoffService.js'
 import BootScreen from '../components/BootScreen.jsx'
 
+// /boot is a developer/founder/admin-only system console. Public and staff
+// users are sent straight to the public CraftHub experience.
+const BOOT_ALLOWED_ROLES = new Set(['founder_level_0', 'admin', 'developer'])
+
 // ── Timing constants (ms) ────────────────────────────────────────────────────
-const FADE_IN_MS  = 700
-const FADE_OUT_MS = 600
-const STAGE_GAP   = 100
+const FADE_IN_MS  = 250
+const FADE_OUT_MS = 200
+const STAGE_GAP   = 50
 
 // ── Boot stage definitions ────────────────────────────────────────────────────
 // backgroundImage: place matching PNG in public/boot/ — gradient fallback used if absent.
@@ -32,7 +38,7 @@ const BOOT_STAGES = [
     ],
     connectionItems: [],
     items:   ['System Core', 'Neural Interface', 'Data Stream', 'Security Layer', 'Modules'],
-    holdMs:  1900,
+    holdMs:  300,
     logoH:   220,
   },
   {
@@ -54,7 +60,7 @@ const BOOT_STAGES = [
     ],
     connectionItems: [],
     items:   ['System Check', 'Core Modules', 'Network Status', 'Secure Link', 'Data Sync', 'Encryption'],
-    holdMs:  2200,
+    holdMs:  300,
     logoH:   190,
   },
   {
@@ -74,7 +80,7 @@ const BOOT_STAGES = [
       { label: 'WineCraft 360',  value: 'Connected' },
     ],
     items:   ['SmokeCraft 360', 'PourCraft 360', 'BeerCraft 360', 'WineCraft 360'],
-    holdMs:  2600,
+    holdMs:  300,
     logoH:   200,
   },
   {
@@ -96,7 +102,7 @@ const BOOT_STAGES = [
       { label: 'Humidor',       value: 'Connected' },
     ],
     items:   ['Venue Control', 'Inventory', 'POS 3', 'Kitchen', 'Bar', 'Humidor'],
-    holdMs:  2600,
+    holdMs:  300,
     logoH:   190,
   },
   {
@@ -117,7 +123,7 @@ const BOOT_STAGES = [
     ],
     connectionItems: [],
     items:   ['Members', 'Events', 'Passport Stamps', 'Network Layer', 'Experience Sync'],
-    holdMs:  3000,
+    holdMs:  300,
     logoH:   190,
   },
 ]
@@ -126,6 +132,7 @@ export default function Boot() {
   const navigate          = useNavigate()
   const [searchParams]    = useSearchParams()
   const { enterDemoMode } = useDemoMode()
+  const { role }          = useSecurity()
 
   const [introPhase,    setIntroPhase]    = useState('playing')
   const [stageIndex,    setStageIndex]    = useState(0)
@@ -161,7 +168,7 @@ export default function Boot() {
     after(200, () => {
       setBootVisible(true)
       after(500, () => setHeaderVisible(true))
-      fallbackTimer.current = setTimeout(() => setShowFallback(true), 14000)
+      fallbackTimer.current = setTimeout(() => setShowFallback(true), 600)
     })
   }, [after])
 
@@ -201,6 +208,8 @@ export default function Boot() {
   }, [after, startBootUI])
 
   useEffect(() => {
+    if (loadStaffSession()?.role !== 'founder' && !BOOT_ALLOWED_ROLES.has(role)) return
+
     if (sessionStorage.getItem('novee_booted')) {
       const returnPath = sessionStorage.getItem('novee_boot_return')
         || loadSession()?.system?.lastVisitedRoute
@@ -267,6 +276,13 @@ export default function Boot() {
   }
 
   const stage = BOOT_STAGES[stageIndex] || BOOT_STAGES[0]
+
+  // /boot is a developer/founder/admin-only system console — never shown to
+  // public, guest, or staff users. Send everyone else straight to CraftHub.
+  const staffSession = loadStaffSession()
+  if (staffSession?.role !== 'founder' && !BOOT_ALLOWED_ROLES.has(role)) {
+    return <Navigate to="/crafthub" replace />
+  }
 
   return (
     <div

@@ -5,6 +5,37 @@ import { XP_AWARDS } from '../../constants/session.js'
 import { STAMP_CATALOG } from '../../data/passportCatalog.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 
+// APPROVED SMOKECRAFT VISUAL RULE:
+// No stock-photo fallback URLs, no CSS-drawn graphics, no cartoon/placeholder art.
+// If a real image is missing, render "Image pending" only.
+function PassportStampImage({ src, alt, className, style }) {
+  const [failed, setFailed] = useState(!src)
+  if (!failed && src) {
+    return (
+      <img
+        className={className}
+        style={style}
+        alt={alt}
+        src={src}
+        onError={() => setFailed(true)}
+      />
+    )
+  }
+  return (
+    <div
+      className={className}
+      style={{
+        ...style,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+        color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+      }}
+    >
+      Image pending
+    </div>
+  )
+}
+
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
 const GOLD_TEXT = {
@@ -126,10 +157,10 @@ export default function PassportStamp() {
 
       {/* Cinematic backdrop */}
       <div className="fixed inset-0 -z-10">
-        <img
+        <PassportStampImage
           className="w-full h-full object-cover"
           style={{ opacity: 0.22, filter: 'brightness(0.6)' }}
-          src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"
+          src={null}
           alt=""
         />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #131314 0%, rgba(19,19,20,0.88) 55%, rgba(19,19,20,0.55) 100%)' }} />
@@ -141,7 +172,7 @@ export default function PassportStamp() {
           <button
             className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-primary/10 transition-colors duration-300"
             style={{ minWidth: 48, minHeight: 48 }}
-            onClick={() => navigate('/smokecraft/session-complete')}
+            onClick={() => navigate('/smokecraft/scorecard')}
           >arrow_back</button>
           <h1 className="font-display-lg text-primary uppercase tracking-widest" style={{ fontSize: 20 }}>The 360 Passport</h1>
         </div>
@@ -270,11 +301,11 @@ export default function PassportStamp() {
             Open My Passport
           </button>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/smokecraft/connections')}
             className="flex items-center gap-4 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300"
             style={{ height: 72, paddingInline: 48 }}
           >
-            Return to CraftHub
+            Continue to Connections
             <span className="material-symbols-outlined">arrow_forward</span>
           </button>
         </div>

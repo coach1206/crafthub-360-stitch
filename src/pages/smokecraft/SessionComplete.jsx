@@ -3,6 +3,38 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
+import StaffHandoffButton from '../../components/staffhandoff/StaffHandoffButton.jsx'
+
+// APPROVED SMOKECRAFT VISUAL RULE:
+// No stock-photo fallback URLs, no CSS-drawn graphics, no cartoon/placeholder art.
+// If a real image is missing, render "Image pending" only.
+function SessionCompleteImage({ src, alt, className, style, portrait }) {
+  const [failed, setFailed] = useState(!src)
+  if (!failed && src) {
+    return (
+      <img
+        className={className}
+        style={style}
+        alt={alt}
+        src={src}
+        onError={() => setFailed(true)}
+      />
+    )
+  }
+  return (
+    <div
+      className={className}
+      style={{
+        ...style,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+        color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+      }}
+    >
+      {portrait ? 'Portrait pending' : 'Image pending'}
+    </div>
+  )
+}
 
 const STAMPS = [
   { icon: 'workspace_premium', label: 'Mentor',      earned: true },
@@ -42,11 +74,16 @@ export default function SessionComplete() {
 
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
+      {/* Staff handoff to POS 3 — this is the customer's session-complete handoff point */}
+      <StaffHandoffButton />
+
       {/* Cinematic Background */}
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center grayscale opacity-20"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542618933-91ad68f4709e?q=80&w=2000')" }}
+        <SessionCompleteImage
+          alt=""
+          className="absolute inset-0 grayscale opacity-20"
+          src={null}
+          style={{ fontSize: 11 }}
         />
         <div className="absolute -top-20 -left-20 w-[600px] h-[600px] bg-primary/10 rounded-full animated-smoke" />
         <div
@@ -65,18 +102,20 @@ export default function SessionComplete() {
           <button
             className="material-symbols-outlined text-primary p-2 hover:bg-surface-variant/50 transition-colors duration-300 rounded-full"
             style={{ minWidth: 48, minHeight: 48 }}
-            onClick={() => navigate('/smokecraft')}
-            aria-label="Back to SmokeCraft"
+            onClick={() => navigate('/smokecraft/management-sync')}
+            aria-label="Back"
           >arrow_back</button>
           <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
         </div>
         <div className="flex items-center gap-6">
           <span className="font-label-lg text-label-lg text-primary tracking-widest uppercase">Grand Lounge</span>
           <div className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center overflow-hidden">
-            <img
+            <SessionCompleteImage
               alt="Member Portrait"
               className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA98s8tDjBZr09TNJ2O1w7yZWQaTib457ZFZzZbXeaLt1cn7yjKpToGDA58R2BdeqzmOFDSJWJ_hHQx_v06fxDJVOM3v7a1EZWZHdMYvN-FB7elwQq4L4HDMvAX3DxIipeKXqDrtHdy8wZcTzxZnjO7ADhSxqNWFLJ-GU2JrP3tSOK41z09sUOch__lqPFF_6yuztQ9sIJmb4RAXQFRmRfXkFECcKFKLEFvoKi0G3-XmCc72C4i3kQmMAjEjUIGWoZNl7BMyXMH_js"
+              src={null}
+              style={{ fontSize: 6 }}
+              portrait
             />
           </div>
         </div>
@@ -110,12 +149,9 @@ export default function SessionComplete() {
                   <div>
                     <h4 className="font-label-lg text-label-lg text-primary mb-2 uppercase">Selected Mentors</h4>
                     <div className="flex -space-x-4">
-                      {[
-                        'https://lh3.googleusercontent.com/aida-public/AB6AXuBSbcrfFhzzUyCbokX0KWemlxzKadWMkQX8OMg-RuxOh3xPhFl-aNmAqKFLJ4yXaHiw8n0emHhmZmGtp57PVpaTQujKIq2PA8xG1Yrujhk_EZl2MAsYpGK0jevnsJnLSpfaDyfWSCTVfR0hxstB-ANZ7te9qIdic-TghyeTiM-Xs8dI7N0n_wfOExbD1-gjcW-trqf_N_qYqpL3efxQAnmw7oVF1Iv7SceQOtw2qCXOaqzE1n7f9NOwjxZhJl4CY0F3KvKbujl-SeM',
-                        'https://lh3.googleusercontent.com/aida-public/AB6AXuBSlPgR71XYsY5Q2j6LS8RD2xf_FJkRA_v9J7SWFGrYO8nr4fjU0_zGA_3q7Yqn0YBLrw_x0j9YBaQjpd5E-ZcTPoKkMVhZ4-SipbUuy1GKYq53LmcXJw_DiEaJqsLIaRlwGg3cBJksm_YQYzzo-bLid742wQ5IRKem1kur635Go-CZ87itLE4aMTKC-AatnkS3VaM57O0Q_egp-zqQ1SbIinCCFdTIa7pVM_x-N_e_PBYKggU0hBqwteemIiAu_CLE0DyqJk_Myr4',
-                      ].map((src, i) => (
+                      {[null, null].map((src, i) => (
                         <div key={i} className="w-12 h-12 rounded-full border-2 border-primary-container overflow-hidden bg-surface shadow-lg">
-                          <img alt={`Mentor ${i + 1}`} className="w-full h-full object-cover" src={src} />
+                          <SessionCompleteImage alt={`Mentor ${i + 1}`} className="w-full h-full object-cover" src={src} style={{ fontSize: 5 }} portrait />
                         </div>
                       ))}
                     </div>
@@ -162,10 +198,10 @@ export default function SessionComplete() {
             {/* Recommended Cigar Card */}
             <div className="glass-panel rounded-xl overflow-hidden amber-glow">
               <div className="relative h-64">
-                <img
+                <SessionCompleteImage
                   alt="Recommended Cigar"
                   className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmj5C9I2JRccTEI5QSHylZl-mmqcW16e_ptkciwMmCNWtZbOsZq2oLzSD-6ulnfQM2LVyDfciR3Y1_nVUS9NYozYmny0ZGeMc1DxQfVC113BmhREXupWdmGgr-U6ypqxTpEaGjGDAW1Z63h7Ave31OET3DiiX0JqX7RjVz4sAaFcUwDH3BhJQM50KIDzPdo9rl3_k-3lbnbEiy5sgoixZa_M4_ZsYK26uALYa-YhZbEWlSf9fEbQJwEV4QSwZLcj6rxrH11_hS8vc"
+                  src={null}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6">

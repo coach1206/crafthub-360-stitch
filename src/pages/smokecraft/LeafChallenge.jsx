@@ -2,13 +2,44 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 
+// APPROVED SMOKECRAFT VISUAL RULE:
+// No stock-photo fallback URLs, no CSS-drawn graphics, no cartoon/placeholder art.
+// If a real image is missing, render "Image pending" only.
+function LeafChallengeImage({ src, alt, className, style }) {
+  const [failed, setFailed] = useState(!src)
+  if (!failed && src) {
+    return (
+      <img
+        className={className}
+        style={style}
+        alt={alt}
+        src={src}
+        onError={() => setFailed(true)}
+      />
+    )
+  }
+  return (
+    <div
+      className={className}
+      style={{
+        ...style,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+        color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+      }}
+    >
+      Image pending
+    </div>
+  )
+}
+
 const LEAVES = {
-  'habano-colorado':   { id: 'habano-colorado',   name: 'Habano Colorado',   region: 'Cuba',      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAMxHg5VUIQz2opEFUOvAZaHkGnvXKQ9yDFdsq3RUowHT7ozQeGhkOj4CtmRKiM64Y--LZWrD2SfEqNVNEH5IZUbCwfEJYQpQwwcdMQAeOyCUeYQg-zVwzE-DvSbMRj8Cw_DUs1wIH-vZ_9HgSCJd4UG2wAR0buIJt-vZYQA8hg9avSf8LT23EFKEFs-MFFo7yLtpvTd-wvvXzkeo0sNBrWfsPNQiHid4U8fxXVVtkjV2jsMDW_0AsjU-Q3UH0N9nSdOOHzqSQuD9U' },
-  'corojo-rosado':     { id: 'corojo-rosado',     name: 'Corojo Rosado',     region: 'Cuba',      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBxTg65Wt9uZIkpBqyy4dP-yfpAOzZbz2z5ZkV13oVaJ2SAkBidZBFP7grSXlnvgp0rzviZQ5z2QkEdoI5kL1JIAKOIeQwpBh6JQcEGoYgi9hWq5KktjPbu0JFnOgOPJQVxxQ5dzEyYiC6zZsnAzdfCzfC2_n70T7Il7VU5QitXotLyl-tyuOyPD8qOjumx5OXXmnAYMXRe-yumHpuykGEynj_dpEkroC7aiLKuXGRVBObPXsvZ5CI4Og0tcI5Qts4m648an1iWXHk' },
-  'criollo-98':        { id: 'criollo-98',        name: "Criollo '98",       region: 'Nicaragua', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC-wFKd36V8Kte15q8k8B-07-DyWINrytg3jtB6nOkc55ovBl4NALS6YptCCnVeaf3H0BiZaFZyCPhdpRz6cJuFHWafpHgA0bqZij04ksDjTgbbT5XRZzsSojqvCQVT5O8jsyto4qMMBNy06XdXMxckzv0jbOT8tWEt9Nt1Z6g8UILoCRPg0EX6hSOgzhvRWrHCdvSBENZGQ1W5nkASD5aX019MPiabFOQUvieuxQyNse6-qHGoiBrr39deuAFKC3uxypdFhGZN_8U' },
-  'connecticut-shade': { id: 'connecticut-shade', name: 'Connecticut Shade', region: 'USA',       img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZfnH-MsSB9L3fIvUmuB2jydCCAwvaAMEPJRNZecV6PKAJjHl8HulsTrHI7spXAr_AUXO1qSOOPo_DW4VdixxR-ayV4PnjVm2xiPhwWoFuWAF5PXCEsSlxekHHk-9vi2U4TZZT_qBdTVZ_-asuKsewgotaUAHMpqQqbSTlWGbxa8cyI7OPGMqVK5UT3jPVfaKM9X6uqMaQVfu-wFOCMZ_jY166IMOq2LWncgNMBJG-6FojwRTZejpcpIJ7mK8e1pi_2SjsjN9CTYo' },
-  'sumatra-maduro':    { id: 'sumatra-maduro',    name: 'Sumatra Maduro',    region: 'Indonesia', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBktRXv3px18iAdmk-FIbB6ajfhPahwqk9W_JP8Z3CMm5d75I1D5sQYn3y5CtixAGzZo0bWs5yXhZQ8TGcBZxfdlOrRy-X2jzZpEocDLKB-z48LeV4PdnPkWAu1EF0aLxDcp6N-JXmverp_fSYWKdujWH1FrWoLUY1CgVrJguJJeILwvw4JN5SLy70oWxWGRHWFymEXJ3FzmzsY93qIxljsbG1ANTGrbqwoIcmIQ6eUZnCsPhFk08_Z55717Itp90HwmP1ssOO0o' },
-  'broadleaf-maduro':  { id: 'broadleaf-maduro',  name: 'Broadleaf Maduro',  region: 'USA',       img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7N47zDRsd9xrna2FHDxZmmuHa9zMDEUx9pMH9OCchjzHa3TdmwiSK8rUNWCu3tQGc-DAewn13cJY0epAJPIuDmMkZDOxrSVbOlyqVToXKvvjL6eG_DDV4N_NgC9R-umyF3Ju6St0MmAbi63vwiC983oWNNS-xjiFcTNM2U0WpVcTXm-UZIbkyIPsqPC1U2cXP_tBIdctZFXNXkmSZml4JE2zbuDf4hyFSqmaSAAOlPQFZcXaAVWIcu0KFWBuNqFEsHk7jQouxUVY' },
+  'habano-colorado':   { id: 'habano-colorado',   name: 'Habano Colorado',   region: 'Cuba',      img: null },
+  'corojo-rosado':     { id: 'corojo-rosado',     name: 'Corojo Rosado',     region: 'Cuba',      img: null },
+  'criollo-98':        { id: 'criollo-98',        name: "Criollo '98",       region: 'Nicaragua', img: null },
+  'connecticut-shade': { id: 'connecticut-shade', name: 'Connecticut Shade', region: 'USA',       img: null },
+  'sumatra-maduro':    { id: 'sumatra-maduro',    name: 'Sumatra Maduro',    region: 'Indonesia', img: null },
+  'broadleaf-maduro':  { id: 'broadleaf-maduro',  name: 'Broadleaf Maduro',  region: 'USA',       img: null },
 }
 
 // 5 rounds: correct leaf + 3 distractors (display order pre-shuffled so correct isn't always first)
@@ -156,10 +187,11 @@ export default function LeafChallenge() {
         </div>
 
         <div className="w-9 h-9 rounded-full border border-primary/30 overflow-hidden">
-          <img
+          <LeafChallengeImage
             alt="Member"
             className="w-full h-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq4_EpkSpYVcHVlVxnKXJacUbdRmQWEovF-KvyMHM6dJqnGjPivNcRVqPojva00dcFw-6BVVfhI1gFLcaSclOfplLXr3i6MUVX4P-hkoIEfJTKgiHqRbMzmwdN_3t5yChLEGMio7Do167r-rCSqyVByUbYjQFGK9oISPUctIdJqwIGb-QKw2h3XuvSYjbpmyaRpt-JnoQzW41fw_DgeBRzjFoBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo"
+            src={null}
+            style={{ fontSize: 6 }}
           />
         </div>
       </header>
@@ -173,7 +205,7 @@ export default function LeafChallenge() {
           <div className="glass-card rounded-2xl overflow-hidden mb-6 shadow-2xl" style={{ border: '1px solid rgba(233,193,118,0.12)' }}>
             {/* Image */}
             <div className="relative h-64 sm:h-72 overflow-hidden">
-              <img
+              <LeafChallengeImage
                 src={challengeLeaf.img}
                 alt=""
                 className="w-full h-full object-cover"
@@ -280,7 +312,7 @@ export default function LeafChallenge() {
                   <div className="flex items-start gap-3">
                     {/* Leaf thumbnail */}
                     <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-outline-variant/20">
-                      <img src={leaf.img} alt="" className="w-full h-full object-cover" />
+                      <LeafChallengeImage src={leaf.img} alt="" className="w-full h-full object-cover" style={{ fontSize: 5 }} />
                     </div>
                     <div>
                       <p

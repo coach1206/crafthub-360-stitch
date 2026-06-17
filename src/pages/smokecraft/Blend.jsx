@@ -7,39 +7,70 @@ import {
   SmokeCraftBottomNav,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
+// APPROVED SMOKECRAFT VISUAL RULE:
+// No stock-photo fallback URLs, no CSS-drawn graphics, no cartoon/placeholder art.
+// If a real image is missing, render "Image pending" only.
+function BlendImage({ src, alt, className, style }) {
+  const [failed, setFailed] = useState(!src)
+  if (!failed && src) {
+    return (
+      <img
+        className={className}
+        style={style}
+        alt={alt}
+        src={src}
+        onError={() => setFailed(true)}
+      />
+    )
+  }
+  return (
+    <div
+      className={className}
+      style={{
+        ...style,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+        color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+      }}
+    >
+      Image pending
+    </div>
+  )
+}
+
 const WRAPPERS = [
   {
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAMxHg5VUIQz2opEFUOvAZaHkGnvXKQ9yDFdsq3RUowHT7ozQeGhkOj4CtmRKiM64Y--LZWrD2SfEqNVNEH5IZUbCwfEJYQpQwwcdMQAeOyCUeYQg-zVwzE-DvSbMRj8Cw_DUs1wIH-vZ_9HgSCJd4UG2wAR0buIJt-vZYQA8hg9avSf8LT23EFKEFs-MFFo7yLtpvTd-wvvXzkeo0sNBrWfsPNQiHid4U8fxXVVtkjV2jsMDW_0AsjU-Q3UH0N9nSdOOHzqSQuD9U',
+    img: null,
     name: 'Habano Maduro Heritage',
   },
   {
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBxTg65Wt9uZIkpBqyy4dP-yfpAOzZbz2z5ZkV13oVaJ2SAkBidZBFP7grSXlnvgp0rzviZQ5z2QkEdoI5kL1JIAKOIeQwpBh6JQcEGoYgi9hWq5KktjPbu0JFnOgOPJQVxxQ5dzEyYiC6zZsnAzdfCzfC2_n70T7Il7VU5QitXotLyl-tyuOyPD8qOjumx5OXXmnAYMXRe-yumHpuykGEynj_dpEkroC7aiLKuXGRVBObPXsvZ5CI4Og0tcI5Qts4m648an1iWXHk',
+    img: null,
     name: 'Ecuador Connecticut',
   },
 ]
 
 const BINDERS = [
   {
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC-wFKd36V8Kte15q8k8B-07-DyWINrytg3jtB6nOkc55ovBl4NALS6YptCCnVeaf3H0BiZaFZyCPhdpRz6cJuFHWafpHgA0bqZij04ksDjTgbbT5XRZzsSojqvCQVT5O8jsyto4qMMBNy06XdXMxckzv0jbOT8tWEt9Nt1Z6g8UILoCRPg0EX6hSOgzhvRWrHCdvSBENZGQ1W5nkASD5aX019MPiabFOQUvieuxQyNse6-qHGoiBrr39deuAFKC3uxypdFhGZN_8U',
+    img: null,
     name: "Estelí Criollo '98",
   },
   {
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZfnH-MsSB9L3fIvUmuB2jydCCAwvaAMEPJRNZecV6PKAJjHl8HulsTrHI7spXAr_AUXO1qSOOPo_DW4VdixxR-ayV4PnjVm2xiPhwWoFuWAF5PXCEsSlxekHHk-9vi2U4TZZT_qBdTVZ_-asuKsewgotaUAHMpqQqbSTlWGbxa8cyI7OPGMqVK5UT3jPVfaKM9X6uqMaQVfu-wFOCMZ_jY166IMOq2LWncgNMBJG-6FojwRTZejpcpIJ7mK8e1pi_2SjsjN9CTYo',
+    img: null,
     name: 'Corojo Binder',
   },
 ]
 
 const FILLERS = [
   {
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBktRXv3px18iAdmk-FIbB6ajfhPahwqk9W_JP8Z3CMm5d75I1D5sQYn3y5CtixAGzZo0bWs5yXhZQ8TGcBZxfdlOrRy-X2jzZpEocDLKB-z48LeV4PdnPkWAu1EF0aLxDcp6N-JXmverp_fSYWKdujWH1FrWoLUY1CgVrJguJJeILwvw4JN5SLy70oWxWGRHWFymEXJ3FzmzsY93qIxljsbG1ANTGrbqwoIcmIQ6eUZnCsPhFk08_Z55717Itp90HwmP1ssOO0o',
+    img: null,
     name: 'Ometepe',
   },
   {
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7N47zDRsd9xrna2FHDxZmmuHa9zMDEUx9pMH9OCchjzHa3TdmwiSK8rUNWCu3tQGc-DAewn13cJY0epAJPIuDmMkZDOxrSVbOlyqVToXKvvjL6eG_DDV4N_NgC9R-umyF3Ju6St0MmAbi63vwiC983oWNNS-xjiFcTNM2U0WpVcTXm-UZIbkyIPsqPC1U2cXP_tBIdctZFXNXkmSZml4JE2zbuDf4hyFSqmaSAAOlPQFZcXaAVWIcu0KFWBuNqFEsHk7jQouxUVY',
+    img: null,
     name: 'Jalapa',
   },
   {
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBChsiFnTvnyOgSUpMyb4bHIgSDdIDhtpVEibdxcWU0oqYOeuVhtcpaQzJvQfET3Dl4wY9hl8p0fpXwW4XrqkFuv9HW2neJbZUZKfMZGQCfkXjs_fRdITEoj5UvPENLQzNGUUM_RBaDeiJ-jn_US4q1RIfcVoAzzXno57Z3KAEbJOV54Ym7cFmm9S_sigXryY_V0GkHk1A-cDY_EY3FBroW7N8DIF1iWCMn_WfRHq2S5Z-vavYMLfgkOelI1guIV4t6T3wFJJYPkZ8',
+    img: null,
     name: 'Condega',
   },
 ]
@@ -72,10 +103,10 @@ export default function Blend() {
       <SmokeCraftAtmosphericBackground variant="education" />
       {/* Atmospheric Background */}
       <div className="fixed inset-0 z-[1] opacity-45 pointer-events-none">
-        <img
+        <BlendImage
           alt="Background"
           className="w-full h-full object-cover opacity-60"
-          src="https://lh3.googleusercontent.com/aida/AP1WRLtj5JwkrPxrixCHOG-zYc0I132qSqfPBoOMSk6vfHero4WAiBipQc-lZT7hXU1GpL6px8LH9kYjGodZhH3N8nj4PPbYOxr9GAZPkrO0051iTZg7S8ugdj8Jjhb1Nk1ypTQVWHqE6FAxbE10qnVi4vZsWlx-ERtDmWU97juw1txqVGwGBCCyPBZ0d56Ipsq-2AoFCMCvEkr3KBKpxovN6AFO6VxoRAIzzw3xk5lxCphgeEU6xTGCqGzLaag"
+          src={null}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background" />
       </div>
@@ -93,10 +124,11 @@ export default function Blend() {
             <span className="text-secondary text-[10px] tracking-[0.2em] font-label-sm cursor-pointer uppercase hover:scale-95 transition-transform hover:brightness-125">CONNOISSEUR</span>
           </nav>
           <div className="h-10 w-10 rounded-full border border-primary/30 flex items-center justify-center overflow-hidden bg-surface-container-high transition-all duration-300 hover:scale-110 cursor-pointer">
-            <img
+            <BlendImage
               alt="Profile"
               className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq4_EpkSpYVcHVlVxnKXJacUbdRmQWEovF-KvyMHM6dJqnGjPivNcRVqPojva00dcFw-6BVVfhI1gFLcaSclOfplLXr3i6MUVX4P-hkoIEfJTKgiHqRbMzmwdN_3t5yChLEGMio7Do167r-rCSqyVByUbYjQFGK9oISPUctIdJqwIGb-QKw2h3XuvSYjbpmyaRpt-JnoQzW41fw_DgeBRzjFoBukHh9bttmrZSUbJTEq5nRcpGZ410InFTORhNwgbrVX3N9_MH0Bo"
+              src={null}
+              style={{ fontSize: 6 }}
             />
           </div>
         </div>
@@ -122,31 +154,31 @@ export default function Blend() {
           {[
             {
               label: 'SmokeCraft', sub: 'Signature Blends', active: true, to: '/smokecraft',
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBibwIn3K4im-7feOc6MbE0qrLgoKLyluRCrG3hjStuvfdpV18KH3A62G-Qz_6SVfNrj8RmOIz4hgjZbsiGf5vrfo17Uf0QYtARmYGCz3AONU-8UZEcE8OSFgxjJwc2qzjNic1fMb52TVcCBU_2QQ-yDTSHGdEzFFXRQYmR_R8lGcWMHEeM5hpoR4wpZFsjtro1GAI7dOrXg5xHk9gr32bXN3Vbzy7Ng-LmBNF7rU_vEhH3psYZXs9IvOT6qmbzmAV5Jtgn4Cdo8XQ',
+              img: null,
             },
             {
               label: 'BeerCraft', sub: 'Artisan Pairings', active: false, to: '/beercraft',
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD7VKTY8DSDP4GuM4QjYR6EUZ4LubDo2yCakN2HYV6KyES6tx4THIbwtZKTJGP7jwwJa0Y6Mpwe7t4lB4Z6ZrtkphJapCLIUjlAPK5yHz-y4rHZPgVcmGAqu2dBojUcETurbHllrTS7OdYNtG59QmMelXGI4jLltYxca6qYZFERSoyNOPC51Er70AmYxHA9cNjDpdI-4qDJHTY_Buz0AhxIxquJ5jyxJLlm9k4VqSjh11zr9yTQ5djQ81CEGXwI41JwzsUu5pAUzB4',
+              img: null,
             },
             {
               label: 'PourCraft', sub: 'Mixology Curated', active: false, to: '/pourcraft',
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjHHIqUqm4IOBASD9e2CFzmQ4Vt8WRSqfeXFt8t_1i2pPsfxMn84WFBCXRIk_Bd1AjSxcXHBCeNc41pSby-goSyKfSuQe5AOAaLaBlpi6JnD_7fhr1sPy6VbWBiTzmjmFzEwjw8z5kQIVkiKACQgwi-HzB-sAbPIleq_5tachES6TA9xVwf7i_1v1HOewxIVMzGkOsmiCHglJ001ONH5Cj1WC3TTNUZGDRHqfeKBppL49vwAMhY09pzWoCB-KDVF6TYDa-xhKCOS8',
+              img: null,
             },
             {
               label: 'WineCraft', sub: 'Vintage Selections', active: false, to: '/winecraft',
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDN-VSDDSik_99uYcdNQK9qplzBEeBHFI5GylQ4yLuTVURyE09ShNJzs5TFDa5QWyyJqQjK9XXkZtTSgGc3zY8-pfx1LHbrOayvxB1x5xOIbt0i472thBGJ6WOX3Jl2NwrYJNbGUYOeMCs-mohmkNWfHVU7VLntJ1SjdlDhqth5FyEiWKPI00krkamgowHVvovuXEXO1EBTHCDeFDRxeFFSoRI5OGRdtY96RyQbRrtNMWUqWI7x4AuazZYNAIqroB1vsEBlsjx7su8',
+              img: null,
             },
             {
               label: '360 Passport', sub: 'Global Access', active: false, to: '/passport',
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts',
+              img: null,
             },
             {
               label: 'E.A.T.', sub: 'Culinary Journeys', active: false, to: '/',
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBkj1vyr57VqCSvkAIytKCP-dMimzcM6Bkfpo2BogqBmXvJno7XWBIkFHJP0uTjIRf43VMB4VT0fAzPe56ohr59HTYYKsym0J2JV6xGqZPzbw5OHeK9oQVklLm-rTkus0D_QeG5AsW_i3r95SxCCtkda_GbYOLo3MnRfTZ3tRjOehK1rR6yLCjtmEhkAfL3RPm8SEoj5khmFowDyNMdG5WO2fYsQ3Jh34sFkF3uM5Rql5d_S8_0z_f_osUhL3uDZji89YvLMFPAia4',
+              img: null,
             },
             {
               label: 'POS 3', sub: 'Hospitality Ops', active: false, to: '/pos3',
-              img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC-wFKd36V8Kte15q8k8B-07-DyWINrytg3jtB6nOkc55ovBl4NALS6YptCCnVeaf3H0BiZaFZyCPhdpRz6cJuFHWafpHgA0bqZij04ksDjTgbbT5XRZzsSojqvCQVT5O8jsyto4qMMBNy06XdXMxckzv0jbOT8tWEt9Nt1Z6g8UILoCRPg0EX6hSOgzhvRWrHCdvSBENZGQ1W5nkASD5aX019MPiabFOQUvieuxQyNse6-qHGoiBrr39deuAFKC3uxypdFhGZN_8U',
+              img: null,
             },
           ].map(({ label, sub, active, to, img }) => (
             <button
@@ -174,7 +206,7 @@ export default function Blend() {
                 border: active ? '1px solid rgba(212,175,55,0.6)' : '1px solid rgba(255,255,255,0.1)',
                 boxShadow: active ? '0 0 12px rgba(212,175,55,0.2)' : 'none',
               }}>
-                <img src={img} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: active ? 'none' : 'brightness(0.5) saturate(0.6)' }} />
+                <BlendImage src={img} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: active ? 'none' : 'brightness(0.5) saturate(0.6)', fontSize: 7 }} />
               </div>
               {/* Labels */}
               <div style={{ minWidth: 0 }}>
@@ -231,7 +263,7 @@ export default function Blend() {
                     className={`w-[72px] h-[72px] rounded-lg p-[1px] transition-transform hover:scale-105 active:scale-95 ${selectedWrapper === i ? 'gold-foil' : 'titanium-border opacity-40 hover:opacity-100'}`}
                   >
                     <div className="w-full h-full bg-background/80 rounded-[7px] flex items-center justify-center overflow-hidden border border-white/10">
-                      <img className="w-full h-full object-cover" src={w.img} alt={w.name} />
+                      <BlendImage className="w-full h-full object-cover" src={w.img} alt={w.name} style={{ fontSize: 6 }} />
                     </div>
                   </button>
                 ))}
@@ -265,7 +297,7 @@ export default function Blend() {
                     className={`w-[72px] h-[72px] rounded-lg p-[1px] transition-transform hover:scale-105 active:scale-95 titanium-border ${selectedBinder === i ? 'ring-2 ring-primary ring-offset-4 ring-offset-background/40' : 'opacity-40 hover:opacity-100'}`}
                   >
                     <div className="w-full h-full bg-background/20 rounded-[7px] flex items-center justify-center overflow-hidden">
-                      <img className="w-full h-full object-cover" src={b.img} alt={b.name} />
+                      <BlendImage className="w-full h-full object-cover" src={b.img} alt={b.name} style={{ fontSize: 6 }} />
                     </div>
                   </button>
                 ))}
@@ -296,7 +328,7 @@ export default function Blend() {
                     className={`w-[72px] h-[72px] rounded-lg p-[1px] transition-transform hover:scale-105 ${selectedFillers.has(i) ? 'gold-foil' : 'titanium-border opacity-40 hover:opacity-100'}`}
                   >
                     <div className="w-full h-full bg-background/80 rounded-[7px] flex items-center justify-center overflow-hidden border border-white/10">
-                      <img className="w-full h-full object-cover" src={f.img} alt={f.name} />
+                      <BlendImage className="w-full h-full object-cover" src={f.img} alt={f.name} style={{ fontSize: 6 }} />
                     </div>
                   </button>
                 ))}
@@ -314,10 +346,11 @@ export default function Blend() {
               <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-full border border-primary overflow-hidden">
-                  <img
+                  <BlendImage
                     alt="Mentor"
                     className="w-full h-full bg-surface-container object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb_QZr6Rcm5yAhoSToxjFZlKstPP_xnANgwmcyebOi0hM07Oc1SIX0GSF_Syk0jBYjnBOFZH6USUIgzjk5Z2IvBbJ9KPe7FZxm4Nr2zEfiUD3pj5SrHSrKTqrHnHZ7b6_PXBFAEA-POR-ylC-x_OD_RU-x7tqzqgVYZKxSV18uwF4EjoMgLf5YAXyaknUAZVGRjIiijHuUWkG5-_gH_xsHMhYlP-2-aGuwZuieceSWjeP3c4o-xgWwVNQCED0_lt1MLIpgq51Vx_g"
+                    src={null}
+                    style={{ fontSize: 6 }}
                   />
                 </div>
                 <div>

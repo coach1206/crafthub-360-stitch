@@ -4,6 +4,26 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 
 const GOLD = 'linear-gradient(135deg,#8b6914,#e9c176,#f5d98a,#c5a059,#8b6914)'
 
+// APPROVED SMOKECRAFT VISUAL RULE: no stock-photo fallback URLs. If a real image is missing, render "Image pending" only.
+function LeafChallengeImage({ src, alt, className, style }) {
+  const [failed, setFailed] = useState(!src)
+  if (!failed && src) {
+    return (
+      <img className={className} style={style} alt={alt} src={src} onError={() => setFailed(true)} />
+    )
+  }
+  return (
+    <div className={className} style={{
+      ...style,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
+      color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
+    }}>
+      Image pending
+    </div>
+  )
+}
+
 function getPerformance(score) {
   if (score === 5) return { title: 'Master Leaf Eye',        copy: 'You identified all 5 leaf profiles perfectly. A rare achievement — the eye of a true master blender.', xp: 125 }
   if (score === 4) return { title: 'Aficionado Level',       copy: 'You identified 4 out of 5 leaf profiles. Exceptional botanical instincts. Near-master recognition.',       xp: 100 }
@@ -90,8 +110,8 @@ export default function LeafChallengeResult() {
 
       {/* ── Cinematic lounge background ────────────────────── */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
-        <img
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQvi01dyiQOaL3eFq6x6nNewuibQg39rgwH-Wr9YWWkCJPOL1c-bOW_JmToKrMdlQhuQPCPfLNuVZiJZiU7osW7IauYsUlFVhIkW53MmLW0ci9MRPZoTbcEzVdngrAsUHb2ilp8j4izE7XtzxUlgiMcc1l6foE7PkPOCc8b906Fj3sH-KyWg60C6klgSwpWqQSbMIxAMdG1ZWNxuslbsXwT-CpDQ3QwFaKqedknrQW_LxVRGI61hDwy9jOE9SS3ixRuiVUo-dzuts"
+        <LeafChallengeImage
+          src={null}
           alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
         />
@@ -134,7 +154,7 @@ export default function LeafChallengeResult() {
           Leaf Challenge Complete
         </div>
         <div style={{ width: 36, height: 36, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.25)', overflow: 'hidden' }}>
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <LeafChallengeImage src={null} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', fontSize: 6 }} />
         </div>
       </header>
 
@@ -237,11 +257,10 @@ export default function LeafChallengeResult() {
               background: 'linear-gradient(135deg,#3D2B0A,#6A4A10)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <img
-                src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=120&auto=format&fit=crop&q=80"
+              <LeafChallengeImage
+                src={null}
                 alt="XP coin"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'luminosity', opacity: 0.9 }}
-                onError={e => { e.target.style.display='none' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', fontSize: 6 }}
               />
             </div>
             <div>
@@ -266,11 +285,10 @@ export default function LeafChallengeResult() {
               boxShadow: showBadge ? '0 0 20px rgba(212,175,55,0.25)' : 'none',
               transition: 'box-shadow 0.8s ease 0.3s',
             }}>
-              <img
-                src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=120&auto=format&fit=crop&q=80"
+              <LeafChallengeImage
+                src={null}
                 alt="Botanist Badge"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                onError={e => { e.target.style.display='none' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', fontSize: 6 }}
               />
               <div style={{ position: 'absolute', inset: 0, background: 'rgba(8,5,2,0.2)' }} />
               {/* Shimmer sweep */}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { smokeCraftAssets } from '../../data/smokecraftAssets.js'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
@@ -18,59 +19,32 @@ const CONTENTS = [
   { icon: 'workspace_premium', label: 'Exclusive Lounge Privileges',  desc: 'Priority access, premium humidor reservations, and private sommelier sessions.' },
 ]
 
-function GoldenTreasureBox({ memberName = 'Julian Sterling' }) {
+function GoldenBoxHeroImage() {
+  const [failed, setFailed] = useState(false)
+  if (!failed) {
+    return (
+      <img
+        src={smokeCraftAssets.goldenBoxHero}
+        alt="Golden Box"
+        onError={() => setFailed(true)}
+        style={{ maxWidth: 480, width: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
+      />
+    )
+  }
   return (
-    <div className="golden-box-stage" aria-hidden="true">
-      <div className="golden-box-rays" />
-      <div className="golden-box-smoke golden-box-smoke-left" />
-      <div className="golden-box-smoke golden-box-smoke-right" />
-      <div className="golden-box-table-glow" />
-
-      <div className="mahogany-humidor">
-        <div className="mahogany-humidor-lid">
-          <div className="mahogany-lid-interior">
-            <div className="mahogany-brand-mark">
-              <span className="material-symbols-outlined">shield_person</span>
-              <strong>CRAFTHUB 360</strong>
-              <small>Private SmokeCraft Reserve</small>
-            </div>
-          </div>
-          <span className="mahogany-hinge mahogany-hinge-left" />
-          <span className="mahogany-hinge mahogany-hinge-right" />
-        </div>
-
-        <div className="mahogany-humidor-tray">
-          <div className="mahogany-cigar-bed">
-            {Array.from({ length: 8 }, (_, index) => (
-              <span key={index} className={`mahogany-cigar mahogany-cigar-${index + 1}`}>
-                <i />
-              </span>
-            ))}
-          </div>
-          <div className="mahogany-humidor-front">
-            <div className="mahogany-nameplate">
-              <small>Reserved For</small>
-              <strong>{memberName}</strong>
-            </div>
-            <div className="mahogany-lock">
-              <span className="mahogany-keyhole" />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="golden-box-pending" aria-hidden="true">
+      Image pending
     </div>
   )
 }
 
 export default function GoldenBox() {
   const navigate = useNavigate()
-  const { session, addXP, addBadge, completeStep } = useGuestSession()
+  const { addXP, addBadge, completeStep } = useGuestSession()
 
   const [revealed, setRevealed]         = useState(false)
   const [contentsOpen, setContentsOpen] = useState(false)
   const [accepted, setAccepted]         = useState(false)
-  const displayName = session?.profile?.nickname || session?.profile?.firstName || session?.leaderboard?.displayName || 'Julian Sterling'
-
   useEffect(() => {
     const t = setTimeout(() => setRevealed(true), 120)
     return () => clearTimeout(t)
@@ -83,7 +57,7 @@ export default function GoldenBox() {
     addXP(25)
     addBadge({ id: 'golden-box-invitation', name: 'Golden Invitation', icon: 'inventory_2' })
     completeStep('golden-box')
-    setTimeout(() => navigate('/smokecraft/art'), 600)
+    setTimeout(() => navigate('/smokecraft/humidor-match'), 600)
   }
 
   const FILL1 = { fontVariationSettings: "'FILL' 1" }
@@ -110,8 +84,8 @@ export default function GoldenBox() {
           <button
             className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-primary/10 active:bg-primary/20 transition-colors duration-300"
             style={{ minWidth: 48, minHeight: 48 }}
-            onClick={() => navigate('/smokecraft/enroll')}
-            aria-label="Back to Enroll"
+            onClick={() => navigate('/smokecraft/mentor')}
+            aria-label="Back to Mentor Selection"
           >arrow_back</button>
           <span className="material-symbols-outlined text-primary text-[22px]" style={FILL1}>shield_person</span>
           <span className="font-headline-md text-[18px] font-bold text-primary tracking-tighter">CRAFTHUB 360</span>
@@ -139,7 +113,7 @@ export default function GoldenBox() {
           className={`transition-all duration-1000 ease-out ${revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
           style={{ transitionDelay: '0ms' }}
         >
-          <GoldenTreasureBox memberName={displayName} />
+          <GoldenBoxHeroImage />
         </div>
 
         {/* Headline Block */}
@@ -290,302 +264,20 @@ export default function GoldenBox() {
           animation-delay: -7s;
         }
 
-        .golden-box-stage {
-          position: relative;
-          width: min(820px, 94vw);
-          height: clamp(330px, 43vw, 500px);
+        .golden-box-pending {
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-top: 0;
-          isolation: isolate;
-        }
-
-        .golden-box-rays {
-          position: absolute;
-          top: -22%;
-          left: 50%;
-          width: 72%;
-          height: 86%;
-          transform: translateX(-50%);
-          background:
-            conic-gradient(from 160deg at 50% 0%, transparent 0deg, rgba(255,229,134,0.24) 14deg, transparent 28deg, rgba(255,204,76,0.18) 40deg, transparent 56deg),
-            radial-gradient(ellipse at 50% 0%, rgba(255,243,184,0.58), transparent 58%);
-          filter: blur(1px);
-          opacity: 0.86;
-          mix-blend-mode: screen;
-          z-index: 0;
-        }
-
-        .golden-box-smoke {
-          position: absolute;
-          width: 44%;
-          height: 50%;
-          top: 28%;
-          background:
-            radial-gradient(ellipse at 30% 48%, rgba(255,255,255,0.13), transparent 28%),
-            radial-gradient(ellipse at 65% 34%, rgba(233,193,118,0.09), transparent 36%);
-          filter: blur(14px);
-          opacity: 0.62;
-          z-index: 1;
-        }
-
-        .golden-box-smoke-left {
-          left: 0;
-        }
-
-        .golden-box-smoke-right {
-          right: 0;
-          transform: scaleX(-1);
-        }
-
-        .golden-box-table-glow {
-          position: absolute;
-          bottom: 13%;
-          left: 50%;
-          width: 84%;
-          height: 22%;
-          transform: translateX(-50%);
-          border-radius: 999px;
-          background: radial-gradient(ellipse at center, rgba(255,190,70,0.42), rgba(118,62,14,0.18) 42%, transparent 72%);
-          filter: blur(13px);
-          z-index: 1;
-        }
-
-        .mahogany-humidor {
-          position: relative;
-          width: clamp(330px, 72vw, 720px);
-          height: clamp(260px, 39vw, 430px);
-          transform: perspective(980px) rotateX(2deg);
-          filter: drop-shadow(0 42px 48px rgba(0,0,0,0.76)) drop-shadow(0 0 58px rgba(255,177,60,0.22));
-          z-index: 3;
-        }
-
-        .mahogany-humidor-lid {
-          position: absolute;
-          left: 8%;
-          top: 2%;
-          width: 84%;
-          height: 48%;
-          transform: perspective(900px) rotateX(58deg) translateY(-18%);
-          transform-origin: bottom center;
-          border-radius: 13px 13px 4px 4px;
-          border: 2px solid rgba(243,189,85,0.78);
-          background:
-            linear-gradient(105deg, rgba(255,255,255,0.16), transparent 18%, rgba(255,220,128,0.1) 50%, transparent 82%),
-            repeating-linear-gradient(92deg, rgba(255,225,159,0.08) 0 2px, transparent 2px 28px),
-            linear-gradient(135deg, #6f2d0d 0%, #321004 34%, #8a4316 62%, #260b03 100%);
-          box-shadow:
-            inset 0 2px 0 rgba(255,232,164,0.34),
-            inset 0 -22px 38px rgba(16,5,1,0.6),
-            0 0 42px rgba(255,177,60,0.2);
-          overflow: hidden;
-        }
-
-        .mahogany-lid-interior {
-          position: absolute;
-          inset: 8% 8% 15%;
-          border-radius: 10px;
-          display: grid;
-          place-items: center;
-          border: 1px solid rgba(255,220,127,0.36);
-          background:
-            radial-gradient(circle at 50% 36%, rgba(255,201,82,0.16), transparent 32%),
-            repeating-linear-gradient(0deg, rgba(255,218,143,0.07) 0 2px, transparent 2px 22px),
-            linear-gradient(135deg, #441708, #1a0803 58%, #5d260b);
-        }
-
-        .mahogany-brand-mark {
-          display: grid;
-          place-items: center;
-          gap: 5px;
-          color: #f2d184;
-          text-transform: uppercase;
+          width: min(480px, 94vw);
+          height: clamp(220px, 30vw, 320px);
+          margin: 0 auto;
+          border-radius: 12px;
+          background: rgba(10,6,3,0.85);
+          border: 1px solid rgba(233,193,118,0.24);
+          color: rgba(233,193,118,0.5);
+          font-size: 12px;
           letter-spacing: 0.12em;
-          text-shadow: 0 0 16px rgba(242,209,132,0.36);
-        }
-
-        .mahogany-brand-mark .material-symbols-outlined {
-          font-size: 34px;
-          color: #f2d184;
-        }
-
-        .mahogany-brand-mark strong {
-          font-family: "Playfair Display", serif;
-          font-size: clamp(18px, 2.1vw, 28px);
-        }
-
-        .mahogany-brand-mark small {
-          font-family: "JetBrains Mono", monospace;
-          font-size: clamp(8px, 1vw, 11px);
-          color: rgba(242,209,132,0.74);
-        }
-
-        .mahogany-hinge {
-          position: absolute;
-          bottom: -5px;
-          width: 64px;
-          height: 12px;
-          border-radius: 999px;
-          background: linear-gradient(90deg, #6a350a, #ffe18a, #b36d17, #4b2105);
-          border: 1px solid rgba(255,226,138,0.74);
-          box-shadow: 0 0 14px rgba(255,196,73,0.32);
-        }
-
-        .mahogany-hinge-left { left: 17%; }
-        .mahogany-hinge-right { right: 17%; }
-
-        .mahogany-humidor-tray {
-          position: absolute;
-          left: 3%;
-          right: 3%;
-          bottom: 1%;
-          height: 60%;
-          transform: perspective(780px) rotateX(-5deg);
-        }
-
-        .mahogany-cigar-bed {
-          position: absolute;
-          left: 7%;
-          right: 7%;
-          top: 0;
-          height: 55%;
-          border-radius: 12px 12px 3px 3px;
-          border: 1px solid rgba(243,189,85,0.42);
-          background:
-            radial-gradient(ellipse at 50% 5%, rgba(255,224,138,0.18), transparent 42%),
-            linear-gradient(180deg, rgba(28,9,2,0.42), rgba(7,2,1,0.7)),
-            repeating-linear-gradient(90deg, #2d1105 0 36px, #421907 37px 71px);
-          box-shadow: inset 0 18px 30px rgba(0,0,0,0.58);
-          overflow: hidden;
-        }
-
-        .mahogany-cigar {
-          position: absolute;
-          width: 15%;
-          height: 82%;
-          top: 11%;
-          border-radius: 999px;
-          transform: rotate(90deg);
-          background:
-            radial-gradient(circle at 22% 48%, rgba(255,233,173,0.35), transparent 10%),
-            repeating-linear-gradient(108deg, rgba(255,231,174,0.08) 0 7px, rgba(44,18,7,0.16) 8px 14px),
-            linear-gradient(90deg, #4a210e, #9f5f2c 20%, #6a3217 52%, #c0803e 72%, #381608);
-          box-shadow: inset 0 2px 8px rgba(255,235,184,0.18), inset 0 -6px 8px rgba(0,0,0,0.34), 0 9px 12px rgba(0,0,0,0.38);
-        }
-
-        .mahogany-cigar i {
-          position: absolute;
-          left: 48%;
-          top: -5px;
-          width: 18px;
-          height: calc(100% + 10px);
-          border-radius: 3px;
-          background: linear-gradient(90deg, rgba(59,27,8,0.88), rgba(236,199,117,0.95), rgba(78,39,12,0.92));
-          border: 1px solid rgba(255,224,148,0.48);
-        }
-
-        .mahogany-cigar-1 { left: 6%; }
-        .mahogany-cigar-2 { left: 16%; top: 15%; }
-        .mahogany-cigar-3 { left: 27%; }
-        .mahogany-cigar-4 { left: 38%; top: 15%; }
-        .mahogany-cigar-5 { left: 49%; }
-        .mahogany-cigar-6 { left: 60%; top: 15%; }
-        .mahogany-cigar-7 { left: 71%; }
-        .mahogany-cigar-8 { left: 82%; top: 15%; }
-
-        .mahogany-humidor-front {
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          height: 62%;
-          border-radius: 6px 6px 16px 16px;
-          border: 2px solid rgba(243,189,85,0.68);
-          background:
-            linear-gradient(105deg, rgba(255,255,255,0.13), transparent 20%, rgba(255,215,122,0.08) 46%, transparent 82%),
-            repeating-linear-gradient(0deg, rgba(255,225,159,0.08) 0 2px, transparent 2px 24px),
-            linear-gradient(145deg, #6d2c0d 0%, #2a0c03 44%, #8b4213 78%, #230802 100%);
-          box-shadow:
-            inset 0 2px 0 rgba(255,232,164,0.28),
-            inset 0 -28px 42px rgba(13,4,1,0.62),
-            0 0 30px rgba(255,177,60,0.16);
-          overflow: hidden;
-        }
-
-        .mahogany-humidor-front::before,
-        .mahogany-humidor-front::after {
-          content: "";
-          position: absolute;
-          top: 16%;
-          bottom: 16%;
-          width: 27%;
-          border: 1px solid rgba(255,222,127,0.22);
-          border-radius: 7px;
-          background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(36,11,3,0.08));
-        }
-
-        .mahogany-humidor-front::before { left: 8%; }
-        .mahogany-humidor-front::after { right: 8%; }
-
-        .mahogany-nameplate {
-          position: absolute;
-          left: 50%;
-          top: 18%;
-          min-width: 190px;
-          transform: translateX(-50%);
-          padding: 8px 20px;
-          border-radius: 999px;
-          display: grid;
-          gap: 1px;
-          place-items: center;
-          z-index: 4;
-          color: #1b0d02;
-          background: linear-gradient(135deg, #ffe296, #bd812e 62%, #805014);
-          border: 1px solid rgba(255,239,171,0.82);
-          box-shadow: 0 0 24px rgba(255,196,73,0.28), inset 0 1px 0 rgba(255,255,230,0.54);
-        }
-
-        .mahogany-nameplate small {
-          font-family: "JetBrains Mono", monospace;
-          font-size: 8px;
-          letter-spacing: 0.18em;
           text-transform: uppercase;
-        }
-
-        .mahogany-nameplate strong {
-          font-family: "Playfair Display", serif;
-          font-size: clamp(14px, 1.6vw, 18px);
-          color: #1b0d02;
-        }
-
-        .mahogany-lock {
-          position: absolute;
-          left: 50%;
-          bottom: 12%;
-          width: 64px;
-          height: 58px;
-          transform: translateX(-50%);
-          border-radius: 7px 7px 14px 14px;
-          background: linear-gradient(160deg, #ffe28a, #b66d19 52%, #4a1b04);
-          border: 1px solid rgba(255,241,176,0.8);
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,225,0.5),
-            0 0 24px rgba(255,194,75,0.38),
-            0 10px 18px rgba(0,0,0,0.35);
-          z-index: 4;
-        }
-
-        .mahogany-keyhole {
-          position: absolute;
-          left: 50%;
-          top: 30%;
-          width: 14px;
-          height: 14px;
-          transform: translateX(-50%);
-          border-radius: 999px 999px 45% 45%;
-          background: #160804;
-          box-shadow: 0 16px 0 -4px #160804;
         }
 
         .golden-box-kicker::before,
@@ -674,8 +366,8 @@ export default function GoldenBox() {
           .golden-box-page {
             min-height: max(900px, 100dvh);
           }
-          .golden-box-stage {
-            height: 245px;
+          .golden-box-pending {
+            height: 220px;
             margin-top: 24px;
           }
           .golden-phase-track {
