@@ -162,7 +162,8 @@ export default function App() {
             {/* ── All app routes — public, gated per-route where needed ── */}
             <Route element={<Layout />}>
               <Route index           element={<Navigate to="/crafthub" replace />} />
-              <Route path="home"     element={
+              <Route path="home"     element={<Navigate to="/crafthub" replace />} />
+              <Route path="novee-home" element={
                 <ProtectedRoute
                   allowedRoles={['admin', 'founder_level_0', 'developer']}
                   loginRoute="/admin-login"
