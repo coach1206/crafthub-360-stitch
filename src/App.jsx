@@ -139,20 +139,6 @@ function RouteTracker() {
   return null
 }
 
-function BootGuard({ children }) {
-  const booted    = sessionStorage.getItem('novee_booted')
-  const devBypass = import.meta.env.DEV && new URLSearchParams(window.location.search).get('preview') === '1'
-  if (devBypass) { sessionStorage.setItem('novee_booted', '1') }
-  if (!booted && !devBypass) {
-    const intended = window.location.pathname + window.location.search
-    if (intended !== '/boot' && intended !== '/') {
-      sessionStorage.setItem('novee_boot_return', intended)
-    }
-    return <Navigate to="/boot" replace />
-  }
-  return children
-}
-
 export default function App() {
   return (
     <DemoModeProvider>
@@ -173,15 +159,9 @@ export default function App() {
             <Route path="mentor-login"  element={<MentorLogin />} />
             <Route path="dev-login"     element={<DevLogin />} />
 
-            {/* ── All app routes — guarded by boot + Layout ─────── */}
-            <Route
-              element={
-                <BootGuard>
-                  <Layout />
-                </BootGuard>
-              }
-            >
-              <Route index           element={<Home />} />
+            {/* ── All app routes — public, gated per-route where needed ── */}
+            <Route element={<Layout />}>
+              <Route index           element={<Navigate to="/crafthub" replace />} />
               <Route path="home"     element={<Home />} />
               <Route path="crafthub" element={<CraftHub />} />
 
