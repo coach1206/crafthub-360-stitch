@@ -172,7 +172,7 @@ export default function App() {
               }
             >
               <Route index           element={<Home />} />
-              <Route path="home"     element={<Home />} />
+              <Route path="home" element={<CraftHub />} />
               <Route path="crafthub" element={<CraftHub />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
