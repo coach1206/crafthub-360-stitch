@@ -336,6 +336,17 @@ export default function App() {
                   <POS3 />
                 </ProtectedRoute>
               } />
+              <Route path="pos/table/:tableId" element={
+                <ProtectedRoute
+                  requiredPermission="access_pos3_staff"
+                  loginRoute="/staff-login"
+                  loginLabel="Staff Login"
+                  lockedMessage="POS 3 requires staff-level access. Please sign in with your staff PIN."
+                  demoBlocked
+                >
+                  <POS3 />
+                </ProtectedRoute>
+              } />
 
               {/* ── Protected: manager+ — BLOCKED in demo mode ───── */}
               <Route path="eat" element={

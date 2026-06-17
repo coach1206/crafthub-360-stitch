@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Flame, Wine, Beer, GlassWater, UtensilsCrossed, Plus, Minus, CheckCircle2, ChefHat, SplitSquareHorizontal, ShieldCheck, X } from 'lucide-react'
 import { useSecurity } from '../context/SecurityContext.jsx'
@@ -7,6 +7,7 @@ import {
   getActiveOrders, getTables, getProviderInventory,
   getProviderStatus, getPOS3Providers, sendRecommendation, getStaff,
 } from '../services/pos3IntegrationApiService.js'
+import { loadHandoff, acceptHandoff } from '../services/staffHandoffService.js'
 
 const FADE    = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
 const STAGGER = { show: { transition: { staggerChildren: 0.07 } } }
@@ -61,7 +62,14 @@ const TABLE_SEATS = { T1:2, T2:4, T3:6, T4:4, T5:2, T6:8, T7:2, T8:4, T9:2, T10:
 
 export default function POS3() {
   const navigate = useNavigate()
+  const { tableId: routeTableId } = useParams()
   const { role, hasPermission } = useSecurity()
+
+  // ── Staff handoff from customer SmokeCraft session ───────────────────
+  const [handoff, setHandoff] = useState(() => loadHandoff())
+  function handleAcceptHandoff() {
+    setHandoff(acceptHandoff())
+  }
   const isStaff   = ['staff','manager','admin','founder_level_0'].includes(role)
   const isManager = ['manager','admin','founder_level_0'].includes(role)
   const isAdmin   = ['admin','founder_level_0'].includes(role)
@@ -103,7 +111,15 @@ export default function POS3() {
     setLoadingMgmt(true)
     const fetches = [
       getActiveOrders(PROVIDER).then(r => setOrders(r?.orders || [])),
-      getTables(PROVIDER).then(r => setTables(r?.tables || [])),
+      getTables(PROVIDER).then(r => {
+        const list = r?.tables || []
+        setTables(list)
+        const targetTableId = routeTableId || handoff?.tableId
+        if (targetTableId) {
+          const match = list.find(t => t.id === targetTableId || t.label === targetTableId)
+          if (match) setSelectedTable(match)
+        }
+      }),
     ]
     if (isManager) {
       fetches.push(getProviderInventory(PROVIDER).then(r => setInventory(r?.inventory || [])))
@@ -252,6 +268,45 @@ export default function POS3() {
           </div>
         </div>
       </motion.div>
+
+      {/* ── Staff handoff banner ─────────────────────────────────────── */}
+      {handoff && (
+        <motion.div variants={FADE} style={{ padding: '14px 16px 0' }}>
+          <div style={{
+            background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.35)',
+            borderRadius: 14, padding: '14px 16px',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
+              <div>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#D4AF37', marginBottom: 4 }}>
+                  {handoff.status === 'accepted_by_staff' ? 'Handoff Accepted' : 'Incoming Customer Handoff'}
+                </div>
+                <div style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 16, color: '#E5E2E1', fontWeight: 600 }}>
+                  {handoff.customerName || 'Guest'}{handoff.tableId ? ` · Table ${handoff.tableId}` : ''}
+                </div>
+                {handoff.selectedCigar?.name && (
+                  <div style={{ fontSize: 12, color: '#9A9A9A', marginTop: 4 }}>Cigar: {handoff.selectedCigar.name}</div>
+                )}
+                {handoff.purchaseRequest && (
+                  <div style={{ fontSize: 12, color: '#9A9A9A' }}>Purchase request: {String(handoff.purchaseRequest)}</div>
+                )}
+                {handoff.rewardStatus?.rank && (
+                  <div style={{ fontSize: 12, color: '#9A9A9A' }}>Rank: {handoff.rewardStatus.rank} · {handoff.rewardStatus.xp} XP</div>
+                )}
+              </div>
+              {handoff.status !== 'accepted_by_staff' && (
+                <button onClick={handleAcceptHandoff} style={{
+                  flexShrink: 0, height: 38, padding: '0 16px', borderRadius: 10, border: 'none', cursor: 'pointer',
+                  background: '#D4AF37', color: '#010101', fontFamily: '"JetBrains Mono",monospace',
+                  fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 700,
+                }}>
+                  Accept Staff Handoff
+                </button>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* ── Category filter ──────────────────────────────────────────── */}
       <motion.div variants={FADE} style={{ padding: '16px 16px 0' }}>

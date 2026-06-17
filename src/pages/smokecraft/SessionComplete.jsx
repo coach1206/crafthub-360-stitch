@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
+import StaffHandoffButton from '../../components/staffhandoff/StaffHandoffButton.jsx'
 
 // APPROVED SMOKECRAFT VISUAL RULE:
 // No stock-photo fallback URLs, no CSS-drawn graphics, no cartoon/placeholder art.
@@ -73,6 +74,9 @@ export default function SessionComplete() {
 
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
+      {/* Staff handoff to POS 3 — this is the customer's session-complete handoff point */}
+      <StaffHandoffButton />
+
       {/* Cinematic Background */}
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
         <SessionCompleteImage
