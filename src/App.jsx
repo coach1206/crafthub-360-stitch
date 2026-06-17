@@ -162,7 +162,17 @@ export default function App() {
             {/* ── All app routes — public, gated per-route where needed ── */}
             <Route element={<Layout />}>
               <Route index           element={<Navigate to="/crafthub" replace />} />
-              <Route path="home"     element={<Home />} />
+              <Route path="home"     element={
+                <ProtectedRoute
+                  allowedRoles={['admin', 'founder_level_0', 'developer']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin / Founder Login"
+                  lockedMessage="NOVEE OS Command Hub requires founder, admin, or developer access."
+                  demoBlocked
+                >
+                  <Home />
+                </ProtectedRoute>
+              } />
               <Route path="crafthub" element={<CraftHub />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
