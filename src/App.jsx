@@ -169,7 +169,7 @@ export default function App() {
         <Suspense fallback={<NOVEELoader />}>
           <Routes>
             {/* ── Boot — accessible at root and /boot ─────────────── */}
-            <Route path="/"    element={<Boot />} />
+            <Route path="/" element={<Navigate to="/crafthub" replace />} />
             <Route path="boot" element={<Boot />} />
 
             {/* ── Login screens — lazy, accessible without boot ─── */}
