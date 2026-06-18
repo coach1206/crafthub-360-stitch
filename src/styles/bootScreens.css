@@ -50,11 +50,52 @@
   .boot-screen__data-line,
   .boot-screen__progress-fill,
   .boot-screen__progress-fill::after,
-  .boot-screen__pulse-dot {
+  .boot-screen__pulse-dot,
+  .boot-entrance-glow-rise,
+  .boot-entrance-tech-scale,
+  .boot-entrance-layer-slide,
+  .boot-entrance-command-rise,
+  .boot-entrance-passport-reveal {
     animation: none !important;
     transition: none !important;
   }
 }
+
+/* ── Per-stage entrance animations ───────────────────────────────────────── */
+/* Each plays once on mount of the incoming stage layer; the crossfade opacity
+   itself is handled separately via inline style so these only drive motion. */
+
+@keyframes bs-entrance-glow-rise {
+  from { opacity: 0; transform: translateY(26px) scale(0.97); filter: brightness(0.55); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    filter: brightness(1);    }
+}
+.boot-entrance-glow-rise { animation: bs-entrance-glow-rise 700ms cubic-bezier(0.2,0.7,0.2,1) both; }
+
+@keyframes bs-entrance-tech-scale {
+  from { opacity: 0; transform: scale(1.08); filter: brightness(0.7) saturate(1.3); }
+  60%  { opacity: 1; }
+  to   { opacity: 1; transform: scale(1);    filter: brightness(1)   saturate(1);   }
+}
+.boot-entrance-tech-scale { animation: bs-entrance-tech-scale 650ms cubic-bezier(0.34,1.1,0.64,1) both; }
+
+@keyframes bs-entrance-layer-slide {
+  from { opacity: 0; transform: translateX(-48px); }
+  to   { opacity: 1; transform: translateX(0);      }
+}
+.boot-entrance-layer-slide { animation: bs-entrance-layer-slide 700ms cubic-bezier(0.22,0.8,0.3,1) both; }
+
+@keyframes bs-entrance-command-rise {
+  0%   { opacity: 0; transform: translateY(36px); }
+  70%  { opacity: 1; transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0);     }
+}
+.boot-entrance-command-rise { animation: bs-entrance-command-rise 750ms cubic-bezier(0.25,0.9,0.3,1.15) both; }
+
+@keyframes bs-entrance-passport-reveal {
+  from { opacity: 0; transform: scale(0.92); filter: blur(6px); }
+  to   { opacity: 1; transform: scale(1);    filter: blur(0);   }
+}
+.boot-entrance-passport-reveal { animation: bs-entrance-passport-reveal 800ms cubic-bezier(0.16,0.8,0.24,1) both; }
 
 /* ── Root container ──────────────────────────────────────────────────────── */
 .boot-screen {

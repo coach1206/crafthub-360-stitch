@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { useNavigate, useSearchParams, Navigate } from 'react-router-dom'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { loadSession } from '../services/sessionStorageService.js'
 import { useDemoMode } from '../context/DemoModeContext.jsx'
 import { useSecurity } from '../context/SecurityContext.jsx'
@@ -11,14 +11,24 @@ import BootScreen from '../components/BootScreen.jsx'
 const BOOT_ALLOWED_ROLES = new Set(['founder_level_0', 'admin', 'developer'])
 
 // ── Timing constants (ms) ────────────────────────────────────────────────────
-const FADE_IN_MS  = 250
-const FADE_OUT_MS = 200
-const STAGE_GAP   = 50
+// Per-stage entrance/exit transforms live in src/styles/bootScreens.css
+// (boot-entrance-*). FADE_MS drives the opacity crossfade between stages;
+// the entrance keyframe plays underneath it on the incoming layer only, so
+// stages overlap during the swap instead of dropping to a black frame.
+const FADE_MS = 700
+
+// NOVEE OS and E.A.T. System are private/backend systems and must never be
+// shown to the public before a staff PIN unlock. The public cinematic intro
+// is restricted to these two stages only; the full stage list (including
+// novee-os/eat) is reserved for the founder/admin/developer admin-console
+// path — see PUBLIC_STAGE_IDS / STAGES below.
+const PUBLIC_STAGE_IDS = new Set(['profound', 'crafthub'])
 
 // ── Boot stage definitions ────────────────────────────────────────────────────
 // backgroundImage: place matching PNG in public/boot/ — gradient fallback used if absent.
 // items: used by the animation system for progressive reveal timing.
 //        Must mirror statusItems or connectionItems so timing aligns with display.
+// entranceType: maps to a .boot-entrance-* class in bootScreens.css.
 const BOOT_STAGES = [
   {
     id:             'profound',
@@ -37,14 +47,16 @@ const BOOT_STAGES = [
       { label: 'Modules',          value: 'Loaded'   },
     ],
     connectionItems: [],
-    items:   ['System Core', 'Neural Interface', 'Data Stream', 'Security Layer', 'Modules'],
-    holdMs:  300,
-    logoH:   220,
+    items:        ['System Core', 'Neural Interface', 'Data Stream', 'Security Layer', 'Modules'],
+    entranceType: 'glow-rise',
+    exitType:     'fade',
+    holdMs:       1400,
+    logoH:        220,
   },
   {
     id:             'novee-os',
     logo:           '/logos/novee-os.png',
-    title:          'CRAFTHUB 360',
+    title:          'NOVEE OS',
     subtitle:       'Powering Core Systems',
     backgroundImage: '/boot/novee-boot.png',
     fullBleedImage: true,
@@ -59,16 +71,21 @@ const BOOT_STAGES = [
       { label: 'Encryption',     value: 'Active' },
     ],
     connectionItems: [],
-    items:   ['System Check', 'Core Modules', 'Network Status', 'Secure Link', 'Data Sync', 'Encryption'],
-    holdMs:  300,
-    logoH:   190,
+    items:        ['System Check', 'Core Modules', 'Network Status', 'Secure Link', 'Data Sync', 'Encryption'],
+    entranceType: 'tech-scale',
+    exitType:     'fade',
+    holdMs:       1400,
+    logoH:        190,
   },
   {
     id:             'crafthub',
     logo:           '/logos/crafthub.png',
     title:          'CRAFTHUB',
     subtitle:       'Integrate · Connect · Elevate',
-    backgroundImage: '/boot/crafthub-boot.png',
+    // PENDING ASSET — placeholder path, do not point this at crafthub-boot.png
+    // (that file is the old/incorrect art). Drop the correct image at
+    // public/boot/crafthub-360.png and this stage will pick it up automatically.
+    backgroundImage: '/boot/crafthub-360.png',
     fullBleedImage: true,
     bootMessage:    'Loading CraftHub network',
     progress:       78,
@@ -79,9 +96,11 @@ const BOOT_STAGES = [
       { label: 'BeerCraft 360',  value: 'Connected' },
       { label: 'WineCraft 360',  value: 'Connected' },
     ],
-    items:   ['SmokeCraft 360', 'PourCraft 360', 'BeerCraft 360', 'WineCraft 360'],
-    holdMs:  300,
-    logoH:   200,
+    items:        ['SmokeCraft 360', 'PourCraft 360', 'BeerCraft 360', 'WineCraft 360'],
+    entranceType: 'layer-slide',
+    exitType:     'fade',
+    holdMs:       1400,
+    logoH:        200,
   },
   {
     id:             'eat',
@@ -101,9 +120,11 @@ const BOOT_STAGES = [
       { label: 'Bar',           value: 'Connected' },
       { label: 'Humidor',       value: 'Connected' },
     ],
-    items:   ['Venue Control', 'Inventory', 'POS 3', 'Kitchen', 'Bar', 'Humidor'],
-    holdMs:  300,
-    logoH:   190,
+    items:        ['Venue Control', 'Inventory', 'POS 3', 'Kitchen', 'Bar', 'Humidor'],
+    entranceType: 'command-rise',
+    exitType:     'fade',
+    holdMs:       1400,
+    logoH:        190,
   },
   {
     id:             'passport',
@@ -122,9 +143,11 @@ const BOOT_STAGES = [
       { label: 'Experience Sync', value: 'Ready'     },
     ],
     connectionItems: [],
-    items:   ['Members', 'Events', 'Passport Stamps', 'Network Layer', 'Experience Sync'],
-    holdMs:  300,
-    logoH:   190,
+    items:        ['Members', 'Events', 'Passport Stamps', 'Network Layer', 'Experience Sync'],
+    entranceType: 'passport-reveal',
+    exitType:     'fade',
+    holdMs:       1400,
+    logoH:        190,
   },
 ]
 
@@ -134,9 +157,22 @@ export default function Boot() {
   const { enterDemoMode } = useDemoMode()
   const { role }          = useSecurity()
 
+  // Public users only ever see Profound Innovations -> CraftHub 360.
+  // The privileged admin-console path (founder/admin/developer, or an
+  // already-authenticated founder staff session) keeps the full intro.
+  const STAGES = useMemo(() => {
+    const staffSession = loadStaffSession()
+    const privileged    = staffSession?.role === 'founder' || BOOT_ALLOWED_ROLES.has(role)
+    return privileged ? BOOT_STAGES : BOOT_STAGES.filter(s => PUBLIC_STAGE_IDS.has(s.id))
+  }, [role])
+
   const [introPhase,    setIntroPhase]    = useState('playing')
-  const [stageIndex,    setStageIndex]    = useState(0)
-  const [stageVisible,  setStageVisible]  = useState(false)
+  // displayIndex: the stage currently fully shown (base layer).
+  // incomingIndex: the next stage, mounted on top and crossfaded in; null when idle.
+  const [displayIndex,  setDisplayIndex]  = useState(0)
+  const [incomingIndex, setIncomingIndex] = useState(null)
+  const [incomingVisible, setIncomingVisible] = useState(false)
+  const [introVisible,  setIntroVisible]  = useState(true)
   const [itemsRevealed, setItemsRevealed] = useState(0)
 
   const [bootVisible,   setBootVisible]   = useState(false)
@@ -163,14 +199,31 @@ export default function Boot() {
   }, [])
 
   const startBootUI = useCallback(() => {
-    setIntroPhase('done')
-    setStageVisible(false)
-    after(200, () => {
+    // Final exit: fade the whole intro layer out, then either land the
+    // guest/staff session straight in the app, or fade the NOVEE OS admin
+    // console in underneath for founder/admin/developer roles.
+    setIntroVisible(false)
+    after(FADE_MS, () => {
+      setIntroPhase('done')
+
+      const staffSession = loadStaffSession()
+      const privileged    = staffSession?.role === 'founder' || BOOT_ALLOWED_ROLES.has(role)
+
+      if (!privileged) {
+        sessionStorage.setItem('novee_booted', '1')
+        const returnPath = sessionStorage.getItem('novee_boot_return')
+          || loadSession()?.system?.lastVisitedRoute
+          || '/crafthub'
+        sessionStorage.removeItem('novee_boot_return')
+        navigate(returnPath, { replace: true })
+        return
+      }
+
       setBootVisible(true)
       after(500, () => setHeaderVisible(true))
       fallbackTimer.current = setTimeout(() => setShowFallback(true), 600)
     })
-  }, [after])
+  }, [after, role, navigate])
 
   const skipIntro = useCallback(() => {
     if (skipped.current || introPhase === 'done') return
@@ -179,37 +232,53 @@ export default function Boot() {
     startBootUI()
   }, [introPhase, clearIntroTimers, startBootUI])
 
-  const playStage = useCallback((idx) => {
-    if (skipped.current) return
-    if (idx >= BOOT_STAGES.length) { startBootUI(); return }
-
-    const stage = BOOT_STAGES[idx]
-    setStageIndex(idx)
-    setItemsRevealed(0)
-    setStageVisible(false)
-
-    after(STAGE_GAP, () => {
-      setStageVisible(true)
-
-      if (stage.items.length > 0) {
-        const spacing = Math.min(400, (stage.holdMs - 200) / stage.items.length)
-        stage.items.forEach((_, i) => {
-          after(FADE_IN_MS + 200 + i * spacing, () => {
-            setItemsRevealed(prev => Math.max(prev, i + 1))
-          })
-        })
-      }
-
-      after(FADE_IN_MS + stage.holdMs, () => {
-        setStageVisible(false)
-        after(FADE_OUT_MS + STAGE_GAP, () => playStage(idx + 1))
+  const revealItems = useCallback((stage) => {
+    if (stage.items.length === 0) return
+    const spacing = Math.min(400, (stage.holdMs - 200) / stage.items.length)
+    stage.items.forEach((_, i) => {
+      after(200 + i * spacing, () => {
+        setItemsRevealed(prev => Math.max(prev, i + 1))
       })
     })
-  }, [after, startBootUI])
+  }, [after])
+
+  const playStage = useCallback((idx) => {
+    if (skipped.current) return
+    if (idx >= STAGES.length) { startBootUI(); return }
+
+    const stage = STAGES[idx]
+
+    if (idx === 0) {
+      // First stage mounts directly as the base layer — its own entrance
+      // keyframe (glow-rise) plays on mount, no crossfade needed.
+      setDisplayIndex(0)
+      setItemsRevealed(0)
+      revealItems(stage)
+      after(stage.holdMs, () => playStage(1))
+      return
+    }
+
+    // Crossfade: mount the next stage on top of the current one and fade
+    // it in. The base layer stays visible underneath the whole time, so
+    // there is never a moment with nothing on screen.
+    setIncomingIndex(idx)
+    setIncomingVisible(false)
+    after(20, () => setIncomingVisible(true))
+
+    after(20 + FADE_MS, () => {
+      setDisplayIndex(idx)
+      setIncomingIndex(null)
+      setIncomingVisible(false)
+      setItemsRevealed(0)
+      revealItems(stage)
+      after(stage.holdMs, () => playStage(idx + 1))
+    })
+  }, [after, startBootUI, revealItems, STAGES])
 
   useEffect(() => {
-    if (loadStaffSession()?.role !== 'founder' && !BOOT_ALLOWED_ROLES.has(role)) return
-
+    // The cinematic intro (5 boot stages) plays for every fresh session,
+    // regardless of role — only the post-intro admin console (further
+    // below) is restricted to founder/admin/developer.
     if (sessionStorage.getItem('novee_booted')) {
       const returnPath = sessionStorage.getItem('novee_boot_return')
         || loadSession()?.system?.lastVisitedRoute
@@ -275,14 +344,14 @@ export default function Boot() {
     navigate(returnPath, { replace: true })
   }
 
-  const stage = BOOT_STAGES[stageIndex] || BOOT_STAGES[0]
+  const stage    = STAGES[displayIndex] || STAGES[0]
+  const incoming = incomingIndex != null ? STAGES[incomingIndex] : null
 
-  // /boot is a developer/founder/admin-only system console — never shown to
-  // public, guest, or staff users. Send everyone else straight to CraftHub.
-  const staffSession = loadStaffSession()
-  if (staffSession?.role !== 'founder' && !BOOT_ALLOWED_ROLES.has(role)) {
-    return <Navigate to="/crafthub" replace />
-  }
+  // Everyone sees the cinematic intro (introPhase === 'playing', rendered
+  // below). The admin-only console (hold-to-activate, service registry,
+  // etc.) only renders once bootVisible is set — and startBootUI() only
+  // sets that for founder/admin/developer roles, redirecting everyone
+  // else straight into the app instead. Nothing further to gate here.
 
   return (
     <div
@@ -302,16 +371,18 @@ export default function Boot() {
       {introPhase === 'playing' && (
         <div
           className="fixed inset-0 z-50 select-none"
-          style={{ cursor: 'none' }}
+          style={{
+            cursor:     'none',
+            opacity:    introVisible ? 1 : 0,
+            transition: `opacity ${FADE_MS}ms cubic-bezier(0.4,0,0.2,1)`,
+          }}
           onClick={skipIntro}
         >
+          {/* Base layer — currently displayed stage, always visible */}
           <div
-            style={{
-              width:      '100%',
-              height:     '100vh',
-              opacity:    stageVisible ? 1 : 0,
-              transition: `opacity ${stageVisible ? FADE_IN_MS : FADE_OUT_MS}ms cubic-bezier(0.4,0,0.2,1)`,
-            }}
+            key={`base-${stage.id}`}
+            className={`boot-entrance-${stage.entranceType}`}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100vh' }}
           >
             <BootScreen
               brandName={stage.title}
@@ -327,6 +398,39 @@ export default function Boot() {
             />
           </div>
 
+          {/* Incoming layer — next stage, crossfades on top of the base layer */}
+          {incoming && (
+            <div
+              style={{
+                position:   'absolute',
+                inset:      0,
+                width:      '100%',
+                height:     '100vh',
+                opacity:    incomingVisible ? 1 : 0,
+                transition: `opacity ${FADE_MS}ms cubic-bezier(0.4,0,0.2,1)`,
+              }}
+            >
+              <div
+                key={`incoming-${incoming.id}`}
+                className={`boot-entrance-${incoming.entranceType}`}
+                style={{ width: '100%', height: '100vh' }}
+              >
+                <BootScreen
+                  brandName={incoming.title}
+                  brandSubtitle={incoming.subtitle}
+                  logo={incoming.logo}
+                  logoHeight={incoming.logoH}
+                  backgroundImage={incoming.backgroundImage}
+                  bootMessage={incoming.bootMessage}
+                  progress={incoming.progress}
+                  statusItems={incoming.statusItems}
+                  connectionItems={incoming.connectionItems}
+                  itemsRevealed={999}
+                />
+              </div>
+            </div>
+          )}
+
           <div
             style={{
               position:   'absolute',
@@ -339,19 +443,19 @@ export default function Boot() {
               zIndex:     20,
             }}
           >
-            {BOOT_STAGES.map((s, i) => (
+            {STAGES.map((s, i) => (
               <div
                 key={s.id}
                 style={{
-                  width:        i === stageIndex ? 22 : 6,
+                  width:        i === displayIndex ? 22 : 6,
                   height:       6,
                   borderRadius: 3,
-                  background:   i === stageIndex
+                  background:   i === displayIndex
                     ? '#C9A84C'
-                    : i < stageIndex
+                    : i < displayIndex
                       ? 'rgba(201,168,76,0.35)'
                       : 'rgba(201,168,76,0.10)',
-                  boxShadow:  i === stageIndex ? '0 0 10px rgba(201,168,76,0.55)' : 'none',
+                  boxShadow:  i === displayIndex ? '0 0 10px rgba(201,168,76,0.55)' : 'none',
                   transition: 'all 0.4s ease',
                 }}
               />
@@ -402,18 +506,18 @@ export default function Boot() {
                 <span className="material-symbols-outlined text-primary">terminal</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-label-lg text-label-lg text-primary tracking-widest">CRAFTHUB INITIALIZED</span>
+                <span className="font-label-lg text-label-lg text-primary tracking-widest">SYSTEM INITIALIZED</span>
                 <span className="font-body-md text-body-md text-on-surface-variant/60">V.4.2.0. PREMIUM_CORE</span>
               </div>
             </div>
             <div className="glass-panel px-6 py-2 rounded-full border border-primary/10">
-              <span className="font-label-lg text-label-lg text-primary">CRAFTHUB LINK: ACTIVE</span>
+              <span className="font-label-lg text-label-lg text-primary">SECURE LINK: ACTIVE</span>
             </div>
           </header>
 
           <div className="flex flex-col items-center text-center">
             <div className="mb-12 animate-pulse-gold">
-              <h1 className="font-display-lg text-display-lg gold-foil-text tracking-tighter mb-2">CRAFTHUB 360</h1>
+              <h1 className="font-display-lg text-display-lg gold-foil-text tracking-tighter mb-2">NOVEE OS</h1>
               <div className="h-[1px] w-64 bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto" />
               <h2 className="font-headline-md text-headline-md text-on-surface-variant mt-4 tracking-widest uppercase">CRAFTHUB 360</h2>
             </div>
@@ -425,7 +529,7 @@ export default function Boot() {
           <aside className="fixed left-8 top-1/2 -translate-y-1/2">
             <div className="glass-panel p-6 rounded-xl space-y-6 w-72 shadow-2xl shadow-black/50 border-l-2 border-l-primary/40 relative overflow-hidden scan-effect">
               <h3 className="font-label-lg text-label-lg text-on-surface-variant/50 border-b border-outline-variant pb-2">
-                CRAFT CRAFT CRAFT SERVICE REGISTRY
+                SERVICE REGISTRY
               </h3>
               <div className="space-y-4">
                 {[
@@ -475,7 +579,7 @@ export default function Boot() {
               <div className="absolute -inset-1 bg-primary/5 rounded-2xl blur-xl group-hover:bg-primary/10 transition-all duration-700" />
               <div className="relative flex flex-col items-center">
                 <span className="font-headline-md text-headline-md text-primary tracking-[0.2em] font-bold text-lg">
-                  ENTER CRAFTHUB
+                  HOLD TO ACTIVATE
                 </span>
                 <span className="material-symbols-outlined text-primary/60 text-sm animate-bounce mt-1">
                   keyboard_double_arrow_down
@@ -560,7 +664,7 @@ export default function Boot() {
           }}
         >
           <p style={{ color: 'rgba(201,168,76,0.6)', fontSize: '0.78rem', letterSpacing: '0.08em', marginBottom: '0.875rem' }}>
-            CRAFTHUB 360 is preparing your experience.
+            NOVEE OS is preparing your experience.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <button
