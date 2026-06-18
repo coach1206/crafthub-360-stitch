@@ -6,33 +6,24 @@ import {
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
+const FALLBACK_CIGAR_IMAGE = '/cigar-anatomy.png'
+
 function CigarImage({ image, name, height = '80px' }) {
-  const [failed, setFailed] = useState(false)
-  if (!failed && image) {
-    return (
-      <img
-        src={image}
-        alt={name}
-        onError={() => setFailed(true)}
-        style={{ width: '100%', height, objectFit: 'contain', objectPosition: 'center', display: 'block' }}
-      />
-    )
-  }
+  const [src, setSrc] = useState(image || FALLBACK_CIGAR_IMAGE)
   return (
-    <span style={{
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      width: '100%', height, borderRadius: 8,
-      background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
-      color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
-    }}>
-      Image pending
-    </span>
+    <img
+      src={src}
+      alt={name}
+      onError={() => setSrc(FALLBACK_CIGAR_IMAGE)}
+      style={{ width: '100%', height, objectFit: 'contain', objectPosition: 'center', display: 'block' }}
+    />
   )
 }
 
 // APPROVED SMOKECRAFT VISUAL ASSETS.
 // Do not replace cigar images with cartoon placeholders, fake cigar strips, or flat illustrations.
-// If a realistic image is missing, render "Image pending" instead of a cartoon fallback.
+// Realistic per-format photos load from /assets/smokecraft/cigars/; if missing, falls back to the
+// real cigar-anatomy.png asset rather than leaving any placeholder text.
 
 const FORMATS = [
   {
