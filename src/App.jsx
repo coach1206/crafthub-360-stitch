@@ -199,6 +199,13 @@ export default function App() {
               <Route path="smokecraft">
                 <Route index element={<SmokeCraft />} />
                 <Route path="enroll"           element={<Enroll />} />
+                <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
+                <Route path="profile"          element={<Navigate to="/smokecraft/identity" replace />} />
+                <Route path="education"        element={<Navigate to="/smokecraft/format" replace />} />
+                <Route path="mentors"          element={<Navigate to="/smokecraft/mentor-selection" replace />} />
+                <Route path="humidor"          element={<Navigate to="/smokecraft/humidor-match" replace />} />
+                <Route path="light"            element={<Navigate to="/smokecraft/cut-toast-light" replace />} />
+                <Route path="complete"         element={<Navigate to="/smokecraft/session-complete" replace />} />
                 <Route path="golden-box">
                   <Route index             element={<GoldenBox />} />
                   <Route path="status"     element={<GoldenBoxStatus />} />
