@@ -196,7 +196,7 @@ export default function SmokeCraft() {
                   </div>
                   <div style={{ display: 'flex', gap: 6, marginTop: 14 }}>
                     {Array.from({ length: 4 }, (_, i) => (
-                      <div key={i} style={{ width: 26, height: 26, borderRadius: '50%', border: `1px solid ${i < session.smokecraftStamps.length ? 'rgba(212,175,55,0.6)' : 'rgba(122,100,60,0.3)'}`, background: i < session.smokecraftStamps.length ? 'rgba(212,175,55,0.15)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: i < session.smokecraftStamps.length ? '#D4AF37' : '#5A4A30' }}>
+                      <div key={i} style={{ width: 26, height: 26, borderRadius: '50%', border: `1px solid ${i < (session.smokecraftStamps?.length ?? 0) ? 'rgba(212,175,55,0.6)' : 'rgba(122,100,60,0.3)'}`, background: i < (session.smokecraftStamps?.length ?? 0) ? 'rgba(212,175,55,0.15)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: i < (session.smokecraftStamps?.length ?? 0) ? '#D4AF37' : '#5A4A30' }}>
                         {String(i + 1).padStart(2, '0')}
                       </div>
                     ))}
