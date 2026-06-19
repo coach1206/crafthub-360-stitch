@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../context/GuestSessionContext.jsx'
-import { getNextSmokecraftRoute, getLastSmokecraftRoute } from '../constants/session.js'
+import { useDemoMode } from '../context/DemoModeContext.jsx'
+import { getNextSmokecraftRoute } from '../constants/session.js'
 
 function PassportCoverVisual() {
   return (
@@ -36,10 +37,34 @@ function PassportCoverVisual() {
 export default function SmokeCraft() {
   const navigate = useNavigate()
   const { session } = useGuestSession()
+  const { enterDemoMode } = useDemoMode()
   const [howItWorksOpen, setHowItWorksOpen] = useState(false)
 
-  function handleStart() {
+  const hasPreviousSession = (session.completedSteps?.length ?? 0) > 0
+
+  function handleStartNew() {
+    navigate('/smokecraft/enroll')
+  }
+
+  function handleContinue() {
     navigate(getNextSmokecraftRoute(session.completedSteps))
+  }
+
+  function handleEventChallenge() {
+    navigate('/smokecraft/leaf-challenge')
+  }
+
+  function handleViewPassport() {
+    navigate('/passport')
+  }
+
+  function handleBrowseHumidor() {
+    navigate('/smokecraft/humidor-match')
+  }
+
+  function handleDemoExperience() {
+    enterDemoMode()
+    navigate('/smokecraft/enroll')
   }
 
   const bottomNav = [
@@ -131,26 +156,53 @@ export default function SmokeCraft() {
               Your personalized cigar journey starts here. Explore. Learn. Pair. Track every step with craftsmanship and purpose.
             </p>
 
-            {/* CTA Buttons */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginBottom: 32 }}>
+            {/* CTA Buttons — required entry-gate action set */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 20 }}>
               <button
-                onClick={handleStart}
+                onClick={handleStartNew}
                 style={{ height: 56, padding: '0 28px', borderRadius: 8, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #D4AF37, #B8952A)', color: '#0A0705', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 900, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10, boxShadow: '0 0 28px rgba(212,175,55,0.35)', transition: 'all 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
               >
-                Start SmokeCraft
+                Start New SmokeCraft Session
                 <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chevron_right</span>
               </button>
 
+              {hasPreviousSession && (
+                <button
+                  onClick={handleContinue}
+                  style={{ height: 56, padding: '0 28px', borderRadius: 8, cursor: 'pointer', background: 'rgba(91,143,201,0.08)', border: '1px solid rgba(91,143,201,0.45)', color: '#9cc2e8', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10, transition: 'all 0.2s' }}
+                  onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'}
+                  onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                >
+                  Continue Previous Session
+                </button>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 32 }}>
+              {[
+                { label: 'Enter Event Challenge', onClick: handleEventChallenge, icon: 'emoji_events' },
+                { label: 'View My Passport',       onClick: handleViewPassport,  icon: 'menu_book' },
+                { label: 'Browse Humidor',          onClick: handleBrowseHumidor, icon: 'inventory_2' },
+                { label: 'Demo Experience',         onClick: handleDemoExperience, icon: 'visibility' },
+              ].map(btn => (
+                <button
+                  key={btn.label}
+                  onClick={btn.onClick}
+                  style={{ height: 48, padding: '0 20px', borderRadius: 8, cursor: 'pointer', background: 'rgba(212,175,55,0.06)', border: '1px solid rgba(212,175,55,0.3)', color: '#D4AF37', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8, backdropFilter: 'blur(8px)', transition: 'all 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(212,175,55,0.12)' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(212,175,55,0.06)' }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>{btn.icon}</span>
+                  {btn.label}
+                </button>
+              ))}
               <button
                 onClick={() => setHowItWorksOpen(true)}
-                style={{ height: 56, padding: '0 28px', borderRadius: 8, cursor: 'pointer', background: 'rgba(212,175,55,0.06)', border: '1px solid rgba(212,175,55,0.4)', color: '#D4AF37', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10, backdropFilter: 'blur(8px)', transition: 'all 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(212,175,55,0.12)'; e.currentTarget.style.transform = 'scale(1.02)' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(212,175,55,0.06)'; e.currentTarget.style.transform = 'scale(1)' }}
+                style={{ height: 48, padding: '0 20px', borderRadius: 8, cursor: 'pointer', background: 'transparent', border: '1px solid rgba(212,175,55,0.2)', color: 'rgba(212,175,55,0.7)', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8 }}
               >
                 How It Works
-                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chevron_right</span>
               </button>
             </div>
 

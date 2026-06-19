@@ -8,6 +8,7 @@ import DemoBanner from './components/demo/DemoBanner.jsx'
 // ── Critical boot-path pages — eager loaded ───────────────────
 import Home             from './pages/Home.jsx'
 import Boot             from './pages/Boot.jsx'
+import NoveeHome        from './pages/NoveeHome.jsx'
 import CraftHub         from './pages/CraftHub.jsx'
 import POS3             from './pages/POS3.jsx'
 import EATCommand       from './pages/EATCommand.jsx'
@@ -71,6 +72,7 @@ import BeerCraft from './pages/BeerCraft.jsx'
 import WineCraft from './pages/WineCraft.jsx'
 
 // ── Auth screens — lazy ───────────────────────────────────────
+const BootConsole   = lazy(() => import('./pages/BootConsole.jsx'))
 const StaffLogin   = lazy(() => import('./pages/StaffLogin.jsx'))
 const AdminLogin   = lazy(() => import('./pages/AdminLogin.jsx'))
 const FounderLogin = lazy(() => import('./pages/FounderLogin.jsx'))
@@ -129,7 +131,7 @@ function NOVEELoader() {
 }
 
 // Routes reachable without first playing the boot intro.
-const NO_BOOT_REQUIRED = new Set(['/', '/boot', '/staff-login', '/admin-login', '/founder-login', '/mentor-login', '/dev-login'])
+const NO_BOOT_REQUIRED = new Set(['/', '/boot', '/boot/console', '/staff-login', '/admin-login', '/founder-login', '/mentor-login', '/dev-login'])
 
 /** Silently records the current route in session state for refresh recovery. */
 function RouteTracker() {
@@ -168,9 +170,10 @@ export default function App() {
         <KioskShell>
         <Suspense fallback={<NOVEELoader />}>
           <Routes>
-            {/* ── Boot — accessible at root and /boot ─────────────── */}
-            <Route path="/" element={<Navigate to="/crafthub" replace />} />
+            {/* ── Boot — public NOVEE OS boot screen at root and /boot ── */}
+            <Route path="/" element={<Boot />} />
             <Route path="boot" element={<Boot />} />
+            <Route path="boot/console" element={<BootConsole />} />
 
             {/* ── Login screens — lazy, accessible without boot ─── */}
             <Route path="staff-login"   element={<StaffLogin />} />
@@ -181,7 +184,7 @@ export default function App() {
 
             {/* ── All app routes — public, gated per-route where needed ── */}
             <Route element={<Layout />}>
-              <Route path="home"     element={<Navigate to="/crafthub" replace />} />
+              <Route path="home"     element={<NoveeHome />} />
               <Route path="novee-home" element={
                 <ProtectedRoute
                   allowedRoles={['admin', 'founder_level_0', 'developer']}
