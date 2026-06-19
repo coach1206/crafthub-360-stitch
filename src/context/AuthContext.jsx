@@ -37,6 +37,11 @@ export function AuthProvider({ children }) {
   const refreshMe = useCallback(async () => {
     setIsLoading(true)
     try {
+      // apiClient never throws. A 401/403 here just means "no active
+      // session" — that's the normal state for guest/public/demo traffic,
+      // not an error, and it must never block the public app shell from
+      // rendering. authError stays untouched for it; it's reserved for
+      // explicit login-form failures (wrong PIN, etc).
       const result = await authApi.getMe()
       if (result?.data?.authenticated) {
         setAuthUser(result.data)
@@ -45,6 +50,7 @@ export function AuthProvider({ children }) {
         setAuthUser(null)
       }
     } catch {
+      // Defensive only — authApi.getMe() already swallows all failures.
       setAuthUser(null)
     } finally {
       setIsLoading(false)

@@ -5,6 +5,7 @@ import { DemoModeProvider } from './context/DemoModeContext.jsx'
 import Layout from './components/Layout.jsx'
 import DemoBanner from './components/demo/DemoBanner.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
+import PublicSessionNotice from './components/PublicSessionNotice.jsx'
 
 // ── Critical boot-path pages — eager loaded ───────────────────
 import Home             from './pages/Home.jsx'
@@ -156,6 +157,7 @@ export default function App() {
         <RouteTracker />
         {/* Persistent Demo Mode banner — renders on top of all routes */}
         <DemoBanner />
+        <PublicSessionNotice />
         <KioskShell>
         <ErrorBoundary>
         <Suspense fallback={<NOVEELoader />}>
