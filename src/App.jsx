@@ -1,9 +1,10 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useGuestSession } from './context/GuestSessionContext.jsx'
 import { DemoModeProvider } from './context/DemoModeContext.jsx'
 import Layout from './components/Layout.jsx'
 import DemoBanner from './components/demo/DemoBanner.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 
 // ── Critical boot-path pages — eager loaded ───────────────────
 import Home             from './pages/Home.jsx'
@@ -130,32 +131,20 @@ function NOVEELoader() {
   )
 }
 
-// Routes reachable without first playing the boot intro.
-const NO_BOOT_REQUIRED = new Set(['/', '/boot', '/boot/console', '/staff-login', '/admin-login', '/founder-login', '/mentor-login', '/dev-login'])
-
-/** Silently records the current route in session state for refresh recovery. */
+/**
+ * Silently records the current route in session state for refresh recovery.
+ * Every route is reachable unconditionally — no boot flag, auth state, or
+ * demo state gates rendering here. Per-route access control (staff/admin/etc)
+ * is handled by ProtectedRoute on the individual routes that need it.
+ */
 function RouteTracker() {
   const location = useLocation()
-  const navigate  = useNavigate()
   const { trackRoute } = useGuestSession()
 
   useEffect(() => {
     if (location.pathname !== '/boot') trackRoute(location.pathname)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
-
-  // Deep-linking straight into any app route (e.g. /crafthub) on a fresh
-  // session would skip the boot intro entirely. Funnel through "/" first;
-  // Boot.jsx reads sessionStorage('novee_boot_return') to send the user
-  // back here once the intro finishes. Only runs once per session, since
-  // novee_booted gets set right after the intro completes.
-  useEffect(() => {
-    if (NO_BOOT_REQUIRED.has(location.pathname)) return
-    if (sessionStorage.getItem('novee_booted')) return
-    sessionStorage.setItem('novee_boot_return', location.pathname + location.search)
-    navigate('/', { replace: true })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, location.search])
 
   return null
 }
@@ -168,6 +157,7 @@ export default function App() {
         {/* Persistent Demo Mode banner — renders on top of all routes */}
         <DemoBanner />
         <KioskShell>
+        <ErrorBoundary>
         <Suspense fallback={<NOVEELoader />}>
           <Routes>
             {/* ── Boot — public NOVEE OS boot screen at root and /boot ── */}
@@ -564,6 +554,7 @@ export default function App() {
             </Route>
           </Routes>
         </Suspense>
+        </ErrorBoundary>
 
         {/* Dev-only floating role switcher */}
         <DevRoleSwitcher />
