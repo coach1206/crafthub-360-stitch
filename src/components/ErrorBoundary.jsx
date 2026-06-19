@@ -23,8 +23,25 @@ export default class ErrorBoundary extends Component {
     window.location.reload()
   }
 
+  // This is a class component, so React Router's useNavigate() hook isn't
+  // available here — plain browser navigation also has the benefit of a
+  // hard reset of any corrupted in-memory state that caused the crash.
+  handleBack = () => {
+    window.history.back()
+  }
+
+  handleGoTo = (path) => {
+    window.location.href = path
+  }
+
   render() {
     if (!this.state.error) return this.props.children
+
+    const buttonStyle = {
+      border: '1px solid rgba(212,175,55,0.4)', background: 'rgba(212,175,55,0.1)',
+      color: '#d4af37', borderRadius: 24, padding: '10px 24px', cursor: 'pointer',
+      fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700,
+    }
 
     return (
       <div style={{
@@ -37,16 +54,13 @@ export default class ErrorBoundary extends Component {
         <p style={{ maxWidth: 480, color: '#cbb98f', fontSize: 14, lineHeight: 1.6 }}>
           {this.state.error?.message || 'An unexpected error occurred while loading this screen.'}
         </p>
-        <button
-          onClick={this.handleReload}
-          style={{
-            border: '1px solid rgba(212,175,55,0.4)', background: 'rgba(212,175,55,0.1)',
-            color: '#d4af37', borderRadius: 24, padding: '10px 24px', cursor: 'pointer',
-            fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700,
-          }}
-        >
-          Reload
-        </button>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center' }}>
+          <button onClick={this.handleReload} style={buttonStyle}>Reload</button>
+          <button onClick={this.handleBack} style={buttonStyle}>Back</button>
+          <button onClick={() => this.handleGoTo('/home')} style={buttonStyle}>Home</button>
+          <button onClick={() => this.handleGoTo('/crafthub')} style={buttonStyle}>CraftHub</button>
+          <button onClick={() => this.handleGoTo('/smokecraft')} style={buttonStyle}>SmokeCraft</button>
+        </div>
       </div>
     )
   }

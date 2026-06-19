@@ -81,7 +81,6 @@ export default function LeafChallenge() {
 
   // Re-animate card on each new round
   useEffect(() => {
-    if (phase !== 'challenge') return
     setCardMounted(false)
     const t = setTimeout(() => setCardMounted(true), 60)
     return () => clearTimeout(t)
@@ -89,7 +88,7 @@ export default function LeafChallenge() {
 
   function handleAnswer(leafId) {
     if (answered || submitting) return
-    const currentRound = ROUNDS[round]
+    const currentRound = ROUNDS[round] || ROUNDS[0]
     const isCorrect    = leafId === currentRound.correct
 
     setSelectedId(leafId)
@@ -128,7 +127,7 @@ export default function LeafChallenge() {
   }
 
   const FILL1 = { fontVariationSettings: "'FILL' 1" }
-  const currentRound = ROUNDS[round]
+  const currentRound = ROUNDS[round] || ROUNDS[0]
 
   /* ── CHALLENGE PHASE ────────────────────────────────────── */
   const challengeLeaf    = LEAVES[currentRound.correct]
