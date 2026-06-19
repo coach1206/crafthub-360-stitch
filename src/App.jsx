@@ -150,39 +150,11 @@ function RouteTracker() {
   return null
 }
 
-// TEMPORARY DIAGNOSTIC — proves each public route's element tree actually
-// mounts, independent of whatever the route's real (possibly lazy) page
-// component renders. Remove once the blank-screen report is closed out.
-const ROUTE_TEST_LABEL = {
-  '/':           'BOOT ROUTE WORKS',
-  '/boot':       'BOOT ROUTE WORKS',
-  '/home':       'HOME ROUTE WORKS',
-  '/crafthub':   'CRAFTHUB ROUTE WORKS',
-  '/smokecraft': 'SMOKECRAFT ROUTE WORKS',
-}
-
-function RouteDiagnostic() {
-  const location = useLocation()
-  const label = ROUTE_TEST_LABEL[location.pathname]
-  if (!label) return null
-  return (
-    <div style={{ position: 'fixed', top: 22, left: 0, zIndex: 99999, background: '#0000ff', color: '#fff', fontFamily: 'monospace', fontSize: 12, padding: '4px 8px' }}>
-      {label}
-    </div>
-  )
-}
-
 export default function App() {
-  console.log('APP COMPONENT RENDERED')
   return (
     <DemoModeProvider>
       <BrowserRouter>
         <RouteTracker />
-        <RouteDiagnostic />
-        {/* REACT MOUNTED: CRAFTHUB APP ACTIVE */}
-        <div style={{ position: 'fixed', top: 0, right: 0, zIndex: 99999, background: '#00aa00', color: '#fff', fontFamily: 'monospace', fontSize: 12, padding: '4px 8px' }}>
-          REACT MOUNTED: CRAFTHUB APP ACTIVE
-        </div>
         {/* Persistent Demo Mode banner — renders on top of all routes */}
         <DemoBanner />
         <PublicSessionNotice />

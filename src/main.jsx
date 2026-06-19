@@ -9,9 +9,6 @@ import { flushOfflineQueue }    from './services/syncService.js'
 import { registerServiceWorker } from './serviceWorkerRegistration.js'
 import './styles.css'
 
-console.log('MAIN ENTRY LOADED')
-console.log('ROOT ELEMENT FOUND', !!document.getElementById('root'))
-
 // Flush any sync items queued during a previous offline session
 flushOfflineQueue().catch(() => {})
 
