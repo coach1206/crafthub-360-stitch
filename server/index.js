@@ -121,6 +121,8 @@ app.use('/api/developer',         developerRoutes)
 app.use('/api/access-requests',   accessRequestsRoutes)
 
 // ── Frontend static app ──────────────────────────────────────
+app.get('/', (_req, res) => res.redirect(302, '/crafthub'))
+
 app.use(express.static(CLIENT_DIST))
 
 app.get(/^\/(?!api\/?).*/, (_req, res) => {
