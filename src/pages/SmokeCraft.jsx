@@ -757,6 +757,10 @@ export default function SmokeCraft() {
           }
         }
       `}</style>
+
+      <div style={{ position: 'fixed', bottom: 8, left: 8, zIndex: 9999, fontSize: 10, color: 'rgba(255,255,255,0.6)', background: 'rgba(0,0,0,0.6)', padding: '2px 6px', borderRadius: 4, pointerEvents: 'none' }}>
+        LIVE SMOKECRAFT BUILD 668d6599
+      </div>
     </div>
   )
 }
