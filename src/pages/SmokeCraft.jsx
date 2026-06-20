@@ -103,31 +103,19 @@ export default function SmokeCraft() {
   ]
 
   return (
-    <div style={{ minHeight: '100dvh', background: 'linear-gradient(180deg, #080503 0%, #0A0705 46%, #050302 100%)', color: '#E5E2E1', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
-
-      {/* ── Single cinematic hero background ─────────────────────── */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 720, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-        <img
-          src="/smokecraft-hero.png"
-          alt=""
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', opacity: 0.54 }}
-        />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(8,5,2,0.92) 0%, rgba(8,5,2,0.72) 45%, rgba(8,5,2,0.9) 100%)' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(8,5,2,0.16) 0%, rgba(10,7,5,0.78) 72%, #0A0705 100%)' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 24% 42%, rgba(212,175,55,0.12) 0%, transparent 48%)' }} />
-      </div>
+    <div style={{ minHeight: '100dvh', background: 'linear-gradient(180deg, #FBF7EE 0%, #F5EEDD 50%, #F0E8D2 100%)', color: '#2A2117', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
 
       {/* ── Top Bar ───────────────────────────────────────────────── */}
-      <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', background: 'rgba(10,7,5,0.75)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(212,175,55,0.12)' }}>
+      <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', background: 'rgba(253,250,242,0.85)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(180,140,40,0.18)', boxShadow: '0 2px 18px rgba(180,140,40,0.06)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.4)', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ fontSize: 11, fontWeight: 900, color: '#D4AF37', letterSpacing: '0.05em', fontFamily: '"JetBrains Mono",monospace' }}>360</span>
+          <div style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(180,140,40,0.4)', background: 'linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.05))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ fontSize: 11, fontWeight: 900, color: '#A6791F', letterSpacing: '0.05em', fontFamily: '"JetBrains Mono",monospace' }}>360</span>
           </div>
-          <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#D4AF37', letterSpacing: '-0.01em' }}>CraftHub 360</span>
+          <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#A6791F', letterSpacing: '-0.01em' }}>CraftHub 360</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#A89B86', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Grand Lounge</span>
-          <button onClick={() => navigate('/')} style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.25)', overflow: 'hidden', cursor: 'pointer', background: 'rgba(212,175,55,0.08)' }}>
+          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#8A7A5C', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Grand Lounge</span>
+          <button className="sc-tactile" onClick={() => navigate('/')} style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(180,140,40,0.3)', overflow: 'hidden', cursor: 'pointer', background: 'rgba(212,175,55,0.08)' }}>
             <img src="/passport.jpg" alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </button>
         </div>
@@ -138,31 +126,30 @@ export default function SmokeCraft() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 48, alignItems: 'center' }} className="smokecraft-grid">
 
           {/* Left Column */}
-          <div style={{ gridColumn: 'span 1' }}>
+          <div className="sc-fade-in" style={{ gridColumn: 'span 1' }}>
             {/* Welcome label */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, padding: '6px 14px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.3)', background: 'rgba(212,175,55,0.08)' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#D4AF37' }}>smoking_rooms</span>
-              <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>Welcome to SmokeCraft 360</span>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, padding: '6px 14px', borderRadius: 20, border: '1px solid rgba(180,140,40,0.32)', background: 'rgba(212,175,55,0.1)' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#A6791F' }}>smoking_rooms</span>
+              <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#A6791F', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>Welcome to SmokeCraft 360</span>
             </div>
 
             {/* Headline */}
-            <h2 style={{ fontFamily: '"Playfair Display",serif', fontSize: 'clamp(40px, 6vw, 72px)', fontWeight: 700, lineHeight: 1.08, color: '#EDE8DF', letterSpacing: '-0.02em', marginBottom: 20 }}>
+            <h2 style={{ fontFamily: '"Playfair Display",serif', fontSize: 'clamp(40px, 6vw, 72px)', fontWeight: 700, lineHeight: 1.08, color: '#241D12', letterSpacing: '-0.02em', marginBottom: 20 }}>
               Discover your<br />
-              <em style={{ color: '#D4AF37', fontStyle: 'italic' }}>cigar profile.</em>
+              <em style={{ color: '#A6791F', fontStyle: 'italic' }}>cigar profile.</em>
             </h2>
 
             {/* Body */}
-            <p style={{ fontSize: 16, lineHeight: 1.7, color: '#A89B86', maxWidth: 480, marginBottom: 36 }}>
+            <p style={{ fontSize: 16, lineHeight: 1.7, color: '#6B5E48', maxWidth: 480, marginBottom: 36 }}>
               Your personalized cigar journey starts here. Explore. Learn. Pair. Track every step with craftsmanship and purpose.
             </p>
 
             {/* CTA Buttons — required entry-gate action set */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 20 }}>
               <button
+                className="sc-tactile"
                 onClick={handleStartNew}
-                style={{ height: 56, padding: '0 28px', borderRadius: 8, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #D4AF37, #B8952A)', color: '#0A0705', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 900, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10, boxShadow: '0 0 28px rgba(212,175,55,0.35)', transition: 'all 0.2s' }}
-                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
-                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                style={{ height: 56, padding: '0 28px', borderRadius: 10, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #E2BB57, #B8952A)', color: '#241D12', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 900, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10, boxShadow: '0 6px 24px rgba(184,149,42,0.32)' }}
               >
                 Start New SmokeCraft Session
                 <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chevron_right</span>
@@ -170,10 +157,9 @@ export default function SmokeCraft() {
 
               {hasPreviousSession && (
                 <button
+                  className="sc-tactile"
                   onClick={handleContinue}
-                  style={{ height: 56, padding: '0 28px', borderRadius: 8, cursor: 'pointer', background: 'rgba(91,143,201,0.08)', border: '1px solid rgba(91,143,201,0.45)', color: '#9cc2e8', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10, transition: 'all 0.2s' }}
-                  onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'}
-                  onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                  style={{ height: 56, padding: '0 28px', borderRadius: 10, cursor: 'pointer', background: 'rgba(91,143,201,0.06)', border: '1px solid rgba(91,143,201,0.45)', color: '#3E72A8', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10 }}
                 >
                   Continue Previous Session
                 </button>
@@ -189,18 +175,18 @@ export default function SmokeCraft() {
               ].map(btn => (
                 <button
                   key={btn.label}
+                  className="sc-tactile"
                   onClick={btn.onClick}
-                  style={{ height: 48, padding: '0 20px', borderRadius: 8, cursor: 'pointer', background: 'rgba(212,175,55,0.06)', border: '1px solid rgba(212,175,55,0.3)', color: '#D4AF37', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8, backdropFilter: 'blur(8px)', transition: 'all 0.2s' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(212,175,55,0.12)' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(212,175,55,0.06)' }}
+                  style={{ height: 48, padding: '0 20px', borderRadius: 10, cursor: 'pointer', background: '#FFFDF7', border: '1px solid rgba(180,140,40,0.32)', color: '#A6791F', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 2px 10px rgba(180,140,40,0.08)' }}
                 >
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>{btn.icon}</span>
                   {btn.label}
                 </button>
               ))}
               <button
+                className="sc-tactile"
                 onClick={() => setHowItWorksOpen(true)}
-                style={{ height: 48, padding: '0 20px', borderRadius: 8, cursor: 'pointer', background: 'transparent', border: '1px solid rgba(212,175,55,0.2)', color: 'rgba(212,175,55,0.7)', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8 }}
+                style={{ height: 48, padding: '0 20px', borderRadius: 10, cursor: 'pointer', background: 'transparent', border: '1px solid rgba(180,140,40,0.22)', color: 'rgba(166,121,31,0.8)', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8 }}
               >
                 How It Works
               </button>
@@ -208,24 +194,23 @@ export default function SmokeCraft() {
 
             {/* Hint row */}
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, maxWidth: 440 }}>
-              <div style={{ width: 32, height: 32, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.35)', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#D4AF37' }}>star</span>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', border: '1px solid rgba(180,140,40,0.35)', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#A6791F' }}>star</span>
               </div>
-              <p style={{ fontSize: 13, color: '#7A7060', lineHeight: 1.6 }}>
+              <p style={{ fontSize: 13, color: '#8A7A5C', lineHeight: 1.6 }}>
                 Begin your guided cigar profile, earn passport stamps, and unlock personalized pairings.
               </p>
             </div>
           </div>
 
           {/* Right Column — Cards */}
-          <div style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <div className="sc-fade-in" style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: 18 }}>
 
             {/* 360 Passport Card */}
             <div
+              className="sc-card-tactile"
               onClick={() => navigate('/passport')}
-              style={{ position: 'relative', overflow: 'hidden', borderRadius: 16, border: '1px solid rgba(212,175,55,0.18)', background: 'rgba(18,12,6,0.82)', backdropFilter: 'blur(20px)', cursor: 'pointer', transition: 'all 0.3s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.45)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.5)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.18)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
+              style={{ position: 'relative', overflow: 'hidden', borderRadius: 18, border: '1px solid rgba(180,140,40,0.22)', background: '#FFFDF7', cursor: 'pointer', boxShadow: '0 4px 18px rgba(180,140,40,0.1)' }}
             >
               <div style={{ display: 'flex', gap: 0 }}>
                 {/* Passport book visual */}
@@ -237,18 +222,18 @@ export default function SmokeCraft() {
 
                 {/* Card text */}
                 <div style={{ flex: 1, padding: '24px 24px 20px' }}>
-                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 10 }}>360 Passport</div>
-                  <p style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.35, color: '#EDE8DF', marginBottom: 16 }}>
+                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#A6791F', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 10 }}>360 Passport</div>
+                  <p style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.35, color: '#241D12', marginBottom: 16 }}>
                     Build your passport, collect stamps, and track your journey.
                   </p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#D4AF37', cursor: 'pointer' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#A6791F', cursor: 'pointer' }}>
                     <span className="material-symbols-outlined" style={{ fontSize: 16 }}>menu_book</span>
                     <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>View Passport</span>
                     <span className="material-symbols-outlined" style={{ fontSize: 16 }}>chevron_right</span>
                   </div>
                   <div style={{ display: 'flex', gap: 6, marginTop: 14 }}>
                     {Array.from({ length: 4 }, (_, i) => (
-                      <div key={i} style={{ width: 26, height: 26, borderRadius: '50%', border: `1px solid ${i < (session.smokecraftStamps?.length ?? 0) ? 'rgba(212,175,55,0.6)' : 'rgba(122,100,60,0.3)'}`, background: i < (session.smokecraftStamps?.length ?? 0) ? 'rgba(212,175,55,0.15)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: i < (session.smokecraftStamps?.length ?? 0) ? '#D4AF37' : '#5A4A30' }}>
+                      <div key={i} style={{ width: 26, height: 26, borderRadius: '50%', border: `1px solid ${i < (session.smokecraftStamps?.length ?? 0) ? 'rgba(180,140,40,0.55)' : 'rgba(180,140,40,0.18)'}`, background: i < (session.smokecraftStamps?.length ?? 0) ? 'rgba(212,175,55,0.15)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: i < (session.smokecraftStamps?.length ?? 0) ? '#A6791F' : '#B8A87E' }}>
                         {String(i + 1).padStart(2, '0')}
                       </div>
                     ))}
@@ -259,15 +244,14 @@ export default function SmokeCraft() {
 
             {/* Recommended Pairing Card */}
             <div
+              className="sc-card-tactile"
               onClick={() => navigate('/smokecraft/pairing')}
-              style={{ position: 'relative', overflow: 'hidden', borderRadius: 16, border: '1px solid rgba(212,175,55,0.18)', background: 'rgba(18,12,6,0.82)', backdropFilter: 'blur(20px)', cursor: 'pointer', transition: 'all 0.3s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.45)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.5)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(212,175,55,0.18)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
+              style={{ position: 'relative', overflow: 'hidden', borderRadius: 18, border: '1px solid rgba(180,140,40,0.22)', background: '#FFFDF7', cursor: 'pointer', boxShadow: '0 4px 18px rgba(180,140,40,0.1)' }}
             >
               <div style={{ padding: '20px 24px' }}>
-                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#D4AF37', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 14 }}>Recommended Pairing</div>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#A6791F', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 14 }}>Recommended Pairing</div>
                 <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-                  <div style={{ width: 100, height: 80, borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.2)', flexShrink: 0 }}>
+                  <div style={{ width: 100, height: 80, borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(180,140,40,0.2)', flexShrink: 0, boxShadow: '0 2px 10px rgba(180,140,40,0.12)' }}>
                     <img
                       src="/smokecraft.jpg"
                       alt="Padrón 1964"
@@ -275,10 +259,10 @@ export default function SmokeCraft() {
                     />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <h4 style={{ fontFamily: '"Playfair Display",serif', fontSize: 18, fontWeight: 700, color: '#EDE8DF', marginBottom: 4, lineHeight: 1.2 }}>Padrón 1964 Anniversary</h4>
-                    <p style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#7A6A50', letterSpacing: '0.08em', marginBottom: 8 }}>Maduro · Nicaragua</p>
-                    <p style={{ fontSize: 12, color: '#8A7A66', lineHeight: 1.5, marginBottom: 14 }}>Rich cocoa, espresso, and dark fruit with a long, velvety finish.</p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#D4AF37' }}>
+                    <h4 style={{ fontFamily: '"Playfair Display",serif', fontSize: 18, fontWeight: 700, color: '#241D12', marginBottom: 4, lineHeight: 1.2 }}>Padrón 1964 Anniversary</h4>
+                    <p style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#9A8A66', letterSpacing: '0.08em', marginBottom: 8 }}>Maduro · Nicaragua</p>
+                    <p style={{ fontSize: 12, color: '#7A6E58', lineHeight: 1.5, marginBottom: 14 }}>Rich cocoa, espresso, and dark fruit with a long, velvety finish.</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#A6791F' }}>
                       <span className="material-symbols-outlined" style={{ fontSize: 16 }}>smoking_rooms</span>
                       <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>View Pairing</span>
                       <span className="material-symbols-outlined" style={{ fontSize: 16 }}>chevron_right</span>
@@ -293,11 +277,11 @@ export default function SmokeCraft() {
       </main>
 
       {/* ── Bottom Nav Bar ─────────────────────────────────────────── */}
-      <nav className="smokecraft-bottom-nav" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, height: 100, display: 'flex', alignItems: 'center', background: 'rgba(10,7,5,0.92)', backdropFilter: 'blur(24px)', borderTop: '1px solid rgba(212,175,55,0.12)' }}>
+      <nav className="smokecraft-bottom-nav" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, height: 100, display: 'flex', alignItems: 'center', background: 'rgba(253,250,242,0.94)', backdropFilter: 'blur(24px)', borderTop: '1px solid rgba(180,140,40,0.18)', boxShadow: '0 -2px 18px rgba(180,140,40,0.06)' }}>
         {bottomNav.map((item, i) => (
           <button
             key={item.label}
-            className="smokecraft-bottom-nav-item"
+            className="smokecraft-bottom-nav-item sc-tactile"
             onClick={() => navigate(item.to)}
             style={{
               flex: 1,
@@ -308,29 +292,26 @@ export default function SmokeCraft() {
               gap: 16,
               background: item.active ? 'rgba(212,175,55,0.1)' : 'transparent',
               border: 'none',
-              borderRight: i < bottomNav.length - 1 ? '1px solid rgba(212,175,55,0.08)' : 'none',
-              borderTop: item.active ? '2px solid rgba(212,175,55,0.6)' : '2px solid transparent',
+              borderRight: i < bottomNav.length - 1 ? '1px solid rgba(180,140,40,0.1)' : 'none',
+              borderTop: item.active ? '2px solid rgba(180,140,40,0.55)' : '2px solid transparent',
               cursor: 'pointer',
-              transition: 'all 0.2s',
               padding: '0 20px',
             }}
-            onMouseEnter={e => { if (!item.active) e.currentTarget.style.background = 'rgba(212,175,55,0.05)' }}
-            onMouseLeave={e => { if (!item.active) e.currentTarget.style.background = 'transparent' }}
           >
             {/* Icon */}
-            <div style={{ width: 44, height: 44, borderRadius: '50%', border: `1px solid ${item.active ? 'rgba(212,175,55,0.5)' : 'rgba(212,175,55,0.2)'}`, background: item.active ? 'rgba(212,175,55,0.18)' : 'rgba(212,175,55,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ width: 44, height: 44, borderRadius: '50%', border: `1px solid ${item.active ? 'rgba(180,140,40,0.45)' : 'rgba(180,140,40,0.18)'}`, background: item.active ? 'rgba(212,175,55,0.16)' : 'rgba(212,175,55,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               {item.iconType === 'material'
-                ? <span className="material-symbols-outlined" style={{ fontSize: 22, color: item.active ? '#D4AF37' : '#6A5A40' }}>{item.icon}</span>
-                : <img src={item.icon} alt="" style={{ width: 22, height: 22, objectFit: 'cover', borderRadius: '50%', filter: item.active ? 'none' : 'brightness(0.4) sepia(1) hue-rotate(5deg)' }} />
+                ? <span className="material-symbols-outlined" style={{ fontSize: 22, color: item.active ? '#A6791F' : '#A89878' }}>{item.icon}</span>
+                : <img src={item.icon} alt="" style={{ width: 22, height: 22, objectFit: 'cover', borderRadius: '50%', filter: item.active ? 'none' : 'grayscale(0.4)' }} />
               }
             </div>
             {/* Label */}
             <div className="smokecraft-bottom-nav-copy" style={{ textAlign: 'left', minWidth: 0 }}>
-              <div className="smokecraft-bottom-nav-label" style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color: item.active ? '#D4AF37' : '#5A4A30', marginBottom: 3, whiteSpace: 'nowrap' }}>{item.label}</div>
-              <div className="smokecraft-bottom-nav-sub" style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 11, color: item.active ? '#A89B86' : '#3A3020', whiteSpace: 'nowrap' }}>{item.sub}</div>
+              <div className="smokecraft-bottom-nav-label" style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color: item.active ? '#A6791F' : '#8A7A5C', marginBottom: 3, whiteSpace: 'nowrap' }}>{item.label}</div>
+              <div className="smokecraft-bottom-nav-sub" style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 11, color: item.active ? '#8A7A5C' : '#B0A484', whiteSpace: 'nowrap' }}>{item.sub}</div>
             </div>
             {/* Arrow */}
-            <span className="material-symbols-outlined smokecraft-bottom-nav-arrow" style={{ fontSize: 16, color: item.active ? '#D4AF37' : '#3A3020', marginLeft: 4, flexShrink: 0 }}>chevron_right</span>
+            <span className="material-symbols-outlined smokecraft-bottom-nav-arrow" style={{ fontSize: 16, color: item.active ? '#A6791F' : '#B0A484', marginLeft: 4, flexShrink: 0 }}>chevron_right</span>
           </button>
         ))}
       </nav>
