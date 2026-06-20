@@ -169,11 +169,23 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(express.static(CLIENT_DIST))
+// index: false — never let express.static auto-serve index.html with its
+// own ETag/Last-Modified, since a conditional 304 against a stale browser
+// cache would re-serve old HTML even with the no-cache headers above.
+app.use(express.static(CLIENT_DIST, { index: false }))
 
-app.get(/^\/(?!api\/?).*/, (_req, res) => {
-  res.sendFile(path.join(CLIENT_DIST, 'index.html'))
-})
+const sendFreshIndexHtml = (_req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+  res.set('Pragma', 'no-cache')
+  res.set('Expires', '0')
+  res.sendFile(path.join(CLIENT_DIST, 'index.html'), {
+    cacheControl: false,
+    etag: false,
+    lastModified: false,
+  })
+}
+
+app.get(/^\/(?!api\/?).*/, sendFreshIndexHtml)
 
 // ── 404 handler ───────────────────────────────────────────────
 app.use((_req, res) => {
