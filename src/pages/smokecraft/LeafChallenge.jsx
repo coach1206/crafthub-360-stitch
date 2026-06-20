@@ -81,7 +81,6 @@ export default function LeafChallenge() {
 
   // Re-animate card on each new round
   useEffect(() => {
-    if (phase !== 'challenge') return
     setCardMounted(false)
     const t = setTimeout(() => setCardMounted(true), 60)
     return () => clearTimeout(t)
@@ -89,7 +88,7 @@ export default function LeafChallenge() {
 
   function handleAnswer(leafId) {
     if (answered || submitting) return
-    const currentRound = ROUNDS[round]
+    const currentRound = ROUNDS[round] || ROUNDS[0]
     const isCorrect    = leafId === currentRound.correct
 
     setSelectedId(leafId)
@@ -128,7 +127,7 @@ export default function LeafChallenge() {
   }
 
   const FILL1 = { fontVariationSettings: "'FILL' 1" }
-  const currentRound = ROUNDS[round]
+  const currentRound = ROUNDS[round] || ROUNDS[0]
 
   /* ── CHALLENGE PHASE ────────────────────────────────────── */
   const challengeLeaf    = LEAVES[currentRound.correct]
@@ -138,7 +137,7 @@ export default function LeafChallenge() {
   return (
     <div
       className="min-h-screen bg-background text-on-surface font-body-md flex flex-col relative overflow-hidden"
-      style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/black-linen.png')" }}
+      style={{ backgroundImage: "url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')" }}
     >
       {/* Submitting overlay — fades in on final answer */}
       {submitting && (

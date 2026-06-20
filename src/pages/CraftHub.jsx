@@ -104,6 +104,20 @@ export default function CraftHub() {
       {/* ── Header ──────────────────────────────────────── */}
       <header className="sticky top-0 z-50 w-full border-b border-[#d4af37]/20 bg-[#0a0805]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate("/")}
+              className="rounded-full border border-[#5b8fc9]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#9cc2e8] transition hover:bg-[#5b8fc9]/10"
+            >
+              Back to NOVEE OS
+            </button>
+            <button
+              onClick={() => navigate("/home")}
+              className="rounded-full border border-[#5b8fc9]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#9cc2e8] transition hover:bg-[#5b8fc9]/10"
+            >
+              Home
+            </button>
+          </div>
           <h1 className="text-2xl font-bold uppercase tracking-[0.25em] text-[#d4af37]">CraftHub 360</h1>
           <div className="flex items-center gap-4">
             <button

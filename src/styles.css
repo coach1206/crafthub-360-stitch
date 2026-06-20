@@ -663,6 +663,41 @@
   border: 1px solid rgba(233,193,118,0.34);
 }
 
+/* ─── Touchscreen tactile polish (buttons/cards, visual-only) ────────── */
+.sc-tactile {
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+.sc-tactile:hover {
+  box-shadow: 0 0 0 1px rgba(233,193,118,0.3), 0 0 24px rgba(233,193,118,0.18);
+}
+.sc-tactile:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(233,193,118,0.45), 0 0 28px rgba(233,193,118,0.22);
+}
+.sc-tactile:active {
+  transform: scale(0.97);
+  filter: brightness(0.93);
+}
+
+.sc-card-tactile {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sc-card-tactile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 1px rgba(233,193,118,0.26), 0 16px 36px rgba(0,0,0,0.4), 0 0 26px rgba(233,193,118,0.14);
+}
+.sc-card-tactile:active {
+  transform: translateY(-1px) scale(0.985);
+}
+
+.sc-fade-in {
+  animation: scFadeIn 0.5s ease forwards;
+}
+@keyframes scFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .smokecraft-info-card {
   width: 100%;
   text-align: left;

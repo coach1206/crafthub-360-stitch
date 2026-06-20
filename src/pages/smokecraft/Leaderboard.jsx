@@ -79,7 +79,7 @@ function RewardsAtmosphere() {
       <div style={{
         position: 'absolute',
         inset: 0,
-        backgroundImage: 'linear-gradient(90deg,rgba(5,3,2,0.98) 0%,rgba(5,3,2,0.74) 35%,rgba(5,3,2,0.62) 62%,rgba(5,3,2,0.97) 100%), linear-gradient(180deg,rgba(5,3,2,0.7) 0%,rgba(5,3,2,0.2) 38%,rgba(5,3,2,0.96) 100%), url(/background-lounge-airy.jpg)',
+        backgroundImage: 'linear-gradient(90deg,rgba(5,3,2,0.98) 0%,rgba(5,3,2,0.74) 35%,rgba(5,3,2,0.62) 62%,rgba(5,3,2,0.97) 100%), linear-gradient(180deg,rgba(5,3,2,0.7) 0%,rgba(5,3,2,0.2) 38%,rgba(5,3,2,0.96) 100%), url(/assets/smokecraft/cropped/golden-box-hero.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         filter: 'saturate(1.14) contrast(1.14) brightness(0.64)',
@@ -92,7 +92,7 @@ function RewardsAtmosphere() {
         maxWidth: 380,
         aspectRatio: '1.2',
         borderRadius: 28,
-        backgroundImage: 'linear-gradient(90deg,rgba(5,3,2,0.52),rgba(5,3,2,0.12)), url(/crafthub-gold.jpg)',
+        backgroundImage: 'linear-gradient(90deg,rgba(5,3,2,0.52),rgba(5,3,2,0.12)), url(/assets/smokecraft/cropped/scorecard-bg.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         opacity: 0.24,
@@ -515,8 +515,8 @@ export default function Leaderboard() {
 
             {/* hero */}
             <div style={{ position: 'relative', borderRadius: 18, overflow: 'hidden', marginBottom: 16, minHeight: 220, border: `1px solid ${BORDERHI}`, boxShadow: '0 18px 46px rgba(0,0,0,0.48), 0 0 42px rgba(201,168,76,0.18)' }}>
-              <img src="/background-lounge-airy.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 42%', filter: 'brightness(0.38) saturate(1.2) contrast(1.16)' }} onError={e => e.target.style.display = 'none'} />
-              <img src="/crafthub-gold.jpg" alt="" style={{ position: 'absolute', right: -26, top: -44, width: '54%', height: '125%', objectFit: 'cover', opacity: 0.62, filter: 'brightness(0.8) saturate(1.16)', borderRadius: 22 }} onError={e => e.target.style.display = 'none'} />
+              <img src="/assets/smokecraft/cropped/golden-box-hero.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 42%', filter: 'brightness(0.38) saturate(1.2) contrast(1.16)' }} onError={e => e.target.style.display = 'none'} />
+              <img src="/assets/smokecraft/cropped/scorecard-bg.jpg" alt="" style={{ position: 'absolute', right: -26, top: -44, width: '54%', height: '125%', objectFit: 'cover', opacity: 0.62, filter: 'brightness(0.8) saturate(1.16)', borderRadius: 22 }} onError={e => e.target.style.display = 'none'} />
               <div style={{ position: 'absolute', right: '12%', top: 0, width: 2, height: '100%', background: 'linear-gradient(180deg,transparent,rgba(232,213,163,0.6),transparent)', filter: 'blur(1px)', boxShadow: `0 0 40px ${G}` }} />
               <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 76% 16%,rgba(232,213,163,0.28),transparent 24%), radial-gradient(circle at 70% 54%,rgba(201,118,34,0.18),transparent 36%), linear-gradient(120deg,rgba(5,3,2,0.94) 0%,rgba(12,8,5,0.72) 54%,rgba(5,3,2,0.3) 100%)' }} />
               <div style={{ position: 'relative', padding: '28px 22px 24px' }}>

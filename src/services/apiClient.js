@@ -19,7 +19,10 @@ function isOnline() {
 
 /**
  * Core fetch wrapper.
- * @returns {Promise<object|null>} Parsed JSON response, or null on any failure.
+ * @returns {Promise<{data:null, status:number}|object|null>} Parsed JSON response, or null on any failure.
+ *   On a 401/403 the raw status is attached as `status` on the returned object/null marker so
+ *   callers (e.g. AuthContext) can tell "not logged in" apart from a real network/server error
+ *   without ever throwing into the render tree.
  */
 async function apiFetch(method, path, data) {
   if (!isOnline()) {
@@ -46,6 +49,13 @@ async function apiFetch(method, path, data) {
     const res = await fetch(path, opts)
 
     if (!res.ok) {
+      // 401/403 on an auth-check endpoint is an expected, routine outcome for
+      // guest/public/demo traffic — not an error. Never throw for it; just
+      // hand the status back so the caller can decide what "unauthenticated"
+      // means for that endpoint instead of treating it as a failure.
+      if (res.status === 401 || res.status === 403) {
+        return { data: null, status: res.status }
+      }
       const json = await res.json().catch(() => ({ message: res.statusText }))
       throw new Error(json.message || `HTTP ${res.status}`)
     }

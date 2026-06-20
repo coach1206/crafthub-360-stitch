@@ -14,7 +14,7 @@ const VARIETIES = [
     strength: 4, aroma: 5, body: 4,
     notes: ['Red Pepper', 'Cedar', 'Earth'],
     tasting: "A Havana classic. Silky texture with a pronounced spice bloom on the mid-palate, finishing with red pepper and mature cedar.",
-    visual: 'linear-gradient(135deg, rgba(90,42,18,0.24), rgba(0,0,0,0.28)), repeating-linear-gradient(132deg, transparent 0 19px, rgba(236,181,86,0.24) 20px 22px), url(/smokecraft.jpg)',
+    visual: 'linear-gradient(135deg, rgba(90,42,18,0.24), rgba(0,0,0,0.28)), repeating-linear-gradient(132deg, transparent 0 19px, rgba(236,181,86,0.24) 20px 22px), url(/assets/smokecraft/cropped/humidor-match-bg.jpg)',
     position: 'center 34%',
   },
   {
@@ -27,7 +27,7 @@ const VARIETIES = [
     strength: 3, aroma: 4, body: 3,
     notes: ['Floral', 'Sweet', 'Cream'],
     tasting: "Corojo's most celebrated expression opens silky and sweet before delicate floral notes arrive.",
-    visual: 'radial-gradient(circle at 48% 46%, rgba(247,196,91,0.34), transparent 26%), repeating-linear-gradient(98deg, transparent 0 21px, rgba(69,37,13,0.32) 22px 25px), url(/crafthub-gold.jpg)',
+    visual: 'radial-gradient(circle at 48% 46%, rgba(247,196,91,0.34), transparent 26%), repeating-linear-gradient(98deg, transparent 0 21px, rgba(69,37,13,0.32) 22px 25px), url(/assets/smokecraft/cropped/cut-toast-light-bg.jpg)',
     position: 'center',
   },
   {
@@ -40,7 +40,7 @@ const VARIETIES = [
     strength: 5, aroma: 4, body: 5,
     notes: ['Black Pepper', 'Cocoa', 'Leather'],
     tasting: 'A powerhouse leaf with assertive pepper and deep cocoa undertones that intensify with heat.',
-    visual: 'linear-gradient(135deg, rgba(86,40,18,0.22), rgba(0,0,0,0.32)), repeating-linear-gradient(23deg, transparent 0 16px, rgba(232,168,77,0.18) 17px 19px), url(/smokecraft.jpg)',
+    visual: 'linear-gradient(135deg, rgba(86,40,18,0.22), rgba(0,0,0,0.32)), repeating-linear-gradient(23deg, transparent 0 16px, rgba(232,168,77,0.18) 17px 19px), url(/assets/smokecraft/cropped/flavor-dna-bg.jpg)',
     position: 'right 42%',
   },
   {
@@ -53,7 +53,7 @@ const VARIETIES = [
     strength: 1, aroma: 3, body: 2,
     notes: ['Cream', 'Vanilla', 'Hay'],
     tasting: 'Buttery and light with natural sweetness that welcomes new smokers and calms complex fillers.',
-    visual: 'radial-gradient(circle at 34% 44%, rgba(210,82,54,0.35), transparent 30%), repeating-linear-gradient(118deg, transparent 0 18px, rgba(242,181,110,0.18) 19px 22px), url(/background-lounge-airy.jpg)',
+    visual: 'radial-gradient(circle at 34% 44%, rgba(210,82,54,0.35), transparent 30%), repeating-linear-gradient(118deg, transparent 0 18px, rgba(242,181,110,0.18) 19px 22px), url(/assets/smokecraft/cropped/connections-bg.jpg)',
     position: 'left center',
   },
   {
@@ -66,7 +66,7 @@ const VARIETIES = [
     strength: 4, aroma: 3, body: 4,
     notes: ['Dark Chocolate', 'Coffee', 'Earth'],
     tasting: 'Indonesian Sumatra delivers rich cocoa sweetness with an earthy undertone and lingering finish.',
-    visual: 'linear-gradient(135deg, rgba(44,23,12,0.25), rgba(0,0,0,0.38)), repeating-linear-gradient(105deg, transparent 0 17px, rgba(180,122,57,0.18) 18px 21px), url(/crafthub-gold.jpg)',
+    visual: 'linear-gradient(135deg, rgba(44,23,12,0.25), rgba(0,0,0,0.38)), repeating-linear-gradient(105deg, transparent 0 17px, rgba(180,122,57,0.18) 18px 21px), url(/assets/smokecraft/cropped/scorecard-bg.jpg)',
     position: '68% 44%',
   },
   {
@@ -79,7 +79,7 @@ const VARIETIES = [
     strength: 3, aroma: 4, body: 4,
     notes: ['Molasses', 'Dried Fruit', 'Oak'],
     tasting: 'Deep molasses and dried cherry evolve into a long oaken finish from slow fermentation.',
-    visual: 'radial-gradient(ellipse at 78% 38%, rgba(129,68,29,0.38), transparent 30%), repeating-linear-gradient(12deg, transparent 0 11px, rgba(235,173,91,0.2) 12px 14px), url(/background-lounge-airy.jpg)',
+    visual: 'radial-gradient(ellipse at 78% 38%, rgba(129,68,29,0.38), transparent 30%), repeating-linear-gradient(12deg, transparent 0 11px, rgba(235,173,91,0.2) 12px 14px), url(/assets/smokecraft/cropped/final-third-bg.jpg)',
     position: 'right bottom',
   },
 ]
@@ -217,7 +217,7 @@ export default function Leaves() {
             radial-gradient(ellipse at 95% 34%, rgba(255,255,255,0.12), transparent 23%),
             radial-gradient(circle at 50% 30%, rgba(233,193,118,0.12), transparent 32%),
             linear-gradient(90deg, rgba(5,3,2,0.94), rgba(5,3,2,0.62), rgba(5,3,2,0.94)),
-            url(/background-lounge-airy.jpg);
+            url(/assets/smokecraft/cropped/golden-box-hero.jpg);
           background-size: cover;
           background-position: center;
           filter: saturate(1.08) contrast(1.12) brightness(0.62);

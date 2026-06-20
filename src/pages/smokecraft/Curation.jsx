@@ -45,7 +45,7 @@ export default function Curation() {
           background-image:
             radial-gradient(circle at 52% 34%, rgba(233,193,118,0.18), transparent 30%),
             linear-gradient(90deg, rgba(5,3,2,0.94), rgba(5,3,2,0.62), rgba(5,3,2,0.94)),
-            url(/background-lounge-airy.jpg);
+            url(/assets/smokecraft/cropped/flavor-dna-bg.jpg);
           background-size: cover;
           background-position: center;
           filter: brightness(0.62) saturate(1.1) contrast(1.12);

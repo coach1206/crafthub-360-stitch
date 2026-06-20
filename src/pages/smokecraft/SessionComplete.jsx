@@ -85,6 +85,7 @@ export default function SessionComplete() {
           src={null}
           style={{ fontSize: 11 }}
         />
+        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('/assets/smokecraft/cropped/final-third-bg.jpg')" }} />
         <div className="absolute -top-20 -left-20 w-[600px] h-[600px] bg-primary/10 rounded-full animated-smoke" />
         <div
           className="absolute -bottom-20 -right-20 w-[600px] h-[600px] bg-secondary/10 rounded-full animated-smoke"
@@ -291,6 +292,10 @@ export default function SessionComplete() {
           </button>
         ))}
       </nav>
+
+      <div style={{ position:'fixed', bottom:8, right:8, zIndex:9999, fontSize:10, color:'rgba(255,255,255,0.6)', background:'rgba(0,0,0,0.6)', padding:'2px 6px', borderRadius:4, pointerEvents:'none' }}>
+        VISUAL COMMIT c9354dca · IMAGE: final-third-bg.jpg
+      </div>
     </div>
   )
 }

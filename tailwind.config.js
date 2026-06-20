@@ -54,6 +54,11 @@ export default {
         'on-error':                    '#690005',
         'on-error-container':          '#ffdad6',
         'accent-success':              '#4ade80',
+        /* ── Deep-blue "command platform" accent — pairs with the gold/charcoal core ── */
+        'accent-blue':                 '#3b6ea5',
+        'accent-blue-deep':            '#1c3a5e',
+        'accent-blue-glow':            '#5b8fc9',
+        'on-accent-blue':              '#eaf2fb',
       },
       fontFamily: {
         'display-lg':  ['"Playfair Display"', 'serif'],

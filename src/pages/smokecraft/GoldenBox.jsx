@@ -27,7 +27,7 @@ function GoldenBoxHeroImage() {
         src={smokeCraftAssets.goldenBoxHero}
         alt="Golden Box"
         onError={() => setFailed(true)}
-        style={{ maxWidth: 480, width: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
+        style={{ maxWidth: 620, width: '100%', height: 'auto', display: 'block', margin: '0 auto', borderRadius: 16 }}
       />
     )
   }
@@ -189,7 +189,7 @@ export default function GoldenBox() {
           <button
             onClick={handleAccept}
             disabled={accepted}
-            className="w-full group relative py-5 px-8 rounded-xl gold-foil overflow-hidden transition-all duration-300 hover:shadow-[0_0_50px_rgba(233,193,118,0.35)] active:scale-[0.98] disabled:opacity-60"
+            className="sc-tactile w-full group relative py-5 px-8 rounded-xl gold-foil overflow-hidden transition-all duration-300 hover:shadow-[0_0_50px_rgba(233,193,118,0.35)] active:scale-[0.98] disabled:opacity-60"
           >
             <div className="absolute inset-0 bg-white/15 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12" />
             <div className="relative flex items-center justify-center gap-3">
@@ -219,7 +219,7 @@ export default function GoldenBox() {
             radial-gradient(ellipse at 12% 58%, rgba(167,92,32,0.26) 0%, rgba(44,20,6,0.28) 24%, transparent 40%),
             radial-gradient(ellipse at 88% 50%, rgba(255,205,113,0.2) 0%, rgba(48,23,8,0.32) 22%, transparent 38%),
             linear-gradient(180deg, rgba(28,12,3,0.9) 0%, rgba(8,4,2,0.94) 74%, #020101 100%),
-            url(/background-lounge-airy.jpg);
+            url(/assets/smokecraft/cropped/golden-box-hero.jpg);
           background-size: cover;
           background-position: center;
           filter: saturate(1.16) contrast(1.1) brightness(0.88);
@@ -392,6 +392,9 @@ export default function GoldenBox() {
           }
         }
       `}</style>
+      <div style={{ position:'fixed', bottom:8, right:8, zIndex:9999, fontSize:10, color:'rgba(255,255,255,0.6)', background:'rgba(0,0,0,0.6)', padding:'2px 6px', borderRadius:4, pointerEvents:'none' }}>
+        VISUAL COMMIT c9354dca · IMAGE: golden-box-hero.jpg
+      </div>
     </div>
   )
 }

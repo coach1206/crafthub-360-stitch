@@ -160,7 +160,7 @@ export default function PassportStamp() {
         <PassportStampImage
           className="w-full h-full object-cover"
           style={{ opacity: 0.22, filter: 'brightness(0.6)' }}
-          src={null}
+          src="/assets/smokecraft/cropped/passport-stamp-bg.jpg"
           alt=""
         />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #131314 0%, rgba(19,19,20,0.88) 55%, rgba(19,19,20,0.55) 100%)' }} />

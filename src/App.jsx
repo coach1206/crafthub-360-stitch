@@ -1,13 +1,16 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useGuestSession } from './context/GuestSessionContext.jsx'
 import { DemoModeProvider } from './context/DemoModeContext.jsx'
 import Layout from './components/Layout.jsx'
 import DemoBanner from './components/demo/DemoBanner.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
+import PublicSessionNotice from './components/PublicSessionNotice.jsx'
 
 // ── Critical boot-path pages — eager loaded ───────────────────
 import Home             from './pages/Home.jsx'
 import Boot             from './pages/Boot.jsx'
+import NoveeHome        from './pages/NoveeHome.jsx'
 import CraftHub         from './pages/CraftHub.jsx'
 import POS3             from './pages/POS3.jsx'
 import EATCommand       from './pages/EATCommand.jsx'
@@ -71,6 +74,7 @@ import BeerCraft from './pages/BeerCraft.jsx'
 import WineCraft from './pages/WineCraft.jsx'
 
 // ── Auth screens — lazy ───────────────────────────────────────
+const BootConsole   = lazy(() => import('./pages/BootConsole.jsx'))
 const StaffLogin   = lazy(() => import('./pages/StaffLogin.jsx'))
 const AdminLogin   = lazy(() => import('./pages/AdminLogin.jsx'))
 const FounderLogin = lazy(() => import('./pages/FounderLogin.jsx'))
@@ -128,32 +132,20 @@ function NOVEELoader() {
   )
 }
 
-// Routes reachable without first playing the boot intro.
-const NO_BOOT_REQUIRED = new Set(['/', '/boot', '/staff-login', '/admin-login', '/founder-login', '/mentor-login', '/dev-login'])
-
-/** Silently records the current route in session state for refresh recovery. */
+/**
+ * Silently records the current route in session state for refresh recovery.
+ * Every route is reachable unconditionally — no boot flag, auth state, or
+ * demo state gates rendering here. Per-route access control (staff/admin/etc)
+ * is handled by ProtectedRoute on the individual routes that need it.
+ */
 function RouteTracker() {
   const location = useLocation()
-  const navigate  = useNavigate()
   const { trackRoute } = useGuestSession()
 
   useEffect(() => {
     if (location.pathname !== '/boot') trackRoute(location.pathname)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
-
-  // Deep-linking straight into any app route (e.g. /crafthub) on a fresh
-  // session would skip the boot intro entirely. Funnel through "/" first;
-  // Boot.jsx reads sessionStorage('novee_boot_return') to send the user
-  // back here once the intro finishes. Only runs once per session, since
-  // novee_booted gets set right after the intro completes.
-  useEffect(() => {
-    if (NO_BOOT_REQUIRED.has(location.pathname)) return
-    if (sessionStorage.getItem('novee_booted')) return
-    sessionStorage.setItem('novee_boot_return', location.pathname + location.search)
-    navigate('/', { replace: true })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, location.search])
 
   return null
 }
@@ -165,12 +157,15 @@ export default function App() {
         <RouteTracker />
         {/* Persistent Demo Mode banner — renders on top of all routes */}
         <DemoBanner />
+        <PublicSessionNotice />
         <KioskShell>
+        <ErrorBoundary>
         <Suspense fallback={<NOVEELoader />}>
           <Routes>
-            {/* ── Boot — accessible at root and /boot ─────────────── */}
-            <Route path="/" element={<Navigate to="/crafthub" replace />} />
+            {/* ── Boot — public NOVEE OS boot screen at root and /boot ── */}
+            <Route path="/" element={<Boot />} />
             <Route path="boot" element={<Boot />} />
+            <Route path="boot/console" element={<BootConsole />} />
 
             {/* ── Login screens — lazy, accessible without boot ─── */}
             <Route path="staff-login"   element={<StaffLogin />} />
@@ -181,7 +176,7 @@ export default function App() {
 
             {/* ── All app routes — public, gated per-route where needed ── */}
             <Route element={<Layout />}>
-              <Route path="home"     element={<Navigate to="/crafthub" replace />} />
+              <Route path="home"     element={<NoveeHome />} />
               <Route path="novee-home" element={
                 <ProtectedRoute
                   allowedRoles={['admin', 'founder_level_0', 'developer']}
@@ -199,6 +194,13 @@ export default function App() {
               <Route path="smokecraft">
                 <Route index element={<SmokeCraft />} />
                 <Route path="enroll"           element={<Enroll />} />
+                <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
+                <Route path="profile"          element={<Navigate to="/smokecraft/identity" replace />} />
+                <Route path="education"        element={<Navigate to="/smokecraft/format" replace />} />
+                <Route path="mentors"          element={<Navigate to="/smokecraft/mentor-selection" replace />} />
+                <Route path="humidor"          element={<Navigate to="/smokecraft/humidor-match" replace />} />
+                <Route path="light"            element={<Navigate to="/smokecraft/cut-toast-light" replace />} />
+                <Route path="complete"         element={<Navigate to="/smokecraft/session-complete" replace />} />
                 <Route path="golden-box">
                   <Route index             element={<GoldenBox />} />
                   <Route path="status"     element={<GoldenBoxStatus />} />
@@ -554,6 +556,7 @@ export default function App() {
             </Route>
           </Routes>
         </Suspense>
+        </ErrorBoundary>
 
         {/* Dev-only floating role switcher */}
         <DevRoleSwitcher />

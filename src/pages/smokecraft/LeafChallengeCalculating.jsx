@@ -79,7 +79,7 @@ export default function LeafChallengeCalculating() {
       {/* Tobacco leaf texture */}
       <div style={{
         position: 'absolute', inset: 0,
-        backgroundImage: "url('https://www.transparenttextures.com/patterns/black-linen.png')",
+        backgroundImage: "url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')",
         opacity: 0.12, pointerEvents: 'none',
       }} />
 

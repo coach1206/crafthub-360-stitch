@@ -60,7 +60,7 @@ export default function Enroll() {
         minHeight: 'max(884px, 100dvh)',
         position: 'relative',
         backgroundColor: '#050302',
-        backgroundImage: 'radial-gradient(ellipse at 50% 38%, rgba(255,181,73,0.3) 0%, rgba(155,73,11,0.13) 32%, transparent 60%), linear-gradient(90deg, rgba(0,0,0,0.86), rgba(0,0,0,0.28) 48%, rgba(0,0,0,0.86)), linear-gradient(180deg, rgba(4,3,2,0.24), rgba(3,2,1,0.92)), url(/smokecraft-hero.png)',
+        backgroundImage: 'radial-gradient(ellipse at 50% 38%, rgba(255,181,73,0.3) 0%, rgba(155,73,11,0.13) 32%, transparent 60%), linear-gradient(90deg, rgba(0,0,0,0.86), rgba(0,0,0,0.28) 48%, rgba(0,0,0,0.86)), linear-gradient(180deg, rgba(4,3,2,0.24), rgba(3,2,1,0.92)), url(/assets/smokecraft/cropped/humidor-match-bg.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center top',
         backgroundAttachment: 'fixed',
@@ -358,14 +358,14 @@ export default function Enroll() {
           left: 0;
           background-image:
             radial-gradient(ellipse at 40% 42%, rgba(233,193,118,0.3), transparent 42%),
-            url('/smokecraft.jpg');
+            url('/assets/smokecraft/cropped/management-sync-bg.jpg');
         }
         .smokecraft-intake-right-scene {
           right: 0;
           transform: scaleX(-1);
           background-image:
             radial-gradient(ellipse at 48% 46%, rgba(233,193,118,0.28), transparent 40%),
-            url('/background-lounge-airy.jpg');
+            url('/assets/smokecraft/cropped/cut-toast-light-bg.jpg');
         }
         .smokecraft-intake-frost {
           position: fixed;
@@ -509,6 +509,9 @@ export default function Enroll() {
           }
         }
       `}</style>
+      <div style={{ position:'fixed', bottom:8, right:8, zIndex:9999, fontSize:10, color:'rgba(255,255,255,0.6)', background:'rgba(0,0,0,0.6)', padding:'2px 6px', borderRadius:4, pointerEvents:'none' }}>
+        VISUAL COMMIT c9354dca · IMAGE: humidor-match-bg.jpg / management-sync-bg.jpg / cut-toast-light-bg.jpg
+      </div>
     </div>
   )
 }
