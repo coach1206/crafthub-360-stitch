@@ -8,22 +8,56 @@ import {
 
 const FALLBACK_CIGAR_IMAGE = '/cigar-anatomy.png'
 
-function CigarImage({ image, name, height = '80px' }) {
-  const [src, setSrc] = useState(image || FALLBACK_CIGAR_IMAGE)
-  return (
-    <img
-      src={src}
-      alt={name}
-      onError={() => setSrc(FALLBACK_CIGAR_IMAGE)}
-      style={{ width: '100%', height, objectFit: 'contain', objectPosition: 'center', display: 'block' }}
-    />
-  )
-}
-
 // APPROVED SMOKECRAFT VISUAL ASSETS.
 // Do not replace cigar images with cartoon placeholders, fake cigar strips, or flat illustrations.
-// Realistic per-format photos load from /assets/smokecraft/cigars/; if missing, falls back to the
-// real cigar-anatomy.png asset rather than leaving any placeholder text.
+// Per-format shape photos (/assets/smokecraft/cigars/*.jpg) do not exist in the repo yet, so every
+// FORMATS entry below is explicitly flagged hasPhoto: false. This flag — not a browser onError race —
+// decides which visual renders, so the fallback panel is always intentional and never a blank/broken
+// image while the per-shape photo request resolves.
+
+function CigarImage({ image, hasPhoto, name, height = '80px' }) {
+  if (hasPhoto && image) {
+    return (
+      <img
+        src={image}
+        alt={name}
+        style={{ width: '100%', height, objectFit: 'contain', objectPosition: 'center', display: 'block' }}
+      />
+    )
+  }
+  return <CigarFallbackPanel name={name} height={height} />
+}
+
+// Shape-specific crop/scale treatments so all 6 fallback panels — sharing the same
+// cigar-anatomy.png source — read as distinct shapes rather than duplicated thumbnails.
+const SHAPE_TREATMENTS = {
+  robusto:   { scale: 1.55, posY: '46%', label: 'Short & Thick' },
+  toro:      { scale: 1.25, posY: '50%', label: 'Long & Balanced' },
+  churchill: { scale: 1.05, posY: '50%', label: 'Longest & Slim' },
+  corona:    { scale: 1.4,  posY: '54%', label: 'Slim & Classic' },
+  gordo:     { scale: 1.7,  posY: '46%', label: 'Thick Ring Gauge' },
+  torpedo:   { scale: 1.2,  posY: '42%', label: 'Tapered Figurado' },
+}
+
+function CigarFallbackPanel({ name, height }) {
+  const key = name.toLowerCase().includes('torpedo') ? 'torpedo' : name.toLowerCase().replace(/[^a-z]/g, '')
+  const treatment = SHAPE_TREATMENTS[key] || { scale: 1.3, posY: '50%', label: 'Real photo pending' }
+  return (
+    <div className="cigar-fallback-panel" style={{ height }}>
+      <div
+        className="cigar-fallback-panel__art"
+        style={{
+          backgroundImage: `url(${FALLBACK_CIGAR_IMAGE})`,
+          backgroundSize: `${treatment.scale * 100}% auto`,
+          backgroundPosition: `center ${treatment.posY}`,
+        }}
+      />
+      <div className="cigar-fallback-panel__rim" aria-hidden="true" />
+      <span className="cigar-fallback-panel__badge">{treatment.label}</span>
+      <span className="cigar-fallback-panel__pending">Real photo pending</span>
+    </div>
+  )
+}
 
 const FORMATS = [
   {
@@ -42,6 +76,7 @@ const FORMATS = [
     xp: 25,
     tip: 'Robusto keeps the session focused: enough ring gauge for smoke volume, short enough to preserve intensity.',
     image: '/assets/smokecraft/cigars/robusto.jpg',
+    hasPhoto: false,
   },
   {
     id: 'toro',
@@ -59,6 +94,7 @@ const FORMATS = [
     xp: 30,
     tip: 'Toro length lets a blend evolve gradually, making it ideal for pairings that open in stages.',
     image: '/assets/smokecraft/cigars/toro.jpg',
+    hasPhoto: false,
   },
   {
     id: 'churchill',
@@ -76,6 +112,7 @@ const FORMATS = [
     xp: 35,
     tip: 'Churchill rewards patience. Its length cools the smoke and gives subtle tobaccos more room to speak.',
     image: '/assets/smokecraft/cigars/churchill.jpg',
+    hasPhoto: false,
   },
   {
     id: 'corona',
@@ -93,6 +130,7 @@ const FORMATS = [
     xp: 20,
     tip: 'Corona uses a slimmer ring gauge to concentrate wrapper character and keep the session crisp.',
     image: '/assets/smokecraft/cigars/corona.jpg',
+    hasPhoto: false,
   },
   {
     id: 'gordo',
@@ -110,6 +148,7 @@ const FORMATS = [
     xp: 40,
     tip: 'Gordo delivers more filler volume and a cooler burn, so the blend needs structure to avoid becoming soft.',
     image: '/assets/smokecraft/cigars/gordo.jpg',
+    hasPhoto: false,
   },
   {
     id: 'torpedo',
@@ -127,6 +166,7 @@ const FORMATS = [
     xp: 45,
     tip: 'A tapered head focuses the draw, making Torpedo formats especially useful for layered, complex blends.',
     image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
+    hasPhoto: false,
   },
 ]
 
@@ -380,15 +420,83 @@ export default function Format() {
           transform: scale(1);
         }
         .format-card__visual {
-          height: 130px;
+          height: 168px;
           display: flex;
           align-items: center;
           justify-content: center;
           margin: 16px 0 14px;
           border-radius: 12px;
+          overflow: hidden;
           background:
             radial-gradient(ellipse at center, rgba(233,193,118,0.12), transparent 65%),
             linear-gradient(135deg, rgba(0,0,0,0.22), rgba(233,193,118,0.04));
+        }
+        .cigar-fallback-panel {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          border-radius: 10px;
+          overflow: hidden;
+          background: linear-gradient(160deg, #2a1c0e 0%, #160e06 70%, #0c0703 100%);
+          box-shadow: inset 0 0 0 1px rgba(233,193,118,0.14);
+        }
+        .cigar-fallback-panel__art {
+          position: absolute;
+          inset: 0;
+          background-repeat: no-repeat;
+          filter: brightness(0.82) saturate(1.05);
+          opacity: 0.92;
+        }
+        .cigar-fallback-panel__rim {
+          position: absolute;
+          inset: 0;
+          border-radius: 10px;
+          box-shadow:
+            inset 0 0 0 1.5px rgba(233,193,118,0.42),
+            inset 0 0 28px rgba(233,193,118,0.16);
+          background: radial-gradient(ellipse at 50% 0%, rgba(233,193,118,0.14), transparent 60%);
+          pointer-events: none;
+        }
+        .cigar-fallback-panel__badge {
+          position: absolute;
+          top: 8px;
+          left: 8px;
+          z-index: 2;
+          padding: 4px 9px;
+          border-radius: 999px;
+          background: rgba(10,6,3,0.78);
+          border: 1px solid rgba(233,193,118,0.4);
+          color: #e9c176;
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        .cigar-fallback-panel__pending {
+          position: absolute;
+          bottom: 8px;
+          right: 9px;
+          z-index: 2;
+          color: rgba(233,193,118,0.62);
+          font-size: 9px;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+        .format-missing-note {
+          padding: 14px 18px;
+          color: rgba(233,193,118,0.55);
+          font-size: 11px;
+          letter-spacing: 0.04em;
+          line-height: 1.6;
+        }
+        .format-missing-note strong {
+          display: block;
+          color: rgba(233,193,118,0.78);
+          font-size: 11px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          margin-bottom: 4px;
         }
         .format-card h2 {
           margin: 0 0 6px;
@@ -466,6 +574,7 @@ export default function Format() {
           display: grid;
           place-items: center;
           border-radius: 10px;
+          overflow: hidden;
           background:
             radial-gradient(circle at center, rgba(233,193,118,0.14), transparent 62%),
             linear-gradient(135deg, rgba(233,193,118,0.06), rgba(0,0,0,0.18));
@@ -719,7 +828,7 @@ export default function Format() {
                     <span className="format-card__number">{String(index + 1).padStart(2, '0')}</span>
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
-                      <CigarImage image={format.image} name={format.name} height="118px" />
+                      <CigarImage image={format.image} hasPhoto={format.hasPhoto} name={format.name} height="100%" />
                     </span>
                     <h2>{format.name}</h2>
                     <p>{format.description}</p>
@@ -743,7 +852,7 @@ export default function Format() {
                 <div className="format-panel__label">Format Insight</div>
                 <div className="format-insight">
                   <div className="format-insight__cigar" aria-hidden="true">
-                    <CigarImage image={insightFormat.image} name={insightFormat.name} height="200px" />
+                    <CigarImage image={insightFormat.image} hasPhoto={insightFormat.hasPhoto} name={insightFormat.name} height="100%" />
                   </div>
                   <div>
                     <h2>{insightFormat.name}</h2>
@@ -803,6 +912,13 @@ export default function Format() {
                   <p>{selected?.tip || DEFAULT_TIP}</p>
                 </div>
                 <div className="format-tip__image" aria-hidden="true" />
+              </div>
+            </section>
+
+            <section className="format-panel">
+              <div className="format-missing-note">
+                <strong>Required real photos pending</strong>
+                robusto.jpg, toro.jpg, churchill.jpg, corona.jpg, gordo.jpg, torpedo-figurado.jpg
               </div>
             </section>
           </aside>
