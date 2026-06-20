@@ -136,12 +136,24 @@ app.get('/__build-check', (_req, res) => {
 
   let jsFilesChecked = []
   let distJsContainsBadge = false
+  let formatContainsCigarVisual = false
+  let formatContainsVitolaDiagram = false
+  let formatContainsCigarImage = false
+  let distJsContainsFormatPhotoFixMarker = false
+  let distJsContainsCigarVisualCardMarker = false
   const assetsDir = path.join(CLIENT_DIST, 'assets')
   if (distExists && fs.existsSync(assetsDir)) {
     jsFilesChecked = fs.readdirSync(assetsDir).filter(f => f.endsWith('.js'))
-    distJsContainsBadge = jsFilesChecked.some(f =>
-      fs.readFileSync(path.join(assetsDir, f), 'utf8').includes(EXPECTED_BADGE)
-    )
+    const jsContents = jsFilesChecked.map(f => fs.readFileSync(path.join(assetsDir, f), 'utf8'))
+    distJsContainsBadge = jsContents.some(c => c.includes(EXPECTED_BADGE))
+    // Function/component identifiers (CigarVisual, VitolaDiagram, CigarImage) get mangled by the
+    // minifier and won't survive in dist as literal text, so this checks the className strings
+    // those components render instead — string literals are preserved through minification.
+    formatContainsCigarVisual = jsContents.some(c => c.includes('cigar-visual'))
+    formatContainsVitolaDiagram = jsContents.some(c => c.includes('vitola-stage') || c.includes('vitola-svg'))
+    formatContainsCigarImage = jsContents.some(c => c.includes('cigar-fallback-panel'))
+    distJsContainsFormatPhotoFixMarker = jsContents.some(c => c.includes('FORMAT PHOTO FIX LIVE c6104fd'))
+    distJsContainsCigarVisualCardMarker = jsContents.some(c => c.includes('CIGARVISUAL CARD LIVE'))
   }
 
   res.json({
@@ -152,6 +164,13 @@ app.get('/__build-check', (_req, res) => {
     distIndexExists,
     distIndexContainsBadge,
     distJsContainsBadge,
+    formatContainsCigarVisual,
+    formatContainsVitolaDiagram,
+    formatContainsCigarImage,
+    distJsContainsFormatPhotoFixMarker,
+    distJsContainsCigarVisualCardMarker,
+    deployedExpectedCommit: 'c6104fd',
+    currentServerTime: new Date().toISOString(),
     jsFilesChecked,
     timestamp: new Date().toISOString(),
   })
