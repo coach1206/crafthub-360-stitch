@@ -6,24 +6,56 @@ import {
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
-const FALLBACK_CIGAR_IMAGE = '/cigar-anatomy.png'
+// VITOLA DIAGRAM SYSTEM.
+// Real per-shape cigar photographs (/assets/smokecraft/cigars/*.jpg) do not exist in the repo.
+// Rather than crop a placeholder photo, each cigar shape is drawn live as an SVG silhouette,
+// scaled per-shape by diagram.lengthScale / diagram.ringGaugeScale / diagram.taper. This is the
+// primary visual for every card and the Format Insight panel — it never depends on an image load.
+function VitolaDiagram({ format }) {
+  const { lengthScale, ringGaugeScale, taper } = format.diagram
+  const viewW = 220
+  const viewH = 88
+  const width = 64 + lengthScale * 132
+  const height = 18 + ringGaugeScale * 38
+  const x = (viewW - width) / 2
+  const y = (viewH - height) / 2
+  const cap = height / 2
+  const gradId = `vitola-wrapper-${format.id}`
+  const bandX = x + width * 0.66
+  const bandWidth = Math.max(8, width * 0.06)
 
-function CigarImage({ image, name, height = '80px' }) {
-  const [src, setSrc] = useState(image || FALLBACK_CIGAR_IMAGE)
+  const taperedPath = `M ${x + cap * 1.1} ${y + height / 2}
+    Q ${x + width * 0.3} ${y} ${x + width * 0.58} ${y}
+    L ${x + width - cap} ${y}
+    A ${cap} ${cap} 0 0 1 ${x + width - cap} ${y + height}
+    L ${x + width * 0.58} ${y + height}
+    Q ${x + width * 0.3} ${y + height} ${x + cap * 1.1} ${y + height / 2}
+    Z`
+
   return (
-    <img
-      src={src}
-      alt={name}
-      onError={() => setSrc(FALLBACK_CIGAR_IMAGE)}
-      style={{ width: '100%', height, objectFit: 'contain', objectPosition: 'center', display: 'block' }}
-    />
+    <div className="vitola-stage">
+      <svg viewBox={`0 0 ${viewW} ${viewH}`} className="vitola-svg" role="img" aria-label={`${format.name} vitola diagram`}>
+        <defs>
+          <linearGradient id={gradId} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#6b4322" />
+            <stop offset="45%" stopColor="#3c2613" />
+            <stop offset="100%" stopColor="#1c1108" />
+          </linearGradient>
+        </defs>
+        <ellipse cx={viewW / 2} cy={viewH / 2} rx={width / 1.55} ry={height * 1.5} fill="rgba(233,193,118,0.12)" />
+        {taper ? (
+          <path d={taperedPath} fill={`url(#${gradId})`} stroke="rgba(233,193,118,0.5)" strokeWidth="1" />
+        ) : (
+          <rect x={x} y={y} width={width} height={height} rx={cap} ry={cap} fill={`url(#${gradId})`} stroke="rgba(233,193,118,0.5)" strokeWidth="1" />
+        )}
+        <rect x={x + width - cap * 0.9} y={y + 2} width={cap * 0.9} height={height - 4} rx={cap * 0.5} fill="rgba(10,6,3,0.65)" />
+        <rect x={bandX} y={y - 2} width={bandWidth} height={height + 4} rx="2" fill="#e9c176" opacity="0.9" />
+        <rect x={bandX} y={y - 2} width={bandWidth} height="6" rx="2" fill="#fff" opacity="0.25" />
+      </svg>
+      <span className="vitola-caption">Vitola diagram · Real photo pending</span>
+    </div>
   )
 }
-
-// APPROVED SMOKECRAFT VISUAL ASSETS.
-// Do not replace cigar images with cartoon placeholders, fake cigar strips, or flat illustrations.
-// Realistic per-format photos load from /assets/smokecraft/cigars/; if missing, falls back to the
-// real cigar-anatomy.png asset rather than leaving any placeholder text.
 
 const FORMATS = [
   {
@@ -41,7 +73,12 @@ const FORMATS = [
     tags: ['Balanced', 'Everyday', 'Smooth Draw'],
     xp: 25,
     tip: 'Robusto keeps the session focused: enough ring gauge for smoke volume, short enough to preserve intensity.',
+    bestUseCase: 'Everyday smoke, quick relaxation',
+    experienceLevel: 'Beginner Friendly',
+    flavorImpact: 'Balanced & Approachable',
+    diagram: { lengthScale: 0.32, ringGaugeScale: 0.85, taper: false },
     image: '/assets/smokecraft/cigars/robusto.jpg',
+    hasPhoto: false,
   },
   {
     id: 'toro',
@@ -58,7 +95,12 @@ const FORMATS = [
     tags: ['Long Session', 'Rich Draw', 'Balanced'],
     xp: 30,
     tip: 'Toro length lets a blend evolve gradually, making it ideal for pairings that open in stages.',
+    bestUseCase: 'Long pairings, evening unwind',
+    experienceLevel: 'Beginner–Intermediate',
+    flavorImpact: 'Rich & Evolving',
+    diagram: { lengthScale: 0.62, ringGaugeScale: 0.62, taper: false },
     image: '/assets/smokecraft/cigars/toro.jpg',
+    hasPhoto: false,
   },
   {
     id: 'churchill',
@@ -75,7 +117,12 @@ const FORMATS = [
     tags: ['Long Session', 'Elegant', 'Cool Burn'],
     xp: 35,
     tip: 'Churchill rewards patience. Its length cools the smoke and gives subtle tobaccos more room to speak.',
+    bestUseCase: 'Special occasions, slow lounge sessions',
+    experienceLevel: 'Intermediate',
+    flavorImpact: 'Refined & Cool',
+    diagram: { lengthScale: 0.92, ringGaugeScale: 0.46, taper: false },
     image: '/assets/smokecraft/cigars/churchill.jpg',
+    hasPhoto: false,
   },
   {
     id: 'corona',
@@ -92,7 +139,12 @@ const FORMATS = [
     tags: ['Lighter Draw', 'Classic', 'Quick Smoke'],
     xp: 20,
     tip: 'Corona uses a slimmer ring gauge to concentrate wrapper character and keep the session crisp.',
+    bestUseCase: 'Quick smoke, casual moments',
+    experienceLevel: 'Beginner Friendly',
+    flavorImpact: 'Crisp & Light',
+    diagram: { lengthScale: 0.42, ringGaugeScale: 0.4, taper: false },
     image: '/assets/smokecraft/cigars/corona.jpg',
+    hasPhoto: false,
   },
   {
     id: 'gordo',
@@ -109,7 +161,12 @@ const FORMATS = [
     tags: ['Full Flavor', 'Slow Burn', 'Cool Smoke'],
     xp: 40,
     tip: 'Gordo delivers more filler volume and a cooler burn, so the blend needs structure to avoid becoming soft.',
+    bestUseCase: 'Bold relaxation, slow deep sessions',
+    experienceLevel: 'Experienced',
+    flavorImpact: 'Full & Bold',
+    diagram: { lengthScale: 0.55, ringGaugeScale: 1, taper: false },
     image: '/assets/smokecraft/cigars/gordo.jpg',
+    hasPhoto: false,
   },
   {
     id: 'torpedo',
@@ -126,7 +183,12 @@ const FORMATS = [
     tags: ['Complex', 'Focused Flavor', 'Rich Draw'],
     xp: 45,
     tip: 'A tapered head focuses the draw, making Torpedo formats especially useful for layered, complex blends.',
+    bestUseCase: 'Focused tasting, complex blends',
+    experienceLevel: 'Experienced',
+    flavorImpact: 'Layered & Intense',
+    diagram: { lengthScale: 0.78, ringGaugeScale: 0.58, taper: true },
     image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
+    hasPhoto: false,
   },
 ]
 
@@ -223,7 +285,7 @@ export default function Format() {
           background: #050302;
           position: relative;
           overflow-x: hidden;
-          padding-bottom: 116px;
+          padding-bottom: 160px;
         }
         .smokecraft-format-page::before {
           content: "";
@@ -253,9 +315,9 @@ export default function Format() {
         .format-shell {
           position: relative;
           z-index: 2;
-          max-width: 1280px;
+          max-width: 1320px;
           margin: 0 auto;
-          padding: 102px 24px 26px;
+          padding: 104px 28px 40px;
         }
         .format-progress {
           display: grid;
@@ -312,27 +374,32 @@ export default function Format() {
         }
         .format-card-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 12px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 18px;
         }
         .format-card {
           position: relative;
-          min-height: 214px;
-          padding: 16px;
-          border-radius: 10px;
-          border: 1px solid rgba(233,193,118,0.24);
-          background: linear-gradient(135deg, rgba(17,12,7,0.9), rgba(7,5,3,0.86));
+          min-height: 420px;
+          padding: 22px;
+          border-radius: 16px;
+          border: 1.5px solid rgba(233,193,118,0.3);
+          background:
+            radial-gradient(ellipse at 50% 0%, rgba(233,193,118,0.1), transparent 60%),
+            linear-gradient(160deg, rgba(58,38,20,0.95), rgba(20,13,7,0.96) 55%, rgba(8,5,3,0.97));
           color: #f7efe2;
           text-align: left;
           cursor: pointer;
           overflow: hidden;
-          box-shadow: 0 16px 36px rgba(0,0,0,0.34);
+          box-shadow: inset 0 0 0 1px rgba(233,193,118,0.08), inset 0 30px 60px rgba(0,0,0,0.32), 0 18px 40px rgba(0,0,0,0.45);
           transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
-        .format-card:hover,
+        .format-card:hover {
+          transform: translateY(-2px);
+          border-color: rgba(255,225,151,0.6);
+        }
         .format-card.is-selected {
-          border-color: rgba(255,225,151,0.9);
-          box-shadow: 0 0 0 1px rgba(255,225,151,0.26), 0 0 32px rgba(233,193,118,0.28), 0 22px 48px rgba(0,0,0,0.42);
+          border-color: rgba(255,225,151,0.95);
+          box-shadow: 0 0 0 1.5px rgba(255,225,151,0.45), 0 0 56px rgba(233,193,118,0.42), 0 26px 56px rgba(0,0,0,0.5), inset 0 0 34px rgba(233,193,118,0.1);
         }
         .format-card:active {
           transform: scale(0.985);
@@ -375,37 +442,106 @@ export default function Format() {
           transform: scale(1);
         }
         .format-card__visual {
-          height: 74px;
+          height: 152px;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 12px 0 10px;
+          margin: 16px 0 14px;
+          border-radius: 12px;
+          overflow: hidden;
+          background:
+            radial-gradient(ellipse at 50% 100%, rgba(233,193,118,0.16), transparent 60%),
+            linear-gradient(180deg, rgba(0,0,0,0.4), rgba(40,26,14,0.42));
+          box-shadow: inset 0 0 0 1px rgba(233,193,118,0.24), inset 0 10px 26px rgba(0,0,0,0.55);
+          transition: box-shadow 0.2s ease;
+        }
+        .format-card.is-selected .format-card__visual {
+          box-shadow: inset 0 0 0 1.5px rgba(255,225,151,0.7), inset 0 0 32px rgba(233,193,118,0.28), 0 0 30px rgba(233,193,118,0.32);
+        }
+        .vitola-stage {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        .vitola-svg {
+          width: 92%;
+          height: 78%;
+        }
+        .vitola-caption {
+          margin-top: 4px;
+          color: rgba(233,193,118,0.6);
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        .format-missing-note {
+          padding: 14px 18px;
+          color: rgba(233,193,118,0.55);
+          font-size: 11px;
+          letter-spacing: 0.04em;
+          line-height: 1.6;
+        }
+        .format-missing-note strong {
+          display: block;
+          color: rgba(233,193,118,0.78);
+          font-size: 11px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          margin-bottom: 4px;
         }
         .format-card h2 {
-          margin: 0 0 6px;
+          margin: 0 0 2px;
           font-family: "Playfair Display", Georgia, serif;
           color: #f7efe2;
-          font-size: 25px;
+          font-size: 27px;
           line-height: 1.05;
         }
+        .format-card__type {
+          display: inline-block;
+          margin-bottom: 8px;
+          color: rgba(233,193,118,0.7);
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
         .format-card p {
-          margin: 0 0 11px;
+          margin: 0 0 12px;
           color: rgba(247,239,226,0.76);
           font-size: 15px;
           line-height: 1.35;
         }
-        .format-card__metrics {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px 12px;
-          color: #e9c176;
-          font-size: 13px;
-          font-weight: 800;
+        .format-card__facts {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 9px 14px;
+          margin-bottom: 12px;
         }
-        .format-card__metrics span {
+        .format-card__facts div {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+        .format-card__fact-label {
+          color: rgba(233,193,118,0.62);
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        .format-card__fact-value {
+          color: #f7efe2;
+          font-size: 13px;
+          font-weight: 700;
+          line-height: 1.25;
           display: inline-flex;
           align-items: center;
-          gap: 4px;
+          gap: 5px;
         }
         .format-card__tags {
           display: flex;
@@ -457,6 +593,7 @@ export default function Format() {
           display: grid;
           place-items: center;
           border-radius: 10px;
+          overflow: hidden;
           background:
             radial-gradient(circle at center, rgba(233,193,118,0.14), transparent 62%),
             linear-gradient(135deg, rgba(233,193,118,0.06), rgba(0,0,0,0.18));
@@ -502,46 +639,54 @@ export default function Format() {
         }
         .session-list {
           display: grid;
-          gap: 8px;
+          gap: 12px;
         }
         .session-row {
-          min-height: 64px;
+          min-height: 84px;
           display: grid;
-          grid-template-columns: 44px 1fr auto;
-          gap: 10px;
+          grid-template-columns: 52px 1fr;
+          gap: 14px;
           align-items: center;
-          padding: 10px;
-          border: 1px solid rgba(233,193,118,0.14);
-          border-radius: 10px;
-          background: rgba(255,255,255,0.03);
+          padding: 16px;
+          border: 1px solid rgba(233,193,118,0.18);
+          border-radius: 14px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18));
+          box-shadow: inset 0 1px 0 rgba(255,236,178,0.05);
         }
         .session-row.is-active {
-          border-color: rgba(255,225,151,0.72);
-          background: rgba(233,193,118,0.12);
-          box-shadow: 0 0 22px rgba(233,193,118,0.16);
+          border-color: rgba(255,225,151,0.8);
+          background: linear-gradient(135deg, rgba(233,193,118,0.16), rgba(233,193,118,0.05));
+          box-shadow: 0 0 26px rgba(233,193,118,0.2), inset 0 0 0 1px rgba(255,225,151,0.2);
         }
         .session-row__icon {
-          width: 38px;
-          height: 38px;
+          width: 46px;
+          height: 46px;
           border-radius: 50%;
           display: grid;
           place-items: center;
           color: #e9c176;
-          border: 1px solid rgba(233,193,118,0.32);
+          background: radial-gradient(circle, rgba(233,193,118,0.14), transparent 70%);
+          border: 1px solid rgba(233,193,118,0.4);
         }
         .session-row strong {
           display: block;
           color: #e9c176;
           text-transform: uppercase;
           font-size: 14px;
-          letter-spacing: 0.08em;
+          letter-spacing: 0.1em;
+          margin-bottom: 2px;
         }
-        .session-row span,
-        .session-row p {
+        .session-row span {
           margin: 0;
-          color: rgba(247,239,226,0.72);
-          font-size: 14px;
-          line-height: 1.25;
+          color: rgba(247,239,226,0.55);
+          font-size: 12px;
+          letter-spacing: 0.04em;
+        }
+        .session-row p {
+          margin: 4px 0 0;
+          color: rgba(247,239,226,0.74);
+          font-size: 13px;
+          line-height: 1.35;
         }
         .format-tip {
           display: grid;
@@ -702,15 +847,45 @@ export default function Format() {
                     <span className="format-card__number">{String(index + 1).padStart(2, '0')}</span>
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
-                      <CigarImage image={format.image} name={format.name} />
+                      <VitolaDiagram format={format} />
                     </span>
                     <h2>{format.name}</h2>
+                    <span className="format-card__type">{format.shape}</span>
                     <p>{format.description}</p>
-                    <span className="format-card__metrics">
-                      <span><span className="material-symbols-outlined">straighten</span>{format.length}</span>
-                      <span><span className="material-symbols-outlined">timer</span>{format.burnTime}</span>
-                      <span>{format.strengthBody}</span>
-                    </span>
+                    <div className="format-card__facts">
+                      <div>
+                        <span className="format-card__fact-label">Length</span>
+                        <span className="format-card__fact-value">{format.length}</span>
+                      </div>
+                      <div>
+                        <span className="format-card__fact-label">Ring Gauge</span>
+                        <span className="format-card__fact-value">{format.ringGauge}</span>
+                      </div>
+                      <div>
+                        <span className="format-card__fact-label">Burn Time</span>
+                        <span className="format-card__fact-value">{format.burnTime}</span>
+                      </div>
+                      <div>
+                        <span className="format-card__fact-label">Draw Feel</span>
+                        <span className="format-card__fact-value">{format.drawFeel}</span>
+                      </div>
+                      <div>
+                        <span className="format-card__fact-label">Strength / Body</span>
+                        <span className="format-card__fact-value"><Dots count={format.bodyScore} /> {format.strengthBody}</span>
+                      </div>
+                      <div>
+                        <span className="format-card__fact-label">Flavor Impact</span>
+                        <span className="format-card__fact-value">{format.flavorImpact}</span>
+                      </div>
+                      <div>
+                        <span className="format-card__fact-label">Best Use Case</span>
+                        <span className="format-card__fact-value">{format.bestUseCase}</span>
+                      </div>
+                      <div>
+                        <span className="format-card__fact-label">Experience Level</span>
+                        <span className="format-card__fact-value">{format.experienceLevel}</span>
+                      </div>
+                    </div>
                     <span className="format-card__tags">
                       {format.tags.map(tag => <span key={tag}>{tag}</span>)}
                     </span>
@@ -726,7 +901,7 @@ export default function Format() {
                 <div className="format-panel__label">Format Insight</div>
                 <div className="format-insight">
                   <div className="format-insight__cigar" aria-hidden="true">
-                    <CigarImage image={insightFormat.image} name={insightFormat.name} height="200px" />
+                    <VitolaDiagram format={insightFormat} />
                   </div>
                   <div>
                     <h2>{insightFormat.name}</h2>
@@ -771,8 +946,8 @@ export default function Format() {
                       <div>
                         <strong>{type.label}</strong>
                         <span>{type.range}</span>
+                        <p>{type.copy}</p>
                       </div>
-                      <p>{type.copy}</p>
                     </article>
                   ))}
                 </div>
@@ -786,6 +961,13 @@ export default function Format() {
                   <p>{selected?.tip || DEFAULT_TIP}</p>
                 </div>
                 <div className="format-tip__image" aria-hidden="true" />
+              </div>
+            </section>
+
+            <section className="format-panel">
+              <div className="format-missing-note">
+                <strong>Required real photos pending</strong>
+                robusto.jpg, toro.jpg, churchill.jpg, corona.jpg, gordo.jpg, torpedo-figurado.jpg
               </div>
             </section>
           </aside>

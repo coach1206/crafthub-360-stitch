@@ -189,7 +189,7 @@ export default function Mentor() {
             Grand Lounge
           </button>
           <button className="smokecraft-mentor-avatar" onClick={() => navigate('/passport')} aria-label="Open member passport">
-            <img src="/passport.jpg" alt="" />
+            <img src="/assets/smokecraft/cropped/passport-cover.jpg" alt="" />
           </button>
         </div>
       </header>

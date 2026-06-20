@@ -52,14 +52,14 @@ function CigarVisual({ active }) {
   return (
     <div className="relative min-h-[315px] overflow-hidden flex flex-col">
       <div
-        className="mx-6 mt-6 flex flex-1 items-center justify-center rounded-xl"
-        style={{
-          background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
-          color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
-          minHeight: 140,
-        }}
+        className="mx-6 mt-6 flex flex-1 items-center justify-center overflow-hidden rounded-xl"
+        style={{ border: '1px solid rgba(233,193,118,0.24)', minHeight: 140 }}
       >
-        Image pending
+        <img
+          src="/cigar-anatomy.png"
+          alt="Cigar anatomy — wrapper, binder, and filler layers"
+          className="h-full w-full object-cover"
+        />
       </div>
       <div className="px-6 pb-5 pt-4 space-y-1">
         {rows.map(row => {
@@ -131,13 +131,13 @@ export default function Art() {
       <div className="fixed inset-0 -z-10 overflow-hidden bg-[#050302]">
         <img
           alt=""
-          src="/background-lounge-airy.jpg"
+          src="/smokecraft-hero.png"
           className="h-full w-full object-cover"
           style={{ filter: 'brightness(0.38) saturate(1.15) contrast(1.12)' }}
         />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg,rgba(5,3,2,0.94),rgba(5,3,2,0.68) 42%,rgba(5,3,2,0.84)), radial-gradient(circle at 75% 42%,rgba(233,193,118,0.18),transparent 34%)' }} />
         <div className="absolute -left-24 top-16 h-[78vh] w-[36vw] opacity-55 blur-xl" style={{ background: 'radial-gradient(ellipse,rgba(233,193,118,0.14),transparent 62%)' }} />
-        <div className="absolute left-0 bottom-0 h-[42vh] w-[42vw] opacity-25" style={{ backgroundImage: 'url(/smokecraft.jpg)', backgroundSize: 'cover', backgroundPosition: 'left bottom', maskImage: 'linear-gradient(90deg, black, transparent)' }} />
+        <div className="absolute left-0 bottom-0 h-[42vh] w-[42vw] opacity-25" style={{ backgroundImage: 'url(/cigar-anatomy.png)', backgroundSize: 'cover', backgroundPosition: 'left bottom', maskImage: 'linear-gradient(90deg, black, transparent)' }} />
         <div className="absolute inset-0 opacity-28" style={{ background: 'radial-gradient(ellipse at 8% 35%,rgba(255,255,255,0.13),transparent 26%), radial-gradient(ellipse at 94% 48%,rgba(255,255,255,0.1),transparent 26%)', filter: 'blur(20px)' }} />
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 0%, transparent 52%, rgba(0,0,0,0.72) 100%)' }} />
       </div>
@@ -220,7 +220,7 @@ export default function Art() {
             <section className="craft-art-panel relative min-h-[245px] overflow-hidden rounded-2xl p-6">
               <img
                 alt=""
-                src="/background-lounge-airy.jpg"
+                src="/smokecraft-hero.png"
                 className="absolute inset-0 h-full w-full object-cover"
                 style={{ filter: 'brightness(0.5) saturate(1.16)', opacity: 0.62 }}
               />

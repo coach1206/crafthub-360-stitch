@@ -76,9 +76,6 @@ export default function SeedSoil() {
           </button>
         </div>
       </main>
-      <div style={{ position:'fixed', bottom:8, right:8, zIndex:9999, fontSize:10, color:'rgba(255,255,255,0.6)', background:'rgba(0,0,0,0.6)', padding:'2px 6px', borderRadius:4, pointerEvents:'none' }}>
-        VISUAL COMMIT c9354dca · IMAGE: cut-toast-light-bg.jpg
-      </div>
     </div>
   )
 }

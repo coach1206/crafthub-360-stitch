@@ -296,7 +296,7 @@ export default function Pairing() {
   /* ── RENDER ─────────────────────────────────────────────── */
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen"
-      style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/black-linen.png')" }}>
+      style={{ backgroundImage: 'radial-gradient(circle at 30% 25%, rgba(255,255,255,0.02) 0%, transparent 45%), radial-gradient(circle at 70% 70%, rgba(255,255,255,0.018) 0%, transparent 40%)' }}>
 
       {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none -z-10"

@@ -153,7 +153,7 @@ export default function FlavorDNA() {
     <div style={S.page}>
       {/* Smoke texture overlay */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundImage: "url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.12, pointerEvents: 'none' }} />
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundImage: "url('https://www.transparenttextures.com/patterns/black-leather.png')", opacity: 0.15, pointerEvents: 'none' }} />
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundImage: 'radial-gradient(circle at 25% 20%, rgba(255,255,255,0.025) 0%, transparent 45%), radial-gradient(circle at 75% 65%, rgba(255,255,255,0.02) 0%, transparent 40%)', opacity: 0.15, pointerEvents: 'none' }} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, background: 'radial-gradient(ellipse at 20% 60%, rgba(212,175,55,0.05) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
       {/* ── Top Bar ─────────────────────────────────────────── */}
