@@ -219,7 +219,7 @@ export default function GoldenBox() {
             radial-gradient(ellipse at 12% 58%, rgba(167,92,32,0.26) 0%, rgba(44,20,6,0.28) 24%, transparent 40%),
             radial-gradient(ellipse at 88% 50%, rgba(255,205,113,0.2) 0%, rgba(48,23,8,0.32) 22%, transparent 38%),
             linear-gradient(180deg, rgba(28,12,3,0.9) 0%, rgba(8,4,2,0.94) 74%, #020101 100%),
-            url(/background-lounge-airy.jpg);
+            url(/assets/smokecraft/cropped/golden-box-hero.jpg);
           background-size: cover;
           background-position: center;
           filter: saturate(1.16) contrast(1.1) brightness(0.88);

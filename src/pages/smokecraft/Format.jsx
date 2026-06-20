@@ -234,7 +234,7 @@ export default function Format() {
             radial-gradient(circle at 24% 36%, rgba(233,193,118,0.18), transparent 28%),
             radial-gradient(circle at 78% 18%, rgba(255,255,255,0.08), transparent 22%),
             linear-gradient(90deg, rgba(5,3,2,0.98), rgba(5,3,2,0.68), rgba(5,3,2,0.95)),
-            url(/background-lounge-airy.jpg);
+            url(/assets/smokecraft/cropped/management-sync-bg.jpg);
           background-size: cover;
           background-position: center;
           filter: brightness(0.62) saturate(1.12) contrast(1.1);
@@ -561,7 +561,7 @@ export default function Format() {
           background:
             radial-gradient(circle at 72% 28%, rgba(233,193,118,0.32), transparent 32%),
             linear-gradient(135deg, rgba(65,33,13,0.92), rgba(6,4,3,0.72)),
-            url(/smokecraft.jpg);
+            url(/assets/smokecraft/cropped/humidor-match-bg.jpg);
           background-size: cover;
           background-position: center;
           box-shadow: inset 0 0 0 1px rgba(233,193,118,0.2);
@@ -580,7 +580,7 @@ export default function Format() {
           border-radius: 12px;
           background:
             linear-gradient(90deg, rgba(5,3,2,0.1), rgba(5,3,2,0.28)),
-            url(/crafthub-gold.jpg);
+            url(/assets/smokecraft/cropped/cut-toast-light-bg.jpg);
           background-size: cover;
           background-position: center;
           box-shadow: inset 0 0 0 1px rgba(233,193,118,0.24);

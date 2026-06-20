@@ -171,7 +171,7 @@ export default function Origins() {
             radial-gradient(ellipse at 8% 28%, rgba(255,255,255,0.13), transparent 24%),
             radial-gradient(circle at 52% 48%, rgba(233,193,118,0.17), transparent 28%),
             linear-gradient(90deg, rgba(5,3,2,0.94), rgba(5,3,2,0.68), rgba(5,3,2,0.94)),
-            url(/background-lounge-airy.jpg);
+            url(/assets/smokecraft/cropped/connections-bg.jpg);
           background-size: cover;
           background-position: center;
           filter: saturate(1.08) contrast(1.12) brightness(0.66);

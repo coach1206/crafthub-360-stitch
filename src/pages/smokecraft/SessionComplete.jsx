@@ -85,6 +85,7 @@ export default function SessionComplete() {
           src={null}
           style={{ fontSize: 11 }}
         />
+        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('/assets/smokecraft/cropped/final-third-bg.jpg')" }} />
         <div className="absolute -top-20 -left-20 w-[600px] h-[600px] bg-primary/10 rounded-full animated-smoke" />
         <div
           className="absolute -bottom-20 -right-20 w-[600px] h-[600px] bg-secondary/10 rounded-full animated-smoke"

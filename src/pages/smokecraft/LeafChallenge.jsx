@@ -137,7 +137,7 @@ export default function LeafChallenge() {
   return (
     <div
       className="min-h-screen bg-background text-on-surface font-body-md flex flex-col relative overflow-hidden"
-      style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/black-linen.png')" }}
+      style={{ backgroundImage: "url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')" }}
     >
       {/* Submitting overlay — fades in on final answer */}
       {submitting && (
