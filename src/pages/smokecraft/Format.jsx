@@ -49,7 +49,7 @@ const FORMATS = [
     bestUseCase: 'Everyday smoke, quick relaxation',
     experienceLevel: 'Beginner Friendly',
     flavorImpact: 'Balanced & Approachable',
-    photo: { src: '/assets/smokecraft/cropped/scorecard-bg.jpg', position: 'center 32%', zoom: 1.65, taper: false },
+    photo: { src: '/assets/smokecraft/cropped/scorecard-bg.jpg', position: 'center 63%', zoom: 1.3, taper: false },
     image: '/assets/smokecraft/cigars/robusto.jpg',
     hasPhoto: false,
   },
@@ -71,7 +71,7 @@ const FORMATS = [
     bestUseCase: 'Long pairings, evening unwind',
     experienceLevel: 'Beginner–Intermediate',
     flavorImpact: 'Rich & Evolving',
-    photo: { src: '/assets/smokecraft/cropped/cut-toast-light-bg.jpg', position: 'center 48%', zoom: 1.1, taper: false },
+    photo: { src: '/assets/smokecraft/cropped/cut-toast-light-bg.jpg', position: 'center 55%', zoom: 1.2, taper: false },
     image: '/assets/smokecraft/cigars/toro.jpg',
     hasPhoto: false,
   },
@@ -93,7 +93,7 @@ const FORMATS = [
     bestUseCase: 'Special occasions, slow lounge sessions',
     experienceLevel: 'Intermediate',
     flavorImpact: 'Refined & Cool',
-    photo: { src: '/assets/smokecraft/cropped/connections-bg.jpg', position: 'center 42%', zoom: 1, taper: false },
+    photo: { src: '/assets/smokecraft/cropped/connections-bg.jpg', position: 'center 75%', zoom: 1.4, taper: false },
     image: '/assets/smokecraft/cigars/churchill.jpg',
     hasPhoto: false,
   },
@@ -115,7 +115,7 @@ const FORMATS = [
     bestUseCase: 'Quick smoke, casual moments',
     experienceLevel: 'Beginner Friendly',
     flavorImpact: 'Crisp & Light',
-    photo: { src: '/assets/smokecraft/cropped/humidor-match-bg.jpg', position: 'center 30%', zoom: 1.85, taper: false },
+    photo: { src: '/assets/smokecraft/cropped/humidor-match-bg.jpg', position: 'center 0%', zoom: 1, taper: false },
     image: '/assets/smokecraft/cigars/corona.jpg',
     hasPhoto: false,
   },
@@ -137,7 +137,7 @@ const FORMATS = [
     bestUseCase: 'Bold relaxation, slow deep sessions',
     experienceLevel: 'Experienced',
     flavorImpact: 'Full & Bold',
-    photo: { src: '/assets/smokecraft/cropped/flavor-dna-bg.jpg', position: 'center 62%', zoom: 1.35, taper: false },
+    photo: { src: '/assets/smokecraft/cropped/flavor-dna-bg.jpg', position: 'left 70%', zoom: 1.6, taper: false },
     image: '/assets/smokecraft/cigars/gordo.jpg',
     hasPhoto: false,
   },
@@ -159,7 +159,7 @@ const FORMATS = [
     bestUseCase: 'Focused tasting, complex blends',
     experienceLevel: 'Experienced',
     flavorImpact: 'Layered & Intense',
-    photo: { src: '/assets/smokecraft/cropped/final-third-bg.jpg', position: 'center 38%', zoom: 1.25, taper: true },
+    photo: { src: '/assets/smokecraft/cropped/final-third-bg.jpg', position: '75% 5%', zoom: 2, taper: true },
     image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
     hasPhoto: false,
   },
@@ -806,23 +806,6 @@ export default function Format() {
         }
       `}</style>
 
-      <div
-        style={{
-          position: 'fixed',
-          top: 12,
-          left: 12,
-          zIndex: 2147483647,
-          background: 'red',
-          color: 'white',
-          fontWeight: 900,
-          fontSize: 18,
-          padding: '10px 14px',
-          border: '3px solid white',
-        }}
-      >
-        FORMAT PHOTO FIX LIVE c6104fd
-      </div>
-
       <SmokeCraftPremiumHeader
         step="Step 5 of 20"
         backTo="/smokecraft/enroll"
@@ -863,20 +846,6 @@ export default function Format() {
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
                       <CigarVisual format={format} />
-                    </span>
-                    <span
-                      style={{
-                        display: 'inline-block',
-                        marginBottom: 4,
-                        padding: '2px 6px',
-                        background: 'red',
-                        color: 'white',
-                        fontWeight: 900,
-                        fontSize: 10,
-                        letterSpacing: '0.04em',
-                      }}
-                    >
-                      CIGARVISUAL CARD LIVE
                     </span>
                     <h2>{format.name}</h2>
                     <span className="format-card__type">{format.shape}</span>
