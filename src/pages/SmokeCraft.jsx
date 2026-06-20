@@ -105,13 +105,6 @@ export default function SmokeCraft() {
   return (
     <div style={{ minHeight: '100dvh', background: 'radial-gradient(ellipse at 80% 0%, rgba(212,175,55,0.1), transparent 50%), linear-gradient(180deg, #0A0705 0%, #050302 50%, #030201 100%)', color: '#F4ECDA', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
 
-      <div style={{ position: 'fixed', top: 12, left: 12, zIndex: 2147483647, background: 'red', color: 'white', fontSize: 18, fontWeight: 900, padding: '10px 14px', border: '3px solid white' }}>
-        LIVE SMOKECRAFT BUILD 668d6599
-      </div>
-      <div style={{ position: 'fixed', top: 60, left: 12, zIndex: 2147483647, background: 'red', color: 'white', fontSize: 14, fontWeight: 900, padding: '6px 10px', border: '3px solid white' }}>
-        SMOKECRAFT JSX ROUTE ACTIVE
-      </div>
-
       {/* ── Top Bar ───────────────────────────────────────────────── */}
       <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', background: 'rgba(10,7,5,0.75)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(212,175,55,0.18)', boxShadow: '0 2px 18px rgba(0,0,0,0.4)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
