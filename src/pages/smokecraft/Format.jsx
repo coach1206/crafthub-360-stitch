@@ -6,53 +6,26 @@ import {
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
-// VITOLA DIAGRAM SYSTEM.
-// Real per-shape cigar photographs (/assets/smokecraft/cigars/*.jpg) do not exist in the repo.
-// Rather than crop a placeholder photo, each cigar shape is drawn live as an SVG silhouette,
-// scaled per-shape by diagram.lengthScale / diagram.ringGaugeScale / diagram.taper. This is the
-// primary visual for every card and the Format Insight panel — it never depends on an image load.
-function VitolaDiagram({ format }) {
-  const { lengthScale, ringGaugeScale, taper } = format.diagram
-  const viewW = 220
-  const viewH = 88
-  const width = 64 + lengthScale * 132
-  const height = 18 + ringGaugeScale * 38
-  const x = (viewW - width) / 2
-  const y = (viewH - height) / 2
-  const cap = height / 2
-  const gradId = `vitola-wrapper-${format.id}`
-  const bandX = x + width * 0.66
-  const bandWidth = Math.max(8, width * 0.06)
-
-  const taperedPath = `M ${x + cap * 1.1} ${y + height / 2}
-    Q ${x + width * 0.3} ${y} ${x + width * 0.58} ${y}
-    L ${x + width - cap} ${y}
-    A ${cap} ${cap} 0 0 1 ${x + width - cap} ${y + height}
-    L ${x + width * 0.58} ${y + height}
-    Q ${x + width * 0.3} ${y + height} ${x + cap * 1.1} ${y + height / 2}
-    Z`
-
+// CIGAR PHOTO VISUAL SYSTEM.
+// Dedicated per-shape product photography (/assets/smokecraft/cigars/*.jpg) does not exist in the
+// repo yet, so each card reuses real lounge/humidor cigar photography already shot for other
+// SmokeCraft screens (see public/assets/smokecraft/cropped/*). Every format gets its own real photo,
+// cropped/scaled/positioned via format.photo so the six cards read as six different cigars, not one
+// shared illustration. Torpedo/Figurado additionally clips the frame to a tapered silhouette.
+function CigarVisual({ format }) {
+  const { src, position, zoom, taper } = format.photo
   return (
-    <div className="vitola-stage">
-      <svg viewBox={`0 0 ${viewW} ${viewH}`} className="vitola-svg" role="img" aria-label={`${format.name} vitola diagram`}>
-        <defs>
-          <linearGradient id={gradId} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#6b4322" />
-            <stop offset="45%" stopColor="#3c2613" />
-            <stop offset="100%" stopColor="#1c1108" />
-          </linearGradient>
-        </defs>
-        <ellipse cx={viewW / 2} cy={viewH / 2} rx={width / 1.55} ry={height * 1.5} fill="rgba(233,193,118,0.12)" />
-        {taper ? (
-          <path d={taperedPath} fill={`url(#${gradId})`} stroke="rgba(233,193,118,0.5)" strokeWidth="1" />
-        ) : (
-          <rect x={x} y={y} width={width} height={height} rx={cap} ry={cap} fill={`url(#${gradId})`} stroke="rgba(233,193,118,0.5)" strokeWidth="1" />
-        )}
-        <rect x={x + width - cap * 0.9} y={y + 2} width={cap * 0.9} height={height - 4} rx={cap * 0.5} fill="rgba(10,6,3,0.65)" />
-        <rect x={bandX} y={y - 2} width={bandWidth} height={height + 4} rx="2" fill="#e9c176" opacity="0.9" />
-        <rect x={bandX} y={y - 2} width={bandWidth} height="6" rx="2" fill="#fff" opacity="0.25" />
-      </svg>
-      <span className="vitola-caption">Vitola diagram · Real photo pending</span>
+    <div className={`cigar-visual${taper ? ' is-tapered' : ''}`}>
+      <div
+        className="cigar-visual__photo"
+        style={{
+          backgroundImage: `url(${src})`,
+          backgroundPosition: position,
+          backgroundSize: `${zoom * 100}% auto`,
+        }}
+      />
+      <div className="cigar-visual__vignette" aria-hidden="true" />
+      <div className="cigar-visual__rim" aria-hidden="true" />
     </div>
   )
 }
@@ -76,7 +49,7 @@ const FORMATS = [
     bestUseCase: 'Everyday smoke, quick relaxation',
     experienceLevel: 'Beginner Friendly',
     flavorImpact: 'Balanced & Approachable',
-    diagram: { lengthScale: 0.32, ringGaugeScale: 0.85, taper: false },
+    photo: { src: '/assets/smokecraft/cropped/scorecard-bg.jpg', position: 'center 32%', zoom: 1.65, taper: false },
     image: '/assets/smokecraft/cigars/robusto.jpg',
     hasPhoto: false,
   },
@@ -98,7 +71,7 @@ const FORMATS = [
     bestUseCase: 'Long pairings, evening unwind',
     experienceLevel: 'Beginner–Intermediate',
     flavorImpact: 'Rich & Evolving',
-    diagram: { lengthScale: 0.62, ringGaugeScale: 0.62, taper: false },
+    photo: { src: '/assets/smokecraft/cropped/cut-toast-light-bg.jpg', position: 'center 48%', zoom: 1.1, taper: false },
     image: '/assets/smokecraft/cigars/toro.jpg',
     hasPhoto: false,
   },
@@ -120,7 +93,7 @@ const FORMATS = [
     bestUseCase: 'Special occasions, slow lounge sessions',
     experienceLevel: 'Intermediate',
     flavorImpact: 'Refined & Cool',
-    diagram: { lengthScale: 0.92, ringGaugeScale: 0.46, taper: false },
+    photo: { src: '/assets/smokecraft/cropped/connections-bg.jpg', position: 'center 42%', zoom: 1, taper: false },
     image: '/assets/smokecraft/cigars/churchill.jpg',
     hasPhoto: false,
   },
@@ -142,7 +115,7 @@ const FORMATS = [
     bestUseCase: 'Quick smoke, casual moments',
     experienceLevel: 'Beginner Friendly',
     flavorImpact: 'Crisp & Light',
-    diagram: { lengthScale: 0.42, ringGaugeScale: 0.4, taper: false },
+    photo: { src: '/assets/smokecraft/cropped/humidor-match-bg.jpg', position: 'center 30%', zoom: 1.85, taper: false },
     image: '/assets/smokecraft/cigars/corona.jpg',
     hasPhoto: false,
   },
@@ -164,7 +137,7 @@ const FORMATS = [
     bestUseCase: 'Bold relaxation, slow deep sessions',
     experienceLevel: 'Experienced',
     flavorImpact: 'Full & Bold',
-    diagram: { lengthScale: 0.55, ringGaugeScale: 1, taper: false },
+    photo: { src: '/assets/smokecraft/cropped/flavor-dna-bg.jpg', position: 'center 62%', zoom: 1.35, taper: false },
     image: '/assets/smokecraft/cigars/gordo.jpg',
     hasPhoto: false,
   },
@@ -186,7 +159,7 @@ const FORMATS = [
     bestUseCase: 'Focused tasting, complex blends',
     experienceLevel: 'Experienced',
     flavorImpact: 'Layered & Intense',
-    diagram: { lengthScale: 0.78, ringGaugeScale: 0.58, taper: true },
+    photo: { src: '/assets/smokecraft/cropped/final-third-bg.jpg', position: 'center 38%', zoom: 1.25, taper: true },
     image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
     hasPhoto: false,
   },
@@ -458,26 +431,42 @@ export default function Format() {
         .format-card.is-selected .format-card__visual {
           box-shadow: inset 0 0 0 1.5px rgba(255,225,151,0.7), inset 0 0 32px rgba(233,193,118,0.28), 0 0 30px rgba(233,193,118,0.32);
         }
-        .vitola-stage {
+        .cigar-visual {
           position: relative;
           width: 100%;
           height: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
+          border-radius: 10px;
+          overflow: hidden;
+          background: #0c0703;
         }
-        .vitola-svg {
-          width: 92%;
-          height: 78%;
+        .cigar-visual__photo {
+          position: absolute;
+          inset: -4%;
+          background-repeat: no-repeat;
+          filter: saturate(1.12) brightness(0.94) contrast(1.1);
+          transition: transform 0.35s ease;
         }
-        .vitola-caption {
-          margin-top: 4px;
-          color: rgba(233,193,118,0.6);
-          font-size: 10px;
-          font-weight: 800;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
+        .format-card:hover .cigar-visual__photo,
+        .format-insight__cigar:hover .cigar-visual__photo {
+          transform: scale(1.04);
+        }
+        .cigar-visual.is-tapered .cigar-visual__photo {
+          clip-path: polygon(6% 50%, 24% 16%, 100% 10%, 100% 90%, 24% 84%);
+        }
+        .cigar-visual__vignette {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(ellipse at 50% 0%, rgba(233,193,118,0.16), transparent 60%),
+            linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.1) 55%, rgba(5,3,2,0.5));
+        }
+        .cigar-visual__rim {
+          position: absolute;
+          inset: 0;
+          border-radius: 10px;
+          pointer-events: none;
+          box-shadow: inset 0 0 0 1.5px rgba(233,193,118,0.4), inset 0 0 24px rgba(233,193,118,0.12);
         }
         .format-missing-note {
           padding: 14px 18px;
@@ -589,7 +578,8 @@ export default function Format() {
           min-height: 310px;
         }
         .format-insight__cigar {
-          min-height: 240px;
+          position: relative;
+          min-height: 280px;
           display: grid;
           place-items: center;
           border-radius: 10px;
@@ -597,6 +587,14 @@ export default function Format() {
           background:
             radial-gradient(circle at center, rgba(233,193,118,0.14), transparent 62%),
             linear-gradient(135deg, rgba(233,193,118,0.06), rgba(0,0,0,0.18));
+          box-shadow: inset 0 0 0 1.5px rgba(233,193,118,0.32);
+        }
+        .format-insight__cigar img {
+          width: 78%;
+          height: 92%;
+          object-fit: contain;
+          object-position: center;
+          filter: drop-shadow(0 18px 30px rgba(0,0,0,0.6));
         }
         .format-insight h2 {
           margin: 0 0 16px;
@@ -847,7 +845,7 @@ export default function Format() {
                     <span className="format-card__number">{String(index + 1).padStart(2, '0')}</span>
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
-                      <VitolaDiagram format={format} />
+                      <CigarVisual format={format} />
                     </span>
                     <h2>{format.name}</h2>
                     <span className="format-card__type">{format.shape}</span>
@@ -901,7 +899,7 @@ export default function Format() {
                 <div className="format-panel__label">Format Insight</div>
                 <div className="format-insight">
                   <div className="format-insight__cigar" aria-hidden="true">
-                    <VitolaDiagram format={insightFormat} />
+                    <img src="/cigar-anatomy.png" alt="" />
                   </div>
                   <div>
                     <h2>{insightFormat.name}</h2>
@@ -966,7 +964,7 @@ export default function Format() {
 
             <section className="format-panel">
               <div className="format-missing-note">
-                <strong>Required real photos pending</strong>
+                <strong>Asset requirements · dedicated photography pending</strong>
                 robusto.jpg, toro.jpg, churchill.jpg, corona.jpg, gordo.jpg, torpedo-figurado.jpg
               </div>
             </section>
