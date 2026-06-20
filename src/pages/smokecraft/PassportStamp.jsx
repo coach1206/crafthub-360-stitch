@@ -47,7 +47,10 @@ const GOLD_TEXT = {
 
 const PARCHMENT = {
   backgroundColor: '#fdfaf3',
-  backgroundImage: 'url("https://www.transparenttextures.com/patterns/natural-paper.png")',
+  backgroundImage:
+    'radial-gradient(circle at 20% 30%, rgba(0,0,0,0.025) 0%, transparent 45%), ' +
+    'radial-gradient(circle at 78% 64%, rgba(0,0,0,0.02) 0%, transparent 40%), ' +
+    'radial-gradient(circle at 50% 90%, rgba(0,0,0,0.018) 0%, transparent 35%)',
   boxShadow: 'inset 0 0 100px rgba(0,0,0,0.05)',
 }
 

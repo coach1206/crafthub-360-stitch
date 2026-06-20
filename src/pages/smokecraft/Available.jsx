@@ -100,16 +100,16 @@ export default function Available() {
 
   return (
     <div className="font-body-md text-body-md select-none bg-background text-on-surface min-h-screen">
-      {/* Parallax Atmospheric Background */}
-      <div
-        className="fixed top-0 left-0 w-full h-full -z-10"
-        style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
-          color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
-        }}
-      >
-        Image pending
+      {/* Atmospheric Background */}
+      <div className="fixed inset-0 -z-10 bg-background overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-10"
+          style={{ backgroundImage: "url('/assets/smokecraft/cropped/request-purchase-bg.jpg')" }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(0deg, rgba(19,19,20,0.95) 0%, rgba(19,19,20,0.6) 50%, rgba(19,19,20,0.95) 100%)' }}
+        />
       </div>
 
       {/* Top Navigation */}
