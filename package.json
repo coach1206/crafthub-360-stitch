@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "start": "npm run build && node server/index.js",
     "server": "node server/index.js",
     "dev:server": "node --watch server/index.js",
     "dev:full": "concurrently -n FRONT,BACK -c cyan,yellow \"npm run dev\" \"npm run dev:server\""
