@@ -11,6 +11,7 @@ import express      from 'express'
 import cors         from 'cors'
 import cookieParser from 'cookie-parser'
 import path         from 'node:path'
+import fs           from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
 import healthRoutes          from './routes/healthRoutes.js'
@@ -120,8 +121,53 @@ app.use('/api/mentor',            mentorRoutes)
 app.use('/api/developer',         developerRoutes)
 app.use('/api/access-requests',   accessRequestsRoutes)
 
+// ── TEMP diagnostic: prove what the live server is actually serving ──
+const EXPECTED_BADGE = 'LIVE SMOKECRAFT BUILD 668d6599'
+
+app.get('/__build-check', (_req, res) => {
+  const distExists = fs.existsSync(CLIENT_DIST)
+  const distIndexPath = path.join(CLIENT_DIST, 'index.html')
+  const distIndexExists = distExists && fs.existsSync(distIndexPath)
+
+  let distIndexContainsBadge = false
+  if (distIndexExists) {
+    distIndexContainsBadge = fs.readFileSync(distIndexPath, 'utf8').includes(EXPECTED_BADGE)
+  }
+
+  let jsFilesChecked = []
+  let distJsContainsBadge = false
+  const assetsDir = path.join(CLIENT_DIST, 'assets')
+  if (distExists && fs.existsSync(assetsDir)) {
+    jsFilesChecked = fs.readdirSync(assetsDir).filter(f => f.endsWith('.js'))
+    distJsContainsBadge = jsFilesChecked.some(f =>
+      fs.readFileSync(path.join(assetsDir, f), 'utf8').includes(EXPECTED_BADGE)
+    )
+  }
+
+  res.json({
+    ok: true,
+    expectedBadge: EXPECTED_BADGE,
+    distPath: CLIENT_DIST,
+    distExists,
+    distIndexExists,
+    distIndexContainsBadge,
+    distJsContainsBadge,
+    jsFilesChecked,
+    timestamp: new Date().toISOString(),
+  })
+})
+
 // ── Frontend static app ──────────────────────────────────────
 app.get('/', (_req, res) => res.redirect(302, '/crafthub'))
+
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/api/')) {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    res.set('Pragma', 'no-cache')
+    res.set('Expires', '0')
+  }
+  next()
+})
 
 app.use(express.static(CLIENT_DIST))
 
