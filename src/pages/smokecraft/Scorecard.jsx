@@ -34,7 +34,7 @@ export default function Scorecard() {
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/smokecraft.jpg')" }} />
+        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/assets/smokecraft/cropped/scorecard-bg.jpg')" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
@@ -70,7 +70,7 @@ export default function Scorecard() {
                   const on = (scores[cat.id] || 0) >= v
                   return (
                     <button key={v} onClick={() => setScore(cat.id, v)}
-                      className="w-9 h-9 rounded-lg border font-label-lg text-label-lg transition-all duration-200 active:scale-90"
+                      className="sc-tactile w-9 h-9 rounded-lg border font-label-lg text-label-lg transition-all duration-200 active:scale-90"
                       style={{ borderColor: on ? '#e9c176' : 'rgba(255,255,255,0.15)', background: on ? 'rgba(233,193,118,0.2)' : 'transparent', color: on ? '#e9c176' : 'rgba(255,255,255,0.4)', fontSize:13 }}>
                       {v}
                     </button>
@@ -83,7 +83,7 @@ export default function Scorecard() {
 
         <div className="flex gap-4">
           <button onClick={handleContinue}
-            className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300"
+            className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
             Passport Stamp <span className="material-symbols-outlined">arrow_forward</span>
           </button>

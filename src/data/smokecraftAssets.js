@@ -4,7 +4,7 @@
 // If a realistic image is missing, render "Image pending" instead of a cartoon fallback.
 
 export const smokeCraftAssets = {
-  goldenBoxHero:    '/assets/smokecraft/golden-box/golden-box-hero.png',
+  goldenBoxHero:    '/assets/smokecraft/cropped/golden-box-hero.jpg',
   shapeBurnFinal:   '/assets/smokecraft/cigars/cigar-anatomy.png',
   smokecraftBg:     '/smokecraft.jpg',
   loungeBg:         '/background-lounge-airy.jpg',

@@ -27,7 +27,7 @@ export default function FinalThird() {
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/smokecraft.jpg')" }} />
+        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/assets/smokecraft/cropped/final-third-bg.jpg')" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
@@ -46,7 +46,7 @@ export default function FinalThird() {
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Flavor Notes</p>
         <div className="flex flex-wrap gap-2 mb-8">
           {NOTES.map(n => { const on = selected.has(n); return (
-            <button key={n} onClick={() => toggleNote(n)} className="px-4 py-2 rounded-full border font-label-lg text-label-lg transition-all duration-200 active:scale-95"
+            <button key={n} onClick={() => toggleNote(n)} className="sc-tactile px-4 py-2 rounded-full border font-label-lg text-label-lg transition-all duration-200 active:scale-95"
               style={{ borderColor: on ? '#e9c176' : 'rgba(255,255,255,0.15)', background: on ? 'rgba(233,193,118,0.12)' : 'transparent', color: on ? '#e9c176' : 'rgba(255,255,255,0.6)' }}>
               {n}
             </button>
@@ -56,7 +56,7 @@ export default function FinalThird() {
         <div className="flex gap-3 mb-12">
           {[1,2,3,4,5].map(v => (
             <button key={v} onClick={() => { triggerHaptic('light'); setRating(v) }}
-              className="w-12 h-12 rounded-full border-2 font-label-lg text-label-lg transition-all duration-200 active:scale-90"
+              className="sc-tactile w-12 h-12 rounded-full border-2 font-label-lg text-label-lg transition-all duration-200 active:scale-90"
               style={{ borderColor: rating >= v ? '#e9c176' : 'rgba(255,255,255,0.2)', background: rating >= v ? 'rgba(233,193,118,0.15)' : 'transparent', color: rating >= v ? '#e9c176' : 'rgba(255,255,255,0.4)' }}>
               {v}
             </button>
@@ -64,7 +64,7 @@ export default function FinalThird() {
         </div>
         <div className="flex gap-4">
           <button onClick={handleContinue}
-            className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300"
+            className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
             Scorecard <span className="material-symbols-outlined">arrow_forward</span>
           </button>

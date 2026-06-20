@@ -34,7 +34,7 @@ export default function Connections() {
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/background-lounge-airy.jpg')" }} />
+        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/assets/smokecraft/cropped/connections-bg.jpg')" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
@@ -55,7 +55,7 @@ export default function Connections() {
             const on = done.has(a.id)
             return (
               <button key={a.id} type="button" onClick={() => toggle(a.id)}
-                className="flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
+                className="sc-tactile flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
                 style={{ padding:'20px 24px', background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)' }}>
                 <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300" style={{ background: on ? 'rgba(233,193,118,0.15)' : 'rgba(255,255,255,0.05)' }}>
                   <span className="material-symbols-outlined text-primary" style={{ fontSize:22, ...(on ? FILL1 : {}) }}>{a.icon}</span>
@@ -73,7 +73,7 @@ export default function Connections() {
         </div>
         <div className="flex gap-4">
           <button onClick={handleContinue}
-            className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300"
+            className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
             Continue <span className="material-symbols-outlined">arrow_forward</span>
           </button>
