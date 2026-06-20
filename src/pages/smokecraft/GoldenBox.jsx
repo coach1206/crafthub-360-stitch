@@ -99,7 +99,7 @@ export default function GoldenBox() {
             <img
               alt="Member"
               className="w-full h-full object-cover"
-              src="/passport.jpg"
+              src="/assets/smokecraft/cropped/passport-cover.jpg"
             />
           </div>
         </div>

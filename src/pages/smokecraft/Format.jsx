@@ -223,7 +223,7 @@ export default function Format() {
           background: #050302;
           position: relative;
           overflow-x: hidden;
-          padding-bottom: 116px;
+          padding-bottom: 160px;
         }
         .smokecraft-format-page::before {
           content: "";
@@ -253,9 +253,9 @@ export default function Format() {
         .format-shell {
           position: relative;
           z-index: 2;
-          max-width: 1280px;
+          max-width: 1320px;
           margin: 0 auto;
-          padding: 102px 24px 26px;
+          padding: 104px 28px 40px;
         }
         .format-progress {
           display: grid;
@@ -312,27 +312,32 @@ export default function Format() {
         }
         .format-card-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 12px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 18px;
         }
         .format-card {
           position: relative;
-          min-height: 214px;
-          padding: 16px;
-          border-radius: 10px;
-          border: 1px solid rgba(233,193,118,0.24);
-          background: linear-gradient(135deg, rgba(17,12,7,0.9), rgba(7,5,3,0.86));
+          min-height: 296px;
+          padding: 22px;
+          border-radius: 16px;
+          border: 1px solid rgba(233,193,118,0.26);
+          background:
+            radial-gradient(ellipse at 50% 0%, rgba(233,193,118,0.07), transparent 55%),
+            linear-gradient(135deg, rgba(34,23,12,0.92), rgba(9,6,3,0.92));
           color: #f7efe2;
           text-align: left;
           cursor: pointer;
           overflow: hidden;
-          box-shadow: 0 16px 36px rgba(0,0,0,0.34);
+          box-shadow: 0 18px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,236,178,0.06);
           transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
-        .format-card:hover,
+        .format-card:hover {
+          transform: translateY(-2px);
+          border-color: rgba(255,225,151,0.6);
+        }
         .format-card.is-selected {
-          border-color: rgba(255,225,151,0.9);
-          box-shadow: 0 0 0 1px rgba(255,225,151,0.26), 0 0 32px rgba(233,193,118,0.28), 0 22px 48px rgba(0,0,0,0.42);
+          border-color: rgba(255,225,151,0.95);
+          box-shadow: 0 0 0 1.5px rgba(255,225,151,0.4), 0 0 46px rgba(233,193,118,0.38), 0 26px 56px rgba(0,0,0,0.5), inset 0 0 30px rgba(233,193,118,0.08);
         }
         .format-card:active {
           transform: scale(0.985);
@@ -375,21 +380,25 @@ export default function Format() {
           transform: scale(1);
         }
         .format-card__visual {
-          height: 74px;
+          height: 130px;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 12px 0 10px;
+          margin: 16px 0 14px;
+          border-radius: 12px;
+          background:
+            radial-gradient(ellipse at center, rgba(233,193,118,0.12), transparent 65%),
+            linear-gradient(135deg, rgba(0,0,0,0.22), rgba(233,193,118,0.04));
         }
         .format-card h2 {
           margin: 0 0 6px;
           font-family: "Playfair Display", Georgia, serif;
           color: #f7efe2;
-          font-size: 25px;
+          font-size: 27px;
           line-height: 1.05;
         }
         .format-card p {
-          margin: 0 0 11px;
+          margin: 0 0 12px;
           color: rgba(247,239,226,0.76);
           font-size: 15px;
           line-height: 1.35;
@@ -502,46 +511,54 @@ export default function Format() {
         }
         .session-list {
           display: grid;
-          gap: 8px;
+          gap: 12px;
         }
         .session-row {
-          min-height: 64px;
+          min-height: 84px;
           display: grid;
-          grid-template-columns: 44px 1fr auto;
-          gap: 10px;
+          grid-template-columns: 52px 1fr;
+          gap: 14px;
           align-items: center;
-          padding: 10px;
-          border: 1px solid rgba(233,193,118,0.14);
-          border-radius: 10px;
-          background: rgba(255,255,255,0.03);
+          padding: 16px;
+          border: 1px solid rgba(233,193,118,0.18);
+          border-radius: 14px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18));
+          box-shadow: inset 0 1px 0 rgba(255,236,178,0.05);
         }
         .session-row.is-active {
-          border-color: rgba(255,225,151,0.72);
-          background: rgba(233,193,118,0.12);
-          box-shadow: 0 0 22px rgba(233,193,118,0.16);
+          border-color: rgba(255,225,151,0.8);
+          background: linear-gradient(135deg, rgba(233,193,118,0.16), rgba(233,193,118,0.05));
+          box-shadow: 0 0 26px rgba(233,193,118,0.2), inset 0 0 0 1px rgba(255,225,151,0.2);
         }
         .session-row__icon {
-          width: 38px;
-          height: 38px;
+          width: 46px;
+          height: 46px;
           border-radius: 50%;
           display: grid;
           place-items: center;
           color: #e9c176;
-          border: 1px solid rgba(233,193,118,0.32);
+          background: radial-gradient(circle, rgba(233,193,118,0.14), transparent 70%);
+          border: 1px solid rgba(233,193,118,0.4);
         }
         .session-row strong {
           display: block;
           color: #e9c176;
           text-transform: uppercase;
           font-size: 14px;
-          letter-spacing: 0.08em;
+          letter-spacing: 0.1em;
+          margin-bottom: 2px;
         }
-        .session-row span,
-        .session-row p {
+        .session-row span {
           margin: 0;
-          color: rgba(247,239,226,0.72);
-          font-size: 14px;
-          line-height: 1.25;
+          color: rgba(247,239,226,0.55);
+          font-size: 12px;
+          letter-spacing: 0.04em;
+        }
+        .session-row p {
+          margin: 4px 0 0;
+          color: rgba(247,239,226,0.74);
+          font-size: 13px;
+          line-height: 1.35;
         }
         .format-tip {
           display: grid;
@@ -702,7 +719,7 @@ export default function Format() {
                     <span className="format-card__number">{String(index + 1).padStart(2, '0')}</span>
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
-                      <CigarImage image={format.image} name={format.name} />
+                      <CigarImage image={format.image} name={format.name} height="118px" />
                     </span>
                     <h2>{format.name}</h2>
                     <p>{format.description}</p>
@@ -771,8 +788,8 @@ export default function Format() {
                       <div>
                         <strong>{type.label}</strong>
                         <span>{type.range}</span>
+                        <p>{type.copy}</p>
                       </div>
-                      <p>{type.copy}</p>
                     </article>
                   ))}
                 </div>

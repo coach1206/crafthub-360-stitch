@@ -103,7 +103,27 @@ export default function SmokeCraft() {
   ]
 
   return (
-    <div style={{ minHeight: '100dvh', background: 'radial-gradient(ellipse at 80% 0%, rgba(212,175,55,0.1), transparent 50%), linear-gradient(180deg, #0A0705 0%, #050302 50%, #030201 100%)', color: '#F4ECDA', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
+    <div style={{ minHeight: '100dvh', background: '#050302', color: '#F4ECDA', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
+
+      {/* ── Cinematic Lounge Background ──────────────────────────── */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden' }} aria-hidden="true">
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: "url('/assets/smokecraft/cropped/management-sync-bg.jpg')",
+          backgroundSize: 'cover', backgroundPosition: 'center 30%',
+          filter: 'brightness(0.5) saturate(1.15) contrast(1.08)',
+          transform: 'scale(1.04)',
+        }} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'radial-gradient(ellipse at 78% 8%, rgba(212,175,55,0.16), transparent 48%), radial-gradient(ellipse at 10% 92%, rgba(91,143,201,0.12), transparent 46%), linear-gradient(180deg, rgba(5,3,2,0.86) 0%, rgba(5,3,2,0.55) 38%, rgba(5,3,2,0.72) 68%, rgba(5,3,2,0.95) 100%)',
+        }} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(120deg, transparent 0%, rgba(255,236,178,0.05) 40%, transparent 60%)',
+          mixBlendMode: 'screen',
+        }} />
+      </div>
 
       {/* ── Top Bar ───────────────────────────────────────────────── */}
       <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', background: 'rgba(10,7,5,0.75)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(212,175,55,0.18)', boxShadow: '0 2px 18px rgba(0,0,0,0.4)' }}>
@@ -122,8 +142,8 @@ export default function SmokeCraft() {
       </header>
 
       {/* ── Main Content ──────────────────────────────────────────── */}
-      <main style={{ position: 'relative', zIndex: 10, paddingTop: 100, paddingBottom: 140, maxWidth: 1280, margin: '0 auto', padding: '100px 32px 140px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 48, alignItems: 'center' }} className="smokecraft-grid">
+      <main style={{ position: 'relative', zIndex: 10, maxWidth: 1320, margin: '0 auto', padding: '124px 32px 140px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 64, alignItems: 'center' }} className="smokecraft-grid">
 
           {/* Left Column */}
           <div className="sc-fade-in" style={{ gridColumn: 'span 1' }}>
@@ -204,26 +224,26 @@ export default function SmokeCraft() {
           </div>
 
           {/* Right Column — Cards */}
-          <div className="sc-fade-in" style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <div className="sc-fade-in" style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: 22 }}>
 
             {/* 360 Passport Card */}
             <div
               className="sc-card-tactile"
               onClick={() => navigate('/passport')}
-              style={{ position: 'relative', overflow: 'hidden', borderRadius: 18, border: '1px solid rgba(212,175,55,0.22)', background: 'rgba(18,12,6,0.82)', cursor: 'pointer', boxShadow: '0 4px 18px rgba(0,0,0,0.4)' }}
+              style={{ position: 'relative', overflow: 'hidden', borderRadius: 20, border: '1px solid rgba(212,175,55,0.28)', background: 'linear-gradient(150deg, rgba(36,24,12,0.92), rgba(14,9,5,0.94))', cursor: 'pointer', boxShadow: '0 14px 38px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,236,178,0.06)' }}
             >
               <div style={{ display: 'flex', gap: 0 }}>
                 {/* Passport book visual */}
-                <div style={{ width: 160, flexShrink: 0, background: 'radial-gradient(circle at 50% 30%, rgba(212,175,55,0.18), transparent 45%), linear-gradient(160deg, #3D2B1A, #1E1208)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 160, position: 'relative', overflow: 'hidden' }}>
+                <div style={{ width: 184, flexShrink: 0, background: 'radial-gradient(circle at 50% 30%, rgba(212,175,55,0.22), transparent 45%), linear-gradient(160deg, #3D2B1A, #1E1208)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 188, position: 'relative', overflow: 'hidden' }}>
                   <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg,rgba(255,255,255,0.018) 0px,rgba(255,255,255,0.018) 1px,transparent 1px,transparent 8px)', pointerEvents: 'none' }} />
-                  <div style={{ position: 'absolute', width: 142, height: 142, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.08)', boxShadow: 'inset 0 0 34px rgba(212,175,55,0.07)' }} />
+                  <div style={{ position: 'absolute', width: 162, height: 162, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.1)', boxShadow: 'inset 0 0 34px rgba(212,175,55,0.09)' }} />
                   <PassportCoverVisual />
                 </div>
 
                 {/* Card text */}
-                <div style={{ flex: 1, padding: '24px 24px 20px' }}>
+                <div style={{ flex: 1, padding: '26px 26px 22px' }}>
                   <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#E6C76A', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 10 }}>360 Passport</div>
-                  <p style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.35, color: '#F4ECDA', marginBottom: 16 }}>
+                  <p style={{ fontSize: 19, fontWeight: 700, lineHeight: 1.35, color: '#F4ECDA', marginBottom: 16 }}>
                     Build your passport, collect stamps, and track your journey.
                   </p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#E6C76A', cursor: 'pointer' }}>
@@ -231,9 +251,9 @@ export default function SmokeCraft() {
                     <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>View Passport</span>
                     <span className="material-symbols-outlined" style={{ fontSize: 16 }}>chevron_right</span>
                   </div>
-                  <div style={{ display: 'flex', gap: 6, marginTop: 14 }}>
+                  <div style={{ display: 'flex', gap: 6, marginTop: 16 }}>
                     {Array.from({ length: 4 }, (_, i) => (
-                      <div key={i} style={{ width: 26, height: 26, borderRadius: '50%', border: `1px solid ${i < (session.smokecraftStamps?.length ?? 0) ? 'rgba(212,175,55,0.55)' : 'rgba(212,175,55,0.18)'}`, background: i < (session.smokecraftStamps?.length ?? 0) ? 'rgba(212,175,55,0.15)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: i < (session.smokecraftStamps?.length ?? 0) ? '#E6C76A' : 'rgba(244,236,218,0.4)' }}>
+                      <div key={i} style={{ width: 28, height: 28, borderRadius: '50%', border: `1px solid ${i < (session.smokecraftStamps?.length ?? 0) ? 'rgba(212,175,55,0.6)' : 'rgba(212,175,55,0.2)'}`, background: i < (session.smokecraftStamps?.length ?? 0) ? 'rgba(212,175,55,0.18)' : 'transparent', boxShadow: i < (session.smokecraftStamps?.length ?? 0) ? '0 0 12px rgba(212,175,55,0.25)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: i < (session.smokecraftStamps?.length ?? 0) ? '#E6C76A' : 'rgba(244,236,218,0.4)' }}>
                         {String(i + 1).padStart(2, '0')}
                       </div>
                     ))}
@@ -246,22 +266,22 @@ export default function SmokeCraft() {
             <div
               className="sc-card-tactile"
               onClick={() => navigate('/smokecraft/pairing')}
-              style={{ position: 'relative', overflow: 'hidden', borderRadius: 18, border: '1px solid rgba(212,175,55,0.22)', background: 'rgba(18,12,6,0.82)', cursor: 'pointer', boxShadow: '0 4px 18px rgba(0,0,0,0.4)' }}
+              style={{ position: 'relative', overflow: 'hidden', borderRadius: 20, border: '1px solid rgba(212,175,55,0.28)', background: 'linear-gradient(150deg, rgba(36,24,12,0.92), rgba(14,9,5,0.94))', cursor: 'pointer', boxShadow: '0 14px 38px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,236,178,0.06)' }}
             >
-              <div style={{ padding: '20px 24px' }}>
-                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#E6C76A', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 14 }}>Recommended Pairing</div>
-                <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-                  <div style={{ width: 100, height: 80, borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.2)', flexShrink: 0, boxShadow: '0 2px 10px rgba(0,0,0,0.35)' }}>
+              <div style={{ padding: '24px 26px' }}>
+                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#E6C76A', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>Recommended Pairing</div>
+                <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+                  <div style={{ width: 168, height: 152, borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.28)', flexShrink: 0, boxShadow: '0 8px 22px rgba(0,0,0,0.45)' }}>
                     <img
                       src="/assets/smokecraft/cropped/golden-box-hero.jpg"
                       alt="Padrón 1964"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <h4 style={{ fontFamily: '"Playfair Display",serif', fontSize: 18, fontWeight: 700, color: '#F4ECDA', marginBottom: 4, lineHeight: 1.2 }}>Padrón 1964 Anniversary</h4>
-                    <p style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: 'rgba(244,236,218,0.5)', letterSpacing: '0.08em', marginBottom: 8 }}>Maduro · Nicaragua</p>
-                    <p style={{ fontSize: 12, color: 'rgba(244,236,218,0.6)', lineHeight: 1.5, marginBottom: 14 }}>Rich cocoa, espresso, and dark fruit with a long, velvety finish.</p>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h4 style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#F4ECDA', marginBottom: 5, lineHeight: 1.2 }}>Padrón 1964 Anniversary</h4>
+                    <p style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: 'rgba(244,236,218,0.5)', letterSpacing: '0.08em', marginBottom: 10 }}>Maduro · Nicaragua</p>
+                    <p style={{ fontSize: 13, color: 'rgba(244,236,218,0.62)', lineHeight: 1.55, marginBottom: 16 }}>Rich cocoa, espresso, and dark fruit with a long, velvety finish.</p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#E6C76A' }}>
                       <span className="material-symbols-outlined" style={{ fontSize: 16 }}>smoking_rooms</span>
                       <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>View Pairing</span>
@@ -276,9 +296,9 @@ export default function SmokeCraft() {
         </div>
       </main>
 
-      {/* ── Bottom Nav Bar ─────────────────────────────────────────── */}
-      <nav className="smokecraft-bottom-nav" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, height: 100, display: 'flex', alignItems: 'center', background: 'rgba(10,7,5,0.92)', backdropFilter: 'blur(24px)', borderTop: '1px solid rgba(212,175,55,0.18)', boxShadow: '0 -2px 18px rgba(0,0,0,0.4)' }}>
-        {bottomNav.map((item, i) => (
+      {/* ── Bottom Control Dock ───────────────────────────────────── */}
+      <nav className="smokecraft-bottom-nav" style={{ position: 'fixed', bottom: 16, left: 16, right: 16, zIndex: 50, height: 84, display: 'flex', alignItems: 'center', gap: 8, padding: '0 8px', background: 'rgba(20,14,8,0.72)', backdropFilter: 'blur(28px)', WebkitBackdropFilter: 'blur(28px)', border: '1px solid rgba(212,175,55,0.22)', borderRadius: 20, boxShadow: '0 12px 36px rgba(0,0,0,0.5)' }}>
+        {bottomNav.map(item => (
           <button
             key={item.label}
             className="smokecraft-bottom-nav-item sc-tactile"
@@ -289,29 +309,24 @@ export default function SmokeCraft() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 16,
-              background: item.active ? 'rgba(212,175,55,0.1)' : 'transparent',
+              gap: 14,
+              background: item.active ? 'rgba(212,175,55,0.14)' : 'transparent',
               border: 'none',
-              borderRight: i < bottomNav.length - 1 ? '1px solid rgba(212,175,55,0.1)' : 'none',
-              borderTop: item.active ? '2px solid rgba(212,175,55,0.55)' : '2px solid transparent',
+              borderRadius: 14,
               cursor: 'pointer',
-              padding: '0 20px',
+              padding: '0 16px',
+              transition: 'background 0.2s ease',
             }}
           >
             {/* Icon */}
-            <div style={{ width: 44, height: 44, borderRadius: '50%', border: `1px solid ${item.active ? 'rgba(212,175,55,0.45)' : 'rgba(212,175,55,0.18)'}`, background: item.active ? 'rgba(212,175,55,0.16)' : 'rgba(212,175,55,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              {item.iconType === 'material'
-                ? <span className="material-symbols-outlined" style={{ fontSize: 22, color: item.active ? '#E6C76A' : 'rgba(244,236,218,0.5)' }}>{item.icon}</span>
-                : <img src={item.icon} alt="" style={{ width: 22, height: 22, objectFit: 'cover', borderRadius: '50%', filter: item.active ? 'none' : 'grayscale(0.4)' }} />
-              }
+            <div style={{ width: 40, height: 40, borderRadius: '50%', border: `1px solid ${item.active ? 'rgba(212,175,55,0.5)' : 'rgba(212,175,55,0.16)'}`, background: item.active ? 'rgba(212,175,55,0.18)' : 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 20, color: item.active ? '#E6C76A' : 'rgba(244,236,218,0.5)' }}>{item.icon}</span>
             </div>
             {/* Label */}
             <div className="smokecraft-bottom-nav-copy" style={{ textAlign: 'left', minWidth: 0 }}>
-              <div className="smokecraft-bottom-nav-label" style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 900, letterSpacing: '0.18em', textTransform: 'uppercase', color: item.active ? '#E6C76A' : 'rgba(244,236,218,0.55)', marginBottom: 3, whiteSpace: 'nowrap' }}>{item.label}</div>
-              <div className="smokecraft-bottom-nav-sub" style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 11, color: item.active ? 'rgba(244,236,218,0.55)' : 'rgba(244,236,218,0.35)', whiteSpace: 'nowrap' }}>{item.sub}</div>
+              <div className="smokecraft-bottom-nav-label" style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, fontWeight: 900, letterSpacing: '0.16em', textTransform: 'uppercase', color: item.active ? '#E6C76A' : 'rgba(244,236,218,0.55)', marginBottom: 2, whiteSpace: 'nowrap' }}>{item.label}</div>
+              <div className="smokecraft-bottom-nav-sub" style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 10, color: item.active ? 'rgba(244,236,218,0.55)' : 'rgba(244,236,218,0.35)', whiteSpace: 'nowrap' }}>{item.sub}</div>
             </div>
-            {/* Arrow */}
-            <span className="material-symbols-outlined smokecraft-bottom-nav-arrow" style={{ fontSize: 16, color: item.active ? '#E6C76A' : 'rgba(244,236,218,0.35)', marginLeft: 4, flexShrink: 0 }}>chevron_right</span>
           </button>
         ))}
       </nav>
@@ -737,7 +752,10 @@ export default function SmokeCraft() {
         }
         @media (max-width: 760px) {
           .smokecraft-bottom-nav {
-            height: 82px !important;
+            height: 72px !important;
+            bottom: 10px !important;
+            left: 10px !important;
+            right: 10px !important;
           }
           .smokecraft-bottom-nav-item {
             flex-direction: column !important;
@@ -751,8 +769,7 @@ export default function SmokeCraft() {
             font-size: 8px !important;
             letter-spacing: 0.08em !important;
           }
-          .smokecraft-bottom-nav-sub,
-          .smokecraft-bottom-nav-arrow {
+          .smokecraft-bottom-nav-sub {
             display: none !important;
           }
         }

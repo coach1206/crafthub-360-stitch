@@ -762,7 +762,7 @@ export default function Leaves() {
         <div className="leaf-header__actions">
           <button className="leaf-lounge" onClick={() => navigate('/grand-lounge-ranking')}>Grand Lounge</button>
           <button className="leaf-avatar" onClick={() => navigate('/passport')} aria-label="Open passport">
-            <img src="/passport.jpg" alt="" />
+            <img src="/assets/smokecraft/cropped/passport-cover.jpg" alt="" />
           </button>
         </div>
       </header>
