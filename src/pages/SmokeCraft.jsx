@@ -116,7 +116,7 @@ export default function SmokeCraft() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Grand Lounge</span>
           <button className="sc-tactile" onClick={() => navigate('/')} style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.35)', overflow: 'hidden', cursor: 'pointer', background: 'rgba(212,175,55,0.08)' }}>
-            <img src="/passport.jpg" alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="/assets/smokecraft/cropped/passport-cover.jpg" alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </button>
         </div>
       </header>
@@ -253,7 +253,7 @@ export default function SmokeCraft() {
                 <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
                   <div style={{ width: 100, height: 80, borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.2)', flexShrink: 0, boxShadow: '0 2px 10px rgba(0,0,0,0.35)' }}>
                     <img
-                      src="/smokecraft.jpg"
+                      src="/assets/smokecraft/cropped/golden-box-hero.jpg"
                       alt="Padrón 1964"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
@@ -347,28 +347,28 @@ export default function SmokeCraft() {
                 num: '01',
                 title: 'Enroll & Discover',
                 desc: 'Answer a few guided questions about your palate. We build your personal cigar profile from your preferences.',
-                image: '/passport.jpg',
+                image: '/assets/smokecraft/cropped/passport-cover.jpg',
                 icon: 'assignment',
               },
               {
                 num: '02',
                 title: 'Learn the Craft',
                 desc: 'Explore origins, tobacco leaves, vitola shapes, and the art of blending through interactive modules.',
-                image: '/smokecraft.jpg',
+                image: '/assets/smokecraft/cropped/cut-toast-light-bg.jpg',
                 icon: 'school',
               },
               {
                 num: '03',
                 title: 'Earn Passport Stamps',
                 desc: 'Complete each chapter to stamp your 360 Passport. Stamps unlock exclusive pairings and member benefits.',
-                image: '/crafthub-gold.jpg',
+                image: '/assets/smokecraft/cropped/passport-stamp-bg.jpg',
                 icon: 'workspace_premium',
               },
               {
                 num: '04',
                 title: 'Unlock Your Pairing',
                 desc: 'Your profile generates a personalized cigar and spirit pairing, curated to your flavour DNA.',
-                image: '/background-lounge-airy.jpg',
+                image: '/assets/smokecraft/cropped/management-sync-bg.jpg',
                 icon: 'local_bar',
               },
             ].map(step => (
@@ -431,7 +431,7 @@ export default function SmokeCraft() {
           color: #f4ead7;
           background:
             linear-gradient(180deg, rgba(16,14,13,0.96), rgba(8,5,3,0.98)),
-            url('/background-lounge-airy.jpg');
+            url('/assets/smokecraft/cropped/management-sync-bg.jpg');
           background-size: cover;
           background-position: center;
           box-shadow:
@@ -757,6 +757,10 @@ export default function SmokeCraft() {
           }
         }
       `}</style>
+
+      <div style={{ position: 'fixed', bottom: 8, left: 8, zIndex: 9999, fontSize: 10, color: 'rgba(255,255,255,0.6)', background: 'rgba(0,0,0,0.6)', padding: '2px 6px', borderRadius: 4, pointerEvents: 'none' }}>
+        LIVE SMOKECRAFT BUILD 668d6599
+      </div>
     </div>
   )
 }
