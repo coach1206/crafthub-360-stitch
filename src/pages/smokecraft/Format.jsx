@@ -806,6 +806,23 @@ export default function Format() {
         }
       `}</style>
 
+      <div
+        style={{
+          position: 'fixed',
+          top: 12,
+          left: 12,
+          zIndex: 2147483647,
+          background: 'red',
+          color: 'white',
+          fontWeight: 900,
+          fontSize: 18,
+          padding: '10px 14px',
+          border: '3px solid white',
+        }}
+      >
+        FORMAT PHOTO FIX LIVE c6104fd
+      </div>
+
       <SmokeCraftPremiumHeader
         step="Step 5 of 20"
         backTo="/smokecraft/enroll"
@@ -846,6 +863,20 @@ export default function Format() {
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
                       <CigarVisual format={format} />
+                    </span>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        marginBottom: 4,
+                        padding: '2px 6px',
+                        background: 'red',
+                        color: 'white',
+                        fontWeight: 900,
+                        fontSize: 10,
+                        letterSpacing: '0.04em',
+                      }}
+                    >
+                      CIGARVISUAL CARD LIVE
                     </span>
                     <h2>{format.name}</h2>
                     <span className="format-card__type">{format.shape}</span>
