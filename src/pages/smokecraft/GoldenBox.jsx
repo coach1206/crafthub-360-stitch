@@ -27,7 +27,7 @@ function GoldenBoxHeroImage() {
         src={smokeCraftAssets.goldenBoxHero}
         alt="Golden Box"
         onError={() => setFailed(true)}
-        style={{ maxWidth: 480, width: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
+        style={{ maxWidth: 620, width: '100%', height: 'auto', display: 'block', margin: '0 auto', borderRadius: 16 }}
       />
     )
   }
