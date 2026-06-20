@@ -6,7 +6,7 @@
  * Graceful update: shows new version on next navigation.
  */
 
-const CACHE_NAME    = 'novee-os-v1'
+const CACHE_NAME    = 'novee-os-v2'
 const OFFLINE_URL   = '/offline.html'
 
 // Assets to pre-cache on install
