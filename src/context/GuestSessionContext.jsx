@@ -269,9 +269,15 @@ export function GuestSessionProvider({ children }) {
 
   /**
    * Records how the guest is obtaining their cigar (request from humidor vs.
-   * already has one). When the choice is HUMIDOR_REQUEST, also prepares a
-   * pending pos3 signal for the next phase — this does NOT create a real POS
-   * ticket or notify staff; it only stages the data POS 3 / E.A.T. will need.
+   * already has one).
+   *
+   * HUMIDOR_REQUEST stages a POS 3 pending handoff and an E.A.T. staff event,
+   * and writes both to the central smokeCraft.eventLog. This is local/
+   * session-backed only — no real POS ticket is created and no staff member
+   * is actually notified by this call; "pending" + "staffActionRequired" are
+   * the honest state until a real integration consumes these signals.
+   *
+   * GUEST_HAS_CIGAR creates no POS/E.A.T. signals — only a confirmed log entry.
    */
   const setRequestPurchaseChoice = useCallback((choice) => {
     update(prev => {
@@ -282,6 +288,8 @@ export function GuestSessionProvider({ children }) {
         actionType: choice.actionType,
         timestamp: now,
       }
+      const existingLog = prev.smokeCraft?.eventLog || []
+
       const next = {
         ...prev,
         smokeCraft: {
@@ -289,19 +297,55 @@ export function GuestSessionProvider({ children }) {
           requestPurchaseChoice,
         },
       }
+
       if (choice.actionType === 'HUMIDOR_REQUEST') {
+        const pos3Handoff = {
+          eventType:  'POS_HANDOFF_CREATED',
+          actionType: 'HUMIDOR_REQUEST',
+          status:     'pending',
+          userId:     prev.guestId || prev.profile?.email || null,
+          sessionId:  prev.sessionId || null,
+          venueId:    prev.venueId || null,
+          tableId:    prev.pos3?.tableNumber || null,
+          productId:  prev.smokeCraft?.selectedFormat?.id || null,
+          quantity:   1,
+          timestamp:  now,
+        }
+        const eatEvent = {
+          eventType:           'EAT_EVENT_CREATED',
+          actionType:          'CIGAR_REQUESTED',
+          status:              'pending',
+          venueId:             prev.venueId || null,
+          tableId:             prev.pos3?.tableNumber || null,
+          userId:              prev.guestId || prev.profile?.email || null,
+          sessionId:           prev.sessionId || null,
+          managerAlert:        true,
+          staffActionRequired: true,
+          timestamp:           now,
+        }
+
         next.pos3 = {
           ...prev.pos3,
-          pendingHumidorRequest: {
-            sessionId: prev.sessionId || null,
-            venueId: prev.venueId || null,
-            tableId: prev.pos3?.tableNumber || null,
-            actionType: 'HUMIDOR_REQUEST',
-            status: 'pending',
-            timestamp: now,
-          },
+          pendingHumidorRequest: pos3Handoff,
         }
+        next.eatCommand = {
+          ...prev.eatCommand,
+          pendingStaffEvent: eatEvent,
+        }
+        next.smokeCraft.eventLog = [...existingLog, pos3Handoff, eatEvent].slice(-50)
+      } else {
+        next.smokeCraft.eventLog = [
+          ...existingLog,
+          {
+            eventType:  'CIGAR_PROVIDED_BY_GUEST',
+            actionType: 'GUEST_HAS_CIGAR',
+            status:     'confirmed',
+            sessionId:  prev.sessionId || null,
+            timestamp:  now,
+          },
+        ].slice(-50)
       }
+
       return next
     })
   }, [update])

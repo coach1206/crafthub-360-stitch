@@ -12,7 +12,7 @@ const OPTIONS = [
 
 export default function RequestPurchase() {
   const navigate = useNavigate()
-  const { completeStep, addXP, setRequestPurchaseChoice } = useGuestSession()
+  const { completeStep, addXP, setRequestPurchaseChoice, syncPos3Activity, syncEATActivity } = useGuestSession()
   const [selected, setSelected] = useState(null)
   const [done, setDone] = useState(false)
 
@@ -23,6 +23,10 @@ export default function RequestPurchase() {
     setDone(true)
     triggerHaptic('medium')
     setRequestPurchaseChoice(choice)
+    if (choice.actionType === 'HUMIDOR_REQUEST') {
+      syncPos3Activity()
+      syncEATActivity()
+    }
     completeStep('request-purchase')
     addXP(25)
     navigate('/smokecraft/cut-toast-light')
