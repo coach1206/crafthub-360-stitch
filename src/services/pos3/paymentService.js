@@ -15,8 +15,9 @@ export function calcTotals(ticket, tipAmount = 0) {
   const taxableSubtotal = items.reduce((s, i) => s + (i.comped ? 0 : (i.taxable !== false ? i.price * i.qty : 0)), 0)
   const tax = taxableSubtotal * TAX_RATE
   const tip = Number(tipAmount) || 0
-  const total = subtotal + tax + tip
-  return { subtotal, tax, tip, total }
+  const serviceFee = Number(ticket?.serviceFee) || 0
+  const total = subtotal + tax + tip + serviceFee
+  return { subtotal, tax, tip, serviceFee, total }
 }
 
 export function startPayment(ticketId, method) {

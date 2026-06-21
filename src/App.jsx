@@ -22,6 +22,11 @@ import POS3Tables   from './pages/pos3/POS3Tables.jsx'
 import POS3Orders   from './pages/pos3/POS3Orders.jsx'
 import POS3Checkout from './pages/pos3/POS3Checkout.jsx'
 import POS3Settings from './pages/pos3/POS3Settings.jsx'
+import KitchenDisplay from './pages/pos3/KitchenDisplay.jsx'
+import BarDisplay from './pages/pos3/BarDisplay.jsx'
+import HumidorControl from './pages/pos3/HumidorControl.jsx'
+import InventoryControl from './pages/pos3/InventoryControl.jsx'
+import POSIntegrationHub from './pages/pos3/POSIntegrationHub.jsx'
 
 // ── NEW E.A.T. management system (/eat/*) ─────────────────────
 import EATCommandHub from './pages/eat/EATCommandHub.jsx'
@@ -38,6 +43,7 @@ import EATData from './pages/eat/EATData.jsx'
 import EATReports from './pages/eat/EATReports.jsx'
 import EATDeviceMode from './pages/eat/EATDeviceMode.jsx'
 import EATSettings from './pages/eat/EATSettings.jsx'
+import EATOperations from './pages/eat/EATOperations.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -428,6 +434,11 @@ export default function App() {
                 <Route path="tables"    element={<POS3Tables />} />
                 <Route path="orders"    element={<POS3Orders />} />
                 <Route path="checkout"  element={<POS3Checkout />} />
+                <Route path="kitchen"   element={<KitchenDisplay />} />
+                <Route path="bar"       element={<BarDisplay />} />
+                <Route path="humidor"   element={<HumidorControl />} />
+                <Route path="inventory" element={<InventoryControl />} />
+                <Route path="integrations" element={<POSIntegrationHub />} />
                 <Route path="settings"  element={<POS3Settings />} />
               </Route>
 
@@ -435,6 +446,7 @@ export default function App() {
               <Route path="eat">
                 <Route index              element={<EATCommandHub />} />
                 <Route path="pos-control" element={<EATPosControl />} />
+                <Route path="operations"  element={<EATOperations />} />
                 <Route path="inventory"   element={<EATInventory />} />
                 <Route path="reorders"    element={<EATReorders />} />
                 <Route path="staff"       element={<EATStaff />} />
