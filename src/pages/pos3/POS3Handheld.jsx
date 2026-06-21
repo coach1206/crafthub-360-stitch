@@ -1,102 +1,182 @@
 import { useState } from 'react'
-import { Shell, Card, Pill, Btn, GOLD, NAVY, PANEL, PANEL2, EatBadge, useToast } from '../../components/eat/ui.jsx'
-import { getMenu, createTicket, sendOrder, ticketTotals } from '../../services/pos3/pos3Service.js'
+import { Shell, Card, Pill, GOLD, NAVY, PANEL, PANEL2, EatBadge, useToast } from '../../components/eat/ui.jsx'
+import { MENU_CATEGORIES, getCatalogByCategory } from '../../data/pos3/menuCatalog.js'
+import {
+  createTicket, getOpenTickets, addItem, removeItem, changeQuantity, sendTicket,
+} from '../../services/pos3/orderService.js'
+import { calcTotals } from '../../services/pos3/paymentService.js'
+import TouchCard from '../../components/pos3/TouchCard.jsx'
+import TouchButton from '../../components/pos3/TouchButton.jsx'
+import QuantityStepper from '../../components/pos3/QuantityStepper.jsx'
+import ModifierSheet from '../../components/pos3/ModifierSheet.jsx'
+import TicketRail from '../../components/pos3/TicketRail.jsx'
+import CheckoutDrawer from '../../components/pos3/CheckoutDrawer.jsx'
+import { successTap, warningTap } from '../../services/shared/haptics.js'
 
-const TABS = ['Food', 'Drinks', 'Cigars', 'Cart']
+const TABS = [...MENU_CATEGORIES, 'Cart']
 
 export default function POS3Handheld() {
-  const menu = getMenu()
-  const [tab, setTab] = useState('Food')
-  const [cart, setCart] = useState([])
+  const [tab, setTab] = useState('Cigars')
+  const [tickets, setTickets] = useState(() => getOpenTickets())
+  const [activeId, setActiveId] = useState(() => getOpenTickets()[0]?.id || null)
+  const [pendingItem, setPendingItem] = useState(null)
+  const [pulseCardId, setPulseCardId] = useState(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const toast = useToast()
 
-  function add(m) {
-    setCart((c) => {
-      const ex = c.find((i) => i.menuId === m.id)
-      if (ex) return c.map((i) => i.menuId === m.id ? { ...i, qty: i.qty + 1 } : i)
-      return [...c, { id: 'li_' + m.id, menuId: m.id, name: m.name, station: m.station, price: m.price, qty: 1, modifier: m.modifier }]
-    })
-  }
-  function step(menuId, d) {
-    setCart((c) => c.map((i) => i.menuId === menuId ? { ...i, qty: Math.max(0, i.qty + d) } : i).filter((i) => i.qty > 0))
+  const ticket = tickets.find((t) => t.id === activeId) || null
+
+  function refresh(newActiveId = activeId) {
+    const open = getOpenTickets()
+    setTickets(open)
+    if (newActiveId !== undefined) setActiveId(newActiveId)
   }
 
-  const totals = ticketTotals({ items: cart })
-  const visible = tab === 'Cart' ? [] : menu.filter((m) => m.category === tab)
-
-  function sendTo(station) {
-    if (!cart.length) return toast('Cart is empty')
-    const t = createTicket({ tableId: 'T2', server: 'Jordan Smith', guests: 2, items: cart })
-    sendOrder(t.id)
-    toast(`${t.id} sent to ${station}`)
-    setCart([])
+  function ensureTicket() {
+    if (ticket) return ticket
+    const t = createTicket({ tableId: 'T2', sectionId: 'Lounge', staffId: 'stf_jordan', server: 'Jordan Smith', guests: 2 })
+    refresh(t.id)
+    return t
   }
+
+  function newTicket() {
+    const t = createTicket({ tableId: 'T2', sectionId: 'Lounge', staffId: 'stf_jordan', server: 'Jordan Smith', guests: 2 })
+    refresh(t.id)
+    toast(`${t.id} created`)
+  }
+
+  function handleAddCard(item) {
+    const t = ensureTicket()
+    if (item.modifiers && item.modifiers.length) {
+      setPendingItem(item)
+      return
+    }
+    addItem(t.id, item, 1, [])
+    refresh(t.id)
+    setPulseCardId(item.id)
+    setTimeout(() => setPulseCardId(null), 400)
+  }
+
+  function confirmModifiers(selectedMods) {
+    if (!pendingItem) return
+    const t = ensureTicket()
+    addItem(t.id, pendingItem, 1, selectedMods)
+    refresh(t.id)
+    setPulseCardId(pendingItem.id)
+    setTimeout(() => setPulseCardId(null), 400)
+    setPendingItem(null)
+  }
+
+  function step(itemId, qty) {
+    if (!ticket) return
+    if (qty <= 0) {
+      removeItem(ticket.id, itemId)
+    } else {
+      changeQuantity(ticket.id, itemId, qty)
+    }
+    refresh(ticket.id)
+  }
+
+  function handleSend() {
+    if (!ticket || !ticket.items.length) {
+      try { warningTap() } catch {}
+      toast('Add items before sending')
+      return
+    }
+    sendTicket(ticket.id)
+    try { successTap() } catch {}
+    toast(`${ticket.id} sent to kitchen/bar/humidor/retail`)
+    setDrawerOpen(false)
+    refresh(null)
+    setActiveId(null)
+  }
+
+  const totals = calcTotals(ticket)
+  const catalogItems = tab === 'Cart' ? [] : getCatalogByCategory(tab)
+  const cartCount = (ticket?.items || []).reduce((s, i) => s + i.qty, 0)
 
   return (
     <Shell style={{ maxWidth: 480, margin: '0 auto' }}>
       <div style={{ background: PANEL, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div><div style={{ fontWeight: 700, color: GOLD }}>POS 3</div><div style={{ fontSize: 11, color: '#8b95a3' }}>System Online</div></div>
+        <div><div style={{ fontWeight: 700, color: GOLD }}>POS 3 Handheld</div><div style={{ fontSize: 11, color: '#8b95a3' }}>System Online</div></div>
         <EatBadge />
       </div>
-      <div style={{ padding: '10px 16px', background: PANEL2, display: 'flex', gap: 16, fontSize: 12, color: '#aab3bf' }}>
-        <span>Table T2</span><span>2 Guests</span><span>Server: Jordan</span>
+
+      <div style={{ padding: '10px 16px', background: PANEL2 }}>
+        <TicketRail tickets={tickets} activeId={activeId} onSelect={(id) => refresh(id)} onNewTicket={newTicket} />
       </div>
-      <div style={{ display: 'flex', gap: 8, padding: 12 }}>
+
+      <div style={{ display: 'flex', gap: 8, padding: 12, overflowX: 'auto' }}>
         {TABS.map((t) => (
           <button key={t} onClick={() => setTab(t)} style={{
-            flex: 1, padding: '10px 0', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13,
-            background: tab === t ? GOLD : PANEL2, color: tab === t ? NAVY : '#aab3bf',
-          }}>{t}{t === 'Cart' && cart.length ? ` (${cart.reduce((s, i) => s + i.qty, 0)})` : ''}</button>
+            flexShrink: 0, minHeight: 44, padding: '10px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13,
+            background: tab === t ? GOLD : PANEL2, color: tab === t ? NAVY : '#aab3bf', touchAction: 'manipulation',
+          }}>{t}{t === 'Cart' && cartCount ? ` (${cartCount})` : ''}</button>
         ))}
       </div>
 
-      <div style={{ padding: '0 12px 140px' }}>
+      <div style={{ padding: '0 12px 160px' }}>
         {tab !== 'Cart' && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            {visible.map((m) => (
-              <Card key={m.id} style={{ padding: 10 }}>
-                <img src={m.image} alt="" style={{ width: '100%', height: 80, objectFit: 'cover', borderRadius: 8, marginBottom: 8 }} />
+            {catalogItems.map((m) => (
+              <TouchCard key={m.id} onClick={() => handleAddCard(m)} pulse={pulseCardId === m.id} style={{ padding: 10 }}>
                 <div style={{ fontWeight: 600, fontSize: 13 }}>{m.name}</div>
-                <div style={{ fontSize: 11, color: '#8b95a3' }}>{m.modifier}</div>
+                <div style={{ fontSize: 11, color: '#8b95a3', minHeight: 14 }}>
+                  {m.modifiers?.length ? `${m.modifiers.length} options` : ' '}
+                  {m.ageRestricted ? ' · 21+' : ''}
+                </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
                   <span style={{ color: GOLD, fontWeight: 700 }}>${m.price.toFixed(2)}</span>
-                  <Btn onClick={() => add(m)} style={{ padding: '6px 12px', fontSize: 12 }}>+ Add</Btn>
+                  <TouchButton tone="primary" onClick={(e) => { e.stopPropagation(); handleAddCard(m) }} style={{ padding: '8px 14px', fontSize: 12, minHeight: 40 }}>+ Add</TouchButton>
                 </div>
-              </Card>
+              </TouchCard>
             ))}
           </div>
         )}
+
         {tab === 'Cart' && (
           <Card>
-            {!cart.length && <div style={{ color: '#8b95a3', textAlign: 'center', padding: 20 }}>Cart is empty</div>}
-            {cart.map((i) => (
-              <div key={i.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                <div><div style={{ fontWeight: 600, fontSize: 13 }}>{i.name}</div><Pill label={i.station} tone={i.station} /></div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <button onClick={() => step(i.menuId, -1)} style={stepBtn}>−</button>
-                  <span>{i.qty}</span>
-                  <button onClick={() => step(i.menuId, 1)} style={stepBtn}>+</button>
-                  <span style={{ color: GOLD, width: 56, textAlign: 'right' }}>${(i.price * i.qty).toFixed(2)}</span>
+            {!ticket || !ticket.items.length ? (
+              <div style={{ color: '#8b95a3', textAlign: 'center', padding: 20 }}>Cart is empty</div>
+            ) : (
+              ticket.items.map((i) => (
+                <div key={i.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: 13 }}>{i.name}</div>
+                    <Pill label={i.destination} tone={i.destination} />
+                    {i.modifiers?.length > 0 && <div style={{ fontSize: 11, color: '#8b95a3', marginTop: 2 }}>{i.modifiers.map((m) => m.label).join(', ')}</div>}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <QuantityStepper value={i.qty} onChange={(q) => step(i.id, q)} />
+                    <span style={{ color: GOLD, width: 56, textAlign: 'right', fontWeight: 700 }}>${(i.price * i.qty).toFixed(2)}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </Card>
         )}
       </div>
+
+      <ModifierSheet item={pendingItem} open={!!pendingItem} onConfirm={confirmModifiers} onClose={() => setPendingItem(null)} />
+      <CheckoutDrawer
+        open={drawerOpen}
+        ticket={ticket}
+        totals={totals}
+        onClose={() => setDrawerOpen(false)}
+        onPrimaryAction={handleSend}
+        primaryLabel="Send Ticket"
+      />
 
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, maxWidth: 480, margin: '0 auto', background: PANEL, borderTop: '1px solid rgba(212,168,67,0.18)', padding: 12 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 8 }}>
           <span style={{ color: '#8b95a3' }}>Subtotal ${totals.subtotal.toFixed(2)} · Tax ${totals.tax.toFixed(2)}</span>
           <span style={{ color: GOLD, fontWeight: 700 }}>Total ${totals.total.toFixed(2)}</span>
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <Btn tone="purple" onClick={() => sendTo('Bar')} style={{ flex: 1, fontSize: 12 }}>Send to Bar</Btn>
-          <Btn tone="red" onClick={() => sendTo('Kitchen')} style={{ flex: 1, fontSize: 12 }}>Send to Kitchen</Btn>
-          <Btn tone="purple" onClick={() => sendTo('Humidor')} style={{ flex: 1, fontSize: 12 }}>Send to Humidor</Btn>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <TouchButton tone="neutral" onClick={() => setDrawerOpen(true)} style={{ flex: 1 }}>View Ticket</TouchButton>
+          <TouchButton tone="success" onClick={handleSend} style={{ flex: 2 }}>Send Ticket</TouchButton>
         </div>
       </div>
     </Shell>
   )
 }
-
-const stepBtn = { width: 26, height: 26, borderRadius: 6, border: '1px solid rgba(212,168,67,0.3)', background: 'transparent', color: '#d4a843', cursor: 'pointer', fontSize: 16, lineHeight: 1 }

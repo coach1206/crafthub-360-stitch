@@ -4,6 +4,11 @@ import { subscribe, getOpsEvents } from '../../services/shared/opsEventBus.js'
 import { completeCommand, receiveCommand } from '../../services/shared/opsControlBridge.js'
 import { getTickets } from '../../services/pos3/pos3Service.js'
 import { EAT_ALERTS } from '../../data/eat/seedData.js'
+import { getEatOpsSnapshot } from '../../services/eat/eatOpsAnalyticsService.js'
+import RevenuePanel from '../../components/eat/RevenuePanel.jsx'
+import LiveTicketsPanel from '../../components/eat/LiveTicketsPanel.jsx'
+import InventoryImpactPanel from '../../components/eat/InventoryImpactPanel.jsx'
+import StaffActivityPanel from '../../components/eat/StaffActivityPanel.jsx'
 
 /** Re-imported helper so opsEventBus has getOpsEvents */
 function useOpsFeed() {
@@ -13,8 +18,16 @@ function useOpsFeed() {
   return [feed, refresh]
 }
 
+function useEatSnapshot() {
+  const [snapshot, setSnapshot] = useState(() => getEatOpsSnapshot())
+  const refresh = () => setSnapshot(getEatOpsSnapshot())
+  useEffect(() => { refresh(); return subscribe(() => refresh()) }, [])
+  return [snapshot, refresh]
+}
+
 export default function EATCommandHub() {
   const [feed, refresh] = useOpsFeed()
+  const [snapshot] = useEatSnapshot()
   const eatTargeted = feed.filter((e) => e.targetSystem === 'EAT')
   const openTickets = getTickets().filter((t) => !['paid'].includes(t.status)).length
   const pendingHumidor = eatTargeted.filter((e) => e.commandType === 'CIGAR_REQUESTED' && e.status !== 'completed').length
@@ -32,7 +45,7 @@ export default function EATCommandHub() {
         <KpiCard label="Total Ops Events" value={feed.length} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.7fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.7fr 1fr', gap: 16, marginBottom: 16 }}>
         <Card>
           <div style={{ fontWeight: 700, marginBottom: 12 }}>Live Ops Feed</div>
           {!feed.length && <div style={{ color: '#8b95a3' }}>No ops events yet.</div>}
@@ -59,6 +72,13 @@ export default function EATCommandHub() {
             </div>
           ))}
         </Card>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <RevenuePanel revenueToday={snapshot.revenueToday} destinationBreakdown={snapshot.destinationBreakdown} />
+        <LiveTicketsPanel tickets={snapshot.recentTickets} ticketCounts={snapshot.ticketCounts} />
+        <InventoryImpactPanel impacts={snapshot.inventoryImpacts} voidsAndComps={snapshot.voidsAndComps} />
+        <StaffActivityPanel activity={snapshot.staffActivity} activityCounts={snapshot.staffActivityCounts} />
       </div>
     </ManagementLayout>
   )
