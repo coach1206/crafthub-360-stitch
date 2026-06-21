@@ -350,6 +350,39 @@ export function GuestSessionProvider({ children }) {
     })
   }, [update])
 
+  /**
+   * Records which cut/toast/light prep steps the guest actually completed
+   * (rather than discarding the checklist state on navigation). Writes a
+   * truthful PREP_STEPS_COMPLETED event to smokeCraft.eventLog — status is
+   * "complete" only when all 3 steps were checked, otherwise "partial".
+   */
+  const setCutToastLightProgress = useCallback((payload) => {
+    update(prev => {
+      const now = Date.now()
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const cutToastLight = { ...payload, timestamp: now }
+      const event = {
+        eventType:       'PREP_STEPS_COMPLETED',
+        actionType:      'CUT_TOAST_LIGHT',
+        stepsCompleted:  payload.stepsCompleted,
+        allStepsCompleted: payload.allStepsCompleted,
+        completedCount:  payload.completedCount,
+        totalSteps:      payload.totalSteps,
+        status:          payload.allStepsCompleted ? 'complete' : 'partial',
+        timestamp:       now,
+      }
+
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          cutToastLight,
+          eventLog: [...existingLog, event].slice(-50),
+        },
+      }
+    })
+  }, [update])
+
   // ── Phase 6: SmokeCraft Session 1 completion ──────────────────────────────
 
   /**
@@ -540,6 +573,7 @@ export function GuestSessionProvider({ children }) {
       setSmokeCraftFormat,
       setSelectedLevel,
       setRequestPurchaseChoice,
+      setCutToastLightProgress,
       // Phase 6: Session completion
       completeSmokeCraftSession,
       syncPos3Activity,
