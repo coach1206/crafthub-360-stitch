@@ -267,6 +267,45 @@ export function GuestSessionProvider({ children }) {
     update(prev => ({ ...prev, selectedLevel: level }))
   }, [update])
 
+  /**
+   * Records how the guest is obtaining their cigar (request from humidor vs.
+   * already has one). When the choice is HUMIDOR_REQUEST, also prepares a
+   * pending pos3 signal for the next phase — this does NOT create a real POS
+   * ticket or notify staff; it only stages the data POS 3 / E.A.T. will need.
+   */
+  const setRequestPurchaseChoice = useCallback((choice) => {
+    update(prev => {
+      const now = Date.now()
+      const requestPurchaseChoice = {
+        requestPurchaseChoice: choice.id,
+        label: choice.label,
+        actionType: choice.actionType,
+        timestamp: now,
+      }
+      const next = {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          requestPurchaseChoice,
+        },
+      }
+      if (choice.actionType === 'HUMIDOR_REQUEST') {
+        next.pos3 = {
+          ...prev.pos3,
+          pendingHumidorRequest: {
+            sessionId: prev.sessionId || null,
+            venueId: prev.venueId || null,
+            tableId: prev.pos3?.tableNumber || null,
+            actionType: 'HUMIDOR_REQUEST',
+            status: 'pending',
+            timestamp: now,
+          },
+        }
+      }
+      return next
+    })
+  }, [update])
+
   // ── Phase 6: SmokeCraft Session 1 completion ──────────────────────────────
 
   /**
@@ -456,6 +495,7 @@ export function GuestSessionProvider({ children }) {
       setSelectedMentor,
       setSmokeCraftFormat,
       setSelectedLevel,
+      setRequestPurchaseChoice,
       // Phase 6: Session completion
       completeSmokeCraftSession,
       syncPos3Activity,
