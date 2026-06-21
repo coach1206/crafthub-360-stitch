@@ -1,0 +1,101 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Shell, SideNav, TopBar, Card, Pill, KpiCard, Btn, GOLD, PANEL2 } from '../../components/eat/ui.jsx'
+import { getTables, getTickets, ticketTotals } from '../../services/pos3/pos3Service.js'
+import { subscribe, eventsFor } from '../../services/shared/opsEventBus.js'
+import { completeCommand, receiveCommand } from '../../services/shared/opsControlBridge.js'
+
+/** POS3 receiver hook — watches the shared bus for events/commands targeting POS3. */
+export function usePos3Incoming() {
+  const [items, setItems] = useState([])
+  const refresh = () => {
+    const evs = eventsFor('POS3')
+      .filter((e) => e.status !== 'completed')
+      .sort((a, b) => b.createdAt - a.createdAt)
+    setItems(evs)
+  }
+  useEffect(() => {
+    refresh()
+    return subscribe(() => refresh())
+  }, [])
+  return [items, refresh]
+}
+
+export default function POS3Home() {
+  const navigate = useNavigate()
+  const tables = getTables()
+  const tickets = getTickets().filter((t) => t.status !== 'paid')
+  const [incoming, refresh] = usePos3Incoming()
+
+  const openTickets = tickets.length
+  const occupied = tables.filter((t) => t.status === 'occupied').length
+
+  function ack(ev) {
+    receiveCommand(ev.id)
+    completeCommand(ev.id)
+    refresh()
+  }
+
+  return (
+    <Shell>
+      <div style={{ display: 'flex', minHeight: '100vh' }}>
+        <SideNav system="POS3" />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <TopBar system="POS3" title="POS 3 Hospitality Terminal" subtitle="PM Shift · System Online" />
+          <div style={{ padding: 20 }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
+              <KpiCard label="Open Tickets" value={openTickets} />
+              <KpiCard label="Occupied Tables" value={occupied} />
+              <KpiCard label="Incoming Requests" value={incoming.length} accent={incoming.length ? '#f0907f' : GOLD} />
+            </div>
+
+            {incoming.length > 0 && (
+              <Card style={{ marginBottom: 20, borderColor: 'rgba(240,144,127,0.4)' }}>
+                <div style={{ fontWeight: 700, marginBottom: 10, color: '#f0907f' }}>Incoming Requests (from SmokeCraft / E.A.T.)</div>
+                {incoming.map((ev) => (
+                  <div key={ev.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div>
+                      <Pill label={ev.commandType || ev.eventType} tone="pending" />
+                      <span style={{ marginLeft: 10, fontSize: 13 }}>{ev.payload?.label || ev.eventType} · from {ev.sourceSystem}</span>
+                    </div>
+                    <Btn tone="green" onClick={() => ack(ev)} style={{ padding: '8px 14px' }}>Mark Received</Btn>
+                  </div>
+                ))}
+              </Card>
+            )}
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <Card>
+                <div style={{ fontWeight: 700, marginBottom: 12 }}>Floor / Table Map</div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
+                  {tables.map((t) => (
+                    <div key={t.id} onClick={() => navigate('/pos3/tables')} style={{ background: PANEL2, borderRadius: 12, padding: 12, cursor: 'pointer' }}>
+                      <div style={{ fontWeight: 700 }}>{t.name}</div>
+                      <div style={{ fontSize: 12, color: '#8b95a3', margin: '4px 0' }}>{t.section} · {t.guests}/{t.seats}</div>
+                      <Pill label={t.status} tone={t.status} />
+                    </div>
+                  ))}
+                </div>
+              </Card>
+              <Card>
+                <div style={{ fontWeight: 700, marginBottom: 12 }}>Open Tickets / Recent Orders</div>
+                {tickets.map((t) => (
+                  <div key={t.id} onClick={() => navigate('/pos3/orders?ticket=' + t.id)} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer' }}>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>{t.id} · {t.tableId}</div>
+                      <div style={{ fontSize: 12, color: '#8b95a3' }}>{t.server} · {t.items.length} items</div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <Pill label={t.status} tone={t.status} />
+                      <div style={{ color: GOLD, fontWeight: 700, marginTop: 4 }}>${ticketTotals(t).total.toFixed(2)}</div>
+                    </div>
+                  </div>
+                ))}
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Shell>
+  )
+}
