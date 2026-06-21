@@ -3,6 +3,7 @@ import { ManagementLayout, Card, Pill, Btn, Table, useToast } from '../../compon
 import { getTables, getTickets, ticketTotals } from '../../services/pos3/pos3Service.js'
 import { createCommand } from '../../services/shared/opsControlBridge.js'
 import { SYSTEMS } from '../../services/shared/opsEventBus.js'
+import POSProviderSyncPanel from '../../components/eat/POSProviderSyncPanel.jsx'
 
 export default function EATPosControl() {
   const toast = useToast()
@@ -45,6 +46,10 @@ export default function EATPosControl() {
           : k === 'actions' ? <Btn tone="red" style={{ padding: '6px 10px', fontSize: 12 }} onClick={() => send('VOID_TICKET', { ticketId: r.id, tableId: r.tableId })}>Void</Btn>
           : r[k]}
       />
+
+      <div style={{ marginTop: 18 }}>
+        <POSProviderSyncPanel />
+      </div>
     </ManagementLayout>
   )
 }

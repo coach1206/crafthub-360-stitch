@@ -59,9 +59,9 @@ export function Pill({ label, tone }) {
   )
 }
 
-export function Card({ children, style, onClick }) {
+export function Card({ children, style, onClick, className }) {
   return (
-    <div onClick={onClick} style={{
+    <div onClick={onClick} className={className} style={{
       background: PANEL, border: `1px solid ${LINE}`, borderRadius: 16,
       padding: 16, ...(onClick ? { cursor: 'pointer' } : {}), ...style,
     }}>{children}</div>
@@ -98,7 +98,7 @@ export function Btn({ children, onClick, tone = 'gold', disabled, title, style }
 }
 
 const EAT_NAV = [
-  ['Command Hub', '/eat'], ['POS Control', '/eat/pos-control'], ['Inventory', '/eat/inventory'],
+  ['Command Hub', '/eat'], ['POS Control', '/eat/pos-control'], ['Operations', '/eat/operations'], ['Inventory', '/eat/inventory'],
   ['Reorders', '/eat/reorders'], ['Staff', '/eat/staff'], ['Sections', '/eat/sections'],
   ['Kitchen', '/eat/kitchen'], ['Bar', '/eat/bar'], ['Humidor', '/eat/humidor'],
   ['Data', '/eat/data'], ['Reports', '/eat/reports'], ['Media Library', '/eat/media'],
@@ -107,7 +107,9 @@ const EAT_NAV = [
 
 const POS3_NAV = [
   ['Home', '/pos3'], ['Handheld', '/pos3/handheld'], ['Tables', '/pos3/tables'],
-  ['Orders', '/pos3/orders'], ['Checkout', '/pos3/checkout'], ['Settings', '/pos3/settings'],
+  ['Orders', '/pos3/orders'], ['Checkout', '/pos3/checkout'],
+  ['Kitchen', '/pos3/kitchen'], ['Bar', '/pos3/bar'], ['Humidor', '/pos3/humidor'], ['Inventory', '/pos3/inventory'],
+  ['Integrations', '/pos3/integrations'], ['Settings', '/pos3/settings'],
 ]
 
 export function SideNav({ system = 'EAT' }) {

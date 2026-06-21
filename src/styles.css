@@ -713,6 +713,62 @@
   50%      { box-shadow: 0 0 0 4px rgba(217,130,43,0.25); }
 }
 
+/* ─── POS3/E.A.T. operations & integration hub utility classes ───────── */
+.touch-pressable {
+  transition: transform 0.1s ease, box-shadow 0.14s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.touch-pressable:active {
+  transform: scale(0.95);
+}
+.tactile-card {
+  transition: transform 0.12s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+.tactile-card:active {
+  transform: scale(0.97);
+}
+.haptic-success {
+  animation: hapticSuccessFlash 0.5s ease-out;
+}
+@keyframes hapticSuccessFlash {
+  0%   { box-shadow: 0 0 0 0 rgba(80,200,120,0.55); }
+  100% { box-shadow: 0 0 0 8px rgba(80,200,120,0); }
+}
+.haptic-warning {
+  animation: hapticWarningFlash 0.5s ease-out;
+}
+@keyframes hapticWarningFlash {
+  0%   { box-shadow: 0 0 0 0 rgba(217,130,43,0.55); }
+  100% { box-shadow: 0 0 0 8px rgba(217,130,43,0); }
+}
+.ticket-active {
+  border-color: rgba(212,168,67,0.6) !important;
+  box-shadow: 0 0 0 1px rgba(212,168,67,0.35);
+}
+.checkout-ready {
+  border-color: rgba(80,200,120,0.55) !important;
+  box-shadow: 0 0 0 1px rgba(80,200,120,0.3);
+}
+.station-ready {
+  border-color: rgba(80,200,120,0.5) !important;
+}
+.station-backed-up {
+  border-color: rgba(217,130,43,0.6) !important;
+  animation: pos3WarningPulse 1.6s ease-in-out infinite;
+}
+.inventory-low {
+  border-color: rgba(217,130,43,0.55) !important;
+}
+.inventory-out {
+  border-color: rgba(220,80,60,0.7) !important;
+  animation: pos3WarningPulse 1.6s ease-in-out infinite;
+}
+.humidor-alert {
+  border-color: rgba(220,80,60,0.6) !important;
+  box-shadow: 0 0 0 1px rgba(220,80,60,0.3);
+}
+
 .smokecraft-info-card {
   width: 100%;
   text-align: left;

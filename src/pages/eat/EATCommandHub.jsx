@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ManagementLayout, Card, Pill, KpiCard, Btn, GOLD } from '../../components/eat/ui.jsx'
 import { subscribe, getOpsEvents } from '../../services/shared/opsEventBus.js'
 import { completeCommand, receiveCommand } from '../../services/shared/opsControlBridge.js'
@@ -26,6 +27,7 @@ function useEatSnapshot() {
 }
 
 export default function EATCommandHub() {
+  const navigate = useNavigate()
   const [feed, refresh] = useOpsFeed()
   const [snapshot] = useEatSnapshot()
   const eatTargeted = feed.filter((e) => e.targetSystem === 'EAT')
@@ -43,6 +45,10 @@ export default function EATCommandHub() {
         <KpiCard label="Pending Humidor Requests" value={pendingHumidor} accent={pendingHumidor ? '#f0907f' : GOLD} />
         <KpiCard label="Active Alerts" value={EAT_ALERTS.length} accent="#f0907f" />
         <KpiCard label="Total Ops Events" value={feed.length} />
+      </div>
+
+      <div style={{ marginBottom: 20 }}>
+        <Btn tone="purple" onClick={() => navigate('/eat/operations')}>Open Operations View</Btn>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.7fr 1fr', gap: 16, marginBottom: 16 }}>

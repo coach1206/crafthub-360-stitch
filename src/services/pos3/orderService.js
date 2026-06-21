@@ -12,6 +12,7 @@
 
 import { getTickets, saveTickets, getTicket as getTicketRaw } from './pos3Service.js'
 import { emit, SYSTEMS, STATUS } from '../shared/opsEventBus.js'
+import { routeTicket } from './stationRoutingService.js'
 
 // ── Persistence adapter (thin — swap for a backend later) ──────────────
 function readTickets() { return getTickets() }
@@ -45,6 +46,12 @@ export function createTicket({ tableId = null, sectionId = null, staffId = null,
     items: [],
     voids: [],
     comps: [],
+    stationStatus: { kitchen: 'idle', bar: 'idle', humidor: 'idle', retail: 'idle' },
+    inventoryWarnings: [],
+    destinationReadiness: null,
+    sentDestinations: [],
+    serviceFee: 0,
+    paymentStatus: 'unpaid',
   }
   tickets.push(ticket)
   writeTickets(tickets)
@@ -195,7 +202,7 @@ export function sendTicket(ticketId, destinations = null) {
   const groups = groupByDestination(ticket)
   const targetDestinations = destinations || Object.keys(groups).filter((d) => groups[d].length > 0)
 
-  tickets[idx] = { ...ticket, status: 'sent', sentAt: Date.now() }
+  tickets[idx] = { ...ticket, status: 'sent', sentAt: Date.now(), sentDestinations: targetDestinations }
   writeTickets(tickets)
 
   emit({
@@ -216,6 +223,9 @@ export function sendTicket(ticketId, destinations = null) {
       timestamp: Date.now(),
     },
   })
+
+  // Route items into kitchen/bar/humidor queues + apply inventory impact.
+  try { routeTicket(tickets[idx]) } catch {}
 
   return tickets[idx]
 }
@@ -294,7 +304,7 @@ export function closeTicket(ticketId, { status = 'paid' } = {}) {
   const tickets = readTickets()
   const idx = findIndex(tickets, ticketId)
   if (idx === -1) return null
-  tickets[idx] = { ...tickets[idx], status, closedAt: Date.now() }
+  tickets[idx] = { ...tickets[idx], status, closedAt: Date.now(), paymentStatus: status === 'paid' ? 'paid' : tickets[idx].paymentStatus }
   writeTickets(tickets)
 
   emit({
@@ -316,4 +326,35 @@ export function closeTicket(ticketId, { status = 'paid' } = {}) {
 /** Alias used by checkout flow after payment completes — same as closeTicket('paid'). */
 export function cashoutTicket(ticketId) {
   return closeTicket(ticketId, { status: 'paid' })
+}
+
+/** Set the per-item station/destination statuses on a ticket (stationStatus map). */
+export function setStationStatus(ticketId, destination, status) {
+  const tickets = readTickets()
+  const idx = findIndex(tickets, ticketId)
+  if (idx === -1) return null
+  const stationStatus = { ...(tickets[idx].stationStatus || {}), [destination]: status }
+  tickets[idx] = { ...tickets[idx], stationStatus }
+  writeTickets(tickets)
+  return tickets[idx]
+}
+
+/** Set inventory warnings array on a ticket (used by orderReadinessService). */
+export function setInventoryWarnings(ticketId, warnings) {
+  const tickets = readTickets()
+  const idx = findIndex(tickets, ticketId)
+  if (idx === -1) return null
+  tickets[idx] = { ...tickets[idx], inventoryWarnings: warnings }
+  writeTickets(tickets)
+  return tickets[idx]
+}
+
+/** Set the readiness object computed by orderReadinessService.checkReadiness(). */
+export function setDestinationReadiness(ticketId, readiness) {
+  const tickets = readTickets()
+  const idx = findIndex(tickets, ticketId)
+  if (idx === -1) return null
+  tickets[idx] = { ...tickets[idx], destinationReadiness: readiness }
+  writeTickets(tickets)
+  return tickets[idx]
 }

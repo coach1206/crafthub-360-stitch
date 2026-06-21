@@ -11,6 +11,10 @@ import QuantityStepper from '../../components/pos3/QuantityStepper.jsx'
 import ModifierSheet from '../../components/pos3/ModifierSheet.jsx'
 import TicketRail from '../../components/pos3/TicketRail.jsx'
 import CheckoutDrawer from '../../components/pos3/CheckoutDrawer.jsx'
+import OrderReadinessPanel from '../../components/pos3/stations/OrderReadinessPanel.jsx'
+import DestinationRouter from '../../components/pos3/stations/DestinationRouter.jsx'
+import { checkReadiness } from '../../services/pos3/orderReadinessService.js'
+import { groupByDestination } from '../../services/pos3/orderService.js'
 import { successTap, warningTap } from '../../services/shared/haptics.js'
 
 const TABS = [...MENU_CATEGORIES, 'Cart']
@@ -22,6 +26,7 @@ export default function POS3Handheld() {
   const [pendingItem, setPendingItem] = useState(null)
   const [pulseCardId, setPulseCardId] = useState(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [readiness, setReadiness] = useState(null)
   const toast = useToast()
 
   const ticket = tickets.find((t) => t.id === activeId) || null
@@ -83,12 +88,31 @@ export default function POS3Handheld() {
       toast('Add items before sending')
       return
     }
+    const result = checkReadiness(ticket)
+    setReadiness(result)
+    if (result.overallStatus === 'ready') {
+      doSend()
+    }
+  }
+
+  function doSend(managerOverride = false) {
     sendTicket(ticket.id)
     try { successTap() } catch {}
     toast(`${ticket.id} sent to kitchen/bar/humidor/retail`)
     setDrawerOpen(false)
+    setReadiness(null)
     refresh(null)
     setActiveId(null)
+  }
+
+  function handleManagerOverride() {
+    if (!ticket) return
+    const result = checkReadiness(ticket, { managerOverride: true })
+    setReadiness(result)
+    if (result.overallStatus !== 'blocked') {
+      try { successTap() } catch {}
+      toast('Manager override applied')
+    }
   }
 
   const totals = calcTotals(ticket)
@@ -158,6 +182,19 @@ export default function POS3Handheld() {
       </div>
 
       <ModifierSheet item={pendingItem} open={!!pendingItem} onConfirm={confirmModifiers} onClose={() => setPendingItem(null)} />
+      {readiness && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 9100, background: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <div style={{ width: '100%', maxWidth: 420 }}>
+            <DestinationRouter groups={ticket ? groupByDestination(ticket) : {}} />
+            <OrderReadinessPanel
+              readiness={readiness}
+              onConfirmSend={() => doSend()}
+              onManagerOverride={handleManagerOverride}
+              onCancel={() => setReadiness(null)}
+            />
+          </div>
+        </div>
+      )}
       <CheckoutDrawer
         open={drawerOpen}
         ticket={ticket}
