@@ -350,6 +350,46 @@ export function GuestSessionProvider({ children }) {
     })
   }, [update])
 
+  /** Records the guest's selected humidor storage condition and what it implies. */
+  const setHumidorMatchSelection = useCallback((choice) => {
+    update(prev => {
+      const now = Date.now()
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const humidorMatch = { conditionId: choice.id, label: choice.label, desc: choice.desc, timestamp: now }
+      const event = {
+        eventType:  'HUMIDOR_CONDITION_SELECTED',
+        actionType: choice.id,
+        label:      choice.label,
+        timestamp:  now,
+      }
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          humidorMatch,
+          eventLog: [...existingLog, event].slice(-50),
+        },
+      }
+    })
+  }, [update])
+
+  /** Records that the guest accepted the Golden Box challenge. */
+  const setGoldenBoxAccepted = useCallback(() => {
+    update(prev => {
+      const now = Date.now()
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const event = { eventType: 'GOLDEN_BOX_ACCEPTED', timestamp: now }
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          goldenBox: { ...prev.smokeCraft?.goldenBox, accepted: true, acceptedAt: now },
+          eventLog: [...existingLog, event].slice(-50),
+        },
+      }
+    })
+  }, [update])
+
   /**
    * Records which cut/toast/light prep steps the guest actually completed
    * (rather than discarding the checklist state on navigation). Writes a
@@ -639,6 +679,8 @@ export function GuestSessionProvider({ children }) {
       setSelectedLevel,
       setRequestPurchaseChoice,
       setCutToastLightProgress,
+      setHumidorMatchSelection,
+      setGoldenBoxAccepted,
       setFirstThirdTasting,
       setFinalThirdTasting,
       // Phase 6: Session completion

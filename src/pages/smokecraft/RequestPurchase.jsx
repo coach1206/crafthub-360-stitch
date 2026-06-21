@@ -75,7 +75,10 @@ export default function RequestPurchase() {
         </div>
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Request or Purchase Cigar</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth:560 }}>How will you be obtaining your cigar for tonight's session?</p>
+        <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>How will you be obtaining your cigar for tonight's session?</p>
+        <div className="rounded-2xl overflow-hidden mb-10 border border-primary/15" style={{ height: 180 }}>
+          <img src="/assets/smokecraft/cropped/request-purchase-bg.jpg" alt="Request or purchase" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.1) brightness(0.85)' }} />
+        </div>
         <div
           className="flex flex-col gap-3 mb-12 rounded-3xl border border-primary/15 backdrop-blur-xl"
           style={{

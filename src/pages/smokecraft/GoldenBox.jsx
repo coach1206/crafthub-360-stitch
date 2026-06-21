@@ -5,18 +5,18 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 
 const PHASES = [
-  { label: 'Mentor',      icon: 'person'         },
-  { label: 'Origins',     icon: 'travel_explore' },
-  { label: 'Cultivation', icon: 'nature_people'  },
-  { label: 'Blending',    icon: 'science'        },
-  { label: 'Identity',    icon: 'diamond'        },
+  { label: 'Mentor',      icon: 'person',         route: '/smokecraft/mentor',      detail: 'Choose the mentor who will guide your blend and flavor decisions throughout the journey.' },
+  { label: 'Origins',     icon: 'travel_explore', route: '/smokecraft/origins',     detail: 'Trace the tobacco’s growing region and terroir before it reaches your hands.' },
+  { label: 'Cultivation', icon: 'nature_people',  route: '/smokecraft/seed-soil',   detail: 'Learn how seed and soil choices shape the leaf you’ll eventually smoke.' },
+  { label: 'Blending',    icon: 'science',        route: '/smokecraft/leaves',      detail: 'Select the leaves that will be blended into your personal cigar profile.' },
+  { label: 'Identity',    icon: 'diamond',        route: '/smokecraft/format',      detail: 'Lock in the format and identity of the cigar you’ll carry through the session.' },
 ]
 
 const CONTENTS = [
-  { icon: 'inventory_2',       label: 'Personalized Vitola Profile',  desc: 'A curated cigar profile built from your flavor DNA and blend choices.'    },
-  { icon: 'approval',          label: 'Journey Stamp Collection',     desc: 'Every stamp earned across your SmokeCraft sessions, archived in your Passport.' },
-  { icon: 'id_card',           label: 'Cigar Identity Card',          desc: 'A shareable credential revealing your archetype — Diplomat, Scholar, Adventurer, or Señor.' },
-  { icon: 'workspace_premium', label: 'Exclusive Lounge Privileges',  desc: 'Priority access, premium humidor reservations, and private sommelier sessions.' },
+  { icon: 'inventory_2',       label: 'Personalized Vitola Profile',  desc: 'A curated cigar profile built from your flavor DNA and blend choices.',    unlock: 'Unlocks after Blending is complete.' },
+  { icon: 'approval',          label: 'Journey Stamp Collection',     desc: 'Every stamp earned across your SmokeCraft sessions, archived in your Passport.', unlock: 'Builds automatically as you earn stamps.' },
+  { icon: 'id_card',           label: 'Cigar Identity Card',          desc: 'A shareable credential revealing your archetype — Diplomat, Scholar, Adventurer, or Señor.', unlock: 'Unlocks when your Identity phase is finalized.' },
+  { icon: 'workspace_premium', label: 'Exclusive Lounge Privileges',  desc: 'Priority access, premium humidor reservations, and private sommelier sessions.', unlock: 'Unlocks after the Golden Box is accepted.' },
 ]
 
 function GoldenBoxHeroImage() {
@@ -40,11 +40,13 @@ function GoldenBoxHeroImage() {
 
 export default function GoldenBox() {
   const navigate = useNavigate()
-  const { addXP, addBadge, completeStep } = useGuestSession()
+  const { addXP, addBadge, completeStep, setGoldenBoxAccepted } = useGuestSession()
 
   const [revealed, setRevealed]         = useState(false)
   const [contentsOpen, setContentsOpen] = useState(false)
   const [accepted, setAccepted]         = useState(false)
+  const [activePhase, setActivePhase]   = useState(null)
+  const [activeTile, setActiveTile]     = useState(null)
   useEffect(() => {
     const t = setTimeout(() => setRevealed(true), 120)
     return () => clearTimeout(t)
@@ -57,6 +59,7 @@ export default function GoldenBox() {
     addXP(25)
     addBadge({ id: 'golden-box-invitation', name: 'Golden Invitation', icon: 'inventory_2' })
     completeStep('golden-box')
+    setGoldenBoxAccepted()
     setTimeout(() => navigate('/smokecraft/humidor-match'), 600)
   }
 
@@ -137,16 +140,38 @@ export default function GoldenBox() {
         >
           <p className="font-label-sm text-label-sm text-primary/80 uppercase tracking-[0.24em] mb-5">Five Phases to Unlock</p>
           <div className="golden-phase-track">
-            {PHASES.map(({ label, icon }, index) => (
-              <div key={label} className="golden-phase-item group">
+            {PHASES.map((phase, index) => (
+              <button
+                key={phase.label}
+                type="button"
+                className="golden-phase-item group"
+                style={{ background: 'none', border: 0, cursor: 'pointer' }}
+                onClick={() => { triggerHaptic('light'); setActivePhase(p => p === phase.label ? null : phase.label) }}
+                aria-label={`${phase.label} phase details`}
+              >
                 <div className="golden-phase-orb">
-                  <span className="material-symbols-outlined text-[24px] text-primary">{icon}</span>
+                  <span className="material-symbols-outlined text-[24px] text-primary">{phase.icon}</span>
                 </div>
                 <span className="golden-phase-number">{index + 1}</span>
-                <span className="golden-phase-label">{label}</span>
-              </div>
+                <span className="golden-phase-label">{phase.label}</span>
+              </button>
             ))}
           </div>
+          {activePhase && (
+            <div className="golden-content-card p-4 rounded-xl mt-5 text-left max-w-[460px] mx-auto">
+              <p className="font-label-lg text-label-lg text-primary mb-1">{activePhase}</p>
+              <p className="font-label-sm text-[11px] text-on-surface-variant leading-relaxed mb-3">
+                {PHASES.find(p => p.label === activePhase)?.detail}
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate(PHASES.find(p => p.label === activePhase)?.route)}
+                className="text-primary font-label-sm text-[11px] uppercase tracking-widest flex items-center gap-1"
+              >
+                Go to {activePhase} <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* What's Inside Accordion */}
@@ -166,17 +191,29 @@ export default function GoldenBox() {
             style={{ maxHeight: contentsOpen ? '360px' : '0px', opacity: contentsOpen ? 1 : 0 }}
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 text-left">
-              {CONTENTS.map(({ icon, label, desc }) => (
-                <div key={label} className="golden-content-card p-4 rounded-xl flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="material-symbols-outlined text-primary text-[18px]" style={FILL1}>{icon}</span>
-                  </div>
-                  <div>
-                    <p className="font-label-lg text-label-lg text-primary mb-0.5">{label}</p>
-                    <p className="font-label-sm text-[11px] text-on-surface-variant leading-relaxed">{desc}</p>
-                  </div>
-                </div>
-              ))}
+              {CONTENTS.map(({ icon, label, desc, unlock }) => {
+                const open = activeTile === label
+                return (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={() => { triggerHaptic('light'); setActiveTile(t => t === label ? null : label) }}
+                    className="golden-content-card p-4 rounded-xl flex items-start gap-3 text-left cursor-pointer"
+                    style={{ border: open ? '1px solid rgba(233,193,118,0.55)' : undefined }}
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="material-symbols-outlined text-primary text-[18px]" style={FILL1}>{icon}</span>
+                    </div>
+                    <div>
+                      <p className="font-label-lg text-label-lg text-primary mb-0.5">{label}</p>
+                      <p className="font-label-sm text-[11px] text-on-surface-variant leading-relaxed">{desc}</p>
+                      {open && (
+                        <p className="font-label-sm text-[11px] text-primary/80 leading-relaxed mt-2 uppercase tracking-wide">{unlock}</p>
+                      )}
+                    </div>
+                  </button>
+                )
+              })}
             </div>
           </div>
         </div>

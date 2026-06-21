@@ -4,23 +4,25 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 
 const OPTIONS = [
-  { id: 'ideal',   label: 'Ideal 70/70',   desc: '70°F / 70% RH — classic storage, balanced draw.' },
-  { id: 'dry',     label: 'Dry Box 62%',   desc: '62% RH — tighter draw, slower burn.' },
-  { id: 'travel',  label: 'Travel Case',   desc: 'Sealed travel humidor — field conditions.' },
+  { id: 'ideal',   label: 'Ideal 70/70',   desc: '70°F / 70% RH — classic storage, balanced draw.', insight: 'Your cigar has been resting at the textbook standard. Expect an even burn and the flavor profile the blender intended.' },
+  { id: 'dry',     label: 'Dry Box 62%',   desc: '62% RH — tighter draw, slower burn.',              insight: 'Slightly under-humidified. The draw will feel firmer and the burn rate slower — toast a touch longer before lighting.' },
+  { id: 'travel',  label: 'Travel Case',   desc: 'Sealed travel humidor — field conditions.',         insight: 'Storage conditions were not climate-controlled. Inspect the wrapper for dryness before cutting and toast carefully.' },
 ]
 
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
 export default function HumidorMatch() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { completeStep, addXP, setHumidorMatchSelection } = useGuestSession()
   const [selected, setSelected] = useState(null)
   const [done, setDone] = useState(false)
+  const selectedOption = OPTIONS.find(o => o.id === selected)
 
   function handleContinue() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
+    if (selectedOption) setHumidorMatchSelection(selectedOption)
     completeStep('humidor-match')
     addXP(100)
     navigate('/smokecraft/request-purchase')
@@ -44,7 +46,10 @@ export default function HumidorMatch() {
         </div>
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Humidor Match</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth:560 }}>Confirm your cigar's storage condition before the session begins.</p>
+        <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>Confirm your cigar's storage condition before the session begins.</p>
+        <div className="rounded-2xl overflow-hidden mb-10 border border-primary/15" style={{ height: 180 }}>
+          <img src="/assets/smokecraft/cropped/humidor-match-bg.jpg" alt="Humidor" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.1) brightness(0.85)' }} />
+        </div>
         <div
           className="flex flex-col gap-3 mb-12 rounded-3xl border border-primary/15 backdrop-blur-xl"
           style={{
@@ -99,6 +104,22 @@ export default function HumidorMatch() {
             )
           })}
         </div>
+        {selectedOption && (
+          <div
+            className="flex items-start gap-4 mb-12 rounded-2xl border"
+            style={{
+              padding: '18px 22px',
+              background: 'linear-gradient(135deg, rgba(233,193,118,0.08), rgba(233,193,118,0.02))',
+              borderColor: 'rgba(233,193,118,0.3)',
+            }}
+          >
+            <span className="material-symbols-outlined text-primary" style={{ fontSize: 22, ...FILL1 }}>insights</span>
+            <div>
+              <p className="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-1">What this means</p>
+              <p className="font-body-md text-body-md text-on-surface-variant">{selectedOption.insight}</p>
+            </div>
+          </div>
+        )}
         <div className="flex flex-col sm:flex-row gap-4">
           <button onClick={handleContinue} disabled={!selected || done}
             className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40 w-full sm:w-auto"
