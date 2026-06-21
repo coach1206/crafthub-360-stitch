@@ -383,6 +383,39 @@ export function GuestSessionProvider({ children }) {
     })
   }, [update])
 
+  /**
+   * Records the guest's First Third flavor-note and draw-rating selections
+   * (rather than discarding them on navigation). Status is "complete" only
+   * when at least one note was selected AND a draw rating was given,
+   * otherwise "partial" — the truth of what was actually tasted/recorded.
+   */
+  const setFirstThirdTasting = useCallback((payload) => {
+    update(prev => {
+      const now = Date.now()
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const firstThird = { ...payload, timestamp: now }
+      const event = {
+        eventType:      'TASTING_RECORDED',
+        actionType:     'FIRST_THIRD',
+        notesSelected:  payload.notesSelected,
+        notesCount:     payload.notesCount,
+        drawRating:     payload.drawRating,
+        hasDrawRating:  payload.hasDrawRating,
+        status:         (payload.notesCount > 0 && payload.hasDrawRating) ? 'complete' : 'partial',
+        timestamp:      now,
+      }
+
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          firstThird,
+          eventLog: [...existingLog, event].slice(-50),
+        },
+      }
+    })
+  }, [update])
+
   // ── Phase 6: SmokeCraft Session 1 completion ──────────────────────────────
 
   /**
@@ -574,6 +607,7 @@ export function GuestSessionProvider({ children }) {
       setSelectedLevel,
       setRequestPurchaseChoice,
       setCutToastLightProgress,
+      setFirstThirdTasting,
       // Phase 6: Session completion
       completeSmokeCraftSession,
       syncPos3Activity,
