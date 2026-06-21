@@ -7,22 +7,34 @@ import {
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 
 // CIGAR PHOTO VISUAL SYSTEM.
-// Dedicated per-shape product photography (/assets/smokecraft/cigars/*.jpg) does not exist in the
-// repo yet, so each card reuses real lounge/humidor cigar photography already shot for other
-// SmokeCraft screens (see public/assets/smokecraft/cropped/*). Every format gets its own real photo,
-// cropped/scaled/positioned via format.photo so the six cards read as six different cigars, not one
-// shared illustration. Torpedo/Figurado additionally clips the frame to a tapered silhouette.
+// Each format's final customer-facing visual must come from a dedicated product photo at
+// format.image (public/assets/smokecraft/cigars/<id>.jpg — see README.md in that folder for the
+// shoot requirements). Cropped lounge/humidor backgrounds are never used as the final visual. If
+// the dedicated photo is missing, the card shows an honest "photo missing" state naming the exact
+// required filename instead of substituting any other image.
 function CigarVisual({ format }) {
-  const { src, position, zoom, taper } = format.photo || {}
+  const [missing, setMissing] = useState(false)
+  const filename = format.image ? format.image.split('/').pop() : null
+
+  if (!format.image || missing) {
+    return (
+      <div className="cigar-visual cigar-visual--missing">
+        <span className="cigar-visual__missing-icon material-symbols-outlined" aria-hidden="true">
+          photo_camera
+        </span>
+        <span className="cigar-visual__missing-title">Required cigar photo missing</span>
+        <span className="cigar-visual__missing-file">{filename || 'unknown.jpg'}</span>
+      </div>
+    )
+  }
+
   return (
-    <div className={`cigar-visual${taper ? ' is-tapered' : ''}`}>
-      <div
+    <div className="cigar-visual">
+      <img
         className="cigar-visual__photo"
-        style={{
-          backgroundImage: `url(${src})`,
-          backgroundPosition: position,
-          backgroundSize: `${zoom * 100}% auto`,
-        }}
+        src={format.image}
+        alt={`${format.name} cigar`}
+        onError={() => setMissing(true)}
       />
       <div className="cigar-visual__vignette" aria-hidden="true" />
       <div className="cigar-visual__rim" aria-hidden="true" />
@@ -49,10 +61,9 @@ const FORMATS = [
     bestUseCase: 'Everyday smoke, quick relaxation',
     experienceLevel: 'Beginner Friendly',
     flavorImpact: 'Balanced & Approachable',
-    photo: { src: '/assets/smokecraft/cropped/scorecard-bg.jpg', position: 'center 63%', zoom: 1.3, taper: false },
+    taper: false,
     shapeProfile: { badge: 'Short / Thick', label: 'Short · Thick · 50 Ring Gauge', lengthPct: 45, thicknessPx: 16 },
     image: '/assets/smokecraft/cigars/robusto.jpg',
-    hasPhoto: false,
   },
   {
     id: 'toro',
@@ -72,10 +83,9 @@ const FORMATS = [
     bestUseCase: 'Long pairings, evening unwind',
     experienceLevel: 'Beginner–Intermediate',
     flavorImpact: 'Rich & Evolving',
-    photo: { src: '/assets/smokecraft/cropped/cut-toast-light-bg.jpg', position: 'center 55%', zoom: 1.2, taper: false },
+    taper: false,
     shapeProfile: { badge: 'Long / Balanced', label: 'Long · Balanced · 50 Ring Gauge', lengthPct: 85, thicknessPx: 14 },
     image: '/assets/smokecraft/cigars/toro.jpg',
-    hasPhoto: false,
   },
   {
     id: 'churchill',
@@ -95,10 +105,9 @@ const FORMATS = [
     bestUseCase: 'Special occasions, slow lounge sessions',
     experienceLevel: 'Intermediate',
     flavorImpact: 'Refined & Cool',
-    photo: { src: '/assets/smokecraft/cropped/connections-bg.jpg', position: 'center 75%', zoom: 1.4, taper: false },
+    taper: false,
     shapeProfile: { badge: 'Longest / Slim', label: 'Longest · Slim · 47 Ring Gauge', lengthPct: 100, thicknessPx: 9 },
     image: '/assets/smokecraft/cigars/churchill.jpg',
-    hasPhoto: false,
   },
   {
     id: 'corona',
@@ -118,10 +127,9 @@ const FORMATS = [
     bestUseCase: 'Quick smoke, casual moments',
     experienceLevel: 'Beginner Friendly',
     flavorImpact: 'Crisp & Light',
-    photo: { src: '/assets/smokecraft/cropped/humidor-match-bg.jpg', position: 'center 0%', zoom: 1, taper: false },
+    taper: false,
     shapeProfile: { badge: 'Small / Slim', label: 'Small · Slim · 42 Ring Gauge', lengthPct: 35, thicknessPx: 8 },
     image: '/assets/smokecraft/cigars/corona.jpg',
-    hasPhoto: false,
   },
   {
     id: 'gordo',
@@ -141,10 +149,9 @@ const FORMATS = [
     bestUseCase: 'Bold relaxation, slow deep sessions',
     experienceLevel: 'Experienced',
     flavorImpact: 'Full & Bold',
-    photo: { src: '/assets/smokecraft/cropped/flavor-dna-bg.jpg', position: 'left 70%', zoom: 1.6, taper: false },
+    taper: false,
     shapeProfile: { badge: 'Thickest / Big Ring', label: 'Thickest · 60 Ring Gauge', lengthPct: 65, thicknessPx: 20 },
     image: '/assets/smokecraft/cigars/gordo.jpg',
-    hasPhoto: false,
   },
   {
     id: 'torpedo',
@@ -164,10 +171,9 @@ const FORMATS = [
     bestUseCase: 'Focused tasting, complex blends',
     experienceLevel: 'Experienced',
     flavorImpact: 'Layered & Intense',
-    photo: { src: '/assets/smokecraft/cropped/final-third-bg.jpg', position: '75% 5%', zoom: 2, taper: true },
+    taper: true,
     shapeProfile: { badge: 'Tapered / Pointed', label: 'Tapered · Figurado · 52 Ring Gauge', lengthPct: 78, thicknessPx: 13 },
     image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
-    hasPhoto: false,
   },
 ]
 
@@ -469,11 +475,20 @@ export default function Format() {
           clip-path: polygon(0 12%, 76% 12%, 100% 50%, 76% 88%, 0 88%);
         }
         .format-silhouette__label {
+          display: flex;
+          flex-direction: column;
           font-size: 10px;
           font-weight: 800;
           letter-spacing: 0.04em;
           text-transform: uppercase;
           color: rgba(233,193,118,0.78);
+        }
+        .format-silhouette__label em {
+          font-style: normal;
+          font-size: 8px;
+          font-weight: 700;
+          letter-spacing: 0.03em;
+          color: rgba(233,193,118,0.42);
         }
         .format-card.is-selected .format-card__visual {
           box-shadow: inset 0 0 0 1.5px rgba(255,225,151,0.7), inset 0 0 32px rgba(233,193,118,0.28), 0 0 30px rgba(233,193,118,0.32);
@@ -488,10 +503,42 @@ export default function Format() {
         }
         .cigar-visual__photo {
           position: absolute;
-          inset: -4%;
-          background-repeat: no-repeat;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
           filter: saturate(1.12) brightness(0.94) contrast(1.1);
           transition: transform 0.35s ease;
+        }
+        .cigar-visual--missing {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+          text-align: center;
+          padding: 10px 14px;
+          background:
+            radial-gradient(ellipse at 50% 0%, rgba(233,193,118,0.1), transparent 60%),
+            linear-gradient(160deg, rgba(40,26,14,0.9), rgba(10,6,3,0.95));
+          box-shadow: inset 0 0 0 1px rgba(233,193,118,0.22);
+        }
+        .cigar-visual__missing-icon {
+          color: rgba(233,193,118,0.55);
+          font-size: 26px;
+          margin-bottom: 2px;
+        }
+        .cigar-visual__missing-title {
+          color: rgba(233,193,118,0.85);
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        .cigar-visual__missing-file {
+          color: rgba(247,239,226,0.6);
+          font-size: 11px;
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
         }
         .format-card:hover .cigar-visual__photo,
         .format-insight__cigar:hover .cigar-visual__photo {
@@ -900,13 +947,16 @@ export default function Format() {
                     {format.shapeProfile && (
                       <span className="format-silhouette" aria-hidden="true">
                         <span
-                          className={`format-silhouette__bar${format.photo?.taper ? ' is-tapered' : ''}`}
+                          className={`format-silhouette__bar${format.taper ? ' is-tapered' : ''}`}
                           style={{
                             width: `${format.shapeProfile.lengthPct ?? 50}%`,
                             height: format.shapeProfile.thicknessPx ?? 12,
                           }}
                         />
-                        <span className="format-silhouette__label">{format.shapeProfile.label}</span>
+                        <span className="format-silhouette__label">
+                          {format.shapeProfile.label}
+                          <em>Temporary guide until photo upload</em>
+                        </span>
                       </span>
                     )}
                     <h2>{format.name}</h2>
