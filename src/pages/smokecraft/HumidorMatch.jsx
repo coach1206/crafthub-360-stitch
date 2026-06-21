@@ -45,31 +45,68 @@ export default function HumidorMatch() {
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Humidor Match</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth:560 }}>Confirm your cigar's storage condition before the session begins.</p>
-        <div className="flex flex-col gap-3 mb-12">
+        <div
+          className="flex flex-col gap-3 mb-12 rounded-3xl border border-primary/15 backdrop-blur-xl"
+          style={{
+            padding: 16,
+            background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
+          }}
+        >
           {OPTIONS.map(o => {
             const on = selected === o.id
+            function select() {
+              triggerHaptic('light')
+              setSelected(o.id)
+            }
             return (
-              <button key={o.id} type="button" onClick={() => { triggerHaptic('light'); setSelected(o.id) }}
-                className="flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
-                style={{ padding:'20px 24px', background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)' }}>
-                <span className="material-symbols-outlined text-primary" style={{ fontSize:28, ...(on ? FILL1 : {}) }}>humidity_mid</span>
+              <div
+                key={o.id}
+                role="button"
+                tabIndex={0}
+                onClick={select}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') select() }}
+                className="flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98] cursor-pointer"
+                style={{
+                  padding: '20px 20px 20px 24px',
+                  background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
+                  borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.08)',
+                  boxShadow: on ? '0 0 0 1px rgba(233,193,118,0.25), 0 8px 28px rgba(233,193,118,0.18)' : 'none',
+                }}
+              >
+                <span className="material-symbols-outlined text-primary" style={{ fontSize: 28, ...(on ? FILL1 : {}) }}>humidity_mid</span>
                 <div className="flex-1">
                   <p className="font-label-lg text-label-lg text-on-surface font-semibold">{o.label}</p>
                   <p className="font-body-md text-body-md text-on-surface-variant mt-1">{o.desc}</p>
                 </div>
                 {on && <span className="material-symbols-outlined text-primary" style={FILL1}>check_circle</span>}
-              </button>
+                <button
+                  type="button"
+                  onClick={e => { e.stopPropagation(); select() }}
+                  aria-label={`Select ${o.label}`}
+                  className="flex items-center justify-center rounded-full transition-all duration-300 active:scale-90 hover:bg-primary/10"
+                  style={{
+                    width: 40,
+                    height: 40,
+                    flexShrink: 0,
+                    border: on ? '1px solid rgba(233,193,118,0.5)' : '1px solid rgba(255,255,255,0.1)',
+                    color: on ? '#e9c176' : 'rgba(255,255,255,0.5)',
+                  }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 22 }}>chevron_right</span>
+                </button>
+              </div>
             )
           })}
         </div>
-        <div className="flex gap-4">
-          <button onClick={handleContinue} disabled={!selected}
-            className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40"
+        <div className="flex flex-col sm:flex-row gap-4">
+          <button onClick={handleContinue} disabled={!selected || done}
+            className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40 w-full sm:w-auto"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
             Continue <span className="material-symbols-outlined">arrow_forward</span>
           </button>
           <button onClick={() => navigate('/smokecraft/golden-box')}
-            className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300"
+            className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300 w-full sm:w-auto"
             style={{ height:64,paddingInline:32 }}>
             <span className="material-symbols-outlined">arrow_back</span> Back
           </button>
