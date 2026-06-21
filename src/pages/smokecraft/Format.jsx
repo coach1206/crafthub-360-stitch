@@ -50,6 +50,7 @@ const FORMATS = [
     experienceLevel: 'Beginner Friendly',
     flavorImpact: 'Balanced & Approachable',
     photo: { src: '/assets/smokecraft/cropped/scorecard-bg.jpg', position: 'center 63%', zoom: 1.3, taper: false },
+    shapeProfile: { badge: 'Short / Thick', label: 'Short · Thick · 50 Ring Gauge', lengthPct: 45, thicknessPx: 16 },
     image: '/assets/smokecraft/cigars/robusto.jpg',
     hasPhoto: false,
   },
@@ -72,6 +73,7 @@ const FORMATS = [
     experienceLevel: 'Beginner–Intermediate',
     flavorImpact: 'Rich & Evolving',
     photo: { src: '/assets/smokecraft/cropped/cut-toast-light-bg.jpg', position: 'center 55%', zoom: 1.2, taper: false },
+    shapeProfile: { badge: 'Long / Balanced', label: 'Long · Balanced · 50 Ring Gauge', lengthPct: 85, thicknessPx: 14 },
     image: '/assets/smokecraft/cigars/toro.jpg',
     hasPhoto: false,
   },
@@ -94,6 +96,7 @@ const FORMATS = [
     experienceLevel: 'Intermediate',
     flavorImpact: 'Refined & Cool',
     photo: { src: '/assets/smokecraft/cropped/connections-bg.jpg', position: 'center 75%', zoom: 1.4, taper: false },
+    shapeProfile: { badge: 'Longest / Slim', label: 'Longest · Slim · 47 Ring Gauge', lengthPct: 100, thicknessPx: 9 },
     image: '/assets/smokecraft/cigars/churchill.jpg',
     hasPhoto: false,
   },
@@ -116,6 +119,7 @@ const FORMATS = [
     experienceLevel: 'Beginner Friendly',
     flavorImpact: 'Crisp & Light',
     photo: { src: '/assets/smokecraft/cropped/humidor-match-bg.jpg', position: 'center 0%', zoom: 1, taper: false },
+    shapeProfile: { badge: 'Small / Slim', label: 'Small · Slim · 42 Ring Gauge', lengthPct: 35, thicknessPx: 8 },
     image: '/assets/smokecraft/cigars/corona.jpg',
     hasPhoto: false,
   },
@@ -138,6 +142,7 @@ const FORMATS = [
     experienceLevel: 'Experienced',
     flavorImpact: 'Full & Bold',
     photo: { src: '/assets/smokecraft/cropped/flavor-dna-bg.jpg', position: 'left 70%', zoom: 1.6, taper: false },
+    shapeProfile: { badge: 'Thickest / Big Ring', label: 'Thickest · 60 Ring Gauge', lengthPct: 65, thicknessPx: 20 },
     image: '/assets/smokecraft/cigars/gordo.jpg',
     hasPhoto: false,
   },
@@ -160,6 +165,7 @@ const FORMATS = [
     experienceLevel: 'Experienced',
     flavorImpact: 'Layered & Intense',
     photo: { src: '/assets/smokecraft/cropped/final-third-bg.jpg', position: '75% 5%', zoom: 2, taper: true },
+    shapeProfile: { badge: 'Tapered / Pointed', label: 'Tapered · Figurado · 52 Ring Gauge', lengthPct: 78, thicknessPx: 13 },
     image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
     hasPhoto: false,
   },
@@ -415,11 +421,12 @@ export default function Format() {
           transform: scale(1);
         }
         .format-card__visual {
+          position: relative;
           height: 152px;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 16px 0 14px;
+          margin: 16px 0 10px;
           border-radius: 12px;
           overflow: hidden;
           background:
@@ -427,6 +434,46 @@ export default function Format() {
             linear-gradient(180deg, rgba(0,0,0,0.4), rgba(40,26,14,0.42));
           box-shadow: inset 0 0 0 1px rgba(233,193,118,0.24), inset 0 10px 26px rgba(0,0,0,0.55);
           transition: box-shadow 0.2s ease;
+        }
+        .format-shape-badge {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          z-index: 4;
+          padding: 3px 9px;
+          border-radius: 999px;
+          background: rgba(10,6,3,0.84);
+          border: 1px solid rgba(233,193,118,0.55);
+          color: #e9c176;
+          font-size: 9px;
+          font-weight: 900;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+        .format-silhouette {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0 0 12px;
+        }
+        .format-silhouette__bar {
+          flex-shrink: 0;
+          display: inline-block;
+          background: linear-gradient(90deg, #c8973f, #f0d184);
+          border-radius: 999px;
+          box-shadow: 0 0 8px rgba(233,193,118,0.3);
+        }
+        .format-silhouette__bar.is-tapered {
+          border-radius: 999px;
+          clip-path: polygon(0 12%, 76% 12%, 100% 50%, 76% 88%, 0 88%);
+        }
+        .format-silhouette__label {
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          color: rgba(233,193,118,0.78);
         }
         .format-card.is-selected .format-card__visual {
           box-shadow: inset 0 0 0 1.5px rgba(255,225,151,0.7), inset 0 0 32px rgba(233,193,118,0.28), 0 0 30px rgba(233,193,118,0.32);
@@ -846,7 +893,15 @@ export default function Format() {
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
                       <CigarVisual format={format} />
+                      <span className="format-shape-badge">{format.shapeProfile.badge}</span>
                     </span>
+                    <div className="format-silhouette" aria-hidden="true">
+                      <span
+                        className={`format-silhouette__bar${format.photo.taper ? ' is-tapered' : ''}`}
+                        style={{ width: `${format.shapeProfile.lengthPct}%`, height: format.shapeProfile.thicknessPx }}
+                      />
+                      <span className="format-silhouette__label">{format.shapeProfile.label}</span>
+                    </div>
                     <h2>{format.name}</h2>
                     <span className="format-card__type">{format.shape}</span>
                     <p>{format.description}</p>
