@@ -10,9 +10,11 @@ const STEPS = [
 ]
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
+const XP_BY_COMPLETED_COUNT = { 3: 50, 2: 35, 1: 20, 0: 5 }
+
 export default function CutToastLight() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { completeStep, addXP, setCutToastLightProgress } = useGuestSession()
   const [checked, setChecked] = useState(new Set())
   const [done, setDone] = useState(false)
 
@@ -25,8 +27,17 @@ export default function CutToastLight() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
+    const stepsCompleted = STEPS.filter(s => checked.has(s.id)).map(s => s.id)
+    const completedCount = stepsCompleted.length
+    const allStepsCompleted = completedCount === STEPS.length
+    setCutToastLightProgress({
+      stepsCompleted,
+      allStepsCompleted,
+      completedCount,
+      totalSteps: STEPS.length,
+    })
     completeStep('cut-toast-light')
-    addXP(50)
+    addXP(XP_BY_COMPLETED_COUNT[completedCount])
     navigate('/smokecraft/first-third')
   }
 
@@ -49,33 +60,47 @@ export default function CutToastLight() {
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Cut, Toast &amp; Light</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth:560 }}>Complete each preparation step before beginning your tasting.</p>
-        <div className="flex flex-col gap-3 mb-12">
+        <div
+          className="flex flex-col gap-3 mb-12 rounded-3xl border border-primary/15 backdrop-blur-xl"
+          style={{
+            padding: 16,
+            background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
+          }}
+        >
           {STEPS.map(s => {
             const on = checked.has(s.id)
             return (
               <button key={s.id} type="button" onClick={() => toggle(s.id)}
-                className="flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
-                style={{ padding:'20px 24px', background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)' }}>
-                <span className="material-symbols-outlined text-primary" style={{ fontSize:26, ...(on ? FILL1 : {}) }}>{s.icon}</span>
-                <div className="flex-1">
-                  <p className="font-label-lg text-label-lg text-on-surface font-semibold">{s.label}</p>
-                  <p className="font-body-md text-body-md text-on-surface-variant mt-1">{s.desc}</p>
+                className="sc-tactile flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
+                style={{
+                  padding: '24px',
+                  background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
+                  borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.08)',
+                  boxShadow: on ? '0 0 0 1px rgba(233,193,118,0.25), 0 8px 28px rgba(233,193,118,0.18)' : 'none',
+                }}>
+                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ background: on ? 'rgba(233,193,118,0.15)' : 'rgba(255,255,255,0.05)' }}>
+                  <span className="material-symbols-outlined text-primary" style={{ fontSize:22, lineHeight:1, ...(on ? FILL1 : {}) }}>{s.icon}</span>
                 </div>
-                <div className="w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: on ? '#e9c176' : 'rgba(255,255,255,0.2)', background: on ? '#e9c176' : 'transparent' }}>
-                  {on && <span className="material-symbols-outlined" style={{ fontSize:14,color:'#131314',...FILL1 }}>check</span>}
+                <div className="flex-1">
+                  <p className="font-label-lg text-label-lg text-on-surface font-semibold mb-1">{s.label}</p>
+                  <p className="font-body-md text-body-md text-on-surface-variant">{s.desc}</p>
+                </div>
+                <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: on ? '#e9c176' : 'rgba(255,255,255,0.2)', background: on ? '#e9c176' : 'transparent' }}>
+                  {on && <span className="material-symbols-outlined" style={{ fontSize:12,color:'#131314',...FILL1 }}>check</span>}
                 </div>
               </button>
             )
           })}
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           <button onClick={handleContinue}
-            className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300"
+            className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 w-full sm:w-auto"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
             Begin Tasting <span className="material-symbols-outlined">arrow_forward</span>
           </button>
           <button onClick={() => navigate('/smokecraft/request-purchase')}
-            className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300"
+            className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300 w-full sm:w-auto"
             style={{ height:64,paddingInline:32 }}>
             <span className="material-symbols-outlined">arrow_back</span> Back
           </button>
