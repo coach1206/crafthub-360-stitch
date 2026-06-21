@@ -34,8 +34,12 @@ export default function EATCommandHub() {
   const openTickets = getTickets().filter((t) => !['paid'].includes(t.status)).length
   const pendingHumidor = eatTargeted.filter((e) => e.commandType === 'CIGAR_REQUESTED' && e.status !== 'completed').length
 
-  function resolve(ev) {
-    receiveCommand(ev.id); completeCommand(ev.id); refresh()
+  function markReceived(ev) {
+    receiveCommand(ev.id); refresh()
+  }
+
+  function markCompleted(ev) {
+    completeCommand(ev.id); refresh()
   }
 
   return (
@@ -64,7 +68,8 @@ export default function EATCommandHub() {
                   <span style={{ marginLeft: 8, fontSize: 13 }}>{e.eventType || e.commandType}</span>
                   <div style={{ fontSize: 11, color: '#8b95a3', marginTop: 2 }}>{e.sourceSystem} → {e.targetSystem}{e.ticketId ? ` · ${e.ticketId}` : ''}{e.payload?.label ? ` · ${e.payload.label}` : ''}</div>
                 </div>
-                {actionable && <Btn tone="green" onClick={() => resolve(e)} style={{ padding: '7px 12px', fontSize: 12 }}>Acknowledge</Btn>}
+                {actionable && e.status === 'pending' && <Btn tone="green" onClick={() => markReceived(e)} style={{ padding: '7px 12px', fontSize: 12 }}>Mark Received</Btn>}
+                {actionable && e.status === 'received' && <Btn tone="green" onClick={() => markCompleted(e)} style={{ padding: '7px 12px', fontSize: 12 }}>Mark Completed</Btn>}
               </div>
             )
           })}

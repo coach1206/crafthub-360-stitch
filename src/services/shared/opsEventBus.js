@@ -8,9 +8,9 @@
  *                      native `storage` event (cross-tab) and invokes handler.
  *
  * Normalized event/command shape:
- *  { id, sourceSystem, targetSystem, eventType, commandType, tableId,
- *    sectionId, staffId, ticketId, productId, inventoryId, provider,
- *    payload, status, createdAt, resolvedAt }
+ *  { id, parentSystem, platformSystem, sourceSystem, targetSystem, eventType,
+ *    commandType, tableId, sectionId, staffId, ticketId, productId,
+ *    inventoryId, provider, payload, status, createdAt, resolvedAt }
  */
 
 import { OPS_KEYS, opsAppend, getOpsEvents } from './opsStorage.js'
@@ -37,6 +37,8 @@ function uid() {
 export function normalizeEvent(partial = {}) {
   return {
     id:           partial.id || uid(),
+    parentSystem: partial.parentSystem || 'NOVEE',
+    platformSystem: partial.platformSystem || 'CRAFTHUB',
     sourceSystem: partial.sourceSystem || SYSTEMS.NOVEE,
     targetSystem: partial.targetSystem || SYSTEMS.NOVEE,
     eventType:    partial.eventType || null,
