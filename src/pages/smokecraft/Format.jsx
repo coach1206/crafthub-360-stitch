@@ -562,21 +562,6 @@ export default function Format() {
           pointer-events: none;
           box-shadow: inset 0 0 0 1.5px rgba(233,193,118,0.4), inset 0 0 24px rgba(233,193,118,0.12);
         }
-        .format-missing-note {
-          padding: 14px 18px;
-          color: rgba(233,193,118,0.55);
-          font-size: 11px;
-          letter-spacing: 0.04em;
-          line-height: 1.6;
-        }
-        .format-missing-note strong {
-          display: block;
-          color: rgba(233,193,118,0.78);
-          font-size: 11px;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          margin-bottom: 4px;
-        }
         .format-card h2 {
           margin: 0 0 2px;
           font-family: "Playfair Display", Georgia, serif;
@@ -955,7 +940,7 @@ export default function Format() {
                         />
                         <span className="format-silhouette__label">
                           {format.shapeProfile.label}
-                          <em>Temporary guide until photo upload</em>
+                          <em>Relative size guide</em>
                         </span>
                       </span>
                     )}
@@ -1074,12 +1059,6 @@ export default function Format() {
               </div>
             </section>
 
-            <section className="format-panel">
-              <div className="format-missing-note">
-                <strong>Asset requirements · dedicated photography pending</strong>
-                robusto.jpg, toro.jpg, churchill.jpg, corona.jpg, gordo.jpg, torpedo-figurado.jpg
-              </div>
-            </section>
           </aside>
         </div>
 
