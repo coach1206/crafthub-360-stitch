@@ -11,11 +11,22 @@ export default function Enroll() {
   const [form, setForm] = useState({
     fullName: '', phone: '', email: '', nickname: '',
     ageConfirmed: false, city: '', state: '', zip: '', countryRegion: '',
+    experienceLevel: '', strengthPreference: '', occasion: '', socialPreference: '', budgetRange: '',
+    flavorPreferences: [],
   })
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
+  }
+
+  function toggleFlavor(flavor) {
+    setForm(prev => ({
+      ...prev,
+      flavorPreferences: prev.flavorPreferences.includes(flavor)
+        ? prev.flavorPreferences.filter(f => f !== flavor)
+        : [...prev.flavorPreferences, flavor],
+    }))
   }
 
   function handlePhotoChange(e) {
@@ -40,6 +51,12 @@ export default function Enroll() {
       countryRegion: form.countryRegion,
       ageConfirmed: form.ageConfirmed,
       photo:        avatarSrc,
+      experienceLevel:    form.experienceLevel,
+      strengthPreference: form.strengthPreference,
+      occasion:           form.occasion,
+      socialPreference:   form.socialPreference,
+      budgetRange:         form.budgetRange,
+      flavorPreferences:   form.flavorPreferences,
     }
     completeGuestProfile(profilePayload)
     setSelectedCraft('SmokeCraft 360')
@@ -249,6 +266,93 @@ export default function Enroll() {
                 <option value="Brazil">Brazil</option>
                 <option value="Other">Other</option>
               </select>
+            </div>
+
+            {/* Smoke Preference DNA */}
+            <div className="md:col-span-2 flex items-center gap-3 pb-2 mt-4" style={{ borderBottom: '1px solid rgba(255,232,186,0.2)' }}>
+              <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>fingerprint</span>
+              <h3 className="font-label-lg text-primary uppercase tracking-widest">Smoke Preference DNA</h3>
+            </div>
+
+            <div className="gold-underline py-2">
+              <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Experience Level</label>
+              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none" name="experienceLevel" value={form.experienceLevel} onChange={handleChange}>
+                <option value="">Select experience level</option>
+                <option value="Novice">Novice</option>
+                <option value="Enthusiast">Enthusiast</option>
+                <option value="Connoisseur">Connoisseur</option>
+                <option value="Aficionado">Aficionado</option>
+              </select>
+            </div>
+
+            <div className="gold-underline py-2">
+              <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Strength Preference</label>
+              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none" name="strengthPreference" value={form.strengthPreference} onChange={handleChange}>
+                <option value="">Select strength preference</option>
+                <option value="Mild">Mild</option>
+                <option value="Mild-Medium">Mild-Medium</option>
+                <option value="Medium">Medium</option>
+                <option value="Medium-Full">Medium-Full</option>
+                <option value="Full">Full</option>
+              </select>
+            </div>
+
+            <div className="gold-underline py-2">
+              <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Occasion</label>
+              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none" name="occasion" value={form.occasion} onChange={handleChange}>
+                <option value="">Select occasion</option>
+                <option value="Solo Relaxation">Solo Relaxation</option>
+                <option value="Celebration">Celebration</option>
+                <option value="Social Gathering">Social Gathering</option>
+                <option value="Business">Business</option>
+                <option value="Pairing Dinner">Pairing Dinner</option>
+                <option value="Outdoor / Golf">Outdoor / Golf</option>
+              </select>
+            </div>
+
+            <div className="gold-underline py-2">
+              <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Social Preference</label>
+              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none" name="socialPreference" value={form.socialPreference} onChange={handleChange}>
+                <option value="">Select social preference</option>
+                <option value="Solo">Solo</option>
+                <option value="Small Group">Small Group</option>
+                <option value="Large Group / Event">Large Group / Event</option>
+              </select>
+            </div>
+
+            <div className="gold-underline py-2 md:col-span-2">
+              <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Budget Range</label>
+              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none" name="budgetRange" value={form.budgetRange} onChange={handleChange}>
+                <option value="">Select budget range</option>
+                <option value="Under $10">Under $10</option>
+                <option value="$10–20">$10–20</option>
+                <option value="$20–35">$20–35</option>
+                <option value="$35+">$35+</option>
+              </select>
+            </div>
+
+            <div className="md:col-span-2 py-2">
+              <label className="block font-label-sm text-on-surface-variant mb-3 uppercase">Flavor Preferences</label>
+              <div className="flex flex-wrap gap-3">
+                {['Earthy', 'Spicy', 'Sweet', 'Woody', 'Nutty', 'Creamy', 'Fruity', 'Cocoa & Coffee'].map(flavor => {
+                  const on = form.flavorPreferences.includes(flavor)
+                  return (
+                    <button
+                      type="button"
+                      key={flavor}
+                      onClick={() => toggleFlavor(flavor)}
+                      className="px-4 py-2 rounded-full font-label-sm uppercase tracking-wider transition-all active:scale-95"
+                      style={{
+                        border: `1px solid ${on ? 'rgba(233,193,118,0.85)' : 'rgba(255,232,186,0.25)'}`,
+                        background: on ? 'rgba(233,193,118,0.18)' : 'rgba(0,0,0,0.3)',
+                        color: on ? '#ffd889' : 'rgba(255,247,229,0.7)',
+                      }}
+                    >
+                      {flavor}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           </form>
         </div>
