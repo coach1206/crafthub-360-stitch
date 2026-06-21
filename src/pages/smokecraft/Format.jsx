@@ -13,7 +13,7 @@ import {
 // cropped/scaled/positioned via format.photo so the six cards read as six different cigars, not one
 // shared illustration. Torpedo/Figurado additionally clips the frame to a tapered silhouette.
 function CigarVisual({ format }) {
-  const { src, position, zoom, taper } = format.photo
+  const { src, position, zoom, taper } = format.photo || {}
   return (
     <div className={`cigar-visual${taper ? ' is-tapered' : ''}`}>
       <div
@@ -893,15 +893,22 @@ export default function Format() {
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
                       <CigarVisual format={format} />
-                      <span className="format-shape-badge">{format.shapeProfile.badge}</span>
+                      {format.shapeProfile?.badge && (
+                        <span className="format-shape-badge">{format.shapeProfile.badge}</span>
+                      )}
                     </span>
-                    <div className="format-silhouette" aria-hidden="true">
-                      <span
-                        className={`format-silhouette__bar${format.photo.taper ? ' is-tapered' : ''}`}
-                        style={{ width: `${format.shapeProfile.lengthPct}%`, height: format.shapeProfile.thicknessPx }}
-                      />
-                      <span className="format-silhouette__label">{format.shapeProfile.label}</span>
-                    </div>
+                    {format.shapeProfile && (
+                      <span className="format-silhouette" aria-hidden="true">
+                        <span
+                          className={`format-silhouette__bar${format.photo?.taper ? ' is-tapered' : ''}`}
+                          style={{
+                            width: `${format.shapeProfile.lengthPct ?? 50}%`,
+                            height: format.shapeProfile.thicknessPx ?? 12,
+                          }}
+                        />
+                        <span className="format-silhouette__label">{format.shapeProfile.label}</span>
+                      </span>
+                    )}
                     <h2>{format.name}</h2>
                     <span className="format-card__type">{format.shape}</span>
                     <p>{format.description}</p>
