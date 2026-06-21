@@ -33,6 +33,15 @@ export default function EATMediaLibrary() {
       />
       <div style={{ fontSize: 12, color: '#8b95a3', marginBottom: 14 }}>{filtered.length} assets · uploads are session-local previews (object URLs), not persisted to cloud storage.</div>
 
+      <Card style={{ marginBottom: 20 }}>
+        <div style={{ fontWeight: 700, marginBottom: 10, color: GOLD }}>Reference Visuals / Media Source</div>
+        <div style={{ fontSize: 12, color: '#8b95a3', marginBottom: 10 }}>POS 3 and E.A.T. reference images live here as seed media assets. They are not currently rendered on the POS 3 or E.A.T. screens.</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(170px,1fr))', gap: 14 }}>
+          {assets.filter((a) => ['med_pos3_handheld', 'med_pos3_tablet', 'med_eat_system'].includes(a.id))
+            .map((a) => <MediaAssetCard key={a.id} asset={a} onAssign={setAssignTarget} />)}
+        </div>
+      </Card>
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(170px,1fr))', gap: 14, marginBottom: 24 }}>
         {filtered.map((a) => <MediaAssetCard key={a.id} asset={a} onAssign={setAssignTarget} />)}
         {filtered.length === 0 && <div style={{ color: '#8b95a3' }}>No assets match these filters.</div>}

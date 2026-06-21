@@ -30,8 +30,12 @@ export default function POS3Home() {
   const openTickets = tickets.length
   const occupied = tables.filter((t) => t.status === 'occupied').length
 
-  function ack(ev) {
+  function markReceived(ev) {
     receiveCommand(ev.id)
+    refresh()
+  }
+
+  function markCompleted(ev) {
     completeCommand(ev.id)
     refresh()
   }
@@ -55,10 +59,16 @@ export default function POS3Home() {
                 {incoming.map((ev) => (
                   <div key={ev.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                     <div>
+                      <Pill label={ev.status} tone={ev.status} />
                       <Pill label={ev.commandType || ev.eventType} tone="pending" />
                       <span style={{ marginLeft: 10, fontSize: 13 }}>{ev.payload?.label || ev.eventType} · from {ev.sourceSystem}</span>
                     </div>
-                    <Btn tone="green" onClick={() => ack(ev)} style={{ padding: '8px 14px' }}>Mark Received</Btn>
+                    {ev.status === 'pending' && (
+                      <Btn tone="green" onClick={() => markReceived(ev)} style={{ padding: '8px 14px' }}>Mark Received</Btn>
+                    )}
+                    {ev.status === 'received' && (
+                      <Btn tone="green" onClick={() => markCompleted(ev)} style={{ padding: '8px 14px' }}>Mark Completed</Btn>
+                    )}
                   </div>
                 ))}
               </Card>

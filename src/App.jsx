@@ -445,6 +445,7 @@ export default function App() {
               {/* ── NEW E.A.T. management system — nested route tree ── */}
               <Route path="eat">
                 <Route index              element={<EATCommandHub />} />
+                <Route path="command-hub" element={<EATCommandHub />} />
                 <Route path="pos-control" element={<EATPosControl />} />
                 <Route path="operations"  element={<EATOperations />} />
                 <Route path="inventory"   element={<EATInventory />} />
