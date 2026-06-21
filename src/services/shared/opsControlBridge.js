@@ -28,13 +28,33 @@ export function createCommand(partial) {
   return cmd
 }
 
+function updateEventStatus(id, patch) {
+  const events = opsGet(OPS_KEYS.events, [])
+  const idx = events.findIndex((e) => e.id === id)
+  if (idx === -1) return null
+  events[idx] = { ...events[idx], ...patch }
+  opsSet(OPS_KEYS.events, events)
+  try { window.dispatchEvent(new CustomEvent(OPS_EVENT_NAME, { detail: null })) } catch {}
+  return events[idx]
+}
+
+/**
+ * Update a command/event's status by id. IDs are shared between
+ * shared:controlCommands (created via createCommand) and shared:opsEvents
+ * (created via emit() elsewhere, e.g. SmokeCraft → POS3/EAT handoffs), so
+ * "Acknowledge/Resolve" UI can call this on either kind of id.
+ */
 function updateCommand(id, patch) {
   const commands = getControlCommands()
   const idx = commands.findIndex((c) => c.id === id)
-  if (idx === -1) return null
-  commands[idx] = { ...commands[idx], ...patch }
-  persist(commands)
-  return commands[idx]
+  if (idx !== -1) {
+    commands[idx] = { ...commands[idx], ...patch }
+    persist(commands)
+    updateEventStatus(id, patch)
+    return commands[idx]
+  }
+  // Not a control command — try updating it as a plain ops event instead.
+  return updateEventStatus(id, patch)
 }
 
 export function markCommandStatus(id, status) {
