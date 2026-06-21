@@ -15,6 +15,30 @@ import CraftHub         from './pages/CraftHub.jsx'
 import POS3             from './pages/POS3.jsx'
 import EATCommand       from './pages/EATCommand.jsx'
 
+// ── NEW POS 3 system (/pos3/*) ────────────────────────────────
+import POS3Home     from './pages/pos3/POS3Home.jsx'
+import POS3Handheld from './pages/pos3/POS3Handheld.jsx'
+import POS3Tables   from './pages/pos3/POS3Tables.jsx'
+import POS3Orders   from './pages/pos3/POS3Orders.jsx'
+import POS3Checkout from './pages/pos3/POS3Checkout.jsx'
+import POS3Settings from './pages/pos3/POS3Settings.jsx'
+
+// ── NEW E.A.T. management system (/eat/*) ─────────────────────
+import EATCommandHub from './pages/eat/EATCommandHub.jsx'
+import EATPosControl from './pages/eat/EATPosControl.jsx'
+import EATMediaLibrary from './pages/EATMediaLibrary.jsx'
+import EATInventory from './pages/eat/EATInventory.jsx'
+import EATReorders from './pages/eat/EATReorders.jsx'
+import EATStaff from './pages/eat/EATStaff.jsx'
+import EATSections from './pages/eat/EATSections.jsx'
+import EATKitchen from './pages/eat/EATKitchen.jsx'
+import EATBar from './pages/eat/EATBar.jsx'
+import EATHumidor from './pages/eat/EATHumidor.jsx'
+import EATData from './pages/eat/EATData.jsx'
+import EATReports from './pages/eat/EATReports.jsx'
+import EATDeviceMode from './pages/eat/EATDeviceMode.jsx'
+import EATSettings from './pages/eat/EATSettings.jsx'
+
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
 import Enroll           from './pages/smokecraft/Enroll.jsx'
@@ -383,8 +407,9 @@ export default function App() {
                 </ProtectedRoute>
               } />
 
-              {/* ── Protected: manager+ — BLOCKED in demo mode ───── */}
-              <Route path="eat" element={
+              {/* ── Legacy E.A.T. Command (older surface) — moved to /eat-legacy
+                   so the NEW E.A.T. management system can own /eat. ───── */}
+              <Route path="eat-legacy" element={
                 <ProtectedRoute
                   requiredPermission="access_eat_command"
                   loginRoute="/admin-login"
@@ -395,6 +420,34 @@ export default function App() {
                   <EATCommand />
                 </ProtectedRoute>
               } />
+
+              {/* ── NEW POS 3 system — nested route tree ───────────── */}
+              <Route path="pos3">
+                <Route index            element={<POS3Home />} />
+                <Route path="handheld"  element={<POS3Handheld />} />
+                <Route path="tables"    element={<POS3Tables />} />
+                <Route path="orders"    element={<POS3Orders />} />
+                <Route path="checkout"  element={<POS3Checkout />} />
+                <Route path="settings"  element={<POS3Settings />} />
+              </Route>
+
+              {/* ── NEW E.A.T. management system — nested route tree ── */}
+              <Route path="eat">
+                <Route index              element={<EATCommandHub />} />
+                <Route path="pos-control" element={<EATPosControl />} />
+                <Route path="inventory"   element={<EATInventory />} />
+                <Route path="reorders"    element={<EATReorders />} />
+                <Route path="staff"       element={<EATStaff />} />
+                <Route path="sections"    element={<EATSections />} />
+                <Route path="kitchen"     element={<EATKitchen />} />
+                <Route path="bar"         element={<EATBar />} />
+                <Route path="humidor"     element={<EATHumidor />} />
+                <Route path="data"        element={<EATData />} />
+                <Route path="reports"     element={<EATReports />} />
+                <Route path="device-mode" element={<EATDeviceMode />} />
+                <Route path="media"       element={<EATMediaLibrary />} />
+                <Route path="settings"    element={<EATSettings />} />
+              </Route>
 
               {/* ── Protected: admin+ — BLOCKED in demo mode ──────── */}
               <Route path="admin" element={
@@ -542,9 +595,10 @@ export default function App() {
               <Route path="craft-hub"    element={<Navigate to="/crafthub" replace />} />
               <Route path="craft-modules" element={<Navigate to="/crafthub" replace />} />
               <Route path="dashboard"    element={<Navigate to="/crafthub" replace />} />
+              {/* command-center / eat-command now resolve to the NEW /eat hub */}
               <Route path="command-center" element={<Navigate to="/eat" replace />} />
               <Route path="eat-command"  element={<Navigate to="/eat" replace />} />
-              <Route path="pos3"         element={<Navigate to="/pos" replace />} />
+              {/* NOTE: pos3 -> /pos redirect removed; /pos3 is now a real route tree */}
               <Route path="founder-command" element={<Navigate to="/founder" replace />} />
               <Route path="admin-command" element={<Navigate to="/admin" replace />} />
               <Route path="smokecraft/session-1" element={<Navigate to="/smokecraft" replace />} />

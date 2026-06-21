@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import { emit, SYSTEMS } from '../../services/shared/opsEventBus.js'
 
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
@@ -26,6 +27,30 @@ export default function RequestPurchase() {
     if (choice.actionType === 'HUMIDOR_REQUEST') {
       syncPos3Activity()
       syncEATActivity()
+      // Emit shared ops-bus events so POS3 + E.A.T. surface this handoff live.
+      emit({
+        sourceSystem: SYSTEMS.SMOKECRAFT,
+        targetSystem: SYSTEMS.POS3,
+        eventType:    'POS_HANDOFF_CREATED',
+        commandType:  'HUMIDOR_REQUEST',
+        payload:      { label: choice.label, desc: choice.desc, channel: 'humidor' },
+      })
+      emit({
+        sourceSystem: SYSTEMS.SMOKECRAFT,
+        targetSystem: SYSTEMS.EAT,
+        eventType:    'EAT_EVENT_CREATED',
+        commandType:  'CIGAR_REQUESTED',
+        payload:      { label: choice.label, desc: choice.desc, channel: 'humidor' },
+      })
+    } else {
+      // "I Already Have My Cigar" — SmokeCraft-only signal, no POS3/EAT routing.
+      emit({
+        sourceSystem: SYSTEMS.SMOKECRAFT,
+        targetSystem: SYSTEMS.SMOKECRAFT,
+        eventType:    'CIGAR_PROVIDED_BY_GUEST',
+        commandType:  'GUEST_HAS_CIGAR',
+        payload:      { label: choice.label },
+      })
     }
     completeStep('request-purchase')
     addXP(25)
