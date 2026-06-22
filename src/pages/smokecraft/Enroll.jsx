@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
+import { triggerHaptic } from '../../utils/haptics.js'
 
 export default function Enroll() {
   const navigate = useNavigate()
@@ -21,6 +22,7 @@ export default function Enroll() {
   }
 
   function toggleFlavor(flavor) {
+    triggerHaptic('light')
     setForm(prev => ({
       ...prev,
       flavorPreferences: prev.flavorPreferences.includes(flavor)
@@ -38,6 +40,8 @@ export default function Enroll() {
   }
 
   function handleContinue() {
+    if (!form.ageConfirmed) return
+    triggerHaptic('success')
     const [firstName, ...rest] = (form.fullName || '').trim().split(' ')
     const profilePayload = {
       firstName:    firstName || '',
@@ -66,6 +70,7 @@ export default function Enroll() {
   }
 
   function handleDraft() {
+    triggerHaptic('medium')
     const [firstName, ...rest] = (form.fullName || '').trim().split(' ')
     updateProfile({ firstName: firstName || '', lastName: rest.join(' '), nickname: form.nickname, email: form.email, countryRegion: form.countryRegion })
   }
@@ -367,12 +372,19 @@ export default function Enroll() {
           </button>
           <button
             onClick={handleContinue}
-            className="order-1 md:order-2 px-12 py-5 rounded-lg bg-primary text-on-primary font-label-lg tracking-widest shadow-[0_0_20px_rgba(233,193,118,0.3)] hover:brightness-110 transition-all active:scale-95 duration-200 flex items-center justify-center gap-3"
+            disabled={!form.ageConfirmed}
+            title={!form.ageConfirmed ? 'Age confirmation is required to continue' : undefined}
+            className="order-1 md:order-2 px-12 py-5 rounded-lg bg-primary text-on-primary font-label-lg tracking-widest shadow-[0_0_20px_rgba(233,193,118,0.3)] hover:brightness-110 transition-all active:scale-95 duration-200 flex items-center justify-center gap-3 disabled:opacity-45 disabled:cursor-not-allowed disabled:shadow-none"
           >
             CONTINUE TO PASSPORT
             <span className="material-symbols-outlined">arrow_forward</span>
           </button>
         </div>
+        {!form.ageConfirmed && (
+          <p className="text-center mt-4 font-label-sm" style={{ color: 'rgba(255,247,229,0.6)' }}>
+            Age confirmation is required before continuing to your Passport.
+          </p>
+        )}
       </main>
 
       {/* Bottom Navigation */}

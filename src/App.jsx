@@ -225,6 +225,7 @@ export default function App() {
               <Route path="smokecraft">
                 <Route index element={<SmokeCraft />} />
                 <Route path="enroll"           element={<Enroll />} />
+                <Route path="intake"           element={<Navigate to="/smokecraft/enroll" replace />} />
                 <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
                 <Route path="profile"          element={<Navigate to="/smokecraft/identity" replace />} />
                 <Route path="education"        element={<Navigate to="/smokecraft/format" replace />} />
