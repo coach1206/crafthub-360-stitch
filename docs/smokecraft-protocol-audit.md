@@ -205,24 +205,30 @@ Passport tree is reachable in Demo Mode.
 ### Phase 12 — 360 Passport Stamp
 
 - **Purpose**: award a stamp with user/venue/event/date/cigar country/type/mentor names/score/badge/pairing/networking status, **inside** the same 360 Passport Connections system — not a separate "Passport Legacy."
-- **Route/File**: `/smokecraft/passport-stamp` → `PassportStamp.jsx`; stamp logic in `GuestSessionContext.jsx`'s `completeSmokeCraftSession()`/`awardStamp()`.
-- **Status**: **Partial**. The stamp ceremony is live and writes into `session.passport.earnedStamps[]` — confirmed to be the **same** `session.passport` object used by every `/passport/*` page (no separate "Passport Legacy" system exists anywhere in the codebase — repo-wide grep for "Passport Legacy"/"PassportLegacy" returned zero results). However, the actual stamp object recorded (`stampId, title, craft, sessionNumber, eventName, earnedAt, visualTheme, points, sourceModule`) does **not** include several spec'd fields: mentor names, cigar country/type, score, badge earned, pairing-completed flag, or networking status. It is a generic "SmokeCraft 360 Initiation Stamp," not the rich per-session stamp the spec describes.
+- **Route/File**: `/smokecraft/passport-stamp` → `PassportStamp.jsx`; stamp logic in `GuestSessionContext.jsx`'s `awardStamp()` → `src/utils/passportProgress.js`'s `awardPassportStamp()`.
+- **Status (updated)**: **Partial, strengthened**. `awardPassportStamp()` now accepts an optional `extra` payload that is merged onto the stamp object (and onto an already-earned stamp, so a later page can enrich rather than duplicate). `PassportStamp.jsx` builds this payload (`buildStampPayload()`) from data already in session state: `userId/guestId`, `smokeCraftSessionId`, `smokeCraftPassportId`, `userName`, `venue`, `eventName`, `date`, `cigarName`/`cigarType`/`burnTime` (from `smokeCraft.selectedFormat`), `mentorNames`/`mentorIds` (from `session.mentors`), `score` (from the now-persisted `smokeCraft.scorecard.total`), `rankingLevel` (`session.rank`), `badgeEarned`/`badgesEarned`, `pairingCompleted`/`seedRegion`/`soilSelections` (from `smokecraftSeedSoil`), `networkingStatus`, `shareConsent`, `createdAt`. The Passport Stamp screen now renders a "Stamp Details" card showing venue/event/date/cigar/mentors/score/badge-ranking/pairing-completed/networking-status/privacy-status.
+- **Still honest gaps (not faked)**: `cigarCountry`/`wrapper`/`strength` are left `null` and labeled "Backend pending" in the UI — the Seed & Soil step (Phase 3) only stores a `seedRegionId`, not the region's country/wrapper/strength as discrete session fields, so the stamp cannot honestly populate those without inventing data. Fixing this is a Phase 3 data-shape change, out of scope for this pass.
+- **Scorecard persistence added**: `Scorecard.jsx` previously computed `total`/`scores` only in local component state and never saved them — there was nothing for the stamp to read. `handleContinue()` now writes `{ scores, total, maxTotal }` into `session.smokeCraft.scorecard` before navigating, which is the minimum change required for the stamp's `score` field to be real rather than fabricated.
 - **Demo Mode**: allowed.
-- **Stores state**: yes — `session.passport.earnedStamps`, `latestStampId`, `passportId`. No backend write.
+- **Stores state**: yes — `session.smokecraftStamps[]` (enriched), `session.passport.earnedStamps[]` (unchanged, still the thinner `completeSmokeCraftSession()` path), `latestStampId`, `passportId`. No backend write.
 - **Gamification**: yes — XP awarded (`XP_AWARDS.PASSPORT_STAMP`); `completeStep('passport-stamp')`.
-- **Passport/ranking/mentor/networking**: confirmed unified with `/passport/*` — **no conflicting legacy system**. Mentor names, cigar type/country, and score are **not** carried onto the stamp despite being available elsewhere in session state.
-- **Missing**: enriching the stamp payload with mentor names, cigar country/type, score, badge, pairing-completed, and networking status — the data exists in session state already; it just isn't being attached to the stamp object today.
+- **Passport/ranking/mentor/networking**: confirmed unified with `/passport/*` — **no conflicting legacy system** (zero "Passport Legacy" matches, re-confirmed this pass). Mentor names, score, and badges are now carried onto the stamp object.
+- **Remaining work**: `cigarCountry`/`wrapper`/`strength` enrichment depends on a Phase 3 data-shape change (storing the full region object, not just its id) — flagged for a future pass, not implemented here to stay in scope.
 
 ### Phase 13 — 360 Passport Connections / Networking
 
 - **Purpose**: share stamp, exchange contact, connect with guest, join leaderboard, save mentor rec, follow venue, join cigar circle, send tasting note, networking QR — under explicit user-controlled privacy/consent.
-- **Route/File**: `/passport/connections` → `PassportConnections.jsx`; `/passport/events` → `PassportEvents.jsx`; `src/api/passportConnectionsApi.js`; `src/api/passportEventsApi.js`.
-- **Status**: **Local/Demo only — backend pending**. The UI is live and well-developed: Best Matches, People You Met, Suggested connections, event filters (All/Featured/VIP/Craft/Networking/Attending), and a "360 Passport Connections" stamp visual. But every API call here (`verifyConnection`, `scanConnection`, `getPassport`, `attendEvent`, `requestVipAccess`, `scanEventQr`, `unlockEventStamp`) is a `delay()`-based mock with **no real network call and no matching backend route** — this matches the existing finding already documented in `docs/backend-readiness-map.md` §2.
-- **Demo Mode**: allowed (and arguably indistinguishable from a "real" session today, since both run on the same mocked API).
-- **Stores state**: yes — local component/session state only.
-- **Gamification**: no explicit XP award found tied to networking actions in this phase.
-- **Passport/ranking/mentor/networking**: this is the **end** of the chain the spec describes, but it is not actually fed by Phase 12's stamp (the stamp object doesn't carry mentor/score/badge data forward — see Phase 12) or by Phase 4's mentor selection ("save mentor recommendation" is not implemented).
-- **Privacy/consent**: **not implemented**. No consent UI, opt-in flow, or data-sharing control was found in either `PassportConnections.jsx` or `PassportEvents.jsx` — contact/event data renders without an explicit user permission step. This is a real gap against the spec's explicit privacy rule and should be treated as a requirement for the next phase of work, not a nice-to-have.
+- **Route/File**: `/smokecraft/connections` → `Connections.jsx` (SmokeCraft's own networking step, step 15 of 17 — the primary target of this pass); `/passport/connections` → `PassportConnections.jsx`; `/passport/events` → `PassportEvents.jsx`; `src/api/passportConnectionsApi.js`; `src/api/passportEventsApi.js`.
+- **Status (updated, `Connections.jsx` only)**: **Local/Demo, now consent-gated and honestly tracked**. The page now has:
+  - A visible privacy notice with the required copy: "Your SmokeCraft Passport details are only shared when you choose to share them," plus an explicit statement that nothing here is sent anywhere automatically and no real backend/SMS/email exists yet.
+  - A consent panel (`setNetworkingConsent()`) with all 8 spec'd fields (`allowShareStamp`, `allowShareName`, `allowShareContact`, `allowShareBusinessLinks`, `allowShareSmokeCraftLevel`, `allowShareFavoriteCigarStyle`, `allowShareEventStamp`, `allowVenueFollowUp`), defaulting to `false` — nothing is shareable until the guest opts in.
+  - All 9 named networking actions (share stamp, exchange contact card, connect with another guest, use networking QR code, join leaderboard, follow venue, save mentor recommendation, join cigar circle, send a tasting note), each mapped to the consent field it actually requires (`mentor-rec` requires none — it's a private, on-device bookmark, not a share).
+  - Honest per-action status tracking via `recordPassportConnectionAction()`, writing into the new `session.smokeCraft.passportConnections[]` array with one of the spec'd statuses: `consent_required` (shown with a lock icon, action does nothing but opens the consent panel) or `shared_locally` (recorded on the device only — never claims a real send/connect). `not_started`, `connection_pending`, and `backend_pending` are supported by the underlying status model but not currently reachable from this page (no backend exists yet to produce them).
+- **Gamification loop closed**: `recordPassportConnectionAction()` writes to `session.smokeCraft.passportConnections`, which is exactly the field `smokeWinnerService.js`'s `evalPassportConnector()` already reads to evaluate the "Passport Connector" winner category (`passport.earnedStamps.length > 0` **and** `smokeCraft.passportConnections.length > 0`). Before this pass, nothing ever wrote to `passportConnections`, so that winner category could never be earned — it is now reachable through honest, consented local actions. A small local/demo XP award (`addXP(10)`, clearly local-only, not backend-verified) is given per completed action, distinct from the page's existing flat 50 XP on Continue.
+- **Demo Mode**: allowed; confirmed safe — no SMS, email, or external network call is made by any action (`recordPassportConnectionAction` only updates local session state).
+- **Stores state**: yes — `session.smokeCraft.passportConnections[]`, `session.smokeCraft.networkingConsent`, `session.smokeCraft.networkingStatus`. No backend write.
+- **Passport/ranking/mentor/networking**: the stamp (Phase 12) and connections (Phase 13) are now linked through the same `smokeCraft` object the winner-eligibility service reads — this closes the structural gap noted in the original audit ("the stamp object doesn't carry mentor/score/badge data forward... Phase 13 has nothing rich to display").
+- **Not changed in this pass (still backend pending, by design)**: `/passport/connections` (`PassportConnections.jsx`) and `/passport/events` (`PassportEvents.jsx`) still call fully mocked `delay()`-based APIs with no real route — connecting those to a real backend was explicitly out of scope for this pass (consent had to exist first, per the original Recommended Build Order). Their privacy/consent gap is **not yet addressed** — only the SmokeCraft-native `Connections.jsx` step received consent gating in this pass.
 
 ## Gamification Gap Map
 
@@ -240,34 +246,34 @@ Passport tree is reachable in Demo Mode.
 | Pairing review points | 6 | **Not found as a distinct award** — Phase 6 awards points for the humidor-match/request-purchase steps, not a "pairing review" specifically |
 | Final review points | 11 | Yes | `addXP(100)` on Scorecard completion |
 | Passport stamp | 12 | Yes | `XP_AWARDS.PASSPORT_STAMP` |
-| Networking action points | 13 | **Missing** — no XP award tied to any Phase 13 action |
+| Networking action points | 13 | **Updated — now implemented** — `recordPassportConnectionAction()` + `addXP(10)` per completed, consented action in `Connections.jsx`; honestly labeled local/demo, not backend-verified |
 | Ranking levels | 11 | **Unconfirmed** — winner-category badge logic exists; the four named tier labels (Novice/Enthusiast/Connoisseur/Aficionado) were not directly confirmed as implemented and need direct verification before claiming completion |
 | Badges | 11 | Partial — winner-category service exists and is honest (no auto-grant); exact match against all 10 named badges (First Smoke, Perfect Draw, Seed & Soil Explorer, Maduro Minded, Dominican Route, Pairing Pro, Slow Burn Master, Lounge Certified, Mentor Approved, Gold Box Finisher) was not individually verified line-by-line and should be checked directly against `smokeWinnerService.js` before claiming full coverage |
 
-**Headline gap**: the gamification chain is real and largely wired from Phase 1 through Phase 12, but **breaks at Phase 13** — no networking action currently earns XP, and the Phase 11 ranking-tier-name mapping needs direct confirmation rather than being assumed complete from this pass.
+**Headline gap (updated)**: the gamification chain is now real and wired from Phase 1 through Phase 13 — Phase 13 actions write to `session.smokeCraft.passportConnections`, which `evalPassportConnector()` already reads, so the "Passport Connector" winner category is reachable for the first time. The remaining gaps are Phase 6's recommendation-logic naming and Phase 11's ranking-tier-name confirmation, neither of which were in scope for this pass.
 
 ## 360 Passport Connection Chain
 
-- **SmokeCraft stamp feeds 360 Passport Connections?** Structurally yes (same `session.passport` object, same system, no Passport Legacy conflict) — but **functionally thin**: the stamp object itself doesn't carry mentor names, cigar details, score, or badge forward, so Phase 13 has nothing rich to display even though it's wired to the same data store.
-- **Networking actions connect properly?** No — Phase 13's API layer is fully mocked; nothing it does persists or round-trips anywhere.
-- **Mentor history preserved?** Partially — `session.selectedMentor`/`selectedMentorCountry` persist in session state, but nothing in Phase 12 or 13 reads or displays it.
-- **Privacy/consent respected?** No — not implemented at all in the current Connections/Events UI.
-- **No separate legacy passport logic conflicts?** Confirmed — zero references to "Passport Legacy" anywhere in the repository.
+- **SmokeCraft stamp feeds 360 Passport Connections?** Yes, and **no longer thin** — `buildStampPayload()` (`PassportStamp.jsx`) now carries venue, event, date, cigar name/type, burn time, mentor names/ids, score, ranking level, badge(s) earned, pairing-completed, seed region, soil selections, networking status, and share-consent snapshot forward onto the stamp object via `awardStamp()`'s new `extra` parameter. `cigarCountry`/`wrapper`/`strength` remain honestly `null` (Phase 3 only stores a seed-region id, not country/wrapper/strength as session fields) and are shown with a "Backend pending" UI fallback rather than invented values.
+- **Networking actions connect properly?** Now honestly local/demo: 9 named actions in `Connections.jsx` write a real, consented `shared_locally` status into session state (no fake send/connect claim). The deeper `/passport/connections` and `/passport/events` API layers (`PassportConnections.jsx`/`PassportEvents.jsx`) are unchanged in this pass and remain fully mocked/backend-pending.
+- **Mentor history preserved?** Yes — `session.mentors[].name/id` now flow into the stamp payload (`mentorNames`/`mentorIds`) and are displayed on the Stamp Detail Card.
+- **Privacy/consent respected?** Yes, for the SmokeCraft-native `Connections.jsx` step — a consent panel with the 8 spec'd fields gates every sharing action, with the exact required copy ("Your SmokeCraft Passport details are only shared when you choose to share them.") shown above the action list. The separate `/passport/connections` and `/passport/events` pages were **not** touched in this pass and still have no consent layer.
+- **No separate legacy passport logic conflicts?** Confirmed — zero references to "Passport Legacy" anywhere in the repository; this pass added no new passport system, only enriched the existing one.
 
 ## Demo Mode Gap Map
 
 Every SmokeCraft and Passport route is allowed in Demo Mode (none appear in
 `DEMO_BLOCKED_PATHS`, `src/context/DemoModeContext.jsx:24-48`). This means
 Demo Mode currently exercises the **entire** protocol end to end, including
-all of the partial/gap areas above — a demo session will hit the same
-mocked Phase 13 APIs and the same thin Phase 12 stamp as a "real" session,
-because there is no functional difference between the two for SmokeCraft
-today (the backend-pending areas are pending for everyone, not just demo
-users). No phase needs an additional Demo Mode block; the disclosure need is
-the same Backend Pending honesty already applied elsewhere in the product
-(POS3/E.A.T. TopBar pill) — Phase 13 in particular should carry an equivalent
-visible disclosure, since its mocked APIs could otherwise read as real to a
-demo reviewer.
+all of the partial/gap areas above. **Updated**: `Connections.jsx` now
+explicitly discloses, in-UI, that "Networking is local/demo only today — no
+real backend connection, SMS, or email is sent yet," which is exactly the
+visible Backend Pending disclosure this section previously called for —
+Phase 13 no longer reads as a finished real-networking feature to a demo
+reviewer. No action sends a real SMS/email or makes any external network
+call; every Phase 13 action only writes to local session state. The
+`/passport/connections` and `/passport/events` pages were not touched and
+still lack an equivalent disclosure — they remain a residual gap.
 
 ## Grep Checks
 
@@ -287,35 +293,41 @@ demo reviewer.
 
 ## Recommended Build Order
 
-1. **Phase 13 privacy/consent** — add an explicit opt-in/consent step before any contact/event data renders; this is a real product gap, not cosmetic.
-2. **Phase 12 stamp enrichment** — attach mentor names, cigar country/type, score, badge, and pairing-completed status to the stamp object already being written; the data already exists in session state.
+1. ~~**Phase 13 privacy/consent**~~ — **Done in this pass**: `Connections.jsx` now gates every sharing action behind the 8 spec'd consent fields, with the required privacy copy shown up front.
+2. ~~**Phase 12 stamp enrichment**~~ — **Done in this pass**: `buildStampPayload()` attaches mentor names/ids, cigar name/type, burn time, score, badge(s), ranking level, pairing-completed, seed region/soil, networking status, and share-consent snapshot to the stamp object via `awardStamp()`'s new `extra` parameter.
 3. **Phase 4 → 7/8/9/10 mentor wiring** — surface the selected mentor's guidance on the cut/toast/light and tasting pages, fulfilling the spec's "mentors guide cutting, toasting, lighting..." requirement.
 4. **Phase 11 ranking-tier confirmation** — directly verify (or implement) the Novice/Enthusiast/Connoisseur/Aficionado tier mapping in `smokeWinnerService.js`, and confirm the full 10-badge list against spec name-by-name.
 5. **Phase 6 recommendation logic** — implement Best Match / Step-Up Pick / Venue Featured Pick using existing pairing-score and mentor data, rather than only storage-condition selection.
 6. **Phase 5 rules content** — add the actual no-fake-scoring/age/etiquette/purchase rules text and the three distinct Accept Rules / View Scoring / Start Session actions.
 7. **Phase 2 photography** — replace the four reused-photo shapes (Lancero, Belicoso, Perfecto, Panetela) with dedicated images.
-8. **Phase 13 backend wiring** — connect `passportConnectionsApi.js`/`passportEventsApi.js` to real routes once consent (item 1) is in place, following the same pattern already proven for SmokeCraft sessions.
+8. **Phase 13 backend wiring** — connect `passportConnectionsApi.js`/`passportEventsApi.js` to real routes now that consent (item 1) is in place, following the same pattern already proven for SmokeCraft sessions.
 
-## Honest Verdict
+## Honest Verdict (updated)
 
 SmokeCraft is **not** reducible to Intake/Passport/Mentor/Seed & Soil/
 Leaderboard — all 14 phases (0–13) have real, navigable implementations, and
-the gamification chain is substantially wired from Phase 1 through Phase 12.
-But the protocol is **not fully built to spec**: Phase 13 networking has no
-real backend and no privacy/consent step, the Phase 12 stamp is thinner than
-specified, several tasting/rules/recommendation phases (5, 6, 7, 8, 9, 10)
-implement a simplified version of their spec rather than every named
-sub-element, and the Phase 11 ranking-tier-name claim needs direct
-verification rather than being assumed.
+the gamification chain is now wired from Phase 1 through Phase 13: Phase 13
+networking actions write honest, consented local state that the existing
+"Passport Connector" winner category already reads, and the Phase 12 stamp
+now carries mentor, score, badge, ranking, and pairing data forward instead
+of being a bare claim of a stamp. What remains **not fully built to spec**:
+`cigarCountry`/`wrapper`/`strength` are honestly null pending a Phase 3 data
+shape change; `/passport/connections` and `/passport/events` still have no
+real backend and no consent layer of their own; several tasting/rules/
+recommendation phases (5, 6, 7, 8, 9, 10) implement a simplified version of
+their spec rather than every named sub-element; and the Phase 11
+ranking-tier-name claim still needs direct verification rather than being
+assumed.
 
 **Demo Mode readiness**: every phase is reachable and functions in Demo
-Mode today, with no routing blocks needed. What Demo Mode does **not** yet
-do is visibly disclose that Phase 13 (and parts of Phase 6/11/12) are
-running on mocked or partial logic — the same kind of "Backend Pending"
-honesty already applied to POS3/E.A.T. should be extended to Phase 13
-specifically before this is shown as a finished networking feature.
+Mode today, with no routing blocks needed. Phase 13 now visibly discloses,
+in-UI, that networking is local/demo only with no real backend/SMS/email —
+closing the disclosure gap this section previously flagged for that phase.
+`/passport/connections` and `/passport/events` still lack an equivalent
+disclosure and remain a residual gap for a future pass.
 
-**Conclusion**: SmokeCraft is demo-ready as an experience walkthrough, but
-not protocol-complete. Further SmokeCraft development should follow the
-Recommended Build Order above rather than assuming any phase beyond what is
-documented here as "Live" is finished.
+**Conclusion**: SmokeCraft is demo-ready as an experience walkthrough, with
+Phase 12 and Phase 13 now meaningfully strengthened and connected into the
+existing gamification/winner system. Further SmokeCraft development should
+follow the Recommended Build Order above rather than assuming any phase
+beyond what is documented here as "Live" is finished.

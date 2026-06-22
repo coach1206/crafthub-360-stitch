@@ -119,6 +119,13 @@ export default function Scorecard() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
+    update(prev => ({
+      ...prev,
+      smokeCraft: {
+        ...prev.smokeCraft,
+        scorecard: { scores, total, maxTotal },
+      },
+    }))
     completeStep('scorecard')
     addXP(100)
     navigate('/smokecraft/passport-stamp')

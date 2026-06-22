@@ -52,6 +52,25 @@ const BLANK_SMOKE_CRAFT = {
   pairingSelections:  [],
   soilSeedSelections: [],
   mentorNotes:        [],
+  // Phase 13: 360 Passport Connections — honest, locally-tracked networking actions.
+  // Each entry: { actionId, status, consented, timestamp }. Read by
+  // smokeWinnerService's "Passport Connector" eligibility check.
+  passportConnections: [],
+  // 'not_started' | 'consent_required' | 'ready_to_share' | 'shared_locally' |
+  // 'connection_pending' | 'backend_pending'
+  networkingStatus:    'not_started',
+  // User-controlled sharing consent for Phase 13 networking — all default to
+  // false (opt-in only). No action can claim "shared" without consent.
+  networkingConsent: {
+    allowShareStamp:             false,
+    allowShareName:               false,
+    allowShareContact:            false,
+    allowShareBusinessLinks:      false,
+    allowShareSmokeCraftLevel:    false,
+    allowShareFavoriteCigarStyle: false,
+    allowShareEventStamp:         false,
+    allowVenueFollowUp:           false,
+  },
 }
 
 const BLANK_PASSPORT = {
@@ -297,6 +316,21 @@ export function migrateSessionIfNeeded(session) {
         eatCommand: { ...BLANK_EAT_COMMAND, ...(s.eatCommand || {}) },
         __version:  SCHEMA_VERSION,
       }
+    }
+
+    // Top-up for sessions already at v4 that predate the Phase 13 networking
+    // consent/status fields — additive only, never overwrites existing values.
+    s = {
+      ...s,
+      smokeCraft: {
+        ...s.smokeCraft,
+        passportConnections: s.smokeCraft?.passportConnections ?? [],
+        networkingStatus:    s.smokeCraft?.networkingStatus    ?? 'not_started',
+        networkingConsent: {
+          ...BLANK_SMOKE_CRAFT.networkingConsent,
+          ...(s.smokeCraft?.networkingConsent || {}),
+        },
+      },
     }
 
     return s
