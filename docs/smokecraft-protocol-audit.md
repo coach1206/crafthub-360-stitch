@@ -151,45 +151,45 @@ Passport tree is reachable in Demo Mode.
 
 - **Purpose**: inspect/cut type/toast/light/draw guidance with points earned.
 - **Route/File**: `/smokecraft/cut-toast-light` → `CutToastLight.jsx`.
-- **Status**: **Partial**. Implements a checklist of prep steps (cut, toast, light) and awards XP scaled to how many steps were completed. It does **not** break out the specific sub-steps named in the spec as distinct trackable items — wrapper texture/firmness/foot aroma inspection, the three cut-type choices (straight/V-cut/punch), rotate-while-toasting, draw resistance rating, or smoke-output/heat/smoothness ratings are not present as discrete fields; the page is a simpler 3-step checklist.
+- **Status**: **Strengthened**. Adds a cut-method selector (straight/V-cut/punch) required before continuing, keeps the existing toast/light/cut checklist, and adds Draw Check/Burn Check/Ash Check 1-5 quality ratings plus a mentor tip card sourced from `session.mentors[0]` via `getMentorGuidance()`. Continue is gated on selecting a cut method and completing at least one checklist step.
 - **Demo Mode**: allowed.
-- **Stores state**: yes — `session.smokeCraft.eventLog` entry `PREP_STEPS_COMPLETED`.
-- **Gamification**: yes — variable XP by completed-step count; `completeStep('cut-toast-light')`.
-- **Passport/ranking/mentor/networking**: none directly; no mentor guidance surfaced here (see Phase 4 gap).
-- **Missing**: cut-type selection, wrapper inspection sub-steps, draw-resistance rating, mentor-guided tips.
+- **Stores state**: yes — `session.smokeCraft.cutToastLight` (`stepsCompleted, allStepsCompleted, completedCount, totalSteps` unchanged; additive `cutMethod, drawCheck, burnCheck, ashCheck, mentorTip, mentorName`), eventLog entry `PREP_STEPS_COMPLETED`.
+- **Gamification**: yes — variable XP by completed-step count; `completeStep('cut-toast-light')`. Unchanged.
+- **Passport/ranking/mentor/networking**: mentor tip now surfaced from the guest's selected Phase 4 mentor (honest `null`/fallback copy when none selected).
+- **Missing**: wrapper texture/firmness/foot aroma inspection sub-steps are still not discrete fields.
 
 ### Phase 8 — First Third Tasting
 
 - **Purpose**: opening flavor/aroma/draw/burn/smoke output/strength/first impression with multi-category scoring.
 - **Route/File**: `/smokecraft/first-third` → `FirstThird.jsx`.
-- **Status**: **Partial**. Captures selected flavor notes (checkbox set) and a draw rating, then computes XP from `tastingXP(notesCount, hasDrawRating)`. Does not implement separate numeric scores for flavor/draw/burn/aroma/smoothness/construction as distinct rated categories — it is notes + one rating, not six.
+- **Status**: **Strengthened**. Keeps flavor notes + draw rating + formula XP (`tastingXP`, unchanged), and adds 1-5 ratings for Strength, Body, Smoke Output, and Burn Quality, a Pairing Reaction choice (Loved it/Worked well/Neutral/Clashed), and a mentor tip card.
 - **Demo Mode**: allowed.
-- **Stores state**: yes — `session.smokeCraft.firstThird`, eventLog entry `TASTING_RECORDED`.
-- **Gamification**: yes — formula-based XP; `completeStep('first-third')`.
-- **Passport/ranking/mentor/networking**: none directly; no mentor feedback wired in.
-- **Missing**: the six-category scoring breakdown; mentor feedback.
+- **Stores state**: yes — `session.smokeCraft.firstThird` (`notesSelected, notesCount, drawRating, hasDrawRating` unchanged; additive `strength, body, smokeOutput, burnQuality, pairingReaction, mentorTip, mentorName`), eventLog entry `TASTING_RECORDED`.
+- **Gamification**: yes — formula-based XP; `completeStep('first-third')`. Unchanged.
+- **Passport/ranking/mentor/networking**: mentor tip now surfaced.
+- **Missing**: separate numeric scores for aroma/construction remain unimplemented as distinct rated categories.
 
 ### Phase 9 — Second Third Tasting
 
 - **Purpose**: flavor transition, strength increase, complexity, pairing response, room experience, mentor feedback, pacing guidance.
 - **Route/File**: `/smokecraft/second-third` → `SecondThird.jsx`.
-- **Status**: **Partial** — same shape as Phase 8 (notes + rating + formula XP). "Pairing response," "room experience," "mentor feedback," and "pacing guidance" are not implemented as distinct captured data; the page does not differ structurally from First/Final Third beyond copy.
+- **Status**: **Strengthened**. Keeps flavor notes + draw rating (relabeled "Burn Consistency") + flat 50 XP, and adds a Flavor Development choice (Deepening/Shifting/Steady/Fading), Strength Change and Body Change choices (Increasing/Steady/Decreasing), an Ash Quality 1-5 rating, a Pairing Reaction choice, and a mentor tip card.
 - **Demo Mode**: allowed.
-- **Stores state**: yes — `session.smokeCraft.secondThird`.
-- **Gamification**: yes — formula-based XP; `completeStep('second-third')`.
-- **Passport/ranking/mentor/networking**: none directly.
-- **Missing**: pairing-response/room-experience/mentor-feedback/pacing-guidance capture.
+- **Stores state**: yes — `session.smokeCraft.secondThird` (`notesSelected, notesCount, rating, hasRating` unchanged; additive `flavorDevelopment, strengthChange, bodyChange, ashQuality, pairingReaction, mentorTip, mentorName`).
+- **Gamification**: yes — flat 50 XP; `completeStep('second-third')`. Unchanged.
+- **Passport/ranking/mentor/networking**: mentor tip now surfaced.
+- **Missing**: room-experience/pacing-guidance capture not implemented as distinct fields.
 
 ### Phase 10 — Final Third Tasting
 
 - **Purpose**: finish, heat, bitterness, strength peak, complexity, satisfaction, would-smoke-again, would-buy, would-recommend, next pairing.
 - **Route/File**: `/smokecraft/final-third` → `FinalThird.jsx`.
-- **Status**: **Partial** — same notes+rating+formula-XP shape as Phases 8–9. The explicit would-smoke-again/would-buy/would-recommend/next-pairing fields named in the spec are not present as their own captured fields.
+- **Status**: **Strengthened**. Keeps flavor notes + overall rating + formula XP (`tastingXP`, unchanged), and adds 1-5 ratings for Final Strength, Final Body, and Heat/Harshness, a Burn Finish choice (Clean burn to the end/Needed touch-ups/Burned hot/Went out early), a Final Pairing Reaction choice, a Would Smoke Again Yes/No toggle, and a mentor tip card.
 - **Demo Mode**: allowed.
-- **Stores state**: yes — `session.smokeCraft.finalThird`.
-- **Gamification**: yes — formula-based XP; `completeStep('final-third')`.
-- **Passport/ranking/mentor/networking**: none directly.
-- **Missing**: would-smoke-again/would-buy/would-recommend/next-pairing fields.
+- **Stores state**: yes — `session.smokeCraft.finalThird` (`notesSelected, notesCount, overallRating, hasOverallRating` unchanged; additive `finalStrength, finalBody, heatHarshness, burnFinish, finalPairingReaction, wouldSmokeAgain, mentorTip, mentorName`).
+- **Gamification**: yes — formula-based XP; `completeStep('final-third')`. Unchanged.
+- **Passport/ranking/mentor/networking**: mentor tip now surfaced.
+- **Missing**: would-buy/would-recommend/next-pairing fields are still not present as their own captured fields.
 
 ### Phase 11 — Scorecard and Ranking
 
