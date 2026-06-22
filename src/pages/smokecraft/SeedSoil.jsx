@@ -206,6 +206,14 @@ export default function SeedSoil() {
         <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Seed &amp; Soil Pairing</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>Select the tobacco growing region that defines the character of tonight's cigar (the Seed), then tell us about tonight's setting (the Soil) so we can explain why the pairing works.</p>
 
+        <div
+          className="rounded-3xl border border-primary/15 backdrop-blur-xl mb-8"
+          style={{
+            padding: 28,
+            background: 'linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 60%, rgba(0,0,0,0.12) 100%)',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
+          }}
+        >
         <h3 className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-3">Seed: Growing Region</h3>
         <div className="flex flex-col gap-3 mb-6">
           {REGIONS.map(r => {
@@ -213,8 +221,13 @@ export default function SeedSoil() {
             return (
               <button key={r.id} type="button" onClick={() => { triggerHaptic('light'); setSelected(r.id) }}
                 aria-pressed={on} aria-label={`${r.name}, ${r.country}`}
-                className="flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
-                style={{ padding:'20px 24px', minHeight: 44, background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)' }}>
+                className="sc-tactile flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
+                style={{
+                  padding:'20px 24px', minHeight: 44,
+                  borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.15)',
+                  background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
+                  boxShadow: on ? '0 0 0 1px rgba(233,193,118,0.25), 0 8px 28px rgba(233,193,118,0.18)' : 'none',
+                }}>
                 <span className="flex items-center justify-center rounded-full shrink-0" style={{ width:48, height:48, background: `${r.accent}26`, border: `1.5px solid ${r.accent}66`, color: r.accent }}>
                   <LeafIcon size={24} />
                 </span>
@@ -233,7 +246,7 @@ export default function SeedSoil() {
         </div>
 
         {region && (
-          <div className="mb-10 rounded-2xl border border-outline-variant/20" style={{ padding: '20px 24px', background: 'rgba(255,255,255,0.03)' }}>
+          <div className="mb-10 rounded-2xl border border-primary/15 backdrop-blur-xl" style={{ padding: '20px 24px', background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
             <p className="font-label-md text-label-md text-primary uppercase tracking-[0.15em] mb-3">Seed Profile</p>
             <dl className="grid grid-cols-2 gap-3 font-body-sm text-body-sm text-on-surface-variant">
               <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 11 }}>Wrapper</dt><dd>{region.wrapper}</dd></div>
@@ -261,8 +274,14 @@ export default function SeedSoil() {
                   return (
                     <button key={opt} type="button" onClick={() => setSoilValue(group.key, opt)}
                       aria-pressed={on} aria-label={`${group.label}: ${opt}`}
-                      className="rounded-full border font-label-sm text-label-sm transition-all duration-200"
-                      style={{ padding: '8px 16px', minHeight: 40, background: on ? 'rgba(233,193,118,0.16)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.5)' : 'rgba(255,255,255,0.08)', color: on ? '#e9c176' : 'inherit' }}>
+                      className="sc-tactile rounded-full border font-label-sm text-label-sm transition-all duration-300 active:scale-95"
+                      style={{
+                        padding: '8px 16px', minHeight: 40,
+                        borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.15)',
+                        background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
+                        color: on ? '#e9c176' : 'rgba(255,255,255,0.6)',
+                        boxShadow: on ? '0 0 0 1px rgba(233,193,118,0.25), 0 8px 28px rgba(233,193,118,0.18)' : 'none',
+                      }}>
                       {opt}
                     </button>
                   )
@@ -273,7 +292,7 @@ export default function SeedSoil() {
         </div>
 
         {region && soilComplete && (
-          <div className="mb-10 rounded-2xl border border-primary/30" style={{ padding: '20px 24px', background: 'rgba(233,193,118,0.06)' }}>
+          <div className="mb-10 rounded-2xl border border-primary/30 backdrop-blur-xl" style={{ padding: '20px 24px', background: 'linear-gradient(135deg, rgba(233,193,118,0.1), rgba(233,193,118,0.03))', boxShadow: '0 8px 28px rgba(233,193,118,0.12)' }}>
             <p className="font-label-md text-label-md text-primary uppercase tracking-[0.15em] mb-2">Why This Pairing Works</p>
             <p className="font-body-md text-body-md text-on-surface-variant">{buildPairingExplanation(region, soil)}</p>
           </div>
@@ -292,6 +311,7 @@ export default function SeedSoil() {
         {blendSignature && soilComplete && (
           <UniqueBlendPanel signature={blendSignature} uniqueness={uniqueness} />
         )}
+        </div>
 
         <div className="flex flex-col sm:flex-row gap-4">
           <button onClick={handleContinue} disabled={!canContinue || blockedByWarning}
