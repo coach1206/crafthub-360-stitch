@@ -40,6 +40,8 @@ import demoRoutes            from './routes/demoRoutes.js'
 import pilotRoutes           from './routes/pilotRoutes.js'
 import pairingOrderRoutes    from './routes/pairingOrderRoutes.js'
 import smokecraftOrders      from './routes/smokecraftOrders.js'
+import smokecraftRoutes      from './routes/smokecraftRoutes.js'
+import smokecraftEatRoutes   from './routes/smokecraftEatRoutes.js'
 import rankingRoutes         from './routes/rankingRoutes.js'
 import badgeRoutes           from './routes/badgeRoutes.js'
 import tickerRoutes          from './routes/tickerRoutes.js'
@@ -107,7 +109,9 @@ app.use('/api/venue-test',        venueTestRoutes)
 app.use('/api/demo',              demoRoutes)
 app.use('/api/pilot',             pilotRoutes)
 app.use('/api/pairings',          pairingOrderRoutes)
+app.use('/api/smokecraft',        smokecraftRoutes)
 app.use('/api/smokecraft',        smokecraftOrders)
+app.use('/api/eat/smokecraft',    smokecraftEatRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)

@@ -1,12 +1,15 @@
-# SmokeCraft Backend Schema — Planning Document (Phase 9)
+# SmokeCraft Backend Schema (Phase 9 plan → Phase 10 routes)
 
-Status: **planning only**. None of the tables below exist in the live database yet.
-A migration file (`server/db/migrations/011_smokecraft_schema.sql`) has been added
-following the repo's existing migration pattern, but it has **not been applied** to
-any running database — applying it is a deploy-time operation outside this phase's
-scope, and `DATABASE_URL` is not configured in this environment. Until it is applied
-and the corresponding API routes are implemented, all SmokeCraft data remains in the
-Phase 8 local-fallback storage.
+Status: API routes that read/write these tables are now implemented
+(`server/routes/smokecraftRoutes.js`, `server/routes/smokecraftEatRoutes.js`).
+The migration file (`server/db/migrations/011_smokecraft_schema.sql`) still has
+**not been applied** to any running database — this repo has no migration
+runner, so applying it remains a manual, deploy-time operation outside the
+scope of this codebase. Until it is applied AND `DATABASE_URL` points at that
+database, every route below transparently falls back to an in-process
+in-memory store and reports `storageMode: "memory_fallback"` rather than
+claiming durable/shared storage. The frontend never reports "shared venue
+storage" unless `storageMode === "postgres"`.
 
 The repo already has `guest_sessions`, `craft_sessions`, `system_users`, `venues`,
 `audit_logs`, and `inventory_items` (see `server/db/schema.sql` and

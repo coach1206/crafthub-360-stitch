@@ -17,6 +17,7 @@ import {
   getSmokeEATHandoffsRemote,
   createSmokeLeaderboardEntryRemote,
   getSmokeLeaderboardEntriesRemote,
+  getSmokeBackendRouteStatusRemote,
 } from './smokeBackendApiClient.js'
 
 const LOCAL_KEYS = {
@@ -93,17 +94,60 @@ export function getSmokeBackendStatus() {
   return cachedBackendStatus
 }
 
+let cachedRouteStatus = { checked: false, ok: false, storageMode: 'none' }
+
 /**
- * SmokeCraft's actual storage mode. This stays local_fallback regardless of
- * general backend reachability, because no SmokeCraft shared-storage
- * endpoints exist server-side yet — never claim otherwise.
+ * Checks the SmokeCraft route-foundation status (Phase 10). Routes now exist
+ * server-side, but "shared venue storage" is only true when the server
+ * reports storageMode "postgres" — a server using its in-memory fallback
+ * (no DATABASE_URL, or the smoke_* tables not migrated in — this repo has no
+ * migration runner, so 011_smokecraft_schema.sql isn't auto-applied) is NOT
+ * shared/durable storage even though the routes respond successfully.
+ */
+export async function checkSmokeBackendRouteStatus() {
+  const res = await getSmokeBackendRouteStatusRemote()
+  cachedRouteStatus = {
+    checked: true,
+    ok: res.ok === true,
+    storageMode: res.ok ? res.storageMode : 'none',
+    checkedAt: Date.now(),
+  }
+  return cachedRouteStatus
+}
+
+/** Last-known route-status check (sync read) — informational only. */
+export function getCachedSmokeRouteStatus() {
+  return cachedRouteStatus
+}
+
+/**
+ * SmokeCraft's actual storage mode. Local fallback (localStorage) remains
+ * the always-available baseline. "venue_shared" is reported ONLY when the
+ * most recent route-status check confirmed storageMode "postgres" — never
+ * for memory_fallback, even though the route foundation itself is real.
  */
 export function getSmokeSharedStorageMode() {
+  if (cachedRouteStatus.checked && cachedRouteStatus.ok && cachedRouteStatus.storageMode === 'postgres') {
+    return {
+      mode: 'venue_shared',
+      backendConnected: true,
+      localFallback: true,
+      reason: 'SmokeCraft backend routes are connected to Postgres — purchase intents, POS3 verification, E.A.T. handoff, and leaderboard data are shared venue-wide.',
+    }
+  }
+  if (cachedRouteStatus.checked && cachedRouteStatus.ok && cachedRouteStatus.storageMode === 'memory_fallback') {
+    return {
+      mode: 'route_foundation_memory_fallback',
+      backendConnected: false,
+      localFallback: true,
+      reason: 'SmokeCraft backend routes exist and respond, but the server itself is using in-memory fallback storage (no Postgres connection) — this is not shared/durable venue storage. Local browser fallback remains the source of truth for this guest session.',
+    }
+  }
   return {
     mode: 'local_fallback',
     backendConnected: false,
     localFallback: true,
-    reason: 'SmokeCraft shared venue storage is not yet implemented on the backend. Purchase intents, POS3 verification, E.A.T. handoff, and leaderboard data stay local to this browser/session only.',
+    reason: 'SmokeCraft backend route status has not been confirmed this session. Purchase intents, POS3 verification, E.A.T. handoff, and leaderboard data stay local to this browser/session only.',
   }
 }
 

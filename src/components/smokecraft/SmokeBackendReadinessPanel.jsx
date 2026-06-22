@@ -3,8 +3,9 @@
  * POS3, and E.A.T. surfaces. Every row reflects an actual checked value or
  * an explicit "Not checked" / "Pending config" — never a guessed "yes".
  */
+import { useEffect } from 'react'
 import { getSmokeApiConfigStatus } from '../../services/smokecraft/smokeBackendApiClient.js'
-import { getSmokeBackendStatus, getSmokeSharedStorageMode, getSmokeRemoteSyncCache } from '../../services/smokecraft/smokeSharedStorageService.js'
+import { getSmokeBackendStatus, getSmokeSharedStorageMode, getSmokeRemoteSyncCache, checkSmokeBackendRouteStatus, getCachedSmokeRouteStatus } from '../../services/smokecraft/smokeSharedStorageService.js'
 
 function Row({ label, value, tone }) {
   const colors = {
@@ -34,11 +35,25 @@ export default function SmokeBackendReadinessPanel({ compact = false }) {
   const backendStatus = getSmokeBackendStatus()
   const storageMode = getSmokeSharedStorageMode()
   const remoteCache = getSmokeRemoteSyncCache()
+  const routeStatus = getCachedSmokeRouteStatus()
+
+  useEffect(() => {
+    checkSmokeBackendRouteStatus()
+  }, [])
 
   const reachable = backendStatus.status === 'backend_reachable' ? 'yes'
     : backendStatus.status === 'backend_unreachable' ? 'no'
     : 'unknown'
   const reachableTone = reachable === 'yes' ? 'connected' : reachable === 'no' ? 'no' : 'unknown'
+
+  const routesValue = !routeStatus.checked ? 'not checked' : routeStatus.ok ? 'connected' : 'failed'
+  const routesTone = !routeStatus.checked ? 'unknown' : routeStatus.ok ? 'connected' : 'no'
+
+  const dbModeValue = !routeStatus.checked ? 'not checked' : routeStatus.storageMode === 'postgres' ? 'postgres' : routeStatus.storageMode === 'memory_fallback' ? 'memory fallback' : 'none'
+  const dbModeTone = !routeStatus.checked ? 'unknown' : routeStatus.storageMode === 'postgres' ? 'connected' : routeStatus.storageMode === 'memory_fallback' ? 'pending' : 'no'
+
+  const sharedStorageValue = storageMode.mode === 'venue_shared' ? 'connected' : 'pending'
+  const sharedStorageTone = storageMode.mode === 'venue_shared' ? 'connected' : 'pending'
 
   const pos3 = remoteRowFor(remoteCache, 'purchaseVerification')
   const eat = remoteRowFor(remoteCache, 'eatHandoffs')
@@ -50,13 +65,15 @@ export default function SmokeBackendReadinessPanel({ compact = false }) {
       <Row label="Backend mode" value={storageMode.mode.replaceAll('_', ' ')} tone={storageMode.backendConnected ? 'connected' : 'pending'} />
       <Row label="API base URL configured" value={apiConfig.configured ? 'yes' : 'no'} tone={apiConfig.configured ? 'connected' : 'no'} />
       <Row label="Remote API reachable" value={reachable} tone={reachableTone} />
+      <Row label="SmokeCraft API routes" value={routesValue} tone={routesTone} />
+      <Row label="Database mode" value={dbModeValue} tone={dbModeTone} />
       <Row label="Local fallback active" value={storageMode.localFallback ? 'yes' : 'no'} tone={storageMode.localFallback ? 'pending' : 'connected'} />
-      <Row label="Shared venue storage" value={storageMode.backendConnected ? 'connected' : 'pending'} tone={storageMode.backendConnected ? 'connected' : 'pending'} />
+      <Row label="Shared venue storage" value={sharedStorageValue} tone={sharedStorageTone} />
       <Row label="POS3 verification API" value={pos3.value} tone={pos3.tone} />
       <Row label="E.A.T. handoff API" value={eat.value} tone={eat.tone} />
       <Row label="Leaderboard API" value={leaderboard.value} tone={leaderboard.tone} />
-      <Row label="Inventory API" value="Pending config" tone="pending" />
-      <Row label="Audit API" value="Pending config" tone="pending" />
+      <Row label="Inventory sync" value="pending (no real inventory integration)" tone="pending" />
+      <Row label="Audit API" value={routesValue} tone={routesTone} />
     </div>
   )
 }

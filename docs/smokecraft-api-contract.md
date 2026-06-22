@@ -1,12 +1,22 @@
-# SmokeCraft API Contract — Planning Document (Phase 9)
+# SmokeCraft API Contract (Phase 9 plan → Phase 10 implementation)
 
-Status: **none of the endpoints below exist yet**. `/api/smokecraft` is currently
-mounted to `server/routes/smokecraftOrders.js`, which only implements an unrelated,
-in-memory pairing-order feature (`POST /api/smokecraft/pairing-order`,
-`GET /api/smokecraft/orders`). This document specifies what a real implementation
-should look like; `smokeBackendApiClient.js` calls these paths today and will
-honestly report `failed`/`backend_required` until a real implementation exists,
-falling back to Phase 8 local storage.
+Status: **all endpoints below are implemented** as of Phase 10
+(`server/routes/smokecraftRoutes.js` mounted at `/api/smokecraft`,
+`server/routes/smokecraftEatRoutes.js` mounted at `/api/eat/smokecraft`).
+The pre-existing unrelated pairing-order feature
+(`POST /api/smokecraft/pairing-order`, `GET /api/smokecraft/orders` in
+`server/routes/smokecraftOrders.js`) is untouched and mounted alongside.
+
+Every endpoint uses Postgres when `DATABASE_URL` is set AND the `smoke_*`
+tables already exist (this repo has no migration runner — `011_smokecraft_schema.sql`
+is not auto-applied, so the tables must be created externally before Postgres
+mode actually engages), otherwise it transparently falls back to an in-memory
+store within the running server process. Every response has the shape
+`{ ok, status, storageMode: "postgres" | "memory_fallback" | "none", data, error }`.
+The frontend (`smokeSharedStorageService.js`) only reports "shared venue
+storage" to the UI when `storageMode === "postgres"` — memory-fallback
+responses are honestly labeled as non-durable, in-process-only storage, not
+shared/multi-device storage.
 
 Base path: `/api/smokecraft` and `/api/eat/smokecraft` (relative — same pattern as
 every other route in this repo; the frontend has no `VITE_*_API_BASE_URL` env var
@@ -23,7 +33,7 @@ rather than inventing a new env var.
 - **Error states**: `400` missing `sessionId`; `409` if `sessionId` already has a smoke_session.
 - **Local fallback behavior**: on failure/unreachable, `smokeSharedStorageService.saveSmokeSessionSnapshot` keeps writing to `novee_smoke_shared_session_snapshots`.
 - **Frontend service**: `smokeBackendApiClient.createSmokeSessionRemote`.
-- **Status**: pending — endpoint does not exist.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ### `GET /api/smokecraft/sessions/:sessionId`
 - **Response body**: `{ ok: true, session: {...} }` or `{ ok: false, error: 'not_found' }`
@@ -31,7 +41,7 @@ rather than inventing a new env var.
 - **Error states**: `404` if not found.
 - **Local fallback**: `loadSmokeSessionSnapshot(sessionId)` reads local storage.
 - **Frontend service**: `smokeBackendApiClient.getSmokeSessionRemote`.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ### `PATCH /api/smokecraft/sessions/:sessionId`
 - **Request body**: partial `{ xp?, rank?, completedSteps?, finalScore?, challengeStatus? }`
@@ -40,7 +50,7 @@ rather than inventing a new env var.
 - **Error states**: `404` not found; `400` invalid fields.
 - **Local fallback**: re-write of the local snapshot.
 - **Frontend service**: `smokeBackendApiClient.updateSmokeSessionRemote`.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ## Session Events
 
@@ -51,7 +61,7 @@ rather than inventing a new env var.
 - **Error states**: `404` session not found; `400` missing `type`.
 - **Local fallback**: events stay only in `session.smokeCraft.eventLog` (already always local — no Phase 8 remote path existed for this).
 - **Frontend service**: `smokeBackendApiClient.postSmokeSessionEventRemote`.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ### `GET /api/smokecraft/sessions/:sessionId/events`
 - **Response body**: `{ ok: true, events: [...] }`
@@ -59,7 +69,7 @@ rather than inventing a new env var.
 - **Error states**: `404` session not found.
 - **Local fallback**: n/a — read from local `eventLog` directly in the UI.
 - **Frontend service**: none yet (read access not wired client-side this phase).
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ## Purchase Intents
 
@@ -70,7 +80,7 @@ rather than inventing a new env var.
 - **Error states**: `400` missing fields; `409` duplicate `intentId`.
 - **Local fallback**: `saveSmokePurchaseIntent` keeps writing to `novee_smoke_shared_purchase_intents`.
 - **Frontend service**: `smokeBackendApiClient.createSmokePurchaseIntentRemote`.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ### `GET /api/smokecraft/purchase-intents`
 - **Response body**: `{ ok: true, intents: [...] }`
@@ -78,7 +88,7 @@ rather than inventing a new env var.
 - **Error states**: none beyond auth.
 - **Local fallback**: `loadSmokePurchaseIntents()` reads local storage.
 - **Frontend service**: `smokeBackendApiClient.getSmokePurchaseIntentsRemote`.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ### `GET /api/smokecraft/purchase-intents/:intentId`
 - **Response body**: `{ ok: true, intent: {...} }` or `404`.
@@ -86,7 +96,7 @@ rather than inventing a new env var.
 - **Error states**: `404` not found.
 - **Local fallback**: filter local list by `intentId`.
 - **Frontend service**: not separately wired — covered by the list call.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ### `PATCH /api/smokecraft/purchase-intents/:intentId`
 - **Request body**: partial `{ product?, status? }` (non-verification fields only — see verify/reject below for status transitions that require staff role).
@@ -95,7 +105,7 @@ rather than inventing a new env var.
 - **Error states**: `404`; `403` if guest attempts to set `status` to `verified`/`rejected` directly.
 - **Local fallback**: local update.
 - **Frontend service**: `smokeBackendApiClient.updateSmokePurchaseIntentRemote`.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ## POS3 Verification
 
@@ -106,12 +116,12 @@ rather than inventing a new env var.
 - **Error states**: `404` intent not found; `403` insufficient role; `409` already verified/rejected.
 - **Local fallback**: `updateSmokePurchaseVerification(intentId, { status: 'verified' })` — Phase 8/9 keep this as the only way a reward becomes eligible; never auto-verified by the client.
 - **Frontend service**: `smokeBackendApiClient.verifySmokePurchaseIntentRemote`, called from POS3Home's "Mark Verified" button only.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ### `POST /api/smokecraft/purchase-intents/:intentId/reject`
 - Same shape as `verify`, with `action: 'rejected'`.
 - **Auth/role**: POS3 staff only.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ## E.A.T.
 
@@ -121,7 +131,7 @@ rather than inventing a new env var.
 - **Error states**: none beyond auth.
 - **Local fallback**: `loadSmokeEATHandoffs()`.
 - **Frontend service**: `smokeBackendApiClient.getSmokeEATHandoffsRemote`.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ### `PATCH /api/eat/smokecraft/handoffs/:handoffId`
 - **Request body**: `{ acknowledgedByUserId? , status? }`
@@ -130,7 +140,7 @@ rather than inventing a new env var.
 - **Error states**: `404`.
 - **Local fallback**: local update by `handoffId`.
 - **Frontend service**: `smokeBackendApiClient.updateSmokeEATHandoffRemote`.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ## Leaderboard
 
@@ -141,7 +151,7 @@ rather than inventing a new env var.
 - **Error states**: `400` missing fields.
 - **Local fallback**: `saveSmokeLeaderboardEntry`.
 - **Frontend service**: `smokeBackendApiClient.createSmokeLeaderboardEntryRemote`.
-- **Status**: pending. Even once implemented, entries default to `visibility: 'local_only'` until a venue explicitly opts into shared community leaderboards — the demo "Tonight's Ranking" board must stay labeled demo regardless.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode. Even once implemented, entries default to `visibility: 'local_only'` until a venue explicitly opts into shared community leaderboards — the demo "Tonight's Ranking" board must stay labeled demo regardless.
 
 ### `GET /api/smokecraft/leaderboard`
 - **Response body**: `{ ok: true, entries: [...] }`
@@ -149,7 +159,7 @@ rather than inventing a new env var.
 - **Error states**: none.
 - **Local fallback**: `loadSmokeLeaderboardEntries()`.
 - **Frontend service**: `smokeBackendApiClient.getSmokeLeaderboardEntriesRemote`.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ## Inventory Preview
 
@@ -160,12 +170,12 @@ rather than inventing a new env var.
 - **Error states**: `400` missing fields.
 - **Local fallback**: existing `getSmokeInventoryImpactPreview` stays purely local/computed — no remote call wired this phase.
 - **Frontend service**: none yet.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ### `GET /api/smokecraft/inventory-impact-preview/:sessionId`
 - **Response body**: `{ ok: true, previews: [...] }`
 - **Auth/role**: E.A.T. manager, admin.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ## Audit
 
@@ -176,12 +186,12 @@ rather than inventing a new env var.
 - **Error states**: `400` missing `eventType`.
 - **Local fallback**: none — audit events that can't reach the backend are not currently mirrored to localStorage (audit trails should not silently exist only on a guest's own device).
 - **Frontend service**: `smokeBackendApiClient.postSmokeAuditEventRemote`.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ### `GET /api/smokecraft/audit-events`
 - **Response body**: `{ ok: true, events: [...] }`
 - **Auth/role**: admin/founder only.
-- **Status**: pending.
+- **Status**: implemented (Phase 10) — in-memory or Postgres per server storageMode.
 
 ## Auth / Role Expectations Summary
 
@@ -189,8 +199,9 @@ rather than inventing a new env var.
 - **POS3 staff**: can verify/reject purchase intents (the *only* path that makes a reward eligible), can read the purchase-intent queue for their venue.
 - **E.A.T. manager**: can read handoffs and acknowledge them; read-only on purchase intents and inventory previews.
 - **Admin/founder**: full read access plus audit-event read; the only role that can read `smoke_audit_logs`.
-- **Demo mode**: per the repo's existing `demoModeConfig.js` pattern, demo-mode sessions must not be allowed to write real backend records once these endpoints exist — this mirrors how `pos3Routes`/`venueTestRoutes` already gate demo traffic. Not implemented this phase since no real auth check exists yet for these specific endpoints (they don't exist).
+- **Demo mode**: per the repo's existing `demoModeConfig.js` pattern, demo-mode sessions must not be allowed to write real backend records — this mirrors how `pos3Routes`/`venueTestRoutes` already gate demo traffic. **Pending** — Phase 10 routes do not yet enforce role/auth checks or demo-mode gating; any caller can hit any endpoint. This is the next gap to close before these routes are exposed beyond internal testing.
 
 This repo's existing auth (`authConfig.js`, `authRoutes.js`, cookie-based JWT via
-`novee_auth`) is the auth system these endpoints should plug into when implemented —
-no new auth scheme should be invented for SmokeCraft.
+`novee_auth`) is the auth system these endpoints should plug into. **Pending** —
+Phase 10 did not wire `requireAuth`/role middleware onto the SmokeCraft routes;
+no new auth scheme was invented, but the existing one isn't enforced here yet.

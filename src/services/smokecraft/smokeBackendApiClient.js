@@ -1,11 +1,14 @@
 /**
- * SmokeCraft backend API client — calls the endpoints documented in
- * docs/smokecraft-api-contract.md. None of those endpoints exist server-side
- * yet (only the unrelated pairing-order routes are mounted at /api/smokecraft),
- * so every call here will currently resolve to `failed` or `backend_required`.
- * This file exists so the wiring is real and honest the moment those routes
- * are implemented — it must never report `backend_connected` unless the
- * backend actually returned a successful response.
+ * SmokeCraft backend API client — calls the real routes implemented in
+ * server/routes/smokecraftRoutes.js and server/routes/smokecraftEatRoutes.js
+ * (Phase 10), matching docs/smokecraft-api-contract.md. The server always
+ * returns { ok, status, storageMode, data, error }; storageMode is
+ * "postgres" only when a live Postgres connection actually served the
+ * request, "memory_fallback" when the in-memory store served it (e.g. no
+ * DATABASE_URL, or the smoke_* tables aren't migrated in yet — this repo has
+ * no migration runner, so 011_smokecraft_schema.sql is not auto-applied).
+ * This client must never report `backend_connected`/`postgres` unless the
+ * backend actually returned ok:true with storageMode "postgres".
  */
 import { apiGet, apiPost, apiPut } from '../apiClient.js'
 
@@ -19,21 +22,21 @@ export function getSmokeApiConfigStatus() {
   return { configured: true, baseUrl: getSmokeApiBaseUrl(), reason: 'Using the existing relative /api proxy pattern — no dedicated SmokeCraft API base URL is configured or required.' }
 }
 
-function ok(data, source = 'remote') {
-  return { ok: true, status: 'backend_connected', data, error: null, source }
+function ok(res, source = 'remote') {
+  return { ok: true, status: res?.status || 'backend_connected', storageMode: res?.storageMode || 'none', data: res?.data ?? null, error: null, source }
 }
-function failed(error) {
-  return { ok: false, status: 'failed', data: null, error, source: 'remote' }
+function failed(error, storageMode = 'none') {
+  return { ok: false, status: 'failed', storageMode, data: null, error, source: 'remote' }
 }
 function backendRequired(reason) {
-  return { ok: false, status: 'backend_required', data: null, error: reason, source: 'none' }
+  return { ok: false, status: 'backend_required', storageMode: 'none', data: null, error: reason, source: 'none' }
 }
 
 async function safeGet(path) {
   try {
     const res = await apiGet(path)
-    if (res && res.ok !== false) return ok(res)
-    return failed(`No successful response from ${path}`)
+    if (res && res.ok === true) return ok(res)
+    return failed(res?.error || `No successful response from ${path}`, res?.storageMode || 'none')
   } catch (err) {
     return failed(err?.message || `Request to ${path} failed`)
   }
@@ -42,8 +45,8 @@ async function safeGet(path) {
 async function safePost(path, payload) {
   try {
     const res = await apiPost(path, payload)
-    if (res && res.ok !== false) return ok(res)
-    return failed(`No successful response from ${path}`)
+    if (res && res.ok === true) return ok(res)
+    return failed(res?.error || `No successful response from ${path}`, res?.storageMode || 'none')
   } catch (err) {
     return failed(err?.message || `Request to ${path} failed`)
   }
@@ -52,12 +55,15 @@ async function safePost(path, payload) {
 async function safePatch(path, payload) {
   try {
     const res = await apiPut(path, payload)
-    if (res && res.ok !== false) return ok(res)
-    return failed(`No successful response from ${path}`)
+    if (res && res.ok === true) return ok(res)
+    return failed(res?.error || `No successful response from ${path}`, res?.storageMode || 'none')
   } catch (err) {
     return failed(err?.message || `Request to ${path} failed`)
   }
 }
+
+/** Route-status check, used by SmokeBackendReadinessPanel. */
+export const getSmokeBackendRouteStatusRemote = () => safeGet(`${getSmokeApiBaseUrl()}/status`)
 
 const BASE = getSmokeApiBaseUrl()
 
