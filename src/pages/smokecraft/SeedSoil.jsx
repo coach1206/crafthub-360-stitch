@@ -182,9 +182,15 @@ export default function SeedSoil() {
 
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
+      {/* SEED & SOIL VISUAL UPGRADE — no "SEED PARING 2" asset exists in the repo's GitHub/public
+          assets (searched lancero/belicoso/panetela-style filenames, seed pairing, seed-paring,
+          smoke pairing, seed and soil); the closest existing design reference is the
+          stitch_export "smokecraft_seed_soil" mockup, which uses this same dark lounge +
+          gold-card direction. Darkened/saturated the existing humidor backdrop to match that
+          mockup's mood instead of the flatter cut-toast background previously used here. */}
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('/assets/smokecraft/cropped/cut-toast-light-bg.jpg')" }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/smokecraft/cropped/humidor-match-bg.jpg')", opacity: 0.22, filter: 'brightness(0.7) saturate(1.15)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(8,5,3,0.97) 0%,rgba(8,5,3,0.72) 50%,rgba(8,5,3,0.97) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
         <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/format')} aria-label="Back"><ArrowBackIcon size={24} /></button>
@@ -206,8 +212,9 @@ export default function SeedSoil() {
             const on = selected === r.id
             return (
               <button key={r.id} type="button" onClick={() => { triggerHaptic('light'); setSelected(r.id) }}
+                aria-pressed={on} aria-label={`${r.name}, ${r.country}`}
                 className="flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
-                style={{ padding:'20px 24px', background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)' }}>
+                style={{ padding:'20px 24px', minHeight: 44, background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)' }}>
                 <span className="flex items-center justify-center rounded-full shrink-0" style={{ width:48, height:48, background: `${r.accent}26`, border: `1.5px solid ${r.accent}66`, color: r.accent }}>
                   <LeafIcon size={24} />
                 </span>
@@ -253,8 +260,9 @@ export default function SeedSoil() {
                   const on = soil[group.key] === opt
                   return (
                     <button key={opt} type="button" onClick={() => setSoilValue(group.key, opt)}
+                      aria-pressed={on} aria-label={`${group.label}: ${opt}`}
                       className="rounded-full border font-label-sm text-label-sm transition-all duration-200"
-                      style={{ padding: '8px 16px', background: on ? 'rgba(233,193,118,0.16)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.5)' : 'rgba(255,255,255,0.08)', color: on ? '#e9c176' : 'inherit' }}>
+                      style={{ padding: '8px 16px', minHeight: 40, background: on ? 'rgba(233,193,118,0.16)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.5)' : 'rgba(255,255,255,0.08)', color: on ? '#e9c176' : 'inherit' }}>
                       {opt}
                     </button>
                   )

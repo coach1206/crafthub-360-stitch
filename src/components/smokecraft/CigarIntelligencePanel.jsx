@@ -48,7 +48,7 @@ const TABS = [
   { id: 'burn', label: 'Burn-Time Strategy', Icon: FlameIcon },
 ]
 
-export default function CigarIntelligencePanel({ activeRingGauge }) {
+export default function CigarIntelligencePanel({ activeRingGauge, selectedWrapperId, onSelectWrapper }) {
   const [tab, setTab] = useState('wrapper')
   const activeTier = ringGaugeTierFor(activeRingGauge)
 
@@ -62,6 +62,22 @@ export default function CigarIntelligencePanel({ activeRingGauge }) {
       }}
       aria-label="Cigar Intelligence"
     >
+      <style>{`
+        .wrapper-profile-card {
+          min-height: 64px;
+          transition: transform 0.15s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+        }
+        .wrapper-profile-card:hover {
+          border-color: rgba(233,193,118,0.45);
+        }
+        .wrapper-profile-card:active {
+          transform: scale(0.985);
+        }
+        .wrapper-profile-card:focus-visible {
+          outline: 2px solid rgba(255,225,151,0.85);
+          outline-offset: 2px;
+        }
+      `}</style>
       <div className="flex items-center gap-3 mb-1">
         <span className="flex items-center justify-center rounded-full shrink-0" style={{ width: 40, height: 40, background: 'rgba(233,193,118,0.15)', color: '#e9c176' }}>
           <InsightsIcon size={20} />
@@ -87,16 +103,37 @@ export default function CigarIntelligencePanel({ activeRingGauge }) {
 
       {tab === 'wrapper' && (
         <div className="grid sm:grid-cols-2 gap-3" aria-label="Wrapper Scoring">
-          {WRAPPER_TYPES.map(w => (
-            <div key={w.id} className="flex items-center gap-3 rounded-2xl border border-outline-variant/20" style={{ padding: '14px 16px', background: 'rgba(255,255,255,0.03)' }}>
-              <span className="rounded-full shrink-0" style={{ width: 28, height: 28, background: w.tone, border: '1.5px solid rgba(255,255,255,0.25)' }} aria-hidden="true" />
-              <div className="flex-1">
-                <p className="font-label-md text-label-md text-on-surface font-semibold">{w.name}</p>
-                <p className="font-body-sm text-body-sm text-on-surface-variant">{w.note}</p>
-              </div>
-              <span className="font-label-sm text-label-sm shrink-0" style={{ color: '#e9c176' }}>{'●'.repeat(w.strength)}{'○'.repeat(4 - w.strength)}</span>
-            </div>
-          ))}
+          {WRAPPER_TYPES.map(w => {
+            const on = w.id === selectedWrapperId
+            return (
+              <button
+                type="button"
+                key={w.id}
+                onClick={() => onSelectWrapper?.(w)}
+                aria-pressed={on}
+                aria-label={`${w.name} wrapper profile`}
+                className="flex items-center gap-3 rounded-2xl border border-outline-variant/20 wrapper-profile-card"
+                style={{
+                  padding: '14px 16px',
+                  background: on ? 'rgba(233,193,118,0.14)' : 'rgba(255,255,255,0.03)',
+                  borderColor: on ? 'rgba(233,193,118,0.55)' : undefined,
+                  boxShadow: on ? '0 0 18px rgba(233,193,118,0.3)' : 'none',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  width: '100%',
+                  font: 'inherit',
+                  color: 'inherit',
+                }}
+              >
+                <span className="rounded-full shrink-0" style={{ width: 28, height: 28, background: w.tone, border: '1.5px solid rgba(255,255,255,0.25)' }} aria-hidden="true" />
+                <div className="flex-1">
+                  <p className="font-label-md text-label-md text-on-surface font-semibold">{w.name}</p>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">{w.note}</p>
+                </div>
+                <span className="font-label-sm text-label-sm shrink-0" style={{ color: '#e9c176' }}>{'●'.repeat(w.strength)}{'○'.repeat(4 - w.strength)}</span>
+              </button>
+            )
+          })}
         </div>
       )}
 

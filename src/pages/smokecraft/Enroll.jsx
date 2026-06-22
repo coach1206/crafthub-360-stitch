@@ -3,12 +3,18 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
+import {
+  ACCEPT_ATTRIBUTE,
+  REJECTED_IMAGE_MESSAGE,
+  isAllowedSmokeCraftImage,
+} from '../../utils/smokecraftImageValidation.js'
 
 export default function Enroll() {
   const navigate = useNavigate()
   const { updateProfile, completeGuestProfile, completeStep, addXP, setSelectedCraft } = useGuestSession()
   const fileInputRef = useRef(null)
   const [avatarSrc, setAvatarSrc] = useState(null)
+  const [photoError, setPhotoError] = useState('')
   const [form, setForm] = useState({
     fullName: '', phone: '', email: '', nickname: '',
     ageConfirmed: false, city: '', state: '', zip: '', countryRegion: '',
@@ -34,6 +40,16 @@ export default function Enroll() {
   function handlePhotoChange(e) {
     const file = e.target.files[0]
     if (!file) return
+
+    if (!isAllowedSmokeCraftImage(file)) {
+      setPhotoError(REJECTED_IMAGE_MESSAGE)
+      triggerHaptic('warning')
+      e.target.value = ''
+      return
+    }
+
+    setPhotoError('')
+    triggerHaptic('success')
     const reader = new FileReader()
     reader.onload = (ev) => setAvatarSrc(ev.target.result)
     reader.readAsDataURL(file)
@@ -161,7 +177,7 @@ export default function Enroll() {
               >
                 <span className="material-symbols-outlined text-xl">edit</span>
                 <input
-                  accept="image/*"
+                  accept={ACCEPT_ATTRIBUTE}
                   className="hidden"
                   id="photo-upload"
                   type="file"
@@ -171,6 +187,9 @@ export default function Enroll() {
               </label>
             </div>
             <p className="font-label-sm text-primary mt-4 tracking-widest uppercase" style={{ textShadow: '0 2px 14px rgba(0,0,0,0.35)' }}>Member Portrait (Optional)</p>
+            {photoError && (
+              <p className="font-label-sm mt-2 text-center" style={{ color: 'rgba(247,239,226,0.85)', fontSize: 11.5 }} role="status">{photoError}</p>
+            )}
           </div>
 
           {/* Form */}

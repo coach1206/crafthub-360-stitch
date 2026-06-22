@@ -1,11 +1,12 @@
 const FALLBACK_DESCRIPTION = 'More details coming soon for this SmokeCraft profile tag.'
 
 /**
- * Small detail panel shown when a profile-tag chip is selected on a cigar
- * recommendation card. Renders inline near the grid rather than a full
- * blocking modal, so it never covers the cigar image or card stats.
+ * Small detail panel shown when a profile-tag chip, wrapper card, or session
+ * card is selected on the SmokeCraft Format page. Renders inline near the
+ * grid rather than a full blocking modal, so it never covers the cigar
+ * image or card stats.
  */
-export default function SmokeCraftInsightPanel({ cigarName, chip, onClose }) {
+export default function SmokeCraftInsightPanel({ cigarName, chip, onClose, fallbackText = FALLBACK_DESCRIPTION }) {
   if (!chip) return null
 
   return (
@@ -23,7 +24,7 @@ export default function SmokeCraftInsightPanel({ cigarName, chip, onClose }) {
       </div>
       <h3 className="smokecraft-insight-panel__title">{chip.label}</h3>
       {chip.value && <div className="smokecraft-insight-panel__value">{chip.value}</div>}
-      <p className="smokecraft-insight-panel__description">{chip.description || FALLBACK_DESCRIPTION}</p>
+      <p className="smokecraft-insight-panel__description">{chip.description || fallbackText}</p>
     </div>
   )
 }

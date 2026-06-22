@@ -8,6 +8,7 @@ import VoiceButton             from '../../components/voice/VoiceButton.jsx'
 import {
   SmokeCraftAtmosphericBackground,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import SmokeCraftPassportUploadCard from '../../components/smokecraft/SmokeCraftPassportUploadCard.jsx'
 
 function MentorPortrait({ image, name }) {
   const [failed, setFailed] = useState(false)
@@ -117,9 +118,27 @@ const MAX_SELECTIONS = 2
 
 export default function Mentor() {
   const navigate = useNavigate()
-  const { setMentors, setSelectedMentor, completeStep, addXP } = useGuestSession()
+  const { session, update, setMentors, setSelectedMentor, completeStep, addXP } = useGuestSession()
   const [selected, setSelected] = useState([])
   const voice = useMentorVoice()
+
+  function handleMentorMediaStateChange(mediaState) {
+    if (import.meta.env.DEV) console.debug('[SmokeCraft] passport media upload state', { sourceType: 'passport-media-upload', ...mediaState })
+    update(prev => ({
+      ...prev,
+      smokeCraft: {
+        ...prev.smokeCraft,
+        passportMediaUpload: {
+          ...prev.smokeCraft?.passportMediaUpload,
+          uploadStatus: mediaState.uploadStatus,
+          uploadPreviewUrl: mediaState.uploadPreviewUrl || prev.smokeCraft?.passportMediaUpload?.uploadPreviewUrl || null,
+          uploadLink: mediaState.uploadLink || prev.smokeCraft?.passportMediaUpload?.uploadLink || null,
+          uploadDeliveryMethod: mediaState.uploadDeliveryMethod || prev.smokeCraft?.passportMediaUpload?.uploadDeliveryMethod || null,
+          updatedAt: Date.now(),
+        },
+      },
+    }))
+  }
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -229,14 +248,15 @@ export default function Mentor() {
             </p>
           </div>
 
-          <div className="smokecraft-mentor-stamp" aria-label="Mentor Participation Stamp Preview Mode">
-            <div className="smokecraft-mentor-stamp__ring">
-              <span className="material-symbols-outlined">verified</span>
-              <strong>Mentor Participation</strong>
-              <small>Stamp</small>
-            </div>
-            <p>Preview Mode</p>
-          </div>
+          <SmokeCraftPassportUploadCard
+            identity={{
+              sessionId: session?.sessionId,
+              userId: session?.userId,
+              guestId: session?.guestId,
+              smokeCraftPassportId: session?.smokeCraft?.passportId,
+            }}
+            onMediaStateChange={handleMentorMediaStateChange}
+          />
         </section>
 
         <section className="smokecraft-mentor-instructions">

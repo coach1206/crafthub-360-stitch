@@ -5,9 +5,12 @@ import {
   SmokeCraftBottomNav,
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
-import CigarIntelligencePanel from '../../components/smokecraft/CigarIntelligencePanel.jsx'
+import CigarIntelligencePanel, { WRAPPER_TYPES } from '../../components/smokecraft/CigarIntelligencePanel.jsx'
 import SmokeCraftInsightChip from '../../components/smokecraft/SmokeCraftInsightChip.jsx'
 import SmokeCraftInsightPanel from '../../components/smokecraft/SmokeCraftInsightPanel.jsx'
+import { triggerHaptic } from '../../utils/haptics.js'
+
+const WRAPPER_FALLBACK_DESCRIPTION = 'More details coming soon for this SmokeCraft wrapper profile.'
 
 // CIGAR PHOTO VISUAL SYSTEM.
 // Each format's final customer-facing visual must come from a dedicated product photo at
@@ -198,7 +201,11 @@ const FORMATS = [
     flavorImpact: 'Concentrated & Refined',
     taper: false,
     shapeProfile: { badge: 'Longest / Slimmest', label: 'Longest · Slimmest · 38 Ring Gauge', lengthPct: 100, thicknessPx: 7 },
-    image: '/assets/smokecraft/cigars/lancero.jpg',
+    // TEMPORARY FALLBACK — no dedicated lancero.jpg shoot exists yet. Reusing corona.jpg
+    // (the slimmest photo currently in public/assets/smokecraft/cigars/) as a stand-in.
+    // Replace with a real Lancero product photo when available; not final.
+    // TODO: Replace with licensed Lancero cigar photo.
+    image: '/assets/smokecraft/cigars/corona.jpg',
   },
   {
     id: 'belicoso',
@@ -220,7 +227,11 @@ const FORMATS = [
     flavorImpact: 'Rounded & Rich',
     taper: true,
     shapeProfile: { badge: 'Tapered / Rounded', label: 'Tapered · Rounded Cap · 52 Ring Gauge', lengthPct: 60, thicknessPx: 14 },
-    image: '/assets/smokecraft/cigars/belicoso.jpg',
+    // TEMPORARY FALLBACK — no dedicated belicoso.jpg shoot exists yet. Reusing the
+    // torpedo-figurado.jpg photo since it shares Belicoso's tapered figurado shape.
+    // Replace with a real Belicoso product photo when available; not final.
+    // TODO: Replace with licensed Belicoso cigar photo.
+    image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
   },
   {
     id: 'perfecto',
@@ -242,7 +253,11 @@ const FORMATS = [
     flavorImpact: 'Evolving & Complex',
     taper: true,
     shapeProfile: { badge: 'Double Tapered', label: 'Double-Tapered · 48 Ring Gauge', lengthPct: 50, thicknessPx: 13 },
-    image: '/assets/smokecraft/cigars/perfecto.jpg',
+    // TEMPORARY FALLBACK — no dedicated perfecto.jpg shoot exists yet. Reusing
+    // churchill.jpg as the closest classic-shape photo currently available.
+    // Replace with a real Perfecto product photo when available; not final.
+    // TODO: Replace with licensed Perfecto cigar photo.
+    image: '/assets/smokecraft/cigars/churchill.jpg',
   },
   {
     id: 'panetela',
@@ -264,7 +279,11 @@ const FORMATS = [
     flavorImpact: 'Brisk & Elegant',
     taper: false,
     shapeProfile: { badge: 'Slim / Long', label: 'Slim · Long · 34 Ring Gauge', lengthPct: 90, thicknessPx: 6 },
-    image: '/assets/smokecraft/cigars/panetela.jpg',
+    // TEMPORARY FALLBACK — no dedicated panetela.jpg shoot exists yet. Reusing corona.jpg
+    // (the slimmest photo currently in public/assets/smokecraft/cigars/) as a stand-in.
+    // Replace with a real Panetela product photo when available; not final.
+    // TODO: Replace with licensed Panetela cigar photo.
+    image: '/assets/smokecraft/cigars/corona.jpg',
   },
 ]
 
@@ -408,28 +427,74 @@ export default function Format() {
   const savedFormatId = session.smokeCraft?.selectedFormat?.id || null
   const [selectedId, setSelectedId] = useState(savedFormatId)
   const [feedback, setFeedback] = useState('')
-  const [activeChip, setActiveChip] = useState(null) // { cigarId, chip }
+  // Single shared selection state for every selectable insight on this page
+  // (cigar chips, wrapper profiles, session comparisons) instead of one
+  // useState per source. Shape: { sourceType, cigarId, cigarName, itemId,
+  // itemLabel, itemCategory, itemValue, description }.
+  const [selectedInsight, setSelectedInsight] = useState(null)
+
+  function emitInsightSelection(payload) {
+    // No dedicated chip/wrapper/session-level recommendation/filter state
+    // exists yet in GuestSessionContext (only format-level
+    // setSmokeCraftFormat). Avoid inventing a duplicate state system — just
+    // surface the selection for now so it's ready to wire into real
+    // filtering later.
+    if (import.meta.env.DEV) console.debug('[SmokeCraft] insight selected', payload)
+  }
 
   function handleChipSelect(format, chip) {
-    setActiveChip(prev =>
-      prev && prev.cigarId === format.id && prev.chip.id === chip.id
-        ? null
-        : { cigarId: format.id, chip }
-    )
-
-    const payload = {
+    const itemId = `${format.id}:${chip.id}`
+    setSelectedInsight(prev => (prev?.itemId === itemId ? null : {
+      sourceType: 'cigar-chip',
       cigarId: format.id,
       cigarName: format.name,
-      chipId: chip.id,
-      chipLabel: chip.label,
-      chipCategory: chip.category,
-      chipValue: chip.value,
-    }
-    // No dedicated chip-level recommendation/filter state exists yet in
-    // GuestSessionContext (only format-level setSmokeCraftFormat). Avoid
-    // inventing a duplicate state system — just surface the selection for
-    // now so it's ready to wire into real filtering later.
-    if (import.meta.env.DEV) console.debug('[SmokeCraft] chip selected', payload)
+      itemId,
+      itemLabel: chip.label,
+      itemCategory: chip.category,
+      itemValue: chip.value,
+      description: chip.description,
+    }))
+    emitInsightSelection({
+      sourceType: 'cigar-chip',
+      cigarId: format.id,
+      cigarName: format.name,
+      itemId,
+      itemLabel: chip.label,
+      itemCategory: chip.category,
+      itemValue: chip.value,
+    })
+  }
+
+  function handleWrapperSelect(wrapper) {
+    triggerHaptic('light')
+    const itemId = `wrapper:${wrapper.id}`
+    setSelectedInsight(prev => (prev?.itemId === itemId ? null : {
+      sourceType: 'wrapper-profile',
+      cigarId: null,
+      cigarName: null,
+      itemId,
+      itemLabel: wrapper.name,
+      itemCategory: 'Wrapper',
+      itemValue: null,
+      description: wrapper.note,
+    }))
+    emitInsightSelection({ sourceType: 'wrapper-profile', itemId, itemLabel: wrapper.name })
+  }
+
+  function handleSessionSelect(sessionType) {
+    triggerHaptic('light')
+    const itemId = `session:${sessionType.id}`
+    setSelectedInsight(prev => (prev?.itemId === itemId ? null : {
+      sourceType: 'session-comparison',
+      cigarId: null,
+      cigarName: null,
+      itemId,
+      itemLabel: sessionType.label,
+      itemCategory: 'Session Length',
+      itemValue: sessionType.range,
+      description: sessionType.copy,
+    }))
+    emitInsightSelection({ sourceType: 'session-comparison', itemId, itemLabel: sessionType.label })
   }
 
   const selected = useMemo(
@@ -1033,11 +1098,29 @@ export default function Format() {
           border-radius: 14px;
           background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18));
           box-shadow: inset 0 1px 0 rgba(255,236,178,0.05);
+          cursor: pointer;
+          text-align: left;
+          font-family: inherit;
+          transition: transform 0.15s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+        .session-row:hover {
+          border-color: rgba(255,225,151,0.55);
+        }
+        .session-row:active {
+          transform: scale(0.99);
+        }
+        .session-row:focus-visible {
+          outline: 2px solid rgba(255,225,151,0.85);
+          outline-offset: 2px;
         }
         .session-row.is-active {
           border-color: rgba(255,225,151,0.8);
           background: linear-gradient(135deg, rgba(233,193,118,0.16), rgba(233,193,118,0.05));
           box-shadow: 0 0 26px rgba(233,193,118,0.2), inset 0 0 0 1px rgba(255,225,151,0.2);
+        }
+        .session-row.is-picked {
+          border-color: rgba(255,225,151,0.95);
+          box-shadow: 0 0 30px rgba(233,193,118,0.4), inset 0 0 0 1.5px rgba(255,225,151,0.5);
         }
         .session-row__icon {
           width: 46px;
@@ -1214,13 +1297,34 @@ export default function Format() {
               the rhythm of your experience. Explore the most iconic formats and find the one that matches your moment.
             </p>
 
-            <CigarIntelligencePanel activeRingGauge={insightFormat.ringGauge} />
+            <CigarIntelligencePanel
+              activeRingGauge={insightFormat.ringGauge}
+              selectedWrapperId={selectedInsight?.sourceType === 'wrapper-profile' ? selectedInsight.itemId.replace('wrapper:', '') : null}
+              onSelectWrapper={handleWrapperSelect}
+            />
+
+            {selectedInsight?.sourceType === 'wrapper-profile' && (
+              <SmokeCraftInsightPanel
+                cigarName="Wrapper Profile"
+                chip={{
+                  id: selectedInsight.itemId,
+                  label: selectedInsight.itemLabel,
+                  category: selectedInsight.itemCategory,
+                  value: selectedInsight.itemValue,
+                  description: selectedInsight.description,
+                }}
+                fallbackText={WRAPPER_FALLBACK_DESCRIPTION}
+                onClose={() => setSelectedInsight(null)}
+              />
+            )}
 
             <div className="format-card-grid" aria-label="Cigar format choices">
               {FORMATS.map((format, index) => {
                 const isSelected = selected?.id === format.id
                 const { tagChips, factChips } = buildChipsForFormat(format)
-                const cardActiveChip = activeChip?.cigarId === format.id ? activeChip.chip : null
+                const cardActiveChip = selectedInsight?.sourceType === 'cigar-chip' && selectedInsight.cigarId === format.id
+                  ? { id: selectedInsight.itemId, label: selectedInsight.itemLabel, category: selectedInsight.itemCategory, value: selectedInsight.itemValue, description: selectedInsight.description }
+                  : null
 
                 function handleCardKeyDown(e) {
                   if (e.target !== e.currentTarget) return
@@ -1268,7 +1372,7 @@ export default function Format() {
                     <p>{format.description}</p>
                     <div className="format-card__facts">
                       {factChips.map((chip) => {
-                        const isChipSelected = cardActiveChip?.id === chip.id
+                        const isChipSelected = cardActiveChip?.id === `${format.id}:${chip.id}`
                         return (
                           <button
                             type="button"
@@ -1291,7 +1395,7 @@ export default function Format() {
                         <SmokeCraftInsightChip
                           key={chip.id}
                           chip={chip}
-                          isSelected={cardActiveChip?.id === chip.id}
+                          isSelected={cardActiveChip?.id === `${format.id}:${chip.id}`}
                           onSelect={(c) => handleChipSelect(format, c)}
                         />
                       ))}
@@ -1300,7 +1404,7 @@ export default function Format() {
                       <SmokeCraftInsightPanel
                         cigarName={format.name}
                         chip={cardActiveChip}
-                        onClose={() => setActiveChip(null)}
+                        onClose={() => setSelectedInsight(null)}
                       />
                     )}
                   </div>
@@ -1354,17 +1458,51 @@ export default function Format() {
               <div className="format-panel__inner">
                 <div className="format-panel__label">Session Comparison</div>
                 <div className="session-list">
-                  {SESSION_TYPES.map(type => (
-                    <article key={type.id} className={`session-row${selected?.category === type.id ? ' is-active' : ''}`}>
-                      <span className="session-row__icon material-symbols-outlined" aria-hidden="true">timer</span>
-                      <div>
-                        <strong>{type.label}</strong>
-                        <span>{type.range}</span>
-                        <p>{type.copy}</p>
-                      </div>
-                    </article>
-                  ))}
+                  {SESSION_TYPES.map(type => {
+                    const isPicked = selectedInsight?.sourceType === 'session-comparison' && selectedInsight.itemId === `session:${type.id}`
+                    const isActive = selected?.category === type.id
+
+                    function handleSessionKeyDown(e) {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        handleSessionSelect(type)
+                      }
+                    }
+
+                    return (
+                      <article
+                        key={type.id}
+                        role="button"
+                        tabIndex={0}
+                        className={`session-row${isActive ? ' is-active' : ''}${isPicked ? ' is-picked' : ''}`}
+                        onClick={() => handleSessionSelect(type)}
+                        onKeyDown={handleSessionKeyDown}
+                        aria-pressed={isPicked}
+                        aria-label={`${type.label}, ${type.range}`}
+                      >
+                        <span className="session-row__icon material-symbols-outlined" aria-hidden="true">timer</span>
+                        <div>
+                          <strong>{type.label}</strong>
+                          <span>{type.range}</span>
+                          <p>{type.copy}</p>
+                        </div>
+                      </article>
+                    )
+                  })}
                 </div>
+                {selectedInsight?.sourceType === 'session-comparison' && (
+                  <SmokeCraftInsightPanel
+                    cigarName="Session Comparison"
+                    chip={{
+                      id: selectedInsight.itemId,
+                      label: selectedInsight.itemLabel,
+                      category: selectedInsight.itemCategory,
+                      value: selectedInsight.itemValue,
+                      description: selectedInsight.description,
+                    }}
+                    onClose={() => setSelectedInsight(null)}
+                  />
+                )}
               </div>
             </section>
 
