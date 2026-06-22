@@ -152,6 +152,7 @@ export default function Pairing() {
   const [selectedItem,  setSelectedItem]  = useState(null)
   const [cartOpen,      setCartOpen]      = useState(false)
   const [orderResult,   setOrderResult]   = useState(null)
+  const [orderError,    setOrderError]    = useState(null)
   const [showStamp,     setShowStamp]     = useState(false)
   const [orderNotes,    setOrderNotes]    = useState('')
   const [sending,       setSending]       = useState(false)
@@ -199,6 +200,7 @@ export default function Pairing() {
   async function sendOrder() {
     if (cart.length === 0 || sending) return
     setSending(true)
+    setOrderError(null)
     try {
       const payload = {
         guestId:   session?.guestId   || 'guest-demo',
@@ -235,17 +237,9 @@ export default function Pairing() {
         cart.forEach(i => addPendingOrder({ id: i.id, name: i.name, type: 'pairing' }))
       }
     } catch (_) {
-      // Offline fallback — still confirm locally
-      const fakeOrder = {
-        id:        `PAIR-${Date.now()}`,
-        items:     cart,
-        subtotal:  cartSubtotal,
-        status:    'submitted',
-        createdAt: new Date().toISOString(),
-      }
-      setOrderResult(fakeOrder)
-      setCart([])
-      setCartOpen(false)
+      // Honest failure — the order was never actually sent to staff. Cart is
+      // preserved so the guest can retry instead of seeing a fake success.
+      setOrderError('Could not reach the staff order system. Your order was not sent — please try again or ask staff directly.')
     } finally {
       setSending(false)
     }
@@ -768,6 +762,11 @@ export default function Pairing() {
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-on-surface-variant text-sm uppercase tracking-widest font-label-sm">Subtotal</span>
                   <span className="text-primary font-bold text-xl">${cartSubtotal.toFixed(2)}</span>
+                </div>
+              )}
+              {orderError && (
+                <div className="mb-3 px-3 py-2 rounded-lg text-sm" style={{ background: 'rgba(220,80,60,0.12)', border: '1px solid rgba(220,80,60,0.35)', color: '#f0a89a' }}>
+                  {orderError}
                 </div>
               )}
               <button onClick={sendOrder}

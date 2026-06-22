@@ -148,14 +148,15 @@ export default function Available() {
             { icon: 'menu_book', label: 'My Passport' },
             { icon: 'contact_support', label: 'Support' },
           ].map(({ icon, label, active }) => (
-            <a
+            <div
               key={label}
-              href="#"
-              className={`flex items-center gap-4 px-8 py-3 transition-all ${active ? 'bg-secondary-container text-on-secondary-container rounded-r-full mr-4' : 'text-on-surface-variant hover:bg-surface-container-highest/50'}`}
+              aria-disabled={!active}
+              title={active ? undefined : 'Coming soon'}
+              className={`flex items-center gap-4 px-8 py-3 transition-all ${active ? 'bg-secondary-container text-on-secondary-container rounded-r-full mr-4' : 'text-on-surface-variant/50'}`}
             >
               <span className="material-symbols-outlined">{icon}</span>
               <span className="font-label-lg text-label-lg">{label}</span>
-            </a>
+            </div>
           ))}
         </nav>
       </aside>
@@ -260,14 +261,15 @@ export default function Available() {
           { icon: 'menu_book',    label: 'Passport',  active: true },
           { icon: 'auto_awesome', label: 'Assistant', active: false },
         ].map(({ icon, label, active }) => (
-          <a
+          <div
             key={label}
-            href="#"
-            className={`flex flex-col items-center justify-center transition-colors ${active ? 'text-primary bg-primary-container/20 rounded-full px-6 py-2 scale-90 duration-300' : 'text-on-surface-variant hover:text-primary'}`}
+            aria-disabled={!active}
+            title={active ? undefined : 'Coming soon'}
+            className={`flex flex-col items-center justify-center transition-colors ${active ? 'text-primary bg-primary-container/20 rounded-full px-6 py-2 scale-90 duration-300' : 'text-on-surface-variant/50'}`}
           >
             <span className="material-symbols-outlined">{icon}</span>
             <span className="font-label-sm text-label-sm">{label}</span>
-          </a>
+          </div>
         ))}
       </nav>
     </div>

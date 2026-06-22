@@ -609,9 +609,12 @@ export default function Leaderboard() {
               <div style={{ position: 'absolute', right: '12%', top: 0, width: 2, height: '100%', background: 'linear-gradient(180deg,transparent,rgba(232,213,163,0.6),transparent)', filter: 'blur(1px)', boxShadow: `0 0 40px ${G}` }} />
               <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 76% 16%,rgba(232,213,163,0.28),transparent 24%), radial-gradient(circle at 70% 54%,rgba(201,118,34,0.18),transparent 36%), linear-gradient(120deg,rgba(5,3,2,0.94) 0%,rgba(12,8,5,0.72) 54%,rgba(5,3,2,0.3) 100%)' }} />
               <div style={{ position: 'relative', padding: '28px 22px 24px' }}>
-                <div style={{ fontSize: 8, color: `${G}99`, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 10 }}>SmokeCraft 360</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                  <div style={{ fontSize: 8, color: `${G}99`, letterSpacing: '0.3em', textTransform: 'uppercase' }}>SmokeCraft 360</div>
+                  <div style={{ fontSize: 8, color: '#0a0704', background: G, borderRadius: 99, padding: '2px 7px', letterSpacing: '0.12em', fontWeight: 700 }}>DEMO</div>
+                </div>
                 <h1 style={{ fontFamily: '"Playfair Display",serif', fontSize: 'clamp(24px,3vw,36px)', fontWeight: 700, margin: '0 0 10px', lineHeight: 1.15 }}>
-                  Tonight's <span style={{ color: G, fontStyle: 'italic' }}>Ranking</span>
+                  Demo Lounge <span style={{ color: G, fontStyle: 'italic' }}>Ranking</span>
                 </h1>
                 <p style={{ color: TEXTM, fontSize: 12, margin: 0, maxWidth: 260, lineHeight: 1.5 }}>
                   Ranked by SmokeCraft XP earned across all sessions. You enter the Grand Lounge as a ranked member of this cigar society.
