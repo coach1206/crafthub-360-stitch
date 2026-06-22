@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useGuestSession } from './context/GuestSessionContext.jsx'
 import { DemoModeProvider } from './context/DemoModeContext.jsx'
 import Layout from './components/Layout.jsx'
@@ -430,7 +430,18 @@ export default function App() {
               } />
 
               {/* ── NEW POS 3 system — nested route tree ───────────── */}
-              <Route path="pos3">
+              {/* ── Protected: staff+ — BLOCKED in demo mode ────── */}
+              <Route path="pos3" element={
+                <ProtectedRoute
+                  requiredPermission="access_pos3_staff"
+                  loginRoute="/staff-login"
+                  loginLabel="Staff Login"
+                  lockedMessage="POS 3 requires staff-level access. Please sign in with your staff PIN."
+                  demoBlocked
+                >
+                  <Outlet />
+                </ProtectedRoute>
+              }>
                 <Route index            element={<POS3Home />} />
                 <Route path="handheld"  element={<POS3Handheld />} />
                 <Route path="tables"    element={<POS3Tables />} />
@@ -445,7 +456,18 @@ export default function App() {
               </Route>
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
-              <Route path="eat">
+              {/* ── Protected: manager+ — BLOCKED in demo mode ────── */}
+              <Route path="eat" element={
+                <ProtectedRoute
+                  requiredPermission="access_eat_command"
+                  loginRoute="/admin-login"
+                  loginLabel="Manager / Admin Login"
+                  lockedMessage="E.A.T. Command requires manager-level access or higher."
+                  demoBlocked
+                >
+                  <Outlet />
+                </ProtectedRoute>
+              }>
                 <Route index              element={<EATCommandHub />} />
                 <Route path="command-hub" element={<EATCommandHub />} />
                 <Route path="pos-control" element={<EATPosControl />} />
