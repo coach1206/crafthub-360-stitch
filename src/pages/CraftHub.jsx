@@ -7,11 +7,11 @@ import StaffHandoffButton from "../components/staffhandoff/StaffHandoffButton.js
 // POS 3 and E.A.T. System are intentionally excluded: they are staff/manager
 // systems reached only through the Staff Handoff PIN flow (see ROW 2).
 const ROW1_MODULES = [
-  { id: "smokecraft", title: "SmokeCraft 360", desc: "Cigar pairing, mentor-guided tasting, flavor notes, score flow.", icon: "chair", action: "route", route: "/smokecraft", image: "/smokecraft.jpg" },
-  { id: "pourcraft", title: "PourCraft 360", desc: "Cocktail discovery, bar specials, pairing moments, guest preference capture.", icon: "liquor", action: "route", route: "/pourcraft", image: "/pourcraft.jpg" },
-  { id: "winecraft", title: "WineCraft 360", desc: "Wine flights, cellar signals, tasting notes, event pairing.", icon: "wine_bar", action: "route", route: "/winecraft", image: "/winecraft.jpg" },
-  { id: "beercraft", title: "BeerCraft 360", desc: "Beer flights, taproom specials, style matching, score flow.", icon: "sports_bar", action: "route", route: "/beercraft", image: "/beercraft.jpg" },
-  { id: "passport-connections", title: "360 Passport Connections", desc: "Guest identity, stamps, networking, experience history.", icon: "menu_book", action: "route", route: "/passport/connections", image: "/passport.jpg" },
+  { id: "smokecraft", title: "SmokeCraft 360", desc: "Cigar pairing, mentor-guided tasting, flavor notes, score flow.", icon: "chair", action: "route", route: "/smokecraft", image: "/smokecraft.jpg", status: "active" },
+  { id: "pourcraft", title: "PourCraft 360", desc: "Built on the SmokeCraft MVP2 engine. Unlocks after SmokeCraft, POS3, and E.A.T. are complete.", icon: "liquor", action: "route", route: "/pourcraft", image: "/pourcraft.jpg", status: "coming-soon" },
+  { id: "winecraft", title: "WineCraft 360", desc: "Built on the SmokeCraft MVP2 engine. Unlocks after SmokeCraft, POS3, and E.A.T. are complete.", icon: "wine_bar", action: "route", route: "/winecraft", image: "/winecraft.jpg", status: "coming-soon" },
+  { id: "beercraft", title: "BeerCraft 360", desc: "Built on the SmokeCraft MVP2 engine. Unlocks after SmokeCraft, POS3, and E.A.T. are complete.", icon: "sports_bar", action: "route", route: "/beercraft", image: "/beercraft.jpg", status: "coming-soon" },
+  { id: "passport-connections", title: "360 Passport Connections", desc: "Guest identity, stamps, networking, experience history.", icon: "menu_book", action: "route", route: "/passport/connections", image: "/passport.jpg", status: "active" },
 ];
 
 // ROW 2 — Staff Handoff is the only bridge to POS 3 / E.A.T. System, and
@@ -78,13 +78,20 @@ export default function CraftHub() {
             <img
               src={mod.image}
               alt={mod.title}
-              className="parallax-bg h-full w-full scale-110 object-cover transition-transform duration-700 group-hover:scale-125"
+              className={`parallax-bg h-full w-full scale-110 object-cover transition-transform duration-700 group-hover:scale-125 ${mod.status === "coming-soon" ? "grayscale-[0.5] brightness-[0.55]" : ""}`}
             />
           ) : (
             <div className="h-full w-full bg-gradient-to-br from-[#1a1410] via-[#0a0805] to-black" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
         </div>
+
+        {mod.status === "coming-soon" && (
+          <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 rounded-full border border-[#d4af37]/40 bg-black/70 px-3 py-1 backdrop-blur-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37]" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#d4af37]">Coming Soon</span>
+          </div>
+        )}
 
         <div className="absolute bottom-0 left-0 z-10 flex w-full items-end justify-between gap-4 p-6">
           <div>
