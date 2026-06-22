@@ -3,12 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import { emit, SYSTEMS } from '../../services/shared/opsEventBus.js'
-
-const FILL1 = { fontVariationSettings: "'FILL' 1" }
+import { StoreIcon, CigarIcon, CheckIcon, ArrowForwardIcon, ArrowBackIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 
 const OPTIONS = [
-  { id: 'request', icon: 'store',         label: 'Request from Humidor',     desc: 'A staff member will retrieve your selected cigar from the house humidor.', actionType: 'HUMIDOR_REQUEST' },
-  { id: 'have',    icon: 'smoking_rooms', label: 'I Already Have My Cigar',  desc: 'You have your cigar ready. Proceed to cut, toast, and light.',             actionType: 'GUEST_HAS_CIGAR' },
+  { id: 'request', Icon: StoreIcon, label: 'Request from Humidor',     desc: 'A staff member will retrieve your selected cigar from the house humidor.', actionType: 'HUMIDOR_REQUEST' },
+  { id: 'have',    Icon: CigarIcon, label: 'I Already Have My Cigar',  desc: 'You have your cigar ready. Proceed to cut, toast, and light.',             actionType: 'GUEST_HAS_CIGAR' },
 ]
 
 export default function RequestPurchase() {
@@ -64,7 +63,7 @@ export default function RequestPurchase() {
         <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
-        <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/humidor-match')} aria-label="Back">arrow_back</button>
+        <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/humidor-match')} aria-label="Back"><ArrowBackIcon size={24} /></button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
@@ -98,15 +97,15 @@ export default function RequestPurchase() {
                   borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.08)',
                   boxShadow: on ? '0 0 0 1px rgba(233,193,118,0.25), 0 8px 28px rgba(233,193,118,0.18)' : 'none',
                 }}>
-                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ background: on ? 'rgba(233,193,118,0.15)' : 'rgba(255,255,255,0.05)' }}>
-                  <span className="material-symbols-outlined text-primary" style={{ fontSize:22, lineHeight:1, ...(on ? FILL1 : {}) }}>{o.icon}</span>
+                <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ background: on ? 'rgba(233,193,118,0.15)' : 'rgba(255,255,255,0.05)', color: '#e9c176' }}>
+                  <o.Icon size={22} />
                 </div>
                 <div className="flex-1">
                   <p className="font-label-lg text-label-lg text-on-surface font-semibold mb-1">{o.label}</p>
                   <p className="font-body-md text-body-md text-on-surface-variant">{o.desc}</p>
                 </div>
                 <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: on ? '#e9c176' : 'rgba(255,255,255,0.2)', background: on ? '#e9c176' : 'transparent' }}>
-                  {on && <span className="material-symbols-outlined" style={{ fontSize:12,color:'#131314',...FILL1 }}>check</span>}
+                  {on && <CheckIcon size={12} color="#131314" />}
                 </div>
               </button>
             )
@@ -116,12 +115,12 @@ export default function RequestPurchase() {
           <button onClick={handleContinue} disabled={!selected || done}
             className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40 w-full sm:w-auto"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
-            Continue <span className="material-symbols-outlined">arrow_forward</span>
+            Continue <ArrowForwardIcon size={20} />
           </button>
           <button onClick={() => navigate('/smokecraft/humidor-match')}
             className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300 w-full sm:w-auto"
             style={{ height:64,paddingInline:32 }}>
-            <span className="material-symbols-outlined">arrow_back</span> Back
+            <ArrowBackIcon size={20} /> Back
           </button>
         </div>
       </main>

@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useGuestSession } from './context/GuestSessionContext.jsx'
 import { DemoModeProvider } from './context/DemoModeContext.jsx'
 import Layout from './components/Layout.jsx'
@@ -80,6 +80,7 @@ import FirstThird       from './pages/smokecraft/FirstThird.jsx'
 import SecondThird      from './pages/smokecraft/SecondThird.jsx'
 import FinalThird       from './pages/smokecraft/FinalThird.jsx'
 import Scorecard        from './pages/smokecraft/Scorecard.jsx'
+import EventChallenge   from './pages/smokecraft/EventChallenge.jsx'
 import Connections      from './pages/smokecraft/Connections.jsx'
 import ManagementSync   from './pages/smokecraft/ManagementSync.jsx'
 
@@ -224,6 +225,7 @@ export default function App() {
               <Route path="smokecraft">
                 <Route index element={<SmokeCraft />} />
                 <Route path="enroll"           element={<Enroll />} />
+                <Route path="intake"           element={<Navigate to="/smokecraft/enroll" replace />} />
                 <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
                 <Route path="profile"          element={<Navigate to="/smokecraft/identity" replace />} />
                 <Route path="education"        element={<Navigate to="/smokecraft/format" replace />} />
@@ -268,6 +270,7 @@ export default function App() {
                 <Route path="second-third"     element={<SecondThird />} />
                 <Route path="final-third"      element={<FinalThird />} />
                 <Route path="scorecard"        element={<Scorecard />} />
+                <Route path="event-challenge"  element={<EventChallenge />} />
                 <Route path="connections"      element={<Connections />} />
                 <Route path="management-sync"  element={<ManagementSync />} />
               </Route>
@@ -428,7 +431,18 @@ export default function App() {
               } />
 
               {/* ── NEW POS 3 system — nested route tree ───────────── */}
-              <Route path="pos3">
+              {/* ── Protected: staff+ — BLOCKED in demo mode ────── */}
+              <Route path="pos3" element={
+                <ProtectedRoute
+                  requiredPermission="access_pos3_staff"
+                  loginRoute="/staff-login"
+                  loginLabel="Staff Login"
+                  lockedMessage="POS 3 requires staff-level access. Please sign in with your staff PIN."
+                  demoBlocked
+                >
+                  <Outlet />
+                </ProtectedRoute>
+              }>
                 <Route index            element={<POS3Home />} />
                 <Route path="handheld"  element={<POS3Handheld />} />
                 <Route path="tables"    element={<POS3Tables />} />
@@ -443,7 +457,18 @@ export default function App() {
               </Route>
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
-              <Route path="eat">
+              {/* ── Protected: manager+ — BLOCKED in demo mode ────── */}
+              <Route path="eat" element={
+                <ProtectedRoute
+                  requiredPermission="access_eat_command"
+                  loginRoute="/admin-login"
+                  loginLabel="Manager / Admin Login"
+                  lockedMessage="E.A.T. Command requires manager-level access or higher."
+                  demoBlocked
+                >
+                  <Outlet />
+                </ProtectedRoute>
+              }>
                 <Route index              element={<EATCommandHub />} />
                 <Route path="command-hub" element={<EATCommandHub />} />
                 <Route path="pos-control" element={<EATPosControl />} />

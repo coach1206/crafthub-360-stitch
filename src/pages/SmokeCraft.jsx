@@ -6,11 +6,23 @@ import { getNextSmokecraftRoute } from '../constants/session.js'
 
 export default function SmokeCraft() {
   const navigate = useNavigate()
-  const { session } = useGuestSession()
+  const { session, updateProfile } = useGuestSession()
   const { enterDemoMode } = useDemoMode()
   const [howItWorksOpen, setHowItWorksOpen] = useState(false)
+  const [signInOpen, setSignInOpen] = useState(false)
+  const [guestPassOpen, setGuestPassOpen] = useState(false)
+  const [qrOpen, setQrOpen] = useState(false)
+  const [signInValue, setSignInValue] = useState('')
+  const [guestPassValue, setGuestPassValue] = useState('')
 
-  const hasPreviousSession = (session.completedSteps?.length ?? 0) > 0
+  const completedSteps     = session.completedSteps ?? []
+  const hasPreviousSession = completedSteps.length > 0
+  const hasUnfinishedSession = hasPreviousSession && !completedSteps.includes('session-complete')
+  const stampCount         = session.passport?.earnedStamps?.length ?? session.smokecraftStamps?.length ?? 0
+  const badgeCount         = session.badges?.length ?? 0
+  const mentorCount        = session.mentors?.length ?? 0
+  const hasEventHistory    = completedSteps.includes('leaf-challenge')
+  const isReturningUser    = hasPreviousSession || stampCount > 0 || badgeCount > 0
 
   function handleStartNew() {
     navigate('/smokecraft/enroll')
@@ -18,6 +30,22 @@ export default function SmokeCraft() {
 
   function handleContinue() {
     navigate(getNextSmokecraftRoute(session.completedSteps))
+  }
+
+  function handleSignInSubmit(e) {
+    e.preventDefault()
+    if (signInValue.includes('@')) updateProfile({ email: signInValue })
+    else if (signInValue) updateProfile({ phone: signInValue })
+    setSignInOpen(false)
+    setSignInValue('')
+  }
+
+  function handleGuestPassSubmit(e) {
+    e.preventDefault()
+    if (guestPassValue) updateProfile({ venueGuestPassCode: guestPassValue })
+    setGuestPassOpen(false)
+    setGuestPassValue('')
+    navigate('/smokecraft/enroll')
   }
 
   function handleEventChallenge() {
@@ -120,8 +148,24 @@ export default function SmokeCraft() {
             {/* Welcome label */}
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, padding: '6px 14px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.32)', background: 'rgba(212,175,55,0.1)' }}>
               <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#E6C76A' }}>smoking_rooms</span>
-              <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#E6C76A', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>Welcome to SmokeCraft 360</span>
+              <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#E6C76A', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>
+                {isReturningUser ? 'Welcome back to SmokeCraft 360' : 'Welcome to SmokeCraft 360'}
+              </span>
             </div>
+
+            {/* Returning-user history check */}
+            {isReturningUser && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 22, padding: '12px 16px', borderRadius: 12, border: '1px solid rgba(212,175,55,0.22)', background: 'rgba(212,175,55,0.05)' }}>
+                {hasUnfinishedSession && (
+                  <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#9DC2EE', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                    Unfinished tasting in progress
+                  </span>
+                )}
+                <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                  {stampCount} stamp{stampCount === 1 ? '' : 's'} · {badgeCount} badge{badgeCount === 1 ? '' : 's'} · {mentorCount} mentor{mentorCount === 1 ? '' : 's'}{hasEventHistory ? ' · event challenge completed' : ''}
+                </span>
+              </div>
+            )}
 
             {/* Headline */}
             <h2 style={{ fontFamily: '"Playfair Display",serif', fontSize: 'clamp(40px, 6vw, 72px)', fontWeight: 700, lineHeight: 1.08, color: '#F4ECDA', letterSpacing: '-0.02em', marginBottom: 20 }}>
@@ -162,6 +206,9 @@ export default function SmokeCraft() {
                 { label: 'View My Passport',       onClick: handleViewPassport,  icon: 'menu_book' },
                 { label: 'Browse Humidor',          onClick: handleBrowseHumidor, icon: 'inventory_2' },
                 { label: 'Demo Experience',         onClick: handleDemoExperience, icon: 'visibility' },
+                { label: 'Sign In',                 onClick: () => setSignInOpen(true), icon: 'login' },
+                { label: 'Scan QR Code',            onClick: () => setQrOpen(true), icon: 'qr_code_scanner' },
+                { label: 'Venue Guest Pass',         onClick: () => setGuestPassOpen(true), icon: 'badge' },
               ].map(btn => (
                 <button
                   key={btn.label}
@@ -305,6 +352,56 @@ export default function SmokeCraft() {
         ))}
       </nav>
 
+      {/* ── Sign In Modal (lightweight guest identity capture — no backend auth) ── */}
+      {signInOpen && (
+        <div onClick={() => setSignInOpen(false)} className="smokecraft-how-overlay" style={{ alignItems: 'center' }}>
+          <form onClick={e => e.stopPropagation()} onSubmit={handleSignInSubmit} className="smokecraft-entry-modal">
+            <button type="button" className="smokecraft-how-close" onClick={() => setSignInOpen(false)} aria-label="Close sign in"><span className="material-symbols-outlined">close</span></button>
+            <h3 className="smokecraft-entry-title">Sign In</h3>
+            <p className="smokecraft-entry-desc">Enter your email or phone to link this session to your guest profile.</p>
+            <input
+              autoFocus
+              className="smokecraft-entry-input"
+              placeholder="Email or phone"
+              value={signInValue}
+              onChange={e => setSignInValue(e.target.value)}
+            />
+            <button type="submit" className="smokecraft-entry-submit">Continue</button>
+          </form>
+        </div>
+      )}
+
+      {/* ── QR Scan Placeholder Modal ─────────────────────────────────── */}
+      {qrOpen && (
+        <div onClick={() => setQrOpen(false)} className="smokecraft-how-overlay" style={{ alignItems: 'center' }}>
+          <div onClick={e => e.stopPropagation()} className="smokecraft-entry-modal" style={{ textAlign: 'center' }}>
+            <button className="smokecraft-how-close" onClick={() => setQrOpen(false)} aria-label="Close QR scan"><span className="material-symbols-outlined">close</span></button>
+            <span className="material-symbols-outlined" style={{ fontSize: 64, color: '#E6C76A', marginBottom: 12 }}>qr_code_scanner</span>
+            <h3 className="smokecraft-entry-title">Scan QR Code</h3>
+            <p className="smokecraft-entry-desc">Point your camera at a table, bar, humidor, or event QR code to enter SmokeCraft 360 directly into that context. Camera scanning activates on the venue device.</p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Venue Guest Pass Modal ───────────────────────────────────── */}
+      {guestPassOpen && (
+        <div onClick={() => setGuestPassOpen(false)} className="smokecraft-how-overlay" style={{ alignItems: 'center' }}>
+          <form onClick={e => e.stopPropagation()} onSubmit={handleGuestPassSubmit} className="smokecraft-entry-modal">
+            <button type="button" className="smokecraft-how-close" onClick={() => setGuestPassOpen(false)} aria-label="Close guest pass"><span className="material-symbols-outlined">close</span></button>
+            <h3 className="smokecraft-entry-title">Venue Guest Pass</h3>
+            <p className="smokecraft-entry-desc">Enter the guest pass code provided by the venue to begin your session.</p>
+            <input
+              autoFocus
+              className="smokecraft-entry-input"
+              placeholder="Guest pass code"
+              value={guestPassValue}
+              onChange={e => setGuestPassValue(e.target.value)}
+            />
+            <button type="submit" className="smokecraft-entry-submit">Enter SmokeCraft</button>
+          </form>
+        </div>
+      )}
+
       {/* ── How It Works Modal ──────────────────────────────────────── */}
       {howItWorksOpen && (
         <div
@@ -392,6 +489,53 @@ export default function SmokeCraft() {
 
       {/* Desktop grid responsive style */}
       <style>{`
+        .smokecraft-entry-modal {
+          position: relative;
+          width: min(420px, 100%);
+          border-radius: 22px;
+          border: 1.5px solid rgba(233,193,118,0.6);
+          padding: 32px 28px 28px;
+          color: #f4ead7;
+          background: linear-gradient(180deg, rgba(20,14,9,0.97), rgba(8,5,3,0.98));
+          box-shadow: 0 32px 90px rgba(0,0,0,0.7), 0 0 36px rgba(233,193,118,0.18);
+        }
+        .smokecraft-entry-title {
+          font-family: "Playfair Display", serif;
+          font-size: 26px;
+          color: #f7d88a;
+          margin: 0 0 10px;
+        }
+        .smokecraft-entry-desc {
+          font-size: 13px;
+          line-height: 1.55;
+          color: rgba(244,236,218,0.65);
+          margin: 0 0 18px;
+        }
+        .smokecraft-entry-input {
+          width: 100%;
+          height: 48px;
+          border-radius: 10px;
+          border: 1px solid rgba(212,175,55,0.35);
+          background: rgba(255,255,255,0.04);
+          color: #f4ead7;
+          padding: 0 16px;
+          margin-bottom: 16px;
+          font-size: 14px;
+        }
+        .smokecraft-entry-submit {
+          width: 100%;
+          height: 52px;
+          border: none;
+          border-radius: 10px;
+          cursor: pointer;
+          background: linear-gradient(135deg, #E9C176, #B8952A);
+          color: #1A1207;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+        }
         .smokecraft-how-overlay {
           position: fixed;
           inset: 0;

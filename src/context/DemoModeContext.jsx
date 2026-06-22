@@ -26,6 +26,7 @@ export const DEMO_BLOCKED_PATHS = new Set([
   '/admin',
   '/eat',
   '/pos',
+  '/pos3',
   '/ultra-command-center',
   '/novee-vault',
   '/remote-software-control',

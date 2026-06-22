@@ -17,7 +17,8 @@ const STAFF_ROLES = new Set(['staff', 'manager', 'admin', 'founder_level_0'])
  *
  * If the device is already an authenticated staff session, the CTA reads
  * "Open in POS 3" / "Open in E.A.T." and skips straight to the transition
- * (no re-login needed).
+ * (no re-login needed). Both destinations land on the current/active route
+ * trees (/pos3, /eat) — not the legacy /pos or /eat-legacy pages.
  *
  * allowedDestinations: which systems staff may hand off into.
  *   - ['pos']            (default) — original SmokeCraft behavior, no
@@ -72,7 +73,7 @@ export default function StaffHandoffButton({ tableId = null, allowedDestinations
 
   function handleTransitionComplete() {
     if (destination === 'eat') { navigate('/eat'); return }
-    navigate(tableId ? `/pos/table/${tableId}` : '/pos')
+    navigate(tableId ? '/pos3/tables' : '/pos3')
   }
 
   if (mode === 'transition') {

@@ -5,6 +5,12 @@ import {
   SmokeCraftBottomNav,
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import CigarIntelligencePanel, { WRAPPER_TYPES } from '../../components/smokecraft/CigarIntelligencePanel.jsx'
+import SmokeCraftInsightChip from '../../components/smokecraft/SmokeCraftInsightChip.jsx'
+import SmokeCraftInsightPanel from '../../components/smokecraft/SmokeCraftInsightPanel.jsx'
+import { triggerHaptic } from '../../utils/haptics.js'
+
+const WRAPPER_FALLBACK_DESCRIPTION = 'More details coming soon for this SmokeCraft wrapper profile.'
 
 // CIGAR PHOTO VISUAL SYSTEM.
 // Each format's final customer-facing visual must come from a dedicated product photo at
@@ -53,7 +59,7 @@ const FORMATS = [
     burnTime: '45–60 minutes',
     strengthBody: 'Medium',
     bodyScore: 3,
-    category: 'balanced',
+    category: 'standard-smoke',
     description: 'The perfect balance of time and flavor.',
     tags: ['Balanced', 'Everyday', 'Smooth Draw'],
     xp: 25,
@@ -75,7 +81,7 @@ const FORMATS = [
     burnTime: '60–75 minutes',
     strengthBody: 'Medium+',
     bodyScore: 4,
-    category: 'balanced',
+    category: 'standard-smoke',
     description: 'A longer, richer smoke with great balance.',
     tags: ['Long Session', 'Rich Draw', 'Balanced'],
     xp: 30,
@@ -97,7 +103,7 @@ const FORMATS = [
     burnTime: '75–105 minutes',
     strengthBody: 'Medium',
     bodyScore: 3,
-    category: 'long',
+    category: 'long-session',
     description: 'Classic length. Refined and consistent.',
     tags: ['Long Session', 'Elegant', 'Cool Burn'],
     xp: 35,
@@ -119,7 +125,7 @@ const FORMATS = [
     burnTime: '35–50 minutes',
     strengthBody: 'Mild–Medium',
     bodyScore: 2,
-    category: 'short',
+    category: 'quick-smoke',
     description: 'Timeless and approachable.',
     tags: ['Lighter Draw', 'Classic', 'Quick Smoke'],
     xp: 20,
@@ -141,7 +147,7 @@ const FORMATS = [
     burnTime: '75–120 minutes',
     strengthBody: 'Full',
     bodyScore: 5,
-    category: 'long',
+    category: 'vip-slow-burn',
     description: 'Big ring gauge. Bold, cool and satisfying.',
     tags: ['Full Flavor', 'Slow Burn', 'Cool Smoke'],
     xp: 40,
@@ -163,7 +169,7 @@ const FORMATS = [
     burnTime: '60–90 minutes',
     strengthBody: 'Medium+',
     bodyScore: 4,
-    category: 'long',
+    category: 'long-session',
     description: 'Tapered for complexity and intensity.',
     tags: ['Complex', 'Focused Flavor', 'Rich Draw'],
     xp: 45,
@@ -175,26 +181,213 @@ const FORMATS = [
     shapeProfile: { badge: 'Tapered / Pointed', label: 'Tapered · Figurado · 52 Ring Gauge', lengthPct: 78, thicknessPx: 13 },
     image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
   },
+  {
+    id: 'lancero',
+    name: 'Lancero',
+    shape: 'Straight Parejo',
+    length: '7½ inches',
+    ringGauge: '38',
+    drawFeel: 'Tight / Refined',
+    burnTime: '90–120 minutes',
+    strengthBody: 'Medium',
+    bodyScore: 3,
+    category: 'vip-slow-burn',
+    description: 'Long and slim. A purist’s format that rewards patience.',
+    tags: ['Slim', 'Purist', 'Slow Burn'],
+    xp: 40,
+    tip: 'The thin ring gauge concentrates the wrapper’s influence, making Lancero a true test of a blend’s balance.',
+    bestUseCase: 'Quiet, unhurried evenings',
+    experienceLevel: 'Experienced',
+    flavorImpact: 'Concentrated & Refined',
+    taper: false,
+    shapeProfile: { badge: 'Longest / Slimmest', label: 'Longest · Slimmest · 38 Ring Gauge', lengthPct: 100, thicknessPx: 7 },
+    // TEMPORARY FALLBACK — no dedicated lancero.jpg shoot exists yet. Reusing corona.jpg
+    // (the slimmest photo currently in public/assets/smokecraft/cigars/) as a stand-in.
+    // Replace with a real Lancero product photo when available; not final.
+    // TODO: Replace with licensed Lancero cigar photo.
+    image: '/assets/smokecraft/cigars/corona.jpg',
+  },
+  {
+    id: 'belicoso',
+    name: 'Belicoso',
+    shape: 'Tapered Figurado',
+    length: '5½ inches',
+    ringGauge: '52',
+    drawFeel: 'Focused / Rounded',
+    burnTime: '60–75 minutes',
+    strengthBody: 'Medium+',
+    bodyScore: 4,
+    category: 'standard-smoke',
+    description: 'A shorter, rounded taper that softens a Torpedo’s intensity.',
+    tags: ['Tapered', 'Rounded Cap', 'Rich Draw'],
+    xp: 30,
+    tip: 'Belicoso’s rounded taper opens the draw earlier than a Torpedo, giving a gentler ramp into full flavor.',
+    bestUseCase: 'Evening lounge sessions',
+    experienceLevel: 'Intermediate',
+    flavorImpact: 'Rounded & Rich',
+    taper: true,
+    shapeProfile: { badge: 'Tapered / Rounded', label: 'Tapered · Rounded Cap · 52 Ring Gauge', lengthPct: 60, thicknessPx: 14 },
+    // TEMPORARY FALLBACK — no dedicated belicoso.jpg shoot exists yet. Reusing the
+    // torpedo-figurado.jpg photo since it shares Belicoso's tapered figurado shape.
+    // Replace with a real Belicoso product photo when available; not final.
+    // TODO: Replace with licensed Belicoso cigar photo.
+    image: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
+  },
+  {
+    id: 'perfecto',
+    name: 'Perfecto',
+    shape: 'Double-Tapered Figurado',
+    length: '5 inches',
+    ringGauge: '48',
+    drawFeel: 'Variable / Complex',
+    burnTime: '50–65 minutes',
+    strengthBody: 'Medium',
+    bodyScore: 3,
+    category: 'standard-smoke',
+    description: 'Tapered at both ends — a classic shape with a flavor curve that shifts as it burns.',
+    tags: ['Double Taper', 'Classic', 'Evolving'],
+    xp: 35,
+    tip: 'Perfecto’s changing ring gauge along its length means the draw and flavor concentration shift noticeably third to third.',
+    bestUseCase: 'Curious tasting, classic appreciation',
+    experienceLevel: 'Intermediate',
+    flavorImpact: 'Evolving & Complex',
+    taper: true,
+    shapeProfile: { badge: 'Double Tapered', label: 'Double-Tapered · 48 Ring Gauge', lengthPct: 50, thicknessPx: 13 },
+    // TEMPORARY FALLBACK — no dedicated perfecto.jpg shoot exists yet. Reusing
+    // churchill.jpg as the closest classic-shape photo currently available.
+    // Replace with a real Perfecto product photo when available; not final.
+    // TODO: Replace with licensed Perfecto cigar photo.
+    image: '/assets/smokecraft/cigars/churchill.jpg',
+  },
+  {
+    id: 'panetela',
+    name: 'Panetela',
+    shape: 'Straight Parejo',
+    length: '6 inches',
+    ringGauge: '34',
+    drawFeel: 'Light / Brisk',
+    burnTime: '45–60 minutes',
+    strengthBody: 'Mild–Medium',
+    bodyScore: 2,
+    category: 'quick-smoke',
+    description: 'Slim and long. A brisk, elegant draw for a shorter window.',
+    tags: ['Slim', 'Elegant', 'Quick Smoke'],
+    xp: 25,
+    tip: 'Panetela’s narrow ring gauge burns fast and bright, so a quicker pace suits the format better than slow sipping.',
+    bestUseCase: 'Short windows, elegant quick smoke',
+    experienceLevel: 'Beginner–Intermediate',
+    flavorImpact: 'Brisk & Elegant',
+    taper: false,
+    shapeProfile: { badge: 'Slim / Long', label: 'Slim · Long · 34 Ring Gauge', lengthPct: 90, thicknessPx: 6 },
+    // TEMPORARY FALLBACK — no dedicated panetela.jpg shoot exists yet. Reusing corona.jpg
+    // (the slimmest photo currently in public/assets/smokecraft/cigars/) as a stand-in.
+    // Replace with a real Panetela product photo when available; not final.
+    // TODO: Replace with licensed Panetela cigar photo.
+    image: '/assets/smokecraft/cigars/corona.jpg',
+  },
 ]
+
+const CHIP_FALLBACK_DESCRIPTION = 'More details coming soon for this SmokeCraft profile tag.'
+
+// Descriptive copy for draw-feel / session tags shown on each card. Anything
+// not listed here falls back to CHIP_FALLBACK_DESCRIPTION rather than showing
+// nothing or a fake explanation.
+const TAG_DESCRIPTIONS = {
+  'Balanced':       'An even draw and burn with no single note dominating — a safe, versatile choice.',
+  'Everyday':       'Sized and paced for a regular smoke, not reserved for special occasions.',
+  'Smooth Draw':    'Low resistance pulling air through the cigar, for an easy, relaxed pull.',
+  'Rich Draw':      'A fuller-bodied pull that carries more smoke and flavor per draw.',
+  'Long Session':   'Built for an extended sit — expect 60+ minutes of evolving flavor.',
+  'Lighter Draw':   'An easy, airy pull suited to shorter or more casual smokes.',
+  'Classic':        'A traditional shape and profile with a long, proven track record.',
+  'Quick Smoke':    'A shorter format built for a focused 30–45 minute window.',
+  'Full Flavor':    'Bigger ring gauge, more filler volume, and a bolder flavor delivery.',
+  'Slow Burn':      'Burns cooler and longer, giving the blend more time to develop.',
+  'Cool Smoke':     'A wider ring gauge keeps the burn temperature lower and the smoke smoother.',
+  'Complex':        'Flavor shifts and layers noticeably from first third to last.',
+  'Focused Flavor': 'A tapered head concentrates the draw, sharpening flavor delivery.',
+  'Elegant':        'A refined, slimmer profile favored for its poise as much as its taste.',
+  'Cool Burn':      'Extra length gives smoke more room to cool before it reaches the palate.',
+  'Tapered':        'A narrowing head shapes and focuses the draw compared to a straight cut.',
+  'Rounded Cap':    'A gentler taper than a torpedo, easing into full flavor sooner.',
+  'Double Taper':   'Tapered at both ends, so ring gauge — and flavor concentration — shifts as it burns.',
+  'Evolving':       'Flavor intentionally changes shape across the smoke rather than staying flat.',
+  'Slim':           'A narrower ring gauge concentrates wrapper character for a more intense profile.',
+  'Purist':         'A traditionalist’s format that rewards patience over convenience.',
+}
+
+// Descriptive copy for the per-card stat values (Length, Ring Gauge, Burn
+// Time, Draw Feel, Strength/Body, Flavor Impact, Best Use Case, Experience
+// Level). These explain what the stat means in general, not the specific
+// value — the value itself is shown in the chip detail panel separately.
+const FACT_DESCRIPTIONS = {
+  'Length':           'The physical length of the cigar from foot to cap — a major factor in total smoke time.',
+  'Ring Gauge':       'Diameter measured in 64ths of an inch. Wider ring gauges burn cooler and slower.',
+  'Burn Time':        'The typical total smoke time for this format under normal pacing — sometimes called "smoke time."',
+  'Draw Feel':        'How much resistance you feel pulling smoke through the cigar — from smooth to rich and full.',
+  'Strength / Body':  'How intense and full the smoke feels on the palate, from mild to full-bodied.',
+  'Flavor Impact':    'The character and intensity of the flavor profile this format is known for.',
+  'Best Use Case':    'The moment or pairing this format is best suited for — quick smoke, lounge session, or special occasion.',
+  'Experience Level': 'How approachable this format is for a newer smoker versus an experienced one.',
+}
+
+function slugify(label) {
+  return label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
+
+/** Builds the structured chip objects for a format's tag pills + fact stats. */
+function buildChipsForFormat(format) {
+  const tagChips = (format.tags || []).map((tag) => ({
+    id: `${format.id}-tag-${slugify(tag)}`,
+    label: tag.toUpperCase(),
+    category: 'Draw Feel',
+    description: TAG_DESCRIPTIONS[tag] || CHIP_FALLBACK_DESCRIPTION,
+  }))
+
+  const factChips = [
+    { key: 'length', label: 'Length', value: format.length },
+    { key: 'ringGauge', label: 'Ring Gauge', value: format.ringGauge },
+    { key: 'burnTime', label: 'Burn Time', value: format.burnTime },
+    { key: 'drawFeel', label: 'Draw Feel', value: format.drawFeel },
+    { key: 'strengthBody', label: 'Strength / Body', value: format.strengthBody },
+    { key: 'flavorImpact', label: 'Flavor Impact', value: format.flavorImpact },
+    { key: 'bestUseCase', label: 'Best Use Case', value: format.bestUseCase },
+    { key: 'experienceLevel', label: 'Experience Level', value: format.experienceLevel },
+  ].map((fact) => ({
+    id: `${format.id}-fact-${fact.key}`,
+    label: fact.label.toUpperCase(),
+    category: 'Cigar Profile',
+    description: FACT_DESCRIPTIONS[fact.label] || CHIP_FALLBACK_DESCRIPTION,
+    value: fact.value,
+  }))
+
+  return { tagChips, factChips }
+}
 
 const SESSION_TYPES = [
   {
-    id: 'short',
-    label: 'Short Session',
+    id: 'quick-smoke',
+    label: 'Quick Smoke',
     range: '0–50 min',
     copy: 'Quick pleasure, lighter body.',
   },
   {
-    id: 'balanced',
-    label: 'Balanced Session',
+    id: 'standard-smoke',
+    label: 'Standard Smoke',
     range: '50–75 min',
     copy: 'Most versatile. Perfect balance.',
   },
   {
-    id: 'long',
+    id: 'long-session',
     label: 'Long Session',
-    range: '75–120+ min',
+    range: '75–105 min',
     copy: 'Slow burn, deeper experience.',
+  },
+  {
+    id: 'vip-slow-burn',
+    label: 'VIP Slow Burn',
+    range: '105+ min',
+    copy: 'The longest format. A full evening, savored slowly.',
   },
 ]
 
@@ -234,6 +427,75 @@ export default function Format() {
   const savedFormatId = session.smokeCraft?.selectedFormat?.id || null
   const [selectedId, setSelectedId] = useState(savedFormatId)
   const [feedback, setFeedback] = useState('')
+  // Single shared selection state for every selectable insight on this page
+  // (cigar chips, wrapper profiles, session comparisons) instead of one
+  // useState per source. Shape: { sourceType, cigarId, cigarName, itemId,
+  // itemLabel, itemCategory, itemValue, description }.
+  const [selectedInsight, setSelectedInsight] = useState(null)
+
+  function emitInsightSelection(payload) {
+    // No dedicated chip/wrapper/session-level recommendation/filter state
+    // exists yet in GuestSessionContext (only format-level
+    // setSmokeCraftFormat). Avoid inventing a duplicate state system — just
+    // surface the selection for now so it's ready to wire into real
+    // filtering later.
+    if (import.meta.env.DEV) console.debug('[SmokeCraft] insight selected', payload)
+  }
+
+  function handleChipSelect(format, chip) {
+    const itemId = `${format.id}:${chip.id}`
+    setSelectedInsight(prev => (prev?.itemId === itemId ? null : {
+      sourceType: 'cigar-chip',
+      cigarId: format.id,
+      cigarName: format.name,
+      itemId,
+      itemLabel: chip.label,
+      itemCategory: chip.category,
+      itemValue: chip.value,
+      description: chip.description,
+    }))
+    emitInsightSelection({
+      sourceType: 'cigar-chip',
+      cigarId: format.id,
+      cigarName: format.name,
+      itemId,
+      itemLabel: chip.label,
+      itemCategory: chip.category,
+      itemValue: chip.value,
+    })
+  }
+
+  function handleWrapperSelect(wrapper) {
+    triggerHaptic('light')
+    const itemId = `wrapper:${wrapper.id}`
+    setSelectedInsight(prev => (prev?.itemId === itemId ? null : {
+      sourceType: 'wrapper-profile',
+      cigarId: null,
+      cigarName: null,
+      itemId,
+      itemLabel: wrapper.name,
+      itemCategory: 'Wrapper',
+      itemValue: null,
+      description: wrapper.note,
+    }))
+    emitInsightSelection({ sourceType: 'wrapper-profile', itemId, itemLabel: wrapper.name })
+  }
+
+  function handleSessionSelect(sessionType) {
+    triggerHaptic('light')
+    const itemId = `session:${sessionType.id}`
+    setSelectedInsight(prev => (prev?.itemId === itemId ? null : {
+      sourceType: 'session-comparison',
+      cigarId: null,
+      cigarName: null,
+      itemId,
+      itemLabel: sessionType.label,
+      itemCategory: 'Session Length',
+      itemValue: sessionType.range,
+      description: sessionType.copy,
+    }))
+    emitInsightSelection({ sourceType: 'session-comparison', itemId, itemLabel: sessionType.label })
+  }
 
   const selected = useMemo(
     () => FORMATS.find(format => format.id === selectedId) || null,
@@ -377,6 +639,10 @@ export default function Format() {
           overflow: hidden;
           box-shadow: inset 0 0 0 1px rgba(233,193,118,0.08), inset 0 30px 60px rgba(0,0,0,0.32), 0 18px 40px rgba(0,0,0,0.45);
           transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .format-card:focus-visible {
+          outline: 2px solid rgba(255,225,151,0.85);
+          outline-offset: 3px;
         }
         .format-card:hover {
           transform: translateY(-2px);
@@ -617,15 +883,118 @@ export default function Format() {
           gap: 6px;
           margin-top: 11px;
         }
-        .format-card__tags span {
+        .smokecraft-insight-chip {
           border: 1px solid rgba(233,193,118,0.24);
           border-radius: 999px;
-          padding: 5px 8px;
+          padding: 7px 11px;
+          min-height: 32px;
           color: #e9c176;
           background: rgba(233,193,118,0.08);
           font-size: 11px;
+          font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.04em;
+          font-family: inherit;
+          cursor: pointer;
+          transition: transform 0.12s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+        }
+        .smokecraft-insight-chip:hover {
+          border-color: rgba(255,225,151,0.6);
+          background: rgba(233,193,118,0.16);
+        }
+        .smokecraft-insight-chip:active {
+          transform: scale(0.94);
+        }
+        .smokecraft-insight-chip:focus-visible {
+          outline: 2px solid rgba(255,225,151,0.85);
+          outline-offset: 2px;
+        }
+        .smokecraft-insight-chip.is-selected {
+          border-color: rgba(255,225,151,0.95);
+          background: rgba(233,193,118,0.3);
+          color: #fff1d6;
+          box-shadow: 0 0 14px rgba(233,193,118,0.55);
+        }
+        .format-card__fact {
+          all: unset;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          padding: 6px 4px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-family: inherit;
+          text-align: left;
+          min-height: 44px;
+          transition: background 0.18s ease, box-shadow 0.18s ease;
+        }
+        .format-card__fact:hover {
+          background: rgba(233,193,118,0.08);
+        }
+        .format-card__fact:focus-visible {
+          outline: 2px solid rgba(255,225,151,0.85);
+          outline-offset: 2px;
+        }
+        .format-card__fact:active {
+          transform: scale(0.97);
+        }
+        .format-card__fact.is-selected {
+          background: rgba(233,193,118,0.16);
+          box-shadow: inset 0 0 0 1px rgba(233,193,118,0.4);
+        }
+        .smokecraft-insight-panel {
+          margin-top: 12px;
+          padding: 12px 14px;
+          border-radius: 12px;
+          border: 1px solid rgba(233,193,118,0.4);
+          background: rgba(12,7,3,0.85);
+          box-shadow: 0 0 24px rgba(233,193,118,0.18);
+          animation: smokecraft-panel-pulse 0.5s ease;
+        }
+        @keyframes smokecraft-panel-pulse {
+          0% { box-shadow: 0 0 0 rgba(233,193,118,0); }
+          40% { box-shadow: 0 0 28px rgba(233,193,118,0.4); }
+          100% { box-shadow: 0 0 24px rgba(233,193,118,0.18); }
+        }
+        .smokecraft-insight-panel__header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px;
+        }
+        .smokecraft-insight-panel__eyebrow {
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: rgba(233,193,118,0.7);
+        }
+        .smokecraft-insight-panel__close {
+          background: none;
+          border: none;
+          color: rgba(233,193,118,0.7);
+          cursor: pointer;
+          padding: 2px;
+          line-height: 1;
+        }
+        .smokecraft-insight-panel__close:hover {
+          color: #fff1d6;
+        }
+        .smokecraft-insight-panel__title {
+          margin: 6px 0 2px;
+          font-size: 15px;
+          color: #f7efe2;
+        }
+        .smokecraft-insight-panel__value {
+          font-size: 13px;
+          font-weight: 700;
+          color: #e9c176;
+          margin-bottom: 4px;
+        }
+        .smokecraft-insight-panel__description {
+          margin: 0;
+          font-size: 12.5px;
+          line-height: 1.5;
+          color: rgba(247,239,226,0.85);
         }
         .format-side {
           display: grid;
@@ -729,11 +1098,29 @@ export default function Format() {
           border-radius: 14px;
           background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18));
           box-shadow: inset 0 1px 0 rgba(255,236,178,0.05);
+          cursor: pointer;
+          text-align: left;
+          font-family: inherit;
+          transition: transform 0.15s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+        .session-row:hover {
+          border-color: rgba(255,225,151,0.55);
+        }
+        .session-row:active {
+          transform: scale(0.99);
+        }
+        .session-row:focus-visible {
+          outline: 2px solid rgba(255,225,151,0.85);
+          outline-offset: 2px;
         }
         .session-row.is-active {
           border-color: rgba(255,225,151,0.8);
           background: linear-gradient(135deg, rgba(233,193,118,0.16), rgba(233,193,118,0.05));
           box-shadow: 0 0 26px rgba(233,193,118,0.2), inset 0 0 0 1px rgba(255,225,151,0.2);
+        }
+        .session-row.is-picked {
+          border-color: rgba(255,225,151,0.95);
+          box-shadow: 0 0 30px rgba(233,193,118,0.4), inset 0 0 0 1.5px rgba(255,225,151,0.5);
         }
         .session-row__icon {
           width: 46px;
@@ -910,15 +1297,51 @@ export default function Format() {
               the rhythm of your experience. Explore the most iconic formats and find the one that matches your moment.
             </p>
 
+            <CigarIntelligencePanel
+              activeRingGauge={insightFormat.ringGauge}
+              selectedWrapperId={selectedInsight?.sourceType === 'wrapper-profile' ? selectedInsight.itemId.replace('wrapper:', '') : null}
+              onSelectWrapper={handleWrapperSelect}
+            />
+
+            {selectedInsight?.sourceType === 'wrapper-profile' && (
+              <SmokeCraftInsightPanel
+                cigarName="Wrapper Profile"
+                chip={{
+                  id: selectedInsight.itemId,
+                  label: selectedInsight.itemLabel,
+                  category: selectedInsight.itemCategory,
+                  value: selectedInsight.itemValue,
+                  description: selectedInsight.description,
+                }}
+                fallbackText={WRAPPER_FALLBACK_DESCRIPTION}
+                onClose={() => setSelectedInsight(null)}
+              />
+            )}
+
             <div className="format-card-grid" aria-label="Cigar format choices">
               {FORMATS.map((format, index) => {
                 const isSelected = selected?.id === format.id
+                const { tagChips, factChips } = buildChipsForFormat(format)
+                const cardActiveChip = selectedInsight?.sourceType === 'cigar-chip' && selectedInsight.cigarId === format.id
+                  ? { id: selectedInsight.itemId, label: selectedInsight.itemLabel, category: selectedInsight.itemCategory, value: selectedInsight.itemValue, description: selectedInsight.description }
+                  : null
+
+                function handleCardKeyDown(e) {
+                  if (e.target !== e.currentTarget) return
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    selectFormat(format.id)
+                  }
+                }
+
                 return (
-                  <button
+                  <div
                     key={format.id}
-                    type="button"
+                    role="button"
+                    tabIndex={0}
                     className={`format-card${isSelected ? ' is-selected' : ''}`}
                     onClick={() => selectFormat(format.id)}
+                    onKeyDown={handleCardKeyDown}
                     aria-pressed={isSelected}
                   >
                     <span className="format-card__number">{String(index + 1).padStart(2, '0')}</span>
@@ -948,43 +1371,43 @@ export default function Format() {
                     <span className="format-card__type">{format.shape}</span>
                     <p>{format.description}</p>
                     <div className="format-card__facts">
-                      <div>
-                        <span className="format-card__fact-label">Length</span>
-                        <span className="format-card__fact-value">{format.length}</span>
-                      </div>
-                      <div>
-                        <span className="format-card__fact-label">Ring Gauge</span>
-                        <span className="format-card__fact-value">{format.ringGauge}</span>
-                      </div>
-                      <div>
-                        <span className="format-card__fact-label">Burn Time</span>
-                        <span className="format-card__fact-value">{format.burnTime}</span>
-                      </div>
-                      <div>
-                        <span className="format-card__fact-label">Draw Feel</span>
-                        <span className="format-card__fact-value">{format.drawFeel}</span>
-                      </div>
-                      <div>
-                        <span className="format-card__fact-label">Strength / Body</span>
-                        <span className="format-card__fact-value"><Dots count={format.bodyScore} /> {format.strengthBody}</span>
-                      </div>
-                      <div>
-                        <span className="format-card__fact-label">Flavor Impact</span>
-                        <span className="format-card__fact-value">{format.flavorImpact}</span>
-                      </div>
-                      <div>
-                        <span className="format-card__fact-label">Best Use Case</span>
-                        <span className="format-card__fact-value">{format.bestUseCase}</span>
-                      </div>
-                      <div>
-                        <span className="format-card__fact-label">Experience Level</span>
-                        <span className="format-card__fact-value">{format.experienceLevel}</span>
-                      </div>
+                      {factChips.map((chip) => {
+                        const isChipSelected = cardActiveChip?.id === `${format.id}:${chip.id}`
+                        return (
+                          <button
+                            type="button"
+                            key={chip.id}
+                            className={`format-card__fact${isChipSelected ? ' is-selected' : ''}`}
+                            aria-pressed={isChipSelected}
+                            aria-label={`${chip.label}, ${chip.value}`}
+                            onClick={(e) => { e.stopPropagation(); handleChipSelect(format, chip) }}
+                          >
+                            <span className="format-card__fact-label">{chip.label}</span>
+                            <span className="format-card__fact-value">
+                              {chip.id.endsWith('-strengthBody') && <Dots count={format.bodyScore} />} {chip.value}
+                            </span>
+                          </button>
+                        )
+                      })}
                     </div>
                     <span className="format-card__tags">
-                      {format.tags.map(tag => <span key={tag}>{tag}</span>)}
+                      {tagChips.map((chip) => (
+                        <SmokeCraftInsightChip
+                          key={chip.id}
+                          chip={chip}
+                          isSelected={cardActiveChip?.id === `${format.id}:${chip.id}`}
+                          onSelect={(c) => handleChipSelect(format, c)}
+                        />
+                      ))}
                     </span>
-                  </button>
+                    {cardActiveChip && (
+                      <SmokeCraftInsightPanel
+                        cigarName={format.name}
+                        chip={cardActiveChip}
+                        onClose={() => setSelectedInsight(null)}
+                      />
+                    )}
+                  </div>
                 )
               })}
             </div>
@@ -1035,17 +1458,51 @@ export default function Format() {
               <div className="format-panel__inner">
                 <div className="format-panel__label">Session Comparison</div>
                 <div className="session-list">
-                  {SESSION_TYPES.map(type => (
-                    <article key={type.id} className={`session-row${selected?.category === type.id ? ' is-active' : ''}`}>
-                      <span className="session-row__icon material-symbols-outlined" aria-hidden="true">timer</span>
-                      <div>
-                        <strong>{type.label}</strong>
-                        <span>{type.range}</span>
-                        <p>{type.copy}</p>
-                      </div>
-                    </article>
-                  ))}
+                  {SESSION_TYPES.map(type => {
+                    const isPicked = selectedInsight?.sourceType === 'session-comparison' && selectedInsight.itemId === `session:${type.id}`
+                    const isActive = selected?.category === type.id
+
+                    function handleSessionKeyDown(e) {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        handleSessionSelect(type)
+                      }
+                    }
+
+                    return (
+                      <article
+                        key={type.id}
+                        role="button"
+                        tabIndex={0}
+                        className={`session-row${isActive ? ' is-active' : ''}${isPicked ? ' is-picked' : ''}`}
+                        onClick={() => handleSessionSelect(type)}
+                        onKeyDown={handleSessionKeyDown}
+                        aria-pressed={isPicked}
+                        aria-label={`${type.label}, ${type.range}`}
+                      >
+                        <span className="session-row__icon material-symbols-outlined" aria-hidden="true">timer</span>
+                        <div>
+                          <strong>{type.label}</strong>
+                          <span>{type.range}</span>
+                          <p>{type.copy}</p>
+                        </div>
+                      </article>
+                    )
+                  })}
                 </div>
+                {selectedInsight?.sourceType === 'session-comparison' && (
+                  <SmokeCraftInsightPanel
+                    cigarName="Session Comparison"
+                    chip={{
+                      id: selectedInsight.itemId,
+                      label: selectedInsight.itemLabel,
+                      category: selectedInsight.itemCategory,
+                      value: selectedInsight.itemValue,
+                      description: selectedInsight.description,
+                    }}
+                    onClose={() => setSelectedInsight(null)}
+                  />
+                )}
               </div>
             </section>
 

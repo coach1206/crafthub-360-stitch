@@ -110,7 +110,8 @@ function deriveArchetypeKey(session) {
   if (steps.includes('origins'))                scores.senor      += 2
   if (steps.includes('mentor'))                 scores.senor      += 1
 
-  const seed    = parseInt((session.sessionId || '42').slice(-2), 10)
+  const sid     = String(session.sessionId || '42')
+  const seed     = sid.split('').reduce((sum, ch) => sum + ch.charCodeAt(0), 0)
   const keys    = ['diplomat', 'scholar', 'adventurer', 'senor']
   const maxVal  = Math.max(...keys.map(k => scores[k]))
   const winners = keys.filter(k => scores[k] === maxVal)
@@ -140,7 +141,7 @@ export default function Identity() {
   const [accepted, setAccepted] = useState(false)
 
   const archetypeKey = useMemo(() => deriveArchetypeKey(session), [session])
-  const archetype    = ARCHETYPES[archetypeKey]
+  const archetype    = ARCHETYPES[archetypeKey] || ARCHETYPES.diplomat
   const rank         = getRankFromXP(session.xp)
   const firstName    = session.profile?.firstName || 'Guest'
 

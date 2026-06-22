@@ -4,7 +4,7 @@
  * pill badges. Reused across both the touch-first POS3 surface and the denser
  * E.A.T. back-office surface.
  */
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 export const GOLD = '#d4a843'
 export const NAVY = '#0f1419'
@@ -135,6 +135,7 @@ export function SideNav({ system = 'EAT' }) {
 }
 
 export function TopBar({ system = 'EAT', title, subtitle }) {
+  const navigate = useNavigate()
   return (
     <div style={{
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -146,8 +147,18 @@ export function TopBar({ system = 'EAT', title, subtitle }) {
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <Pill label="System Online" tone="open" />
+        <Pill label="Backend Pending — Local Data" tone="pending" />
         <span style={{ fontSize: 12, color: '#aab3bf' }}>Jordan Smith · Floor Supervisor</span>
         <EatBadge />
+        <button
+          onClick={() => navigate('/crafthub')}
+          style={{
+            background: 'transparent', border: `1px solid ${LINE}`, borderRadius: 8,
+            color: GOLD, fontSize: 12, padding: '6px 12px', cursor: 'pointer',
+          }}
+        >
+          Exit to CraftHub
+        </button>
       </div>
     </div>
   )
