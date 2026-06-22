@@ -91,13 +91,20 @@ function PassportStamp({ size = 148 }) {
 /* ── Match badge ──────────────────────────────────────────── */
 function MatchBadge({ pct, onClick }) {
   return (
-    <button onClick={onClick}
+    <button type="button" onClick={onClick}
+      aria-label={`${pct}% match — view why you match`}
+      className="match-badge"
       onTouchStart={e => e.currentTarget.style.transform='scale(0.92)'}
       onTouchEnd={e => e.currentTarget.style.transform=''}
       style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
         width:60, height:60, borderRadius:'50%', flexShrink:0, cursor:'pointer',
         border:'1.5px solid rgba(197,160,89,0.45)', background:'rgba(10,7,2,0.9)',
-        boxShadow:'0 0 12px rgba(197,160,89,0.12)', transition:'transform 0.1s' }}>
+        boxShadow:'0 0 12px rgba(197,160,89,0.12)', transition:'transform 0.1s, border-color 0.15s' }}>
+      <style>{`
+        .match-badge:hover { border-color: rgba(197,160,89,0.8); }
+        .match-badge:active { transform: scale(0.92); }
+        .match-badge:focus-visible { outline: 2px solid #e9c176; outline-offset: 2px; }
+      `}</style>
       <span style={{ fontFamily:'"Playfair Display",serif', fontWeight:700, fontSize:15, color:'#e9c176', lineHeight:1 }}>{pct}%</span>
       <span style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:7.5, color:'rgba(197,160,89,0.55)', letterSpacing:'0.1em', textTransform:'uppercase' }}>MATCH</span>
     </button>
@@ -299,14 +306,20 @@ function DetailModal({ person, muted, onClose, onViewPassport, onConnect }) {
             <p style={{ fontFamily:'"Playfair Display",serif', fontWeight:700, fontSize:22, color:'#fff8ee' }}>{person.name}</p>
           </div>
           <div style={{ position:'absolute', top:12, right:14 }}>
-            <MatchBadge pct={person.matchScore} onClick={() => {}} />
+            <MatchBadge
+              pct={person.matchScore}
+              onClick={() => {
+                triggerHaptic('light')
+                document.getElementById('why-you-match-section')?.scrollIntoView({ behavior:'smooth', block:'start' })
+              }}
+            />
           </div>
         </div>
         {/* Body */}
         <div style={{ padding:'16px 18px 36px' }}>
           <p style={{ fontFamily:'"Hanken Grotesk",sans-serif', fontSize:14, color:'rgba(197,160,89,0.65)', marginBottom:2 }}>{person.role} @ {person.company}</p>
           <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:10, color:'rgba(255,255,255,0.3)', marginBottom:16, letterSpacing:'0.06em' }}>{person.location}</p>
-          <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8.5, color:'rgba(197,160,89,0.4)', textTransform:'uppercase', letterSpacing:'0.14em', marginBottom:6 }}>Why You Match</p>
+          <p id="why-you-match-section" style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8.5, color:'rgba(197,160,89,0.4)', textTransform:'uppercase', letterSpacing:'0.14em', marginBottom:6 }}>Why You Match</p>
           <p style={{ fontFamily:'"Hanken Grotesk",sans-serif', fontSize:13, color:'rgba(255,255,255,0.5)', lineHeight:1.65, marginBottom:14 }}>{person.whyYouMatch}</p>
           <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8.5, color:'rgba(197,160,89,0.4)', textTransform:'uppercase', letterSpacing:'0.14em', marginBottom:8 }}>Shared Interests</p>
           <div style={{ display:'flex', flexWrap:'wrap', gap:7, marginBottom:14 }}>

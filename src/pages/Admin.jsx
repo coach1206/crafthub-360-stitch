@@ -145,6 +145,7 @@ export default function Admin() {
   // ── PIN Reset state ───────────────────────────────────────
   const [resetTarget, setResetTarget] = useState(null)
   const [resetSuccess, setResetSuccess] = useState('')
+  const [comingSoonTile, setComingSoonTile] = useState(null)
   const canResetPin = ['manager','admin','founder_level_0'].includes(role)
   const resetScope  = RESET_SCOPE[role] || []
 
@@ -479,13 +480,13 @@ export default function Admin() {
             <NavTile icon="restaurant" label="E.A.T. Command" href="/eat" color="#45B7D1" />
           </PermissionGate>
           <PermissionGate permission="view_audit_logs">
-            <NavTile icon="fact_check" label="Audit Logs" href="#" color="#96CEB4" />
+            <NavTile icon="fact_check" label="Audit Logs" color="#96CEB4" onClick={() => setComingSoonTile('Audit Logs')} />
           </PermissionGate>
           <PermissionGate permission="manage_staff">
-            <NavTile icon="group" label="Staff Management" href="#" color={DIM} />
+            <NavTile icon="group" label="Staff Management" color={DIM} onClick={() => setComingSoonTile('Staff Management')} />
           </PermissionGate>
           <PermissionGate permission="manage_integrations">
-            <NavTile icon="hub" label="Integrations" href="#" color={DIM} />
+            <NavTile icon="hub" label="Integrations" color={DIM} onClick={() => setComingSoonTile('Integrations')} />
           </PermissionGate>
           <RoleGate allowedRoles={['manager','admin','founder_level_0']}>
             <NavTile icon="science"      label="Venue Test Control" href="/venue-test"       color="#a3e635" />
@@ -1619,6 +1620,11 @@ export default function Admin() {
         </div>
       </div>
 
+      {/* ── Coming Soon / Backend Pending Panel ─────────────── */}
+      {comingSoonTile && (
+        <NavTileComingSoonPanel label={comingSoonTile} onClose={() => setComingSoonTile(null)} />
+      )}
+
       {/* ── PIN Reset Modal ───────────────────────────────── */}
       {resetTarget && (
         <PinResetModal
@@ -1634,23 +1640,124 @@ export default function Admin() {
   )
 }
 
-function NavTile({ icon, label, href, color, highlight = false }) {
-  return (
-    <a href={href} style={{
-      display:        'flex',
-      flexDirection:  'column',
-      gap:            '0.5rem',
-      background:     highlight ? `rgba(201,168,76,0.07)` : CARD,
-      border:         `1px solid ${highlight ? GOLD + '44' : BORDER}`,
-      borderRadius:   '8px',
-      padding:        '1rem 1.25rem',
-      textDecoration: 'none',
-      transition:     'border-color 0.2s',
-    }}>
+function NavTile({ icon, label, href, color, highlight = false, onClick }) {
+  const tileStyle = {
+    display:        'flex',
+    flexDirection:  'column',
+    gap:            '0.5rem',
+    background:     highlight ? `rgba(201,168,76,0.07)` : CARD,
+    border:         `1px solid ${highlight ? GOLD + '44' : BORDER}`,
+    borderRadius:   '8px',
+    padding:        '1rem 1.25rem',
+    textDecoration: 'none',
+    cursor:         'pointer',
+  }
+
+  const inner = (
+    <>
       <span className="material-symbols-outlined" style={{ fontSize: '22px', color }}>{icon}</span>
       <span style={{ color: color || DIM, fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
         {label}
       </span>
-    </a>
+    </>
+  )
+
+  const navTileCss = (
+    <style>{`
+      .admin-nav-tile { transition: border-color 0.2s, background 0.2s, transform 0.1s; }
+      .admin-nav-tile:hover { border-color: ${GOLD}88 !important; background: rgba(201,168,76,0.08); }
+      .admin-nav-tile:active { transform: scale(0.97); }
+      .admin-nav-tile:focus-visible { outline: 2px solid ${GOLD}; outline-offset: 2px; }
+    `}</style>
+  )
+
+  // No real route yet — render as a real button that opens a Coming Soon /
+  // Backend Pending panel rather than a dead href="#" link.
+  if (onClick) {
+    return (
+      <>
+        {navTileCss}
+        <button
+          type="button"
+          onClick={onClick}
+          aria-label={`${label} — coming soon`}
+          className="admin-nav-tile"
+          style={{ ...tileStyle, textAlign: 'left', font: 'inherit' }}
+        >
+          {inner}
+        </button>
+      </>
+    )
+  }
+
+  return (
+    <>
+      {navTileCss}
+      <a href={href} aria-label={label} className="admin-nav-tile" style={tileStyle}>
+        {inner}
+      </a>
+    </>
+  )
+}
+
+function NavTileComingSoonPanel({ label, onClose }) {
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${label} — coming soon`}
+      style={{
+        position: 'fixed', inset: 0,
+        background: 'rgba(0,0,0,0.85)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        zIndex: 10000,
+        padding: '1rem',
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          background:   CARD,
+          border:       `1px solid ${BORDER}`,
+          borderRadius: '12px',
+          padding:      'clamp(1.5rem, 4vw, 2rem)',
+          width:        '100%',
+          maxWidth:     '360px',
+          fontFamily:   'Georgia, serif',
+          textAlign:    'center',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <span className="material-symbols-outlined" style={{ fontSize: '32px', color: GOLD, marginBottom: '0.75rem', display: 'inline-block' }}>
+          schedule
+        </span>
+        <div style={{ color: DIM, fontSize: '9px', letterSpacing: '0.25em', marginBottom: '0.6rem' }}>
+          BACKEND PENDING
+        </div>
+        <div style={{ color: GOLD, fontSize: '15px', letterSpacing: '0.06em', marginBottom: '0.75rem' }}>
+          {label}
+        </div>
+        <p style={{ color: '#999', fontSize: '12px', lineHeight: 1.6, margin: '0 0 1.5rem' }}>
+          This panel isn't wired to a real backend yet. It will become available once the {label} module is built out.
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          style={{
+            background:   'rgba(201,168,76,0.1)',
+            border:       `1px solid ${BORDER}`,
+            borderRadius: '6px',
+            color:        GOLD,
+            fontSize:     '11px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            padding:      '0.6rem 1.5rem',
+            cursor:       'pointer',
+          }}
+        >
+          Close
+        </button>
+      </div>
+    </div>
   )
 }
