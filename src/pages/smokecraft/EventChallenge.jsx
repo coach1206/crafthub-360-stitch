@@ -5,11 +5,13 @@ import { CrownIcon, ArrowBackIcon, EventIcon, InsightsIcon, StoreIcon } from '..
 import { getCurrentPlayerSnapshot } from '../../services/smokecraft/smokeLeaderboardService.js'
 import { getTopEligibleCategory } from '../../services/smokecraft/smokeWinnerService.js'
 import { getSmokePOSHandoff, createSmokePurchaseIntent, getSmokePurchaseRewardStatus, getSmokeEATHandoffSummary, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
+import { checkSmokeBackendConnectivity, getSmokeSharedStorageMode, buildSmokeStorageStatusFields } from '../../services/smokecraft/smokeSharedStorageService.js'
 
 export default function EventChallenge() {
   const navigate = useNavigate()
   const { session, update } = useGuestSession()
   const loggedRef = useRef(false)
+  const checkedStorageRef = useRef(false)
 
   useEffect(() => {
     if (loggedRef.current) return
@@ -27,6 +29,26 @@ export default function EventChallenge() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    if (checkedStorageRef.current) return
+    checkedStorageRef.current = true
+    checkSmokeBackendConnectivity().then(() => {
+      update(prev => {
+        const existingLog = prev.smokeCraft?.eventLog || []
+        const fields = buildSmokeStorageStatusFields('backend_connectivity_check', { status: getSmokeSharedStorageMode().mode })
+        return {
+          ...prev,
+          smokeCraft: {
+            ...prev.smokeCraft,
+            ...fields,
+            eventLog: [...existingLog, { type: 'SMOKECRAFT_SHARED_STORAGE_STATUS_CHECKED', timestamp: Date.now() }].slice(-50),
+          },
+        }
+      })
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const snapshot = getCurrentPlayerSnapshot(session)
   const topCategory = getTopEligibleCategory(session)
   const goldenBoxAccepted = Boolean(session?.smokeCraft?.goldenBox?.accepted)
@@ -36,6 +58,8 @@ export default function EventChallenge() {
   const posHandoff = getSmokePOSHandoff(session)
   const purchaseReward = getSmokePurchaseRewardStatus(session)
   const eatSummary = getSmokeEATHandoffSummary(session)
+  const storageMode = getSmokeSharedStorageMode()
+  const syncStatus = session?.smokeCraft?.syncStatus || null
 
   function handleCreatePurchaseIntent() {
     if (posHandoff.intentId) return
@@ -43,6 +67,7 @@ export default function EventChallenge() {
     update(prev => {
       const existingLog = prev.smokeCraft?.eventLog || []
       const derived = getDerivedPurchaseState({ ...prev, smokeCraft: { ...prev.smokeCraft, posHandoff: handoff } })
+      const storageFields = buildSmokeStorageStatusFields('create_purchase_intent', handoff.syncResult)
       return {
         ...prev,
         smokeCraft: {
@@ -50,7 +75,11 @@ export default function EventChallenge() {
           posHandoff: handoff,
           purchaseRewards: derived.purchaseRewards,
           eatHandoff: derived.eatHandoff,
-          eventLog: [...existingLog, { type: 'SMOKECRAFT_POS_PURCHASE_INTENT_CREATED', timestamp: Date.now(), payload: { intentId: handoff.intentId } }].slice(-50),
+          ...storageFields,
+          eventLog: [...existingLog,
+            { type: 'SMOKECRAFT_POS_PURCHASE_INTENT_CREATED', timestamp: Date.now(), payload: { intentId: handoff.intentId } },
+            { type: 'SMOKECRAFT_PURCHASE_INTENT_SHARED_SAVE_ATTEMPTED', timestamp: Date.now(), payload: { intentId: handoff.intentId, result: handoff.syncResult?.status } },
+          ].slice(-50),
         },
       }
     })
@@ -162,6 +191,20 @@ export default function EventChallenge() {
             {eatSummary.visibleToManagement ? 'E.A.T. can see this handoff.' : 'E.A.T. cannot see this handoff yet — no intent has been created.'}
           </p>
           <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">{eatSummary.backendRequiredReason}</p>
+
+          <div className="rounded-xl border border-outline-variant/15 mb-4" style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.02)' }}>
+            <p className="font-label-sm text-label-sm uppercase tracking-widest text-primary/70 mb-1">Backend &amp; Storage Status</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">Storage mode: <span className="text-on-surface font-semibold">{storageMode.mode.replaceAll('_', ' ')}</span></p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">Shared leaderboard readiness: <span className="text-on-surface font-semibold">{storageMode.backendConnected ? 'Ready' : 'Not Yet Ready'}</span></p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">POS3 verification source: <span className="text-on-surface">Local session/device only</span></p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">E.A.T. visibility source: <span className="text-on-surface">Local session/device only</span></p>
+            {syncStatus?.lastAttemptAt && (
+              <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">Last sync attempt: <span className="text-on-surface">{new Date(syncStatus.lastAttemptAt).toLocaleTimeString()}</span> · {syncStatus.lastAction} · {syncStatus.lastResult}</p>
+            )}
+            {!storageMode.backendConnected && (
+              <p className="font-body-sm text-body-sm" style={{ color: '#e9c176' }}>Local fallback only. Other devices will not see this until backend storage is connected.</p>
+            )}
+          </div>
 
           <button onClick={handleCreatePurchaseIntent} disabled={Boolean(posHandoff.intentId)}
             className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40 w-full"

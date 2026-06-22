@@ -5,6 +5,7 @@
 // be set by a controlled local/dev action, never automatically.
 
 import { emit, SYSTEMS } from '../shared/opsEventBus.js'
+import { saveSmokePurchaseIntent, updateSmokePurchaseVerification, getSmokeSharedStorageMode } from './smokeSharedStorageService.js'
 
 export const POS_HANDOFF_STATUS = {
   NOT_STARTED: 'not_started',
@@ -61,7 +62,7 @@ export function createSmokePurchaseIntent(session, payload = {}) {
     payload: { intentId, product, label: 'SmokeCraft Purchase Intent', sessionId: session?.sessionId || null },
   })
 
-  return {
+  const handoff = {
     status: POS_HANDOFF_STATUS.INTENT_CREATED,
     intentId,
     verificationStatus: POS_HANDOFF_STATUS.NOT_STARTED,
@@ -69,6 +70,9 @@ export function createSmokePurchaseIntent(session, payload = {}) {
     createdAt: now,
     updatedAt: now,
   }
+
+  const syncResult = saveSmokePurchaseIntent(session, handoff)
+  return { ...handoff, syncResult }
 }
 
 /** Moves an existing intent into pending POS verification. No reward yet. */
@@ -92,7 +96,7 @@ export function markSmokePurchasePending(session, payload = {}) {
 export function markSmokePurchaseVerified(session, payload = {}) {
   const current = ph(session)
   if (!current.intentId) return current
-  return {
+  const updated = {
     ...current,
     status: POS_HANDOFF_STATUS.VERIFIED,
     verificationStatus: POS_HANDOFF_STATUS.VERIFIED,
@@ -100,19 +104,23 @@ export function markSmokePurchaseVerified(session, payload = {}) {
     updatedAt: Date.now(),
     ...payload,
   }
+  const syncResult = updateSmokePurchaseVerification(current.intentId, updated)
+  return { ...updated, syncResult }
 }
 
 /** Marks a purchase rejected (e.g. staff declines the handoff). */
 export function markSmokePurchaseRejected(session, payload = {}) {
   const current = ph(session)
   if (!current.intentId) return current
-  return {
+  const updated = {
     ...current,
     status: POS_HANDOFF_STATUS.REJECTED,
     verificationStatus: POS_HANDOFF_STATUS.REJECTED,
     updatedAt: Date.now(),
     ...payload,
   }
+  const syncResult = updateSmokePurchaseVerification(current.intentId, updated)
+  return { ...updated, syncResult }
 }
 
 /**
@@ -148,6 +156,14 @@ export function getSmokeEATHandoffSummary(session) {
     backendRequired: true,
     backendRequiredReason: 'Cross-venue/multi-session POS verification requires a real backend or shared event store — this is local/session-only until that exists.',
   }
+}
+
+/** Honest storage-mode message for UI surfaces — never implies multi-device sync exists. */
+export function getSmokeStorageStatusMessage() {
+  const mode = getSmokeSharedStorageMode()
+  return mode.backendConnected
+    ? 'Shared venue storage active.'
+    : 'Local fallback active. Shared venue storage pending.'
 }
 
 /**

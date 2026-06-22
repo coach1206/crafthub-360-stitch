@@ -8,6 +8,7 @@ import WinnerCriteriaPanel from '../../components/smokecraft/WinnerCriteriaPanel
 import { calculateWinnerEligibility, assignWinnerCategory, getPendingWinnerCategories, getLockedWinnerCategories, getWinnerProgress } from '../../services/smokecraft/smokeWinnerService.js'
 import { StoreIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 import { getSmokePOSHandoff, createSmokePurchaseIntent, getSmokePurchaseRewardStatus, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
+import { checkSmokeBackendConnectivity, getSmokeSharedStorageMode, buildSmokeStorageStatusFields, saveSmokeSessionSnapshot } from '../../services/smokecraft/smokeSharedStorageService.js'
 
 const CATEGORIES = [
   { id:'appearance',   label:'Appearance',   desc:'Wrapper color, sheen, seam quality' },
@@ -23,6 +24,46 @@ export default function Scorecard() {
   const [scores, setScores] = useState({})
   const [done, setDone] = useState(false)
   const loggedEligibilityRef = useRef(false)
+  const checkedStorageRef = useRef(false)
+
+  useEffect(() => {
+    if (checkedStorageRef.current) return
+    checkedStorageRef.current = true
+    checkSmokeBackendConnectivity().then(() => {
+      update(prev => {
+        const existingLog = prev.smokeCraft?.eventLog || []
+        const fields = buildSmokeStorageStatusFields('backend_connectivity_check', { status: getSmokeSharedStorageMode().mode })
+        return {
+          ...prev,
+          smokeCraft: {
+            ...prev.smokeCraft,
+            ...fields,
+            eventLog: [...existingLog, { type: 'SMOKECRAFT_SHARED_STORAGE_STATUS_CHECKED', timestamp: Date.now() }].slice(-50),
+          },
+        }
+      })
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const snapshotSavedRef = useRef(false)
+
+  useEffect(() => {
+    if (snapshotSavedRef.current) return
+    snapshotSavedRef.current = true
+    const result = saveSmokeSessionSnapshot(session)
+    update(prev => {
+      const existingLog = prev.smokeCraft?.eventLog || []
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          eventLog: [...existingLog, { type: 'SMOKECRAFT_SESSION_SNAPSHOT_SAVE_ATTEMPTED', timestamp: Date.now(), payload: { result: result?.status } }].slice(-50),
+        },
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const total = Object.values(scores).reduce((s, v) => s + v, 0)
   const maxTotal = CATEGORIES.length * 10
@@ -77,6 +118,8 @@ export default function Scorecard() {
 
   const posHandoff = getSmokePOSHandoff(session)
   const purchaseReward = getSmokePurchaseRewardStatus(session)
+  const storageMode = getSmokeSharedStorageMode()
+  const syncStatus = session?.smokeCraft?.syncStatus || null
 
   function handleCreatePurchaseIntent() {
     if (posHandoff.intentId) return
@@ -85,6 +128,7 @@ export default function Scorecard() {
     update(prev => {
       const existingLog = prev.smokeCraft?.eventLog || []
       const derived = getDerivedPurchaseState({ ...prev, smokeCraft: { ...prev.smokeCraft, posHandoff: handoff } })
+      const storageFields = buildSmokeStorageStatusFields('create_purchase_intent', handoff.syncResult)
       return {
         ...prev,
         smokeCraft: {
@@ -92,7 +136,11 @@ export default function Scorecard() {
           posHandoff: handoff,
           purchaseRewards: derived.purchaseRewards,
           eatHandoff: derived.eatHandoff,
-          eventLog: [...existingLog, { type: 'SMOKECRAFT_POS_PURCHASE_INTENT_CREATED', timestamp: Date.now(), payload: { intentId: handoff.intentId } }].slice(-50),
+          ...storageFields,
+          eventLog: [...existingLog,
+            { type: 'SMOKECRAFT_POS_PURCHASE_INTENT_CREATED', timestamp: Date.now(), payload: { intentId: handoff.intentId } },
+            { type: 'SMOKECRAFT_PURCHASE_INTENT_SHARED_SAVE_ATTEMPTED', timestamp: Date.now(), payload: { intentId: handoff.intentId, result: handoff.syncResult?.status } },
+          ].slice(-50),
         },
       }
     })
@@ -151,6 +199,18 @@ export default function Scorecard() {
           </div>
 
           <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">{purchaseReward.reason}</p>
+
+          <div className="rounded-xl border border-outline-variant/15 mb-4" style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.02)' }}>
+            <p className="font-label-sm text-label-sm uppercase tracking-widest text-primary/70 mb-1">Backend &amp; Storage Status</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">Storage mode: <span className="text-on-surface font-semibold">{storageMode.mode.replaceAll('_', ' ')}</span></p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">Shared venue storage: <span className="text-on-surface font-semibold">{storageMode.backendConnected ? 'Active' : 'Not Yet Active'}</span></p>
+            {syncStatus?.lastAttemptAt && (
+              <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">Last sync attempt: <span className="text-on-surface">{new Date(syncStatus.lastAttemptAt).toLocaleTimeString()}</span> · {syncStatus.lastAction} · {syncStatus.lastResult}</p>
+            )}
+            {!storageMode.backendConnected && (
+              <p className="font-body-sm text-body-sm" style={{ color: '#e9c176' }}>Local fallback active. Shared venue storage pending.</p>
+            )}
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
             <button onClick={handleCreatePurchaseIntent} disabled={Boolean(posHandoff.intentId)}

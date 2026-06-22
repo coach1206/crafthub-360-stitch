@@ -10,6 +10,7 @@ import {
 import TicketTicker from '../../components/common/TicketTicker.jsx'
 import { SmokeCraftBottomNav } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 import { getLeaderboardSnapshot } from '../../services/smokecraft/smokeLeaderboardService.js'
+import { getSmokeSharedStorageMode, saveSmokeLeaderboardEntry } from '../../services/smokecraft/smokeSharedStorageService.js'
 
 /* ─── palette ─── */
 const G = '#C9A84C', GL = '#E8D5A3', GD = '#8A7030'
@@ -376,6 +377,7 @@ export default function Leaderboard() {
   const navigate = useNavigate()
   const { session, addXP, completeStep, update } = useGuestSession()
   const loggedRef = useRef(false)
+  const sharedLoadRef = useRef(false)
 
   useEffect(() => {
     if (loggedRef.current) return
@@ -394,6 +396,24 @@ export default function Leaderboard() {
   }, [])
 
   const snapshot = getLeaderboardSnapshot(session)
+  const storageMode = getSmokeSharedStorageMode()
+
+  useEffect(() => {
+    if (sharedLoadRef.current) return
+    sharedLoadRef.current = true
+    saveSmokeLeaderboardEntry(session, snapshot.currentPlayer)
+    update(prev => {
+      const existingLog = prev.smokeCraft?.eventLog || []
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          eventLog: [...existingLog, { type: 'SMOKECRAFT_LEADERBOARD_SHARED_LOAD_ATTEMPTED', timestamp: Date.now() }].slice(-50),
+        },
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const [board,    setBoard]    = useState([])
   const [activity, setActivity] = useState([])
@@ -551,6 +571,11 @@ export default function Leaderboard() {
               )}
             </div>
             <div style={{ fontSize: 11, color: TEXTD }}>{snapshot.communityMessage}</div>
+            <div style={{ marginTop: 10, paddingTop: 10, borderTop: `1px solid ${BORDER}`, fontSize: 11, color: TEXTM, lineHeight: 1.6 }}>
+              <div>Ranking scope: <strong style={{ color: TEXT }}>{storageMode.backendConnected ? 'Shared community' : 'Local/session only'}</strong></div>
+              <div>Backend status: <strong style={{ color: TEXT }}>{storageMode.backendConnected ? 'Connected' : 'Not connected'}</strong></div>
+              <div>Community leaderboard below: <strong style={{ color: TEXT }}>Demo / illustrative — not live shared data</strong></div>
+            </div>
             <button onClick={() => navigate('/smokecraft/event-challenge')}
               style={{ marginTop: 12, minHeight: 38, padding: '8px 14px', borderRadius: 10, border: `1px solid ${G}66`, background: `${G}1f`, color: G, cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>
               View Event Challenge

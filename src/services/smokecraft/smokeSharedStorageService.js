@@ -1,0 +1,174 @@
+/**
+ * SmokeCraft shared storage adapter — honest bridge toward a real
+ * multi-device backend. A real NOVEE backend exists (Express + optional
+ * Postgres, see server/) and is reachable via apiClient, but it does not
+ * yet expose any SmokeCraft-specific persistence endpoints (purchase
+ * intents, POS3 verification, E.A.T. handoff, leaderboard). Until those
+ * endpoints exist, every read/write here uses a local-storage fallback and
+ * says so explicitly — it never claims to be shared/multi-device storage.
+ */
+
+import { apiGet } from '../apiClient.js'
+
+const LOCAL_KEYS = {
+  snapshots:   'novee_smoke_shared_session_snapshots',
+  intents:     'novee_smoke_shared_purchase_intents',
+  eatHandoffs: 'novee_smoke_shared_eat_handoffs',
+  leaderboard: 'novee_smoke_shared_leaderboard_entries',
+}
+
+let cachedBackendStatus = {
+  status: 'backend_required',
+  reason: 'Backend connectivity has not been checked yet this session.',
+  checkedAt: null,
+}
+
+function readLocal(key) {
+  try {
+    const raw = localStorage.getItem(key)
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+
+function writeLocal(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value))
+    return true
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Pings the real NOVEE backend health endpoint. Even when reachable, this
+ * does NOT mean SmokeCraft shared storage exists server-side — no such
+ * endpoints have been built yet — so it only updates general backend
+ * reachability, never the storage mode itself.
+ */
+export async function checkSmokeBackendConnectivity() {
+  try {
+    const res = await apiGet('/api/health')
+    cachedBackendStatus = res
+      ? { status: 'backend_reachable', reason: 'NOVEE backend is reachable, but no SmokeCraft shared-storage endpoints exist yet — local fallback remains active.', checkedAt: Date.now() }
+      : { status: 'backend_unreachable', reason: 'NOVEE backend is unreachable — using local fallback only.', checkedAt: Date.now() }
+  } catch {
+    cachedBackendStatus = { status: 'backend_unreachable', reason: 'NOVEE backend is unreachable — using local fallback only.', checkedAt: Date.now() }
+  }
+  return cachedBackendStatus
+}
+
+/** Last-known backend reachability (sync read of the cached check). */
+export function getSmokeBackendStatus() {
+  return cachedBackendStatus
+}
+
+/**
+ * SmokeCraft's actual storage mode. This stays local_fallback regardless of
+ * general backend reachability, because no SmokeCraft shared-storage
+ * endpoints exist server-side yet — never claim otherwise.
+ */
+export function getSmokeSharedStorageMode() {
+  return {
+    mode: 'local_fallback',
+    backendConnected: false,
+    localFallback: true,
+    reason: 'SmokeCraft shared venue storage is not yet implemented on the backend. Purchase intents, POS3 verification, E.A.T. handoff, and leaderboard data stay local to this browser/session only.',
+  }
+}
+
+export function saveSmokeSessionSnapshot(session) {
+  const sessionId = session?.sessionId || 'unknown-session'
+  const all = readLocal(LOCAL_KEYS.snapshots) || {}
+  all[sessionId] = { smokeCraft: session?.smokeCraft || null, savedAt: Date.now() }
+  const ok = writeLocal(LOCAL_KEYS.snapshots, all)
+  return ok
+    ? { status: 'local_fallback', reason: 'Session snapshot saved to local fallback storage — not yet synced to a shared backend.' }
+    : { status: 'failed', reason: 'Local storage write failed.' }
+}
+
+export function loadSmokeSessionSnapshot(sessionId) {
+  const all = readLocal(LOCAL_KEYS.snapshots) || {}
+  const entry = all[sessionId] || null
+  return { status: 'local_fallback', data: entry, reason: entry ? 'Loaded from local fallback storage.' : 'No snapshot found in local fallback storage.' }
+}
+
+export function saveSmokePurchaseIntent(session, intent) {
+  if (!intent?.intentId) return { status: 'failed', reason: 'No purchase intent to save.' }
+  const list = readLocal(LOCAL_KEYS.intents) || []
+  const idx = list.findIndex(i => i.intentId === intent.intentId)
+  const record = { ...intent, sessionId: session?.sessionId || null, savedAt: Date.now() }
+  if (idx >= 0) list[idx] = record
+  else list.push(record)
+  const ok = writeLocal(LOCAL_KEYS.intents, list)
+  return ok
+    ? { status: 'local_fallback', reason: 'Purchase intent saved to local fallback — shared venue storage pending backend implementation.' }
+    : { status: 'failed', reason: 'Local storage write failed.' }
+}
+
+export function loadSmokePurchaseIntents() {
+  const list = readLocal(LOCAL_KEYS.intents) || []
+  return { status: 'local_fallback', data: list, reason: 'Loaded from local fallback storage — only intents created on this browser are visible.' }
+}
+
+export function updateSmokePurchaseVerification(intentId, verificationPayload = {}) {
+  const list = readLocal(LOCAL_KEYS.intents) || []
+  const idx = list.findIndex(i => i.intentId === intentId)
+  if (idx < 0) return { status: 'failed', reason: 'No matching local purchase intent found.' }
+  list[idx] = { ...list[idx], ...verificationPayload, updatedAt: Date.now() }
+  const ok = writeLocal(LOCAL_KEYS.intents, list)
+  return ok
+    ? { status: 'local_fallback', reason: 'Verification update saved to local fallback only — not yet visible to other devices.' }
+    : { status: 'failed', reason: 'Local storage write failed.' }
+}
+
+export function saveSmokeEATHandoff(session, handoff) {
+  const sessionId = session?.sessionId || 'unknown-session'
+  const all = readLocal(LOCAL_KEYS.eatHandoffs) || {}
+  all[sessionId] = { ...handoff, savedAt: Date.now() }
+  const ok = writeLocal(LOCAL_KEYS.eatHandoffs, all)
+  return ok
+    ? { status: 'local_fallback', reason: 'E.A.T. handoff saved to local fallback — not visible to other devices yet.' }
+    : { status: 'failed', reason: 'Local storage write failed.' }
+}
+
+export function loadSmokeEATHandoffs() {
+  const all = readLocal(LOCAL_KEYS.eatHandoffs) || {}
+  return { status: 'local_fallback', data: Object.values(all), reason: 'Loaded from local fallback storage only.' }
+}
+
+export function saveSmokeLeaderboardEntry(session, leaderboardEntry) {
+  const sessionId = session?.sessionId || 'unknown-session'
+  const all = readLocal(LOCAL_KEYS.leaderboard) || {}
+  all[sessionId] = { ...leaderboardEntry, savedAt: Date.now() }
+  const ok = writeLocal(LOCAL_KEYS.leaderboard, all)
+  return ok
+    ? { status: 'local_fallback', reason: 'Leaderboard entry saved to local fallback — a real community leaderboard requires shared backend storage.' }
+    : { status: 'failed', reason: 'Local storage write failed.' }
+}
+
+export function loadSmokeLeaderboardEntries() {
+  const all = readLocal(LOCAL_KEYS.leaderboard) || {}
+  return { status: 'local_fallback', data: Object.values(all), reason: 'Loaded from local fallback storage only — not a real shared/community leaderboard yet.' }
+}
+
+/**
+ * Builds the session.smokeCraft.{sharedStorage,backendStatus,syncStatus}
+ * fragment for callers to persist via GuestSessionContext's update(). Keeps
+ * every consumer (Scorecard, EventChallenge, POS3Home, etc.) writing the
+ * exact same honest shape instead of re-deriving it ad hoc.
+ */
+export function buildSmokeStorageStatusFields(action, syncResult) {
+  const mode = getSmokeSharedStorageMode()
+  const backend = getSmokeBackendStatus()
+  return {
+    sharedStorage: { mode: mode.mode, backendConnected: mode.backendConnected, localFallback: mode.localFallback },
+    backendStatus: { status: backend.status, reason: backend.reason },
+    syncStatus: {
+      lastAttemptAt: Date.now(),
+      lastAction: action,
+      lastResult: syncResult?.status || 'unknown',
+    },
+  }
+}

@@ -6,6 +6,7 @@ import { subscribe, eventsFor } from '../../services/shared/opsEventBus.js'
 import { completeCommand, receiveCommand } from '../../services/shared/opsControlBridge.js'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getSmokePOSHandoff, markSmokePurchaseVerified, markSmokePurchaseRejected, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
+import { loadSmokePurchaseIntents, getSmokeSharedStorageMode, buildSmokeStorageStatusFields } from '../../services/smokecraft/smokeSharedStorageService.js'
 
 /** POS3 receiver hook — watches the shared bus for events/commands targeting POS3. */
 export function usePos3Incoming() {
@@ -33,6 +34,9 @@ export default function POS3Home() {
   const openTickets = tickets.length
   const occupied = tables.filter((t) => t.status === 'occupied').length
   const posHandoff = getSmokePOSHandoff(session)
+  const storageMode = getSmokeSharedStorageMode()
+  const sharedIntents = loadSmokePurchaseIntents()
+  const queueIsShared = storageMode.backendConnected && sharedIntents.data.length > 0
 
   function markReceived(ev) {
     receiveCommand(ev.id)
@@ -48,6 +52,7 @@ export default function POS3Home() {
     update(prev => {
       const existingLog = prev.smokeCraft?.eventLog || []
       const derived = getDerivedPurchaseState({ ...prev, smokeCraft: { ...prev.smokeCraft, posHandoff: handoff } })
+      const storageFields = buildSmokeStorageStatusFields('pos3_verification_update', handoff.syncResult)
       return {
         ...prev,
         smokeCraft: {
@@ -55,7 +60,11 @@ export default function POS3Home() {
           posHandoff: handoff,
           purchaseRewards: derived.purchaseRewards,
           eatHandoff: derived.eatHandoff,
-          eventLog: [...existingLog, { type, timestamp: Date.now(), payload: { intentId: handoff.intentId } }].slice(-50),
+          ...storageFields,
+          eventLog: [...existingLog,
+            { type, timestamp: Date.now(), payload: { intentId: handoff.intentId } },
+            { type: 'SMOKECRAFT_PURCHASE_VERIFICATION_SHARED_UPDATE_ATTEMPTED', timestamp: Date.now(), payload: { intentId: handoff.intentId, result: handoff.syncResult?.status } },
+          ].slice(-50),
         },
       }
     })
@@ -107,6 +116,10 @@ export default function POS3Home() {
               <div style={{ fontWeight: 700, marginBottom: 10 }}>SmokeCraft Purchase Queue</div>
               <div style={{ fontSize: 11, color: '#8b95a3', marginBottom: 10 }}>
                 Local/session-only — a real venue-wide queue requires a backend or shared event store. Showing the current guest session's handoff state.
+              </div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+                <Pill label={'storage: ' + storageMode.mode.replaceAll('_', ' ')} tone={storageMode.backendConnected ? 'open' : 'pending'} />
+                <Pill label={queueIsShared ? 'shared queue' : 'local-only queue'} tone={queueIsShared ? 'open' : 'pending'} />
               </div>
               {!posHandoff.intentId ? (
                 <div style={{ fontSize: 13, color: '#8b95a3', padding: '8px 0' }}>No SmokeCraft purchase intent created yet.</div>
