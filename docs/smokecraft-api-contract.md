@@ -203,5 +203,31 @@ rather than inventing a new env var.
 
 This repo's existing auth (`authConfig.js`, `authRoutes.js`, cookie-based JWT via
 `novee_auth`) is the auth system these endpoints should plug into. **Pending** —
-Phase 10 did not wire `requireAuth`/role middleware onto the SmokeCraft routes;
-no new auth scheme was invented, but the existing one isn't enforced here yet.
+Phase 10/10B did not wire `requireAuth`/role middleware onto the SmokeCraft
+routes; no new auth scheme was invented, but the existing one isn't enforced
+here yet.
+
+### Phase 10B audit — current gaps, stated plainly
+
+- **Auth/role gating: pending.** None of `server/routes/smokecraftRoutes.js`
+  or `server/routes/smokecraftEatRoutes.js` apply `requireAuth` or any role
+  middleware (compare `eatRoutes.js`, which gates its manager dashboard with
+  `requireAuth, canAccessEAT`). Any caller can currently hit any SmokeCraft
+  endpoint, including `/verify` and `/reject`. Not implemented this phase
+  because wiring it in required deciding how a guest's anonymous session
+  should authenticate against `novee_auth` cookies, which is a real design
+  decision, not a default-safe one to make silently.
+- **POS3 staff verification: currently a manual/local prototype route.** The
+  `/verify` and `/reject` endpoints accept any caller and an optional,
+  client-supplied `staffId` — there is no server-side check that the caller
+  is actually logged in as POS3 staff. The only thing the UI does to keep
+  this honest is gate the "Mark Verified"/"Reject" buttons behind the POS3
+  terminal page itself (`src/pages/pos3/POS3Home.jsx`); the API does not
+  enforce this.
+- **Demo-mode backend blocking: pending.** Demo sessions are not currently
+  prevented from writing real backend records through these routes — the
+  repo's existing `demoModeConfig.js` gating pattern (used by
+  `pos3Routes`/`venueTestRoutes`) has not been applied here.
+- **Founder/admin audit protection: pending.** `GET /api/smokecraft/audit-events`
+  has no role check; it should be admin/founder-only per the contract above
+  but currently returns to any caller.

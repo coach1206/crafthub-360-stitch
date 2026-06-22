@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { registerSmokeEventLogSink } from '../services/smokecraft/smokeSharedStorageService.js'
 import { getRankFromXP } from '../constants/session.js'
 import {
   awardPassportStamp,
@@ -37,6 +38,24 @@ export function GuestSessionProvider({ children }) {
       return next
     })
   }, [])
+
+  // SmokeCraft backend success/status events (Phase 10B) — registered once;
+  // smokeSharedStorageService fires these only on real ok:true responses,
+  // never speculatively, never from a render path.
+  useEffect(() => {
+    registerSmokeEventLogSink((type, payload) => {
+      update(prev => {
+        const existingLog = prev.smokeCraft?.eventLog || []
+        return {
+          ...prev,
+          smokeCraft: {
+            ...prev.smokeCraft,
+            eventLog: [...existingLog, { type, timestamp: Date.now(), payload }].slice(-50),
+          },
+        }
+      })
+    })
+  }, [update])
 
   // ── Profile (display) ─────────────────────────────────────────────────────
   const updateProfile = useCallback((fields) => {

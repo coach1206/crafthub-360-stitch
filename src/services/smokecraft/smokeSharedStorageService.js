@@ -36,9 +36,37 @@ const LOCAL_KEYS = {
  */
 const remoteSyncCache = {}
 
-function attemptRemoteSync(key, remoteCallPromise) {
+/**
+ * A single registered sink that turns a (type, payload) success/status event
+ * into a real session.smokeCraft.eventLog entry. Registered once by
+ * GuestSessionContext (the only place with access to `update()`), so this
+ * module can log honestly without every page needing its own plumbing.
+ * Never invoked from a render path — only from resolved/rejected promises.
+ */
+let eventLogSink = null
+export function registerSmokeEventLogSink(fn) {
+  eventLogSink = fn
+}
+function logSmokeEvent(type, payload) {
+  if (eventLogSink) eventLogSink(type, payload)
+}
+
+/**
+ * Fires a remote call in the background and updates remoteSyncCache when it
+ * settles. Only logs a *_SUCCEEDED event when the response actually came
+ * back with ok: true — never on local-fallback writes, never speculatively.
+ * Also logs SMOKECRAFT_BACKEND_MEMORY_FALLBACK_ACTIVE whenever a successful
+ * response reveals the server itself is running on in-memory storage.
+ */
+function attemptRemoteSync(key, remoteCallPromise, successEventType) {
   remoteCallPromise
-    .then((res) => { remoteSyncCache[key] = { ...res, attemptedAt: Date.now() } })
+    .then((res) => {
+      remoteSyncCache[key] = { ...res, attemptedAt: Date.now() }
+      if (res.ok === true) {
+        if (successEventType) logSmokeEvent(successEventType, { key, storageMode: res.storageMode })
+        if (res.storageMode === 'memory_fallback') logSmokeEvent('SMOKECRAFT_BACKEND_MEMORY_FALLBACK_ACTIVE', { key })
+      }
+    })
     .catch((err) => { remoteSyncCache[key] = { ok: false, status: 'failed', error: err?.message || 'Remote sync attempt failed', attemptedAt: Date.now() } })
 }
 
@@ -112,6 +140,10 @@ export async function checkSmokeBackendRouteStatus() {
     storageMode: res.ok ? res.storageMode : 'none',
     checkedAt: Date.now(),
   }
+  logSmokeEvent('SMOKECRAFT_BACKEND_ROUTE_STATUS_CHECKED', { ok: cachedRouteStatus.ok, storageMode: cachedRouteStatus.storageMode })
+  if (cachedRouteStatus.ok && cachedRouteStatus.storageMode === 'memory_fallback') {
+    logSmokeEvent('SMOKECRAFT_BACKEND_MEMORY_FALLBACK_ACTIVE', { key: 'routeStatus' })
+  }
   return cachedRouteStatus
 }
 
@@ -156,7 +188,7 @@ export function saveSmokeSessionSnapshot(session) {
   const all = readLocal(LOCAL_KEYS.snapshots) || {}
   all[sessionId] = { smokeCraft: session?.smokeCraft || null, savedAt: Date.now() }
   const ok = writeLocal(LOCAL_KEYS.snapshots, all)
-  attemptRemoteSync('session', createSmokeSessionRemote({ sessionId, ...session?.smokeCraft }))
+  attemptRemoteSync('session', createSmokeSessionRemote({ sessionId, ...session?.smokeCraft }), 'SMOKECRAFT_REMOTE_SESSION_SAVE_SUCCEEDED')
   return ok
     ? { status: 'local_fallback', reason: 'Session snapshot saved to local fallback storage — not yet synced to a shared backend.' }
     : { status: 'failed', reason: 'Local storage write failed.' }
@@ -176,7 +208,7 @@ export function saveSmokePurchaseIntent(session, intent) {
   if (idx >= 0) list[idx] = record
   else list.push(record)
   const ok = writeLocal(LOCAL_KEYS.intents, list)
-  attemptRemoteSync('purchaseIntent', createSmokePurchaseIntentRemote(record))
+  attemptRemoteSync('purchaseIntent', createSmokePurchaseIntentRemote(record), 'SMOKECRAFT_REMOTE_PURCHASE_INTENT_SAVE_SUCCEEDED')
   return ok
     ? { status: 'local_fallback', reason: 'Purchase intent saved to local fallback — shared venue storage pending backend implementation.' }
     : { status: 'failed', reason: 'Local storage write failed.' }
@@ -194,7 +226,7 @@ export function updateSmokePurchaseVerification(intentId, verificationPayload = 
   if (idx < 0) return { status: 'failed', reason: 'No matching local purchase intent found.' }
   list[idx] = { ...list[idx], ...verificationPayload, updatedAt: Date.now() }
   const ok = writeLocal(LOCAL_KEYS.intents, list)
-  attemptRemoteSync('purchaseVerification', updateSmokePurchaseIntentRemote(intentId, verificationPayload))
+  attemptRemoteSync('purchaseVerification', updateSmokePurchaseIntentRemote(intentId, verificationPayload), 'SMOKECRAFT_REMOTE_PURCHASE_VERIFICATION_SUCCEEDED')
   return ok
     ? { status: 'local_fallback', reason: 'Verification update saved to local fallback only — not yet visible to other devices.' }
     : { status: 'failed', reason: 'Local storage write failed.' }
@@ -212,7 +244,7 @@ export function saveSmokeEATHandoff(session, handoff) {
 
 export function loadSmokeEATHandoffs() {
   const all = readLocal(LOCAL_KEYS.eatHandoffs) || {}
-  attemptRemoteSync('eatHandoffs', getSmokeEATHandoffsRemote())
+  attemptRemoteSync('eatHandoffs', getSmokeEATHandoffsRemote(), 'SMOKECRAFT_REMOTE_EAT_HANDOFF_LOAD_SUCCEEDED')
   return { status: 'local_fallback', data: Object.values(all), reason: 'Loaded from local fallback storage only.' }
 }
 
@@ -229,7 +261,7 @@ export function saveSmokeLeaderboardEntry(session, leaderboardEntry) {
 
 export function loadSmokeLeaderboardEntries() {
   const all = readLocal(LOCAL_KEYS.leaderboard) || {}
-  attemptRemoteSync('leaderboardList', getSmokeLeaderboardEntriesRemote())
+  attemptRemoteSync('leaderboardList', getSmokeLeaderboardEntriesRemote(), 'SMOKECRAFT_REMOTE_LEADERBOARD_LOAD_SUCCEEDED')
   return { status: 'local_fallback', data: Object.values(all), reason: 'Loaded from local fallback storage only — not a real shared/community leaderboard yet.' }
 }
 
