@@ -151,6 +151,10 @@ function buildStampPayload(session) {
   const seedSoil = session.smokecraftSeedSoil || null
   const latestBadge = session.badges?.[session.badges.length - 1] || null
   const protocolScore = session.smokeCraft?.scoreBreakdown || null
+  // Phase 6 recommendation selection carries real cigar country/wrapper/
+  // strength data — when present, it replaces the honest nulls below that
+  // existed because Seed & Soil only stores a region id.
+  const recommendation = session.smokeCraft?.selectedHumidorRecommendation || null
 
   return {
     userId:               session.guestId || null,
@@ -163,12 +167,12 @@ function buildStampPayload(session) {
     venue:                session.venueId || null,
     eventName:            session.passport?.eventName || 'The Grand Lounge',
     date:                 new Date().toISOString(),
-    cigarName:            format?.name || null,
-    cigarCountry:         null, // Seed region only stores an id today, not country — see audit Phase 3 gap
-    cigarType:            format?.id || null,
-    wrapper:              null, // same Phase 3 limitation as cigarCountry
-    strength:             null,
-    burnTime:             format?.burnTime || null,
+    cigarName:            recommendation?.selectedCigarName || format?.name || null,
+    cigarCountry:         recommendation?.selectedCigarCountry || null, // Seed region only stores an id, not country, unless a Phase 6 recommendation was selected
+    cigarType:            recommendation?.selectedCigarType || format?.id || null,
+    wrapper:              recommendation?.selectedWrapper || null,
+    strength:             recommendation?.selectedStrength || null,
+    burnTime:             recommendation?.selectedBurnTime || format?.burnTime || null,
     mentorNames:          mentors.map(m => m.name).filter(Boolean),
     mentorIds:            mentors.map(m => m.id).filter(Boolean),
     score:                protocolScore?.total ?? scorecard?.total ?? null,

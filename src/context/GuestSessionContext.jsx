@@ -392,6 +392,48 @@ export function GuestSessionProvider({ children }) {
     })
   }, [update])
 
+  /**
+   * Records the guest's chosen Phase 6 recommendation (Best Match / Step-Up
+   * Pick / Venue Featured Pick). Persists exactly the spec'd field set so
+   * Phase 11 (Scorecard), Phase 12 (Passport Stamp) and Phase 13 (Passport
+   * Connections) can read real cigar attributes instead of the null
+   * placeholders those phases previously had to fall back to.
+   */
+  const setSelectedHumidorRecommendation = useCallback((recommendation) => {
+    update(prev => {
+      const now = Date.now()
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const selectedHumidorRecommendation = {
+        selectedRecommendationType:  recommendation.recommendationType,
+        selectedCigarId:             recommendation.cigarId,
+        selectedCigarName:           recommendation.cigarName,
+        selectedCigarCountry:        recommendation.cigarCountry,
+        selectedCigarType:           recommendation.cigarType,
+        selectedWrapper:             recommendation.wrapper,
+        selectedStrength:            recommendation.strength,
+        selectedBurnTime:            recommendation.burnTime,
+        selectedPairingSuggestion:   recommendation.pairingSuggestion,
+        selectedMentorNote:          recommendation.mentorNote,
+        selectedMatchScore:          recommendation.matchScore,
+        selectedAt:                  now,
+      }
+      const event = {
+        eventType:  'HUMIDOR_RECOMMENDATION_SELECTED',
+        actionType: recommendation.recommendationType,
+        label:      recommendation.cigarName,
+        timestamp:  now,
+      }
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          selectedHumidorRecommendation,
+          eventLog: [...existingLog, event].slice(-50),
+        },
+      }
+    })
+  }, [update])
+
   /** Records that the guest accepted the Golden Box challenge. */
   const setGoldenBoxAccepted = useCallback(() => {
     update(prev => {
@@ -769,6 +811,7 @@ export function GuestSessionProvider({ children }) {
       setRequestPurchaseChoice,
       setCutToastLightProgress,
       setHumidorMatchSelection,
+      setSelectedHumidorRecommendation,
       setGoldenBoxAccepted,
       setFirstThirdTasting,
       setSecondThirdTasting,
