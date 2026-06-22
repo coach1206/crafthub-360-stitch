@@ -2,9 +2,18 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import { getMentorGuidance } from '../../utils/smokecraftMentorTips.js'
 
 const NOTES = ['Cedar','Cream','Pepper','Grass','Earth','Floral','Leather','Nuts']
-const FILL1 = { fontVariationSettings: "'FILL' 1" }
+
+const SCALE_FIELDS = [
+  { id: 'strength', label: 'Strength' },
+  { id: 'body',     label: 'Body' },
+  { id: 'smokeOutput', label: 'Smoke Output' },
+  { id: 'burnQuality', label: 'Burn Quality' },
+]
+
+const PAIRING_REACTIONS = ['Loved it', 'Worked well', 'Neutral', 'Clashed']
 
 function tastingXP(notesCount, hasDrawRating) {
   if (notesCount === 0 && !hasDrawRating) return 5
@@ -17,12 +26,23 @@ function tastingXP(notesCount, hasDrawRating) {
 
 export default function FirstThird() {
   const navigate = useNavigate()
-  const { completeStep, addXP, setFirstThirdTasting } = useGuestSession()
+  const { session, completeStep, addXP, setFirstThirdTasting } = useGuestSession()
   const [selected, setSelected] = useState(new Set())
   const [rating, setRating] = useState(0)
+  const [strength, setStrength] = useState(0)
+  const [body, setBody] = useState(0)
+  const [smokeOutput, setSmokeOutput] = useState(0)
+  const [burnQuality, setBurnQuality] = useState(0)
+  const [pairingReaction, setPairingReaction] = useState(null)
   const [done, setDone] = useState(false)
 
+  const mentorGuidance = getMentorGuidance(session, 'first-third')
+  const scaleValue = { strength, body, smokeOutput, burnQuality }
+  const scaleSetter = { strength: setStrength, body: setBody, smokeOutput: setSmokeOutput, burnQuality: setBurnQuality }
+
   function toggleNote(n) { triggerHaptic('light'); setSelected(prev => { const s = new Set(prev); s.has(n) ? s.delete(n) : s.add(n); return s }) }
+
+  function selectPairingReaction(r) { triggerHaptic('light'); setPairingReaction(r) }
 
   function handleContinue() {
     if (done) return
@@ -36,6 +56,13 @@ export default function FirstThird() {
       notesCount,
       drawRating: hasDrawRating ? rating : null,
       hasDrawRating,
+      strength: strength || null,
+      body: body || null,
+      smokeOutput: smokeOutput || null,
+      burnQuality: burnQuality || null,
+      pairingReaction,
+      mentorTip: mentorGuidance ? mentorGuidance.tip : null,
+      mentorName: mentorGuidance ? mentorGuidance.mentorName : null,
     })
     completeStep('first-third')
     addXP(tastingXP(notesCount, hasDrawRating))
@@ -88,8 +115,9 @@ export default function FirstThird() {
                 </button>
               )})}
             </div>
+
             <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Draw Rating</p>
-            <div className="flex gap-3">
+            <div className="flex gap-3 mb-8">
               {[1,2,3,4,5].map(v => (
                 <button key={v} type="button" onClick={() => { triggerHaptic('light'); setRating(v) }}
                   className="sc-tactile w-12 h-12 rounded-full border-2 font-label-lg text-label-lg transition-all duration-300 active:scale-90"
@@ -103,6 +131,53 @@ export default function FirstThird() {
                 </button>
               ))}
             </div>
+
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Profile Ratings</p>
+            <div className="flex flex-col gap-4 mb-8">
+              {SCALE_FIELDS.map(f => (
+                <div key={f.id}>
+                  <p className="font-label-sm text-label-sm text-on-surface-variant mb-2">{f.label}</p>
+                  <div className="flex gap-2">
+                    {[1,2,3,4,5].map(v => (
+                      <button key={v} type="button" onClick={() => { triggerHaptic('light'); scaleSetter[f.id](v) }}
+                        className="sc-tactile w-10 h-10 rounded-full border-2 font-label-sm text-label-sm transition-all duration-300 active:scale-90"
+                        style={{
+                          borderColor: scaleValue[f.id] >= v ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.2)',
+                          background: scaleValue[f.id] >= v ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
+                          color: scaleValue[f.id] >= v ? '#e9c176' : 'rgba(255,255,255,0.4)',
+                        }}>
+                        {v}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Pairing Reaction</p>
+            <div className="flex flex-wrap gap-2">
+              {PAIRING_REACTIONS.map(r => { const on = pairingReaction === r; return (
+                <button key={r} type="button" onClick={() => selectPairingReaction(r)}
+                  className="sc-tactile px-4 py-2 rounded-full border font-label-lg text-label-lg transition-all duration-300 active:scale-95"
+                  style={{
+                    borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.15)',
+                    background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
+                    color: on ? '#e9c176' : 'rgba(255,255,255,0.6)',
+                  }}>
+                  {r}
+                </button>
+              )})}
+            </div>
+
+            {mentorGuidance && (
+              <div className="rounded-2xl border border-primary/20 mt-8" style={{ padding: 16, background: 'rgba(233,193,118,0.06)' }}>
+                <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mb-1">Mentor Tip — {mentorGuidance.mentorName}{mentorGuidance.mentorCountry ? ` (${mentorGuidance.mentorCountry})` : ''}</p>
+                <p className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{mentorGuidance.tip}</p>
+              </div>
+            )}
+            {!mentorGuidance && (
+              <p className="font-label-sm text-[11px] text-on-surface-variant/50 mt-8">No mentor selected yet — mentor tips will appear here once you choose a mentor.</p>
+            )}
           </div>
 
           <aside

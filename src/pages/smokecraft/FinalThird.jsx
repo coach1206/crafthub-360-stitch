@@ -2,9 +2,18 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import { getMentorGuidance } from '../../utils/smokecraftMentorTips.js'
 
 const NOTES = ['Caramel','Char','Toast','Wood','Sweet','Bitter','Smoke','Mineral']
-const FILL1 = { fontVariationSettings: "'FILL' 1" }
+
+const SCALE_FIELDS = [
+  { id: 'finalStrength', label: 'Final Strength' },
+  { id: 'finalBody',     label: 'Final Body' },
+  { id: 'heatHarshness', label: 'Heat / Harshness' },
+]
+
+const BURN_FINISH_OPTIONS = ['Clean burn to the end', 'Needed touch-ups', 'Burned hot', 'Went out early']
+const PAIRING_REACTIONS = ['Loved it', 'Worked well', 'Neutral', 'Clashed']
 
 function tastingXP(notesCount, hasRating) {
   if (notesCount === 0 && !hasRating) return 5
@@ -17,10 +26,20 @@ function tastingXP(notesCount, hasRating) {
 
 export default function FinalThird() {
   const navigate = useNavigate()
-  const { completeStep, addXP, setFinalThirdTasting } = useGuestSession()
+  const { session, completeStep, addXP, setFinalThirdTasting } = useGuestSession()
   const [selected, setSelected] = useState(new Set())
   const [rating, setRating] = useState(0)
+  const [finalStrength, setFinalStrength] = useState(0)
+  const [finalBody, setFinalBody] = useState(0)
+  const [heatHarshness, setHeatHarshness] = useState(0)
+  const [burnFinish, setBurnFinish] = useState(null)
+  const [finalPairingReaction, setFinalPairingReaction] = useState(null)
+  const [wouldSmokeAgain, setWouldSmokeAgain] = useState(null)
   const [done, setDone] = useState(false)
+
+  const mentorGuidance = getMentorGuidance(session, 'final-third')
+  const scaleValue = { finalStrength, finalBody, heatHarshness }
+  const scaleSetter = { finalStrength: setFinalStrength, finalBody: setFinalBody, heatHarshness: setHeatHarshness }
 
   function toggleNote(n) { triggerHaptic('light'); setSelected(prev => { const s = new Set(prev); s.has(n) ? s.delete(n) : s.add(n); return s }) }
 
@@ -36,6 +55,14 @@ export default function FinalThird() {
       notesCount,
       overallRating: hasOverallRating ? rating : null,
       hasOverallRating,
+      finalStrength: finalStrength || null,
+      finalBody: finalBody || null,
+      heatHarshness: heatHarshness || null,
+      burnFinish,
+      finalPairingReaction,
+      wouldSmokeAgain,
+      mentorTip: mentorGuidance ? mentorGuidance.tip : null,
+      mentorName: mentorGuidance ? mentorGuidance.mentorName : null,
     })
     completeStep('final-third')
     addXP(tastingXP(notesCount, hasOverallRating))
@@ -88,8 +115,9 @@ export default function FinalThird() {
                 </button>
               )})}
             </div>
+
             <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Overall Rating</p>
-            <div className="flex gap-3">
+            <div className="flex gap-3 mb-8">
               {[1,2,3,4,5].map(v => (
                 <button key={v} type="button" onClick={() => { triggerHaptic('light'); setRating(v) }}
                   className="sc-tactile w-12 h-12 rounded-full border-2 font-label-lg text-label-lg transition-all duration-300 active:scale-90"
@@ -103,6 +131,83 @@ export default function FinalThird() {
                 </button>
               ))}
             </div>
+
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Finishing Profile</p>
+            <div className="flex flex-col gap-4 mb-8">
+              {SCALE_FIELDS.map(f => (
+                <div key={f.id}>
+                  <p className="font-label-sm text-label-sm text-on-surface-variant mb-2">{f.label}</p>
+                  <div className="flex gap-2">
+                    {[1,2,3,4,5].map(v => (
+                      <button key={v} type="button" onClick={() => { triggerHaptic('light'); scaleSetter[f.id](v) }}
+                        className="sc-tactile w-10 h-10 rounded-full border-2 font-label-sm text-label-sm transition-all duration-300 active:scale-90"
+                        style={{
+                          borderColor: scaleValue[f.id] >= v ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.2)',
+                          background: scaleValue[f.id] >= v ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
+                          color: scaleValue[f.id] >= v ? '#e9c176' : 'rgba(255,255,255,0.4)',
+                        }}>
+                        {v}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Burn Finish</p>
+            <div className="flex flex-wrap gap-2 mb-8">
+              {BURN_FINISH_OPTIONS.map(b => { const on = burnFinish === b; return (
+                <button key={b} type="button" onClick={() => { triggerHaptic('light'); setBurnFinish(b) }}
+                  className="sc-tactile px-4 py-2 rounded-full border font-label-lg text-label-lg transition-all duration-300 active:scale-95"
+                  style={{
+                    borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.15)',
+                    background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
+                    color: on ? '#e9c176' : 'rgba(255,255,255,0.6)',
+                  }}>
+                  {b}
+                </button>
+              )})}
+            </div>
+
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Final Pairing Reaction</p>
+            <div className="flex flex-wrap gap-2 mb-8">
+              {PAIRING_REACTIONS.map(r => { const on = finalPairingReaction === r; return (
+                <button key={r} type="button" onClick={() => { triggerHaptic('light'); setFinalPairingReaction(r) }}
+                  className="sc-tactile px-4 py-2 rounded-full border font-label-lg text-label-lg transition-all duration-300 active:scale-95"
+                  style={{
+                    borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.15)',
+                    background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
+                    color: on ? '#e9c176' : 'rgba(255,255,255,0.6)',
+                  }}>
+                  {r}
+                </button>
+              )})}
+            </div>
+
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Would You Smoke Again?</p>
+            <div className="flex gap-3 mb-8">
+              {[{id:true,label:'Yes'},{id:false,label:'No'}].map(o => { const on = wouldSmokeAgain === o.id; return (
+                <button key={o.label} type="button" onClick={() => { triggerHaptic('light'); setWouldSmokeAgain(o.id) }}
+                  className="sc-tactile px-6 py-3 rounded-full border font-label-lg text-label-lg transition-all duration-300 active:scale-95"
+                  style={{
+                    borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.15)',
+                    background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
+                    color: on ? '#e9c176' : 'rgba(255,255,255,0.6)',
+                  }}>
+                  {o.label}
+                </button>
+              )})}
+            </div>
+
+            {mentorGuidance && (
+              <div className="rounded-2xl border border-primary/20" style={{ padding: 16, background: 'rgba(233,193,118,0.06)' }}>
+                <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mb-1">Mentor Tip — {mentorGuidance.mentorName}{mentorGuidance.mentorCountry ? ` (${mentorGuidance.mentorCountry})` : ''}</p>
+                <p className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{mentorGuidance.tip}</p>
+              </div>
+            )}
+            {!mentorGuidance && (
+              <p className="font-label-sm text-[11px] text-on-surface-variant/50">No mentor selected yet — mentor tips will appear here once you choose a mentor.</p>
+            )}
           </div>
 
           <aside

@@ -2,16 +2,27 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import { getMentorGuidance } from '../../utils/smokecraftMentorTips.js'
 
 const NOTES = ['Leather','Dark Cocoa','Coffee','Spice','Nuts','Cedar','Dried Fruit','Tobacco']
-const FILL1 = { fontVariationSettings: "'FILL' 1" }
+
+const FLAVOR_DEVELOPMENT = ['Deepening', 'Shifting', 'Steady', 'Fading']
+const CHANGE_OPTIONS = ['Increasing', 'Steady', 'Decreasing']
+const PAIRING_REACTIONS = ['Loved it', 'Worked well', 'Neutral', 'Clashed']
 
 export default function SecondThird() {
   const navigate = useNavigate()
-  const { completeStep, addXP, setSecondThirdTasting } = useGuestSession()
+  const { session, completeStep, addXP, setSecondThirdTasting } = useGuestSession()
   const [selected, setSelected] = useState(new Set())
   const [rating, setRating] = useState(0)
+  const [flavorDevelopment, setFlavorDevelopment] = useState(null)
+  const [strengthChange, setStrengthChange] = useState(null)
+  const [bodyChange, setBodyChange] = useState(null)
+  const [ashQuality, setAshQuality] = useState(0)
+  const [pairingReaction, setPairingReaction] = useState(null)
   const [done, setDone] = useState(false)
+
+  const mentorGuidance = getMentorGuidance(session, 'second-third')
 
   function toggleNote(n) { triggerHaptic('light'); setSelected(prev => { const s = new Set(prev); s.has(n) ? s.delete(n) : s.add(n); return s }) }
 
@@ -27,6 +38,13 @@ export default function SecondThird() {
       notesCount,
       rating: hasRating ? rating : null,
       hasRating,
+      flavorDevelopment,
+      strengthChange,
+      bodyChange,
+      ashQuality: ashQuality || null,
+      pairingReaction,
+      mentorTip: mentorGuidance ? mentorGuidance.tip : null,
+      mentorName: mentorGuidance ? mentorGuidance.mentorName : null,
     })
     completeStep('second-third')
     addXP(50)
@@ -52,6 +70,7 @@ export default function SecondThird() {
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Second Third — Tasting</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-8" style={{ maxWidth:560 }}>The flavor profile typically deepens and transitions. Note the evolution.</p>
+
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Flavor Notes</p>
         <div className="flex flex-wrap gap-2 mb-8">
           {NOTES.map(n => { const on = selected.has(n); return (
@@ -61,8 +80,47 @@ export default function SecondThird() {
             </button>
           )})}
         </div>
-        <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Draw Rating</p>
-        <div className="flex gap-3 mb-12">
+
+        <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Flavor Development</p>
+        <div className="flex flex-wrap gap-2 mb-8">
+          {FLAVOR_DEVELOPMENT.map(d => { const on = flavorDevelopment === d; return (
+            <button key={d} type="button" onClick={() => { triggerHaptic('light'); setFlavorDevelopment(d) }}
+              className="px-4 py-2 rounded-full border font-label-lg text-label-lg transition-all duration-200 active:scale-95"
+              style={{ borderColor: on ? '#e9c176' : 'rgba(255,255,255,0.15)', background: on ? 'rgba(233,193,118,0.12)' : 'transparent', color: on ? '#e9c176' : 'rgba(255,255,255,0.6)' }}>
+              {d}
+            </button>
+          )})}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+          <div>
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-3">Strength Change</p>
+            <div className="flex flex-wrap gap-2">
+              {CHANGE_OPTIONS.map(c => { const on = strengthChange === c; return (
+                <button key={c} type="button" onClick={() => { triggerHaptic('light'); setStrengthChange(c) }}
+                  className="px-3 py-2 rounded-full border font-label-sm text-label-sm transition-all duration-200 active:scale-95"
+                  style={{ borderColor: on ? '#e9c176' : 'rgba(255,255,255,0.15)', background: on ? 'rgba(233,193,118,0.12)' : 'transparent', color: on ? '#e9c176' : 'rgba(255,255,255,0.6)' }}>
+                  {c}
+                </button>
+              )})}
+            </div>
+          </div>
+          <div>
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-3">Body Change</p>
+            <div className="flex flex-wrap gap-2">
+              {CHANGE_OPTIONS.map(c => { const on = bodyChange === c; return (
+                <button key={c} type="button" onClick={() => { triggerHaptic('light'); setBodyChange(c) }}
+                  className="px-3 py-2 rounded-full border font-label-sm text-label-sm transition-all duration-200 active:scale-95"
+                  style={{ borderColor: on ? '#e9c176' : 'rgba(255,255,255,0.15)', background: on ? 'rgba(233,193,118,0.12)' : 'transparent', color: on ? '#e9c176' : 'rgba(255,255,255,0.6)' }}>
+                  {c}
+                </button>
+              )})}
+            </div>
+          </div>
+        </div>
+
+        <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Burn Consistency (Draw Rating)</p>
+        <div className="flex gap-3 mb-8">
           {[1,2,3,4,5].map(v => (
             <button key={v} onClick={() => { triggerHaptic('light'); setRating(v) }}
               className="w-12 h-12 rounded-full border-2 font-label-lg text-label-lg transition-all duration-200 active:scale-90"
@@ -71,6 +129,39 @@ export default function SecondThird() {
             </button>
           ))}
         </div>
+
+        <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Ash Quality</p>
+        <div className="flex gap-3 mb-8">
+          {[1,2,3,4,5].map(v => (
+            <button key={v} onClick={() => { triggerHaptic('light'); setAshQuality(v) }}
+              className="w-12 h-12 rounded-full border-2 font-label-lg text-label-lg transition-all duration-200 active:scale-90"
+              style={{ borderColor: ashQuality >= v ? '#e9c176' : 'rgba(255,255,255,0.2)', background: ashQuality >= v ? 'rgba(233,193,118,0.15)' : 'transparent', color: ashQuality >= v ? '#e9c176' : 'rgba(255,255,255,0.4)' }}>
+              {v}
+            </button>
+          ))}
+        </div>
+
+        <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Pairing Reaction</p>
+        <div className="flex flex-wrap gap-2 mb-10">
+          {PAIRING_REACTIONS.map(r => { const on = pairingReaction === r; return (
+            <button key={r} type="button" onClick={() => { triggerHaptic('light'); setPairingReaction(r) }}
+              className="px-4 py-2 rounded-full border font-label-lg text-label-lg transition-all duration-200 active:scale-95"
+              style={{ borderColor: on ? '#e9c176' : 'rgba(255,255,255,0.15)', background: on ? 'rgba(233,193,118,0.12)' : 'transparent', color: on ? '#e9c176' : 'rgba(255,255,255,0.6)' }}>
+              {r}
+            </button>
+          )})}
+        </div>
+
+        {mentorGuidance && (
+          <div className="rounded-2xl border border-primary/20 mb-10" style={{ padding: 16, background: 'rgba(233,193,118,0.06)' }}>
+            <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mb-1">Mentor Tip — {mentorGuidance.mentorName}{mentorGuidance.mentorCountry ? ` (${mentorGuidance.mentorCountry})` : ''}</p>
+            <p className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{mentorGuidance.tip}</p>
+          </div>
+        )}
+        {!mentorGuidance && (
+          <p className="font-label-sm text-[11px] text-on-surface-variant/50 mb-10">No mentor selected yet — mentor tips will appear here once you choose a mentor.</p>
+        )}
+
         <div className="flex gap-4">
           <button onClick={handleContinue}
             className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300"
