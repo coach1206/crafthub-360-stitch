@@ -43,6 +43,8 @@ const MENTORS = [
   {
     id: 'dominican',
     country: 'Dominican Republic',
+    countryCode: 'DO',
+    flag: '🇩🇴',
     name: 'Don Alejandro',
     bio: 'Master of volcanic soil nutrients and the delicate art of Olor wrapper fermentation.',
     tags: ['Complexity', 'Floral Notes'],
@@ -52,6 +54,8 @@ const MENTORS = [
   {
     id: 'nicaragua',
     country: 'Nicaragua',
+    countryCode: 'NI',
+    flag: '🇳🇮',
     name: 'Javier Estelí',
     bio: "Specialist in sun-grown Criollo '98 and the robust spice profiles of Jalapa Valley.",
     tags: ['Bold', 'Earth / Spice'],
@@ -61,6 +65,8 @@ const MENTORS = [
   {
     id: 'honduras',
     country: 'Honduras',
+    countryCode: 'HN',
+    flag: '🇭🇳',
     name: 'Doña Jamastran',
     bio: 'Legacy grower of authentic Corojo seed and the intense, full-bodied traditions of Danlí.',
     tags: ['Authentic', 'Rich Cedar'],
@@ -70,6 +76,8 @@ const MENTORS = [
   {
     id: 'mexico',
     country: 'Mexico',
+    countryCode: 'MX',
+    flag: '🇲🇽',
     name: 'Mateo San Andrés',
     bio: "Guardian of the Negro San Andrés leaf, the world's most sought-after Maduro wrapper.",
     tags: ['Dark Cocoa', 'Maduro Expert'],
@@ -79,6 +87,8 @@ const MENTORS = [
   {
     id: 'cuba',
     country: 'Cuba',
+    countryCode: 'CU',
+    flag: '🇨🇺',
     name: 'Maestro Rafael',
     bio: 'Keeper of classic Cuban-seed tradition, elegant draw discipline, and old-world rolling standards.',
     tags: ['Tradition', 'Balance'],
@@ -88,6 +98,8 @@ const MENTORS = [
   {
     id: 'peru',
     country: 'Peru',
+    countryCode: 'PE',
+    flag: '🇵🇪',
     name: 'Carlos Mendoza',
     bio: 'Andean curator of altitude-grown aromatics, mineral sweetness, and rare leaf experimentation.',
     tags: ['Altitude', 'Aromatics'],
@@ -97,6 +109,8 @@ const MENTORS = [
   {
     id: 'florida',
     country: 'USA (Florida)',
+    countryCode: 'US',
+    flag: '🇺🇸',
     name: 'Thomas A. Blackwell',
     bio: 'Modern lounge strategist blending hospitality, humidor discipline, and contemporary cigar service.',
     tags: ['Lounge Craft', 'Service'],
@@ -106,6 +120,8 @@ const MENTORS = [
   {
     id: 'brazil',
     country: 'Brazil',
+    countryCode: 'BR',
+    flag: '🇧🇷',
     name: 'Dr. Paulo Oliveira',
     bio: 'Mata Fina researcher focused on natural sweetness, earthy depth, and scientific tasting language.',
     tags: ['Mata Fina', 'Research'],
@@ -299,6 +315,13 @@ export default function Mentor() {
                 </span>
                 <MentorPortrait image={mentor.image} name={mentor.name} />
                 <span className="smokecraft-mentor-card__shade" aria-hidden="true" />
+                <span
+                  className="smokecraft-mentor-card__flag"
+                  role="img"
+                  aria-label={`${mentor.country} flag`}
+                >
+                  {mentor.flag}
+                </span>
                 <span className="smokecraft-mentor-card__body">
                   <span className="smokecraft-mentor-card__country">{mentor.country}</span>
                   <strong>{mentor.name}</strong>
