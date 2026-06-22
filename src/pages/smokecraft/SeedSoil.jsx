@@ -4,7 +4,9 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import { LeafIcon, CheckIcon, ArrowForwardIcon, ArrowBackIcon, DeckIcon, GlassIcon, MusicIcon, WeatherIcon, GroupsIcon, MoodIcon, EventIcon, FlaskIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 import PairingScorePanel from '../../components/smokecraft/PairingScorePanel.jsx'
+import UniqueBlendPanel from '../../components/smokecraft/UniqueBlendPanel.jsx'
 import { calculatePairingScore, applyKeptWarningPenalty } from '../../services/smokecraft/smokePairingScoreService.js'
+import { createBlendSignature, calculateUniquenessScore } from '../../services/smokecraft/smokeUniquenessService.js'
 
 const REGIONS = [
   {
@@ -89,7 +91,7 @@ function buildPairingExplanation(region, soil) {
 
 export default function SeedSoil() {
   const navigate = useNavigate()
-  const { completeStep, addXP, update } = useGuestSession()
+  const { completeStep, addXP, update, session } = useGuestSession()
   const [selected, setSelected] = useState(null)
   const [soil, setSoil] = useState({})
   const [done, setDone] = useState(false)
@@ -101,6 +103,13 @@ export default function SeedSoil() {
 
   const pairingResult = region && soilComplete ? calculatePairingScore({ region, soil }) : null
   const blockedByWarning = Boolean(pairingResult?.warning) && !warningResolved
+
+  const blendSignature = region ? createBlendSignature({
+    region, soil,
+    format: session?.smokeCraft?.selectedFormat || null,
+    mentorId: session?.selectedMentor || null,
+  }) : null
+  const uniqueness = blendSignature ? calculateUniquenessScore(blendSignature) : null
 
   function setSoilValue(key, value) {
     triggerHaptic('light')
@@ -156,10 +165,15 @@ export default function SeedSoil() {
         penalties: warningResolved === 'kept'
           ? [...(prev.smokeCraft?.penalties || []), { reason: 'Pairing clash warning ignored', points: -50, timestamp: Date.now() }]
           : (prev.smokeCraft?.penalties || []),
+        uniqueBlendSignature: blendSignature,
+        uniquenessScore: uniqueness.score,
+        uniquenessCategory: uniqueness.category,
       },
     }))
     logPairingEvent('SMOKECRAFT_PAIRING_COMBO_CREATED', { seedRegionId: region.id, soil })
     logPairingEvent('SMOKECRAFT_PAIRING_SCORE_UPDATED', { score: pairingResult.score, grade: pairingResult.grade })
+    logPairingEvent('SMOKECRAFT_UNIQUE_BLEND_SIGNATURE_CREATED', { signature: blendSignature })
+    logPairingEvent('SMOKECRAFT_UNIQUENESS_SCORE_UPDATED', { score: uniqueness.score, category: uniqueness.category })
     if (pairingResult.score > 0) addXP(pairingResult.score)
     completeStep('seed-soil')
     addXP(100)
@@ -265,6 +279,10 @@ export default function SeedSoil() {
             onAdjust={handleAdjustPairing}
             onAskMentor={handleAskMentor}
           />
+        )}
+
+        {blendSignature && soilComplete && (
+          <UniqueBlendPanel signature={blendSignature} uniqueness={uniqueness} />
         )}
 
         <div className="flex flex-col sm:flex-row gap-4">
