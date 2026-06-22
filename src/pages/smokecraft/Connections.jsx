@@ -31,6 +31,28 @@ const CONSENT_FIELDS = [
 
 const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
+const NETWORKING_STATUS_LABELS = {
+  not_started:        'Not started',
+  consent_required:   'Consent required',
+  ready_to_share:      'Ready to share',
+  shared_locally:      'Shared locally (demo only)',
+  connection_pending:  'Connection pending',
+  backend_pending:     'Backend pending',
+}
+
+/** Read-only display row used by the Passport Connections summary — shows
+ * "Not recorded yet" instead of breaking when a Phase 0-12 field is absent. */
+function DetailRow({ label, value, pendingNote }) {
+  return (
+    <div>
+      <dt className="font-label-sm text-label-sm text-on-surface-variant/60 uppercase tracking-widest mb-1" style={{ fontSize: 10 }}>{label}</dt>
+      <dd className="font-body-md text-on-surface" style={{ opacity: value ? 1 : 0.45 }}>
+        {value || (pendingNote || 'Not recorded yet')}
+      </dd>
+    </div>
+  )
+}
+
 /** Per-action status copy — never claims a send/connection that didn't happen. */
 function actionStatus(action, consent, recorded) {
   const entry = recorded.find(c => c.actionId === action.id)
@@ -54,6 +76,11 @@ export default function Connections() {
 
   const consent = session.smokeCraft?.networkingConsent || {}
   const recorded = session.smokeCraft?.passportConnections || []
+
+  // Phase 13 reads the Phase 12 stamp payload — it already aggregates the
+  // full Phase 0-12 journey, so nothing here is re-derived or renamed.
+  const latestStamp = (session.smokecraftStamps || []).find(s => s.id === 'passport-stamp') || null
+  const networkingStatus = session.smokeCraft?.networkingStatus || 'not_started'
 
   function toggleConsent(fieldId) {
     triggerHaptic('light')
@@ -141,6 +168,70 @@ export default function Connections() {
             </div>
           )}
         </div>
+
+        {/* Phase 13 — Passport Connections summary, built from the Phase 12 stamp
+            payload (which itself aggregates the preserved Phase 0-11 fields).
+            Nothing here is fabricated; every row falls back to "Not recorded yet". */}
+        <section className="mb-10 rounded-2xl border border-primary/20 bg-primary/5 px-6 py-6">
+          <p className="font-label-sm text-label-sm text-primary/70 uppercase tracking-widest mb-5">Your SmokeCraft 360 Journey</p>
+
+          <p className="font-label-sm text-label-sm text-primary/50 uppercase tracking-widest mb-3" style={{ fontSize: 10 }}>Cigar Identity</p>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mb-6" style={{ fontSize: 14 }}>
+            <DetailRow label="Cigar" value={latestStamp?.cigarName} />
+            <DetailRow label="Country / Origin" value={latestStamp?.cigarCountry} />
+          </dl>
+
+          <p className="font-label-sm text-label-sm text-primary/50 uppercase tracking-widest mb-3" style={{ fontSize: 10 }}>Mentor</p>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mb-6" style={{ fontSize: 14 }}>
+            <DetailRow label="Mentor(s)" value={latestStamp?.mentorNames?.length ? latestStamp.mentorNames.join(', ') : null} />
+          </dl>
+
+          <p className="font-label-sm text-label-sm text-primary/50 uppercase tracking-widest mb-3" style={{ fontSize: 10 }}>Tasting Profile</p>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mb-6" style={{ fontSize: 14 }}>
+            <DetailRow label="First Third Notes" value={latestStamp?.firstThirdNotes} />
+            <DetailRow label="Second Third Notes" value={latestStamp?.secondThirdNotes} />
+            <DetailRow label="Final Third Notes" value={latestStamp?.finalThirdNotes} />
+            <DetailRow label="Pairing Reaction" value={latestStamp?.pairingReaction} />
+          </dl>
+
+          <p className="font-label-sm text-label-sm text-primary/50 uppercase tracking-widest mb-3" style={{ fontSize: 10 }}>Strength / Body Profile</p>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mb-6" style={{ fontSize: 14 }}>
+            <DetailRow label="Strength Progression" value={latestStamp?.strengthProgression} />
+            <DetailRow label="Body Progression" value={latestStamp?.bodyProgression} />
+          </dl>
+
+          <p className="font-label-sm text-label-sm text-primary/50 uppercase tracking-widest mb-3" style={{ fontSize: 10 }}>Final Outcome</p>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mb-6" style={{ fontSize: 14 }}>
+            <DetailRow label="Final Rating" value={latestStamp?.finalRating != null ? `${latestStamp.finalRating} / 5` : null} />
+            <DetailRow label="Would Smoke Again" value={latestStamp?.wouldSmokeAgain} />
+          </dl>
+
+          <p className="font-label-sm text-label-sm text-primary/50 uppercase tracking-widest mb-3" style={{ fontSize: 10 }}>Score, Ranking & Badges</p>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mb-6" style={{ fontSize: 14 }}>
+            <DetailRow label="Score" value={latestStamp?.score != null ? `${latestStamp.score}${latestStamp.maxScore != null ? ` / ${latestStamp.maxScore}` : ''} pts` : null} />
+            <DetailRow label="Ranking" value={latestStamp?.rankingLevel} />
+            <DetailRow label="Badge" value={latestStamp?.badgeEarned} />
+            <DetailRow label="All Badges" value={latestStamp?.badgesEarned?.length ? latestStamp.badgesEarned.join(', ') : null} />
+          </dl>
+
+          <p className="font-label-sm text-label-sm text-primary/50 uppercase tracking-widest mb-3" style={{ fontSize: 10 }}>Passport Stamp Summary</p>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mb-6" style={{ fontSize: 14 }}>
+            <DetailRow label="Venue" value={latestStamp?.venue} />
+            <DetailRow label="Event" value={latestStamp?.eventName} />
+            <DetailRow label="Date Certified" value={latestStamp?.date ? new Date(latestStamp.date).toLocaleDateString() : null} />
+            <DetailRow
+              label="Networking Status"
+              value={NETWORKING_STATUS_LABELS[networkingStatus] || networkingStatus}
+            />
+          </dl>
+
+          <p className="font-label-sm text-label-sm text-primary/50 uppercase tracking-widest mb-3" style={{ fontSize: 10 }}>Future Connections</p>
+          <p className="font-body-sm text-body-sm text-on-surface-variant/70" style={{ maxWidth: 560 }}>
+            Member, cigar, and mentor connections from this session will appear here once the
+            360 member network is live. Backend pending — no member directory or matching
+            service exists yet.
+          </p>
+        </section>
 
         <div className="flex flex-col gap-3 mb-12">
           {ACTIONS.map(a => {
