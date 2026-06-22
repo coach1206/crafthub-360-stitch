@@ -7,6 +7,7 @@ import { completeCommand, receiveCommand } from '../../services/shared/opsContro
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getSmokePOSHandoff, markSmokePurchaseVerified, markSmokePurchaseRejected, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 import { loadSmokePurchaseIntents, getSmokeSharedStorageMode, buildSmokeStorageStatusFields } from '../../services/smokecraft/smokeSharedStorageService.js'
+import SmokeBackendReadinessPanel from '../../components/smokecraft/SmokeBackendReadinessPanel.jsx'
 
 /** POS3 receiver hook — watches the shared bus for events/commands targeting POS3. */
 export function usePos3Incoming() {
@@ -64,6 +65,7 @@ export default function POS3Home() {
           eventLog: [...existingLog,
             { type, timestamp: Date.now(), payload: { intentId: handoff.intentId } },
             { type: 'SMOKECRAFT_PURCHASE_VERIFICATION_SHARED_UPDATE_ATTEMPTED', timestamp: Date.now(), payload: { intentId: handoff.intentId, result: handoff.syncResult?.status } },
+            { type: 'SMOKECRAFT_REMOTE_PURCHASE_VERIFICATION_ATTEMPTED', timestamp: Date.now(), payload: { intentId: handoff.intentId } },
           ].slice(-50),
         },
       }
@@ -120,6 +122,9 @@ export default function POS3Home() {
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
                 <Pill label={'storage: ' + storageMode.mode.replaceAll('_', ' ')} tone={storageMode.backendConnected ? 'open' : 'pending'} />
                 <Pill label={queueIsShared ? 'shared queue' : 'local-only queue'} tone={queueIsShared ? 'open' : 'pending'} />
+              </div>
+              <div style={{ marginBottom: 10 }}>
+                <SmokeBackendReadinessPanel compact />
               </div>
               {!posHandoff.intentId ? (
                 <div style={{ fontSize: 13, color: '#8b95a3', padding: '8px 0' }}>No SmokeCraft purchase intent created yet.</div>

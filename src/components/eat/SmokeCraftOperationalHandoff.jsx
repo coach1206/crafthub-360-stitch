@@ -9,6 +9,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { Card, Pill } from './ui.jsx'
 import { getSmokeEATHandoffSummary, getSmokeInventoryImpactPreview, getSmokePOSHandoff } from '../../services/smokecraft/smokePOSHandoffService.js'
 import { getSmokeSharedStorageMode, loadSmokeEATHandoffs, saveSmokeEATHandoff } from '../../services/smokecraft/smokeSharedStorageService.js'
+import SmokeBackendReadinessPanel from '../smokecraft/SmokeBackendReadinessPanel.jsx'
 
 export default function SmokeCraftOperationalHandoff() {
   const { session, update } = useGuestSession()
@@ -32,7 +33,10 @@ export default function SmokeCraftOperationalHandoff() {
         ...prev,
         smokeCraft: {
           ...prev.smokeCraft,
-          eventLog: [...existingLog, { type: 'SMOKECRAFT_EAT_HANDOFF_SHARED_SAVE_ATTEMPTED', timestamp: Date.now() }].slice(-50),
+          eventLog: [...existingLog,
+            { type: 'SMOKECRAFT_EAT_HANDOFF_SHARED_SAVE_ATTEMPTED', timestamp: Date.now() },
+            { type: 'SMOKECRAFT_REMOTE_EAT_HANDOFF_LOAD_ATTEMPTED', timestamp: Date.now() },
+          ].slice(-50),
         },
       }
     })
@@ -85,7 +89,9 @@ export default function SmokeCraftOperationalHandoff() {
       <div style={{ fontSize: 12, color: '#8b95a3', marginBottom: 6 }}>Inventory impact preview</div>
       <div style={{ fontSize: 13, marginBottom: 12 }}>{inventory.reason}</div>
 
-      <div style={{ fontSize: 12, color: '#8b95a3' }}>Management note: this panel reflects only the current browser's guest session. A venue-wide SmokeCraft operational view requires a backend or shared event store.</div>
+      <div style={{ fontSize: 12, color: '#8b95a3', marginBottom: 12 }}>Management note: this panel reflects only the current browser's guest session. A venue-wide SmokeCraft operational view requires a backend or shared event store.</div>
+
+      <SmokeBackendReadinessPanel compact />
     </Card>
   )
 }

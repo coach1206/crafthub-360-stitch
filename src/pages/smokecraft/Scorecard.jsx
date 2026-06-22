@@ -9,6 +9,7 @@ import { calculateWinnerEligibility, assignWinnerCategory, getPendingWinnerCateg
 import { StoreIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 import { getSmokePOSHandoff, createSmokePurchaseIntent, getSmokePurchaseRewardStatus, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 import { checkSmokeBackendConnectivity, getSmokeSharedStorageMode, buildSmokeStorageStatusFields, saveSmokeSessionSnapshot } from '../../services/smokecraft/smokeSharedStorageService.js'
+import SmokeBackendReadinessPanel from '../../components/smokecraft/SmokeBackendReadinessPanel.jsx'
 
 const CATEGORIES = [
   { id:'appearance',   label:'Appearance',   desc:'Wrapper color, sheen, seam quality' },
@@ -38,7 +39,11 @@ export default function Scorecard() {
           smokeCraft: {
             ...prev.smokeCraft,
             ...fields,
-            eventLog: [...existingLog, { type: 'SMOKECRAFT_SHARED_STORAGE_STATUS_CHECKED', timestamp: Date.now() }].slice(-50),
+            eventLog: [...existingLog,
+              { type: 'SMOKECRAFT_SHARED_STORAGE_STATUS_CHECKED', timestamp: Date.now() },
+              { type: 'SMOKECRAFT_BACKEND_API_CONFIG_CHECKED', timestamp: Date.now() },
+              { type: 'SMOKECRAFT_BACKEND_SCHEMA_FOUNDATION_VIEWED', timestamp: Date.now() },
+            ].slice(-50),
           },
         }
       })
@@ -58,7 +63,10 @@ export default function Scorecard() {
         ...prev,
         smokeCraft: {
           ...prev.smokeCraft,
-          eventLog: [...existingLog, { type: 'SMOKECRAFT_SESSION_SNAPSHOT_SAVE_ATTEMPTED', timestamp: Date.now(), payload: { result: result?.status } }].slice(-50),
+          eventLog: [...existingLog,
+            { type: 'SMOKECRAFT_SESSION_SNAPSHOT_SAVE_ATTEMPTED', timestamp: Date.now(), payload: { result: result?.status } },
+            { type: 'SMOKECRAFT_REMOTE_SESSION_SAVE_ATTEMPTED', timestamp: Date.now() },
+          ].slice(-50),
         },
       }
     })
@@ -210,6 +218,10 @@ export default function Scorecard() {
             {!storageMode.backendConnected && (
               <p className="font-body-sm text-body-sm" style={{ color: '#e9c176' }}>Local fallback active. Shared venue storage pending.</p>
             )}
+          </div>
+
+          <div className="mb-4">
+            <SmokeBackendReadinessPanel compact />
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">

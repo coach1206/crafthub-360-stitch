@@ -9,12 +9,41 @@
  */
 
 import { apiGet } from '../apiClient.js'
+import {
+  createSmokeSessionRemote,
+  createSmokePurchaseIntentRemote,
+  getSmokePurchaseIntentsRemote,
+  updateSmokePurchaseIntentRemote,
+  getSmokeEATHandoffsRemote,
+  createSmokeLeaderboardEntryRemote,
+  getSmokeLeaderboardEntriesRemote,
+} from './smokeBackendApiClient.js'
 
 const LOCAL_KEYS = {
   snapshots:   'novee_smoke_shared_session_snapshots',
   intents:     'novee_smoke_shared_purchase_intents',
   eatHandoffs: 'novee_smoke_shared_eat_handoffs',
   leaderboard: 'novee_smoke_shared_leaderboard_entries',
+}
+
+/**
+ * Last-known outcome of each remote attempt, keyed by operation. These calls
+ * are fired in the background (never awaited by the sync local-storage API
+ * below) so reads/writes never block on a backend that doesn't expose these
+ * endpoints yet. Read via getSmokeRemoteSyncCache() for UI display only —
+ * never treated as proof that shared storage is active.
+ */
+const remoteSyncCache = {}
+
+function attemptRemoteSync(key, remoteCallPromise) {
+  remoteCallPromise
+    .then((res) => { remoteSyncCache[key] = { ...res, attemptedAt: Date.now() } })
+    .catch((err) => { remoteSyncCache[key] = { ok: false, status: 'failed', error: err?.message || 'Remote sync attempt failed', attemptedAt: Date.now() } })
+}
+
+/** Last-known remote sync outcome per operation — informational only, never authoritative for storage mode. */
+export function getSmokeRemoteSyncCache() {
+  return remoteSyncCache
 }
 
 let cachedBackendStatus = {
@@ -83,6 +112,7 @@ export function saveSmokeSessionSnapshot(session) {
   const all = readLocal(LOCAL_KEYS.snapshots) || {}
   all[sessionId] = { smokeCraft: session?.smokeCraft || null, savedAt: Date.now() }
   const ok = writeLocal(LOCAL_KEYS.snapshots, all)
+  attemptRemoteSync('session', createSmokeSessionRemote({ sessionId, ...session?.smokeCraft }))
   return ok
     ? { status: 'local_fallback', reason: 'Session snapshot saved to local fallback storage — not yet synced to a shared backend.' }
     : { status: 'failed', reason: 'Local storage write failed.' }
@@ -102,6 +132,7 @@ export function saveSmokePurchaseIntent(session, intent) {
   if (idx >= 0) list[idx] = record
   else list.push(record)
   const ok = writeLocal(LOCAL_KEYS.intents, list)
+  attemptRemoteSync('purchaseIntent', createSmokePurchaseIntentRemote(record))
   return ok
     ? { status: 'local_fallback', reason: 'Purchase intent saved to local fallback — shared venue storage pending backend implementation.' }
     : { status: 'failed', reason: 'Local storage write failed.' }
@@ -109,6 +140,7 @@ export function saveSmokePurchaseIntent(session, intent) {
 
 export function loadSmokePurchaseIntents() {
   const list = readLocal(LOCAL_KEYS.intents) || []
+  attemptRemoteSync('purchaseIntentsList', getSmokePurchaseIntentsRemote())
   return { status: 'local_fallback', data: list, reason: 'Loaded from local fallback storage — only intents created on this browser are visible.' }
 }
 
@@ -118,6 +150,7 @@ export function updateSmokePurchaseVerification(intentId, verificationPayload = 
   if (idx < 0) return { status: 'failed', reason: 'No matching local purchase intent found.' }
   list[idx] = { ...list[idx], ...verificationPayload, updatedAt: Date.now() }
   const ok = writeLocal(LOCAL_KEYS.intents, list)
+  attemptRemoteSync('purchaseVerification', updateSmokePurchaseIntentRemote(intentId, verificationPayload))
   return ok
     ? { status: 'local_fallback', reason: 'Verification update saved to local fallback only — not yet visible to other devices.' }
     : { status: 'failed', reason: 'Local storage write failed.' }
@@ -135,6 +168,7 @@ export function saveSmokeEATHandoff(session, handoff) {
 
 export function loadSmokeEATHandoffs() {
   const all = readLocal(LOCAL_KEYS.eatHandoffs) || {}
+  attemptRemoteSync('eatHandoffs', getSmokeEATHandoffsRemote())
   return { status: 'local_fallback', data: Object.values(all), reason: 'Loaded from local fallback storage only.' }
 }
 
@@ -143,6 +177,7 @@ export function saveSmokeLeaderboardEntry(session, leaderboardEntry) {
   const all = readLocal(LOCAL_KEYS.leaderboard) || {}
   all[sessionId] = { ...leaderboardEntry, savedAt: Date.now() }
   const ok = writeLocal(LOCAL_KEYS.leaderboard, all)
+  attemptRemoteSync('leaderboard', createSmokeLeaderboardEntryRemote({ sessionId, ...leaderboardEntry }))
   return ok
     ? { status: 'local_fallback', reason: 'Leaderboard entry saved to local fallback — a real community leaderboard requires shared backend storage.' }
     : { status: 'failed', reason: 'Local storage write failed.' }
@@ -150,6 +185,7 @@ export function saveSmokeLeaderboardEntry(session, leaderboardEntry) {
 
 export function loadSmokeLeaderboardEntries() {
   const all = readLocal(LOCAL_KEYS.leaderboard) || {}
+  attemptRemoteSync('leaderboardList', getSmokeLeaderboardEntriesRemote())
   return { status: 'local_fallback', data: Object.values(all), reason: 'Loaded from local fallback storage only — not a real shared/community leaderboard yet.' }
 }
 

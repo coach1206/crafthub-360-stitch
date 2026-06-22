@@ -6,6 +6,7 @@ import { getCurrentPlayerSnapshot } from '../../services/smokecraft/smokeLeaderb
 import { getTopEligibleCategory } from '../../services/smokecraft/smokeWinnerService.js'
 import { getSmokePOSHandoff, createSmokePurchaseIntent, getSmokePurchaseRewardStatus, getSmokeEATHandoffSummary, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 import { checkSmokeBackendConnectivity, getSmokeSharedStorageMode, buildSmokeStorageStatusFields } from '../../services/smokecraft/smokeSharedStorageService.js'
+import SmokeBackendReadinessPanel from '../../components/smokecraft/SmokeBackendReadinessPanel.jsx'
 
 export default function EventChallenge() {
   const navigate = useNavigate()
@@ -41,7 +42,10 @@ export default function EventChallenge() {
           smokeCraft: {
             ...prev.smokeCraft,
             ...fields,
-            eventLog: [...existingLog, { type: 'SMOKECRAFT_SHARED_STORAGE_STATUS_CHECKED', timestamp: Date.now() }].slice(-50),
+            eventLog: [...existingLog,
+              { type: 'SMOKECRAFT_SHARED_STORAGE_STATUS_CHECKED', timestamp: Date.now() },
+              { type: 'SMOKECRAFT_BACKEND_API_CONFIG_CHECKED', timestamp: Date.now() },
+            ].slice(-50),
           },
         }
       })
@@ -79,6 +83,7 @@ export default function EventChallenge() {
           eventLog: [...existingLog,
             { type: 'SMOKECRAFT_POS_PURCHASE_INTENT_CREATED', timestamp: Date.now(), payload: { intentId: handoff.intentId } },
             { type: 'SMOKECRAFT_PURCHASE_INTENT_SHARED_SAVE_ATTEMPTED', timestamp: Date.now(), payload: { intentId: handoff.intentId, result: handoff.syncResult?.status } },
+            { type: 'SMOKECRAFT_REMOTE_PURCHASE_INTENT_SAVE_ATTEMPTED', timestamp: Date.now(), payload: { intentId: handoff.intentId } },
           ].slice(-50),
         },
       }
@@ -204,6 +209,10 @@ export default function EventChallenge() {
             {!storageMode.backendConnected && (
               <p className="font-body-sm text-body-sm" style={{ color: '#e9c176' }}>Local fallback only. Other devices will not see this until backend storage is connected.</p>
             )}
+          </div>
+
+          <div className="mb-4">
+            <SmokeBackendReadinessPanel compact />
           </div>
 
           <button onClick={handleCreatePurchaseIntent} disabled={Boolean(posHandoff.intentId)}
