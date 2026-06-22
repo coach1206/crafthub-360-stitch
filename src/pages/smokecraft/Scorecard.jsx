@@ -96,6 +96,16 @@ export default function Scorecard() {
 
         <WinnerCriteriaPanel session={session} />
 
+        <button onClick={() => navigate('/smokecraft/event-challenge')}
+          className="w-full flex items-center justify-between gap-3 text-left rounded-2xl border border-primary/30 hover:bg-primary/5 active:scale-[0.99] transition-all duration-300 mb-8"
+          style={{ padding:'16px 20px', background:'rgba(233,193,118,0.04)' }}>
+          <span>
+            <span className="block font-label-lg text-label-lg text-primary uppercase tracking-widest mb-1">Event Challenge</span>
+            <span className="block font-body-sm text-body-sm text-on-surface-variant">View your active challenge status, winner category progress, and event log.</span>
+          </span>
+          <ArrowForwardIcon size={20} />
+        </button>
+
         <div className="rounded-2xl border border-outline-variant/30 p-6 mb-8" style={{ background:'rgba(233,193,118,0.04)' }}>
           <div className="flex justify-between items-center mb-2">
             <span className="font-label-lg text-label-lg text-primary uppercase tracking-widest">Total Score</span>

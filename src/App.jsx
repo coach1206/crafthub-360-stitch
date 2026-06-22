@@ -80,6 +80,7 @@ import FirstThird       from './pages/smokecraft/FirstThird.jsx'
 import SecondThird      from './pages/smokecraft/SecondThird.jsx'
 import FinalThird       from './pages/smokecraft/FinalThird.jsx'
 import Scorecard        from './pages/smokecraft/Scorecard.jsx'
+import EventChallenge   from './pages/smokecraft/EventChallenge.jsx'
 import Connections      from './pages/smokecraft/Connections.jsx'
 import ManagementSync   from './pages/smokecraft/ManagementSync.jsx'
 
@@ -268,6 +269,7 @@ export default function App() {
                 <Route path="second-third"     element={<SecondThird />} />
                 <Route path="final-third"      element={<FinalThird />} />
                 <Route path="scorecard"        element={<Scorecard />} />
+                <Route path="event-challenge"  element={<EventChallenge />} />
                 <Route path="connections"      element={<Connections />} />
                 <Route path="management-sync"  element={<ManagementSync />} />
               </Route>

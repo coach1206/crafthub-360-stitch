@@ -9,6 +9,7 @@ import {
 } from '../../utils/rankingQrPayloads.js'
 import TicketTicker from '../../components/common/TicketTicker.jsx'
 import { SmokeCraftBottomNav } from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import { getLeaderboardSnapshot } from '../../services/smokecraft/smokeLeaderboardService.js'
 
 /* ─── palette ─── */
 const G = '#C9A84C', GL = '#E8D5A3', GD = '#8A7030'
@@ -373,7 +374,26 @@ function Toast({ message, visible }) {
 ═══════════════════════════════════════════════ */
 export default function Leaderboard() {
   const navigate = useNavigate()
-  const { addXP, completeStep } = useGuestSession()
+  const { session, addXP, completeStep, update } = useGuestSession()
+  const loggedRef = useRef(false)
+
+  useEffect(() => {
+    if (loggedRef.current) return
+    loggedRef.current = true
+    update(prev => {
+      const existingLog = prev.smokeCraft?.eventLog || []
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          eventLog: [...existingLog, { type: 'SMOKECRAFT_LEADERBOARD_VIEWED', timestamp: Date.now() }].slice(-50),
+        },
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const snapshot = getLeaderboardSnapshot(session)
 
   const [board,    setBoard]    = useState([])
   const [activity, setActivity] = useState([])
@@ -501,6 +521,43 @@ export default function Leaderboard() {
 
       {/* ── main content — 2-column grid ── */}
       <main className="smokecraft-ranking-main" style={{ position: 'relative', zIndex: 10, paddingTop: 96, paddingBottom: 148 }}>
+        {/* ── Your SmokeCraft Session — real session data, separate from the demo board below ── */}
+        <div style={{ maxWidth: 1100, margin: '0 auto 18px', padding: '0 16px' }}>
+          <div style={{ borderRadius: 16, border: `1px solid ${BORDERHI}`, background: 'linear-gradient(160deg,rgba(201,168,76,0.08),rgba(8,5,2,0.7))', padding: '18px 20px' }}>
+            <div style={{ fontSize: 10, color: G, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 10 }}>Your SmokeCraft Session (Real Data)</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 10, marginBottom: 12 }}>
+              <div>
+                <div style={{ fontSize: 10, color: TEXTM, textTransform: 'uppercase', letterSpacing: '0.1em' }}>XP / Rank</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: snapshot.currentPlayer.rankColor }}>{snapshot.currentPlayer.xp} · {snapshot.currentPlayer.rank}</div>
+              </div>
+              <div>
+                <div style={{ fontSize: 10, color: TEXTM, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Protocol Steps</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: GL }}>{snapshot.currentPlayer.completedSteps} / 17</div>
+              </div>
+              <div>
+                <div style={{ fontSize: 10, color: TEXTM, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Final Score</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: GL }}>{snapshot.currentPlayer.finalScore}</div>
+              </div>
+              <div>
+                <div style={{ fontSize: 10, color: TEXTM, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Status</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: GL }}>{snapshot.currentPlayer.challengeStatus}</div>
+              </div>
+            </div>
+            <div style={{ fontSize: 11, color: TEXTM, marginBottom: 4 }}>
+              {snapshot.currentPlayer.earnedWinnerCategories.length > 0 ? (
+                <span>Winner categories earned: {snapshot.currentPlayer.earnedWinnerCategories.join(', ')}</span>
+              ) : (
+                <span>Winner categories: Not Yet Earned — Pending Real Scoring Data</span>
+              )}
+            </div>
+            <div style={{ fontSize: 11, color: TEXTD }}>{snapshot.communityMessage}</div>
+            <button onClick={() => navigate('/smokecraft/event-challenge')}
+              style={{ marginTop: 12, minHeight: 38, padding: '8px 14px', borderRadius: 10, border: `1px solid ${G}66`, background: `${G}1f`, color: G, cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>
+              View Event Challenge
+            </button>
+          </div>
+        </div>
+
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
