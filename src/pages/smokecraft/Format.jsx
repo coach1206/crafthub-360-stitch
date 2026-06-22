@@ -5,6 +5,7 @@ import {
   SmokeCraftBottomNav,
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import CigarIntelligencePanel from '../../components/smokecraft/CigarIntelligencePanel.jsx'
 
 // CIGAR PHOTO VISUAL SYSTEM.
 // Each format's final customer-facing visual must come from a dedicated product photo at
@@ -1003,6 +1004,8 @@ export default function Format() {
               The shape and size of a cigar shape everything — from how it draws and burns, to the body it delivers and
               the rhythm of your experience. Explore the most iconic formats and find the one that matches your moment.
             </p>
+
+            <CigarIntelligencePanel activeRingGauge={insightFormat.ringGauge} />
 
             <div className="format-card-grid" aria-label="Cigar format choices">
               {FORMATS.map((format, index) => {
