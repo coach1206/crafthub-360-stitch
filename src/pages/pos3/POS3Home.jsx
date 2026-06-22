@@ -4,6 +4,8 @@ import { Shell, SideNav, TopBar, Card, Pill, KpiCard, Btn, GOLD, PANEL2 } from '
 import { getTables, getTickets, ticketTotals } from '../../services/pos3/pos3Service.js'
 import { subscribe, eventsFor } from '../../services/shared/opsEventBus.js'
 import { completeCommand, receiveCommand } from '../../services/shared/opsControlBridge.js'
+import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { getSmokePOSHandoff, markSmokePurchaseVerified, markSmokePurchaseRejected, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 
 /** POS3 receiver hook — watches the shared bus for events/commands targeting POS3. */
 export function usePos3Incoming() {
@@ -26,9 +28,11 @@ export default function POS3Home() {
   const tables = getTables()
   const tickets = getTickets().filter((t) => t.status !== 'paid')
   const [incoming, refresh] = usePos3Incoming()
+  const { session, update } = useGuestSession()
 
   const openTickets = tickets.length
   const occupied = tables.filter((t) => t.status === 'occupied').length
+  const posHandoff = getSmokePOSHandoff(session)
 
   function markReceived(ev) {
     receiveCommand(ev.id)
@@ -38,6 +42,31 @@ export default function POS3Home() {
   function markCompleted(ev) {
     completeCommand(ev.id)
     refresh()
+  }
+
+  function logPosEvent(type, handoff) {
+    update(prev => {
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const derived = getDerivedPurchaseState({ ...prev, smokeCraft: { ...prev.smokeCraft, posHandoff: handoff } })
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          posHandoff: handoff,
+          purchaseRewards: derived.purchaseRewards,
+          eatHandoff: derived.eatHandoff,
+          eventLog: [...existingLog, { type, timestamp: Date.now(), payload: { intentId: handoff.intentId } }].slice(-50),
+        },
+      }
+    })
+  }
+
+  function verifySmokeCraftPurchase() {
+    logPosEvent('SMOKECRAFT_POS_PURCHASE_VERIFIED', markSmokePurchaseVerified(session, {}))
+  }
+
+  function rejectSmokeCraftPurchase() {
+    logPosEvent('SMOKECRAFT_POS_PURCHASE_REJECTED', markSmokePurchaseRejected(session, {}))
   }
 
   return (
@@ -73,6 +102,35 @@ export default function POS3Home() {
                 ))}
               </Card>
             )}
+
+            <Card style={{ marginBottom: 20 }}>
+              <div style={{ fontWeight: 700, marginBottom: 10 }}>SmokeCraft Purchase Queue</div>
+              <div style={{ fontSize: 11, color: '#8b95a3', marginBottom: 10 }}>
+                Local/session-only — a real venue-wide queue requires a backend or shared event store. Showing the current guest session's handoff state.
+              </div>
+              {!posHandoff.intentId ? (
+                <div style={{ fontSize: 13, color: '#8b95a3', padding: '8px 0' }}>No SmokeCraft purchase intent created yet.</div>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 600 }}>{posHandoff.intentId}</div>
+                    <div style={{ fontSize: 12, color: '#8b95a3', margin: '4px 0' }}>Product: {posHandoff.product || 'Not specified'}</div>
+                    <span style={{ display: 'inline-flex', gap: 6 }}>
+                      <Pill label={posHandoff.status} tone={posHandoff.status === 'verified' ? 'open' : posHandoff.status === 'rejected' ? 'critical' : 'pending'} />
+                      <Pill label={'verification: ' + posHandoff.verificationStatus} tone={posHandoff.verificationStatus === 'verified' ? 'open' : posHandoff.verificationStatus === 'rejected' ? 'critical' : 'pending'} />
+                    </span>
+                  </div>
+                  {posHandoff.status !== 'verified' && posHandoff.status !== 'rejected' ? (
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <Btn tone="green" onClick={verifySmokeCraftPurchase} style={{ padding: '8px 14px' }}>Mark Verified</Btn>
+                      <Btn tone="red" onClick={rejectSmokeCraftPurchase} style={{ padding: '8px 14px' }}>Reject</Btn>
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 12, color: '#8b95a3' }}>Needs POS Verification: No</div>
+                  )}
+                </div>
+              )}
+            </Card>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
               <Card>

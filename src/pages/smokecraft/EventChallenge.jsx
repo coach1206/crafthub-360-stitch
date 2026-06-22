@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { CrownIcon, ArrowBackIcon, EventIcon, InsightsIcon } from '../../components/smokecraft/PremiumIcons.jsx'
+import { CrownIcon, ArrowBackIcon, EventIcon, InsightsIcon, StoreIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 import { getCurrentPlayerSnapshot } from '../../services/smokecraft/smokeLeaderboardService.js'
 import { getTopEligibleCategory } from '../../services/smokecraft/smokeWinnerService.js'
+import { getSmokePOSHandoff, createSmokePurchaseIntent, getSmokePurchaseRewardStatus, getSmokeEATHandoffSummary, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 
 export default function EventChallenge() {
   const navigate = useNavigate()
@@ -31,6 +32,29 @@ export default function EventChallenge() {
   const goldenBoxAccepted = Boolean(session?.smokeCraft?.goldenBox?.accepted)
   const eventLog = (session?.smokeCraft?.eventLog || []).slice(-5).reverse()
   const identity = session?.profile?.nickname || session?.guestName || null
+
+  const posHandoff = getSmokePOSHandoff(session)
+  const purchaseReward = getSmokePurchaseRewardStatus(session)
+  const eatSummary = getSmokeEATHandoffSummary(session)
+
+  function handleCreatePurchaseIntent() {
+    if (posHandoff.intentId) return
+    const handoff = createSmokePurchaseIntent(session, {})
+    update(prev => {
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const derived = getDerivedPurchaseState({ ...prev, smokeCraft: { ...prev.smokeCraft, posHandoff: handoff } })
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          posHandoff: handoff,
+          purchaseRewards: derived.purchaseRewards,
+          eatHandoff: derived.eatHandoff,
+          eventLog: [...existingLog, { type: 'SMOKECRAFT_POS_PURCHASE_INTENT_CREATED', timestamp: Date.now(), payload: { intentId: handoff.intentId } }].slice(-50),
+        },
+      }
+    })
+  }
 
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
@@ -108,6 +132,42 @@ export default function EventChallenge() {
               <p className="font-label-md text-label-md font-semibold text-on-surface-variant">Not Yet Earned — Pending Real Scoring Data</p>
             )}
           </div>
+        </section>
+
+        <section
+          className="rounded-2xl border mb-6"
+          style={{ padding: '20px 24px', background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)', borderColor: 'rgba(233,193,118,0.35)' }}
+          aria-label="Purchase Reward Handoff"
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <span className="flex items-center justify-center rounded-full shrink-0" style={{ width: 40, height: 40, background: 'rgba(233,193,118,0.15)', color: '#e9c176' }}>
+              <StoreIcon size={20} />
+            </span>
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em]">Purchase Reward Handoff</p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-3 mb-3">
+            <div className="rounded-xl border border-outline-variant/15" style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.025)' }}>
+              <p className="font-label-sm text-label-sm uppercase tracking-widest text-primary/70 mb-1">Purchase Status</p>
+              <p className="font-label-md text-label-md font-semibold text-on-surface">{posHandoff.status.replaceAll('_', ' ')}</p>
+            </div>
+            <div className="rounded-xl border border-outline-variant/15" style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.025)' }}>
+              <p className="font-label-sm text-label-sm uppercase tracking-widest text-primary/70 mb-1">Reward Earnable</p>
+              <p className="font-label-md text-label-md font-semibold" style={{ color: purchaseReward.eligible ? '#e9c176' : 'rgba(255,255,255,0.5)' }}>{purchaseReward.eligible ? 'Yes' : 'Not Yet'}</p>
+            </div>
+          </div>
+
+          <p className="font-body-sm text-body-sm text-on-surface-variant mb-2">{purchaseReward.reason}</p>
+          <p className="font-body-sm text-body-sm text-on-surface-variant mb-2">
+            {eatSummary.visibleToManagement ? 'E.A.T. can see this handoff.' : 'E.A.T. cannot see this handoff yet — no intent has been created.'}
+          </p>
+          <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">{eatSummary.backendRequiredReason}</p>
+
+          <button onClick={handleCreatePurchaseIntent} disabled={Boolean(posHandoff.intentId)}
+            className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40 w-full"
+            style={{ height: 56, background: 'linear-gradient(135deg,#e9c176,#c5a059)', color: '#131314' }}>
+            {posHandoff.intentId ? 'Purchase Intent Created' : 'Create Purchase Intent'}
+          </button>
         </section>
 
         <section

@@ -6,6 +6,7 @@ import StationHealthPanel from '../../components/eat/StationHealthPanel.jsx'
 import HumidorHealthPanel from '../../components/eat/HumidorHealthPanel.jsx'
 import KitchenBarLoadPanel from '../../components/eat/KitchenBarLoadPanel.jsx'
 import OperationsAlertPanel from '../../components/eat/OperationsAlertPanel.jsx'
+import SmokeCraftOperationalHandoff from '../../components/eat/SmokeCraftOperationalHandoff.jsx'
 
 export default function EATOperations() {
   const [snapshot, setSnapshot] = useState(() => getOperationsSnapshot())
@@ -20,6 +21,7 @@ export default function EATOperations() {
         <HumidorHealthPanel humidorHealth={snapshot.humidorHealth} />
         <KitchenBarLoadPanel inventoryHealth={snapshot.inventoryHealth} />
         <OperationsAlertPanel alerts={snapshot.alerts} />
+        <SmokeCraftOperationalHandoff />
       </div>
     </ManagementLayout>
   )

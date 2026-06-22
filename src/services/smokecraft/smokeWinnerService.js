@@ -137,11 +137,23 @@ function evalPerfectDrawAward(session) {
 
 function evalVenueFavorite(session) {
   const choice = sc(session).requestPurchaseChoice
+  const posHandoff = sc(session).posHandoff
   const purchaseProofScore = sc(session).purchaseProofScore
-  if (purchaseProofScore == null) {
-    return { currentProgress: choice ? 1 : 0, status: STATUS.PENDING, reason: 'Purchase proof pending', nextAction: choice ? 'Purchase proof scoring is a future phase' : 'Request or purchase a cigar to begin qualifying' }
+
+  // A verified POS3 purchase is required before this category can become
+  // eligible — intent_created/pending_pos_verification alone never qualify.
+  if (posHandoff?.verificationStatus !== 'verified') {
+    return {
+      currentProgress: choice ? 1 : 0,
+      status: STATUS.PENDING,
+      reason: posHandoff?.intentId ? 'Purchase reward pending POS3 verification.' : 'Purchase proof pending',
+      nextAction: choice ? 'Create a purchase intent and wait for POS3 verification' : 'Request or purchase a cigar to begin qualifying',
+    }
   }
-  return { currentProgress: purchaseProofScore, status: purchaseProofScore >= 75 ? STATUS.ELIGIBLE : STATUS.PARTIAL, reason: `Purchase proof score ${purchaseProofScore}`, nextAction: 'Verify purchase with POS3' }
+  if (purchaseProofScore == null) {
+    return { currentProgress: 1, status: STATUS.ELIGIBLE, reason: 'Purchase verified by POS3', nextAction: 'Finish the session to confirm this title' }
+  }
+  return { currentProgress: purchaseProofScore, status: purchaseProofScore >= 75 ? STATUS.ELIGIBLE : STATUS.PARTIAL, reason: `Purchase verified by POS3 — proof score ${purchaseProofScore}`, nextAction: 'Maintain this standing through the rest of the session' }
 }
 
 function evalDiscoveryChampion(session) {

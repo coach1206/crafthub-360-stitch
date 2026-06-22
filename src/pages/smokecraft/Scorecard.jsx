@@ -6,6 +6,8 @@ import { ArrowBackIcon, ArrowForwardIcon } from '../../components/smokecraft/Pre
 import AdvancedScorecardPanel from '../../components/smokecraft/AdvancedScorecardPanel.jsx'
 import WinnerCriteriaPanel from '../../components/smokecraft/WinnerCriteriaPanel.jsx'
 import { calculateWinnerEligibility, assignWinnerCategory, getPendingWinnerCategories, getLockedWinnerCategories, getWinnerProgress } from '../../services/smokecraft/smokeWinnerService.js'
+import { StoreIcon } from '../../components/smokecraft/PremiumIcons.jsx'
+import { getSmokePOSHandoff, createSmokePurchaseIntent, getSmokePurchaseRewardStatus, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 
 const CATEGORIES = [
   { id:'appearance',   label:'Appearance',   desc:'Wrapper color, sheen, seam quality' },
@@ -73,6 +75,29 @@ export default function Scorecard() {
     navigate('/smokecraft/passport-stamp')
   }
 
+  const posHandoff = getSmokePOSHandoff(session)
+  const purchaseReward = getSmokePurchaseRewardStatus(session)
+
+  function handleCreatePurchaseIntent() {
+    if (posHandoff.intentId) return
+    triggerHaptic('light')
+    const handoff = createSmokePurchaseIntent(session, {})
+    update(prev => {
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const derived = getDerivedPurchaseState({ ...prev, smokeCraft: { ...prev.smokeCraft, posHandoff: handoff } })
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          posHandoff: handoff,
+          purchaseRewards: derived.purchaseRewards,
+          eatHandoff: derived.eatHandoff,
+          eventLog: [...existingLog, { type: 'SMOKECRAFT_POS_PURCHASE_INTENT_CREATED', timestamp: Date.now(), payload: { intentId: handoff.intentId } }].slice(-50),
+        },
+      }
+    })
+  }
+
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
@@ -105,6 +130,53 @@ export default function Scorecard() {
           </span>
           <ArrowForwardIcon size={20} />
         </button>
+
+        <section className="rounded-2xl border border-outline-variant/30 mb-8" style={{ padding: '20px 24px', background: 'rgba(233,193,118,0.04)' }} aria-label="POS3 Purchase Rewards">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="flex items-center justify-center rounded-full shrink-0" style={{ width: 40, height: 40, background: 'rgba(233,193,118,0.15)', color: '#e9c176' }}>
+              <StoreIcon size={20} />
+            </span>
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em]">POS3 Purchase Rewards</p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-3 mb-4">
+            <div className="rounded-xl border border-outline-variant/15" style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.025)' }}>
+              <p className="font-label-sm text-label-sm uppercase tracking-widest text-primary/70 mb-1">Purchase Handoff Status</p>
+              <p className="font-label-md text-label-md font-semibold text-on-surface">{posHandoff.status.replaceAll('_', ' ')}</p>
+            </div>
+            <div className="rounded-xl border border-outline-variant/15" style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.025)' }}>
+              <p className="font-label-sm text-label-sm uppercase tracking-widest text-primary/70 mb-1">Reward Eligibility</p>
+              <p className="font-label-md text-label-md font-semibold" style={{ color: purchaseReward.eligible ? '#e9c176' : 'rgba(255,255,255,0.5)' }}>{purchaseReward.eligible ? 'Eligible' : 'Not Yet Eligible'}</p>
+            </div>
+          </div>
+
+          <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">{purchaseReward.reason}</p>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button onClick={handleCreatePurchaseIntent} disabled={Boolean(posHandoff.intentId)}
+              className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40"
+              style={{ height: 56, paddingInline: 24, background: 'linear-gradient(135deg,#e9c176,#c5a059)', color: '#131314' }}>
+              {posHandoff.intentId ? 'Purchase Intent Created' : 'Create Purchase Intent'}
+            </button>
+            <button onClick={() => navigate('/smokecraft/event-challenge')}
+              className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300"
+              style={{ height: 56, paddingInline: 24 }}>
+              View Event Challenge
+            </button>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 mt-3">
+            <button onClick={() => navigate('/pos3')}
+              className="flex items-center justify-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-[0.15em] rounded-xl border border-primary/15 hover:bg-primary/5 active:scale-95 transition-all duration-300"
+              style={{ height: 48, paddingInline: 20 }}>
+              Open POS3 (Staff Access)
+            </button>
+            <button onClick={() => navigate('/eat')}
+              className="flex items-center justify-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-[0.15em] rounded-xl border border-primary/15 hover:bg-primary/5 active:scale-95 transition-all duration-300"
+              style={{ height: 48, paddingInline: 20 }}>
+              Open E.A.T. Summary (Staff Access)
+            </button>
+          </div>
+        </section>
 
         <div className="rounded-2xl border border-outline-variant/30 p-6 mb-8" style={{ background:'rgba(233,193,118,0.04)' }}>
           <div className="flex justify-between items-center mb-2">
