@@ -147,6 +147,7 @@ export function TopBar({ system = 'EAT', title, subtitle }) {
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <Pill label="System Online" tone="open" />
+        <Pill label="Backend Pending — Local Data" tone="pending" />
         <span style={{ fontSize: 12, color: '#aab3bf' }}>Jordan Smith · Floor Supervisor</span>
         <EatBadge />
         <button
