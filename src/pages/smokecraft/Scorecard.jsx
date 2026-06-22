@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import { ArrowBackIcon, ArrowForwardIcon } from '../../components/smokecraft/PremiumIcons.jsx'
+import AdvancedScorecardPanel from '../../components/smokecraft/AdvancedScorecardPanel.jsx'
 
 const CATEGORIES = [
   { id:'appearance',   label:'Appearance',   desc:'Wrapper color, sheen, seam quality' },
@@ -13,7 +15,7 @@ const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
 export default function Scorecard() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { completeStep, addXP, session } = useGuestSession()
   const [scores, setScores] = useState({})
   const [done, setDone] = useState(false)
 
@@ -38,7 +40,7 @@ export default function Scorecard() {
         <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
-        <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/final-third')} aria-label="Back">arrow_back</button>
+        <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/final-third')} aria-label="Back"><ArrowBackIcon size={24} /></button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
@@ -49,6 +51,8 @@ export default function Scorecard() {
         </div>
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>SmokeCraft Scorecard</h2>
+
+        <AdvancedScorecardPanel session={session} />
 
         <div className="rounded-2xl border border-outline-variant/30 p-6 mb-8" style={{ background:'rgba(233,193,118,0.04)' }}>
           <div className="flex justify-between items-center mb-2">
@@ -85,12 +89,12 @@ export default function Scorecard() {
           <button onClick={handleContinue}
             className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
-            Passport Stamp <span className="material-symbols-outlined">arrow_forward</span>
+            Passport Stamp <ArrowForwardIcon size={20} />
           </button>
           <button onClick={() => navigate('/smokecraft/final-third')}
             className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300"
             style={{ height:64,paddingInline:32 }}>
-            <span className="material-symbols-outlined">arrow_back</span> Back
+            <ArrowBackIcon size={20} /> Back
           </button>
         </div>
       </main>
