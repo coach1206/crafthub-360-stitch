@@ -476,6 +476,38 @@ export function GuestSessionProvider({ children }) {
   }, [update])
 
   /**
+   * Records the guest's Second Third flavor-note and rating selections,
+   * mirroring setFirstThirdTasting. Status is "complete" only when at least
+   * one note was selected AND a rating was given, otherwise "partial".
+   */
+  const setSecondThirdTasting = useCallback((payload) => {
+    update(prev => {
+      const now = Date.now()
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const secondThird = { ...payload, timestamp: now }
+      const event = {
+        eventType:      'TASTING_RECORDED',
+        actionType:     'SECOND_THIRD',
+        notesSelected:  payload.notesSelected,
+        notesCount:     payload.notesCount,
+        rating:         payload.rating,
+        hasRating:      payload.hasRating,
+        status:         (payload.notesCount > 0 && payload.hasRating) ? 'complete' : 'partial',
+        timestamp:      now,
+      }
+
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          secondThird,
+          eventLog: [...existingLog, event].slice(-50),
+        },
+      }
+    })
+  }, [update])
+
+  /**
    * Records the guest's Final Third flavor-note and overall-rating selections,
    * mirroring setFirstThirdTasting. Status is "complete" only when at least
    * one note was selected AND an overall rating was given, otherwise "partial".
@@ -739,6 +771,7 @@ export function GuestSessionProvider({ children }) {
       setHumidorMatchSelection,
       setGoldenBoxAccepted,
       setFirstThirdTasting,
+      setSecondThirdTasting,
       setFinalThirdTasting,
       // Phase 6: Session completion
       completeSmokeCraftSession,
