@@ -58,8 +58,14 @@ export function calculatePassportXP(session) {
  * Awards a stamp by catalog ID. Returns an updated session object.
  * Safe: no duplicates, unknown IDs logged + ignored, missing arrays handled.
  * Sets `latestStampId` so ceremony pages know which stamp triggered the visit.
+ *
+ * `extra` (optional) carries the richer Phase 12 payload fields (venue, event,
+ * cigar, mentors, score, badge, pairing, networking status, etc.) so the
+ * stamp the guest actually earns is not just a catalog name/icon pair. Only
+ * fields the caller actually has are merged — nothing here fabricates a
+ * value that wasn't already present in session state.
  */
-export function awardPassportStamp(session, stampId, source = 'unknown') {
+export function awardPassportStamp(session, stampId, source = 'unknown', extra = {}) {
   if (!session) return session ?? {}
   const catalogEntry = STAMP_CATALOG.find(c => c.id === stampId)
   if (!catalogEntry) {
@@ -69,13 +75,24 @@ export function awardPassportStamp(session, stampId, source = 'unknown') {
     return session
   }
   const stamps = Array.isArray(session.smokecraftStamps) ? session.smokecraftStamps : []
-  if (stamps.some(s => s.id === stampId)) return session  // already earned — no-op
+  const existing = stamps.find(s => s.id === stampId)
+  if (existing) {
+    // Already earned — allow a later call (e.g. Scorecard data arriving after
+    // the initial award) to enrich the existing stamp, never to fake new ones.
+    const enriched = { ...existing, ...extra }
+    return {
+      ...session,
+      smokecraftStamps: stamps.map(s => (s.id === stampId ? enriched : s)),
+      latestStampId:    stampId,
+    }
+  }
   const newStamp = {
     id:       catalogEntry.id,
     name:     catalogEntry.name,
     icon:     catalogEntry.icon,
     source,
     earnedAt: Date.now(),
+    ...extra,
   }
   return {
     ...session,

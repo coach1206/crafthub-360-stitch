@@ -60,6 +60,26 @@ const SPINE = {
 
 const ROTATIONS = [-3, 8, -5, 12, -2, 6, -8, 4]
 
+const NETWORKING_STATUS_LABELS = {
+  not_started:        'Not started',
+  consent_required:   'Consent required',
+  ready_to_share:      'Ready to share',
+  shared_locally:      'Shared locally (demo only)',
+  connection_pending:  'Connection pending',
+  backend_pending:     'Backend pending',
+}
+
+function DetailRow({ label, value, pendingNote }) {
+  return (
+    <div>
+      <dt className="font-label-sm text-label-sm text-on-surface-variant/60 uppercase tracking-widest mb-1" style={{ fontSize: 10 }}>{label}</dt>
+      <dd className="font-body-md text-on-surface" style={{ opacity: value ? 1 : 0.45 }}>
+        {value || (pendingNote || 'Backend pending')}
+      </dd>
+    </div>
+  )
+}
+
 function StampCard({ stamp, index, delay }) {
   return (
     <div style={{
@@ -118,6 +138,51 @@ function EmptySlot({ label }) {
   )
 }
 
+/**
+ * Builds the Phase 12 stamp payload from data that already exists in
+ * session state. Fields with no real source are left null/empty rather
+ * than fabricated — this stamp is read by Phase 13 (Connections) and by
+ * the winner-eligibility service, so it must stay honest.
+ */
+function buildStampPayload(session) {
+  const mentors = Array.isArray(session.mentors) ? session.mentors : []
+  const format = session.smokeCraft?.selectedFormat || null
+  const scorecard = session.smokeCraft?.scorecard || null
+  const seedSoil = session.smokecraftSeedSoil || null
+  const latestBadge = session.badges?.[session.badges.length - 1] || null
+
+  return {
+    userId:               session.guestId || null,
+    guestId:              session.guestId || null,
+    smokeCraftSessionId:  session.sessionId || null,
+    smokeCraftPassportId: session.passport?.passportId || null,
+    userName:             session.profile?.firstName
+      ? `${session.profile.firstName} ${session.profile.lastName || ''}`.trim()
+      : (session.profile?.nickname || null),
+    venue:                session.venueId || null,
+    eventName:            session.passport?.eventName || 'The Grand Lounge',
+    date:                 new Date().toISOString(),
+    cigarName:            format?.name || null,
+    cigarCountry:         null, // Seed region only stores an id today, not country — see audit Phase 3 gap
+    cigarType:            format?.id || null,
+    wrapper:              null, // same Phase 3 limitation as cigarCountry
+    strength:             null,
+    burnTime:             format?.burnTime || null,
+    mentorNames:          mentors.map(m => m.name).filter(Boolean),
+    mentorIds:            mentors.map(m => m.id).filter(Boolean),
+    score:                scorecard?.total ?? null,
+    rankingLevel:         session.rank || null,
+    badgeEarned:          latestBadge?.label || null,
+    badgesEarned:         (session.badges || []).map(b => b.label).filter(Boolean),
+    pairingCompleted:     Boolean(seedSoil?.seedRegionId),
+    seedRegion:           seedSoil?.seedRegionId || null,
+    soilSelections:       seedSoil?.soil || null,
+    networkingStatus:     session.smokeCraft?.networkingStatus || 'not_started',
+    shareConsent:         session.smokeCraft?.networkingConsent || null,
+    createdAt:            Date.now(),
+  }
+}
+
 export default function PassportStamp() {
   const navigate = useNavigate()
   const { session, addXP, completeStep, awardStamp, addBadge } = useGuestSession()
@@ -132,11 +197,13 @@ export default function PassportStamp() {
     if (session.completedSteps.includes('passport-stamp')) return
     completeStep('passport-stamp')
     addXP(XP_AWARDS.PASSPORT_STAMP)
-    awardStamp('passport-stamp', 'passport-stamp')
+    awardStamp('passport-stamp', 'passport-stamp', buildStampPayload(session))
     addBadge({ id: 'passport-certified', label: 'Passport Certified', icon: 'menu_book' })
     triggerHaptic('success')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const latestStamp = (session.smokecraftStamps || []).find(s => s.id === 'passport-stamp') || null
 
   const stamps = session.smokecraftStamps ?? []
   const left  = stamps.slice(0, 2)
@@ -229,6 +296,35 @@ export default function PassportStamp() {
             )
           })()}
         </section>
+
+        {/* Stamp Detail Card — Phase 12 enriched payload */}
+        {latestStamp && (
+          <section
+            className="max-w-3xl mx-auto mb-16 rounded-2xl border border-primary/20 bg-primary/5 px-8 py-7"
+            style={{ opacity: revealed ? 1 : 0, transition: 'opacity 0.8s ease 0.3s' }}
+          >
+            <p className="font-label-sm text-label-sm text-primary/70 uppercase tracking-widest mb-5">Stamp Details</p>
+            <dl className="grid grid-cols-2 gap-x-8 gap-y-4" style={{ fontSize: 14 }}>
+              <DetailRow label="Venue" value={latestStamp.venue} />
+              <DetailRow label="Event" value={latestStamp.eventName} />
+              <DetailRow label="Date" value={latestStamp.date ? new Date(latestStamp.date).toLocaleDateString() : null} />
+              <DetailRow label="Cigar" value={latestStamp.cigarName} />
+              <DetailRow label="Cigar Country" value={latestStamp.cigarCountry} pendingNote="Backend pending — seed region detail not yet captured" />
+              <DetailRow label="Mentors" value={latestStamp.mentorNames?.length ? latestStamp.mentorNames.join(', ') : null} />
+              <DetailRow label="Score" value={latestStamp.score != null ? `${latestStamp.score} pts` : null} />
+              <DetailRow label="Badge / Ranking" value={[latestStamp.badgeEarned, latestStamp.rankingLevel].filter(Boolean).join(' — ') || null} />
+              <DetailRow label="Pairing Completed" value={latestStamp.pairingCompleted ? 'Yes' : 'Not yet'} />
+              <DetailRow
+                label="Networking Status"
+                value={NETWORKING_STATUS_LABELS[latestStamp.networkingStatus] || latestStamp.networkingStatus}
+              />
+              <DetailRow
+                label="Privacy / Share Status"
+                value={latestStamp.shareConsent && Object.values(latestStamp.shareConsent).some(Boolean) ? 'Shared by your choice' : 'Private — nothing shared yet'}
+              />
+            </dl>
+          </section>
+        )}
 
         {/* Passport Booklet */}
         <div

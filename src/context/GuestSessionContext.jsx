@@ -93,8 +93,8 @@ export function GuestSessionProvider({ children }) {
 
   // ── Passport stamps ───────────────────────────────────────────────────────
   /** Primary stamp award — validates against catalog, prevents duplicates, sets latestStampId. */
-  const awardStamp = useCallback((stampId, source = 'unknown') => {
-    update(prev => awardPassportStamp(prev, stampId, source))
+  const awardStamp = useCallback((stampId, source = 'unknown', extra = {}) => {
+    update(prev => awardPassportStamp(prev, stampId, source, extra))
   }, [update])
 
   /** @deprecated Use awardStamp(stampId, source). Kept for backward compat. */
@@ -652,6 +652,43 @@ export function GuestSessionProvider({ children }) {
     })
   }, [update])
 
+  // ── Phase 13: 360 Passport Connections / Networking consent ──────────────
+  /** Merges user-controlled sharing consent fields. Never auto-grants any field. */
+  const setNetworkingConsent = useCallback((fields) => {
+    update(prev => ({
+      ...prev,
+      smokeCraft: {
+        ...prev.smokeCraft,
+        networkingConsent: { ...prev.smokeCraft?.networkingConsent, ...fields },
+      },
+    }))
+  }, [update])
+
+  /**
+   * Records a single honest networking action outcome into
+   * smokeCraft.passportConnections — read by smokeWinnerService's
+   * "Passport Connector" eligibility check, closing the Phase 12→13
+   * gamification loop. Never writes a "shared"/"connected" status unless
+   * the corresponding consent was actually granted; no backend call is made
+   * or implied (no real SMS/email/connection happens here today).
+   */
+  const recordPassportConnectionAction = useCallback((actionId, status) => {
+    update(prev => {
+      const existing = prev.smokeCraft?.passportConnections || []
+      const next = existing.filter(c => c.actionId !== actionId)
+      next.push({ actionId, status, timestamp: Date.now() })
+      const anyShared = next.some(c => c.status === 'shared_locally' || c.status === 'connection_pending')
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          passportConnections: next,
+          networkingStatus: anyShared ? 'shared_locally' : (prev.smokeCraft?.networkingStatus || 'not_started'),
+        },
+      }
+    })
+  }, [update])
+
   // ── Session reset ─────────────────────────────────────────────────────────
   const resetGuestSession = useCallback(() => {
     const fresh = createNewSession()
@@ -707,6 +744,9 @@ export function GuestSessionProvider({ children }) {
       completeSmokeCraftSession,
       syncPos3Activity,
       syncEATActivity,
+      // Phase 13: Networking consent / connections
+      setNetworkingConsent,
+      recordPassportConnectionAction,
       // Reset
       resetGuestSession,
       resetSession,
