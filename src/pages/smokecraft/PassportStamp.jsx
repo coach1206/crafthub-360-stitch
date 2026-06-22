@@ -150,6 +150,7 @@ function buildStampPayload(session) {
   const scorecard = session.smokeCraft?.scorecard || null
   const seedSoil = session.smokecraftSeedSoil || null
   const latestBadge = session.badges?.[session.badges.length - 1] || null
+  const protocolScore = session.smokeCraft?.scoreBreakdown || null
 
   return {
     userId:               session.guestId || null,
@@ -170,10 +171,13 @@ function buildStampPayload(session) {
     burnTime:             format?.burnTime || null,
     mentorNames:          mentors.map(m => m.name).filter(Boolean),
     mentorIds:            mentors.map(m => m.id).filter(Boolean),
-    score:                scorecard?.total ?? null,
-    rankingLevel:         session.rank || null,
-    badgeEarned:          latestBadge?.label || null,
-    badgesEarned:         (session.badges || []).map(b => b.label).filter(Boolean),
+    score:                protocolScore?.total ?? scorecard?.total ?? null,
+    maxScore:             protocolScore?.maxTotal ?? null,
+    rankingLevel:         session.smokeCraft?.rankingLevel || session.rank || null,
+    badgeEarned:          session.smokeCraft?.badgeEarned || latestBadge?.label || null,
+    badgesEarned:         session.smokeCraft?.badgesEarned?.length
+      ? session.smokeCraft.badgesEarned
+      : (session.badges || []).map(b => b.label).filter(Boolean),
     pairingCompleted:     Boolean(seedSoil?.seedRegionId),
     seedRegion:           seedSoil?.seedRegionId || null,
     soilSelections:       seedSoil?.soil || null,
