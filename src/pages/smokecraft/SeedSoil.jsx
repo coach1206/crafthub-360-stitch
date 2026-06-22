@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import { LeafIcon, CheckIcon, ArrowForwardIcon, ArrowBackIcon, DeckIcon, GlassIcon, MusicIcon, WeatherIcon, GroupsIcon, MoodIcon, EventIcon } from '../../components/smokecraft/PremiumIcons.jsx'
+import { LeafIcon, CheckIcon, ArrowForwardIcon, ArrowBackIcon, DeckIcon, GlassIcon, MusicIcon, WeatherIcon, GroupsIcon, MoodIcon, EventIcon, FlaskIcon } from '../../components/smokecraft/PremiumIcons.jsx'
+import PairingScorePanel from '../../components/smokecraft/PairingScorePanel.jsx'
+import { calculatePairingScore, applyKeptWarningPenalty } from '../../services/smokecraft/smokePairingScoreService.js'
 
 const REGIONS = [
   {
@@ -45,8 +47,12 @@ const SOIL_GROUPS = [
     options: ['Lounge', 'Patio', 'Poolside', 'Private Room'],
   },
   {
-    key: 'pairing', label: 'Drink / Food Pairing', Icon: GlassIcon,
+    key: 'pairing', label: 'Drink Pairing', Icon: GlassIcon,
     options: ['Whiskey', 'Rum', 'Coffee', 'Red Wine'],
+  },
+  {
+    key: 'food', label: 'Food Pairing', Icon: FlaskIcon,
+    options: ['Dark Chocolate', 'Cheese Board', 'Dessert', 'None'],
   },
   {
     key: 'music', label: 'Music Vibe', Icon: MusicIcon,
@@ -87,24 +93,74 @@ export default function SeedSoil() {
   const [selected, setSelected] = useState(null)
   const [soil, setSoil] = useState({})
   const [done, setDone] = useState(false)
+  const [warningResolved, setWarningResolved] = useState(null)
 
   const region = REGIONS.find(r => r.id === selected) || null
   const soilComplete = SOIL_GROUPS.every(g => soil[g.key])
   const canContinue = Boolean(selected) && soilComplete
 
+  const pairingResult = region && soilComplete ? calculatePairingScore({ region, soil }) : null
+  const blockedByWarning = Boolean(pairingResult?.warning) && !warningResolved
+
   function setSoilValue(key, value) {
     triggerHaptic('light')
+    setWarningResolved(null)
     setSoil(prev => ({ ...prev, [key]: prev[key] === value ? undefined : value }))
   }
 
+  function logPairingEvent(eventType, payload) {
+    update(prev => {
+      const existingLog = prev.smokeCraft?.eventLog || []
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          eventLog: [...existingLog, { eventType, timestamp: Date.now(), ...payload }].slice(-50),
+        },
+      }
+    })
+  }
+
+  function handleKeepPairing() {
+    setWarningResolved('kept')
+    triggerHaptic('medium')
+    logPairingEvent('SMOKECRAFT_PAIRING_PENALTY_APPLIED', { reason: pairingResult.warning.message })
+    logPairingEvent('SMOKECRAFT_POINTS_DEDUCTED', { amount: -50, reason: 'Pairing clash warning ignored' })
+    addXP(-50)
+  }
+
+  function handleAdjustPairing() {
+    setWarningResolved(null)
+    triggerHaptic('light')
+    setSoil(prev => ({ ...prev, pairing: undefined, food: undefined }))
+  }
+
+  function handleAskMentor() {
+    setWarningResolved('mentor')
+    triggerHaptic('light')
+    logPairingEvent('SMOKECRAFT_PAIRING_WARNING_CREATED', { reason: pairingResult.warning.message, resolution: 'ask-mentor' })
+  }
+
   function handleContinue() {
-    if (done || !canContinue) return
+    if (done || !canContinue || blockedByWarning) return
     setDone(true)
     triggerHaptic('medium')
     update(prev => ({
       ...prev,
       smokecraftSeedSoil: { seedRegionId: region.id, soil, pairingExplanation: buildPairingExplanation(region, soil) },
+      smokeCraft: {
+        ...prev.smokeCraft,
+        pairingCombo: { seedRegionId: region.id, ...soil },
+        pairingScore: pairingResult.score,
+        pairingGrade: pairingResult.grade,
+        penalties: warningResolved === 'kept'
+          ? [...(prev.smokeCraft?.penalties || []), { reason: 'Pairing clash warning ignored', points: -50, timestamp: Date.now() }]
+          : (prev.smokeCraft?.penalties || []),
+      },
     }))
+    logPairingEvent('SMOKECRAFT_PAIRING_COMBO_CREATED', { seedRegionId: region.id, soil })
+    logPairingEvent('SMOKECRAFT_PAIRING_SCORE_UPDATED', { score: pairingResult.score, grade: pairingResult.grade })
+    if (pairingResult.score > 0) addXP(pairingResult.score)
     completeStep('seed-soil')
     addXP(100)
     navigate('/smokecraft/mentor')
@@ -201,8 +257,18 @@ export default function SeedSoil() {
           </div>
         )}
 
+        {pairingResult && (
+          <PairingScorePanel
+            result={pairingResult}
+            warningResolved={warningResolved}
+            onKeep={handleKeepPairing}
+            onAdjust={handleAdjustPairing}
+            onAskMentor={handleAskMentor}
+          />
+        )}
+
         <div className="flex flex-col sm:flex-row gap-4">
-          <button onClick={handleContinue} disabled={!canContinue}
+          <button onClick={handleContinue} disabled={!canContinue || blockedByWarning}
             className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40 w-full sm:w-auto"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
             Continue <ArrowForwardIcon size={20} />
