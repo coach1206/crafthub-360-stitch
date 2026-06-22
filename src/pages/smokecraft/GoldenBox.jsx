@@ -4,6 +4,19 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import { SeedlingIcon, CompassIcon, FlaskIcon, DiamondIcon, CrateIcon, StampIcon, CardIcon, CrownIcon, ShieldPersonIcon, CheckIcon, ArrowForwardIcon, ArrowBackIcon, ChevronDownIcon } from '../../components/smokecraft/PremiumIcons.jsx'
+import {
+  SCORING_OVERVIEW,
+  BADGE_OVERVIEW,
+  PASSPORT_STAMP_OVERVIEW,
+  COMPLETED_SESSION_DEFINITION,
+  EVENT_CHALLENGE_RULES,
+  LOUNGE_ETIQUETTE_RULES,
+  NO_FAKE_SCORING_RULE,
+  AGE_COMPLIANCE_RULE,
+  VENUE_COMPLIANCE_RULE,
+  PURCHASE_RULES,
+  BACKEND_PENDING_NOTE,
+} from '../../utils/smokecraftGoldBoxRules.js'
 
 const PHASES = [
   { label: 'Mentor',      Icon: SeedlingIcon, route: '/smokecraft/mentor',      detail: 'Choose the mentor who will guide your blend and flavor decisions throughout the journey.' },
@@ -41,11 +54,14 @@ function GoldenBoxHeroImage() {
 
 export default function GoldenBox() {
   const navigate = useNavigate()
-  const { addXP, addBadge, completeStep, setGoldenBoxAccepted } = useGuestSession()
+  const { session, addXP, addBadge, completeStep, setGoldenBoxAccepted, setGoldBoxViewedScoring, setGoldBoxSessionStarted } = useGuestSession()
 
+  const goldBoxRules = session?.smokeCraft?.goldBoxRules
   const [revealed, setRevealed]         = useState(false)
   const [contentsOpen, setContentsOpen] = useState(false)
-  const [accepted, setAccepted]         = useState(false)
+  const [accepted, setAccepted]         = useState(Boolean(goldBoxRules?.goldBoxAccepted))
+  const [scoringOpen, setScoringOpen]   = useState(false)
+  const [startError, setStartError]     = useState(false)
   const [activePhase, setActivePhase]   = useState(null)
   const [activeTile, setActiveTile]     = useState(null)
   useEffect(() => {
@@ -53,14 +69,31 @@ export default function GoldenBox() {
     return () => clearTimeout(t)
   }, [])
 
-  function handleAccept() {
+  function handleAcceptRules() {
     if (accepted) return
     setAccepted(true)
+    setStartError(false)
     triggerHaptic('success')
     addXP(25)
     addBadge({ id: 'golden-box-invitation', name: 'Golden Invitation', icon: 'inventory_2' })
     completeStep('golden-box')
     setGoldenBoxAccepted()
+  }
+
+  function handleViewScoring() {
+    triggerHaptic('light')
+    setScoringOpen(o => !o)
+    setGoldBoxViewedScoring()
+  }
+
+  function handleStartSession() {
+    if (!accepted) {
+      triggerHaptic('warning')
+      setStartError(true)
+      return
+    }
+    triggerHaptic('success')
+    setGoldBoxSessionStarted()
     setTimeout(() => navigate('/smokecraft/humidor-match'), 600)
   }
 
@@ -217,13 +250,118 @@ export default function GoldenBox() {
           </div>
         </div>
 
-        {/* CTA */}
+        {/* Gold Box Rulebook */}
+        <div
+          className={`w-full space-y-4 text-left transition-all duration-1000 ease-out ${revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+          style={{ transitionDelay: '600ms' }}
+        >
+          <div className="golden-content-card p-5 rounded-xl">
+            <p className="golden-box-kicker font-label-lg text-label-lg text-primary uppercase tracking-[0.3em] text-center mb-1" style={{ justifyContent: 'center', display: 'flex' }}>
+              Official Rulebook
+            </p>
+            <h2 className="font-headline-md text-headline-md text-on-surface text-center mb-4" style={{ fontFamily: '"Playfair Display", serif' }}>
+              Gold Box Rules &amp; Fair Play
+            </h2>
+
+            <div className="space-y-3">
+              <div className="rounded-lg p-3" style={{ background: 'rgba(0,0,0,0.22)', border: '1px solid rgba(233,193,118,0.16)' }}>
+                <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mb-1">No Fake Scoring</p>
+                <p className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{NO_FAKE_SCORING_RULE}</p>
+              </div>
+
+              <div className="rounded-lg p-3" style={{ background: 'rgba(0,0,0,0.22)', border: '1px solid rgba(233,193,118,0.16)' }}>
+                <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mb-1">Age &amp; Venue Compliance</p>
+                <p className="font-body-md text-[13px] text-on-surface-variant leading-relaxed mb-2">{AGE_COMPLIANCE_RULE}</p>
+                <p className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{VENUE_COMPLIANCE_RULE}</p>
+              </div>
+
+              <div className="rounded-lg p-3" style={{ background: 'rgba(0,0,0,0.22)', border: '1px solid rgba(233,193,118,0.16)' }}>
+                <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mb-1">Lounge Etiquette</p>
+                <ul className="list-disc list-inside space-y-1">
+                  {LOUNGE_ETIQUETTE_RULES.map(rule => (
+                    <li key={rule} className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{rule}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-lg p-3" style={{ background: 'rgba(0,0,0,0.22)', border: '1px solid rgba(233,193,118,0.16)' }}>
+                <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mb-1">Event Challenge Rules</p>
+                <ul className="list-disc list-inside space-y-1">
+                  {EVENT_CHALLENGE_RULES.map(rule => (
+                    <li key={rule} className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{rule}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-lg p-3" style={{ background: 'rgba(0,0,0,0.22)', border: '1px solid rgba(233,193,118,0.16)' }}>
+                <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mb-1">Purchase &amp; POS Rules</p>
+                <ul className="list-disc list-inside space-y-1">
+                  {PURCHASE_RULES.map(rule => (
+                    <li key={rule} className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{rule}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-lg p-3" style={{ background: 'rgba(0,0,0,0.22)', border: '1px solid rgba(233,193,118,0.16)' }}>
+                <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mb-1">What Counts as a Completed Session</p>
+                <p className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{COMPLETED_SESSION_DEFINITION}</p>
+              </div>
+
+              <div className="rounded-lg p-3" style={{ background: 'rgba(0,0,0,0.22)', border: '1px solid rgba(233,193,118,0.16)' }}>
+                <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mb-1">Backend &amp; POS Status</p>
+                <p className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{BACKEND_PENDING_NOTE}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* View Scoring */}
+          <button
+            type="button"
+            onClick={handleViewScoring}
+            className="golden-content-card w-full p-4 rounded-xl flex items-center justify-between"
+          >
+            <span className="flex items-center gap-2 font-label-lg text-label-lg text-primary">
+              <DiamondIcon size={18} /> View Scoring &amp; Badges
+            </span>
+            <span style={{ display: 'inline-flex', transform: scoringOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }}>
+              <ChevronDownIcon size={16} />
+            </span>
+          </button>
+          <div
+            className="overflow-hidden transition-all duration-500 ease-in-out"
+            style={{ maxHeight: scoringOpen ? '900px' : '0px', opacity: scoringOpen ? 1 : 0 }}
+          >
+            <div className="golden-content-card p-4 rounded-xl space-y-3">
+              <p className="font-label-sm text-[11px] text-on-surface-variant leading-relaxed">{SCORING_OVERVIEW.note}</p>
+              <div className="space-y-1.5">
+                {SCORING_OVERVIEW.categories.map(c => (
+                  <div key={c.id} className="flex items-center justify-between text-[12px]">
+                    <span className="text-on-surface-variant">Phase {c.phase} · {c.label}</span>
+                    <span className="text-primary font-bold">{c.maxPoints} pts</span>
+                  </div>
+                ))}
+                <div className="flex items-center justify-between text-[12px] pt-2 mt-1" style={{ borderTop: '1px solid rgba(233,193,118,0.2)' }}>
+                  <span className="text-on-surface font-bold uppercase tracking-wide">Max Total Score</span>
+                  <span className="text-primary font-bold">{SCORING_OVERVIEW.maxTotalScore} pts</span>
+                </div>
+              </div>
+              <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mt-3">Badge Overview</p>
+              {BADGE_OVERVIEW.examples.map(ex => (
+                <p key={ex} className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{ex}</p>
+              ))}
+              <p className="font-label-sm text-[11px] text-primary uppercase tracking-widest mt-3">Passport Stamp</p>
+              <p className="font-body-md text-[13px] text-on-surface-variant leading-relaxed">{PASSPORT_STAMP_OVERVIEW.note}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Accept Rules / Start Session CTA */}
         <div
           className={`w-full space-y-4 transition-all duration-1000 ease-out ${revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
-          style={{ transitionDelay: '640ms' }}
+          style={{ transitionDelay: '720ms' }}
         >
           <button
-            onClick={handleAccept}
+            onClick={handleAcceptRules}
             disabled={accepted}
             className="sc-tactile w-full group relative py-5 px-8 rounded-xl gold-foil overflow-hidden transition-all duration-300 hover:shadow-[0_0_50px_rgba(233,193,118,0.35)] active:scale-[0.98] disabled:opacity-60"
           >
@@ -233,10 +371,32 @@ export default function GoldenBox() {
                 {accepted ? <CheckIcon size={20} /> : <CrateIcon size={20} />}
               </span>
               <span className="font-headline-md text-headline-md text-on-primary font-bold tracking-tight">
-                {accepted ? 'Challenge Accepted' : 'Accept the Challenge'}
+                {accepted ? 'Rules Accepted' : 'Accept Rules'}
               </span>
             </div>
           </button>
+          {accepted && (
+            <p className="font-label-sm text-[11px] text-primary/80 uppercase tracking-widest text-center flex items-center justify-center gap-1.5">
+              <CheckIcon size={14} /> Accepted {goldBoxRules?.goldBoxAcceptedAt ? new Date(goldBoxRules.goldBoxAcceptedAt).toLocaleTimeString() : ''}
+            </p>
+          )}
+          <button
+            onClick={handleStartSession}
+            className="w-full py-4 px-8 rounded-xl border transition-all duration-300 active:scale-[0.98] font-headline-md text-headline-md font-bold tracking-tight"
+            style={{
+              borderColor: accepted ? 'rgba(233,193,118,0.5)' : 'rgba(233,193,118,0.15)',
+              color: accepted ? '#e9c176' : 'rgba(233,193,118,0.4)',
+              background: 'rgba(0,0,0,0.25)',
+              cursor: accepted ? 'pointer' : 'not-allowed',
+            }}
+          >
+            Start Session
+          </button>
+          {startError && (
+            <p className="font-label-sm text-[11px] text-center" style={{ color: '#ff8a8a' }}>
+              Accept the Gold Box Rules before starting your session.
+            </p>
+          )}
           <p className="font-label-sm text-[11px] text-on-surface-variant/50">
             +25 XP · Golden Invitation Badge · Unlocks the SmokeCraft Journey
           </p>

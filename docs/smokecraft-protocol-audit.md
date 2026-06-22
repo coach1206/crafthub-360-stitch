@@ -128,13 +128,13 @@ Passport tree is reachable in Demo Mode.
 ### Phase 5 — Gold Box Rules
 
 - **Purpose**: present scoring/badge/stamp/etiquette/no-fake-scoring/no-underage/venue/purchase rules; gate via Accept Rules / View Scoring / Start Session.
-- **Route/File**: `/smokecraft/golden-box` → `src/pages/smokecraft/GoldenBox.jsx`.
-- **Status**: **Partial**. The page presents a journey map (mentor → origins → cultivation → blending → identity) and unlockable content (Vitola Profile, Stamp Collection, Identity Card, Lounge Privileges), gated behind a single "Accept" action that awards XP and a "Golden Invitation" badge before continuing. It does **not** display the specific required rules content: no explicit no-fake-scoring statement, no underage-participation rule, no lounge-etiquette text, and no separate "View Scoring" button — there is one combined accept/continue action, not three distinct buttons (Accept Rules / View Scoring / Start Session) as spec'd.
-- **Demo Mode**: allowed.
-- **Stores state**: yes — `session.smokeCraft.goldenBox.accepted`, badge added to `session.badges`.
-- **Gamification**: yes — 25 XP + "Golden Invitation" badge on accept; `completeStep('golden-box')`.
-- **Passport/ranking/mentor/networking**: badge only, no stamp.
-- **Missing**: the actual rules text (anti-cheating, age, etiquette, purchase rules) and the three distinct required buttons.
+- **Route/File**: `/smokecraft/golden-box` → `src/pages/smokecraft/GoldenBox.jsx` (+ new `src/utils/smokecraftGoldBoxRules.js` rules-content module).
+- **Status**: **Strengthened**. The page now presents the full official rulebook — No Fake Scoring, Age & Venue Compliance, Lounge Etiquette, Event Challenge Rules, Purchase & POS Rules, Completed-Session definition, and a Backend/POS status note — read from real `smokecraftScoring.js` data (`SCORE_CATEGORIES`, `MAX_TOTAL_SCORE`) rather than invented. Three distinct actions now exist: **Accept Rules** (awards the existing 25 XP + "Golden Invitation" badge + `completeStep('golden-box')`, same as before, plus records the new `goldBoxRules` fields), **View Scoring** (expands a panel showing every scoring category/points and badge/stamp overview; records `goldBoxViewedScoring`), and **Start Session** (disabled until rules are accepted; navigates to Humidor Match and records `goldBoxSessionStartedAt`). Attempting Start Session before accepting shows "Accept the Gold Box Rules before starting your session." The journey map and "What's Inside" accordion are unchanged.
+- **Demo Mode**: allowed. All new state is local session-only; no backend write, no real age/legal verification, no real POS3/E.A.T. call.
+- **Stores state**: yes — `session.smokeCraft.goldenBox.accepted`/`acceptedAt` (unchanged, still read directly by the Phase 11 evaluators below) plus the new additive `session.smokeCraft.goldBoxRules = { goldBoxAccepted, goldBoxAcceptedAt, goldBoxViewedScoring, goldBoxSessionStartedAt, goldBoxRuleVersion }`; badge added to `session.badges`.
+- **Gamification**: yes — 25 XP + "Golden Invitation" badge on Accept Rules; `completeStep('golden-box')` — unchanged from before.
+- **Passport/ranking/mentor/networking**: feeds Phase 11's `goldBoxRulesAccepted` score category (50 pts) and `gold-box-finisher` badge, both of which already read `session.smokeCraft.goldenBox.accepted` and are unmodified/unaffected by this change. No stamp.
+- **See**: `docs/smokecraft-phase-5-implementation.md` for full rule text and coverage detail.
 
 ### Phase 6 — Cigar Recommendation / Humidor Match
 

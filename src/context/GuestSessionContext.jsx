@@ -22,6 +22,7 @@ import {
   createNewSession,
 } from '../services/sessionStorageService.js'
 import { calculateScore, getRankLabel } from '../services/leaderboardService.js'
+import { GOLD_BOX_RULE_VERSION } from '../utils/smokecraftGoldBoxRules.js'
 
 // SCHEMA_VERSION is now managed in sessionStorageService (v4)
 
@@ -434,7 +435,12 @@ export function GuestSessionProvider({ children }) {
     })
   }, [update])
 
-  /** Records that the guest accepted the Golden Box challenge. */
+  /**
+   * Records that the guest accepted the Golden Box challenge / Gold Box Rules.
+   * Preserves the original `smokeCraft.goldenBox.accepted` field (read directly
+   * by the Phase 11 scoring/badge evaluators in smokecraftScoring.js) and
+   * additively records the Phase 5 spec'd `goldBoxRules` field set alongside it.
+   */
   const setGoldenBoxAccepted = useCallback(() => {
     update(prev => {
       const now = Date.now()
@@ -445,6 +451,52 @@ export function GuestSessionProvider({ children }) {
         smokeCraft: {
           ...prev.smokeCraft,
           goldenBox: { ...prev.smokeCraft?.goldenBox, accepted: true, acceptedAt: now },
+          goldBoxRules: {
+            ...prev.smokeCraft?.goldBoxRules,
+            goldBoxAccepted: true,
+            goldBoxAcceptedAt: now,
+            goldBoxRuleVersion: GOLD_BOX_RULE_VERSION,
+          },
+          eventLog: [...existingLog, event].slice(-50),
+        },
+      }
+    })
+  }, [update])
+
+  /** Records that the guest opened the Gold Box "View Scoring" panel. */
+  const setGoldBoxViewedScoring = useCallback(() => {
+    update(prev => {
+      const now = Date.now()
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const event = { eventType: 'GOLD_BOX_SCORING_VIEWED', timestamp: now }
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          goldBoxRules: {
+            ...prev.smokeCraft?.goldBoxRules,
+            goldBoxViewedScoring: true,
+          },
+          eventLog: [...existingLog, event].slice(-50),
+        },
+      }
+    })
+  }, [update])
+
+  /** Records that the guest started their Gold Box session (after accepting rules). */
+  const setGoldBoxSessionStarted = useCallback(() => {
+    update(prev => {
+      const now = Date.now()
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const event = { eventType: 'GOLD_BOX_SESSION_STARTED', timestamp: now }
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          goldBoxRules: {
+            ...prev.smokeCraft?.goldBoxRules,
+            goldBoxSessionStartedAt: now,
+          },
           eventLog: [...existingLog, event].slice(-50),
         },
       }
@@ -813,6 +865,8 @@ export function GuestSessionProvider({ children }) {
       setHumidorMatchSelection,
       setSelectedHumidorRecommendation,
       setGoldenBoxAccepted,
+      setGoldBoxViewedScoring,
+      setGoldBoxSessionStarted,
       setFirstThirdTasting,
       setSecondThirdTasting,
       setFinalThirdTasting,
