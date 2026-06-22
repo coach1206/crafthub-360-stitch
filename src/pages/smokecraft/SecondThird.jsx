@@ -8,7 +8,7 @@ const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
 export default function SecondThird() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { completeStep, addXP, setSecondThirdTasting } = useGuestSession()
   const [selected, setSelected] = useState(new Set())
   const [rating, setRating] = useState(0)
   const [done, setDone] = useState(false)
@@ -19,6 +19,15 @@ export default function SecondThird() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
+    const notesSelected = NOTES.filter(n => selected.has(n))
+    const notesCount = notesSelected.length
+    const hasRating = rating > 0
+    setSecondThirdTasting({
+      notesSelected,
+      notesCount,
+      rating: hasRating ? rating : null,
+      hasRating,
+    })
     completeStep('second-third')
     addXP(50)
     navigate('/smokecraft/final-third')

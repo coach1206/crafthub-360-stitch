@@ -10,6 +10,7 @@ import { StoreIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 import { getSmokePOSHandoff, createSmokePurchaseIntent, getSmokePurchaseRewardStatus, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 import { checkSmokeBackendConnectivity, getSmokeSharedStorageMode, buildSmokeStorageStatusFields, saveSmokeSessionSnapshot } from '../../services/smokecraft/smokeSharedStorageService.js'
 import SmokeBackendReadinessPanel from '../../components/smokecraft/SmokeBackendReadinessPanel.jsx'
+import { computeScoreBreakdown, computeProtocolBadges } from '../../utils/smokecraftScoring.js'
 
 const CATEGORIES = [
   { id:'appearance',   label:'Appearance',   desc:'Wrapper color, sheen, seam quality' },
@@ -21,7 +22,7 @@ const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
 export default function Scorecard() {
   const navigate = useNavigate()
-  const { completeStep, addXP, session, update } = useGuestSession()
+  const { completeStep, addXP, addBadge, session, update } = useGuestSession()
   const [scores, setScores] = useState({})
   const [done, setDone] = useState(false)
   const loggedEligibilityRef = useRef(false)
@@ -78,6 +79,9 @@ export default function Scorecard() {
 
   function setScore(id, v) { triggerHaptic('light'); setScores(prev => ({ ...prev, [id]: v })) }
 
+  const scoreBreakdown = computeScoreBreakdown(session)
+  const protocolBadges = computeProtocolBadges(session)
+
   useEffect(() => {
     if (loggedEligibilityRef.current) return
     loggedEligibilityRef.current = true
@@ -119,11 +123,22 @@ export default function Scorecard() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
+
+    const unlockedBadges = protocolBadges.filter(b => b.unlocked)
+    unlockedBadges.forEach(b => addBadge({ id: `protocol-${b.badgeId}`, name: b.name, description: b.description, phase: b.phase }))
+
     update(prev => ({
       ...prev,
       smokeCraft: {
         ...prev.smokeCraft,
         scorecard: { scores, total, maxTotal },
+        score: scoreBreakdown.total,
+        maxScore: scoreBreakdown.maxTotal,
+        rankingLevel: scoreBreakdown.rankingLevel,
+        badgesEarned: unlockedBadges.map(b => b.badgeId),
+        badgeEarned: unlockedBadges.length > 0 ? unlockedBadges[unlockedBadges.length - 1].badgeId : null,
+        scoreBreakdown,
+        scoreCalculatedAt: scoreBreakdown.calculatedAt,
       },
     }))
     completeStep('scorecard')
@@ -266,6 +281,41 @@ export default function Scorecard() {
             <div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: maxTotal ? `${(total/maxTotal)*100}%` : '0%' }} />
           </div>
         </div>
+
+        <section className="rounded-2xl border border-outline-variant/30 p-6 mb-8" style={{ background:'rgba(233,193,118,0.04)' }} aria-label="Protocol Score & Ranking">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-label-lg text-label-lg text-primary uppercase tracking-widest">Protocol Score</span>
+            <span className="font-headline-md text-headline-md text-primary">{scoreBreakdown.total}<span className="text-primary/50 font-normal text-lg"> / {scoreBreakdown.maxTotal}</span></span>
+          </div>
+          <div className="h-2 rounded-full bg-outline-variant/30 mb-3">
+            <div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: scoreBreakdown.maxTotal ? `${(scoreBreakdown.total/scoreBreakdown.maxTotal)*100}%` : '0%' }} />
+          </div>
+          <p className="font-label-md text-label-md text-on-surface mb-5">Ranking Level: <span className="text-primary font-semibold">{scoreBreakdown.rankingLevel}</span></p>
+
+          <div className="flex flex-col gap-3 mb-6">
+            {scoreBreakdown.categories.map(cat => (
+              <div key={cat.id} className="flex items-center justify-between gap-3 rounded-xl border border-outline-variant/15" style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.02)' }}>
+                <div className="min-w-0">
+                  <p className="font-label-md text-label-md text-on-surface font-semibold">{cat.label}</p>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">{cat.reason}</p>
+                </div>
+                <span className="font-label-md text-label-md shrink-0" style={{ color: cat.status === 'complete' ? '#e9c176' : cat.status === 'partial' ? 'rgba(233,193,118,0.7)' : 'rgba(255,255,255,0.4)' }}>
+                  {cat.points} / {cat.maxPoints}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-3">Protocol Badges</p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {protocolBadges.map(b => (
+              <div key={b.badgeId} className="rounded-xl border" style={{ padding: '12px 14px', borderColor: b.unlocked ? '#e9c176' : 'rgba(255,255,255,0.1)', background: b.unlocked ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.02)' }}>
+                <p className="font-label-md text-label-md font-semibold mb-1" style={{ color: b.unlocked ? '#e9c176' : 'rgba(255,255,255,0.5)' }}>{b.unlocked ? '✓ ' : '🔒 '}{b.name}</p>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">{b.reason}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <div className="flex flex-col gap-5 mb-12">
           {CATEGORIES.map(cat => (
