@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import { ArrowBackIcon, ArrowForwardIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 import AdvancedScorecardPanel from '../../components/smokecraft/AdvancedScorecardPanel.jsx'
+import WinnerCriteriaPanel from '../../components/smokecraft/WinnerCriteriaPanel.jsx'
+import { calculateWinnerEligibility, assignWinnerCategory, getPendingWinnerCategories, getLockedWinnerCategories, getWinnerProgress } from '../../services/smokecraft/smokeWinnerService.js'
 
 const CATEGORIES = [
   { id:'appearance',   label:'Appearance',   desc:'Wrapper color, sheen, seam quality' },
@@ -15,14 +17,52 @@ const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
 export default function Scorecard() {
   const navigate = useNavigate()
-  const { completeStep, addXP, session } = useGuestSession()
+  const { completeStep, addXP, session, update } = useGuestSession()
   const [scores, setScores] = useState({})
   const [done, setDone] = useState(false)
+  const loggedEligibilityRef = useRef(false)
 
   const total = Object.values(scores).reduce((s, v) => s + v, 0)
   const maxTotal = CATEGORIES.length * 10
 
   function setScore(id, v) { triggerHaptic('light'); setScores(prev => ({ ...prev, [id]: v })) }
+
+  useEffect(() => {
+    if (loggedEligibilityRef.current) return
+    loggedEligibilityRef.current = true
+    const eligibility = calculateWinnerEligibility(session)
+    const earned = assignWinnerCategory(session)
+    const pending = getPendingWinnerCategories(session)
+    const locked = getLockedWinnerCategories(session)
+    const progress = getWinnerProgress(session)
+    const now = Date.now()
+
+    update(prev => {
+      const existingLog = prev.smokeCraft?.eventLog || []
+      const events = [{
+        type: 'SMOKECRAFT_WINNER_ELIGIBILITY_UPDATED',
+        timestamp: now,
+        payload: { progress },
+      }]
+      if (earned) {
+        events.push({ type: 'SMOKECRAFT_WINNER_CATEGORY_ASSIGNED', timestamp: now, payload: { categoryId: earned.id, title: earned.title } })
+      }
+      return {
+        ...prev,
+        smokeCraft: {
+          ...prev.smokeCraft,
+          winnerEligibility: eligibility,
+          winnerCategory: earned ? earned.id : null,
+          winnerProgress: progress,
+          pendingWinnerCategories: pending.map(c => c.id),
+          lockedWinnerCategories: locked.map(c => c.id),
+          earnedWinnerCategories: eligibility.filter(c => c.earned).map(c => c.id),
+          eventLog: [...existingLog, ...events].slice(-50),
+        },
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function handleContinue() {
     if (done) return
@@ -53,6 +93,8 @@ export default function Scorecard() {
         <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>SmokeCraft Scorecard</h2>
 
         <AdvancedScorecardPanel session={session} />
+
+        <WinnerCriteriaPanel session={session} />
 
         <div className="rounded-2xl border border-outline-variant/30 p-6 mb-8" style={{ background:'rgba(233,193,118,0.04)' }}>
           <div className="flex justify-between items-center mb-2">

@@ -646,6 +646,7 @@ export function GuestSessionProvider({ children }) {
   return (
     <GuestSessionContext.Provider value={{
       session,
+      update,
       // Profile
       updateProfile,
       // SmokeCraft steps
