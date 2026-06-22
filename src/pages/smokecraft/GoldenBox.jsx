@@ -3,20 +3,21 @@ import { smokeCraftAssets } from '../../data/smokecraftAssets.js'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import { SeedlingIcon, CompassIcon, FlaskIcon, DiamondIcon, CrateIcon, StampIcon, CardIcon, CrownIcon, ShieldPersonIcon, CheckIcon, ArrowForwardIcon, ArrowBackIcon, ChevronDownIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 
 const PHASES = [
-  { label: 'Mentor',      icon: 'person',         route: '/smokecraft/mentor',      detail: 'Choose the mentor who will guide your blend and flavor decisions throughout the journey.' },
-  { label: 'Origins',     icon: 'travel_explore', route: '/smokecraft/origins',     detail: 'Trace the tobacco’s growing region and terroir before it reaches your hands.' },
-  { label: 'Cultivation', icon: 'nature_people',  route: '/smokecraft/seed-soil',   detail: 'Learn how seed and soil choices shape the leaf you’ll eventually smoke.' },
-  { label: 'Blending',    icon: 'science',        route: '/smokecraft/leaves',      detail: 'Select the leaves that will be blended into your personal cigar profile.' },
-  { label: 'Identity',    icon: 'diamond',        route: '/smokecraft/format',      detail: 'Lock in the format and identity of the cigar you’ll carry through the session.' },
+  { label: 'Mentor',      Icon: SeedlingIcon, route: '/smokecraft/mentor',      detail: 'Choose the mentor who will guide your blend and flavor decisions throughout the journey.' },
+  { label: 'Origins',     Icon: CompassIcon,  route: '/smokecraft/origins',     detail: 'Trace the tobacco’s growing region and terroir before it reaches your hands.' },
+  { label: 'Cultivation', Icon: SeedlingIcon, route: '/smokecraft/seed-soil',   detail: 'Learn how seed and soil choices shape the leaf you’ll eventually smoke.' },
+  { label: 'Blending',    Icon: FlaskIcon,    route: '/smokecraft/leaves',      detail: 'Select the leaves that will be blended into your personal cigar profile.' },
+  { label: 'Identity',    Icon: DiamondIcon,  route: '/smokecraft/format',      detail: 'Lock in the format and identity of the cigar you’ll carry through the session.' },
 ]
 
 const CONTENTS = [
-  { icon: 'inventory_2',       label: 'Personalized Vitola Profile',  desc: 'A curated cigar profile built from your flavor DNA and blend choices.',    unlock: 'Unlocks after Blending is complete.' },
-  { icon: 'approval',          label: 'Journey Stamp Collection',     desc: 'Every stamp earned across your SmokeCraft sessions, archived in your Passport.', unlock: 'Builds automatically as you earn stamps.' },
-  { icon: 'id_card',           label: 'Cigar Identity Card',          desc: 'A shareable credential revealing your archetype — Diplomat, Scholar, Adventurer, or Señor.', unlock: 'Unlocks when your Identity phase is finalized.' },
-  { icon: 'workspace_premium', label: 'Exclusive Lounge Privileges',  desc: 'Priority access, premium humidor reservations, and private sommelier sessions.', unlock: 'Unlocks after the Golden Box is accepted.' },
+  { Icon: CrateIcon,  label: 'Personalized Vitola Profile',  desc: 'A curated cigar profile built from your flavor DNA and blend choices.',    unlock: 'Unlocks after Blending is complete.' },
+  { Icon: StampIcon,  label: 'Journey Stamp Collection',     desc: 'Every stamp earned across your SmokeCraft sessions, archived in your Passport.', unlock: 'Builds automatically as you earn stamps.' },
+  { Icon: CardIcon,   label: 'Cigar Identity Card',          desc: 'A shareable credential revealing your archetype — Diplomat, Scholar, Adventurer, or Señor.', unlock: 'Unlocks when your Identity phase is finalized.' },
+  { Icon: CrownIcon,  label: 'Exclusive Lounge Privileges',  desc: 'Priority access, premium humidor reservations, and private sommelier sessions.', unlock: 'Unlocks after the Golden Box is accepted.' },
 ]
 
 function GoldenBoxHeroImage() {
@@ -63,8 +64,6 @@ export default function GoldenBox() {
     setTimeout(() => navigate('/smokecraft/humidor-match'), 600)
   }
 
-  const FILL1 = { fontVariationSettings: "'FILL' 1" }
-
   return (
     <div className="golden-box-page min-h-screen text-on-surface font-body-md overflow-hidden flex flex-col items-center relative">
 
@@ -85,12 +84,12 @@ export default function GoldenBox() {
       <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-20">
         <div className="flex items-center gap-3">
           <button
-            className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-primary/10 active:bg-primary/20 transition-colors duration-300"
+            className="text-primary p-2 rounded-full hover:bg-primary/10 active:bg-primary/20 transition-colors duration-300 flex items-center justify-center"
             style={{ minWidth: 48, minHeight: 48 }}
             onClick={() => navigate('/smokecraft/mentor')}
             aria-label="Back to Mentor Selection"
-          >arrow_back</button>
-          <span className="material-symbols-outlined text-primary text-[22px]" style={FILL1}>shield_person</span>
+          ><ArrowBackIcon size={24} /></button>
+          <span className="text-primary"><ShieldPersonIcon size={22} /></span>
           <span className="font-headline-md text-[18px] font-bold text-primary tracking-tighter">CRAFTHUB 360</span>
         </div>
         <div className="flex items-center gap-3">
@@ -150,7 +149,7 @@ export default function GoldenBox() {
                 aria-label={`${phase.label} phase details`}
               >
                 <div className="golden-phase-orb">
-                  <span className="material-symbols-outlined text-[24px] text-primary">{phase.icon}</span>
+                  <span className="text-primary"><phase.Icon size={24} /></span>
                 </div>
                 <span className="golden-phase-number">{index + 1}</span>
                 <span className="golden-phase-label">{phase.label}</span>
@@ -168,7 +167,7 @@ export default function GoldenBox() {
                 onClick={() => navigate(PHASES.find(p => p.label === activePhase)?.route)}
                 className="text-primary font-label-sm text-[11px] uppercase tracking-widest flex items-center gap-1"
               >
-                Go to {activePhase} <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                Go to {activePhase} <ArrowForwardIcon size={14} />
               </button>
             </div>
           )}
@@ -183,7 +182,7 @@ export default function GoldenBox() {
             onClick={() => setContentsOpen(o => !o)}
             className="flex items-center gap-2 mx-auto text-primary/80 hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-[0.15em]"
           >
-            <span className="material-symbols-outlined text-[16px]">{contentsOpen ? 'expand_less' : 'expand_more'}</span>
+            <span style={{ display: 'inline-flex', transform: contentsOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }}><ChevronDownIcon size={16} /></span>
             {"What's inside?"}
           </button>
           <div
@@ -191,7 +190,7 @@ export default function GoldenBox() {
             style={{ maxHeight: contentsOpen ? '360px' : '0px', opacity: contentsOpen ? 1 : 0 }}
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 text-left">
-              {CONTENTS.map(({ icon, label, desc, unlock }) => {
+              {CONTENTS.map(({ Icon, label, desc, unlock }) => {
                 const open = activeTile === label
                 return (
                   <button
@@ -201,8 +200,8 @@ export default function GoldenBox() {
                     className="golden-content-card p-4 rounded-xl flex items-start gap-3 text-left cursor-pointer"
                     style={{ border: open ? '1px solid rgba(233,193,118,0.55)' : undefined }}
                   >
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="material-symbols-outlined text-primary text-[18px]" style={FILL1}>{icon}</span>
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5 text-primary">
+                      <Icon size={18} />
                     </div>
                     <div>
                       <p className="font-label-lg text-label-lg text-primary mb-0.5">{label}</p>
@@ -230,8 +229,8 @@ export default function GoldenBox() {
           >
             <div className="absolute inset-0 bg-white/15 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12" />
             <div className="relative flex items-center justify-center gap-3">
-              <span className="material-symbols-outlined text-on-primary" style={FILL1}>
-                {accepted ? 'check_circle' : 'inventory_2'}
+              <span className="text-on-primary">
+                {accepted ? <CheckIcon size={20} /> : <CrateIcon size={20} />}
               </span>
               <span className="font-headline-md text-headline-md text-on-primary font-bold tracking-tight">
                 {accepted ? 'Challenge Accepted' : 'Accept the Challenge'}
@@ -420,8 +419,9 @@ export default function GoldenBox() {
             width: 50px;
             height: 50px;
           }
-          .golden-phase-orb .material-symbols-outlined {
-            font-size: 20px !important;
+          .golden-phase-orb svg {
+            width: 20px !important;
+            height: 20px !important;
           }
           .golden-phase-label {
             font-size: 8px;

@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import { LeafIcon, CheckIcon, ArrowForwardIcon, ArrowBackIcon, DeckIcon, GlassIcon, MusicIcon, WeatherIcon, GroupsIcon, MoodIcon, EventIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 
 const REGIONS = [
   {
-    id: 'vuelta', name: 'Vuelta Abajo', country: 'Cuba',
+    id: 'vuelta', name: 'Vuelta Abajo', country: 'Cuba', accent: '#c5a059',
     note: 'The gold standard — silky texture, complex aroma.',
     wrapper: 'Habano Cuban-seed', binder: 'Cuban Criollo', filler: 'Cuban Corojo & Criollo',
     aging: 'Aged 4+ years in cedar', strength: 'Medium-Full',
@@ -13,7 +14,7 @@ const REGIONS = [
     brandStory: "Vuelta Abajo's red clay soil and humid microclimate have made it the benchmark region tobacco growers worldwide try to imitate.",
   },
   {
-    id: 'jalapa', name: 'Jalapa Valley', country: 'Nicaragua',
+    id: 'jalapa', name: 'Jalapa Valley', country: 'Nicaragua', accent: '#8d6b3a',
     note: 'High altitude, bold spice and earth.',
     wrapper: 'Jalapa Habano', binder: 'Nicaraguan Criollo', filler: 'Nicaraguan Ligero & Seco',
     aging: 'Aged 3 years', strength: 'Full',
@@ -21,7 +22,7 @@ const REGIONS = [
     brandStory: "Jalapa's volcanic soil and fog-shrouded valley produce some of the most sought-after ligero filler leaf in the world.",
   },
   {
-    id: 'esteli', name: 'Estelí', country: 'Nicaragua',
+    id: 'esteli', name: 'Estelí', country: 'Nicaragua', accent: '#a8632f',
     note: 'Sun-grown Criollo with intense pepper notes.',
     wrapper: 'Estelí Criollo', binder: 'Nicaraguan Habano', filler: 'Nicaraguan Ligero',
     aging: 'Aged 2-3 years', strength: 'Full',
@@ -29,7 +30,7 @@ const REGIONS = [
     brandStory: "Known as the tobacco capital of Nicaragua, Estelí's mineral-rich valley soil drives intensity into every leaf.",
   },
   {
-    id: 'sanandres', name: 'San Andrés', country: 'Mexico',
+    id: 'sanandres', name: 'San Andrés', country: 'Mexico', accent: '#5c4226',
     note: 'Negro Maduro wrapper, dark cocoa and sweet finish.',
     wrapper: 'San Andrés Negro Maduro', binder: 'Mexican Criollo', filler: 'Mexican Criollo & Nicaraguan blend',
     aging: 'Aged 18-24 months', strength: 'Medium',
@@ -40,36 +41,34 @@ const REGIONS = [
 
 const SOIL_GROUPS = [
   {
-    key: 'atmosphere', label: 'Venue Atmosphere', icon: 'deck',
+    key: 'atmosphere', label: 'Venue Atmosphere', Icon: DeckIcon,
     options: ['Lounge', 'Patio', 'Poolside', 'Private Room'],
   },
   {
-    key: 'pairing', label: 'Drink / Food Pairing', icon: 'local_bar',
+    key: 'pairing', label: 'Drink / Food Pairing', Icon: GlassIcon,
     options: ['Whiskey', 'Rum', 'Coffee', 'Red Wine'],
   },
   {
-    key: 'music', label: 'Music Vibe', icon: 'music_note',
+    key: 'music', label: 'Music Vibe', Icon: MusicIcon,
     options: ['Jazz', 'Acoustic', 'Lo-fi', 'Live Band'],
   },
   {
-    key: 'weather', label: 'Weather', icon: 'partly_cloudy_night',
+    key: 'weather', label: 'Weather', Icon: WeatherIcon,
     options: ['Warm Evening', 'Cool Night', 'Rainy', 'Breezy'],
   },
   {
-    key: 'social', label: 'Social Setting', icon: 'groups',
+    key: 'social', label: 'Social Setting', Icon: GroupsIcon,
     options: ['Solo', 'Date', 'Group', 'Celebration'],
   },
   {
-    key: 'mood', label: 'Your Mood', icon: 'mood',
+    key: 'mood', label: 'Your Mood', Icon: MoodIcon,
     options: ['Relaxed', 'Celebratory', 'Reflective', 'Adventurous'],
   },
   {
-    key: 'theme', label: 'Event Theme', icon: 'event',
+    key: 'theme', label: 'Event Theme', Icon: EventIcon,
     options: ['Casual', 'Formal', 'Outdoor', 'Anniversary'],
   },
 ]
-
-const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
 function buildPairingExplanation(region, soil) {
   if (!region) return ''
@@ -118,7 +117,7 @@ export default function SeedSoil() {
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
-        <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/format')} aria-label="Back">arrow_back</button>
+        <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/format')} aria-label="Back"><ArrowBackIcon size={24} /></button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
@@ -139,12 +138,18 @@ export default function SeedSoil() {
               <button key={r.id} type="button" onClick={() => { triggerHaptic('light'); setSelected(r.id) }}
                 className="flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
                 style={{ padding:'20px 24px', background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)' }}>
-                <span className="material-symbols-outlined text-primary" style={{ fontSize:28, ...(on ? FILL1 : {}) }}>nature_people</span>
+                <span className="flex items-center justify-center rounded-full shrink-0" style={{ width:48, height:48, background: `${r.accent}26`, border: `1.5px solid ${r.accent}66`, color: r.accent }}>
+                  <LeafIcon size={24} />
+                </span>
                 <div className="flex-1">
                   <p className="font-label-lg text-label-lg text-on-surface font-semibold">{r.name} <span className="text-primary/60 font-normal">— {r.country}</span></p>
                   <p className="font-body-md text-body-md text-on-surface-variant mt-1">{r.note}</p>
                 </div>
-                {on && <span className="material-symbols-outlined text-primary" style={FILL1}>check_circle</span>}
+                {on && (
+                  <span className="flex items-center justify-center rounded-full shrink-0" style={{ width:20, height:20, background:'#e9c176', color:'#131314' }}>
+                    <CheckIcon size={13} />
+                  </span>
+                )}
               </button>
             )
           })}
@@ -170,7 +175,7 @@ export default function SeedSoil() {
           {SOIL_GROUPS.map(group => (
             <div key={group.key}>
               <p className="font-label-md text-label-md text-on-surface-variant flex items-center gap-2 mb-2">
-                <span className="material-symbols-outlined text-primary" style={{ fontSize: 18 }}>{group.icon}</span>
+                <span className="text-primary"><group.Icon size={18} /></span>
                 {group.label}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -200,12 +205,12 @@ export default function SeedSoil() {
           <button onClick={handleContinue} disabled={!canContinue}
             className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40 w-full sm:w-auto"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
-            Continue <span className="material-symbols-outlined">arrow_forward</span>
+            Continue <ArrowForwardIcon size={20} />
           </button>
           <button onClick={() => navigate('/smokecraft/format')}
             className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300 w-full sm:w-auto"
             style={{ height:64,paddingInline:32 }}>
-            <span className="material-symbols-outlined">arrow_back</span> Back
+            <ArrowBackIcon size={20} /> Back
           </button>
         </div>
       </main>
