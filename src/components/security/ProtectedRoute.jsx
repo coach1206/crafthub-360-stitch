@@ -20,7 +20,6 @@
 import { useState } from 'react'
 import { useSecurity }  from '../../context/SecurityContext.jsx'
 import { useDemoMode }  from '../../context/DemoModeContext.jsx'
-import { loadStaffSession } from '../../services/staffHandoffService.js'
 import RequestAccessModal from './RequestAccessModal.jsx'
 
 const GOLD = '#C9A84C'
@@ -229,8 +228,9 @@ export default function ProtectedRoute({
 
   // Founder master access always passes — checked before demo-mode blocking
   // so founder is never redirected away from internal pages, even in demo.
-  const staffSession = loadStaffSession()
-  if (isFounder() || staffSession?.role === 'founder') return children
+  // isFounder() resolves through SecurityContext, which prefers the
+  // backend-verified JWT session (AuthContext) over any local fallback.
+  if (isFounder()) return children
 
   // Demo mode check — blocks restricted routes regardless of role
   if (isDemoMode && demoBlocked && isDemoBlocked(path)) {

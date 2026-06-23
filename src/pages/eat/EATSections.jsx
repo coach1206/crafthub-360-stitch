@@ -3,7 +3,7 @@ import { EAT_SECTIONS } from '../../data/eat/seedData.js'
 
 export default function EATSections() {
   return (
-    <ManagementLayout title="Sections" subtitle="Floor sections, table counts, and assigned servers">
+    <ManagementLayout title="Sections" subtitle="Floor sections, table counts, and assigned servers (demo data — pending live floor-management integration)">
       <Table
         columns={[
           { key: 'name', label: 'Section' }, { key: 'tables', label: 'Tables' }, { key: 'openTickets', label: 'Open Tickets' },

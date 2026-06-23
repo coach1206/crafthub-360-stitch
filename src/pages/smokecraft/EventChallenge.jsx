@@ -6,7 +6,6 @@ import { getCurrentPlayerSnapshot } from '../../services/smokecraft/smokeLeaderb
 import { getTopEligibleCategory } from '../../services/smokecraft/smokeWinnerService.js'
 import { getSmokePOSHandoff, createSmokePurchaseIntent, getSmokePurchaseRewardStatus, getSmokeEATHandoffSummary, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 import { checkSmokeBackendConnectivity, getSmokeSharedStorageMode, buildSmokeStorageStatusFields } from '../../services/smokecraft/smokeSharedStorageService.js'
-import SmokeBackendReadinessPanel from '../../components/smokecraft/SmokeBackendReadinessPanel.jsx'
 
 export default function EventChallenge() {
   const navigate = useNavigate()
@@ -209,10 +208,6 @@ export default function EventChallenge() {
             {!storageMode.backendConnected && (
               <p className="font-body-sm text-body-sm" style={{ color: '#e9c176' }}>Local fallback only. Other devices will not see this until backend storage is connected.</p>
             )}
-          </div>
-
-          <div className="mb-4">
-            <SmokeBackendReadinessPanel compact />
           </div>
 
           <button onClick={handleCreatePurchaseIntent} disabled={Boolean(posHandoff.intentId)}

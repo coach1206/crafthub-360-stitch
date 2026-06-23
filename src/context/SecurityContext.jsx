@@ -1,10 +1,10 @@
 /**
- * Security Context — Phase 8.5
+ * Security Context — Phase 8.5 (production-gated Phase 4)
  * Provides role-based access control state to the React tree.
  *
  * Identity resolution (first match wins):
  *   1. Real JWT session from AuthContext (backend-verified)
- *   2. localStorage prototype session (dev / prototype only)
+ *   2. localStorage prototype session (DEV ONLY — never read or written in production)
  *   3. Guest default
  *
  * IMPORTANT: This context is for UI rendering decisions only.
@@ -18,6 +18,10 @@ import { AuthContext } from './AuthContext.jsx'
 const ADMIN_SESSION_KEY = 'novee_admin_session'
 
 function readStoredSession() {
+  // The localStorage prototype role is a dev-only convenience (DevRoleSwitcher).
+  // It must never be consulted in production builds — Vite/Rollup statically
+  // eliminates this branch in prod, so the key is never even read.
+  if (!import.meta.env.DEV) return null
   try {
     const raw = localStorage.getItem(ADMIN_SESSION_KEY)
     if (!raw) return null
@@ -67,7 +71,13 @@ export function SecurityProvider({ children }) {
 
   // ── Prototype role setter (localStorage, dev only) ────────
   // Used by DevRoleSwitcher when no real JWT session exists.
+  // Disabled outright in production — this is a UI-prototyping aid only,
+  // never a path to grant a real role in a shipped build.
   const setRole = useCallback((role, meta = {}) => {
+    if (!import.meta.env.DEV) {
+      console.warn('[SecurityContext] setRole is disabled in production. Use real login.')
+      return
+    }
     if (!ROLE_MAP[role]) { console.warn('[SecurityContext] Unknown role:', role); return }
     // If a real auth session exists, don't override it via localStorage
     if (authCtx?.isAuthenticated) {

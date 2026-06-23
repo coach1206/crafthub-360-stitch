@@ -252,18 +252,6 @@ export default function Scorecard() {
               View Event Challenge
             </button>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 mt-3">
-            <button onClick={() => navigate('/pos3')}
-              className="flex items-center justify-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-[0.15em] rounded-xl border border-primary/15 hover:bg-primary/5 active:scale-95 transition-all duration-300"
-              style={{ height: 48, paddingInline: 20 }}>
-              Open POS3 (Staff Access)
-            </button>
-            <button onClick={() => navigate('/eat')}
-              className="flex items-center justify-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-[0.15em] rounded-xl border border-primary/15 hover:bg-primary/5 active:scale-95 transition-all duration-300"
-              style={{ height: 48, paddingInline: 20 }}>
-              Open E.A.T. Summary (Staff Access)
-            </button>
-          </div>
         </section>
 
         <div className="rounded-2xl border border-outline-variant/30 p-6 mb-8" style={{ background:'rgba(233,193,118,0.04)' }}>

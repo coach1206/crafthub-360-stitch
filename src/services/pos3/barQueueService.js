@@ -5,6 +5,7 @@
 
 import { opsGet, opsSet } from '../shared/opsStorage.js'
 import { emit, SYSTEMS, STATUS } from '../shared/opsEventBus.js'
+import { saveEvent } from '../syncQueueService.js'
 
 const QUEUE_KEY = 'pos3:barQueue'
 
@@ -47,6 +48,13 @@ export function pushBarTicket({ ticketId, item, tableId, staffId }) {
     payload: { entry, timestamp: entry.createdAt },
   })
 
+  saveEvent({
+    sourceSystem: 'BAR',
+    eventType: 'BarAccepted',
+    entityId: entry.id,
+    payload: { entry },
+  }).catch(() => {})
+
   return entry
 }
 
@@ -75,15 +83,42 @@ function updateEntry(id, patch, eventType) {
 }
 
 export function markStarted(id) {
-  return updateEntry(id, { status: 'started', startedAt: Date.now() }, 'BAR_TICKET_STARTED')
+  const updated = updateEntry(id, { status: 'started', startedAt: Date.now() }, 'BAR_TICKET_STARTED')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'BAR',
+      eventType: 'BarStarted',
+      entityId: updated.id,
+      payload: { entry: updated, transitionAction: 'started' },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function markReady(id) {
-  return updateEntry(id, { status: 'ready', readyAt: Date.now() }, 'BAR_TICKET_READY')
+  const updated = updateEntry(id, { status: 'ready', readyAt: Date.now() }, 'BAR_TICKET_READY')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'BAR',
+      eventType: 'BarReady',
+      entityId: updated.id,
+      payload: { entry: updated, transitionAction: 'ready' },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function markCompleted(id) {
-  return updateEntry(id, { status: 'completed', completedAt: Date.now() }, 'BAR_TICKET_COMPLETED')
+  const updated = updateEntry(id, { status: 'completed', completedAt: Date.now() }, 'BAR_TICKET_COMPLETED')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'BAR',
+      eventType: 'BarCompleted',
+      entityId: updated.id,
+      payload: { entry: updated },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function getQueueForTicket(ticketId) {

@@ -11,7 +11,6 @@ import TicketTicker from '../../components/common/TicketTicker.jsx'
 import { SmokeCraftBottomNav } from '../../components/smokecraft/SmokeCraftPremium.jsx'
 import { getLeaderboardSnapshot } from '../../services/smokecraft/smokeLeaderboardService.js'
 import { getSmokeSharedStorageMode, saveSmokeLeaderboardEntry } from '../../services/smokecraft/smokeSharedStorageService.js'
-import SmokeBackendReadinessPanel from '../../components/smokecraft/SmokeBackendReadinessPanel.jsx'
 
 /* ─── palette ─── */
 const G = '#C9A84C', GL = '#E8D5A3', GD = '#8A7030'
@@ -579,9 +578,6 @@ export default function Leaderboard() {
               <div>Ranking scope: <strong style={{ color: TEXT }}>{storageMode.backendConnected ? 'Shared community' : 'Local/session only'}</strong></div>
               <div>Backend status: <strong style={{ color: TEXT }}>{storageMode.backendConnected ? 'Connected' : 'Not connected'}</strong></div>
               <div>Community leaderboard below: <strong style={{ color: TEXT }}>Demo / illustrative — not live shared data</strong></div>
-            </div>
-            <div style={{ marginTop: 12 }}>
-              <SmokeBackendReadinessPanel compact />
             </div>
             <button onClick={() => navigate('/smokecraft/event-challenge')}
               style={{ marginTop: 12, minHeight: 38, padding: '8px 14px', borderRadius: 10, border: `1px solid ${G}66`, background: `${G}1f`, color: G, cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>

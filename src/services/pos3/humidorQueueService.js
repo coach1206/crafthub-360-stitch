@@ -6,6 +6,7 @@
 
 import { opsGet, opsSet } from '../shared/opsStorage.js'
 import { emit, SYSTEMS, STATUS } from '../shared/opsEventBus.js'
+import { saveEvent } from '../syncQueueService.js'
 
 const QUEUE_KEY = 'pos3:humidorRequests'
 
@@ -48,6 +49,13 @@ export function pushHumidorRequest({ ticketId, item, tableId, staffId }) {
     payload: { entry, timestamp: entry.createdAt },
   })
 
+  saveEvent({
+    sourceSystem: 'HUMIDOR',
+    eventType: 'HumidorAccepted',
+    entityId: entry.id,
+    payload: { entry },
+  }).catch(() => {})
+
   return entry
 }
 
@@ -77,19 +85,55 @@ function updateEntry(id, patch, eventType) {
 }
 
 export function markPulled(id) {
-  return updateEntry(id, { status: 'pulled', pulledAt: Date.now() }, 'HUMIDOR_ITEM_PULLED')
+  const updated = updateEntry(id, { status: 'pulled', pulledAt: Date.now() }, 'HUMIDOR_ITEM_PULLED')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'HUMIDOR',
+      eventType: 'HumidorPulled',
+      entityId: updated.id,
+      payload: { entry: updated, transitionAction: 'pulled' },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function markUnavailable(id, reason = '') {
-  return updateEntry(id, { status: 'unavailable', reason }, 'HUMIDOR_ITEM_UNAVAILABLE')
+  const updated = updateEntry(id, { status: 'unavailable', reason }, 'HUMIDOR_ITEM_UNAVAILABLE')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'HUMIDOR',
+      eventType: 'HumidorUnavailable',
+      entityId: updated.id,
+      payload: { entry: updated, transitionAction: 'unavailable', reason },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function suggestSubstitution(id, substitution) {
-  return updateEntry(id, { substitution }, 'HUMIDOR_SUBSTITUTION_SUGGESTED')
+  const updated = updateEntry(id, { substitution }, 'HUMIDOR_SUBSTITUTION_SUGGESTED')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'HUMIDOR',
+      eventType: 'HumidorSubstituted',
+      entityId: updated.id,
+      payload: { entry: updated, transitionAction: 'substituted', substitution },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function markDelivered(id) {
-  return updateEntry(id, { status: 'delivered', deliveredAt: Date.now() }, 'HUMIDOR_ITEM_DELIVERED')
+  const updated = updateEntry(id, { status: 'delivered', deliveredAt: Date.now() }, 'HUMIDOR_ITEM_DELIVERED')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'HUMIDOR',
+      eventType: 'HumidorCompleted',
+      entityId: updated.id,
+      payload: { entry: updated },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function getRequestsForTicket(ticketId) {

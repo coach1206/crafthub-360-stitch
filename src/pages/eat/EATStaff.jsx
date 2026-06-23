@@ -3,7 +3,7 @@ import { EAT_STAFF } from '../../data/eat/seedData.js'
 
 export default function EATStaff() {
   return (
-    <ManagementLayout title="Staff" subtitle="Current shift roster">
+    <ManagementLayout title="Staff" subtitle="Current shift roster (demo data — pending live staff roster integration)">
       <Table
         columns={[
           { key: 'name', label: 'Name' }, { key: 'role', label: 'Role' }, { key: 'section', label: 'Section' },

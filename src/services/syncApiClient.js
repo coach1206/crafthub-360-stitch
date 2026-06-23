@@ -1,0 +1,194 @@
+/**
+ * Sync API Client — Phase 6C
+ * Thin frontend client for the Phase 6B backend event store
+ * (/api/sync/events, /api/sync/status). Built on the existing apiClient.js
+ * safe-fetch wrapper — no new fetch/timeout/offline logic invented here.
+ */
+
+import { apiGet, apiPost } from './apiClient.js'
+import { getDeviceId } from './shared/deviceIdService.js'
+
+/**
+ * Posts a batch of outbox events to /api/sync/events.
+ * `events` are syncQueueService records — mapped here to the backend's
+ * exact SyncEvent shape (Phase 6A/6B): eventId, sourceSystem, eventType,
+ * entityId, payload, clientCreatedAt.
+ * Returns the raw apiPost response (or null on offline/network failure —
+ * apiClient never throws). Callers must check `success` and per-event
+ * `success`/`degraded` fields before treating anything as synced.
+ */
+export async function postSyncEvents(events) {
+  const body = {
+    sourceDeviceId: getDeviceId(),
+    events: events.map((e) => ({
+      eventId:         e.eventId,
+      sourceSystem:    e.sourceSystem,
+      eventType:       e.eventType,
+      entityId:        e.entityId,
+      payload:         e.payload,
+      clientCreatedAt: e.timestamp,
+    })),
+  }
+  return apiPost('/api/sync/events', body)
+}
+
+/** Reads backend sync status (staff-gated — returns null for guests, which apiClient already handles). */
+export async function getSyncStatus() {
+  return apiGet('/api/sync/status')
+}
+
+// ── Phase 6D additions ──────────────────────────────────────────
+// Additive only — postSyncEvents/getSyncStatus above are unchanged.
+// These wrap the same already-built, staff-gated /api/sync/* routes
+// (Phase 6B) for the new E.A.T. catch-up consumer / status UI. None of
+// them invent new backend behavior; they fail gracefully (return null)
+// if a route is unreachable, exactly like apiGet/apiPost already do.
+
+/** Alias kept for callers that prefer an explicit "fetch" verb. */
+export async function fetchSyncStatus() {
+  return getSyncStatus()
+}
+
+/**
+ * Fetches confirmed (already-durably-saved) events from the backend's
+ * read endpoint. This is the ONLY source of "confirmed" events — it never
+ * reads local IndexedDB pending records, since those are not yet backend
+ * confirmed by definition.
+ */
+export async function fetchConfirmedEvents({ sourceSystem = null, limit = 100 } = {}) {
+  const params = new URLSearchParams()
+  if (sourceSystem) params.set('sourceSystem', sourceSystem)
+  if (limit) params.set('limit', String(limit))
+  const qs = params.toString()
+  return apiGet(`/api/sync/events${qs ? `?${qs}` : ''}`)
+}
+
+/**
+ * Catch-up pull: confirmed events recorded after `cursor` (an ISO
+ * timestamp or epoch ms, per the Phase 6B `/events/since/:timestamp`
+ * contract). Returns null on any failure — callers must not infer
+ * "no new events" from a null response, only from an empty `events` array
+ * on a successful response.
+ */
+export async function fetchEventsSince(cursor) {
+  if (!cursor) return null
+  return apiGet(`/api/sync/events/since/${encodeURIComponent(cursor)}`)
+}
+
+/**
+ * Per-device sync status. The Phase 6B backend has no per-device filter on
+ * /api/sync/status — it reports store-wide availability/counts only. This
+ * function does NOT pretend otherwise: it calls the existing status route
+ * and honestly flags the result as venue-wide, not device-scoped, rather
+ * than fabricating device-level data the backend doesn't provide.
+ */
+export async function fetchDeviceSyncStatus(deviceId) {
+  const status = await getSyncStatus()
+  if (!status) return null
+  return {
+    ...status,
+    deviceId,
+    deviceScoped: false,
+    note: 'Backend reports venue-wide sync status only — no per-device filter exists yet.',
+  }
+}
+
+// ── Phase 6F additions ──────────────────────────────────────────
+// Backend reconciliation/replay-confirmation endpoints (/api/sync/events/:id,
+// /api/sync/conflicts, /api/sync/replay, /api/sync/reconciliation/*). All
+// fail gracefully via apiGet/apiPost (return null on offline/unreachable) —
+// callers must never convert a null response into a fake success.
+
+/** Looks up a backend-confirmed event by its exact eventId. */
+export async function fetchSyncEventById(eventId) {
+  if (!eventId) return null
+  return apiGet(`/api/sync/events/${encodeURIComponent(eventId)}`)
+}
+
+/** Looks up a backend-confirmed event by business-action fingerprint. */
+export async function fetchSyncEventByFingerprint(fingerprint) {
+  if (!fingerprint) return null
+  return apiGet(`/api/sync/events/fingerprint/${encodeURIComponent(fingerprint)}`)
+}
+
+/** Lists backend-known conflicts (optionally filtered to manual-review-only). */
+export async function fetchSyncConflicts({ requiresManualReview = null } = {}) {
+  const params = new URLSearchParams()
+  if (requiresManualReview !== null) params.set('requiresManualReview', String(requiresManualReview))
+  const qs = params.toString()
+  return apiGet(`/api/sync/conflicts${qs ? `?${qs}` : ''}`)
+}
+
+/** Submits a conflict decision (server-classified, or an explicit staff override). */
+export async function postConflictDecision(body) {
+  return apiPost('/api/sync/conflicts/decision', body)
+}
+
+/** Read-only server-side replay preview — never writes. */
+export async function previewBackendReplay(event) {
+  return apiPost('/api/sync/replay/preview', { event })
+}
+
+/** Requests an actual server-confirmed replay, by eventId or full event payload. */
+export async function requestBackendReplay({ eventId, event, sourceDeviceId } = {}) {
+  return apiPost('/api/sync/replay', { eventId, event, sourceDeviceId })
+}
+
+/** Adds a staff reconciliation note to a backend-known event. */
+export async function postReconciliationNote(eventId, note) {
+  return apiPost(`/api/sync/reconciliation/${encodeURIComponent(eventId)}/note`, { note })
+}
+
+/** Resolves a backend-known event's reconciliation — requires staffReason or backendConfirmationId. */
+export async function postReconciliationResolve(eventId, { staffReason, backendConfirmationId } = {}) {
+  return apiPost(`/api/sync/reconciliation/${encodeURIComponent(eventId)}/resolve`, { staffReason, backendConfirmationId })
+}
+
+/** Backend-wide reconciliation summary (conflict/replay counts), honestly degraded if DB is down. */
+export async function fetchBackendReconciliationSummary() {
+  return apiGet('/api/sync/reconciliation/summary')
+}
+
+// ── Phase 6G additions ──────────────────────────────────────────
+// Audit log + event lifecycle timeline endpoints (/api/sync/audit/*).
+// All fail gracefully via apiGet (return null on offline/unreachable) —
+// callers must never convert a null response into a fake success.
+
+/** Lists raw audit log entries, optionally filtered by category/type. */
+export async function fetchAuditLogs({ actionCategory = null, actionType = null, limit = 100 } = {}) {
+  const params = new URLSearchParams()
+  if (actionCategory) params.set('actionCategory', actionCategory)
+  if (actionType) params.set('actionType', actionType)
+  if (limit) params.set('limit', String(limit))
+  const qs = params.toString()
+  return apiGet(`/api/sync/audit/logs${qs ? `?${qs}` : ''}`)
+}
+
+/** Full audit log + lifecycle timeline for a single event, time-ordered. */
+export async function fetchEventTimeline(eventId) {
+  if (!eventId) return null
+  return apiGet(`/api/sync/audit/events/${encodeURIComponent(eventId)}/timeline`)
+}
+
+/** Full audit log + lifecycle timeline for a single business action, time-ordered. */
+export async function fetchBusinessActionTimeline(fingerprint) {
+  if (!fingerprint) return null
+  return apiGet(`/api/sync/audit/fingerprints/${encodeURIComponent(fingerprint)}/timeline`)
+}
+
+/** Audit logs recorded by a single actor (staff or user id). */
+export async function fetchActorAuditLogs(actorId, { limit = 100 } = {}) {
+  if (!actorId) return null
+  const params = new URLSearchParams()
+  if (limit) params.set('limit', String(limit))
+  const qs = params.toString()
+  return apiGet(`/api/sync/audit/actors/${encodeURIComponent(actorId)}/logs${qs ? `?${qs}` : ''}`)
+}
+
+/** Venue-wide audit dashboard summary, honestly degraded if DB is down. */
+export async function fetchAuditSummary({ since = null } = {}) {
+  const params = new URLSearchParams()
+  if (since) params.set('since', since)
+  const qs = params.toString()
+  return apiGet(`/api/sync/audit/summary${qs ? `?${qs}` : ''}`)
+}

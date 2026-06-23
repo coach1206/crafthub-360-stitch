@@ -12,7 +12,7 @@ export default function EATReorders() {
   }
 
   return (
-    <ManagementLayout title="Reorders" subtitle="Suggested and active purchase orders">
+    <ManagementLayout title="Reorders" subtitle="Suggested and active purchase orders (demo data — pending live inventory integration)">
       <Table
         columns={[
           { key: 'name', label: 'Item' }, { key: 'suggestedQty', label: 'Qty' }, { key: 'supplier', label: 'Supplier' },

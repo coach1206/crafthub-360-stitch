@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { verifyStaffHandoffCredentials, verifyFounderCredentials } from '../../data/staffHandoffRegistry.js'
+import { verifyStaffHandoffCredentials, verifyFounderCredentials, STAFF_HANDOFF_AUTH_AVAILABLE } from '../../data/staffHandoffRegistry.js'
 
 const GOLD = '#E9C176'
 
@@ -7,8 +7,61 @@ const GOLD = '#E9C176'
  * Premium staff login panel for the SmokeCraft → POS 3 handoff.
  * Staff enters email + PIN; on success calls onUnlock({ role, displayName, email }).
  * On failure shows "Staff credentials not recognized."
+ *
+ * In production builds there is no backend endpoint for this email+PIN
+ * handoff auth yet, so the form is replaced with a disabled, safe message
+ * instead of shipping real credentials in the client bundle.
  */
 export default function StaffHandoffLoginModal({ onUnlock, onCancel }) {
+  if (!STAFF_HANDOFF_AUTH_AVAILABLE) {
+    return (
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 400,
+        background: 'rgba(5,3,2,0.88)', backdropFilter: 'blur(6px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20,
+      }}>
+        <div style={{
+          width: '100%', maxWidth: 360,
+          background: 'rgba(14,10,6,0.97)',
+          border: `1px solid rgba(233,193,118,0.25)`,
+          borderRadius: 16, padding: '2rem 1.75rem',
+          boxShadow: '0 24px 60px rgba(0,0,0,0.6)',
+          fontFamily: 'Georgia, serif',
+        }}>
+          <div style={{
+            fontFamily: '"JetBrains Mono", monospace', fontSize: 10,
+            letterSpacing: '0.2em', textTransform: 'uppercase',
+            color: 'rgba(233,193,118,0.55)', marginBottom: 6,
+          }}>
+            Staff Handoff
+          </div>
+          <h2 style={{ color: GOLD, fontSize: '1.3rem', fontWeight: 400, margin: '0 0 1rem', letterSpacing: '0.04em' }}>
+            Staff Login Unavailable
+          </h2>
+          <p style={{ color: 'rgba(229,226,225,0.7)', fontSize: 13, lineHeight: 1.6, margin: '0 0 1.5rem' }}>
+            Staff authentication requires secure backend configuration.
+          </p>
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{
+              width: '100%', height: 44, borderRadius: 8,
+              background: 'transparent', border: '1px solid rgba(233,193,118,0.18)',
+              color: 'rgba(233,193,118,0.55)', fontFamily: '"JetBrains Mono", monospace',
+              fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
+            }}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return <StaffHandoffLoginForm onUnlock={onUnlock} onCancel={onCancel} />
+}
+
+function StaffHandoffLoginForm({ onUnlock, onCancel }) {
   const [email, setEmail] = useState('')
   const [pin,   setPin]   = useState('')
   const [error, setError] = useState(null)
