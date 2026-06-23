@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { loadSession } from '../services/sessionStorageService.js'
 import { useDemoMode } from '../context/DemoModeContext.jsx'
 import { useSecurity } from '../context/SecurityContext.jsx'
-import { loadStaffSession } from '../services/staffHandoffService.js'
 import BootScreen from '../components/BootScreen.jsx'
 
 // /boot is a developer/founder/admin-only system console. Public and staff
@@ -161,8 +160,7 @@ export default function BootConsole() {
   // The privileged admin-console path (founder/admin/developer, or an
   // already-authenticated founder staff session) keeps the full intro.
   const STAGES = useMemo(() => {
-    const staffSession = loadStaffSession()
-    const privileged    = staffSession?.role === 'founder' || BOOT_ALLOWED_ROLES.has(role)
+    const privileged = BOOT_ALLOWED_ROLES.has(role)
     return privileged ? BOOT_STAGES : BOOT_STAGES.filter(s => PUBLIC_STAGE_IDS.has(s.id))
   }, [role])
 
@@ -206,8 +204,7 @@ export default function BootConsole() {
     after(FADE_MS, () => {
       setIntroPhase('done')
 
-      const staffSession = loadStaffSession()
-      const privileged    = staffSession?.role === 'founder' || BOOT_ALLOWED_ROLES.has(role)
+      const privileged = BOOT_ALLOWED_ROLES.has(role)
 
       if (!privileged) {
         sessionStorage.setItem('novee_booted', '1')
