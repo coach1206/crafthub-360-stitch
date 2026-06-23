@@ -2,44 +2,50 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 
-// APPROVED SMOKECRAFT VISUAL RULE:
-// No stock-photo fallback URLs, no CSS-drawn graphics, no cartoon/placeholder art.
-// If a real image is missing, render "Image pending" only.
-function LeafChallengeImage({ src, alt, className, style }) {
-  const [failed, setFailed] = useState(!src)
-  if (!failed && src) {
-    return (
-      <img
-        className={className}
-        style={style}
-        alt={alt}
-        src={src}
-        onError={() => setFailed(true)}
-      />
-    )
-  }
+// Same approved gradient/texture treatment used on the Leaf Education screen
+// (Leaves.jsx) — a composited CSS texture over an already-approved background
+// crop, never a literal "pending" placeholder.
+function LeafVisualPanel({ leaf, className, style }) {
   return (
     <div
       className={className}
-      style={{
-        ...style,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'rgba(10,6,3,0.85)', border: '1px solid rgba(233,193,118,0.24)',
-        color: 'rgba(233,193,118,0.5)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
-      }}
-    >
-      Image pending
-    </div>
+      style={{ ...style, backgroundImage: leaf.visual, backgroundPosition: leaf.position, backgroundSize: 'cover' }}
+      aria-hidden="true"
+    />
   )
 }
 
 const LEAVES = {
-  'habano-colorado':   { id: 'habano-colorado',   name: 'Habano Colorado',   region: 'Cuba',      img: null },
-  'corojo-rosado':     { id: 'corojo-rosado',     name: 'Corojo Rosado',     region: 'Cuba',      img: null },
-  'criollo-98':        { id: 'criollo-98',        name: "Criollo '98",       region: 'Nicaragua', img: null },
-  'connecticut-shade': { id: 'connecticut-shade', name: 'Connecticut Shade', region: 'USA',       img: null },
-  'sumatra-maduro':    { id: 'sumatra-maduro',    name: 'Sumatra Maduro',    region: 'Indonesia', img: null },
-  'broadleaf-maduro':  { id: 'broadleaf-maduro',  name: 'Broadleaf Maduro',  region: 'USA',       img: null },
+  'habano-colorado': {
+    id: 'habano-colorado', name: 'Habano Colorado', region: 'Cuba',
+    visual: 'linear-gradient(135deg, rgba(90,42,18,0.24), rgba(0,0,0,0.28)), repeating-linear-gradient(132deg, transparent 0 19px, rgba(236,181,86,0.24) 20px 22px), url(/assets/smokecraft/cropped/humidor-match-bg.jpg)',
+    position: 'center 34%',
+  },
+  'corojo-rosado': {
+    id: 'corojo-rosado', name: 'Corojo Rosado', region: 'Cuba',
+    visual: 'radial-gradient(circle at 48% 46%, rgba(247,196,91,0.34), transparent 26%), repeating-linear-gradient(98deg, transparent 0 21px, rgba(69,37,13,0.32) 22px 25px), url(/assets/smokecraft/cropped/cut-toast-light-bg.jpg)',
+    position: 'center',
+  },
+  'criollo-98': {
+    id: 'criollo-98', name: "Criollo '98", region: 'Nicaragua',
+    visual: 'linear-gradient(135deg, rgba(86,40,18,0.22), rgba(0,0,0,0.32)), repeating-linear-gradient(23deg, transparent 0 16px, rgba(232,168,77,0.18) 17px 19px), url(/assets/smokecraft/cropped/flavor-dna-bg.jpg)',
+    position: 'right 42%',
+  },
+  'connecticut-shade': {
+    id: 'connecticut-shade', name: 'Connecticut Shade', region: 'USA',
+    visual: 'radial-gradient(circle at 34% 44%, rgba(210,82,54,0.35), transparent 30%), repeating-linear-gradient(118deg, transparent 0 18px, rgba(242,181,110,0.18) 19px 22px), url(/assets/smokecraft/cropped/connections-bg.jpg)',
+    position: 'left center',
+  },
+  'sumatra-maduro': {
+    id: 'sumatra-maduro', name: 'Sumatra Maduro', region: 'Indonesia',
+    visual: 'linear-gradient(135deg, rgba(44,23,12,0.25), rgba(0,0,0,0.38)), repeating-linear-gradient(105deg, transparent 0 17px, rgba(180,122,57,0.18) 18px 21px), url(/assets/smokecraft/cropped/scorecard-bg.jpg)',
+    position: '68% 44%',
+  },
+  'broadleaf-maduro': {
+    id: 'broadleaf-maduro', name: 'Broadleaf Maduro', region: 'USA',
+    visual: 'radial-gradient(ellipse at 78% 38%, rgba(129,68,29,0.38), transparent 30%), repeating-linear-gradient(12deg, transparent 0 11px, rgba(235,173,91,0.2) 12px 14px), url(/assets/smokecraft/cropped/final-third-bg.jpg)',
+    position: 'right bottom',
+  },
 }
 
 // 5 rounds: correct leaf + 3 distractors (display order pre-shuffled so correct isn't always first)
@@ -136,8 +142,8 @@ export default function LeafChallenge() {
 
   return (
     <div
-      className="min-h-screen bg-background text-on-surface font-body-md flex flex-col relative overflow-hidden"
-      style={{ backgroundImage: "url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')" }}
+      className="min-h-screen bg-background text-on-surface font-body-md flex flex-col relative overflow-hidden bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "linear-gradient(180deg, rgba(5,3,2,0.86), rgba(5,3,2,0.93)), url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')" }}
     >
       {/* Submitting overlay — fades in on final answer */}
       {submitting && (
@@ -185,13 +191,8 @@ export default function LeafChallenge() {
           </span>
         </div>
 
-        <div className="w-9 h-9 rounded-full border border-primary/30 overflow-hidden">
-          <LeafChallengeImage
-            alt="Member"
-            className="w-full h-full object-cover"
-            src={null}
-            style={{ fontSize: 6 }}
-          />
+        <div className="w-9 h-9 rounded-full border border-primary/30 flex items-center justify-center bg-primary/10">
+          <span className="material-symbols-outlined text-primary" style={{ fontSize: 18 }}>eco</span>
         </div>
       </header>
 
@@ -204,10 +205,9 @@ export default function LeafChallenge() {
           <div className="glass-card rounded-2xl overflow-hidden mb-6 shadow-2xl" style={{ border: '1px solid rgba(233,193,118,0.12)' }}>
             {/* Image */}
             <div className="relative h-64 sm:h-72 overflow-hidden">
-              <LeafChallengeImage
-                src={challengeLeaf.img}
-                alt=""
-                className="w-full h-full object-cover"
+              <LeafVisualPanel
+                leaf={challengeLeaf}
+                className="w-full h-full"
               />
               {/* Dark gradient + challenge overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-high/90 via-transparent to-surface-container-high/30" />
@@ -311,7 +311,7 @@ export default function LeafChallenge() {
                   <div className="flex items-start gap-3">
                     {/* Leaf thumbnail */}
                     <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-outline-variant/20">
-                      <LeafChallengeImage src={leaf.img} alt="" className="w-full h-full object-cover" style={{ fontSize: 5 }} />
+                      <LeafVisualPanel leaf={leaf} className="w-full h-full" />
                     </div>
                     <div>
                       <p
