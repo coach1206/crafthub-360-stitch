@@ -47,8 +47,8 @@ export function PremiumDivider({ children }) {
   return <div className="premium-divider-gold">{children}</div>
 }
 
-export function PremiumPill({ children, className = '' }) {
-  return <span className={`premium-pill${className ? ' ' + className : ''}`}>{children}</span>
+export function PremiumPill({ children, className = '', style = {} }) {
+  return <span className={`premium-pill${className ? ' ' + className : ''}`} style={style}>{children}</span>
 }
 
 export function PremiumButton({ children, variant = 'primary', onClick, type = 'button', className = '', disabled = false }) {

@@ -24,6 +24,18 @@ export default function PassportDirectory() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('All')
+  const [detailMember, setDetailMember] = useState(null)
+  const [savedNames, setSavedNames] = useState(() => new Set())
+  const [introRequested, setIntroRequested] = useState(() => new Set())
+  const [connectedNames, setConnectedNames] = useState(() => new Set())
+
+  function toggleInSet(setter, name) {
+    setter(prev => {
+      const next = new Set(prev)
+      next.has(name) ? next.delete(name) : next.add(name)
+      return next
+    })
+  }
 
   const filtered = MEMBERS.filter(m => {
     const q = search.toLowerCase()
@@ -208,18 +220,24 @@ export default function PassportDirectory() {
 
                 <div className="grid grid-cols-4 gap-2">
                   {[
-                    { label:'View Profile', icon:'person'            },
-                    { label:'Save',         icon:'bookmark'          },
-                    { label:'Intro',        icon:'record_voice_over' },
-                    { label:'Connect',      icon:'hub'               },
+                    { label:'View Profile', icon:'person',            active:false,                            onClick:() => setDetailMember(m) },
+                    { label: savedNames.has(m.name) ? 'Saved' : 'Save', icon: savedNames.has(m.name) ? 'bookmark_added' : 'bookmark', active: savedNames.has(m.name), onClick:() => toggleInSet(setSavedNames, m.name) },
+                    { label: introRequested.has(m.name) ? 'Requested' : 'Intro', icon:'record_voice_over', active: introRequested.has(m.name), onClick:() => toggleInSet(setIntroRequested, m.name) },
+                    { label: connectedNames.has(m.name) ? 'Connected' : 'Connect', icon: connectedNames.has(m.name) ? 'check_circle' : 'hub', active: connectedNames.has(m.name), onClick:() => toggleInSet(setConnectedNames, m.name) },
                   ].map(btn => (
                     <button key={btn.label}
+                      type="button"
+                      onClick={btn.onClick}
                       onTouchStart={e => e.currentTarget.style.transform='scale(0.93)'}
                       onTouchEnd={e => e.currentTarget.style.transform=''}
                       className="flex flex-col items-center justify-center gap-1 rounded-xl active:scale-93 transition-all"
-                      style={{ height:56, background:'rgba(102,187,106,0.08)', border:'1px solid rgba(102,187,106,0.2)' }}>
+                      style={{
+                        height:56,
+                        background: btn.active ? 'rgba(102,187,106,0.22)' : 'rgba(102,187,106,0.08)',
+                        border: btn.active ? '1.5px solid rgba(102,187,106,0.55)' : '1px solid rgba(102,187,106,0.2)',
+                      }}>
                       <span className="material-symbols-outlined" style={{ fontSize:16, color:'#66bb6a', ...FILL1 }}>{btn.icon}</span>
-                      <span className="text-[8.5px] font-bold uppercase tracking-wider" style={{ color:'rgba(168,230,172,0.6)' }}>{btn.label}</span>
+                      <span className="text-[8.5px] font-bold uppercase tracking-wider" style={{ color: btn.active ? '#8bd98f' : 'rgba(168,230,172,0.6)' }}>{btn.label}</span>
                     </button>
                   ))}
                 </div>
@@ -236,6 +254,35 @@ export default function PassportDirectory() {
         </section>
 
       </main>
+
+      {detailMember && (
+        <div className="fixed inset-0 z-[60] flex items-end justify-center"
+          style={{ background:'rgba(0,0,0,0.7)' }}
+          onClick={() => setDetailMember(null)}>
+          <div onClick={e => e.stopPropagation()}
+            className="w-full max-w-2xl rounded-t-3xl p-5 pb-8"
+            style={{ background:'linear-gradient(160deg,#0a1e0b,#081208)', border:'1px solid rgba(102,187,106,0.3)', borderBottom:'none' }}>
+            <div className="flex items-center justify-between mb-4">
+              <p className="font-bold text-[18px]" style={{ color:'#a8e6ac', fontFamily:'"Playfair Display",serif' }}>{detailMember.name}</p>
+              <button onClick={() => setDetailMember(null)} className="active:scale-90 transition-transform">
+                <span className="material-symbols-outlined" style={{ color:'rgba(168,230,172,0.5)' }}>close</span>
+              </button>
+            </div>
+            <p className="text-[12px] mb-3" style={{ color:'rgba(168,230,172,0.6)' }}>{detailMember.role} · {detailMember.company} · {detailMember.city}</p>
+            <div className="flex gap-1.5 flex-wrap mb-3">
+              {detailMember.tags.map(t => (
+                <span key={t} className="px-2.5 py-0.5 rounded-full text-[9px] uppercase tracking-wider font-bold"
+                  style={{ background:'rgba(102,187,106,0.1)', border:'1px solid rgba(102,187,106,0.22)', color:'rgba(168,230,172,0.65)' }}>{t}</span>
+              ))}
+            </div>
+            <p className="text-[11px] mb-1" style={{ color:'rgba(102,187,106,0.45)' }}>Goal</p>
+            <p className="text-[12px] mb-3" style={{ color:'rgba(168,230,172,0.7)' }}>{detailMember.goals}</p>
+            <p className="text-[11px] mb-1" style={{ color:'rgba(102,187,106,0.45)' }}>Shared Event</p>
+            <p className="text-[12px]" style={{ color:'rgba(168,230,172,0.7)' }}>{detailMember.shared}</p>
+          </div>
+        </div>
+      )}
+
       <PassportBottomNav active="directory" />
     </div>
   )

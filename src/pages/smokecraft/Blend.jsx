@@ -267,7 +267,12 @@ export default function Blend() {
                     </div>
                   </button>
                 ))}
-                <button className="w-[72px] h-[72px] rounded-lg titanium-border p-[1px] opacity-40 hover:opacity-100 transition-all">
+                <button
+                  type="button"
+                  disabled
+                  title="Custom wrapper requests are not yet supported — ask staff for special orders"
+                  className="w-[72px] h-[72px] rounded-lg titanium-border p-[1px] opacity-20 cursor-not-allowed transition-all"
+                >
                   <div className="w-full h-full bg-background/20 rounded-[7px] flex items-center justify-center">
                     <span className="material-symbols-outlined text-white/20">add</span>
                   </div>
@@ -332,8 +337,13 @@ export default function Blend() {
                     </div>
                   </button>
                 ))}
-                <button className="w-[72px] h-[72px] rounded-lg border-2 border-dashed border-white/10 flex items-center justify-center group hover:border-primary/40 transition-colors">
-                  <span className="material-symbols-outlined text-white/10 group-hover:text-primary transition-colors">add_circle</span>
+                <button
+                  type="button"
+                  disabled
+                  title="Custom filler requests are not yet supported — ask staff for special orders"
+                  className="w-[72px] h-[72px] rounded-lg border-2 border-dashed border-white/10 flex items-center justify-center cursor-not-allowed opacity-50"
+                >
+                  <span className="material-symbols-outlined text-white/10">add_circle</span>
                 </button>
               </div>
             </section>

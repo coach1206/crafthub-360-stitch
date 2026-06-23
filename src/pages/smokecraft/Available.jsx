@@ -232,7 +232,12 @@ export default function Available() {
                   >
                     {selectedCigar === cigar.id ? 'Selected ✓' : 'Select Cigar'}
                   </button>
-                  <button className="px-4 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors">
+                  <button
+                    type="button"
+                    disabled
+                    title="Drink pairing suggestions are not yet available — ask staff for a recommendation"
+                    className="px-4 border border-outline-variant rounded-lg text-on-surface-variant opacity-40 cursor-not-allowed"
+                  >
                     <span className="material-symbols-outlined">wine_bar</span>
                   </button>
                 </div>

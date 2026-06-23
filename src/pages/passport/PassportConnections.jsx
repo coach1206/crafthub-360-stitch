@@ -6,6 +6,7 @@ import { CONNECTIONS, findConnection } from '../../data/connectionsData.js'
 import { verifyConnection, scanConnection, getPassport } from '../../api/passportConnectionsApi.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import { playStampSound, playSuccessTone } from '../../utils/sound.js'
+import { PremiumPill } from '../../components/premium/PremiumPanel.jsx'
 
 const FILL1 = { fontVariationSettings:"'FILL' 1" }
 
@@ -795,7 +796,9 @@ export default function PassportConnections() {
         </div>
 
         {/* ── Section label ─────────────────────────────── */}
-        <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:9, fontWeight:700, color:'rgba(197,160,89,0.4)', letterSpacing:'0.18em', textTransform:'uppercase', marginBottom:12 }}>Top Matches For You</p>
+        <PremiumPill style={{ background:'rgba(197,160,89,0.08)', borderColor:'rgba(197,160,89,0.3)', color:'#c5a059', marginBottom:12 }}>
+          {TABS.find(t => t.id === tab)?.label || 'Top Matches For You'}
+        </PremiumPill>
 
         {/* ── Connection rows ──────────────────────────── */}
         <AnimatePresence mode="wait">

@@ -176,7 +176,10 @@ export default function FlavorDNA() {
             <div style={{ fontSize: 13, color: '#D4AF37', fontWeight: 600 }}>Julian Sterling</div>
             <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 8, color: '#6A5A40', letterSpacing: '0.16em', textTransform: 'uppercase' }}>Platinum Member</div>
           </div>
-          <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 18px', borderRadius: 20, background: 'rgba(212,175,55,0.12)', border: '1px solid rgba(212,175,55,0.35)', color: '#D4AF37', fontFamily: '"JetBrains Mono",monospace', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', cursor: 'pointer' }}>
+          <button
+            onClick={() => navigate('/smokecraft/grand-lounge-ranking')}
+            title="View Grand Lounge ranking"
+            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 18px', borderRadius: 20, background: 'rgba(212,175,55,0.12)', border: '1px solid rgba(212,175,55,0.35)', color: '#D4AF37', fontFamily: '"JetBrains Mono",monospace', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', cursor: 'pointer' }}>
             <span className="material-symbols-outlined" style={{ fontSize: 14 }}>military_tech</span>
             Grand Lounge
           </button>

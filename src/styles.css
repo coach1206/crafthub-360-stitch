@@ -1791,4 +1791,71 @@
   .premium-btn-secondary:active {
     transform: scale(0.97);
   }
+
+  /* ════════════════════════════════════════════════════════════════
+     PHASE 7B — GUEST EXPERIENCE REDESIGN
+     Additive-only screen-level polish for SmokeCraft + Passport guest
+     flows. Built on the Phase 7A tokens/primitives above — nothing in
+     this block overrides an existing selector.
+   ════════════════════════════════════════════════════════════════ */
+
+  /* ─── Obvious "selected" state for choice cards/chips (SmokeCraft
+       region/soil/cigar/storage selection, Passport tab selection) ── */
+  .premium-selected-gold {
+    box-shadow: 0 0 0 2px #e9c176, 0 0 20px rgba(233, 193, 118, 0.35);
+    transform: translateY(-1px);
+  }
+
+  .premium-selected-navy {
+    box-shadow: 0 0 0 2px #c9a84c, 0 0 20px rgba(201, 168, 76, 0.3);
+    transform: translateY(-1px);
+  }
+
+  /* ─── SmokeCraft ritual-journey progress rail ──────────────────── */
+  .premium-smokecraft-progress-rail {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .premium-smokecraft-progress-dot {
+    height: 4px;
+    flex: 1;
+    border-radius: 9999px;
+    background: rgba(233, 193, 118, 0.15);
+    transition: background 0.3s ease;
+  }
+
+  .premium-smokecraft-progress-dot.is-complete {
+    background: linear-gradient(90deg, #e9c176, #c5a059);
+  }
+
+  /* ─── Passport gold-trimmed quick action tile ──────────────────── */
+  .premium-passport-quick-action {
+    background: rgba(201, 168, 76, 0.08);
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    border-radius: 0.85rem;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .premium-passport-quick-action:active {
+    transform: scale(0.96);
+    background: rgba(201, 168, 76, 0.16);
+  }
+
+  /* ─── Guest-safe "ask staff" affordance (never claims completion) ── */
+  .premium-ask-staff-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(233, 193, 118, 0.1);
+    border: 1px dashed rgba(233, 193, 118, 0.4);
+    color: #e9c176;
+  }
 }
