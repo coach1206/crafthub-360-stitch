@@ -1665,3 +1665,282 @@
     width: 100%;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   PHASE 7A — PREMIUM DESIGN FOUNDATION
+   Additive only. None of the rules below modify or override any
+   existing class above — every selector is uniquely namespaced under
+   "premium-*" so this layer cannot regress Phase 6 or earlier UI.
+   Three variants, matching the Phase 7 reference pack:
+     - premium-passport-*  (navy / ivory / gold leather — 360 Passport)
+     - premium-novee-*     (deep-tech navy / cyan / gold — NOVEE OS)
+     - premium-smokecraft-* (black / espresso / amber / gold — SmokeCraft)
+   ════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+
+  /* ─── Passport shell + panel (navy leather, ivory paper) ─────── */
+  .premium-passport-shell {
+    background: linear-gradient(180deg, #0f1b2e 0%, #0a1320 100%);
+    color: #f3ead8;
+  }
+
+  .premium-passport-panel {
+    background: #f3ead8;
+    color: #1c1812;
+    border: 1px solid rgba(201, 168, 76, 0.35);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  .premium-passport-sidebar {
+    background: linear-gradient(180deg, #0f1b2e 0%, #0a1320 100%);
+    border-right: 1px solid rgba(201, 168, 76, 0.25);
+    color: #f3ead8;
+  }
+
+  .premium-passport-gold-rule {
+    border: none;
+    border-top: 1px solid rgba(201, 168, 76, 0.4);
+  }
+
+  /* ─── NOVEE OS shell + panel (deep-tech navy + cyan/gold) ─────── */
+  .premium-novee-shell {
+    background:
+      radial-gradient(circle at 80% 0%, rgba(91, 143, 201, 0.08) 0%, transparent 50%),
+      linear-gradient(180deg, #070b14 0%, #0a1320 100%);
+    color: #eaf2fb;
+  }
+
+  .premium-novee-panel {
+    background: #0d1420;
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .premium-novee-glow-ring {
+    box-shadow: 0 0 0 1px rgba(91, 143, 201, 0.3), 0 0 24px rgba(91, 143, 201, 0.15);
+  }
+
+  /* ─── SmokeCraft 360 shell + panel (black/espresso/amber/gold) ── */
+  .premium-smokecraft-shell {
+    background: linear-gradient(180deg, #0e0a08 0%, #1a120c 100%);
+    color: #e9c176;
+  }
+
+  .premium-smokecraft-panel {
+    background: rgba(20, 14, 10, 0.92);
+    border: 1px solid rgba(233, 193, 118, 0.18);
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  }
+
+  /* ─── Shared premium primitives (variant-agnostic) ────────────── */
+  .premium-divider-gold {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.6), transparent);
+  }
+
+  .premium-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid rgba(201, 168, 76, 0.35);
+  }
+
+  .premium-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+    color: #1c1812;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .premium-btn-primary:active {
+    transform: scale(0.97);
+  }
+
+  .premium-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid rgba(201, 168, 76, 0.4);
+    color: inherit;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .premium-btn-secondary:active {
+    transform: scale(0.97);
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     PHASE 7B — GUEST EXPERIENCE REDESIGN
+     Additive-only screen-level polish for SmokeCraft + Passport guest
+     flows. Built on the Phase 7A tokens/primitives above — nothing in
+     this block overrides an existing selector.
+   ════════════════════════════════════════════════════════════════ */
+
+  /* ─── Obvious "selected" state for choice cards/chips (SmokeCraft
+       region/soil/cigar/storage selection, Passport tab selection) ── */
+  .premium-selected-gold {
+    box-shadow: 0 0 0 2px #e9c176, 0 0 20px rgba(233, 193, 118, 0.35);
+    transform: translateY(-1px);
+  }
+
+  .premium-selected-navy {
+    box-shadow: 0 0 0 2px #c9a84c, 0 0 20px rgba(201, 168, 76, 0.3);
+    transform: translateY(-1px);
+  }
+
+  /* ─── SmokeCraft ritual-journey progress rail ──────────────────── */
+  .premium-smokecraft-progress-rail {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .premium-smokecraft-progress-dot {
+    height: 4px;
+    flex: 1;
+    border-radius: 9999px;
+    background: rgba(233, 193, 118, 0.15);
+    transition: background 0.3s ease;
+  }
+
+  .premium-smokecraft-progress-dot.is-complete {
+    background: linear-gradient(90deg, #e9c176, #c5a059);
+  }
+
+  /* ─── Passport gold-trimmed quick action tile ──────────────────── */
+  .premium-passport-quick-action {
+    background: rgba(201, 168, 76, 0.08);
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    border-radius: 0.85rem;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .premium-passport-quick-action:active {
+    transform: scale(0.96);
+    background: rgba(201, 168, 76, 0.16);
+  }
+
+  /* ─── Guest-safe "ask staff" affordance (never claims completion) ── */
+  .premium-ask-staff-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(233, 193, 118, 0.1);
+    border: 1px dashed rgba(233, 193, 118, 0.4);
+    color: #e9c176;
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     PHASE 7C — NOVEE COMMAND HUB + MANAGER/ADMIN ACCESS REDESIGN
+     Additive-only. Nothing in this block overrides an existing
+     selector — built on the Phase 7A navy/gold NOVEE tokens above.
+   ════════════════════════════════════════════════════════════════ */
+
+  /* ─── Module-launcher glass command card (NOVEE tiles, explanation
+       cards) — subtle electric-blue intelligence glow on gold trim ── */
+  .premium-novee-glow-card {
+    background: rgba(13, 20, 32, 0.85);
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    border-radius: 0.85rem;
+    box-shadow: 0 0 0 1px rgba(91, 143, 201, 0.12), 0 12px 28px rgba(0, 0, 0, 0.45);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .premium-novee-glow-card:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(91, 143, 201, 0.28), 0 16px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ─── Honest module-status badge. Content is supplied by the caller
+       and must be a real or clearly-static label, never fabricated
+       live telemetry ── */
+  .premium-novee-status-dot {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 9999px;
+    background: rgba(91, 143, 201, 0.12);
+    border: 1px solid rgba(91, 143, 201, 0.3);
+    color: #9cc2e8;
+  }
+
+  .premium-novee-status-dot[data-status="Active"],
+  .premium-novee-status-dot[data-status="Configured"] {
+    background: rgba(52, 211, 153, 0.1);
+    border-color: rgba(52, 211, 153, 0.3);
+    color: #6ee7b7;
+  }
+
+  .premium-novee-status-dot[data-status="Restricted"],
+  .premium-novee-status-dot[data-status="Coming Soon"] {
+    background: rgba(201, 168, 76, 0.1);
+    border-color: rgba(201, 168, 76, 0.3);
+    color: #d8b35f;
+  }
+
+  /* ─── Secure-access panel shell for PIN/login forms ─────────────── */
+  .premium-novee-access-panel {
+    box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.1), 0 0 36px rgba(91, 143, 201, 0.08);
+  }
+
+  /* ─── Left-side system-status rail ──────────────────────────────── */
+  .premium-novee-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .premium-novee-rail-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 0.6rem;
+    background: rgba(13, 20, 32, 0.6);
+    border: 1px solid rgba(201, 168, 76, 0.15);
+  }
+
+  .premium-novee-rail-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(234, 242, 251, 0.5);
+  }
+
+  .premium-novee-rail-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: #9cc2e8;
+  }
+}

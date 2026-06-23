@@ -12,6 +12,7 @@ import Home             from './pages/Home.jsx'
 import Boot             from './pages/Boot.jsx'
 import NoveeHome        from './pages/NoveeHome.jsx'
 import CraftHub         from './pages/CraftHub.jsx'
+import PublicCraftHubLanding from './pages/PublicCraftHubLanding.jsx'
 import POS3             from './pages/POS3.jsx'
 import EATCommand       from './pages/EATCommand.jsx'
 
@@ -225,6 +226,7 @@ export default function App() {
                 </ProtectedRoute>
               } />
               <Route path="crafthub" element={<CraftHub />} />
+              <Route path="system-explained" element={<PublicCraftHubLanding />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
               <Route path="smokecraft">

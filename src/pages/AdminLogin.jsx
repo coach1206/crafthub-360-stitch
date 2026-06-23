@@ -103,10 +103,14 @@ export default function AdminLogin() {
         <div style={{ color: 'rgba(201,168,76,0.25)', fontSize: '11px', letterSpacing: '0.1em' }}>
           Email and PIN required
         </div>
+        <div style={{ color: 'rgba(201,168,76,0.32)', fontSize: '10px', letterSpacing: '0.08em', marginTop: '0.6rem' }}>
+          Manager → E.A.T. Command Hub &nbsp;·&nbsp; Admin → Admin Console
+        </div>
       </div>
 
       <form
         onSubmit={handleSubmit}
+        className="premium-novee-access-panel"
         style={{
           background:   CARD,
           border:       `1px solid ${BORDER}`,

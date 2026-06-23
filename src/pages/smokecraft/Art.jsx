@@ -42,7 +42,7 @@ const LAYERS = [
 // No CSS-drawn cigar graphics, no fake cigar illustrations.
 // If a real photo is missing, render "Image pending" only.
 
-function CigarVisual({ active }) {
+function CigarVisual({ active, onSelectZone }) {
   const rows = [
     { zone: 'wrapper', label: 'Wrapper', pct: '40%', color: '#e9c176' },
     { zone: 'binder', label: 'Binder', pct: '25%', color: '#c5a059' },
@@ -68,6 +68,7 @@ function CigarVisual({ active }) {
             <button
               key={row.zone}
               type="button"
+              onClick={() => onSelectZone?.(row.zone)}
               className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition-all active:scale-[0.98]"
               style={{ minHeight: 56, background: hot ? 'rgba(233,193,118,0.08)' : 'transparent' }}
             >
@@ -201,7 +202,7 @@ export default function Art() {
                   <span className="h-px w-14 bg-gradient-to-l from-transparent to-[#e9c17688]" />
                 </div>
               </div>
-              <CigarVisual active={activeLayer} />
+              <CigarVisual active={activeLayer} onSelectZone={setActiveLayer} />
               <div className="grid grid-cols-3 border-t border-[#e9c17622]">
                 {[
                   { icon: 'eco', stat: '2-4', label: 'Leaf Varieties' },

@@ -576,7 +576,7 @@ export function CommandHubHeader({ navigate, isDemoMode, roleLabel }) {
         </div>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <div className="rounded-md border border-emerald-400/25 bg-emerald-400/10 px-4 py-3 text-xs font-black uppercase tracking-[0.16em] text-emerald-200">System Healthy</div>
+          <div className="rounded-md border border-emerald-400/25 bg-emerald-400/10 px-4 py-3 text-xs font-black uppercase tracking-[0.16em] text-emerald-200">Console Active</div>
           <div className="rounded-md border border-primary/25 bg-primary/10 px-4 py-3 text-xs font-black uppercase tracking-[0.16em] text-primary">{isDemoMode ? 'Demo User' : roleLabel}</div>
           {isDemoMode && <div className="rounded-md border border-amber-300/40 bg-amber-300/10 px-4 py-3 text-xs font-black uppercase tracking-[0.16em] text-amber-100">Demo Mode Active</div>}
         </div>
@@ -586,10 +586,10 @@ export function CommandHubHeader({ navigate, isDemoMode, roleLabel }) {
             <span className="material-symbols-outlined">id_card</span>
             Passport
           </button>
-          <button type="button" aria-label="Notifications" className="flex min-h-[52px] min-w-[52px] items-center justify-center rounded-md border border-primary/20 bg-black/20 text-primary">
+          <button type="button" disabled aria-label="Notifications" title="Notifications center — coming soon" className="flex min-h-[52px] min-w-[52px] items-center justify-center rounded-md border border-primary/20 bg-black/20 text-primary opacity-40 cursor-not-allowed">
             <span className="material-symbols-outlined">notifications</span>
           </button>
-          <button type="button" aria-label="Settings" className="flex min-h-[52px] min-w-[52px] items-center justify-center rounded-md border border-primary/20 bg-black/20 text-primary">
+          <button type="button" onClick={() => navigate('/system-overview')} aria-label="Settings" title="System settings and overview" className="flex min-h-[52px] min-w-[52px] items-center justify-center rounded-md border border-primary/20 bg-black/20 text-primary">
             <span className="material-symbols-outlined">settings</span>
           </button>
           <button type="button" onClick={() => navigate('/passport')} aria-label="User Passport" className="h-12 w-12 shrink-0 overflow-hidden rounded-full border-2 border-primary/50 bg-surface-container-high">
@@ -761,7 +761,13 @@ export function RemoteSoftwareControlPanel({ navigate }) {
           <p className="text-xs font-black uppercase tracking-[0.26em] text-primary/70">Remote push actions</p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {remotePushActions.map((item) => (
-              <button key={item} type="button" className="min-h-[64px] rounded-md border border-primary/20 bg-black/25 px-4 text-left text-sm font-bold leading-6 text-[#ead6a6]">{item}</button>
+              <button
+                key={item}
+                type="button"
+                disabled
+                title="Remote push control is not yet available — open Remote Control for status"
+                className="min-h-[64px] rounded-md border border-primary/20 bg-black/25 px-4 text-left text-sm font-bold leading-6 text-[#ead6a6] opacity-40 cursor-not-allowed"
+              >{item}</button>
             ))}
           </div>
         </div>
