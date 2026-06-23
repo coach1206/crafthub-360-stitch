@@ -57,10 +57,10 @@ export default function RequestPurchase() {
   }
 
   return (
-    <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
-      <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/assets/smokecraft/cropped/request-purchase-bg.jpg')" }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
+    <div className="request-purchase-page text-on-surface font-body-md overflow-x-hidden min-h-screen">
+      <div className="fixed inset-0 -z-20 overflow-hidden request-purchase-page-bg">
+        <div className="absolute inset-0 bg-cover bg-center opacity-25" style={{ backgroundImage:"url('/assets/smokecraft/cropped/request-purchase-bg.jpg')" }} />
+        <div className="absolute inset-0 pointer-events-none request-purchase-page-vignette" />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
         <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/humidor-match')} aria-label="Back"><ArrowBackIcon size={24} /></button>
@@ -72,11 +72,19 @@ export default function RequestPurchase() {
           <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'41.2%' }} /></div>
           <span>Request / Purchase</span>
         </div>
-        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
-        <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Request or Purchase Cigar</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>How will you be obtaining your cigar for tonight's session?</p>
-        <div className="rounded-2xl overflow-hidden mb-10 border border-primary/15" style={{ height: 180 }}>
-          <img src="/assets/smokecraft/cropped/request-purchase-bg.jpg" alt="Request or purchase" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.1) brightness(0.85)' }} />
+
+        <div className="request-purchase-hero">
+          <img src="/assets/smokecraft/cropped/request-purchase-bg.jpg" alt="Request or purchase" className="request-purchase-hero__img" />
+          <div className="request-purchase-hero__fade" aria-hidden="true" />
+          <div className="request-purchase-hero__content">
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-2">SmokeCraft 360</p>
+            <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)', fontFamily: '"Playfair Display", serif' }}>Request or Purchase Cigar</h2>
+            <p className="font-body-lg text-body-lg text-on-surface-variant" style={{ maxWidth:520 }}>How will you be obtaining your cigar for tonight's session?</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-3 mb-6 rounded-2xl border" style={{ padding: '14px 18px', background: 'rgba(233,193,118,0.06)', borderColor: 'rgba(233,193,118,0.25)' }}>
+          <span className="material-symbols-outlined text-primary" style={{ fontSize: 20, marginTop: 1 }}>info</span>
+          <p className="font-body-sm text-body-sm text-on-surface-variant" style={{ fontSize: 13 }}>This is a local handoff step only — no payment is processed and no order is placed here. Your choice tells the session what to do next.</p>
         </div>
         <div
           className="flex flex-col gap-3 mb-12 rounded-3xl border border-primary/15 backdrop-blur-xl"
@@ -124,6 +132,44 @@ export default function RequestPurchase() {
           </button>
         </div>
       </main>
+      <style>{`
+        .request-purchase-page { background: #0d0d0e; }
+        .request-purchase-page-bg { background: #0d0d0e; }
+        .request-purchase-page-vignette {
+          background:
+            radial-gradient(ellipse at 50% 0%, rgba(233,193,118,0.08) 0%, transparent 45%),
+            linear-gradient(0deg, rgba(13,13,14,0.97) 0%, rgba(13,13,14,0.55) 45%, rgba(13,13,14,0.97) 100%);
+        }
+        .request-purchase-hero {
+          position: relative;
+          border-radius: 24px;
+          overflow: hidden;
+          margin-bottom: 40px;
+          min-height: 220px;
+          display: flex;
+          align-items: flex-end;
+          border: 1px solid rgba(233,193,118,0.22);
+          box-shadow: 0 24px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+        .request-purchase-hero__img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          filter: saturate(1.15) contrast(1.05) brightness(0.7);
+        }
+        .request-purchase-hero__fade {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, rgba(13,13,14,0.15) 0%, rgba(13,13,14,0.55) 55%, rgba(13,13,14,0.95) 100%);
+        }
+        .request-purchase-hero__content {
+          position: relative;
+          z-index: 1;
+          padding: 26px 26px 24px;
+        }
+      `}</style>
     </div>
   )
 }

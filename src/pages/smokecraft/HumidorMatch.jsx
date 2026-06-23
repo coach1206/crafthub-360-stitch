@@ -12,69 +12,93 @@ const LANE_META = {
   'venue-featured-pick': { label: 'Venue Featured Pick', Icon: CrownIcon },
 }
 
+function CigarMediaPanel({ cigarName, shapePhoto }) {
+  const [failed, setFailed] = useState(false)
+  const src = shapePhoto || null
+  if (!src || failed) {
+    return (
+      <div className="humidor-card__media humidor-card__media--pending" aria-hidden="true">
+        <span className="material-symbols-outlined" style={{ fontSize: 28, opacity: 0.5 }}>photo_camera</span>
+        <span>Cigar image pending</span>
+      </div>
+    )
+  }
+  return (
+    <div className="humidor-card__media">
+      <img src={src} alt={cigarName} onError={() => setFailed(true)} />
+      <div className="humidor-card__media-fade" aria-hidden="true" />
+    </div>
+  )
+}
+
+const STOCK_COLOR = { 'In Stock': '#5fb87a', 'Low Stock': '#e9c176', 'Out of Stock': '#d96b6b' }
+
 function RecommendationCard({ rec, selected, onSelect, requestState, onRequestStaff, onAddToPos }) {
   const meta = LANE_META[rec.recommendationType]
   return (
-    <div
-      className="flex flex-col gap-3 rounded-2xl border transition-all duration-300"
-      style={{
-        padding: 20,
-        background: selected ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
-        borderColor: selected ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.08)',
-      }}
-    >
-      <div className="flex items-center gap-3">
-        <span className="flex items-center justify-center rounded-full shrink-0" style={{ width: 40, height: 40, background: 'rgba(233,193,118,0.14)', color: '#e9c176' }}>
-          <meta.Icon size={20} />
-        </span>
-        <div>
-          <p className="font-label-sm text-label-sm text-primary uppercase tracking-widest">{meta.label}</p>
-          <p className="font-label-lg text-label-lg text-on-surface font-semibold">{rec.cigarName}</p>
+    <div className={`humidor-card${selected ? ' humidor-card--selected' : ''}`}>
+      <CigarMediaPanel cigarName={rec.cigarName} shapePhoto={rec.shapePhoto} />
+      <div className="humidor-card__body">
+        <div className="flex items-center gap-3 mb-3">
+          <span className="humidor-card__lane-icon">
+            <meta.Icon size={18} />
+          </span>
+          <div>
+            <p className="font-label-sm text-label-sm text-primary uppercase tracking-widest">{meta.label}</p>
+            <p className="font-label-lg text-label-lg text-on-surface font-semibold leading-tight">{rec.cigarName}</p>
+          </div>
         </div>
-      </div>
-      <div className="grid grid-cols-2 gap-2 font-body-md text-body-md text-on-surface-variant">
-        <p>Brand: {rec.brand}</p>
-        <p>Country: {rec.cigarCountry}</p>
-        <p>Wrapper: {rec.wrapper}</p>
-        <p>Strength: {rec.strength}</p>
-        <p>Burn time: {rec.burnTime}</p>
-        <p>{rec.priceStatus}</p>
-      </div>
-      <p className="font-body-sm text-body-sm text-on-surface-variant">Flavor notes: {rec.flavorNotes.join(', ')}</p>
-      <p className="font-body-sm text-body-sm text-on-surface-variant">{rec.pairingSuggestion}</p>
-      <p className="font-body-sm text-body-sm text-on-surface-variant">{rec.inventoryStatus}</p>
-      {rec.mentorNote && <p className="font-body-sm text-body-sm text-primary/80">{rec.mentorNote}</p>}
-      <p className="font-body-sm text-body-sm text-on-surface-variant">Match reason: {rec.matchReason}</p>
-      <p className="font-label-sm text-label-sm text-primary">Match score: {rec.matchScore}/100</p>
-      {rec.stepUpReason && <p className="font-body-sm text-body-sm text-on-surface-variant">{rec.stepUpReason}</p>}
-      {rec.venueFeatureReason && <p className="font-body-sm text-body-sm text-on-surface-variant">{rec.venueFeatureReason}</p>}
-      <div className="flex flex-wrap gap-2 mt-2">
-        <button
-          type="button"
-          onClick={() => onSelect(rec)}
-          className="font-label-sm text-label-sm uppercase tracking-widest rounded-lg active:scale-95 transition-all"
-          style={{ height: 40, paddingInline: 16, background: selected ? '#e9c176' : 'rgba(255,255,255,0.06)', color: selected ? '#131314' : '#fff', border: '1px solid rgba(233,193,118,0.4)' }}
-        >
-          {selected ? 'Selected' : 'Select This Cigar'}
-        </button>
-        <button
-          type="button"
-          onClick={() => onRequestStaff(rec)}
-          disabled={requestState?.staff === 'pending'}
-          className="font-label-sm text-label-sm uppercase tracking-widest rounded-lg active:scale-95 transition-all disabled:opacity-60"
-          style={{ height: 40, paddingInline: 16, background: 'rgba(255,255,255,0.06)', color: '#fff', border: '1px solid rgba(255,255,255,0.15)' }}
-        >
-          {requestState?.staff === 'pending' ? 'Requested — Pending Staff' : 'Request from Staff'}
-        </button>
-        <button
-          type="button"
-          onClick={() => onAddToPos(rec)}
-          disabled={requestState?.pos === 'pending'}
-          className="font-label-sm text-label-sm uppercase tracking-widest rounded-lg active:scale-95 transition-all disabled:opacity-60"
-          style={{ height: 40, paddingInline: 16, background: 'rgba(255,255,255,0.06)', color: '#fff', border: '1px solid rgba(255,255,255,0.15)' }}
-        >
-          {requestState?.pos === 'pending' ? 'Add to POS — Backend Pending' : 'Add to POS'}
-        </button>
+        <div className="humidor-card__facts">
+          <span><strong>Brand</strong>{rec.brand}</span>
+          <span><strong>Country</strong>{rec.cigarCountry}</span>
+          <span><strong>Wrapper</strong>{rec.wrapper}</span>
+          <span><strong>Strength</strong>{rec.strength}</span>
+          <span><strong>Burn time</strong>{rec.burnTime}</span>
+          <span>
+            <strong>Availability</strong>
+            <span style={{ color: STOCK_COLOR[rec.inventoryStatus] || '#fff', fontWeight: 700 }}>● {rec.inventoryStatus}</span>
+          </span>
+        </div>
+        <p className="font-body-sm text-body-sm text-on-surface-variant mt-3">Flavor notes: {rec.flavorNotes.join(', ')}</p>
+        <p className="font-body-sm text-body-sm text-on-surface-variant">{rec.pairingSuggestion}</p>
+        <p className="font-body-sm text-body-sm text-on-surface-variant/60" style={{ fontSize: 11 }}>{rec.availabilityNote} · {rec.priceStatus}</p>
+        {rec.mentorNote && <p className="font-body-sm text-body-sm text-primary/80">{rec.mentorNote}</p>}
+        <p className="font-body-sm text-body-sm text-on-surface-variant">Match reason: {rec.matchReason}</p>
+        {rec.stepUpReason && <p className="font-body-sm text-body-sm text-on-surface-variant">{rec.stepUpReason}</p>}
+        {rec.venueFeatureReason && <p className="font-body-sm text-body-sm text-on-surface-variant">{rec.venueFeatureReason}</p>}
+        <div className="humidor-card__score">
+          <span>Match Score</span>
+          <div className="humidor-card__score-bar"><div style={{ width: `${rec.matchScore}%` }} /></div>
+          <span className="humidor-card__score-value">{rec.matchScore}/100</span>
+        </div>
+        <div className="flex flex-wrap gap-2 mt-4">
+          <button
+            type="button"
+            onClick={() => onSelect(rec)}
+            className="font-label-sm text-label-sm uppercase tracking-widest rounded-lg active:scale-95 transition-all"
+            style={{ height: 40, paddingInline: 16, background: selected ? '#e9c176' : 'rgba(255,255,255,0.06)', color: selected ? '#131314' : '#fff', border: '1px solid rgba(233,193,118,0.4)' }}
+          >
+            {selected ? 'Selected' : 'Select This Cigar'}
+          </button>
+          <button
+            type="button"
+            onClick={() => onRequestStaff(rec)}
+            disabled={requestState?.staff === 'pending'}
+            className="font-label-sm text-label-sm uppercase tracking-widest rounded-lg active:scale-95 transition-all disabled:opacity-60"
+            style={{ height: 40, paddingInline: 16, background: 'rgba(255,255,255,0.06)', color: '#fff', border: '1px solid rgba(255,255,255,0.15)' }}
+          >
+            {requestState?.staff === 'pending' ? 'Request Logged — Local Session' : 'Request from Staff'}
+          </button>
+          <button
+            type="button"
+            onClick={() => onAddToPos(rec)}
+            disabled={requestState?.pos === 'pending'}
+            className="font-label-sm text-label-sm uppercase tracking-widest rounded-lg active:scale-95 transition-all disabled:opacity-60"
+            style={{ height: 40, paddingInline: 16, background: 'rgba(255,255,255,0.06)', color: '#fff', border: '1px solid rgba(255,255,255,0.15)' }}
+          >
+            {requestState?.pos === 'pending' ? 'Added — Local Session' : 'Add to POS'}
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -143,10 +167,10 @@ export default function HumidorMatch() {
   }
 
   return (
-    <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
-      <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/assets/smokecraft/cropped/humidor-match-bg.jpg')" }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
+    <div className="humidor-page text-on-surface font-body-md overflow-x-hidden min-h-screen">
+      <div className="fixed inset-0 -z-20 overflow-hidden humidor-page-bg">
+        <div className="absolute inset-0 bg-cover bg-center opacity-25" style={{ backgroundImage:"url('/assets/smokecraft/cropped/humidor-match-bg.jpg')" }} />
+        <div className="absolute inset-0 pointer-events-none humidor-page-vignette" />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
         <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/golden-box')} aria-label="Back"><ArrowBackIcon size={24} /></button>
@@ -158,18 +182,23 @@ export default function HumidorMatch() {
           <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'35.3%' }} /></div>
           <span>Humidor Match</span>
         </div>
-        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
-        <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Humidor Match</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>Your matched recommendations, then confirm your cigar's storage condition before the session begins.</p>
-        <div className="rounded-2xl overflow-hidden mb-10 border border-primary/15" style={{ height: 180 }}>
-          <img src="/assets/smokecraft/cropped/humidor-match-bg.jpg" alt="Humidor" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.1) brightness(0.85)' }} />
+
+        <div className="humidor-hero">
+          <img src="/assets/smokecraft/cropped/humidor-match-bg.jpg" alt="Humidor" className="humidor-hero__img" />
+          <div className="humidor-hero__fade" aria-hidden="true" />
+          <div className="humidor-hero__content">
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-2">SmokeCraft 360</p>
+            <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)', fontFamily: '"Playfair Display", serif' }}>Humidor Match</h2>
+            <p className="font-body-lg text-body-lg text-on-surface-variant" style={{ maxWidth:520 }}>Your matched recommendations, then confirm your cigar's storage condition before the session begins.</p>
+          </div>
         </div>
 
-        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-4">Your Cigar Recommendations</p>
+        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-2">Your Cigar Recommendations</p>
+        <p className="font-body-sm text-body-sm text-on-surface-variant/70 mb-4" style={{ fontSize: 12 }}>Matched from the house humidor catalog. Pricing and staff requests are logged to this local session — no order is placed automatically.</p>
         {!recommendations.dataCompleteness.hasProfile && (
           <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">Complete your profile, format, and Seed & Soil pairing earlier in the protocol for a stronger match — these recommendations use only the data you've provided so far.</p>
         )}
-        <div className="grid gap-4 mb-12" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+        <div className="grid gap-5 mb-12" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
           {recList.map(rec => (
             <RecommendationCard
               key={rec.recommendationType}
@@ -273,6 +302,150 @@ export default function HumidorMatch() {
           </button>
         </div>
       </main>
+      <style>{`
+        .humidor-page { background: #0d0d0e; }
+        .humidor-page-bg { background: #0d0d0e; }
+        .humidor-page-vignette {
+          background:
+            radial-gradient(ellipse at 50% 0%, rgba(233,193,118,0.08) 0%, transparent 45%),
+            linear-gradient(0deg, rgba(13,13,14,0.97) 0%, rgba(13,13,14,0.55) 45%, rgba(13,13,14,0.97) 100%);
+        }
+
+        .humidor-hero {
+          position: relative;
+          border-radius: 24px;
+          overflow: hidden;
+          margin-bottom: 40px;
+          min-height: 260px;
+          display: flex;
+          align-items: flex-end;
+          border: 1px solid rgba(233,193,118,0.22);
+          box-shadow: 0 24px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+        .humidor-hero__img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          filter: saturate(1.15) contrast(1.05) brightness(0.7);
+        }
+        .humidor-hero__fade {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, rgba(13,13,14,0.15) 0%, rgba(13,13,14,0.55) 55%, rgba(13,13,14,0.95) 100%);
+        }
+        .humidor-hero__content {
+          position: relative;
+          z-index: 1;
+          padding: 28px 28px 26px;
+        }
+
+        .humidor-card {
+          display: flex;
+          flex-direction: column;
+          border-radius: 20px;
+          overflow: hidden;
+          background: linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.18) 100%);
+          border: 1px solid rgba(255,255,255,0.08);
+          box-shadow: 0 18px 42px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+        }
+        .humidor-card--selected {
+          border-color: rgba(233,193,118,0.55);
+          box-shadow: 0 0 0 1px rgba(233,193,118,0.3), 0 18px 48px rgba(233,193,118,0.16);
+          background: linear-gradient(160deg, rgba(233,193,118,0.1) 0%, rgba(233,193,118,0.03) 60%, rgba(0,0,0,0.18) 100%);
+        }
+        .humidor-card__media {
+          position: relative;
+          height: 150px;
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+        .humidor-card__media img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          filter: saturate(1.1) brightness(0.9);
+        }
+        .humidor-card__media-fade {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, transparent 50%, rgba(13,13,14,0.85) 100%);
+        }
+        .humidor-card__media--pending {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          background: rgba(0,0,0,0.35);
+          color: rgba(233,193,118,0.55);
+          font-size: 11px;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+        .humidor-card__body { padding: 18px 20px 20px; }
+        .humidor-card__lane-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border-radius: 999px;
+          flex-shrink: 0;
+          background: rgba(233,193,118,0.14);
+          color: #e9c176;
+        }
+        .humidor-card__facts {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 6px 12px;
+          padding: 12px;
+          border-radius: 12px;
+          background: rgba(0,0,0,0.22);
+          border: 1px solid rgba(233,193,118,0.12);
+        }
+        .humidor-card__facts span {
+          display: flex;
+          flex-direction: column;
+          font-size: 12.5px;
+          color: rgba(229,226,227,0.85);
+        }
+        .humidor-card__facts span strong {
+          font-size: 9.5px;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: rgba(233,193,118,0.75);
+          font-weight: 700;
+          margin-bottom: 1px;
+        }
+        .humidor-card__score {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-top: 14px;
+          font-size: 11px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(233,193,118,0.85);
+        }
+        .humidor-card__score-bar {
+          flex: 1;
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.08);
+          overflow: hidden;
+        }
+        .humidor-card__score-bar div {
+          height: 100%;
+          border-radius: 999px;
+          background: linear-gradient(90deg, #c5a059, #e9c176);
+        }
+        .humidor-card__score-value { color: #e9c176; font-weight: 700; }
+      `}</style>
     </div>
   )
 }

@@ -7,6 +7,7 @@ import { GuestSessionProvider } from './context/GuestSessionContext.jsx'
 import { KioskProvider }        from './context/KioskContext.jsx'
 import { flushOfflineQueue }    from './services/syncService.js'
 import { initSyncQueueRetryTriggers } from './services/syncQueueService.js'
+import './fonts.css'
 import './styles.css'
 
 // Flush any sync items queued during a previous offline session

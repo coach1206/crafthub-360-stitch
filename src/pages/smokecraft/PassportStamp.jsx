@@ -66,7 +66,7 @@ const NETWORKING_STATUS_LABELS = {
   ready_to_share:      'Ready to share',
   shared_locally:      'Shared locally (demo only)',
   connection_pending:  'Connection pending',
-  backend_pending:     'Backend pending',
+  backend_pending:     'Connection not shared yet',
 }
 
 function DetailRow({ label, value, pendingNote }) {
@@ -74,7 +74,7 @@ function DetailRow({ label, value, pendingNote }) {
     <div>
       <dt className="font-label-sm text-label-sm text-on-surface-variant/60 uppercase tracking-widest mb-1" style={{ fontSize: 10 }}>{label}</dt>
       <dd className="font-body-md text-on-surface" style={{ opacity: value ? 1 : 0.45 }}>
-        {value || (pendingNote || 'Backend pending')}
+        {value || (pendingNote || 'Not recorded yet')}
       </dd>
     </div>
   )
@@ -156,6 +156,13 @@ function buildStampPayload(session) {
   // existed because Seed & Soil only stores a region id.
   const recommendation = session.smokeCraft?.selectedHumidorRecommendation || null
 
+  // Phase 7-10 — read straight from the preserved session.smokeCraft fields;
+  // none of these field names were renamed when Phases 7-10 were strengthened.
+  const cutToastLight = session.smokeCraft?.cutToastLight || null
+  const firstThird     = session.smokeCraft?.firstThird || null
+  const secondThird    = session.smokeCraft?.secondThird || null
+  const finalThird     = session.smokeCraft?.finalThird || null
+
   return {
     userId:               session.guestId || null,
     guestId:              session.guestId || null,
@@ -187,6 +194,39 @@ function buildStampPayload(session) {
     soilSelections:       seedSoil?.soil || null,
     networkingStatus:     session.smokeCraft?.networkingStatus || 'not_started',
     shareConsent:         session.smokeCraft?.networkingConsent || null,
+
+    // Phase 7 — Cut, Toast & Light
+    cutMethod:            cutToastLight?.cutMethod || null,
+    toastLightCompletion: cutToastLight
+      ? `${cutToastLight.completedCount ?? 0} of ${cutToastLight.totalSteps ?? 3} steps${cutToastLight.allStepsCompleted ? ' — complete' : ''}`
+      : null,
+    drawCheck:            cutToastLight?.drawCheck || null,
+    burnCheck:            cutToastLight?.burnCheck || null,
+    ashCheck:             cutToastLight?.ashCheck || null,
+    prepMentorTip:        cutToastLight?.mentorTip || null,
+
+    // Phase 8-10 — flavor notes per third
+    firstThirdNotes:      firstThird?.notesSelected?.length ? firstThird.notesSelected.join(', ') : null,
+    secondThirdNotes:     secondThird?.notesSelected?.length ? secondThird.notesSelected.join(', ') : null,
+    finalThirdNotes:      finalThird?.notesSelected?.length ? finalThird.notesSelected.join(', ') : null,
+
+    // Strength/body progression across the three thirds
+    strengthProgression:  [firstThird?.strength, secondThird?.strengthChange, finalThird?.finalStrength]
+      .filter(v => v !== null && v !== undefined).length
+      ? `${firstThird?.strength ?? '—'} → ${secondThird?.strengthChange ?? '—'} → ${finalThird?.finalStrength ?? '—'}`
+      : null,
+    bodyProgression:      [firstThird?.body, secondThird?.bodyChange, finalThird?.finalBody]
+      .filter(v => v !== null && v !== undefined).length
+      ? `${firstThird?.body ?? '—'} → ${secondThird?.bodyChange ?? '—'} → ${finalThird?.finalBody ?? '—'}`
+      : null,
+
+    // Pairing reaction — most recent recorded reaction wins, final third preferred
+    pairingReaction:      finalThird?.finalPairingReaction || secondThird?.pairingReaction || firstThird?.pairingReaction || null,
+
+    // Final rating and would-smoke-again, both captured on Final Third
+    finalRating:          finalThird?.hasOverallRating ? finalThird.overallRating : null,
+    wouldSmokeAgain:      finalThird?.wouldSmokeAgain === true ? 'Yes' : finalThird?.wouldSmokeAgain === false ? 'No' : null,
+
     createdAt:            Date.now(),
   }
 }
@@ -316,11 +356,11 @@ export default function PassportStamp() {
               <DetailRow label="Venue" value={latestStamp.venue} />
               <DetailRow label="Event" value={latestStamp.eventName} />
               <DetailRow label="Date" value={latestStamp.date ? new Date(latestStamp.date).toLocaleDateString() : null} />
-              <DetailRow label="Cigar" value={latestStamp.cigarName} />
-              <DetailRow label="Cigar Country" value={latestStamp.cigarCountry} pendingNote="Backend pending — seed region detail not yet captured" />
-              <DetailRow label="Mentors" value={latestStamp.mentorNames?.length ? latestStamp.mentorNames.join(', ') : null} />
-              <DetailRow label="Score" value={latestStamp.score != null ? `${latestStamp.score} pts` : null} />
-              <DetailRow label="Badge / Ranking" value={[latestStamp.badgeEarned, latestStamp.rankingLevel].filter(Boolean).join(' — ') || null} />
+              <DetailRow label="Cigar" value={latestStamp.cigarName} pendingNote="Not recorded yet" />
+              <DetailRow label="Cigar Country" value={latestStamp.cigarCountry} pendingNote="Not recorded yet" />
+              <DetailRow label="Mentors" value={latestStamp.mentorNames?.length ? latestStamp.mentorNames.join(', ') : null} pendingNote="Not recorded yet" />
+              <DetailRow label="Score" value={latestStamp.score != null ? `${latestStamp.score} pts` : null} pendingNote="Not recorded yet" />
+              <DetailRow label="Badge / Ranking" value={[latestStamp.badgeEarned, latestStamp.rankingLevel].filter(Boolean).join(' — ') || null} pendingNote="Not recorded yet" />
               <DetailRow label="Pairing Completed" value={latestStamp.pairingCompleted ? 'Yes' : 'Not yet'} />
               <DetailRow
                 label="Networking Status"
@@ -330,6 +370,23 @@ export default function PassportStamp() {
                 label="Privacy / Share Status"
                 value={latestStamp.shareConsent && Object.values(latestStamp.shareConsent).some(Boolean) ? 'Shared by your choice' : 'Private — nothing shared yet'}
               />
+            </dl>
+
+            <p className="font-label-sm text-label-sm text-primary/70 uppercase tracking-widest mb-5 mt-8">Guided Session Detail</p>
+            <dl className="grid grid-cols-2 gap-x-8 gap-y-4" style={{ fontSize: 14 }}>
+              <DetailRow label="Cut Method" value={latestStamp.cutMethod} pendingNote="Not recorded yet" />
+              <DetailRow label="Toast / Light Completion" value={latestStamp.toastLightCompletion} pendingNote="Not recorded yet" />
+              <DetailRow label="Draw Check" value={latestStamp.drawCheck != null ? `${latestStamp.drawCheck} / 5` : null} pendingNote="Not recorded yet" />
+              <DetailRow label="Burn Check" value={latestStamp.burnCheck != null ? `${latestStamp.burnCheck} / 5` : null} pendingNote="Not recorded yet" />
+              <DetailRow label="Ash Check" value={latestStamp.ashCheck != null ? `${latestStamp.ashCheck} / 5` : null} pendingNote="Not recorded yet" />
+              <DetailRow label="First Third Notes" value={latestStamp.firstThirdNotes} pendingNote="Not recorded yet" />
+              <DetailRow label="Second Third Notes" value={latestStamp.secondThirdNotes} pendingNote="Not recorded yet" />
+              <DetailRow label="Final Third Notes" value={latestStamp.finalThirdNotes} pendingNote="Not recorded yet" />
+              <DetailRow label="Strength Progression" value={latestStamp.strengthProgression} pendingNote="Not recorded yet" />
+              <DetailRow label="Body Progression" value={latestStamp.bodyProgression} pendingNote="Not recorded yet" />
+              <DetailRow label="Pairing Reaction" value={latestStamp.pairingReaction} pendingNote="Not recorded yet" />
+              <DetailRow label="Final Rating" value={latestStamp.finalRating != null ? `${latestStamp.finalRating} / 5` : null} pendingNote="Not recorded yet" />
+              <DetailRow label="Would Smoke Again" value={latestStamp.wouldSmokeAgain} pendingNote="Not recorded yet" />
             </dl>
           </section>
         )}
