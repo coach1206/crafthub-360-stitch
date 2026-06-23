@@ -9,7 +9,6 @@ import { calculateWinnerEligibility, assignWinnerCategory, getPendingWinnerCateg
 import { StoreIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 import { getSmokePOSHandoff, createSmokePurchaseIntent, getSmokePurchaseRewardStatus, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 import { checkSmokeBackendConnectivity, getSmokeSharedStorageMode, buildSmokeStorageStatusFields, saveSmokeSessionSnapshot } from '../../services/smokecraft/smokeSharedStorageService.js'
-import SmokeBackendReadinessPanel from '../../components/smokecraft/SmokeBackendReadinessPanel.jsx'
 import { computeScoreBreakdown, computeProtocolBadges } from '../../utils/smokecraftScoring.js'
 
 const CATEGORIES = [
@@ -242,10 +241,6 @@ export default function Scorecard() {
             )}
           </div>
 
-          <div className="mb-4">
-            <SmokeBackendReadinessPanel compact />
-          </div>
-
           <div className="flex flex-col sm:flex-row gap-3">
             <button onClick={handleCreatePurchaseIntent} disabled={Boolean(posHandoff.intentId)}
               className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40"
@@ -256,18 +251,6 @@ export default function Scorecard() {
               className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300"
               style={{ height: 56, paddingInline: 24 }}>
               View Event Challenge
-            </button>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3 mt-3">
-            <button onClick={() => navigate('/pos3')}
-              className="flex items-center justify-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-[0.15em] rounded-xl border border-primary/15 hover:bg-primary/5 active:scale-95 transition-all duration-300"
-              style={{ height: 48, paddingInline: 20 }}>
-              Open POS3 (Staff Access)
-            </button>
-            <button onClick={() => navigate('/eat')}
-              className="flex items-center justify-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-[0.15em] rounded-xl border border-primary/15 hover:bg-primary/5 active:scale-95 transition-all duration-300"
-              style={{ height: 48, paddingInline: 20 }}>
-              Open E.A.T. Summary (Staff Access)
             </button>
           </div>
         </section>
