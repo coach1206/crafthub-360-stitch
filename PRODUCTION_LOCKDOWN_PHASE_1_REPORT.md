@@ -149,3 +149,18 @@ No other launch-blocking issues were found. Build is green, routes are intact, p
 8. Backend persistence issues — none found; documented gaps (Supabase/S3 media storage, SMS/email link delivery, real inventory sync) are pre-existing, intentionally-flagged TODOs, not regressions, and are left as-is per the "no redesign / no deleting systems" rule for this phase.
 
 `npm run build` was re-run after the Section F fix and passed cleanly (see commit for this branch).
+
+---
+
+## M. Phase 1 Re-Verification Pass (branch `claude/beautiful-thompson-r3mm5m`)
+
+A second pass was run against the designated branch (`claude/beautiful-thompson-r3mm5m`), which had diverged from the originally audited branch with newer SmokeCraft phase work. Findings:
+
+1. **Section F leak re-occurred on this branch's version of the files** (it had its own copies of `Scorecard.jsx`, `EventChallenge.jsx`, `Leaderboard.jsx` with the same `SmokeBackendReadinessPanel` + "Open POS3/E.A.T. (Staff Access)" buttons). **Fixed** — same removals applied directly on this branch: `src/pages/smokecraft/Scorecard.jsx`, `src/pages/smokecraft/EventChallenge.jsx`, `src/pages/smokecraft/Leaderboard.jsx`. Build verified green after the fix (commit `f8ea8766`).
+2. **Routes** — re-checked `src/App.jsx` for duplicate paths; the apparent duplicates (`bar`, `humidor`, `kitchen`, `inventory`, `settings`, `profile`, `connections`, `leaderboard`) are all nested under distinct parents (`/smokecraft/*`, `/passport/*`, `/pos3/*`, `/eat/*`) — not real collisions. No broken routes found.
+3. **Dead buttons** — re-grepped for `onClick={() => {}}` no-op handlers. One hit: `src/pages/passport/PassportHome.jsx:736`, a `StampSeal` icon inside an already-open `StampDetailModal` — decorative, not an interactive control, not a dead button.
+4. **Mock/demo data** — grepped for `mockData`/`demoData` across `src/` — zero matches. No hidden static data masquerading as live data.
+5. **TODO/FIXME** — same 7 markers as originally documented (Supabase/S3 media storage, SMS/email upload-link providers, 4 licensed-photo placeholders in `Format.jsx`) — all require new third-party infrastructure or licensed assets not available in this environment, out of scope for a functionality-only fix, left as-is per the no-redesign/no-new-systems rule.
+6. **console.log** — only in `src/serviceWorkerRegistration.js` (standard CRA/Vite service-worker boilerplate), not a risk.
+
+No new launch blockers found beyond the one fixed in item 1. `npm run build` passed cleanly after this pass.
