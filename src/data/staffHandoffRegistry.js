@@ -1,32 +1,49 @@
 /**
- * DEMO / LOCAL-PREVIEW STAFF REGISTRY — staff handoff email + PIN login.
+ * DEV-ONLY STAFF REGISTRY — staff handoff email + PIN login.
  *
  * There is no backend endpoint yet for "staff email + PIN" handoff auth
  * (the existing /api/auth/staff-pin-login is PIN-only, no email). Until
  * that endpoint exists, this in-memory table is used to verify the
- * handoff login screen. It is for demo/local preview only.
+ * handoff login screen in local development only.
+ *
+ * SECURITY: these records must never ship in a production bundle. They
+ * are only populated when `import.meta.env.DEV` is true; Vite statically
+ * replaces that with `false` in production builds and dead-code-eliminates
+ * this branch, so the email/PIN strings below are not present in the
+ * production output. In production both records are empty arrays/null and
+ * verification always fails — see verifyFounderCredentials/
+ * verifyStaffHandoffCredentials below.
  *
  * The raw PIN is never persisted anywhere (not localStorage, not
  * sessionStorage) — it only exists transiently as a function argument
  * during verification.
  */
 
-const DEMO_STAFF = [
-  { email: 'staff@crafthub360.com',   pin: '2501', role: 'staff',   displayName: 'Staff' },
-  { email: 'manager@crafthub360.com', pin: '3600', role: 'manager', displayName: 'Manager' },
-]
+const DEMO_STAFF = import.meta.env.DEV
+  ? [
+      { email: 'staff@crafthub360.com',   pin: '2501', role: 'staff',   displayName: 'Staff' },
+      { email: 'manager@crafthub360.com', pin: '3600', role: 'manager', displayName: 'Manager' },
+    ]
+  : []
 
 /**
  * Master founder credential. Supersedes all other access checks.
  * Role maps to 'founder_level_0' — the role key used throughout
  * SecurityContext / ProtectedRoute / roleMap.js for the founder bypass.
+ *
+ * `null` in production builds — see module doc comment above.
  */
-const FOUNDER_CREDENTIAL = {
-  email: 'jccollins1206@yahoo.com',
-  pin:   '2501',
-  role:  'founder_level_0',
-  displayName: 'Founder',
-}
+const FOUNDER_CREDENTIAL = import.meta.env.DEV
+  ? {
+      email: 'jccollins1206@yahoo.com',
+      pin:   '2501',
+      role:  'founder_level_0',
+      displayName: 'Founder',
+    }
+  : null
+
+/** True only in local development, where the dev-only registry above is populated. */
+export const STAFF_HANDOFF_AUTH_AVAILABLE = import.meta.env.DEV
 
 function normalizeEmail(email) {
   return String(email || '').trim().toLowerCase()
@@ -49,6 +66,8 @@ function normalizePin(pin) {
  *                    (caller should fall through to staff/manager check)
  */
 export function verifyFounderCredentials(email, pin) {
+  if (!FOUNDER_CREDENTIAL) return { ok: false }
+
   const normalizedEmail = normalizeEmail(email)
   const normalizedPin   = normalizePin(pin)
 
