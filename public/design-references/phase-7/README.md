@@ -53,3 +53,32 @@ for DayOne360) until real reference images are added.
 
 If/when these are added to the repo, drop them directly into this folder
 (`public/design-references/phase-7/`) and update the table above.
+
+## Chat-uploaded references (text description only — no file access)
+
+11 additional reference images were supplied inline in chat during Phase
+7A planning. This environment has no filesystem access to images pasted
+into a chat message, so they cannot be saved as real files in this
+folder. They are recorded here as text descriptions so the direction
+they convey isn't lost; if the actual image files are added to the repo
+later, replace these entries with real copied files.
+
+**Manager / Admin Access (NOVEE login) — 2 variants:**
+- *v1, warm:* cigar-lounge-style PIN pad, gold-trimmed glass panel, "NOVEE OS" crest, email + 4-digit PIN entry, red "Invalid credentials" banner.
+- *v2, cool:* navy/cyberpunk variant, system-status sidebar, fingerprint "AUTHENTICATE" button, encryption/security badges.
+
+**360 Passport Connection dashboard:** navy leather sidebar, ivory content cards, gold trim, journey progress bar (Scan In → Build Profile → Meet People → Earn Stamps), QR scan card, 5-tier passport color system (Ivory / Blue / Burgundy / Green / Black).
+
+**NOVEE OS investor deck:** 16-slide dark navy grid, "Adaptive Intelligence. Human Optimized." concept, sense → analyze → adapt → optimize cycle, use-case grid (hotel/smart-home/office/vehicle/healthcare), market opportunity stats.
+
+**SmokeCraft 360 dashboard:** black/gold gamified leaderboard, rank/XP system, "The Golden Box" CTA, live leaderboard table, E.A.T. intelligence strip (lounge temp/humidity/humidor count), mentor-selection CTA.
+
+**SmokeCraft Intake form:** detailed lounge-themed onboarding — "Private Identity" / "Lounge Persona" / "Smoke Preference DNA" sections, member portrait upload, flavor-preference pills.
+
+**Seed & Soil Pairing screen (step 5 of 17):** growing-region selection cards, seed profile detail panel, multi-category "Soil: Tonight's Setting" selector grid, pairing-score breakdown, "Unique Blend Signature" summary table.
+
+**SmokeCraft 360 Storyboard (S1→S4):** full ritual-flow storyboard — S1 Arrival/Immersion Gate, S2 Identity/Profile Creation, S3 The Leaf Matrix, S4 The Pairing Reveal, plus a "Next Steps" row for staff handoff/leaderboard/lounge mode/competition night.
+
+**"Every system, one command hub" (CraftHub 360 ecosystem grid):** 8 module cards — CraftHub 360, SmokeCraft 360, PourCraft 360, WineCraft 360, BeerCraft 360, 360 Passport Connections, POS 3 (Staff Access), E.A.T. Management Hub (Staff Access). Staff-only modules are visually labeled as such.
+
+**Humidor Match screen (step 6 of 17):** three cigar recommendation cards with match scores, flavor notes, pairing reasons, plus a storage-condition selector.

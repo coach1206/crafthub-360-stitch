@@ -59,6 +59,28 @@ export default {
         'accent-blue-deep':            '#1c3a5e',
         'accent-blue-glow':            '#5b8fc9',
         'on-accent-blue':              '#eaf2fb',
+
+        /* ── Phase 7 Premium Tier — 360 Passport (navy/ivory/gold leather) ──
+           Additive only: namespaced under "passport-*" so no existing
+           gold/charcoal token above is touched or reinterpreted. */
+        'passport-navy':              '#0f1b2e',
+        'passport-navy-deep':         '#0a1320',
+        'passport-navy-light':        '#1c3454',
+        'passport-ivory':             '#f3ead8',
+        'passport-ivory-dim':         '#e4d9c2',
+        'passport-gold':              '#c9a84c',
+        'passport-gold-bright':       '#e9c176',
+        'on-passport-navy':           '#f3ead8',
+        'on-passport-ivory':          '#1c1812',
+
+        /* ── Phase 7 Premium Tier — NOVEE OS (deep-tech command shell) ──
+           Additive only: namespaced under "novee-*". */
+        'novee-bg':                   '#070b14',
+        'novee-panel':                '#0d1420',
+        'novee-panel-light':          '#141d2e',
+        'novee-cyan':                 '#5b8fc9',
+        'novee-gold':                 '#c9a84c',
+        'on-novee':                   '#eaf2fb',
       },
       fontFamily: {
         'display-lg':  ['"Playfair Display"', 'serif'],

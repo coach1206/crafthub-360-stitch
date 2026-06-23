@@ -1665,3 +1665,130 @@
     width: 100%;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   PHASE 7A — PREMIUM DESIGN FOUNDATION
+   Additive only. None of the rules below modify or override any
+   existing class above — every selector is uniquely namespaced under
+   "premium-*" so this layer cannot regress Phase 6 or earlier UI.
+   Three variants, matching the Phase 7 reference pack:
+     - premium-passport-*  (navy / ivory / gold leather — 360 Passport)
+     - premium-novee-*     (deep-tech navy / cyan / gold — NOVEE OS)
+     - premium-smokecraft-* (black / espresso / amber / gold — SmokeCraft)
+   ════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+
+  /* ─── Passport shell + panel (navy leather, ivory paper) ─────── */
+  .premium-passport-shell {
+    background: linear-gradient(180deg, #0f1b2e 0%, #0a1320 100%);
+    color: #f3ead8;
+  }
+
+  .premium-passport-panel {
+    background: #f3ead8;
+    color: #1c1812;
+    border: 1px solid rgba(201, 168, 76, 0.35);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  .premium-passport-sidebar {
+    background: linear-gradient(180deg, #0f1b2e 0%, #0a1320 100%);
+    border-right: 1px solid rgba(201, 168, 76, 0.25);
+    color: #f3ead8;
+  }
+
+  .premium-passport-gold-rule {
+    border: none;
+    border-top: 1px solid rgba(201, 168, 76, 0.4);
+  }
+
+  /* ─── NOVEE OS shell + panel (deep-tech navy + cyan/gold) ─────── */
+  .premium-novee-shell {
+    background:
+      radial-gradient(circle at 80% 0%, rgba(91, 143, 201, 0.08) 0%, transparent 50%),
+      linear-gradient(180deg, #070b14 0%, #0a1320 100%);
+    color: #eaf2fb;
+  }
+
+  .premium-novee-panel {
+    background: #0d1420;
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .premium-novee-glow-ring {
+    box-shadow: 0 0 0 1px rgba(91, 143, 201, 0.3), 0 0 24px rgba(91, 143, 201, 0.15);
+  }
+
+  /* ─── SmokeCraft 360 shell + panel (black/espresso/amber/gold) ── */
+  .premium-smokecraft-shell {
+    background: linear-gradient(180deg, #0e0a08 0%, #1a120c 100%);
+    color: #e9c176;
+  }
+
+  .premium-smokecraft-panel {
+    background: rgba(20, 14, 10, 0.92);
+    border: 1px solid rgba(233, 193, 118, 0.18);
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  }
+
+  /* ─── Shared premium primitives (variant-agnostic) ────────────── */
+  .premium-divider-gold {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.6), transparent);
+  }
+
+  .premium-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid rgba(201, 168, 76, 0.35);
+  }
+
+  .premium-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #775a19 100%);
+    color: #1c1812;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .premium-btn-primary:active {
+    transform: scale(0.97);
+  }
+
+  .premium-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid rgba(201, 168, 76, 0.4);
+    color: inherit;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .premium-btn-secondary:active {
+    transform: scale(0.97);
+  }
+}
