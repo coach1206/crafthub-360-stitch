@@ -148,3 +148,47 @@ export async function postReconciliationResolve(eventId, { staffReason, backendC
 export async function fetchBackendReconciliationSummary() {
   return apiGet('/api/sync/reconciliation/summary')
 }
+
+// ── Phase 6G additions ──────────────────────────────────────────
+// Audit log + event lifecycle timeline endpoints (/api/sync/audit/*).
+// All fail gracefully via apiGet (return null on offline/unreachable) —
+// callers must never convert a null response into a fake success.
+
+/** Lists raw audit log entries, optionally filtered by category/type. */
+export async function fetchAuditLogs({ actionCategory = null, actionType = null, limit = 100 } = {}) {
+  const params = new URLSearchParams()
+  if (actionCategory) params.set('actionCategory', actionCategory)
+  if (actionType) params.set('actionType', actionType)
+  if (limit) params.set('limit', String(limit))
+  const qs = params.toString()
+  return apiGet(`/api/sync/audit/logs${qs ? `?${qs}` : ''}`)
+}
+
+/** Full audit log + lifecycle timeline for a single event, time-ordered. */
+export async function fetchEventTimeline(eventId) {
+  if (!eventId) return null
+  return apiGet(`/api/sync/audit/events/${encodeURIComponent(eventId)}/timeline`)
+}
+
+/** Full audit log + lifecycle timeline for a single business action, time-ordered. */
+export async function fetchBusinessActionTimeline(fingerprint) {
+  if (!fingerprint) return null
+  return apiGet(`/api/sync/audit/fingerprints/${encodeURIComponent(fingerprint)}/timeline`)
+}
+
+/** Audit logs recorded by a single actor (staff or user id). */
+export async function fetchActorAuditLogs(actorId, { limit = 100 } = {}) {
+  if (!actorId) return null
+  const params = new URLSearchParams()
+  if (limit) params.set('limit', String(limit))
+  const qs = params.toString()
+  return apiGet(`/api/sync/audit/actors/${encodeURIComponent(actorId)}/logs${qs ? `?${qs}` : ''}`)
+}
+
+/** Venue-wide audit dashboard summary, honestly degraded if DB is down. */
+export async function fetchAuditSummary({ since = null } = {}) {
+  const params = new URLSearchParams()
+  if (since) params.set('since', since)
+  const qs = params.toString()
+  return apiGet(`/api/sync/audit/summary${qs ? `?${qs}` : ''}`)
+}

@@ -10,6 +10,7 @@ import {
   getEventById, getEventByFingerprint, recordConflictDecision as storeRecordConflictDecision,
 } from './syncReconciliationStore.js'
 import { createBusinessActionFingerprint } from './syncBusinessActionFingerprint.js'
+import { auditConflictDetected, auditConflictDecision, auditManualReviewRequired } from './syncAuditService.js'
 
 export const CONFLICT_TYPES = [
   'none',
@@ -84,13 +85,17 @@ export async function detectConflict(candidateEvent) {
 
 export async function classifyConflict(candidateEvent) {
   const detected = await detectConflict(candidateEvent)
-  return {
+  const conflict = {
     eventId: candidateEvent?.eventId || null,
     eventType: candidateEvent?.eventType || null,
     businessActionFingerprint: detected.businessActionFingerprint || candidateEvent?.businessActionFingerprint || null,
     conflictType: detected.conflictType,
     backendEvent: detected.backendEvent || null,
   }
+  if (conflict.conflictType !== 'none') {
+    await auditConflictDetected(candidateEvent, conflict, { source: 'server' }).catch(() => {})
+  }
+  return conflict
 }
 
 export function resolveDuplicateEvent(conflict) {
@@ -167,7 +172,7 @@ function finalize(conflict, decision, reason, flags) {
 
 /** Persists the decision via the store — single write path, append-only log. */
 export async function recordConflictDecision(resolvedConflict, { decidedBy = null, source = 'server' } = {}) {
-  return storeRecordConflictDecision({
+  const record = await storeRecordConflictDecision({
     eventId: resolvedConflict.eventId,
     eventType: resolvedConflict.eventType,
     businessActionFingerprint: resolvedConflict.businessActionFingerprint,
@@ -179,6 +184,12 @@ export async function recordConflictDecision(resolvedConflict, { decidedBy = nul
     requiresManualReview: resolvedConflict.requiresManualReview,
     safeToAutoResolve: resolvedConflict.safeToAutoResolve,
   })
+  const auditEntry = { ...resolvedConflict, decisionId: record?.decision_id || null }
+  await auditConflictDecision(auditEntry, { source, staffId: decidedBy }).catch(() => {})
+  if (resolvedConflict.requiresManualReview) {
+    await auditManualReviewRequired(resolvedConflict, resolvedConflict.reason, { source }).catch(() => {})
+  }
+  return record
 }
 
 export async function getConflictSummary(listConflictsFn) {

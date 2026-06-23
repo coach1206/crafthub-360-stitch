@@ -11,6 +11,7 @@
 
 import { query, isDbAvailable } from '../db/connection.js'
 import { createBusinessActionFingerprint } from './syncBusinessActionFingerprint.js'
+import { auditReconciliationNote, auditReconciliationResolved } from './syncAuditService.js'
 
 export class DbUnavailableError extends Error {
   constructor() {
@@ -157,6 +158,7 @@ export async function createReconciliationNote(eventId, note, { createdBy = null
     `UPDATE sync_events SET reconciliation_note = $2 WHERE event_id = $1`,
     [eventId, note]
   )
+  await auditReconciliationNote(eventId, inserted.rows[0], { source, staffId: createdBy }).catch(() => {})
   return inserted.rows[0]
 }
 
@@ -178,6 +180,7 @@ export async function resolveReconciliation(eventId, { staffReason, backendConfi
      RETURNING *`,
     [eventId, staffReason || null, resolvedBy, backendConfirmationId || null]
   )
+  await auditReconciliationResolved(eventId, { staffReason, backendConfirmationId }, { staffId: resolvedBy }).catch(() => {})
   return toCamelEvent(result.rows[0] || null)
 }
 

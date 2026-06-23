@@ -17,6 +17,9 @@ import {
 import {
   classifyConflict, resolveConflict, recordConflictDecision, shouldReplayEvent,
 } from './syncConflictResolutionServerService.js'
+import {
+  auditReplayPreview, auditReplayAttempt, auditReplayConfirmed, auditReplayRejected,
+} from './syncAuditService.js'
 
 export const REPLAY_RESULT_STATUSES = [
   'replayed_confirmed',
@@ -42,7 +45,7 @@ export async function previewReplay(candidateEvent) {
     return { backendReachable: false, eventId: candidateEvent?.eventId || null, status: 'backend_unavailable' }
   }
   const { conflict, safe } = await validateReplaySafety(candidateEvent)
-  return {
+  const result = {
     backendReachable: true,
     eventId: candidateEvent?.eventId || null,
     conflictType: conflict.conflictType,
@@ -50,6 +53,8 @@ export async function previewReplay(candidateEvent) {
     willReplay: safe,
     reason: conflict.reason,
   }
+  await auditReplayPreview(candidateEvent, result, { source: 'server' }).catch(() => {})
+  return result
 }
 
 /** Replays a stored event by its eventId (the staff-driven "Request Server Replay" path). */
@@ -79,7 +84,9 @@ export async function replayEventPayload(candidateEvent, { decidedBy = null, sou
   }
   if (resolved.decision === 'server_rejected_duplicate') {
     await markReplayRejected(candidateEvent.eventId, resolved.reason).catch(() => {})
-    return { eventId: candidateEvent.eventId, status: 'duplicate_blocked', conflict: resolved }
+    const result = { eventId: candidateEvent.eventId, status: 'duplicate_blocked', conflict: resolved }
+    await auditReplayRejected(candidateEvent, resolved.reason, { source: 'server' }).catch(() => {})
+    return result
   }
   if (resolved.decision === 'manual_review_required') {
     return { eventId: candidateEvent.eventId, status: 'manual_review_required', conflict: resolved }
@@ -89,6 +96,7 @@ export async function replayEventPayload(candidateEvent, { decidedBy = null, sou
   }
 
   await markReplayAttempted(candidateEvent.eventId)
+  await auditReplayAttempt(candidateEvent, { status: 'attempted' }, { source: 'server' }).catch(() => {})
 
   try {
     const { event, duplicate } = await recordEvent(candidateEvent, { sourceDeviceId, userId, userRole })
@@ -96,7 +104,9 @@ export async function replayEventPayload(candidateEvent, { decidedBy = null, sou
       return { eventId: candidateEvent.eventId, status: 'already_processed', conflict: resolved }
     }
     await markReplayConfirmed(candidateEvent.eventId, { confirmationId: event.event_id })
-    return { eventId: candidateEvent.eventId, status: 'replayed_confirmed', conflict: resolved, confirmationId: event.event_id }
+    const result = { eventId: candidateEvent.eventId, status: 'replayed_confirmed', conflict: resolved, confirmationId: event.event_id }
+    await auditReplayConfirmed(candidateEvent, result, { source: 'server' }).catch(() => {})
+    return result
   } catch (err) {
     return { eventId: candidateEvent.eventId, status: 'failed', error: err.message }
   }
