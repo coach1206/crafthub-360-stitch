@@ -92,3 +92,59 @@ export async function fetchDeviceSyncStatus(deviceId) {
     note: 'Backend reports venue-wide sync status only — no per-device filter exists yet.',
   }
 }
+
+// ── Phase 6F additions ──────────────────────────────────────────
+// Backend reconciliation/replay-confirmation endpoints (/api/sync/events/:id,
+// /api/sync/conflicts, /api/sync/replay, /api/sync/reconciliation/*). All
+// fail gracefully via apiGet/apiPost (return null on offline/unreachable) —
+// callers must never convert a null response into a fake success.
+
+/** Looks up a backend-confirmed event by its exact eventId. */
+export async function fetchSyncEventById(eventId) {
+  if (!eventId) return null
+  return apiGet(`/api/sync/events/${encodeURIComponent(eventId)}`)
+}
+
+/** Looks up a backend-confirmed event by business-action fingerprint. */
+export async function fetchSyncEventByFingerprint(fingerprint) {
+  if (!fingerprint) return null
+  return apiGet(`/api/sync/events/fingerprint/${encodeURIComponent(fingerprint)}`)
+}
+
+/** Lists backend-known conflicts (optionally filtered to manual-review-only). */
+export async function fetchSyncConflicts({ requiresManualReview = null } = {}) {
+  const params = new URLSearchParams()
+  if (requiresManualReview !== null) params.set('requiresManualReview', String(requiresManualReview))
+  const qs = params.toString()
+  return apiGet(`/api/sync/conflicts${qs ? `?${qs}` : ''}`)
+}
+
+/** Submits a conflict decision (server-classified, or an explicit staff override). */
+export async function postConflictDecision(body) {
+  return apiPost('/api/sync/conflicts/decision', body)
+}
+
+/** Read-only server-side replay preview — never writes. */
+export async function previewBackendReplay(event) {
+  return apiPost('/api/sync/replay/preview', { event })
+}
+
+/** Requests an actual server-confirmed replay, by eventId or full event payload. */
+export async function requestBackendReplay({ eventId, event, sourceDeviceId } = {}) {
+  return apiPost('/api/sync/replay', { eventId, event, sourceDeviceId })
+}
+
+/** Adds a staff reconciliation note to a backend-known event. */
+export async function postReconciliationNote(eventId, note) {
+  return apiPost(`/api/sync/reconciliation/${encodeURIComponent(eventId)}/note`, { note })
+}
+
+/** Resolves a backend-known event's reconciliation — requires staffReason or backendConfirmationId. */
+export async function postReconciliationResolve(eventId, { staffReason, backendConfirmationId } = {}) {
+  return apiPost(`/api/sync/reconciliation/${encodeURIComponent(eventId)}/resolve`, { staffReason, backendConfirmationId })
+}
+
+/** Backend-wide reconciliation summary (conflict/replay counts), honestly degraded if DB is down. */
+export async function fetchBackendReconciliationSummary() {
+  return apiGet('/api/sync/reconciliation/summary')
+}

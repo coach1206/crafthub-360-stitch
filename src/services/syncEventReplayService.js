@@ -13,7 +13,7 @@
 import {
   getPendingEvents, getFailedEvents, patchEvent, markSynced as queueMarkSynced,
 } from './syncQueueService.js'
-import { postSyncEvents, getSyncStatus } from './syncApiClient.js'
+import { postSyncEvents, getSyncStatus, previewBackendReplay, requestBackendReplay } from './syncApiClient.js'
 import {
   classifyConflict, resolveConflict, shouldReplayEvent,
 } from './syncConflictResolutionService.js'
@@ -166,6 +166,62 @@ export async function replayPendingEvents(options = {}) {
 export async function replayFailedEvents(options = {}) {
   const events = await getFailedEvents()
   return replayBatch(events, options)
+}
+
+// ── Phase 6F additions ──────────────────────────────────────────
+// Backend-confirmed replay path. Always prefers the server's conflict
+// resolution + replay confirmation over the local-only path above; falls
+// back to the Phase 6E local classification (still blocking unsafe replay)
+// only when the backend reconciliation endpoints are unreachable — never
+// the other way around.
+
+function toCandidatePayload(event) {
+  return {
+    eventId: event.eventId,
+    eventType: event.eventType,
+    entityId: event.entityId,
+    payload: event.payload,
+    businessActionFingerprint: event.businessActionFingerprint,
+    sourceSystem: event.sourceSystem,
+    sourceDeviceId: event.sourceDeviceId,
+    clientCreatedAt: event.timestamp,
+  }
+}
+
+/** Read-only: asks the backend whether this event would safely replay. Never writes. */
+export async function previewServerReplay(event) {
+  const response = await previewBackendReplay(toCandidatePayload(event))
+  if (!response || response.success !== true) {
+    return { eventId: event.eventId, decisionSource: 'backend_unavailable', backendReachable: false }
+  }
+  return { ...response.data, decisionSource: 'backend_confirmed', backendReachable: true }
+}
+
+/**
+ * Requests a real, server-confirmed replay. Only marks the local outbox
+ * record `replayed`/synced after the backend's response explicitly reports
+ * `status: 'replayed_confirmed'` — every other backend status (blocked,
+ * rejected, manual review, unavailable, failed) leaves the local record
+ * untouched in its current pending/failed state.
+ */
+export async function requestServerReplay(event) {
+  const response = await requestBackendReplay({ event: toCandidatePayload(event), sourceDeviceId: event.sourceDeviceId })
+  if (!response || response.success !== true) {
+    return { eventId: event.eventId, status: 'backend_unavailable', decisionSource: 'backend_unavailable' }
+  }
+  const result = response.data
+  if (result.status === 'replayed_confirmed') {
+    await markReplaySucceeded(event, response)
+    return { ...result, decisionSource: 'backend_confirmed' }
+  }
+  if (result.status === 'manual_review_required') {
+    await patchEvent(event.eventId, { requiresManualReview: true })
+  } else if (result.status === 'duplicate_blocked' || result.status === 'replay_blocked') {
+    await markReplayBlocked(event, result.conflict?.reason || 'Server blocked this replay.')
+  } else if (result.status === 'failed') {
+    await markReplayFailed(event, new Error(result.error || 'Server replay failed'))
+  }
+  return { ...result, decisionSource: 'backend_confirmed' }
 }
 
 export async function getReplaySummary() {

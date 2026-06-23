@@ -8,7 +8,7 @@
  */
 
 import { getAllEvents, getFailedEvents, patchEvent } from './syncQueueService.js'
-import { getSyncStatus } from './syncApiClient.js'
+import { getSyncStatus, fetchBackendReconciliationSummary, postReconciliationNote as postReconciliationNoteToBackend, postReconciliationResolve as postReconciliationResolveToBackend } from './syncApiClient.js'
 
 export const RECONCILIATION_STATUSES = [
   'pending_review',
@@ -175,4 +175,38 @@ export async function getReconciliationSummary() {
     backendReachable,
     queue: await getReconciliationQueue(),
   }
+}
+
+// ── Phase 6F additions ──────────────────────────────────────────
+// Backend-preferring reconciliation summary/note/resolve. The local-only
+// functions above remain the fallback used automatically by the panel when
+// these backend calls return null (server unreachable).
+
+/** Backend-wide conflict/replay counts — honestly degraded if the server's DB is down. */
+export async function getBackendReconciliationSummary() {
+  const response = await fetchBackendReconciliationSummary()
+  if (!response || response.success !== true) {
+    return { backendReachable: false }
+  }
+  return { backendReachable: true, degraded: Boolean(response.degraded), ...response.data }
+}
+
+/** Adds a staff note to the backend-known event (cross-device durable). Falls back to local note on failure. */
+export async function submitReconciliationNoteToBackend(eventId, note) {
+  const response = await postReconciliationNoteToBackend(eventId, note)
+  if (!response || response.success !== true) {
+    await markReconciliationNote(eventId, note)
+    return { backendConfirmed: false }
+  }
+  return { backendConfirmed: true, data: response.data }
+}
+
+/** Resolves via the backend (requires staffReason or backendConfirmationId) — never fabricates resolution. */
+export async function resolveReconciliationWithBackend(eventId, { staffReason, backendConfirmationId } = {}) {
+  const response = await postReconciliationResolveToBackend(eventId, { staffReason, backendConfirmationId })
+  if (!response || response.success !== true) {
+    return { backendConfirmed: false, message: response?.message || 'Backend unavailable — resolution not confirmed.' }
+  }
+  await markReconciliationResolved(eventId, { backendConfirmed: true, note: staffReason }).catch(() => {})
+  return { backendConfirmed: true, data: response.data }
 }

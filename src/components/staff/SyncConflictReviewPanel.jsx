@@ -8,9 +8,12 @@
  */
 import { useState } from 'react'
 import { Card, Pill, Btn, GOLD } from '../eat/ui.jsx'
-import { getReconciliationQueue, getReconciliationSummary, markManualReviewRequired, markReconciliationNote } from '../../services/syncReconciliationService.js'
-import { previewReplay, replayFailedEvents } from '../../services/syncEventReplayService.js'
-import { clearResolvedConflicts } from '../../services/syncConflictResolutionService.js'
+import {
+  getReconciliationQueue, getReconciliationSummary, markManualReviewRequired, markReconciliationNote,
+  getBackendReconciliationSummary, submitReconciliationNoteToBackend, resolveReconciliationWithBackend,
+} from '../../services/syncReconciliationService.js'
+import { previewReplay, replayFailedEvents, previewServerReplay, requestServerReplay } from '../../services/syncEventReplayService.js'
+import { clearResolvedConflicts, classifyConflictWithBackend, submitConflictDecisionToBackend } from '../../services/syncConflictResolutionService.js'
 
 function reconciliationTone(status) {
   if (status === 'resolved_confirmed') return 'open'
@@ -41,13 +44,16 @@ export default function SyncConflictReviewPanel() {
   const [lastAction, setLastAction] = useState(null)
   const [expandedId, setExpandedId] = useState(null)
   const [noteDrafts, setNoteDrafts] = useState({})
+  const [backendChecks, setBackendChecks] = useState({})
+  const [backendSummary, setBackendSummary] = useState(null)
 
   async function refresh() {
     setLoading(true)
     try {
-      const [q, s] = await Promise.all([getReconciliationQueue(), getReconciliationSummary()])
+      const [q, s, bs] = await Promise.all([getReconciliationQueue(), getReconciliationSummary(), getBackendReconciliationSummary()])
       setQueue(q)
       setSummary(s)
+      setBackendSummary(bs)
     } finally {
       setLoading(false)
     }
@@ -107,6 +113,54 @@ export default function SyncConflictReviewPanel() {
     }
   }
 
+  async function handlePreviewServerReplay(item) {
+    const result = await previewServerReplay(item)
+    setBackendChecks((c) => ({ ...c, [item.eventId]: { ...c[item.eventId], preview: result } }))
+    setLastAction(result.backendReachable
+      ? `Server preview for ${item.eventId}: ${result.willReplay ? 'would replay safely' : `blocked (${result.decision})`}.`
+      : `Server preview for ${item.eventId}: backend unavailable.`)
+  }
+
+  async function handleRequestServerReplay(item) {
+    const result = await requestServerReplay(item)
+    setBackendChecks((c) => ({ ...c, [item.eventId]: { ...c[item.eventId], replay: result } }))
+    setLastAction(`Server replay for ${item.eventId}: ${result.status}${result.confirmationId ? ` (confirmation ${result.confirmationId})` : ''}.`)
+    await refresh()
+  }
+
+  async function handleSubmitConflictDecision(item) {
+    const conflict = await classifyConflictWithBackend(item)
+    const record = await submitConflictDecisionToBackend(conflict, item)
+    setBackendChecks((c) => ({ ...c, [item.eventId]: { ...c[item.eventId], decision: record } }))
+    setLastAction(record?.success
+      ? `Server decision recorded for ${item.eventId}: ${conflict.conflictType}.`
+      : `Could not record server decision for ${item.eventId} — backend unavailable.`)
+  }
+
+  async function handleSubmitNoteToBackend(eventId) {
+    const note = noteDrafts[eventId]
+    if (!note) return
+    const result = await submitReconciliationNoteToBackend(eventId, note)
+    setLastAction(result.backendConfirmed
+      ? `Note confirmed by backend for ${eventId}.`
+      : `Note saved locally only — backend unavailable for ${eventId}.`)
+    setNoteDrafts((d) => ({ ...d, [eventId]: '' }))
+    await refresh()
+  }
+
+  async function handleResolveWithReason(item) {
+    const reason = noteDrafts[item.eventId]
+    if (!reason) {
+      setLastAction('Enter a reason in the note field before resolving.')
+      return
+    }
+    const result = await resolveReconciliationWithBackend(item.eventId, { staffReason: reason })
+    setLastAction(result.backendConfirmed
+      ? `Confirmed by backend: ${item.eventId} resolved.`
+      : `Resolution not confirmed — ${result.message}`)
+    await refresh()
+  }
+
   return (
     <Card>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
@@ -118,6 +172,14 @@ export default function SyncConflictReviewPanel() {
           />
         )}
       </div>
+
+      {backendSummary?.backendReachable && (
+        <div style={{ fontSize: 12, color: '#aab3bf', marginBottom: 12 }}>
+          Server reconciliation: {backendSummary.degraded
+            ? 'Backend Unavailable (no database connection)'
+            : `${backendSummary.manualReviewCount ?? 0} need staff review server-side, ${Object.values(backendSummary.byConflictType || {}).reduce((a, b) => a + b, 0)} server conflicts on record.`}
+        </div>
+      )}
 
       {!summary && (
         <div style={{ color: '#8b95a3', marginBottom: 12 }}>
@@ -176,15 +238,38 @@ export default function SyncConflictReviewPanel() {
               {item.lastAttemptAt ? ` · Last attempt: ${new Date(item.lastAttemptAt).toLocaleString()}` : ''}
             </div>
 
+            {backendChecks[item.eventId] && (
+              <div style={{ fontSize: 11, color: '#aab3bf', marginTop: 6, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                {backendChecks[item.eventId].preview && (
+                  <span>Backend match found: {backendChecks[item.eventId].preview.backendReachable
+                    ? (backendChecks[item.eventId].preview.willReplay ? 'Retry Safe' : 'Duplicate Risk')
+                    : 'Backend Unavailable'}
+                    {' · '}Backend replay status: {backendChecks[item.eventId].preview.decision || 'n/a'}</span>
+                )}
+                {backendChecks[item.eventId].replay && (
+                  <span>Backend confirmation ID: {backendChecks[item.eventId].replay.confirmationId || 'none'}
+                    {' · '}Server decision: {backendChecks[item.eventId].replay.status}</span>
+                )}
+                {backendChecks[item.eventId].decision && (
+                  <span>Decision source: {backendChecks[item.eventId].decision.success ? 'Confirmed by Backend' : 'Backend Unavailable'}</span>
+                )}
+              </div>
+            )}
+
             <div style={{ display: 'flex', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
               <Btn tone="orange" style={{ padding: '7px 12px', fontSize: 12 }} onClick={() => handleMarkManualReview(item.eventId)}>Mark Manual Review</Btn>
+              <Btn tone="purple" style={{ padding: '7px 12px', fontSize: 12 }} onClick={() => handlePreviewServerReplay(item)}>Preview Server Replay</Btn>
+              <Btn tone="green" style={{ padding: '7px 12px', fontSize: 12 }} onClick={() => handleRequestServerReplay(item)}>Request Server Replay</Btn>
+              <Btn tone="blue" style={{ padding: '7px 12px', fontSize: 12 }} onClick={() => handleSubmitConflictDecision(item)}>Submit Conflict Decision</Btn>
               <input
                 value={noteDrafts[item.eventId] || ''}
                 onChange={(e) => setNoteDrafts((d) => ({ ...d, [item.eventId]: e.target.value }))}
-                placeholder="Reconciliation note..."
+                placeholder="Reconciliation note / resolution reason..."
                 style={{ flex: 1, minWidth: 160, background: '#161d26', border: '1px solid rgba(212,168,67,0.18)', borderRadius: 8, color: '#e8eef5', padding: '6px 10px', fontSize: 12 }}
               />
               <Btn tone="gray" style={{ padding: '7px 12px', fontSize: 12 }} onClick={() => handleAddNote(item.eventId)}>Add Note</Btn>
+              <Btn tone="gray" style={{ padding: '7px 12px', fontSize: 12 }} onClick={() => handleSubmitNoteToBackend(item.eventId)}>Submit Reconciliation Note</Btn>
+              <Btn tone="orange" style={{ padding: '7px 12px', fontSize: 12 }} onClick={() => handleResolveWithReason(item)}>Resolve With Reason</Btn>
               <button
                 onClick={() => setExpandedId(expandedId === item.eventId ? null : item.eventId)}
                 style={{ background: 'transparent', border: 'none', color: GOLD, fontSize: 11, cursor: 'pointer' }}

@@ -10,6 +10,7 @@
 
 import { createBusinessActionFingerprint } from './shared/businessActionFingerprint.js'
 import { getAllEvents } from './syncQueueService.js'
+import { fetchSyncEventById, fetchSyncEventByFingerprint, postConflictDecision as postConflictDecisionToBackend } from './syncApiClient.js'
 
 export const CONFLICT_TYPES = [
   'none',
@@ -244,6 +245,82 @@ export function getConflictSummary() {
     byDecision,
     decisions: decisionLog.slice(-100),
   }
+}
+
+// ── Phase 6F additions ──────────────────────────────────────────
+// Backend-preferring conflict detection. The functions above remain the
+// local-only fallback (used automatically when the backend is unreachable,
+// and always available as the offline classification path). These new
+// functions query the Phase 6F backend reconciliation endpoints first, and
+// fall back to local classification only when the backend call returns
+// null (offline/unreachable) — they never silently downgrade a backend
+// "duplicate" finding into "no conflict".
+
+/**
+ * Looks up a backend match for this local event by eventId, then by
+ * fingerprint. Returns { backendReachable, backendEvent } — backendEvent is
+ * null both when reachable-with-no-match and when unreachable, so callers
+ * must check backendReachable to tell those apart.
+ */
+export async function detectConflictWithBackend(localEvent) {
+  if (!localEvent) return { backendReachable: false, backendEvent: null }
+
+  const byId = await fetchSyncEventById(localEvent.eventId)
+  if (byId?.success) {
+    return { backendReachable: true, backendEvent: byId.data || null }
+  }
+
+  const fingerprint = localEvent.businessActionFingerprint || createBusinessActionFingerprint(localEvent)
+  if (fingerprint) {
+    const byFingerprint = await fetchSyncEventByFingerprint(fingerprint)
+    if (byFingerprint?.success) {
+      return { backendReachable: true, backendEvent: byFingerprint.data || null }
+    }
+    // A 404 still means "backend reachable, just no match" — apiGet/apiPost
+    // return null only on network/offline failure, not on a handled 404
+    // body, so byFingerprint being a non-null object with success:false here
+    // means the backend answered "not found", which is still reachable.
+    if (byFingerprint && byFingerprint.success === false) {
+      return { backendReachable: true, backendEvent: null }
+    }
+  }
+
+  if (byId && byId.success === false) {
+    return { backendReachable: true, backendEvent: null }
+  }
+
+  return { backendReachable: false, backendEvent: null }
+}
+
+/**
+ * Backend-preferring classification: queries the backend for a real match
+ * first; if the backend is unreachable, falls back to classifyConflict()'s
+ * local-only logic (which still correctly returns `backend_missing` rather
+ * than guessing).
+ */
+export async function classifyConflictWithBackend(localEvent) {
+  const { backendReachable, backendEvent } = await detectConflictWithBackend(localEvent)
+  return classifyConflict(localEvent, backendEvent, { backendReachable })
+}
+
+/** Submits a resolved conflict decision to the backend for durable, cross-device recording. */
+export async function submitConflictDecisionToBackend(resolvedConflict, event) {
+  return postConflictDecisionToBackend({
+    event: {
+      eventId: event.eventId,
+      eventType: event.eventType,
+      entityId: event.entityId,
+      payload: event.payload,
+      businessActionFingerprint: event.businessActionFingerprint,
+      sourceSystem: event.sourceSystem,
+      sourceDeviceId: event.sourceDeviceId,
+    },
+    conflictType: resolvedConflict.conflictType,
+    decision: resolvedConflict.decision,
+    reason: resolvedConflict.reason,
+    requiresManualReview: resolvedConflict.requiresManualReview,
+    safeToAutoResolve: resolvedConflict.safeToAutoResolve,
+  })
 }
 
 /** Clears in-memory decisions whose underlying local event is no longer pending/failed (e.g. it synced). */
