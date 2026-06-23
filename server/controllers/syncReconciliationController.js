@@ -17,6 +17,11 @@ import {
 import {
   previewReplay as serverPreviewReplay, replayEventById, replayEventPayload,
 } from '../services/syncReplayServerService.js'
+import {
+  validateEventId, validateFingerprint, validateConflictDecisionPayload,
+  validateReplayPreviewPayload, validateReplayRequestPayload,
+  validateReconciliationNotePayload, validateReconciliationResolvePayload,
+} from '../services/syncRequestValidationService.js'
 
 const DEGRADED_MESSAGE =
   'Reconciliation store is unavailable (no database connection). Conflict and replay decisions ' +
@@ -28,7 +33,9 @@ function envelope({ success, mode = 'live', degraded = false, message = null, da
 
 export async function getSyncEventById(req, res) {
   try {
-    const event = await getEventById(req.params.eventId)
+    const check = validateEventId(req.params.eventId)
+    if (!check.valid) return fail(res, check.errors.join('; '), 400)
+    const event = await getEventById(check.sanitized)
     if (!event) return res.status(404).json(envelope({ success: false, message: 'Event not found', data: null }))
     return res.json(envelope({ success: true, data: event }))
   } catch (err) {
@@ -41,7 +48,9 @@ export async function getSyncEventById(req, res) {
 
 export async function getSyncEventByFingerprint(req, res) {
   try {
-    const event = await getEventByFingerprint(req.params.fingerprint)
+    const check = validateFingerprint(req.params.fingerprint)
+    if (!check.valid) return fail(res, check.errors.join('; '), 400)
+    const event = await getEventByFingerprint(check.sanitized)
     if (!event) return res.status(404).json(envelope({ success: false, message: 'No matching event found', data: null }))
     return res.json(envelope({ success: true, data: event }))
   } catch (err) {
@@ -68,8 +77,9 @@ export async function getSyncConflicts(req, res) {
 
 export async function postConflictDecision(req, res) {
   try {
-    const { event, conflictType, decision, reason, requiresManualReview, safeToAutoResolve } = req.body || {}
-    if (!event || !event.eventId) return fail(res, 'event with eventId is required', 400)
+    const payloadCheck = validateConflictDecisionPayload(req.body)
+    if (!payloadCheck.valid) return fail(res, payloadCheck.errors.join('; '), 400)
+    const { event, conflictType, decision, reason, requiresManualReview, safeToAutoResolve } = payloadCheck.sanitized
 
     let resolved
     if (decision) {
@@ -100,21 +110,28 @@ export async function postConflictDecision(req, res) {
 
 export async function previewReplayRoute(req, res) {
   try {
-    const result = await serverPreviewReplay(req.body?.event)
+    const payloadCheck = validateReplayPreviewPayload(req.body)
+    if (!payloadCheck.valid) return fail(res, payloadCheck.errors.join('; '), 400)
+    const result = await serverPreviewReplay(payloadCheck.sanitized.event)
     return res.json(envelope({ success: true, data: result }))
   } catch (err) {
+    if (err instanceof DbUnavailableError) {
+      return res.status(503).json(envelope({ success: false, mode: 'degraded', degraded: true, message: DEGRADED_MESSAGE }))
+    }
     return serverError(res, err, 'previewReplayRoute')
   }
 }
 
 export async function postReplay(req, res) {
   try {
-    const { eventId, event } = req.body || {}
+    const payloadCheck = validateReplayRequestPayload(req.body)
+    if (!payloadCheck.valid) return fail(res, payloadCheck.errors.join('; '), 400)
+    const { eventId, event, sourceDeviceId } = payloadCheck.sanitized
     const result = eventId
       ? await replayEventById(eventId, { decidedBy: req.user?.id || null })
       : await replayEventPayload(event, {
           decidedBy: req.user?.id || null,
-          sourceDeviceId: req.body?.sourceDeviceId || null,
+          sourceDeviceId: sourceDeviceId || null,
           userId: req.user?.id || null,
           userRole: req.user?.role || null,
         })
@@ -126,9 +143,9 @@ export async function postReplay(req, res) {
 
 export async function postReconciliationNote(req, res) {
   try {
-    const { note } = req.body || {}
-    if (!note) return fail(res, 'note is required', 400)
-    const record = await createReconciliationNote(req.params.eventId, note, { createdBy: req.user?.id || null })
+    const payloadCheck = validateReconciliationNotePayload(req.body)
+    if (!payloadCheck.valid) return fail(res, payloadCheck.errors.join('; '), 400)
+    const record = await createReconciliationNote(req.params.eventId, payloadCheck.sanitized.note, { createdBy: req.user?.id || null })
     return ok(res, record)
   } catch (err) {
     if (err instanceof DbUnavailableError) {
@@ -140,9 +157,14 @@ export async function postReconciliationNote(req, res) {
 
 export async function postReconciliationResolve(req, res) {
   try {
-    const { staffReason, backendConfirmationId } = req.body || {}
+    const payloadCheck = validateReconciliationResolvePayload(req.body)
+    if (!payloadCheck.valid) return fail(res, payloadCheck.errors.join('; '), 400)
+    // backendConfirmationId is never trusted from the client — the validator
+    // already strips it from `sanitized`; resolution must be driven by
+    // staffReason only, never by a client-echoed confirmation id.
+    const { staffReason } = payloadCheck.sanitized
     const event = await resolveReconciliation(req.params.eventId, {
-      staffReason, backendConfirmationId, resolvedBy: req.user?.id || null,
+      staffReason, resolvedBy: req.user?.id || null,
     })
     return ok(res, event)
   } catch (err) {

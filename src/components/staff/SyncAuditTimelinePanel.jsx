@@ -111,8 +111,17 @@ export default function SyncAuditTimelinePanel() {
         <div style={{ fontWeight: 700 }}>Audit Logs & Event Lifecycle Timeline — Staff Only</div>
         {health && (
           <Pill
-            label={health.backendReachable ? (health.degraded ? 'Degraded' : 'Backend Reachable') : 'Backend Unavailable'}
-            tone={health.backendReachable ? (health.degraded ? 'warning' : 'open') : 'critical'}
+            label={
+              health.authRequired ? 'Sign-In Required'
+                : health.forbidden ? 'Staff Access Required'
+                : health.backendReachable ? (health.degraded ? 'Degraded' : 'Backend Reachable')
+                : 'Backend Unavailable'
+            }
+            tone={
+              health.authRequired || health.forbidden ? 'critical'
+                : health.backendReachable ? (health.degraded ? 'warning' : 'open')
+                : 'critical'
+            }
           />
         )}
       </div>

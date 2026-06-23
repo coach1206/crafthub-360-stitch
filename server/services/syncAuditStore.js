@@ -11,6 +11,7 @@
  */
 
 import { query, isDbAvailable } from '../db/connection.js'
+import { sanitizeAuditMetadata } from './syncSecurityResponseService.js'
 
 export class DbUnavailableError extends Error {
   constructor() {
@@ -24,19 +25,12 @@ function assertDb() {
 }
 
 // Metadata is for operational context only — never include payment details,
-// guest PII, or full payloads. Callers should pass small, safe key/value
-// pairs (e.g. station, table, conflictType) — this is a last-resort guard.
-const SENSITIVE_METADATA_KEYS = ['cardNumber', 'cvv', 'paymentToken', 'guestEmail', 'guestPhone', 'ssn']
-
+// guest PII, auth secrets, or full payloads. Phase 6H extends this guard
+// (see syncSecurityResponseService.sanitizeAuditMetadata) to also strip
+// auth headers/cookies/passwords/reset tokens/API keys and cap value size —
+// failures here never block the audit write, they just drop the field.
 function sanitizeMetadata(metadata) {
-  if (!metadata || typeof metadata !== 'object') return {}
-  const safe = {}
-  for (const [key, value] of Object.entries(metadata)) {
-    if (SENSITIVE_METADATA_KEYS.includes(key)) continue
-    if (value !== null && typeof value === 'object') continue // never nest raw payloads
-    safe[key] = value
-  }
-  return safe
+  return sanitizeAuditMetadata(metadata).sanitized
 }
 
 function toCamelAuditLog(row) {

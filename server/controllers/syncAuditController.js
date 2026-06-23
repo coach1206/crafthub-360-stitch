@@ -12,6 +12,9 @@ import {
 import {
   getTimelineForEvent, getTimelineForBusinessAction, getAuditDashboardSummary,
 } from '../services/syncAuditService.js'
+import {
+  validateEventId, validateFingerprint, validateAuditLogQuery, validateTimelineQuery,
+} from '../services/syncRequestValidationService.js'
 
 const DEGRADED_MESSAGE =
   'Audit store is unavailable (no database connection). Audit logs and lifecycle timelines ' +
@@ -23,12 +26,10 @@ function envelope({ success, mode = 'live', degraded = false, message = null, da
 
 export async function getAuditLogsRoute(req, res) {
   try {
-    const { actionCategory, actionType, limit } = req.query || {}
-    const logs = await getAuditLogs({
-      actionCategory: actionCategory || null,
-      actionType: actionType || null,
-      limit: limit ? Number(limit) : 100,
-    })
+    const queryCheck = validateAuditLogQuery(req.query)
+    if (!queryCheck.valid) return fail(res, queryCheck.errors.join('; '), 400)
+    const { actionCategory, actionType, limit } = queryCheck.sanitized
+    const logs = await getAuditLogs({ actionCategory, actionType, limit })
     return res.json(envelope({ success: true, data: logs }))
   } catch (err) {
     if (err.code === 'DB_UNAVAILABLE') {
@@ -40,7 +41,11 @@ export async function getAuditLogsRoute(req, res) {
 
 export async function getEventTimeline(req, res) {
   try {
-    const result = await getTimelineForEvent(req.params.eventId)
+    const eventIdCheck = validateEventId(req.params.eventId)
+    if (!eventIdCheck.valid) return fail(res, eventIdCheck.errors.join('; '), 400)
+    const queryCheck = validateTimelineQuery(req.query)
+    if (!queryCheck.valid) return fail(res, queryCheck.errors.join('; '), 400)
+    const result = await getTimelineForEvent(eventIdCheck.sanitized)
     if (result.dbAvailable === false) {
       return res.status(503).json(envelope({ success: false, mode: 'degraded', degraded: true, message: result.message }))
     }
@@ -52,7 +57,11 @@ export async function getEventTimeline(req, res) {
 
 export async function getBusinessActionTimelineRoute(req, res) {
   try {
-    const result = await getTimelineForBusinessAction(req.params.fingerprint)
+    const fingerprintCheck = validateFingerprint(req.params.fingerprint)
+    if (!fingerprintCheck.valid) return fail(res, fingerprintCheck.errors.join('; '), 400)
+    const queryCheck = validateTimelineQuery(req.query)
+    if (!queryCheck.valid) return fail(res, queryCheck.errors.join('; '), 400)
+    const result = await getTimelineForBusinessAction(fingerprintCheck.sanitized)
     if (result.dbAvailable === false) {
       return res.status(503).json(envelope({ success: false, mode: 'degraded', degraded: true, message: result.message }))
     }
@@ -64,8 +73,12 @@ export async function getBusinessActionTimelineRoute(req, res) {
 
 export async function getActorAuditLogs(req, res) {
   try {
-    const { limit } = req.query || {}
-    const logs = await getAuditLogsByActor(req.params.actorId, { limit: limit ? Number(limit) : 100 })
+    if (!req.params.actorId || req.params.actorId.length > 128) {
+      return fail(res, 'actorId is required and must not exceed 128 characters', 400)
+    }
+    const paginationCheck = validateTimelineQuery(req.query)
+    if (!paginationCheck.valid) return fail(res, paginationCheck.errors.join('; '), 400)
+    const logs = await getAuditLogsByActor(req.params.actorId, { limit: paginationCheck.sanitized.limit })
     return res.json(envelope({ success: true, data: logs }))
   } catch (err) {
     if (err.code === 'DB_UNAVAILABLE') {

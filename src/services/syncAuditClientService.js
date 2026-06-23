@@ -11,37 +11,49 @@ import {
   fetchActorAuditLogs, fetchAuditSummary,
 } from './syncApiClient.js'
 
-function unavailable(message = 'Audit backend unavailable — cannot reach the server right now.') {
-  return { backendReachable: false, degraded: true, message }
+/**
+ * Phase 6H: distinguishes "not signed in" (401) and "signed in but not
+ * staff" (403) from a genuine network/backend-unavailable failure, so the
+ * panel can show honest, specific staff-facing language instead of a single
+ * generic "unavailable" message for every failure mode.
+ */
+function unavailable(result, fallbackMessage = 'Audit backend unavailable — cannot reach the server right now.') {
+  if (result?.status === 401) {
+    return { backendReachable: false, degraded: false, authRequired: true, message: 'Sign-in required to view audit logs.' }
+  }
+  if (result?.status === 403) {
+    return { backendReachable: false, degraded: false, forbidden: true, message: 'Staff access required to view audit logs.' }
+  }
+  return { backendReachable: false, degraded: true, message: result?.message || fallbackMessage }
 }
 
 export async function getAuditDashboardSummary(options = {}) {
   const result = await fetchAuditSummary(options)
-  if (!result || result.success === false) return unavailable()
+  if (!result || result.success === false) return unavailable(result)
   return { backendReachable: true, degraded: Boolean(result.degraded), ...result.data }
 }
 
 export async function getEventTimeline(eventId) {
   const result = await fetchEventTimeline(eventId)
-  if (!result || result.success === false) return unavailable(result?.message)
+  if (!result || result.success === false) return unavailable(result, result?.message)
   return { backendReachable: true, degraded: false, ...result.data }
 }
 
 export async function getBusinessActionTimeline(fingerprint) {
   const result = await fetchBusinessActionTimeline(fingerprint)
-  if (!result || result.success === false) return unavailable(result?.message)
+  if (!result || result.success === false) return unavailable(result, result?.message)
   return { backendReachable: true, degraded: false, ...result.data }
 }
 
 export async function getStaffActionLogs(actorId, options = {}) {
   const result = await fetchActorAuditLogs(actorId, options)
-  if (!result || result.success === false) return unavailable()
+  if (!result || result.success === false) return unavailable(result)
   return { backendReachable: true, degraded: false, logs: result.data || [] }
 }
 
 export async function getLatestAuditLogs(options = {}) {
   const result = await fetchAuditLogs(options)
-  if (!result || result.success === false) return unavailable()
+  if (!result || result.success === false) return unavailable(result)
   return { backendReachable: true, degraded: false, logs: result.data || [] }
 }
 
@@ -115,8 +127,6 @@ export function formatLifecycleStageForUI(stage) {
 /** Cheap reachability probe for the staff panel's health indicator — never claims healthy without a real response. */
 export async function getAuditHealth() {
   const summary = await fetchAuditSummary({})
-  if (!summary || summary.success === false) {
-    return { backendReachable: false, degraded: true, message: 'Audit backend unavailable.' }
-  }
+  if (!summary || summary.success === false) return unavailable(summary, 'Audit backend unavailable.')
   return { backendReachable: true, degraded: Boolean(summary.degraded), message: summary.degraded ? summary.message : null }
 }
