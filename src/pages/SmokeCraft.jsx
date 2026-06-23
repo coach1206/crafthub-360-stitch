@@ -1,19 +1,13 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../context/GuestSessionContext.jsx'
-import { useDemoMode } from '../context/DemoModeContext.jsx'
 import { getNextSmokecraftRoute } from '../constants/session.js'
+import { triggerHaptic } from '../utils/haptics.js'
+import { getVenueHomeContent } from '../data/venueHomeContent.js'
+import VenueHeroRotator from '../components/smokecraft/VenueHeroRotator.jsx'
 
 export default function SmokeCraft() {
   const navigate = useNavigate()
-  const { session, updateProfile } = useGuestSession()
-  const { enterDemoMode } = useDemoMode()
-  const [howItWorksOpen, setHowItWorksOpen] = useState(false)
-  const [signInOpen, setSignInOpen] = useState(false)
-  const [guestPassOpen, setGuestPassOpen] = useState(false)
-  const [qrOpen, setQrOpen] = useState(false)
-  const [signInValue, setSignInValue] = useState('')
-  const [guestPassValue, setGuestPassValue] = useState('')
+  const { session } = useGuestSession()
 
   const completedSteps     = session.completedSteps ?? []
   const hasPreviousSession = completedSteps.length > 0
@@ -24,7 +18,18 @@ export default function SmokeCraft() {
   const hasEventHistory    = completedSteps.includes('leaf-challenge')
   const isReturningUser    = hasPreviousSession || stampCount > 0 || badgeCount > 0
 
-  function handleStartNew() {
+  const venueContent = getVenueHomeContent(session.venueId)
+
+  function handleHowItWorks() {
+    navigate('/smokecraft/how-it-works')
+  }
+
+  function handleEnterChallenge() {
+    navigate('/smokecraft/challenge')
+  }
+
+  function handleStartSession() {
+    triggerHaptic('medium')
     navigate('/smokecraft/enroll')
   }
 
@@ -32,37 +37,28 @@ export default function SmokeCraft() {
     navigate(getNextSmokecraftRoute(session.completedSteps))
   }
 
-  function handleSignInSubmit(e) {
-    e.preventDefault()
-    if (signInValue.includes('@')) updateProfile({ email: signInValue })
-    else if (signInValue) updateProfile({ phone: signInValue })
-    setSignInOpen(false)
-    setSignInValue('')
-  }
-
-  function handleGuestPassSubmit(e) {
-    e.preventDefault()
-    if (guestPassValue) updateProfile({ venueGuestPassCode: guestPassValue })
-    setGuestPassOpen(false)
-    setGuestPassValue('')
-    navigate('/smokecraft/enroll')
-  }
-
-  function handleEventChallenge() {
-    navigate('/smokecraft/leaf-challenge')
-  }
-
-  function handleViewPassport() {
-    navigate('/passport')
+  function handleSignIn() {
+    navigate('/signin')
   }
 
   function handleBrowseHumidor() {
-    navigate('/smokecraft/humidor-match')
+    navigate('/smokecraft/humidor')
+  }
+
+  function handleGuestPass() {
+    navigate('/smokecraft/guest-pass')
   }
 
   function handleDemoExperience() {
-    enterDemoMode()
-    navigate('/smokecraft/enroll')
+    navigate('/smokecraft/demo')
+  }
+
+  function handleViewPassport() {
+    navigate('/smokecraft/passport')
+  }
+
+  function handleScanQR() {
+    navigate('/smokecraft/scan')
   }
 
   const bottomNav = [
@@ -141,7 +137,7 @@ export default function SmokeCraft() {
 
       {/* ── Main Content ──────────────────────────────────────────── */}
       <main style={{ position: 'relative', zIndex: 10, maxWidth: 1320, margin: '0 auto', padding: '124px 32px 140px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 64, alignItems: 'center' }} className="smokecraft-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 64, alignItems: 'start' }} className="smokecraft-grid">
 
           {/* Left Column */}
           <div className="sc-fade-in" style={{ gridColumn: 'span 1' }}>
@@ -178,65 +174,108 @@ export default function SmokeCraft() {
               Your personalized cigar journey starts here. Explore. Learn. Pair. Track every step with craftsmanship and purpose.
             </p>
 
-            {/* CTA Buttons — required entry-gate action set */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 20 }}>
+            {/* ── Stepped action journey ──────────────────────────── */}
+
+            {/* Top row: How It Works, Enter Challenge */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 12 }}>
               <button
                 className="sc-tactile"
-                onClick={handleStartNew}
-                style={{ height: 56, padding: '0 28px', borderRadius: 10, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #E9C176, #B8952A)', color: '#1A1207', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 900, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10, boxShadow: '0 6px 24px rgba(212,175,55,0.32)' }}
+                onClick={handleHowItWorks}
+                style={{ height: 50, padding: '0 22px', borderRadius: 10, cursor: 'pointer', background: 'transparent', border: '1px solid rgba(212,175,55,0.32)', color: '#E6C76A', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8 }}
               >
-                Start New SmokeCraft Session
-                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chevron_right</span>
+                <span className="material-symbols-outlined" style={{ fontSize: 17 }}>menu_book</span>
+                How It Works
+              </button>
+              <button
+                className="sc-tactile"
+                onClick={handleEnterChallenge}
+                style={{ height: 50, padding: '0 22px', borderRadius: 10, cursor: 'pointer', background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.32)', color: '#E6C76A', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8 }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 17 }}>emoji_events</span>
+                Enter Challenge
+              </button>
+            </div>
+
+            {/* Main row: strongest CTA */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 12 }}>
+              <button
+                className="sc-tactile"
+                onClick={handleStartSession}
+                style={{ height: 60, padding: '0 32px', borderRadius: 12, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #E9C176, #B8952A)', color: '#1A1207', fontFamily: '"JetBrains Mono",monospace', fontSize: 13, fontWeight: 900, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10, boxShadow: '0 8px 28px rgba(212,175,55,0.38)' }}
+              >
+                Start Your SmokeCraft Session
+                <span className="material-symbols-outlined" style={{ fontSize: 19 }}>chevron_right</span>
               </button>
 
               {hasPreviousSession && (
                 <button
                   className="sc-tactile"
                   onClick={handleContinue}
-                  style={{ height: 56, padding: '0 28px', borderRadius: 10, cursor: 'pointer', background: 'rgba(91,143,201,0.1)', border: '1px solid rgba(123,168,219,0.45)', color: '#9DC2EE', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10 }}
+                  style={{ height: 60, padding: '0 24px', borderRadius: 12, cursor: 'pointer', background: 'rgba(91,143,201,0.1)', border: '1px solid rgba(123,168,219,0.45)', color: '#9DC2EE', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10 }}
                 >
                   Continue Previous Session
                 </button>
               )}
             </div>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 32 }}>
-              {[
-                { label: 'Enter Event Challenge', onClick: handleEventChallenge, icon: 'emoji_events' },
-                { label: 'View My Passport',       onClick: handleViewPassport,  icon: 'menu_book' },
-                { label: 'Browse Humidor',          onClick: handleBrowseHumidor, icon: 'inventory_2' },
-                { label: 'Demo Experience',         onClick: handleDemoExperience, icon: 'visibility' },
-                { label: 'Sign In',                 onClick: () => setSignInOpen(true), icon: 'login' },
-                { label: 'Scan QR Code',            onClick: () => setQrOpen(true), icon: 'qr_code_scanner' },
-                { label: 'Venue Guest Pass',         onClick: () => setGuestPassOpen(true), icon: 'badge' },
-              ].map(btn => (
-                <button
-                  key={btn.label}
-                  className="sc-tactile"
-                  onClick={btn.onClick}
-                  style={{ height: 48, padding: '0 20px', borderRadius: 10, cursor: 'pointer', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(212,175,55,0.32)', color: '#E6C76A', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>{btn.icon}</span>
-                  {btn.label}
-                </button>
-              ))}
+            {/* Second row: Sign In, Browse Humidor */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 12 }}>
               <button
                 className="sc-tactile"
-                onClick={() => setHowItWorksOpen(true)}
-                style={{ height: 48, padding: '0 20px', borderRadius: 10, cursor: 'pointer', background: 'transparent', border: '1px solid rgba(212,175,55,0.22)', color: 'rgba(230,199,106,0.8)', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8 }}
+                onClick={handleSignIn}
+                style={{ height: 48, padding: '0 20px', borderRadius: 10, cursor: 'pointer', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(212,175,55,0.32)', color: '#E6C76A', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
               >
-                How It Works
+                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>login</span>
+                Sign In
+              </button>
+              <button
+                className="sc-tactile"
+                onClick={handleBrowseHumidor}
+                style={{ height: 48, padding: '0 20px', borderRadius: 10, cursor: 'pointer', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(212,175,55,0.32)', color: '#E6C76A', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>inventory_2</span>
+                Browse Humidor
               </button>
             </div>
 
-            {/* Hint row */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, maxWidth: 440 }}>
-              <div style={{ width: 32, height: 32, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.35)', background: 'rgba(212,175,55,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#E6C76A' }}>star</span>
-              </div>
-              <p style={{ fontSize: 13, color: 'rgba(244,236,218,0.55)', lineHeight: 1.6 }}>
-                Begin your guided cigar profile, earn passport stamps, and unlock personalized pairings.
-              </p>
+            {/* Third row: Venue Guest Pass, Demo Experience */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 20 }}>
+              <button
+                className="sc-tactile"
+                onClick={handleGuestPass}
+                style={{ height: 48, padding: '0 20px', borderRadius: 10, cursor: 'pointer', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(212,175,55,0.32)', color: '#E6C76A', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>badge</span>
+                Venue Guest Pass
+              </button>
+              <button
+                className="sc-tactile"
+                onClick={handleDemoExperience}
+                style={{ height: 48, padding: '0 20px', borderRadius: 10, cursor: 'pointer', background: 'transparent', border: '1px solid rgba(123,168,219,0.35)', color: '#9DC2EE', fontFamily: '"JetBrains Mono",monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8 }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>visibility</span>
+                Demo Experience
+              </button>
+            </div>
+
+            {/* Utility row: View Passport, Scan QR Code */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              <button
+                className="sc-tactile"
+                onClick={handleViewPassport}
+                style={{ height: 42, padding: '0 16px', borderRadius: 8, cursor: 'pointer', background: 'transparent', border: '1px solid rgba(212,175,55,0.2)', color: 'rgba(230,199,106,0.75)', fontFamily: '"JetBrains Mono",monospace', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 15 }}>menu_book</span>
+                View Passport
+              </button>
+              <button
+                className="sc-tactile"
+                onClick={handleScanQR}
+                style={{ height: 42, padding: '0 16px', borderRadius: 8, cursor: 'pointer', background: 'transparent', border: '1px solid rgba(212,175,55,0.2)', color: 'rgba(230,199,106,0.75)', fontFamily: '"JetBrains Mono",monospace', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 15 }}>qr_code_scanner</span>
+                Scan QR Code
+              </button>
             </div>
           </div>
 
@@ -283,35 +322,8 @@ export default function SmokeCraft() {
               </div>
             </div>
 
-            {/* Recommended Pairing Card */}
-            <div
-              className="sc-card-tactile"
-              onClick={() => navigate('/smokecraft/pairing')}
-              style={{ position: 'relative', overflow: 'hidden', borderRadius: 20, border: '1px solid rgba(212,175,55,0.28)', background: 'linear-gradient(150deg, rgba(36,24,12,0.92), rgba(14,9,5,0.94))', cursor: 'pointer', boxShadow: '0 14px 38px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,236,178,0.06)' }}
-            >
-              <div style={{ padding: '24px 26px' }}>
-                <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#E6C76A', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>Recommended Pairing</div>
-                <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
-                  <div style={{ width: 168, height: 152, borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.28)', flexShrink: 0, boxShadow: '0 8px 22px rgba(0,0,0,0.45)' }}>
-                    <img
-                      src="/assets/smokecraft/cropped/flavor-dna-bg.jpg"
-                      alt="Padrón 1964"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <h4 style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#F4ECDA', marginBottom: 5, lineHeight: 1.2 }}>Padrón 1964 Anniversary</h4>
-                    <p style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: 'rgba(244,236,218,0.5)', letterSpacing: '0.08em', marginBottom: 10 }}>Maduro · Nicaragua</p>
-                    <p style={{ fontSize: 13, color: 'rgba(244,236,218,0.62)', lineHeight: 1.55, marginBottom: 16 }}>Rich cocoa, espresso, and dark fruit with a long, velvety finish.</p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#E6C76A' }}>
-                      <span className="material-symbols-outlined" style={{ fontSize: 16 }}>smoking_rooms</span>
-                      <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>View Pairing</span>
-                      <span className="material-symbols-outlined" style={{ fontSize: 16 }}>chevron_right</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Venue-controlled rotating hero card (humidor, pairing, challenge, etc.) */}
+            <VenueHeroRotator content={venueContent} />
 
           </div>
         </div>
@@ -352,520 +364,11 @@ export default function SmokeCraft() {
         ))}
       </nav>
 
-      {/* ── Sign In Modal (lightweight guest identity capture — no backend auth) ── */}
-      {signInOpen && (
-        <div onClick={() => setSignInOpen(false)} className="smokecraft-how-overlay" style={{ alignItems: 'center' }}>
-          <form onClick={e => e.stopPropagation()} onSubmit={handleSignInSubmit} className="smokecraft-entry-modal">
-            <button type="button" className="smokecraft-how-close" onClick={() => setSignInOpen(false)} aria-label="Close sign in"><span className="material-symbols-outlined">close</span></button>
-            <h3 className="smokecraft-entry-title">Sign In</h3>
-            <p className="smokecraft-entry-desc">Enter your email or phone to link this session to your guest profile.</p>
-            <input
-              autoFocus
-              className="smokecraft-entry-input"
-              placeholder="Email or phone"
-              value={signInValue}
-              onChange={e => setSignInValue(e.target.value)}
-            />
-            <button type="submit" className="smokecraft-entry-submit">Continue</button>
-          </form>
-        </div>
-      )}
-
-      {/* ── QR Scan Placeholder Modal ─────────────────────────────────── */}
-      {qrOpen && (
-        <div onClick={() => setQrOpen(false)} className="smokecraft-how-overlay" style={{ alignItems: 'center' }}>
-          <div onClick={e => e.stopPropagation()} className="smokecraft-entry-modal" style={{ textAlign: 'center' }}>
-            <button className="smokecraft-how-close" onClick={() => setQrOpen(false)} aria-label="Close QR scan"><span className="material-symbols-outlined">close</span></button>
-            <span className="material-symbols-outlined" style={{ fontSize: 64, color: '#E6C76A', marginBottom: 12 }}>qr_code_scanner</span>
-            <h3 className="smokecraft-entry-title">Scan QR Code</h3>
-            <p className="smokecraft-entry-desc">Point your camera at a table, bar, humidor, or event QR code to enter SmokeCraft 360 directly into that context. Camera scanning activates on the venue device.</p>
-          </div>
-        </div>
-      )}
-
-      {/* ── Venue Guest Pass Modal ───────────────────────────────────── */}
-      {guestPassOpen && (
-        <div onClick={() => setGuestPassOpen(false)} className="smokecraft-how-overlay" style={{ alignItems: 'center' }}>
-          <form onClick={e => e.stopPropagation()} onSubmit={handleGuestPassSubmit} className="smokecraft-entry-modal">
-            <button type="button" className="smokecraft-how-close" onClick={() => setGuestPassOpen(false)} aria-label="Close guest pass"><span className="material-symbols-outlined">close</span></button>
-            <h3 className="smokecraft-entry-title">Venue Guest Pass</h3>
-            <p className="smokecraft-entry-desc">Enter the guest pass code provided by the venue to begin your session.</p>
-            <input
-              autoFocus
-              className="smokecraft-entry-input"
-              placeholder="Guest pass code"
-              value={guestPassValue}
-              onChange={e => setGuestPassValue(e.target.value)}
-            />
-            <button type="submit" className="smokecraft-entry-submit">Enter SmokeCraft</button>
-          </form>
-        </div>
-      )}
-
-      {/* ── How It Works Modal ──────────────────────────────────────── */}
-      {howItWorksOpen && (
-        <div
-          onClick={() => setHowItWorksOpen(false)}
-          className="smokecraft-how-overlay"
-        >
-          <div
-            onClick={e => e.stopPropagation()}
-            className="smokecraft-how-modal"
-          >
-            <div className="smokecraft-how-atmosphere" aria-hidden="true" />
-            <button
-              className="smokecraft-how-close"
-              onClick={() => setHowItWorksOpen(false)}
-              aria-label="Close How It Works"
-            >
-              <span className="material-symbols-outlined">close</span>
-            </button>
-
-            <header className="smokecraft-how-header">
-              <div className="smokecraft-how-feather" aria-hidden="true">
-                <span className="material-symbols-outlined">eco</span>
-              </div>
-              <h3>How It Works</h3>
-            </header>
-
-            {[
-              {
-                num: '01',
-                title: 'Enroll & Discover',
-                desc: 'Answer a few guided questions about your palate. We build your personal cigar profile from your preferences.',
-                image: '/assets/smokecraft/cropped/passport-cover.jpg',
-                icon: 'assignment',
-              },
-              {
-                num: '02',
-                title: 'Learn the Craft',
-                desc: 'Explore origins, tobacco leaves, vitola shapes, and the art of blending through interactive modules.',
-                image: '/assets/smokecraft/cropped/cut-toast-light-bg.jpg',
-                icon: 'school',
-              },
-              {
-                num: '03',
-                title: 'Earn Passport Stamps',
-                desc: 'Complete each chapter to stamp your 360 Passport. Stamps unlock exclusive pairings and member benefits.',
-                image: '/assets/smokecraft/cropped/passport-stamp-bg.jpg',
-                icon: 'workspace_premium',
-              },
-              {
-                num: '04',
-                title: 'Unlock Your Pairing',
-                desc: 'Your profile generates a personalized cigar and spirit pairing, curated to your flavour DNA.',
-                image: '/assets/smokecraft/cropped/management-sync-bg.jpg',
-                icon: 'local_bar',
-              },
-            ].map(step => (
-              <article key={step.num} className="smokecraft-how-step">
-                <div className="smokecraft-how-image">
-                  <img src={step.image} alt="" />
-                  <span className="material-symbols-outlined">{step.icon}</span>
-                </div>
-                <div className="smokecraft-how-step-copy">
-                  <div className="smokecraft-how-step-kicker">
-                    <strong>{Number(step.num)}</strong>
-                    <span>Step {step.num}</span>
-                  </div>
-                  <h4>{step.title}</h4>
-                  <p>{step.desc}</p>
-                </div>
-              </article>
-            ))}
-
-            <button
-              onClick={() => { setHowItWorksOpen(false); navigate('/smokecraft/enroll') }}
-              className="smokecraft-how-start"
-            >
-              <span>Start SmokeCraft</span>
-              <span className="material-symbols-outlined">arrow_forward</span>
-            </button>
-
-            <div className="smokecraft-how-mark" aria-hidden="true">SC</div>
-          </div>
-        </div>
-      )}
-
       {/* Desktop grid responsive style */}
       <style>{`
-        .smokecraft-entry-modal {
-          position: relative;
-          width: min(420px, 100%);
-          border-radius: 22px;
-          border: 1.5px solid rgba(233,193,118,0.6);
-          padding: 32px 28px 28px;
-          color: #f4ead7;
-          background: linear-gradient(180deg, rgba(20,14,9,0.97), rgba(8,5,3,0.98));
-          box-shadow: 0 32px 90px rgba(0,0,0,0.7), 0 0 36px rgba(233,193,118,0.18);
-        }
-        .smokecraft-entry-title {
-          font-family: "Playfair Display", serif;
-          font-size: 26px;
-          color: #f7d88a;
-          margin: 0 0 10px;
-        }
-        .smokecraft-entry-desc {
-          font-size: 13px;
-          line-height: 1.55;
-          color: rgba(244,236,218,0.65);
-          margin: 0 0 18px;
-        }
-        .smokecraft-entry-input {
-          width: 100%;
-          height: 48px;
-          border-radius: 10px;
-          border: 1px solid rgba(212,175,55,0.35);
-          background: rgba(255,255,255,0.04);
-          color: #f4ead7;
-          padding: 0 16px;
-          margin-bottom: 16px;
-          font-size: 14px;
-        }
-        .smokecraft-entry-submit {
-          width: 100%;
-          height: 52px;
-          border: none;
-          border-radius: 10px;
-          cursor: pointer;
-          background: linear-gradient(135deg, #E9C176, #B8952A);
-          color: #1A1207;
-          font-family: "JetBrains Mono", monospace;
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-        }
-        .smokecraft-how-overlay {
-          position: fixed;
-          inset: 0;
-          z-index: 200;
-          min-height: 100dvh;
-          display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          padding: 20px 18px 28px;
-          overflow-y: auto;
-          background:
-            radial-gradient(ellipse at 50% 12%, rgba(212,175,55,0.16), transparent 34%),
-            radial-gradient(ellipse at 16% 45%, rgba(255,255,255,0.08), transparent 24%),
-            rgba(0,0,0,0.88);
-          backdrop-filter: blur(7px);
-          -webkit-backdrop-filter: blur(7px);
-        }
-        .smokecraft-how-modal {
-          position: relative;
-          width: min(640px, 100%);
-          min-height: min-content;
-          border-radius: 28px;
-          border: 1.5px solid rgba(233,193,118,0.82);
-          padding: 28px 40px 28px;
-          overflow: hidden;
-          color: #f4ead7;
-          background:
-            linear-gradient(180deg, rgba(16,14,13,0.96), rgba(8,5,3,0.98)),
-            url('/assets/smokecraft/cropped/management-sync-bg.jpg');
-          background-size: cover;
-          background-position: center;
-          box-shadow:
-            0 0 0 1px rgba(255,246,216,0.08),
-            0 0 42px rgba(233,193,118,0.3),
-            0 32px 110px rgba(0,0,0,0.78),
-            inset 0 0 70px rgba(233,193,118,0.08);
-        }
-        .smokecraft-how-modal::before,
-        .smokecraft-how-modal::after,
-        .smokecraft-how-atmosphere {
-          content: "";
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-        }
-        .smokecraft-how-modal::before {
-          background:
-            radial-gradient(ellipse at 50% 6%, rgba(255,226,150,0.22), transparent 34%),
-            radial-gradient(ellipse at 50% 78%, rgba(233,193,118,0.13), transparent 32%),
-            linear-gradient(90deg, rgba(0,0,0,0.38), transparent 26%, transparent 72%, rgba(0,0,0,0.34));
-          z-index: 0;
-        }
-        .smokecraft-how-modal::after {
-          z-index: 0;
-          border-radius: inherit;
-          box-shadow: inset 0 0 30px rgba(255,233,166,0.11), inset 0 -70px 80px rgba(0,0,0,0.42);
-        }
-        .smokecraft-how-atmosphere {
-          z-index: 0;
-          background:
-            radial-gradient(ellipse at 4% 32%, rgba(255,255,255,0.15), transparent 30%),
-            radial-gradient(ellipse at 92% 40%, rgba(255,255,255,0.12), transparent 28%),
-            radial-gradient(ellipse at 18% 92%, rgba(255,255,255,0.11), transparent 28%);
-          filter: blur(18px);
-          mix-blend-mode: screen;
-          opacity: 0.86;
-        }
-        .smokecraft-how-header,
-        .smokecraft-how-step,
-        .smokecraft-how-start,
-        .smokecraft-how-close,
-        .smokecraft-how-mark {
-          position: relative;
-          z-index: 1;
-        }
-        .smokecraft-how-close {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          width: 48px;
-          height: 48px;
-          border-radius: 999px;
-          border: 1.5px solid rgba(233,193,118,0.72);
-          color: #e9c176;
-          background: rgba(0,0,0,0.28);
-          display: grid;
-          place-items: center;
-          cursor: pointer;
-          box-shadow: 0 0 20px rgba(233,193,118,0.12);
-        }
-        .smokecraft-how-header {
-          text-align: center;
-          padding: 0 54px 18px;
-        }
-        .smokecraft-how-feather {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 18px;
-          color: #f3cb72;
-          margin-bottom: 2px;
-        }
-        .smokecraft-how-feather::before,
-        .smokecraft-how-feather::after {
-          content: "";
-          width: 64px;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(233,193,118,0.48), transparent);
-        }
-        .smokecraft-how-feather .material-symbols-outlined {
-          font-size: 34px;
-          transform: rotate(-24deg);
-          filter: drop-shadow(0 0 12px rgba(233,193,118,0.5));
-        }
-        .smokecraft-how-header h3 {
-          margin: 0;
-          font-family: "Playfair Display", serif;
-          font-size: clamp(48px, 7vw, 72px);
-          line-height: 1;
-          color: #f7d88a;
-          letter-spacing: 0;
-          text-shadow:
-            0 0 8px rgba(255,236,178,0.68),
-            0 0 28px rgba(233,193,118,0.42),
-            0 6px 18px rgba(0,0,0,0.82);
-        }
-        .smokecraft-how-header h3::after {
-          content: "";
-          display: block;
-          width: 150px;
-          height: 13px;
-          margin: 4px auto 0;
-          background:
-            radial-gradient(circle, rgba(255,226,150,0.85) 0 2px, transparent 3px),
-            linear-gradient(90deg, transparent, rgba(233,193,118,0.5), transparent);
-          background-repeat: no-repeat;
-          background-position: center;
-        }
-        .smokecraft-how-step {
-          min-height: 130px;
-          margin-bottom: 12px;
-          padding: 12px 18px 12px 12px;
-          border: 1px solid rgba(233,193,118,0.36);
-          border-radius: 16px;
-          display: grid;
-          grid-template-columns: 116px minmax(0, 1fr);
-          gap: 18px;
-          align-items: center;
-          overflow: hidden;
-          background:
-            radial-gradient(ellipse at 20% 50%, rgba(233,193,118,0.16), transparent 36%),
-            linear-gradient(135deg, rgba(255,255,255,0.07), rgba(13,9,5,0.72));
-          box-shadow: 0 0 22px rgba(233,193,118,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
-          backdrop-filter: blur(18px);
-          -webkit-backdrop-filter: blur(18px);
-        }
-        .smokecraft-how-step::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          background:
-            radial-gradient(ellipse at 88% 32%, rgba(255,255,255,0.08), transparent 28%),
-            linear-gradient(90deg, transparent, rgba(233,193,118,0.04), transparent);
-        }
-        .smokecraft-how-image {
-          position: relative;
-          width: 104px;
-          height: 104px;
-          border-radius: 999px;
-          border: 1.5px solid rgba(233,193,118,0.68);
-          overflow: hidden;
-          box-shadow: 0 0 26px rgba(233,193,118,0.24), inset 0 0 20px rgba(0,0,0,0.58);
-        }
-        .smokecraft-how-image img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          filter: saturate(0.95) contrast(1.08) brightness(0.74);
-        }
-        .smokecraft-how-image::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(circle at 36% 24%, rgba(255,230,170,0.2), transparent 32%), linear-gradient(180deg, transparent, rgba(0,0,0,0.42));
-        }
-        .smokecraft-how-image .material-symbols-outlined {
-          position: absolute;
-          right: 9px;
-          bottom: 8px;
-          z-index: 1;
-          width: 28px;
-          height: 28px;
-          border-radius: 999px;
-          display: grid;
-          place-items: center;
-          color: #130905;
-          background: linear-gradient(135deg, #e9c176, #fff0aa 48%, #b98527);
-          font-size: 17px;
-        }
-        .smokecraft-how-step-kicker {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          margin-bottom: 4px;
-        }
-        .smokecraft-how-step-kicker strong {
-          width: 32px;
-          height: 32px;
-          border-radius: 999px;
-          border: 1px solid rgba(233,193,118,0.72);
-          display: grid;
-          place-items: center;
-          color: #f7d88a;
-          font-family: "Playfair Display", serif;
-          font-size: 22px;
-          line-height: 1;
-          box-shadow: 0 0 16px rgba(233,193,118,0.25);
-        }
-        .smokecraft-how-step-kicker span {
-          color: #e9c176;
-          font-family: "JetBrains Mono", monospace;
-          font-size: 10px;
-          font-weight: 800;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-        }
-        .smokecraft-how-step h4 {
-          margin: 0 0 4px;
-          color: #f8eee1;
-          font-family: "Playfair Display", serif;
-          font-size: 26px;
-          line-height: 1.08;
-          text-shadow: 0 3px 16px rgba(0,0,0,0.72);
-        }
-        .smokecraft-how-step p {
-          margin: 0;
-          color: rgba(248,238,225,0.72);
-          font-size: 13px;
-          line-height: 1.48;
-        }
-        .smokecraft-how-start {
-          width: 100%;
-          min-height: 68px;
-          margin-top: 14px;
-          border: 1px solid rgba(255,236,180,0.78);
-          border-radius: 14px;
-          color: #130905;
-          background:
-            linear-gradient(180deg, rgba(255,242,191,0.95), rgba(217,145,37,0.94) 55%, rgba(163,86,15,0.95)),
-            radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.5), transparent 48%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 18px;
-          cursor: pointer;
-          font-family: "JetBrains Mono", monospace;
-          font-size: 15px;
-          font-weight: 950;
-          letter-spacing: 0.32em;
-          text-transform: uppercase;
-          box-shadow: 0 0 38px rgba(233,193,118,0.48), inset 0 2px 0 rgba(255,255,255,0.48), inset 0 -3px 10px rgba(88,34,0,0.34);
-        }
-        .smokecraft-how-start:active,
-        .smokecraft-how-close:active {
-          transform: scale(0.97);
-        }
-        .smokecraft-how-start .material-symbols-outlined {
-          font-size: 22px;
-          letter-spacing: 0;
-        }
-        .smokecraft-how-mark {
-          width: 46px;
-          height: 30px;
-          margin: 13px auto 0;
-          color: rgba(233,193,118,0.62);
-          font-family: "Playfair Display", serif;
-          font-size: 15px;
-          display: grid;
-          place-items: center;
-          text-shadow: 0 0 14px rgba(233,193,118,0.36);
-        }
         @media (min-width: 1024px) {
           .smokecraft-grid {
             grid-template-columns: 1fr 1fr !important;
-          }
-        }
-        @media (max-width: 760px) {
-          .smokecraft-how-overlay {
-            padding: 12px;
-          }
-          .smokecraft-how-modal {
-            border-radius: 22px;
-            padding: 24px 18px 22px;
-          }
-          .smokecraft-how-close {
-            width: 42px;
-            height: 42px;
-            top: 14px;
-            right: 14px;
-          }
-          .smokecraft-how-header {
-            padding: 6px 40px 14px;
-          }
-          .smokecraft-how-feather::before,
-          .smokecraft-how-feather::after {
-            width: 42px;
-          }
-          .smokecraft-how-step {
-            grid-template-columns: 82px minmax(0, 1fr);
-            gap: 12px;
-            min-height: 112px;
-            padding: 10px;
-          }
-          .smokecraft-how-image {
-            width: 78px;
-            height: 78px;
-          }
-          .smokecraft-how-step h4 {
-            font-size: 21px;
-          }
-          .smokecraft-how-step p {
-            font-size: 12px;
-            line-height: 1.38;
-          }
-          .smokecraft-how-start {
-            min-height: 62px;
-            font-size: 12px;
-            letter-spacing: 0.2em;
-            gap: 10px;
           }
         }
         @media (max-width: 760px) {
