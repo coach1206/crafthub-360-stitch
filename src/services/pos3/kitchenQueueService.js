@@ -86,11 +86,29 @@ function updateEntry(id, patch, eventType) {
 }
 
 export function markStarted(id) {
-  return updateEntry(id, { status: 'started', startedAt: Date.now() }, 'KITCHEN_TICKET_STARTED')
+  const updated = updateEntry(id, { status: 'started', startedAt: Date.now() }, 'KITCHEN_TICKET_STARTED')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'KITCHEN',
+      eventType: 'KitchenStarted',
+      entityId: updated.id,
+      payload: { entry: updated, transitionAction: 'started' },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function markReady(id) {
-  return updateEntry(id, { status: 'ready', readyAt: Date.now() }, 'KITCHEN_TICKET_READY')
+  const updated = updateEntry(id, { status: 'ready', readyAt: Date.now() }, 'KITCHEN_TICKET_READY')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'KITCHEN',
+      eventType: 'KitchenReady',
+      entityId: updated.id,
+      payload: { entry: updated, transitionAction: 'ready' },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function markCompleted(id) {

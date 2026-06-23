@@ -85,15 +85,42 @@ function updateEntry(id, patch, eventType) {
 }
 
 export function markPulled(id) {
-  return updateEntry(id, { status: 'pulled', pulledAt: Date.now() }, 'HUMIDOR_ITEM_PULLED')
+  const updated = updateEntry(id, { status: 'pulled', pulledAt: Date.now() }, 'HUMIDOR_ITEM_PULLED')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'HUMIDOR',
+      eventType: 'HumidorPulled',
+      entityId: updated.id,
+      payload: { entry: updated, transitionAction: 'pulled' },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function markUnavailable(id, reason = '') {
-  return updateEntry(id, { status: 'unavailable', reason }, 'HUMIDOR_ITEM_UNAVAILABLE')
+  const updated = updateEntry(id, { status: 'unavailable', reason }, 'HUMIDOR_ITEM_UNAVAILABLE')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'HUMIDOR',
+      eventType: 'HumidorUnavailable',
+      entityId: updated.id,
+      payload: { entry: updated, transitionAction: 'unavailable', reason },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function suggestSubstitution(id, substitution) {
-  return updateEntry(id, { substitution }, 'HUMIDOR_SUBSTITUTION_SUGGESTED')
+  const updated = updateEntry(id, { substitution }, 'HUMIDOR_SUBSTITUTION_SUGGESTED')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'HUMIDOR',
+      eventType: 'HumidorSubstituted',
+      entityId: updated.id,
+      payload: { entry: updated, transitionAction: 'substituted', substitution },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function markDelivered(id) {

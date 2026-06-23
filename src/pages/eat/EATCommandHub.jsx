@@ -11,6 +11,7 @@ import LiveTicketsPanel from '../../components/eat/LiveTicketsPanel.jsx'
 import InventoryImpactPanel from '../../components/eat/InventoryImpactPanel.jsx'
 import StaffActivityPanel from '../../components/eat/StaffActivityPanel.jsx'
 import SyncStatusPanel from '../../components/staff/SyncStatusPanel.jsx'
+import SyncConflictReviewPanel from '../../components/staff/SyncConflictReviewPanel.jsx'
 
 /** Re-imported helper so opsEventBus has getOpsEvents */
 function useOpsFeed() {
@@ -92,6 +93,7 @@ export default function EATCommandHub() {
         <InventoryImpactPanel impacts={snapshot.inventoryImpacts} voidsAndComps={snapshot.voidsAndComps} />
         <StaffActivityPanel activity={snapshot.staffActivity} activityCounts={snapshot.staffActivityCounts} />
         <SyncStatusPanel />
+        <SyncConflictReviewPanel />
       </div>
     </ManagementLayout>
   )

@@ -18,6 +18,7 @@
 
 import { getDeviceId } from './shared/deviceIdService.js'
 import { postSyncEvents, getSyncStatus } from './syncApiClient.js'
+import { createBusinessActionFingerprint } from './shared/businessActionFingerprint.js'
 
 const DB_NAME    = 'novee_sync_queue'
 const DB_VERSION = 1
@@ -84,6 +85,23 @@ export async function saveEvent(event) {
     retryCount:      0,
     lastError:       null,
     lastAttemptAt:   null,
+    // Phase 6E additions — only ever populated on new records; existing
+    // Phase 6C records without these fields keep working unmodified.
+    businessActionFingerprint: null,
+    replayStatus:           'not_attempted',
+    replayBlockedReason:    null,
+    conflictType:           null,
+    conflictDecision:       null,
+    requiresManualReview:   false,
+    lastReplayAttemptAt:    null,
+    reconciliationStatus:   null,
+    reconciliationNote:     null,
+    reconciliationUpdatedAt: null,
+  }
+  try {
+    record.businessActionFingerprint = createBusinessActionFingerprint(record)
+  } catch {
+    record.businessActionFingerprint = null
   }
   await withStore('readwrite', (store) => store.put(record))
   return record
@@ -99,7 +117,18 @@ export async function getAllEvents() {
   return withStore('readonly', (store) => reqToPromise(store.getAll()))
 }
 
-async function patchEvent(eventId, patch) {
+/** Single-record lookup by eventId — used by Phase 6E reconciliation/conflict services. */
+export async function getEventById(eventId) {
+  return withStore('readonly', (store) => reqToPromise(store.get(eventId)))
+}
+
+/** Failed (permanently stuck, retryCount >= MAX_RETRIES) records — for Phase 6E reconciliation. */
+export async function getFailedEvents() {
+  const all = await getAllEvents()
+  return all.filter((e) => e.syncStatus === 'failed')
+}
+
+export async function patchEvent(eventId, patch) {
   return withStore('readwrite', async (store) => {
     const existing = await reqToPromise(store.get(eventId))
     if (!existing) return null
