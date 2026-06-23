@@ -82,6 +82,10 @@ export default function RequestPurchase() {
             <p className="font-body-lg text-body-lg text-on-surface-variant" style={{ maxWidth:520 }}>How will you be obtaining your cigar for tonight's session?</p>
           </div>
         </div>
+        <div className="flex items-start gap-3 mb-6 rounded-2xl border" style={{ padding: '14px 18px', background: 'rgba(233,193,118,0.06)', borderColor: 'rgba(233,193,118,0.25)' }}>
+          <span className="material-symbols-outlined text-primary" style={{ fontSize: 20, marginTop: 1 }}>info</span>
+          <p className="font-body-sm text-body-sm text-on-surface-variant" style={{ fontSize: 13 }}>This is a local handoff step only — no payment is processed and no order is placed here. Your choice tells the session what to do next.</p>
+        </div>
         <div
           className="flex flex-col gap-3 mb-12 rounded-3xl border border-primary/15 backdrop-blur-xl"
           style={{

@@ -148,8 +148,6 @@ export default function Scorecard() {
 
   const posHandoff = getSmokePOSHandoff(session)
   const purchaseReward = getSmokePurchaseRewardStatus(session)
-  const storageMode = getSmokeSharedStorageMode()
-  const syncStatus = session?.smokeCraft?.syncStatus || null
 
   function handleCreatePurchaseIntent() {
     if (posHandoff.intentId) return
@@ -230,21 +228,17 @@ export default function Scorecard() {
 
           <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">{purchaseReward.reason}</p>
 
-          <div className="rounded-xl border border-outline-variant/15 mb-4" style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.02)' }}>
-            <p className="font-label-sm text-label-sm uppercase tracking-widest text-primary/70 mb-1">Backend &amp; Storage Status</p>
-            <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">Storage mode: <span className="text-on-surface font-semibold">{storageMode.mode.replaceAll('_', ' ')}</span></p>
-            <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">Shared venue storage: <span className="text-on-surface font-semibold">{storageMode.backendConnected ? 'Active' : 'Not Yet Active'}</span></p>
-            {syncStatus?.lastAttemptAt && (
-              <p className="font-body-sm text-body-sm text-on-surface-variant mb-1">Last sync attempt: <span className="text-on-surface">{new Date(syncStatus.lastAttemptAt).toLocaleTimeString()}</span> · {syncStatus.lastAction} · {syncStatus.lastResult}</p>
-            )}
-            {!storageMode.backendConnected && (
-              <p className="font-body-sm text-body-sm" style={{ color: '#e9c176' }}>Local fallback active. Shared venue storage pending.</p>
-            )}
+          <div className="rounded-xl border border-outline-variant/15 mb-4 flex items-center gap-3" style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.02)' }}>
+            <span className="w-2 h-2 rounded-full shrink-0" style={{ background: '#e9c176' }} />
+            <p className="font-body-sm text-body-sm text-on-surface-variant">Running in local/demo session mode — your scorecard, badges, and rewards are saved to this session on this device.</p>
           </div>
 
-          <div className="mb-4">
-            <SmokeBackendReadinessPanel compact />
-          </div>
+          <details className="mb-4">
+            <summary className="font-label-sm text-label-sm uppercase tracking-widest text-primary/50 cursor-pointer select-none">Developer Diagnostics</summary>
+            <div className="mt-3">
+              <SmokeBackendReadinessPanel compact />
+            </div>
+          </details>
 
           <div className="flex flex-col sm:flex-row gap-3">
             <button onClick={handleCreatePurchaseIntent} disabled={Boolean(posHandoff.intentId)}

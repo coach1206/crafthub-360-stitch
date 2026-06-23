@@ -61,7 +61,7 @@ export default function SecondThird() {
         <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/first-third')} aria-label="Back">arrow_back</button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
-      <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
+      <main className="relative pt-28 pb-36 px-6 max-w-[1100px] mx-auto">
         <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
           <span>Step 10 of 17</span>
           <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'58.8%' }} /></div>
@@ -71,6 +71,7 @@ export default function SecondThird() {
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Second Third — Tasting</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-8" style={{ maxWidth:560 }}>The flavor profile typically deepens and transitions. Note the evolution.</p>
 
+        <div className="grid gap-6 lg:grid-cols-[1fr_360px] items-start">
         <div
           className="rounded-3xl border border-primary/15 backdrop-blur-xl"
           style={{
@@ -204,6 +205,39 @@ export default function SecondThird() {
         {!mentorGuidance && (
           <p className="font-label-sm text-[11px] text-on-surface-variant/50">No mentor selected yet — mentor tips will appear here once you choose a mentor.</p>
         )}
+        </div>
+
+        <aside
+          className="hidden lg:flex flex-col rounded-3xl border border-primary/15 backdrop-blur-xl overflow-hidden"
+          style={{
+            background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.15) 100%)',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
+          }}
+        >
+          <div className="bg-cover bg-center" style={{ height: 180, backgroundImage:"url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')" }} />
+          <div style={{ padding: 24 }}>
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-3">Midpoint Evolution</p>
+            <p className="font-body-md text-body-md text-on-surface-variant mb-5">The second third reveals how the blend transitions — track what's deepening, shifting, or fading.</p>
+
+            <p className="font-label-sm text-label-sm text-primary/70 uppercase tracking-widest mb-2">Notes Selected</p>
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {selected.size === 0
+                ? <span className="font-body-md text-body-md text-on-surface-variant/60 italic">None yet</span>
+                : NOTES.filter(n => selected.has(n)).map(n => (
+                  <span key={n} className="px-3 py-1 rounded-full font-label-sm text-label-sm" style={{ background:'rgba(233,193,118,0.14)', color:'#e9c176', border:'1px solid rgba(233,193,118,0.35)' }}>{n}</span>
+                ))
+              }
+            </div>
+
+            <p className="font-label-sm text-label-sm text-primary/70 uppercase tracking-widest mb-2">Flavor Development</p>
+            <p className="font-body-md text-body-md text-on-surface-variant mb-5">{flavorDevelopment || 'Not noted yet.'}</p>
+
+            <p className="font-label-sm text-label-sm text-primary/70 uppercase tracking-widest mb-2">Burn Consistency</p>
+            <p className="font-body-md text-body-md text-on-surface-variant">
+              {rating === 0 ? 'Not rated yet.' : `${rating} / 5 — ${rating <= 2 ? 'tight, needs attention' : rating === 3 ? 'workable draw' : 'smooth, consistent burn'}.`}
+            </p>
+          </div>
+        </aside>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 mt-12">
