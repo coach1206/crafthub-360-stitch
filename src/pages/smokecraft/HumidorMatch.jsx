@@ -12,28 +12,9 @@ const LANE_META = {
   'venue-featured-pick': { label: 'Venue Featured Pick', Icon: CrownIcon },
 }
 
-// Shape photos are dedicated product shots — see public/assets/smokecraft/cigars/README.md.
-// Recommendations are matched to a shape photo by keyword in the cigar name; if none match,
-// the card shows an honest "Cigar image pending" panel rather than substituting another photo.
-const SHAPE_IMAGE_BY_KEYWORD = [
-  ['torpedo', '/assets/smokecraft/cigars/torpedo-figurado.jpg'],
-  ['figurado', '/assets/smokecraft/cigars/torpedo-figurado.jpg'],
-  ['churchill', '/assets/smokecraft/cigars/churchill.jpg'],
-  ['corona', '/assets/smokecraft/cigars/corona.jpg'],
-  ['gordo', '/assets/smokecraft/cigars/gordo.jpg'],
-  ['toro', '/assets/smokecraft/cigars/toro.jpg'],
-  ['robusto', '/assets/smokecraft/cigars/robusto.jpg'],
-]
-
-function resolveShapeImage(cigarName = '') {
-  const lower = cigarName.toLowerCase()
-  const match = SHAPE_IMAGE_BY_KEYWORD.find(([kw]) => lower.includes(kw))
-  return match ? match[1] : null
-}
-
-function CigarMediaPanel({ cigarName }) {
+function CigarMediaPanel({ cigarName, shapePhoto }) {
   const [failed, setFailed] = useState(false)
-  const src = resolveShapeImage(cigarName)
+  const src = shapePhoto || null
   if (!src || failed) {
     return (
       <div className="humidor-card__media humidor-card__media--pending" aria-hidden="true">
@@ -50,11 +31,13 @@ function CigarMediaPanel({ cigarName }) {
   )
 }
 
+const STOCK_COLOR = { 'In Stock': '#5fb87a', 'Low Stock': '#e9c176', 'Out of Stock': '#d96b6b' }
+
 function RecommendationCard({ rec, selected, onSelect, requestState, onRequestStaff, onAddToPos }) {
   const meta = LANE_META[rec.recommendationType]
   return (
     <div className={`humidor-card${selected ? ' humidor-card--selected' : ''}`}>
-      <CigarMediaPanel cigarName={rec.cigarName} />
+      <CigarMediaPanel cigarName={rec.cigarName} shapePhoto={rec.shapePhoto} />
       <div className="humidor-card__body">
         <div className="flex items-center gap-3 mb-3">
           <span className="humidor-card__lane-icon">
@@ -71,11 +54,14 @@ function RecommendationCard({ rec, selected, onSelect, requestState, onRequestSt
           <span><strong>Wrapper</strong>{rec.wrapper}</span>
           <span><strong>Strength</strong>{rec.strength}</span>
           <span><strong>Burn time</strong>{rec.burnTime}</span>
-          <span><strong>Availability</strong>{rec.priceStatus}</span>
+          <span>
+            <strong>Availability</strong>
+            <span style={{ color: STOCK_COLOR[rec.inventoryStatus] || '#fff', fontWeight: 700 }}>● {rec.inventoryStatus}</span>
+          </span>
         </div>
         <p className="font-body-sm text-body-sm text-on-surface-variant mt-3">Flavor notes: {rec.flavorNotes.join(', ')}</p>
         <p className="font-body-sm text-body-sm text-on-surface-variant">{rec.pairingSuggestion}</p>
-        <p className="font-body-sm text-body-sm text-on-surface-variant">{rec.inventoryStatus}</p>
+        <p className="font-body-sm text-body-sm text-on-surface-variant/60" style={{ fontSize: 11 }}>{rec.availabilityNote} · {rec.priceStatus}</p>
         {rec.mentorNote && <p className="font-body-sm text-body-sm text-primary/80">{rec.mentorNote}</p>}
         <p className="font-body-sm text-body-sm text-on-surface-variant">Match reason: {rec.matchReason}</p>
         {rec.stepUpReason && <p className="font-body-sm text-body-sm text-on-surface-variant">{rec.stepUpReason}</p>}
@@ -101,7 +87,7 @@ function RecommendationCard({ rec, selected, onSelect, requestState, onRequestSt
             className="font-label-sm text-label-sm uppercase tracking-widest rounded-lg active:scale-95 transition-all disabled:opacity-60"
             style={{ height: 40, paddingInline: 16, background: 'rgba(255,255,255,0.06)', color: '#fff', border: '1px solid rgba(255,255,255,0.15)' }}
           >
-            {requestState?.staff === 'pending' ? 'Requested — Pending Staff' : 'Request from Staff'}
+            {requestState?.staff === 'pending' ? 'Request Logged — Local Session' : 'Request from Staff'}
           </button>
           <button
             type="button"
@@ -110,7 +96,7 @@ function RecommendationCard({ rec, selected, onSelect, requestState, onRequestSt
             className="font-label-sm text-label-sm uppercase tracking-widest rounded-lg active:scale-95 transition-all disabled:opacity-60"
             style={{ height: 40, paddingInline: 16, background: 'rgba(255,255,255,0.06)', color: '#fff', border: '1px solid rgba(255,255,255,0.15)' }}
           >
-            {requestState?.pos === 'pending' ? 'Add to POS — Backend Pending' : 'Add to POS'}
+            {requestState?.pos === 'pending' ? 'Added — Local Session' : 'Add to POS'}
           </button>
         </div>
       </div>
@@ -207,7 +193,8 @@ export default function HumidorMatch() {
           </div>
         </div>
 
-        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-4">Your Cigar Recommendations</p>
+        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-2">Your Cigar Recommendations</p>
+        <p className="font-body-sm text-body-sm text-on-surface-variant/70 mb-4" style={{ fontSize: 12 }}>Matched from the house humidor catalog. Pricing and staff requests are logged to this local session — no order is placed automatically.</p>
         {!recommendations.dataCompleteness.hasProfile && (
           <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">Complete your profile, format, and Seed & Soil pairing earlier in the protocol for a stronger match — these recommendations use only the data you've provided so far.</p>
         )}

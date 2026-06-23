@@ -35,6 +35,9 @@ const CIGAR_CATALOG = [
     seedSoilCountries: ['Nicaragua', 'Mexico'],
     pairingSuggestion: 'Pairs well with an aged rum or dark-roast espresso.',
     isVenueFeatured: true,
+    // Padrón 1964 Anniversary is also offered in a Torpedo vitola — used for
+    // the product shot since the name itself carries no shape keyword.
+    shapePhoto: '/assets/smokecraft/cigars/torpedo-figurado.jpg',
   },
   {
     id: 'opusx-robusto',
@@ -50,6 +53,7 @@ const CIGAR_CATALOG = [
     seedSoilCountries: ['Dominican Republic'],
     pairingSuggestion: 'Pairs well with a peated single malt scotch.',
     isVenueFeatured: false,
+    shapePhoto: '/assets/smokecraft/cigars/robusto.jpg',
   },
   {
     id: 'churchill-reserve',
@@ -65,6 +69,7 @@ const CIGAR_CATALOG = [
     seedSoilCountries: ['Dominican Republic'],
     pairingSuggestion: 'Pairs well with a barrel-aged Old Fashioned.',
     isVenueFeatured: false,
+    shapePhoto: '/assets/smokecraft/cigars/churchill.jpg',
   },
   {
     id: 'oliva-v-melanio-toro',
@@ -80,6 +85,7 @@ const CIGAR_CATALOG = [
     seedSoilCountries: ['Nicaragua'],
     pairingSuggestion: 'Pairs well with a reserve Cabernet Sauvignon pour.',
     isVenueFeatured: false,
+    shapePhoto: '/assets/smokecraft/cigars/toro.jpg',
   },
 ]
 
@@ -122,9 +128,9 @@ function scoreCigar(cigar, ctx) {
 
 function inventoryStatusFor(sku) {
   const avail = checkAvailability(sku, 1)
-  if (avail.status === 'out') return { inventoryStatus: 'Out of stock (local/demo POS3 inventory)', available: false }
-  if (avail.status === 'low') return { inventoryStatus: 'Low stock (local/demo POS3 inventory)', available: true }
-  return { inventoryStatus: 'In stock (local/demo POS3 inventory)', available: true }
+  if (avail.status === 'out') return { inventoryStatus: 'Out of Stock', availabilityNote: 'Local demo inventory', available: false }
+  if (avail.status === 'low') return { inventoryStatus: 'Low Stock', availabilityNote: 'Local demo inventory', available: true }
+  return { inventoryStatus: 'In Stock', availabilityNote: 'Local demo inventory', available: true }
 }
 
 function mentorNoteFor(cigar, mentors) {
@@ -134,7 +140,7 @@ function mentorNoteFor(cigar, mentors) {
 }
 
 function buildRecommendation(cigar, recommendationType, ctx, score, reasons, extra = {}) {
-  const { available, inventoryStatus } = inventoryStatusFor(cigar.sku)
+  const { available, inventoryStatus, availabilityNote } = inventoryStatusFor(cigar.sku)
   const { profile } = ctx
   return {
     recommendationType,
@@ -148,10 +154,12 @@ function buildRecommendation(cigar, recommendationType, ctx, score, reasons, ext
     strength: cigar.strength,
     flavorNotes: cigar.flavorNotes,
     burnTime: cigar.burnTime,
+    shapePhoto: cigar.shapePhoto,
     price: null,
-    priceStatus: 'Price pending POS sync',
+    priceStatus: 'Priced at pickup — ask staff for current pricing',
     pairingSuggestion: cigar.pairingSuggestion,
     inventoryStatus,
+    availabilityNote,
     mentorNote: mentorNoteFor(cigar, ctx.mentors),
     matchReason: reasons.length ? reasons.join('; ') : 'No profile data yet — complete your profile, format, and Seed & Soil pairing for a stronger match.',
     matchScore: score,
@@ -159,7 +167,7 @@ function buildRecommendation(cigar, recommendationType, ctx, score, reasons, ext
     budgetFit: profile?.budgetRange || null,
     occasionFit: profile?.occasion || null,
     seedSoilFit: ctx.seedSoilCountry ? cigar.seedSoilCountries.includes(ctx.seedSoilCountry) : null,
-    posActionStatus: 'Backend Pending',
+    posActionStatus: 'Saved to local session',
     available,
     ...extra,
   }

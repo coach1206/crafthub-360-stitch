@@ -37,7 +37,7 @@ const NETWORKING_STATUS_LABELS = {
   ready_to_share:      'Ready to share',
   shared_locally:      'Shared locally (demo only)',
   connection_pending:  'Connection pending',
-  backend_pending:     'Backend pending',
+  backend_pending:     'Connection not shared yet',
 }
 
 /** Read-only display row used by the Passport Connections summary — shows
@@ -141,8 +141,8 @@ export default function Connections() {
           </div>
           <p className="font-body-sm text-body-sm text-on-surface-variant mb-4" style={{ maxWidth:560 }}>
             Nothing below is sent anywhere automatically. Networking is local/demo only today —
-            no real backend connection, SMS, or email is sent yet (see Backend Pending below).
-            Choose what you're willing to share, then tap an action to mark it shared on this device.
+            no SMS or email is sent. Choose what you're willing to share, then tap an action to mark
+            it shared on this device.
           </p>
           <button
             type="button"
@@ -227,9 +227,8 @@ export default function Connections() {
 
           <p className="font-label-sm text-label-sm text-primary/50 uppercase tracking-widest mb-3" style={{ fontSize: 10 }}>Future Connections</p>
           <p className="font-body-sm text-body-sm text-on-surface-variant/70" style={{ maxWidth: 560 }}>
-            Member, cigar, and mentor connections from this session will appear here once the
-            360 member network is live. Backend pending — no member directory or matching
-            service exists yet.
+            Connection not shared yet. Member, cigar, and mentor connections from this session
+            will appear here once the 360 member network is live.
           </p>
         </section>
 

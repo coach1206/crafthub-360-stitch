@@ -66,7 +66,7 @@ const NETWORKING_STATUS_LABELS = {
   ready_to_share:      'Ready to share',
   shared_locally:      'Shared locally (demo only)',
   connection_pending:  'Connection pending',
-  backend_pending:     'Backend pending',
+  backend_pending:     'Connection not shared yet',
 }
 
 function DetailRow({ label, value, pendingNote }) {
@@ -74,7 +74,7 @@ function DetailRow({ label, value, pendingNote }) {
     <div>
       <dt className="font-label-sm text-label-sm text-on-surface-variant/60 uppercase tracking-widest mb-1" style={{ fontSize: 10 }}>{label}</dt>
       <dd className="font-body-md text-on-surface" style={{ opacity: value ? 1 : 0.45 }}>
-        {value || (pendingNote || 'Backend pending')}
+        {value || (pendingNote || 'Not recorded yet')}
       </dd>
     </div>
   )
@@ -357,7 +357,7 @@ export default function PassportStamp() {
               <DetailRow label="Event" value={latestStamp.eventName} />
               <DetailRow label="Date" value={latestStamp.date ? new Date(latestStamp.date).toLocaleDateString() : null} />
               <DetailRow label="Cigar" value={latestStamp.cigarName} pendingNote="Not recorded yet" />
-              <DetailRow label="Cigar Country" value={latestStamp.cigarCountry} pendingNote="Backend pending — seed region detail not yet captured" />
+              <DetailRow label="Cigar Country" value={latestStamp.cigarCountry} pendingNote="Not recorded yet" />
               <DetailRow label="Mentors" value={latestStamp.mentorNames?.length ? latestStamp.mentorNames.join(', ') : null} pendingNote="Not recorded yet" />
               <DetailRow label="Score" value={latestStamp.score != null ? `${latestStamp.score} pts` : null} pendingNote="Not recorded yet" />
               <DetailRow label="Badge / Ranking" value={[latestStamp.badgeEarned, latestStamp.rankingLevel].filter(Boolean).join(' — ') || null} pendingNote="Not recorded yet" />
