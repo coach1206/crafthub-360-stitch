@@ -33,6 +33,7 @@ import pos3IntegrationRoutes, {
   syncRouter       as pos3SyncRouter,
 }                            from './routes/pos3IntegrationRoutes.js'
 import voiceRoutes           from './routes/voiceRoutes.js'
+import syncRoutes             from './routes/syncRoutes.js'
 import deviceRoutes          from './routes/deviceRoutes.js'
 import deploymentRoutes      from './routes/deploymentRoutes.js'
 import venueTestRoutes       from './routes/venueTestRoutes.js'
@@ -102,6 +103,7 @@ app.use('/api/pos3/providers',    pos3IntegrationRoutes)
 app.use('/api/pos3/eat-feed',     pos3EatFeedRouter)
 app.use('/api/pos3/founder',      pos3FounderRouter)
 app.use('/api/voice',             voiceRoutes)
+app.use('/api/sync',              syncRoutes)
 app.use('/api/device',            deviceRoutes)
 app.use('/api/deployment',        deploymentRoutes)
 app.use('/api/eat',               eatRoutes)
