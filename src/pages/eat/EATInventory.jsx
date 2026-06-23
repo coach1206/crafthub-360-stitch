@@ -3,7 +3,7 @@ import { EAT_INVENTORY } from '../../data/eat/seedData.js'
 
 export default function EATInventory() {
   return (
-    <ManagementLayout title="Inventory" subtitle="Stock on hand across humidor, bar, and kitchen">
+    <ManagementLayout title="Inventory" subtitle="Stock on hand across humidor, bar, and kitchen (demo data — pending live inventory integration)">
       <Table
         columns={[
           { key: 'name', label: 'Item' }, { key: 'category', label: 'Category' }, { key: 'station', label: 'Station' },
