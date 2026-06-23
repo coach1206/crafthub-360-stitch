@@ -1858,4 +1858,89 @@
     border: 1px dashed rgba(233, 193, 118, 0.4);
     color: #e9c176;
   }
+
+  /* ════════════════════════════════════════════════════════════════
+     PHASE 7C — NOVEE COMMAND HUB + MANAGER/ADMIN ACCESS REDESIGN
+     Additive-only. Nothing in this block overrides an existing
+     selector — built on the Phase 7A navy/gold NOVEE tokens above.
+   ════════════════════════════════════════════════════════════════ */
+
+  /* ─── Module-launcher glass command card (NOVEE tiles, explanation
+       cards) — subtle electric-blue intelligence glow on gold trim ── */
+  .premium-novee-glow-card {
+    background: rgba(13, 20, 32, 0.85);
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    border-radius: 0.85rem;
+    box-shadow: 0 0 0 1px rgba(91, 143, 201, 0.12), 0 12px 28px rgba(0, 0, 0, 0.45);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .premium-novee-glow-card:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(91, 143, 201, 0.28), 0 16px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ─── Honest module-status badge. Content is supplied by the caller
+       and must be a real or clearly-static label, never fabricated
+       live telemetry ── */
+  .premium-novee-status-dot {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 9999px;
+    background: rgba(91, 143, 201, 0.12);
+    border: 1px solid rgba(91, 143, 201, 0.3);
+    color: #9cc2e8;
+  }
+
+  .premium-novee-status-dot[data-status="Active"],
+  .premium-novee-status-dot[data-status="Configured"] {
+    background: rgba(52, 211, 153, 0.1);
+    border-color: rgba(52, 211, 153, 0.3);
+    color: #6ee7b7;
+  }
+
+  .premium-novee-status-dot[data-status="Restricted"],
+  .premium-novee-status-dot[data-status="Coming Soon"] {
+    background: rgba(201, 168, 76, 0.1);
+    border-color: rgba(201, 168, 76, 0.3);
+    color: #d8b35f;
+  }
+
+  /* ─── Secure-access panel shell for PIN/login forms ─────────────── */
+  .premium-novee-access-panel {
+    box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.1), 0 0 36px rgba(91, 143, 201, 0.08);
+  }
+
+  /* ─── Left-side system-status rail ──────────────────────────────── */
+  .premium-novee-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .premium-novee-rail-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 0.6rem;
+    background: rgba(13, 20, 32, 0.6);
+    border: 1px solid rgba(201, 168, 76, 0.15);
+  }
+
+  .premium-novee-rail-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(234, 242, 251, 0.5);
+  }
+
+  .premium-novee-rail-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: #9cc2e8;
+  }
 }

@@ -12,6 +12,7 @@ const CARDS = [
   { title: 'E.A.T. Management Hub',     desc: 'Venue intelligence, inventory, staff performance command center.',      status: 'Staff Access', to: '/eat' },
   { title: 'DayOne360 Travel',          desc: 'Travel placement, venue offers, destination experiences.',              status: 'External', to: 'https://dayone360.com', external: true },
   { title: 'Leaderboard',               desc: 'Grand Lounge rankings across every craft module.',                     status: 'Active', to: '/leaderboard' },
+  { title: 'How CraftHub 360 Works',    desc: 'How NOVEE OS, CraftHub, POS 3, and E.A.T. connect.',                    status: 'Active', to: '/system-explained' },
 ]
 
 export default function NoveeHome() {
