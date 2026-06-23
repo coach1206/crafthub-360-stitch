@@ -137,7 +137,7 @@ export default function POS3Handheld() {
           <div style={{ fontSize: 19, fontWeight: 800, color: L_NAVY }}>EAT System</div>
           <div style={{ fontSize: 10, fontWeight: 700, color: L_GOLD, letterSpacing: '0.06em' }}>POWERED BY NOVEE OS</div>
         </div>
-        <button type="button" title="Notifications" style={{ background: 'none', border: 'none', color: L_NAVY, position: 'relative' }}>
+        <button type="button" disabled title="Notification center is not yet built" style={{ background: 'none', border: 'none', color: L_NAVY, position: 'relative', cursor: 'not-allowed', opacity: 0.45 }}>
           <span className="material-symbols-outlined">notifications</span>
         </button>
       </div>
