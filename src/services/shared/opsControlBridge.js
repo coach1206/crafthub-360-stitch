@@ -8,7 +8,8 @@
  */
 
 import { OPS_KEYS, opsGet, opsSet, getControlCommands, getSystemStatus } from './opsStorage.js'
-import { normalizeEvent, emit, STATUS, OPS_EVENT_NAME } from './opsEventBus.js'
+import { normalizeEvent, emit, STATUS, OPS_EVENT_NAME, SYSTEMS } from './opsEventBus.js'
+import { saveEvent } from '../syncQueueService.js'
 
 export { getControlCommands, getSystemStatus, STATUS }
 
@@ -25,6 +26,19 @@ export function createCommand(partial) {
   persist(commands)
   // Mirror onto the event feed so it is visible in live feeds.
   emit({ ...cmd, eventType: cmd.eventType || 'CONTROL_COMMAND' })
+
+  // Durable outbox entry for E.A.T.-originated operational commands only
+  // (commands flowing the other direction are POS3-sourced and already
+  // covered by pos3Service.js's own sync events).
+  if (cmd.sourceSystem === SYSTEMS.EAT) {
+    saveEvent({
+      sourceSystem: 'EAT',
+      eventType: cmd.eventType || 'CONTROL_COMMAND',
+      entityId: cmd.id,
+      payload: { command: cmd },
+    }).catch(() => {})
+  }
+
   return cmd
 }
 

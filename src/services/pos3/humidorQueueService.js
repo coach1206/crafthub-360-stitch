@@ -6,6 +6,7 @@
 
 import { opsGet, opsSet } from '../shared/opsStorage.js'
 import { emit, SYSTEMS, STATUS } from '../shared/opsEventBus.js'
+import { saveEvent } from '../syncQueueService.js'
 
 const QUEUE_KEY = 'pos3:humidorRequests'
 
@@ -48,6 +49,13 @@ export function pushHumidorRequest({ ticketId, item, tableId, staffId }) {
     payload: { entry, timestamp: entry.createdAt },
   })
 
+  saveEvent({
+    sourceSystem: 'HUMIDOR',
+    eventType: 'HumidorAccepted',
+    entityId: entry.id,
+    payload: { entry },
+  }).catch(() => {})
+
   return entry
 }
 
@@ -89,7 +97,16 @@ export function suggestSubstitution(id, substitution) {
 }
 
 export function markDelivered(id) {
-  return updateEntry(id, { status: 'delivered', deliveredAt: Date.now() }, 'HUMIDOR_ITEM_DELIVERED')
+  const updated = updateEntry(id, { status: 'delivered', deliveredAt: Date.now() }, 'HUMIDOR_ITEM_DELIVERED')
+  if (updated) {
+    saveEvent({
+      sourceSystem: 'HUMIDOR',
+      eventType: 'HumidorCompleted',
+      entityId: updated.id,
+      payload: { entry: updated },
+    }).catch(() => {})
+  }
+  return updated
 }
 
 export function getRequestsForTicket(ticketId) {

@@ -5,6 +5,7 @@
 
 import { loadSession, saveSession } from './sessionStorageService.js'
 import { syncPassportToBackend } from './syncService.js'
+import { saveEvent } from './syncQueueService.js'
 
 function genPassportId() {
   return `PP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
@@ -64,6 +65,16 @@ export function awardStamp(stampData) {
   saveSession(updatedSession)
   // Fire-and-forget passport sync after local save
   syncPassportToBackend(updatedSession).catch(() => {})
+  // Durable outbox entry — separate from the existing fire-and-forget sync above.
+  const passportId = updatedSession.passport?.passportId
+  if (passportId) {
+    saveEvent({
+      sourceSystem: 'PASSPORT',
+      eventType: 'PassportStampAwarded',
+      entityId: passportId,
+      payload: { stamp, sessionId: updatedSession.sessionId },
+    }).catch(() => {})
+  }
   return stamp
 }
 

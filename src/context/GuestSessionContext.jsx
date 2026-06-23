@@ -23,6 +23,7 @@ import {
 } from '../services/sessionStorageService.js'
 import { calculateScore, getRankLabel } from '../services/leaderboardService.js'
 import { GOLD_BOX_RULE_VERSION } from '../utils/smokecraftGoldBoxRules.js'
+import { saveEvent } from '../services/syncQueueService.js'
 
 // SCHEMA_VERSION is now managed in sessionStorageService (v4)
 
@@ -647,8 +648,10 @@ export function GuestSessionProvider({ children }) {
    * in SessionComplete — it handles the NEW data fields only, so nothing doubles.
    */
   const completeSmokeCraftSession = useCallback((sessionData = {}) => {
+    let syncedSessionId = null
     update(prev => {
       const now = Date.now()
+      syncedSessionId = prev.sessionId
 
       // Rich initiation stamp for the new passport model
       const initiationStamp = {
@@ -734,6 +737,14 @@ export function GuestSessionProvider({ children }) {
         },
       }
     })
+    if (syncedSessionId) {
+      saveEvent({
+        sourceSystem: 'SMOKECRAFT',
+        eventType: 'SmokeCraftCompleted',
+        entityId: syncedSessionId,
+        payload: { sessionData },
+      }).catch(() => {})
+    }
   }, [update])
 
   // ── Phase 6: Activity sync ────────────────────────────────────────────────

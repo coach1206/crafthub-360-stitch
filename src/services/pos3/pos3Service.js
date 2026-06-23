@@ -8,6 +8,7 @@
 import { POS3_TABLES, POS3_TICKETS, POS3_MENU, POS3_STAFF, TAX_RATE } from '../../data/pos3/seedData.js'
 import { opsGet, opsSet } from '../shared/opsStorage.js'
 import { emit, SYSTEMS } from '../shared/opsEventBus.js'
+import { saveEvent } from '../syncQueueService.js'
 
 const K = {
   tables:  'pos3:tables',
@@ -58,6 +59,12 @@ export function createTicket({ tableId, server, guests, items = [] }) {
   }
   tickets.push(ticket)
   saveTickets(tickets)
+  saveEvent({
+    sourceSystem: 'POS3',
+    eventType: 'OrderCreated',
+    entityId: ticket.id,
+    payload: { ticket },
+  }).catch(() => {})
   return ticket
 }
 
@@ -67,6 +74,12 @@ export function upsertTicketItems(ticketId, items) {
   if (idx === -1) return null
   tickets[idx] = { ...tickets[idx], items }
   saveTickets(tickets)
+  saveEvent({
+    sourceSystem: 'POS3',
+    eventType: 'OrderUpdated',
+    entityId: ticketId,
+    payload: { ticket: tickets[idx] },
+  }).catch(() => {})
   return tickets[idx]
 }
 
@@ -87,6 +100,12 @@ export function sendOrder(ticketId) {
     ticketId: t.id,
     payload: { routing: routingSummary(t), total: ticketTotals(t).total, server: t.server },
   })
+  saveEvent({
+    sourceSystem: 'POS3',
+    eventType: 'OrderUpdated',
+    entityId: t.id,
+    payload: { ticket: t },
+  }).catch(() => {})
   return t
 }
 
@@ -118,5 +137,11 @@ export function checkoutTicket(ticketId, { method = 'manual', provider = 'local'
     provider,
     payload: { total: totals.total, method, provider },
   })
+  saveEvent({
+    sourceSystem: 'POS3',
+    eventType: 'OrderClosed',
+    entityId: t.id,
+    payload: { ticket: t, total: totals.total, method, provider },
+  }).catch(() => {})
   return t
 }
