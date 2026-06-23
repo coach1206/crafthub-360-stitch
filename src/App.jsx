@@ -83,6 +83,11 @@ import Scorecard        from './pages/smokecraft/Scorecard.jsx'
 import EventChallenge   from './pages/smokecraft/EventChallenge.jsx'
 import Connections      from './pages/smokecraft/Connections.jsx'
 import ManagementSync   from './pages/smokecraft/ManagementSync.jsx'
+import HowItWorks       from './pages/smokecraft/HowItWorks.jsx'
+import GuestPass        from './pages/smokecraft/GuestPass.jsx'
+import Demo             from './pages/smokecraft/Demo.jsx'
+import Scan             from './pages/smokecraft/Scan.jsx'
+import SignIn           from './pages/SignIn.jsx'
 
 // ── Passport — guest-accessible, eager ───────────────────────
 import PassportHome        from './pages/passport/PassportHome.jsx'
@@ -273,7 +278,16 @@ export default function App() {
                 <Route path="event-challenge"  element={<EventChallenge />} />
                 <Route path="connections"      element={<Connections />} />
                 <Route path="management-sync"  element={<ManagementSync />} />
+                <Route path="how-it-works"     element={<HowItWorks />} />
+                <Route path="challenge"        element={<Navigate to="/smokecraft/leaf-challenge" replace />} />
+                <Route path="session/start"    element={<Navigate to="/smokecraft/enroll" replace />} />
+                <Route path="guest-pass"       element={<GuestPass />} />
+                <Route path="demo"             element={<Demo />} />
+                <Route path="scan"             element={<Scan />} />
+                <Route path="passport"         element={<Navigate to="/passport" replace />} />
               </Route>
+
+              <Route path="signin" element={<SignIn />} />
 
               {/* 360 Passport — guest-accessible + demo-allowed */}
               <Route path="passport">
