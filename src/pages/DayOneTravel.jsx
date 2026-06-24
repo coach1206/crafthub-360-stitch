@@ -132,7 +132,7 @@ export default function DayOneTravel() {
 
       {/* hero */}
       <div style={{ position:'relative', height:200, overflow:'hidden' }}>
-        <img src={craftImages.fallbacks.lounge} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center', filter:'brightness(0.35) saturate(1.1)' }} onError={e=>e.target.style.display='none'} />
+        <img src="/assets/dayone/concierge-hero.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center', filter:'brightness(0.35) saturate(1.1)' }} onError={e=>e.target.style.display='none'} />
         <div style={{ position:'absolute', inset:0, background:`linear-gradient(to top, ${NAVY} 0%, rgba(11,27,51,0.2) 60%)` }} />
         <div style={{ position:'absolute', bottom:0, left:0, right:0, padding:'0 20px 24px' }}>
           <div style={{ fontSize:9, color:`${G}99`, letterSpacing:'0.25em', textTransform:'uppercase', marginBottom:6 }}>Passport-Connected Travel & Relocation</div>
