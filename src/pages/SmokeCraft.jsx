@@ -99,23 +99,15 @@ export default function SmokeCraft() {
   return (
     <div style={{ minHeight: '100dvh', background: '#050302', color: '#F4ECDA', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
 
-      {/* ── Cinematic Lounge Background ──────────────────────────── */}
+      {/* ── Ambient Lounge Tone (no photo bleed — image lives in the hero showcase panel) ── */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden' }} aria-hidden="true">
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: "url('/assets/smokecraft/cropped/discover-profile-bg-v3.jpg')",
-          backgroundSize: 'cover', backgroundPosition: 'center 35%',
-          filter: 'brightness(0.78) saturate(1.2) contrast(1.08)',
-          transform: 'scale(1.04)',
+          background: '#050302',
         }} />
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse at 78% 8%, rgba(212,175,55,0.16), transparent 48%), radial-gradient(ellipse at 10% 92%, rgba(91,143,201,0.12), transparent 46%), linear-gradient(180deg, rgba(5,3,2,0.7) 0%, rgba(5,3,2,0.32) 38%, rgba(5,3,2,0.5) 68%, rgba(5,3,2,0.88) 100%)',
-        }} />
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(120deg, transparent 0%, rgba(255,236,178,0.05) 40%, transparent 60%)',
-          mixBlendMode: 'screen',
+          background: 'radial-gradient(ellipse at 78% 8%, rgba(212,175,55,0.14), transparent 48%), radial-gradient(ellipse at 10% 92%, rgba(91,143,201,0.10), transparent 46%), radial-gradient(ellipse at 50% 50%, rgba(80,52,18,0.10), transparent 70%)',
         }} />
       </div>
 
@@ -140,7 +132,7 @@ export default function SmokeCraft() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 64, alignItems: 'start' }} className="smokecraft-grid">
 
           {/* Left Column */}
-          <div className="sc-fade-in" style={{ gridColumn: 'span 1' }}>
+          <div className="sc-fade-in smokecraft-left-col" style={{ gridColumn: 'span 1' }}>
             {/* Welcome label */}
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, padding: '6px 14px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.32)', background: 'rgba(212,175,55,0.1)' }}>
               <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#E6C76A' }}>smoking_rooms</span>
@@ -280,7 +272,24 @@ export default function SmokeCraft() {
           </div>
 
           {/* Right Column — Cards */}
-          <div className="sc-fade-in" style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: 22 }}>
+          <div className="sc-fade-in smokecraft-right-col" style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: 22 }}>
+
+            {/* Hero Showcase — dominant visible visual, full image, light overlay only at the base for legibility */}
+            <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 22, border: '1px solid rgba(212,175,55,0.4)', minHeight: 340, boxShadow: '0 20px 52px rgba(0,0,0,0.55), 0 0 60px rgba(201,168,76,0.12)' }}>
+              <img
+                src="/assets/smokecraft/cropped/discover-profile-hero.jpg"
+                alt="Discover your cigar profile — featured humidor selection"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(5,3,2,0) 55%, rgba(5,3,2,0.62) 100%)' }} />
+              <div style={{ position: 'absolute', top: 16, left: 16, padding: '6px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.4)', background: 'rgba(5,3,2,0.55)', backdropFilter: 'blur(6px)' }}>
+                <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#E6C76A', letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700 }}>Featured Selection</span>
+              </div>
+              <div style={{ position: 'absolute', bottom: 18, left: 20, right: 20 }}>
+                <p style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#F4ECDA', margin: 0 }}>From the house humidor</p>
+                <p style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 12, color: 'rgba(244,236,218,0.7)', margin: '4px 0 0' }}>A glimpse of what's waiting in your profile.</p>
+              </div>
+            </div>
 
             {/* 360 Passport Card */}
             <div
@@ -369,6 +378,14 @@ export default function SmokeCraft() {
         @media (min-width: 1024px) {
           .smokecraft-grid {
             grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 1023px) {
+          .smokecraft-right-col {
+            order: -1;
+          }
+          .smokecraft-left-col {
+            order: 2;
           }
         }
         @media (max-width: 760px) {
