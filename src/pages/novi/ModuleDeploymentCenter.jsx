@@ -1,13 +1,20 @@
 /**
- * Module Deployment Center — Novi OS, Phase 7
+ * Module Deployment Center — Novi OS, Phase 7/8
  *
- * Read-only admin screen showing which CraftHub modules exist, which are
- * standalone, which are ready, and which are not ready. Sources data only
- * from the Phase 6 read-only layer (noviModuleStatusService.js,
- * noviModuleSecurityPolicy.js) — no SmokeCraft/POS3/E.A.T. screen or
- * component is imported, and nothing here deploys, bills, or controls a
- * device. All action buttons are visually present but permanently
- * disabled in this phase.
+ * Admin screen showing which CraftHub modules exist, which are standalone,
+ * which are ready, and which are not ready, plus a prototype-only vendor
+ * assignment / disable / restore workflow added in Phase 8. Sources module
+ * data only from the Phase 6 read-only layer (noviModuleStatusService.js)
+ * and writes assignment/disable/audit records only through the Phase 8
+ * prototype layer (noviVendorModuleAssignments.js, noviRemoteDisableService.js,
+ * noviDeploymentAuditLog.js) — no SmokeCraft/POS3/E.A.T. screen or
+ * component is imported, and nothing here performs live deployment,
+ * billing, or device control.
+ *
+ * "Deploy Module" remains permanently disabled — live deployment is not
+ * built until a later phase. "Assign Vendor", "Disable Module", and
+ * "Restore Module" now create local prototype records only, and every
+ * resulting action is labeled "Prototype only. No live deployment sent."
  *
  * Route-gated to admin/founder_level_0 in App.jsx (the same mechanism
  * that already gates /admin) — see docs/phase-7-novi-deployment-center-audit.md
@@ -15,9 +22,28 @@
  * two real roles rather than inventing new session roles.
  */
 
+import { useState } from 'react'
 import { getAllNoviModules } from '../../services/noviModuleStatusService.js'
 import { CONTROL_MODE } from '../../modules/noviModuleRegistry.js'
 import { useSecurity } from '../../context/SecurityContext.jsx'
+import { listVendors } from '../../modules/vendorModuleAccess.js'
+import {
+  assignModuleToVendor,
+  getAssignments,
+} from '../../modules/noviVendorModuleAssignments.js'
+import {
+  disableModuleForVendor,
+  disableModuleGlobally,
+  requestRestore,
+  getDisableRecords,
+  RESTORE_STATUS,
+} from '../../services/noviRemoteDisableService.js'
+import {
+  recordNoviAuditEvent,
+  getNoviAuditLog,
+  NOVI_AUDIT_ACTION,
+  NOVI_AUDIT_STATUS,
+} from '../../modules/noviDeploymentAuditLog.js'
 
 const GOLD   = '#C9A84C'
 const DARK   = '#0a0603'
@@ -31,6 +57,8 @@ const ROLE_DISPLAY_LABEL = {
   admin: 'Novi Admin',
   founder_level_0: 'Super Admin',
 }
+
+const PROTOTYPE_NOTICE = 'Prototype only. No live deployment sent.'
 
 function readinessLabel(module) {
   if (module.controlMode === CONTROL_MODE.NOT_READY) return 'Not Ready'
@@ -65,12 +93,12 @@ function StatusBadge({ children, tone = 'neutral' }) {
   )
 }
 
-function DisabledActionButton({ label }) {
+function DisabledActionButton({ label, title }) {
   return (
     <button
       type="button"
       disabled
-      title="Coming in Phase 8/9"
+      title={title ?? 'Coming in Phase 9'}
       aria-disabled="true"
       style={{
         background: 'rgba(100,100,100,0.10)', color: DIM, border: `1px solid ${BORDER}`,
@@ -78,14 +106,35 @@ function DisabledActionButton({ label }) {
         marginTop: '8px', cursor: 'not-allowed', opacity: 0.6,
       }}
     >
-      {label} — Coming in Phase 8/9
+      {label}
     </button>
   )
 }
 
-function ModuleCard({ module }) {
+function PreviewActionButton({ label, onClick, disabled }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      title={PROTOTYPE_NOTICE}
+      style={{
+        background: disabled ? 'rgba(100,100,100,0.10)' : 'rgba(201,168,76,0.10)',
+        color: disabled ? DIM : GOLD,
+        border: `1px solid ${BORDER}`,
+        borderRadius: '6px', fontSize: '11px', padding: '6px 12px', marginRight: '8px',
+        marginTop: '8px', cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.6 : 1,
+      }}
+    >
+      {label}
+    </button>
+  )
+}
+
+function ModuleCard({ module, vendorId, vendorName, onAssign, onDisable, onRestore, latestDisableRecord }) {
   const ready = module.controlMode !== CONTROL_MODE.NOT_READY
   const integrations = Object.keys(module.optionalIntegrations ?? {})
+  const canRestore = latestDisableRecord && latestDisableRecord.restoreStatus !== RESTORE_STATUS.RESTORED
 
   return (
     <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1.25rem', marginBottom: '1rem' }}>
@@ -116,18 +165,31 @@ function ModuleCard({ module }) {
       <div style={{ color: DIM, fontSize: '11px', marginBottom: '0.25rem' }}>
         Dependencies: {module.dependencies.length > 0 ? module.dependencies.join(', ') : 'None'}
       </div>
-      <div style={{ color: DIM, fontSize: '11px' }}>
+      <div style={{ color: DIM, fontSize: '11px', marginBottom: '0.5rem' }}>
         Optional integrations:{' '}
         {integrations.length > 0 ? (
           integrations.map(id => <StatusBadge key={id} tone="neutral">Optional Integration: {id}</StatusBadge>)
         ) : 'None'}
       </div>
 
+      <div style={{ color: DIM, fontSize: '10px', marginBottom: '0.25rem' }}>{PROTOTYPE_NOTICE}</div>
       <div>
-        <DisabledActionButton label="Assign Vendor" />
-        <DisabledActionButton label="Deploy Module" />
-        <DisabledActionButton label="Disable Module" />
-        <DisabledActionButton label="View Audit Log" />
+        <PreviewActionButton
+          label="Assign Vendor Preview"
+          disabled={!module.vendorAssignable || !vendorId}
+          onClick={() => onAssign(module, vendorId, vendorName)}
+        />
+        <DisabledActionButton label="Deploy Module — Coming in Phase 9" />
+        <PreviewActionButton
+          label="Disable Module Preview"
+          disabled={!vendorId}
+          onClick={() => onDisable(module, vendorId, vendorName)}
+        />
+        <PreviewActionButton
+          label="Restore Module Preview"
+          disabled={!canRestore}
+          onClick={() => onRestore(module, latestDisableRecord)}
+        />
       </div>
     </div>
   )
@@ -137,24 +199,163 @@ export default function ModuleDeploymentCenter() {
   const { role } = useSecurity()
   const modules = getAllNoviModules()
   const displayRole = ROLE_DISPLAY_LABEL[role] ?? role
+  const vendors = listVendors()
+
+  const [vendorId, setVendorId] = useState(vendors[0]?.vendorId ?? '')
+  const [, forceRefresh] = useState(0)
+
+  const vendorName = vendors.find(v => v.vendorId === vendorId)?.vendorName ?? vendorId
+
+  function handleAssign(module, selectedVendorId, selectedVendorName) {
+    const result = assignModuleToVendor({
+      vendorId: selectedVendorId,
+      vendorName: selectedVendorName,
+      moduleId: module.moduleId,
+      environment: 'demo',
+      assignedBy: role,
+      notes: PROTOTYPE_NOTICE,
+    })
+    recordNoviAuditEvent({
+      action: NOVI_AUDIT_ACTION.VENDOR_ASSIGNED_PREVIEW,
+      moduleId: module.moduleId,
+      vendorId: selectedVendorId,
+      actorRole: role,
+      status: result.ok ? NOVI_AUDIT_STATUS.SUCCESS : NOVI_AUDIT_STATUS.FAILURE,
+      reason: result.ok ? null : result.reason,
+      environment: 'demo',
+      notes: PROTOTYPE_NOTICE,
+    })
+    forceRefresh(n => n + 1)
+  }
+
+  function handleDisable(module, selectedVendorId, selectedVendorName) {
+    const record = disableModuleForVendor({
+      moduleId: module.moduleId,
+      vendorId: selectedVendorId,
+      reason: 'Prototype preview disable',
+      actor: role,
+      environment: 'demo',
+    })
+    recordNoviAuditEvent({
+      action: NOVI_AUDIT_ACTION.MODULE_DISABLED_PREVIEW,
+      moduleId: module.moduleId,
+      vendorId: selectedVendorId,
+      actorRole: role,
+      status: NOVI_AUDIT_STATUS.SUCCESS,
+      reason: record.reason,
+      environment: 'demo',
+      notes: PROTOTYPE_NOTICE,
+    })
+    forceRefresh(n => n + 1)
+  }
+
+  function handleRestore(module, disableRecord) {
+    if (!disableRecord) return
+    requestRestore({ disableRecordId: disableRecord.id, actor: role })
+    recordNoviAuditEvent({
+      action: NOVI_AUDIT_ACTION.MODULE_RESTORED_PREVIEW,
+      moduleId: module.moduleId,
+      vendorId: disableRecord.vendorId,
+      actorRole: role,
+      status: NOVI_AUDIT_STATUS.SUCCESS,
+      reason: 'Prototype preview restore request',
+      environment: 'demo',
+      notes: PROTOTYPE_NOTICE,
+    })
+    forceRefresh(n => n + 1)
+  }
+
+  const assignments = getAssignments()
+  const disableRecords = getDisableRecords()
+  const auditLog = getNoviAuditLog()
+  const latestDisableByModule = Object.fromEntries(
+    modules.map(module => [
+      module.moduleId,
+      [...disableRecords].reverse().find(r => r.moduleId === module.moduleId) ?? null,
+    ]),
+  )
 
   return (
     <div style={{ background: DARK, minHeight: '100vh', padding: '2rem', color: '#eee' }}>
       <h1 style={{ color: GOLD, fontSize: '22px', marginBottom: '0.25rem' }}>Module Deployment Center</h1>
       <p style={{ color: DIM, fontSize: '12px', marginBottom: '1.5rem' }}>
-        Read-only view of CraftHub modules known to Novi OS. Signed in as: {displayRole}.
+        Read-only view of CraftHub modules known to Novi OS, plus prototype-only vendor assignment tools. Signed in as: {displayRole}.
       </p>
 
       <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1rem', marginBottom: '1.5rem', fontSize: '12px', color: DIM }}>
         <div>This screen is Novi admin / super admin only.</div>
-        <div>Deployment actions are not active yet — every action button below is disabled.</div>
-        <div>Live vendor assignment, billing, and device control are future phases (8/9).</div>
+        <div>Vendor assignment, disable, and restore below create local prototype records only — {PROTOTYPE_NOTICE}</div>
+        <div>Live deployment, billing, and device control are future phases.</div>
+      </div>
+
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1rem', marginBottom: '1.5rem' }}>
+        <div style={{ color: GOLD, fontSize: '13px', marginBottom: '0.5rem' }}>Preview Vendor</div>
+        <select
+          value={vendorId}
+          onChange={e => setVendorId(e.target.value)}
+          style={{ background: DARK, color: '#eee', border: `1px solid ${BORDER}`, borderRadius: '6px', padding: '4px 8px', fontSize: '12px' }}
+        >
+          {vendors.map(v => (
+            <option key={v.vendorId} value={v.vendorId}>{v.vendorName}</option>
+          ))}
+        </select>
+        <div style={{ color: DIM, fontSize: '10px', marginTop: '0.5rem' }}>
+          Assignment/disable/restore preview actions below apply to this vendor. {PROTOTYPE_NOTICE}
+        </div>
       </div>
 
       <div>
         {modules.map(module => (
-          <ModuleCard key={module.moduleId} module={module} />
+          <ModuleCard
+            key={module.moduleId}
+            module={module}
+            vendorId={vendorId}
+            vendorName={vendorName}
+            onAssign={handleAssign}
+            onDisable={handleDisable}
+            onRestore={handleRestore}
+            latestDisableRecord={latestDisableByModule[module.moduleId]}
+          />
         ))}
+      </div>
+
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1rem', marginBottom: '1rem' }}>
+        <h2 style={{ color: GOLD, fontSize: '14px', marginTop: 0, marginBottom: '0.5rem' }}>Currently Assigned Modules (Prototype Preview)</h2>
+        {assignments.length === 0 ? (
+          <div style={{ color: DIM, fontSize: '11px' }}>No prototype assignments recorded yet.</div>
+        ) : (
+          assignments.map(a => (
+            <div key={a.id} style={{ color: DIM, fontSize: '11px', marginBottom: '4px' }}>
+              {a.vendorName ?? a.vendorId} &middot; {a.moduleId} &middot; {a.assignmentStatus} &middot; {a.enabled ? 'enabled' : 'disabled'} &middot; {a.environment}
+            </div>
+          ))
+        )}
+      </div>
+
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1rem', marginBottom: '1rem' }}>
+        <h2 style={{ color: GOLD, fontSize: '14px', marginTop: 0, marginBottom: '0.5rem' }}>Disabled Modules (Prototype Preview)</h2>
+        {disableRecords.length === 0 ? (
+          <div style={{ color: DIM, fontSize: '11px' }}>No prototype disable records yet.</div>
+        ) : (
+          disableRecords.map(r => (
+            <div key={r.id} style={{ color: DIM, fontSize: '11px', marginBottom: '4px' }}>
+              {r.moduleId} &middot; scope: {r.scope} &middot; {r.vendorId ?? 'all vendors'} &middot; restore: {r.restoreStatus}
+            </div>
+          ))
+        )}
+      </div>
+
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1rem' }}>
+        <h2 style={{ color: GOLD, fontSize: '14px', marginTop: 0, marginBottom: '0.5rem' }}>Audit Trail Preview</h2>
+        {auditLog.length === 0 ? (
+          <div style={{ color: DIM, fontSize: '11px' }}>No audit events recorded yet.</div>
+        ) : (
+          [...auditLog].reverse().slice(0, 20).map(entry => (
+            <div key={entry.id} style={{ color: DIM, fontSize: '11px', marginBottom: '4px' }}>
+              {entry.action} &middot; {entry.moduleId ?? 'n/a'} &middot; {entry.vendorId ?? 'n/a'} &middot; {entry.status} &middot; {entry.actorRole ?? 'unknown'}
+            </div>
+          ))
+        )}
       </div>
     </div>
   )

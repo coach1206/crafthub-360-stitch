@@ -52,13 +52,17 @@ check('Page has logic to render a "Not Ready" label distinct from "Ready"', /Not
 
 // ── 4. No deploy function exists ───────────────────────────────────────
 check('Page contains no deployModule(/handleDeploy( implementation', !/function\s+(deployModule|handleDeploy)\s*\(/.test(pageSource))
-check('Page contains no onClick handler wired to any action button', !/onClick=/.test(pageSource))
+const deployModuleLine = [...pageSource.split('\n')].reverse().find(line => line.includes('Deploy Module'))
+check(
+  'Deploy Module button has no onClick handler wired to it (still fully inert)',
+  Boolean(deployModuleLine) && /DisabledActionButton/.test(deployModuleLine) && !/onClick/.test(deployModuleLine),
+)
 
 // ── 5. Disabled actions are disabled ───────────────────────────────────
-const requiredButtons = ['Assign Vendor', 'Deploy Module', 'Disable Module', 'View Audit Log']
+const requiredButtons = ['Assign Vendor', 'Deploy Module', 'Disable Module', 'Restore Module']
 check('All four required action buttons are present', requiredButtons.every(label => pageSource.includes(label)))
 check('Action buttons are marked disabled', /disabled\b/.test(pageSource))
-check('Disabled buttons reference "Coming in Phase 8/9"', /Coming in Phase 8\/9/.test(pageSource))
+check('Deploy Module button references "Coming in Phase 9"', /Deploy Module — Coming in Phase 9/.test(pageSource))
 
 // ── 6. Route is protected ──────────────────────────────────────────────
 const routeBlockMatch = appSource.match(/admin\/deployment-center[\s\S]{0,400}/)
