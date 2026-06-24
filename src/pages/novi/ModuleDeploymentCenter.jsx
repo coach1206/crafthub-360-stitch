@@ -301,8 +301,8 @@ export default function ModuleDeploymentCenter() {
   const deploymentContract = createDeploymentContract({ vendorId, moduleId: 'pos3', deploymentMode: 'production' })
 
   return (
-    <div style={{ background: DARK, minHeight: '100vh', padding: '2rem', color: '#eee' }}>
-      <h1 style={{ color: GOLD, fontSize: '22px', marginBottom: '0.25rem' }}>Module Deployment Center</h1>
+    <div style={{ background: DARK, minHeight: '100vh', padding: '2rem', color: '#eee', fontFamily: 'Georgia, serif' }}>
+      <h1 style={{ color: GOLD, fontSize: '22px', marginBottom: '0.25rem', fontFamily: 'Georgia, serif' }}>Module Deployment Center</h1>
       <p style={{ color: DIM, fontSize: '12px', marginBottom: '1.5rem' }}>
         Read-only view of CraftHub modules known to Novi OS, plus prototype-only vendor assignment tools. Signed in as: {displayRole}.
       </p>
