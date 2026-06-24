@@ -103,7 +103,7 @@ export default function SmokeCraft() {
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden' }} aria-hidden="true">
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: "url('/assets/smokecraft/cropped/management-sync-bg.jpg')",
+          backgroundImage: "url('/assets/smokecraft/cropped/discover-profile-bg.jpg')",
           backgroundSize: 'cover', backgroundPosition: 'center 30%',
           filter: 'brightness(0.5) saturate(1.15) contrast(1.08)',
           transform: 'scale(1.04)',
