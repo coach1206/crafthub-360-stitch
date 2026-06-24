@@ -530,6 +530,15 @@ export default function App() {
                 </ProtectedRoute>
               } />
 
+              {/* ── Public, no login: temporary read-only review copy of the
+                   Deployment Center. Renders the same screen with readOnly
+                   forced true — no vendor assignment, disable, restore, or
+                   deploy actions are reachable from this route. Does not
+                   touch /admin/deployment-center, which remains protected. ── */}
+              <Route path="review/deployment-center" element={
+                <ModuleDeploymentCenter readOnly />
+              } />
+
               {/* ── Protected: founder only — BLOCKED in demo mode ── */}
               <Route path="founder" element={
                 <ProtectedRoute

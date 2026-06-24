@@ -150,10 +150,10 @@ function ReadinessItem({ label, ready, lockedTone = false }) {
   )
 }
 
-function ModuleCard({ module, vendorId, vendorName, onAssign, onDisable, onRestore, latestDisableRecord }) {
+function ModuleCard({ module, vendorId, vendorName, onAssign, onDisable, onRestore, latestDisableRecord, readOnly = false }) {
   const ready = module.controlMode !== CONTROL_MODE.NOT_READY
   const integrations = Object.keys(module.optionalIntegrations ?? {})
-  const canRestore = latestDisableRecord && latestDisableRecord.restoreStatus !== RESTORE_STATUS.RESTORED
+  const canRestore = !readOnly && latestDisableRecord && latestDisableRecord.restoreStatus !== RESTORE_STATUS.RESTORED
 
   return (
     <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1.25rem', marginBottom: '1rem' }}>
@@ -193,31 +193,42 @@ function ModuleCard({ module, vendorId, vendorName, onAssign, onDisable, onResto
 
       <div style={{ color: DIM, fontSize: '10px', marginBottom: '0.25rem' }}>{PROTOTYPE_NOTICE}</div>
       <div>
-        <PreviewActionButton
-          label="Assign Vendor Preview"
-          disabled={!module.vendorAssignable || !vendorId}
-          onClick={() => onAssign(module, vendorId, vendorName)}
-        />
-        <DisabledActionButton label="Deploy Module — Coming in Phase 9" />
-        <PreviewActionButton
-          label="Disable Module Preview"
-          disabled={!vendorId}
-          onClick={() => onDisable(module, vendorId, vendorName)}
-        />
-        <PreviewActionButton
-          label="Restore Module Preview"
-          disabled={!canRestore}
-          onClick={() => onRestore(module, latestDisableRecord)}
-        />
+        {readOnly ? (
+          <>
+            <DisabledActionButton label="Assign Vendor Preview" title="Disabled in Review Mode" />
+            <DisabledActionButton label="Deploy Module — Coming in Phase 9" />
+            <DisabledActionButton label="Disable Module Preview" title="Disabled in Review Mode" />
+            <DisabledActionButton label="Restore Module Preview" title="Disabled in Review Mode" />
+          </>
+        ) : (
+          <>
+            <PreviewActionButton
+              label="Assign Vendor Preview"
+              disabled={!module.vendorAssignable || !vendorId}
+              onClick={() => onAssign(module, vendorId, vendorName)}
+            />
+            <DisabledActionButton label="Deploy Module — Coming in Phase 9" />
+            <PreviewActionButton
+              label="Disable Module Preview"
+              disabled={!vendorId}
+              onClick={() => onDisable(module, vendorId, vendorName)}
+            />
+            <PreviewActionButton
+              label="Restore Module Preview"
+              disabled={!canRestore}
+              onClick={() => onRestore(module, latestDisableRecord)}
+            />
+          </>
+        )}
       </div>
     </div>
   )
 }
 
-export default function ModuleDeploymentCenter() {
+export default function ModuleDeploymentCenter({ readOnly = false } = {}) {
   const { role } = useSecurity()
   const modules = getAllNoviModules()
-  const displayRole = ROLE_DISPLAY_LABEL[role] ?? role
+  const displayRole = readOnly ? 'Review Mode (no session)' : (ROLE_DISPLAY_LABEL[role] ?? role)
   const vendors = listVendors()
 
   const [vendorId, setVendorId] = useState(vendors[0]?.vendorId ?? '')
@@ -226,6 +237,7 @@ export default function ModuleDeploymentCenter() {
   const vendorName = vendors.find(v => v.vendorId === vendorId)?.vendorName ?? vendorId
 
   function handleAssign(module, selectedVendorId, selectedVendorName) {
+    if (readOnly) return
     const result = assignModuleToVendor({
       vendorId: selectedVendorId,
       vendorName: selectedVendorName,
@@ -248,6 +260,7 @@ export default function ModuleDeploymentCenter() {
   }
 
   function handleDisable(module, selectedVendorId, selectedVendorName) {
+    if (readOnly) return
     const record = disableModuleForVendor({
       moduleId: module.moduleId,
       vendorId: selectedVendorId,
@@ -269,6 +282,7 @@ export default function ModuleDeploymentCenter() {
   }
 
   function handleRestore(module, disableRecord) {
+    if (readOnly) return
     if (!disableRecord) return
     requestRestore({ disableRecordId: disableRecord.id, actor: role })
     recordNoviAuditEvent({
@@ -302,9 +316,18 @@ export default function ModuleDeploymentCenter() {
 
   return (
     <div style={{ background: DARK, minHeight: '100vh', padding: '2rem', color: '#eee', fontFamily: 'Georgia, serif' }}>
+      {readOnly && (
+        <div style={{
+          background: 'rgba(224,169,90,0.12)', border: `1px solid ${WARN}`, color: WARN,
+          borderRadius: '8px', padding: '0.75rem 1rem', marginBottom: '1.5rem',
+          fontSize: '13px', fontWeight: 700, letterSpacing: '0.02em', textAlign: 'center',
+        }}>
+          Review Mode Only — No Live Deployment Controls
+        </div>
+      )}
       <h1 style={{ color: GOLD, fontSize: '22px', marginBottom: '0.25rem', fontFamily: 'Georgia, serif' }}>Module Deployment Center</h1>
       <p style={{ color: DIM, fontSize: '12px', marginBottom: '1.5rem' }}>
-        Read-only view of CraftHub modules known to Novi OS, plus prototype-only vendor assignment tools. Signed in as: {displayRole}.
+        Read-only view of CraftHub modules known to Novi OS{readOnly ? '' : ', plus prototype-only vendor assignment tools'}. Signed in as: {displayRole}.
       </p>
 
       <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1rem', marginBottom: '1.5rem', fontSize: '12px', color: DIM }}>
@@ -318,14 +341,17 @@ export default function ModuleDeploymentCenter() {
         <select
           value={vendorId}
           onChange={e => setVendorId(e.target.value)}
-          style={{ background: DARK, color: '#eee', border: `1px solid ${BORDER}`, borderRadius: '6px', padding: '4px 8px', fontSize: '12px' }}
+          disabled={readOnly}
+          style={{ background: DARK, color: '#eee', border: `1px solid ${BORDER}`, borderRadius: '6px', padding: '4px 8px', fontSize: '12px', opacity: readOnly ? 0.6 : 1, cursor: readOnly ? 'not-allowed' : 'auto' }}
         >
           {vendors.map(v => (
             <option key={v.vendorId} value={v.vendorId}>{v.vendorName}</option>
           ))}
         </select>
         <div style={{ color: DIM, fontSize: '10px', marginTop: '0.5rem' }}>
-          Assignment/disable/restore preview actions below apply to this vendor. {PROTOTYPE_NOTICE}
+          {readOnly
+            ? 'Vendor selection and all assignment/disable/restore actions are disabled in Review Mode.'
+            : <>Assignment/disable/restore preview actions below apply to this vendor. {PROTOTYPE_NOTICE}</>}
         </div>
       </div>
 
@@ -340,6 +366,7 @@ export default function ModuleDeploymentCenter() {
             onDisable={handleDisable}
             onRestore={handleRestore}
             latestDisableRecord={latestDisableByModule[module.moduleId]}
+            readOnly={readOnly}
           />
         ))}
       </div>
