@@ -1,15 +1,21 @@
 import { useState } from 'react'
-import { Shell, Card, Pill, GOLD, NAVY, PANEL, PANEL2, EatBadge, useToast } from '../../components/eat/ui.jsx'
+import { useNavigate } from 'react-router-dom'
+import { Pill, GOLD, useToast } from '../../components/eat/ui.jsx'
+import {
+  LightShell, LightCard, StaffBand, LightTouchButton, CategoryTile, LightBottomNav, L_NAVY, L_GOLD,
+} from '../../components/eat/lightTheme.jsx'
 import { MENU_CATEGORIES, getCatalogByCategory } from '../../data/pos3/menuCatalog.js'
 import {
   createTicket, getOpenTickets, addItem, removeItem, changeQuantity, sendTicket,
 } from '../../services/pos3/orderService.js'
 import { calcTotals } from '../../services/pos3/paymentService.js'
+import { getTables } from '../../services/pos3/pos3Service.js'
+import { EAT_INVENTORY } from '../../data/eat/seedData.js'
+import { POS3_STAFF } from '../../data/pos3/seedData.js'
 import TouchCard from '../../components/pos3/TouchCard.jsx'
 import TouchButton from '../../components/pos3/TouchButton.jsx'
 import QuantityStepper from '../../components/pos3/QuantityStepper.jsx'
 import ModifierSheet from '../../components/pos3/ModifierSheet.jsx'
-import TicketRail from '../../components/pos3/TicketRail.jsx'
 import CheckoutDrawer from '../../components/pos3/CheckoutDrawer.jsx'
 import OrderReadinessPanel from '../../components/pos3/stations/OrderReadinessPanel.jsx'
 import DestinationRouter from '../../components/pos3/stations/DestinationRouter.jsx'
@@ -18,6 +24,7 @@ import { groupByDestination } from '../../services/pos3/orderService.js'
 import { successTap, warningTap } from '../../services/shared/haptics.js'
 
 const TABS = [...MENU_CATEGORIES, 'Cart']
+const CATEGORY_ICONS = { Cigars: 'spa', Food: 'restaurant', Bar: 'local_bar', 'Non-Alcohol Drinks': 'local_cafe', 'Lounge Services': 'room_service', Retail: 'shopping_bag', Cart: 'shopping_cart' }
 
 export default function POS3Handheld() {
   const [tab, setTab] = useState('Cigars')
@@ -118,39 +125,102 @@ export default function POS3Handheld() {
   const totals = calcTotals(ticket)
   const catalogItems = tab === 'Cart' ? [] : getCatalogByCategory(tab)
   const cartCount = (ticket?.items || []).reduce((s, i) => s + i.qty, 0)
+  const navigate = useNavigate()
+  const staff = POS3_STAFF[0]
+  const occupiedTables = getTables().filter((t) => t.status === 'occupied')
+  const lowStock = EAT_INVENTORY.filter((i) => i.onHand <= i.par * 0.5)
 
   return (
-    <Shell style={{ maxWidth: 480, margin: '0 auto' }}>
-      <div style={{ background: PANEL, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div><div style={{ fontWeight: 700, color: GOLD }}>POS 3 Handheld</div><div style={{ fontSize: 11, color: '#8b95a3' }}>System Online</div></div>
-        <EatBadge />
+    <LightShell style={{ maxWidth: 480, margin: '0 auto', paddingBottom: 76 }}>
+      <div style={{ padding: '12px 16px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', background: '#fff' }}>
+        <div>
+          <div style={{ fontSize: 19, fontWeight: 800, color: L_NAVY }}>EAT System</div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: L_GOLD, letterSpacing: '0.06em' }}>POWERED BY NOVEE OS</div>
+        </div>
+        <button type="button" disabled title="Notification center is not yet built" style={{ background: 'none', border: 'none', color: L_NAVY, position: 'relative', cursor: 'not-allowed', opacity: 0.45 }}>
+          <span className="material-symbols-outlined">notifications</span>
+        </button>
+      </div>
+      <div style={{ padding: '4px 16px 12px', fontSize: 13, color: '#4a5266', background: '#fff', borderBottom: '1px solid rgba(19,41,75,0.08)' }}>
+        Good Evening, {staff.name.split(' ')[0]}! 👋
       </div>
 
-      <div style={{ padding: '10px 16px', background: PANEL2 }}>
-        <TicketRail tickets={tickets} activeId={activeId} onSelect={(id) => refresh(id)} onNewTicket={newTicket} />
+      <StaffBand
+        staff={staff}
+        right={[
+          <LightTouchButton key="scan" tone="ghost" disabled title="Table QR scanning is not yet wired — coming soon">Scan Table</LightTouchButton>,
+          <LightTouchButton key="qa" tone="ghost" onClick={newTicket}>Quick Actions</LightTouchButton>,
+        ]}
+      />
+
+      <div style={{ padding: '14px 16px 0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: L_NAVY, letterSpacing: '0.04em' }}>MY TABLES</div>
+          <button type="button" onClick={() => navigate('/pos3/tables')} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>View All</button>
+        </div>
+        <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 4 }}>
+          {occupiedTables.length === 0 && <div style={{ color: '#8b95a3', fontSize: 12 }}>No occupied tables right now.</div>}
+          {occupiedTables.map((t) => (
+            <LightCard key={t.id} style={{ minWidth: 132, flexShrink: 0, padding: 10 }}>
+              <div style={{ fontWeight: 800, color: L_NAVY, fontSize: 13 }}>{t.name}</div>
+              <div style={{ fontSize: 11, color: '#6b7385' }}>{t.guests} Guests · {t.section}</div>
+              <div style={{ fontSize: 11, color: '#6b7385' }}>Server: {t.server}</div>
+            </LightCard>
+          ))}
+        </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 8, padding: 12, overflowX: 'auto' }}>
+      <div style={{ padding: '16px 16px 0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: L_NAVY, letterSpacing: '0.04em' }}>ACTIVE ORDERS</div>
+          <button type="button" onClick={() => navigate('/pos3/orders')} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>View All</button>
+        </div>
+        <LightCard style={{ padding: 0 }}>
+          {tickets.length === 0 && <div style={{ color: '#8b95a3', fontSize: 12, padding: 14 }}>No open tickets.</div>}
+          {tickets.map((t) => (
+            <div key={t.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', borderBottom: '1px solid rgba(19,41,75,0.06)' }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 12, color: L_NAVY }}>{t.tableId} · {t.id}</div>
+                <div style={{ fontSize: 11, color: '#8b95a3' }}>{t.items.length} item{t.items.length === 1 ? '' : 's'}</div>
+              </div>
+              <button type="button" onClick={() => refresh(t.id)} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Open</button>
+            </div>
+          ))}
+          <button type="button" onClick={newTicket} style={{ display: 'block', width: '100%', padding: 12, background: L_NAVY, color: '#fff', border: 'none', fontWeight: 700, fontSize: 13, cursor: 'pointer', borderRadius: '0 0 14px 14px' }}>
+            + New Order
+          </button>
+        </LightCard>
+      </div>
+
+      <div style={{ padding: '16px 16px 0' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+          {TABS.filter((t) => t !== 'Cart').map((t) => (
+            <CategoryTile key={t} label={t} icon={CATEGORY_ICONS[t] || 'category'} onClick={() => setTab(t)} />
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 8, padding: '16px 16px 0', overflowX: 'auto' }}>
         {TABS.map((t) => (
           <button key={t} onClick={() => setTab(t)} style={{
-            flexShrink: 0, minHeight: 44, padding: '10px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13,
-            background: tab === t ? GOLD : PANEL2, color: tab === t ? NAVY : '#aab3bf', touchAction: 'manipulation',
+            flexShrink: 0, minHeight: 38, padding: '8px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12,
+            background: tab === t ? L_NAVY : '#eceae3', color: tab === t ? '#fff' : '#4a5266', touchAction: 'manipulation',
           }}>{t}{t === 'Cart' && cartCount ? ` (${cartCount})` : ''}</button>
         ))}
       </div>
 
-      <div style={{ padding: '0 12px 160px' }}>
+      <div style={{ padding: '12px 16px 16px' }}>
         {tab !== 'Cart' && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {catalogItems.map((m) => (
-              <TouchCard key={m.id} onClick={() => handleAddCard(m)} pulse={pulseCardId === m.id} style={{ padding: 10 }}>
-                <div style={{ fontWeight: 600, fontSize: 13 }}>{m.name}</div>
+              <TouchCard key={m.id} onClick={() => handleAddCard(m)} pulse={pulseCardId === m.id} style={{ padding: 10, background: '#fff', border: '1px solid rgba(19,41,75,0.08)' }}>
+                <div style={{ fontWeight: 700, fontSize: 13, color: L_NAVY }}>{m.name}</div>
                 <div style={{ fontSize: 11, color: '#8b95a3', minHeight: 14 }}>
                   {m.modifiers?.length ? `${m.modifiers.length} options` : ' '}
                   {m.ageRestricted ? ' · 21+' : ''}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-                  <span style={{ color: GOLD, fontWeight: 700 }}>${m.price.toFixed(2)}</span>
+                  <span style={{ color: '#9c7320', fontWeight: 800 }}>${m.price.toFixed(2)}</span>
                   <TouchButton tone="primary" onClick={(e) => { e.stopPropagation(); handleAddCard(m) }} style={{ padding: '8px 14px', fontSize: 12, minHeight: 40 }}>+ Add</TouchButton>
                 </div>
               </TouchCard>
@@ -159,26 +229,52 @@ export default function POS3Handheld() {
         )}
 
         {tab === 'Cart' && (
-          <Card>
+          <LightCard style={{ padding: 14 }}>
             {!ticket || !ticket.items.length ? (
               <div style={{ color: '#8b95a3', textAlign: 'center', padding: 20 }}>Cart is empty</div>
             ) : (
               ticket.items.map((i) => (
-                <div key={i.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                <div key={i.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderTop: '1px solid rgba(19,41,75,0.06)' }}>
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: 13 }}>{i.name}</div>
+                    <div style={{ fontWeight: 700, fontSize: 13, color: L_NAVY }}>{i.name}</div>
                     <Pill label={i.destination} tone={i.destination} />
                     {i.modifiers?.length > 0 && <div style={{ fontSize: 11, color: '#8b95a3', marginTop: 2 }}>{i.modifiers.map((m) => m.label).join(', ')}</div>}
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <QuantityStepper value={i.qty} onChange={(q) => step(i.id, q)} />
-                    <span style={{ color: GOLD, width: 56, textAlign: 'right', fontWeight: 700 }}>${(i.price * i.qty).toFixed(2)}</span>
+                    <span style={{ color: '#9c7320', width: 56, textAlign: 'right', fontWeight: 800 }}>${(i.price * i.qty).toFixed(2)}</span>
                   </div>
                 </div>
               ))
             )}
-          </Card>
+          </LightCard>
         )}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, padding: '0 16px 16px' }}>
+        <LightCard style={{ padding: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: L_NAVY, marginBottom: 6 }}>PAYMENT</div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: '#9c7320', marginBottom: 8 }}>${totals.total.toFixed(2)}</div>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <LightTouchButton tone="outline" onClick={() => setDrawerOpen(true)} style={{ flex: 1, fontSize: 11 }}>Card</LightTouchButton>
+            <LightTouchButton tone="outline" onClick={() => setDrawerOpen(true)} style={{ flex: 1, fontSize: 11 }}>Cash</LightTouchButton>
+          </div>
+        </LightCard>
+        <LightCard style={{ padding: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ fontSize: 11, fontWeight: 800, color: L_NAVY }}>HUMIDOR</span>
+            {lowStock.length > 0 && <Pill label={`Low Stock ${lowStock.length}`} tone="critical" />}
+          </div>
+          {lowStock[0] ? (
+            <>
+              <div style={{ fontSize: 13, fontWeight: 700, color: L_NAVY }}>{lowStock[0].name}</div>
+              <div style={{ fontSize: 11, color: '#b33b3b' }}>Only {lowStock[0].onHand} left</div>
+            </>
+          ) : (
+            <div style={{ fontSize: 12, color: '#6b7385' }}>All par levels healthy.</div>
+          )}
+          <button type="button" onClick={() => navigate('/pos3/humidor')} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 11, fontWeight: 700, cursor: 'pointer', marginTop: 6 }}>View Humidor →</button>
+        </LightCard>
       </div>
 
       <ModifierSheet item={pendingItem} open={!!pendingItem} onConfirm={confirmModifiers} onClose={() => setPendingItem(null)} />
@@ -204,16 +300,13 @@ export default function POS3Handheld() {
         primaryLabel="Send Ticket"
       />
 
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, maxWidth: 480, margin: '0 auto', background: PANEL, borderTop: '1px solid rgba(212,168,67,0.18)', padding: 12 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 8 }}>
-          <span style={{ color: '#8b95a3' }}>Subtotal ${totals.subtotal.toFixed(2)} · Tax ${totals.tax.toFixed(2)}</span>
-          <span style={{ color: GOLD, fontWeight: 700 }}>Total ${totals.total.toFixed(2)}</span>
-        </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <TouchButton tone="neutral" onClick={() => setDrawerOpen(true)} style={{ flex: 1 }}>View Ticket</TouchButton>
-          <TouchButton tone="success" onClick={handleSend} style={{ flex: 2 }}>Send Ticket</TouchButton>
-        </div>
-      </div>
-    </Shell>
+      <LightBottomNav items={[
+        { label: 'Home', icon: 'home', active: true, onClick: () => navigate('/pos3') },
+        { label: 'Tables', icon: 'table_restaurant', onClick: () => navigate('/pos3/tables') },
+        { label: 'Orders', icon: 'receipt_long', badge: tickets.length || undefined, onClick: () => navigate('/pos3/orders') },
+        { label: 'Messages', icon: 'chat', disabled: true, disabledReason: 'Staff messaging is not yet built' },
+        { label: 'More', icon: 'more_horiz', onClick: () => navigate('/pos3/settings') },
+      ]} />
+    </LightShell>
   )
 }

@@ -12,17 +12,8 @@ const GOLD = {
 
 /* ── Passport Medallion Stamp ─────────────────────────────── */
 function PassportMedallion({ catId, idx, title, date, locked, size = 74 }) {
-  const uid  = `pm-${catId}-${idx}`
   const cx   = size / 2
-  const cy   = size / 2
   const rOuter = cx - 3
-  const rArc   = cx - 11   /* radius for the curved text path */
-
-  /* SVG arc path: semicircle on bottom half */
-  const arcD = [
-    `M ${cx - rArc},${cy}`,
-    `a ${rArc},${rArc} 0 0,0 ${rArc * 2},0`,
-  ].join(' ')
 
   return (
     <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:5 }}>
@@ -30,48 +21,33 @@ function PassportMedallion({ catId, idx, title, date, locked, size = 74 }) {
       {/* Medallion disc */}
       <div style={{ position:'relative', width:size, height:size, flexShrink:0 }}>
 
-        {/* SVG base — gold ring + navy fill + curved text */}
-        <svg width={size} height={size} style={{ position:'absolute', inset:0, overflow:'visible' }}>
-          <defs>
-            <linearGradient id={`g-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%"   stopColor="#6b5010" />
-              <stop offset="35%"  stopColor="#e9c176" />
-              <stop offset="65%"  stopColor="#f5d98a" />
-              <stop offset="100%" stopColor="#c5a059" />
-            </linearGradient>
-            <path id={`arc-${uid}`} d={arcD} />
-          </defs>
-
-          {/* Outer gold ring */}
-          <circle cx={cx} cy={cy} r={rOuter}
-            fill={locked ? '#1c1816' : '#0c1a3a'}
-            stroke={locked ? 'rgba(100,80,50,0.3)' : `url(#g-${uid})`}
-            strokeWidth={3} />
-
-          {/* Inner ring */}
-          <circle cx={cx} cy={cy} r={rOuter - 5}
-            fill="none"
-            stroke={locked ? 'rgba(100,80,50,0.12)' : 'rgba(197,160,89,0.35)'}
-            strokeWidth={1} />
-
-          {/* "360" label top-center */}
-          {!locked && (
-            <text x={cx} y={cy * 0.52} textAnchor="middle"
-              fill="#e9c176" fontSize={size * 0.115}
-              fontFamily="Playfair Display, serif" fontWeight="700"
-              letterSpacing="1">
-              360
-            </text>
-          )}
-
-          {/* Curved text: "PASSPORT CONN." on bottom arc */}
-          {!locked && (
-            <text fontSize={size * 0.076} fill="rgba(197,160,89,0.62)"
-              fontFamily="JetBrains Mono, monospace" letterSpacing="0.5">
-              <textPath href={`#arc-${uid}`} startOffset="8%">PASSPORT CONN.</textPath>
-            </text>
-          )}
-        </svg>
+        {!locked ? (
+          /* Real wax-seal artwork (cropped from uploaded reference) replaces the
+             prior hand-drawn gold-ring + curved-text SVG simulation */
+          <img
+            src="/assets/passport/verified-seal.png"
+            alt="360 Passport Connections stamp"
+            width={size}
+            height={size}
+            style={{
+              position:'absolute', inset:0, width:size, height:size,
+              borderRadius:'50%', objectFit:'cover',
+              boxShadow:'0 0 0 3px rgba(0,0,0,0.0), 0 2px 8px rgba(0,0,0,0.35)',
+            }}
+          />
+        ) : (
+          <svg width={size} height={size} style={{ position:'absolute', inset:0, overflow:'visible' }}>
+            {/* Locked state: unchanged dark disc, no artwork — stamp not yet earned */}
+            <circle cx={cx} cy={cx} r={rOuter}
+              fill="#1c1816"
+              stroke="rgba(100,80,50,0.3)"
+              strokeWidth={3} />
+            <circle cx={cx} cy={cx} r={rOuter - 5}
+              fill="none"
+              stroke="rgba(100,80,50,0.12)"
+              strokeWidth={1} />
+          </svg>
+        )}
 
         {/* Globe / passport icon — overlay div so Material font works */}
         {!locked ? (
@@ -125,42 +101,14 @@ function PassportMedallion({ catId, idx, title, date, locked, size = 74 }) {
 
 /* ── Wax Seal ──────────────────────────────────────────────── */
 function WaxSeal({ size = 64 }) {
-  const cx = size / 2
-  const uid = 'wax-seal-main'
-  const rText = cx - 9
-  const arcD = `M ${cx - rText},${cx} a ${rText},${rText} 0 1,1 ${rText * 2},0`
-
   return (
-    <div style={{ position:'relative', width:size, height:size, flexShrink:0 }}>
-      <svg width={size} height={size} style={{ position:'absolute', inset:0 }}>
-        <defs>
-          <radialGradient id={`wax-${uid}`} cx="40%" cy="35%" r="65%">
-            <stop offset="0%"   stopColor="#9b2020" />
-            <stop offset="60%"  stopColor="#7a1414" />
-            <stop offset="100%" stopColor="#5c0f0f" />
-          </radialGradient>
-          <path id={`wax-arc-${uid}`} d={arcD} />
-        </defs>
-        {/* Wax circle */}
-        <circle cx={cx} cy={cx} r={cx - 2}
-          fill={`url(#wax-${uid})`}
-          stroke="rgba(139,20,20,0.6)" strokeWidth={2} />
-        {/* Inner ring */}
-        <circle cx={cx} cy={cx} r={cx - 8}
-          fill="none" stroke="rgba(255,180,180,0.2)" strokeWidth={1} />
-        {/* Curved text */}
-        <text fontSize={size * 0.092} fill="rgba(255,210,210,0.65)"
-          fontFamily="JetBrains Mono, monospace" letterSpacing="0.3">
-          <textPath href={`#wax-arc-${uid}`} startOffset="2%">360 PASSPORT CONNECTION</textPath>
-        </text>
-      </svg>
-      {/* Globe icon overlay */}
-      <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', paddingBottom:4 }}>
-        <span className="material-symbols-outlined" style={{
-          fontSize: size * 0.32, color:'rgba(255,210,210,0.85)', ...FILL1,
-        }}>public</span>
-      </div>
-    </div>
+    <img
+      src="/assets/passport/verified-seal.png"
+      alt="360 Passport Connections verified wax seal"
+      width={size}
+      height={size}
+      style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+    />
   )
 }
 

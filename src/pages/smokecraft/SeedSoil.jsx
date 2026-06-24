@@ -189,7 +189,7 @@ export default function SeedSoil() {
           gold-card direction. Darkened/saturated the existing humidor backdrop to match that
           mockup's mood instead of the flatter cut-toast background previously used here. */}
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/smokecraft/cropped/humidor-match-bg.jpg')", opacity: 0.22, filter: 'brightness(0.7) saturate(1.15)' }} />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/smokecraft/cropped/seed-soil-bg.jpg')", opacity: 0.22, filter: 'brightness(0.7) saturate(1.15)' }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(8,5,3,0.97) 0%,rgba(8,5,3,0.72) 50%,rgba(8,5,3,0.97) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">

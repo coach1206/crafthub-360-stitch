@@ -169,7 +169,7 @@ export default function HumidorMatch() {
   return (
     <div className="humidor-page text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 -z-20 overflow-hidden humidor-page-bg">
-        <div className="absolute inset-0 bg-cover bg-center opacity-25" style={{ backgroundImage:"url('/assets/smokecraft/cropped/humidor-match-bg.jpg')" }} />
+        <div className="absolute inset-0 bg-cover bg-center opacity-25" style={{ backgroundImage:"url('/assets/smokecraft/cropped/humidor-match-bg-v2.jpg')" }} />
         <div className="absolute inset-0 pointer-events-none humidor-page-vignette" />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
@@ -184,7 +184,7 @@ export default function HumidorMatch() {
         </div>
 
         <div className="humidor-hero">
-          <img src="/assets/smokecraft/cropped/humidor-match-bg.jpg" alt="Humidor" className="humidor-hero__img" />
+          <img src="/assets/smokecraft/cropped/humidor-match-bg-v2.jpg" alt="Humidor" className="humidor-hero__img" />
           <div className="humidor-hero__fade" aria-hidden="true" />
           <div className="humidor-hero__content">
             <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-2">SmokeCraft 360</p>
