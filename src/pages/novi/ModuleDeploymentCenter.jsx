@@ -1,9 +1,10 @@
 /**
- * Module Deployment Center — Novi OS, Phase 7/8
+ * Module Deployment Center — Novi OS, Phase 7/8/9
  *
  * Admin screen showing which CraftHub modules exist, which are standalone,
  * which are ready, and which are not ready, plus a prototype-only vendor
- * assignment / disable / restore workflow added in Phase 8. Sources module
+ * assignment / disable / restore workflow added in Phase 8, plus a final
+ * Remote Deployment Readiness summary added in Phase 9. Sources module
  * data only from the Phase 6 read-only layer (noviModuleStatusService.js)
  * and writes assignment/disable/audit records only through the Phase 8
  * prototype layer (noviVendorModuleAssignments.js, noviRemoteDisableService.js,
@@ -13,8 +14,12 @@
  *
  * "Deploy Module" remains permanently disabled — live deployment is not
  * built until a later phase. "Assign Vendor", "Disable Module", and
- * "Restore Module" now create local prototype records only, and every
+ * "Restore Module" create local prototype records only, and every
  * resulting action is labeled "Prototype only. No live deployment sent."
+ * The Phase 9 Remote Deployment Readiness section sources its
+ * billing/device-control/live-deployment-locked facts from the real
+ * noviDeploymentSafetyChecklist.js / noviRemoteDeploymentContract.js
+ * modules rather than re-describing them — there are no new buttons here.
  *
  * Route-gated to admin/founder_level_0 in App.jsx (the same mechanism
  * that already gates /admin) — see docs/phase-7-novi-deployment-center-audit.md
@@ -44,6 +49,8 @@ import {
   NOVI_AUDIT_ACTION,
   NOVI_AUDIT_STATUS,
 } from '../../modules/noviDeploymentAuditLog.js'
+import { runDeploymentSafetyChecklist, CHECK_STATUS } from '../../modules/noviDeploymentSafetyChecklist.js'
+import { createDeploymentContract } from '../../modules/noviRemoteDeploymentContract.js'
 
 const GOLD   = '#C9A84C'
 const DARK   = '#0a0603'
@@ -128,6 +135,18 @@ function PreviewActionButton({ label, onClick, disabled }) {
     >
       {label}
     </button>
+  )
+}
+
+function ReadinessItem({ label, ready, lockedTone = false }) {
+  // For "locked"/"not connected" facts, `ready` means the lock/absence is
+  // correctly in place — still rendered with the warn tone, since it is
+  // not a deployable-ready state, just an honestly reported one.
+  const tone = lockedTone ? (ready ? 'warn' : 'ok') : (ready ? 'ok' : 'warn')
+  return (
+    <div style={{ marginBottom: '6px' }}>
+      <StatusBadge tone={tone}>{label}: {ready ? 'Yes' : 'No'}</StatusBadge>
+    </div>
   )
 }
 
@@ -275,6 +294,12 @@ export default function ModuleDeploymentCenter() {
     ]),
   )
 
+  const atmosphereModule = modules.find(m => m.moduleId === 'atmosphere')
+  const readinessChecklist = runDeploymentSafetyChecklist({
+    vendorId, moduleId: 'pos3', role, environment: 'production',
+  })
+  const deploymentContract = createDeploymentContract({ vendorId, moduleId: 'pos3', deploymentMode: 'production' })
+
   return (
     <div style={{ background: DARK, minHeight: '100vh', padding: '2rem', color: '#eee' }}>
       <h1 style={{ color: GOLD, fontSize: '22px', marginBottom: '0.25rem' }}>Module Deployment Center</h1>
@@ -356,6 +381,18 @@ export default function ModuleDeploymentCenter() {
             </div>
           ))
         )}
+      </div>
+
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: '8px', padding: '1rem', marginTop: '1rem' }}>
+        <h2 style={{ color: GOLD, fontSize: '14px', marginTop: 0, marginBottom: '0.25rem' }}>Remote Deployment Readiness</h2>
+        <div style={{ color: DIM, fontSize: '10px', marginBottom: '0.75rem' }}>{PROTOTYPE_NOTICE} This section summarizes Phase 8/9 readiness facts — it adds no new actions.</div>
+        <ReadinessItem label="Preview Assignment Ready" ready />
+        <ReadinessItem label="Remote Disable Preview Ready" ready />
+        <ReadinessItem label="Audit Trail Preview Ready" ready={readinessChecklist.checks.auditLogReady === CHECK_STATUS.READY} />
+        <ReadinessItem label="Live Deployment Locked" ready={!deploymentContract.liveDeploymentAllowed} lockedTone />
+        <ReadinessItem label="Billing Not Connected" ready={readinessChecklist.checks.billingConnected === CHECK_STATUS.NOT_READY} lockedTone />
+        <ReadinessItem label="Device Control Not Connected" ready={readinessChecklist.checks.deviceApisConnected === CHECK_STATUS.NOT_READY} lockedTone />
+        <ReadinessItem label="Atmosphere Not Ready" ready={atmosphereModule?.controlMode === CONTROL_MODE.NOT_READY} lockedTone />
       </div>
     </div>
   )
