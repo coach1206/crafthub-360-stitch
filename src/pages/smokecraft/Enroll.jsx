@@ -98,7 +98,7 @@ export default function Enroll() {
         minHeight: 'max(884px, 100dvh)',
         position: 'relative',
         backgroundColor: '#050302',
-        backgroundImage: 'radial-gradient(ellipse at 50% 38%, rgba(255,181,73,0.3) 0%, rgba(155,73,11,0.13) 32%, transparent 60%), linear-gradient(90deg, rgba(0,0,0,0.86), rgba(0,0,0,0.28) 48%, rgba(0,0,0,0.86)), linear-gradient(180deg, rgba(4,3,2,0.24), rgba(3,2,1,0.92)), url(/assets/smokecraft/cropped/humidor-match-bg.jpg)',
+        backgroundImage: 'radial-gradient(ellipse at 50% 38%, rgba(255,181,73,0.3) 0%, rgba(155,73,11,0.13) 32%, transparent 60%), linear-gradient(90deg, rgba(0,0,0,0.86), rgba(0,0,0,0.28) 48%, rgba(0,0,0,0.86)), linear-gradient(180deg, rgba(4,3,2,0.24), rgba(3,2,1,0.92)), url(/assets/smokecraft/cropped/intake-ashtray-bg.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center top',
         backgroundAttachment: 'fixed',
