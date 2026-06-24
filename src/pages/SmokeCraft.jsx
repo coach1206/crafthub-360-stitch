@@ -127,8 +127,32 @@ export default function SmokeCraft() {
         </div>
       </header>
 
+      {/* ── Status Ticker ─────────────────────────────────────────── */}
+      <div style={{ position: 'fixed', top: 72, left: 0, right: 0, zIndex: 49, height: 36, display: 'flex', alignItems: 'center', padding: '0 32px', gap: 28, background: 'rgba(10,7,5,0.65)', backdropFilter: 'blur(14px)', borderBottom: '1px solid rgba(212,175,55,0.1)', overflowX: 'auto', whiteSpace: 'nowrap' }}>
+        <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#E6C76A', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 14 }}>military_tech</span>
+          {stampCount} stamp{stampCount === 1 ? '' : 's'}
+        </span>
+        <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          {badgeCount} badge{badgeCount === 1 ? '' : 's'}
+        </span>
+        <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          {mentorCount} mentor{mentorCount === 1 ? '' : 's'}
+        </span>
+        {hasUnfinishedSession && (
+          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#9DC2EE', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            Unfinished tasting in progress
+          </span>
+        )}
+        {hasEventHistory && (
+          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            Event challenge completed
+          </span>
+        )}
+      </div>
+
       {/* ── Main Content ──────────────────────────────────────────── */}
-      <main style={{ position: 'relative', zIndex: 10, maxWidth: 1320, margin: '0 auto', padding: '124px 32px 140px' }}>
+      <main style={{ position: 'relative', zIndex: 10, maxWidth: 1320, margin: '0 auto', padding: '156px 32px 140px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 64, alignItems: 'start' }} className="smokecraft-grid">
 
           {/* Left Column */}
@@ -140,20 +164,6 @@ export default function SmokeCraft() {
                 {isReturningUser ? 'Welcome back to SmokeCraft 360' : 'Welcome to SmokeCraft 360'}
               </span>
             </div>
-
-            {/* Returning-user history check */}
-            {isReturningUser && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 22, padding: '12px 16px', borderRadius: 12, border: '1px solid rgba(212,175,55,0.22)', background: 'rgba(212,175,55,0.05)' }}>
-                {hasUnfinishedSession && (
-                  <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#9DC2EE', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    Unfinished tasting in progress
-                  </span>
-                )}
-                <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                  {stampCount} stamp{stampCount === 1 ? '' : 's'} · {badgeCount} badge{badgeCount === 1 ? '' : 's'} · {mentorCount} mentor{mentorCount === 1 ? '' : 's'}{hasEventHistory ? ' · event challenge completed' : ''}
-                </span>
-              </div>
-            )}
 
             {/* Headline */}
             <h2 style={{ fontFamily: '"Playfair Display",serif', fontSize: 'clamp(40px, 6vw, 72px)', fontWeight: 700, lineHeight: 1.08, color: '#F4ECDA', letterSpacing: '-0.02em', marginBottom: 20 }}>
@@ -289,6 +299,21 @@ export default function SmokeCraft() {
                 <p style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#F4ECDA', margin: 0 }}>From the house humidor</p>
                 <p style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 12, color: 'rgba(244,236,218,0.7)', margin: '4px 0 0' }}>A glimpse of what's waiting in your profile.</p>
               </div>
+            </div>
+
+            {/* Premium feature stat cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+              {[
+                { label: 'Stamps', value: stampCount, icon: 'military_tech' },
+                { label: 'Badges', value: badgeCount, icon: 'workspace_premium' },
+                { label: 'Mentors', value: mentorCount, icon: 'groups' },
+              ].map(stat => (
+                <div key={stat.label} style={{ borderRadius: 14, border: '1px solid rgba(212,175,55,0.22)', background: 'linear-gradient(150deg, rgba(36,24,12,0.7), rgba(14,9,5,0.8))', padding: '14px 12px', textAlign: 'center', boxShadow: '0 8px 22px rgba(0,0,0,0.4)' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#E6C76A' }}>{stat.icon}</span>
+                  <div style={{ fontFamily: '"Playfair Display",serif', fontSize: 22, fontWeight: 700, color: '#F4ECDA', marginTop: 4 }}>{stat.value}</div>
+                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2 }}>{stat.label}</div>
+                </div>
+              ))}
             </div>
 
             {/* 360 Passport Card */}
