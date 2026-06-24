@@ -103,14 +103,14 @@ export default function SmokeCraft() {
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden' }} aria-hidden="true">
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: "url('/assets/smokecraft/cropped/discover-profile-bg-v2.jpg')",
-          backgroundSize: 'cover', backgroundPosition: 'center 30%',
-          filter: 'brightness(0.5) saturate(1.15) contrast(1.08)',
+          backgroundImage: "url('/assets/smokecraft/cropped/discover-profile-bg-v3.jpg')",
+          backgroundSize: 'cover', backgroundPosition: 'center 35%',
+          filter: 'brightness(0.78) saturate(1.2) contrast(1.08)',
           transform: 'scale(1.04)',
         }} />
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse at 78% 8%, rgba(212,175,55,0.16), transparent 48%), radial-gradient(ellipse at 10% 92%, rgba(91,143,201,0.12), transparent 46%), linear-gradient(180deg, rgba(5,3,2,0.86) 0%, rgba(5,3,2,0.55) 38%, rgba(5,3,2,0.72) 68%, rgba(5,3,2,0.95) 100%)',
+          background: 'radial-gradient(ellipse at 78% 8%, rgba(212,175,55,0.16), transparent 48%), radial-gradient(ellipse at 10% 92%, rgba(91,143,201,0.12), transparent 46%), linear-gradient(180deg, rgba(5,3,2,0.7) 0%, rgba(5,3,2,0.32) 38%, rgba(5,3,2,0.5) 68%, rgba(5,3,2,0.88) 100%)',
         }} />
         <div style={{
           position: 'absolute', inset: 0,
