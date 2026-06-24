@@ -123,6 +123,7 @@ const Admin          = lazy(() => import('./pages/Admin.jsx'))
 const FounderControl = lazy(() => import('./pages/FounderControl.jsx'))
 const MentorConsole  = lazy(() => import('./pages/MentorConsole.jsx'))
 const DevDiagnostics = lazy(() => import('./pages/DevDiagnostics.jsx'))
+const ModuleDeploymentCenter = lazy(() => import('./pages/novi/ModuleDeploymentCenter.jsx'))
 
 import ProtectedRoute  from './components/security/ProtectedRoute.jsx'
 import DevRoleSwitcher from './components/security/DevRoleSwitcher.jsx'
@@ -513,6 +514,19 @@ export default function App() {
                   demoBlocked
                 >
                   <Admin />
+                </ProtectedRoute>
+              } />
+
+              {/* ── Protected: admin+ — Novi module deployment center (read-only) ── */}
+              <Route path="admin/deployment-center" element={
+                <ProtectedRoute
+                  allowedRoles={['admin', 'founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin Login"
+                  lockedMessage="Module Deployment Center requires Novi admin-level access or higher."
+                  demoBlocked
+                >
+                  <ModuleDeploymentCenter />
                 </ProtectedRoute>
               } />
 
