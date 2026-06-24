@@ -99,23 +99,15 @@ export default function SmokeCraft() {
   return (
     <div style={{ minHeight: '100dvh', background: '#050302', color: '#F4ECDA', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
 
-      {/* ── Cinematic Lounge Background ──────────────────────────── */}
+      {/* ── Ambient Lounge Tone (no photo bleed — image lives in the hero showcase panel) ── */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden' }} aria-hidden="true">
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: "url('/assets/smokecraft/cropped/discover-profile-bg-v2.jpg')",
-          backgroundSize: 'cover', backgroundPosition: 'center 30%',
-          filter: 'brightness(0.5) saturate(1.15) contrast(1.08)',
-          transform: 'scale(1.04)',
+          background: '#050302',
         }} />
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse at 78% 8%, rgba(212,175,55,0.16), transparent 48%), radial-gradient(ellipse at 10% 92%, rgba(91,143,201,0.12), transparent 46%), linear-gradient(180deg, rgba(5,3,2,0.86) 0%, rgba(5,3,2,0.55) 38%, rgba(5,3,2,0.72) 68%, rgba(5,3,2,0.95) 100%)',
-        }} />
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(120deg, transparent 0%, rgba(255,236,178,0.05) 40%, transparent 60%)',
-          mixBlendMode: 'screen',
+          background: 'radial-gradient(ellipse at 78% 8%, rgba(212,175,55,0.14), transparent 48%), radial-gradient(ellipse at 10% 92%, rgba(91,143,201,0.10), transparent 46%), radial-gradient(ellipse at 50% 50%, rgba(80,52,18,0.10), transparent 70%)',
         }} />
       </div>
 
@@ -135,12 +127,36 @@ export default function SmokeCraft() {
         </div>
       </header>
 
+      {/* ── Status Ticker ─────────────────────────────────────────── */}
+      <div style={{ position: 'fixed', top: 72, left: 0, right: 0, zIndex: 49, height: 36, display: 'flex', alignItems: 'center', padding: '0 32px', gap: 28, background: 'rgba(10,7,5,0.65)', backdropFilter: 'blur(14px)', borderBottom: '1px solid rgba(212,175,55,0.1)', overflowX: 'auto', whiteSpace: 'nowrap' }}>
+        <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#E6C76A', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 14 }}>military_tech</span>
+          {stampCount} stamp{stampCount === 1 ? '' : 's'}
+        </span>
+        <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          {badgeCount} badge{badgeCount === 1 ? '' : 's'}
+        </span>
+        <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          {mentorCount} mentor{mentorCount === 1 ? '' : 's'}
+        </span>
+        {hasUnfinishedSession && (
+          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#9DC2EE', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            Unfinished tasting in progress
+          </span>
+        )}
+        {hasEventHistory && (
+          <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            Event challenge completed
+          </span>
+        )}
+      </div>
+
       {/* ── Main Content ──────────────────────────────────────────── */}
-      <main style={{ position: 'relative', zIndex: 10, maxWidth: 1320, margin: '0 auto', padding: '124px 32px 140px' }}>
+      <main style={{ position: 'relative', zIndex: 10, maxWidth: 1320, margin: '0 auto', padding: '156px 32px 140px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 64, alignItems: 'start' }} className="smokecraft-grid">
 
           {/* Left Column */}
-          <div className="sc-fade-in" style={{ gridColumn: 'span 1' }}>
+          <div className="sc-fade-in smokecraft-left-col" style={{ gridColumn: 'span 1' }}>
             {/* Welcome label */}
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, padding: '6px 14px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.32)', background: 'rgba(212,175,55,0.1)' }}>
               <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#E6C76A' }}>smoking_rooms</span>
@@ -148,20 +164,6 @@ export default function SmokeCraft() {
                 {isReturningUser ? 'Welcome back to SmokeCraft 360' : 'Welcome to SmokeCraft 360'}
               </span>
             </div>
-
-            {/* Returning-user history check */}
-            {isReturningUser && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 22, padding: '12px 16px', borderRadius: 12, border: '1px solid rgba(212,175,55,0.22)', background: 'rgba(212,175,55,0.05)' }}>
-                {hasUnfinishedSession && (
-                  <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#9DC2EE', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    Unfinished tasting in progress
-                  </span>
-                )}
-                <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                  {stampCount} stamp{stampCount === 1 ? '' : 's'} · {badgeCount} badge{badgeCount === 1 ? '' : 's'} · {mentorCount} mentor{mentorCount === 1 ? '' : 's'}{hasEventHistory ? ' · event challenge completed' : ''}
-                </span>
-              </div>
-            )}
 
             {/* Headline */}
             <h2 style={{ fontFamily: '"Playfair Display",serif', fontSize: 'clamp(40px, 6vw, 72px)', fontWeight: 700, lineHeight: 1.08, color: '#F4ECDA', letterSpacing: '-0.02em', marginBottom: 20 }}>
@@ -280,7 +282,39 @@ export default function SmokeCraft() {
           </div>
 
           {/* Right Column — Cards */}
-          <div className="sc-fade-in" style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: 22 }}>
+          <div className="sc-fade-in smokecraft-right-col" style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: 22 }}>
+
+            {/* Hero Showcase — dominant visible visual, full image, light overlay only at the base for legibility */}
+            <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 22, border: '1px solid rgba(212,175,55,0.4)', minHeight: 340, boxShadow: '0 20px 52px rgba(0,0,0,0.55), 0 0 60px rgba(201,168,76,0.12)' }}>
+              <img
+                src="/assets/smokecraft/cropped/discover-profile-hero.jpg"
+                alt="Discover your cigar profile — featured humidor selection"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(5,3,2,0) 55%, rgba(5,3,2,0.62) 100%)' }} />
+              <div style={{ position: 'absolute', top: 16, left: 16, padding: '6px 12px', borderRadius: 20, border: '1px solid rgba(212,175,55,0.4)', background: 'rgba(5,3,2,0.55)', backdropFilter: 'blur(6px)' }}>
+                <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: '#E6C76A', letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700 }}>Featured Selection</span>
+              </div>
+              <div style={{ position: 'absolute', bottom: 18, left: 20, right: 20 }}>
+                <p style={{ fontFamily: '"Playfair Display",serif', fontSize: 20, fontWeight: 700, color: '#F4ECDA', margin: 0 }}>From the house humidor</p>
+                <p style={{ fontFamily: '"Hanken Grotesk",sans-serif', fontSize: 12, color: 'rgba(244,236,218,0.7)', margin: '4px 0 0' }}>A glimpse of what's waiting in your profile.</p>
+              </div>
+            </div>
+
+            {/* Premium feature stat cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+              {[
+                { label: 'Stamps', value: stampCount, icon: 'military_tech' },
+                { label: 'Badges', value: badgeCount, icon: 'workspace_premium' },
+                { label: 'Mentors', value: mentorCount, icon: 'groups' },
+              ].map(stat => (
+                <div key={stat.label} style={{ borderRadius: 14, border: '1px solid rgba(212,175,55,0.22)', background: 'linear-gradient(150deg, rgba(36,24,12,0.7), rgba(14,9,5,0.8))', padding: '14px 12px', textAlign: 'center', boxShadow: '0 8px 22px rgba(0,0,0,0.4)' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#E6C76A' }}>{stat.icon}</span>
+                  <div style={{ fontFamily: '"Playfair Display",serif', fontSize: 22, fontWeight: 700, color: '#F4ECDA', marginTop: 4 }}>{stat.value}</div>
+                  <div style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 9, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2 }}>{stat.label}</div>
+                </div>
+              ))}
+            </div>
 
             {/* 360 Passport Card */}
             <div
@@ -369,6 +403,14 @@ export default function SmokeCraft() {
         @media (min-width: 1024px) {
           .smokecraft-grid {
             grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 1023px) {
+          .smokecraft-right-col {
+            order: -1;
+          }
+          .smokecraft-left-col {
+            order: 2;
           }
         }
         @media (max-width: 760px) {
