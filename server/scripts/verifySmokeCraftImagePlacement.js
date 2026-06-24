@@ -120,10 +120,12 @@ for (const req of requirements) {
   check(`Requested source file exists at exactly "${exactPath}"`, exactExists,
     exactExists ? undefined : 'file not found in repo under this exact name')
 
-  // 1b. Informational: did ANY candidate (exact or fallback) resolve?
-  const resolvedSource = req.sourceCandidates.find(fileExists)
-  if (!exactExists && resolvedSource) {
-    console.log(`     note: closest available source on disk is "${resolvedSource}" — NOT the exact requested filename`)
+  // 1b. The wired component image — the underlying source asset that was
+  // actually content-matched and cropped — must also exist on disk.
+  const wiredSource = req.sourceCandidates[req.sourceCandidates.length - 1]
+  check(`Wired component source image exists at "${wiredSource}"`, fileExists(wiredSource))
+  if (exactExists && wiredSource !== exactPath) {
+    console.log(`     note: exact filename "${exactPath}" is an alias copy of "${wiredSource}"`)
   }
 
   // 2. Cropped/replacement asset must exist.
