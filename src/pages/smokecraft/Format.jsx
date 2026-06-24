@@ -1170,7 +1170,7 @@ export default function Format() {
           background:
             radial-gradient(circle at 72% 28%, rgba(233,193,118,0.32), transparent 32%),
             linear-gradient(135deg, rgba(65,33,13,0.92), rgba(6,4,3,0.72)),
-            url(/assets/smokecraft/cropped/format-master-tip.jpg);
+            url(/assets/smokecraft/cropped/format-master-tip-v2.jpg);
           background-size: cover;
           background-position: center;
           box-shadow: inset 0 0 0 1px rgba(233,193,118,0.2);
