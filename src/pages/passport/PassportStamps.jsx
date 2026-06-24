@@ -125,42 +125,14 @@ function PassportMedallion({ catId, idx, title, date, locked, size = 74 }) {
 
 /* ── Wax Seal ──────────────────────────────────────────────── */
 function WaxSeal({ size = 64 }) {
-  const cx = size / 2
-  const uid = 'wax-seal-main'
-  const rText = cx - 9
-  const arcD = `M ${cx - rText},${cx} a ${rText},${rText} 0 1,1 ${rText * 2},0`
-
   return (
-    <div style={{ position:'relative', width:size, height:size, flexShrink:0 }}>
-      <svg width={size} height={size} style={{ position:'absolute', inset:0 }}>
-        <defs>
-          <radialGradient id={`wax-${uid}`} cx="40%" cy="35%" r="65%">
-            <stop offset="0%"   stopColor="#9b2020" />
-            <stop offset="60%"  stopColor="#7a1414" />
-            <stop offset="100%" stopColor="#5c0f0f" />
-          </radialGradient>
-          <path id={`wax-arc-${uid}`} d={arcD} />
-        </defs>
-        {/* Wax circle */}
-        <circle cx={cx} cy={cx} r={cx - 2}
-          fill={`url(#wax-${uid})`}
-          stroke="rgba(139,20,20,0.6)" strokeWidth={2} />
-        {/* Inner ring */}
-        <circle cx={cx} cy={cx} r={cx - 8}
-          fill="none" stroke="rgba(255,180,180,0.2)" strokeWidth={1} />
-        {/* Curved text */}
-        <text fontSize={size * 0.092} fill="rgba(255,210,210,0.65)"
-          fontFamily="JetBrains Mono, monospace" letterSpacing="0.3">
-          <textPath href={`#wax-arc-${uid}`} startOffset="2%">360 PASSPORT CONNECTION</textPath>
-        </text>
-      </svg>
-      {/* Globe icon overlay */}
-      <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', paddingBottom:4 }}>
-        <span className="material-symbols-outlined" style={{
-          fontSize: size * 0.32, color:'rgba(255,210,210,0.85)', ...FILL1,
-        }}>public</span>
-      </div>
-    </div>
+    <img
+      src="/assets/passport/verified-seal.png"
+      alt="360 Passport Connections verified wax seal"
+      width={size}
+      height={size}
+      style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+    />
   )
 }
 

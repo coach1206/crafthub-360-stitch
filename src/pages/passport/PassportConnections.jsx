@@ -51,41 +51,14 @@ function Portrait({ portraitKey, name, size = 52, ring = false }) {
 
 /* ── Gold SVG stamp ───────────────────────────────────────── */
 function PassportStamp({ size = 148 }) {
-  const cx = size / 2, r1 = cx - 4, r2 = cx - 14, r3 = cx - 22
-  const toXY = (deg, r) => {
-    const rad = (deg - 90) * (Math.PI / 180)
-    return { x: cx + r * Math.cos(rad), y: cx + r * Math.sin(rad) }
-  }
-  const arcTop = (r, from, to) => {
-    const s = toXY(from, r), e = toXY(to, r)
-    const large = (to - from > 180) ? 1 : 0
-    return `M ${s.x} ${s.y} A ${r} ${r} 0 ${large} 1 ${e.x} ${e.y}`
-  }
-  const gold = '#c5a059'
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <circle cx={cx} cy={cx} r={r1} fill="rgba(10,6,0,0.88)" stroke={gold} strokeWidth={2.5} />
-      <circle cx={cx} cy={cx} r={r2} fill="none" stroke={`${gold}55`} strokeWidth={1} />
-      <circle cx={cx} cy={cx} r={r3} fill="none" stroke={`${gold}30`} strokeWidth={0.8} />
-      {/* Top arc text: 360 PASSPORT */}
-      <path id="arcTop" d={arcTop(r1 - 9, -150, -30)} fill="none" />
-      <text fontFamily="'JetBrains Mono',monospace" fontSize={9.5} fill={gold} letterSpacing={2} fontWeight={700}>
-        <textPath href="#arcTop" startOffset="50%" textAnchor="middle">360 PASSPORT</textPath>
-      </text>
-      {/* Bottom arc text: CONNECTIONS */}
-      <path id="arcBot" d={arcTop(r1 - 9, 30, 150)} fill="none" />
-      <text fontFamily="'JetBrains Mono',monospace" fontSize={9.5} fill={gold} letterSpacing={2} fontWeight={700}>
-        <textPath href="#arcBot" startOffset="50%" textAnchor="middle">CONNECTIONS</textPath>
-      </text>
-      {/* Stars */}
-      {[-165, -150, 165, 150].map((deg, i) => {
-        const p = toXY(deg, r1 - 9)
-        return <text key={i} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize={6} fill={gold}>★</text>
-      })}
-      {/* Center text */}
-      <text x={cx} y={cx - 8} textAnchor="middle" fontFamily="'Playfair Display',serif" fontWeight={900} fontSize={17} fill={gold}>VERIFIED</text>
-      <text x={cx} y={cx + 10} textAnchor="middle" fontFamily="'JetBrains Mono',monospace" fontWeight={700} fontSize={9} fill={`${gold}cc`} letterSpacing={1.5}>INTRODUCTION</text>
-    </svg>
+    <img
+      src="/assets/passport/verified-seal.png"
+      alt="360 Passport Connections verified wax seal"
+      width={size}
+      height={size}
+      style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', boxShadow: '0 0 18px rgba(197,160,89,0.25)' }}
+    />
   )
 }
 
@@ -492,7 +465,7 @@ function AdminModal({ onClose }) {
     { icon:'view_list', label:'Edit tab data', action: () => setStatus('Tab data — edit src/data/connectionsData.js') },
     { icon:'person_edit', label:'Edit displayed people', action: () => setStatus('Edit src/data/connectionsData.js to change people.') },
     { icon:'image', label:'Replace connection images', action: () => setStatus('Paste replacement URL below.') },
-    { icon:'verified', label:'Update hero stamp', action: () => setStatus('Hero stamp is SVG — edit PassportStamp component.') },
+    { icon:'verified', label:'Update hero stamp', action: () => setStatus('Hero stamp is /assets/passport/verified-seal.png — replace that file to change it.') },
   ]
   async function queueOpenAI() {
     setStatus('Image replacement request queued for backend generation.')
