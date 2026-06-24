@@ -18,6 +18,7 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import * as authApi from '../services/authApiService.js'
 import { getEffectivePermissions } from '../config/roleMap.js'
+import { verifyFounderOverride } from '../config/founderOverride.js'
 
 export const AuthContext = createContext(null)
 
@@ -72,8 +73,28 @@ export function AuthProvider({ children }) {
   }, [])
 
   // ── Admin / Manager login ─────────────────────────────────
+  // Tries the founder env override first (see config/founderOverride.js) —
+  // this exists so founder access still works on static-only deployments
+  // where the real Express backend (and its three-factor founder-login
+  // route) is not deployed. It only ever fires when both
+  // VITE_FOUNDER_ADMIN_EMAIL and VITE_FOUNDER_ADMIN_PIN are configured
+  // and match exactly; otherwise it falls through to the real backend.
   const loginAdmin = useCallback(async (email, pin) => {
     setAuthError(null)
+
+    if (verifyFounderOverride(email, pin)) {
+      const user = {
+        userId:      'founder-env-override',
+        role:        'founder_level_0',
+        email:       String(email).trim(),
+        displayName: 'Founder Level 0',
+        authenticated: true,
+        mode:        'env-override',
+      }
+      setAuthUser(user)
+      return { success: true, user }
+    }
+
     const result = await authApi.adminLogin(email, pin)
     if (result?.data) {
       const user = { ...result.data, authenticated: true }

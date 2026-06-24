@@ -35,7 +35,7 @@ export default function AdminLogin() {
   const [error,   setError]   = useState('')
 
   const redirectAfterLogin = (role) => {
-    if (role === 'founder_level_0') window.location.href = '/founder-demo'
+    if (role === 'founder_level_0') window.location.href = '/admin/deployment-center'
     else if (role === 'manager') window.location.href = '/eat'
     else if (role === 'admin') window.location.href = '/admin'
     else window.location.href = '/'
