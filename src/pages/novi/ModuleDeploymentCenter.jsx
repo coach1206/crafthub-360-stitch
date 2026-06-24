@@ -325,7 +325,14 @@ export default function ModuleDeploymentCenter({ readOnly = false } = {}) {
           Review Mode Only — No Live Deployment Controls
         </div>
       )}
-      <h1 style={{ color: GOLD, fontSize: '22px', marginBottom: '0.25rem', fontFamily: 'Georgia, serif' }}>Module Deployment Center</h1>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
+        <img
+          src="/assets/novi/crafthub-gauge-badge.png"
+          alt=""
+          style={{ width: 40, height: 20, objectFit: 'cover', borderRadius: '4px', border: `1px solid ${BORDER}`, flexShrink: 0 }}
+        />
+        <h1 style={{ color: GOLD, fontSize: '22px', margin: 0, fontFamily: 'Georgia, serif' }}>Module Deployment Center</h1>
+      </div>
       <p style={{ color: DIM, fontSize: '12px', marginBottom: '1.5rem' }}>
         Read-only view of CraftHub modules known to Novi OS{readOnly ? '' : ', plus prototype-only vendor assignment tools'}. Signed in as: {displayRole}.
       </p>

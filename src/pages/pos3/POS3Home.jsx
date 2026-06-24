@@ -88,6 +88,11 @@ export default function POS3Home() {
           <TopBar system="POS3" title="POS 3 Hospitality Terminal" subtitle="PM Shift · System Online" />
           <div style={{ padding: 20 }}>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
+              <img
+                src="/assets/pos3/crafthub-gauge-badge.png"
+                alt=""
+                style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 8, border: '1px solid rgba(255,255,255,0.08)', flexShrink: 0 }}
+              />
               <KpiCard label="Open Tickets" value={openTickets} />
               <KpiCard label="Occupied Tables" value={occupied} />
               <KpiCard label="Incoming Requests" value={incoming.length} accent={incoming.length ? '#f0907f' : GOLD} />

@@ -57,9 +57,16 @@ export default function EATCommandHub() {
   return (
     <LightShell>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 22px', background: '#fff', borderBottom: '1px solid rgba(19,41,75,0.08)', flexWrap: 'wrap', gap: 10 }}>
-        <div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: L_NAVY, letterSpacing: '0.02em' }}>E.A.T. SYSTEM <span style={{ fontSize: 11, fontWeight: 700, color: '#8b95a3', marginLeft: 6 }}>POS 3</span></div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: L_GOLD, letterSpacing: '0.08em' }}>VENUE COMMAND CENTER</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <img
+            src="/assets/eat/crafthub-gauge-badge.png"
+            alt=""
+            style={{ width: 44, height: 22, objectFit: 'cover', borderRadius: 5, border: '1px solid rgba(19,41,75,0.12)', flexShrink: 0 }}
+          />
+          <div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: L_NAVY, letterSpacing: '0.02em' }}>E.A.T. SYSTEM <span style={{ fontSize: 11, fontWeight: 700, color: '#8b95a3', marginLeft: 6 }}>POS 3</span></div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: L_GOLD, letterSpacing: '0.08em' }}>VENUE COMMAND CENTER</div>
+          </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: '#1f7a45', display: 'flex', alignItems: 'center', gap: 4 }}>

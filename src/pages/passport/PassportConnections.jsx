@@ -672,6 +672,11 @@ export default function PassportConnections() {
           style={{ width:38, height:38, borderRadius:'50%', border:'1px solid rgba(197,160,89,0.2)', background:'rgba(197,160,89,0.06)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0, transition:'transform 0.1s' }}>
           <span className="material-symbols-outlined" style={{ fontSize:19, color:'#c5a059' }}>arrow_back</span>
         </button>
+        <img
+          src="/assets/passport/network-badge.png"
+          alt=""
+          style={{ width:34, height:34, objectFit:'cover', borderRadius:'50%', border:'1px solid rgba(197,160,89,0.25)', flexShrink:0 }}
+        />
         <div style={{ flex:1, minWidth:0 }}>
           <p style={{ fontFamily:'"Playfair Display",serif', fontWeight:700, fontSize:16, color:'#fff8ee', lineHeight:1 }}>360 Passport Connections</p>
           <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8.5, color:'rgba(197,160,89,0.35)', letterSpacing:'0.08em', marginTop:2 }}>Grow your trusted network</p>
