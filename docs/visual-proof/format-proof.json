@@ -1,4 +1,5 @@
 {
+  "family": "smokecraft",
   "screen": "format",
   "route": "/smokecraft/format",
   "referenceImage": "SHAPE SIZE BURN.11.png",
@@ -7,6 +8,6 @@
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T09:19:14.508Z",
-  "commitHash": "b1fd9ade"
+  "timestamp": "2026-06-25T19:00:06.469Z",
+  "commitHash": "43f7d3ab"
 }

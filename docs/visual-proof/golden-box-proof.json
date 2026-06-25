@@ -1,12 +1,13 @@
 {
+  "family": "smokecraft",
   "screen": "golden-box",
-  "route": "/smokecraft/golden-box",
+  "route": "/smokecraft/golden-box/status",
   "referenceImage": "GOLDEN BOX JOURNEY11.png",
   "referenceFound": true,
   "viewport": {
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T09:05:45.252Z",
-  "commitHash": "3e2b73b9"
+  "timestamp": "2026-06-25T19:00:09.093Z",
+  "commitHash": "43f7d3ab"
 }

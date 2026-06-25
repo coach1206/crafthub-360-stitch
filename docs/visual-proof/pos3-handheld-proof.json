@@ -1,0 +1,17 @@
+{
+  "family": "pos3",
+  "screen": "pos3-handheld",
+  "route": "/pos3/handheld",
+  "referenceImage": "POS 3.11.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 414,
+    "height": 896
+  },
+  "timestamp": "2026-06-25T19:01:51.144Z",
+  "commitHash": "43f7d3ab",
+  "authInjected": {
+    "role": "manager",
+    "mode": "dev-server novee_admin_session"
+  }
+}

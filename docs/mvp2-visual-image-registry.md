@@ -69,32 +69,48 @@ runtime image used by an image-based screen, across all families
 
 ## POS3 (handheld + tablet/stationary)
 
-No binary reference image exists in the repo for any POS3 screen. Only a
-text description (`eat-system-mobile-update`) exists in
-`public/design-references/phase-7/pos-eat/README.md`. Real visual proof
-is impossible until an actual mockup file is uploaded — these rows must
-not be marked "approved" or "in progress" based on the text description
-alone.
+A real reference image (`POS 3.11.png`) was uploaded 2026-06-25 and copied
+to `public/design-references/mvp2/pos3/POS 3.11.png`. It is wired to
+`/pos3/handheld` (confirmed via `src/App.jsx`: `/pos3/handheld` ->
+`src/pages/pos3/POS3Handheld.jsx`) in `scripts/visualProof.js`.
+
+**Important finding from running the proof harness:** `/pos3/handheld`
+(and every other `/pos3/*` route) is gated behind a staff-login
+`ProtectedRoute` (`requiredPermission="access_pos3_staff"`, `demoBlocked`).
+Playwright hits this route unauthenticated, so the rendered capture is an
+"ACCESS RESTRICTED" gate screen, not the actual POS3 Handheld UI. The
+harness now detects this (`accessGated: true` in the proof JSON) and
+prints a warning instead of treating the proof image as a real
+comparison. No visual judgment can be made about POS3 Handheld until the
+harness can authenticate as a staff user before capturing.
 
 | Reference image | Screen/route | Component file | Reference-only / runtime-safe | Clean photo only? | Contains baked UI? | Approved usage | Banned usage | Runtime image paths | Layout requirements | No-gap requirements | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| none (text description only: `eat-system-mobile-update`) | `/pos3/handheld` | not yet built | n/a | n/a | n/a | n/a | n/a | n/a | Handheld-first: header bar, staff identity card, MY TABLES scroll, ACTIVE ORDERS list, + New Order, 2x3 category grid, PAYMENT/HUMIDOR panels, bottom nav (per text spec) | Vertical, thumb-friendly, no dead space | blocked — no reference file in repo |
-| none found | `/pos3/tables` | not yet built | n/a | n/a | n/a | n/a | n/a | n/a | TBD | TBD | blocked — no reference file in repo |
-| none found | `/pos3/orders` | not yet built | n/a | n/a | n/a | n/a | n/a | n/a | TBD | TBD | blocked — no reference file in repo |
-| none found | `/pos3/checkout` | not yet built | n/a | n/a | n/a | n/a | n/a | n/a | TBD | TBD | blocked — no reference file in repo |
+| `POS 3.11.png` (`public/design-references/mvp2/pos3/POS 3.11.png`) | `/pos3/handheld` | `src/pages/pos3/POS3Handheld.jsx` | Reference-only | Unknown — not yet audited | Unknown — not yet audited | Composition/layout spec only, once audited | Direct runtime background | n/a | TBD — pending real (authenticated) capture | TBD — pending real (authenticated) capture | mapping confirmed, proof generated but BEHIND AUTH GATE — not a real screen comparison yet |
+| none found | `/pos3/tables` | `src/pages/pos3/POS3Tables.jsx` | n/a | n/a | n/a | n/a | n/a | n/a | TBD | TBD | blocked — no reference file in repo |
+| none found | `/pos3/orders` | `src/pages/pos3/POS3Orders.jsx` | n/a | n/a | n/a | n/a | n/a | n/a | TBD | TBD | blocked — no reference file in repo |
+| none found | `/pos3/checkout` | `src/pages/pos3/POS3Checkout.jsx` | n/a | n/a | n/a | n/a | n/a | n/a | TBD | TBD | blocked — no reference file in repo |
 
 ## E.A.T. System (command screens + seating/table arrangement)
 
-No binary reference image exists in the repo for any E.A.T. screen. Only
-a text description (`eat-system-command-center-update`) exists in
-`public/design-references/phase-7/pos-eat/README.md`. Real visual proof
-is impossible until an actual mockup file is uploaded.
+A real reference image (`EAT SYSTEM UPDATE 11.png` — the desktop
+management command center) was uploaded 2026-06-25 and copied to
+`public/design-references/mvp2/eat-system/EAT SYSTEM UPDATE 11.png`. It is
+wired to `/eat/command-hub` (confirmed via `src/App.jsx`: `/eat/command-hub`
+-> `src/pages/eat/EATCommandHub.jsx`) as the `eat-command-center` screen
+entry in `scripts/visualProof.js`.
+
+**Same auth-gate finding as POS3:** `/eat/*` routes require manager-level
+login (`requiredPermission="access_eat_command"`, `demoBlocked`). The
+rendered capture for `/eat/command-hub` is an "ACCESS RESTRICTED" gate,
+not the real E.A.T. Command Center UI. Flagged via `accessGated: true` in
+the proof JSON — not visually approved or failed.
 
 | Reference image | Screen/route | Component file | Reference-only / runtime-safe | Clean photo only? | Contains baked UI? | Approved usage | Banned usage | Runtime image paths | Layout requirements | No-gap requirements | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| none (text description only: `eat-system-command-center-update`) | `/eat/command-hub` | not yet built | n/a | n/a | n/a | n/a | n/a | n/a | Desktop: top bar with system chips, 5-tab row, navy left sidebar, Floor Plan Editor canvas, right-side stacked panels (Table Details, Quick Actions, My Tables, Unassigned Orders, New Order, Humidor), bottom summary row, bottom command nav (per text spec) | Full-width, premium, complete desktop use of viewport | blocked — no reference file in repo |
-| none found | `/eat/sections` | not yet built | n/a | n/a | n/a | n/a | n/a | n/a | TBD | TBD | blocked — no reference file in repo |
-| none found | `/eat/operations` | not yet built | n/a | n/a | n/a | n/a | n/a | n/a | TBD | TBD | blocked — no reference file in repo |
+| `EAT SYSTEM UPDATE 11.png` (`public/design-references/mvp2/eat-system/EAT SYSTEM UPDATE 11.png`) | `/eat/command-hub` | `src/pages/eat/EATCommandHub.jsx` | Reference-only | Unknown — not yet audited | Unknown — not yet audited | Composition/layout spec only, once audited | Direct runtime background | n/a | TBD — pending real (authenticated) capture | TBD — pending real (authenticated) capture | mapping confirmed, proof generated but BEHIND AUTH GATE — not a real screen comparison yet |
+| none found | `/eat/sections` | `src/pages/eat/EATSections.jsx` | n/a | n/a | n/a | n/a | n/a | n/a | TBD | TBD | blocked — no reference file in repo |
+| none found | `/eat/operations` | `src/pages/eat/EATOperations.jsx` | n/a | n/a | n/a | n/a | n/a | n/a | TBD | TBD | blocked — no reference file in repo |
 
 ## Other reference files found in repo with no confirmed screen mapping
 

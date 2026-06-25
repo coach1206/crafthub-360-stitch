@@ -1,0 +1,17 @@
+{
+  "family": "eat",
+  "screen": "eat-command-center",
+  "route": "/eat/command-hub",
+  "referenceImage": "EAT SYSTEM UPDATE 11.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T19:01:58.961Z",
+  "commitHash": "43f7d3ab",
+  "authInjected": {
+    "role": "manager",
+    "mode": "dev-server novee_admin_session"
+  }
+}

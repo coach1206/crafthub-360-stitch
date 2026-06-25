@@ -71,19 +71,21 @@ const SCREENS = [
   { family: 'crafthub', name: 'crafthub-landing', route: '/crafthub', reference: null, note: 'Reference "CRAFT HUB EXPLAIND.png" exists in public/ but is not yet confirmed against this route.' },
 
   // --- POS3 (handheld) ---
-  // No binary reference images exist in the repo for POS3 — only a text
-  // description in public/design-references/phase-7/pos-eat/README.md
-  // ("eat-system-mobile-update"). Cannot generate a real proof without the
-  // actual uploaded file.
-  { family: 'pos3', name: 'pos3-handheld', route: '/pos3/handheld', reference: null, viewport: HANDHELD_VIEWPORT, note: 'No binary reference image in repo — only a text description exists. Upload the real mockup file to enable visual proof.' },
+  // Reference image uploaded 2026-06-25 ("POS 3.11.png"). Route mapping
+  // confirmed via src/App.jsx: /pos3/handheld -> POS3Handheld.jsx. Mapping
+  // only — no UI fix has been made against this reference yet, so this is
+  // NOT visually approved until a proof image is generated and inspected.
+  { family: 'pos3', name: 'pos3-handheld', route: '/pos3/handheld', reference: 'POS 3.11.png', referenceDir: 'design-references/mvp2/pos3', viewport: HANDHELD_VIEWPORT, requiresAuth: { role: 'manager' } },
   { family: 'pos3', name: 'pos3-tables', route: '/pos3/tables', reference: null, note: 'No binary reference image in repo.' },
   { family: 'pos3', name: 'pos3-orders', route: '/pos3/orders', reference: null, note: 'No binary reference image in repo.' },
   { family: 'pos3', name: 'pos3-checkout', route: '/pos3/checkout', reference: null, note: 'No binary reference image in repo.' },
 
   // --- E.A.T. System ---
-  // Same situation as POS3 — only a text description exists
-  // ("eat-system-command-center-update").
-  { family: 'eat', name: 'eat-command-hub', route: '/eat/command-hub', reference: null, note: 'No binary reference image in repo — only a text description exists. Upload the real mockup file to enable visual proof.' },
+  // Reference image uploaded 2026-06-25 ("EAT SYSTEM UPDATE 11.png"), the
+  // desktop management command center. Route mapping confirmed via
+  // src/App.jsx: /eat/command-hub -> EATCommandHub.jsx. Mapping only — no
+  // UI fix has been made against this reference yet.
+  { family: 'eat', name: 'eat-command-center', route: '/eat/command-hub', reference: 'EAT SYSTEM UPDATE 11.png', referenceDir: 'design-references/mvp2/eat-system', requiresAuth: { role: 'manager' } },
   { family: 'eat', name: 'eat-sections', route: '/eat/sections', reference: null, note: 'No binary reference image in repo.' },
   { family: 'eat', name: 'eat-operations', route: '/eat/operations', reference: null, note: 'No binary reference image in repo.' },
 ]
@@ -95,8 +97,17 @@ function getArg(name, fallback) {
 }
 
 function findChromiumExecutable() {
-  const browsersPath = process.env.PLAYWRIGHT_BROWSERS_PATH || '/opt/pw-browsers'
-  if (!existsSync(browsersPath)) return null
+  // Sandboxed dev environments pre-install Chromium under a fixed path
+  // (PLAYWRIGHT_BROWSERS_PATH, defaulting to /opt/pw-browsers) and skip the
+  // npm postinstall download. CI (GitHub Actions) has no such path — it runs
+  // `npx playwright install --with-deps chromium`, which installs into
+  // Playwright's own default cache (~/.cache/ms-playwright) under whatever
+  // directory/executable layout that Playwright version uses. Only look for
+  // the sandbox override; if it's not there, return null so the caller lets
+  // Playwright resolve its own installed browser instead of treating "I
+  // didn't find this one specific path" as "Chromium isn't installed."
+  const browsersPath = process.env.PLAYWRIGHT_BROWSERS_PATH
+  if (!browsersPath || !existsSync(browsersPath)) return null
   const candidates = readdirSync(browsersPath).filter(d => d.startsWith('chromium-') || d === 'chromium')
   for (const dir of candidates) {
     const exe = path.join(browsersPath, dir, 'chrome-linux', 'chrome')
@@ -127,6 +138,88 @@ async function waitForServer(url, timeoutMs = 60000) {
   return false
 }
 
+// Every child_process we spawn (vite preview, vite dev) is tracked here so a
+// single cleanup path can guarantee none of them outlive the script. A
+// lingering child (e.g. a vite dev server still listening on a port) keeps
+// Node's event loop alive even after main() returns, which is what hung the
+// GitHub Actions job after "Visual proof artifacts written to docs/visual-proof/"
+// had already printed — the proof generation had finished, but the process
+// never exited.
+const spawnedProcesses = new Set()
+function trackProcess(child) {
+  spawnedProcesses.add(child)
+  child.on('exit', () => spawnedProcesses.delete(child))
+  return child
+}
+
+function killProcessHard(child) {
+  if (!child || child.killed || child.exitCode !== null) return
+  try {
+    child.kill('SIGTERM')
+  } catch {
+    // already gone
+  }
+  setTimeout(() => {
+    if (child.exitCode === null && !child.killed) {
+      try {
+        child.kill('SIGKILL')
+      } catch {
+        // already gone
+      }
+    }
+  }, 2000)
+}
+
+let browserRef = null
+let cleanedUp = false
+async function cleanup() {
+  if (cleanedUp) return
+  cleanedUp = true
+  try {
+    if (browserRef) await browserRef.close()
+  } catch {
+    // ignore — best-effort shutdown
+  }
+  for (const child of spawnedProcesses) {
+    killProcessHard(child)
+  }
+  // Give SIGKILL fallbacks a moment to land before the process exits.
+  await new Promise(r => setTimeout(r, 2200))
+}
+
+process.on('exit', () => {
+  for (const child of spawnedProcesses) killProcessHard(child)
+})
+process.on('SIGINT', async () => {
+  await cleanup()
+  process.exit(130)
+})
+process.on('SIGTERM', async () => {
+  await cleanup()
+  process.exit(143)
+})
+process.on('uncaughtException', async (err) => {
+  console.error('Uncaught exception:', err)
+  await cleanup()
+  process.exit(1)
+})
+process.on('unhandledRejection', async (err) => {
+  console.error('Unhandled rejection:', err)
+  await cleanup()
+  process.exit(1)
+})
+
+const GLOBAL_TIMEOUT_MS = 10 * 60 * 1000
+const ROUTE_TIMEOUT_MS = 30 * 1000
+
+function withTimeout(promise, ms, label) {
+  let timer
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)
+  })
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
+}
+
 async function main() {
   const onlyRoute = getArg('route', null)
   const onlyFamily = getArg('family', null)
@@ -141,12 +234,11 @@ async function main() {
     process.exit(1)
   }
 
-  const executablePath = findChromiumExecutable()
-  if (!executablePath) {
-    console.error('I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.')
-    console.error('Reason: no Chromium executable was found under PLAYWRIGHT_BROWSERS_PATH.')
-    process.exit(1)
-  }
+  // executablePath is only set when a sandbox-specific Chromium override is
+  // found. Otherwise leave it undefined so chromium.launch() resolves
+  // Playwright's own installed browser (e.g. the one `playwright install`
+  // just downloaded in CI).
+  const executablePath = findChromiumExecutable() || undefined
 
   mkdirSync(OUT_DIR, { recursive: true })
 
@@ -158,24 +250,57 @@ async function main() {
     execSync('npm run build', { cwd: ROOT, stdio: 'inherit' })
 
     console.log('Starting preview server...')
-    devServerProcess = spawn('npx', ['vite', 'preview', '--port', '4173', '--strictPort'], {
+    devServerProcess = trackProcess(spawn('npx', ['vite', 'preview', '--port', '4173', '--strictPort'], {
       cwd: ROOT,
       stdio: 'pipe',
-    })
+    }))
     baseUrl = 'http://localhost:4173'
 
     const up = await waitForServer(baseUrl)
     if (!up) {
       console.error('I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.')
       console.error('Reason: the preview server did not start in time.')
-      devServerProcess.kill()
+      await cleanup()
       process.exit(1)
     }
   }
 
+  // Screens flagged requiresAuth depend on the dev-only `novee_admin_session`
+  // localStorage hook in src/context/SecurityContext.jsx, which is gated by
+  // import.meta.env.DEV and stripped out of the production build that the
+  // preview server above serves. Those screens need a separate `vite dev`
+  // server, started lazily and only if such a screen is actually selected.
+  let devModeServerProcess = null
+  let devModeBaseUrl = null
+  async function ensureDevModeServer() {
+    if (devModeBaseUrl) return devModeBaseUrl
+    console.log('Starting vite dev server for auth-injected capture...')
+    devModeServerProcess = trackProcess(spawn('npx', ['vite', 'dev', '--port', '5183', '--strictPort'], {
+      cwd: ROOT,
+      stdio: 'pipe',
+    }))
+    devModeBaseUrl = 'http://localhost:5183'
+    const up = await waitForServer(devModeBaseUrl)
+    if (!up) {
+      console.error('  Could not start vite dev server for authenticated capture.')
+      killProcessHard(devModeServerProcess)
+      devModeServerProcess = null
+      devModeBaseUrl = null
+    }
+    return devModeBaseUrl
+  }
+
+  const globalTimer = setTimeout(async () => {
+    console.error(`I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.`)
+    console.error(`Reason: the full run exceeded the ${GLOBAL_TIMEOUT_MS}ms global timeout.`)
+    await cleanup()
+    process.exit(1)
+  }, GLOBAL_TIMEOUT_MS)
+
   const commitHash = getCommitHash()
   const { chromium } = playwright
   const browser = await chromium.launch({ executablePath })
+  browserRef = browser
 
   let screens = SCREENS
   if (onlyRoute) screens = screens.filter(s => s.route === onlyRoute)
@@ -185,63 +310,117 @@ async function main() {
 
   for (const screen of screens) {
     const viewport = screen.viewport || VIEWPORT
-    const context = await browser.newContext({ viewport })
-    const page = await context.newPage()
-    const url = `${baseUrl}${screen.route}`
-    console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}`)
-    try {
-      await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 })
-      await page.waitForTimeout(800)
-      const screenshotPath = path.join(OUT_DIR, `${screen.name}-rendered.png`)
-      await page.screenshot({ path: screenshotPath, fullPage: false })
 
-      const referencePath = screen.reference ? path.join(ROOT, 'public', screen.reference) : null
-      const referenceExists = Boolean(referencePath && existsSync(referencePath))
-
-      const meta = {
-        family: screen.family,
-        screen: screen.name,
-        route: screen.route,
-        referenceImage: screen.reference,
-        referenceFound: referenceExists,
-        viewport,
-        timestamp: new Date().toISOString(),
-        commitHash,
-      }
-
-      if (referenceExists) {
-        await buildContactSheet({
-          chromiumPage: page,
-          referencePath,
-          renderedPath: screenshotPath,
-          outPath: path.join(OUT_DIR, `${screen.name}-proof.png`),
-          meta,
-        })
+    let screenBaseUrl = baseUrl
+    let usingDevModeAuth = false
+    if (screen.requiresAuth) {
+      const devUrl = await ensureDevModeServer()
+      if (devUrl) {
+        screenBaseUrl = devUrl
+        usingDevModeAuth = true
       } else {
-        meta.note = screen.note || (screen.reference
-          ? `Reference image "${screen.reference}" not found in public/. Rendered screenshot saved alone.`
-          : 'No reference image registered for this screen — cannot generate a side-by-side proof. This is NOT visual approval.')
-        console.warn(`  NO PROOF POSSIBLE — ${meta.note}`)
+        console.warn(`  Could not start dev server for ${screen.name} — falling back to production preview (will likely show ACCESS RESTRICTED).`)
       }
+    }
 
-      writeFileSync(path.join(OUT_DIR, `${screen.name}-proof.json`), JSON.stringify(meta, null, 2))
-      results.push(meta)
+    const context = await browser.newContext({ viewport })
+    if (usingDevModeAuth) {
+      // Visual-proof-only auth injection: writes the same dev-only
+      // `novee_admin_session` localStorage key that src/context/SecurityContext.jsx
+      // already supports for local role prototyping (gated by import.meta.env.DEV).
+      // This does not touch ProtectedRoute.jsx or any production auth path —
+      // it only works because Vite's dev server has DEV=true.
+      await context.addInitScript(({ key, role }) => {
+        window.localStorage.setItem(key, JSON.stringify({ role, grantedAt: Date.now(), source: 'visual-proof-harness' }))
+      }, { key: 'novee_admin_session', role: screen.requiresAuth.role })
+    }
+    const page = await context.newPage()
+    const url = `${screenBaseUrl}${screen.route}`
+    console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}${usingDevModeAuth ? ' (auth-injected dev server)' : ''}`)
+    try {
+      await withTimeout((async () => {
+        await page.goto(url, { waitUntil: 'networkidle', timeout: ROUTE_TIMEOUT_MS })
+        await page.waitForTimeout(800)
+        const screenshotPath = path.join(OUT_DIR, `${screen.name}-rendered.png`)
+        await page.screenshot({ path: screenshotPath, fullPage: false })
+
+        const bodyText = await page.evaluate(() => document.body.innerText)
+        const accessGated = /ACCESS RESTRICTED/i.test(bodyText)
+
+        const referencePath = screen.reference ? path.join(ROOT, 'public', screen.referenceDir || '', screen.reference) : null
+        const referenceExists = Boolean(referencePath && existsSync(referencePath))
+
+        const meta = {
+          family: screen.family,
+          screen: screen.name,
+          route: screen.route,
+          referenceImage: screen.reference,
+          referenceFound: referenceExists,
+          viewport,
+          timestamp: new Date().toISOString(),
+          commitHash,
+        }
+
+        if (usingDevModeAuth) {
+          meta.authInjected = { role: screen.requiresAuth.role, mode: 'dev-server novee_admin_session' }
+        }
+
+        if (accessGated) {
+          meta.accessGated = true
+          meta.warning = `The rendered capture shows an "ACCESS RESTRICTED" auth gate (this route requires staff/manager login), not the actual screen. This proof image does NOT show a real visual comparison against the reference — it only proves the route resolves and is access-controlled. Do not treat this as visual approval or visual failure of the actual screen.`
+          console.warn(`  WARNING: ${meta.warning}`)
+        }
+
+        if (referenceExists) {
+          await buildContactSheet({
+            chromiumPage: page,
+            referencePath,
+            renderedPath: screenshotPath,
+            outPath: path.join(OUT_DIR, `${screen.name}-proof.png`),
+            meta,
+          })
+        } else {
+          meta.note = screen.note || (screen.reference
+            ? `Reference image "${screen.reference}" not found in public/. Rendered screenshot saved alone.`
+            : 'No reference image registered for this screen — cannot generate a side-by-side proof. This is NOT visual approval.')
+          console.warn(`  NO PROOF POSSIBLE — ${meta.note}`)
+        }
+
+        writeFileSync(path.join(OUT_DIR, `${screen.name}-proof.json`), JSON.stringify(meta, null, 2))
+        results.push(meta)
+      })(), ROUTE_TIMEOUT_MS, `Route ${screen.route}`)
     } catch (err) {
       console.error(`  FAILED to capture ${screen.route}: ${err.message}`)
       results.push({ family: screen.family, screen: screen.name, route: screen.route, error: err.message })
     } finally {
+      try {
+        await page.close()
+      } catch {
+        // ignore — context.close() below covers it either way
+      }
       await context.close()
     }
   }
 
-  await browser.close()
-  if (devServerProcess) devServerProcess.kill()
+  clearTimeout(globalTimer)
+  await cleanup()
 
   console.log('\nVisual proof artifacts written to docs/visual-proof/')
   for (const r of results) {
-    const status = r.error ? `FAILED — ${r.error}` : (r.referenceFound ? 'proof generated' : 'NO PROOF — ' + (r.note || 'no reference image'))
+    const status = r.error
+      ? `FAILED — ${r.error}`
+      : r.accessGated
+        ? 'proof generated, but BEHIND AUTH GATE — not a real screen comparison'
+        : (r.referenceFound ? 'proof generated' : 'NO PROOF — ' + (r.note || 'no reference image'))
     console.log(`  - [${r.family}] ${r.screen}: ${status}`)
   }
+}
+
+function exitNow(code) {
+  // Forces a clean exit even if a lingering handle (browser pipe, leftover
+  // child process, open socket) would otherwise keep Node's event loop alive.
+  process.exitCode = code
+  setImmediate(() => process.exit(code))
 }
 
 async function buildContactSheet({ chromiumPage, referencePath, renderedPath, outPath, meta }) {
@@ -259,6 +438,7 @@ async function buildContactSheet({ chromiumPage, referencePath, renderedPath, ou
       .col img { width: 100%; display: block; border: 2px solid #444; }
       .label { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; color: #e9c176; }
       .meta { padding: 10px 12px; font-size: 12px; color: #aaa; border-top: 1px solid #333; }
+      .warning { padding: 10px 12px; font-size: 12px; color: #ff6b6b; border-top: 1px solid #333; font-weight: bold; }
     </style></head>
     <body>
       <div class="row">
@@ -275,6 +455,7 @@ async function buildContactSheet({ chromiumPage, referencePath, renderedPath, ou
         family: ${meta.family} | route: ${meta.route} | viewport: ${meta.viewport.width}x${meta.viewport.height} |
         timestamp: ${meta.timestamp} | commit: ${meta.commitHash}
       </div>
+      ${meta.warning ? `<div class="warning">WARNING: ${meta.warning}</div>` : ''}
     </body></html>
   `
   const sheetPage = await chromiumPage.context().newPage()
@@ -288,8 +469,11 @@ async function buildContactSheet({ chromiumPage, referencePath, renderedPath, ou
   await sheetPage.close()
 }
 
-main().catch(err => {
-  console.error('I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.')
-  console.error('Reason: unexpected error — ' + err.message)
-  process.exit(1)
-})
+main()
+  .then(() => exitNow(0))
+  .catch(async err => {
+    console.error('I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.')
+    console.error('Reason: unexpected error — ' + err.message)
+    await cleanup()
+    exitNow(1)
+  })
