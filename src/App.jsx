@@ -84,6 +84,14 @@ import Scorecard        from './pages/smokecraft/Scorecard.jsx'
 import EventChallenge   from './pages/smokecraft/EventChallenge.jsx'
 import Connections      from './pages/smokecraft/Connections.jsx'
 import ManagementSync   from './pages/smokecraft/ManagementSync.jsx'
+import WrapperStrength     from './pages/smokecraft/WrapperStrength.jsx'
+import PairingLab          from './pages/smokecraft/PairingLab.jsx'
+import FlavorMemory        from './pages/smokecraft/FlavorMemory.jsx'
+import SmokeCraftChallenge from './pages/smokecraft/SmokeCraftChallenge.jsx'
+import SecondHumidorMatch  from './pages/smokecraft/SecondHumidorMatch.jsx'
+import MiniTastingRound    from './pages/smokecraft/MiniTastingRound.jsx'
+import FinalReview         from './pages/smokecraft/FinalReview.jsx'
+import VisitLockGuard      from './components/smokecraft/VisitLockGuard.jsx'
 import HowItWorks       from './pages/smokecraft/HowItWorks.jsx'
 import GuestPass        from './pages/smokecraft/GuestPass.jsx'
 import Demo             from './pages/smokecraft/Demo.jsx'
@@ -248,7 +256,8 @@ export default function App() {
                 <Route path="art"            element={<Art />} />
                 <Route path="mentor-selection" element={<Mentor />} />
                 <Route path="mentor"         element={<Navigate to="/smokecraft/mentor-selection" replace />} />
-                <Route path="format"         element={<Format />} />
+                <Route path="format"         element={<VisitLockGuard stepId="format"><Format /></VisitLockGuard>} />
+                <Route path="wrapper-strength" element={<VisitLockGuard stepId="wrapper-strength"><WrapperStrength /></VisitLockGuard>} />
                 <Route path="shape-size-burn" element={<Navigate to="/smokecraft/format" replace />} />
                 <Route path="gold-box"       element={<Navigate to="/smokecraft/golden-box" replace />} />
                 <Route path="origins"        element={<Origins />} />
@@ -263,24 +272,30 @@ export default function App() {
                 <Route path="pairing"        element={<Pairing />} />
                 <Route path="available"      element={<Available />} />
                 <Route path="assistant"      element={<Assistant />} />
-                <Route path="session-complete" element={<SessionComplete />} />
+                <Route path="session-complete" element={<VisitLockGuard stepId="session-complete"><SessionComplete /></VisitLockGuard>} />
                 <Route path="terroir"        element={<Terroir />} />
                 <Route path="pairing-mastery" element={<PairingMastery />} />
                 <Route path="vitola"         element={<Vitola />} />
                 <Route path="identity"       element={<Identity />} />
                 <Route path="leaderboard"    element={<Leaderboard />} />
-                <Route path="passport-stamp"   element={<PassportStamp />} />
-                <Route path="seed-soil"        element={<SeedSoil />} />
-                <Route path="humidor-match"    element={<HumidorMatch />} />
-                <Route path="request-purchase" element={<RequestPurchase />} />
-                <Route path="cut-toast-light"  element={<CutToastLight />} />
-                <Route path="first-third"      element={<FirstThird />} />
-                <Route path="second-third"     element={<SecondThird />} />
-                <Route path="final-third"      element={<FinalThird />} />
-                <Route path="scorecard"        element={<Scorecard />} />
+                <Route path="passport-stamp"   element={<VisitLockGuard stepId="passport-stamp"><PassportStamp /></VisitLockGuard>} />
+                <Route path="seed-soil"        element={<VisitLockGuard stepId="seed-soil"><SeedSoil /></VisitLockGuard>} />
+                <Route path="pairing-lab"      element={<VisitLockGuard stepId="pairing-lab"><PairingLab /></VisitLockGuard>} />
+                <Route path="humidor-match"    element={<VisitLockGuard stepId="humidor-match"><HumidorMatch /></VisitLockGuard>} />
+                <Route path="request-purchase" element={<VisitLockGuard stepId="request-purchase"><RequestPurchase /></VisitLockGuard>} />
+                <Route path="cut-toast-light"  element={<VisitLockGuard stepId="cut-toast-light"><CutToastLight /></VisitLockGuard>} />
+                <Route path="first-third"      element={<VisitLockGuard stepId="first-third"><FirstThird /></VisitLockGuard>} />
+                <Route path="second-third"     element={<VisitLockGuard stepId="second-third"><SecondThird /></VisitLockGuard>} />
+                <Route path="flavor-memory"    element={<VisitLockGuard stepId="flavor-memory"><FlavorMemory /></VisitLockGuard>} />
+                <Route path="final-third"      element={<VisitLockGuard stepId="final-third"><FinalThird /></VisitLockGuard>} />
+                <Route path="scorecard"        element={<VisitLockGuard stepId="scorecard"><Scorecard /></VisitLockGuard>} />
+                <Route path="smokecraft-challenge"  element={<VisitLockGuard stepId="smokecraft-challenge"><SmokeCraftChallenge /></VisitLockGuard>} />
+                <Route path="second-humidor-match"  element={<VisitLockGuard stepId="second-humidor-match"><SecondHumidorMatch /></VisitLockGuard>} />
+                <Route path="mini-tasting"          element={<VisitLockGuard stepId="mini-tasting"><MiniTastingRound /></VisitLockGuard>} />
+                <Route path="final-review"          element={<VisitLockGuard stepId="final-review"><FinalReview /></VisitLockGuard>} />
                 <Route path="event-challenge"  element={<EventChallenge />} />
-                <Route path="connections"      element={<Connections />} />
-                <Route path="management-sync"  element={<ManagementSync />} />
+                <Route path="connections"      element={<VisitLockGuard stepId="connections"><Connections /></VisitLockGuard>} />
+                <Route path="management-sync"  element={<VisitLockGuard stepId="management-sync"><ManagementSync /></VisitLockGuard>} />
                 <Route path="how-it-works"     element={<HowItWorks />} />
                 <Route path="challenge"        element={<Navigate to="/smokecraft/leaf-challenge" replace />} />
                 <Route path="session/start"    element={<Navigate to="/smokecraft/enroll" replace />} />

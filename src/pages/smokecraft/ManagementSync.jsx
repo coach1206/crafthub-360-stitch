@@ -44,8 +44,8 @@ export default function ManagementSync() {
           <span>Management Sync</span>
         </div>
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
-        <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Venue &amp; Management Sync</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth:560 }}>Optionally share your session data with venue staff before closing out.</p>
+        <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Your Visit Has Been Logged</h2>
+        <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth:560 }}>Your visit has been logged for the venue team. You can optionally share extra details with staff below before closing out.</p>
         <div className="flex flex-col gap-3 mb-12">
           {ITEMS.map(item => {
             const on = checked.has(item.id)
