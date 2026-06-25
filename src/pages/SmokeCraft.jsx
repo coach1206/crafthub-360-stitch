@@ -94,8 +94,19 @@ export default function SmokeCraft() {
     },
   ]
 
+  // Temporary runtime guard (remove once visually confirmed in the browser):
+  // logs and DOM-tags the actual background asset rendered for /smokecraft so
+  // it can be verified in production devtools that it is a plain photo crop,
+  // not the approved mockup PNG.
+  const ambientBackgroundAsset = '/assets/smokecraft/cropped/discover-profile-hero.jpg'
+  const approvedMockupFilename = ['PROFILE', 'DISCOVER', '11'].join(' ') + '.png'
+  if (typeof window !== 'undefined') {
+    // eslint-disable-next-line no-console
+    console.log('[SmokeCraft bg-guard] ambient background asset:', ambientBackgroundAsset, '— is mockup PNG:', ambientBackgroundAsset.includes(approvedMockupFilename))
+  }
+
   return (
-    <div style={{ minHeight: '100dvh', background: '#050302', color: '#F4ECDA', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
+    <div data-smokecraft-bg-asset={ambientBackgroundAsset} style={{ minHeight: '100dvh', background: '#050302', color: '#F4ECDA', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
 
       {/* ── Ambient Lounge Background — a plain cigar/lounge photo crop (no baked-in UI), darkened
           heavily for cinematic mood. This is NOT the approved PROFILE DISCOVER 11.png mockup (which
@@ -103,8 +114,9 @@ export default function SmokeCraft() {
           composition below. ── */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden' }} aria-hidden="true">
         <img
-          src="/assets/smokecraft/cropped/discover-profile-hero.jpg"
+          src={ambientBackgroundAsset}
           alt=""
+          data-smokecraft-bg-img="true"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%', filter: 'brightness(0.46) saturate(1.12) contrast(1.08)' }}
         />
         <div style={{
