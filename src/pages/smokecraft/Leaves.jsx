@@ -749,16 +749,6 @@ export default function Leaves() {
           <span className="leaf-brand">CraftHub 360</span>
         </div>
 
-        <div className="leaf-progress">
-          <div className="leaf-progress__labels">
-            <span>Step 7 of 20</span>
-            <span className="leaf-progress__label">Leaf Education</span>
-          </div>
-          <div className="leaf-progress__bar" aria-hidden="true">
-            {Array.from({ length: 20 }, (_, i) => <span key={i} className={i < 7 ? 'is-filled' : ''} />)}
-          </div>
-        </div>
-
         <div className="leaf-header__actions">
           <button className="leaf-lounge" onClick={() => navigate('/grand-lounge-ranking')}>Grand Lounge</button>
           <button className="leaf-avatar" onClick={() => navigate('/passport')} aria-label="Open passport">

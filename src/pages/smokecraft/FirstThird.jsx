@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import { getMentorGuidance } from '../../utils/smokecraftMentorTips.js'
+import { getVisitProgress } from '../../constants/session.js'
 
 const NOTES = ['Cedar','Cream','Pepper','Grass','Earth','Floral','Leather','Nuts']
 
@@ -70,6 +71,7 @@ export default function FirstThird() {
   }
 
   const notesCountLive = selected.size
+  const stepProgress = getVisitProgress(session.completedSteps)
 
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
@@ -83,8 +85,12 @@ export default function FirstThird() {
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[1100px] mx-auto">
         <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
-          <span>Step 9 of 17</span>
-          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'52.9%' }} /></div>
+          <div className="smokecraft-progress-label flex items-center gap-3">
+            <span>Round {stepProgress.round} of 3</span>
+            <span>Visit {stepProgress.visit} of {stepProgress.totalVisits}</span>
+            <span>Session {stepProgress.session} of {stepProgress.totalSessions}</span>
+          </div>
+          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:`${(stepProgress.session/24)*100}%` }} /></div>
           <span>First Third</span>
         </div>
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>

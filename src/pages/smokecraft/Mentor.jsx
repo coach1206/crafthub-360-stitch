@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate }         from 'react-router-dom'
 import { useGuestSession }     from '../../context/GuestSessionContext.jsx'
-import { XP_AWARDS }           from '../../constants/session.js'
+import { XP_AWARDS, getVisitProgress } from '../../constants/session.js'
 import { triggerHaptic }       from '../../utils/haptics.js'
 import { useMentorVoice }      from '../../hooks/useMentorVoice.js'
 import VoiceButton             from '../../components/voice/VoiceButton.jsx'
@@ -106,6 +106,8 @@ export default function Mentor() {
     navigate('/smokecraft/seed-soil')
   }
 
+  const stepProgress = getVisitProgress(session.completedSteps)
+
   return (
     <div className="smokecraft-premium-page smokecraft-mentor-page">
       <SmokeCraftAtmosphericBackground variant="lounge" />
@@ -123,7 +125,7 @@ export default function Mentor() {
         </div>
 
         <div className="smokecraft-mentor-header__actions">
-          <span className="smokecraft-mentor-step">Step 4 of 20</span>
+          <span className="smokecraft-mentor-step">Round {stepProgress.round} of 3 &middot; Visit {stepProgress.visit} of {stepProgress.totalVisits} &middot; Session {stepProgress.session} of {stepProgress.totalSessions}</span>
           <VoiceButton
             isMuted={voice.isMuted}
             isSpeaking={voice.isSpeaking}

@@ -189,16 +189,6 @@ export default function FlavorDNA() {
       {/* ── Main ──────────────────────────────────────────────── */}
       <main style={S.main}>
 
-        {/* Progress */}
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: '#D4AF37', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700 }}>Step 10 of 20</span>
-            <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 14, color: '#6A5A40', fontStyle: 'italic' }}>Sensory Mapping</span>
-          </div>
-          <div style={{ height: 3, background: 'rgba(212,175,55,0.15)', borderRadius: 4, overflow: 'hidden' }}>
-            <div style={{ width: '50%', height: '100%', background: GOLD, borderRadius: 4, transition: 'width 0.8s ease' }} />
-          </div>
-        </div>
 
         {/* Title */}
         <div style={{ textAlign: 'center', marginBottom: 36 }}>

@@ -199,8 +199,32 @@ export function getVisitProgress(completedSteps) {
   for (const v of VISIT_STRUCTURE) {
     const nextSession = v.sessions.find(s => !isSessionComplete(completedSteps, s.id))
     if (nextSession) {
-      return { visit: v.visit, session: nextSession.session, totalVisits: TOTAL_VISITS, totalSessions: TOTAL_SESSIONS, journeyComplete: false }
+      return { visit: v.visit, session: nextSession.session, totalVisits: TOTAL_VISITS, totalSessions: TOTAL_SESSIONS, journeyComplete: false, round: getRoundForVisit(v.visit) }
     }
   }
-  return { visit: TOTAL_VISITS, session: TOTAL_SESSIONS, totalVisits: TOTAL_VISITS, totalSessions: TOTAL_SESSIONS, journeyComplete: true }
+  return { visit: TOTAL_VISITS, session: TOTAL_SESSIONS, totalVisits: TOTAL_VISITS, totalSessions: TOTAL_SESSIONS, journeyComplete: true, round: getRoundForVisit(TOTAL_VISITS) }
+}
+
+// ── Macro "Round" grouping ───────────────────────────────────────────────
+// 3 macro-phases covering the 8 visits:
+// Round 1 = "Education & Setup"        = Visits 1-3
+// Round 2 = "Tasting Experience"       = Visits 4-6
+// Round 3 = "Challenge & Completion"   = Visits 7-8
+export const TOTAL_ROUNDS = 3
+
+export const ROUNDS = [
+  { round: 1, title: 'Education & Setup',        visits: [1, 2, 3] },
+  { round: 2, title: 'Tasting Experience',        visits: [4, 5, 6] },
+  { round: 3, title: 'Challenge & Completion',    visits: [7, 8] },
+]
+
+export function getRoundForVisit(visitNumber) {
+  if (visitNumber <= 3) return 1
+  if (visitNumber <= 6) return 2
+  return 3
+}
+
+/** Like getVisitProgress, but resolves visit/session/round from a specific stepId rather than the "next incomplete" pointer. */
+export function getFullProgress(completedSteps) {
+  return getVisitProgress(completedSteps)
 }
