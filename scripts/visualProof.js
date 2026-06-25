@@ -71,19 +71,21 @@ const SCREENS = [
   { family: 'crafthub', name: 'crafthub-landing', route: '/crafthub', reference: null, note: 'Reference "CRAFT HUB EXPLAIND.png" exists in public/ but is not yet confirmed against this route.' },
 
   // --- POS3 (handheld) ---
-  // No binary reference images exist in the repo for POS3 — only a text
-  // description in public/design-references/phase-7/pos-eat/README.md
-  // ("eat-system-mobile-update"). Cannot generate a real proof without the
-  // actual uploaded file.
-  { family: 'pos3', name: 'pos3-handheld', route: '/pos3/handheld', reference: null, viewport: HANDHELD_VIEWPORT, note: 'No binary reference image in repo — only a text description exists. Upload the real mockup file to enable visual proof.' },
+  // Reference image uploaded 2026-06-25 ("POS 3.11.png"). Route mapping
+  // confirmed via src/App.jsx: /pos3/handheld -> POS3Handheld.jsx. Mapping
+  // only — no UI fix has been made against this reference yet, so this is
+  // NOT visually approved until a proof image is generated and inspected.
+  { family: 'pos3', name: 'pos3-handheld', route: '/pos3/handheld', reference: 'POS 3.11.png', referenceDir: 'design-references/mvp2/pos3', viewport: HANDHELD_VIEWPORT },
   { family: 'pos3', name: 'pos3-tables', route: '/pos3/tables', reference: null, note: 'No binary reference image in repo.' },
   { family: 'pos3', name: 'pos3-orders', route: '/pos3/orders', reference: null, note: 'No binary reference image in repo.' },
   { family: 'pos3', name: 'pos3-checkout', route: '/pos3/checkout', reference: null, note: 'No binary reference image in repo.' },
 
   // --- E.A.T. System ---
-  // Same situation as POS3 — only a text description exists
-  // ("eat-system-command-center-update").
-  { family: 'eat', name: 'eat-command-hub', route: '/eat/command-hub', reference: null, note: 'No binary reference image in repo — only a text description exists. Upload the real mockup file to enable visual proof.' },
+  // Reference image uploaded 2026-06-25 ("EAT SYSTEM UPDATE 11.png"), the
+  // desktop management command center. Route mapping confirmed via
+  // src/App.jsx: /eat/command-hub -> EATCommandHub.jsx. Mapping only — no
+  // UI fix has been made against this reference yet.
+  { family: 'eat', name: 'eat-command-center', route: '/eat/command-hub', reference: 'EAT SYSTEM UPDATE 11.png', referenceDir: 'design-references/mvp2/eat-system' },
   { family: 'eat', name: 'eat-sections', route: '/eat/sections', reference: null, note: 'No binary reference image in repo.' },
   { family: 'eat', name: 'eat-operations', route: '/eat/operations', reference: null, note: 'No binary reference image in repo.' },
 ]
@@ -203,7 +205,10 @@ async function main() {
       const screenshotPath = path.join(OUT_DIR, `${screen.name}-rendered.png`)
       await page.screenshot({ path: screenshotPath, fullPage: false })
 
-      const referencePath = screen.reference ? path.join(ROOT, 'public', screen.reference) : null
+      const bodyText = await page.evaluate(() => document.body.innerText)
+      const accessGated = /ACCESS RESTRICTED/i.test(bodyText)
+
+      const referencePath = screen.reference ? path.join(ROOT, 'public', screen.referenceDir || '', screen.reference) : null
       const referenceExists = Boolean(referencePath && existsSync(referencePath))
 
       const meta = {
@@ -215,6 +220,12 @@ async function main() {
         viewport,
         timestamp: new Date().toISOString(),
         commitHash,
+      }
+
+      if (accessGated) {
+        meta.accessGated = true
+        meta.warning = `The rendered capture shows an "ACCESS RESTRICTED" auth gate (this route requires staff/manager login), not the actual screen. This proof image does NOT show a real visual comparison against the reference — it only proves the route resolves and is access-controlled. Do not treat this as visual approval or visual failure of the actual screen.`
+        console.warn(`  WARNING: ${meta.warning}`)
       }
 
       if (referenceExists) {
@@ -247,7 +258,11 @@ async function main() {
 
   console.log('\nVisual proof artifacts written to docs/visual-proof/')
   for (const r of results) {
-    const status = r.error ? `FAILED — ${r.error}` : (r.referenceFound ? 'proof generated' : 'NO PROOF — ' + (r.note || 'no reference image'))
+    const status = r.error
+      ? `FAILED — ${r.error}`
+      : r.accessGated
+        ? 'proof generated, but BEHIND AUTH GATE — not a real screen comparison'
+        : (r.referenceFound ? 'proof generated' : 'NO PROOF — ' + (r.note || 'no reference image'))
     console.log(`  - [${r.family}] ${r.screen}: ${status}`)
   }
 }
@@ -267,6 +282,7 @@ async function buildContactSheet({ chromiumPage, referencePath, renderedPath, ou
       .col img { width: 100%; display: block; border: 2px solid #444; }
       .label { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; color: #e9c176; }
       .meta { padding: 10px 12px; font-size: 12px; color: #aaa; border-top: 1px solid #333; }
+      .warning { padding: 10px 12px; font-size: 12px; color: #ff6b6b; border-top: 1px solid #333; font-weight: bold; }
     </style></head>
     <body>
       <div class="row">
@@ -283,6 +299,7 @@ async function buildContactSheet({ chromiumPage, referencePath, renderedPath, ou
         family: ${meta.family} | route: ${meta.route} | viewport: ${meta.viewport.width}x${meta.viewport.height} |
         timestamp: ${meta.timestamp} | commit: ${meta.commitHash}
       </div>
+      ${meta.warning ? `<div class="warning">WARNING: ${meta.warning}</div>` : ''}
     </body></html>
   `
   const sheetPage = await chromiumPage.context().newPage()
