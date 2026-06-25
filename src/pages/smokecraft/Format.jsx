@@ -1037,12 +1037,15 @@ export default function Format() {
             linear-gradient(135deg, rgba(233,193,118,0.06), rgba(0,0,0,0.18));
           box-shadow: inset 0 0 0 1.5px rgba(233,193,118,0.32);
         }
-        .format-insight__cigar img {
-          width: 78%;
-          height: 92%;
-          object-fit: contain;
-          object-position: center;
-          filter: drop-shadow(0 18px 30px rgba(0,0,0,0.6));
+        .format-insight__cigar .cigar-visual {
+          border-radius: 10px;
+        }
+        .format-insight__cigar .cigar-visual__photo {
+          filter: saturate(1.1) brightness(0.96) contrast(1.08) drop-shadow(0 18px 30px rgba(0,0,0,0.55));
+        }
+        .format-insight__cigar .cigar-visual--missing {
+          width: 100%;
+          height: 100%;
         }
         .format-insight h2 {
           margin: 0 0 16px;
@@ -1419,7 +1422,7 @@ export default function Format() {
                 <div className="format-panel__label">Format Insight</div>
                 <div className="format-insight">
                   <div className="format-insight__cigar" aria-hidden="true">
-                    <img src="/cigar-anatomy.png" alt="" />
+                    <CigarVisual format={insightFormat} />
                   </div>
                   <div>
                     <h2>{insightFormat.name}</h2>
@@ -1540,6 +1543,7 @@ export default function Format() {
             </button>
           </div>
         </section>
+        <div data-marker="SHAPE BURN CLEAN BG V1" style={{ display: 'none' }} aria-hidden="true" />
       </main>
 
       <SmokeCraftBottomNav active="smokecraft" />
