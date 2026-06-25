@@ -107,9 +107,14 @@ const requirements = [
   {
     name: 'PROFILE DISCOVER 11.png',
     sourceCandidates: ['public/PROFILE DISCOVER 11.png'],
-    cropAsset: 'public/PROFILE DISCOVER 11.png',
+    cropAsset: 'public/assets/smokecraft/cropped/discover-profile-hero.jpg',
     component: 'src/pages/SmokeCraft.jsx',
-    oldGeneric: '/assets/smokecraft/cropped/discover-profile-hero.jpg',
+    // PROFILE DISCOVER 11.png is a full UI mockup (baked-in headline/cards/buttons) — it must
+    // never be re-introduced as a literal background layer behind the live rebuilt UI, since that
+    // duplicates every headline/card/button on the page. passport-cover.jpg was also removed from
+    // this page because it contains baked-in embossed text ("SMOKECRAFT 360" / "PASSPORT" / "360"),
+    // which is disallowed for any runtime image on /smokecraft — replaced with CSS-only monograms.
+    oldGeneric: '/PROFILE DISCOVER 11.png',
   },
   {
     name: 'SEED & PAIRING.11.png',
