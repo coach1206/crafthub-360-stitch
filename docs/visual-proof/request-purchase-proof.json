@@ -1,0 +1,13 @@
+{
+  "family": "smokecraft",
+  "screen": "request-purchase",
+  "route": "/smokecraft/request-purchase",
+  "referenceImage": "request-purchase.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T21:36:56.079Z",
+  "commitHash": "196ecb92"
+}

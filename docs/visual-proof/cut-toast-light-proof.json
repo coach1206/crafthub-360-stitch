@@ -1,0 +1,13 @@
+{
+  "family": "smokecraft",
+  "screen": "cut-toast-light",
+  "route": "/smokecraft/cut-toast-light",
+  "referenceImage": "CUT TOAST, & LIGHT.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T21:36:44.430Z",
+  "commitHash": "196ecb92"
+}

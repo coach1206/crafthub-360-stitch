@@ -50,6 +50,16 @@ const SCREENS = [
   { family: 'smokecraft', name: 'golden-box', route: '/smokecraft/golden-box/status', reference: 'GOLDEN BOX JOURNEY11.png' },
   { family: 'smokecraft', name: 'leaderboard', route: '/smokecraft/leaderboard', reference: 'lounge demo ranking.11png.png' },
 
+  // Uploaded batch confirmed 2026-06-25 via grep against src/App.jsx (see
+  // docs/mvp2-visual-image-registry.md for the exact commands run). Mapping
+  // only — no UI fix has been made against these references yet.
+  { family: 'smokecraft', name: 'cut-toast-light', route: '/smokecraft/cut-toast-light', reference: 'CUT TOAST, & LIGHT.png', referenceDir: 'design-references/mvp2/smokecraft' },
+  { family: 'smokecraft', name: 'management-sync', route: '/smokecraft/management-sync', reference: 'venue-management-sync.png', referenceDir: 'design-references/mvp2/smokecraft' },
+  { family: 'smokecraft', name: 'final-third', route: '/smokecraft/final-third', reference: 'final-third-tasting.png', referenceDir: 'design-references/mvp2/smokecraft', note: '"findal third tasting.png" is a typo-named duplicate of the same mockup (same dimensions, different compression/md5) — not used as the canonical reference.' },
+  { family: 'smokecraft', name: 'flavor-dna', route: '/smokecraft/flavor-dna', reference: 'flavodr dna.png', referenceDir: 'design-references/mvp2/smokecraft', note: 'Filename preserved exactly as uploaded ("flavodr dna.png", typo for "flavor dna"). A cleaned name of "flavor-dna.png" is a recommendation only, not yet approved as canonical.' },
+  { family: 'smokecraft', name: 'connections', route: '/smokecraft/connections', reference: 'passport-connection-1.png', referenceDir: 'design-references/mvp2/smokecraft', note: 'Filename suggests "Passport Connection" but the reference image content ("360 Passport Connections", SmokeCraft step flow) matches src/pages/smokecraft/Connections.jsx, not src/pages/PassportConnection.jsx or src/pages/passport/PassportConnections.jsx.' },
+  { family: 'smokecraft', name: 'request-purchase', route: '/smokecraft/request-purchase', reference: 'request-purchase.png', referenceDir: 'design-references/mvp2/smokecraft' },
+
   // --- Passport ---
   // Reference images exist in public/ but route mapping is NOT confirmed —
   // multiple similarly-named passport mockups exist (360 Passport 1.png,
@@ -69,6 +79,15 @@ const SCREENS = [
 
   // --- CraftHub ---
   { family: 'crafthub', name: 'crafthub-landing', route: '/crafthub', reference: null, note: 'Reference "CRAFT HUB EXPLAIND.png" exists in public/ but is not yet confirmed against this route.' },
+  // "crafthub-landing.png" (uploaded 2026-06-25) does NOT match either
+  // /crafthub (CraftHub.jsx) or /system-explained (PublicCraftHubLanding.jsx).
+  // It matches the BootConsole.jsx "crafthub" boot stage exactly: logo,
+  // title "CRAFTHUB", connectionItems list (SmokeCraft/PourCraft/BeerCraft/
+  // WineCraft 360, "Connected"). That stage's backgroundImage is an
+  // explicitly-flagged pending asset slot at public/boot/crafthub-360.png
+  // (see src/pages/BootConsole.jsx comment above the 'crafthub' stage) —
+  // it is not a routed page component, so no proof-harness route capture
+  // applies. No SCREENS entry added; left here as a documented finding.
 
   // --- POS3 (handheld) ---
   // Reference image uploaded 2026-06-25 ("POS 3.11.png"). Route mapping
