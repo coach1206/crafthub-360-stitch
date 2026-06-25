@@ -182,65 +182,64 @@ export default function SeedSoil() {
 
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
-      {/* SEED PAIRING CLEAN BG V2 — no "SEED PARING 2" asset exists in the repo's GitHub/public
-          assets (searched lancero/belicoso/panetela-style filenames, seed pairing, seed-paring,
-          smoke pairing, seed and soil); the closest existing design reference is the
-          stitch_export "smokecraft_seed_soil" mockup, which uses this same dark lounge +
-          gold-card direction. seed-soil-bg.jpg (whiskey glass + cigar smoke, verified clean of any
-          baked UI) is anchored left at a stronger opacity/brightness than the V1 pass to give the
-          page real left-side lounge energy instead of a flat near-black wash. */}
+      {/* SEED PAIRING CLEAN BG V3 — V2's left-anchored seed-soil-bg.jpg still read flatter and
+          less dense than the approved reference at the documented proof viewport (1440x900).
+          This pass raises background presence further and compresses vertical rhythm (padding,
+          row heights, section margins) across the whole page so the Seed, Soil, Pairing Score,
+          and Unique Blend Signature panels are far closer to the reference's first-viewport
+          density instead of only showing the Seed region list above the fold. */}
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover" style={{ backgroundImage: "url('/assets/smokecraft/cropped/seed-soil-bg.jpg')", backgroundPosition: 'left center', opacity: 0.62, filter: 'brightness(0.95) saturate(1.3) contrast(1.08)' }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(90deg,rgba(8,5,3,0.32) 0%,rgba(8,5,3,0.74) 42%,rgba(8,5,3,0.88) 100%)' }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(8,5,3,0.95) 0%,rgba(8,5,3,0.32) 20%,rgba(8,5,3,0.32) 80%,rgba(8,5,3,0.95) 100%)' }} />
+        <div className="absolute inset-0 bg-cover" style={{ backgroundImage: "url('/assets/smokecraft/cropped/seed-soil-bg.jpg')", backgroundPosition: 'left center', opacity: 0.8, filter: 'brightness(1.02) saturate(1.35) contrast(1.1)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(90deg,rgba(8,5,3,0.22) 0%,rgba(8,5,3,0.64) 42%,rgba(8,5,3,0.82) 100%)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(8,5,3,0.92) 0%,rgba(8,5,3,0.24) 18%,rgba(8,5,3,0.24) 82%,rgba(8,5,3,0.92) 100%)' }} />
       </div>
-      <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
-        <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/format')} aria-label="Back"><ArrowBackIcon size={24} /></button>
-        <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
+      <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-16 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
+        <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:40,minHeight:40 }} onClick={() => navigate('/smokecraft/format')} aria-label="Back"><ArrowBackIcon size={20} /></button>
+        <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight" style={{ fontSize: 18 }}>CraftHub 360</h1>
       </header>
-      <main className="relative pt-28 pb-36 px-6 max-w-[1280px] mx-auto">
-        <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
+      <main className="relative pt-20 pb-16 px-6 max-w-[1280px] mx-auto">
+        <div className="mb-3 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
           <span>Step 5 of 17</span>
           <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'29.4%' }} /></div>
           <span>Seed &amp; Soil</span>
         </div>
-        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
-        <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(34px,5.2vw,58px)', fontFamily: '"Playfair Display", Georgia, serif' }}>Seed &amp; Soil Pairing</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-8" style={{ maxWidth:680 }}>Select the tobacco growing region that defines the character of tonight's cigar (the Seed), then tell us about tonight's setting (the Soil) so we can explain why the pairing works.</p>
+        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-1">SmokeCraft 360</p>
+        <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(28px,4vw,44px)', fontFamily: '"Playfair Display", Georgia, serif' }}>Seed &amp; Soil Pairing</h2>
+        <p className="font-body-lg text-body-lg text-on-surface-variant mb-4" style={{ maxWidth:680 }}>Select the tobacco growing region that defines the character of tonight's cigar (the Seed), then tell us about tonight's setting (the Soil) so we can explain why the pairing works.</p>
 
-        <div className="grid gap-6 mb-8" style={{ gridTemplateColumns: 'minmax(0,1.05fr) minmax(320px,0.95fr)', alignItems: 'start' }}>
+        <div className="grid gap-4 mb-5" style={{ gridTemplateColumns: 'minmax(0,1.05fr) minmax(320px,0.95fr)', alignItems: 'start' }}>
         <div
           className="rounded-3xl border border-primary/15 backdrop-blur-xl"
           style={{
-            padding: 28,
+            padding: 18,
             background: 'linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 60%, rgba(0,0,0,0.12) 100%)',
             boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
           }}
         >
-        <h3 className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-3">Seed: Growing Region</h3>
-        <div className="flex flex-col gap-3">
+        <h3 className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-2">Seed: Growing Region</h3>
+        <div className="flex flex-col gap-2">
           {REGIONS.map(r => {
             const on = selected === r.id
             return (
               <button key={r.id} type="button" onClick={() => { triggerHaptic('light'); setSelected(r.id) }}
                 aria-pressed={on} aria-label={`${r.name}, ${r.country}`}
-                className="sc-tactile flex items-center gap-5 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
+                className="sc-tactile flex items-center gap-4 w-full text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
                 style={{
-                  padding:'20px 24px', minHeight: 44,
+                  padding:'12px 16px', minHeight: 44,
                   borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.15)',
                   background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
                   boxShadow: on ? '0 0 0 1px rgba(233,193,118,0.25), 0 8px 28px rgba(233,193,118,0.18)' : 'none',
                 }}>
-                <span className="flex items-center justify-center rounded-full shrink-0" style={{ width:48, height:48, background: `${r.accent}26`, border: `1.5px solid ${r.accent}66`, color: r.accent }}>
-                  <LeafIcon size={24} />
+                <span className="flex items-center justify-center rounded-full shrink-0" style={{ width:38, height:38, background: `${r.accent}26`, border: `1.5px solid ${r.accent}66`, color: r.accent }}>
+                  <LeafIcon size={19} />
                 </span>
                 <div className="flex-1">
-                  <p className="font-label-lg text-label-lg text-on-surface font-semibold">{r.name} <span className="text-primary/60 font-normal">— {r.country}</span></p>
-                  <p className="font-body-md text-body-md text-on-surface-variant mt-1">{r.note}</p>
+                  <p className="font-label-md text-label-md text-on-surface font-semibold">{r.name} <span className="text-primary/60 font-normal">— {r.country}</span></p>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant" style={{ marginTop: 2 }}>{r.note}</p>
                 </div>
                 {on && (
-                  <span className="flex items-center justify-center rounded-full shrink-0" style={{ width:20, height:20, background:'#e9c176', color:'#131314' }}>
-                    <CheckIcon size={13} />
+                  <span className="flex items-center justify-center rounded-full shrink-0" style={{ width:18, height:18, background:'#e9c176', color:'#131314' }}>
+                    <CheckIcon size={12} />
                   </span>
                 )}
               </button>
@@ -249,19 +248,19 @@ export default function SeedSoil() {
         </div>
         </div>
 
-        <div className="rounded-3xl border border-primary/15 backdrop-blur-xl" style={{ padding: '24px 26px', background: 'linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 60%, rgba(0,0,0,0.14) 100%)', boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)', position: 'sticky', top: 96 }}>
-          <p className="font-label-md text-label-md text-primary uppercase tracking-[0.15em] mb-3">Seed Profile</p>
+        <div className="rounded-3xl border border-primary/15 backdrop-blur-xl" style={{ padding: '16px 18px', background: 'linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 60%, rgba(0,0,0,0.14) 100%)', boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)', position: 'sticky', top: 84 }}>
+          <p className="font-label-md text-label-md text-primary uppercase tracking-[0.15em] mb-2">Seed Profile</p>
           {region ? (
             <>
-              <dl className="grid grid-cols-2 gap-3 font-body-sm text-body-sm text-on-surface-variant">
-                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 11 }}>Wrapper</dt><dd>{region.wrapper}</dd></div>
-                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 11 }}>Binder</dt><dd>{region.binder}</dd></div>
-                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 11 }}>Filler</dt><dd>{region.filler}</dd></div>
-                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 11 }}>Aging</dt><dd>{region.aging}</dd></div>
-                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 11 }}>Strength</dt><dd>{region.strength}</dd></div>
-                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 11 }}>Craft Profile</dt><dd>{region.craftProfile}</dd></div>
+              <dl className="grid grid-cols-2 gap-2 font-body-sm text-body-sm text-on-surface-variant">
+                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 10 }}>Wrapper</dt><dd>{region.wrapper}</dd></div>
+                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 10 }}>Binder</dt><dd>{region.binder}</dd></div>
+                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 10 }}>Filler</dt><dd>{region.filler}</dd></div>
+                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 10 }}>Aging</dt><dd>{region.aging}</dd></div>
+                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 10 }}>Strength</dt><dd>{region.strength}</dd></div>
+                <div><dt className="text-primary/70 uppercase tracking-wide" style={{ fontSize: 10 }}>Craft Profile</dt><dd>{region.craftProfile}</dd></div>
               </dl>
-              <p className="font-body-sm text-body-sm text-on-surface-variant mt-3" style={{ fontStyle: 'italic' }}>{region.brandStory}</p>
+              <p className="font-body-sm text-body-sm text-on-surface-variant mt-2" style={{ fontStyle: 'italic' }}>{region.brandStory}</p>
             </>
           ) : (
             <p className="font-body-sm text-body-sm text-on-surface-variant">Select a growing region to see its seed profile here.</p>
@@ -269,16 +268,16 @@ export default function SeedSoil() {
         </div>
         </div>
 
-        <h3 className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-3">Soil: Tonight's Setting</h3>
-        <div className="rounded-3xl border border-primary/15 backdrop-blur-xl mb-8" style={{ padding: 28, background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
-        <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
+        <h3 className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-2">Soil: Tonight's Setting</h3>
+        <div className="rounded-3xl border border-primary/15 backdrop-blur-xl mb-5" style={{ padding: 18, background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
+        <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
           {SOIL_GROUPS.map(group => (
             <div key={group.key}>
-              <p className="font-label-md text-label-md text-on-surface-variant flex items-center gap-2 mb-2">
-                <span className="text-primary"><group.Icon size={18} /></span>
+              <p className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-2 mb-1">
+                <span className="text-primary"><group.Icon size={15} /></span>
                 {group.label}
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {group.options.map(opt => {
                   const on = soil[group.key] === opt
                   return (
@@ -286,7 +285,7 @@ export default function SeedSoil() {
                       aria-pressed={on} aria-label={`${group.label}: ${opt}`}
                       className="sc-tactile rounded-full border font-label-sm text-label-sm transition-all duration-300 active:scale-95"
                       style={{
-                        padding: '8px 16px', minHeight: 40,
+                        padding: '5px 12px', minHeight: 32,
                         borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.15)',
                         background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
                         color: on ? '#e9c176' : 'rgba(255,255,255,0.6)',
@@ -302,9 +301,9 @@ export default function SeedSoil() {
         </div>
         </div>
 
-        <div className="mb-10 rounded-2xl border border-primary/30 backdrop-blur-xl" style={{ padding: '20px 24px', background: 'linear-gradient(135deg, rgba(233,193,118,0.1), rgba(233,193,118,0.03))', boxShadow: '0 8px 28px rgba(233,193,118,0.12)' }}>
-          <p className="font-label-md text-label-md text-primary uppercase tracking-[0.15em] mb-2">Why This Pairing Works</p>
-          <p className="font-body-md text-body-md text-on-surface-variant">
+        <div className="mb-5 rounded-2xl border border-primary/30 backdrop-blur-xl" style={{ padding: '14px 18px', background: 'linear-gradient(135deg, rgba(233,193,118,0.1), rgba(233,193,118,0.03))', boxShadow: '0 8px 28px rgba(233,193,118,0.12)' }}>
+          <p className="font-label-md text-label-md text-primary uppercase tracking-[0.15em] mb-1">Why This Pairing Works</p>
+          <p className="font-body-sm text-body-sm text-on-surface-variant">
             {region && soilComplete
               ? buildPairingExplanation(region, soil)
               : 'Choose a growing region and finish setting tonight’s soil to see why this pairing works.'}
@@ -320,8 +319,8 @@ export default function SeedSoil() {
             onAskMentor={handleAskMentor}
           />
         ) : (
-          <section className="rounded-2xl border mb-8" style={{ padding: '20px 24px', background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)', borderColor: 'rgba(255,255,255,0.12)' }} aria-label="Pairing Score">
-            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-1">Pairing Score</p>
+          <section className="rounded-2xl border mb-3" style={{ padding: '12px 16px', background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)', borderColor: 'rgba(255,255,255,0.12)' }} aria-label="Pairing Score">
+            <p className="font-label-md text-label-md text-primary uppercase tracking-[0.2em] mb-1">Pairing Score</p>
             <p className="font-body-sm text-body-sm text-on-surface-variant">Complete your seed and soil selections to calculate tonight's pairing score.</p>
           </section>
         )}
@@ -329,25 +328,25 @@ export default function SeedSoil() {
         {blendSignature && soilComplete ? (
           <UniqueBlendPanel signature={blendSignature} uniqueness={uniqueness} />
         ) : (
-          <section className="rounded-2xl border mb-8" style={{ padding: '20px 24px', background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)', borderColor: 'rgba(255,255,255,0.12)' }} aria-label="Unique Blend Signature">
-            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-1">Unique Blend Signature</p>
+          <section className="rounded-2xl border mb-4" style={{ padding: '12px 16px', background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)', borderColor: 'rgba(255,255,255,0.12)' }} aria-label="Unique Blend Signature">
+            <p className="font-label-md text-label-md text-primary uppercase tracking-[0.2em] mb-1">Unique Blend Signature</p>
             <p className="font-body-sm text-body-sm text-on-surface-variant">Your one-of-a-kind blend signature appears here once your seed and soil pairing is complete.</p>
           </section>
         )}
 
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-3">
           <button onClick={handleContinue} disabled={!canContinue || blockedByWarning}
             className="flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 disabled:opacity-40 w-full sm:w-auto"
-            style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
-            Continue <ArrowForwardIcon size={20} />
+            style={{ height:48,paddingInline:32,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
+            Continue <ArrowForwardIcon size={18} />
           </button>
           <button onClick={() => navigate('/smokecraft/format')}
             className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300 w-full sm:w-auto"
-            style={{ height:64,paddingInline:32 }}>
-            <ArrowBackIcon size={20} /> Back
+            style={{ height:48,paddingInline:24 }}>
+            <ArrowBackIcon size={18} /> Back
           </button>
         </div>
-        <div data-marker="SEED PAIRING CLEAN BG V2" style={{ display: 'none' }} aria-hidden="true" />
+        <div data-marker="SEED PAIRING CLEAN BG V3" style={{ display: 'none' }} aria-hidden="true" />
       </main>
     </div>
   )
