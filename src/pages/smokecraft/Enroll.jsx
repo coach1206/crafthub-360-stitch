@@ -98,7 +98,7 @@ export default function Enroll() {
         minHeight: 'max(884px, 100dvh)',
         position: 'relative',
         backgroundColor: '#050302',
-        backgroundImage: 'linear-gradient(90deg, rgba(2,1,1,0.7), rgba(2,1,1,0.1) 30%, rgba(2,1,1,0.1) 70%, rgba(2,1,1,0.7)), linear-gradient(180deg, rgba(3,2,1,0.18), rgba(3,2,1,0.7)), url(/assets/smokecraft/cropped/intake-ashtray-bg.jpg)',
+        backgroundImage: 'linear-gradient(90deg, rgba(2,1,1,0.62), rgba(2,1,1,0.12) 28%, rgba(2,1,1,0.12) 72%, rgba(2,1,1,0.62)), linear-gradient(180deg, rgba(3,2,1,0.15), rgba(3,2,1,0.68)), url(/smokecraft.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center top',
         backgroundAttachment: 'fixed',
@@ -123,43 +123,43 @@ export default function Enroll() {
         <span className="font-label-sm hidden md:block" style={{ color: 'rgba(248,236,214,0.6)', fontSize: 11 }}>Step 3 of 4</span>
       </header>
 
-      <main className="relative z-10 pt-20 pb-44 px-6 max-w-[900px] mx-auto">
+      <main className="relative z-10 pt-16 pb-40 px-6 max-w-[1040px] mx-auto">
         {/* Header */}
-        <section className="mb-8 text-center">
+        <section className="mb-6 text-center">
           <div className="smokecraft-intake-crest" aria-hidden="true">SC</div>
           <div className="smokecraft-intake-kicker" />
-          <h2 className="mb-3" style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontWeight: 700, fontSize: 'clamp(30px,5vw,40px)', color: '#ffd889', textShadow: '0 0 24px rgba(233,193,118,0.5), 0 10px 28px rgba(0,0,0,0.85)' }}>SmokeCraft Intake</h2>
+          <h2 className="mb-3" style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontWeight: 700, fontSize: 'clamp(38px,5.5vw,56px)', color: '#ffd889', textShadow: '0 0 24px rgba(233,193,118,0.5), 0 10px 28px rgba(0,0,0,0.85)' }}>SmokeCraft Intake</h2>
           <p className="font-body-md max-w-md mx-auto" style={{ color: 'rgba(255,247,229,0.82)', textShadow: '0 2px 16px rgba(0,0,0,0.8)', fontSize: 13, lineHeight: 1.6 }}>
             Tell us a bit about yourself so we can craft a lounge experience worthy of your taste. Your privacy is our priority—only your nickname enters the humidor leaderboard.
           </p>
         </section>
 
         {/* Form card */}
-        <div className="smokecraft-intake-card p-7 rounded-2xl shadow-2xl space-y-7" style={{
-          background: 'rgba(10,7,5,0.82)',
-          backdropFilter: 'blur(18px) saturate(1.1)',
-          WebkitBackdropFilter: 'blur(18px) saturate(1.1)',
-          border: '1px solid rgba(233,193,118,0.32)',
-          boxShadow: '0 24px 70px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)',
+        <div className="smokecraft-intake-card p-8 rounded-2xl shadow-2xl space-y-6" style={{
+          background: 'linear-gradient(155deg, rgba(46,32,20,0.74) 0%, rgba(20,13,8,0.86) 46%, rgba(8,5,3,0.92) 100%)',
+          backdropFilter: 'blur(20px) saturate(1.2)',
+          WebkitBackdropFilter: 'blur(20px) saturate(1.2)',
+          border: '1px solid rgba(233,193,118,0.4)',
+          boxShadow: '0 28px 80px rgba(0,0,0,0.72), inset 0 1px 0 rgba(255,232,186,0.1), inset 0 0 60px rgba(233,193,118,0.06)',
         }}>
           {/* Photo upload */}
           <div className="flex flex-col items-center">
             <div className="relative group">
-              <div className="w-24 h-24 rounded-full border-2 border-dashed flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/60" style={{
+              <div className="w-32 h-32 rounded-full border-2 border-dashed flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/60" style={{
                 borderColor: 'rgba(233,193,118,0.65)',
                 background: 'radial-gradient(circle at 35% 25%, rgba(233,193,118,0.16), rgba(20,14,10,0.85))',
-                boxShadow: '0 0 22px rgba(233,193,118,0.18), inset 0 1px 0 rgba(255,255,255,0.1)',
+                boxShadow: '0 0 28px rgba(233,193,118,0.22), inset 0 1px 0 rgba(255,255,255,0.1)',
               }}>
                 {avatarSrc
                   ? <img src={avatarSrc} alt="Avatar" className="absolute inset-0 w-full h-full object-cover" />
-                  : <span className="material-symbols-outlined text-primary text-4xl" style={{ opacity: 0.75 }}>add_a_photo</span>
+                  : <span className="material-symbols-outlined text-primary text-5xl" style={{ opacity: 0.75 }}>add_a_photo</span>
                 }
               </div>
               <label
-                className="absolute -bottom-1 -right-1 bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center cursor-pointer shadow-lg active:scale-90 transition-transform"
+                className="absolute -bottom-1 -right-1 bg-primary text-on-primary w-9 h-9 rounded-full flex items-center justify-center cursor-pointer shadow-lg active:scale-90 transition-transform"
                 htmlFor="photo-upload"
               >
-                <span className="material-symbols-outlined text-base">add</span>
+                <span className="material-symbols-outlined text-lg">add</span>
                 <input
                   accept={ACCEPT_ATTRIBUTE}
                   className="hidden"
@@ -177,7 +177,7 @@ export default function Enroll() {
           </div>
 
           {/* Form */}
-          <form className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6" onSubmit={(e) => e.preventDefault()}>
+          <form className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5" onSubmit={(e) => e.preventDefault()}>
             {/* Private Identity */}
             <div className="sm:col-span-2 flex items-center gap-3 pb-2" style={{ borderBottom: '1px solid rgba(255,232,186,0.2)' }}>
               <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
@@ -366,7 +366,7 @@ export default function Enroll() {
         </div>
 
         {/* Actions */}
-        <div className="mt-10 flex gap-3 justify-center" style={{ width: 'min(440px, 100%)', marginInline: 'auto' }}>
+        <div className="mt-8 flex gap-4 justify-center" style={{ width: 'min(620px, 92vw)', marginInline: 'auto' }}>
           <button
             onClick={handleDraft}
             className="flex-1 px-5 py-4 rounded-lg border border-primary text-primary font-label-sm tracking-widest hover:bg-primary/10 transition-all active:scale-95 duration-200"
@@ -393,12 +393,12 @@ export default function Enroll() {
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 w-full z-50 rounded-t-xl h-16 px-6 pb-1.5 flex justify-around items-center" style={{
-        background: 'linear-gradient(180deg, rgba(20,15,11,0.6), rgba(8,5,4,0.92))',
-        backdropFilter: 'blur(20px) saturate(1.1)',
-        WebkitBackdropFilter: 'blur(20px) saturate(1.1)',
-        borderTop: '1px solid rgba(255,232,186,0.14)',
-        boxShadow: '0 -10px 32px rgba(0,0,0,0.32)',
+      <nav className="fixed bottom-0 w-full z-50 rounded-t-xl h-14 px-6 flex justify-around items-center" style={{
+        background: 'linear-gradient(180deg, rgba(18,13,10,0.5), rgba(6,4,3,0.88))',
+        backdropFilter: 'blur(18px) saturate(1.1)',
+        WebkitBackdropFilter: 'blur(18px) saturate(1.1)',
+        borderTop: '1px solid rgba(255,232,186,0.12)',
+        boxShadow: '0 -8px 26px rgba(0,0,0,0.28)',
       }}>
         {[
           { icon: 'explore',         label: 'Explore',   active: false, to: '/smokecraft' },
@@ -409,10 +409,10 @@ export default function Enroll() {
           <button
             key={label}
             onClick={() => navigate(to)}
-            className={`flex flex-col items-center justify-center cursor-pointer transition-all active:scale-90 duration-150 border-0 bg-transparent ${active ? 'text-primary font-bold scale-110' : 'text-on-surface-variant hover:text-primary'}`}
+            className={`flex flex-col items-center justify-center cursor-pointer transition-all active:scale-90 duration-150 border-0 bg-transparent ${active ? 'text-primary font-bold scale-105' : 'text-on-surface-variant hover:text-primary'}`}
           >
-            <span className="material-symbols-outlined" style={{ fontSize: 19, ...(active ? { fontVariationSettings: "'FILL' 1" } : {}) }}>{icon}</span>
-            <span style={{ fontSize: 9.5, marginTop: 1 }}>{label}</span>
+            <span className="material-symbols-outlined" style={{ fontSize: 17, ...(active ? { fontVariationSettings: "'FILL' 1" } : {}) }}>{icon}</span>
+            <span style={{ fontSize: 8.5, marginTop: 1 }}>{label}</span>
           </button>
         ))}
       </nav>
@@ -423,55 +423,58 @@ export default function Enroll() {
 
       <style>{`
         .smokecraft-intake-crest {
-          width: 44px;
-          height: 44px;
-          margin: 0 auto 10px;
+          width: 72px;
+          height: 72px;
+          margin: 0 auto 14px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           font-family: "Playfair Display", serif;
           font-weight: 700;
-          font-size: 16px;
+          font-size: 26px;
           color: #ffd889;
-          background: radial-gradient(circle at 35% 30%, rgba(233,193,118,0.22), rgba(10,7,5,0.9));
-          border: 1px solid rgba(233,193,118,0.55);
-          box-shadow: 0 0 18px rgba(233,193,118,0.25);
+          background: radial-gradient(circle at 35% 30%, rgba(233,193,118,0.26), rgba(10,7,5,0.9));
+          border: 1px solid rgba(233,193,118,0.6);
+          box-shadow: 0 0 26px rgba(233,193,118,0.3);
         }
         .smokecraft-intake-kicker {
-          width: 160px;
+          width: 200px;
           height: 1px;
-          margin: 0 auto 14px;
+          margin: 0 auto 16px;
           background: linear-gradient(90deg, transparent, rgba(233,193,118,0.6), transparent);
         }
         .smokecraft-intake-left-scene,
         .smokecraft-intake-right-scene {
           position: fixed;
           top: 0;
-          bottom: 0;
-          width: min(18vw, 220px);
+          height: min(46vh, 420px);
+          width: min(20vw, 280px);
           z-index: 0;
           pointer-events: none;
-          opacity: 0.7;
-          background-size: cover;
-          background-position: center;
-          filter: saturate(1.05) contrast(1.1) brightness(0.85);
-          mask-image: linear-gradient(90deg, #000 0%, rgba(0,0,0,0.7) 70%, transparent 100%);
-          -webkit-mask-image: linear-gradient(90deg, #000 0%, rgba(0,0,0,0.7) 70%, transparent 100%);
+          opacity: 0.95;
+          background-repeat: no-repeat;
+          background-size: 100% auto;
+          filter: saturate(1.12) contrast(1.1) brightness(1.05);
+          mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%), linear-gradient(90deg, #000 0%, rgba(0,0,0,0.85) 70%, transparent 100%);
+          mask-composite: intersect;
+          -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%), linear-gradient(90deg, #000 0%, rgba(0,0,0,0.85) 70%, transparent 100%);
+          -webkit-mask-composite: source-in;
         }
         .smokecraft-intake-left-scene {
           left: 0;
           background-image: url('/assets/smokecraft/cropped/intake-ashtray-bg.jpg');
+          background-position: top left;
         }
         .smokecraft-intake-right-scene {
           right: 0;
-          transform: scaleX(-1);
           background-image: url('/assets/smokecraft/cropped/intake-whiskey-bg.jpg');
+          background-position: top right;
         }
         .smokecraft-intake-card {
           position: relative;
           overflow: hidden;
-          width: min(440px, 100%);
+          width: min(800px, 92vw);
           margin-inline: auto;
         }
         .smokecraft-intake-card > * {
