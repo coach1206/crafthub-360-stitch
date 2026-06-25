@@ -1,4 +1,5 @@
 {
+  "family": "smokecraft",
   "screen": "leaderboard",
   "route": "/smokecraft/leaderboard",
   "referenceImage": "lounge demo ranking.11png.png",
@@ -7,6 +8,6 @@
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T09:05:47.954Z",
-  "commitHash": "3e2b73b9"
+  "timestamp": "2026-06-25T17:38:46.243Z",
+  "commitHash": "a21f31cf"
 }

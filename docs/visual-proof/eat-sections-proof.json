@@ -1,0 +1,14 @@
+{
+  "family": "eat",
+  "screen": "eat-sections",
+  "route": "/eat/sections",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T17:40:33.410Z",
+  "commitHash": "a21f31cf",
+  "note": "No binary reference image in repo."
+}

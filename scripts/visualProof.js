@@ -95,8 +95,17 @@ function getArg(name, fallback) {
 }
 
 function findChromiumExecutable() {
-  const browsersPath = process.env.PLAYWRIGHT_BROWSERS_PATH || '/opt/pw-browsers'
-  if (!existsSync(browsersPath)) return null
+  // Sandboxed dev environments pre-install Chromium under a fixed path
+  // (PLAYWRIGHT_BROWSERS_PATH, defaulting to /opt/pw-browsers) and skip the
+  // npm postinstall download. CI (GitHub Actions) has no such path — it runs
+  // `npx playwright install --with-deps chromium`, which installs into
+  // Playwright's own default cache (~/.cache/ms-playwright) under whatever
+  // directory/executable layout that Playwright version uses. Only look for
+  // the sandbox override; if it's not there, return null so the caller lets
+  // Playwright resolve its own installed browser instead of treating "I
+  // didn't find this one specific path" as "Chromium isn't installed."
+  const browsersPath = process.env.PLAYWRIGHT_BROWSERS_PATH
+  if (!browsersPath || !existsSync(browsersPath)) return null
   const candidates = readdirSync(browsersPath).filter(d => d.startsWith('chromium-') || d === 'chromium')
   for (const dir of candidates) {
     const exe = path.join(browsersPath, dir, 'chrome-linux', 'chrome')
@@ -141,12 +150,11 @@ async function main() {
     process.exit(1)
   }
 
-  const executablePath = findChromiumExecutable()
-  if (!executablePath) {
-    console.error('I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.')
-    console.error('Reason: no Chromium executable was found under PLAYWRIGHT_BROWSERS_PATH.')
-    process.exit(1)
-  }
+  // executablePath is only set when a sandbox-specific Chromium override is
+  // found. Otherwise leave it undefined so chromium.launch() resolves
+  // Playwright's own installed browser (e.g. the one `playwright install`
+  // just downloaded in CI).
+  const executablePath = findChromiumExecutable() || undefined
 
   mkdirSync(OUT_DIR, { recursive: true })
 

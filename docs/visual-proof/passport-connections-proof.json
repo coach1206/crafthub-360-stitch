@@ -1,0 +1,14 @@
+{
+  "family": "passport",
+  "screen": "passport-connections",
+  "route": "/passport/connections",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T17:38:49.100Z",
+  "commitHash": "a21f31cf",
+  "note": "Candidate references exist (360 PASSPORT NETWORK INTERFACE 2.png, 360 PASSPORT CONNECTION 2.png, etc.) but mapping is unconfirmed. See registry."
+}

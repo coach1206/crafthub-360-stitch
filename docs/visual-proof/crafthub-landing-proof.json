@@ -1,0 +1,14 @@
+{
+  "family": "crafthub",
+  "screen": "crafthub-landing",
+  "route": "/crafthub",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T17:40:23.419Z",
+  "commitHash": "a21f31cf",
+  "note": "Reference \"CRAFT HUB EXPLAIND.png\" exists in public/ but is not yet confirmed against this route."
+}

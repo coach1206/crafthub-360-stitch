@@ -1,0 +1,14 @@
+{
+  "family": "pos3",
+  "screen": "pos3-handheld",
+  "route": "/pos3/handheld",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 414,
+    "height": 896
+  },
+  "timestamp": "2026-06-25T17:40:25.049Z",
+  "commitHash": "a21f31cf",
+  "note": "No binary reference image in repo — only a text description exists. Upload the real mockup file to enable visual proof."
+}

@@ -1,0 +1,14 @@
+{
+  "family": "pos3",
+  "screen": "pos3-tables",
+  "route": "/pos3/tables",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T17:40:26.711Z",
+  "commitHash": "a21f31cf",
+  "note": "No binary reference image in repo."
+}

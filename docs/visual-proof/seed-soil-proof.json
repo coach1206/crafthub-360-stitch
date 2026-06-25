@@ -1,4 +1,5 @@
 {
+  "family": "smokecraft",
   "screen": "seed-soil",
   "route": "/smokecraft/seed-soil",
   "referenceImage": "SEED & PAIRING.11.png",
@@ -7,6 +8,6 @@
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T09:11:12.782Z",
-  "commitHash": "b0fd13bd"
+  "timestamp": "2026-06-25T17:38:37.525Z",
+  "commitHash": "a21f31cf"
 }
