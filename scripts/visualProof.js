@@ -138,6 +138,88 @@ async function waitForServer(url, timeoutMs = 60000) {
   return false
 }
 
+// Every child_process we spawn (vite preview, vite dev) is tracked here so a
+// single cleanup path can guarantee none of them outlive the script. A
+// lingering child (e.g. a vite dev server still listening on a port) keeps
+// Node's event loop alive even after main() returns, which is what hung the
+// GitHub Actions job after "Visual proof artifacts written to docs/visual-proof/"
+// had already printed — the proof generation had finished, but the process
+// never exited.
+const spawnedProcesses = new Set()
+function trackProcess(child) {
+  spawnedProcesses.add(child)
+  child.on('exit', () => spawnedProcesses.delete(child))
+  return child
+}
+
+function killProcessHard(child) {
+  if (!child || child.killed || child.exitCode !== null) return
+  try {
+    child.kill('SIGTERM')
+  } catch {
+    // already gone
+  }
+  setTimeout(() => {
+    if (child.exitCode === null && !child.killed) {
+      try {
+        child.kill('SIGKILL')
+      } catch {
+        // already gone
+      }
+    }
+  }, 2000)
+}
+
+let browserRef = null
+let cleanedUp = false
+async function cleanup() {
+  if (cleanedUp) return
+  cleanedUp = true
+  try {
+    if (browserRef) await browserRef.close()
+  } catch {
+    // ignore — best-effort shutdown
+  }
+  for (const child of spawnedProcesses) {
+    killProcessHard(child)
+  }
+  // Give SIGKILL fallbacks a moment to land before the process exits.
+  await new Promise(r => setTimeout(r, 2200))
+}
+
+process.on('exit', () => {
+  for (const child of spawnedProcesses) killProcessHard(child)
+})
+process.on('SIGINT', async () => {
+  await cleanup()
+  process.exit(130)
+})
+process.on('SIGTERM', async () => {
+  await cleanup()
+  process.exit(143)
+})
+process.on('uncaughtException', async (err) => {
+  console.error('Uncaught exception:', err)
+  await cleanup()
+  process.exit(1)
+})
+process.on('unhandledRejection', async (err) => {
+  console.error('Unhandled rejection:', err)
+  await cleanup()
+  process.exit(1)
+})
+
+const GLOBAL_TIMEOUT_MS = 10 * 60 * 1000
+const ROUTE_TIMEOUT_MS = 30 * 1000
+
+function withTimeout(promise, ms, label) {
+  let timer
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)
+  })
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
+}
+
 async function main() {
   const onlyRoute = getArg('route', null)
   const onlyFamily = getArg('family', null)
@@ -168,17 +250,17 @@ async function main() {
     execSync('npm run build', { cwd: ROOT, stdio: 'inherit' })
 
     console.log('Starting preview server...')
-    devServerProcess = spawn('npx', ['vite', 'preview', '--port', '4173', '--strictPort'], {
+    devServerProcess = trackProcess(spawn('npx', ['vite', 'preview', '--port', '4173', '--strictPort'], {
       cwd: ROOT,
       stdio: 'pipe',
-    })
+    }))
     baseUrl = 'http://localhost:4173'
 
     const up = await waitForServer(baseUrl)
     if (!up) {
       console.error('I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.')
       console.error('Reason: the preview server did not start in time.')
-      devServerProcess.kill()
+      await cleanup()
       process.exit(1)
     }
   }
@@ -193,24 +275,32 @@ async function main() {
   async function ensureDevModeServer() {
     if (devModeBaseUrl) return devModeBaseUrl
     console.log('Starting vite dev server for auth-injected capture...')
-    devModeServerProcess = spawn('npx', ['vite', 'dev', '--port', '5183', '--strictPort'], {
+    devModeServerProcess = trackProcess(spawn('npx', ['vite', 'dev', '--port', '5183', '--strictPort'], {
       cwd: ROOT,
       stdio: 'pipe',
-    })
+    }))
     devModeBaseUrl = 'http://localhost:5183'
     const up = await waitForServer(devModeBaseUrl)
     if (!up) {
       console.error('  Could not start vite dev server for authenticated capture.')
-      devModeServerProcess.kill()
+      killProcessHard(devModeServerProcess)
       devModeServerProcess = null
       devModeBaseUrl = null
     }
     return devModeBaseUrl
   }
 
+  const globalTimer = setTimeout(async () => {
+    console.error(`I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.`)
+    console.error(`Reason: the full run exceeded the ${GLOBAL_TIMEOUT_MS}ms global timeout.`)
+    await cleanup()
+    process.exit(1)
+  }, GLOBAL_TIMEOUT_MS)
+
   const commitHash = getCommitHash()
   const { chromium } = playwright
   const browser = await chromium.launch({ executablePath })
+  browserRef = browser
 
   let screens = SCREENS
   if (onlyRoute) screens = screens.filter(s => s.route === onlyRoute)
@@ -248,66 +338,72 @@ async function main() {
     const url = `${screenBaseUrl}${screen.route}`
     console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}${usingDevModeAuth ? ' (auth-injected dev server)' : ''}`)
     try {
-      await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 })
-      await page.waitForTimeout(800)
-      const screenshotPath = path.join(OUT_DIR, `${screen.name}-rendered.png`)
-      await page.screenshot({ path: screenshotPath, fullPage: false })
+      await withTimeout((async () => {
+        await page.goto(url, { waitUntil: 'networkidle', timeout: ROUTE_TIMEOUT_MS })
+        await page.waitForTimeout(800)
+        const screenshotPath = path.join(OUT_DIR, `${screen.name}-rendered.png`)
+        await page.screenshot({ path: screenshotPath, fullPage: false })
 
-      const bodyText = await page.evaluate(() => document.body.innerText)
-      const accessGated = /ACCESS RESTRICTED/i.test(bodyText)
+        const bodyText = await page.evaluate(() => document.body.innerText)
+        const accessGated = /ACCESS RESTRICTED/i.test(bodyText)
 
-      const referencePath = screen.reference ? path.join(ROOT, 'public', screen.referenceDir || '', screen.reference) : null
-      const referenceExists = Boolean(referencePath && existsSync(referencePath))
+        const referencePath = screen.reference ? path.join(ROOT, 'public', screen.referenceDir || '', screen.reference) : null
+        const referenceExists = Boolean(referencePath && existsSync(referencePath))
 
-      const meta = {
-        family: screen.family,
-        screen: screen.name,
-        route: screen.route,
-        referenceImage: screen.reference,
-        referenceFound: referenceExists,
-        viewport,
-        timestamp: new Date().toISOString(),
-        commitHash,
-      }
+        const meta = {
+          family: screen.family,
+          screen: screen.name,
+          route: screen.route,
+          referenceImage: screen.reference,
+          referenceFound: referenceExists,
+          viewport,
+          timestamp: new Date().toISOString(),
+          commitHash,
+        }
 
-      if (usingDevModeAuth) {
-        meta.authInjected = { role: screen.requiresAuth.role, mode: 'dev-server novee_admin_session' }
-      }
+        if (usingDevModeAuth) {
+          meta.authInjected = { role: screen.requiresAuth.role, mode: 'dev-server novee_admin_session' }
+        }
 
-      if (accessGated) {
-        meta.accessGated = true
-        meta.warning = `The rendered capture shows an "ACCESS RESTRICTED" auth gate (this route requires staff/manager login), not the actual screen. This proof image does NOT show a real visual comparison against the reference — it only proves the route resolves and is access-controlled. Do not treat this as visual approval or visual failure of the actual screen.`
-        console.warn(`  WARNING: ${meta.warning}`)
-      }
+        if (accessGated) {
+          meta.accessGated = true
+          meta.warning = `The rendered capture shows an "ACCESS RESTRICTED" auth gate (this route requires staff/manager login), not the actual screen. This proof image does NOT show a real visual comparison against the reference — it only proves the route resolves and is access-controlled. Do not treat this as visual approval or visual failure of the actual screen.`
+          console.warn(`  WARNING: ${meta.warning}`)
+        }
 
-      if (referenceExists) {
-        await buildContactSheet({
-          chromiumPage: page,
-          referencePath,
-          renderedPath: screenshotPath,
-          outPath: path.join(OUT_DIR, `${screen.name}-proof.png`),
-          meta,
-        })
-      } else {
-        meta.note = screen.note || (screen.reference
-          ? `Reference image "${screen.reference}" not found in public/. Rendered screenshot saved alone.`
-          : 'No reference image registered for this screen — cannot generate a side-by-side proof. This is NOT visual approval.')
-        console.warn(`  NO PROOF POSSIBLE — ${meta.note}`)
-      }
+        if (referenceExists) {
+          await buildContactSheet({
+            chromiumPage: page,
+            referencePath,
+            renderedPath: screenshotPath,
+            outPath: path.join(OUT_DIR, `${screen.name}-proof.png`),
+            meta,
+          })
+        } else {
+          meta.note = screen.note || (screen.reference
+            ? `Reference image "${screen.reference}" not found in public/. Rendered screenshot saved alone.`
+            : 'No reference image registered for this screen — cannot generate a side-by-side proof. This is NOT visual approval.')
+          console.warn(`  NO PROOF POSSIBLE — ${meta.note}`)
+        }
 
-      writeFileSync(path.join(OUT_DIR, `${screen.name}-proof.json`), JSON.stringify(meta, null, 2))
-      results.push(meta)
+        writeFileSync(path.join(OUT_DIR, `${screen.name}-proof.json`), JSON.stringify(meta, null, 2))
+        results.push(meta)
+      })(), ROUTE_TIMEOUT_MS, `Route ${screen.route}`)
     } catch (err) {
       console.error(`  FAILED to capture ${screen.route}: ${err.message}`)
       results.push({ family: screen.family, screen: screen.name, route: screen.route, error: err.message })
     } finally {
+      try {
+        await page.close()
+      } catch {
+        // ignore — context.close() below covers it either way
+      }
       await context.close()
     }
   }
 
-  await browser.close()
-  if (devServerProcess) devServerProcess.kill()
-  if (devModeServerProcess) devModeServerProcess.kill()
+  clearTimeout(globalTimer)
+  await cleanup()
 
   console.log('\nVisual proof artifacts written to docs/visual-proof/')
   for (const r of results) {
@@ -318,6 +414,13 @@ async function main() {
         : (r.referenceFound ? 'proof generated' : 'NO PROOF — ' + (r.note || 'no reference image'))
     console.log(`  - [${r.family}] ${r.screen}: ${status}`)
   }
+}
+
+function exitNow(code) {
+  // Forces a clean exit even if a lingering handle (browser pipe, leftover
+  // child process, open socket) would otherwise keep Node's event loop alive.
+  process.exitCode = code
+  setImmediate(() => process.exit(code))
 }
 
 async function buildContactSheet({ chromiumPage, referencePath, renderedPath, outPath, meta }) {
@@ -366,8 +469,11 @@ async function buildContactSheet({ chromiumPage, referencePath, renderedPath, ou
   await sheetPage.close()
 }
 
-main().catch(err => {
-  console.error('I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.')
-  console.error('Reason: unexpected error — ' + err.message)
-  process.exit(1)
-})
+main()
+  .then(() => exitNow(0))
+  .catch(async err => {
+    console.error('I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.')
+    console.error('Reason: unexpected error — ' + err.message)
+    await cleanup()
+    exitNow(1)
+  })

@@ -8,8 +8,8 @@
     "width": 414,
     "height": 896
   },
-  "timestamp": "2026-06-25T17:56:26.171Z",
-  "commitHash": "5c14ffbb",
+  "timestamp": "2026-06-25T19:01:51.144Z",
+  "commitHash": "43f7d3ab",
   "authInjected": {
     "role": "manager",
     "mode": "dev-server novee_admin_session"
