@@ -108,10 +108,8 @@ export default function SmokeCraft() {
   return (
     <div data-smokecraft-bg-asset={ambientBackgroundAsset} style={{ minHeight: '100dvh', background: '#050302', color: '#F4ECDA', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
 
-      {/* ── Ambient Lounge Background — a plain cigar/lounge photo crop (no baked-in UI), darkened
-          heavily for cinematic mood. This is NOT the approved PROFILE DISCOVER 11.png mockup (which
-          already contains its own headline/cards/buttons) — using that would duplicate the live UI
-          composition below. ── */}
+      {/* ── Ambient Lounge Background — a plain cigar/lounge photo crop with zero baked-in UI
+          text, cards, or buttons, darkened heavily for cinematic mood. ── */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden' }} aria-hidden="true">
         <img
           src={ambientBackgroundAsset}
@@ -132,8 +130,8 @@ export default function SmokeCraft() {
           <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 10, color: 'rgba(244,236,218,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
             {stampCount} stamp{stampCount === 1 ? '' : 's'} · {badgeCount} badge{badgeCount === 1 ? '' : 's'} · {mentorCount} mentor{mentorCount === 1 ? '' : 's'}
           </span>
-          <button className="sc-tactile" onClick={() => navigate('/')} style={{ width: 36, height: 36, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.35)', overflow: 'hidden', cursor: 'pointer', background: 'rgba(212,175,55,0.08)' }}>
-            <img src="/assets/smokecraft/cropped/passport-cover.jpg" alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <button className="sc-tactile" onClick={() => navigate('/')} style={{ width: 36, height: 36, borderRadius: '50%', border: '1px solid rgba(212,175,55,0.35)', overflow: 'hidden', cursor: 'pointer', background: 'radial-gradient(circle at 35% 30%, rgba(212,175,55,0.32), rgba(212,175,55,0.06))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 13, fontWeight: 900, color: '#E6C76A' }}>SC</span>
           </button>
         </div>
       </header>
@@ -237,7 +235,7 @@ export default function SmokeCraft() {
             </div>
           </div>
 
-          {/* Right Column — two stacked cards, matching the approved PROFILE DISCOVER 11.png composition */}
+          {/* Right Column — two stacked cards: Passport progress, tonight's featured pairing */}
           <div className="sc-fade-in smokecraft-right-col" style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: 24 }}>
 
             {/* "Your Passport to Discovery" card */}
@@ -263,12 +261,8 @@ export default function SmokeCraft() {
                   </span>
                 </div>
               </div>
-              <div style={{ width: '46%', flexShrink: 0, position: 'relative', overflow: 'hidden' }}>
-                <img
-                  src="/assets/smokecraft/cropped/passport-cover.jpg"
-                  alt="360 Passport"
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%' }}
-                />
+              <div style={{ width: '46%', flexShrink: 0, position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, rgba(212,175,55,0.22), rgba(8,5,3,0.9))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontFamily: '"Playfair Display",serif', fontSize: 44, fontWeight: 900, color: 'rgba(230,199,106,0.5)', letterSpacing: '0.02em' }}>SC</span>
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(8,5,3,0.42), transparent 42%)' }} />
               </div>
             </div>
@@ -382,6 +376,12 @@ export default function SmokeCraft() {
           }
         }
       `}</style>
+
+      {/* Temporary visible build marker — remove once the user has visually confirmed the
+          live deployment is the clean-background build and not a stale/cached one. */}
+      <div style={{ position: 'fixed', bottom: 6, right: 10, zIndex: 999, fontFamily: '"JetBrains Mono",monospace', fontSize: 9, letterSpacing: '0.04em', color: 'rgba(244,236,218,0.55)', background: 'rgba(0,0,0,0.55)', padding: '3px 8px', borderRadius: 6, pointerEvents: 'none' }}>
+        SMOKECRAFT CLEAN BG · no baked UI images
+      </div>
     </div>
   )
 }
