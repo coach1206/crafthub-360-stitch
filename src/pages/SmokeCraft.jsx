@@ -97,16 +97,13 @@ export default function SmokeCraft() {
   return (
     <div style={{ minHeight: '100dvh', background: '#050302', color: '#F4ECDA', fontFamily: '"Hanken Grotesk",sans-serif', overflowX: 'hidden', position: 'relative' }}>
 
-      {/* ── Ambient Lounge Background — the approved PROFILE DISCOVER 11.png scene, full-bleed, visible ── */}
+      {/* ── Ambient Lounge Background — flat premium gradient. PROFILE DISCOVER 11.png is a full UI mockup
+          (it already contains its own headline/cards/buttons), so it cannot be rendered as a literal
+          background layer without duplicating the live UI composition below. ── */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden' }} aria-hidden="true">
-        <img
-          src="/PROFILE DISCOVER 11.png"
-          alt=""
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%' }}
-        />
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(100deg, rgba(5,3,2,0.92) 0%, rgba(5,3,2,0.74) 32%, rgba(5,3,2,0.32) 58%, rgba(5,3,2,0.46) 100%)',
+          background: 'radial-gradient(circle at 16% 8%, rgba(212,175,55,0.16), transparent 38%), radial-gradient(circle at 84% 88%, rgba(212,175,55,0.1), transparent 42%), linear-gradient(135deg, #0a0604 0%, #050302 60%, #050302 100%)',
         }} />
       </div>
 
@@ -342,17 +339,6 @@ export default function SmokeCraft() {
           }
           .smokecraft-left-col {
             order: 2;
-          }
-          .smokecraft-nav-header nav {
-            gap: 16px !important;
-          }
-        }
-        @media (max-width: 640px) {
-          .smokecraft-nav-header {
-            padding: 0 16px !important;
-          }
-          .smokecraft-pair-grid {
-            grid-template-columns: 1fr !important;
           }
         }
         @media (max-width: 760px) {
