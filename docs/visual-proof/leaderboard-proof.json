@@ -1,0 +1,12 @@
+{
+  "screen": "leaderboard",
+  "route": "/smokecraft/leaderboard",
+  "referenceImage": "lounge demo ranking.11png.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T08:57:33.523Z",
+  "commitHash": "caa5001e"
+}

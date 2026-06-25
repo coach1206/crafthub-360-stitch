@@ -1,0 +1,12 @@
+{
+  "screen": "format",
+  "route": "/smokecraft/format",
+  "referenceImage": "SHAPE SIZE BURN.11.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T08:57:28.059Z",
+  "commitHash": "caa5001e"
+}
