@@ -1,0 +1,12 @@
+{
+  "screen": "enroll",
+  "route": "/smokecraft/enroll",
+  "referenceImage": "smokecraft Intake.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T08:57:22.489Z",
+  "commitHash": "caa5001e"
+}

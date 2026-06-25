@@ -1,0 +1,12 @@
+{
+  "screen": "smokecraft-home",
+  "route": "/smokecraft",
+  "referenceImage": "PROFILE DISCOVER 11.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T08:57:19.293Z",
+  "commitHash": "caa5001e"
+}

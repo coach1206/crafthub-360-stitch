@@ -1,0 +1,12 @@
+{
+  "screen": "golden-box",
+  "route": "/smokecraft/golden-box",
+  "referenceImage": "GOLDEN BOX JOURNEY11.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T08:57:30.853Z",
+  "commitHash": "caa5001e"
+}
