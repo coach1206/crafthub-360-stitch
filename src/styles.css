@@ -457,6 +457,20 @@
   opacity: 0.2;
 }
 
+/* MENTOR CLEAN BG V1 — the default .smokecraft-premium-bg__image used
+   /smokecraft-hero.png, which is a full front-door UI screenshot (baked
+   "Discover your cigar profile" headline, Passport/Pairing cards, CTA
+   buttons). Blurred behind the Mentor Selection cards at 0.32 opacity,
+   that baked UI ghosted through and made the mentor portraits look muddy.
+   Swapped to smokecraft.jpg, a verified clean ambient lounge photo with
+   no baked UI, for the lounge variant only. */
+.smokecraft-premium-bg-lounge .smokecraft-premium-bg__image {
+  background-image: url("/smokecraft.jpg");
+  background-position: center 30%;
+  opacity: 0.22;
+  filter: saturate(1.05) contrast(1.08) brightness(0.85);
+}
+
 .smokecraft-premium-bg-reward .smokecraft-premium-bg__image,
 .smokecraft-premium-bg-celebration .smokecraft-premium-bg__image {
   opacity: 0.16;

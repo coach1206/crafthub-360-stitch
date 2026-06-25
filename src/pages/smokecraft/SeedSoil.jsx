@@ -182,18 +182,17 @@ export default function SeedSoil() {
 
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
-      {/* SEED & SOIL VISUAL UPGRADE — no "SEED PARING 2" asset exists in the repo's GitHub/public
+      {/* SEED PAIRING CLEAN BG V2 — no "SEED PARING 2" asset exists in the repo's GitHub/public
           assets (searched lancero/belicoso/panetela-style filenames, seed pairing, seed-paring,
           smoke pairing, seed and soil); the closest existing design reference is the
           stitch_export "smokecraft_seed_soil" mockup, which uses this same dark lounge +
           gold-card direction. seed-soil-bg.jpg (whiskey glass + cigar smoke, verified clean of any
-          baked UI) is anchored left and pushed to a higher opacity than before to give the page the
-          left-side lounge energy the approved reference shows, instead of the flat near-black wash
-          this page previously used. */}
+          baked UI) is anchored left at a stronger opacity/brightness than the V1 pass to give the
+          page real left-side lounge energy instead of a flat near-black wash. */}
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover" style={{ backgroundImage: "url('/assets/smokecraft/cropped/seed-soil-bg.jpg')", backgroundPosition: 'left center', opacity: 0.4, filter: 'brightness(0.78) saturate(1.2)' }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(90deg,rgba(8,5,3,0.55) 0%,rgba(8,5,3,0.86) 38%,rgba(8,5,3,0.93) 100%)' }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(8,5,3,0.97) 0%,rgba(8,5,3,0.45) 18%,rgba(8,5,3,0.45) 82%,rgba(8,5,3,0.97) 100%)' }} />
+        <div className="absolute inset-0 bg-cover" style={{ backgroundImage: "url('/assets/smokecraft/cropped/seed-soil-bg.jpg')", backgroundPosition: 'left center', opacity: 0.62, filter: 'brightness(0.95) saturate(1.3) contrast(1.08)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(90deg,rgba(8,5,3,0.32) 0%,rgba(8,5,3,0.74) 42%,rgba(8,5,3,0.88) 100%)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(8,5,3,0.95) 0%,rgba(8,5,3,0.32) 20%,rgba(8,5,3,0.32) 80%,rgba(8,5,3,0.95) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
         <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/format')} aria-label="Back"><ArrowBackIcon size={24} /></button>
@@ -303,14 +302,16 @@ export default function SeedSoil() {
         </div>
         </div>
 
-        {region && soilComplete && (
-          <div className="mb-10 rounded-2xl border border-primary/30 backdrop-blur-xl" style={{ padding: '20px 24px', background: 'linear-gradient(135deg, rgba(233,193,118,0.1), rgba(233,193,118,0.03))', boxShadow: '0 8px 28px rgba(233,193,118,0.12)' }}>
-            <p className="font-label-md text-label-md text-primary uppercase tracking-[0.15em] mb-2">Why This Pairing Works</p>
-            <p className="font-body-md text-body-md text-on-surface-variant">{buildPairingExplanation(region, soil)}</p>
-          </div>
-        )}
+        <div className="mb-10 rounded-2xl border border-primary/30 backdrop-blur-xl" style={{ padding: '20px 24px', background: 'linear-gradient(135deg, rgba(233,193,118,0.1), rgba(233,193,118,0.03))', boxShadow: '0 8px 28px rgba(233,193,118,0.12)' }}>
+          <p className="font-label-md text-label-md text-primary uppercase tracking-[0.15em] mb-2">Why This Pairing Works</p>
+          <p className="font-body-md text-body-md text-on-surface-variant">
+            {region && soilComplete
+              ? buildPairingExplanation(region, soil)
+              : 'Choose a growing region and finish setting tonight’s soil to see why this pairing works.'}
+          </p>
+        </div>
 
-        {pairingResult && (
+        {pairingResult ? (
           <PairingScorePanel
             result={pairingResult}
             warningResolved={warningResolved}
@@ -318,10 +319,20 @@ export default function SeedSoil() {
             onAdjust={handleAdjustPairing}
             onAskMentor={handleAskMentor}
           />
+        ) : (
+          <section className="rounded-2xl border mb-8" style={{ padding: '20px 24px', background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)', borderColor: 'rgba(255,255,255,0.12)' }} aria-label="Pairing Score">
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-1">Pairing Score</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">Complete your seed and soil selections to calculate tonight's pairing score.</p>
+          </section>
         )}
 
-        {blendSignature && soilComplete && (
+        {blendSignature && soilComplete ? (
           <UniqueBlendPanel signature={blendSignature} uniqueness={uniqueness} />
+        ) : (
+          <section className="rounded-2xl border mb-8" style={{ padding: '20px 24px', background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 60%, rgba(0,0,0,0.1) 100%)', borderColor: 'rgba(255,255,255,0.12)' }} aria-label="Unique Blend Signature">
+            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-1">Unique Blend Signature</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">Your one-of-a-kind blend signature appears here once your seed and soil pairing is complete.</p>
+          </section>
         )}
 
         <div className="flex flex-col sm:flex-row gap-4">
@@ -336,7 +347,7 @@ export default function SeedSoil() {
             <ArrowBackIcon size={20} /> Back
           </button>
         </div>
-        <div data-marker="SEED PAIRING CLEAN BG V1" style={{ display: 'none' }} aria-hidden="true" />
+        <div data-marker="SEED PAIRING CLEAN BG V2" style={{ display: 'none' }} aria-hidden="true" />
       </main>
     </div>
   )

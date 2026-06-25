@@ -270,6 +270,7 @@ export default function Mentor() {
           </button>
         </div>
       </footer>
+      <div data-marker="MENTOR CLEAN BG V1" style={{ display: 'none' }} aria-hidden="true" />
     </div>
   )
 }
