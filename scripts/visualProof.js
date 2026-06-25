@@ -1,17 +1,30 @@
 #!/usr/bin/env node
 /**
- * SmokeCraft Visual Proof Harness.
+ * MVP2 Global Visual Proof Harness.
  *
- * Generates a side-by-side contact sheet for each SmokeCraft screen:
+ * Generates a side-by-side contact sheet for any registered screen:
  * LEFT = approved reference mockup image, RIGHT = actual rendered screenshot
  * of the live route, captured at a documented viewport.
  *
- * See docs/smokecraft-visual-qa-protocol.md for the rules this enforces.
+ * This is the family-generic successor to the SmokeCraft-only
+ * scripts/smokecraftVisualProof.js. It covers every reference-image family
+ * tracked in docs/mvp2-visual-image-registry.md: SmokeCraft, POS3, E.A.T.,
+ * Passport, DayOne360, CraftHub.
+ *
+ * A screen with referenceImage: null has no approved binary reference in
+ * the repo yet (see the registry for why). For those screens this script
+ * captures the rendered screenshot alone and explicitly reports that no
+ * visual comparison is possible — it does NOT fabricate a proof.
  *
  * Usage:
+ *   npm run visual:all
  *   npm run visual:smokecraft
- *   node scripts/smokecraftVisualProof.js --route=/smokecraft/seed-soil
- *   node scripts/smokecraftVisualProof.js --base-url=http://localhost:4173
+ *   npm run visual:passport
+ *   npm run visual:pos3
+ *   npm run visual:eat
+ *   node scripts/visualProof.js --family=passport
+ *   node scripts/visualProof.js --route=/smokecraft/seed-soil
+ *   node scripts/visualProof.js --base-url=http://localhost:4173
  */
 
 import { existsSync, readdirSync, mkdirSync, writeFileSync, readFileSync } from 'fs'
@@ -23,14 +36,56 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
 const OUT_DIR = path.join(ROOT, 'docs', 'visual-proof')
 const VIEWPORT = { width: 1440, height: 900 }
+const HANDHELD_VIEWPORT = { width: 414, height: 896 }
 
+// Each screen: family, name, route, reference (filename in public/, or null
+// if no binary reference has been uploaded to the repo yet), viewport
+// override (for handheld POS3 screens).
 const SCREENS = [
-  { name: 'smokecraft-home', route: '/smokecraft', reference: 'PROFILE DISCOVER 11.png' },
-  { name: 'enroll', route: '/smokecraft/enroll', reference: 'smokecraft Intake.png' },
-  { name: 'seed-soil', route: '/smokecraft/seed-soil', reference: 'SEED & PAIRING.11.png' },
-  { name: 'format', route: '/smokecraft/format', reference: 'SHAPE SIZE BURN.11.png' },
-  { name: 'golden-box', route: '/smokecraft/golden-box/status', reference: 'GOLDEN BOX JOURNEY11.png' },
-  { name: 'leaderboard', route: '/smokecraft/leaderboard', reference: 'lounge demo ranking.11png.png' },
+  // --- SmokeCraft ---
+  { family: 'smokecraft', name: 'smokecraft-home', route: '/smokecraft', reference: 'PROFILE DISCOVER 11.png' },
+  { family: 'smokecraft', name: 'enroll', route: '/smokecraft/enroll', reference: 'smokecraft Intake.png' },
+  { family: 'smokecraft', name: 'seed-soil', route: '/smokecraft/seed-soil', reference: 'SEED & PAIRING.11.png' },
+  { family: 'smokecraft', name: 'format', route: '/smokecraft/format', reference: 'SHAPE SIZE BURN.11.png' },
+  { family: 'smokecraft', name: 'golden-box', route: '/smokecraft/golden-box/status', reference: 'GOLDEN BOX JOURNEY11.png' },
+  { family: 'smokecraft', name: 'leaderboard', route: '/smokecraft/leaderboard', reference: 'lounge demo ranking.11png.png' },
+
+  // --- Passport ---
+  // Reference images exist in public/ but route mapping is NOT confirmed —
+  // multiple similarly-named passport mockups exist (360 Passport 1.png,
+  // 360 passport  connections 11.png, 360  passport connect  CONECTIONS.png,
+  // 360 PASSPORT NETWORK INTERFACE 2.png, 360 PASSPORT CONNECTION 2.png,
+  // 360 LUXARY STAMP COLLECT 2.png) and none are wired into src/ yet. Do not
+  // guess the mapping (see the golden-box route mistake this protocol
+  // exists to prevent) — left as referenceImage: null with a TODO until a
+  // human confirms which file maps to which Passport route.
+  { family: 'passport', name: 'passport-connections', route: '/passport/connections', reference: null, note: 'Candidate references exist (360 PASSPORT NETWORK INTERFACE 2.png, 360 PASSPORT CONNECTION 2.png, etc.) but mapping is unconfirmed. See registry.' },
+  { family: 'passport', name: 'passport-stamps', route: '/passport/stamps', reference: null, note: 'Candidate references exist (DIGETAL STAMP COLLECTION 1.png, 360 LUXARY STAMP COLLECT 2.png) but mapping is unconfirmed. See registry.' },
+  { family: 'passport', name: 'passport-profile', route: '/passport/profile', reference: null, note: 'No confirmed reference image.' },
+  { family: 'passport', name: 'passport-directory', route: '/passport/directory', reference: null, note: 'No confirmed reference image.' },
+
+  // --- DayOne360 ---
+  { family: 'dayone360', name: 'dayone360-concierge', route: '/dayone360', reference: null, note: 'Reference "DAYONE360 CONICERGE 1.png" exists in public/ but is not yet confirmed against this route.' },
+
+  // --- CraftHub ---
+  { family: 'crafthub', name: 'crafthub-landing', route: '/crafthub', reference: null, note: 'Reference "CRAFT HUB EXPLAIND.png" exists in public/ but is not yet confirmed against this route.' },
+
+  // --- POS3 (handheld) ---
+  // No binary reference images exist in the repo for POS3 — only a text
+  // description in public/design-references/phase-7/pos-eat/README.md
+  // ("eat-system-mobile-update"). Cannot generate a real proof without the
+  // actual uploaded file.
+  { family: 'pos3', name: 'pos3-handheld', route: '/pos3/handheld', reference: null, viewport: HANDHELD_VIEWPORT, note: 'No binary reference image in repo — only a text description exists. Upload the real mockup file to enable visual proof.' },
+  { family: 'pos3', name: 'pos3-tables', route: '/pos3/tables', reference: null, note: 'No binary reference image in repo.' },
+  { family: 'pos3', name: 'pos3-orders', route: '/pos3/orders', reference: null, note: 'No binary reference image in repo.' },
+  { family: 'pos3', name: 'pos3-checkout', route: '/pos3/checkout', reference: null, note: 'No binary reference image in repo.' },
+
+  // --- E.A.T. System ---
+  // Same situation as POS3 — only a text description exists
+  // ("eat-system-command-center-update").
+  { family: 'eat', name: 'eat-command-hub', route: '/eat/command-hub', reference: null, note: 'No binary reference image in repo — only a text description exists. Upload the real mockup file to enable visual proof.' },
+  { family: 'eat', name: 'eat-sections', route: '/eat/sections', reference: null, note: 'No binary reference image in repo.' },
+  { family: 'eat', name: 'eat-operations', route: '/eat/operations', reference: null, note: 'No binary reference image in repo.' },
 ]
 
 function getArg(name, fallback) {
@@ -74,6 +129,7 @@ async function waitForServer(url, timeoutMs = 60000) {
 
 async function main() {
   const onlyRoute = getArg('route', null)
+  const onlyFamily = getArg('family', null)
   const explicitBaseUrl = getArg('base-url', null)
 
   let playwright
@@ -120,30 +176,35 @@ async function main() {
   const commitHash = getCommitHash()
   const { chromium } = playwright
   const browser = await chromium.launch({ executablePath })
-  const context = await browser.newContext({ viewport: VIEWPORT })
-  const page = await context.newPage()
 
-  const screens = onlyRoute ? SCREENS.filter(s => s.route === onlyRoute) : SCREENS
+  let screens = SCREENS
+  if (onlyRoute) screens = screens.filter(s => s.route === onlyRoute)
+  if (onlyFamily) screens = screens.filter(s => s.family === onlyFamily)
+
   const results = []
 
   for (const screen of screens) {
+    const viewport = screen.viewport || VIEWPORT
+    const context = await browser.newContext({ viewport })
+    const page = await context.newPage()
     const url = `${baseUrl}${screen.route}`
-    console.log(`Capturing ${screen.route} -> ${url}`)
+    console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}`)
     try {
       await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 })
       await page.waitForTimeout(800)
       const screenshotPath = path.join(OUT_DIR, `${screen.name}-rendered.png`)
       await page.screenshot({ path: screenshotPath, fullPage: false })
 
-      const referencePath = path.join(ROOT, 'public', screen.reference)
-      const referenceExists = existsSync(referencePath)
+      const referencePath = screen.reference ? path.join(ROOT, 'public', screen.reference) : null
+      const referenceExists = Boolean(referencePath && existsSync(referencePath))
 
       const meta = {
+        family: screen.family,
         screen: screen.name,
         route: screen.route,
         referenceImage: screen.reference,
         referenceFound: referenceExists,
-        viewport: VIEWPORT,
+        viewport,
         timestamp: new Date().toISOString(),
         commitHash,
       }
@@ -157,15 +218,19 @@ async function main() {
           meta,
         })
       } else {
-        meta.note = `Reference image "${screen.reference}" not found in public/. Rendered screenshot saved alone.`
-        console.warn(`  WARNING: ${meta.note}`)
+        meta.note = screen.note || (screen.reference
+          ? `Reference image "${screen.reference}" not found in public/. Rendered screenshot saved alone.`
+          : 'No reference image registered for this screen — cannot generate a side-by-side proof. This is NOT visual approval.')
+        console.warn(`  NO PROOF POSSIBLE — ${meta.note}`)
       }
 
       writeFileSync(path.join(OUT_DIR, `${screen.name}-proof.json`), JSON.stringify(meta, null, 2))
       results.push(meta)
     } catch (err) {
       console.error(`  FAILED to capture ${screen.route}: ${err.message}`)
-      results.push({ screen: screen.name, route: screen.route, error: err.message })
+      results.push({ family: screen.family, screen: screen.name, route: screen.route, error: err.message })
+    } finally {
+      await context.close()
     }
   }
 
@@ -174,7 +239,8 @@ async function main() {
 
   console.log('\nVisual proof artifacts written to docs/visual-proof/')
   for (const r of results) {
-    console.log(`  - ${r.screen}: ${r.error ? 'FAILED — ' + r.error : 'ok'}`)
+    const status = r.error ? `FAILED — ${r.error}` : (r.referenceFound ? 'proof generated' : 'NO PROOF — ' + (r.note || 'no reference image'))
+    console.log(`  - [${r.family}] ${r.screen}: ${status}`)
   }
 }
 
@@ -206,7 +272,7 @@ async function buildContactSheet({ chromiumPage, referencePath, renderedPath, ou
         </div>
       </div>
       <div class="meta">
-        route: ${meta.route} | viewport: ${meta.viewport.width}x${meta.viewport.height} |
+        family: ${meta.family} | route: ${meta.route} | viewport: ${meta.viewport.width}x${meta.viewport.height} |
         timestamp: ${meta.timestamp} | commit: ${meta.commitHash}
       </div>
     </body></html>

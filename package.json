@@ -11,7 +11,13 @@
     "server": "node server/index.js",
     "dev:server": "node --watch server/index.js",
     "dev:full": "concurrently -n FRONT,BACK -c cyan,yellow \"npm run dev\" \"npm run dev:server\"",
-    "visual:smokecraft": "node scripts/smokecraftVisualProof.js"
+    "visual:smokecraft": "node scripts/smokecraftVisualProof.js",
+    "visual:all": "node scripts/visualProof.js",
+    "visual:passport": "node scripts/visualProof.js --family=passport",
+    "visual:pos3": "node scripts/visualProof.js --family=pos3",
+    "visual:eat": "node scripts/visualProof.js --family=eat",
+    "visual:dayone360": "node scripts/visualProof.js --family=dayone360",
+    "visual:crafthub": "node scripts/visualProof.js --family=crafthub"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
