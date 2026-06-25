@@ -107,9 +107,9 @@ const requirements = [
   {
     name: 'PROFILE DISCOVER 11.png',
     sourceCandidates: ['public/PROFILE DISCOVER 11.png'],
-    cropAsset: 'public/assets/smokecraft/cropped/discover-profile-hero.jpg',
+    cropAsset: 'public/PROFILE DISCOVER 11.png',
     component: 'src/pages/SmokeCraft.jsx',
-    oldGeneric: '/assets/smokecraft/cropped/discover-profile-bg-v3.jpg',
+    oldGeneric: '/assets/smokecraft/cropped/discover-profile-hero.jpg',
   },
   {
     name: 'SEED & PAIRING.11.png',
