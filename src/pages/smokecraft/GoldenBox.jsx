@@ -402,6 +402,10 @@ export default function GoldenBox() {
           </p>
         </div>
 
+        <div aria-hidden="true" style={{ position: 'fixed', bottom: 10, right: 10, zIndex: 999, fontSize: 9, letterSpacing: '0.1em', color: 'rgba(233,193,118,0.55)', pointerEvents: 'none' }}>
+          GOLD BOX CLEAN BG V1
+        </div>
+
       </main>
       <style>{`
         .golden-box-page {
@@ -415,7 +419,7 @@ export default function GoldenBox() {
             radial-gradient(ellipse at 12% 58%, rgba(167,92,32,0.26) 0%, rgba(44,20,6,0.28) 24%, transparent 40%),
             radial-gradient(ellipse at 88% 50%, rgba(255,205,113,0.2) 0%, rgba(48,23,8,0.32) 22%, transparent 38%),
             linear-gradient(180deg, rgba(28,12,3,0.9) 0%, rgba(8,4,2,0.94) 74%, #020101 100%),
-            url(/assets/smokecraft/cropped/golden-box-hero.jpg);
+            url(/assets/smokecraft/cropped/golden-box-hero-v2.jpg);
           background-size: cover;
           background-position: center;
           filter: saturate(1.16) contrast(1.1) brightness(0.88);
