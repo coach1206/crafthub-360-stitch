@@ -56,6 +56,15 @@ export function useMentorVoice() {
     if (isMuted) return
     stop()
 
+    if (import.meta.env.DEV) {
+      console.debug('[MentorVoice] request', {
+        mentorId,
+        capabilityProvider: capability?.provider || 'unknown',
+        elevenlabsConfiguredOnServer: Boolean(capability?.elevenlabs),
+        isAuthenticated,
+      })
+    }
+
     // Path A: ElevenLabs via backend (authenticated users only)
     if (capability?.elevenlabs && isAuthenticated) {
       setIsSpeaking(true)
@@ -70,6 +79,7 @@ export function useMentorVoice() {
         const data = json?.data
 
         if (data && !data.fallback && data.audio) {
+          if (import.meta.env.DEV) console.debug('[MentorVoice] provider used: elevenlabs', { mentorId })
           // Decode base64 → Blob → Audio element
           const binary = atob(data.audio)
           const bytes  = new Uint8Array(binary.length)
@@ -79,8 +89,8 @@ export function useMentorVoice() {
           const audio  = new Audio(url)
           audioRef.current = audio
           audio.onended = () => { setIsSpeaking(false); URL.revokeObjectURL(url) }
-          audio.onerror = () => { setIsSpeaking(false); URL.revokeObjectURL(url); _webSpeechFallback(text) }
-          audio.play().catch(() => { setIsSpeaking(false); _webSpeechFallback(text) })
+          audio.onerror = () => { setIsSpeaking(false); URL.revokeObjectURL(url); _webSpeechFallback(text, mentorId) }
+          audio.play().catch(() => { setIsSpeaking(false); _webSpeechFallback(text, mentorId) })
           return
         }
         // ElevenLabs returned fallback:true → drop through to Web Speech
@@ -90,6 +100,7 @@ export function useMentorVoice() {
     }
 
     // Path B: Web Speech API (prototype / unauthenticated / ElevenLabs not configured)
+    if (import.meta.env.DEV) console.debug('[MentorVoice] provider used: system-fallback', { mentorId })
     setIsSpeaking(true)
     speakMentorLine(text)
 
@@ -108,9 +119,11 @@ export function useMentorVoice() {
     isMuted,
     toggleMute,
     isAvailable: true,
+    voiceProvider: capability?.elevenlabs ? 'elevenlabs' : 'system-fallback',
   }
 }
 
-function _webSpeechFallback(text) {
+function _webSpeechFallback(text, mentorId) {
+  if (import.meta.env.DEV) console.debug('[MentorVoice] provider used: system-fallback (elevenlabs call failed)', { mentorId })
   speakMentorLine(text)
 }

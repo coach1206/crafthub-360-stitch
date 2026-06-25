@@ -694,11 +694,11 @@ export default function Format() {
         }
         .format-card__visual {
           position: relative;
-          height: 54px;
+          height: 96px;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 4px 0 4px;
+          margin: 4px 0 6px;
           border-radius: 8px;
           overflow: hidden;
           background:
@@ -708,10 +708,9 @@ export default function Format() {
           transition: box-shadow 0.2s ease;
         }
         .format-shape-badge {
-          position: absolute;
-          top: 8px;
-          right: 8px;
-          z-index: 4;
+          display: inline-block;
+          align-self: flex-start;
+          margin: 0 0 4px;
           padding: 3px 9px;
           border-radius: 999px;
           background: rgba(10,6,3,0.84);
@@ -772,7 +771,8 @@ export default function Format() {
           inset: 0;
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
+          object-position: center;
           filter: saturate(1.12) brightness(0.94) contrast(1.1);
           transition: transform 0.35s ease;
         }
@@ -1382,10 +1382,10 @@ export default function Format() {
                     <span className="format-card__check material-symbols-outlined" aria-hidden="true">check</span>
                     <span className="format-card__visual" aria-hidden="true">
                       <CigarVisual format={format} />
-                      {format.shapeProfile?.badge && (
-                        <span className="format-shape-badge">{format.shapeProfile.badge}</span>
-                      )}
                     </span>
+                    {format.shapeProfile?.badge && (
+                      <span className="format-shape-badge">{format.shapeProfile.badge}</span>
+                    )}
                     <h2>{format.name}</h2>
                     <span className="format-card__type">{format.shape}</span>
                     <p>{format.description}</p>

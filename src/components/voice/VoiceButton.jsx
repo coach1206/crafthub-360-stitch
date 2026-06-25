@@ -5,12 +5,16 @@
  * indicates active audio. Tapping mutes/unmutes without blocking anything.
  */
 
-export default function VoiceButton({ isMuted, isSpeaking, onToggle, className = '' }) {
+export default function VoiceButton({ isMuted, isSpeaking, onToggle, className = '', voiceProvider }) {
+  const providerLabel = voiceProvider === 'elevenlabs'
+    ? 'ElevenLabs voice'
+    : 'System fallback voice (ElevenLabs unavailable)'
+  const title = `${isMuted ? 'Unmute' : 'Mute'} mentor voice — ${providerLabel}`
   return (
     <button
       onClick={onToggle}
-      title={isMuted ? 'Unmute mentor voice' : 'Mute mentor voice'}
-      aria-label={isMuted ? 'Unmute mentor voice' : 'Mute mentor voice'}
+      title={title}
+      aria-label={title}
       className={`relative flex items-center justify-center transition-all active:scale-90 ${className}`}
       style={{
         width:        40,

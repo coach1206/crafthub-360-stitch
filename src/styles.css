@@ -1371,7 +1371,7 @@
 
 .smokecraft-mentor-card__image {
   background-size: cover;
-  filter: saturate(0.9) contrast(1.08) brightness(0.72);
+  filter: saturate(1.02) contrast(1.04) brightness(0.98);
   transform: scale(1.02);
   transition: transform 0.45s ease, filter 0.45s ease;
 }
@@ -1379,13 +1379,13 @@
 .smokecraft-mentor-card:hover .smokecraft-mentor-card__image,
 .smokecraft-mentor-card.is-selected .smokecraft-mentor-card__image {
   transform: scale(1.08);
-  filter: saturate(1.05) contrast(1.12) brightness(0.84);
+  filter: saturate(1.08) contrast(1.06) brightness(1.02);
 }
 
 .smokecraft-mentor-card__shade {
   background:
-    radial-gradient(ellipse at 50% 18%, rgba(233,193,118,0.14), transparent 38%),
-    linear-gradient(180deg, rgba(4,2,1,0.08) 0%, rgba(4,2,1,0.3) 42%, rgba(4,2,1,0.92) 100%);
+    radial-gradient(ellipse at 50% 18%, rgba(233,193,118,0.1), transparent 38%),
+    linear-gradient(180deg, rgba(4,2,1,0) 0%, rgba(4,2,1,0) 58%, rgba(4,2,1,0.42) 76%, rgba(4,2,1,0.92) 100%);
 }
 
 .smokecraft-mentor-card__flag {

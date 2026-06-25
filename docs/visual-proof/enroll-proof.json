@@ -1,5 +1,4 @@
 {
-  "family": "smokecraft",
   "screen": "enroll",
   "route": "/smokecraft/enroll",
   "referenceImage": "smokecraft Intake.png",
@@ -8,6 +7,6 @@
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T19:00:00.823Z",
-  "commitHash": "43f7d3ab"
+  "timestamp": "2026-06-25T19:31:09.960Z",
+  "commitHash": "de9c6c90"
 }

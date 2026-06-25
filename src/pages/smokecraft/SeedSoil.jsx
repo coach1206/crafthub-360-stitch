@@ -92,7 +92,7 @@ function buildPairingExplanation(region, soil) {
 export default function SeedSoil() {
   const navigate = useNavigate()
   const { completeStep, addXP, update, session } = useGuestSession()
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState('vuelta')
   const [soil, setSoil] = useState({})
   const [done, setDone] = useState(false)
   const [warningResolved, setWarningResolved] = useState(null)
@@ -182,16 +182,19 @@ export default function SeedSoil() {
 
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
-      {/* SEED PAIRING CLEAN BG V3 — V2's left-anchored seed-soil-bg.jpg still read flatter and
-          less dense than the approved reference at the documented proof viewport (1440x900).
-          This pass raises background presence further and compresses vertical rhythm (padding,
-          row heights, section margins) across the whole page so the Seed, Soil, Pairing Score,
-          and Unique Blend Signature panels are far closer to the reference's first-viewport
-          density instead of only showing the Seed region list above the fold. */}
+      {/* SEED PAIRING CLEAN BG V4 — V3 was still too dark/flat: the approved seed-soil-bg.jpg
+          (whiskey glass + cigar + smoke, left-weighted) was being washed out by heavy gradient
+          overlays, and the right side had no imagery at all, reading as dead black space. This
+          pass raises the base image opacity, repositions it so the cigar/whiskey/smoke is
+          clearly visible in the left/center, lightens the center gradient stop so the photo
+          shows through under the cards, and adds a second clean cigar photo (robusto.jpg, no
+          baked UI/mockup text) anchored to the right edge so the right side also reads as
+          image-backed lounge atmosphere instead of flat black. */}
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover" style={{ backgroundImage: "url('/assets/smokecraft/cropped/seed-soil-bg.jpg')", backgroundPosition: 'left center', opacity: 0.8, filter: 'brightness(1.02) saturate(1.35) contrast(1.1)' }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(90deg,rgba(8,5,3,0.22) 0%,rgba(8,5,3,0.64) 42%,rgba(8,5,3,0.82) 100%)' }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(8,5,3,0.92) 0%,rgba(8,5,3,0.24) 18%,rgba(8,5,3,0.24) 82%,rgba(8,5,3,0.92) 100%)' }} />
+        <div className="absolute inset-0 bg-cover" style={{ backgroundImage: "url('/assets/smokecraft/cropped/seed-soil-bg.jpg')", backgroundPosition: 'left center', opacity: 0.95, filter: 'brightness(1.12) saturate(1.4) contrast(1.12)' }} />
+        <div className="absolute inset-y-0 right-0 bg-cover" style={{ width: '46%', backgroundImage: "url('/assets/smokecraft/cigars/robusto.jpg')", backgroundPosition: 'center', opacity: 0.55, filter: 'brightness(0.9) saturate(1.25) contrast(1.1)', maskImage: 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,1) 100%)', WebkitMaskImage: 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,1) 100%)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(90deg,rgba(8,5,3,0.14) 0%,rgba(8,5,3,0.36) 42%,rgba(8,5,3,0.5) 100%)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(8,5,3,0.88) 0%,rgba(8,5,3,0.14) 18%,rgba(8,5,3,0.14) 82%,rgba(8,5,3,0.88) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-16 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
         <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:40,minHeight:40 }} onClick={() => navigate('/smokecraft/format')} aria-label="Back"><ArrowBackIcon size={20} /></button>
@@ -346,7 +349,7 @@ export default function SeedSoil() {
             <ArrowBackIcon size={18} /> Back
           </button>
         </div>
-        <div data-marker="SEED PAIRING CLEAN BG V3" style={{ display: 'none' }} aria-hidden="true" />
+        <div data-marker="SEED PAIRING CLEAN BG V4" style={{ display: 'none' }} aria-hidden="true" />
       </main>
     </div>
   )
