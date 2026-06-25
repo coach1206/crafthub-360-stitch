@@ -81,6 +81,7 @@ export default function Mentor() {
       if (prev.includes(id)) return prev.filter(m => m !== id)
       if (prev.length >= MAX_SELECTIONS) return prev
       const mentor = MENTORS.find(m => m.id === id)
+      if (import.meta.env.DEV) console.debug('[SmokeCraft] mentor selected', { mentorId: id, mentorName: mentor?.name, voiceProvider: voice.voiceProvider })
       if (mentor?.greeting) voice.speak(mentor.greeting, id)
       return [...prev, id]
     })
@@ -127,6 +128,7 @@ export default function Mentor() {
             isMuted={voice.isMuted}
             isSpeaking={voice.isSpeaking}
             onToggle={voice.toggleMute}
+            voiceProvider={voice.voiceProvider}
           />
           <button className="smokecraft-mentor-lounge-btn" onClick={() => { voice.stop(); navigate('/grand-lounge-ranking') }}>
             Grand Lounge
@@ -270,7 +272,7 @@ export default function Mentor() {
           </button>
         </div>
       </footer>
-      <div data-marker="MENTOR CLEAN BG V1" style={{ display: 'none' }} aria-hidden="true" />
+      <div data-marker="MENTOR CLEAN PORTRAITS V2" style={{ display: 'none' }} aria-hidden="true" />
     </div>
   )
 }
