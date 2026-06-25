@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import TicketTicker from './common/TicketTicker.jsx'
 
 const systemTickerItems = [
@@ -50,11 +50,18 @@ const systemTickerItems = [
 ]
 
 export default function Layout() {
+  const { pathname } = useLocation()
+  // The SmokeCraft game entrance is a cinematic first-viewport experience — the
+  // venue ticker competes with the hero for attention, so it is hidden on that route.
+  const hideTicker = pathname === '/smokecraft' || pathname.startsWith('/smokecraft/')
+
   return (
     <>
-      <div style={{ position: 'sticky', top: 0, zIndex: 60 }}>
-        <TicketTicker items={systemTickerItems} />
-      </div>
+      {!hideTicker && (
+        <div style={{ position: 'sticky', top: 0, zIndex: 60 }}>
+          <TicketTicker items={systemTickerItems} />
+        </div>
+      )}
       <Outlet />
     </>
   )
