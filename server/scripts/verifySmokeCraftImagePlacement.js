@@ -109,7 +109,10 @@ const requirements = [
     sourceCandidates: ['public/PROFILE DISCOVER 11.png'],
     cropAsset: 'public/assets/smokecraft/cropped/passport-cover.jpg',
     component: 'src/pages/SmokeCraft.jsx',
-    oldGeneric: '/assets/smokecraft/cropped/discover-profile-hero.jpg',
+    // PROFILE DISCOVER 11.png is a full UI mockup (baked-in headline/cards/buttons) — it must
+    // never be re-introduced as a literal background layer behind the live rebuilt UI, since that
+    // duplicates every headline/card/button on the page.
+    oldGeneric: '/PROFILE DISCOVER 11.png',
   },
   {
     name: 'SEED & PAIRING.11.png',
