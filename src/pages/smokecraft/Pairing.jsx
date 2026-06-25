@@ -328,16 +328,11 @@ export default function Pairing() {
 
       <main className="pt-28 pb-36 px-margin max-w-[1440px] mx-auto">
 
-        {/* Progress */}
+        {/* Header (legacy supplemental page — not part of the 24-session VISIT_STRUCTURE, so no Round/Visit/Session stepper) */}
         <div className="flex items-center justify-between mb-8 flex-wrap gap-3">
           <div>
             <span className="font-label-sm text-label-sm text-primary uppercase tracking-widest">Cigar Experience Architect</span>
-            <h2 className="font-headline-lg text-headline-lg text-on-surface mt-0.5">Step 11 of 20: The Art of Pairing</h2>
-          </div>
-          <div className="flex gap-1.5 flex-wrap">
-            {Array.from({ length: 12 }, (_, i) => (
-              <div key={i} className={`w-10 h-1 rounded-full ${i < 11 ? 'bg-primary' : 'bg-surface-variant'}`} />
-            ))}
+            <h2 className="font-headline-lg text-headline-lg text-on-surface mt-0.5">The Art of Pairing</h2>
           </div>
         </div>
 

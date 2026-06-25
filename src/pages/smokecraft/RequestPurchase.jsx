@@ -4,6 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import { emit, SYSTEMS } from '../../services/shared/opsEventBus.js'
 import { StoreIcon, CigarIcon, CheckIcon, ArrowForwardIcon, ArrowBackIcon } from '../../components/smokecraft/PremiumIcons.jsx'
+import { getVisitProgress } from '../../constants/session.js'
 
 const OPTIONS = [
   { id: 'request', Icon: StoreIcon, label: 'Request from Humidor',     desc: 'A staff member will retrieve your selected cigar from the house humidor.', actionType: 'HUMIDOR_REQUEST' },
@@ -12,7 +13,7 @@ const OPTIONS = [
 
 export default function RequestPurchase() {
   const navigate = useNavigate()
-  const { completeStep, addXP, setRequestPurchaseChoice, syncPos3Activity, syncEATActivity } = useGuestSession()
+  const { session, completeStep, addXP, setRequestPurchaseChoice, syncPos3Activity, syncEATActivity } = useGuestSession()
   const [selected, setSelected] = useState(null)
   const [done, setDone] = useState(false)
 
@@ -56,6 +57,8 @@ export default function RequestPurchase() {
     navigate('/smokecraft/cut-toast-light')
   }
 
+  const stepProgress = getVisitProgress(session.completedSteps)
+
   return (
     <div className="request-purchase-page text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 -z-20 overflow-hidden request-purchase-page-bg">
@@ -68,8 +71,12 @@ export default function RequestPurchase() {
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
         <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
-          <span>Step 7 of 17</span>
-          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'41.2%' }} /></div>
+          <div className="smokecraft-progress-label flex items-center gap-3">
+            <span>Round {stepProgress.round} of 3</span>
+            <span>Visit {stepProgress.visit} of {stepProgress.totalVisits}</span>
+            <span>Session {stepProgress.session} of {stepProgress.totalSessions}</span>
+          </div>
+          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:`${(stepProgress.session/24)*100}%` }} /></div>
           <span>Request / Purchase</span>
         </div>
 

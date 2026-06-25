@@ -7,6 +7,7 @@ import PairingScorePanel from '../../components/smokecraft/PairingScorePanel.jsx
 import UniqueBlendPanel from '../../components/smokecraft/UniqueBlendPanel.jsx'
 import { calculatePairingScore, applyKeptWarningPenalty } from '../../services/smokecraft/smokePairingScoreService.js'
 import { createBlendSignature, calculateUniquenessScore } from '../../services/smokecraft/smokeUniquenessService.js'
+import { getVisitProgress } from '../../constants/session.js'
 
 const REGIONS = [
   {
@@ -180,6 +181,8 @@ export default function SeedSoil() {
     navigate('/smokecraft/mentor')
   }
 
+  const stepProgress = getVisitProgress(session.completedSteps)
+
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       {/* SEED PAIRING CLEAN BG V4 — V3 was still too dark/flat: the approved seed-soil-bg.jpg
@@ -202,8 +205,12 @@ export default function SeedSoil() {
       </header>
       <main className="relative pt-20 pb-16 px-6 max-w-[1280px] mx-auto">
         <div className="mb-3 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
-          <span>Step 5 of 17</span>
-          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'29.4%' }} /></div>
+          <div className="smokecraft-progress-label flex items-center gap-3">
+            <span>Round {stepProgress.round} of 3</span>
+            <span>Visit {stepProgress.visit} of {stepProgress.totalVisits}</span>
+            <span>Session {stepProgress.session} of {stepProgress.totalSessions}</span>
+          </div>
+          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:`${(stepProgress.session/24)*100}%` }} /></div>
           <span>Seed &amp; Soil</span>
         </div>
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-1">SmokeCraft 360</p>

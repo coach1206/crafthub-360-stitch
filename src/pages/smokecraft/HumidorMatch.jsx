@@ -5,6 +5,7 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import { computeHumidorRecommendations } from '../../utils/smokecraftHumidorMatch.js'
 import { emit, SYSTEMS } from '../../services/shared/opsEventBus.js'
 import { DropIcon, CheckIcon, ChevronRightIcon, InsightsIcon, ArrowForwardIcon, ArrowBackIcon, CigarIcon, DiamondIcon, CrownIcon } from '../../components/smokecraft/PremiumIcons.jsx'
+import { getVisitProgress } from '../../constants/session.js'
 
 const LANE_META = {
   'best-match':         { label: 'Best Match',         Icon: CigarIcon },
@@ -166,6 +167,8 @@ export default function HumidorMatch() {
     navigate('/smokecraft/request-purchase')
   }
 
+  const stepProgress = getVisitProgress(session.completedSteps)
+
   return (
     <div className="humidor-page text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 -z-20 overflow-hidden humidor-page-bg">
@@ -178,8 +181,12 @@ export default function HumidorMatch() {
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
         <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
-          <span>Step 6 of 17</span>
-          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'35.3%' }} /></div>
+          <div className="smokecraft-progress-label flex items-center gap-3">
+            <span>Round {stepProgress.round} of 3</span>
+            <span>Visit {stepProgress.visit} of {stepProgress.totalVisits}</span>
+            <span>Session {stepProgress.session} of {stepProgress.totalSessions}</span>
+          </div>
+          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:`${(stepProgress.session/24)*100}%` }} /></div>
           <span>Humidor Match</span>
         </div>
 
