@@ -29,7 +29,7 @@ const SCREENS = [
   { name: 'enroll', route: '/smokecraft/enroll', reference: 'smokecraft Intake.png' },
   { name: 'seed-soil', route: '/smokecraft/seed-soil', reference: 'SEED & PAIRING.11.png' },
   { name: 'format', route: '/smokecraft/format', reference: 'SHAPE SIZE BURN.11.png' },
-  { name: 'golden-box', route: '/smokecraft/golden-box', reference: 'GOLDEN BOX JOURNEY11.png' },
+  { name: 'golden-box', route: '/smokecraft/golden-box/status', reference: 'GOLDEN BOX JOURNEY11.png' },
   { name: 'leaderboard', route: '/smokecraft/leaderboard', reference: 'lounge demo ranking.11png.png' },
 ]
 
