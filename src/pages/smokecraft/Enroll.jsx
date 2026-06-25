@@ -98,9 +98,9 @@ export default function Enroll() {
         minHeight: 'max(884px, 100dvh)',
         position: 'relative',
         backgroundColor: '#050302',
-        backgroundImage: 'linear-gradient(90deg, rgba(2,1,1,0.62), rgba(2,1,1,0.12) 28%, rgba(2,1,1,0.12) 72%, rgba(2,1,1,0.62)), linear-gradient(180deg, rgba(3,2,1,0.15), rgba(3,2,1,0.68)), url(/smokecraft.jpg)',
+        backgroundImage: 'linear-gradient(90deg, rgba(4,2,1,0.5), rgba(4,2,1,0.08) 26%, rgba(4,2,1,0.08) 74%, rgba(4,2,1,0.5)), linear-gradient(180deg, rgba(5,3,1,0.1), rgba(5,3,1,0.58)), url(/smokecraft.jpg)',
         backgroundSize: 'cover',
-        backgroundPosition: 'center top',
+        backgroundPosition: 'center 28%',
         backgroundAttachment: 'fixed',
       }}
     >
@@ -123,43 +123,44 @@ export default function Enroll() {
         <span className="font-label-sm hidden md:block" style={{ color: 'rgba(248,236,214,0.6)', fontSize: 11 }}>Step 3 of 4</span>
       </header>
 
-      <main className="relative z-10 pt-16 pb-40 px-6 max-w-[1040px] mx-auto">
+      <main className="relative z-10 pt-16 pb-32 px-6 max-w-[1040px] mx-auto">
         {/* Header */}
-        <section className="mb-6 text-center">
+        <section className="mb-7 text-center">
           <div className="smokecraft-intake-crest" aria-hidden="true">SC</div>
           <div className="smokecraft-intake-kicker" />
-          <h2 className="mb-3" style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontWeight: 700, fontSize: 'clamp(38px,5.5vw,56px)', color: '#ffd889', textShadow: '0 0 24px rgba(233,193,118,0.5), 0 10px 28px rgba(0,0,0,0.85)' }}>SmokeCraft Intake</h2>
-          <p className="font-body-md max-w-md mx-auto" style={{ color: 'rgba(255,247,229,0.82)', textShadow: '0 2px 16px rgba(0,0,0,0.8)', fontSize: 13, lineHeight: 1.6 }}>
+          <h2 className="mb-3" style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontWeight: 700, fontSize: 'clamp(44px,6.4vw,68px)', color: '#ffd889', textShadow: '0 0 30px rgba(233,193,118,0.55), 0 10px 30px rgba(0,0,0,0.85)' }}>SmokeCraft Intake</h2>
+          <p className="font-body-md max-w-lg mx-auto" style={{ color: 'rgba(255,247,229,0.86)', textShadow: '0 2px 16px rgba(0,0,0,0.8)', fontSize: 14.5, lineHeight: 1.6 }}>
             Tell us a bit about yourself so we can craft a lounge experience worthy of your taste. Your privacy is our priority—only your nickname enters the humidor leaderboard.
           </p>
         </section>
 
         {/* Form card */}
-        <div className="smokecraft-intake-card p-8 rounded-2xl shadow-2xl space-y-6" style={{
-          background: 'linear-gradient(155deg, rgba(46,32,20,0.74) 0%, rgba(20,13,8,0.86) 46%, rgba(8,5,3,0.92) 100%)',
-          backdropFilter: 'blur(20px) saturate(1.2)',
-          WebkitBackdropFilter: 'blur(20px) saturate(1.2)',
-          border: '1px solid rgba(233,193,118,0.4)',
-          boxShadow: '0 28px 80px rgba(0,0,0,0.72), inset 0 1px 0 rgba(255,232,186,0.1), inset 0 0 60px rgba(233,193,118,0.06)',
+        <div className="smokecraft-intake-card p-9 rounded-2xl shadow-2xl space-y-5" style={{
+          background: 'linear-gradient(155deg, rgba(58,40,24,0.82) 0%, rgba(28,18,11,0.9) 46%, rgba(12,7,4,0.95) 100%)',
+          backdropFilter: 'blur(22px) saturate(1.25)',
+          WebkitBackdropFilter: 'blur(22px) saturate(1.25)',
+          border: '1px solid rgba(233,193,118,0.42)',
+          boxShadow: '0 32px 90px rgba(0,0,0,0.78), inset 0 1px 0 rgba(255,232,186,0.12), inset 0 0 70px rgba(233,193,118,0.08)',
         }}>
           {/* Photo upload */}
           <div className="flex flex-col items-center">
             <div className="relative group">
-              <div className="w-32 h-32 rounded-full border-2 border-dashed flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/60" style={{
-                borderColor: 'rgba(233,193,118,0.65)',
-                background: 'radial-gradient(circle at 35% 25%, rgba(233,193,118,0.16), rgba(20,14,10,0.85))',
-                boxShadow: '0 0 28px rgba(233,193,118,0.22), inset 0 1px 0 rgba(255,255,255,0.1)',
+              <div className="w-40 h-40 rounded-full border-2 border-dashed flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/60" style={{
+                borderColor: 'rgba(233,193,118,0.75)',
+                background: 'radial-gradient(circle at 35% 25%, rgba(233,193,118,0.2), rgba(20,14,10,0.88))',
+                boxShadow: '0 0 36px rgba(233,193,118,0.28), inset 0 1px 0 rgba(255,255,255,0.12)',
               }}>
                 {avatarSrc
                   ? <img src={avatarSrc} alt="Avatar" className="absolute inset-0 w-full h-full object-cover" />
-                  : <span className="material-symbols-outlined text-primary text-5xl" style={{ opacity: 0.75 }}>add_a_photo</span>
+                  : <span className="material-symbols-outlined text-primary" style={{ opacity: 0.8, fontSize: 56 }}>add_a_photo</span>
                 }
               </div>
               <label
-                className="absolute -bottom-1 -right-1 bg-primary text-on-primary w-9 h-9 rounded-full flex items-center justify-center cursor-pointer shadow-lg active:scale-90 transition-transform"
+                className="absolute -bottom-1 -right-1 bg-primary text-on-primary w-11 h-11 rounded-full flex items-center justify-center cursor-pointer shadow-lg active:scale-90 transition-transform"
+                style={{ boxShadow: '0 4px 18px rgba(233,193,118,0.5)' }}
                 htmlFor="photo-upload"
               >
-                <span className="material-symbols-outlined text-lg">add</span>
+                <span className="material-symbols-outlined text-xl">add</span>
                 <input
                   accept={ACCEPT_ATTRIBUTE}
                   className="hidden"
@@ -170,24 +171,24 @@ export default function Enroll() {
                 />
               </label>
             </div>
-            <p className="font-label-sm text-primary mt-3 tracking-widest uppercase" style={{ textShadow: '0 2px 14px rgba(0,0,0,0.35)', fontSize: 10 }}>Member Portrait (Optional)</p>
+            <p className="font-label-sm text-primary mt-4 tracking-widest uppercase" style={{ textShadow: '0 2px 14px rgba(0,0,0,0.35)', fontSize: 11 }}>Member Portrait (Optional)</p>
             {photoError && (
               <p className="font-label-sm mt-2 text-center" style={{ color: 'rgba(247,239,226,0.85)', fontSize: 11.5 }} role="status">{photoError}</p>
             )}
           </div>
 
           {/* Form */}
-          <form className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5" onSubmit={(e) => e.preventDefault()}>
+          <form className="grid grid-cols-1 sm:grid-cols-2 gap-x-9 gap-y-3.5" onSubmit={(e) => e.preventDefault()}>
             {/* Private Identity */}
             <div className="sm:col-span-2 flex items-center gap-3 pb-2" style={{ borderBottom: '1px solid rgba(255,232,186,0.2)' }}>
               <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
               <h3 className="font-label-lg text-primary uppercase tracking-widest">Private Identity</h3>
             </div>
 
-            <div className="gold-underline py-2">
+            <div className="gold-underline py-1.5">
               <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Full Legal Name</label>
               <input
-                className="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0 focus:outline-none"
+                className="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-11 px-0 focus:outline-none"
                 placeholder="e.g. Alistair Sterling"
                 type="text"
                 name="fullName"
@@ -196,10 +197,10 @@ export default function Enroll() {
               />
             </div>
 
-            <div className="gold-underline py-2">
+            <div className="gold-underline py-1.5">
               <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Phone Number</label>
               <input
-                className="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0 focus:outline-none"
+                className="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-11 px-0 focus:outline-none"
                 placeholder="+1 (555) 000-0000"
                 type="tel"
                 name="phone"
@@ -208,10 +209,10 @@ export default function Enroll() {
               />
             </div>
 
-            <div className="gold-underline py-2 sm:col-span-2">
+            <div className="gold-underline py-1.5 sm:col-span-2">
               <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Email Address</label>
               <input
-                className="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-12 px-0 focus:outline-none"
+                className="w-full bg-transparent border-none text-body-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-0 h-11 px-0 focus:outline-none"
                 placeholder="sterling@private.com"
                 type="email"
                 name="email"
@@ -221,15 +222,15 @@ export default function Enroll() {
             </div>
 
             {/* Lounge Persona */}
-            <div className="sm:col-span-2 flex items-center gap-3 pb-2 mt-4" style={{ borderBottom: '1px solid rgba(255,232,186,0.2)' }}>
+            <div className="sm:col-span-2 flex items-center gap-3 pb-2 mt-2" style={{ borderBottom: '1px solid rgba(255,232,186,0.2)' }}>
               <span className="material-symbols-outlined text-primary">public</span>
               <h3 className="font-label-lg text-primary uppercase tracking-widest">Lounge Persona</h3>
             </div>
 
-            <div className="gold-underline py-2">
+            <div className="gold-underline py-1.5">
               <label className="block font-label-sm text-secondary mb-1 uppercase">Nickname / Leaderboard</label>
               <input
-                className="w-full bg-transparent border-none text-body-lg text-secondary placeholder:text-secondary/20 focus:ring-0 h-12 px-0 focus:outline-none"
+                className="w-full bg-transparent border-none text-body-lg text-secondary placeholder:text-secondary/20 focus:ring-0 h-11 px-0 focus:outline-none"
                 placeholder="The Curator"
                 type="text"
                 name="nickname"
@@ -238,9 +239,9 @@ export default function Enroll() {
               />
             </div>
 
-            <div className="gold-underline py-2">
+            <div className="gold-underline py-1.5">
               <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Age Confirmation</label>
-              <div className="flex items-center h-12">
+              <div className="flex items-center h-11">
                 <input
                   className="w-6 h-6 rounded border-outline bg-surface-container text-primary focus:ring-primary focus:ring-offset-surface"
                   id="age-check"
@@ -256,10 +257,10 @@ export default function Enroll() {
             </div>
 
             {/* Region */}
-            <div className="gold-underline py-2 sm:col-span-2">
+            <div className="gold-underline py-1.5 sm:col-span-2">
               <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Country / Region</label>
               <select
-                className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none"
+                className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-11 px-0 focus:outline-none"
                 name="countryRegion"
                 value={form.countryRegion}
                 onChange={handleChange}
@@ -277,14 +278,14 @@ export default function Enroll() {
             </div>
 
             {/* Smoke Preference DNA */}
-            <div className="sm:col-span-2 flex items-center gap-3 pb-2 mt-4" style={{ borderBottom: '1px solid rgba(255,232,186,0.2)' }}>
+            <div className="sm:col-span-2 flex items-center gap-3 pb-2 mt-2" style={{ borderBottom: '1px solid rgba(255,232,186,0.2)' }}>
               <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>fingerprint</span>
               <h3 className="font-label-lg text-primary uppercase tracking-widest">Smoke Preference DNA</h3>
             </div>
 
-            <div className="gold-underline py-2">
+            <div className="gold-underline py-1.5">
               <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Experience Level</label>
-              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none" name="experienceLevel" value={form.experienceLevel} onChange={handleChange}>
+              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-11 px-0 focus:outline-none" name="experienceLevel" value={form.experienceLevel} onChange={handleChange}>
                 <option value="">Select experience level</option>
                 <option value="Novice">Novice</option>
                 <option value="Enthusiast">Enthusiast</option>
@@ -293,9 +294,9 @@ export default function Enroll() {
               </select>
             </div>
 
-            <div className="gold-underline py-2">
+            <div className="gold-underline py-1.5">
               <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Strength Preference</label>
-              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none" name="strengthPreference" value={form.strengthPreference} onChange={handleChange}>
+              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-11 px-0 focus:outline-none" name="strengthPreference" value={form.strengthPreference} onChange={handleChange}>
                 <option value="">Select strength preference</option>
                 <option value="Mild">Mild</option>
                 <option value="Mild-Medium">Mild-Medium</option>
@@ -305,9 +306,9 @@ export default function Enroll() {
               </select>
             </div>
 
-            <div className="gold-underline py-2">
+            <div className="gold-underline py-1.5">
               <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Occasion</label>
-              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none" name="occasion" value={form.occasion} onChange={handleChange}>
+              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-11 px-0 focus:outline-none" name="occasion" value={form.occasion} onChange={handleChange}>
                 <option value="">Select occasion</option>
                 <option value="Solo Relaxation">Solo Relaxation</option>
                 <option value="Celebration">Celebration</option>
@@ -318,9 +319,9 @@ export default function Enroll() {
               </select>
             </div>
 
-            <div className="gold-underline py-2">
+            <div className="gold-underline py-1.5">
               <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Social Preference</label>
-              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none" name="socialPreference" value={form.socialPreference} onChange={handleChange}>
+              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-11 px-0 focus:outline-none" name="socialPreference" value={form.socialPreference} onChange={handleChange}>
                 <option value="">Select social preference</option>
                 <option value="Solo">Solo</option>
                 <option value="Small Group">Small Group</option>
@@ -328,9 +329,9 @@ export default function Enroll() {
               </select>
             </div>
 
-            <div className="gold-underline py-2 sm:col-span-2">
+            <div className="gold-underline py-1.5 sm:col-span-2">
               <label className="block font-label-sm text-on-surface-variant mb-1 uppercase">Budget Range</label>
-              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-12 px-0 focus:outline-none" name="budgetRange" value={form.budgetRange} onChange={handleChange}>
+              <select className="w-full bg-transparent border-none text-body-lg text-on-surface focus:ring-0 h-11 px-0 focus:outline-none" name="budgetRange" value={form.budgetRange} onChange={handleChange}>
                 <option value="">Select budget range</option>
                 <option value="Under $10">Under $10</option>
                 <option value="$10–20">$10–20</option>
@@ -393,12 +394,12 @@ export default function Enroll() {
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 w-full z-50 rounded-t-xl h-14 px-6 flex justify-around items-center" style={{
-        background: 'linear-gradient(180deg, rgba(18,13,10,0.5), rgba(6,4,3,0.88))',
+      <nav className="fixed bottom-0 w-full z-50 rounded-t-xl h-11 px-6 flex justify-around items-center" style={{
+        background: 'linear-gradient(180deg, rgba(18,13,10,0.42), rgba(6,4,3,0.82))',
         backdropFilter: 'blur(18px) saturate(1.1)',
         WebkitBackdropFilter: 'blur(18px) saturate(1.1)',
         borderTop: '1px solid rgba(255,232,186,0.12)',
-        boxShadow: '0 -8px 26px rgba(0,0,0,0.28)',
+        boxShadow: '0 -8px 26px rgba(0,0,0,0.24)',
       }}>
         {[
           { icon: 'explore',         label: 'Explore',   active: false, to: '/smokecraft' },
@@ -411,14 +412,14 @@ export default function Enroll() {
             onClick={() => navigate(to)}
             className={`flex flex-col items-center justify-center cursor-pointer transition-all active:scale-90 duration-150 border-0 bg-transparent ${active ? 'text-primary font-bold scale-105' : 'text-on-surface-variant hover:text-primary'}`}
           >
-            <span className="material-symbols-outlined" style={{ fontSize: 17, ...(active ? { fontVariationSettings: "'FILL' 1" } : {}) }}>{icon}</span>
-            <span style={{ fontSize: 8.5, marginTop: 1 }}>{label}</span>
+            <span className="material-symbols-outlined" style={{ fontSize: 15, ...(active ? { fontVariationSettings: "'FILL' 1" } : {}) }}>{icon}</span>
+            <span style={{ fontSize: 7.5, marginTop: 1 }}>{label}</span>
           </button>
         ))}
       </nav>
 
       <div aria-hidden="true" style={{ position: 'fixed', bottom: 4, right: 8, zIndex: 999, fontSize: 8, letterSpacing: '0.08em', color: 'rgba(233,193,118,0.4)', pointerEvents: 'none' }}>
-        SMOKECRAFT INTAKE CLEAN V1
+        SMOKECRAFT INTAKE CLEAN V2
       </div>
 
       <style>{`
@@ -448,14 +449,14 @@ export default function Enroll() {
         .smokecraft-intake-right-scene {
           position: fixed;
           top: 0;
-          height: min(46vh, 420px);
-          width: min(20vw, 280px);
+          height: min(50vh, 460px);
+          width: min(23vw, 320px);
           z-index: 0;
           pointer-events: none;
-          opacity: 0.95;
+          opacity: 1;
           background-repeat: no-repeat;
           background-size: 100% auto;
-          filter: saturate(1.12) contrast(1.1) brightness(1.05);
+          filter: saturate(1.22) contrast(1.18) brightness(1.08);
           mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%), linear-gradient(90deg, #000 0%, rgba(0,0,0,0.85) 70%, transparent 100%);
           mask-composite: intersect;
           -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%), linear-gradient(90deg, #000 0%, rgba(0,0,0,0.85) 70%, transparent 100%);
@@ -474,7 +475,7 @@ export default function Enroll() {
         .smokecraft-intake-card {
           position: relative;
           overflow: hidden;
-          width: min(800px, 92vw);
+          width: min(840px, 92vw);
           margin-inline: auto;
         }
         .smokecraft-intake-card > * {
@@ -514,7 +515,7 @@ export default function Enroll() {
           .smokecraft-intake main {
             padding-left: 18px !important;
             padding-right: 18px !important;
-            padding-bottom: 150px !important;
+            padding-bottom: 110px !important;
           }
           .smokecraft-intake-card {
             padding: 24px 18px !important;
