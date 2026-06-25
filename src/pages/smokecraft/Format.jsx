@@ -564,7 +564,7 @@ export default function Format() {
           z-index: 2;
           max-width: 1320px;
           margin: 0 auto;
-          padding: 104px 28px 40px;
+          padding: 60px 28px 40px;
         }
         .format-progress {
           display: grid;
@@ -572,8 +572,8 @@ export default function Format() {
           gap: 18px;
           align-items: center;
           color: #e9c176;
-          margin-bottom: 20px;
-          font-size: 13px;
+          margin-bottom: 8px;
+          font-size: 12px;
           text-transform: uppercase;
           letter-spacing: 0.14em;
           font-weight: 900;
@@ -597,15 +597,15 @@ export default function Format() {
           color: #e9c176;
           text-transform: uppercase;
           letter-spacing: 0.18em;
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 900;
-          margin-bottom: 10px;
+          margin-bottom: 6px;
         }
         .format-title {
-          margin: 0 0 10px;
+          margin: 0 0 4px;
           font-family: "Playfair Display", Georgia, serif;
-          font-size: clamp(48px, 5vw, 76px);
-          line-height: 0.96;
+          font-size: clamp(26px, 2.8vw, 38px);
+          line-height: 1;
           color: #f7efe2;
         }
         .format-title em {
@@ -614,21 +614,21 @@ export default function Format() {
         }
         .format-intro {
           max-width: 720px;
-          margin: 0 0 22px;
+          margin: 0 0 8px;
           color: rgba(247,239,226,0.8);
-          font-size: 17px;
-          line-height: 1.55;
+          font-size: 12.5px;
+          line-height: 1.35;
         }
         .format-card-grid {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 18px;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 10px;
         }
         .format-card {
           position: relative;
-          min-height: 420px;
-          padding: 22px;
-          border-radius: 16px;
+          min-height: 165px;
+          padding: 10px;
+          border-radius: 12px;
           border: 1.5px solid rgba(233,193,118,0.3);
           background:
             radial-gradient(ellipse at 50% 0%, rgba(233,193,118,0.1), transparent 60%),
@@ -694,12 +694,12 @@ export default function Format() {
         }
         .format-card__visual {
           position: relative;
-          height: 152px;
+          height: 54px;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 16px 0 10px;
-          border-radius: 12px;
+          margin: 4px 0 4px;
+          border-radius: 8px;
           overflow: hidden;
           background:
             radial-gradient(ellipse at 50% 100%, rgba(233,193,118,0.16), transparent 60%),
@@ -727,7 +727,7 @@ export default function Format() {
           display: flex;
           align-items: center;
           gap: 8px;
-          margin: 0 0 12px;
+          margin: 0 0 6px;
         }
         .format-silhouette__bar {
           flex-shrink: 0;
@@ -832,29 +832,33 @@ export default function Format() {
           margin: 0 0 2px;
           font-family: "Playfair Display", Georgia, serif;
           color: #f7efe2;
-          font-size: 27px;
+          font-size: 18px;
           line-height: 1.05;
         }
         .format-card__type {
           display: inline-block;
-          margin-bottom: 8px;
+          margin-bottom: 4px;
           color: rgba(233,193,118,0.7);
-          font-size: 11px;
+          font-size: 10px;
           font-weight: 800;
           letter-spacing: 0.1em;
           text-transform: uppercase;
         }
         .format-card p {
-          margin: 0 0 12px;
+          margin: 0 0 4px;
           color: rgba(247,239,226,0.76);
-          font-size: 15px;
-          line-height: 1.35;
+          font-size: 11px;
+          line-height: 1.25;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
         }
         .format-card__facts {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 9px 14px;
-          margin-bottom: 12px;
+          gap: 2px 6px;
+          margin-bottom: 4px;
         }
         .format-card__facts div {
           display: flex;
@@ -863,34 +867,34 @@ export default function Format() {
         }
         .format-card__fact-label {
           color: rgba(233,193,118,0.62);
-          font-size: 10px;
+          font-size: 9px;
           font-weight: 800;
           letter-spacing: 0.08em;
           text-transform: uppercase;
         }
         .format-card__fact-value {
           color: #f7efe2;
-          font-size: 13px;
+          font-size: 11px;
           font-weight: 700;
-          line-height: 1.25;
+          line-height: 1.2;
           display: inline-flex;
           align-items: center;
-          gap: 5px;
+          gap: 4px;
         }
         .format-card__tags {
           display: flex;
           flex-wrap: wrap;
-          gap: 6px;
-          margin-top: 11px;
+          gap: 4px;
+          margin-top: 6px;
         }
         .smokecraft-insight-chip {
           border: 1px solid rgba(233,193,118,0.24);
           border-radius: 999px;
-          padding: 7px 11px;
-          min-height: 32px;
+          padding: 4px 8px;
+          min-height: 24px;
           color: #e9c176;
           background: rgba(233,193,118,0.08);
-          font-size: 11px;
+          font-size: 9px;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.04em;
@@ -919,13 +923,13 @@ export default function Format() {
           all: unset;
           display: flex;
           flex-direction: column;
-          gap: 2px;
-          padding: 6px 4px;
-          border-radius: 8px;
+          gap: 1px;
+          padding: 3px 4px;
+          border-radius: 6px;
           cursor: pointer;
           font-family: inherit;
           text-align: left;
-          min-height: 44px;
+          min-height: 0;
           transition: background 0.18s ease, box-shadow 0.18s ease;
         }
         .format-card__fact:hover {
@@ -998,7 +1002,7 @@ export default function Format() {
         }
         .format-side {
           display: grid;
-          gap: 12px;
+          gap: 8px;
         }
         .format-panel {
           border: 1px solid rgba(233,193,118,0.26);
@@ -1008,26 +1012,26 @@ export default function Format() {
           overflow: hidden;
         }
         .format-panel__inner {
-          padding: 18px;
+          padding: 12px;
         }
         .format-panel__label {
           color: #e9c176;
           text-transform: uppercase;
           letter-spacing: 0.18em;
-          font-size: 12px;
+          font-size: 11px;
           font-weight: 900;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
         }
         .format-insight {
           display: grid;
-          grid-template-columns: 42% 1fr;
-          gap: 16px;
+          grid-template-columns: 38% 1fr;
+          gap: 12px;
           align-items: center;
-          min-height: 310px;
+          min-height: 150px;
         }
         .format-insight__cigar {
           position: relative;
-          min-height: 280px;
+          min-height: 130px;
           display: grid;
           place-items: center;
           border-radius: 10px;
@@ -1048,27 +1052,27 @@ export default function Format() {
           height: 100%;
         }
         .format-insight h2 {
-          margin: 0 0 16px;
+          margin: 0 0 8px;
           font-family: "Playfair Display", Georgia, serif;
-          font-size: 28px;
+          font-size: 19px;
           color: #f7efe2;
         }
         .format-insight dl {
           margin: 0;
           display: grid;
-          gap: 12px;
+          gap: 6px;
         }
         .format-insight dt {
           color: #e9c176;
           text-transform: uppercase;
           letter-spacing: 0.12em;
-          font-size: 11px;
+          font-size: 9px;
           font-weight: 900;
         }
         .format-insight dd {
-          margin: 2px 0 0;
+          margin: 1px 0 0;
           color: rgba(247,239,226,0.86);
-          font-size: 16px;
+          font-size: 12px;
           font-weight: 700;
         }
         .format-dots {
@@ -1088,17 +1092,17 @@ export default function Format() {
         }
         .session-list {
           display: grid;
-          gap: 12px;
+          gap: 6px;
         }
         .session-row {
-          min-height: 84px;
+          min-height: 52px;
           display: grid;
-          grid-template-columns: 52px 1fr;
-          gap: 14px;
+          grid-template-columns: 34px 1fr;
+          gap: 10px;
           align-items: center;
-          padding: 16px;
+          padding: 8px 10px;
           border: 1px solid rgba(233,193,118,0.18);
-          border-radius: 14px;
+          border-radius: 12px;
           background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18));
           box-shadow: inset 0 1px 0 rgba(255,236,178,0.05);
           cursor: pointer;
@@ -1126,8 +1130,8 @@ export default function Format() {
           box-shadow: 0 0 30px rgba(233,193,118,0.4), inset 0 0 0 1.5px rgba(255,225,151,0.5);
         }
         .session-row__icon {
-          width: 46px;
-          height: 46px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
           display: grid;
           place-items: center;
@@ -1139,36 +1143,36 @@ export default function Format() {
           display: block;
           color: #e9c176;
           text-transform: uppercase;
-          font-size: 14px;
+          font-size: 12px;
           letter-spacing: 0.1em;
-          margin-bottom: 2px;
+          margin-bottom: 1px;
         }
         .session-row span {
           margin: 0;
           color: rgba(247,239,226,0.55);
-          font-size: 12px;
+          font-size: 10px;
           letter-spacing: 0.04em;
         }
         .session-row p {
-          margin: 4px 0 0;
+          margin: 2px 0 0;
           color: rgba(247,239,226,0.74);
-          font-size: 13px;
-          line-height: 1.35;
+          font-size: 11px;
+          line-height: 1.3;
         }
         .format-tip {
           display: grid;
-          grid-template-columns: 1fr 130px;
-          gap: 12px;
+          grid-template-columns: 1fr 100px;
+          gap: 10px;
           align-items: center;
         }
         .format-tip p {
           margin: 0;
           color: rgba(247,239,226,0.82);
-          font-size: 15px;
-          line-height: 1.45;
+          font-size: 12.5px;
+          line-height: 1.4;
         }
         .format-tip__image {
-          height: 86px;
+          height: 58px;
           border-radius: 10px;
           background:
             radial-gradient(circle at 72% 28%, rgba(233,193,118,0.32), transparent 32%),
@@ -1179,16 +1183,16 @@ export default function Format() {
           box-shadow: inset 0 0 0 1px rgba(233,193,118,0.2);
         }
         .format-cta {
-          margin-top: 14px;
-          min-height: 138px;
+          margin-top: 10px;
+          min-height: 92px;
           display: grid;
-          grid-template-columns: 250px 1fr auto;
-          gap: 22px;
+          grid-template-columns: 170px 1fr auto;
+          gap: 16px;
           align-items: center;
-          padding: 18px;
+          padding: 12px;
         }
         .format-cta__image {
-          height: 102px;
+          height: 68px;
           border-radius: 12px;
           background:
             linear-gradient(90deg, rgba(5,3,2,0.1), rgba(5,3,2,0.28)),
@@ -1198,28 +1202,28 @@ export default function Format() {
           box-shadow: inset 0 0 0 1px rgba(233,193,118,0.24);
         }
         .format-cta h2 {
-          margin: 0 0 8px;
+          margin: 0 0 4px;
           color: #e9c176;
           font-family: "Playfair Display", Georgia, serif;
-          font-size: 31px;
+          font-size: 21px;
         }
         .format-cta p {
           margin: 0;
           color: rgba(247,239,226,0.78);
-          font-size: 16px;
-          line-height: 1.45;
+          font-size: 13px;
+          line-height: 1.4;
         }
         .format-actions {
           display: flex;
-          gap: 10px;
+          gap: 8px;
           align-items: stretch;
         }
         .format-actions button {
-          min-height: 62px;
+          min-height: 44px;
           border-radius: 10px;
-          padding: 0 24px;
+          padding: 0 18px;
           cursor: pointer;
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 900;
           letter-spacing: 0.13em;
           text-transform: uppercase;
@@ -1253,6 +1257,33 @@ export default function Format() {
           font-weight: 900;
           min-height: 22px;
           font-size: 15px;
+        }
+        .format-shell section[aria-label="Cigar Intelligence"] {
+          margin-bottom: 8px !important;
+          padding: 8px !important;
+        }
+        .format-shell section[aria-label="Cigar Intelligence"] .wrapper-profile-card,
+        .format-shell section[aria-label="Cigar Intelligence"] [aria-label="Ring Gauge and Vitola Strategy"] > div,
+        .format-shell section[aria-label="Cigar Intelligence"] [aria-label="Burn-Time Strategy"] > div {
+          min-height: 0 !important;
+          padding: 4px 8px !important;
+        }
+        .format-shell section[aria-label="Cigar Intelligence"] .grid,
+        .format-shell section[aria-label="Cigar Intelligence"] .flex.flex-col {
+          gap: 4px !important;
+        }
+        .format-shell section[aria-label="Cigar Intelligence"] .mt-5,
+        .format-shell section[aria-label="Cigar Intelligence"] .mb-5 {
+          margin-top: 6px !important;
+          margin-bottom: 6px !important;
+        }
+        .format-shell section[aria-label="Cigar Intelligence"] p.font-body-sm,
+        .format-shell section[aria-label="Cigar Intelligence"] .wrapper-profile-card p {
+          font-size: 10.5px !important;
+          line-height: 1.2 !important;
+        }
+        .format-shell section[aria-label="Cigar Intelligence"] p.font-label-md {
+          font-size: 11.5px !important;
         }
         @media (max-width: 1120px) {
           .format-layout { grid-template-columns: 1fr; }
@@ -1355,26 +1386,11 @@ export default function Format() {
                         <span className="format-shape-badge">{format.shapeProfile.badge}</span>
                       )}
                     </span>
-                    {format.shapeProfile && (
-                      <span className="format-silhouette" aria-hidden="true">
-                        <span
-                          className={`format-silhouette__bar${format.taper ? ' is-tapered' : ''}`}
-                          style={{
-                            width: `${format.shapeProfile.lengthPct ?? 50}%`,
-                            height: format.shapeProfile.thicknessPx ?? 12,
-                          }}
-                        />
-                        <span className="format-silhouette__label">
-                          {format.shapeProfile.label}
-                          <em>Relative size guide</em>
-                        </span>
-                      </span>
-                    )}
                     <h2>{format.name}</h2>
                     <span className="format-card__type">{format.shape}</span>
                     <p>{format.description}</p>
                     <div className="format-card__facts">
-                      {factChips.map((chip) => {
+                      {factChips.slice(0, 4).map((chip) => {
                         const isChipSelected = cardActiveChip?.id === `${format.id}:${chip.id}`
                         return (
                           <button
@@ -1543,7 +1559,7 @@ export default function Format() {
             </button>
           </div>
         </section>
-        <div data-marker="SHAPE BURN CLEAN BG V1" style={{ display: 'none' }} aria-hidden="true" />
+        <div data-marker="SHAPE BURN CLEAN BG V2" style={{ display: 'none' }} aria-hidden="true" />
       </main>
 
       <SmokeCraftBottomNav active="smokecraft" />
