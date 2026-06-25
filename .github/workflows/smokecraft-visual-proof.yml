@@ -1,4 +1,4 @@
-name: SmokeCraft Visual Proof
+name: MVP2 Visual Proof
 
 on:
   pull_request:
@@ -6,6 +6,16 @@ on:
       - 'src/pages/SmokeCraft.jsx'
       - 'src/pages/smokecraft/**'
       - 'src/components/smokecraft/**'
+      - 'src/pages/pos3/**'
+      - 'src/components/pos3/**'
+      - 'src/pages/eat/**'
+      - 'src/components/eat/**'
+      - 'src/pages/passport/**'
+      - 'src/components/passport/**'
+      - 'src/pages/dayone360/**'
+      - 'src/components/dayone360/**'
+      - 'src/pages/crafthub/**'
+      - 'src/components/crafthub/**'
       - 'src/styles.css'
       - 'public/assets/smokecraft/**'
       - 'public/*SmokeCraft*'
@@ -14,6 +24,14 @@ on:
       - 'public/*SHAPE*'
       - 'public/*GOLDEN*'
       - 'public/*LOUNGE*'
+      - 'public/*PASSPORT*'
+      - 'public/*Passport*'
+      - 'public/*DAYONE360*'
+      - 'public/*CRAFT HUB*'
+      - 'public/*POS*'
+      - 'public/*EAT*'
+      - 'scripts/visualProof.js'
+      - 'scripts/smokecraftVisualProof.js'
 
 jobs:
   visual-proof:
@@ -31,13 +49,13 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run SmokeCraft visual proof
-        run: npm run visual:smokecraft
+      - name: Run MVP2 visual proof (all families)
+        run: npm run visual:all
 
       - name: Upload visual proof artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: smokecraft-visual-proof
+          name: mvp2-visual-proof
           path: docs/visual-proof/
           if-no-files-found: warn
