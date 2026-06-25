@@ -8,8 +8,10 @@
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T17:47:01.864Z",
-  "commitHash": "647caf25",
-  "accessGated": true,
-  "warning": "The rendered capture shows an \"ACCESS RESTRICTED\" auth gate (this route requires staff/manager login), not the actual screen. This proof image does NOT show a real visual comparison against the reference — it only proves the route resolves and is access-controlled. Do not treat this as visual approval or visual failure of the actual screen."
+  "timestamp": "2026-06-25T17:59:42.015Z",
+  "commitHash": "5c14ffbb",
+  "authInjected": {
+    "role": "manager",
+    "mode": "dev-server novee_admin_session"
+  }
 }

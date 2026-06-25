@@ -8,8 +8,8 @@
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T17:46:47.932Z",
-  "commitHash": "647caf25",
+  "timestamp": "2026-06-25T17:56:30.052Z",
+  "commitHash": "5c14ffbb",
   "accessGated": true,
   "warning": "The rendered capture shows an \"ACCESS RESTRICTED\" auth gate (this route requires staff/manager login), not the actual screen. This proof image does NOT show a real visual comparison against the reference — it only proves the route resolves and is access-controlled. Do not treat this as visual approval or visual failure of the actual screen.",
   "note": "No binary reference image in repo."

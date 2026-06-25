@@ -75,7 +75,7 @@ const SCREENS = [
   // confirmed via src/App.jsx: /pos3/handheld -> POS3Handheld.jsx. Mapping
   // only — no UI fix has been made against this reference yet, so this is
   // NOT visually approved until a proof image is generated and inspected.
-  { family: 'pos3', name: 'pos3-handheld', route: '/pos3/handheld', reference: 'POS 3.11.png', referenceDir: 'design-references/mvp2/pos3', viewport: HANDHELD_VIEWPORT },
+  { family: 'pos3', name: 'pos3-handheld', route: '/pos3/handheld', reference: 'POS 3.11.png', referenceDir: 'design-references/mvp2/pos3', viewport: HANDHELD_VIEWPORT, requiresAuth: { role: 'manager' } },
   { family: 'pos3', name: 'pos3-tables', route: '/pos3/tables', reference: null, note: 'No binary reference image in repo.' },
   { family: 'pos3', name: 'pos3-orders', route: '/pos3/orders', reference: null, note: 'No binary reference image in repo.' },
   { family: 'pos3', name: 'pos3-checkout', route: '/pos3/checkout', reference: null, note: 'No binary reference image in repo.' },
@@ -85,7 +85,7 @@ const SCREENS = [
   // desktop management command center. Route mapping confirmed via
   // src/App.jsx: /eat/command-hub -> EATCommandHub.jsx. Mapping only — no
   // UI fix has been made against this reference yet.
-  { family: 'eat', name: 'eat-command-center', route: '/eat/command-hub', reference: 'EAT SYSTEM UPDATE 11.png', referenceDir: 'design-references/mvp2/eat-system' },
+  { family: 'eat', name: 'eat-command-center', route: '/eat/command-hub', reference: 'EAT SYSTEM UPDATE 11.png', referenceDir: 'design-references/mvp2/eat-system', requiresAuth: { role: 'manager' } },
   { family: 'eat', name: 'eat-sections', route: '/eat/sections', reference: null, note: 'No binary reference image in repo.' },
   { family: 'eat', name: 'eat-operations', route: '/eat/operations', reference: null, note: 'No binary reference image in repo.' },
 ]
@@ -183,6 +183,31 @@ async function main() {
     }
   }
 
+  // Screens flagged requiresAuth depend on the dev-only `novee_admin_session`
+  // localStorage hook in src/context/SecurityContext.jsx, which is gated by
+  // import.meta.env.DEV and stripped out of the production build that the
+  // preview server above serves. Those screens need a separate `vite dev`
+  // server, started lazily and only if such a screen is actually selected.
+  let devModeServerProcess = null
+  let devModeBaseUrl = null
+  async function ensureDevModeServer() {
+    if (devModeBaseUrl) return devModeBaseUrl
+    console.log('Starting vite dev server for auth-injected capture...')
+    devModeServerProcess = spawn('npx', ['vite', 'dev', '--port', '5183', '--strictPort'], {
+      cwd: ROOT,
+      stdio: 'pipe',
+    })
+    devModeBaseUrl = 'http://localhost:5183'
+    const up = await waitForServer(devModeBaseUrl)
+    if (!up) {
+      console.error('  Could not start vite dev server for authenticated capture.')
+      devModeServerProcess.kill()
+      devModeServerProcess = null
+      devModeBaseUrl = null
+    }
+    return devModeBaseUrl
+  }
+
   const commitHash = getCommitHash()
   const { chromium } = playwright
   const browser = await chromium.launch({ executablePath })
@@ -195,10 +220,33 @@ async function main() {
 
   for (const screen of screens) {
     const viewport = screen.viewport || VIEWPORT
+
+    let screenBaseUrl = baseUrl
+    let usingDevModeAuth = false
+    if (screen.requiresAuth) {
+      const devUrl = await ensureDevModeServer()
+      if (devUrl) {
+        screenBaseUrl = devUrl
+        usingDevModeAuth = true
+      } else {
+        console.warn(`  Could not start dev server for ${screen.name} — falling back to production preview (will likely show ACCESS RESTRICTED).`)
+      }
+    }
+
     const context = await browser.newContext({ viewport })
+    if (usingDevModeAuth) {
+      // Visual-proof-only auth injection: writes the same dev-only
+      // `novee_admin_session` localStorage key that src/context/SecurityContext.jsx
+      // already supports for local role prototyping (gated by import.meta.env.DEV).
+      // This does not touch ProtectedRoute.jsx or any production auth path —
+      // it only works because Vite's dev server has DEV=true.
+      await context.addInitScript(({ key, role }) => {
+        window.localStorage.setItem(key, JSON.stringify({ role, grantedAt: Date.now(), source: 'visual-proof-harness' }))
+      }, { key: 'novee_admin_session', role: screen.requiresAuth.role })
+    }
     const page = await context.newPage()
-    const url = `${baseUrl}${screen.route}`
-    console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}`)
+    const url = `${screenBaseUrl}${screen.route}`
+    console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}${usingDevModeAuth ? ' (auth-injected dev server)' : ''}`)
     try {
       await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 })
       await page.waitForTimeout(800)
@@ -220,6 +268,10 @@ async function main() {
         viewport,
         timestamp: new Date().toISOString(),
         commitHash,
+      }
+
+      if (usingDevModeAuth) {
+        meta.authInjected = { role: screen.requiresAuth.role, mode: 'dev-server novee_admin_session' }
       }
 
       if (accessGated) {
@@ -255,6 +307,7 @@ async function main() {
 
   await browser.close()
   if (devServerProcess) devServerProcess.kill()
+  if (devModeServerProcess) devModeServerProcess.kill()
 
   console.log('\nVisual proof artifacts written to docs/visual-proof/')
   for (const r of results) {
