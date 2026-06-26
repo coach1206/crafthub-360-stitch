@@ -134,6 +134,18 @@ export default function Connections() {
           <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:`${(stepProgress.session/24)*100}%` }} /></div>
           <span>360 Connections</span>
         </div>
+        <div className="mb-8 rounded-2xl overflow-hidden border border-primary/20 shadow-xl relative" style={{ height: 200 }}>
+          <img
+            className="w-full h-full object-cover"
+            src="/assets/smokecraft/cropped/connections-hero.jpg"
+            alt="360 network connections at the lounge table"
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(19,19,20,0.85) 0%, rgba(19,19,20,0.15) 60%, transparent 100%)' }} />
+          <div className="absolute inset-0 flex flex-col justify-center px-6">
+            <span className="material-symbols-outlined text-primary mb-2" style={{ fontSize: 28, ...FILL1 }}>hub</span>
+            <p className="font-label-sm text-label-sm text-primary uppercase tracking-widest">360 Member Network</p>
+          </div>
+        </div>
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>360 Passport Connections</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>Complete any connections you want to make before leaving the lounge. Each action deepens your membership and grows your 360 network.</p>

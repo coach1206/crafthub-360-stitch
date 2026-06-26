@@ -308,6 +308,16 @@ export default function PassportStamp() {
             transition: 'opacity 0.8s ease, transform 0.8s ease',
           }}
         >
+          <div
+            className="mx-auto mb-8 rounded-2xl overflow-hidden border border-primary/25 shadow-2xl"
+            style={{ maxWidth: 220, aspectRatio: '480/941' }}
+          >
+            <PassportStampImage
+              className="w-full h-full object-cover"
+              src="/assets/smokecraft/cropped/passport-stamp-hero.jpg"
+              alt="SmokeCraft 360 Passport, certified"
+            />
+          </div>
           <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.3em] mb-4">SmokeCraft Journey Complete</p>
           <h2
             className="font-display-lg text-on-surface leading-tight mb-6"
