@@ -144,7 +144,7 @@ export default function Scorecard() {
     }))
     completeStep('scorecard')
     addXP(100)
-    navigate('/smokecraft/passport-stamp')
+    navigate('/smokecraft/smokecraft-challenge')
   }
 
   const posHandoff = getSmokePOSHandoff(session)
@@ -331,7 +331,7 @@ export default function Scorecard() {
           <button onClick={handleContinue}
             className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
-            Passport Stamp <ArrowForwardIcon size={20} />
+            SmokeCraft Challenge <ArrowForwardIcon size={20} />
           </button>
           <button onClick={() => navigate('/smokecraft/final-third')}
             className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300"

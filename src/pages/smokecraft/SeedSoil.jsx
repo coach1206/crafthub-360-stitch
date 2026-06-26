@@ -178,7 +178,7 @@ export default function SeedSoil() {
     if (pairingResult.score > 0) addXP(pairingResult.score)
     completeStep('seed-soil')
     addXP(100)
-    navigate('/smokecraft/mentor')
+    navigate('/smokecraft/pairing-lab')
   }
 
   const stepProgress = getVisitProgress(session.completedSteps)
