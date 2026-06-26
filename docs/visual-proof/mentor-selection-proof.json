@@ -1,0 +1,14 @@
+{
+  "family": "smokecraft",
+  "screen": "mentor-selection",
+  "route": "/smokecraft/mentor-selection",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T01:44:48.783Z",
+  "commitHash": "b8c2bd18",
+  "note": "Ungated route. No reference mockup uploaded."
+}
