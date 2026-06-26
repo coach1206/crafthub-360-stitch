@@ -85,6 +85,7 @@ import EventChallenge   from './pages/smokecraft/EventChallenge.jsx'
 import Connections      from './pages/smokecraft/Connections.jsx'
 import ManagementSync   from './pages/smokecraft/ManagementSync.jsx'
 import WrapperStrength     from './pages/smokecraft/WrapperStrength.jsx'
+import CigarGaugeGuide     from './pages/smokecraft/CigarGaugeGuide.jsx'
 import PairingLab          from './pages/smokecraft/PairingLab.jsx'
 import FlavorMemory        from './pages/smokecraft/FlavorMemory.jsx'
 import SmokeCraftChallenge from './pages/smokecraft/SmokeCraftChallenge.jsx'
@@ -257,6 +258,7 @@ export default function App() {
                 <Route path="mentor-selection" element={<Mentor />} />
                 <Route path="mentor"         element={<Navigate to="/smokecraft/mentor-selection" replace />} />
                 <Route path="format"         element={<VisitLockGuard stepId="format"><Format /></VisitLockGuard>} />
+                <Route path="cigar-gauge-guide" element={<VisitLockGuard stepId="format"><CigarGaugeGuide /></VisitLockGuard>} />
                 <Route path="wrapper-strength" element={<VisitLockGuard stepId="wrapper-strength"><WrapperStrength /></VisitLockGuard>} />
                 <Route path="shape-size-burn" element={<Navigate to="/smokecraft/format" replace />} />
                 <Route path="gold-box"       element={<Navigate to="/smokecraft/golden-box" replace />} />

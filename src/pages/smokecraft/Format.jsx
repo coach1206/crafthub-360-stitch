@@ -521,7 +521,7 @@ export default function Format() {
   function continueNext() {
     if (!selected) return
     if (!isSaved) saveFormat()
-    navigate('/smokecraft/seed-soil')
+    navigate('/smokecraft/cigar-gauge-guide')
   }
 
   const stepProgress = getVisitProgress(session.completedSteps)
@@ -1557,7 +1557,7 @@ export default function Format() {
               Save Format
             </button>
             <button className="format-continue" type="button" onClick={continueNext} disabled={!selected}>
-              Continue to Seed &amp; Soil
+              Continue to Cigar Gauge Guide
               <span className="material-symbols-outlined">arrow_forward</span>
             </button>
           </div>

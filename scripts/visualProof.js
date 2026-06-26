@@ -139,6 +139,7 @@ const SCREENS = [
   { family: 'smokecraft', name: 'enroll', route: '/smokecraft/enroll', reference: 'smokecraft Intake.png' },
   { family: 'smokecraft', name: 'seed-soil', route: '/smokecraft/seed-soil', reference: 'SEED & PAIRING.11.png', seedSmokeCraftStep: 'seed-soil' },
   { family: 'smokecraft', name: 'format', route: '/smokecraft/format', reference: 'SHAPE SIZE BURN.11.png', seedSmokeCraftStep: 'format' },
+  { family: 'smokecraft', name: 'cigar-gauge-guide', route: '/smokecraft/cigar-gauge-guide', reference: null, seedSmokeCraftStep: 'format', note: 'Sub-step of Session 5 (Shape, Size & Burn Time) — gated by the same VisitLockGuard stepId ("format") as /smokecraft/format, not a separate completed session. Reference image "cigar gauge guide.png" was shared inline in chat but has not been committed to the repo as a binary file; reference intentionally left null, not substituted.' },
   { family: 'smokecraft', name: 'golden-box', route: '/smokecraft/golden-box', reference: null, note: 'No reference mockup mapped to the plain /smokecraft/golden-box index route (the existing GOLDEN BOX JOURNEY11.png reference is mapped to /smokecraft/golden-box/status below). Ungated — no seeding needed.' },
   { family: 'smokecraft', name: 'golden-box-status', route: '/smokecraft/golden-box/status', reference: 'GOLDEN BOX JOURNEY11.png' },
   { family: 'smokecraft', name: 'mentor-selection', route: '/smokecraft/mentor-selection', reference: null, note: 'Ungated route. No reference mockup uploaded.' },
