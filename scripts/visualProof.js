@@ -60,6 +60,22 @@ const SCREENS = [
   { family: 'smokecraft', name: 'connections', route: '/smokecraft/connections', reference: 'passport-connection-1.png', referenceDir: 'design-references/mvp2/smokecraft', note: 'Filename suggests "Passport Connection" but the reference image content ("360 Passport Connections", SmokeCraft step flow) matches src/pages/smokecraft/Connections.jsx, not src/pages/PassportConnection.jsx or src/pages/passport/PassportConnections.jsx.' },
   { family: 'smokecraft', name: 'request-purchase', route: '/smokecraft/request-purchase', reference: 'request-purchase.png', referenceDir: 'design-references/mvp2/smokecraft' },
 
+  // 8-visit/24-session journey screens added 2026-06-26. These routes are
+  // gated by VisitLockGuard (see App.jsx) based on GuestSessionContext's
+  // completedSteps, which this harness has no mechanism to seed (unlike the
+  // separate novee_admin_session role-injection used below for POS3/E.A.T.).
+  // A cold Playwright navigation will very likely render the LockedVisit.jsx
+  // screen instead of real content. No reference mockups exist for these
+  // routes — only runtime accent images were uploaded — so reference is null
+  // and no side-by-side proof is possible; only a rendered screenshot is captured.
+  { family: 'smokecraft', name: 'wrapper-strength', route: '/smokecraft/wrapper-strength', reference: null, note: 'Gated by VisitLockGuard (Visit 2, session 5). No reference mockup uploaded — runtime accent image only.' },
+  { family: 'smokecraft', name: 'pairing-lab', route: '/smokecraft/pairing-lab', reference: null, note: 'Gated by VisitLockGuard (Visit 3). No reference mockup uploaded — runtime accent image only.' },
+  { family: 'smokecraft', name: 'flavor-memory', route: '/smokecraft/flavor-memory', reference: null, note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only.' },
+  { family: 'smokecraft', name: 'smokecraft-challenge', route: '/smokecraft/smokecraft-challenge', reference: null, note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only.' },
+  { family: 'smokecraft', name: 'second-humidor-match', route: '/smokecraft/second-humidor-match', reference: null, note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only.' },
+  { family: 'smokecraft', name: 'mini-tasting', route: '/smokecraft/mini-tasting', reference: null, note: 'Gated by VisitLockGuard (Visit 7). No reference mockup uploaded — runtime accent image only.' },
+  { family: 'smokecraft', name: 'final-review', route: '/smokecraft/final-review', reference: null, note: 'Gated by VisitLockGuard (Visit 8). No reference mockup uploaded — runtime accent image only.' },
+
   // --- Passport ---
   // Reference images exist in public/ but route mapping is NOT confirmed —
   // multiple similarly-named passport mockups exist (360 Passport 1.png,
