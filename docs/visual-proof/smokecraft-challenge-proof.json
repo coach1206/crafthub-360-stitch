@@ -1,0 +1,14 @@
+{
+  "family": "smokecraft",
+  "screen": "smokecraft-challenge",
+  "route": "/smokecraft/smokecraft-challenge",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T01:24:49.565Z",
+  "commitHash": "24a2a454",
+  "note": "Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only."
+}
