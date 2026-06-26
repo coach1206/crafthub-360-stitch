@@ -31,12 +31,104 @@ import { existsSync, readdirSync, mkdirSync, writeFileSync, readFileSync } from 
 import { execSync, spawn } from 'child_process'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { VISIT_STRUCTURE } from '../src/constants/session.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
 const OUT_DIR = path.join(ROOT, 'docs', 'visual-proof')
 const VIEWPORT = { width: 1440, height: 900 }
 const HANDHELD_VIEWPORT = { width: 414, height: 896 }
+
+// ── SmokeCraft visual-proof-only progress seeding ──────────────────────────
+// VisitLockGuard (src/components/smokecraft/VisitLockGuard.jsx) locks any
+// SmokeCraft session-5+ route until GuestSessionContext's completedSteps
+// shows every earlier session done. The harness has no real guest progress,
+// so a cold navigation always renders LockedVisit.jsx. This block computes
+// the exact completedSteps array needed to legitimately pass that guard for
+// a given target stepId — by walking the same VISIT_STRUCTURE the guard
+// itself reads — and is used ONLY by this proof script, never by the app.
+// It never modifies VisitLockGuard, GuestSessionContext, or any production
+// auth/gating code; it only seeds localStorage in a Playwright browser
+// context before navigation, exactly like the existing requiresAuth
+// novee_admin_session injection used for POS3/E.A.T. below.
+function findVisitSession(stepId) {
+  for (const v of VISIT_STRUCTURE) {
+    const s = v.sessions.find(s => s.id === stepId)
+    if (s) return { visit: v.visit, session: s.session }
+  }
+  return null
+}
+
+/** All session ids (excluding 'entry', which the guard always treats as complete) strictly before the target stepId's session. */
+function priorSessionIds(stepId) {
+  const target = findVisitSession(stepId)
+  if (!target) return []
+  const ids = []
+  for (const v of VISIT_STRUCTURE) {
+    for (const s of v.sessions) {
+      if (s.session < target.session && s.id !== 'entry') ids.push(s.id)
+    }
+  }
+  return ids
+}
+
+/** Builds a full novee_guest_session-shaped object (same shape as createNewSession()) with completedSteps seeded so VisitLockGuard unlocks stepId's route. Proof-only — never written by the real app. */
+function buildSeededGuestSession(stepId) {
+  const completedSteps = priorSessionIds(stepId)
+  const now = Date.now()
+  return {
+    sessionId: `proof_seed_${now}`,
+    createdAt: now,
+    updatedAt: now,
+    __version: 4,
+    profile: { firstName: '', lastName: '', nickname: '', email: '', phone: '', city: '', state: '', zip: '', photo: null, ageConfirmed: false },
+    completedSteps,
+    xp: 0,
+    rank: 'Novice',
+    badges: [],
+    smokecraftStamps: [],
+    mentors: [],
+    favorites: [],
+    pendingOrders: [],
+    currentSmokecraftStep: null,
+    latestStampId: null,
+    goldenBoxProgress: null,
+    guestId: null,
+    venueId: 'novee-grand-lounge',
+    deviceId: 'kiosk-001',
+    entrySource: 'qr-scan',
+    entryStartedAt: null,
+    lastActiveAt: null,
+    guestProfile: null,
+    profileComplete: false,
+    resumeToken: null,
+    audioEnabled: true,
+    hapticsEnabled: true,
+    lastVisitedRoute: null,
+    leaderboardScore: 0,
+    selectedCraft: null,
+    selectedMentor: null,
+    selectedMentorCountry: null,
+    selectedLevel: null,
+    smokeCraft: {
+      currentSession: null, completedSessions: [], sessionScores: [], flavorPreferences: [],
+      strengthTolerance: null, aromaInterests: [], vitolaPreferences: [], pairingSelections: [],
+      soilSeedSelections: [], mentorNotes: [], passportConnections: [], networkingStatus: 'not_started',
+      networkingConsent: {
+        allowShareStamp: false, allowShareName: false, allowShareContact: false,
+        allowShareBusinessLinks: false, allowShareSmokeCraftLevel: false,
+        allowShareFavoriteCigarStyle: false, allowShareEventStamp: false, allowVenueFollowUp: false,
+      },
+    },
+    passport: { passportId: null, earnedStamps: [], latestStampId: null, connectionCount: 0, eventName: null, ceremonySeen: false },
+    goldenBox: { eligible: false, progress: 0, entries: [], lastReveal: null },
+    leaderboard: { score: 0, rank: 'Novice', submitted: false, displayName: null },
+    preferences: { audioEnabled: true, hapticsEnabled: true, readInstead: false, language: 'en' },
+    system: { lastVisitedRoute: null, schemaVersion: 4, kioskMode: false, sourceModule: null },
+    pos3: { activeTicketId: null, tableNumber: null, staffId: null, suggestedPairings: [], upsellRecommendations: [], inventorySignals: [] },
+    eatCommand: { engagementScore: 0, guestMoodSignal: null, sessionValue: 0, staffAssistTriggered: false, environmentNotes: [] },
+  }
+}
 
 // Each screen: family, name, route, reference (filename in public/, or null
 // if no binary reference has been uploaded to the repo yet), viewport
@@ -68,13 +160,13 @@ const SCREENS = [
   // screen instead of real content. No reference mockups exist for these
   // routes — only runtime accent images were uploaded — so reference is null
   // and no side-by-side proof is possible; only a rendered screenshot is captured.
-  { family: 'smokecraft', name: 'wrapper-strength', route: '/smokecraft/wrapper-strength', reference: null, note: 'Gated by VisitLockGuard (Visit 2, session 5). No reference mockup uploaded — runtime accent image only.' },
-  { family: 'smokecraft', name: 'pairing-lab', route: '/smokecraft/pairing-lab', reference: null, note: 'Gated by VisitLockGuard (Visit 3). No reference mockup uploaded — runtime accent image only.' },
-  { family: 'smokecraft', name: 'flavor-memory', route: '/smokecraft/flavor-memory', reference: null, note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only.' },
-  { family: 'smokecraft', name: 'smokecraft-challenge', route: '/smokecraft/smokecraft-challenge', reference: null, note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only.' },
-  { family: 'smokecraft', name: 'second-humidor-match', route: '/smokecraft/second-humidor-match', reference: null, note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only.' },
-  { family: 'smokecraft', name: 'mini-tasting', route: '/smokecraft/mini-tasting', reference: null, note: 'Gated by VisitLockGuard (Visit 7). No reference mockup uploaded — runtime accent image only.' },
-  { family: 'smokecraft', name: 'final-review', route: '/smokecraft/final-review', reference: null, note: 'Gated by VisitLockGuard (Visit 8). No reference mockup uploaded — runtime accent image only.' },
+  { family: 'smokecraft', name: 'wrapper-strength', route: '/smokecraft/wrapper-strength', reference: null, seedSmokeCraftStep: 'wrapper-strength', note: 'Gated by VisitLockGuard (Visit 2, session 5). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'pairing-lab', route: '/smokecraft/pairing-lab', reference: null, seedSmokeCraftStep: 'pairing-lab', note: 'Gated by VisitLockGuard (Visit 3). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'flavor-memory', route: '/smokecraft/flavor-memory', reference: null, seedSmokeCraftStep: 'flavor-memory', note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'smokecraft-challenge', route: '/smokecraft/smokecraft-challenge', reference: null, seedSmokeCraftStep: 'smokecraft-challenge', note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'second-humidor-match', route: '/smokecraft/second-humidor-match', reference: null, seedSmokeCraftStep: 'second-humidor-match', note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'mini-tasting', route: '/smokecraft/mini-tasting', reference: null, seedSmokeCraftStep: 'mini-tasting', note: 'Gated by VisitLockGuard (Visit 7). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'final-review', route: '/smokecraft/final-review', reference: null, seedSmokeCraftStep: 'final-review', note: 'Gated by VisitLockGuard (Visit 8). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
 
   // --- Passport ---
   // Reference images exist in public/ but route mapping is NOT confirmed —
@@ -369,9 +461,24 @@ async function main() {
         window.localStorage.setItem(key, JSON.stringify({ role, grantedAt: Date.now(), source: 'visual-proof-harness' }))
       }, { key: 'novee_admin_session', role: screen.requiresAuth.role })
     }
+    let seededSession = null
+    if (screen.seedSmokeCraftStep) {
+      // Visual-proof-only progress seeding: writes the same
+      // `novee_guest_session` localStorage key src/services/sessionStorageService.js
+      // already reads/writes for real guest progress. VisitLockGuard (the
+      // real route guard) is never modified or bypassed in code — it simply
+      // sees completedSteps that look like a guest who legitimately finished
+      // every earlier session, exactly as it would for a real returning
+      // guest. A cold browser outside this harness has no such seeded
+      // localStorage and remains locked.
+      seededSession = buildSeededGuestSession(screen.seedSmokeCraftStep)
+      await context.addInitScript(({ key, value }) => {
+        window.localStorage.setItem(key, JSON.stringify(value))
+      }, { key: 'novee_guest_session', value: seededSession })
+    }
     const page = await context.newPage()
     const url = `${screenBaseUrl}${screen.route}`
-    console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}${usingDevModeAuth ? ' (auth-injected dev server)' : ''}`)
+    console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}${usingDevModeAuth ? ' (auth-injected dev server)' : ''}${seededSession ? ' (proof-only SmokeCraft progress seeded)' : ''}`)
     try {
       await withTimeout((async () => {
         await page.goto(url, { waitUntil: 'networkidle', timeout: ROUTE_TIMEOUT_MS })
@@ -398,6 +505,17 @@ async function main() {
 
         if (usingDevModeAuth) {
           meta.authInjected = { role: screen.requiresAuth.role, mode: 'dev-server novee_admin_session' }
+        }
+
+        if (seededSession) {
+          const stillLocked = /is locked/i.test(bodyText) && /Return on your next visit/i.test(bodyText)
+          meta.smokeCraftProgressSeeded = true
+          meta.seededSession = findVisitSession(screen.seedSmokeCraftStep)?.session ?? null
+          meta.routeUnlockedForProof = !stillLocked
+          if (stillLocked) {
+            meta.warning = `Progress was seeded for proof but the route still rendered LockedVisit.jsx. This is a real gating result, not fabricated — do not treat routeUnlockedForProof as true.`
+            console.warn(`  WARNING: ${meta.warning}`)
+          }
         }
 
         if (accessGated) {
