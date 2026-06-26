@@ -154,6 +154,14 @@ export default function POS3Handheld() {
       />
 
       <div style={{ padding: '14px 16px 0' }}>
+        <img
+          src="/assets/pos3/cropped/POS 3.11.png"
+          alt=""
+          style={{ width: '100%', height: 96, objectFit: 'cover', borderRadius: 14, border: '1px solid rgba(19,41,75,0.08)' }}
+        />
+      </div>
+
+      <div style={{ padding: '14px 16px 0' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: L_NAVY, letterSpacing: '0.04em' }}>MY TABLES</div>
           <button type="button" onClick={() => navigate('/pos3/tables')} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>View All</button>

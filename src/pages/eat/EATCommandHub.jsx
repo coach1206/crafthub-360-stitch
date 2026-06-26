@@ -77,6 +77,14 @@ export default function EATCommandHub() {
         </div>
       </div>
 
+      <div style={{ padding: '14px 22px 0' }}>
+        <img
+          src="/assets/eat/cropped/EAT system  UPDATE.png"
+          alt=""
+          style={{ width: '100%', height: 110, objectFit: 'cover', borderRadius: 14, border: '1px solid rgba(19,41,75,0.08)' }}
+        />
+      </div>
+
       <div style={{ display: 'flex', gap: 6, padding: '12px 22px 0', overflowX: 'auto', background: '#fff', borderBottom: '1px solid rgba(19,41,75,0.08)' }}>
         {COMMAND_TABS.map((t) => (
           <button
