@@ -1,0 +1,14 @@
+{
+  "family": "smokecraft",
+  "screen": "mini-tasting",
+  "route": "/smokecraft/mini-tasting",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T01:24:58.879Z",
+  "commitHash": "24a2a454",
+  "note": "Gated by VisitLockGuard (Visit 7). No reference mockup uploaded — runtime accent image only."
+}

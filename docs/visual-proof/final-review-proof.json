@@ -1,0 +1,14 @@
+{
+  "family": "smokecraft",
+  "screen": "final-review",
+  "route": "/smokecraft/final-review",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T01:25:03.524Z",
+  "commitHash": "24a2a454",
+  "note": "Gated by VisitLockGuard (Visit 8). No reference mockup uploaded — runtime accent image only."
+}
