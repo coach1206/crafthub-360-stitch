@@ -49,7 +49,7 @@ export default function SecondThird() {
     })
     completeStep('second-third')
     addXP(50)
-    navigate('/smokecraft/final-third')
+    navigate('/smokecraft/flavor-memory')
   }
 
   const stepProgress = getVisitProgress(session.completedSteps)
@@ -251,7 +251,7 @@ export default function SecondThird() {
           <button onClick={handleContinue}
             className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 w-full sm:w-auto"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
-            Final Third <span className="material-symbols-outlined">arrow_forward</span>
+            Flavor Memory <span className="material-symbols-outlined">arrow_forward</span>
           </button>
           <button onClick={() => navigate('/smokecraft/first-third')}
             className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300 w-full sm:w-auto"
