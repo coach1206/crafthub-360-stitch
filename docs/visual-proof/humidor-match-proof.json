@@ -1,0 +1,17 @@
+{
+  "family": "smokecraft",
+  "screen": "humidor-match",
+  "route": "/smokecraft/humidor-match",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T01:45:15.613Z",
+  "commitHash": "b8c2bd18",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 9,
+  "routeUnlockedForProof": true,
+  "note": "Gated by VisitLockGuard (Visit 4, session 9). No reference mockup uploaded. Proof-only progress seeded so the real page renders."
+}

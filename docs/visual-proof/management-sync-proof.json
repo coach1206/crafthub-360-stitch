@@ -8,6 +8,9 @@
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T21:36:46.684Z",
-  "commitHash": "196ecb92"
+  "timestamp": "2026-06-26T01:46:35.350Z",
+  "commitHash": "b8c2bd18",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 23,
+  "routeUnlockedForProof": true
 }

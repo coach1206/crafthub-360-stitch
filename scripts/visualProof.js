@@ -137,20 +137,28 @@ const SCREENS = [
   // --- SmokeCraft ---
   { family: 'smokecraft', name: 'smokecraft-home', route: '/smokecraft', reference: 'PROFILE DISCOVER 11.png' },
   { family: 'smokecraft', name: 'enroll', route: '/smokecraft/enroll', reference: 'smokecraft Intake.png' },
-  { family: 'smokecraft', name: 'seed-soil', route: '/smokecraft/seed-soil', reference: 'SEED & PAIRING.11.png' },
-  { family: 'smokecraft', name: 'format', route: '/smokecraft/format', reference: 'SHAPE SIZE BURN.11.png' },
-  { family: 'smokecraft', name: 'golden-box', route: '/smokecraft/golden-box/status', reference: 'GOLDEN BOX JOURNEY11.png' },
+  { family: 'smokecraft', name: 'seed-soil', route: '/smokecraft/seed-soil', reference: 'SEED & PAIRING.11.png', seedSmokeCraftStep: 'seed-soil' },
+  { family: 'smokecraft', name: 'format', route: '/smokecraft/format', reference: 'SHAPE SIZE BURN.11.png', seedSmokeCraftStep: 'format' },
+  { family: 'smokecraft', name: 'golden-box', route: '/smokecraft/golden-box', reference: null, note: 'No reference mockup mapped to the plain /smokecraft/golden-box index route (the existing GOLDEN BOX JOURNEY11.png reference is mapped to /smokecraft/golden-box/status below). Ungated — no seeding needed.' },
+  { family: 'smokecraft', name: 'golden-box-status', route: '/smokecraft/golden-box/status', reference: 'GOLDEN BOX JOURNEY11.png' },
+  { family: 'smokecraft', name: 'mentor-selection', route: '/smokecraft/mentor-selection', reference: null, note: 'Ungated route. No reference mockup uploaded.' },
   { family: 'smokecraft', name: 'leaderboard', route: '/smokecraft/leaderboard', reference: 'lounge demo ranking.11png.png' },
 
   // Uploaded batch confirmed 2026-06-25 via grep against src/App.jsx (see
   // docs/mvp2-visual-image-registry.md for the exact commands run). Mapping
   // only — no UI fix has been made against these references yet.
-  { family: 'smokecraft', name: 'cut-toast-light', route: '/smokecraft/cut-toast-light', reference: 'CUT TOAST, & LIGHT.png', referenceDir: 'design-references/mvp2/smokecraft' },
-  { family: 'smokecraft', name: 'management-sync', route: '/smokecraft/management-sync', reference: 'venue-management-sync.png', referenceDir: 'design-references/mvp2/smokecraft' },
-  { family: 'smokecraft', name: 'final-third', route: '/smokecraft/final-third', reference: 'final-third-tasting.png', referenceDir: 'design-references/mvp2/smokecraft', note: '"findal third tasting.png" is a typo-named duplicate of the same mockup (same dimensions, different compression/md5) — not used as the canonical reference.' },
+  { family: 'smokecraft', name: 'cut-toast-light', route: '/smokecraft/cut-toast-light', reference: 'CUT TOAST, & LIGHT.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'cut-toast-light' },
+  { family: 'smokecraft', name: 'management-sync', route: '/smokecraft/management-sync', reference: 'venue-management-sync.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'management-sync' },
+  { family: 'smokecraft', name: 'final-third', route: '/smokecraft/final-third', reference: 'final-third-tasting.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'final-third', note: '"findal third tasting.png" is a typo-named duplicate of the same mockup (same dimensions, different compression/md5) — not used as the canonical reference.' },
   { family: 'smokecraft', name: 'flavor-dna', route: '/smokecraft/flavor-dna', reference: 'flavodr dna.png', referenceDir: 'design-references/mvp2/smokecraft', note: 'Filename preserved exactly as uploaded ("flavodr dna.png", typo for "flavor dna"). A cleaned name of "flavor-dna.png" is a recommendation only, not yet approved as canonical.' },
-  { family: 'smokecraft', name: 'connections', route: '/smokecraft/connections', reference: 'passport-connection-1.png', referenceDir: 'design-references/mvp2/smokecraft', note: 'Filename suggests "Passport Connection" but the reference image content ("360 Passport Connections", SmokeCraft step flow) matches src/pages/smokecraft/Connections.jsx, not src/pages/PassportConnection.jsx or src/pages/passport/PassportConnections.jsx.' },
-  { family: 'smokecraft', name: 'request-purchase', route: '/smokecraft/request-purchase', reference: 'request-purchase.png', referenceDir: 'design-references/mvp2/smokecraft' },
+  { family: 'smokecraft', name: 'connections', route: '/smokecraft/connections', reference: 'passport-connection-1.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'connections', note: 'Filename suggests "Passport Connection" but the reference image content ("360 Passport Connections", SmokeCraft step flow) matches src/pages/smokecraft/Connections.jsx, not src/pages/PassportConnection.jsx or src/pages/passport/PassportConnections.jsx.' },
+  { family: 'smokecraft', name: 'request-purchase', route: '/smokecraft/request-purchase', reference: 'request-purchase.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'request-purchase' },
+  { family: 'smokecraft', name: 'humidor-match', route: '/smokecraft/humidor-match', reference: null, seedSmokeCraftStep: 'humidor-match', note: 'Gated by VisitLockGuard (Visit 4, session 9). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'first-third', route: '/smokecraft/first-third', reference: null, seedSmokeCraftStep: 'first-third', note: 'Gated by VisitLockGuard (Visit 4, session 12). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'second-third', route: '/smokecraft/second-third', reference: null, seedSmokeCraftStep: 'second-third', note: 'Gated by VisitLockGuard (Visit 5, session 13). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'scorecard', route: '/smokecraft/scorecard', reference: null, seedSmokeCraftStep: 'scorecard', note: 'Gated by VisitLockGuard (Visit 6, session 16). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'passport-stamp', route: '/smokecraft/passport-stamp', reference: null, seedSmokeCraftStep: 'passport-stamp', note: 'Gated by VisitLockGuard (Visit 8, session 21). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'session-complete', route: '/smokecraft/session-complete', reference: null, seedSmokeCraftStep: 'session-complete', note: 'Gated by VisitLockGuard (Visit 8, session 24 — final session). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
 
   // 8-visit/24-session journey screens added 2026-06-26. These routes are
   // gated by VisitLockGuard (see App.jsx) based on GuestSessionContext's
