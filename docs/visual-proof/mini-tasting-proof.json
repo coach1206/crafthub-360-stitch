@@ -8,7 +8,10 @@
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-26T01:24:58.879Z",
-  "commitHash": "24a2a454",
-  "note": "Gated by VisitLockGuard (Visit 7). No reference mockup uploaded — runtime accent image only."
+  "timestamp": "2026-06-26T01:30:55.397Z",
+  "commitHash": "cb712f0f",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 19,
+  "routeUnlockedForProof": true,
+  "note": "Gated by VisitLockGuard (Visit 7). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders."
 }
