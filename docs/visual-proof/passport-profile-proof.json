@@ -1,0 +1,14 @@
+{
+  "family": "passport",
+  "screen": "passport-profile",
+  "route": "/passport/profile",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-27T16:56:13.198Z",
+  "commitHash": "e636305b",
+  "note": "2026-06-27: confirmed no usable candidate image exists. \"DISCOVER YOUR PROFILE.png\" / \"PROFILE DISCOVER 11.png\" are SmokeCraft homepage mockups, not Passport profile screens — not usable."
+}

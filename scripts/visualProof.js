@@ -481,13 +481,30 @@ async function main() {
         window.localStorage.setItem(key, JSON.stringify(value))
       }, { key: 'novee_guest_session', value: seededSession })
     }
+    // Visual-proof-only network stub: app code legitimately points several
+    // images at googleusercontent.com (CraftImage fallbacks, member portraits,
+    // nav badges, etc.). This sandbox's outbound proxy cannot reach that host,
+    // so each request hangs until a slow proxy-tunnel failure instead of
+    // failing fast — with many such images on one page, there is almost
+    // always one in flight, and Playwright's `networkidle` wait never
+    // resolves. Aborting just these requests inside this Playwright context
+    // only affects this proof run; it does not touch the deployed app, which
+    // still issues normal requests to lh3.googleusercontent.com for real users.
+    await context.route('**://*.googleusercontent.com/**', route => route.abort())
+
     const page = await context.newPage()
     const url = `${screenBaseUrl}${screen.route}`
     console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}${usingDevModeAuth ? ' (auth-injected dev server)' : ''}${seededSession ? ' (proof-only SmokeCraft progress seeded)' : ''}`)
     try {
       await withTimeout((async () => {
-        await page.goto(url, { waitUntil: 'networkidle', timeout: ROUTE_TIMEOUT_MS })
-        await page.waitForTimeout(800)
+        // `networkidle` was unreliable even with the googleusercontent.com
+        // abort above (other transient/long-poll requests can keep it from
+        // settling). Use `domcontentloaded` — which still fails the proof if
+        // the route genuinely doesn't load — plus a short settle delay for
+        // React to finish its first render pass before the screenshot.
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: ROUTE_TIMEOUT_MS })
+        await page.waitForSelector('#root', { timeout: ROUTE_TIMEOUT_MS }).catch(() => {})
+        await page.waitForTimeout(1200)
         const screenshotPath = path.join(OUT_DIR, `${screen.name}-rendered.png`)
         await page.screenshot({ path: screenshotPath, fullPage: false })
 
