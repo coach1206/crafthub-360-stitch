@@ -80,10 +80,6 @@ export default function CutToastLight() {
 
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
-      <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/assets/smokecraft/cropped/cut-toast-light-bg.jpg')" }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
-      </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
         <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/request-purchase')} aria-label="Back"><ArrowBackIcon size={24} /></button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
@@ -101,8 +97,8 @@ export default function CutToastLight() {
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Cut, Toast &amp; Light</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>Complete each preparation step before beginning your tasting.</p>
-        <div className="rounded-2xl overflow-hidden mb-10 border border-primary/15" style={{ height: 180 }}>
-          <img src="/assets/smokecraft/cropped/cut-toast-light-bg.jpg" alt="Cut, toast and light" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.1) brightness(0.85)' }} />
+        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 12 }}>
+          <img src="/CUT  TOAST, & LIGHT.png" alt="Cut, toast and light" style={{ width: '100%', maxHeight: 460, objectFit: 'contain', display: 'block', margin: '0 auto' }} />
         </div>
 
         {/* Cut Method */}
