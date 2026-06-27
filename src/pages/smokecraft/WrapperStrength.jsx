@@ -39,8 +39,32 @@ export default function WrapperStrength() {
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>Wrapper &amp; Strength Education</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth: 560 }}>The wrapper leaf shapes both flavor and visual character. Pick the wrapper and strength you'd reach for tonight.</p>
 
-        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 16 }}>
-          <img src="/assets/smokecraft/cropped/wrapping  and strength11.png" alt="Wrapper and strength guide" style={{ width: '100%', maxHeight: '85vh', objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+        <div
+          className="rounded-3xl border overflow-hidden mb-10"
+          style={{
+            height: 280,
+            borderColor: 'rgba(233,193,118,0.28)',
+            background: "url('/assets/smokecraft/cropped/wrapper-strength-hero.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
+            display: 'flex',
+            alignItems: 'flex-end',
+            padding: 28,
+          }}
+        >
+          <div
+            className="w-full"
+            style={{
+              background: 'linear-gradient(to top, rgba(10,7,4,0.72) 0%, rgba(10,7,4,0.0) 100%)',
+              margin: -28,
+              padding: 28,
+              paddingTop: 70,
+            }}
+          >
+            <p className="font-label-sm text-label-sm uppercase tracking-[0.25em] mb-1" style={{ color: '#f3d49a', textShadow: '0 2px 6px rgba(0,0,0,0.6)' }}>Leaf &amp; Wrapper Selection</p>
+            <p className="font-body-md text-[14px] text-white/80" style={{ maxWidth: 560, textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>The wrapper leaf defines the look, feel, and first impression of the cigar.</p>
+          </div>
         </div>
 
         <div className="rounded-2xl border mb-10" style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)', borderColor: 'rgba(233,193,118,0.2)', padding: 24 }}>
