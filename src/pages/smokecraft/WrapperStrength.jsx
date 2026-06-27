@@ -34,40 +34,42 @@ export default function WrapperStrength() {
         <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth: 48, minHeight: 48 }} onClick={() => navigate('/smokecraft/cigar-gauge-guide')} aria-label="Back">arrow_back</button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
-      <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
+      <main className="relative pt-28 pb-20 px-6 max-w-[800px] mx-auto">
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360 — Visit 2</p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>Wrapper &amp; Strength Education</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth: 560 }}>The wrapper leaf shapes both flavor and visual character. Pick the wrapper and strength you'd reach for tonight.</p>
 
-        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 12 }}>
-          <img src="/assets/smokecraft/cropped/wrapping  and strength11.png" alt="Wrapper and strength guide" style={{ width: '100%', maxHeight: 460, objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 16 }}>
+          <img src="/assets/smokecraft/cropped/wrapping  and strength11.png" alt="Wrapper and strength guide" style={{ width: '100%', maxHeight: '85vh', objectFit: 'contain', display: 'block', margin: '0 auto' }} />
         </div>
 
-        <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Wrapper</p>
-        <div className="grid sm:grid-cols-2 gap-3 mb-10">
-          {WRAPPERS.map(w => { const on = wrapper === w.id; return (
-            <button key={w.id} type="button" onClick={() => { triggerHaptic('light'); setWrapper(w.id) }}
-              className="sc-tactile text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
-              style={{ padding: 20, background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)' }}>
-              <p className="font-label-lg text-label-lg font-semibold" style={{ color: on ? '#e9c176' : undefined }}>{w.label}</p>
-              <p className="font-body-md text-body-md text-on-surface-variant mt-1">{w.desc}</p>
-            </button>
-          )})}
-        </div>
+        <div className="rounded-2xl border mb-10" style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)', borderColor: 'rgba(233,193,118,0.2)', padding: 24 }}>
+          <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Wrapper</p>
+          <div className="grid sm:grid-cols-2 gap-3 mb-8">
+            {WRAPPERS.map(w => { const on = wrapper === w.id; return (
+              <button key={w.id} type="button" onClick={() => { triggerHaptic('light'); setWrapper(w.id) }}
+                className="sc-tactile text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
+                style={{ padding: 20, background: on ? 'rgba(233,193,118,0.12)' : 'rgba(255,255,255,0.07)', borderColor: on ? 'rgba(233,193,118,0.5)' : 'rgba(233,193,118,0.22)' }}>
+                <p className="font-label-lg text-label-lg font-semibold" style={{ color: on ? '#e9c176' : undefined }}>{w.label}</p>
+                <p className="font-body-md text-body-md text-on-surface-variant mt-1">{w.desc}</p>
+              </button>
+            )})}
+          </div>
 
-        <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Preferred Strength</p>
-        <div className="flex flex-wrap gap-2 mb-12">
-          {STRENGTHS.map(s => { const on = strength === s; return (
-            <button key={s} type="button" onClick={() => { triggerHaptic('light'); setStrength(s) }}
-              className="sc-tactile px-5 py-2.5 rounded-full border font-label-lg text-label-lg transition-all duration-300 active:scale-95"
-              style={{
-                borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(255,255,255,0.15)',
-                background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.14), rgba(233,193,118,0.04))' : 'rgba(255,255,255,0.025)',
-                color: on ? '#e9c176' : 'rgba(255,255,255,0.6)',
-              }}>
-              {s}
-            </button>
-          )})}
+          <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Preferred Strength</p>
+          <div className="flex flex-wrap gap-2">
+            {STRENGTHS.map(s => { const on = strength === s; return (
+              <button key={s} type="button" onClick={() => { triggerHaptic('light'); setStrength(s) }}
+                className="sc-tactile px-5 py-2.5 rounded-full border font-label-lg text-label-lg transition-all duration-300 active:scale-95"
+                style={{
+                  borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(233,193,118,0.25)',
+                  background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.16), rgba(233,193,118,0.05))' : 'rgba(255,255,255,0.07)',
+                  color: on ? '#e9c176' : 'rgba(255,255,255,0.75)',
+                }}>
+                {s}
+              </button>
+            )})}
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4">

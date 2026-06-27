@@ -80,8 +80,8 @@ export default function RequestPurchase() {
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)', fontFamily: '"Playfair Display", serif' }}>Request or Purchase Cigar</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:520 }}>How will you be obtaining your cigar for tonight's session?</p>
 
-        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 12 }}>
-          <img src="/request-purchase.png" alt="Request or purchase guide" style={{ width: '100%', maxHeight: 460, objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 16 }}>
+          <img src="/request-purchase.png" alt="Request or purchase guide" style={{ width: '100%', maxHeight: '85vh', objectFit: 'contain', display: 'block', margin: '0 auto' }} />
         </div>
         <div className="flex items-start gap-3 mb-6 rounded-2xl border" style={{ padding: '14px 18px', background: 'rgba(233,193,118,0.06)', borderColor: 'rgba(233,193,118,0.25)' }}>
           <span className="material-symbols-outlined text-primary" style={{ fontSize: 20, marginTop: 1 }}>info</span>

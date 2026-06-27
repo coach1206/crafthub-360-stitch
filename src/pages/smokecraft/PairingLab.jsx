@@ -31,24 +31,27 @@ export default function PairingLab() {
         <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth: 48, minHeight: 48 }} onClick={() => navigate('/smokecraft/seed-soil')} aria-label="Back">arrow_back</button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
-      <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
+      <main className="relative pt-28 pb-20 px-6 max-w-[800px] mx-auto">
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360 — Visit 3</p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>Pairing Lab</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth: 560 }}>Experiment with a pairing before your first official cigar match. What would you reach for?</p>
 
-        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 12 }}>
-          <img src="/assets/smokecraft/cropped/pairing-lab-bg.jpg" alt="Pairing lab guide" style={{ width: '100%', maxHeight: 460, objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 16 }}>
+          <img src="/assets/smokecraft/cropped/pairing-lab-bg.jpg" alt="Pairing lab guide" style={{ width: '100%', maxHeight: '85vh', objectFit: 'contain', display: 'block', margin: '0 auto' }} />
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-3 mb-12">
-          {PAIRINGS.map(p => { const on = pairing === p.id; return (
-            <button key={p.id} type="button" onClick={() => { triggerHaptic('light'); setPairing(p.id) }}
-              className="sc-tactile text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
-              style={{ padding: 20, background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)' }}>
-              <p className="font-label-lg text-label-lg font-semibold" style={{ color: on ? '#e9c176' : undefined }}>{p.label}</p>
-              <p className="font-body-md text-body-md text-on-surface-variant mt-1">{p.desc}</p>
-            </button>
-          )})}
+        <div className="rounded-2xl border mb-10" style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)', borderColor: 'rgba(233,193,118,0.2)', padding: 24 }}>
+          <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-4">Choose Your Pairing</p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {PAIRINGS.map(p => { const on = pairing === p.id; return (
+              <button key={p.id} type="button" onClick={() => { triggerHaptic('light'); setPairing(p.id) }}
+                className="sc-tactile text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
+                style={{ padding: 20, background: on ? 'rgba(233,193,118,0.12)' : 'rgba(255,255,255,0.07)', borderColor: on ? 'rgba(233,193,118,0.5)' : 'rgba(233,193,118,0.22)' }}>
+                <p className="font-label-lg text-label-lg font-semibold" style={{ color: on ? '#e9c176' : undefined }}>{p.label}</p>
+                <p className="font-body-md text-body-md text-on-surface-variant mt-1">{p.desc}</p>
+              </button>
+            )})}
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4">
