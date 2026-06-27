@@ -19,9 +19,9 @@ export function LightShell({ children, style }) {
   )
 }
 
-export function LightCard({ children, style }) {
+export function LightCard({ children, style, onClick }) {
   return (
-    <div style={{ background: '#fff', border: '1px solid rgba(19,41,75,0.08)', borderRadius: 14, boxShadow: '0 1px 3px rgba(19,41,75,0.06)', ...style }}>
+    <div onClick={onClick} style={{ background: '#fff', border: '1px solid rgba(19,41,75,0.08)', borderRadius: 14, boxShadow: '0 1px 3px rgba(19,41,75,0.06)', ...style }}>
       {children}
     </div>
   )
