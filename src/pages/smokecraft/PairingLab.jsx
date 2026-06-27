@@ -31,7 +31,7 @@ export default function PairingLab() {
         <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth: 48, minHeight: 48 }} onClick={() => navigate('/smokecraft/seed-soil')} aria-label="Back">arrow_back</button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
-      <main className="relative pt-28 pb-20 px-6 max-w-[800px] mx-auto">
+      <main className="relative pt-28 pb-20 px-6 sm:px-[6vw] max-w-[1400px] mx-auto">
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360 — Visit 3</p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>Pairing Lab</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth: 560 }}>Experiment with a pairing before your first official cigar match. What would you reach for?</p>

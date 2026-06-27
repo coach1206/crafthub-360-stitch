@@ -34,7 +34,7 @@ export default function WrapperStrength() {
         <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth: 48, minHeight: 48 }} onClick={() => navigate('/smokecraft/cigar-gauge-guide')} aria-label="Back">arrow_back</button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
-      <main className="relative pt-28 pb-20 px-6 max-w-[800px] mx-auto">
+      <main className="relative pt-28 pb-20 px-6 sm:px-[6vw] max-w-[1400px] mx-auto">
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360 — Visit 2</p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>Wrapper &amp; Strength Education</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth: 560 }}>The wrapper leaf shapes both flavor and visual character. Pick the wrapper and strength you'd reach for tonight.</p>
@@ -60,8 +60,9 @@ export default function WrapperStrength() {
           <div className="flex flex-wrap gap-2">
             {STRENGTHS.map(s => { const on = strength === s; return (
               <button key={s} type="button" onClick={() => { triggerHaptic('light'); setStrength(s) }}
-                className="sc-tactile px-5 py-2.5 rounded-full border font-label-lg text-label-lg transition-all duration-300 active:scale-95"
+                className="sc-tactile px-6 py-3.5 rounded-full border font-label-lg text-label-lg transition-all duration-300 active:scale-95"
                 style={{
+                  minHeight: 56,
                   borderColor: on ? 'rgba(233,193,118,0.55)' : 'rgba(233,193,118,0.25)',
                   background: on ? 'linear-gradient(135deg, rgba(233,193,118,0.16), rgba(233,193,118,0.05))' : 'rgba(255,255,255,0.07)',
                   color: on ? '#e9c176' : 'rgba(255,255,255,0.75)',
