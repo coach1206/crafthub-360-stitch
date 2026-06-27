@@ -178,18 +178,14 @@ const SCREENS = [
   { family: 'smokecraft', name: 'final-review', route: '/smokecraft/final-review', reference: null, seedSmokeCraftStep: 'final-review', note: 'Gated by VisitLockGuard (Visit 8). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
 
   // --- Passport ---
-  // Reference images exist in public/ but route mapping is NOT confirmed —
-  // multiple similarly-named passport mockups exist (360 Passport 1.png,
-  // 360 passport  connections 11.png, 360  passport connect  CONECTIONS.png,
-  // 360 PASSPORT NETWORK INTERFACE 2.png, 360 PASSPORT CONNECTION 2.png,
-  // 360 LUXARY STAMP COLLECT 2.png) and none are wired into src/ yet. Do not
-  // guess the mapping (see the golden-box route mistake this protocol
-  // exists to prevent) — left as referenceImage: null with a TODO until a
-  // human confirms which file maps to which Passport route.
-  { family: 'passport', name: 'passport-connections', route: '/passport/connections', reference: null, note: 'Candidate references exist (360 PASSPORT NETWORK INTERFACE 2.png, 360 PASSPORT CONNECTION 2.png, etc.) but mapping is unconfirmed. See registry.' },
-  { family: 'passport', name: 'passport-stamps', route: '/passport/stamps', reference: null, note: 'Candidate references exist (DIGETAL STAMP COLLECTION 1.png, 360 LUXARY STAMP COLLECT 2.png) but mapping is unconfirmed. See registry.' },
-  { family: 'passport', name: 'passport-profile', route: '/passport/profile', reference: null, note: 'No confirmed reference image.' },
-  { family: 'passport', name: 'passport-directory', route: '/passport/directory', reference: null, note: 'No confirmed reference image.' },
+  // 2026-06-27: connections and stamps mapping confirmed via structural
+  // comparison against the live components (PassportConnections.jsx,
+  // PassportStamps.jsx) and wired below. profile and directory have no
+  // candidate images anywhere in public/ — left as reference: null.
+  { family: 'passport', name: 'passport-connections', route: '/passport/connections', reference: 'connections-reference.png', referenceDir: 'design-references/mvp2/passport', note: '2026-06-27: reference is "connections-reference.png" (copy of public/"360 PASSPORT CONNECTION 2.png"). Strong structural match — same hero stats (12 verified / 94% match / 8/10 goal), same tab labels (Best Matches/People You Met/Suggested), same bottom-nav pattern as the live PassportConnections.jsx page. Not the same source as the SmokeCraft /smokecraft/connections reference (360 PASSPORT NETWORK INTERFACE 2.png), which remains a separate, unrelated file.' },
+  { family: 'passport', name: 'passport-stamps', route: '/passport/stamps', reference: 'stamps-reference.png', referenceDir: 'design-references/mvp2/passport', note: '2026-06-27: reference is "stamps-reference.png" (copy of public/"DIGETAL STAMP COLLECTION 1.png"). Strong structural match — same 5 stamp categories (Event/Connection/Craft/VIP/Profile Stamps) and 11/24 progress as the live PassportStamps.jsx page. Note: a near-duplicate of this image, "360 LUXARY STAMP COLLECT 2.png", remains wired to SmokeCraft /smokecraft/passport-stamp as a loose/thematic reference there; it is likely a better structural fit for this route than for that one, but it has not been reassigned — see registry.' },
+  { family: 'passport', name: 'passport-profile', route: '/passport/profile', reference: null, note: '2026-06-27: confirmed no usable candidate image exists. "DISCOVER YOUR PROFILE.png" / "PROFILE DISCOVER 11.png" are SmokeCraft homepage mockups, not Passport profile screens — not usable.' },
+  { family: 'passport', name: 'passport-directory', route: '/passport/directory', reference: null, note: '2026-06-27: confirmed no candidate image exists anywhere in public/ for the member-directory layout.' },
 
   // --- DayOne360 ---
   { family: 'dayone360', name: 'dayone360-concierge', route: '/dayone360', reference: null, note: 'Reference "DAYONE360 CONICERGE 1.png" exists in public/ but is not yet confirmed against this route.' },
