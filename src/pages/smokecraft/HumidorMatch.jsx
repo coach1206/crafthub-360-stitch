@@ -190,8 +190,8 @@ export default function HumidorMatch() {
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)', fontFamily: '"Playfair Display", serif' }}>Humidor Match</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:520 }}>Your matched recommendations, then confirm your cigar's storage condition before the session begins.</p>
 
-        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 12 }}>
-          <img src="/assets/smokecraft/Humidor Match 1.png" alt="Humidor match guide" style={{ width: '100%', maxHeight: 460, objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 16 }}>
+          <img src="/assets/smokecraft/Humidor Match 1.png" alt="Humidor match guide" style={{ width: '100%', maxHeight: '85vh', objectFit: 'contain', display: 'block', margin: '0 auto' }} />
         </div>
 
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-2">Your Cigar Recommendations</p>
