@@ -404,21 +404,46 @@ async function main() {
   // server, started lazily and only if such a screen is actually selected.
   let devModeServerProcess = null
   let devModeBaseUrl = null
+  let devModeServerAttempted = false
+  let devModeServerFailureReason = null
   async function ensureDevModeServer() {
     if (devModeBaseUrl) return devModeBaseUrl
-    console.log('Starting vite dev server for auth-injected capture...')
+    if (devModeServerAttempted) return null // already failed once this run — don't retry per-screen
+    devModeServerAttempted = true
+
+    const candidateUrl = 'http://localhost:5183'
+    console.log('Starting vite dev server for auth-injected capture (port 5183)...')
+    let stderrTail = ''
     devModeServerProcess = trackProcess(spawn('npx', ['vite', 'dev', '--port', '5183', '--strictPort'], {
       cwd: ROOT,
       stdio: 'pipe',
     }))
-    devModeBaseUrl = 'http://localhost:5183'
-    const up = await waitForServer(devModeBaseUrl)
+    devModeServerProcess.stderr?.on('data', chunk => {
+      stderrTail = (stderrTail + chunk.toString()).slice(-2000)
+    })
+    devModeServerProcess.on('exit', (code, signal) => {
+      if (!devModeBaseUrl) {
+        devModeServerFailureReason = `vite dev process exited early (code=${code}, signal=${signal}) before becoming reachable.${stderrTail ? ` stderr: ${stderrTail}` : ''}`
+      }
+    })
+
+    // The dev server has to compile/transform on first request, which is
+    // slower than the static prod preview server this harness otherwise
+    // uses — give it materially more time than the default 60s before
+    // declaring auth-injected capture impossible for this run.
+    const DEV_SERVER_TIMEOUT_MS = 90000
+    const up = await waitForServer(candidateUrl, DEV_SERVER_TIMEOUT_MS)
     if (!up) {
-      console.error('  Could not start vite dev server for authenticated capture.')
+      devModeServerFailureReason = devModeServerFailureReason
+        || `vite dev server did not become reachable at ${candidateUrl} within ${DEV_SERVER_TIMEOUT_MS}ms.${stderrTail ? ` stderr: ${stderrTail}` : ''}`
+      console.error(`  FAILED to start vite dev server for authenticated capture: ${devModeServerFailureReason}`)
       killProcessHard(devModeServerProcess)
       devModeServerProcess = null
-      devModeBaseUrl = null
+      return null
     }
+
+    console.log(`  Dev server reachable at ${candidateUrl}.`)
+    devModeBaseUrl = candidateUrl
     return devModeBaseUrl
   }
 
@@ -451,7 +476,23 @@ async function main() {
         screenBaseUrl = devUrl
         usingDevModeAuth = true
       } else {
-        console.warn(`  Could not start dev server for ${screen.name} — falling back to production preview (will likely show ACCESS RESTRICTED).`)
+        // Do NOT fall back to the production preview server here — that
+        // server strips the DEV-only novee_admin_session hook, so the
+        // capture would always show ACCESS RESTRICTED. That looks like a
+        // real screen failure but is actually a harness setup failure.
+        // Recording it as an honest setup failure instead of a misleading
+        // "proof generated" artifact.
+        const reason = devModeServerFailureReason || 'Dev server for authenticated capture could not be started.'
+        console.error(`  AUTHENTICATED PROOF SETUP FAILED for ${screen.name}: ${reason}`)
+        results.push({
+          family: screen.family,
+          screen: screen.name,
+          route: screen.route,
+          requiresAuth: screen.requiresAuth,
+          authSetupFailed: true,
+          error: `Authenticated-proof setup failed — dev server unreachable, so no capture was attempted. Reason: ${reason}`,
+        })
+        continue
       }
     }
 
@@ -523,10 +564,13 @@ async function main() {
           viewport,
           timestamp: new Date().toISOString(),
           commitHash,
+          requiresAuth: screen.requiresAuth || null,
+          devServerUsed: usingDevModeAuth,
         }
 
         if (usingDevModeAuth) {
           meta.authInjected = { role: screen.requiresAuth.role, mode: 'dev-server novee_admin_session' }
+          console.log(`  Auth role injected: ${screen.requiresAuth.role} (novee_admin_session, dev server) — capturing real route.`)
         }
 
         if (seededSession) {
@@ -582,13 +626,23 @@ async function main() {
 
   console.log('\nVisual proof artifacts written to docs/visual-proof/')
   for (const r of results) {
-    const status = r.error
-      ? `FAILED — ${r.error}`
-      : r.accessGated
-        ? 'proof generated, but BEHIND AUTH GATE — not a real screen comparison'
-        : (r.referenceFound ? 'proof generated' : 'NO PROOF — ' + (r.note || 'no reference image'))
+    const status = r.authSetupFailed
+      ? `AUTHENTICATED PROOF SETUP FAILED — ${r.error}`
+      : r.error
+        ? `FAILED — ${r.error}`
+        : r.accessGated
+          ? 'proof generated, but BEHIND AUTH GATE — not a real screen comparison'
+          : r.devServerUsed
+            ? `proof generated (auth role '${r.requiresAuth?.role}' injected — real authenticated route captured)`
+            : (r.referenceFound ? 'proof generated' : 'NO PROOF — ' + (r.note || 'no reference image'))
     console.log(`  - [${r.family}] ${r.screen}: ${status}`)
   }
+
+  const setupFailures = results.filter(r => r.authSetupFailed)
+  if (setupFailures.length > 0) {
+    console.error(`\n${setupFailures.length} authenticated-proof screen(s) failed setup — no misleading ACCESS RESTRICTED artifact was saved for these. Treat as a harness failure, not a screen failure.`)
+  }
+  return { authSetupFailureCount: setupFailures.length }
 }
 
 function exitNow(code) {
@@ -645,7 +699,7 @@ async function buildContactSheet({ chromiumPage, referencePath, renderedPath, ou
 }
 
 main()
-  .then(() => exitNow(0))
+  .then(result => exitNow(result?.authSetupFailureCount > 0 ? 1 : 0))
   .catch(async err => {
     console.error('I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.')
     console.error('Reason: unexpected error — ' + err.message)
