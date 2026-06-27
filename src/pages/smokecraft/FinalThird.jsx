@@ -79,7 +79,7 @@ export default function FinalThird() {
         <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/second-third')} aria-label="Back">arrow_back</button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
-      <main className="relative pt-28 pb-36 px-6 max-w-[1100px] mx-auto">
+      <main className="relative pt-28 pb-36 px-6 sm:px-[6vw] max-w-[1400px] mx-auto">
         <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
           <div className="smokecraft-progress-label flex items-center gap-3">
             <span>Round {stepProgress.round} of 3</span>
