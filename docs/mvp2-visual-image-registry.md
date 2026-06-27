@@ -68,7 +68,7 @@ runtime image used by an image-based screen, across all families
 
 | Reference image | Screen/route | Component file | Reference-only / runtime-safe | Clean photo only? | Contains baked UI? | Approved usage | Banned usage | Runtime image paths | Layout requirements | No-gap requirements | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| `DAYONE360 CONICERGE 1.png` | `/dayone360` (candidate, unconfirmed) | not wired in `src/` | Unknown | Unknown | Likely yes (mockup-style) | TBD | TBD | n/a | TBD | TBD | blocked — mapping unconfirmed |
+| `concierge-reference.png` (`public/design-references/mvp2/dayone360/concierge-reference.png`, copy of `public/DAYONE360 CONICERGE 1.png`) | `/dayone360` (`/dayone360-travel` renders the identical `DayOneTravel.jsx` component but is not separately tracked in `scripts/visualProof.js`) | `src/pages/DayOneTravel.jsx` | Reference-only | No | Yes (full mockup) | Strong structural proof-comparison reference | Direct runtime background; do not use this asset for any other route | n/a | n/a | n/a | mapping confirmed 2026-06-27. Strong structural match — header/action buttons (Plan Travel/Request Concierge/View Passport), journey tracker (Plan/Pre-Arrival/In-Country/Return), concierge services grid, destination cards, passport stamps section, and bottom nav all match the live page. **Minor non-blocking layout drift (not defects):** (1) reference includes a Concierge Status card not verbatim in the current component; (2) reference includes a 4-tile promo/service row (Travel Booking/Corporate Travel/Relocation Support/Earn More Partner Network) not currently in the live component. |
 
 ## CraftHub
 

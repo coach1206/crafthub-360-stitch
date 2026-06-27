@@ -2,13 +2,12 @@
   "family": "dayone360",
   "screen": "dayone360-concierge",
   "route": "/dayone360",
-  "referenceImage": null,
-  "referenceFound": false,
+  "referenceImage": "concierge-reference.png",
+  "referenceFound": true,
   "viewport": {
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T21:38:31.022Z",
-  "commitHash": "196ecb92",
-  "note": "Reference \"DAYONE360 CONICERGE 1.png\" exists in public/ but is not yet confirmed against this route."
+  "timestamp": "2026-06-27T17:02:36.613Z",
+  "commitHash": "1d2e4caf"
 }
