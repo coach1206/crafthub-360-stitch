@@ -2,14 +2,14 @@
   "family": "smokecraft",
   "screen": "connections",
   "route": "/smokecraft/connections",
-  "referenceImage": "passport-connection-1.png",
+  "referenceImage": "connections-reference.png",
   "referenceFound": true,
   "viewport": {
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-26T11:59:57.639Z",
-  "commitHash": "625ba33b",
+  "timestamp": "2026-06-27T16:22:30.034Z",
+  "commitHash": "8e0ae555",
   "smokeCraftProgressSeeded": true,
   "seededSession": 22,
   "routeUnlockedForProof": true
