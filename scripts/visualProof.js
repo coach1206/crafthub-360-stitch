@@ -188,7 +188,7 @@ const SCREENS = [
   { family: 'passport', name: 'passport-directory', route: '/passport/directory', reference: null, note: '2026-06-27: confirmed no candidate image exists anywhere in public/ for the member-directory layout.' },
 
   // --- DayOne360 ---
-  { family: 'dayone360', name: 'dayone360-concierge', route: '/dayone360', reference: null, note: 'Reference "DAYONE360 CONICERGE 1.png" exists in public/ but is not yet confirmed against this route.' },
+  { family: 'dayone360', name: 'dayone360-concierge', route: '/dayone360', reference: 'concierge-reference.png', referenceDir: 'design-references/mvp2/dayone360', note: '2026-06-27: reference is "concierge-reference.png" (copy of public/"DAYONE360 CONICERGE 1.png"). Strong structural match for DayOneTravel.jsx (header/action buttons, journey tracker, concierge services grid, destination cards, passport stamps, bottom nav). Minor non-blocking layout drift: (1) reference includes a Concierge Status card not verbatim in current component; (2) reference includes a 4-tile promo/service row not currently in the live component. Neither is a defect — drift notes only.' },
 
   // --- CraftHub ---
   { family: 'crafthub', name: 'crafthub-landing', route: '/crafthub', reference: null, note: 'Reference "CRAFT HUB EXPLAIND.png" exists in public/ but is not yet confirmed against this route.' },
