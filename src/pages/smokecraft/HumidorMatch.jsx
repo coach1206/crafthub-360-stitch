@@ -171,10 +171,6 @@ export default function HumidorMatch() {
 
   return (
     <div className="humidor-page text-on-surface font-body-md overflow-x-hidden min-h-screen">
-      <div className="fixed inset-0 -z-20 overflow-hidden humidor-page-bg">
-        <div className="absolute inset-0 bg-cover bg-center opacity-25" style={{ backgroundImage:"url('/assets/smokecraft/cropped/humidor-match-bg-v2.jpg')" }} />
-        <div className="absolute inset-0 pointer-events-none humidor-page-vignette" />
-      </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
         <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/golden-box')} aria-label="Back"><ArrowBackIcon size={24} /></button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
@@ -190,14 +186,12 @@ export default function HumidorMatch() {
           <span>Humidor Match</span>
         </div>
 
-        <div className="humidor-hero">
-          <img src="/assets/smokecraft/cropped/humidor-match-bg-v2.jpg" alt="Humidor" className="humidor-hero__img" />
-          <div className="humidor-hero__fade" aria-hidden="true" />
-          <div className="humidor-hero__content">
-            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-2">SmokeCraft 360</p>
-            <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)', fontFamily: '"Playfair Display", serif' }}>Humidor Match</h2>
-            <p className="font-body-lg text-body-lg text-on-surface-variant" style={{ maxWidth:520 }}>Your matched recommendations, then confirm your cigar's storage condition before the session begins.</p>
-          </div>
+        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-2">SmokeCraft 360</p>
+        <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)', fontFamily: '"Playfair Display", serif' }}>Humidor Match</h2>
+        <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:520 }}>Your matched recommendations, then confirm your cigar's storage condition before the session begins.</p>
+
+        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 12 }}>
+          <img src="/assets/smokecraft/Humidor Match 1.png" alt="Humidor match guide" style={{ width: '100%', maxHeight: 460, objectFit: 'contain', display: 'block', margin: '0 auto' }} />
         </div>
 
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.2em] mb-2">Your Cigar Recommendations</p>
@@ -311,42 +305,6 @@ export default function HumidorMatch() {
       </main>
       <style>{`
         .humidor-page { background: #0d0d0e; }
-        .humidor-page-bg { background: #0d0d0e; }
-        .humidor-page-vignette {
-          background:
-            radial-gradient(ellipse at 50% 0%, rgba(233,193,118,0.08) 0%, transparent 45%),
-            linear-gradient(0deg, rgba(13,13,14,0.97) 0%, rgba(13,13,14,0.55) 45%, rgba(13,13,14,0.97) 100%);
-        }
-
-        .humidor-hero {
-          position: relative;
-          border-radius: 24px;
-          overflow: hidden;
-          margin-bottom: 40px;
-          min-height: 260px;
-          display: flex;
-          align-items: flex-end;
-          border: 1px solid rgba(233,193,118,0.22);
-          box-shadow: 0 24px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
-        }
-        .humidor-hero__img {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          filter: saturate(1.15) contrast(1.05) brightness(0.7);
-        }
-        .humidor-hero__fade {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(180deg, rgba(13,13,14,0.15) 0%, rgba(13,13,14,0.55) 55%, rgba(13,13,14,0.95) 100%);
-        }
-        .humidor-hero__content {
-          position: relative;
-          z-index: 1;
-          padding: 28px 28px 26px;
-        }
 
         .humidor-card {
           display: flex;
