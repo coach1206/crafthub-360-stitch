@@ -1,0 +1,14 @@
+{
+  "family": "passport",
+  "screen": "passport-directory",
+  "route": "/passport/directory",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-27T16:56:14.920Z",
+  "commitHash": "e636305b",
+  "note": "2026-06-27: confirmed no candidate image exists anywhere in public/ for the member-directory layout."
+}
