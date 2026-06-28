@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Pill, Btn, useToast } from '../../components/eat/ui.jsx'
 import { LightShell, LightHeader, LightCard, LightBottomNav, L_NAVY, L_GOLD } from '../../components/eat/lightTheme.jsx'
-import { getOpenTickets, closeTicket, cashoutTicket } from '../../services/pos3/orderService.js'
+import { getOpenTickets, closeTicketWithAudit } from '../../services/pos3/orderService.js'
 import { calcTotals, completeCashPayment, completeCardPayment, completeSplitPayment } from '../../services/pos3/paymentService.js'
 import { buildReceipt } from '../../services/pos3/receiptService.js'
 import { recordInventoryImpact } from '../../services/pos3/inventoryImpactService.js'
@@ -26,7 +26,7 @@ export default function POS3Checkout() {
   if (!ticket && !paid) {
     return (
       <LightShell style={{ maxWidth: 480, margin: '0 auto', paddingBottom: 84 }}>
-        <LightHeader eyebrow="POS 3" title="Checkout" />
+        <LightHeader eyebrow="POS360" title="Checkout" />
         <div style={{ padding: 20, color: '#8b95a3' }}>No open tickets to check out.</div>
         <LightBottomNav items={[
           { label: 'Home', icon: 'home', onClick: () => navigate('/pos3') },
@@ -51,7 +51,7 @@ export default function POS3Checkout() {
       toast(result.error || 'Cash tendered is less than the total due.')
       return
     }
-    cashoutTicket(ticket.id)
+    closeTicketWithAudit(ticket.id, { status: 'paid', staffId: ticket.staffId, staffRole: 'server' })
     const receipt = buildReceipt(ticket, { ...result, tenderType: 'cash' })
     recordInventoryImpact(ticket)
     setLastResult({ ...result, receipt })
@@ -71,7 +71,7 @@ export default function POS3Checkout() {
 
   return (
     <LightShell style={{ maxWidth: 480, margin: '0 auto', paddingBottom: 84 }}>
-      <LightHeader eyebrow="POS 3" title="Checkout" subtitle={ticket ? `${ticket.id} · ${ticket.tableId || ''}` : 'Complete'} />
+      <LightHeader eyebrow="POS360" title="Checkout" subtitle={ticket ? `${ticket.id} · ${ticket.tableId || ''}` : 'Complete'} />
       <div style={{ padding: '14px 16px 0' }}>
         {!paid && tickets.length > 1 && (
           <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
