@@ -34,7 +34,7 @@ export default function POS3Home() {
   const { session, update } = useGuestSession()
 
   const openTickets = tickets.length
-  const occupied = tables.filter((t) => t.status === 'occupied').length
+  const occupied = tables.filter((t) => t.status !== 'open' && t.status !== 'cleaning').length
   const posHandoff = getSmokePOSHandoff(session)
   const storageMode = getSmokeSharedStorageMode()
   const sharedIntents = loadSmokePurchaseIntents()

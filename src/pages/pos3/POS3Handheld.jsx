@@ -127,7 +127,7 @@ export default function POS3Handheld() {
   const cartCount = (ticket?.items || []).reduce((s, i) => s + i.qty, 0)
   const navigate = useNavigate()
   const staff = POS3_STAFF[0]
-  const occupiedTables = getTables().filter((t) => t.status === 'occupied')
+  const occupiedTables = getTables().filter((t) => t.status !== 'open' && t.status !== 'cleaning')
   const lowStock = EAT_INVENTORY.filter((i) => i.onHand <= i.par * 0.5)
 
   return (
