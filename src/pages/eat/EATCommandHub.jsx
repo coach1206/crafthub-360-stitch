@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ManagementLayout, Card, Pill, Btn, GOLD } from '../../components/eat/ui.jsx'
+import { EatManagementLayout, EatCard, EatBtn, EAT_GOLD, L_NAVY, LightPill } from '../../components/eat/lightTheme.jsx'
 import { subscribe, getOpsEvents, SYSTEMS } from '../../services/shared/opsEventBus.js'
 import { completeCommand, receiveCommand } from '../../services/shared/opsControlBridge.js'
 import { getTickets } from '../../services/pos3/pos3Service.js'
@@ -74,15 +74,7 @@ export default function EATCommandHub() {
   }
 
   return (
-    <ManagementLayout title="Command Hub" subtitle="Venue-wide overview — open tickets, alerts, stations, and live ops">
-      <div style={{ marginBottom: 18 }}>
-        <img
-          src="/assets/eat/cropped/EAT system  UPDATE.png"
-          alt=""
-          style={{ width: '100%', height: 110, objectFit: 'cover', borderRadius: 14, border: '1px solid rgba(212,168,67,0.18)' }}
-        />
-      </div>
-
+    <EatManagementLayout title="Command Hub" subtitle="Venue-wide overview">
       <div style={{ display: 'flex', gap: 6, marginBottom: 18, overflowX: 'auto' }}>
         {COMMAND_TABS.map((t) => (
           <button
@@ -92,132 +84,140 @@ export default function EATCommandHub() {
             title={!t.to ? t.disabledReason : undefined}
             onClick={t.to ? () => navigate(t.to) : undefined}
             style={{
-              flexShrink: 0, padding: '9px 14px', borderRadius: 10, border: `1px solid ${t.to ? GOLD : 'rgba(255,255,255,0.08)'}`,
-              background: t.to ? 'rgba(212,168,67,0.1)' : 'transparent', color: t.to ? GOLD : '#5c6470', fontWeight: 700, fontSize: 12.5,
-              cursor: t.to ? 'pointer' : 'not-allowed', opacity: t.to ? 1 : 0.6,
+              flexShrink: 0, padding: '9px 14px', borderRadius: 10, border: `1px solid ${t.to ? EAT_GOLD : 'rgba(19,41,75,0.1)'}`,
+              background: t.to ? 'rgba(212,168,67,0.12)' : '#f1efe9', color: t.to ? '#9c7320' : '#8b95a3', fontWeight: 700, fontSize: 12.5,
+              cursor: t.to ? 'pointer' : 'not-allowed', opacity: t.to ? 1 : 0.7,
             }}
           >{t.label}</button>
         ))}
       </div>
 
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 18 }}>
-        <Card style={{ flex: 1, minWidth: 140 }}>
+        <EatCard style={{ flex: 1, minWidth: 140 }}>
           <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8b95a3', fontWeight: 700 }}>Open Tickets</div>
-          <div style={{ fontSize: 28, fontWeight: 800, color: '#e8eef5', marginTop: 4 }}>{openTickets}</div>
-        </Card>
-        <Card style={{ flex: 1, minWidth: 140 }}>
+          <div style={{ fontSize: 28, fontWeight: 800, color: L_NAVY, marginTop: 4 }}>{openTickets}</div>
+        </EatCard>
+        <EatCard style={{ flex: 1, minWidth: 140 }}>
           <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8b95a3', fontWeight: 700 }}>Pending Humidor Requests</div>
-          <div style={{ fontSize: 28, fontWeight: 800, color: pendingHumidor ? '#f0907f' : '#e8eef5', marginTop: 4 }}>{pendingHumidor}</div>
-        </Card>
-        <Card style={{ flex: 1, minWidth: 140 }}>
+          <div style={{ fontSize: 28, fontWeight: 800, color: pendingHumidor ? '#b33b3b' : L_NAVY, marginTop: 4 }}>{pendingHumidor}</div>
+        </EatCard>
+        <EatCard style={{ flex: 1, minWidth: 140 }}>
           <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8b95a3', fontWeight: 700 }}>Active Alerts</div>
-          <div style={{ fontSize: 28, fontWeight: 800, color: '#f0907f', marginTop: 4 }}>{EAT_ALERTS.length}</div>
-        </Card>
-        <Card style={{ flex: 1, minWidth: 140 }}>
+          <div style={{ fontSize: 28, fontWeight: 800, color: '#b33b3b', marginTop: 4 }}>{EAT_ALERTS.length}</div>
+        </EatCard>
+        <EatCard style={{ flex: 1, minWidth: 140 }}>
           <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8b95a3', fontWeight: 700 }}>Total Ops Events</div>
-          <div style={{ fontSize: 28, fontWeight: 800, color: '#e8eef5', marginTop: 4 }}>{feed.length}</div>
-        </Card>
+          <div style={{ fontSize: 28, fontWeight: 800, color: L_NAVY, marginTop: 4 }}>{feed.length}</div>
+        </EatCard>
       </div>
 
-      <div style={{ fontSize: 11, fontWeight: 800, color: GOLD, letterSpacing: '0.08em', marginBottom: 8 }}>STATION QUICK ACCESS</div>
+      <div style={{ fontSize: 11, fontWeight: 800, color: '#9c7320', letterSpacing: '0.08em', marginBottom: 8 }}>STATION QUICK ACCESS</div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10, marginBottom: 18 }}>
         {STATION_CARDS.map((s) => (
-          <Card key={s.label} onClick={s.to ? () => navigate(s.to) : undefined} title={!s.to ? s.disabledReason : undefined}
+          <EatCard key={s.label} onClick={s.to ? () => navigate(s.to) : undefined} title={!s.to ? s.disabledReason : undefined}
             style={{ padding: '12px 14px', opacity: s.to ? 1 : 0.55, cursor: s.to ? 'pointer' : 'not-allowed' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: s.to ? '#e8eef5' : '#8b95a3' }}>{s.label}</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: s.to ? L_NAVY : '#8b95a3' }}>{s.label}</div>
             <div style={{ fontSize: 11, color: '#8b95a3', marginTop: 2 }}>{s.to ? 'Open station →' : 'Not yet built'}</div>
-          </Card>
+          </EatCard>
         ))}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12, marginBottom: 20 }}>
-        <Card style={{ padding: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: GOLD, marginBottom: 8 }}>STAFF ASSIGNMENT</div>
+        <EatCard style={{ padding: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#9c7320', marginBottom: 8 }}>STAFF ASSIGNMENT</div>
           {EAT_STAFF.slice(0, 3).map((s) => (
-            <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#cdd5df' }}>
+            <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#1c2230' }}>
               <span>{s.name} · {s.role}</span>
-              <Pill label={s.status} tone={s.status === 'on-shift' ? 'open' : s.status === 'on-break' ? 'warning' : 'dirty'} />
+              <LightPill tone={s.status === 'on-shift' ? 'green' : s.status === 'on-break' ? 'gold' : 'navy'}>{s.status}</LightPill>
             </div>
           ))}
-          <button type="button" onClick={() => navigate('/eat/staff')} style={{ background: 'none', border: 'none', color: GOLD, fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 6 }}>View Staff →</button>
-        </Card>
-        <Card style={{ padding: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: GOLD, marginBottom: 8 }}>SECTIONS & ZONES</div>
+          <button type="button" onClick={() => navigate('/eat/staff')} style={{ background: 'none', border: 'none', color: '#9c7320', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 6 }}>View Staff →</button>
+        </EatCard>
+        <EatCard style={{ padding: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#9c7320', marginBottom: 8 }}>SECTIONS & ZONES</div>
           {EAT_SECTIONS.slice(0, 3).map((s) => (
-            <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#cdd5df' }}>
+            <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#1c2230' }}>
               <span>{s.name} · {s.tables} tables</span>
-              <Pill label={s.status} tone={s.status === 'active' ? 'open' : 'dirty'} />
+              <LightPill tone={s.status === 'active' ? 'green' : 'navy'}>{s.status}</LightPill>
             </div>
           ))}
-          <button type="button" onClick={() => navigate('/eat/sections')} style={{ background: 'none', border: 'none', color: GOLD, fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 6 }}>View Sections →</button>
-        </Card>
-        <Card style={{ padding: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: GOLD, marginBottom: 8 }}>POS3 SYNC</div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#cdd5df' }}>
+          <button type="button" onClick={() => navigate('/eat/sections')} style={{ background: 'none', border: 'none', color: '#9c7320', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 6 }}>View Sections →</button>
+        </EatCard>
+        <EatCard style={{ padding: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#9c7320', marginBottom: 8 }}>POS3 SYNC</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#1c2230' }}>
             <span>Events with POS 3</span><span>{pos3Feed.length}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#cdd5df' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#1c2230' }}>
             <span>Last activity</span><span>{lastEventAt(pos3Feed)}</span>
           </div>
-          <button type="button" onClick={() => navigate('/eat/pos-control')} style={{ background: 'none', border: 'none', color: GOLD, fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 6 }}>Open POS Control →</button>
-        </Card>
-        <Card style={{ padding: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: GOLD, marginBottom: 8 }}>SMOKECRAFT SYNC</div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#cdd5df' }}>
+          <button type="button" onClick={() => navigate('/eat/pos-control')} style={{ background: 'none', border: 'none', color: '#9c7320', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 6 }}>Open POS Control →</button>
+        </EatCard>
+        <EatCard style={{ padding: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#9c7320', marginBottom: 8 }}>SMOKECRAFT SYNC</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#1c2230' }}>
             <span>Events with SmokeCraft</span><span>{smokecraftFeed.length}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#cdd5df' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#1c2230' }}>
             <span>Last activity</span><span>{lastEventAt(smokecraftFeed)}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#cdd5df' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', color: '#1c2230' }}>
             <span>Pending humidor requests</span><span>{pendingHumidor}</span>
           </div>
-        </Card>
+        </EatCard>
+        <EatCard onClick={() => navigate('/eat/humidor')} style={{ padding: 14, cursor: 'pointer', display: 'flex', gap: 10, alignItems: 'center' }}>
+          <img src="/assets/smokecraft/cropped/humidor-match-hero.jpg" alt="Humidor" style={{ width: 48, height: 64, objectFit: 'cover', borderRadius: 6, flexShrink: 0 }} />
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: '#9c7320', marginBottom: 4 }}>HUMIDOR SPOTLIGHT</div>
+            <div style={{ fontSize: 12, color: '#1c2230', fontWeight: 700 }}>Cigar requests &amp; stock</div>
+            <div style={{ fontSize: 11, color: '#8b95a3', marginTop: 2 }}>Open Humidor →</div>
+          </div>
+        </EatCard>
       </div>
 
       <div style={{ marginBottom: 20 }}>
-        <Btn tone="purple" onClick={() => navigate('/eat/operations')}>Open Operations View</Btn>
+        <EatBtn tone="purple" onClick={() => navigate('/eat/operations')}>Open Operations View</EatBtn>
       </div>
 
-      <div style={{ fontSize: 11, fontWeight: 800, color: GOLD, letterSpacing: '0.08em', marginBottom: 8 }}>DECISION HUB</div>
+      <div style={{ fontSize: 11, fontWeight: 800, color: '#9c7320', letterSpacing: '0.08em', marginBottom: 8 }}>DECISION HUB</div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginBottom: 20 }}>
         {DECISION_HUB_ITEMS.map((d) => (
-          <Card key={d.label} onClick={d.to ? () => navigate(d.to) : undefined} title={!d.to ? d.disabledReason : undefined}
+          <EatCard key={d.label} onClick={d.to ? () => navigate(d.to) : undefined} title={!d.to ? d.disabledReason : undefined}
             style={{ padding: '12px 14px', opacity: d.to ? 1 : 0.55, cursor: d.to ? 'pointer' : 'not-allowed' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: d.to ? '#e8eef5' : '#8b95a3' }}>{d.label}</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: d.to ? L_NAVY : '#8b95a3' }}>{d.label}</div>
             <div style={{ fontSize: 11, color: '#8b95a3', marginTop: 2 }}>{d.to ? 'Open →' : 'Not yet built'}</div>
-          </Card>
+          </EatCard>
         ))}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.7fr 1fr', gap: 16, marginBottom: 16 }}>
-        <Card>
-          <div style={{ fontWeight: 700, marginBottom: 12 }}>Live Ops Feed</div>
+        <EatCard>
+          <div style={{ fontWeight: 700, marginBottom: 12, color: L_NAVY }}>Live Ops Feed</div>
           {!feed.length && <div style={{ color: '#8b95a3' }}>No ops events yet.</div>}
           {feed.slice(0, 25).map((e) => {
             const actionable = e.targetSystem === 'EAT' && e.status !== 'completed'
             return (
-              <div key={e.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '9px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              <div key={e.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '9px 0', borderTop: '1px solid rgba(19,41,75,0.06)' }}>
                 <div>
-                  <Pill label={e.status} tone={e.status === 'completed' ? 'paid' : 'pending'} />
-                  <span style={{ marginLeft: 8, fontSize: 13 }}>{e.eventType || e.commandType}</span>
+                  <LightPill tone={e.status === 'completed' ? 'green' : 'gold'}>{e.status}</LightPill>
+                  <span style={{ marginLeft: 8, fontSize: 13, color: '#1c2230' }}>{e.eventType || e.commandType}</span>
                   <div style={{ fontSize: 11, color: '#8b95a3', marginTop: 2 }}>{e.sourceSystem} → {e.targetSystem}{e.ticketId ? ` · ${e.ticketId}` : ''}{e.payload?.label ? ` · ${e.payload.label}` : ''}</div>
                 </div>
-                {actionable && e.status === 'pending' && <Btn tone="green" onClick={() => markReceived(e)} style={{ padding: '7px 12px', fontSize: 12 }}>Mark Received</Btn>}
-                {actionable && e.status === 'received' && <Btn tone="green" onClick={() => markCompleted(e)} style={{ padding: '7px 12px', fontSize: 12 }}>Mark Completed</Btn>}
+                {actionable && e.status === 'pending' && <EatBtn tone="green" onClick={() => markReceived(e)} style={{ padding: '7px 12px', fontSize: 12 }}>Mark Received</EatBtn>}
+                {actionable && e.status === 'received' && <EatBtn tone="green" onClick={() => markCompleted(e)} style={{ padding: '7px 12px', fontSize: 12 }}>Mark Completed</EatBtn>}
               </div>
             )
           })}
-        </Card>
-        <Card>
-          <div style={{ fontWeight: 700, marginBottom: 12 }}>Active Alerts</div>
+        </EatCard>
+        <EatCard>
+          <div style={{ fontWeight: 700, marginBottom: 12, color: L_NAVY }}>Active Alerts</div>
           {EAT_ALERTS.map((a) => (
-            <div key={a.id} style={{ padding: '8px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-              <Pill label={a.level} tone={a.level} />
-              <div style={{ fontSize: 13, marginTop: 4 }}>{a.message}</div>
+            <div key={a.id} style={{ padding: '8px 0', borderTop: '1px solid rgba(19,41,75,0.06)' }}>
+              <LightPill tone={a.level === 'critical' ? 'red' : a.level === 'warning' ? 'gold' : 'blue'}>{a.level}</LightPill>
+              <div style={{ fontSize: 13, marginTop: 4, color: '#1c2230' }}>{a.message}</div>
             </div>
           ))}
-        </Card>
+        </EatCard>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -229,6 +229,6 @@ export default function EATCommandHub() {
         <SyncConflictReviewPanel />
         <SyncAuditTimelinePanel />
       </div>
-    </ManagementLayout>
+    </EatManagementLayout>
   )
 }

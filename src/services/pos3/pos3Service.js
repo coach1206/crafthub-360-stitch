@@ -5,7 +5,7 @@
  * sees real activity.
  */
 
-import { POS3_TABLES, POS3_TICKETS, POS3_MENU, POS3_STAFF, TAX_RATE } from '../../data/pos3/seedData.js'
+import { POS3_TABLES, POS3_TICKETS, POS3_MENU, POS3_STAFF, TAX_RATE, POS3_LAYOUT_SECTIONS } from '../../data/pos3/seedData.js'
 import { opsGet, opsSet } from '../shared/opsStorage.js'
 import { emit, SYSTEMS } from '../shared/opsEventBus.js'
 import { saveEvent } from '../syncQueueService.js'
@@ -29,6 +29,33 @@ export function getTicket(id) { return getTickets().find((t) => t.id === id) || 
 
 export function saveTickets(tickets) { opsSet(K.tickets, tickets) }
 export function saveTables(tables)   { opsSet(K.tables, tables) }
+
+/** Layout sections shared by POS3 Tables (handheld) and E.A.T. Sections (manager editor). */
+export function getLayoutSections() { return POS3_LAYOUT_SECTIONS }
+
+/**
+ * Updates a single table's drag position (x/y, 0-100 percent within its
+ * section canvas) and persists it via saveTables. Shared by POS3 Tables
+ * and E.A.T. Sections so both screens read/write the same layout data.
+ * Layout persists locally until a backend table-layout endpoint is connected.
+ */
+export function updateTablePosition(tableId, x, y) {
+  const tables = getTables().map((t) => (t.id === tableId ? { ...t, x, y } : t))
+  saveTables(tables)
+  return tables
+}
+
+/**
+ * Moves a table to a different section (e.g. dragged from Lounge to Patio)
+ * at the given x/y, keeping its status/server/reservation/order data intact.
+ * Same local persistence as updateTablePosition — no backend table-layout
+ * endpoint exists yet.
+ */
+export function moveTableToSection(tableId, section, x, y) {
+  const tables = getTables().map((t) => (t.id === tableId ? { ...t, section, x, y } : t))
+  saveTables(tables)
+  return tables
+}
 
 function uid(prefix = 'TKT') {
   return `${prefix}-${Math.floor(1000 + Math.random() * 9000)}`

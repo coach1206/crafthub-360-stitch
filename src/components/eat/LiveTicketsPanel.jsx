@@ -2,7 +2,7 @@
  * LiveTicketsPanel — dense management table of recent POS3 tickets, with
  * lifecycle status, item counts, and totals.
  */
-import { Card, Pill, GOLD, Table } from './ui.jsx'
+import { EatCard, EatTable, LightPill, L_NAVY } from './lightTheme.jsx'
 
 export default function LiveTicketsPanel({ tickets, ticketCounts }) {
   const columns = [
@@ -14,24 +14,24 @@ export default function LiveTicketsPanel({ tickets, ticketCounts }) {
   ]
 
   return (
-    <Card>
-      <div style={{ fontWeight: 700, marginBottom: 12 }}>Live Tickets</div>
-      <div style={{ display: 'flex', gap: 14, marginBottom: 12, fontSize: 12, color: '#aab3bf' }}>
-        <span>Open: <strong style={{ color: GOLD }}>{ticketCounts.open}</strong></span>
-        <span>Sent: <strong style={{ color: GOLD }}>{ticketCounts.sent}</strong></span>
-        <span>Held: <strong style={{ color: GOLD }}>{ticketCounts.held}</strong></span>
-        <span>Paid: <strong style={{ color: GOLD }}>{ticketCounts.paid}</strong></span>
+    <EatCard>
+      <div style={{ fontWeight: 700, marginBottom: 12, color: L_NAVY }}>Live Tickets</div>
+      <div style={{ display: 'flex', gap: 14, marginBottom: 12, fontSize: 12, color: '#6b7385' }}>
+        <span>Open: <strong style={{ color: '#9c7320' }}>{ticketCounts.open}</strong></span>
+        <span>Sent: <strong style={{ color: '#9c7320' }}>{ticketCounts.sent}</strong></span>
+        <span>Held: <strong style={{ color: '#9c7320' }}>{ticketCounts.held}</strong></span>
+        <span>Paid: <strong style={{ color: '#9c7320' }}>{ticketCounts.paid}</strong></span>
       </div>
-      <Table
+      <EatTable
         columns={columns}
         rows={tickets}
         renderCell={(row, key) => {
           if (key === 'items') return row.items?.length || 0
-          if (key === 'status') return <Pill label={row.status} tone={row.status} />
+          if (key === 'status') return <LightPill tone={row.status === 'paid' || row.status === 'open' ? 'green' : row.status === 'held' ? 'navy' : 'gold'}>{row.status}</LightPill>
           if (key === 'staffId') return row.staffId || row.server || '—'
           return row[key] ?? '—'
         }}
       />
-    </Card>
+    </EatCard>
   )
 }

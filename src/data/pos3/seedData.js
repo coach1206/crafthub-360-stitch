@@ -11,13 +11,36 @@ export const POS3_STAFF = [
   { id: 'stf_dev',    name: 'Devon Park',   role: 'Bartender',        shift: 'PM', pinHint: '••••' },
 ]
 
+/**
+ * Layout sections available to the drag/drop floor planner (POS3 Tables +
+ * E.A.T. Sections). x/y are percentage positions (0-100) within each
+ * section's own canvas — independent per section so a table dragged in
+ * Lounge has no effect on its position when viewed under Patio, etc.
+ */
+export const POS3_LAYOUT_SECTIONS = ['Lounge', 'Patio', 'Bar', 'VIP', 'Main Floor', 'Private Room']
+
+/**
+ * Venue table-management redesign (Phase 4): each table carries the richer
+ * floor-plan/operations fields used by VenueTableObject + TableActionDrawer
+ * (tableNumber, elapsedTime, reservationTime, serverName/serverInitials,
+ * orderNumber, checkTotal, shape, needsService, vip) alongside the original
+ * name/section/seats/guests/server/status/x/y fields, which stay populated
+ * so POS3Home.jsx and POS3Handheld.jsx (out of this redesign's edit scope)
+ * keep working unchanged. status values: open | seated | busy | reserved |
+ * vip | needsService | cleaning.
+ */
 export const POS3_TABLES = [
-  { id: 'T1', name: 'Table T1', section: 'Lounge',  seats: 4, status: 'open',     guests: 0, server: null },
-  { id: 'T2', name: 'Table T2', section: 'Lounge',  seats: 2, status: 'occupied', guests: 2, server: 'Jordan Smith' },
-  { id: 'T3', name: 'Table T3', section: 'Humidor', seats: 6, status: 'occupied', guests: 5, server: 'Mara Lopez' },
-  { id: 'T4', name: 'Table T4', section: 'Patio',   seats: 4, status: 'open',     guests: 0, server: null },
-  { id: 'T5', name: 'Table T5', section: 'Bar',     seats: 8, status: 'occupied', guests: 6, server: 'Devon Park' },
-  { id: 'T6', name: 'Table T6', section: 'Patio',   seats: 2, status: 'dirty',    guests: 0, server: null },
+  { id: 'T1', name: 'Table T1', tableNumber: 1, section: 'Lounge', seats: 4, status: 'open', guests: 0, server: null, serverName: null, serverInitials: null, shape: 'round', elapsedTime: null, reservationTime: null, orderNumber: null, checkTotal: null, needsService: false, vip: false, x: 18, y: 22 },
+  { id: 'T2', name: 'Table T2', tableNumber: 2, section: 'Lounge', seats: 2, status: 'seated', guests: 2, server: 'Jordan Smith', serverName: 'Jordan Smith', serverInitials: 'JS', shape: 'booth', elapsedTime: '24m', reservationTime: null, orderNumber: 'TKT-1057', checkTotal: 186.62, needsService: false, vip: false, x: 60, y: 22 },
+  { id: 'T3', name: 'Table T3', tableNumber: 3, section: 'Humidor', seats: 6, status: 'busy', guests: 5, server: 'Mara Lopez', serverName: 'Mara Lopez', serverInitials: 'ML', shape: 'rect', elapsedTime: '41m', reservationTime: null, orderNumber: null, checkTotal: null, needsService: false, vip: false, x: 30, y: 50 },
+  { id: 'T4', name: 'Table T4', tableNumber: 4, section: 'Patio', seats: 4, status: 'open', guests: 0, server: null, serverName: null, serverInitials: null, shape: 'round', elapsedTime: null, reservationTime: null, orderNumber: null, checkTotal: null, needsService: false, vip: false, x: 20, y: 25 },
+  { id: 'T5', name: 'Table T5', tableNumber: 5, section: 'Bar', seats: 8, status: 'busy', guests: 6, server: 'Devon Park', serverName: 'Devon Park', serverInitials: 'DP', shape: 'rect', elapsedTime: '12m', reservationTime: null, orderNumber: 'TKT-1058', checkTotal: 95.0, needsService: false, vip: false, x: 40, y: 30 },
+  { id: 'T6', name: 'Table T6', tableNumber: 6, section: 'Patio', seats: 2, status: 'cleaning', guests: 0, server: null, serverName: null, serverInitials: null, shape: 'round', elapsedTime: null, reservationTime: null, orderNumber: null, checkTotal: null, needsService: true, vip: false, x: 62, y: 55 },
+  { id: 'T7', name: 'Table T7', tableNumber: 7, section: 'VIP', seats: 6, status: 'reserved', guests: 4, server: 'Jordan Smith', serverName: 'Jordan Smith', serverInitials: 'JS', shape: 'booth', elapsedTime: null, reservationTime: '7:30 PM', orderNumber: null, checkTotal: null, needsService: false, vip: true, x: 25, y: 30 },
+  { id: 'T8', name: 'Table T8', tableNumber: 8, section: 'VIP', seats: 4, status: 'needsService', guests: 2, server: 'Mara Lopez', serverName: 'Mara Lopez', serverInitials: 'ML', shape: 'rect', elapsedTime: '18m', reservationTime: null, orderNumber: null, checkTotal: null, needsService: true, vip: true, x: 65, y: 60 },
+  { id: 'T9', name: 'Table T9', tableNumber: 9, section: 'Main Floor', seats: 4, status: 'open', guests: 0, server: null, serverName: null, serverInitials: null, shape: 'round', elapsedTime: null, reservationTime: null, orderNumber: null, checkTotal: null, needsService: false, vip: false, x: 22, y: 20 },
+  { id: 'T10', name: 'Table T10', tableNumber: 10, section: 'Main Floor', seats: 4, status: 'seated', guests: 3, server: 'Devon Park', serverName: 'Devon Park', serverInitials: 'DP', shape: 'rect', elapsedTime: '6m', reservationTime: null, orderNumber: null, checkTotal: null, needsService: false, vip: false, x: 55, y: 45 },
+  { id: 'T11', name: 'Table T11', tableNumber: 11, section: 'Private Room', seats: 10, status: 'reserved', guests: 8, server: 'Jordan Smith', serverName: 'Jordan Smith', serverInitials: 'JS', shape: 'booth', elapsedTime: null, reservationTime: '8:15 PM', orderNumber: null, checkTotal: null, needsService: false, vip: false, x: 35, y: 35 },
 ]
 
 export const POS3_MENU = [

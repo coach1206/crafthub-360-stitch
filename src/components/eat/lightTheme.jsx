@@ -4,7 +4,7 @@
  * EATCommandHub only; the dark theme in ui.jsx remains the default for every
  * other POS3/E.A.T. screen and is not modified by this file.
  */
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, NavLink } from 'react-router-dom'
 
 export const L_NAVY = '#13294b'
 export const L_GOLD = '#c9952c'
@@ -151,4 +151,155 @@ export function LightBottomNav({ items }) {
 
 export function useLightNavigate() {
   return useNavigate()
+}
+
+/**
+ * E.A.T. Command Center theme — light/off-white dashboard with a deep-navy
+ * sidebar/topbar accent, matching the uploaded "EAT SYSTEM UPDATE 11"
+ * reference. Additive to this file; existing POS3 exports above are
+ * untouched. Used only by EATCommandHub / EATData / EATSettings and the
+ * E.A.T.-only sub-panels (RevenuePanel, LiveTicketsPanel, InventoryImpactPanel,
+ * StaffActivityPanel).
+ */
+export const EAT_GOLD = '#d4a843'
+
+const EAT_NAV = [
+  ['Dashboard', '/eat'], ['Tables', '/eat/sections'], ['Orders', '/eat/pos-control'],
+  ['Operations', '/eat/operations'], ['Humidor', '/eat/humidor'], ['Inventory', '/eat/inventory'],
+  ['Reorders', '/eat/reorders'], ['Staff', '/eat/staff'], ['Kitchen', '/eat/kitchen'], ['Bar', '/eat/bar'],
+  ['Data', '/eat/data'], ['Reports', '/eat/reports'], ['Media Library', '/eat/media'],
+  ['Device Mode', '/eat/device-mode'], ['Settings', '/eat/settings'],
+]
+
+export function EatShell({ children, style }) {
+  return (
+    <div style={{ minHeight: '100vh', background: L_BG, color: '#1c2230', fontFamily: 'system-ui, sans-serif', display: 'flex', ...style }}>
+      {children}
+    </div>
+  )
+}
+
+export function EatSidebar() {
+  const navigate = useNavigate()
+  return (
+    <nav style={{
+      width: 200, flexShrink: 0, background: L_NAVY, padding: '16px 12px',
+      display: 'flex', flexDirection: 'column', gap: 2, minHeight: '100vh',
+    }}>
+      <div style={{ color: '#fff', fontWeight: 800, fontSize: 16, padding: '6px 8px 4px', letterSpacing: '0.02em' }}>E.A.T. Command</div>
+      <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, padding: '0 8px 14px', letterSpacing: '0.08em' }}>POS 3</div>
+      {EAT_NAV.map(([label, to]) => (
+        <NavLink key={to} to={to} end={to === '/eat'}
+          style={({ isActive }) => ({
+            padding: '9px 10px', borderRadius: 9, fontSize: 13, textDecoration: 'none',
+            color: isActive ? '#1c2230' : 'rgba(255,255,255,0.7)',
+            background: isActive ? EAT_GOLD : 'transparent', fontWeight: isActive ? 700 : 500,
+          })}>{label}</NavLink>
+      ))}
+      <div style={{ marginTop: 'auto', paddingTop: 16 }}>
+        <button type="button" onClick={() => navigate('/crafthub')} style={{
+          width: '100%', background: 'rgba(255,255,255,0.08)', border: 'none', borderRadius: 10,
+          color: EAT_GOLD, fontSize: 12, fontWeight: 700, padding: '10px 10px', cursor: 'pointer',
+        }}>Exit to CraftHub</button>
+      </div>
+    </nav>
+  )
+}
+
+export function EatTopBar({ title, subtitle }) {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '14px 22px', borderBottom: '1px solid rgba(19,41,75,0.08)', background: '#fff',
+    }}>
+      <div>
+        <div style={{ fontSize: 20, fontWeight: 800, color: L_NAVY, letterSpacing: '0.04em' }}>E.A.T. SYSTEM</div>
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7385', letterSpacing: '0.08em' }}>VENUE COMMAND CENTER{subtitle ? ` · ${subtitle}` : ''}</div>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <LightPill tone="green">System Online</LightPill>
+        <LightPill tone="gold">Backend Pending — Local Data</LightPill>
+        <span style={{ fontSize: 12, color: '#6b7385' }}>Jordan Smith · Floor Supervisor</span>
+      </div>
+    </div>
+  )
+}
+
+export function EatManagementLayout({ title, subtitle, children }) {
+  return (
+    <EatShell>
+      <EatSidebar />
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+        <EatTopBar title={title} subtitle={subtitle} />
+        <div style={{ padding: 22, overflowX: 'auto' }}>{children}</div>
+      </div>
+    </EatShell>
+  )
+}
+
+export function EatCard({ children, style, onClick, title }) {
+  return (
+    <div onClick={onClick} title={title} style={{
+      background: '#fff', border: '1px solid rgba(19,41,75,0.08)', borderRadius: 14,
+      boxShadow: '0 1px 3px rgba(19,41,75,0.06)', padding: 16,
+      ...(onClick ? { cursor: 'pointer' } : {}), ...style,
+    }}>{children}</div>
+  )
+}
+
+export function EatKpiCard({ label, value, accent = L_NAVY }) {
+  return (
+    <EatCard style={{ flex: 1, minWidth: 140 }}>
+      <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8b95a3', fontWeight: 700 }}>{label}</div>
+      <div style={{ fontSize: 28, fontWeight: 800, color: accent, marginTop: 4 }}>{value}</div>
+    </EatCard>
+  )
+}
+
+export function EatBtn({ children, onClick, tone = 'navy', disabled, title, style }) {
+  const tones = {
+    navy:   { bg: L_NAVY, fg: '#fff' },
+    gold:   { bg: EAT_GOLD, fg: '#1c2230' },
+    green:  { bg: '#2f9e5b', fg: '#fff' },
+    red:    { bg: '#c0443a', fg: '#fff' },
+    purple: { bg: '#7e57c2', fg: '#fff' },
+    blue:   { bg: '#3a72c0', fg: '#fff' },
+    orange: { bg: '#d9822b', fg: '#fff' },
+    gray:   { bg: '#eceae3', fg: '#4a5266' },
+  }
+  const c = tones[tone] || tones.navy
+  return (
+    <button type="button" onClick={onClick} disabled={disabled} title={title} style={{
+      background: c.bg, color: c.fg, border: 'none', borderRadius: 10,
+      padding: '10px 16px', fontWeight: 700, fontSize: 13, cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.45 : 1, ...style,
+    }}>{children}</button>
+  )
+}
+
+export function EatTable({ columns, rows, renderCell }) {
+  return (
+    <EatCard style={{ padding: 0, overflow: 'hidden' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+        <thead>
+          <tr style={{ background: '#f1efe9' }}>
+            {columns.map((c) => (
+              <th key={c.key} style={{ textAlign: 'left', padding: '11px 14px', color: '#6b7385', fontWeight: 700, textTransform: 'uppercase', fontSize: 11, letterSpacing: '0.05em' }}>{c.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={row.id || i} style={{ borderTop: '1px solid rgba(19,41,75,0.06)' }}>
+              {columns.map((c) => (
+                <td key={c.key} style={{ padding: '11px 14px', color: '#1c2230' }}>
+                  {renderCell ? renderCell(row, c.key) : row[c.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </EatCard>
+  )
 }
