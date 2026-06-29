@@ -28,6 +28,8 @@ import BarDisplay from './pages/pos3/BarDisplay.jsx'
 import HumidorControl from './pages/pos3/HumidorControl.jsx'
 import InventoryControl from './pages/pos3/InventoryControl.jsx'
 import POSIntegrationHub from './pages/pos3/POSIntegrationHub.jsx'
+import POS360TableManagement from './pages/pos3/POS360TableManagement.jsx'
+import POS360VenueSystemsSetup from './pages/pos3/POS360VenueSystemsSetup.jsx'
 
 // ── NEW E.A.T. management system (/eat/*) ─────────────────────
 import EATCommandHub from './pages/eat/EATCommandHub.jsx'
@@ -480,6 +482,8 @@ export default function App() {
                 <Route index            element={<POS3Home />} />
                 <Route path="handheld"  element={<POS3Handheld />} />
                 <Route path="tables"    element={<POS3Tables />} />
+                <Route path="venue-tables" element={<POS360TableManagement />} />
+                <Route path="venue-systems" element={<POS360VenueSystemsSetup />} />
                 <Route path="orders"    element={<POS3Orders />} />
                 <Route path="checkout"  element={<POS3Checkout />} />
                 <Route path="kitchen"   element={<KitchenDisplay />} />
