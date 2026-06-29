@@ -1,23 +1,27 @@
 /**
- * DEV-ONLY STAFF REGISTRY — staff handoff email + PIN login.
+ * Staff handoff email + PIN login registry.
  *
- * There is no backend endpoint yet for "staff email + PIN" handoff auth
- * (the existing /api/auth/staff-pin-login is PIN-only, no email). Until
- * that endpoint exists, this in-memory table is used to verify the
- * handoff login screen in local development only.
+ * THREE AUTH PATHS (checked in order):
  *
- * SECURITY: these records must never ship in a production bundle. They
- * are only populated when `import.meta.env.DEV` is true; Vite statically
- * replaces that with `false` in production builds and dead-code-eliminates
- * this branch, so the email/PIN strings below are not present in the
- * production output. In production both records are empty arrays/null and
- * verification always fails — see verifyFounderCredentials/
- * verifyStaffHandoffCredentials below.
+ * 1. VITE_ env override (production static deployments):
+ *    Set VITE_FOUNDER_ADMIN_EMAIL + VITE_FOUNDER_ADMIN_PIN in your hosting
+ *    dashboard. The founder can log in from any static deployment without a
+ *    live backend. See src/config/founderOverride.js for the security notes.
+ *
+ * 2. Dev-only hardcoded registry:
+ *    Only active when import.meta.env.DEV is true. Never ships in production
+ *    bundles — Vite dead-code-eliminates the branch.
+ *
+ * 3. Demo mode (VITE_STAFF_DEMO_MODE=true):
+ *    Unlocks the Staff Handoff modal with no credentials required. Shows a
+ *    clear "DEMO MODE" label. Use only for live demos / trade shows.
+ *    Never claim real auth or real backend sync when this is active.
  *
  * The raw PIN is never persisted anywhere (not localStorage, not
- * sessionStorage) — it only exists transiently as a function argument
- * during verification.
+ * sessionStorage) — it only exists transiently as a function argument.
  */
+
+import { isFounderOverrideConfigured, verifyFounderOverride } from '../config/founderOverride.js'
 
 const DEMO_STAFF = import.meta.env.DEV
   ? [
@@ -26,13 +30,6 @@ const DEMO_STAFF = import.meta.env.DEV
     ]
   : []
 
-/**
- * Master founder credential. Supersedes all other access checks.
- * Role maps to 'founder_level_0' — the role key used throughout
- * SecurityContext / ProtectedRoute / roleMap.js for the founder bypass.
- *
- * `null` in production builds — see module doc comment above.
- */
 const FOUNDER_CREDENTIAL = import.meta.env.DEV
   ? {
       email: 'jccollins1206@yahoo.com',
@@ -42,8 +39,19 @@ const FOUNDER_CREDENTIAL = import.meta.env.DEV
     }
   : null
 
-/** True only in local development, where the dev-only registry above is populated. */
-export const STAFF_HANDOFF_AUTH_AVAILABLE = import.meta.env.DEV
+/**
+ * True when at least one auth path is available:
+ *   - Local dev (hardcoded registry)
+ *   - VITE_FOUNDER_ADMIN_EMAIL + VITE_FOUNDER_ADMIN_PIN are both set (production override)
+ *   - VITE_STAFF_DEMO_MODE=true (demo/kiosk bypass)
+ */
+export const STAFF_HANDOFF_AUTH_AVAILABLE =
+  import.meta.env.DEV ||
+  isFounderOverrideConfigured() ||
+  import.meta.env.VITE_STAFF_DEMO_MODE === 'true'
+
+/** True when running in explicit demo/kiosk mode — no credentials required. */
+export const STAFF_DEMO_MODE = import.meta.env.VITE_STAFF_DEMO_MODE === 'true'
 
 function normalizeEmail(email) {
   return String(email || '').trim().toLowerCase()
@@ -66,17 +74,29 @@ function normalizePin(pin) {
  *                    (caller should fall through to staff/manager check)
  */
 export function verifyFounderCredentials(email, pin) {
-  if (!FOUNDER_CREDENTIAL) return { ok: false }
-
   const normalizedEmail = normalizeEmail(email)
   const normalizedPin   = normalizePin(pin)
+
+  // 1. VITE_ production override — works on any static deployment where
+  //    VITE_FOUNDER_ADMIN_EMAIL + VITE_FOUNDER_ADMIN_PIN are set in the
+  //    hosting dashboard (Railway, Vercel, etc.).
+  if (isFounderOverrideConfigured()) {
+    const overrideEmail = (import.meta.env.VITE_FOUNDER_ADMIN_EMAIL || '').trim().toLowerCase()
+    if (normalizedEmail === overrideEmail) {
+      if (verifyFounderOverride(email, pin)) {
+        return { ok: true, role: 'founder_level_0', displayName: 'Founder', email: normalizedEmail }
+      }
+      return { ok: false, error: 'Founder PIN not recognized.' }
+    }
+  }
+
+  // 2. Dev-only hardcoded credential.
+  if (!FOUNDER_CREDENTIAL) return { ok: false }
 
   const emailMatches = normalizedEmail === FOUNDER_CREDENTIAL.email
   if (!emailMatches) return { ok: false }
 
-  const pinMatches = normalizedPin === FOUNDER_CREDENTIAL.pin
-
-  if (!pinMatches) {
+  if (normalizedPin !== FOUNDER_CREDENTIAL.pin) {
     return { ok: false, error: 'Founder PIN not recognized.' }
   }
 
