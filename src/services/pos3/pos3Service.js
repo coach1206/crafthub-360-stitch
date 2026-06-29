@@ -57,6 +57,52 @@ export function moveTableToSection(tableId, section, x, y) {
   return tables
 }
 
+/** Assigns/reassigns a staff member to a table by name. Local state only — no staffing backend exists yet. */
+export function assignStaffToTable(tableId, staffName) {
+  const staff = getStaff().find((s) => s.name === staffName)
+  const tables = getTables().map((t) => (t.id === tableId
+    ? { ...t, server: staffName, serverName: staffName, serverInitials: staffName.split(' ').map((p) => p[0]).join('').toUpperCase() }
+    : t))
+  saveTables(tables)
+  emit({
+    sourceSystem: SYSTEMS.POS3, targetSystem: SYSTEMS.EAT, eventType: 'TABLE_STAFF_ASSIGNED', commandType: 'TABLE_STAFF_ASSIGNED',
+    tableId, payload: { staffId: staff?.id, staffName },
+  })
+  return tables
+}
+
+export function updateTableStatus(tableId, status) {
+  const tables = getTables().map((t) => (t.id === tableId ? { ...t, status } : t))
+  saveTables(tables)
+  emit({
+    sourceSystem: SYSTEMS.POS3, targetSystem: SYSTEMS.EAT, eventType: 'TABLE_STATUS_CHANGED', commandType: 'TABLE_STATUS_CHANGED',
+    tableId, payload: { status },
+  })
+  return tables
+}
+
+/** Tables currently owned (assigned-server) by a given staff name. */
+export function getStaffOwnedTables(staffName) {
+  return getTables().filter((t) => t.serverName === staffName)
+}
+
+/** Reassigns a table from its current server to a new staff member. Same local persistence as assignStaffToTable. */
+export function reassignStaff(tableId, newStaffName) {
+  const tables = getTables()
+  const prev = tables.find((t) => t.id === tableId)
+  const updated = assignStaffToTable(tableId, newStaffName)
+  emit({
+    sourceSystem: SYSTEMS.POS3, targetSystem: SYSTEMS.EAT, eventType: 'TABLE_STAFF_REASSIGNED', commandType: 'TABLE_STAFF_REASSIGNED',
+    tableId, payload: { fromStaffName: prev?.serverName || null, toStaffName: newStaffName },
+  })
+  return updated
+}
+
+/** Routes a ticket's items to their stations (bar/kitchen/humidor) — local equivalent of sendOrder, exposed by station name. */
+export function routeOrderToBarKitchenHumidor(ticketId) {
+  return sendOrder(ticketId)
+}
+
 function uid(prefix = 'TKT') {
   return `${prefix}-${Math.floor(1000 + Math.random() * 9000)}`
 }
