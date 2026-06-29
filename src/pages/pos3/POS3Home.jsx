@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Pill, Btn } from '../../components/eat/ui.jsx'
-import { LightShell, LightHeader, LightCard, LightBottomNav, L_NAVY } from '../../components/eat/lightTheme.jsx'
+import { LightShell, LightBottomNav, L_NAVY, L_GOLD } from '../../components/eat/lightTheme.jsx'
 import { getTables, getTickets, ticketTotals } from '../../services/pos3/pos3Service.js'
 import { subscribe, eventsFor } from '../../services/shared/opsEventBus.js'
 import { completeCommand, receiveCommand } from '../../services/shared/opsControlBridge.js'
@@ -9,6 +9,38 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getSmokePOSHandoff, markSmokePurchaseVerified, markSmokePurchaseRejected, getDerivedPurchaseState } from '../../services/smokecraft/smokePOSHandoffService.js'
 import { loadSmokePurchaseIntents, getSmokeSharedStorageMode, buildSmokeStorageStatusFields } from '../../services/smokecraft/smokeSharedStorageService.js'
 import SmokeBackendReadinessPanel from '../../components/smokecraft/SmokeBackendReadinessPanel.jsx'
+
+const TABLE_PHOTO_BY_INDEX = [
+  '/assets/pos3/reference-crops/table-05.png',
+  '/assets/pos3/reference-crops/table-03.png',
+  '/assets/pos3/reference-crops/table-10.png',
+  '/assets/pos3/reference-crops/table-07.png',
+]
+
+const TABLE_PREVIEW_COUNT = 4
+
+/** Raised, image-backed card shell shared by the home-screen tile sections. Plain div
+ * (not LightCard) because LightCard doesn't forward onMouseDown/onMouseUp — needed here
+ * for the tactile pressed state. */
+function RaisedTile({ onClick, children, style }) {
+  return (
+    <div
+      onClick={onClick}
+      onMouseDown={(e) => { e.currentTarget.style.transform = 'scale(0.97)' }}
+      onMouseUp={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
+      onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
+      style={{
+        background: '#fff', borderRadius: 16, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default',
+        border: `1px solid rgba(201,149,44,0.25)`,
+        boxShadow: '0 10px 24px rgba(19,41,75,0.16), 0 2px 6px rgba(19,41,75,0.10)',
+        transition: 'transform 120ms ease, box-shadow 120ms ease',
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  )
+}
 
 /** POS3 receiver hook — watches the shared bus for events/commands targeting POS3. */
 export function usePos3Incoming() {
@@ -39,6 +71,7 @@ export default function POS3Home() {
   const storageMode = getSmokeSharedStorageMode()
   const sharedIntents = loadSmokePurchaseIntents()
   const queueIsShared = storageMode.backendConnected && sharedIntents.data.length > 0
+  const now = new Date()
 
   function markReceived(ev) {
     receiveCommand(ev.id)
@@ -82,27 +115,69 @@ export default function POS3Home() {
   }
 
   return (
-    <LightShell style={{ maxWidth: 480, margin: '0 auto', paddingBottom: 84 }}>
-      <LightHeader eyebrow="POS 3 · PM Shift" title="Hospitality Terminal" subtitle="System Online" />
+    <LightShell style={{ maxWidth: 480, margin: '0 auto', paddingBottom: 84, background: '#f7f6f2' }}>
+      <div style={{ background: '#fff', padding: '14px 18px 12px', borderBottom: '1px solid rgba(19,41,75,0.08)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <div style={{ fontSize: 21, fontWeight: 800, color: L_NAVY, letterSpacing: '-0.01em' }}>POS360 <span style={{ fontWeight: 600 }}>System</span></div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: L_GOLD, marginTop: 1 }}>Powered by NOVEE OS</div>
+          </div>
+          <div style={{ position: 'relative', width: 38, height: 38, borderRadius: '50%', background: '#f1efe9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 18, color: L_NAVY }}>notifications</span>
+            {incoming.length > 0 && (
+              <span style={{ position: 'absolute', top: -4, right: -4, background: '#c43c3c', color: '#fff', borderRadius: 999, fontSize: 10, fontWeight: 700, padding: '1px 5px', minWidth: 16, textAlign: 'center' }}>{incoming.length}</span>
+            )}
+          </div>
+        </div>
+        <div style={{ marginTop: 10, fontSize: 14, fontWeight: 700, color: L_NAVY }}>Good Evening, Alex! 👋</div>
+        <div style={{ fontSize: 11, color: '#8b95a3', marginTop: 2 }}>
+          {now.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })} · {now.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}
+          <span style={{ color: '#2e9e5a', fontWeight: 700 }}> · Online</span>
+        </div>
+      </div>
+
+      <div style={{ background: L_NAVY, color: '#fff', padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, borderRadius: '0 0 18px 18px', boxShadow: '0 8px 18px rgba(19,41,75,0.25)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <img src="/assets/pos3/reference-crops/staff-avatar.png" alt="" style={{ width: 42, height: 42, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${L_GOLD}` }} />
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14 }}>Jordan Smith</div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 6 }}>
+              Floor Supervisor
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#3ddc84', display: 'inline-block' }} />
+              On Duty
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 6 }}>
+          <button type="button" onClick={() => navigate('/pos3/tables')} style={{ background: 'transparent', border: `1px solid rgba(255,255,255,0.3)`, borderRadius: 10, color: '#fff', fontSize: 10, fontWeight: 700, padding: '8px 9px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 16, color: L_GOLD }}>qr_code_scanner</span>
+            Scan Table
+          </button>
+          <button type="button" onClick={() => navigate('/pos3/handheld')} style={{ background: 'transparent', border: `1px solid rgba(255,255,255,0.3)`, borderRadius: 10, color: '#fff', fontSize: 10, fontWeight: 700, padding: '8px 9px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 16, color: L_GOLD }}>grid_view</span>
+            Quick Actions
+          </button>
+        </div>
+      </div>
 
       <div style={{ padding: '14px 16px 0', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-        <LightCard style={{ padding: 10 }}>
+        <RaisedTile style={{ padding: 10 }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: '#8b95a3' }}>OPEN TICKETS</div>
           <div style={{ fontSize: 20, fontWeight: 800, color: L_NAVY }}>{openTickets}</div>
-        </LightCard>
-        <LightCard style={{ padding: 10 }}>
+        </RaisedTile>
+        <RaisedTile style={{ padding: 10 }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: '#8b95a3' }}>OCCUPIED</div>
           <div style={{ fontSize: 20, fontWeight: 800, color: L_NAVY }}>{occupied}</div>
-        </LightCard>
-        <LightCard style={{ padding: 10 }}>
+        </RaisedTile>
+        <RaisedTile style={{ padding: 10 }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: '#8b95a3' }}>INCOMING</div>
           <div style={{ fontSize: 20, fontWeight: 800, color: incoming.length ? '#c43c3c' : L_NAVY }}>{incoming.length}</div>
-        </LightCard>
+        </RaisedTile>
       </div>
 
       {incoming.length > 0 && (
         <div style={{ padding: '14px 16px 0' }}>
-          <LightCard style={{ padding: 14, borderColor: 'rgba(196,60,60,0.3)' }}>
+          <RaisedTile style={{ padding: 14, borderColor: 'rgba(196,60,60,0.3)' }}>
             <div style={{ fontWeight: 700, marginBottom: 10, color: '#c43c3c', fontSize: 13 }}>Incoming Requests (SmokeCraft / E.A.T.)</div>
             {incoming.map((ev) => (
               <div key={ev.id} style={{ padding: '10px 0', borderTop: '1px solid rgba(19,41,75,0.06)' }}>
@@ -118,12 +193,65 @@ export default function POS3Home() {
                 )}
               </div>
             ))}
-          </LightCard>
+          </RaisedTile>
         </div>
       )}
 
-      <div style={{ padding: '14px 16px 0' }}>
-        <LightCard style={{ padding: 14 }}>
+      <div style={{ padding: '16px 16px 0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: L_NAVY, letterSpacing: '0.04em' }}>MY TABLES</div>
+          <button type="button" onClick={() => navigate('/pos3/tables')} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>View All</button>
+        </div>
+        <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 4 }}>
+          {tables.slice(0, TABLE_PREVIEW_COUNT).map((t, i) => (
+            <RaisedTile key={t.id} onClick={() => navigate('/pos3/tables')} style={{ minWidth: 140, flex: '0 0 140px' }}>
+              <div style={{ position: 'relative', height: 100 }}>
+                <img
+                  src={TABLE_PHOTO_BY_INDEX[i % TABLE_PHOTO_BY_INDEX.length]}
+                  alt=""
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+                <div style={{ position: 'absolute', top: 8, right: 8 }}>
+                  <Pill label={t.status} tone={t.status} />
+                </div>
+              </div>
+              <div style={{ padding: '9px 10px' }}>
+                <div style={{ fontWeight: 700, fontSize: 13, color: L_NAVY }}>{t.name}</div>
+                <div style={{ fontSize: 11, color: '#8b95a3', margin: '4px 0 0' }}>{t.section} · {t.guests}/{t.seats}</div>
+              </div>
+            </RaisedTile>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ padding: '16px 16px 0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: L_NAVY, letterSpacing: '0.04em' }}>ACTIVE ORDERS</div>
+          <button type="button" onClick={() => navigate('/pos3/orders')} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>View All</button>
+        </div>
+        <RaisedTile style={{ padding: 0 }}>
+          {tickets.length === 0 && <div style={{ color: '#8b95a3', fontSize: 12, padding: 14 }}>No open tickets.</div>}
+          {tickets.map((t, i) => (
+            <div
+              key={t.id}
+              onClick={() => navigate('/pos3/orders?ticket=' + t.id)}
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: i < tickets.length - 1 ? '1px solid rgba(19,41,75,0.06)' : 'none', cursor: 'pointer' }}
+            >
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 13, color: L_NAVY }}>{t.id} · {t.tableId}</div>
+                <div style={{ fontSize: 11, color: '#8b95a3' }}>{t.server} · {t.items.length} items</div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <Pill label={t.status} tone={t.status} />
+                <div style={{ color: '#9c7320', fontWeight: 800, marginTop: 4, fontSize: 13 }}>${ticketTotals(t).total.toFixed(2)}</div>
+              </div>
+            </div>
+          ))}
+        </RaisedTile>
+      </div>
+
+      <div style={{ padding: '16px 16px 0' }}>
+        <RaisedTile style={{ padding: 14 }}>
           <div style={{ fontWeight: 700, marginBottom: 8, fontSize: 13, color: L_NAVY }}>SmokeCraft Purchase Queue</div>
           <div style={{ fontSize: 11, color: '#8b95a3', marginBottom: 10 }}>
             Local/session-only — a real venue-wide queue requires a backend or shared event store. Showing the current guest session's handoff state.
@@ -155,46 +283,10 @@ export default function POS3Home() {
               )}
             </div>
           )}
-        </LightCard>
+        </RaisedTile>
       </div>
 
-      <div style={{ padding: '14px 16px 0' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: L_NAVY }}>FLOOR / TABLE MAP</div>
-          <button type="button" onClick={() => navigate('/pos3/tables')} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>View All</button>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
-          {tables.map((t) => (
-            <LightCard key={t.id} onClick={() => navigate('/pos3/tables')} style={{ padding: 10, cursor: 'pointer' }}>
-              <div style={{ fontWeight: 700, fontSize: 13, color: L_NAVY }}>{t.name}</div>
-              <div style={{ fontSize: 11, color: '#8b95a3', margin: '4px 0' }}>{t.section} · {t.guests}/{t.seats}</div>
-              <Pill label={t.status} tone={t.status} />
-            </LightCard>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ padding: '14px 16px 16px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: L_NAVY }}>OPEN TICKETS / RECENT ORDERS</div>
-          <button type="button" onClick={() => navigate('/pos3/orders')} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>View All</button>
-        </div>
-        <LightCard style={{ padding: 0 }}>
-          {tickets.length === 0 && <div style={{ color: '#8b95a3', fontSize: 12, padding: 14 }}>No open tickets.</div>}
-          {tickets.map((t) => (
-            <div key={t.id} onClick={() => navigate('/pos3/orders?ticket=' + t.id)} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', borderBottom: '1px solid rgba(19,41,75,0.06)', cursor: 'pointer' }}>
-              <div>
-                <div style={{ fontWeight: 600, fontSize: 13, color: L_NAVY }}>{t.id} · {t.tableId}</div>
-                <div style={{ fontSize: 11, color: '#8b95a3' }}>{t.server} · {t.items.length} items</div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <Pill label={t.status} tone={t.status} />
-                <div style={{ color: '#9c7320', fontWeight: 700, marginTop: 4, fontSize: 13 }}>${ticketTotals(t).total.toFixed(2)}</div>
-              </div>
-            </div>
-          ))}
-        </LightCard>
-      </div>
+      <div style={{ height: 16 }} />
 
       <LightBottomNav items={[
         { label: 'Home', icon: 'home', active: true, onClick: () => navigate('/pos3') },
