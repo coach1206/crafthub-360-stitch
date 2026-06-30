@@ -498,9 +498,7 @@ export default function Origins() {
           The journey of a masterpiece begins deep within the earth. Explore the synergy between genetic heritage
           and the minerals that breathe life into every leaf.
         </p>
-        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 28, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
-          <img src="/assets/smokecraft-reference/approved/smokecraft-origins.png" alt="SmokeCraft Origins" style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 420, objectFit: 'cover', objectPosition: 'center top' }} />
-        </div>
+        <img src="/assets/smokecraft-reference/approved/smokecraft-origins.png" alt="SmokeCraft Origins" style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain', marginBottom: 28 }} />
 
         <div className="origins-grid">
           <section>
