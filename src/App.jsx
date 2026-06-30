@@ -30,6 +30,7 @@ import InventoryControl from './pages/pos3/InventoryControl.jsx'
 import POSIntegrationHub from './pages/pos3/POSIntegrationHub.jsx'
 import POS360TableManagement from './pages/pos3/POS360TableManagement.jsx'
 import POS360VenueSystemsSetup from './pages/pos3/POS360VenueSystemsSetup.jsx'
+import POS360VisualProof from './pages/pos3/POS360VisualProof.jsx'
 
 // ── NEW E.A.T. management system (/eat/*) ─────────────────────
 import EATCommandHub from './pages/eat/EATCommandHub.jsx'
@@ -465,6 +466,9 @@ export default function App() {
                   <EATCommand />
                 </ProtectedRoute>
               } />
+
+              {/* ── POS360 image-first visual proof — no auth required ── */}
+              <Route path="pos360-visual-proof" element={<POS360VisualProof />} />
 
               {/* ── NEW POS 3 system — nested route tree ───────────── */}
               {/* ── Protected: staff+ — BLOCKED in demo mode ────── */}

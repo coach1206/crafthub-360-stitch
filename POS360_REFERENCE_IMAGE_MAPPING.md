@@ -4,11 +4,11 @@
 
 | Required Screen | Official Path | Status |
 |---|---|---|
-| CraftHub 360 Landing Page | `public/assets/pos360-reference/crafthub-360-landing-page.png` | ✅ CONFIRMED + COPIED |
-| Choose Destination | `public/assets/pos360-reference/choose-destination.png` | ✅ CONFIRMED + COPIED |
-| Unlock POS360 | `public/assets/pos360-reference/unlock-pos-360.png` | ❌ MISSING |
-| Manager Access Interface | `public/assets/pos360-reference/manager-access-interface.png` | ❌ MISSING |
-| Module Deployment | `public/assets/pos360-reference/module-deployment.png` | ❌ MISSING |
+| CraftHub 360 Landing Page | `public/assets/pos360-reference/crafthub-360-landing-page.png` | ✅ CONFIRMED + WIRED TO PROOF ROUTE |
+| Choose Destination | `public/assets/pos360-reference/choose-destination.png` | ✅ CONFIRMED + WIRED TO PROOF ROUTE |
+| Unlock POS360 | `public/assets/pos360-reference/unlock-pos-360.png` | ✅ CONFIRMED + WIRED TO PROOF ROUTE |
+| Manager Access Interface | `public/assets/pos360-reference/manager-access-interface.png` | ✅ CONFIRMED + WIRED TO PROOF ROUTE |
+| Module Deployment | `public/assets/pos360-reference/module-deployment.png` | ✅ CONFIRMED + WIRED TO PROOF ROUTE |
 
 ## User-Confirmed Candidate Decisions
 
@@ -20,7 +20,7 @@
 | Manager Access Interface | Missing | No candidate found | public/assets/pos360-reference/manager-access-interface.png | MISSING |
 | Module Deployment | Missing | No candidate found | public/assets/pos360-reference/module-deployment.png | MISSING |
 
-The visual proof route must not be created yet because only 2 of 5 required official images exist. The remaining 3 required images must be uploaded or confirmed before routing begins.
+All 5 required images are confirmed and wired to the visual proof route at `/pos360-visual-proof` via `src/pages/pos3/POS360VisualProof.jsx`.
 
 ## Extra Approved References (copied to extras/)
 
@@ -74,6 +74,6 @@ These may contain some of the required screens. They cannot be assigned to an of
 
 ## Visual Proof Route Status
 
-**NOT CREATED.** The visual proof route (`/pos360-visual-proof`) was not created because the required condition was not met: not all 5 official reference images are confirmed present in `public/assets/pos360-reference/`.
+**CREATED.** Route: `/pos360-visual-proof` — Component: `src/pages/pos3/POS360VisualProof.jsx` — Router: `src/App.jsx`
 
-Per instruction: "If all five do not exist, stop. Do not create the proof route."
+All 5 official reference images are confirmed present and rendered as `<img>` elements only. No CSS recreation. No functionality wired. No stitch_export or attached_assets referenced in src.
