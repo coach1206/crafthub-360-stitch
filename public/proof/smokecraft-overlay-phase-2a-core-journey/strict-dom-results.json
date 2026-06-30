@@ -1,0 +1,198 @@
+{
+  "normalResults": [
+    {
+      "route": "/smokecraft/seed-soil",
+      "pass": true,
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-seed-soil.png",
+      "visibleButtonCount": 0,
+      "hotspotDOMCount": 1,
+      "fixedChromeCount": 0,
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "failTermsFound": [],
+      "debugLabelVisible": false
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "pass": true,
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-mentor-selection.png",
+      "visibleButtonCount": 0,
+      "hotspotDOMCount": 1,
+      "fixedChromeCount": 0,
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "failTermsFound": [],
+      "debugLabelVisible": false
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "pass": true,
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-gold-box-rules.png",
+      "visibleButtonCount": 0,
+      "hotspotDOMCount": 1,
+      "fixedChromeCount": 0,
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "failTermsFound": [],
+      "debugLabelVisible": false
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "pass": true,
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-humidor-match.png",
+      "visibleButtonCount": 0,
+      "hotspotDOMCount": 1,
+      "fixedChromeCount": 0,
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "failTermsFound": [],
+      "debugLabelVisible": false
+    },
+    {
+      "route": "/smokecraft/cut-toast-light",
+      "pass": true,
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-cut-toast-light.png",
+      "visibleButtonCount": 0,
+      "hotspotDOMCount": 1,
+      "fixedChromeCount": 0,
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "failTermsFound": [],
+      "debugLabelVisible": false
+    }
+  ],
+  "debugResults": [
+    {
+      "route": "/smokecraft/seed-soil",
+      "pass": true,
+      "bodyTextLength": 18,
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-seed-soil.png",
+      "visibleButtonCount": 1,
+      "hotspotDOMCount": 1,
+      "fixedChromeCount": 0,
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "failTermsFound": [],
+      "debugLabelVisible": true
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "pass": true,
+      "bodyTextLength": 22,
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-mentor-selection.png",
+      "visibleButtonCount": 1,
+      "hotspotDOMCount": 1,
+      "fixedChromeCount": 0,
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "failTermsFound": [],
+      "debugLabelVisible": true
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "pass": true,
+      "bodyTextLength": 25,
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-gold-box-rules.png",
+      "visibleButtonCount": 1,
+      "hotspotDOMCount": 1,
+      "fixedChromeCount": 0,
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "failTermsFound": [],
+      "debugLabelVisible": true
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "pass": true,
+      "bodyTextLength": 27,
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-humidor-match.png",
+      "visibleButtonCount": 1,
+      "hotspotDOMCount": 1,
+      "fixedChromeCount": 0,
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "failTermsFound": [],
+      "debugLabelVisible": true
+    },
+    {
+      "route": "/smokecraft/cut-toast-light",
+      "pass": true,
+      "bodyTextLength": 23,
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-cut-toast-light.png",
+      "visibleButtonCount": 1,
+      "hotspotDOMCount": 1,
+      "fixedChromeCount": 0,
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "failTermsFound": [],
+      "debugLabelVisible": true
+    }
+  ],
+  "navResults": [
+    {
+      "from": "/smokecraft/seed-soil",
+      "target": "/smokecraft/mentor-selection",
+      "landed": "/smokecraft/mentor-selection",
+      "navPass": true
+    },
+    {
+      "from": "/smokecraft/mentor-selection",
+      "target": "/smokecraft/golden-box",
+      "landed": "/smokecraft/golden-box",
+      "navPass": true
+    },
+    {
+      "from": "/smokecraft/golden-box",
+      "target": "/smokecraft/humidor-match",
+      "landed": "/smokecraft/humidor-match",
+      "navPass": true
+    },
+    {
+      "from": "/smokecraft/humidor-match",
+      "target": "/smokecraft/cut-toast-light",
+      "landed": "/smokecraft/cut-toast-light",
+      "navPass": true
+    },
+    {
+      "from": "/smokecraft/cut-toast-light",
+      "target": "/smokecraft/first-third",
+      "landed": "/smokecraft/first-third",
+      "navPass": true
+    }
+  ]
+}
