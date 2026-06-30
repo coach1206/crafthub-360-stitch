@@ -1,0 +1,9 @@
+[
+  {"page":"EventChallenge","route":"/smokecraft/event-challenge","pass":true,"fgWidth":1024,"fgHeight":768,"fgSrc":"http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-event-challenge.png"},
+  {"page":"SessionComplete","route":"/smokecraft/session-complete","pass":true,"fgWidth":1024,"fgHeight":768,"fgSrc":"http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-session-complete.png"},
+  {"page":"Origins","route":"/smokecraft/origins","pass":true,"fgWidth":1024,"fgHeight":768,"fgSrc":"http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-origins.png"},
+  {"page":"GoldenBoxStatus","route":"/smokecraft/golden-box/status","pass":true,"fgWidth":1024,"fgHeight":768,"fgSrc":"http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-golden-box-status.png"},
+  {"page":"Pairing","route":"/smokecraft/pairing","pass":true,"fgWidth":1024,"fgHeight":768,"fgSrc":"http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-pairing.png"},
+  {"page":"Mentor","route":"/smokecraft/mentor","pass":true,"fgWidth":1024,"fgHeight":768,"fgSrc":"http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-mentor-selection.png"},
+  {"page":"Identity","route":"/smokecraft/identity","pass":true,"fgWidth":1024,"fgHeight":768,"fgSrc":"http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-profile-capture.png"}
+]
