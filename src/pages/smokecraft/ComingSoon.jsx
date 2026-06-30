@@ -20,47 +20,50 @@ export default function ComingSoon({ stepLabel, stepNumber, totalSteps = 20, sti
 
       {/* Main */}
       <main className="relative z-10 pt-28 pb-36 min-h-screen flex flex-col items-center justify-center px-8 text-center">
-        {/* Module badge */}
-        <div className="mb-8">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/25 text-primary font-label-lg text-label-lg">
-            <span className="material-symbols-outlined text-[18px]">smoking_rooms</span>
-            SMOKECRAFT 360
-          </span>
-        </div>
+        {referenceImage ? (
+          <img src={referenceImage} alt={referenceImageAlt || stepLabel} style={{ display: 'block', margin: '0 auto 24px', width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '82vh', objectFit: 'contain' }} />
+        ) : (
+          <>
+            {/* Module badge */}
+            <div className="mb-8">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/25 text-primary font-label-lg text-label-lg">
+                <span className="material-symbols-outlined text-[18px]">smoking_rooms</span>
+                SMOKECRAFT 360
+              </span>
+            </div>
 
-        {/* Stitch status badge */}
-        <div className="mb-6">
-          {stitch ? (
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-900/30 border border-green-500/30 text-green-400 font-label-sm text-label-sm">
-              <span className="material-symbols-outlined text-[14px]">check_circle</span>
-              STITCH SOURCE CONFIRMED — AWAITING BUILD
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high border border-outline-variant text-on-surface-variant font-label-sm text-label-sm">
-              <span className="material-symbols-outlined text-[14px]">pending</span>
-              NEW SCREEN — NO STITCH SOURCE
-            </span>
-          )}
-        </div>
+            {/* Stitch status badge */}
+            <div className="mb-6">
+              {stitch ? (
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-900/30 border border-green-500/30 text-green-400 font-label-sm text-label-sm">
+                  <span className="material-symbols-outlined text-[14px]">check_circle</span>
+                  STITCH SOURCE CONFIRMED — AWAITING BUILD
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high border border-outline-variant text-on-surface-variant font-label-sm text-label-sm">
+                  <span className="material-symbols-outlined text-[14px]">pending</span>
+                  NEW SCREEN — NO STITCH SOURCE
+                </span>
+              )}
+            </div>
 
-        {/* Icon */}
-        <div className="w-32 h-32 rounded-full smokecraft-glass-panel flex items-center justify-center mb-8 border border-primary/30 shadow-[0_0_52px_rgba(233,193,118,0.16)]">
-          <span className="material-symbols-outlined text-primary" style={{ fontSize: '56px', fontVariationSettings: "'FILL' 0, 'wght' 200" }}>
-            construction
-          </span>
-        </div>
+            {/* Icon */}
+            <div className="w-32 h-32 rounded-full smokecraft-glass-panel flex items-center justify-center mb-8 border border-primary/30 shadow-[0_0_52px_rgba(233,193,118,0.16)]">
+              <span className="material-symbols-outlined text-primary" style={{ fontSize: '56px', fontVariationSettings: "'FILL' 0, 'wght' 200" }}>
+                construction
+              </span>
+            </div>
 
-        {referenceImage && (
-          <img src={referenceImage} alt={referenceImageAlt || stepLabel} style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain', marginBottom: 28, maxWidth: 900 }} />
+            <h2 className="smokecraft-premium-title mb-4 leading-tight">
+              {stepLabel}
+            </h2>
+            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-lg mb-12 leading-relaxed">
+              {stitch
+                ? 'This screen has been confirmed in the Stitch export and will be rebuilt in the next approved build batch.'
+                : 'This screen does not yet exist in the Stitch export. It will be designed and built when the new screen brief is approved.'}
+            </p>
+          </>
         )}
-        <h2 className="smokecraft-premium-title mb-4 leading-tight">
-          {stepLabel}
-        </h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant max-w-lg mb-12 leading-relaxed">
-          {stitch
-            ? 'This screen has been confirmed in the Stitch export and will be rebuilt in the next approved build batch.'
-            : 'This screen does not yet exist in the Stitch export. It will be designed and built when the new screen brief is approved.'}
-        </p>
 
         {/* Progress ribbon */}
         {stepNumber && (

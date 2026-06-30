@@ -84,6 +84,8 @@ export default function FirstThird() {
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[1100px] mx-auto">
+        <img src="/assets/smokecraft-reference/approved/smokecraft-first-third.png" alt="First Third Tasting" style={{ display: 'block', margin: '0 auto 24px', width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '82vh', objectFit: 'contain' }} />
+
         <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
           <div className="smokecraft-progress-label flex items-center gap-3">
             <span>Round {stepProgress.round} of 3</span>
@@ -93,10 +95,6 @@ export default function FirstThird() {
           <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:`${(stepProgress.session/24)*100}%` }} /></div>
           <span>First Third</span>
         </div>
-        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
-        <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)' }}>First Third — Tasting</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>Note what you taste and smell in the opening third of the cigar.</p>
-        <img src="/assets/smokecraft-reference/approved/smokecraft-first-third.png" alt="First Third Tasting" style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain', marginBottom: 28 }} />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_360px] items-start">
           <div
