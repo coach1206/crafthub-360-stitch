@@ -1,0 +1,368 @@
+[
+  {
+    "name": "landing",
+    "route": "/smokecraft",
+    "file": "smokecraft-proof-landing.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-landing.png",
+        "naturalWidth": 1189,
+        "naturalHeight": 667,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "art",
+    "route": "/smokecraft/art",
+    "file": "smokecraft-proof-art.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-art.png",
+        "naturalWidth": 896,
+        "naturalHeight": 1280,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "origins",
+    "route": "/smokecraft/origins",
+    "file": "smokecraft-proof-origins.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-origins.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1449,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "how-it-works",
+    "route": "/smokecraft/how-it-works",
+    "file": "smokecraft-proof-how-it-works.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-how-it-works.png",
+        "naturalWidth": 1536,
+        "naturalHeight": 1024,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "scan",
+    "route": "/smokecraft/scan",
+    "file": "smokecraft-proof-scan.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-scan.png",
+        "naturalWidth": 941,
+        "naturalHeight": 1672,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "guest-pass",
+    "route": "/smokecraft/guest-pass",
+    "file": "smokecraft-proof-guest-pass.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-guest-pass.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "enroll",
+    "route": "/smokecraft/enroll",
+    "file": "smokecraft-proof-enroll.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-entry-gate.png",
+        "naturalWidth": 941,
+        "naturalHeight": 1672,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "identity",
+    "route": "/smokecraft/identity",
+    "file": "smokecraft-proof-identity.png",
+    "locked": false,
+    "approvedImages": []
+  },
+  {
+    "name": "mentor",
+    "route": "/smokecraft/mentor-selection",
+    "file": "smokecraft-proof-mentor.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-mentor-selection.png",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "first-third",
+    "route": "/smokecraft/first-third",
+    "file": "smokecraft-proof-first-third.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-first-third.png",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "second-third",
+    "route": "/smokecraft/second-third",
+    "file": "smokecraft-proof-second-third.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-second-third.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "final-third",
+    "route": "/smokecraft/final-third",
+    "file": "smokecraft-proof-final-third.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-final-third.png",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "final-review",
+    "route": "/smokecraft/final-review",
+    "file": "smokecraft-proof-final-review.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-final-review.png",
+        "naturalWidth": 1536,
+        "naturalHeight": 1024,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "session-complete",
+    "route": "/smokecraft/session-complete",
+    "file": "smokecraft-proof-session-complete.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-session-complete.png",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "flavor-memory",
+    "route": "/smokecraft/flavor-memory",
+    "file": "smokecraft-proof-flavor-memory.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-flavor-memory.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "challenge",
+    "route": "/smokecraft/challenges",
+    "file": "smokecraft-proof-challenge.png",
+    "locked": false,
+    "approvedImages": []
+  },
+  {
+    "name": "second-humidor-match",
+    "route": "/smokecraft/second-humidor-match",
+    "file": "smokecraft-proof-second-humidor-match.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-second-humidor-match.png",
+        "naturalWidth": 1448,
+        "naturalHeight": 1086,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "mini-tasting-round",
+    "route": "/smokecraft/mini-tasting",
+    "file": "smokecraft-proof-mini-tasting-round.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-mini-tasting-round.png",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "pairing",
+    "route": "/smokecraft/pairing",
+    "file": "smokecraft-proof-pairing.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-pairing.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "pairing-lab",
+    "route": "/smokecraft/pairing-lab",
+    "file": "smokecraft-proof-pairing-lab.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-pairing-lab.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "pairing-mastery",
+    "route": "/smokecraft/pairing-mastery",
+    "file": "smokecraft-proof-pairing-mastery.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-pairing-mastery.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "terroir",
+    "route": "/smokecraft/terroir",
+    "file": "smokecraft-proof-terroir.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-terroir.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "vitola",
+    "route": "/smokecraft/vitola",
+    "file": "smokecraft-proof-vitola.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-vitola.png",
+        "naturalWidth": 1586,
+        "naturalHeight": 992,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "leaderboard",
+    "route": "/smokecraft/leaderboard",
+    "file": "smokecraft-proof-leaderboard.png",
+    "locked": false,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-leaderboard.png",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "event-challenge",
+    "route": "/smokecraft/event-challenge",
+    "file": "smokecraft-proof-event-challenge.png",
+    "locked": true,
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-event-challenge.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "visible": true
+      }
+    ]
+  },
+  {
+    "name": "golden-box-status",
+    "route": "/smokecraft/golden-box-status",
+    "file": "smokecraft-proof-golden-box-status.png",
+    "locked": false,
+    "approvedImages": []
+  }
+]
