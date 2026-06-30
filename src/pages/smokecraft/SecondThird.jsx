@@ -74,8 +74,8 @@ export default function SecondThird() {
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Second Third — Tasting</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>The flavor profile typically deepens and transitions. Note the evolution.</p>
 
-        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 16 }}>
-          <img src="/assets/smokecraft/source/flavor-dna.png" alt="Flavor DNA guide" style={{ width: '100%', maxHeight: '85vh', objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 28, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
+          <img src="/assets/smokecraft-reference/approved/smokecraft-second-third.png" alt="Second Third Tasting" style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 420, objectFit: 'cover', objectPosition: 'center top' }} />
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1fr_360px] items-start">
