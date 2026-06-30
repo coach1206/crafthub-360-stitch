@@ -2,15 +2,25 @@
 
 ## Official Required Images
 
-Source: `attached_assets/` only (per instruction)
+| Required Screen | Official Path | Status |
+|---|---|---|
+| CraftHub 360 Landing Page | `public/assets/pos360-reference/crafthub-360-landing-page.png` | ✅ CONFIRMED + COPIED |
+| Choose Destination | `public/assets/pos360-reference/choose-destination.png` | ✅ CONFIRMED + COPIED |
+| Unlock POS360 | `public/assets/pos360-reference/unlock-pos-360.png` | ❌ MISSING |
+| Manager Access Interface | `public/assets/pos360-reference/manager-access-interface.png` | ❌ MISSING |
+| Module Deployment | `public/assets/pos360-reference/module-deployment.png` | ❌ MISSING |
 
-| Required Screen | Official Path | Source Path From attached_assets | Status |
-|---|---|---|---|
-| CraftHub 360 Landing Page | `public/assets/pos360-reference/crafthub-360-landing-page.png` | NOT FOUND | ❌ MISSING |
-| Choose Destination | `public/assets/pos360-reference/choose-destination.png` | NOT FOUND | ❌ MISSING |
-| Unlock POS360 | `public/assets/pos360-reference/unlock-pos-360.png` | NOT FOUND | ❌ MISSING |
-| Manager Access Interface | `public/assets/pos360-reference/manager-access-interface.png` | NOT FOUND | ❌ MISSING |
-| Module Deployment | `public/assets/pos360-reference/module-deployment.png` | NOT FOUND | ❌ MISSING |
+## User-Confirmed Candidate Decisions
+
+| Required Screen | Decision | Source Candidate | Official Path | Status |
+|---|---|---|---|---|
+| CraftHub 360 Landing Page | Confirmed | public/assets/smokecraft/CRAFTHUB 360. VENUE TABLE EXPERIENCE.png | public/assets/pos360-reference/crafthub-360-landing-page.png | COPIED |
+| Choose Destination | Confirmed | public/novee-interface-page.png | public/assets/pos360-reference/choose-destination.png | COPIED |
+| Unlock POS360 | Missing | No candidate found | public/assets/pos360-reference/unlock-pos-360.png | MISSING |
+| Manager Access Interface | Missing | No candidate found | public/assets/pos360-reference/manager-access-interface.png | MISSING |
+| Module Deployment | Missing | No candidate found | public/assets/pos360-reference/module-deployment.png | MISSING |
+
+The visual proof route must not be created yet because only 2 of 5 required official images exist. The remaining 3 required images must be uploaded or confirmed before routing begins.
 
 ## Extra Approved References (copied to extras/)
 
