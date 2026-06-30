@@ -18,7 +18,7 @@ The user uploads files into `public/`. Claude searches `public/` first, then cop
 | smokecraft-event-challenge.png | public/smokecraft-event-challenge.png | public/assets/smokecraft-reference/incoming-batch-2-support/smokecraft-event-challenge.png | public/assets/smokecraft-reference/approved/smokecraft-event-challenge.png | COPIED AND CONFIRMED |
 | smokecraft-terroir.png | public/smokecraft-terroir.png | public/assets/smokecraft-reference/incoming-batch-2-support/smokecraft-terroir.png | public/assets/smokecraft-reference/approved/smokecraft-terroir.png | COPIED AND CONFIRMED |
 | smokecraft-pairing-mastery.png | public/smokecraft-pairing-mastery.png | public/assets/smokecraft-reference/incoming-batch-2-support/smokecraft-pairing-mastery.png | public/assets/smokecraft-reference/approved/smokecraft-pairing-mastery.png | COPIED AND CONFIRMED |
-| smokecraft-pairing-lab.png | — | — | — | MISSING — not found anywhere in public/ |
+| smokecraft-pairing-lab.png | public/smokecraft-pairing-lab.png | public/assets/smokecraft-reference/incoming-batch-2-support/smokecraft-pairing-lab.png | public/assets/smokecraft-reference/approved/smokecraft-pairing-lab.png | COPIED AND CONFIRMED |
 
 ---
 
@@ -26,10 +26,10 @@ The user uploads files into `public/`. Claude searches `public/` first, then cop
 
 | Page | Approved Image | Visible `<img>`? | Notes |
 |---|---|:---:|---|
-| src/pages/smokecraft/PairingLab.jsx | smokecraft-pairing-lab.png | NO | SKIPPED — image not yet uploaded; img tag wired and ready for when file arrives |
+| src/pages/smokecraft/PairingLab.jsx | smokecraft-pairing-lab.png | YES | `<img>` panel wired after title/description |
 | src/pages/smokecraft/PairingMastery.jsx | smokecraft-pairing-mastery.png | YES | referenceImage prop passed to ComingSoon |
 | src/pages/smokecraft/Terroir.jsx | smokecraft-terroir.png | YES | referenceImage prop passed to ComingSoon |
-| src/pages/smokecraft/EventChallenge.jsx | smokecraft-event-challenge.png | YES | New `<img>` panel added after title/description |
+| src/pages/smokecraft/EventChallenge.jsx | smokecraft-event-challenge.png | YES | `<img>` panel added after title/description |
 
 ---
 
@@ -38,7 +38,7 @@ The user uploads files into `public/`. Claude searches `public/` first, then cop
 | # | Asset | Approved Path | Status |
 |---:|---|---|---|
 | 1 | smokecraft-pairing.png | public/assets/smokecraft-reference/approved/ | WIRED — Pairing.jsx |
-| 2 | smokecraft-pairing-lab.png | — | MISSING — needs upload to public/ |
+| 2 | smokecraft-pairing-lab.png | public/assets/smokecraft-reference/approved/ | WIRED — PairingLab.jsx |
 | 3 | smokecraft-pairing-mastery.png | public/assets/smokecraft-reference/approved/ | WIRED — PairingMastery.jsx |
 | 4 | smokecraft-terroir.png | public/assets/smokecraft-reference/approved/ | WIRED — Terroir.jsx |
 | 5 | smokecraft-vitola.png | public/assets/smokecraft-reference/approved/ | WIRED — Vitola.jsx |
@@ -46,14 +46,11 @@ The user uploads files into `public/`. Claude searches `public/` first, then cop
 | 7 | smokecraft-event-challenge.png | public/assets/smokecraft-reference/approved/ | WIRED — EventChallenge.jsx |
 | 8 | smokecraft-golden-box-status.png | public/assets/smokecraft-reference/approved/ | WIRED — GoldenBoxStatus.jsx |
 
-**Batch 2: 7 of 8 WIRED. 1 of 8 MISSING (smokecraft-pairing-lab.png — needs upload to public/).**
+**Batch 2: 8 of 8 WIRED. Complete.**
 
 ---
 
 ## E. Remaining Work
 
-**Batch 2 upload still needed (1 asset):**
-- `smokecraft-pairing-lab.png` → upload to `public/` root → PairingLab.jsx already has the `<img>` tag wired and waiting
-
-**Batch 3 (6 assets) remains untouched:**
+**Batch 3 (6 assets) remains untouched:**  
 Landing, Art, Origins, How It Works, Scan, Guest Pass — require new uploads to `public/` root.
