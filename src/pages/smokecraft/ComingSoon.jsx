@@ -6,9 +6,23 @@ import {
   SmokeCraftGlassPanel,
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 
 export default function ComingSoon({ stepLabel, stepNumber, totalSteps = 20, stitch = false, nextRoute, prevRoute, referenceImage, referenceImageAlt }) {
   const navigate = useNavigate()
+
+  if (referenceImage) {
+    return (
+      <div
+        onClick={() => navigate(nextRoute || prevRoute || '/smokecraft')}
+        role="button"
+        tabIndex={0}
+        style={{ cursor: 'pointer' }}
+      >
+        <SmokeCraftAssetScreen src={referenceImage} alt={referenceImageAlt || stepLabel} />
+      </div>
+    )
+  }
 
   return (
     <div className="smokecraft-premium-page">
@@ -20,10 +34,7 @@ export default function ComingSoon({ stepLabel, stepNumber, totalSteps = 20, sti
 
       {/* Main */}
       <main className="relative z-10 pt-28 pb-36 min-h-screen flex flex-col items-center justify-center px-8 text-center">
-        {referenceImage ? (
-          <img src={referenceImage} alt={referenceImageAlt || stepLabel} style={{ display: 'block', margin: '0 auto 24px', width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '82vh', objectFit: 'contain' }} />
-        ) : (
-          <>
+        <>
             {/* Module badge */}
             <div className="mb-8">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/25 text-primary font-label-lg text-label-lg">
@@ -62,8 +73,7 @@ export default function ComingSoon({ stepLabel, stepNumber, totalSteps = 20, sti
                 ? 'This screen has been confirmed in the Stitch export and will be rebuilt in the next approved build batch.'
                 : 'This screen does not yet exist in the Stitch export. It will be designed and built when the new screen brief is approved.'}
             </p>
-          </>
-        )}
+        </>
 
         {/* Progress ribbon */}
         {stepNumber && (
