@@ -14,11 +14,27 @@ import { useNavigate } from 'react-router-dom'
  * translucent outlines. Off by default. Never visible in production without
  * that flag.
  */
-export default function SmokeCraftHotspotLayer({ hotspots = [] }) {
+export default function SmokeCraftHotspotLayer({ hotspots = [], route = '' }) {
   const navigate = useNavigate()
   const debug =
     typeof window !== 'undefined' &&
     sessionStorage.getItem('smokecraft_hotspot_debug') === '1'
+
+  if (debug) {
+    hotspots.forEach(h => {
+      if (h.disabled) return
+      // eslint-disable-next-line no-console
+      console.log('[SmokeCraft Hotspot]', {
+        route: route || window.location.pathname,
+        label: h.label,
+        x: h.x + '%',
+        y: h.y + '%',
+        width: h.width + '%',
+        height: h.height + '%',
+        target: h.to || '(callback only)',
+      })
+    })
+  }
 
   return (
     <div

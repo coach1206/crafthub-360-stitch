@@ -10,11 +10,11 @@ import SmokeCraftHotspotLayer from './SmokeCraftHotspotLayer.jsx'
  *   alt       — alt text passed through to SmokeCraftAssetScreen
  *   hotspots  — array of hotspot definitions (see SmokeCraftHotspotLayer)
  */
-export default function SmokeCraftAssetRoute({ src, alt, hotspots = [] }) {
+export default function SmokeCraftAssetRoute({ src, alt, hotspots = [], route = '' }) {
   return (
     <>
       <SmokeCraftAssetScreen src={src} alt={alt} />
-      {hotspots.length > 0 && <SmokeCraftHotspotLayer hotspots={hotspots} />}
+      {hotspots.length > 0 && <SmokeCraftHotspotLayer hotspots={hotspots} route={route} />}
     </>
   )
 }

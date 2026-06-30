@@ -14,6 +14,7 @@ export default function SmokeCraft() {
       src="/assets/smokecraft-reference/approved/smokecraft-landing.png"
       alt="SmokeCraft"
       hotspots={HOTSPOTS}
+      route="/smokecraft"
     />
   )
 }
