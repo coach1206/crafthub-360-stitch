@@ -36,6 +36,7 @@ export default function SessionComplete() {
       src="/assets/smokecraft-reference/approved/smokecraft-session-complete.png"
       alt="Session Complete"
       hotspots={hotspots}
+      route="/smokecraft/session-complete"
     />
   )
 }

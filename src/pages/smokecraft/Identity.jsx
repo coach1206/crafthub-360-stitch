@@ -14,6 +14,7 @@ export default function Identity() {
       src="/assets/smokecraft-reference/approved/smokecraft-profile-capture.png"
       alt="Profile Capture"
       hotspots={HOTSPOTS}
+      route="/smokecraft/identity"
     />
   )
 }
