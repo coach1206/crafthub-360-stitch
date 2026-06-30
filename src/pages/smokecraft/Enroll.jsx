@@ -134,6 +134,15 @@ export default function Enroll() {
           </p>
         </section>
 
+        {/* Entry gate reference */}
+        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 28, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
+          <img
+            src="/assets/smokecraft-reference/approved/smokecraft-entry-gate.png"
+            alt="SmokeCraft entry gate"
+            style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 400, objectFit: 'cover', objectPosition: 'center' }}
+          />
+        </div>
+
         {/* Form card */}
         <div className="smokecraft-intake-card p-9 rounded-2xl shadow-2xl space-y-5" style={{
           background: 'linear-gradient(155deg, rgba(58,40,24,0.82) 0%, rgba(28,18,11,0.9) 46%, rgba(12,7,4,0.95) 100%)',
