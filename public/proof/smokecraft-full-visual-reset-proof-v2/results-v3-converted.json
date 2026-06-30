@@ -1,0 +1,165 @@
+{
+  "passed": 12,
+  "total": 13,
+  "results": [
+    {
+      "route": "/",
+      "name": "smokecraft-index",
+      "pass": false,
+      "bodyLen": 332,
+      "visImgs": 0,
+      "chrome": 2,
+      "header": false,
+      "nav": false,
+      "button": true,
+      "failTermsFound": [
+        "DEMO MODE ACTIVE",
+        "PUBLIC DEMO"
+      ]
+    },
+    {
+      "route": "/smokecraft/enroll",
+      "name": "smokecraft-enroll",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "name": "smokecraft-golden-box",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/flavor-dna",
+      "name": "smokecraft-flavor-dna",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/leaderboard",
+      "name": "smokecraft-leaderboard",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/passport-stamp",
+      "name": "smokecraft-passport-stamp",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/seed-soil",
+      "name": "smokecraft-seed-soil",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "name": "smokecraft-humidor-match",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/request-purchase",
+      "name": "smokecraft-request-purchase",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/cut-toast-light",
+      "name": "smokecraft-cut-toast-light",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "name": "smokecraft-scorecard",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/connections",
+      "name": "smokecraft-connections",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    },
+    {
+      "route": "/smokecraft/management-sync",
+      "name": "smokecraft-management-sync",
+      "pass": true,
+      "bodyLen": 0,
+      "visImgs": 1,
+      "chrome": 0,
+      "header": false,
+      "nav": false,
+      "button": false,
+      "failTermsFound": []
+    }
+  ]
+}
