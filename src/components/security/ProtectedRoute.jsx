@@ -89,7 +89,7 @@ function DemoRestricted({ fallbackRoute = '/' }) {
   )
 }
 
-function AccessRestricted({ message, fallbackRoute = '/', loginRoute, loginLabel = 'Sign In', currentRole }) {
+function AccessRestricted({ message, fallbackRoute = '/', loginRoute, loginLabel = 'Sign In', currentRole, currentPath }) {
   const [showModal, setShowModal]   = useState(false)
   const [submitted, setSubmitted]   = useState(false)
 
@@ -140,7 +140,7 @@ function AccessRestricted({ message, fallbackRoute = '/', loginRoute, loginLabel
 
         {loginRoute && (
           <a
-            href={loginRoute}
+            href={currentPath ? `${loginRoute}?redirect=${encodeURIComponent(currentPath)}` : loginRoute}
             style={{
               display: 'block', background: GOLD, color: '#0a0603',
               padding: '0.75rem 1.5rem', borderRadius: 4, fontFamily: 'Georgia, serif',
@@ -255,6 +255,7 @@ export default function ProtectedRoute({
         loginRoute={loginRoute}
         loginLabel={loginLabel}
         currentRole={role}
+        currentPath={path}
       />
     )
   }

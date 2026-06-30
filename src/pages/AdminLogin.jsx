@@ -4,6 +4,7 @@
  */
 
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth }  from '../context/AuthContext.jsx'
 import PinPad       from '../components/ui/PinPad.jsx'
 
@@ -29,16 +30,22 @@ const INPUT_STYLE = {
 
 export default function AdminLogin() {
   const { loginAdmin } = useAuth()
+  const navigate = useNavigate()
   const [email,   setEmail]   = useState('')
   const [pin,     setPin]     = useState('')
   const [loading, setLoading] = useState(false)
   const [error,   setError]   = useState('')
 
+  const redirectParam = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('redirect')
+    : null
+
   const redirectAfterLogin = (role) => {
-    if (role === 'founder_level_0') window.location.href = '/admin/deployment-center'
-    else if (role === 'manager') window.location.href = '/eat'
-    else if (role === 'admin') window.location.href = '/admin'
-    else window.location.href = '/'
+    if (redirectParam) { navigate(redirectParam); return }
+    if (role === 'founder_level_0') navigate('/admin/deployment-center')
+    else if (role === 'manager') navigate('/eat')
+    else if (role === 'admin') navigate('/admin')
+    else navigate('/')
   }
 
   const handleSubmit = async (e) => {
