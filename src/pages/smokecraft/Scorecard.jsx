@@ -201,7 +201,7 @@ export default function Scorecard() {
           style={{
             height: 280,
             borderColor: 'rgba(233,193,118,0.28)',
-            background: "url('/assets/smokecraft/cropped/scorecard-hero.jpg')",
+            background: "url('/assets/smokecraft-reference/approved/smokecraft-scorecard-ranking.png')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',

@@ -194,7 +194,7 @@ export default function SeedSoil() {
           baked UI/mockup text) anchored to the right edge so the right side also reads as
           image-backed lounge atmosphere instead of flat black. */}
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover" style={{ backgroundImage: "url('/assets/smokecraft/cropped/seed-soil-bg.jpg')", backgroundPosition: 'left center', opacity: 0.95, filter: 'brightness(1.12) saturate(1.4) contrast(1.12)' }} />
+        <div className="absolute inset-0 bg-cover" style={{ backgroundImage: "url('/assets/smokecraft-reference/approved/smokecraft-seed-soil.png')", backgroundPosition: 'left center', opacity: 0.95, filter: 'brightness(1.12) saturate(1.4) contrast(1.12)' }} />
         <div className="absolute inset-y-0 right-0 bg-cover" style={{ width: '46%', backgroundImage: "url('/assets/smokecraft/cigars/robusto.jpg')", backgroundPosition: 'center', opacity: 0.55, filter: 'brightness(0.9) saturate(1.25) contrast(1.1)', maskImage: 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,1) 100%)', WebkitMaskImage: 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,1) 100%)' }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(90deg,rgba(8,5,3,0.14) 0%,rgba(8,5,3,0.36) 42%,rgba(8,5,3,0.5) 100%)' }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(8,5,3,0.88) 0%,rgba(8,5,3,0.14) 18%,rgba(8,5,3,0.14) 82%,rgba(8,5,3,0.88) 100%)' }} />

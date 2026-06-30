@@ -117,7 +117,7 @@ export default function Connections() {
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/assets/smokecraft/cropped/connections-bg.jpg')" }} />
+        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage:"url('/assets/smokecraft-reference/approved/smokecraft-passport-connection.png')" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.95) 0%,rgba(19,19,20,0.6) 50%,rgba(19,19,20,0.95) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
@@ -137,7 +137,7 @@ export default function Connections() {
         <div className="mb-8 rounded-2xl overflow-hidden border border-primary/20 shadow-xl relative" style={{ height: 200 }}>
           <img
             className="w-full h-full object-cover"
-            src="/assets/smokecraft/cropped/connections-hero.jpg"
+            src="/assets/smokecraft-reference/approved/smokecraft-passport-connection.png"
             alt="360 network connections at the lounge table"
           />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(19,19,20,0.85) 0%, rgba(19,19,20,0.15) 60%, transparent 100%)' }} />
