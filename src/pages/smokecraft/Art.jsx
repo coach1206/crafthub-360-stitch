@@ -170,6 +170,9 @@ export default function Art() {
       </header>
 
       <main className="mx-auto min-h-screen max-w-[1280px] px-5 pb-12 pt-[88px] sm:px-8">
+        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 28, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
+          <img src="/assets/smokecraft-reference/approved/smokecraft-art.png" alt="The Art of Smokecraft" style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 420, objectFit: 'cover', objectPosition: 'center top' }} />
+        </div>
         <div className="craft-art-grid grid grid-cols-[1.08fr_0.92fr] gap-9 xl:gap-12">
           <section className={`craft-art-hero transition-all duration-700 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}>
             <div className="mb-8 max-w-2xl">

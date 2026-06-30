@@ -182,6 +182,10 @@ export default function SmokeCraft() {
               A personalized cigar journey built around you. Explore. Learn. Pair. Track every step with craftsmanship and purpose.
             </p>
 
+            <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 28, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
+              <img src="/assets/smokecraft-reference/approved/smokecraft-landing.png" alt="SmokeCraft Landing" style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 420, objectFit: 'cover', objectPosition: 'center top' }} />
+            </div>
+
             {/* ── Stepped action journey ──────────────────────────── */}
 
             {/* Top row: How It Works, Enter Challenge */}
