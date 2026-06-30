@@ -52,6 +52,7 @@ import EATOperations from './pages/eat/EATOperations.jsx'
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
 import SmokeCraftVisualProof from './pages/smokecraft/SmokeCraftVisualProof.jsx'
+import SmokeCraftImageDiagnostic from './pages/smokecraft/SmokeCraftImageDiagnostic.jsx'
 import Enroll           from './pages/smokecraft/Enroll.jsx'
 import GoldenBox        from './pages/smokecraft/GoldenBox.jsx'
 import GoldenBoxStatus  from './pages/smokecraft/GoldenBoxStatus.jsx'
@@ -471,6 +472,7 @@ export default function App() {
               {/* ── Visual proof routes — no auth required ── */}
               <Route path="pos360-visual-proof" element={<POS360VisualProof />} />
               <Route path="smokecraft-visual-proof" element={<SmokeCraftVisualProof />} />
+              <Route path="smokecraft-image-diagnostic" element={<SmokeCraftImageDiagnostic />} />
 
               {/* ── NEW POS 3 system — nested route tree ───────────── */}
               {/* ── Protected: staff+ — BLOCKED in demo mode ────── */}
