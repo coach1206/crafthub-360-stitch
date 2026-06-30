@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import { getVisitProgress } from '../../constants/session.js'
 
 const ITEMS = [
   { id:'log',     icon:'assignment_turned_in', label:'Submit Session to Venue Log',       desc:'Send your full session summary to the house management system.' },
@@ -12,7 +13,7 @@ const FILL1 = { fontVariationSettings: "'FILL' 1" }
 
 export default function ManagementSync() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { session, completeStep, addXP } = useGuestSession()
   const [checked, setChecked] = useState(new Set())
   const [done, setDone] = useState(false)
 
@@ -27,6 +28,8 @@ export default function ManagementSync() {
     navigate('/smokecraft/session-complete')
   }
 
+  const stepProgress = getVisitProgress(session.completedSteps)
+
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
@@ -39,13 +42,29 @@ export default function ManagementSync() {
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
         <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
-          <span>Step 16 of 17</span>
-          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'94.1%' }} /></div>
+          <div className="smokecraft-progress-label flex items-center gap-3">
+            <span>Round {stepProgress.round} of 3</span>
+            <span>Visit {stepProgress.visit} of {stepProgress.totalVisits}</span>
+            <span>Session {stepProgress.session} of {stepProgress.totalSessions}</span>
+          </div>
+          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:`${(stepProgress.session/24)*100}%` }} /></div>
           <span>Management Sync</span>
         </div>
+        <div className="mb-8 rounded-2xl overflow-hidden border border-primary/20 shadow-xl relative" style={{ height: 200 }}>
+          <img
+            className="w-full h-full object-cover"
+            src="/assets/smokecraft/cropped/management-sync-hero.jpg"
+            alt="Venue staff reviewing session handoff details"
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(19,19,20,0.85) 0%, rgba(19,19,20,0.15) 60%, transparent 100%)' }} />
+          <div className="absolute inset-0 flex flex-col justify-center px-6">
+            <span className="material-symbols-outlined text-primary mb-2" style={{ fontSize: 28, ...FILL1 }}>sync</span>
+            <p className="font-label-sm text-label-sm text-primary uppercase tracking-widest">Venue Handoff</p>
+          </div>
+        </div>
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
-        <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Venue &amp; Management Sync</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth:560 }}>Optionally share your session data with venue staff before closing out.</p>
+        <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Your Visit Has Been Logged</h2>
+        <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth:560 }}>Your visit has been logged for the venue team. You can optionally share extra details with staff below before closing out.</p>
         <div className="flex flex-col gap-3 mb-12">
           {ITEMS.map(item => {
             const on = checked.has(item.id)

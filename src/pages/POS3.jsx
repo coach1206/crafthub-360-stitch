@@ -8,6 +8,7 @@ import {
   getProviderStatus, getPOS3Providers, sendRecommendation, getStaff,
 } from '../services/pos3IntegrationApiService.js'
 import { loadHandoff, acceptHandoff } from '../services/staffHandoffService.js'
+import { recordAuditEvent, AUDIT_EVENT_TYPES } from '../services/pos3/auditLogService.js'
 
 const FADE    = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }
 const STAGGER = { show: { transition: { staggerChildren: 0.07 } } }
@@ -63,7 +64,7 @@ const TABLE_SEATS = { T1:2, T2:4, T3:6, T4:4, T5:2, T6:8, T7:2, T8:4, T9:2, T10:
 export default function POS3() {
   const navigate = useNavigate()
   const { tableId: routeTableId } = useParams()
-  const { role, hasPermission } = useSecurity()
+  const { role, hasPermission, user } = useSecurity()
 
   // ── Staff handoff from customer SmokeCraft session ───────────────────
   const [handoff, setHandoff] = useState(() => loadHandoff())
@@ -200,8 +201,38 @@ export default function POS3() {
   const totalB = splitB.reduce((s, i) => s + i.price * i.qty, 0)
 
   // ── Manager override ───────────────────────────────────────────────
+  // Manager Override panel only renders for isManager (real role check above),
+  // so there's no self-approval concern here — the acting role already meets
+  // approvalService's manager-tier bar. Still record every comp/discount to
+  // the local/demo audit log since none of this currently reaches it.
   function toggleComp(id) {
+    const willComp = !compItems.has(id)
     setCompItems(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n })
+    const item = cart.find(i => i.id === id)
+    recordAuditEvent({
+      eventType: AUDIT_EVENT_TYPES.ITEM_COMPED,
+      actorId: user?.userId,
+      actorName: user?.displayName,
+      actorRole: role,
+      targetType: 'cart_item',
+      targetId: id,
+      summary: `${willComp ? 'Comped' : 'Un-comped'} "${item?.name || id}" via manager override`,
+      metadata: { willComp },
+    })
+  }
+
+  function applyDiscount(pct) {
+    setDiscountPct(pct)
+    recordAuditEvent({
+      eventType: AUDIT_EVENT_TYPES.ITEM_COMPED,
+      actorId: user?.userId,
+      actorName: user?.displayName,
+      actorRole: role,
+      targetType: 'cart',
+      targetId: null,
+      summary: pct === 100 ? 'Full comp (100% discount) applied to cart via manager override' : `${pct}% discount applied to cart via manager override`,
+      metadata: { discountPct: pct },
+    })
   }
   const overrideTotal = cart.reduce((s, i) => {
     if (compItems.has(i.id)) return s
@@ -215,6 +246,16 @@ export default function POS3() {
     setTimeout(() => { setCharged(false) }, 3000)
   }
   function closeCheck() {
+    recordAuditEvent({
+      eventType: AUDIT_EVENT_TYPES.TABLE_CLOSED,
+      actorId: user?.userId,
+      actorName: user?.displayName,
+      actorRole: role,
+      targetType: 'table',
+      targetId: selectedTable?.id || null,
+      summary: `Check closed${selectedTable ? ` for table ${selectedTable.id}` : ''}`,
+      metadata: { discountPct, compedCount: compItems.size },
+    })
     setCart([])
     setKitchenFired(new Set())
     setBarFired(new Set())
@@ -509,7 +550,7 @@ export default function POS3() {
                         </div>
                         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                           {[0, 10, 15, 20, 25, 50, 100].map(pct => (
-                            <button key={pct} onClick={() => setDiscountPct(pct)} style={{
+                            <button key={pct} onClick={() => applyDiscount(pct)} style={{
                               height: 32, padding: '0 12px', borderRadius: 8, cursor: 'pointer', border: 'none',
                               fontFamily: '"JetBrains Mono",monospace', fontSize: 10, fontWeight: 700,
                               background: discountPct === pct ? '#5A9A5A' : 'rgba(90,154,90,0.1)',

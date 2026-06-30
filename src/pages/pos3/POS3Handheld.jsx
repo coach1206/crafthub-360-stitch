@@ -127,7 +127,7 @@ export default function POS3Handheld() {
   const cartCount = (ticket?.items || []).reduce((s, i) => s + i.qty, 0)
   const navigate = useNavigate()
   const staff = POS3_STAFF[0]
-  const occupiedTables = getTables().filter((t) => t.status === 'occupied')
+  const occupiedTables = getTables().filter((t) => t.status !== 'open' && t.status !== 'cleaning')
   const lowStock = EAT_INVENTORY.filter((i) => i.onHand <= i.par * 0.5)
 
   return (
@@ -152,6 +152,14 @@ export default function POS3Handheld() {
           <LightTouchButton key="qa" tone="ghost" onClick={newTicket}>Quick Actions</LightTouchButton>,
         ]}
       />
+
+      <div style={{ padding: '14px 16px 0' }}>
+        <img
+          src="/assets/pos3/cropped/POS 3.11.png"
+          alt=""
+          style={{ width: '100%', height: 96, objectFit: 'cover', borderRadius: 14, border: '1px solid rgba(19,41,75,0.08)' }}
+        />
+      </div>
 
       <div style={{ padding: '14px 16px 0' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>

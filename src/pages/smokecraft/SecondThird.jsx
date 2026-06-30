@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import { getMentorGuidance } from '../../utils/smokecraftMentorTips.js'
+import { getVisitProgress } from '../../constants/session.js'
 
 const NOTES = ['Leather','Dark Cocoa','Coffee','Spice','Nuts','Cedar','Dried Fruit','Tobacco']
 
@@ -48,28 +49,34 @@ export default function SecondThird() {
     })
     completeStep('second-third')
     addXP(50)
-    navigate('/smokecraft/final-third')
+    navigate('/smokecraft/flavor-memory')
   }
+
+  const stepProgress = getVisitProgress(session.completedSteps)
 
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
-      <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage:"url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')" }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background:'linear-gradient(0deg,rgba(19,19,20,0.96) 0%,rgba(19,19,20,0.72) 45%,rgba(19,19,20,0.96) 100%)' }} />
-      </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
         <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/first-third')} aria-label="Back">arrow_back</button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
-      <main className="relative pt-28 pb-36 px-6 max-w-[1100px] mx-auto">
+      <main className="relative pt-28 pb-36 px-6 sm:px-[6vw] max-w-[1400px] mx-auto">
         <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
-          <span>Step 10 of 17</span>
-          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'58.8%' }} /></div>
+          <div className="smokecraft-progress-label flex items-center gap-3">
+            <span>Round {stepProgress.round} of 3</span>
+            <span>Visit {stepProgress.visit} of {stepProgress.totalVisits}</span>
+            <span>Session {stepProgress.session} of {stepProgress.totalSessions}</span>
+          </div>
+          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:`${(stepProgress.session/24)*100}%` }} /></div>
           <span>Second Third</span>
         </div>
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Second Third — Tasting</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-8" style={{ maxWidth:560 }}>The flavor profile typically deepens and transitions. Note the evolution.</p>
+        <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>The flavor profile typically deepens and transitions. Note the evolution.</p>
+
+        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 16 }}>
+          <img src="/assets/smokecraft/source/flavor-dna.png" alt="Flavor DNA guide" style={{ width: '100%', maxHeight: '85vh', objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+        </div>
 
         <div className="grid gap-6 lg:grid-cols-[1fr_360px] items-start">
         <div
@@ -214,7 +221,6 @@ export default function SecondThird() {
             boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
           }}
         >
-          <div className="bg-cover bg-center" style={{ height: 180, backgroundImage:"url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')" }} />
           <div style={{ padding: 24 }}>
             <p className="font-label-lg text-label-lg text-primary uppercase tracking-widest mb-3">Midpoint Evolution</p>
             <p className="font-body-md text-body-md text-on-surface-variant mb-5">The second third reveals how the blend transitions — track what's deepening, shifting, or fading.</p>
@@ -244,7 +250,7 @@ export default function SecondThird() {
           <button onClick={handleContinue}
             className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 w-full sm:w-auto"
             style={{ height:64,paddingInline:40,background:'linear-gradient(135deg,#e9c176,#c5a059)',color:'#131314',boxShadow:'0 4px 20px rgba(233,193,118,0.3)' }}>
-            Final Third <span className="material-symbols-outlined">arrow_forward</span>
+            Flavor Memory <span className="material-symbols-outlined">arrow_forward</span>
           </button>
           <button onClick={() => navigate('/smokecraft/first-third')}
             className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300 w-full sm:w-auto"

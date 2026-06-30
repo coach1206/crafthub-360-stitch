@@ -150,7 +150,6 @@ export default function Cultivation() {
 
       {/* ── Top Bar ─────────────────────────────────────────── */}
       <SmokeCraftPremiumHeader
-        step="Step 12 of 20"
         sessionLabel="Cigar Experience Architect"
         onRightClick={() => navigate('/')}
       />

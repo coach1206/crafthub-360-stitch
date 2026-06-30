@@ -1,0 +1,13 @@
+{
+  "family": "passport",
+  "screen": "passport-stamps",
+  "route": "/passport/stamps",
+  "referenceImage": "stamps-reference.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-27T16:56:10.383Z",
+  "commitHash": "e636305b"
+}

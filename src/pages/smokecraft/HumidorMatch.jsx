@@ -5,6 +5,7 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import { computeHumidorRecommendations } from '../../utils/smokecraftHumidorMatch.js'
 import { emit, SYSTEMS } from '../../services/shared/opsEventBus.js'
 import { DropIcon, CheckIcon, ChevronRightIcon, InsightsIcon, ArrowForwardIcon, ArrowBackIcon, CigarIcon, DiamondIcon, CrownIcon } from '../../components/smokecraft/PremiumIcons.jsx'
+import { getVisitProgress } from '../../constants/session.js'
 
 const LANE_META = {
   'best-match':         { label: 'Best Match',         Icon: CigarIcon },
@@ -166,30 +167,54 @@ export default function HumidorMatch() {
     navigate('/smokecraft/request-purchase')
   }
 
+  const stepProgress = getVisitProgress(session.completedSteps)
+
   return (
     <div className="humidor-page text-on-surface font-body-md overflow-x-hidden min-h-screen">
-      <div className="fixed inset-0 -z-20 overflow-hidden humidor-page-bg">
-        <div className="absolute inset-0 bg-cover bg-center opacity-25" style={{ backgroundImage:"url('/assets/smokecraft/cropped/humidor-match-bg-v2.jpg')" }} />
-        <div className="absolute inset-0 pointer-events-none humidor-page-vignette" />
-      </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
         <button className="text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors flex items-center justify-center" style={{ minWidth:48,minHeight:48 }} onClick={() => navigate('/smokecraft/golden-box')} aria-label="Back"><ArrowBackIcon size={24} /></button>
         <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
       </header>
-      <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
+      <main className="relative pt-28 pb-36 px-6 sm:px-[6vw] max-w-[1400px] mx-auto">
         <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
-          <span>Step 6 of 17</span>
-          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'35.3%' }} /></div>
+          <div className="smokecraft-progress-label flex items-center gap-3">
+            <span>Round {stepProgress.round} of 3</span>
+            <span>Visit {stepProgress.visit} of {stepProgress.totalVisits}</span>
+            <span>Session {stepProgress.session} of {stepProgress.totalSessions}</span>
+          </div>
+          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:`${(stepProgress.session/24)*100}%` }} /></div>
           <span>Humidor Match</span>
         </div>
 
-        <div className="humidor-hero">
-          <img src="/assets/smokecraft/cropped/humidor-match-bg-v2.jpg" alt="Humidor" className="humidor-hero__img" />
-          <div className="humidor-hero__fade" aria-hidden="true" />
-          <div className="humidor-hero__content">
-            <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-2">SmokeCraft 360</p>
-            <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)', fontFamily: '"Playfair Display", serif' }}>Humidor Match</h2>
-            <p className="font-body-lg text-body-lg text-on-surface-variant" style={{ maxWidth:520 }}>Your matched recommendations, then confirm your cigar's storage condition before the session begins.</p>
+        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-2">SmokeCraft 360</p>
+        <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)', fontFamily: '"Playfair Display", serif' }}>Humidor Match</h2>
+        <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:520 }}>Your matched recommendations, then confirm your cigar's storage condition before the session begins.</p>
+
+        <div
+          className="rounded-3xl border overflow-hidden mb-10"
+          style={{
+            height: 280,
+            borderColor: 'rgba(233,193,118,0.28)',
+            background: "url('/assets/smokecraft/cropped/humidor-match-hero.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
+            display: 'flex',
+            alignItems: 'flex-end',
+            padding: 28,
+          }}
+        >
+          <div
+            className="w-full"
+            style={{
+              background: 'linear-gradient(to top, rgba(10,7,4,0.72) 0%, rgba(10,7,4,0.0) 100%)',
+              margin: -28,
+              padding: 28,
+              paddingTop: 70,
+            }}
+          >
+            <p className="font-label-sm text-label-sm uppercase tracking-[0.25em] mb-1" style={{ color: '#f3d49a', textShadow: '0 2px 6px rgba(0,0,0,0.6)' }}>Humidor Match</p>
+            <p className="font-body-md text-[14px] text-white/80" style={{ maxWidth: 560, textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>Tune your cigar's storage environment before the session begins.</p>
           </div>
         </div>
 
@@ -304,42 +329,6 @@ export default function HumidorMatch() {
       </main>
       <style>{`
         .humidor-page { background: #0d0d0e; }
-        .humidor-page-bg { background: #0d0d0e; }
-        .humidor-page-vignette {
-          background:
-            radial-gradient(ellipse at 50% 0%, rgba(233,193,118,0.08) 0%, transparent 45%),
-            linear-gradient(0deg, rgba(13,13,14,0.97) 0%, rgba(13,13,14,0.55) 45%, rgba(13,13,14,0.97) 100%);
-        }
-
-        .humidor-hero {
-          position: relative;
-          border-radius: 24px;
-          overflow: hidden;
-          margin-bottom: 40px;
-          min-height: 260px;
-          display: flex;
-          align-items: flex-end;
-          border: 1px solid rgba(233,193,118,0.22);
-          box-shadow: 0 24px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
-        }
-        .humidor-hero__img {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          filter: saturate(1.15) contrast(1.05) brightness(0.7);
-        }
-        .humidor-hero__fade {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(180deg, rgba(13,13,14,0.15) 0%, rgba(13,13,14,0.55) 55%, rgba(13,13,14,0.95) 100%);
-        }
-        .humidor-hero__content {
-          position: relative;
-          z-index: 1;
-          padding: 28px 28px 26px;
-        }
 
         .humidor-card {
           display: flex;

@@ -77,3 +77,154 @@ export function getLastSmokecraftRoute(currentStep) {
   const step = SMOKECRAFT_FLOW.find(s => s.id === currentStep)
   return step ? step.route : '/smokecraft/enroll'
 }
+
+// ── Multi-visit gamified journey ────────────────────────────────────────────
+// SmokeCraft is an 8-visit, 24-session venue journey, not a single-sitting
+// checklist. A visit's sessions all unlock together; the next visit stays
+// locked until every session in the current visit is completed. This is the
+// source of truth for route guards, lock screens, and "Visit X of 8 / Session
+// Y of 24" progress UI — do not hardcode visit/session numbers elsewhere.
+// `id` values match the exact string each page passes to completeStep(id)
+// in GuestSessionContext, except 'entry' (the index page has no discrete
+// completion event — it is always treated as satisfied).
+export const TOTAL_VISITS = 8
+export const TOTAL_SESSIONS = 24
+
+export const VISIT_STRUCTURE = [
+  {
+    visit: 1,
+    title: 'Entry / Profile / Gold Box / Mentor Setup',
+    sessions: [
+      { session: 1, id: 'entry',           route: '/smokecraft',                  label: 'SmokeCraft Entry' },
+      { session: 2, id: 'enroll',          route: '/smokecraft/enroll',           label: 'User Profile Capture' },
+      { session: 3, id: 'golden-box',      route: '/smokecraft/golden-box',       label: 'Gold Box Rules' },
+      { session: 4, id: 'mentor',          route: '/smokecraft/mentor-selection', label: 'Mentor Selection' },
+    ],
+    badges: ['Profile Started Badge', 'Gold Box Entry Badge', 'Mentor Pair Badge'],
+  },
+  {
+    visit: 2,
+    title: 'Cigar Education',
+    sessions: [
+      { session: 5, id: 'format',           route: '/smokecraft/format',           label: 'Shape, Size & Burn Time' },
+      { session: 6, id: 'wrapper-strength', route: '/smokecraft/wrapper-strength', label: 'Wrapper / Strength Education' },
+    ],
+    badges: ['Cigar Format Badge', 'Wrapper Knowledge Badge', 'Burn Time Badge'],
+  },
+  {
+    visit: 3,
+    title: 'Seed & Soil Pairing',
+    sessions: [
+      { session: 7, id: 'seed-soil',   route: '/smokecraft/seed-soil',   label: 'Seed & Soil Pairing' },
+      { session: 8, id: 'pairing-lab', route: '/smokecraft/pairing-lab', label: 'Pairing Lab' },
+    ],
+    badges: ['Seed & Soil Badge', 'Pairing Explorer Badge', 'Origin Knowledge Badge'],
+  },
+  {
+    visit: 4,
+    title: 'First Official Cigar Match',
+    sessions: [
+      { session: 9,  id: 'humidor-match',    route: '/smokecraft/humidor-match',    label: 'Humidor Match' },
+      { session: 10, id: 'request-purchase', route: '/smokecraft/request-purchase', label: 'Request / Purchase' },
+      { session: 11, id: 'cut-toast-light',  route: '/smokecraft/cut-toast-light',  label: 'Cut, Toast & Light' },
+      { session: 12, id: 'first-third',      route: '/smokecraft/first-third',      label: 'First Third Tasting' },
+    ],
+    badges: ['First Official Smoke Badge', 'Cut & Light Badge', 'First Third Badge'],
+  },
+  {
+    visit: 5,
+    title: 'Flavor Transition',
+    sessions: [
+      { session: 13, id: 'second-third',  route: '/smokecraft/second-third',  label: 'Second Third Tasting' },
+      { session: 14, id: 'flavor-memory', route: '/smokecraft/flavor-memory', label: 'Flavor Memory Session' },
+    ],
+    badges: ['Flavor Tracker Badge', 'Second Third Badge', 'Transition Badge'],
+  },
+  {
+    visit: 6,
+    title: 'Final Third / Scorecard',
+    sessions: [
+      { session: 15, id: 'final-third', route: '/smokecraft/final-third', label: 'Final Third Tasting' },
+      { session: 16, id: 'scorecard',   route: '/smokecraft/scorecard',   label: 'Scorecard / Ranking' },
+    ],
+    badges: ['Final Third Badge', 'Completed Cigar Review Badge', 'SmokeCraft Scorecard Badge'],
+  },
+  {
+    visit: 7,
+    title: 'Challenge / Second Cigar',
+    sessions: [
+      { session: 17, id: 'smokecraft-challenge', route: '/smokecraft/smokecraft-challenge', label: 'SmokeCraft Challenge' },
+      { session: 18, id: 'second-humidor-match', route: '/smokecraft/second-humidor-match', label: 'Second Humidor Match' },
+      { session: 19, id: 'mini-tasting',         route: '/smokecraft/mini-tasting',         label: 'Mini Tasting Round' },
+    ],
+    badges: ['Challenge Badge', 'Second Cigar Badge', 'Taste Growth Badge'],
+  },
+  {
+    visit: 8,
+    title: 'Passport Completion',
+    sessions: [
+      { session: 20, id: 'final-review',     route: '/smokecraft/final-review',     label: 'SmokeCraft Final Review' },
+      { session: 21, id: 'passport-stamp',   route: '/smokecraft/passport-stamp',   label: '360 Passport Stamp' },
+      { session: 22, id: 'connections',      route: '/smokecraft/connections',      label: '360 Passport Connections' },
+      { session: 23, id: 'management-sync',  route: '/smokecraft/management-sync',  label: 'Management Sync' },
+      { session: 24, id: 'session-complete', route: '/smokecraft/session-complete', label: 'Session Complete' },
+    ],
+    badges: ['SmokeCraft Passport Stamp', 'Passport Connections Access', 'VIP Candidate Signal', 'Next SmokeCraft Season'],
+  },
+]
+
+function isSessionComplete(completedSteps, sessionId) {
+  return sessionId === 'entry' ? true : completedSteps.includes(sessionId)
+}
+
+/** Find which visit/session a given completedSteps id belongs to. */
+export function getVisitForStepId(stepId) {
+  for (const v of VISIT_STRUCTURE) {
+    const s = v.sessions.find(s => s.id === stepId)
+    if (s) return { visit: v.visit, session: s.session, visitTitle: v.title, sessionLabel: s.label }
+  }
+  return null
+}
+
+/** Visit 1 is always unlocked. Visit N unlocks only once every session in visit N-1 is complete. */
+export function isVisitUnlocked(completedSteps, visitNumber) {
+  if (visitNumber <= 1) return true
+  const prevVisit = VISIT_STRUCTURE.find(v => v.visit === visitNumber - 1)
+  if (!prevVisit) return true
+  return prevVisit.sessions.every(s => isSessionComplete(completedSteps, s.id))
+}
+
+/** Returns the current visit/session pointer, derived from completedSteps — no separate counters to keep in sync. */
+export function getVisitProgress(completedSteps) {
+  for (const v of VISIT_STRUCTURE) {
+    const nextSession = v.sessions.find(s => !isSessionComplete(completedSteps, s.id))
+    if (nextSession) {
+      return { visit: v.visit, session: nextSession.session, totalVisits: TOTAL_VISITS, totalSessions: TOTAL_SESSIONS, journeyComplete: false, round: getRoundForVisit(v.visit) }
+    }
+  }
+  return { visit: TOTAL_VISITS, session: TOTAL_SESSIONS, totalVisits: TOTAL_VISITS, totalSessions: TOTAL_SESSIONS, journeyComplete: true, round: getRoundForVisit(TOTAL_VISITS) }
+}
+
+// ── Macro "Round" grouping ───────────────────────────────────────────────
+// 3 macro-phases covering the 8 visits:
+// Round 1 = "Education & Setup"        = Visits 1-3
+// Round 2 = "Tasting Experience"       = Visits 4-6
+// Round 3 = "Challenge & Completion"   = Visits 7-8
+export const TOTAL_ROUNDS = 3
+
+export const ROUNDS = [
+  { round: 1, title: 'Education & Setup',        visits: [1, 2, 3] },
+  { round: 2, title: 'Tasting Experience',        visits: [4, 5, 6] },
+  { round: 3, title: 'Challenge & Completion',    visits: [7, 8] },
+]
+
+export function getRoundForVisit(visitNumber) {
+  if (visitNumber <= 3) return 1
+  if (visitNumber <= 6) return 2
+  return 3
+}
+
+/** Like getVisitProgress, but resolves visit/session/round from a specific stepId rather than the "next incomplete" pointer. */
+export function getFullProgress(completedSteps) {
+  return getVisitProgress(completedSteps)
+}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import { getVisitProgress } from '../../constants/session.js'
 
 // Each action names the consent field that must be granted before it can run.
 // `consentField: null` means the action never leaves the device (a private
@@ -111,6 +112,8 @@ export default function Connections() {
     navigate('/smokecraft/management-sync')
   }
 
+  const stepProgress = getVisitProgress(session.completedSteps)
+
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 -z-20 bg-background overflow-hidden">
@@ -123,9 +126,25 @@ export default function Connections() {
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
         <div className="mb-6 flex items-center gap-3 text-primary/70 font-label-sm text-label-sm uppercase tracking-widest">
-          <span>Step 15 of 17</span>
-          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:'88.2%' }} /></div>
+          <div className="smokecraft-progress-label flex items-center gap-3">
+            <span>Round {stepProgress.round} of 3</span>
+            <span>Visit {stepProgress.visit} of {stepProgress.totalVisits}</span>
+            <span>Session {stepProgress.session} of {stepProgress.totalSessions}</span>
+          </div>
+          <div className="flex-1 h-1 rounded-full bg-outline-variant/30"><div className="h-full rounded-full bg-primary" style={{ width:`${(stepProgress.session/24)*100}%` }} /></div>
           <span>360 Connections</span>
+        </div>
+        <div className="mb-8 rounded-2xl overflow-hidden border border-primary/20 shadow-xl relative" style={{ height: 200 }}>
+          <img
+            className="w-full h-full object-cover"
+            src="/assets/smokecraft/cropped/connections-hero.jpg"
+            alt="360 network connections at the lounge table"
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(19,19,20,0.85) 0%, rgba(19,19,20,0.15) 60%, transparent 100%)' }} />
+          <div className="absolute inset-0 flex flex-col justify-center px-6">
+            <span className="material-symbols-outlined text-primary mb-2" style={{ fontSize: 28, ...FILL1 }}>hub</span>
+            <p className="font-label-sm text-label-sm text-primary uppercase tracking-widest">360 Member Network</p>
+          </div>
         </div>
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-4" style={{ fontSize:'clamp(26px,4vw,40px)' }}>360 Passport Connections</h2>

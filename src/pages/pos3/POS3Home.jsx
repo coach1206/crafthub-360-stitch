@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Shell, SideNav, TopBar, Card, Pill, KpiCard, Btn, GOLD, PANEL2 } from '../../components/eat/ui.jsx'
+import { Pill, Btn } from '../../components/eat/ui.jsx'
+import { LightShell, LightHeader, LightCard, LightBottomNav, L_NAVY } from '../../components/eat/lightTheme.jsx'
 import { getTables, getTickets, ticketTotals } from '../../services/pos3/pos3Service.js'
 import { subscribe, eventsFor } from '../../services/shared/opsEventBus.js'
 import { completeCommand, receiveCommand } from '../../services/shared/opsControlBridge.js'
@@ -33,7 +34,7 @@ export default function POS3Home() {
   const { session, update } = useGuestSession()
 
   const openTickets = tickets.length
-  const occupied = tables.filter((t) => t.status === 'occupied').length
+  const occupied = tables.filter((t) => t.status !== 'open' && t.status !== 'cleaning').length
   const posHandoff = getSmokePOSHandoff(session)
   const storageMode = getSmokeSharedStorageMode()
   const sharedIntents = loadSmokePurchaseIntents()
@@ -81,112 +82,127 @@ export default function POS3Home() {
   }
 
   return (
-    <Shell>
-      <div style={{ display: 'flex', minHeight: '100vh' }}>
-        <SideNav system="POS3" />
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <TopBar system="POS3" title="POS 3 Hospitality Terminal" subtitle="PM Shift · System Online" />
-          <div style={{ padding: 20 }}>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
-              <img
-                src="/assets/pos3/crafthub-gauge-badge.png"
-                alt=""
-                style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 8, border: '1px solid rgba(255,255,255,0.08)', flexShrink: 0 }}
-              />
-              <KpiCard label="Open Tickets" value={openTickets} />
-              <KpiCard label="Occupied Tables" value={occupied} />
-              <KpiCard label="Incoming Requests" value={incoming.length} accent={incoming.length ? '#f0907f' : GOLD} />
-            </div>
+    <LightShell style={{ maxWidth: 480, margin: '0 auto', paddingBottom: 84 }}>
+      <LightHeader eyebrow="POS 3 · PM Shift" title="Hospitality Terminal" subtitle="System Online" />
 
-            {incoming.length > 0 && (
-              <Card style={{ marginBottom: 20, borderColor: 'rgba(240,144,127,0.4)' }}>
-                <div style={{ fontWeight: 700, marginBottom: 10, color: '#f0907f' }}>Incoming Requests (from SmokeCraft / E.A.T.)</div>
-                {incoming.map((ev) => (
-                  <div key={ev.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                    <div>
-                      <Pill label={ev.status} tone={ev.status} />
-                      <Pill label={ev.commandType || ev.eventType} tone="pending" />
-                      <span style={{ marginLeft: 10, fontSize: 13 }}>{ev.payload?.label || ev.eventType} · from {ev.sourceSystem}</span>
-                    </div>
-                    {ev.status === 'pending' && (
-                      <Btn tone="green" onClick={() => markReceived(ev)} style={{ padding: '8px 14px' }}>Mark Received</Btn>
-                    )}
-                    {ev.status === 'received' && (
-                      <Btn tone="green" onClick={() => markCompleted(ev)} style={{ padding: '8px 14px' }}>Mark Completed</Btn>
-                    )}
-                  </div>
-                ))}
-              </Card>
-            )}
+      <div style={{ padding: '14px 16px 0', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+        <LightCard style={{ padding: 10 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8b95a3' }}>OPEN TICKETS</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: L_NAVY }}>{openTickets}</div>
+        </LightCard>
+        <LightCard style={{ padding: 10 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8b95a3' }}>OCCUPIED</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: L_NAVY }}>{occupied}</div>
+        </LightCard>
+        <LightCard style={{ padding: 10 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8b95a3' }}>INCOMING</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: incoming.length ? '#c43c3c' : L_NAVY }}>{incoming.length}</div>
+        </LightCard>
+      </div>
 
-            <Card style={{ marginBottom: 20 }}>
-              <div style={{ fontWeight: 700, marginBottom: 10 }}>SmokeCraft Purchase Queue</div>
-              <div style={{ fontSize: 11, color: '#8b95a3', marginBottom: 10 }}>
-                Local/session-only — a real venue-wide queue requires a backend or shared event store. Showing the current guest session's handoff state.
-              </div>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
-                <Pill label={'storage: ' + storageMode.mode.replaceAll('_', ' ')} tone={storageMode.backendConnected ? 'open' : 'pending'} />
-                <Pill label={queueIsShared ? 'shared queue' : 'local-only queue'} tone={queueIsShared ? 'open' : 'pending'} />
-              </div>
-              <div style={{ marginBottom: 10 }}>
-                <SmokeBackendReadinessPanel compact />
-              </div>
-              {!posHandoff.intentId ? (
-                <div style={{ fontSize: 13, color: '#8b95a3', padding: '8px 0' }}>No SmokeCraft purchase intent created yet.</div>
-              ) : (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 600 }}>{posHandoff.intentId}</div>
-                    <div style={{ fontSize: 12, color: '#8b95a3', margin: '4px 0' }}>Product: {posHandoff.product || 'Not specified'}</div>
-                    <span style={{ display: 'inline-flex', gap: 6 }}>
-                      <Pill label={posHandoff.status} tone={posHandoff.status === 'verified' ? 'open' : posHandoff.status === 'rejected' ? 'critical' : 'pending'} />
-                      <Pill label={'verification: ' + posHandoff.verificationStatus} tone={posHandoff.verificationStatus === 'verified' ? 'open' : posHandoff.verificationStatus === 'rejected' ? 'critical' : 'pending'} />
-                    </span>
-                  </div>
-                  {posHandoff.status !== 'verified' && posHandoff.status !== 'rejected' ? (
-                    <div style={{ display: 'flex', gap: 8 }}>
-                      <Btn tone="green" onClick={verifySmokeCraftPurchase} style={{ padding: '8px 14px' }}>Mark Verified</Btn>
-                      <Btn tone="red" onClick={rejectSmokeCraftPurchase} style={{ padding: '8px 14px' }}>Reject</Btn>
-                    </div>
-                  ) : (
-                    <div style={{ fontSize: 12, color: '#8b95a3' }}>Needs POS Verification: No</div>
-                  )}
+      {incoming.length > 0 && (
+        <div style={{ padding: '14px 16px 0' }}>
+          <LightCard style={{ padding: 14, borderColor: 'rgba(196,60,60,0.3)' }}>
+            <div style={{ fontWeight: 700, marginBottom: 10, color: '#c43c3c', fontSize: 13 }}>Incoming Requests (SmokeCraft / E.A.T.)</div>
+            {incoming.map((ev) => (
+              <div key={ev.id} style={{ padding: '10px 0', borderTop: '1px solid rgba(19,41,75,0.06)' }}>
+                <div style={{ marginBottom: 6 }}>
+                  <Pill label={ev.status} tone={ev.status} />
+                  <span style={{ marginLeft: 8, fontSize: 12 }}>{ev.payload?.label || ev.eventType} · from {ev.sourceSystem}</span>
                 </div>
-              )}
-            </Card>
+                {ev.status === 'pending' && (
+                  <Btn tone="green" onClick={() => markReceived(ev)} style={{ padding: '8px 14px', fontSize: 12, width: '100%' }}>Mark Received</Btn>
+                )}
+                {ev.status === 'received' && (
+                  <Btn tone="green" onClick={() => markCompleted(ev)} style={{ padding: '8px 14px', fontSize: 12, width: '100%' }}>Mark Completed</Btn>
+                )}
+              </div>
+            ))}
+          </LightCard>
+        </div>
+      )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              <Card>
-                <div style={{ fontWeight: 700, marginBottom: 12 }}>Floor / Table Map</div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
-                  {tables.map((t) => (
-                    <div key={t.id} onClick={() => navigate('/pos3/tables')} style={{ background: PANEL2, borderRadius: 12, padding: 12, cursor: 'pointer' }}>
-                      <div style={{ fontWeight: 700 }}>{t.name}</div>
-                      <div style={{ fontSize: 12, color: '#8b95a3', margin: '4px 0' }}>{t.section} · {t.guests}/{t.seats}</div>
-                      <Pill label={t.status} tone={t.status} />
-                    </div>
-                  ))}
-                </div>
-              </Card>
-              <Card>
-                <div style={{ fontWeight: 700, marginBottom: 12 }}>Open Tickets / Recent Orders</div>
-                {tickets.map((t) => (
-                  <div key={t.id} onClick={() => navigate('/pos3/orders?ticket=' + t.id)} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer' }}>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>{t.id} · {t.tableId}</div>
-                      <div style={{ fontSize: 12, color: '#8b95a3' }}>{t.server} · {t.items.length} items</div>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <Pill label={t.status} tone={t.status} />
-                      <div style={{ color: GOLD, fontWeight: 700, marginTop: 4 }}>${ticketTotals(t).total.toFixed(2)}</div>
-                    </div>
-                  </div>
-                ))}
-              </Card>
-            </div>
+      <div style={{ padding: '14px 16px 0' }}>
+        <LightCard style={{ padding: 14 }}>
+          <div style={{ fontWeight: 700, marginBottom: 8, fontSize: 13, color: L_NAVY }}>SmokeCraft Purchase Queue</div>
+          <div style={{ fontSize: 11, color: '#8b95a3', marginBottom: 10 }}>
+            Local/session-only — a real venue-wide queue requires a backend or shared event store. Showing the current guest session's handoff state.
           </div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+            <Pill label={'storage: ' + storageMode.mode.replaceAll('_', ' ')} tone={storageMode.backendConnected ? 'open' : 'pending'} />
+            <Pill label={queueIsShared ? 'shared queue' : 'local-only queue'} tone={queueIsShared ? 'open' : 'pending'} />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <SmokeBackendReadinessPanel compact />
+          </div>
+          {!posHandoff.intentId ? (
+            <div style={{ fontSize: 13, color: '#8b95a3', padding: '8px 0' }}>No SmokeCraft purchase intent created yet.</div>
+          ) : (
+            <div style={{ padding: '10px 0', borderTop: '1px solid rgba(19,41,75,0.06)' }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: L_NAVY }}>{posHandoff.intentId}</div>
+              <div style={{ fontSize: 12, color: '#8b95a3', margin: '4px 0' }}>Product: {posHandoff.product || 'Not specified'}</div>
+              <span style={{ display: 'inline-flex', gap: 6, marginBottom: 8 }}>
+                <Pill label={posHandoff.status} tone={posHandoff.status === 'verified' ? 'open' : posHandoff.status === 'rejected' ? 'critical' : 'pending'} />
+                <Pill label={'verification: ' + posHandoff.verificationStatus} tone={posHandoff.verificationStatus === 'verified' ? 'open' : posHandoff.verificationStatus === 'rejected' ? 'critical' : 'pending'} />
+              </span>
+              {posHandoff.status !== 'verified' && posHandoff.status !== 'rejected' ? (
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <Btn tone="green" onClick={verifySmokeCraftPurchase} style={{ padding: '8px 14px', fontSize: 12, flex: 1 }}>Mark Verified</Btn>
+                  <Btn tone="red" onClick={rejectSmokeCraftPurchase} style={{ padding: '8px 14px', fontSize: 12, flex: 1 }}>Reject</Btn>
+                </div>
+              ) : (
+                <div style={{ fontSize: 12, color: '#8b95a3' }}>Needs POS Verification: No</div>
+              )}
+            </div>
+          )}
+        </LightCard>
+      </div>
+
+      <div style={{ padding: '14px 16px 0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: L_NAVY }}>FLOOR / TABLE MAP</div>
+          <button type="button" onClick={() => navigate('/pos3/tables')} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>View All</button>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+          {tables.map((t) => (
+            <LightCard key={t.id} onClick={() => navigate('/pos3/tables')} style={{ padding: 10, cursor: 'pointer' }}>
+              <div style={{ fontWeight: 700, fontSize: 13, color: L_NAVY }}>{t.name}</div>
+              <div style={{ fontSize: 11, color: '#8b95a3', margin: '4px 0' }}>{t.section} · {t.guests}/{t.seats}</div>
+              <Pill label={t.status} tone={t.status} />
+            </LightCard>
+          ))}
         </div>
       </div>
-    </Shell>
+
+      <div style={{ padding: '14px 16px 16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: L_NAVY }}>OPEN TICKETS / RECENT ORDERS</div>
+          <button type="button" onClick={() => navigate('/pos3/orders')} style={{ background: 'none', border: 'none', color: '#2a4d8f', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>View All</button>
+        </div>
+        <LightCard style={{ padding: 0 }}>
+          {tickets.length === 0 && <div style={{ color: '#8b95a3', fontSize: 12, padding: 14 }}>No open tickets.</div>}
+          {tickets.map((t) => (
+            <div key={t.id} onClick={() => navigate('/pos3/orders?ticket=' + t.id)} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', borderBottom: '1px solid rgba(19,41,75,0.06)', cursor: 'pointer' }}>
+              <div>
+                <div style={{ fontWeight: 600, fontSize: 13, color: L_NAVY }}>{t.id} · {t.tableId}</div>
+                <div style={{ fontSize: 11, color: '#8b95a3' }}>{t.server} · {t.items.length} items</div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <Pill label={t.status} tone={t.status} />
+                <div style={{ color: '#9c7320', fontWeight: 700, marginTop: 4, fontSize: 13 }}>${ticketTotals(t).total.toFixed(2)}</div>
+              </div>
+            </div>
+          ))}
+        </LightCard>
+      </div>
+
+      <LightBottomNav items={[
+        { label: 'Home', icon: 'home', active: true, onClick: () => navigate('/pos3') },
+        { label: 'Tables', icon: 'table_restaurant', onClick: () => navigate('/pos3/tables') },
+        { label: 'Orders', icon: 'receipt_long', badge: tickets.length || undefined, onClick: () => navigate('/pos3/orders') },
+        { label: 'Messages', icon: 'chat', disabled: true, disabledReason: 'Staff messaging is not yet built' },
+        { label: 'More', icon: 'more_horiz', onClick: () => navigate('/pos3/settings') },
+      ]} />
+    </LightShell>
   )
 }

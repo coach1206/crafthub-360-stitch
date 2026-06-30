@@ -1,0 +1,16 @@
+{
+  "family": "smokecraft",
+  "screen": "final-third",
+  "route": "/smokecraft/final-third",
+  "referenceImage": "final-third-tasting.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T09:01:24.421Z",
+  "commitHash": "494bf41b",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 15,
+  "routeUnlockedForProof": true
+}

@@ -1,0 +1,17 @@
+{
+  "family": "smokecraft",
+  "screen": "pairing-lab",
+  "route": "/smokecraft/pairing-lab",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T08:59:41.472Z",
+  "commitHash": "494bf41b",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 8,
+  "routeUnlockedForProof": true,
+  "note": "Gated by VisitLockGuard (Visit 3). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders."
+}

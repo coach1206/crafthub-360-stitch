@@ -1,0 +1,13 @@
+{
+  "family": "smokecraft",
+  "screen": "flavor-dna",
+  "route": "/smokecraft/flavor-dna",
+  "referenceImage": "flavodr dna.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-25T21:36:51.392Z",
+  "commitHash": "196ecb92"
+}

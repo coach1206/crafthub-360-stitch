@@ -1,0 +1,17 @@
+{
+  "family": "smokecraft",
+  "screen": "session-complete",
+  "route": "/smokecraft/session-complete",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T12:00:29.096Z",
+  "commitHash": "625ba33b",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 24,
+  "routeUnlockedForProof": true,
+  "note": "Gated by VisitLockGuard (Visit 8, session 24 — final session). No reference mockup uploaded. Proof-only progress seeded so the real page renders."
+}

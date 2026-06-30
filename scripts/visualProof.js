@@ -31,12 +31,104 @@ import { existsSync, readdirSync, mkdirSync, writeFileSync, readFileSync } from 
 import { execSync, spawn } from 'child_process'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { VISIT_STRUCTURE } from '../src/constants/session.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
 const OUT_DIR = path.join(ROOT, 'docs', 'visual-proof')
 const VIEWPORT = { width: 1440, height: 900 }
 const HANDHELD_VIEWPORT = { width: 414, height: 896 }
+
+// ── SmokeCraft visual-proof-only progress seeding ──────────────────────────
+// VisitLockGuard (src/components/smokecraft/VisitLockGuard.jsx) locks any
+// SmokeCraft session-5+ route until GuestSessionContext's completedSteps
+// shows every earlier session done. The harness has no real guest progress,
+// so a cold navigation always renders LockedVisit.jsx. This block computes
+// the exact completedSteps array needed to legitimately pass that guard for
+// a given target stepId — by walking the same VISIT_STRUCTURE the guard
+// itself reads — and is used ONLY by this proof script, never by the app.
+// It never modifies VisitLockGuard, GuestSessionContext, or any production
+// auth/gating code; it only seeds localStorage in a Playwright browser
+// context before navigation, exactly like the existing requiresAuth
+// novee_admin_session injection used for POS3/E.A.T. below.
+function findVisitSession(stepId) {
+  for (const v of VISIT_STRUCTURE) {
+    const s = v.sessions.find(s => s.id === stepId)
+    if (s) return { visit: v.visit, session: s.session }
+  }
+  return null
+}
+
+/** All session ids (excluding 'entry', which the guard always treats as complete) strictly before the target stepId's session. */
+function priorSessionIds(stepId) {
+  const target = findVisitSession(stepId)
+  if (!target) return []
+  const ids = []
+  for (const v of VISIT_STRUCTURE) {
+    for (const s of v.sessions) {
+      if (s.session < target.session && s.id !== 'entry') ids.push(s.id)
+    }
+  }
+  return ids
+}
+
+/** Builds a full novee_guest_session-shaped object (same shape as createNewSession()) with completedSteps seeded so VisitLockGuard unlocks stepId's route. Proof-only — never written by the real app. */
+function buildSeededGuestSession(stepId) {
+  const completedSteps = priorSessionIds(stepId)
+  const now = Date.now()
+  return {
+    sessionId: `proof_seed_${now}`,
+    createdAt: now,
+    updatedAt: now,
+    __version: 4,
+    profile: { firstName: '', lastName: '', nickname: '', email: '', phone: '', city: '', state: '', zip: '', photo: null, ageConfirmed: false },
+    completedSteps,
+    xp: 0,
+    rank: 'Novice',
+    badges: [],
+    smokecraftStamps: [],
+    mentors: [],
+    favorites: [],
+    pendingOrders: [],
+    currentSmokecraftStep: null,
+    latestStampId: null,
+    goldenBoxProgress: null,
+    guestId: null,
+    venueId: 'novee-grand-lounge',
+    deviceId: 'kiosk-001',
+    entrySource: 'qr-scan',
+    entryStartedAt: null,
+    lastActiveAt: null,
+    guestProfile: null,
+    profileComplete: false,
+    resumeToken: null,
+    audioEnabled: true,
+    hapticsEnabled: true,
+    lastVisitedRoute: null,
+    leaderboardScore: 0,
+    selectedCraft: null,
+    selectedMentor: null,
+    selectedMentorCountry: null,
+    selectedLevel: null,
+    smokeCraft: {
+      currentSession: null, completedSessions: [], sessionScores: [], flavorPreferences: [],
+      strengthTolerance: null, aromaInterests: [], vitolaPreferences: [], pairingSelections: [],
+      soilSeedSelections: [], mentorNotes: [], passportConnections: [], networkingStatus: 'not_started',
+      networkingConsent: {
+        allowShareStamp: false, allowShareName: false, allowShareContact: false,
+        allowShareBusinessLinks: false, allowShareSmokeCraftLevel: false,
+        allowShareFavoriteCigarStyle: false, allowShareEventStamp: false, allowVenueFollowUp: false,
+      },
+    },
+    passport: { passportId: null, earnedStamps: [], latestStampId: null, connectionCount: 0, eventName: null, ceremonySeen: false },
+    goldenBox: { eligible: false, progress: 0, entries: [], lastReveal: null },
+    leaderboard: { score: 0, rank: 'Novice', submitted: false, displayName: null },
+    preferences: { audioEnabled: true, hapticsEnabled: true, readInstead: false, language: 'en' },
+    system: { lastVisitedRoute: null, schemaVersion: 4, kioskMode: false, sourceModule: null },
+    pos3: { activeTicketId: null, tableNumber: null, staffId: null, suggestedPairings: [], upsellRecommendations: [], inventorySignals: [] },
+    eatCommand: { engagementScore: 0, guestMoodSignal: null, sessionValue: 0, staffAssistTriggered: false, environmentNotes: [] },
+  }
+}
 
 // Each screen: family, name, route, reference (filename in public/, or null
 // if no binary reference has been uploaded to the repo yet), viewport
@@ -45,30 +137,70 @@ const SCREENS = [
   // --- SmokeCraft ---
   { family: 'smokecraft', name: 'smokecraft-home', route: '/smokecraft', reference: 'PROFILE DISCOVER 11.png' },
   { family: 'smokecraft', name: 'enroll', route: '/smokecraft/enroll', reference: 'smokecraft Intake.png' },
-  { family: 'smokecraft', name: 'seed-soil', route: '/smokecraft/seed-soil', reference: 'SEED & PAIRING.11.png' },
-  { family: 'smokecraft', name: 'format', route: '/smokecraft/format', reference: 'SHAPE SIZE BURN.11.png' },
-  { family: 'smokecraft', name: 'golden-box', route: '/smokecraft/golden-box/status', reference: 'GOLDEN BOX JOURNEY11.png' },
+  { family: 'smokecraft', name: 'seed-soil', route: '/smokecraft/seed-soil', reference: 'SEED & PAIRING.11.png', seedSmokeCraftStep: 'seed-soil' },
+  { family: 'smokecraft', name: 'format', route: '/smokecraft/format', reference: 'SHAPE SIZE BURN.11.png', seedSmokeCraftStep: 'format' },
+  { family: 'smokecraft', name: 'cigar-gauge-guide', route: '/smokecraft/cigar-gauge-guide', reference: null, seedSmokeCraftStep: 'format', note: 'Sub-step of Session 5 (Shape, Size & Burn Time) — gated by the same VisitLockGuard stepId ("format") as /smokecraft/format, not a separate completed session. Reference image "cigar gauge guide.png" was shared inline in chat but has not been committed to the repo as a binary file; reference intentionally left null, not substituted.' },
+  { family: 'smokecraft', name: 'golden-box', route: '/smokecraft/golden-box', reference: null, note: 'No reference mockup mapped to the plain /smokecraft/golden-box index route (the existing GOLDEN BOX JOURNEY11.png reference is mapped to /smokecraft/golden-box/status below). Ungated — no seeding needed.' },
+  { family: 'smokecraft', name: 'golden-box-status', route: '/smokecraft/golden-box/status', reference: 'GOLDEN BOX JOURNEY11.png' },
+  { family: 'smokecraft', name: 'mentor-selection', route: '/smokecraft/mentor-selection', reference: null, note: 'Ungated route. No reference mockup uploaded.' },
   { family: 'smokecraft', name: 'leaderboard', route: '/smokecraft/leaderboard', reference: 'lounge demo ranking.11png.png' },
 
+  // Uploaded batch confirmed 2026-06-25 via grep against src/App.jsx (see
+  // docs/mvp2-visual-image-registry.md for the exact commands run). Mapping
+  // only — no UI fix has been made against these references yet.
+  { family: 'smokecraft', name: 'cut-toast-light', route: '/smokecraft/cut-toast-light', reference: 'CUT TOAST, & LIGHT.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'cut-toast-light' },
+  { family: 'smokecraft', name: 'management-sync', route: '/smokecraft/management-sync', reference: 'venue-management-sync.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'management-sync' },
+  { family: 'smokecraft', name: 'final-third', route: '/smokecraft/final-third', reference: 'final-third-tasting.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'final-third', note: '"findal third tasting.png" is a typo-named duplicate of the same mockup (same dimensions, different compression/md5) — not used as the canonical reference.' },
+  { family: 'smokecraft', name: 'flavor-dna', route: '/smokecraft/flavor-dna', reference: 'flavodr dna.png', referenceDir: 'design-references/mvp2/smokecraft', note: 'Filename preserved exactly as uploaded ("flavodr dna.png", typo for "flavor dna"). A cleaned name of "flavor-dna.png" is a recommendation only, not yet approved as canonical.' },
+  { family: 'smokecraft', name: 'connections', route: '/smokecraft/connections', reference: 'connections-reference.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'connections', note: '2026-06-27: reference updated to "connections-reference.png" (copy of public/"360 PASSPORT NETWORK INTERFACE 2.png"), per explicit user mapping request. This is a full passport-connection dashboard mockup (member directory, QR scan, journey-progress rings) — thematically related but NOT a layout match for src/pages/smokecraft/Connections.jsx, which is a single-page consent + action-checklist screen. Used as a loose proof reference only; do not treat side-by-side mismatch as a defect. Superseded mapping (passport-connection-1.png) is still used as the runtime accent-hero source image — unrelated to this reference slot.' },
+  { family: 'smokecraft', name: 'request-purchase', route: '/smokecraft/request-purchase', reference: 'request-purchase.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'request-purchase' },
+  { family: 'smokecraft', name: 'humidor-match', route: '/smokecraft/humidor-match', reference: null, seedSmokeCraftStep: 'humidor-match', note: 'Gated by VisitLockGuard (Visit 4, session 9). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'first-third', route: '/smokecraft/first-third', reference: null, seedSmokeCraftStep: 'first-third', note: 'Gated by VisitLockGuard (Visit 4, session 12). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'second-third', route: '/smokecraft/second-third', reference: null, seedSmokeCraftStep: 'second-third', note: 'Gated by VisitLockGuard (Visit 5, session 13). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'scorecard', route: '/smokecraft/scorecard', reference: null, seedSmokeCraftStep: 'scorecard', note: 'Gated by VisitLockGuard (Visit 6, session 16). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'passport-stamp', route: '/smokecraft/passport-stamp', reference: 'passport-stamp-reference.png', referenceDir: 'design-references/mvp2/smokecraft', seedSmokeCraftStep: 'passport-stamp', note: '2026-06-27: reference updated to "passport-stamp-reference.png" (copy of public/"360 LUXARY STAMP COLLECT 2.png"), per explicit user mapping request. This is a "Your Stamp Collection" grid mockup (11/24 stamps across 5 categories) — thematically related but NOT a layout match for src/pages/smokecraft/PassportStamp.jsx, which is a single-page "Your Passport Has Been Certified" completion screen. Used as a loose proof reference only; do not treat side-by-side mismatch as a defect. Gated by VisitLockGuard (Visit 8, session 21); proof-only progress still seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'session-complete', route: '/smokecraft/session-complete', reference: null, seedSmokeCraftStep: 'session-complete', note: 'Gated by VisitLockGuard (Visit 8, session 24 — final session). No reference mockup uploaded. Proof-only progress seeded so the real page renders.' },
+
+  // 8-visit/24-session journey screens added 2026-06-26. These routes are
+  // gated by VisitLockGuard (see App.jsx) based on GuestSessionContext's
+  // completedSteps, which this harness has no mechanism to seed (unlike the
+  // separate novee_admin_session role-injection used below for POS3/E.A.T.).
+  // A cold Playwright navigation will very likely render the LockedVisit.jsx
+  // screen instead of real content. No reference mockups exist for these
+  // routes — only runtime accent images were uploaded — so reference is null
+  // and no side-by-side proof is possible; only a rendered screenshot is captured.
+  { family: 'smokecraft', name: 'wrapper-strength', route: '/smokecraft/wrapper-strength', reference: null, seedSmokeCraftStep: 'wrapper-strength', note: 'Gated by VisitLockGuard (Visit 2, session 5). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'pairing-lab', route: '/smokecraft/pairing-lab', reference: null, seedSmokeCraftStep: 'pairing-lab', note: 'Gated by VisitLockGuard (Visit 3). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'flavor-memory', route: '/smokecraft/flavor-memory', reference: null, seedSmokeCraftStep: 'flavor-memory', note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'smokecraft-challenge', route: '/smokecraft/smokecraft-challenge', reference: null, seedSmokeCraftStep: 'smokecraft-challenge', note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'second-humidor-match', route: '/smokecraft/second-humidor-match', reference: null, seedSmokeCraftStep: 'second-humidor-match', note: 'Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'mini-tasting', route: '/smokecraft/mini-tasting', reference: null, seedSmokeCraftStep: 'mini-tasting', note: 'Gated by VisitLockGuard (Visit 7). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+  { family: 'smokecraft', name: 'final-review', route: '/smokecraft/final-review', reference: null, seedSmokeCraftStep: 'final-review', note: 'Gated by VisitLockGuard (Visit 8). No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders.' },
+
   // --- Passport ---
-  // Reference images exist in public/ but route mapping is NOT confirmed —
-  // multiple similarly-named passport mockups exist (360 Passport 1.png,
-  // 360 passport  connections 11.png, 360  passport connect  CONECTIONS.png,
-  // 360 PASSPORT NETWORK INTERFACE 2.png, 360 PASSPORT CONNECTION 2.png,
-  // 360 LUXARY STAMP COLLECT 2.png) and none are wired into src/ yet. Do not
-  // guess the mapping (see the golden-box route mistake this protocol
-  // exists to prevent) — left as referenceImage: null with a TODO until a
-  // human confirms which file maps to which Passport route.
-  { family: 'passport', name: 'passport-connections', route: '/passport/connections', reference: null, note: 'Candidate references exist (360 PASSPORT NETWORK INTERFACE 2.png, 360 PASSPORT CONNECTION 2.png, etc.) but mapping is unconfirmed. See registry.' },
-  { family: 'passport', name: 'passport-stamps', route: '/passport/stamps', reference: null, note: 'Candidate references exist (DIGETAL STAMP COLLECTION 1.png, 360 LUXARY STAMP COLLECT 2.png) but mapping is unconfirmed. See registry.' },
-  { family: 'passport', name: 'passport-profile', route: '/passport/profile', reference: null, note: 'No confirmed reference image.' },
-  { family: 'passport', name: 'passport-directory', route: '/passport/directory', reference: null, note: 'No confirmed reference image.' },
+  // 2026-06-27: connections and stamps mapping confirmed via structural
+  // comparison against the live components (PassportConnections.jsx,
+  // PassportStamps.jsx) and wired below. profile and directory have no
+  // candidate images anywhere in public/ — left as reference: null.
+  { family: 'passport', name: 'passport-connections', route: '/passport/connections', reference: 'connections-reference.png', referenceDir: 'design-references/mvp2/passport', note: '2026-06-27: reference is "connections-reference.png" (copy of public/"360 PASSPORT CONNECTION 2.png"). Strong structural match — same hero stats (12 verified / 94% match / 8/10 goal), same tab labels (Best Matches/People You Met/Suggested), same bottom-nav pattern as the live PassportConnections.jsx page. Not the same source as the SmokeCraft /smokecraft/connections reference (360 PASSPORT NETWORK INTERFACE 2.png), which remains a separate, unrelated file.' },
+  { family: 'passport', name: 'passport-stamps', route: '/passport/stamps', reference: 'stamps-reference.png', referenceDir: 'design-references/mvp2/passport', note: '2026-06-27: reference is "stamps-reference.png" (copy of public/"DIGETAL STAMP COLLECTION 1.png"). Strong structural match — same 5 stamp categories (Event/Connection/Craft/VIP/Profile Stamps) and 11/24 progress as the live PassportStamps.jsx page. Note: a near-duplicate of this image, "360 LUXARY STAMP COLLECT 2.png", remains wired to SmokeCraft /smokecraft/passport-stamp as a loose/thematic reference there; it is likely a better structural fit for this route than for that one, but it has not been reassigned — see registry.' },
+  { family: 'passport', name: 'passport-profile', route: '/passport/profile', reference: null, note: '2026-06-27: confirmed no usable candidate image exists. "DISCOVER YOUR PROFILE.png" / "PROFILE DISCOVER 11.png" are SmokeCraft homepage mockups, not Passport profile screens — not usable.' },
+  { family: 'passport', name: 'passport-directory', route: '/passport/directory', reference: null, note: '2026-06-27: confirmed no candidate image exists anywhere in public/ for the member-directory layout.' },
 
   // --- DayOne360 ---
-  { family: 'dayone360', name: 'dayone360-concierge', route: '/dayone360', reference: null, note: 'Reference "DAYONE360 CONICERGE 1.png" exists in public/ but is not yet confirmed against this route.' },
+  { family: 'dayone360', name: 'dayone360-concierge', route: '/dayone360', reference: 'concierge-reference.png', referenceDir: 'design-references/mvp2/dayone360', note: '2026-06-27: reference is "concierge-reference.png" (copy of public/"DAYONE360 CONICERGE 1.png"). Strong structural match for DayOneTravel.jsx (header/action buttons, journey tracker, concierge services grid, destination cards, passport stamps, bottom nav). Minor non-blocking layout drift: (1) reference includes a Concierge Status card not verbatim in current component; (2) reference includes a 4-tile promo/service row not currently in the live component. Neither is a defect — drift notes only.' },
 
   // --- CraftHub ---
   { family: 'crafthub', name: 'crafthub-landing', route: '/crafthub', reference: null, note: 'Reference "CRAFT HUB EXPLAIND.png" exists in public/ but is not yet confirmed against this route.' },
+  // "crafthub-landing.png" (uploaded 2026-06-25) does NOT match either
+  // /crafthub (CraftHub.jsx) or /system-explained (PublicCraftHubLanding.jsx).
+  // It matches the BootConsole.jsx "crafthub" boot stage exactly: logo,
+  // title "CRAFTHUB", connectionItems list (SmokeCraft/PourCraft/BeerCraft/
+  // WineCraft 360, "Connected"). That stage's backgroundImage is an
+  // explicitly-flagged pending asset slot at public/boot/crafthub-360.png
+  // (see src/pages/BootConsole.jsx comment above the 'crafthub' stage) —
+  // it is not a routed page component, so no proof-harness route capture
+  // applies. No SCREENS entry added; left here as a documented finding.
 
   // --- POS3 (handheld) ---
   // Reference image uploaded 2026-06-25 ("POS 3.11.png"). Route mapping
@@ -272,21 +404,46 @@ async function main() {
   // server, started lazily and only if such a screen is actually selected.
   let devModeServerProcess = null
   let devModeBaseUrl = null
+  let devModeServerAttempted = false
+  let devModeServerFailureReason = null
   async function ensureDevModeServer() {
     if (devModeBaseUrl) return devModeBaseUrl
-    console.log('Starting vite dev server for auth-injected capture...')
+    if (devModeServerAttempted) return null // already failed once this run — don't retry per-screen
+    devModeServerAttempted = true
+
+    const candidateUrl = 'http://localhost:5183'
+    console.log('Starting vite dev server for auth-injected capture (port 5183)...')
+    let stderrTail = ''
     devModeServerProcess = trackProcess(spawn('npx', ['vite', 'dev', '--port', '5183', '--strictPort'], {
       cwd: ROOT,
       stdio: 'pipe',
     }))
-    devModeBaseUrl = 'http://localhost:5183'
-    const up = await waitForServer(devModeBaseUrl)
+    devModeServerProcess.stderr?.on('data', chunk => {
+      stderrTail = (stderrTail + chunk.toString()).slice(-2000)
+    })
+    devModeServerProcess.on('exit', (code, signal) => {
+      if (!devModeBaseUrl) {
+        devModeServerFailureReason = `vite dev process exited early (code=${code}, signal=${signal}) before becoming reachable.${stderrTail ? ` stderr: ${stderrTail}` : ''}`
+      }
+    })
+
+    // The dev server has to compile/transform on first request, which is
+    // slower than the static prod preview server this harness otherwise
+    // uses — give it materially more time than the default 60s before
+    // declaring auth-injected capture impossible for this run.
+    const DEV_SERVER_TIMEOUT_MS = 90000
+    const up = await waitForServer(candidateUrl, DEV_SERVER_TIMEOUT_MS)
     if (!up) {
-      console.error('  Could not start vite dev server for authenticated capture.')
+      devModeServerFailureReason = devModeServerFailureReason
+        || `vite dev server did not become reachable at ${candidateUrl} within ${DEV_SERVER_TIMEOUT_MS}ms.${stderrTail ? ` stderr: ${stderrTail}` : ''}`
+      console.error(`  FAILED to start vite dev server for authenticated capture: ${devModeServerFailureReason}`)
       killProcessHard(devModeServerProcess)
       devModeServerProcess = null
-      devModeBaseUrl = null
+      return null
     }
+
+    console.log(`  Dev server reachable at ${candidateUrl}.`)
+    devModeBaseUrl = candidateUrl
     return devModeBaseUrl
   }
 
@@ -319,7 +476,23 @@ async function main() {
         screenBaseUrl = devUrl
         usingDevModeAuth = true
       } else {
-        console.warn(`  Could not start dev server for ${screen.name} — falling back to production preview (will likely show ACCESS RESTRICTED).`)
+        // Do NOT fall back to the production preview server here — that
+        // server strips the DEV-only novee_admin_session hook, so the
+        // capture would always show ACCESS RESTRICTED. That looks like a
+        // real screen failure but is actually a harness setup failure.
+        // Recording it as an honest setup failure instead of a misleading
+        // "proof generated" artifact.
+        const reason = devModeServerFailureReason || 'Dev server for authenticated capture could not be started.'
+        console.error(`  AUTHENTICATED PROOF SETUP FAILED for ${screen.name}: ${reason}`)
+        results.push({
+          family: screen.family,
+          screen: screen.name,
+          route: screen.route,
+          requiresAuth: screen.requiresAuth,
+          authSetupFailed: true,
+          error: `Authenticated-proof setup failed — dev server unreachable, so no capture was attempted. Reason: ${reason}`,
+        })
+        continue
       }
     }
 
@@ -334,13 +507,45 @@ async function main() {
         window.localStorage.setItem(key, JSON.stringify({ role, grantedAt: Date.now(), source: 'visual-proof-harness' }))
       }, { key: 'novee_admin_session', role: screen.requiresAuth.role })
     }
+    let seededSession = null
+    if (screen.seedSmokeCraftStep) {
+      // Visual-proof-only progress seeding: writes the same
+      // `novee_guest_session` localStorage key src/services/sessionStorageService.js
+      // already reads/writes for real guest progress. VisitLockGuard (the
+      // real route guard) is never modified or bypassed in code — it simply
+      // sees completedSteps that look like a guest who legitimately finished
+      // every earlier session, exactly as it would for a real returning
+      // guest. A cold browser outside this harness has no such seeded
+      // localStorage and remains locked.
+      seededSession = buildSeededGuestSession(screen.seedSmokeCraftStep)
+      await context.addInitScript(({ key, value }) => {
+        window.localStorage.setItem(key, JSON.stringify(value))
+      }, { key: 'novee_guest_session', value: seededSession })
+    }
+    // Visual-proof-only network stub: app code legitimately points several
+    // images at googleusercontent.com (CraftImage fallbacks, member portraits,
+    // nav badges, etc.). This sandbox's outbound proxy cannot reach that host,
+    // so each request hangs until a slow proxy-tunnel failure instead of
+    // failing fast — with many such images on one page, there is almost
+    // always one in flight, and Playwright's `networkidle` wait never
+    // resolves. Aborting just these requests inside this Playwright context
+    // only affects this proof run; it does not touch the deployed app, which
+    // still issues normal requests to lh3.googleusercontent.com for real users.
+    await context.route('**://*.googleusercontent.com/**', route => route.abort())
+
     const page = await context.newPage()
     const url = `${screenBaseUrl}${screen.route}`
-    console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}${usingDevModeAuth ? ' (auth-injected dev server)' : ''}`)
+    console.log(`Capturing [${screen.family}] ${screen.route} -> ${url}${usingDevModeAuth ? ' (auth-injected dev server)' : ''}${seededSession ? ' (proof-only SmokeCraft progress seeded)' : ''}`)
     try {
       await withTimeout((async () => {
-        await page.goto(url, { waitUntil: 'networkidle', timeout: ROUTE_TIMEOUT_MS })
-        await page.waitForTimeout(800)
+        // `networkidle` was unreliable even with the googleusercontent.com
+        // abort above (other transient/long-poll requests can keep it from
+        // settling). Use `domcontentloaded` — which still fails the proof if
+        // the route genuinely doesn't load — plus a short settle delay for
+        // React to finish its first render pass before the screenshot.
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: ROUTE_TIMEOUT_MS })
+        await page.waitForSelector('#root', { timeout: ROUTE_TIMEOUT_MS }).catch(() => {})
+        await page.waitForTimeout(1200)
         const screenshotPath = path.join(OUT_DIR, `${screen.name}-rendered.png`)
         await page.screenshot({ path: screenshotPath, fullPage: false })
 
@@ -359,10 +564,24 @@ async function main() {
           viewport,
           timestamp: new Date().toISOString(),
           commitHash,
+          requiresAuth: screen.requiresAuth || null,
+          devServerUsed: usingDevModeAuth,
         }
 
         if (usingDevModeAuth) {
           meta.authInjected = { role: screen.requiresAuth.role, mode: 'dev-server novee_admin_session' }
+          console.log(`  Auth role injected: ${screen.requiresAuth.role} (novee_admin_session, dev server) — capturing real route.`)
+        }
+
+        if (seededSession) {
+          const stillLocked = /is locked/i.test(bodyText) && /Return on your next visit/i.test(bodyText)
+          meta.smokeCraftProgressSeeded = true
+          meta.seededSession = findVisitSession(screen.seedSmokeCraftStep)?.session ?? null
+          meta.routeUnlockedForProof = !stillLocked
+          if (stillLocked) {
+            meta.warning = `Progress was seeded for proof but the route still rendered LockedVisit.jsx. This is a real gating result, not fabricated — do not treat routeUnlockedForProof as true.`
+            console.warn(`  WARNING: ${meta.warning}`)
+          }
         }
 
         if (accessGated) {
@@ -407,13 +626,23 @@ async function main() {
 
   console.log('\nVisual proof artifacts written to docs/visual-proof/')
   for (const r of results) {
-    const status = r.error
-      ? `FAILED — ${r.error}`
-      : r.accessGated
-        ? 'proof generated, but BEHIND AUTH GATE — not a real screen comparison'
-        : (r.referenceFound ? 'proof generated' : 'NO PROOF — ' + (r.note || 'no reference image'))
+    const status = r.authSetupFailed
+      ? `AUTHENTICATED PROOF SETUP FAILED — ${r.error}`
+      : r.error
+        ? `FAILED — ${r.error}`
+        : r.accessGated
+          ? 'proof generated, but BEHIND AUTH GATE — not a real screen comparison'
+          : r.devServerUsed
+            ? `proof generated (auth role '${r.requiresAuth?.role}' injected — real authenticated route captured)`
+            : (r.referenceFound ? 'proof generated' : 'NO PROOF — ' + (r.note || 'no reference image'))
     console.log(`  - [${r.family}] ${r.screen}: ${status}`)
   }
+
+  const setupFailures = results.filter(r => r.authSetupFailed)
+  if (setupFailures.length > 0) {
+    console.error(`\n${setupFailures.length} authenticated-proof screen(s) failed setup — no misleading ACCESS RESTRICTED artifact was saved for these. Treat as a harness failure, not a screen failure.`)
+  }
+  return { authSetupFailureCount: setupFailures.length }
 }
 
 function exitNow(code) {
@@ -470,7 +699,7 @@ async function buildContactSheet({ chromiumPage, referencePath, renderedPath, ou
 }
 
 main()
-  .then(() => exitNow(0))
+  .then(result => exitNow(result?.authSetupFailureCount > 0 ? 1 : 0))
   .catch(async err => {
     console.error('I cannot render visual proof in this sandbox. Do not trust visual completion until this script runs in GitHub Actions or another browser-enabled environment.')
     console.error('Reason: unexpected error — ' + err.message)

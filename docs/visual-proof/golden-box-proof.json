@@ -1,12 +1,14 @@
 {
+  "family": "smokecraft",
   "screen": "golden-box",
-  "route": "/smokecraft/golden-box/status",
-  "referenceImage": "GOLDEN BOX JOURNEY11.png",
-  "referenceFound": true,
+  "route": "/smokecraft/golden-box",
+  "referenceImage": null,
+  "referenceFound": false,
   "viewport": {
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T19:31:17.426Z",
-  "commitHash": "de9c6c90"
+  "timestamp": "2026-06-26T08:58:02.443Z",
+  "commitHash": "494bf41b",
+  "note": "No reference mockup mapped to the plain /smokecraft/golden-box index route (the existing GOLDEN BOX JOURNEY11.png reference is mapped to /smokecraft/golden-box/status below). Ungated — no seeding needed."
 }
