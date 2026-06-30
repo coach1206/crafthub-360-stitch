@@ -82,6 +82,9 @@ export default function HowItWorks() {
         <p style={{ fontSize: 15, lineHeight: 1.7, color: 'rgba(244,236,218,0.65)', textAlign: 'center', marginBottom: 40 }}>
           From discovery to your personalized pairing — here's what to expect.
         </p>
+        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 28, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
+          <img src="/assets/smokecraft-reference/approved/smokecraft-how-it-works.png" alt="How SmokeCraft Works" style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 420, objectFit: 'cover', objectPosition: 'center top' }} />
+        </div>
 
         {STEPS.map(step => (
           <article
