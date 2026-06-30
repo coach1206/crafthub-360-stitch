@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 
 export default function FinalThird() {
-  const navigate = useNavigate()
   const { completeStep, addXP, setFinalThirdTasting } = useGuestSession()
   const [done, setDone] = useState(false)
 
@@ -29,15 +27,23 @@ export default function FinalThird() {
     })
     completeStep('final-third')
     addXP(5)
-    navigate('/smokecraft/scorecard')
   }
 
+  const hotspots = [
+    {
+      label: 'Continue to Scorecard',
+      x: 10, y: 75, width: 80, height: 20,
+      onClick: handleContinue,
+      to: '/smokecraft/scorecard',
+    },
+  ]
+
   return (
-    <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
-      <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-final-third.png"
-        alt="Final Third Tasting"
-      />
-    </div>
+    <SmokeCraftAssetRoute
+      src="/assets/smokecraft-reference/approved/smokecraft-final-third.png"
+      alt="Final Third Tasting"
+      hotspots={hotspots}
+      route="/smokecraft/final-third"
+    />
   )
 }
