@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 
 const TASTE_TAGS = ['Dark Cocoa', 'Cedar Smoke', 'Leather', 'Toasted Almond']
 
@@ -23,10 +23,19 @@ export default function SessionComplete() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const hotspots = [
+    {
+      label: 'Staff Handoff',
+      x: 10, y: 75, width: 80, height: 20,
+      to: '/pos3',
+    },
+  ]
+
   return (
-    <SmokeCraftAssetScreen
+    <SmokeCraftAssetRoute
       src="/assets/smokecraft-reference/approved/smokecraft-session-complete.png"
       alt="Session Complete"
+      hotspots={hotspots}
     />
   )
 }
