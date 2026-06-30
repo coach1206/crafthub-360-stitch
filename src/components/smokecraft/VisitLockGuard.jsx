@@ -2,7 +2,6 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useDemoMode } from '../../context/DemoModeContext.jsx'
 import { getVisitForStepId, isVisitUnlocked, VISIT_STRUCTURE } from '../../constants/session.js'
 import LockedVisit from '../../pages/smokecraft/LockedVisit.jsx'
-import DemoModeBanner from './DemoModeBanner.jsx'
 
 function isSessionComplete(completedSteps, sessionId) {
   return sessionId === 'entry' ? true : completedSteps.includes(sessionId)
@@ -31,8 +30,7 @@ function arePriorSessionsComplete(completedSteps, stepId) {
 /**
  * Wraps a SmokeCraft session page and locks it until the visit containing
  * `stepId` is unlocked AND all earlier sessions (by global order) are done.
- * In demo mode, the lock is bypassed entirely so reviewers can preview any
- * page, but a small banner makes clear progression isn't being saved.
+ * In demo mode, the lock is bypassed entirely so reviewers can preview any page.
  */
 export default function VisitLockGuard({ stepId, children }) {
   const { session } = useGuestSession()
@@ -44,16 +42,7 @@ export default function VisitLockGuard({ stepId, children }) {
     ? isVisitUnlocked(completedSteps, visitInfo.visit) && arePriorSessionsComplete(completedSteps, stepId)
     : true
 
-  if (unlocked) return children
-
-  if (isDemoMode) {
-    return (
-      <>
-        <DemoModeBanner />
-        {children}
-      </>
-    )
-  }
+  if (unlocked || isDemoMode) return children
 
   return <LockedVisit stepId={stepId} />
 }
