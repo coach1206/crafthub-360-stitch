@@ -38,15 +38,14 @@ export default function FlavorMemory() {
           style={{
             height: 280,
             borderColor: 'rgba(233,193,118,0.28)',
-            background: "url('/assets/smokecraft/cropped/flavor-memory-hero.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            position: 'relative',
             boxShadow: '0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
             display: 'flex',
             alignItems: 'flex-end',
             padding: 28,
           }}
         >
+          <img src="/assets/smokecraft-reference/approved/smokecraft-flavor-memory.png" alt="Flavor Memory" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
           <div
             className="w-full"
             style={{
