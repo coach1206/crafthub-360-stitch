@@ -296,6 +296,13 @@ export default function Identity() {
 
       <main className="relative z-10 pt-28 pb-36 px-margin max-w-[900px] mx-auto">
 
+        {/* Profile capture reference */}
+        <img
+          src="/assets/smokecraft-reference/approved/smokecraft-profile-capture.png"
+          alt="SmokeCraft profile capture"
+          style={{ display: 'block', margin: '0 auto 24px', width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '82vh', objectFit: 'contain' }}
+        />
+
         {/* Hero Block */}
         <div className="text-center mb-16" style={{ animation: 'slideIn 0.6s ease-out' }}>
 
@@ -347,15 +354,6 @@ export default function Identity() {
               </span>
             ))}
           </div>
-        </div>
-
-        {/* Profile capture reference */}
-        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 40, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
-          <img
-            src="/assets/smokecraft-reference/approved/smokecraft-profile-capture.png"
-            alt="SmokeCraft profile capture"
-            style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 400, objectFit: 'cover', objectPosition: 'center' }}
-          />
         </div>
 
         {/* Two-column details */}

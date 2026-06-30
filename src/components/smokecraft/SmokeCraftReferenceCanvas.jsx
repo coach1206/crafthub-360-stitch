@@ -1,11 +1,6 @@
 import { useState } from "react";
 
-export default function SmokeCraftReferenceCanvas({
-  src,
-  alt,
-  title,
-  children,
-}) {
+export default function SmokeCraftReferenceCanvas({ src, alt, title, children }) {
   const [failed, setFailed] = useState(false);
 
   return (
@@ -15,8 +10,8 @@ export default function SmokeCraftReferenceCanvas({
         background: "#050505",
         color: "#f5d28a",
         display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
+        flexDirection: "column",
+        alignItems: "center",
         padding: "0",
         margin: "0",
       }}
@@ -27,23 +22,11 @@ export default function SmokeCraftReferenceCanvas({
           maxWidth: "1440px",
           margin: "0 auto",
           padding: "0",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        {title ? (
-          <div
-            style={{
-              padding: "14px 18px",
-              borderBottom: "1px solid rgba(212,175,55,0.25)",
-              background: "#050505",
-              fontFamily: "serif",
-              fontSize: "20px",
-              color: "#f5d28a",
-            }}
-          >
-            {title}
-          </div>
-        ) : null}
-
         {failed ? (
           <div
             style={{
@@ -63,9 +46,10 @@ export default function SmokeCraftReferenceCanvas({
             onError={() => setFailed(true)}
             style={{
               display: "block",
-              width: "100%",
+              width: "auto",
               height: "auto",
-              maxWidth: "100%",
+              maxWidth: "100vw",
+              maxHeight: "100vh",
               objectFit: "contain",
               margin: "0 auto",
               border: "0",
@@ -78,6 +62,7 @@ export default function SmokeCraftReferenceCanvas({
         {children ? (
           <section
             style={{
+              width: "100%",
               maxWidth: "1180px",
               margin: "24px auto",
               padding: "24px",

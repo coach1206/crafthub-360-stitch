@@ -124,7 +124,7 @@ export default function SessionComplete() {
 
       <main className="relative pt-32 pb-40 px-gutter max-w-[1440px] mx-auto">
         {/* Hero Section */}
-        <img src="/assets/smokecraft-reference/approved/smokecraft-session-complete.png" alt="SmokeCraft Session Complete" style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain', marginBottom: 36 }} />
+        <img src="/assets/smokecraft-reference/approved/smokecraft-session-complete.png" alt="SmokeCraft Session Complete" style={{ display: 'block', margin: '0 auto 36px', width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '82vh', objectFit: 'contain' }} />
         <section className="mb-16 text-center">
           <h2 className="font-display-lg text-display-lg text-primary mb-4">Journey Concluded</h2>
           <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">

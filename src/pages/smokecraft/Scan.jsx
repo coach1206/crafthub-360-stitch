@@ -30,7 +30,7 @@ export default function Scan() {
       </header>
 
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-        <img src="/assets/smokecraft-reference/approved/smokecraft-scan.png" alt="SmokeCraft Scan" style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain', marginBottom: 28, maxWidth: 640 }} />
+        <img src="/assets/smokecraft-reference/approved/smokecraft-scan.png" alt="SmokeCraft Scan" style={{ display: 'block', margin: '0 auto 28px', width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '82vh', objectFit: 'contain' }} />
         <div
           style={{ width: 'min(420px,100%)', borderRadius: 22, border: '1.5px solid rgba(233,193,118,0.6)', padding: '32px 28px 28px', textAlign: 'center', background: 'linear-gradient(180deg, rgba(20,14,9,0.97), rgba(8,5,3,0.98))', boxShadow: '0 32px 90px rgba(0,0,0,0.7), 0 0 36px rgba(233,193,118,0.18)' }}
         >
