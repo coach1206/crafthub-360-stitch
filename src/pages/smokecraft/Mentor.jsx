@@ -176,6 +176,14 @@ export default function Mentor() {
             </p>
           </div>
 
+          <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', margin: '24px 0', boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
+            <img
+              src="/assets/smokecraft-reference/approved/smokecraft-mentor-selection.png"
+              alt="SmokeCraft mentor selection"
+              style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 400, objectFit: 'cover', objectPosition: 'center' }}
+            />
+          </div>
+
           <SmokeCraftPassportUploadCard
             identity={{
               sessionId: session?.sessionId,

@@ -93,8 +93,8 @@ export default function FinalThird() {
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(26px,4vw,40px)' }}>Final Third — Tasting</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth:560 }}>The finish. Note the final flavors and how the cigar concludes.</p>
 
-        <div className="rounded-2xl border border-primary/15 mb-10" style={{ background: '#0a0a0b', padding: 16 }}>
-          <img src="/final-third-tasting.png" alt="Final third tasting guide" style={{ width: '100%', maxHeight: '85vh', objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+        <div className="rounded-2xl border border-primary/20 mb-10 overflow-hidden" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.45)', borderColor: 'rgba(233,193,118,0.28)' }}>
+          <img src="/assets/smokecraft-reference/approved/smokecraft-final-third.png" alt="Final third tasting" style={{ width: '100%', maxHeight: 400, objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1fr_360px] items-start">

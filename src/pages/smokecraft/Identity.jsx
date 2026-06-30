@@ -349,6 +349,15 @@ export default function Identity() {
           </div>
         </div>
 
+        {/* Profile capture reference */}
+        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 40, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
+          <img
+            src="/assets/smokecraft-reference/approved/smokecraft-profile-capture.png"
+            alt="SmokeCraft profile capture"
+            style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 400, objectFit: 'cover', objectPosition: 'center' }}
+          />
+        </div>
+
         {/* Two-column details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter mb-12">
 
