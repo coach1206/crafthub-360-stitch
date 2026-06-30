@@ -545,9 +545,7 @@ export default function Leaderboard() {
       {/* ── main content — 2-column grid ── */}
       <main className="smokecraft-ranking-main" style={{ position: 'relative', zIndex: 10, paddingTop: 96, paddingBottom: 148 }}>
         <div style={{ maxWidth: 1100, margin: '0 auto 28px', padding: '0 16px' }}>
-          <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
-            <img src="/assets/smokecraft-reference/approved/smokecraft-leaderboard.png" alt="SmokeCraft Leaderboard" style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 420, objectFit: 'cover', objectPosition: 'center top' }} />
-          </div>
+          <img src="/assets/smokecraft-reference/approved/smokecraft-leaderboard.png" alt="SmokeCraft Leaderboard" style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain' }} />
         </div>
         {/* ── Your SmokeCraft Session — real session data, separate from the demo board below ── */}
         <div style={{ maxWidth: 1100, margin: '0 auto 18px', padding: '0 16px' }}>

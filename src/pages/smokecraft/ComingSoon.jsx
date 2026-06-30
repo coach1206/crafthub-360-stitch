@@ -51,9 +51,7 @@ export default function ComingSoon({ stepLabel, stepNumber, totalSteps = 20, sti
         </div>
 
         {referenceImage && (
-          <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 28, boxShadow: '0 20px 60px rgba(0,0,0,0.45)', width: '100%', maxWidth: 640 }}>
-            <img src={referenceImage} alt={referenceImageAlt || stepLabel} style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 420, objectFit: 'cover', objectPosition: 'center top' }} />
-          </div>
+          <img src={referenceImage} alt={referenceImageAlt || stepLabel} style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain', marginBottom: 28, maxWidth: 900 }} />
         )}
         <h2 className="smokecraft-premium-title mb-4 leading-tight">
           {stepLabel}

@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import SmokeCraftReferenceCanvas from '../../components/smokecraft/SmokeCraftReferenceCanvas.jsx'
 
 const RECOMMENDATIONS = [
-  { id: 'stepup', label: 'Step-Up Pick', desc: 'A slightly bolder cigar than your first, building on what you liked.' },
-  { id: 'bestmatch', label: 'Best Match', desc: 'Closely mirrors the flavor profile you rated highest last time.' },
-  { id: 'venue', label: 'Venue Featured Pick', desc: "Tonight's house recommendation from the humidor team." },
+  { id: 'stepup',    label: 'Step-Up Pick',        desc: 'A slightly bolder cigar than your first, building on what you liked.' },
+  { id: 'bestmatch', label: 'Best Match',           desc: 'Closely mirrors the flavor profile you rated highest last time.' },
+  { id: 'venue',     label: 'Venue Featured Pick',  desc: "Tonight's house recommendation from the humidor team." },
 ]
 
 export default function SecondHumidorMatch() {
@@ -25,47 +26,32 @@ export default function SecondHumidorMatch() {
   }
 
   return (
-    <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
-      <div className="fixed inset-0 z-0 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/smokecraft/cropped/second-humidor-match-bg.jpg')", opacity: 0.85 }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(19,19,20,0.68) 0%,rgba(19,19,20,0.42) 45%,rgba(19,19,20,0.75) 100%)' }} />
-      </div>
-      <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">
-        <button className="material-symbols-outlined text-primary p-2 rounded-full hover:bg-surface-variant/50 transition-colors" style={{ minWidth: 48, minHeight: 48 }} onClick={() => navigate('/smokecraft/smokecraft-challenge')} aria-label="Back">arrow_back</button>
-        <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CraftHub 360</h1>
-      </header>
-      <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
-        <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360 — Visit 7</p>
-        <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>Second Humidor Match</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth: 560 }}>Time for your second cigar of the journey. Choose the recommendation that fits tonight.</p>
-        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 28, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
-          <img src="/assets/smokecraft-reference/approved/smokecraft-second-humidor-match.png" alt="Second Humidor Match" style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 420, objectFit: 'cover', objectPosition: 'center top' }} />
-        </div>
-
-        <div className="grid sm:grid-cols-3 gap-3 mb-12">
-          {RECOMMENDATIONS.map(r => { const on = choice === r.id; return (
-            <button key={r.id} type="button" onClick={() => { triggerHaptic('light'); setChoice(r.id) }}
-              className="sc-tactile text-left rounded-2xl border transition-all duration-300 active:scale-[0.98]"
-              style={{ padding: 20, background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', borderColor: on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)' }}>
-              <p className="font-label-lg text-label-lg font-semibold" style={{ color: on ? '#e9c176' : undefined }}>{r.label}</p>
-              <p className="font-body-md text-body-md text-on-surface-variant mt-1">{r.desc}</p>
+    <SmokeCraftReferenceCanvas
+      src="/assets/smokecraft-reference/approved/smokecraft-second-humidor-match.png"
+      alt="Second Humidor Match"
+    >
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginBottom: 20 }}>
+        {RECOMMENDATIONS.map(r => {
+          const on = choice === r.id
+          return (
+            <button key={r.id} type="button" onClick={() => { triggerHaptic('light'); setChoice(r.id) }} className="sc-tactile"
+              style={{ padding: '16px 18px', borderRadius: 14, border: `1px solid ${on ? 'rgba(233,193,118,0.4)' : 'rgba(255,255,255,0.08)'}`, background: on ? 'rgba(233,193,118,0.08)' : 'rgba(255,255,255,0.03)', cursor: 'pointer', textAlign: 'left' }}>
+              <p style={{ fontSize: 13, fontWeight: 700, color: on ? '#e9c176' : '#f5d28a', marginBottom: 4 }}>{r.label}</p>
+              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', lineHeight: 1.4 }}>{r.desc}</p>
             </button>
-          )})}
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4">
-          <button onClick={handleContinue}
-            className="sc-tactile flex items-center justify-center gap-3 font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl active:scale-95 transition-all duration-300 w-full sm:w-auto"
-            style={{ height: 64, paddingInline: 40, background: 'linear-gradient(135deg,#e9c176,#c5a059)', color: '#131314', boxShadow: '0 4px 20px rgba(233,193,118,0.3)' }}>
-            Continue <span className="material-symbols-outlined">arrow_forward</span>
-          </button>
-          <button onClick={() => navigate('/smokecraft/smokecraft-challenge')}
-            className="flex items-center justify-center gap-3 text-primary font-label-lg text-label-lg uppercase tracking-[0.15em] rounded-xl border border-primary/30 hover:bg-primary/10 active:scale-95 transition-all duration-300 w-full sm:w-auto"
-            style={{ height: 64, paddingInline: 32 }}>
-            <span className="material-symbols-outlined">arrow_back</span> Back
-          </button>
-        </div>
-      </main>
-    </div>
+          )
+        })}
+      </div>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <button onClick={handleContinue} className="sc-tactile"
+          style={{ height: 56, padding: '0 32px', borderRadius: 12, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#e9c176,#c5a059)', color: '#131314', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 900, letterSpacing: '0.14em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8 }}>
+          Continue <span className="material-symbols-outlined">arrow_forward</span>
+        </button>
+        <button onClick={() => navigate('/smokecraft/smokecraft-challenge')} className="sc-tactile"
+          style={{ height: 56, padding: '0 24px', borderRadius: 12, border: '1px solid rgba(212,175,55,0.3)', background: 'transparent', color: '#e9c176', cursor: 'pointer', fontFamily: '"JetBrains Mono",monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span className="material-symbols-outlined">arrow_back</span> Back
+        </button>
+      </div>
+    </SmokeCraftReferenceCanvas>
   )
 }
