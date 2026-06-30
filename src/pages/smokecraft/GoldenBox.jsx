@@ -38,10 +38,10 @@ function GoldenBoxHeroImage() {
   if (!failed) {
     return (
       <img
-        src={smokeCraftAssets.goldenBoxHero}
-        alt="Golden Box"
+        src="/assets/smokecraft-reference/approved/smokecraft-gold-box-rules.png"
+        alt="Golden Box — SmokeCraft 360"
         onError={() => setFailed(true)}
-        style={{ maxWidth: 620, width: '100%', height: 'auto', display: 'block', margin: '0 auto', borderRadius: 16 }}
+        style={{ maxWidth: 680, width: '100%', height: 'auto', display: 'block', margin: '0 auto', borderRadius: 16 }}
       />
     )
   }

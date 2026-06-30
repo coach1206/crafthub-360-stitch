@@ -151,8 +151,8 @@ export default function FlavorDNA() {
 
   return (
     <div style={S.page}>
-      {/* Smoke texture overlay */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundImage: "url('/assets/smokecraft-reference/approved/smokecraft-flavor-dna.png')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.12, pointerEvents: 'none' }} />
+      {/* Smoke texture overlay — kept subtle intentionally; visible panel is rendered in main below */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundImage: "url('/assets/smokecraft-reference/approved/smokecraft-flavor-dna.png')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.08, pointerEvents: 'none' }} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundImage: 'radial-gradient(circle at 25% 20%, rgba(255,255,255,0.025) 0%, transparent 45%), radial-gradient(circle at 75% 65%, rgba(255,255,255,0.02) 0%, transparent 40%)', opacity: 0.15, pointerEvents: 'none' }} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, background: 'radial-gradient(ellipse at 20% 60%, rgba(212,175,55,0.05) 0%, transparent 60%)', pointerEvents: 'none' }} />
 
@@ -191,9 +191,18 @@ export default function FlavorDNA() {
 
 
         {/* Title */}
-        <div style={{ textAlign: 'center', marginBottom: 36 }}>
+        <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <h2 style={{ fontFamily: '"Playfair Display",serif', fontSize: 'clamp(32px,5vw,52px)', fontWeight: 700, color: '#EDE8DF', marginBottom: 10 }}>Sensory Profile</h2>
           <p style={{ fontSize: 15, color: '#7A6A50' }}>Build your Flavor DNA to unlock personalized cigar experiences.</p>
+        </div>
+
+        {/* Approved reference image — visible hero panel */}
+        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.28)', marginBottom: 36, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
+          <img
+            src="/assets/smokecraft-reference/approved/smokecraft-flavor-dna.png"
+            alt="Flavor DNA — sensory profile"
+            style={{ display: 'block', width: '100%', maxHeight: 380, objectFit: 'cover', objectPosition: 'center' }}
+          />
         </div>
 
         {/* ── Atmosphere Card ──────────────────────────────── */}

@@ -310,10 +310,11 @@ export default function PassportStamp() {
         >
           <div
             className="mx-auto mb-8 rounded-2xl overflow-hidden border border-primary/25 shadow-2xl"
-            style={{ maxWidth: 220, aspectRatio: '480/941' }}
+            style={{ maxWidth: 680, width: '100%' }}
           >
             <PassportStampImage
-              className="w-full h-full object-cover"
+              className="w-full h-auto block"
+              style={{ maxHeight: 380, objectFit: 'cover', objectPosition: 'center' }}
               src="/assets/smokecraft-reference/approved/smokecraft-passport-stamp.png"
               alt="SmokeCraft 360 Passport, certified"
             />

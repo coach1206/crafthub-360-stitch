@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import { LeafIcon, CheckIcon, ArrowForwardIcon, ArrowBackIcon, DeckIcon, GlassIcon, MusicIcon, WeatherIcon, GroupsIcon, MoodIcon, EventIcon, FlaskIcon } from '../../components/smokecraft/PremiumIcons.jsx'
+import SmokeCraftVisualPanel from '../../components/smokecraft/SmokeCraftVisualPanel.jsx'
 import PairingScorePanel from '../../components/smokecraft/PairingScorePanel.jsx'
 import UniqueBlendPanel from '../../components/smokecraft/UniqueBlendPanel.jsx'
 import { calculatePairingScore, applyKeptWarningPenalty } from '../../services/smokecraft/smokePairingScoreService.js'
@@ -216,6 +217,13 @@ export default function SeedSoil() {
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-1">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize:'clamp(28px,4vw,44px)', fontFamily: '"Playfair Display", Georgia, serif' }}>Seed &amp; Soil Pairing</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-4" style={{ maxWidth:680 }}>Select the tobacco growing region that defines the character of tonight's cigar (the Seed), then tell us about tonight's setting (the Soil) so we can explain why the pairing works.</p>
+
+        <SmokeCraftVisualPanel
+          src="/assets/smokecraft-reference/approved/smokecraft-seed-soil.png"
+          alt="Seed and Soil — tobacco growing regions"
+          eyebrow="Seed & Soil"
+          title="Region shapes character"
+        />
 
         <div className="grid gap-4 mb-5" style={{ gridTemplateColumns: 'minmax(0,1.05fr) minmax(320px,0.95fr)', alignItems: 'start' }}>
         <div
