@@ -37,7 +37,10 @@ export default function SecondHumidorMatch() {
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360 — Visit 7</p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>Second Humidor Match</h2>
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth: 560 }}>Time for your second cigar of the journey. Choose the recommendation that fits tonight.</p>
+        <p className="font-body-lg text-body-lg text-on-surface-variant mb-6" style={{ maxWidth: 560 }}>Time for your second cigar of the journey. Choose the recommendation that fits tonight.</p>
+        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 28, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
+          <img src="/assets/smokecraft-reference/approved/smokecraft-second-humidor-match.png" alt="Second Humidor Match" style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 420, objectFit: 'cover', objectPosition: 'center top' }} />
+        </div>
 
         <div className="grid sm:grid-cols-3 gap-3 mb-12">
           {RECOMMENDATIONS.map(r => { const on = choice === r.id; return (
