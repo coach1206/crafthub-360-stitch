@@ -104,6 +104,9 @@ export default function EventChallenge() {
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">SmokeCraft 360</p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>Event Challenge</h2>
         <p className="font-body-md text-body-md text-on-surface-variant mb-6">{identity ? `Active session for ${identity}.` : 'Active guest session — no profile name recorded yet.'}</p>
+        <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.28)', marginBottom: 28, boxShadow: '0 20px 60px rgba(0,0,0,0.45)' }}>
+          <img src="/assets/smokecraft-reference/approved/smokecraft-event-challenge.png" alt="Event Challenge" style={{ display: 'block', width: '100%', minHeight: 260, maxHeight: 420, objectFit: 'cover', objectPosition: 'center top' }} />
+        </div>
 
         <section
           className="rounded-2xl border mb-6"
