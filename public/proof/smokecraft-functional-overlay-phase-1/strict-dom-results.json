@@ -1,0 +1,58 @@
+{
+  "passed": 3,
+  "total": 3,
+  "failed": [],
+  "results": [
+    {
+      "route": "/smokecraft",
+      "name": "01-smokecraft-index",
+      "pass": true,
+      "bodyTextLength": 0,
+      "bodyTextPreview": "",
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-landing.png",
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "failTermsFound": [],
+      "hotspotButtonCount": 1
+    },
+    {
+      "route": "/smokecraft/identity",
+      "name": "02-smokecraft-identity",
+      "pass": true,
+      "bodyTextLength": 0,
+      "bodyTextPreview": "",
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-profile-capture.png",
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "failTermsFound": [],
+      "hotspotButtonCount": 1
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "name": "03-session-complete",
+      "pass": true,
+      "bodyTextLength": 0,
+      "bodyTextPreview": "",
+      "visibleImageCount": 1,
+      "mainImageSrc": "/assets/smokecraft-reference/approved/smokecraft-session-complete.png",
+      "headerExists": false,
+      "navExists": false,
+      "asideExists": false,
+      "formExists": false,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "failTermsFound": [],
+      "hotspotButtonCount": 1
+    }
+  ]
+}
