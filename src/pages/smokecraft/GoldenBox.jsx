@@ -2,9 +2,9 @@ import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRou
 
 const HOTSPOTS = [
   {
-    label: 'Continue to Humidor Match',
+    label: 'Continue to Mentor Selection',
     x: 10, y: 75, width: 80, height: 20,
-    to: '/smokecraft/humidor-match',
+    to: '/smokecraft/mentor-selection',
   },
 ]
 

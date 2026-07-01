@@ -2,9 +2,9 @@ import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRou
 
 const HOTSPOTS = [
   {
-    label: 'Continue',
+    label: 'Continue to Gold Box',
     x: 10, y: 75, width: 80, height: 20,
-    to: '/smokecraft/seed-soil',
+    to: '/smokecraft/golden-box',
   },
 ]
 

@@ -15,7 +15,7 @@ export default function PairingLab() {
     triggerHaptic('medium')
     completeStep('pairing-lab')
     addXP(75)
-    navigate('/smokecraft/humidor-match')
+    navigate('/smokecraft/visit-complete')
   }
 
   return (

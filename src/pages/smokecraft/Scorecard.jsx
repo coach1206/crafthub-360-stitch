@@ -2,9 +2,9 @@ import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRou
 
 const HOTSPOTS = [
   {
-    label: 'Continue to Passport Stamp',
+    label: 'Continue to Final Review',
     x: 10, y: 75, width: 80, height: 20,
-    to: '/smokecraft/passport-stamp',
+    to: '/smokecraft/final-review',
   },
 ]
 
