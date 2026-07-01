@@ -50,38 +50,35 @@ These are Visits 2, 3, 7, and 8 session members currently bypassed in the main h
 
 ---
 
-## B. Side/Optional Route Audit Table
+## B. Master Side/Optional Route Audit Table (18 routes total)
 
-### Routes specified in Phase 2E scope
+### Routes specified in Phase 2E scope (10)
 
 | Route | File | Current Image | Has Hotspot | Should Have Hotspot | Next Route if Yes | Side Effects | In Linear Chain | Touch Risk | Recommendation |
 |-------|------|--------------|-------------|---------------------|-------------------|--------------|----------------|------------|----------------|
 | `/smokecraft/origins` | `Origins.jsx` | `smokecraft-origins.png` | NO — bare SmokeCraftAssetScreen | NO | N/A | none | NO — standalone/hub | Low | LEAVE STATIC |
-| `/smokecraft/flavor-dna` | `FlavorDNA.jsx` | `smokecraft-flavor-dna.png` | NO — bare SmokeCraftAssetScreen | NO | none | NO — hub link | Low | LEAVE STATIC |
-| `/smokecraft/pairing` | `Pairing.jsx` | `smokecraft-pairing.png` | NO — bare SmokeCraftAssetScreen | NO | none | NO — Visit 2+ multi-path | Low | LEAVE STATIC |
-| `/smokecraft/pairing-lab` | `PairingLab.jsx` | `smokecraft-pairing-lab.png` | NO — div onClick (wraps SmokeCraftAssetScreen) | YES — has side effects, routes to humidor-match | `/smokecraft/humidor-match` | `completeStep('pairing-lab')`, `addXP(75)`, haptic | YES — Session 8, Visit 3 | Medium — has div onClick, needs conversion to SmokeCraftAssetRoute | RESTORE INTO FLOW |
-| `/smokecraft/pairing-mastery` | `PairingMastery.jsx` | `smokecraft-pairing-mastery.png` | NO — ComingSoon wrapper with div onClick → `/smokecraft/vitola` | Deferred | `/smokecraft/vitola` | none current | NO — optional side path | HIGH — ComingSoon shared component, div onClick conflict | LEAVE STATIC (ComingSoon conflict — see Section C) |
-| `/smokecraft/terroir` | `Terroir.jsx` | `smokecraft-terroir.png` | NO — ComingSoon wrapper with div onClick → `/smokecraft/pairing-mastery` | Deferred | none current | NO — optional side path | HIGH — same ComingSoon conflict | LEAVE STATIC (ComingSoon conflict — see Section C) |
-| `/smokecraft/vitola` | `Vitola.jsx` | `smokecraft-vitola.png` | NO — ComingSoon wrapper with div onClick → `/smokecraft/identity` | Deferred | none current | NO — optional side path | HIGH — same ComingSoon conflict | LEAVE STATIC (ComingSoon conflict — see Section C) |
-| `/smokecraft/event-challenge` | `EventChallenge.jsx` | `smokecraft-event-challenge.png` | NO — bare SmokeCraftAssetScreen | NO | none | NO — event-triggered, no nav target defined | Low | LEAVE STATIC |
-| `/smokecraft/leaderboard` | `Leaderboard.jsx` | `smokecraft-leaderboard.png` | NO — bare SmokeCraftAssetScreen | NO | none | NO — reward/status screen | Low | LEAVE STATIC |
-| `/smokecraft/golden-box/status` | `GoldenBoxStatus.jsx` | `smokecraft-golden-box-status.png` | NO — bare SmokeCraftAssetScreen | NO | none | NO — sub-route, golden-box nested | Low | LEAVE STATIC |
+| `/smokecraft/flavor-dna` | `FlavorDNA.jsx` | `smokecraft-flavor-dna.png` | NO — bare SmokeCraftAssetScreen | NO | N/A | none | NO — hub link | Low | LEAVE STATIC |
+| `/smokecraft/pairing` | `Pairing.jsx` | `smokecraft-pairing.png` | NO — bare SmokeCraftAssetScreen | NO | N/A | none | NO — Visit 2+ multi-path | Low | LEAVE STATIC |
+| `/smokecraft/pairing-lab` | `PairingLab.jsx` | `smokecraft-pairing-lab.png` | NO — div onClick → `/smokecraft/humidor-match` | YES | `/smokecraft/humidor-match` | `completeStep('pairing-lab')`, `addXP(75)`, haptic | YES — Session 8, Visit 3 | Medium — div onClick, needs SmokeCraftAssetRoute conversion | RESTORE INTO FLOW |
+| `/smokecraft/pairing-mastery` | `PairingMastery.jsx` | `smokecraft-pairing-mastery.png` | NO — ComingSoon wrapper, div onClick → `/smokecraft/vitola` | Deferred | `/smokecraft/vitola` | none | NO — optional side path | HIGH — ComingSoon shared component conflict | LEAVE STATIC (ComingSoon conflict — see Section C) |
+| `/smokecraft/terroir` | `Terroir.jsx` | `smokecraft-terroir.png` | NO — ComingSoon wrapper, div onClick → `/smokecraft/pairing-mastery` | Deferred | none | NO — optional side path | HIGH — same ComingSoon conflict | LEAVE STATIC (ComingSoon conflict — see Section C) |
+| `/smokecraft/vitola` | `Vitola.jsx` | `smokecraft-vitola.png` | NO — ComingSoon wrapper, div onClick → `/smokecraft/identity` | Deferred | none | NO — optional side path | HIGH — same ComingSoon conflict | LEAVE STATIC (ComingSoon conflict — see Section C) |
+| `/smokecraft/event-challenge` | `EventChallenge.jsx` | `smokecraft-event-challenge.png` | NO — bare SmokeCraftAssetScreen | NO | N/A | none | NO — event-triggered, no nav target defined | Low | LEAVE STATIC |
+| `/smokecraft/leaderboard` | `Leaderboard.jsx` | `smokecraft-leaderboard.png` | NO — bare SmokeCraftAssetScreen | NO | N/A | none | NO — reward/status screen | Low | LEAVE STATIC |
+| `/smokecraft/golden-box/status` | `GoldenBoxStatus.jsx` | `smokecraft-golden-box-status.png` | NO — bare SmokeCraftAssetScreen | NO | N/A | none | NO — sub-route, golden-box nested | Low | LEAVE STATIC |
 
----
-
-### Additional side routes found in repo (not listed in Phase 2E scope but present)
+### Additional side routes found in repo (8)
 
 | Route | File | Current Image | Has Hotspot | Side Effects | In VISIT_STRUCTURE | Recommendation |
 |-------|------|--------------|-------------|--------------|-------------------|----------------|
-| `/smokecraft/art` | `Art.jsx` | `smokecraft-art.png` | NO — div onClick → `/smokecraft/mentor` | `addXP(50)`, `addBadge('art-appreciation')`, `completeStep('art')` | NO — not in VISIT_STRUCTURE | NEEDS FUNCTIONAL REVIEW — has side effects but step `art` is not in VISIT_STRUCTURE; currently using div onClick, no approved sequence position |
-| `/smokecraft/guest-pass` | `GuestPass.jsx` | `smokecraft-guest-pass.png` | NO — div onClick → `/smokecraft/enroll` | haptic only | NO | ADD HOTSPOT LATER — entry/onboarding screen, no session side effects, good candidate for SmokeCraftAssetRoute conversion |
-| `/smokecraft/how-it-works` | `HowItWorks.jsx` | `smokecraft-how-it-works.png` | NO — div onClick → `/smokecraft/enroll` | haptic only | NO | ADD HOTSPOT LATER — onboarding screen, no session side effects, good candidate |
-| `/smokecraft/scan` | `Scan.jsx` | `smokecraft-scan.png` | NO — div onClick → `/smokecraft/enroll` | haptic only | NO | ADD HOTSPOT LATER — entry scan screen, same pattern |
-| `/smokecraft/smokecraft-challenge` | `SmokeCraftChallenge.jsx` | `smokecraft-challenge.png` | NO — div onClick → `/smokecraft/second-humidor-match` | `completeStep('smokecraft-challenge')`, `addXP(75)`, haptic | YES — Session 17, Visit 7 | RESTORE INTO FLOW — Visit 7 session, has correct side effects, needs SmokeCraftAssetRoute conversion |
+| `/smokecraft/art` | `Art.jsx` | `smokecraft-art.png` | NO — div onClick → `/smokecraft/mentor` | `addXP(50)`, `addBadge('art-appreciation')`, `completeStep('art')` | NO — step `art` absent from VISIT_STRUCTURE | NEEDS FUNCTIONAL REVIEW — side effects present but no approved sequence position |
+| `/smokecraft/guest-pass` | `GuestPass.jsx` | `smokecraft-guest-pass.png` | NO — div onClick → `/smokecraft/enroll` | haptic only | NO | ADD HOTSPOT LATER — onboarding entry screen, no session side effects |
+| `/smokecraft/how-it-works` | `HowItWorks.jsx` | `smokecraft-how-it-works.png` | NO — div onClick → `/smokecraft/enroll` | haptic only | NO | ADD HOTSPOT LATER — onboarding screen, no session side effects |
+| `/smokecraft/scan` | `Scan.jsx` | `smokecraft-scan.png` | NO — div onClick → `/smokecraft/enroll` | haptic only | NO | ADD HOTSPOT LATER — entry scan screen, no session side effects |
+| `/smokecraft/smokecraft-challenge` | `SmokeCraftChallenge.jsx` | `smokecraft-challenge.png` | NO — div onClick → `/smokecraft/second-humidor-match` | `completeStep('smokecraft-challenge')`, `addXP(75)`, haptic | YES — Session 17, Visit 7 | RESTORE INTO FLOW — entry point into Visit 7 chain; no upstream route wired to it yet |
 | `/smokecraft/second-humidor-match` | `SecondHumidorMatch.jsx` | `smokecraft-second-humidor-match.png` | NO — div onClick → `/smokecraft/mini-tasting` | `completeStep('second-humidor-match')`, `addXP(75)`, haptic | YES — Session 18, Visit 7 | RESTORE INTO FLOW — Visit 7 session |
 | `/smokecraft/mini-tasting` | `MiniTastingRound.jsx` | `smokecraft-mini-tasting-round.png` | NO — div onClick → `/smokecraft/final-review` | `completeStep('mini-tasting')`, `addXP(75)`, haptic | YES — Session 19, Visit 7 | RESTORE INTO FLOW — Visit 7 session |
-| `/smokecraft/final-review` | `FinalReview.jsx` | `smokecraft-final-review.png` | NO — div onClick → `/smokecraft/passport-stamp` | `completeStep('final-review')`, `addXP(100)`, haptic | YES — Session 20, Visit 8 | RESTORE INTO FLOW — sits between mini-tasting and passport-stamp per VISIT_STRUCTURE; currently bypassed in main chain (scorecard → passport-stamp skips final-review) |
-| `/smokecraft/pairing-lab` | `PairingLab.jsx` | `smokecraft-pairing-lab.png` | NO — div onClick → `/smokecraft/humidor-match` | `completeStep('pairing-lab')`, `addXP(75)`, haptic | YES — Session 8, Visit 3 | RESTORE INTO FLOW — sits between seed-soil and humidor-match per VISIT_STRUCTURE; currently bypassed |
+| `/smokecraft/final-review` | `FinalReview.jsx` | `smokecraft-final-review.png` | NO — div onClick → `/smokecraft/passport-stamp` | `completeStep('final-review')`, `addXP(100)`, haptic | YES — Session 20, Visit 8 | RESTORE INTO FLOW — bypassed in current chain; scorecard → passport-stamp skips it |
 
 ---
 
