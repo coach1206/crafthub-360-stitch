@@ -1,16 +1,5 @@
-/**
- * LockedSmokeCraftScreen
- *
- * Full-screen lock screen shown by SmokeCraftSessionGuard when the requested
- * session hasn't been unlocked yet. Dark/gold/premium aesthetic — no generic
- * dashboard styling.
- *
- * Props:
- *   sessionNumber  — 1–24 locked session number
- */
 import { useNavigate } from 'react-router-dom'
 import {
-  getSessionByNumber,
   getVisitBySession,
   getLockedReason,
   getCurrentAllowedSession,
@@ -18,167 +7,147 @@ import {
 } from '../../constants/smokecraftJourney.js'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 
+const LOCKED_ASSETS = {
+  21: '/smokecraft-passport-stamp-locked.png',
+  22: '/smokecraft-connections-locked.png',
+  23: '/smokecraft-management-sync-locked.png',
+}
+const DEFAULT_LOCKED_ASSET = '/smokecraft-future-visit-locked.png'
+
 export default function LockedSmokeCraftScreen({ sessionNumber }) {
   const navigate = useNavigate()
-  const { isDemoMode, isLocalPreviewMode, modeLabel, isSessionUnlocked: checkUnlocked } = useSmokeCraftProgress()
+  const { isDemoMode, isLocalPreviewMode, modeLabel } = useSmokeCraftProgress()
 
-  const session = getSessionByNumber(sessionNumber)
-  const visit   = getVisitBySession(sessionNumber)
+  const visit      = getVisitBySession(sessionNumber)
   const visitNumber = visit?.visit || 1
   const visitTitle  = visit?.title || 'Next Visit'
-
-  // Derive the "current allowed" to navigate back to
-  // We use getCurrentAllowedSession directly with no-progress signal so we
-  // always send them somewhere useful, even if context isn't available.
-  const allowedRoute = (() => {
-    try {
-      const allowed = getCurrentAllowedSession([])
-      return allowed?.route || '/smokecraft'
-    } catch (_) {
-      return '/smokecraft'
-    }
-  })()
-
   const lockedReason = getLockedReason(sessionNumber, [])
 
+  const imgSrc = LOCKED_ASSETS[sessionNumber] || DEFAULT_LOCKED_ASSET
+
   return (
-    <div
+    <section
       style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(160deg,#0a0603 0%,#0f0a06 60%,#0a0603 100%)',
+        position: 'relative',
+        width: '100%',
+        height: '100vh',
+        overflow: 'hidden',
+        background: '#050505',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        fontFamily: 'Georgia, serif',
-        padding: '2rem 1.5rem',
-        textAlign: 'center',
       }}
     >
-      {/* Lock icon */}
+      {/* Full-screen asset image */}
+      <img
+        src={imgSrc}
+        alt={`Locked — Visit ${visitNumber} of ${TOTAL_VISITS}: ${visitTitle}`}
+        style={{
+          display: 'block',
+          maxWidth: '100%',
+          maxHeight: '100vh',
+          width: 'auto',
+          height: 'auto',
+          objectFit: 'contain',
+          objectPosition: 'center center',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Hotspot / overlay layer */}
       <div
         style={{
-          width: 88,
-          height: 88,
-          borderRadius: '50%',
+          position: 'absolute',
+          inset: 0,
+          zIndex: 5,
+          pointerEvents: 'none',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: '2rem',
-          background: 'linear-gradient(135deg, rgba(201,168,76,0.14), rgba(201,168,76,0.04))',
-          border: '1px solid rgba(201,168,76,0.28)',
+          justifyContent: 'flex-end',
+          paddingBottom: '8vh',
+          gap: '0.75rem',
         }}
       >
-        <span
-          className="material-symbols-outlined"
-          style={{ fontSize: 40, color: 'rgba(201,168,76,0.75)' }}
-        >
-          lock
-        </span>
-      </div>
-
-      {/* Visit label */}
-      <p
-        style={{
-          fontSize: '10px',
-          letterSpacing: '0.28em',
-          textTransform: 'uppercase',
-          color: 'rgba(201,168,76,0.7)',
-          fontWeight: 600,
-          marginBottom: '0.75rem',
-        }}
-      >
-        Visit {visitNumber} of {TOTAL_VISITS}
-      </p>
-
-      {/* Title */}
-      <h1
-        style={{
-          fontSize: 'clamp(22px, 4vw, 36px)',
-          color: '#f0e6cc',
-          fontWeight: 700,
-          lineHeight: 1.2,
-          marginBottom: '1rem',
-          maxWidth: 440,
-        }}
-      >
-        Locked Until a Future Visit
-      </h1>
-
-      {/* Main message */}
-      <p
-        style={{
-          fontSize: 'clamp(14px, 2vw, 17px)',
-          color: 'rgba(240,230,204,0.65)',
-          lineHeight: 1.6,
-          marginBottom: '0.75rem',
-          maxWidth: 460,
-        }}
-      >
-        This SmokeCraft session is part of{' '}
-        <span style={{ color: 'rgba(201,168,76,0.85)' }}>Visit {visitNumber} of {TOTAL_VISITS}</span>.
-        Return on your next venue visit to unlock{' '}
-        <span style={{ color: 'rgba(201,168,76,0.85)' }}>{visitTitle}</span>.
-      </p>
-
-      {/* Detailed reason */}
-      {lockedReason && (
+        {/* Visit label */}
         <p
           style={{
-            fontSize: '12px',
-            letterSpacing: '0.04em',
-            color: 'rgba(201,168,76,0.45)',
-            marginBottom: '2.5rem',
-            maxWidth: 400,
-          }}
-        >
-          {lockedReason}
-        </p>
-      )}
-
-      {/* Back button */}
-      <button
-        onClick={() => navigate('/smokecraft')}
-        style={{
-          height: 56,
-          paddingInline: 36,
-          borderRadius: '12px',
-          border: 'none',
-          cursor: 'pointer',
-          background: 'linear-gradient(135deg, #e9c176, #c5a059)',
-          color: '#131314',
-          fontFamily: 'Georgia, serif',
-          fontSize: '12px',
-          fontWeight: 700,
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          boxShadow: '0 4px 20px rgba(201,168,76,0.28)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          transition: 'opacity 0.2s',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.opacity = '0.85' }}
-        onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}
-      >
-        Back to Current Session
-        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>arrow_forward</span>
-      </button>
-
-      {/* Mode notice */}
-      {(isDemoMode || isLocalPreviewMode) && (
-        <p
-          style={{
-            marginTop: '2rem',
             fontSize: '10px',
-            letterSpacing: '0.14em',
+            letterSpacing: '0.28em',
             textTransform: 'uppercase',
-            color: isDemoMode ? 'rgba(233,193,118,0.5)' : 'rgba(201,168,76,0.3)',
+            color: 'rgba(201,168,76,0.85)',
+            fontFamily: 'Georgia, serif',
+            fontWeight: 600,
+            textShadow: '0 1px 6px rgba(0,0,0,0.8)',
+            pointerEvents: 'none',
           }}
         >
-          {modeLabel}
+          Visit {visitNumber} of {TOTAL_VISITS} — {visitTitle}
         </p>
-      )}
-    </div>
+
+        {lockedReason && (
+          <p
+            style={{
+              fontSize: '11px',
+              letterSpacing: '0.04em',
+              color: 'rgba(201,168,76,0.55)',
+              fontFamily: 'Georgia, serif',
+              maxWidth: 400,
+              textAlign: 'center',
+              textShadow: '0 1px 4px rgba(0,0,0,0.9)',
+              pointerEvents: 'none',
+            }}
+          >
+            {lockedReason}
+          </p>
+        )}
+
+        {/* Back button — pointer-events: auto so it's clickable */}
+        <button
+          onClick={() => navigate('/smokecraft')}
+          style={{
+            height: 52,
+            paddingInline: 32,
+            borderRadius: '12px',
+            border: 'none',
+            cursor: 'pointer',
+            background: 'linear-gradient(135deg, #e9c176, #c5a059)',
+            color: '#131314',
+            fontFamily: 'Georgia, serif',
+            fontSize: '11px',
+            fontWeight: 700,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            boxShadow: '0 4px 20px rgba(201,168,76,0.35)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            pointerEvents: 'auto',
+            transition: 'opacity 0.2s',
+            marginTop: '0.5rem',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.opacity = '0.85' }}
+          onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}
+        >
+          Back to Current Session
+          <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_forward</span>
+        </button>
+
+        {(isDemoMode || isLocalPreviewMode) && (
+          <p
+            style={{
+              fontSize: '9px',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: isDemoMode ? 'rgba(233,193,118,0.5)' : 'rgba(201,168,76,0.3)',
+              fontFamily: 'Georgia, serif',
+              pointerEvents: 'none',
+            }}
+          >
+            {modeLabel}
+          </p>
+        )}
+      </div>
+    </section>
   )
 }
