@@ -30,10 +30,10 @@ export default function SecondThird() {
 
   const hotspots = [
     {
-      label: 'Continue to Final Third',
+      label: 'Continue to Flavor Memory',
       x: 10, y: 75, width: 80, height: 20,
       onClick: handleContinue,
-      to: '/smokecraft/final-third',
+      to: '/smokecraft/flavor-memory',
     },
   ]
 

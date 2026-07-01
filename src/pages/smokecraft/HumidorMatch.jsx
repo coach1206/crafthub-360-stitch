@@ -2,9 +2,9 @@ import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRou
 
 const HOTSPOTS = [
   {
-    label: 'Continue to Cut Toast Light',
+    label: 'Request Purchase',
     x: 10, y: 75, width: 80, height: 20,
-    to: '/smokecraft/cut-toast-light',
+    to: '/smokecraft/request-purchase',
   },
 ]
 
