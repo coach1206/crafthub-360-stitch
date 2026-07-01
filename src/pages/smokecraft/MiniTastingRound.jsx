@@ -15,7 +15,7 @@ export default function MiniTastingRound() {
     triggerHaptic('medium')
     completeStep('mini-tasting')
     addXP(75)
-    navigate('/smokecraft/final-review')
+    navigate('/smokecraft/visit-complete')
   }
 
   return (

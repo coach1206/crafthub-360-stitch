@@ -25,7 +25,7 @@ export default function WrapperStrength() {
     triggerHaptic('medium')
     completeStep('wrapper-strength')
     addXP(75)
-    navigate('/smokecraft/seed-soil')
+    navigate('/smokecraft/visit-complete')
   }
 
   return (

@@ -17,10 +17,10 @@ export default function FlavorMemory() {
 
   const hotspots = [
     {
-      label: 'Continue to Final Third',
+      label: 'Visit 5 Complete — Return on your next visit',
       x: 10, y: 75, width: 80, height: 20,
       onClick: handleContinue,
-      to: '/smokecraft/final-third',
+      to: '/smokecraft/visit-complete',
     },
   ]
 

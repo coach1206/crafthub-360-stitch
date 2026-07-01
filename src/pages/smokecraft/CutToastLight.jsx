@@ -1,14 +1,19 @@
+import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 
-const HOTSPOTS = [
-  {
-    label: 'Continue to First Third',
-    x: 10, y: 75, width: 80, height: 20,
-    to: '/smokecraft/first-third',
-  },
-]
-
 export default function CutToastLight() {
+  const { completeStep, addXP } = useGuestSession()
+
+  const HOTSPOTS = [
+    {
+      label: 'Continue to First Third',
+      x: 10, y: 75, width: 80, height: 20,
+      onClick: () => { triggerHaptic('medium'); completeStep('cut-toast-light'); addXP(50) },
+      to: '/smokecraft/first-third',
+    },
+  ]
+
   return (
     <SmokeCraftAssetRoute
       src="/assets/smokecraft-reference/approved/smokecraft-cut-toast-light.png"

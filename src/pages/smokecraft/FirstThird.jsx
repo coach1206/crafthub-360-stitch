@@ -30,10 +30,10 @@ export default function FirstThird() {
 
   const hotspots = [
     {
-      label: 'Continue to Second Third',
+      label: 'Visit 4 Complete — Return on your next visit',
       x: 10, y: 75, width: 80, height: 20,
       onClick: handleContinue,
-      to: '/smokecraft/second-third',
+      to: '/smokecraft/visit-complete',
     },
   ]
 
