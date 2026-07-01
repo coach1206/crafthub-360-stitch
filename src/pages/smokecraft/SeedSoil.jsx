@@ -2,9 +2,9 @@ import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRou
 
 const HOTSPOTS = [
   {
-    label: 'Continue to Mentor',
+    label: 'Continue to Pairing Lab',
     x: 10, y: 75, width: 80, height: 20,
-    to: '/smokecraft/mentor-selection',
+    to: '/smokecraft/pairing-lab',
   },
 ]
 
