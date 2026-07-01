@@ -1,21 +1,22 @@
-import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
+
+const HOTSPOTS = [
+  {
+    label: 'Continue to Enroll',
+    x: 10, y: 75, width: 80, height: 20,
+    onClick: () => triggerHaptic('medium'),
+    to: '/smokecraft/enroll',
+  },
+]
 
 export default function GuestPass() {
-  const navigate = useNavigate()
-
-  function handleContinue() {
-    triggerHaptic('medium')
-    navigate('/smokecraft/enroll')
-  }
-
   return (
-    <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
-      <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-guest-pass.png"
-        alt="SmokeCraft Guest Pass"
-      />
-    </div>
+    <SmokeCraftAssetRoute
+      src="/assets/smokecraft-reference/approved/smokecraft-guest-pass.png"
+      alt="SmokeCraft Guest Pass"
+      hotspots={HOTSPOTS}
+      route="/smokecraft/guest-pass"
+    />
   )
 }
