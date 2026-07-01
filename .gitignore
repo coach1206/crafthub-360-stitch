@@ -1,3 +1,7 @@
 node_modules
 dist
 .claude/
+
+# Phase proof scripts (session artifacts)
+e2e-2d.mjs
+proof-2d.mjs
