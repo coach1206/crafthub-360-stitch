@@ -1,21 +1,22 @@
-import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
+
+const HOTSPOTS = [
+  {
+    label: 'Get Started',
+    x: 10, y: 75, width: 80, height: 20,
+    onClick: () => triggerHaptic('medium'),
+    to: '/smokecraft/enroll',
+  },
+]
 
 export default function HowItWorks() {
-  const navigate = useNavigate()
-
-  function handleStart() {
-    triggerHaptic('medium')
-    navigate('/smokecraft/enroll')
-  }
-
   return (
-    <div onClick={handleStart} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
-      <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-how-it-works.png"
-        alt="How SmokeCraft Works"
-      />
-    </div>
+    <SmokeCraftAssetRoute
+      src="/assets/smokecraft-reference/approved/smokecraft-how-it-works.png"
+      alt="How SmokeCraft Works"
+      hotspots={HOTSPOTS}
+      route="/smokecraft/how-it-works"
+    />
   )
 }
