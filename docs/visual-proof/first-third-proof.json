@@ -1,0 +1,17 @@
+{
+  "family": "smokecraft",
+  "screen": "first-third",
+  "route": "/smokecraft/first-third",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T09:00:42.387Z",
+  "commitHash": "494bf41b",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 12,
+  "routeUnlockedForProof": true,
+  "note": "Gated by VisitLockGuard (Visit 4, session 12). No reference mockup uploaded. Proof-only progress seeded so the real page renders."
+}

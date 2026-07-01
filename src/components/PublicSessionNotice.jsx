@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext.jsx'
 // a passive, non-blocking visual confirmation that "/api/auth/me" coming
 // back 401 (no session) is expected here, not an error. It never gates
 // rendering of its siblings.
-const PUBLIC_ROUTES = new Set(['/', '/boot', '/home', '/crafthub', '/smokecraft'])
+const PUBLIC_ROUTES = new Set(['/', '/boot', '/home', '/crafthub'])
 
 export default function PublicSessionNotice() {
   const location = useLocation()

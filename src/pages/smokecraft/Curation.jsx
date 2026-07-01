@@ -162,7 +162,6 @@ export default function Curation() {
       `}</style>
 
       <SmokeCraftPremiumHeader
-        step="Step 6 of 20"
         backTo="/smokecraft/origins"
         onRightClick={() => navigate('/grand-lounge-ranking')}
       />

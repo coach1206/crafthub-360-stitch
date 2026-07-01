@@ -1,0 +1,16 @@
+{
+  "family": "smokecraft",
+  "screen": "connections",
+  "route": "/smokecraft/connections",
+  "referenceImage": "connections-reference.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-27T16:22:30.034Z",
+  "commitHash": "8e0ae555",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 22,
+  "routeUnlockedForProof": true
+}

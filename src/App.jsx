@@ -28,6 +28,9 @@ import BarDisplay from './pages/pos3/BarDisplay.jsx'
 import HumidorControl from './pages/pos3/HumidorControl.jsx'
 import InventoryControl from './pages/pos3/InventoryControl.jsx'
 import POSIntegrationHub from './pages/pos3/POSIntegrationHub.jsx'
+import POS360TableManagement from './pages/pos3/POS360TableManagement.jsx'
+import POS360VenueSystemsSetup from './pages/pos3/POS360VenueSystemsSetup.jsx'
+import POS360VisualProof from './pages/pos3/POS360VisualProof.jsx'
 
 // ── NEW E.A.T. management system (/eat/*) ─────────────────────
 import EATCommandHub from './pages/eat/EATCommandHub.jsx'
@@ -48,6 +51,8 @@ import EATOperations from './pages/eat/EATOperations.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
+import SmokeCraftVisualProof from './pages/smokecraft/SmokeCraftVisualProof.jsx'
+import SmokeCraftImageDiagnostic from './pages/smokecraft/SmokeCraftImageDiagnostic.jsx'
 import Enroll           from './pages/smokecraft/Enroll.jsx'
 import GoldenBox        from './pages/smokecraft/GoldenBox.jsx'
 import GoldenBoxStatus  from './pages/smokecraft/GoldenBoxStatus.jsx'
@@ -84,6 +89,18 @@ import Scorecard        from './pages/smokecraft/Scorecard.jsx'
 import EventChallenge   from './pages/smokecraft/EventChallenge.jsx'
 import Connections      from './pages/smokecraft/Connections.jsx'
 import ManagementSync   from './pages/smokecraft/ManagementSync.jsx'
+import WrapperStrength     from './pages/smokecraft/WrapperStrength.jsx'
+import CigarGaugeGuide     from './pages/smokecraft/CigarGaugeGuide.jsx'
+import PairingLab          from './pages/smokecraft/PairingLab.jsx'
+import FlavorMemory        from './pages/smokecraft/FlavorMemory.jsx'
+import SmokeCraftChallenge from './pages/smokecraft/SmokeCraftChallenge.jsx'
+import SecondHumidorMatch  from './pages/smokecraft/SecondHumidorMatch.jsx'
+import MiniTastingRound    from './pages/smokecraft/MiniTastingRound.jsx'
+import FinalReview         from './pages/smokecraft/FinalReview.jsx'
+import VisitLockGuard      from './components/smokecraft/VisitLockGuard.jsx'
+import SmokeCraftSessionGuard from './components/smokecraft/SmokeCraftSessionGuard.jsx'
+import { SmokeCraftProgressProvider } from './context/SmokeCraftProgressContext.jsx'
+import VisitComplete        from './pages/smokecraft/VisitComplete.jsx'
 import HowItWorks       from './pages/smokecraft/HowItWorks.jsx'
 import GuestPass        from './pages/smokecraft/GuestPass.jsx'
 import Demo             from './pages/smokecraft/Demo.jsx'
@@ -230,27 +247,105 @@ export default function App() {
               <Route path="system-explained" element={<PublicCraftHubLanding />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
-              <Route path="smokecraft">
-                <Route index element={<SmokeCraft />} />
-                <Route path="enroll"           element={<Enroll />} />
+              <Route path="smokecraft" element={<SmokeCraftProgressProvider><Outlet /></SmokeCraftProgressProvider>}>
+                {/* S1 — always unlocked, no guard */}
+                <Route index element={<SmokeCraftSessionGuard sessionNumber={1} hideHeader><SmokeCraft /></SmokeCraftSessionGuard>} />
+
+                {/* S2 — profile/enroll */}
+                <Route path="enroll"           element={<SmokeCraftSessionGuard sessionNumber={2}><Enroll /></SmokeCraftSessionGuard>} />
                 <Route path="intake"           element={<Navigate to="/smokecraft/enroll" replace />} />
                 <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
+                {/* profile → identity (alias per spec) */}
                 <Route path="profile"          element={<Navigate to="/smokecraft/identity" replace />} />
                 <Route path="education"        element={<Navigate to="/smokecraft/format" replace />} />
                 <Route path="mentors"          element={<Navigate to="/smokecraft/mentor-selection" replace />} />
                 <Route path="humidor"          element={<Navigate to="/smokecraft/humidor-match" replace />} />
                 <Route path="light"            element={<Navigate to="/smokecraft/cut-toast-light" replace />} />
                 <Route path="complete"         element={<Navigate to="/smokecraft/session-complete" replace />} />
+
+                {/* S3 — golden-box (aliases: gold-box, golden-box) */}
                 <Route path="golden-box">
-                  <Route index             element={<GoldenBox />} />
+                  <Route index             element={<SmokeCraftSessionGuard sessionNumber={3}><GoldenBox /></SmokeCraftSessionGuard>} />
                   <Route path="status"     element={<GoldenBoxStatus />} />
                 </Route>
-                <Route path="art"            element={<Art />} />
-                <Route path="mentor-selection" element={<Mentor />} />
-                <Route path="mentor"         element={<Navigate to="/smokecraft/mentor-selection" replace />} />
-                <Route path="format"         element={<Format />} />
-                <Route path="shape-size-burn" element={<Navigate to="/smokecraft/format" replace />} />
+                {/* gold-box → golden-box alias per spec */}
                 <Route path="gold-box"       element={<Navigate to="/smokecraft/golden-box" replace />} />
+
+                {/* S4 — mentor-selection */}
+                <Route path="art"            element={<Art />} />
+                <Route path="mentor-selection" element={<SmokeCraftSessionGuard sessionNumber={4}><Mentor /></SmokeCraftSessionGuard>} />
+                <Route path="mentor"         element={<Navigate to="/smokecraft/mentor-selection" replace />} />
+
+                {/* S5 — format / shape-size-burn */}
+                <Route path="format"         element={<SmokeCraftSessionGuard sessionNumber={5}><Format /></SmokeCraftSessionGuard>} />
+                {/* shape-size-burn is the official route alias for format */}
+                <Route path="shape-size-burn" element={<SmokeCraftSessionGuard sessionNumber={5}><Format /></SmokeCraftSessionGuard>} />
+                <Route path="cigar-gauge-guide" element={<SmokeCraftSessionGuard sessionNumber={5}><CigarGaugeGuide /></SmokeCraftSessionGuard>} />
+
+                {/* S6 — wrapper-strength */}
+                <Route path="wrapper-strength" element={<SmokeCraftSessionGuard sessionNumber={6}><WrapperStrength /></SmokeCraftSessionGuard>} />
+
+                {/* S7 — seed-soil */}
+                <Route path="seed-soil"        element={<SmokeCraftSessionGuard sessionNumber={7}><SeedSoil /></SmokeCraftSessionGuard>} />
+
+                {/* S8 — pairing-lab */}
+                <Route path="pairing-lab"      element={<SmokeCraftSessionGuard sessionNumber={8}><PairingLab /></SmokeCraftSessionGuard>} />
+
+                {/* S9 — humidor-match */}
+                <Route path="humidor-match"    element={<SmokeCraftSessionGuard sessionNumber={9}><HumidorMatch /></SmokeCraftSessionGuard>} />
+
+                {/* S10 — request-purchase */}
+                <Route path="request-purchase" element={<SmokeCraftSessionGuard sessionNumber={10}><RequestPurchase /></SmokeCraftSessionGuard>} />
+
+                {/* S11 — cut-toast-light */}
+                <Route path="cut-toast-light"  element={<SmokeCraftSessionGuard sessionNumber={11}><CutToastLight /></SmokeCraftSessionGuard>} />
+
+                {/* S12 — first-third */}
+                <Route path="first-third"      element={<SmokeCraftSessionGuard sessionNumber={12}><FirstThird /></SmokeCraftSessionGuard>} />
+
+                {/* S13 — second-third */}
+                <Route path="second-third"     element={<SmokeCraftSessionGuard sessionNumber={13}><SecondThird /></SmokeCraftSessionGuard>} />
+
+                {/* S14 — flavor-memory */}
+                <Route path="flavor-memory"    element={<SmokeCraftSessionGuard sessionNumber={14}><FlavorMemory /></SmokeCraftSessionGuard>} />
+
+                {/* S15 — final-third */}
+                <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={15}><FinalThird /></SmokeCraftSessionGuard>} />
+
+                {/* S16 — scorecard */}
+                <Route path="scorecard"        element={<SmokeCraftSessionGuard sessionNumber={16}><Scorecard /></SmokeCraftSessionGuard>} />
+
+                {/* S17 — smokecraft-challenge (alias: challenge) */}
+                <Route path="smokecraft-challenge"  element={<SmokeCraftSessionGuard sessionNumber={17}><SmokeCraftChallenge /></SmokeCraftSessionGuard>} />
+                {/* challenge now points to smokecraft-challenge per spec (not leaf-challenge) */}
+                <Route path="challenge"        element={<Navigate to="/smokecraft/smokecraft-challenge" replace />} />
+
+                {/* S18 — second-humidor-match */}
+                <Route path="second-humidor-match"  element={<SmokeCraftSessionGuard sessionNumber={18}><SecondHumidorMatch /></SmokeCraftSessionGuard>} />
+
+                {/* S19 — mini-tasting (alias: mini-tasting-round per spec) */}
+                <Route path="mini-tasting"          element={<SmokeCraftSessionGuard sessionNumber={19}><MiniTastingRound /></SmokeCraftSessionGuard>} />
+                <Route path="mini-tasting-round"    element={<Navigate to="/smokecraft/mini-tasting" replace />} />
+
+                {/* S20 — final-review */}
+                <Route path="final-review"          element={<SmokeCraftSessionGuard sessionNumber={20}><FinalReview /></SmokeCraftSessionGuard>} />
+
+                {/* S21 — passport-stamp (locked until S20 complete) */}
+                <Route path="passport-stamp"   element={<SmokeCraftSessionGuard sessionNumber={21}><PassportStamp /></SmokeCraftSessionGuard>} />
+
+                {/* S22 — connections (locked until S21 complete) */}
+                <Route path="connections"      element={<SmokeCraftSessionGuard sessionNumber={22}><Connections /></SmokeCraftSessionGuard>} />
+
+                {/* S23 — management-sync (admin-facing, locked until S22 complete) */}
+                <Route path="management-sync"  element={<SmokeCraftSessionGuard sessionNumber={23}><ManagementSync /></SmokeCraftSessionGuard>} />
+
+                {/* S24 — session-complete */}
+                <Route path="session-complete" element={<SmokeCraftSessionGuard sessionNumber={24}><SessionComplete /></SmokeCraftSessionGuard>} />
+
+                {/* Visit complete interstitial */}
+                <Route path="visit-complete"   element={<VisitComplete />} />
+
+                {/* Supplemental / unguarded pages */}
                 <Route path="origins"        element={<Origins />} />
                 <Route path="curation"       element={<Curation />} />
                 <Route path="leaves"         element={<Leaves />} />
@@ -263,26 +358,14 @@ export default function App() {
                 <Route path="pairing"        element={<Pairing />} />
                 <Route path="available"      element={<Available />} />
                 <Route path="assistant"      element={<Assistant />} />
-                <Route path="session-complete" element={<SessionComplete />} />
                 <Route path="terroir"        element={<Terroir />} />
                 <Route path="pairing-mastery" element={<PairingMastery />} />
                 <Route path="vitola"         element={<Vitola />} />
-                <Route path="identity"       element={<Identity />} />
+                {/* S2 alias: identity = profile */}
+                <Route path="identity"       element={<SmokeCraftSessionGuard sessionNumber={2}><Identity /></SmokeCraftSessionGuard>} />
                 <Route path="leaderboard"    element={<Leaderboard />} />
-                <Route path="passport-stamp"   element={<PassportStamp />} />
-                <Route path="seed-soil"        element={<SeedSoil />} />
-                <Route path="humidor-match"    element={<HumidorMatch />} />
-                <Route path="request-purchase" element={<RequestPurchase />} />
-                <Route path="cut-toast-light"  element={<CutToastLight />} />
-                <Route path="first-third"      element={<FirstThird />} />
-                <Route path="second-third"     element={<SecondThird />} />
-                <Route path="final-third"      element={<FinalThird />} />
-                <Route path="scorecard"        element={<Scorecard />} />
                 <Route path="event-challenge"  element={<EventChallenge />} />
-                <Route path="connections"      element={<Connections />} />
-                <Route path="management-sync"  element={<ManagementSync />} />
                 <Route path="how-it-works"     element={<HowItWorks />} />
-                <Route path="challenge"        element={<Navigate to="/smokecraft/leaf-challenge" replace />} />
                 <Route path="session/start"    element={<Navigate to="/smokecraft/enroll" replace />} />
                 <Route path="guest-pass"       element={<GuestPass />} />
                 <Route path="demo"             element={<Demo />} />
@@ -447,6 +530,11 @@ export default function App() {
                 </ProtectedRoute>
               } />
 
+              {/* ── Visual proof routes — no auth required ── */}
+              <Route path="pos360-visual-proof" element={<POS360VisualProof />} />
+              <Route path="smokecraft-visual-proof" element={<SmokeCraftVisualProof />} />
+              <Route path="smokecraft-image-diagnostic" element={<SmokeCraftImageDiagnostic />} />
+
               {/* ── NEW POS 3 system — nested route tree ───────────── */}
               {/* ── Protected: staff+ — BLOCKED in demo mode ────── */}
               <Route path="pos3" element={
@@ -463,6 +551,8 @@ export default function App() {
                 <Route index            element={<POS3Home />} />
                 <Route path="handheld"  element={<POS3Handheld />} />
                 <Route path="tables"    element={<POS3Tables />} />
+                <Route path="venue-tables" element={<POS360TableManagement />} />
+                <Route path="venue-systems" element={<POS360VenueSystemsSetup />} />
                 <Route path="orders"    element={<POS3Orders />} />
                 <Route path="checkout"  element={<POS3Checkout />} />
                 <Route path="kitchen"   element={<KitchenDisplay />} />

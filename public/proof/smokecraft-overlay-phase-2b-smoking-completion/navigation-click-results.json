@@ -1,0 +1,34 @@
+{
+  "navResults": [
+    {
+      "from": "/smokecraft/first-third",
+      "target": "/smokecraft/second-third",
+      "landed": "/smokecraft/second-third",
+      "navPass": true
+    },
+    {
+      "from": "/smokecraft/second-third",
+      "target": "/smokecraft/final-third",
+      "landed": "/smokecraft/final-third",
+      "navPass": true
+    },
+    {
+      "from": "/smokecraft/final-third",
+      "target": "/smokecraft/scorecard",
+      "landed": "/smokecraft/scorecard",
+      "navPass": true
+    },
+    {
+      "from": "/smokecraft/scorecard",
+      "target": "/smokecraft/passport-stamp",
+      "landed": "/smokecraft/passport-stamp",
+      "navPass": true
+    },
+    {
+      "from": "/smokecraft/passport-stamp",
+      "target": "/smokecraft/session-complete",
+      "landed": "/smokecraft/session-complete",
+      "navPass": true
+    }
+  ]
+}

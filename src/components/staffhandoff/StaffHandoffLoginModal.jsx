@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { verifyStaffHandoffCredentials, verifyFounderCredentials, STAFF_HANDOFF_AUTH_AVAILABLE } from '../../data/staffHandoffRegistry.js'
+import { verifyStaffHandoffCredentials, verifyFounderCredentials, STAFF_HANDOFF_AUTH_AVAILABLE, STAFF_DEMO_MODE } from '../../data/staffHandoffRegistry.js'
 
 const GOLD = '#E9C176'
 
@@ -13,6 +13,12 @@ const GOLD = '#E9C176'
  * instead of shipping real credentials in the client bundle.
  */
 export default function StaffHandoffLoginModal({ onUnlock, onCancel }) {
+  // Demo mode — no credentials required, clear label shown.
+  if (STAFF_DEMO_MODE) {
+    return <StaffHandoffDemoModal onUnlock={onUnlock} onCancel={onCancel} />
+  }
+
+  // No auth path available — honest error.
   if (!STAFF_HANDOFF_AUTH_AVAILABLE) {
     return (
       <div style={{
@@ -38,8 +44,11 @@ export default function StaffHandoffLoginModal({ onUnlock, onCancel }) {
           <h2 style={{ color: GOLD, fontSize: '1.3rem', fontWeight: 400, margin: '0 0 1rem', letterSpacing: '0.04em' }}>
             Staff Login Unavailable
           </h2>
-          <p style={{ color: 'rgba(229,226,225,0.7)', fontSize: 13, lineHeight: 1.6, margin: '0 0 1.5rem' }}>
+          <p style={{ color: 'rgba(229,226,225,0.7)', fontSize: 13, lineHeight: 1.6, margin: '0 0 0.5rem' }}>
             Staff authentication requires secure backend configuration.
+          </p>
+          <p style={{ color: 'rgba(229,226,225,0.45)', fontSize: 11, lineHeight: 1.6, margin: '0 0 1.5rem', fontFamily: '"JetBrains Mono", monospace' }}>
+            Set VITE_FOUNDER_ADMIN_EMAIL + VITE_FOUNDER_ADMIN_PIN in your hosting dashboard to enable founder access, or set VITE_STAFF_DEMO_MODE=true for demo access.
           </p>
           <button
             type="button"
@@ -59,6 +68,61 @@ export default function StaffHandoffLoginModal({ onUnlock, onCancel }) {
   }
 
   return <StaffHandoffLoginForm onUnlock={onUnlock} onCancel={onCancel} />
+}
+
+function StaffHandoffDemoModal({ onUnlock, onCancel }) {
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 400,
+      background: 'rgba(5,3,2,0.88)', backdropFilter: 'blur(6px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20,
+    }}>
+      <div style={{
+        width: '100%', maxWidth: 360,
+        background: 'rgba(14,10,6,0.97)',
+        border: `1px solid rgba(233,193,118,0.4)`,
+        borderRadius: 16, padding: '2rem 1.75rem',
+        boxShadow: '0 24px 60px rgba(0,0,0,0.6)',
+        fontFamily: 'Georgia, serif',
+      }}>
+        <div style={{
+          display: 'inline-block', fontFamily: '"JetBrains Mono", monospace', fontSize: 9,
+          letterSpacing: '0.2em', textTransform: 'uppercase',
+          background: 'rgba(233,193,118,0.15)', border: '1px solid rgba(233,193,118,0.4)',
+          color: GOLD, borderRadius: 4, padding: '3px 8px', marginBottom: 14,
+        }}>
+          Demo Mode — No real auth, no real data
+        </div>
+        <h2 style={{ color: GOLD, fontSize: '1.3rem', fontWeight: 400, margin: '0 0 1.5rem', letterSpacing: '0.04em' }}>
+          Staff Handoff
+        </h2>
+        <button
+          type="button"
+          onClick={() => onUnlock({ role: 'staff', displayName: 'Demo Staff', email: 'demo@crafthub360.com' })}
+          style={{
+            width: '100%', height: 56, borderRadius: 10, border: 'none',
+            background: GOLD, color: '#0a0603', fontFamily: 'Georgia, serif',
+            fontSize: 15, letterSpacing: '0.08em', textTransform: 'uppercase',
+            fontWeight: 600, cursor: 'pointer', marginBottom: 10,
+          }}
+        >
+          Enter POS 3 &amp; E.A.T. (Demo)
+        </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          style={{
+            width: '100%', height: 38, borderRadius: 8,
+            background: 'transparent', border: '1px solid rgba(233,193,118,0.18)',
+            color: 'rgba(233,193,118,0.55)', fontFamily: '"JetBrains Mono", monospace',
+            fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
+          }}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  )
 }
 
 function StaffHandoffLoginForm({ onUnlock, onCancel }) {

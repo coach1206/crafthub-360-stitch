@@ -1,0 +1,314 @@
+[
+  {
+    "name": "identity",
+    "route": "/smokecraft/identity",
+    "file": "sc-tablet-proof-identity.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-profile-capture.png",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 771.96875,
+        "displayHeight": 434.46875,
+        "top": 112,
+        "bottom": 546.46875,
+        "left": 126.015625,
+        "right": 897.984375
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "first-third",
+    "route": "/smokecraft/first-third",
+    "file": "sc-tablet-proof-first-third.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-first-third.png",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 975.96875,
+        "displayHeight": 549.28125,
+        "top": 112,
+        "bottom": 661.28125,
+        "left": 24.015625,
+        "right": 999.984375
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "second-third",
+    "route": "/smokecraft/second-third",
+    "file": "sc-tablet-proof-second-third.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-second-third.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 472.3125,
+        "displayHeight": 629.75,
+        "top": 112,
+        "bottom": 741.75,
+        "left": 275.84375,
+        "right": 748.15625
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "flavor-memory",
+    "route": "/smokecraft/flavor-memory",
+    "file": "sc-tablet-proof-flavor-memory.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-flavor-memory.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 576,
+        "displayHeight": 768,
+        "top": 0,
+        "bottom": 768,
+        "left": 224,
+        "right": 800
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "second-humidor-match",
+    "route": "/smokecraft/second-humidor-match",
+    "file": "sc-tablet-proof-second-humidor-match.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-second-humidor-match.png",
+        "naturalWidth": 1448,
+        "naturalHeight": 1086,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 1024,
+        "displayHeight": 768,
+        "top": 0,
+        "bottom": 768,
+        "left": 0,
+        "right": 1024
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "final-review",
+    "route": "/smokecraft/final-review",
+    "file": "sc-tablet-proof-final-review.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-final-review.png",
+        "naturalWidth": 1536,
+        "naturalHeight": 1024,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 1023.984375,
+        "displayHeight": 682.65625,
+        "top": 0,
+        "bottom": 682.65625,
+        "left": 0,
+        "right": 1023.984375
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "session-complete",
+    "route": "/smokecraft/session-complete",
+    "file": "sc-tablet-proof-session-complete.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-session-complete.png",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 959.984375,
+        "displayHeight": 540.28125,
+        "top": 128,
+        "bottom": 668.28125,
+        "left": 32,
+        "right": 991.984375
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "terroir",
+    "route": "/smokecraft/terroir",
+    "file": "sc-tablet-proof-terroir.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-terroir.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 472.3125,
+        "displayHeight": 629.75,
+        "top": 112,
+        "bottom": 741.75,
+        "left": 275.84375,
+        "right": 748.15625
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "vitola",
+    "route": "/smokecraft/vitola",
+    "file": "sc-tablet-proof-vitola.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-vitola.png",
+        "naturalWidth": 1586,
+        "naturalHeight": 992,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 959.984375,
+        "displayHeight": 600.453125,
+        "top": 112,
+        "bottom": 712.453125,
+        "left": 32,
+        "right": 991.984375
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "event-challenge",
+    "route": "/smokecraft/event-challenge",
+    "file": "sc-tablet-proof-event-challenge.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-event-challenge.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 472.3125,
+        "displayHeight": 629.75,
+        "top": 112,
+        "bottom": 741.75,
+        "left": 275.84375,
+        "right": 748.15625
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "guest-pass",
+    "route": "/smokecraft/guest-pass",
+    "file": "sc-tablet-proof-guest-pass.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-guest-pass.png",
+        "naturalWidth": 1086,
+        "naturalHeight": 1448,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 472.3125,
+        "displayHeight": 629.75,
+        "top": 96,
+        "bottom": 725.75,
+        "left": 275.84375,
+        "right": 748.15625
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  },
+  {
+    "name": "scan",
+    "route": "/smokecraft/scan",
+    "file": "sc-tablet-proof-scan.png",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "approvedImages": [
+      {
+        "src": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-scan.png",
+        "naturalWidth": 941,
+        "naturalHeight": 1672,
+        "complete": true,
+        "objectFit": "contain",
+        "displayWidth": 354.421875,
+        "displayHeight": 629.75,
+        "top": 96,
+        "bottom": 725.75,
+        "left": 334.78125,
+        "right": 689.203125
+      }
+    ],
+    "fitsInViewport": true,
+    "pass": true
+  }
+]

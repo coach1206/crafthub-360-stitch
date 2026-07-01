@@ -1,0 +1,50 @@
+[
+  {
+    "from": "/smokecraft/enroll",
+    "expected": "/smokecraft/identity",
+    "landed": "/smokecraft/identity",
+    "pass": true
+  },
+  {
+    "from": "/smokecraft/humidor-match",
+    "expected": "/smokecraft/request-purchase",
+    "landed": "/smokecraft/request-purchase",
+    "pass": true
+  },
+  {
+    "from": "/smokecraft/request-purchase",
+    "expected": "/smokecraft/cut-toast-light",
+    "landed": "/smokecraft/cut-toast-light",
+    "pass": true
+  },
+  {
+    "from": "/smokecraft/second-third",
+    "expected": "/smokecraft/flavor-memory",
+    "landed": "/smokecraft/flavor-memory",
+    "pass": true
+  },
+  {
+    "from": "/smokecraft/flavor-memory",
+    "expected": "/smokecraft/final-third",
+    "landed": "/smokecraft/final-third",
+    "pass": true
+  },
+  {
+    "from": "/smokecraft/passport-stamp",
+    "expected": "/smokecraft/connections",
+    "landed": "/smokecraft/connections",
+    "pass": true
+  },
+  {
+    "from": "/smokecraft/connections",
+    "expected": "/smokecraft/management-sync",
+    "landed": "/smokecraft/management-sync",
+    "pass": true
+  },
+  {
+    "from": "/smokecraft/management-sync",
+    "expected": "/smokecraft/session-complete",
+    "landed": "/smokecraft/session-complete",
+    "pass": true
+  }
+]

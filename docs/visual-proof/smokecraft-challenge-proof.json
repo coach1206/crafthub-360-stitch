@@ -1,0 +1,17 @@
+{
+  "family": "smokecraft",
+  "screen": "smokecraft-challenge",
+  "route": "/smokecraft/smokecraft-challenge",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T09:02:00.239Z",
+  "commitHash": "494bf41b",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 17,
+  "routeUnlockedForProof": true,
+  "note": "Gated by VisitLockGuard. No reference mockup uploaded — runtime accent image only. Proof-only progress seeded so the real page renders."
+}

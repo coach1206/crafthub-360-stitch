@@ -1,0 +1,16 @@
+{
+  "family": "smokecraft",
+  "screen": "request-purchase",
+  "route": "/smokecraft/request-purchase",
+  "referenceImage": "request-purchase.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T09:00:09.355Z",
+  "commitHash": "494bf41b",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 10,
+  "routeUnlockedForProof": true
+}

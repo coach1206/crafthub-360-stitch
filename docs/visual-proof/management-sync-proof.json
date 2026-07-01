@@ -1,0 +1,16 @@
+{
+  "family": "smokecraft",
+  "screen": "management-sync",
+  "route": "/smokecraft/management-sync",
+  "referenceImage": "venue-management-sync.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-27T16:56:32.404Z",
+  "commitHash": "e636305b",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 23,
+  "routeUnlockedForProof": true
+}

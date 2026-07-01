@@ -1,0 +1,16 @@
+{
+  "family": "smokecraft",
+  "screen": "passport-stamp",
+  "route": "/smokecraft/passport-stamp",
+  "referenceImage": "passport-stamp-reference.png",
+  "referenceFound": true,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-27T16:22:12.457Z",
+  "commitHash": "8e0ae555",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 21,
+  "routeUnlockedForProof": true
+}

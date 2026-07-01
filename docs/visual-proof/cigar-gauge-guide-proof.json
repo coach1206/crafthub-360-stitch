@@ -1,0 +1,17 @@
+{
+  "family": "smokecraft",
+  "screen": "cigar-gauge-guide",
+  "route": "/smokecraft/cigar-gauge-guide",
+  "referenceImage": null,
+  "referenceFound": false,
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timestamp": "2026-06-26T08:58:53.197Z",
+  "commitHash": "494bf41b",
+  "smokeCraftProgressSeeded": true,
+  "seededSession": 5,
+  "routeUnlockedForProof": true,
+  "note": "Sub-step of Session 5 (Shape, Size & Burn Time) — gated by the same VisitLockGuard stepId (\"format\") as /smokecraft/format, not a separate completed session. Reference image \"cigar gauge guide.png\" was shared inline in chat but has not been committed to the repo as a binary file; reference intentionally left null, not substituted."
+}

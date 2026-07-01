@@ -5,13 +5,17 @@
  */
 
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useDemoMode } from '../../context/DemoModeContext.jsx'
 
 export default function DemoBanner() {
   const { isDemoMode, exitDemoMode } = useDemoMode()
+  const { pathname } = useLocation()
   const [exiting, setExiting] = useState(false)
 
   if (!isDemoMode) return null
+  // Suppress on SmokeCraft asset-screen routes so the demo badge does not overlay the approved images
+  if (pathname === '/smokecraft' || pathname.startsWith('/smokecraft/')) return null
 
   function handleExit() {
     setExiting(true)

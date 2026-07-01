@@ -9,6 +9,7 @@ import CigarIntelligencePanel, { WRAPPER_TYPES } from '../../components/smokecra
 import SmokeCraftInsightChip from '../../components/smokecraft/SmokeCraftInsightChip.jsx'
 import SmokeCraftInsightPanel from '../../components/smokecraft/SmokeCraftInsightPanel.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import { getVisitProgress } from '../../constants/session.js'
 
 const WRAPPER_FALLBACK_DESCRIPTION = 'More details coming soon for this SmokeCraft wrapper profile.'
 
@@ -520,8 +521,10 @@ export default function Format() {
   function continueNext() {
     if (!selected) return
     if (!isSaved) saveFormat()
-    navigate('/smokecraft/seed-soil')
+    navigate('/smokecraft/cigar-gauge-guide')
   }
+
+  const stepProgress = getVisitProgress(session.completedSteps)
 
   return (
     <div className="smokecraft-format-page">
@@ -1307,14 +1310,14 @@ export default function Format() {
       `}</style>
 
       <SmokeCraftPremiumHeader
-        step="Step 5 of 20"
+        step={`Round ${stepProgress.round} of 3 · Visit ${stepProgress.visit} of ${stepProgress.totalVisits} · Session ${stepProgress.session} of ${stepProgress.totalSessions}`}
         backTo="/smokecraft/enroll"
         onRightClick={() => navigate('/grand-lounge-ranking')}
       />
 
       <main className="format-shell">
         <div className="format-progress" aria-label="SmokeCraft journey progress">
-          <span>Step 5 of 20</span>
+          <span>Round {stepProgress.round} of 3 &middot; Visit {stepProgress.visit} of {stepProgress.totalVisits} &middot; Session {stepProgress.session} of {stepProgress.totalSessions}</span>
           <span className="format-progress__track" aria-hidden="true" />
           <span className="format-progress__label">Shape, Size & Burn Time</span>
         </div>
@@ -1554,7 +1557,7 @@ export default function Format() {
               Save Format
             </button>
             <button className="format-continue" type="button" onClick={continueNext} disabled={!selected}>
-              Continue to Seed &amp; Soil
+              Continue to Cigar Gauge Guide
               <span className="material-symbols-outlined">arrow_forward</span>
             </button>
           </div>

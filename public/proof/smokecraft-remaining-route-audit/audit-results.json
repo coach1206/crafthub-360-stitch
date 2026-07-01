@@ -1,0 +1,828 @@
+[
+  {
+    "name": "SmokeCraftIndex",
+    "route": "/smokecraft",
+    "d": {
+      "url": "http://localhost:4173/smokecraft",
+      "bodyTextLen": 777,
+      "bodyTextPreview": "PUBLIC DEMO MODE ACTIVE | 0 STAMPS · 0 BADGES · 0 MENTORS | SC | SC | SMOKECRAFT | CRAFTED EXPERIENCES | § | WELCOME TO SMOKECRAFT 360 | Discover | Your | Cigar Profile | YOUR JOURNEY. YOUR TASTE. YOUR STORY. |  | A personalized cigar journey built around you. Explore. Learn. Pair. Track every step with craftsmanship and pur",
+      "allImgCount": 4,
+      "visImgCount": 4,
+      "fgSrc": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-landing.png",
+      "fgW": 365,
+      "fgH": 205,
+      "fgObjFit": "contain",
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "HEADER text=0 STAMPS · 0 BADGES · 0 MENTORS SC"
+      ],
+      "failTerms": [
+        "DEMO MODE"
+      ],
+      "scrollH": 1146
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/SmokeCraftIndex.png"
+  },
+  {
+    "name": "Enroll",
+    "route": "/smokecraft/enroll",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/enroll",
+      "bodyTextLen": 1305,
+      "bodyTextPreview": "arrow_back | CRAFTHUB 360 | Step 3 of 4 | SC | SmokeCraft Intake |  | Tell us a bit about yourself so we can craft a lounge experience worthy of your taste. Your privacy is our priority—only your nickname enters the humidor leaderboard. |  | add_a_photo | add |  | MEMBER PORTRAIT (OPTIONAL) |  | lock | PRIVATE IDENTITY | FULL LE",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": false,
+      "hasForm": true,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "DIV text=",
+        "HEADER text=arrow_back CRAFTHUB 360 Step 3 of 4"
+      ],
+      "failTerms": [
+        "SmokeCraft Intake"
+      ],
+      "scrollH": 2281
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Enroll.png"
+  },
+  {
+    "name": "GoldenBox",
+    "route": "/smokecraft/golden-box",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/golden-box",
+      "bodyTextLen": 4397,
+      "bodyTextPreview": "CRAFTHUB 360 |  | Julian Sterling |  | SMOKECRAFT SESSION |  | A PROMISE OF CRAFT |  | Your Golden Box Awaits |  | Inside is a reward curated entirely around you — your palate, your story, your craft. Complete the SmokeCraft journey to earn the right to open it. |  | FIVE PHASES TO UNLOCK |  | 1 | MENTOR | 2 | ORIGINS | 3 | CULTIVATION | ",
+      "allImgCount": 2,
+      "visImgCount": 2,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "DIV text=",
+        "DIV text=",
+        "HEADER text=CRAFTHUB 360  Julian Sterling  SMOKECRAFT SESSION"
+      ],
+      "failTerms": [
+        "Lounge"
+      ],
+      "scrollH": 2393
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/GoldenBox.png"
+  },
+  {
+    "name": "Format",
+    "route": "/smokecraft/format",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/format",
+      "bodyTextLen": 4282,
+      "bodyTextPreview": "arrow_back | shield_person | CRAFTHUB 360 | ROUND 1 OF 3 · VISIT 1 OF 8 · SESSION 2 OF 24 | GRAND LOUNGE | ROUND 1 OF 3 · VISIT 1 OF 8 · SESSION 2 OF 24 | SHAPE, SIZE & BURN TIME | — | THE FORMAT GUIDE | Shape, Size & Burn Time |  | The shape and size of a cigar shape everything — from how it draws and burns, to the body",
+      "allImgCount": 12,
+      "visImgCount": 12,
+      "fgSrc": "http://localhost:4173/assets/smokecraft/cigars/robusto.jpg",
+      "fgW": 457,
+      "fgH": 96,
+      "fgObjFit": "contain",
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": true,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "HEADER text=arrow_back shield_person CRAFTHUB 360 ROUND 1 OF 3 · VISIT 1 OF 8 · SESSION 2 OF"
+      ],
+      "failTerms": [],
+      "scrollH": 3744
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Format.png"
+  },
+  {
+    "name": "CigarGaugeGuide",
+    "route": "/smokecraft/cigar-gauge-guide",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/cigar-gauge-guide",
+      "bodyTextLen": 614,
+      "bodyTextPreview": "arrow_back | CraftHub 360 |  | ROUND 1 OF 3 · VISIT 1 OF 8 · SESSION 2 OF 24 · CIGAR GAUGE GUIDE |  | Cigar Gauge Guide |  | Ring gauge measures a cigar's diameter in 64ths of an inch — the thicker the ring gauge, the cooler and slower the burn. Use this scale alongside the Format Guide to compare shapes at a gla",
+      "allImgCount": 0,
+      "visImgCount": 0,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "HEADER text=arrow_back CraftHub 360"
+      ],
+      "failTerms": [
+        "CraftHub 360"
+      ],
+      "scrollH": 1248
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/CigarGaugeGuide.png"
+  },
+  {
+    "name": "WrapperStrength",
+    "route": "/smokecraft/wrapper-strength",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/wrapper-strength",
+      "bodyTextLen": 601,
+      "bodyTextPreview": "arrow_back | CraftHub 360 |  | SMOKECRAFT 360 — VISIT 2 |  | Wrapper & Strength Education |  | The wrapper leaf shapes both flavor and visual character. Pick the wrapper and strength you'd reach for tonight. |  | LEAF & WRAPPER SELECTION |  | The wrapper leaf defines the look, feel, and first impression of the cigar. |  | WR",
+      "allImgCount": 0,
+      "visImgCount": 0,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "HEADER text=arrow_back CraftHub 360"
+      ],
+      "failTerms": [
+        "CraftHub 360"
+      ],
+      "scrollH": 1186
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/WrapperStrength.png"
+  },
+  {
+    "name": "Curation",
+    "route": "/smokecraft/curation",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/curation",
+      "bodyTextLen": 646,
+      "bodyTextPreview": "arrow_back | shield_person | CRAFTHUB 360 | GRAND LOUNGE | SMOKECRAFT CURATION | Your Curation Map |  | Seed genetics and soil terroir are now paired. Review the profile below, then continue into Leaf Education to learn how master blenders identify the leaves that express this foundation. |  | grain | SELECTED SEED PAT",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "HEADER text=arrow_back shield_person CRAFTHUB 360 GRAND LOUNGE"
+      ],
+      "failTerms": [],
+      "scrollH": 806
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Curation.png"
+  },
+  {
+    "name": "Leaves",
+    "route": "/smokecraft/leaves",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/leaves",
+      "bodyTextLen": 3730,
+      "bodyTextPreview": "arrow_back | eco | CraftHub 360 | Grand Lounge | THE STUDY SESSION | Know Your Leaves |  | Master blenders identify tobacco by sight, texture, and origin before a single leaf is rolled. Study these six varieties - flip each card to unlock the Master Sommelier's tasting note. The recognition challenge follows. |  | 01",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "HEADER text=arrow_back eco CraftHub 360 Grand Lounge"
+      ],
+      "failTerms": [
+        "CraftHub 360",
+        "Lounge"
+      ],
+      "scrollH": 1128
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Leaves.png"
+  },
+  {
+    "name": "LeafChallenge",
+    "route": "/smokecraft/leaf-challenge",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/leaf-challenge",
+      "bodyTextLen": 199,
+      "bodyTextPreview": "arrow_back | CraftHub 360 | ROUND 1 OF 5 | SCORE 0 | eco | eco | LEAF 1 | help_outline |  | Which tobacco leaf is this? |  | Connecticut Shade |  | USA |  | Habano Colorado |  | CUBA |  | Sumatra Maduro |  | INDONESIA |  | Criollo '98 |  | NICARAGUA",
+      "allImgCount": 0,
+      "visImgCount": 0,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "HEADER text=arrow_back CraftHub 360 ROUND 1 OF 5 SCORE 0 eco"
+      ],
+      "failTerms": [
+        "CraftHub 360"
+      ],
+      "scrollH": 768
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/LeafChallenge.png"
+  },
+  {
+    "name": "LeafChallengeCalculating",
+    "route": "/smokecraft/leaf-challenge-calculating",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/leaf-challenge-calculating",
+      "bodyTextLen": 140,
+      "bodyTextPreview": "eco | SMOKECRAFT 360 · KNOW YOUR LEAVES | Calculating Your | Leaf Eye… |  | Reviewing your recognition accuracy and preparing your reward moment. |  | eco",
+      "allImgCount": 0,
+      "visImgCount": 0,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": false,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": false,
+      "hasBanner": false,
+      "fixedChrome": [],
+      "failTerms": [],
+      "scrollH": 768
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/LeafChallengeCalculating.png"
+  },
+  {
+    "name": "LeafChallengeResult",
+    "route": "/smokecraft/leaf-challenge-result",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/leaf-challenge-result",
+      "bodyTextLen": 833,
+      "bodyTextPreview": "IMAGE PENDING | arrow_back | CraftHub 360 | LEAF CHALLENGE COMPLETE | IMAGE PENDING | KNOW YOUR LEAVES · SMOKECRAFT 360 | Leaf Challenge Complete | 2/5 | LEAF RECOGNITION SCORE | A Learning Journey |  | You identified 2 out of 5 leaf profiles. Every master blender starts by training the eye. Review the study deck, sharpe",
+      "allImgCount": 0,
+      "visImgCount": 0,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=IMAGE PENDING",
+        "DIV text=",
+        "HEADER text=arrow_back CraftHub 360 LEAF CHALLENGE COMPLETE IMAGE PENDING"
+      ],
+      "failTerms": [
+        "CraftHub 360"
+      ],
+      "scrollH": 1342
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/LeafChallengeResult.png"
+  },
+  {
+    "name": "Cultivation",
+    "route": "/smokecraft/cultivation",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/cultivation",
+      "bodyTextLen": 1124,
+      "bodyTextPreview": "IMAGE PENDING | arrow_back | shield_person | CRAFTHUB 360 | GRAND LOUNGE | eco | FROM SEED TO SMOKE | The Cultivation Journey |  | Every great cigar carries the story of its land. Seed genetics, soil minerals, sun intensity, and the patient hands of master growers — cultivation shapes everything you taste. |  | IMAGE PEN",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "DIV text=IMAGE PENDING",
+        "DIV text=",
+        "HEADER text=arrow_back shield_person CRAFTHUB 360 GRAND LOUNGE"
+      ],
+      "failTerms": [],
+      "scrollH": 1329
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Cultivation.png"
+  },
+  {
+    "name": "Blend",
+    "route": "/smokecraft/blend",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/blend",
+      "bodyTextLen": 1486,
+      "bodyTextPreview": "IMAGE PENDING | arrow_back | CRAFTHUB 360 | CHALLENGES | VAULT | CONNOISSEUR | IMAGE PENDING | token |  | CRAFTHUB 360 |  | ORCHESTRATE · CURATE · ELEVATE |  | IMAGE PENDING | SmokeCraft | SIGNATURE BLENDS | IMAGE PENDING | BeerCraft | ARTISAN PAIRINGS | IMAGE PENDING | PourCraft | MIXOLOGY CURATED | IMAGE PENDING | WineCraft | VINTAGE SELECTIONS",
+      "allImgCount": 0,
+      "visImgCount": 0,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": true,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "DIV text=IMAGE PENDING",
+        "HEADER text=arrow_back CRAFTHUB 360 CHALLENGES VAULT CONNOISSEUR IMAGE PENDING",
+        "ASIDE text=token  CRAFTHUB 360  ORCHESTRATE · CURATE · ELEVATE  IMAGE PENDING SmokeCraft SI"
+      ],
+      "failTerms": [],
+      "scrollH": 2221
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Blend.png"
+  },
+  {
+    "name": "FlavorDNA",
+    "route": "/smokecraft/flavor-dna",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/flavor-dna",
+      "bodyTextLen": 1431,
+      "bodyTextPreview": "arrow_back | CraftHub 360 | Explore | Inventory | Passport | Assistant | Julian Sterling | PLATINUM MEMBER | military_tech | Grand Lounge | Sensory Profile |  | Build your Flavor DNA to unlock personalized cigar experiences. |  | radio_button_checked | OCCASION INFLUENCE | Atmosphere Shapes Flavor |  | Your occasion influences mood, p",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "DIV text=",
+        "DIV text=",
+        "HEADER text=arrow_back CraftHub 360 Explore Inventory Passport Assistant Julian Sterling PLA"
+      ],
+      "failTerms": [
+        "CraftHub 360",
+        "Lounge"
+      ],
+      "scrollH": 2253
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/FlavorDNA.png"
+  },
+  {
+    "name": "Available",
+    "route": "/smokecraft/available",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/available",
+      "bodyTextLen": 1654,
+      "bodyTextPreview": "arrow_back | CraftHub 360 | Grand Lounge | PORTRAIT PENDING | Julian Sterling |  | PLATINUM MEMBER |  | 2,450 Credits | wine_bar | Cellar | smoking_rooms | Humidor | chair | Lounge | menu_book | My Passport | contact_support | Support | verified | STEP 10: CURATED SELECTION | Your Recommendations |  | Based on your preference for earth tones, m",
+      "allImgCount": 0,
+      "visImgCount": 0,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": true,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "HEADER text=arrow_back CraftHub 360 Grand Lounge PORTRAIT PENDING",
+        "ASIDE text=Julian Sterling  PLATINUM MEMBER  2,450 Credits wine_bar Cellar smoking_rooms Hu"
+      ],
+      "failTerms": [
+        "CraftHub 360",
+        "Lounge"
+      ],
+      "scrollH": 2388
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Available.png"
+  },
+  {
+    "name": "Assistant",
+    "route": "/smokecraft/assistant",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/assistant",
+      "bodyTextLen": 456,
+      "bodyTextPreview": "arrow_back | shield_person | CRAFTHUB 360 | STEP 3 OF 4 | GRAND LOUNGE | smoking_rooms | SMOKECRAFT 360 | pending | NEW SCREEN — NO STITCH SOURCE | construction | SmokeCraft Assistant |  | This screen does not yet exist in the Stitch export. It will be designed and built when the new screen brief is approved. |  | Journey Prog",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "HEADER text=arrow_back shield_person CRAFTHUB 360 STEP 3 OF 4 GRAND LOUNGE"
+      ],
+      "failTerms": [],
+      "scrollH": 933
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Assistant.png"
+  },
+  {
+    "name": "Leaderboard",
+    "route": "/smokecraft/leaderboard",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/leaderboard",
+      "bodyTextLen": 1233,
+      "bodyTextPreview": "arrow_back | SMOKECRAFT REWARDS | CraftHub 360 | info | About | person | My Rank | qr_code | Scan QR | volume_up | Grand Lounge | JC | YOUR SMOKECRAFT SESSION (REAL DATA) | XP / RANK | 100 · Novice | PROTOCOL STEPS | 0 / 17 | FINAL SCORE | 0 | STATUS | In Progress | Winner categories: Not Yet Earned — Pending Real Scoring Data | A shared venu",
+      "allImgCount": 3,
+      "visImgCount": 3,
+      "fgSrc": "http://localhost:4173/assets/smokecraft-reference/approved/smokecraft-leaderboard.png",
+      "fgW": 992,
+      "fgH": 558,
+      "fgObjFit": "contain",
+      "fillsDim": true,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "HEADER text=arrow_back SMOKECRAFT REWARDS CraftHub 360 info About person My Rank qr_code Sca",
+        "DIV text="
+      ],
+      "failTerms": [
+        "CraftHub 360",
+        "Lounge"
+      ],
+      "scrollH": 1700
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Leaderboard.png"
+  },
+  {
+    "name": "PassportStamp",
+    "route": "/smokecraft/passport-stamp",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/passport-stamp",
+      "bodyTextLen": 1426,
+      "bodyTextPreview": "arrow_back | THE 360 PASSPORT | GRAND LOUNGE |  | SMOKECRAFT JOURNEY COMPLETE |  | Your Passport Has | Been Certified |  | 1 seal of craft earned, Grand Member. Your SmokeCraft achievements are permanently inscribed in your 360 Passport. |  | stars | +50 XP — PASSPORT CERTIFIED | verified_user | STAMP EARNED: | Passport Certifie",
+      "allImgCount": 2,
+      "visImgCount": 2,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": true,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "HEADER text=arrow_back THE 360 PASSPORT GRAND LOUNGE"
+      ],
+      "failTerms": [
+        "Lounge"
+      ],
+      "scrollH": 2635
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/PassportStamp.png"
+  },
+  {
+    "name": "SeedSoil",
+    "route": "/smokecraft/seed-soil",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/seed-soil",
+      "bodyTextLen": 1741,
+      "bodyTextPreview": "CraftHub 360 | ROUND 1 OF 3 | VISIT 1 OF 8 | SESSION 2 OF 24 | SEED & SOIL |  | SMOKECRAFT 360 |  | Seed & Soil Pairing |  | Select the tobacco growing region that defines the character of tonight's cigar (the Seed), then tell us about tonight's setting (the Soil) so we can explain why the pairing works. |  | SEED & SOIL | R",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "HEADER text=CraftHub 360",
+        "DIV text=SEED PROFILE  WRAPPER Habano Cuban-seed BINDER Cuban Criollo FILLER Cuban Corojo"
+      ],
+      "failTerms": [
+        "CraftHub 360",
+        "Lounge"
+      ],
+      "scrollH": 2103
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/SeedSoil.png"
+  },
+  {
+    "name": "HumidorMatch",
+    "route": "/smokecraft/humidor-match",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/humidor-match",
+      "bodyTextLen": 2557,
+      "bodyTextPreview": "CraftHub 360 | ROUND 1 OF 3 | VISIT 1 OF 8 | SESSION 2 OF 24 | HUMIDOR MATCH |  | SMOKECRAFT 360 |  | Humidor Match |  | Your matched recommendations, then confirm your cigar's storage condition before the session begins. |  | HUMIDOR MATCH |  | Tune your cigar's storage environment before the session begins. |  | YOUR CIGAR RECOM",
+      "allImgCount": 4,
+      "visImgCount": 4,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "HEADER text=CraftHub 360"
+      ],
+      "failTerms": [
+        "CraftHub 360"
+      ],
+      "scrollH": 3018
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/HumidorMatch.png"
+  },
+  {
+    "name": "RequestPurchase",
+    "route": "/smokecraft/request-purchase",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/request-purchase",
+      "bodyTextLen": 600,
+      "bodyTextPreview": "CraftHub 360 | ROUND 1 OF 3 | VISIT 1 OF 8 | SESSION 2 OF 24 | REQUEST / PURCHASE |  | SMOKECRAFT 360 |  | Request or Purchase Cigar |  | How will you be obtaining your cigar for tonight's session? |  | REQUEST OR PURCHASE |  | How will you be obtaining your cigar for tonight's session? |  | info |  | This is a local handoff step only",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "HEADER text=CraftHub 360"
+      ],
+      "failTerms": [
+        "CraftHub 360"
+      ],
+      "scrollH": 1212
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/RequestPurchase.png"
+  },
+  {
+    "name": "CutToastLight",
+    "route": "/smokecraft/cut-toast-light",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/cut-toast-light",
+      "bodyTextLen": 1144,
+      "bodyTextPreview": "CraftHub 360 | ROUND 1 OF 3 | VISIT 1 OF 8 | SESSION 2 OF 24 | CUT, TOAST & LIGHT |  | SMOKECRAFT 360 |  | Cut, Toast & Light |  | Complete each preparation step before beginning your tasting. |  | PREPARE WITH INTENTION |  | Complete each preparation step before beginning your tasting. |  | CHOOSE YOUR CUT METHOD |  | Straight Cut |  | A",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "HEADER text=CraftHub 360"
+      ],
+      "failTerms": [
+        "CraftHub 360"
+      ],
+      "scrollH": 1866
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/CutToastLight.png"
+  },
+  {
+    "name": "Scorecard",
+    "route": "/smokecraft/scorecard",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/scorecard",
+      "bodyTextLen": 5342,
+      "bodyTextPreview": "CraftHub 360 | ROUND 1 OF 3 | VISIT 1 OF 8 | SESSION 2 OF 24 | SCORECARD |  | SMOKECRAFT 360 |  | SmokeCraft Scorecard |  | EVERY POINT DEFINES EXCELLENCE |  | Score with precision. Build your legacy. |  | ADVANCED SCORECARD |  | Novice · 100 XP |  | +0 |  | FINAL TOTAL |  | Protocol Completion |  | 0 steps completed |  | +0 |  | Pairing Score |  | Not yet s",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "HEADER text=CraftHub 360"
+      ],
+      "failTerms": [
+        "CraftHub 360",
+        "Lounge"
+      ],
+      "scrollH": 6190
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Scorecard.png"
+  },
+  {
+    "name": "Connections",
+    "route": "/smokecraft/connections",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/connections",
+      "bodyTextLen": 2610,
+      "bodyTextPreview": "arrow_back | CraftHub 360 | ROUND 1 OF 3 | VISIT 1 OF 8 | SESSION 2 OF 24 | 360 CONNECTIONS | hub |  | 360 MEMBER NETWORK |  | SMOKECRAFT 360 |  | 360 Passport Connections |  | Complete any connections you want to make before leaving the lounge. Each action deepens your membership and grows your 360 network. |  | lock |  | Your SmokeC",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "HEADER text=arrow_back CraftHub 360"
+      ],
+      "failTerms": [
+        "CraftHub 360",
+        "Lounge"
+      ],
+      "scrollH": 3272
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Connections.png"
+  },
+  {
+    "name": "ManagementSync",
+    "route": "/smokecraft/management-sync",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/management-sync",
+      "bodyTextLen": 643,
+      "bodyTextPreview": "arrow_back | CraftHub 360 | ROUND 1 OF 3 | VISIT 1 OF 8 | SESSION 2 OF 24 | MANAGEMENT SYNC | sync |  | VENUE HANDOFF |  | SMOKECRAFT 360 |  | Your Visit Has Been Logged |  | Your visit has been logged for the venue team. You can optionally share extra details with staff below before closing out. |  | assignment_turned_in |  | Submit ",
+      "allImgCount": 1,
+      "visImgCount": 1,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [
+        "DIV text=",
+        "HEADER text=arrow_back CraftHub 360"
+      ],
+      "failTerms": [
+        "CraftHub 360"
+      ],
+      "scrollH": 1130
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/ManagementSync.png"
+  },
+  {
+    "name": "Demo",
+    "route": "/smokecraft/demo",
+    "d": {
+      "url": "http://localhost:4173/smokecraft/demo",
+      "bodyTextLen": 273,
+      "bodyTextPreview": "arrow_back | Demo Experience | visibility | DEMO MODE | This is not live venue data |  | Demo Experience lets you explore the full SmokeCraft 360 journey using sample content. No real purchases, inventory changes, or venue records are created while in demo mode. |  | CONTINUE IN DEMO MODE",
+      "allImgCount": 0,
+      "visImgCount": 0,
+      "fgSrc": null,
+      "fgW": 0,
+      "fgH": 0,
+      "fgObjFit": null,
+      "fillsDim": false,
+      "imgIsCorrect": null,
+      "hasHeader": true,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "hasButton": true,
+      "hasBanner": false,
+      "fixedChrome": [],
+      "failTerms": [
+        "DEMO MODE"
+      ],
+      "scrollH": 768
+    },
+    "screenshot": "/home/user/crafthub-360-stitch/public/proof/smokecraft-remaining-route-audit/Demo.png"
+  }
+]

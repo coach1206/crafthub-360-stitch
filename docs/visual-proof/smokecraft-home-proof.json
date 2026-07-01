@@ -1,4 +1,5 @@
 {
+  "family": "smokecraft",
   "screen": "smokecraft-home",
   "route": "/smokecraft",
   "referenceImage": "PROFILE DISCOVER 11.png",
@@ -7,6 +8,6 @@
     "width": 1440,
     "height": 900
   },
-  "timestamp": "2026-06-25T19:31:07.212Z",
-  "commitHash": "de9c6c90"
+  "timestamp": "2026-06-26T08:57:32.246Z",
+  "commitHash": "494bf41b"
 }
