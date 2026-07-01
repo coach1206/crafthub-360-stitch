@@ -1,0 +1,114 @@
+[
+  {
+    "step": 1,
+    "from": "/smokecraft/enroll",
+    "expected": "/smokecraft/identity",
+    "landed": "/smokecraft/identity",
+    "pass": true
+  },
+  {
+    "step": 2,
+    "from": "/smokecraft/identity",
+    "expected": "/smokecraft/seed-soil",
+    "landed": "/smokecraft/seed-soil",
+    "pass": true
+  },
+  {
+    "step": 3,
+    "from": "/smokecraft/seed-soil",
+    "expected": "/smokecraft/mentor-selection",
+    "landed": "/smokecraft/mentor-selection",
+    "pass": true
+  },
+  {
+    "step": 4,
+    "from": "/smokecraft/mentor-selection",
+    "expected": "/smokecraft/golden-box",
+    "landed": "/smokecraft/golden-box",
+    "pass": true
+  },
+  {
+    "step": 5,
+    "from": "/smokecraft/golden-box",
+    "expected": "/smokecraft/humidor-match",
+    "landed": "/smokecraft/humidor-match",
+    "pass": true
+  },
+  {
+    "step": 6,
+    "from": "/smokecraft/humidor-match",
+    "expected": "/smokecraft/request-purchase",
+    "landed": "/smokecraft/request-purchase",
+    "pass": true
+  },
+  {
+    "step": 7,
+    "from": "/smokecraft/request-purchase",
+    "expected": "/smokecraft/cut-toast-light",
+    "landed": "/smokecraft/cut-toast-light",
+    "pass": true
+  },
+  {
+    "step": 8,
+    "from": "/smokecraft/cut-toast-light",
+    "expected": "/smokecraft/first-third",
+    "landed": "/smokecraft/first-third",
+    "pass": true
+  },
+  {
+    "step": 9,
+    "from": "/smokecraft/first-third",
+    "expected": "/smokecraft/second-third",
+    "landed": "/smokecraft/second-third",
+    "pass": true
+  },
+  {
+    "step": 10,
+    "from": "/smokecraft/second-third",
+    "expected": "/smokecraft/flavor-memory",
+    "landed": "/smokecraft/flavor-memory",
+    "pass": true
+  },
+  {
+    "step": 11,
+    "from": "/smokecraft/flavor-memory",
+    "expected": "/smokecraft/final-third",
+    "landed": "/smokecraft/final-third",
+    "pass": true
+  },
+  {
+    "step": 12,
+    "from": "/smokecraft/final-third",
+    "expected": "/smokecraft/scorecard",
+    "landed": "/smokecraft/scorecard",
+    "pass": true
+  },
+  {
+    "step": 13,
+    "from": "/smokecraft/scorecard",
+    "expected": "/smokecraft/passport-stamp",
+    "landed": "/smokecraft/passport-stamp",
+    "pass": true
+  },
+  {
+    "step": 14,
+    "from": "/smokecraft/passport-stamp",
+    "expected": "/smokecraft/connections",
+    "landed": "/smokecraft/connections",
+    "pass": true
+  },
+  {
+    "step": 15,
+    "from": "/smokecraft/connections",
+    "expected": "/smokecraft/management-sync",
+    "landed": "/smokecraft/management-sync",
+    "pass": true
+  },
+  {
+    "step": 16,
+    "from": "/smokecraft/management-sync",
+    "expected": "/smokecraft/session-complete",
+    "landed": "/smokecraft/session-complete",
+    "pass": true
+  }
+]

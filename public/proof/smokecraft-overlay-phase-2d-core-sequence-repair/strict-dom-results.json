@@ -1,0 +1,182 @@
+{
+  "normal": [
+    {
+      "route": "/smokecraft/enroll",
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "hasHeader": false,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "bodyFail": false,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/request-purchase",
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "hasHeader": false,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "bodyFail": false,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/connections",
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "hasHeader": false,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "bodyFail": false,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/management-sync",
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "hasHeader": false,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "bodyFail": false,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/second-third",
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "hasHeader": false,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "bodyFail": false,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "hasHeader": false,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "bodyFail": false,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/passport-stamp",
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "hasHeader": false,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "bodyFail": false,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "bodyTextLength": 0,
+      "visibleImageCount": 1,
+      "visibleButtonCount": 0,
+      "fixedChromeCount": 0,
+      "hasHeader": false,
+      "hasNav": false,
+      "hasAside": false,
+      "hasForm": false,
+      "bodyFail": false,
+      "pass": true
+    }
+  ],
+  "debug": [
+    {
+      "route": "/smokecraft/enroll",
+      "visibleImageCount": 1,
+      "hotspotDOMCount": 1,
+      "labelVisible": true,
+      "firstLabel": "Continue to Intake",
+      "visibleButtonCount": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/request-purchase",
+      "visibleImageCount": 1,
+      "hotspotDOMCount": 1,
+      "labelVisible": true,
+      "firstLabel": "Continue to Cut Toast Light",
+      "visibleButtonCount": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/connections",
+      "visibleImageCount": 1,
+      "hotspotDOMCount": 1,
+      "labelVisible": true,
+      "firstLabel": "Continue to Management Sync",
+      "visibleButtonCount": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/management-sync",
+      "visibleImageCount": 1,
+      "hotspotDOMCount": 1,
+      "labelVisible": true,
+      "firstLabel": "Complete SmokeCraft",
+      "visibleButtonCount": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/second-third",
+      "visibleImageCount": 1,
+      "hotspotDOMCount": 1,
+      "labelVisible": true,
+      "firstLabel": "Continue to Flavor Memory",
+      "visibleButtonCount": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "visibleImageCount": 1,
+      "hotspotDOMCount": 1,
+      "labelVisible": true,
+      "firstLabel": "Continue to Final Third",
+      "visibleButtonCount": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/passport-stamp",
+      "visibleImageCount": 1,
+      "hotspotDOMCount": 1,
+      "labelVisible": true,
+      "firstLabel": "Continue to Connections",
+      "visibleButtonCount": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "visibleImageCount": 1,
+      "hotspotDOMCount": 1,
+      "labelVisible": true,
+      "firstLabel": "Request Purchase",
+      "visibleButtonCount": 1,
+      "pass": true
+    }
+  ]
+}

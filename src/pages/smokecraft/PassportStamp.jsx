@@ -2,9 +2,9 @@ import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRou
 
 const HOTSPOTS = [
   {
-    label: 'Complete Session',
+    label: 'Continue to Connections',
     x: 10, y: 75, width: 80, height: 20,
-    to: '/smokecraft/session-complete',
+    to: '/smokecraft/connections',
   },
 ]
 

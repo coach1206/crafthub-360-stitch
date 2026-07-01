@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 
 export default function FlavorMemory() {
-  const navigate = useNavigate()
   const { completeStep, addXP } = useGuestSession()
   const [done, setDone] = useState(false)
 
@@ -15,15 +13,23 @@ export default function FlavorMemory() {
     triggerHaptic('medium')
     completeStep('flavor-memory')
     addXP(75)
-    navigate('/smokecraft/final-third')
   }
 
+  const hotspots = [
+    {
+      label: 'Continue to Final Third',
+      x: 10, y: 75, width: 80, height: 20,
+      onClick: handleContinue,
+      to: '/smokecraft/final-third',
+    },
+  ]
+
   return (
-    <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
-      <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-flavor-memory.png"
-        alt="Flavor Memory"
-      />
-    </div>
+    <SmokeCraftAssetRoute
+      src="/assets/smokecraft-reference/approved/smokecraft-flavor-memory.png"
+      alt="Flavor Memory"
+      hotspots={hotspots}
+      route="/smokecraft/flavor-memory"
+    />
   )
 }
