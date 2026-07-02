@@ -6,14 +6,14 @@ import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRou
 
 export default function Format() {
   const navigate = useNavigate()
-  const { completeStep } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
   const [done, setDone] = useState(false)
 
   function handleContinue() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
-    completeStep('format')
+    awardSessionRewards('format')
     navigate('/smokecraft/wrapper-strength')
   }
 

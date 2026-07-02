@@ -3,13 +3,13 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 
 export default function HumidorMatch() {
-  const { completeStep, addXP } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
 
   const HOTSPOTS = [
     {
       label: 'Request Purchase',
       x: 10, y: 75, width: 80, height: 20,
-      onClick: () => { triggerHaptic('medium'); completeStep('humidor-match'); addXP(75) },
+      onClick: () => { triggerHaptic('medium'); awardSessionRewards('humidor-match') },
       to: '/smokecraft/request-purchase',
     },
   ]

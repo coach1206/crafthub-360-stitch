@@ -6,15 +6,14 @@ import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetSc
 
 export default function MiniTastingRound() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
   const [done, setDone] = useState(false)
 
   function handleContinue() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
-    completeStep('mini-tasting')
-    addXP(75)
+    awardSessionRewards('mini-tasting')
     navigate('/smokecraft/visit-complete')
   }
 

@@ -4,7 +4,7 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 
 export default function FinalThird() {
-  const { completeStep, addXP, setFinalThirdTasting } = useGuestSession()
+  const { awardSessionRewards, setFinalThirdTasting } = useGuestSession()
   const [done, setDone] = useState(false)
 
   function handleContinue() {
@@ -25,8 +25,7 @@ export default function FinalThird() {
       mentorTip: null,
       mentorName: null,
     })
-    completeStep('final-third')
-    addXP(5)
+    awardSessionRewards('final-third')
   }
 
   const hotspots = [

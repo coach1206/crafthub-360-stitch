@@ -4,15 +4,14 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 
 export default function FlavorMemory() {
-  const { completeStep, addXP } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
   const [done, setDone] = useState(false)
 
   function handleContinue() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
-    completeStep('flavor-memory')
-    addXP(75)
+    awardSessionRewards('flavor-memory')
   }
 
   const hotspots = [

@@ -6,15 +6,14 @@ import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetSc
 
 export default function PairingLab() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
   const [done, setDone] = useState(false)
 
   function handleContinue() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
-    completeStep('pairing-lab')
-    addXP(75)
+    awardSessionRewards('pairing-lab')
     navigate('/smokecraft/visit-complete')
   }
 

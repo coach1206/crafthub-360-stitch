@@ -6,15 +6,14 @@ import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetSc
 
 export default function FinalReview() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
   const [done, setDone] = useState(false)
 
   function handleContinue() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
-    completeStep('final-review')
-    addXP(100)
+    awardSessionRewards('final-review')
     navigate('/smokecraft/passport-stamp')
   }
 

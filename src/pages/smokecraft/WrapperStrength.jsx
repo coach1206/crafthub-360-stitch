@@ -6,15 +6,14 @@ import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRou
 
 export default function WrapperStrength() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
   const [done, setDone] = useState(false)
 
   function handleContinue() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
-    completeStep('wrapper-strength')
-    addXP(75)
+    awardSessionRewards('wrapper-strength')
     navigate('/smokecraft/visit-complete')
   }
 

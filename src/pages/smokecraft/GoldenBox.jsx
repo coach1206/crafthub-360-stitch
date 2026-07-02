@@ -3,13 +3,13 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 
 export default function GoldenBox() {
-  const { completeStep } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
 
   const HOTSPOTS = [
     {
       label: 'Continue to Mentor Selection',
       x: 10, y: 75, width: 80, height: 20,
-      onClick: () => { triggerHaptic('medium'); completeStep('golden-box') },
+      onClick: () => { triggerHaptic('medium'); awardSessionRewards('golden-box') },
       to: '/smokecraft/mentor-selection',
     },
   ]

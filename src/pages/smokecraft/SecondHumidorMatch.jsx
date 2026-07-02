@@ -6,15 +6,14 @@ import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetSc
 
 export default function SecondHumidorMatch() {
   const navigate = useNavigate()
-  const { completeStep, addXP } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
   const [done, setDone] = useState(false)
 
   function handleContinue() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
-    completeStep('second-humidor-match')
-    addXP(75)
+    awardSessionRewards('second-humidor-match')
     navigate('/smokecraft/mini-tasting')
   }
 
