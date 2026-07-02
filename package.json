@@ -20,7 +20,8 @@
     "visual:crafthub": "node scripts/visualProof.js --family=crafthub",
     "db:migrate": "node server/db/runMigrations.js",
     "verify:pos360": "node server/scripts/verifyPos360PlatformLayer.js",
-    "verify:database": "node server/scripts/verifyDatabaseFoundation.js"
+    "verify:database": "node server/scripts/verifyDatabaseFoundation.js",
+    "verify:payments": "node server/scripts/verifyStripeConnectMoneyBridge.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -37,6 +38,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.26.2",
+    "stripe": "^22.3.0",
     "tailwind-merge": "^1.13.0",
     "uuid": "^14.0.0"
   },

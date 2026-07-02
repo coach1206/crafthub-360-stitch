@@ -210,3 +210,53 @@ export async function getPOS360ReadinessHooks(venueId) {
     tenantGuardStatus: 'tenant_guard_active',
   }
 }
+
+// ── Payment / Money Bridge Management Hooks ───────────────────────────────────
+
+export async function getPaymentReadinessHooks(venueId, partnerId = null) {
+  const { getStripeReadiness } = await import('../config/paymentProviderConfig.js')
+  const { getVenuePaymentReadiness, getPartnerVendorPaymentReadiness, getPlatformPaymentReadiness } = await import('./payments/paymentAccountOnboardingService.js')
+  const { isDbAvailable } = await import('../db/connection.js')
+
+  const stripeReadiness = getStripeReadiness()
+  const platformReadiness = await getPlatformPaymentReadiness()
+  const venueReadiness = venueId ? await getVenuePaymentReadiness(venueId) : null
+  const partnerReadiness = partnerId ? await getPartnerVendorPaymentReadiness(partnerId) : null
+
+  const hooks = []
+
+  if (!stripeReadiness.stripeReady) {
+    hooks.push({ type: 'stripe_keys_missing', severity: 'critical', message: 'Stripe secret key not configured. Payment processing unavailable.' })
+  }
+  if (!stripeReadiness.stripeConnectReady) {
+    hooks.push({ type: 'stripe_connect_required', severity: 'critical', message: 'Stripe Connect client ID not configured. Venue/partner payouts unavailable.' })
+  }
+  if (!stripeReadiness.webhookReady) {
+    hooks.push({ type: 'webhook_pending', severity: 'warning', message: 'STRIPE_WEBHOOK_SECRET not configured. Webhook verification unavailable.' })
+  }
+  if (!isDbAvailable()) {
+    hooks.push({ type: 'database_required', severity: 'warning', message: 'DATABASE_URL not configured. Settlement records not persisted.' })
+  }
+
+  if (venueReadiness && venueReadiness.onboardingStatus !== 'onboarding_complete') {
+    hooks.push({ type: 'onboarding_required', severity: 'warning', owner: 'venue', venueId, message: `Venue ${venueId} payment account onboarding required for referral payout.` })
+  }
+  if (partnerReadiness && partnerReadiness.onboardingStatus !== 'onboarding_complete') {
+    hooks.push({ type: 'onboarding_required', severity: 'warning', owner: 'partner_vendor', partnerId, message: `Partner ${partnerId} payment account onboarding required for payout.` })
+  }
+
+  hooks.push({ type: 'settlement_pending_preview', severity: 'info', message: 'All settlements are in preview mode. Money Bridge calculates splits but cannot release money until Stripe Connect is live.' })
+
+  return {
+    ok: true,
+    venueId,
+    partnerId,
+    stripeReadiness: stripeReadiness.readinessStatus,
+    platformPaymentStatus: platformReadiness.stripeReadiness,
+    settlementStatus: 'settlement_pending_preview',
+    paymentHooks: hooks,
+    moneyBridgeStatus: 'preview_only',
+    refundStatus: 'refund_requires_processor',
+    payoutReadiness: { venue: venueReadiness?.canReceiveReferralPayout ?? false, partner: partnerReadiness?.canReceivePartnerPayout ?? false },
+  }
+}
