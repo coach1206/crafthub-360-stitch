@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { registerSmokeEventLogSink } from '../services/smokecraft/smokeSharedStorageService.js'
 import { getRankFromXP } from '../constants/session.js'
+import { getSessionRewards } from '../constants/smokecraftRewards.js'
 import {
   awardPassportStamp,
   recordGoldenBoxProgress,
@@ -91,6 +92,46 @@ export function GuestSessionProvider({ children }) {
         ? prev.badges
         : [...prev.badges, { ...badge, earnedAt: Date.now() }],
     }))
+  }, [update])
+
+  // ── SmokeCraft: idempotent session reward award ───────────────────────────
+  /**
+   * Awards XP + badges for a SmokeCraft session in a single atomic update.
+   * Fully idempotent: if the session is already in completedSteps, this is
+   * a no-op — XP and badges will not be re-awarded.
+   *
+   * Usage:  awardSessionRewards('enroll')
+   * Replaces manual addXP(n) + addBadge({...}) pairs in session pages.
+   */
+  const awardSessionRewards = useCallback((sessionId) => {
+    const rewards = getSessionRewards(sessionId)
+    if (!rewards) return
+    update(prev => {
+      // Guard: already completed — skip entirely
+      if (prev.completedSteps.includes(sessionId)) return prev
+
+      // Step
+      const completedSteps = [...prev.completedSteps, sessionId]
+
+      // XP
+      const newXP = prev.xp + rewards.xp
+      const rank  = getRankFromXP(newXP).name
+
+      // Badges — deduplicate against existing awards
+      const existingIds = new Set(prev.badges.map(b => b.id))
+      const newBadges = rewards.sessionBadges
+        .filter(b => !existingIds.has(b.id))
+        .map(b => ({ ...b, earnedAt: Date.now() }))
+
+      return {
+        ...prev,
+        completedSteps,
+        currentSmokecraftStep: sessionId,
+        xp: newXP,
+        rank,
+        badges: [...prev.badges, ...newBadges],
+      }
+    })
   }, [update])
 
   // ── Passport stamps ───────────────────────────────────────────────────────
@@ -846,6 +887,7 @@ export function GuestSessionProvider({ children }) {
       completeStep,
       addXP,
       addBadge,
+      awardSessionRewards,
       // Stamps
       awardStamp,
       addSmokecraftStamp,
