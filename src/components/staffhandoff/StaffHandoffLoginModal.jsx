@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { verifyStaffHandoffCredentials, verifyFounderCredentials, STAFF_HANDOFF_AUTH_AVAILABLE, STAFF_DEMO_MODE } from '../../data/staffHandoffRegistry.js'
+import { verifyStaffPin } from '../../services/pos3/customerOrderService.js'
 
 const GOLD = '#E9C176'
 
@@ -131,7 +132,7 @@ function StaffHandoffLoginForm({ onUnlock, onCancel }) {
   const [error, setError] = useState(null)
   const [checking, setChecking] = useState(false)
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setError(null)
 
@@ -150,12 +151,33 @@ function StaffHandoffLoginForm({ onUnlock, onCancel }) {
       return
     }
     if (founderResult.error) {
-      // Email matched the founder account but the PIN didn't.
       setChecking(false)
       setError(founderResult.error)
       return
     }
 
+    // Try backend PIN verification first (scan-mode: finds staff by PIN hash).
+    const backendResult = await verifyStaffPin(pin, { handoffSource: 'StaffHandoffLoginModal', email })
+    if (backendResult.backendAvailable && backendResult.ok) {
+      setChecking(false)
+      onUnlock({
+        ok: true,
+        role: backendResult.staffUser?.role || 'staff',
+        displayName: backendResult.staffUser?.displayName || 'Staff',
+        email: backendResult.staffUser?.email || email,
+        staffUser: backendResult.staffUser,
+        permissions: backendResult.permissions,
+        backendVerified: true,
+      })
+      return
+    }
+    if (backendResult.backendAvailable && !backendResult.ok) {
+      setChecking(false)
+      setError(backendResult.error || 'Staff credentials not recognized.')
+      return
+    }
+
+    // Backend unavailable — fall back to local registry (dev/offline only).
     const result = verifyStaffHandoffCredentials(email, pin)
     setChecking(false)
 
@@ -164,7 +186,7 @@ function StaffHandoffLoginForm({ onUnlock, onCancel }) {
       return
     }
 
-    onUnlock(result)
+    onUnlock({ ...result, backendVerified: false })
   }
 
   return (

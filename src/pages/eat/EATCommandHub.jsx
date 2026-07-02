@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { EatManagementLayout, EatCard, EatBtn, EAT_GOLD, L_NAVY, LightPill } from '../../components/eat/lightTheme.jsx'
 import { subscribe, getOpsEvents, SYSTEMS } from '../../services/shared/opsEventBus.js'
 import { completeCommand, receiveCommand } from '../../services/shared/opsControlBridge.js'
 import { getTickets } from '../../services/pos3/pos3Service.js'
+import { fetchEatPosLiveFeed } from '../../services/pos3/customerOrderService.js'
 import { EAT_ALERTS, EAT_STAFF, EAT_SECTIONS } from '../../data/eat/seedData.js'
 import { getEatOpsSnapshot } from '../../services/eat/eatOpsAnalyticsService.js'
 import RevenuePanel from '../../components/eat/RevenuePanel.jsx'
@@ -54,10 +55,25 @@ function useEatSnapshot() {
   return [snapshot, refresh]
 }
 
+function usePOS360Live() {
+  const [live, setLive] = useState(null)
+  const refresh = useCallback(async () => {
+    const result = await fetchEatPosLiveFeed()
+    if (result.ok) setLive(result)
+  }, [])
+  useEffect(() => {
+    refresh()
+    const id = setInterval(refresh, 20000)
+    return () => clearInterval(id)
+  }, [refresh])
+  return live
+}
+
 export default function EATCommandHub() {
   const navigate = useNavigate()
   const [feed, refresh] = useOpsFeed()
   const [snapshot] = useEatSnapshot()
+  const pos360Live = usePOS360Live()
   const eatTargeted = feed.filter((e) => e.targetSystem === 'EAT')
   const openTickets = getTickets().filter((t) => !['paid'].includes(t.status)).length
   const pendingHumidor = eatTargeted.filter((e) => e.commandType === 'CIGAR_REQUESTED' && e.status !== 'completed').length
@@ -219,6 +235,48 @@ export default function EATCommandHub() {
           ))}
         </EatCard>
       </div>
+
+      {pos360Live && (
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#9c7320', letterSpacing: '0.08em', marginBottom: 8 }}>
+            POS360 LIVE FEED
+            {pos360Live.localPreview && <span style={{ marginLeft: 8, fontWeight: 400, color: '#aaa' }}>(local-preview)</span>}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
+            {[
+              { label: 'Active Orders',       value: pos360Live.activeOrderCount },
+              { label: 'Self-Order',          value: pos360Live.customerSelfOrders },
+              { label: 'Staff-Assisted',      value: pos360Live.staffAssistedOrders },
+              { label: 'Pending Staff Confirm', value: pos360Live.pendingStaffConfirmation, accent: pos360Live.pendingStaffConfirmation > 0 ? '#b33b3b' : undefined },
+            ].map(({ label, value, accent }) => (
+              <EatCard key={label} style={{ padding: '10px 12px' }}>
+                <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#8b95a3', fontWeight: 700 }}>{label}</div>
+                <div style={{ fontSize: 26, fontWeight: 800, color: accent || L_NAVY, marginTop: 4 }}>{value ?? '—'}</div>
+              </EatCard>
+            ))}
+            <EatCard style={{ padding: '10px 12px' }}>
+              <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#8b95a3', fontWeight: 700 }}>Revenue Est.</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: L_NAVY, marginTop: 4 }}>
+                ${((pos360Live.revenueEstimateCents || 0) / 100).toFixed(2)}
+              </div>
+            </EatCard>
+          </div>
+          {pos360Live.recentOrderEvents?.length > 0 && (
+            <EatCard style={{ marginTop: 10, padding: 12 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#9c7320', marginBottom: 8 }}>RECENT POS360 ORDERS</div>
+              {pos360Live.recentOrderEvents.slice(0, 5).map(o => (
+                <div key={o.order_id} style={{ display: 'flex', gap: 10, padding: '5px 0', borderTop: '1px solid rgba(19,41,75,0.06)', fontSize: 12, color: '#1c2230' }}>
+                  <span style={{ flex: 1 }}>{o.order_id?.slice(-6)}</span>
+                  <span style={{ color: '#8b95a3' }}>Table {o.table_number || '—'}</span>
+                  <span style={{ color: '#8b95a3' }}>{o.source?.replace(/_/g, ' ')}</span>
+                  <span style={{ fontWeight: 700, color: o.status === 'routed' ? '#7ddca0' : '#9c7320' }}>{o.status}</span>
+                  <span>${((o.total_cents || 0) / 100).toFixed(2)}</span>
+                </div>
+              ))}
+            </EatCard>
+          )}
+        </div>
+      )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <RevenuePanel revenueToday={snapshot.revenueToday} destinationBreakdown={snapshot.destinationBreakdown} />

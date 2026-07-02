@@ -27,6 +27,7 @@ import * as auth from '../controllers/authController.js'
 const router = Router()
 
 // ── Public endpoints ──────────────────────────────────────────
+router.post('/staff-pin',        auth.staffPinHandoff)   // tablet handoff PIN verify
 router.post('/staff-pin-login',  auth.staffPinLogin)
 router.post('/admin-login',      auth.adminLogin)
 router.post('/founder-login',    auth.founderLogin)

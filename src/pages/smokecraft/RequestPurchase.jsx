@@ -1,13 +1,18 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
 import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
+import VenueMenuOverlay from '../../components/venue/VenueMenuOverlay.jsx'
+
+const GOLD = '#E9C176'
 
 export default function RequestPurchase() {
-  const { awardSessionRewards } = useGuestSession()
+  const { awardSessionRewards, session } = useGuestSession()
   const { setResumeRoute } = useSmokeCraftOrder()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const HOTSPOTS = [
     {
@@ -36,6 +41,36 @@ export default function RequestPurchase() {
         route="/smokecraft/request-purchase"
       />
       <SmokeCraftMenuButton label="Order Pairing" />
+
+      {/* Venue menu entry — floating bottom bar */}
+      <div style={{
+        position: 'fixed', bottom: 72, left: 0, right: 0,
+        display: 'flex', justifyContent: 'center', zIndex: 300, pointerEvents: 'none',
+      }}>
+        <button
+          type="button"
+          onClick={() => { triggerHaptic('medium'); setMenuOpen(true) }}
+          style={{
+            pointerEvents: 'auto',
+            background: GOLD, color: '#0a0603',
+            border: 'none', borderRadius: 28,
+            padding: '13px 28px', fontSize: 14, fontWeight: 700,
+            fontFamily: 'Georgia, serif', letterSpacing: '0.08em',
+            boxShadow: '0 6px 24px rgba(0,0,0,0.45)',
+            cursor: 'pointer',
+          }}
+        >
+          View Venue Menu &amp; Order
+        </button>
+      </div>
+
+      <VenueMenuOverlay
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        guestSessionId={session?.sessionId}
+        tableNumber="SmokeCraft"
+        source="customer_self_order"
+      />
     </>
   )
 }

@@ -865,6 +865,97 @@ export async function revokeSession(req, res) {
   }
 }
 
+// ── Staff PIN Handoff (touchscreen/tablet handoff flow) ───────
+/**
+ * POST /api/auth/staff-pin
+ * Body: { pin, venueId?, handoffContext? }
+ *
+ * Lightweight PIN verify for customer-facing tablet handoff.
+ * Verifies PIN via bcrypt, returns staff identity + permissions.
+ * Does NOT set a full session cookie (guest screen stays active).
+ * Writes audit log with handoff context.
+ *
+ * Falls back honestly in dev/prototype mode when no staff users exist in DB.
+ */
+export async function staffPinHandoff(req, res) {
+  try {
+    const { pin, venueId, handoffContext } = req.body || {}
+    if (!pin) return fail(res, 'PIN is required')
+    if (String(pin).length < 4) return fail(res, 'PIN must be at least 4 digits')
+
+    // Try targeted lookup first, then scan
+    let matched = null
+    const staffUsers = await authService.getActiveUsersWithCredentials(['staff', 'manager', 'admin'])
+
+    for (const u of staffUsers) {
+      if (authService.isLocked(u)) continue
+      if (!u.pin_hash) continue
+      const pinOk = await authService.verifyPin(pin, u.pin_hash)
+      if (pinOk) { matched = u; break }
+    }
+
+    if (!matched) {
+      await authService.recordLoginAttempt({
+        roleAttempted: 'staff',
+        success:       false,
+        failureReason: 'invalid_pin_handoff',
+        req,
+      })
+      await bcryptDelay()
+
+      // Dev/prototype fallback when no staff users are configured
+      const hasUsers = staffUsers.length > 0
+      if (!hasUsers && process.env.NODE_ENV !== 'production') {
+        return fail(res, 'No staff accounts configured. (Dev mode: use the demo PIN flow on the tablet.)', 401)
+      }
+      return fail(res, 'Invalid PIN. Please try again.', 401)
+    }
+
+    if (authService.isLocked(matched)) {
+      return fail(res, 'Account temporarily locked. Please contact a manager.', 423)
+    }
+
+    await authService.clearFailedAttempts(matched.user_id)
+    await authService.recordLoginAttempt({
+      userId:        matched.user_id,
+      roleAttempted: matched.role,
+      success:       true,
+      req,
+    })
+    await securityEventService.recordAccessGranted(matched.user_id, matched.role, '/api/auth/staff-pin')
+
+    // Write audit log with handoff context
+    if (isDbAvailable()) {
+      try {
+        await query(
+          `INSERT INTO audit_logs (action, category, user_id, resource_type, resource_id, details, ip_address)
+           VALUES ('staff_pin_handoff','auth',$1,'handoff',$2,$3,$4)`,
+          [
+            matched.user_id,
+            handoffContext?.orderId || handoffContext?.guestSessionId || 'none',
+            JSON.stringify({ venueId, handoffContext, role: matched.role }),
+            req.ip || null,
+          ]
+        )
+      } catch { /* non-blocking audit write */ }
+    }
+
+    return ok(res, {
+      success:     true,
+      staffUser: {
+        id:          matched.user_id,
+        displayName: matched.display_name,
+        role:        matched.role,
+        staffId:     matched.staff_id || null,
+      },
+      permissions: getEffectivePermissions(matched.role),
+      backendVerified: true,
+    })
+  } catch (err) {
+    serverError(res, err, 'staffPinHandoff')
+  }
+}
+
 // ── Timing helper ─────────────────────────────────────────────
 function bcryptDelay() {
   return new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 100))
