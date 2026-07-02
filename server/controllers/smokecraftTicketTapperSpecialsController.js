@@ -493,3 +493,158 @@ export async function getApprovalQueue(req, res) {
   }
   res.json({ ok: true, localPreview: true, storageMode: 'memory_fallback', queue: [], message: 'Approval queue unavailable — backend not connected.' })
 }
+
+// POST /api/smokecraft/ticket-tapper/specials/:specialId/add-to-cart
+export async function addToCart(req, res) {
+  const { specialId } = req.params
+  const { venueId, cartId, quantity = 1, customerSessionId } = req.body
+  if (!venueId || !specialId) return res.status(400).json({ ok: false, error: 'venueId and specialId required' })
+
+  if (isDbAvailable()) {
+    try {
+      const { rows } = await query(
+        `SELECT * FROM ticket_tapper_specials WHERE special_id = $1 AND venue_id = $2 LIMIT 1`,
+        [specialId, venueId]
+      )
+      const special = rows[0]
+      if (!special) return res.status(404).json({ ok: false, error: 'Special not found' })
+      if (special.status !== 'active') return res.status(409).json({ ok: false, error: 'Special is not active', status: special.status })
+      if (special.active_quantity !== null && special.active_quantity <= 0) {
+        return res.status(409).json({ ok: false, error: 'sold_out', message: 'This special is sold out.' })
+      }
+      return res.json({
+        ok: true,
+        specialId,
+        cartId,
+        quantity,
+        addedToCart: true,
+        storageMode: 'postgres',
+        routingStatus: 'route_pending',
+        settlementStatus: 'pending_preview',
+      })
+    } catch (err) {
+      console.error('[ticketTapperSpecials] addToCart DB error:', err.message)
+    }
+  }
+
+  res.json({
+    ok: true,
+    specialId,
+    cartId,
+    quantity,
+    addedToCart: true,
+    localPreview: true,
+    storageMode: 'memory_fallback',
+    persistenceStatus: 'not_persisted',
+    routingStatus: 'routing_preview',
+    settlementStatus: 'pending_preview',
+    message: 'Added to cart locally. Not persisted — backend unavailable.',
+  })
+}
+
+// POST /api/smokecraft/ticket-tapper/inventory/sync-request
+export async function requestInventorySync(req, res) {
+  const { venueId } = req.body
+  if (!venueId) return res.status(400).json({ ok: false, error: 'venueId required' })
+
+  const { requestInventorySync: doSync } = await import('../services/posInventoryAdapter.js')
+  const result = await doSync(venueId)
+  res.json(result)
+}
+
+// GET /api/smokecraft/ticket-tapper/venue-feature-settings
+export async function getVenueFeatureSettings(req, res) {
+  const { venueId } = req.query
+  if (!venueId) return res.status(400).json({ ok: false, error: 'venueId required' })
+
+  if (isDbAvailable()) {
+    try {
+      const { rows } = await query(
+        'SELECT * FROM venue_feature_settings WHERE venue_id = $1 LIMIT 1',
+        [venueId]
+      )
+      if (rows[0]) {
+        const { resolveFeatureStatus } = await import('../../src/utils/venueFeatureSettings.js')
+        return res.json({ ok: true, settings: resolveFeatureStatus(rows[0]), storageMode: 'postgres' })
+      }
+    } catch (err) {
+      console.error('[ticketTapperSpecials] getVenueFeatureSettings DB error:', err.message)
+    }
+  }
+
+  const { defaultFeatureSettings } = await import('../../src/utils/venueFeatureSettings.js')
+  res.json({
+    ok: true,
+    settings: defaultFeatureSettings(venueId),
+    storageMode: 'memory_fallback',
+    syncMode: 'preview_fallback',
+    message: 'Venue feature settings not found. Returning defaults.',
+  })
+}
+
+// PATCH /api/smokecraft/ticket-tapper/venue-feature-settings
+export async function updateVenueFeatureSettings(req, res) {
+  const { venueId, action, enabledBy, cancelledBy } = req.body
+  if (!venueId || !action) return res.status(400).json({ ok: false, error: 'venueId and action required' })
+
+  const { enableVenuePartnerSpecials, requestCancellation } = await import('../services/eatCommandHubContract.js')
+  const db = isDbAvailable() ? { query } : null
+
+  if (action === 'enable') {
+    const result = await enableVenuePartnerSpecials(venueId, enabledBy, db)
+    return res.json(result)
+  }
+  if (action === 'cancel') {
+    const result = await requestCancellation(venueId, cancelledBy, db)
+    return res.json(result)
+  }
+
+  res.status(400).json({ ok: false, error: 'Unknown action. Use enable or cancel.' })
+}
+
+// GET /api/smokecraft/ticket-tapper/money-bridge/preview
+export async function getMoneyBridgePreview(req, res) {
+  const { venueId, partnerFoodSubtotal = 0, deliveryFee = 4.50 } = req.query
+
+  const subtotal = parseFloat(partnerFoodSubtotal) || 0
+  const delivery = parseFloat(deliveryFee) || 4.50
+  const TAX_PREVIEW = 0.085
+
+  const sc = roundMoney(subtotal * 0.10)
+  const vr = roundMoney(subtotal * 0.05)
+  const pp = roundMoney(subtotal * 0.85)
+  const taxableBase = roundMoney(subtotal)
+  const tax = roundMoney(taxableBase * TAX_PREVIEW)
+  const total = roundMoney(subtotal + delivery + tax)
+
+  res.json({
+    ok: true,
+    venueId,
+    partnerFoodSubtotal: subtotal,
+    smokeCraftCommissionRate: 0.10,
+    smokeCraftCommissionAmount: sc,
+    venueReferralRate: 0.05,
+    venueReferralAmount: vr,
+    partnerPayoutRate: 0.85,
+    partnerPayoutAmount: pp,
+    deliveryRoutingFee: delivery,
+    taxableBase,
+    taxRate: TAX_PREVIEW,
+    taxAmount: tax,
+    taxStatus: 'preview_only',
+    totalCustomerCharge: total,
+    settlementStatus: 'pending_preview',
+    settlementProcessorStatus: 'integration_required',
+    note: 'Preview calculation only. Tax, settlement, and commission not finalized.',
+  })
+}
+
+// POST /api/smokecraft/ticket-tapper/kitchen-routing/preview
+export async function getKitchenRoutingPreview(req, res) {
+  const { orderId, items = [], venueId, staffId } = req.body
+  if (!orderId) return res.status(400).json({ ok: false, error: 'orderId required' })
+
+  const { createRoutingTicket } = await import('../services/kitchenRoutingAdapter.js')
+  const result = await createRoutingTicket({ orderId, items, venueId, staffId })
+  res.json(result)
+}

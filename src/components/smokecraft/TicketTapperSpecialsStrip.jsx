@@ -209,12 +209,17 @@ function SpecialCard({ special, inventoryItems, onAdd, venueId, tableLabel, loca
   )
 }
 
-export default function TicketTapperSpecialsStrip({ specials = [], inventoryItems = [], onAddSpecial, venueId, tableLabel, localPreview }) {
+export default function TicketTapperSpecialsStrip({ specials = [], inventoryItems = [], onAddSpecial, venueId, tableLabel, localPreview, venueFeatureSettings = null }) {
   // Hard filter: customers only see status === 'active' AND approval cleared
-  const customerSpecials = specials.filter(s =>
-    s.status === 'active' &&
-    (!s.approval?.required || s.approval?.status === 'approved')
-  )
+  // Partner specials also require venue opt-in
+  const partnerSpecialsAllowed = venueFeatureSettings?.partnerSpecialsAllowed !== false
+
+  const customerSpecials = specials.filter(s => {
+    if (s.status !== 'active') return false
+    if (s.approval?.required && s.approval?.status !== 'approved') return false
+    if ((s.isPartnerSpecial || s.source === 'partner_network') && !partnerSpecialsAllowed) return false
+    return true
+  })
   if (customerSpecials.length === 0) return null
 
   return (

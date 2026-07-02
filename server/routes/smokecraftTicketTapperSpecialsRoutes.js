@@ -50,4 +50,22 @@ router.post('/specials/:specialId/publish', ctrl.publishSpecial)
 // GET  /api/smokecraft/ticket-tapper/specials-approval-queue/:venueId
 router.get('/specials-approval-queue/:venueId', ctrl.getApprovalQueue)
 
+// POST /api/smokecraft/ticket-tapper/specials/:specialId/add-to-cart
+router.post('/specials/:specialId/add-to-cart', ctrl.addToCart)
+
+// POST /api/smokecraft/ticket-tapper/inventory/sync-request
+router.post('/inventory/sync-request', ctrl.requestInventorySync)
+
+// GET  /api/smokecraft/ticket-tapper/venue-feature-settings
+router.get('/venue-feature-settings', ctrl.getVenueFeatureSettings)
+
+// PATCH /api/smokecraft/ticket-tapper/venue-feature-settings
+router.patch('/venue-feature-settings', ctrl.updateVenueFeatureSettings)
+
+// GET  /api/smokecraft/ticket-tapper/money-bridge/preview
+router.get('/money-bridge/preview', ctrl.getMoneyBridgePreview)
+
+// POST /api/smokecraft/ticket-tapper/kitchen-routing/preview
+router.post('/kitchen-routing/preview', ctrl.getKitchenRoutingPreview)
+
 export default router
