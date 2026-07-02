@@ -19,7 +19,8 @@
     "visual:dayone360": "node scripts/visualProof.js --family=dayone360",
     "visual:crafthub": "node scripts/visualProof.js --family=crafthub",
     "db:migrate": "node server/db/runMigrations.js",
-    "verify:pos360": "node server/scripts/verifyPos360PlatformLayer.js"
+    "verify:pos360": "node server/scripts/verifyPos360PlatformLayer.js",
+    "verify:database": "node server/scripts/verifyDatabaseFoundation.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

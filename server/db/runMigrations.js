@@ -67,8 +67,14 @@ export async function runMigrations() {
       '[runMigrations] DATABASE_URL not set — status: database_required. Skipping migrations.'
     );
     return {
+      databaseStatus: 'database_required',
+      persistenceStatus: 'preview_fallback',
       status: 'database_required',
-      message: 'DATABASE_URL not configured. Migrations not run.',
+      message: 'DATABASE_URL not configured. Migrations not run. Running in preview fallback mode.',
+      migrationsFound: 0,
+      migrationsApplied: 0,
+      migrationsSkipped: 0,
+      migrationsFailed: 0,
       applied: [],
       skipped: [],
     };
@@ -187,15 +193,21 @@ export async function runMigrations() {
     }
   }
 
-  console.log(
-    `[runMigrations] Done. Applied: ${ranThisRun.length}, Skipped: ${skipped.length}`
-  );
-  return {
-    status: ranThisRun.length > 0 ? 'audit_logged' : 'audit_logged',
-    message: `Migrations complete. Applied ${ranThisRun.length} new migration(s).`,
+  const summary = {
+    databaseStatus: 'database_ready',
+    migrationsFound: files.length,
+    migrationsApplied: ranThisRun.length,
+    migrationsSkipped: skipped.length,
+    migrationsFailed: 0,
+    status: ranThisRun.length > 0 ? 'migration_applied' : 'migration_skipped',
+    message: `Migrations complete. Applied ${ranThisRun.length} new migration(s). Skipped ${skipped.length}.`,
     applied: ranThisRun,
     skipped,
   };
+  console.log(
+    `[runMigrations] Done. Applied: ${ranThisRun.length}, Skipped: ${skipped.length}`
+  );
+  return summary;
 }
 
 /**
