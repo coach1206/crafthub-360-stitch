@@ -49,6 +49,8 @@ import rankingRoutes         from './routes/rankingRoutes.js'
 import badgeRoutes           from './routes/badgeRoutes.js'
 import tickerRoutes          from './routes/tickerRoutes.js'
 import travelRoutes          from './routes/travelRoutes.js'
+import venueCommerceRoutes        from './routes/venueCommerceRoutes.js'
+import smokecraftCommerceRoutes   from './routes/smokecraftCommerceRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -125,6 +127,8 @@ app.use('/api/ranking',           rankingRoutes)
 app.use('/api/badges',            badgeRoutes)
 app.use('/api/ticker',            tickerRoutes)
 app.use('/api/travel',            travelRoutes)
+app.use('/api/venues',            venueCommerceRoutes)
+app.use('/api/smokecraft',        smokecraftCommerceRoutes)
 
 // ── Phase 10: New role routes ─────────────────────────────────
 app.use('/api/mentor',            mentorRoutes)

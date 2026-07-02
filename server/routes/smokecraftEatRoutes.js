@@ -5,6 +5,7 @@
  */
 import { Router } from 'express'
 import { isDbAvailable, query } from '../db/connection.js'
+import * as ctrl from '../controllers/venueCommerceController.js'
 
 const router = Router()
 const memHandoffs = new Map()
@@ -63,5 +64,8 @@ router.patch('/handoffs/:handoffId', async (req, res) => {
   if (!handoff) return respond(res, { ok: false, status: 'failed', storageMode: storageModeFor(usedDb), error: 'not_found' }, 404)
   respond(res, { ok: true, status: 'backend_connected', storageMode: storageModeFor(usedDb), data: { handoff } })
 })
+
+// POST /api/eat/smokecraft/sync — E.A.T. management sync from SmokeCraft session
+router.post('/sync', ctrl.syncToEAT)
 
 export default router
