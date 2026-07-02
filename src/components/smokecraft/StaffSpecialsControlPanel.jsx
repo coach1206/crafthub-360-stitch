@@ -4,7 +4,12 @@ import {
   updateTicketTapperSpecial,
   endTicketTapperSpecial,
   updateTicketTapperInventory,
+  submitSpecialForApproval,
+  approveTicketTapperSpecial,
+  rejectTicketTapperSpecial,
+  publishTicketTapperSpecial,
 } from '../../services/smokeCraftTicketTapperSpecialsApi.js'
+import { canApproveSpecial, canPublishSpecial, getInitialSpecialStatusForRole, SPECIAL_SUGGESTION_ROLES } from '../../utils/smokeCraftSpecialsEngine.js'
 
 const gold = '#E9C176'
 const dark = '#0a0603'
@@ -36,10 +41,23 @@ function StaffPill({ label }) {
 function SpecialRow({ special, onAction, venueId, staff }) {
   const status = special.status || 'active'
   const qty = special.inventory?.quantityAvailable ?? '—'
+  const isManager = canApproveSpecial(staff?.role)
+  const isSuggester = SPECIAL_SUGGESTION_ROLES.includes(staff?.role)
+  const approvalStatus = special.approval?.status
+  const submittedByMe = special.approval?.submittedBy?.staffId === staff?.staffId
 
   async function handleAction(action) {
     if (action === 'end') {
       await endTicketTapperSpecial(special.id, { venueId, staff })
+    } else if (action === 'approve') {
+      await approveTicketTapperSpecial(special.id, { venueId, reviewedBy: staff, approval: { approvalNote: 'Approved for Ticket Tapper.' } })
+    } else if (action === 'reject') {
+      const reason = window.prompt('Rejection reason (optional):') || 'Rejected by management.'
+      await rejectTicketTapperSpecial(special.id, { venueId, reviewedBy: staff, approval: { rejectionReason: reason } })
+    } else if (action === 'publish') {
+      await publishTicketTapperSpecial(special.id, { venueId, publishedBy: staff })
+    } else if (action === 'submit_approval') {
+      await submitSpecialForApproval(special.id, { venueId, submittedBy: staff, special })
     } else {
       await updateTicketTapperSpecial(special.id, { venueId, staff, status: action === 'pause' ? 'paused' : 'active', action })
     }
@@ -50,25 +68,62 @@ function SpecialRow({ special, onAction, venueId, staff }) {
     <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderBottom: `1px solid rgba(255,255,255,0.05)`, flexWrap: 'wrap' }}>
       <div style={{ flex: 1, minWidth: 120 }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: '#E5E2E1' }}>{special.title}</div>
-        <div style={{ fontSize: 10, color: '#888', marginTop: 2 }}>{ROLE_LABELS[special.promotedByRole] || special.promotedByRole} · Qty: {qty}</div>
+        <div style={{ fontSize: 10, color: '#888', marginTop: 2 }}>
+          {ROLE_LABELS[special.promotedByRole] || special.promotedByRole} · Qty: {qty}
+          {special.approval?.submittedBy?.name && ` · by ${special.approval.submittedBy.name}`}
+        </div>
+        {approvalStatus === 'pending_approval' && (
+          <div style={{ fontSize: 10, color: '#ffa94d', marginTop: 2 }}>⏳ Awaiting management approval</div>
+        )}
+        {approvalStatus === 'rejected' && (
+          <div style={{ fontSize: 10, color: '#ff8080', marginTop: 2 }}>✗ Rejected{special.approval?.rejectionReason ? `: ${special.approval.rejectionReason}` : ''}</div>
+        )}
       </div>
       <div style={{ display: 'flex', gap: 5, alignItems: 'center', flexWrap: 'wrap' }}>
         <div style={{ fontSize: 10, color: STATUS_COLORS[status] || '#aaa', fontWeight: 700, border: `1px solid ${STATUS_COLORS[status] || '#aaa'}`, borderRadius: 4, padding: '2px 7px' }}>
-          {status.toUpperCase()}
+          {status.replace(/_/g, ' ').toUpperCase()}
         </div>
-        {status === 'active' && (
+
+        {/* Suggester: can submit pending drafts */}
+        {isSuggester && !isManager && status === 'draft' && (
+          <button type="button" onClick={() => handleAction('submit_approval')}
+            style={{ fontSize: 11, padding: '4px 10px', borderRadius: 6, background: 'rgba(233,193,118,0.1)', color: gold, border: `1px solid rgba(233,193,118,0.3)`, cursor: 'pointer', fontWeight: 700 }}>
+            Submit for Approval
+          </button>
+        )}
+
+        {/* Manager actions */}
+        {isManager && status === 'pending_approval' && (
+          <>
+            <button type="button" onClick={() => handleAction('approve')}
+              style={{ fontSize: 11, padding: '4px 10px', borderRadius: 6, background: 'rgba(125,220,160,0.1)', color: '#7ddca0', border: '1px solid rgba(125,220,160,0.3)', cursor: 'pointer', fontWeight: 700 }}>
+              Approve
+            </button>
+            <button type="button" onClick={() => handleAction('reject')}
+              style={{ fontSize: 11, padding: '4px 10px', borderRadius: 6, background: 'rgba(255,107,107,0.08)', color: '#ff8080', border: '1px solid rgba(255,107,107,0.25)', cursor: 'pointer', fontWeight: 700 }}>
+              Reject
+            </button>
+          </>
+        )}
+        {isManager && status === 'approved' && (
+          <button type="button" onClick={() => handleAction('publish')}
+            style={{ fontSize: 11, padding: '4px 10px', borderRadius: 6, background: gold, color: dark, border: 'none', cursor: 'pointer', fontWeight: 700 }}>
+            Publish Live ⚡
+          </button>
+        )}
+        {isManager && status === 'active' && (
           <button type="button" onClick={() => handleAction('pause')}
             style={{ fontSize: 11, padding: '4px 10px', borderRadius: 6, background: 'rgba(255,169,77,0.1)', color: '#ffa94d', border: '1px solid rgba(255,169,77,0.3)', cursor: 'pointer', fontWeight: 700 }}>
             Pause
           </button>
         )}
-        {status === 'paused' && (
-          <button type="button" onClick={() => handleAction('active')}
+        {isManager && status === 'paused' && (
+          <button type="button" onClick={() => handleAction('publish')}
             style={{ fontSize: 11, padding: '4px 10px', borderRadius: 6, background: 'rgba(125,220,160,0.1)', color: '#7ddca0', border: '1px solid rgba(125,220,160,0.3)', cursor: 'pointer', fontWeight: 700 }}>
-            Activate
+            Re-publish
           </button>
         )}
-        {status !== 'ended' && (
+        {isManager && status !== 'ended' && (
           <button type="button" onClick={() => handleAction('end')}
             style={{ fontSize: 11, padding: '4px 10px', borderRadius: 6, background: 'rgba(255,107,107,0.08)', color: '#ff8080', border: '1px solid rgba(255,107,107,0.25)', cursor: 'pointer', fontWeight: 700 }}>
             End
@@ -121,7 +176,7 @@ export default function StaffSpecialsControlPanel({ specials = [], venueId, staf
         specialType: form.specialType,
         source: form.source,
         promotedByRole: form.promotedByRole,
-        status: 'active',
+        status: getInitialSpecialStatusForRole(staff?.role),
         priority: parseInt(form.priority) || 1,
         startsAt: new Date().toISOString(),
         endsAt: null,

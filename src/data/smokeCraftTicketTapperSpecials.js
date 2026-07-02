@@ -31,6 +31,17 @@ export const smokeCraftTicketTapperSpecialsSeed = {
       status: 'active',
       priority: 1,
 
+      approval: {
+        required: false,
+        status: 'approved',
+        submittedBy: { staffId: 'staff-manager-demo', name: 'Demo Manager', role: 'manager' },
+        submittedAt: new Date().toISOString(),
+        reviewedBy: { staffId: 'staff-manager-demo', name: 'Demo Manager', role: 'manager' },
+        reviewedAt: new Date().toISOString(),
+        approvalNote: 'Manager-created special approved.',
+        rejectionReason: '',
+      },
+
       startsAt: new Date().toISOString(),
       endsAt: null,
 
@@ -108,8 +119,19 @@ export const smokeCraftTicketTapperSpecialsSeed = {
 
       promotedByRole: 'bartender',
 
-      status: 'active',
+      status: 'pending_approval',
       priority: 2,
+
+      approval: {
+        required: true,
+        status: 'pending_approval',
+        submittedBy: { staffId: 'staff-bartender-demo', name: 'Demo Bartender', role: 'bartender' },
+        submittedAt: new Date().toISOString(),
+        reviewedBy: null,
+        reviewedAt: null,
+        approvalNote: '',
+        rejectionReason: '',
+      },
 
       startsAt: new Date().toISOString(),
       endsAt: null,
@@ -178,8 +200,19 @@ export const smokeCraftTicketTapperSpecialsSeed = {
 
       promotedByRole: 'cook',
 
-      status: 'active',
+      status: 'pending_approval',
       priority: 3,
+
+      approval: {
+        required: true,
+        status: 'pending_approval',
+        submittedBy: { staffId: 'staff-cook-demo', name: 'Demo Cook', role: 'cook' },
+        submittedAt: new Date().toISOString(),
+        reviewedBy: null,
+        reviewedAt: null,
+        approvalNote: '',
+        rejectionReason: '',
+      },
 
       startsAt: new Date().toISOString(),
       endsAt: null,

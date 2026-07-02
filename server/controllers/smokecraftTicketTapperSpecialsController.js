@@ -5,7 +5,29 @@
  */
 import { isDbAvailable, query } from '../db/connection.js'
 
-const TAX_RATE = 0.085
+const APPROVAL_ROLES = ['manager', 'owner', 'admin']
+const SUGGESTION_ROLES = ['bartender', 'chef', 'cook', 'server']
+
+function canApprove(role) { return APPROVAL_ROLES.includes(role) }
+function canSuggest(role) { return SUGGESTION_ROLES.includes(role) || canApprove(role) }
+
+function getInitialStatus(role) {
+  return canApprove(role) ? 'approved' : 'pending_approval'
+}
+
+function makeTrackEvent(venueId, specialId, action, actor) {
+  return {
+    id: `evt-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    venueId,
+    specialId,
+    action,
+    actor: { staffId: actor.staffId, name: actor.name, role: actor.role },
+    approvalStatus: null,
+    sourceScreen: 'staff_specials_control_panel',
+    timestamp: new Date().toISOString(),
+  }
+}
+
 function roundMoney(n) { return Math.round((n + Number.EPSILON) * 100) / 100 }
 
 function calcMoneyBridge(special) {
@@ -40,17 +62,25 @@ export async function getSpecials(req, res) {
 export async function createSpecial(req, res) {
   const { venueId, special, staff } = req.body
   if (!venueId || !special || !staff) return res.status(400).json({ ok: false, error: 'venueId, special, and staff required' })
+  if (!canSuggest(staff.role)) return res.status(403).json({ ok: false, error: 'UNAUTHORIZED_ROLE', message: 'This role cannot create specials.' })
 
-  const trackEvent = {
-    id: `evt-${Date.now()}`,
-    venueId,
-    specialId: special.id || `sp-${Date.now()}`,
-    action: 'create',
-    staffId: staff.staffId,
-    staffRole: staff.role,
-    sourceScreen: 'staff_specials_control_panel',
-    timestamp: new Date().toISOString(),
+  const initialStatus = getInitialStatus(staff.role)
+  const now = new Date().toISOString()
+  const specialId = `sp-${Date.now()}`
+  const approvalBlock = {
+    required: !canApprove(staff.role),
+    status: initialStatus,
+    submittedBy: { staffId: staff.staffId, name: staff.name, role: staff.role },
+    submittedAt: now,
+    reviewedBy: canApprove(staff.role) ? { staffId: staff.staffId, name: staff.name, role: staff.role } : null,
+    reviewedAt: canApprove(staff.role) ? now : null,
+    approvalNote: canApprove(staff.role) ? 'Manager-created special approved.' : '',
+    rejectionReason: '',
   }
+
+  const trackAction = canApprove(staff.role) ? 'special_draft_created' : 'special_submitted_for_approval'
+  const trackEvent = makeTrackEvent(venueId, specialId, trackAction, staff)
+  trackEvent.approvalStatus = initialStatus
 
   if (isDbAvailable()) {
     try {
@@ -58,14 +88,15 @@ export async function createSpecial(req, res) {
         `INSERT INTO ticket_tapper_specials
            (venue_id, title, subtitle, description, special_type, source, promoted_by_role,
             status, priority, starts_at, ends_at, inventory_json, pricing_json, items_json,
-            media_json, money_bridge_json, cta_json, created_by_json)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,'active',$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+            media_json, money_bridge_json, cta_json, created_by_json, approval_json)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)
          RETURNING *`,
         [
           venueId, special.title, special.subtitle, special.description,
           special.specialType, special.source, special.promotedByRole,
+          initialStatus,
           special.priority || 99,
-          special.startsAt || new Date().toISOString(),
+          special.startsAt || now,
           special.endsAt || null,
           JSON.stringify(special.inventory || {}),
           JSON.stringify(special.pricing || {}),
@@ -74,19 +105,20 @@ export async function createSpecial(req, res) {
           JSON.stringify(special.moneyBridge || {}),
           JSON.stringify(special.callToAction || {}),
           JSON.stringify({ staffId: staff.staffId, name: staff.name, role: staff.role }),
+          JSON.stringify(approvalBlock),
         ]
       )
       await query(
-        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, source_screen, event_timestamp)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
-        [trackEvent.id, venueId, rows[0].special_id, 'create', staff.staffId, staff.role, 'staff_specials_control_panel', trackEvent.timestamp]
+        `INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, approval_status, source_screen, event_timestamp)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        [trackEvent.id, venueId, rows[0].special_id, trackAction, staff.staffId, staff.role, initialStatus, 'staff_specials_control_panel', now]
       )
-      return res.status(201).json({ ok: true, special: rows[0], trackEvent, storageMode: 'postgres' })
+      return res.status(201).json({ ok: true, special: rows[0], status: initialStatus, approvalRequired: approvalBlock.required, trackEvent, storageMode: 'postgres' })
     } catch (err) {
       console.error('[ticketTapperSpecials] createSpecial DB error:', err.message)
     }
   }
-  res.json({ ok: true, localPreview: true, specialId: trackEvent.specialId, status: 'active', trackEvent, message: 'Special created locally — backend unavailable.' })
+  res.json({ ok: true, localPreview: true, specialId, status: initialStatus, approvalRequired: approvalBlock.required, trackEvent, message: `Special created locally (${initialStatus}) — backend unavailable.` })
 }
 
 // PATCH /api/smokecraft/ticket-tapper/specials/:specialId
@@ -329,7 +361,135 @@ export async function getSpecialsReport(req, res) {
       topSpecials: [],
       rolePerformance: { manager: { specialsCreated: 0, taps: 0, revenue: 0 }, bartender: { specialsCreated: 0, taps: 0, revenue: 0 }, cook: { specialsCreated: 0, taps: 0, revenue: 0 }, server: { specialsCreated: 0, taps: 0, revenue: 0 } },
       inventoryAlerts: [],
+      approvalReport: {
+        pendingCount: 0, approvedCount: 0, rejectedCount: 0, publishedCount: 0,
+        pendingByRole: { bartender: 0, chef: 0, cook: 0, server: 0 },
+        approvedByManager: [],
+      },
     },
     message: 'Report unavailable — backend not connected. Showing local-preview placeholder.',
   })
+}
+
+// ── Approval workflow endpoints ───────────────────────────────────────────────
+
+// POST /api/smokecraft/ticket-tapper/specials/:specialId/submit-approval
+export async function submitForApproval(req, res) {
+  const { specialId } = req.params
+  const { venueId, submittedBy, approval, special } = req.body
+  if (!submittedBy?.role) return res.status(400).json({ ok: false, error: 'submittedBy required' })
+  if (canApprove(submittedBy.role)) return res.status(400).json({ ok: false, error: 'Managers can publish directly — use publish endpoint.' })
+
+  const now = new Date().toISOString()
+  const approvalBlock = { required: true, status: 'pending_approval', submittedBy, submittedAt: now, reviewedBy: null, reviewedAt: null, approvalNote: '', rejectionReason: '' }
+  const trackEvent = makeTrackEvent(venueId, specialId, 'special_submitted_for_approval', submittedBy)
+  trackEvent.approvalStatus = 'pending_approval'
+
+  if (isDbAvailable()) {
+    try {
+      await query(`UPDATE ticket_tapper_specials SET status = 'pending_approval', approval_json = $1 WHERE special_id = $2`, [JSON.stringify(approvalBlock), specialId])
+      await query(`INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, approval_status, source_screen, event_timestamp) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        [trackEvent.id, venueId, specialId, 'special_submitted_for_approval', submittedBy.staffId, submittedBy.role, 'pending_approval', 'staff_specials_control_panel', now])
+      return res.json({ ok: true, specialId, status: 'pending_approval', approval: approvalBlock, trackEvent, storageMode: 'postgres' })
+    } catch (err) { console.error('[ticketTapperSpecials] submitForApproval DB error:', err.message) }
+  }
+  res.json({ ok: true, localPreview: true, specialId, status: 'pending_approval', approval: approvalBlock, trackEvent })
+}
+
+// POST /api/smokecraft/ticket-tapper/specials/:specialId/approve
+export async function approveSpecial(req, res) {
+  const { specialId } = req.params
+  const { venueId, reviewedBy, approval } = req.body
+  if (!reviewedBy?.role) return res.status(400).json({ ok: false, error: 'reviewedBy required' })
+  if (!canApprove(reviewedBy.role)) {
+    return res.status(403).json({ ok: false, error: 'SPECIAL_APPROVAL_REQUIRED', message: 'This role can submit specials for management approval but cannot publish them live.' })
+  }
+
+  const now = new Date().toISOString()
+  const approvalBlock = { required: true, status: 'approved', reviewedBy, reviewedAt: now, approvalNote: approval?.approvalNote || 'Approved for Ticket Tapper.', rejectionReason: '' }
+  const trackEvent = makeTrackEvent(venueId, specialId, 'special_approved', reviewedBy)
+  trackEvent.approvalStatus = 'approved'
+
+  if (isDbAvailable()) {
+    try {
+      await query(`UPDATE ticket_tapper_specials SET status = 'approved', approval_json = jsonb_set(COALESCE(approval_json,'{}'), '{status}', '"approved"') WHERE special_id = $1`, [specialId])
+      await query(`INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, approval_status, source_screen, event_timestamp) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        [trackEvent.id, venueId, specialId, 'special_approved', reviewedBy.staffId, reviewedBy.role, 'approved', 'staff_specials_control_panel', now])
+      return res.json({ ok: true, specialId, status: 'approved', approval: approvalBlock, trackEvent, storageMode: 'postgres' })
+    } catch (err) { console.error('[ticketTapperSpecials] approveSpecial DB error:', err.message) }
+  }
+  res.json({ ok: true, localPreview: true, specialId, status: 'approved', approval: approvalBlock, trackEvent })
+}
+
+// POST /api/smokecraft/ticket-tapper/specials/:specialId/reject
+export async function rejectSpecial(req, res) {
+  const { specialId } = req.params
+  const { venueId, reviewedBy, approval } = req.body
+  if (!reviewedBy?.role) return res.status(400).json({ ok: false, error: 'reviewedBy required' })
+  if (!canApprove(reviewedBy.role)) {
+    return res.status(403).json({ ok: false, error: 'SPECIAL_APPROVAL_REQUIRED', message: 'This role cannot reject specials.' })
+  }
+
+  const now = new Date().toISOString()
+  const rejectionReason = approval?.rejectionReason || 'Rejected by management.'
+  const trackEvent = makeTrackEvent(venueId, specialId, 'special_rejected', reviewedBy)
+  trackEvent.approvalStatus = 'rejected'
+
+  if (isDbAvailable()) {
+    try {
+      await query(`UPDATE ticket_tapper_specials SET status = 'rejected', approval_json = jsonb_set(COALESCE(approval_json,'{}'), '{status}', '"rejected"') WHERE special_id = $1`, [specialId])
+      await query(`INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, approval_status, source_screen, event_timestamp) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        [trackEvent.id, venueId, specialId, 'special_rejected', reviewedBy.staffId, reviewedBy.role, 'rejected', 'staff_specials_control_panel', now])
+      return res.json({ ok: true, specialId, status: 'rejected', rejectionReason, trackEvent, storageMode: 'postgres' })
+    } catch (err) { console.error('[ticketTapperSpecials] rejectSpecial DB error:', err.message) }
+  }
+  res.json({ ok: true, localPreview: true, specialId, status: 'rejected', rejectionReason, trackEvent })
+}
+
+// POST /api/smokecraft/ticket-tapper/specials/:specialId/publish
+export async function publishSpecial(req, res) {
+  const { specialId } = req.params
+  const { venueId, publishedBy } = req.body
+  if (!publishedBy?.role) return res.status(400).json({ ok: false, error: 'publishedBy required' })
+  if (!canApprove(publishedBy.role)) {
+    return res.status(403).json({ ok: false, error: 'SPECIAL_APPROVAL_REQUIRED', message: 'This role can submit specials for management approval but cannot publish them live.' })
+  }
+
+  const now = new Date().toISOString()
+  const trackEvent = makeTrackEvent(venueId, specialId, 'special_published_live', publishedBy)
+  trackEvent.approvalStatus = 'approved'
+
+  if (isDbAvailable()) {
+    try {
+      // Verify the special is approved before allowing publish
+      const { rows } = await query(`SELECT status, approval_json FROM ticket_tapper_specials WHERE special_id = $1`, [specialId])
+      if (!rows[0]) return res.status(404).json({ ok: false, error: 'Special not found' })
+      const currentStatus = rows[0].status
+      const approval = typeof rows[0].approval_json === 'string' ? JSON.parse(rows[0].approval_json) : rows[0].approval_json
+      if (currentStatus !== 'approved' && approval?.status !== 'approved' && !canApprove(publishedBy.role)) {
+        return res.status(409).json({ ok: false, error: 'SPECIAL_NOT_APPROVED', message: 'This special must be approved by management before it can go live.' })
+      }
+      await query(`UPDATE ticket_tapper_specials SET status = 'active', approval_json = jsonb_set(COALESCE(approval_json,'{}'), '{status}', '"approved"') WHERE special_id = $1`, [specialId])
+      await query(`INSERT INTO ticket_tapper_special_events (event_id, venue_id, special_id, action, staff_id, staff_role, approval_status, source_screen, event_timestamp) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        [trackEvent.id, venueId, specialId, 'special_published_live', publishedBy.staffId, publishedBy.role, 'approved', 'staff_specials_control_panel', now])
+      return res.json({ ok: true, specialId, status: 'active', publishedAt: now, trackEvent, storageMode: 'postgres' })
+    } catch (err) { console.error('[ticketTapperSpecials] publishSpecial DB error:', err.message) }
+  }
+  res.json({ ok: true, localPreview: true, specialId, status: 'active', publishedAt: now, trackEvent })
+}
+
+// GET /api/smokecraft/ticket-tapper/specials-approval-queue/:venueId
+export async function getApprovalQueue(req, res) {
+  const { venueId } = req.params
+
+  if (isDbAvailable()) {
+    try {
+      const { rows } = await query(
+        `SELECT * FROM ticket_tapper_specials WHERE venue_id = $1 AND status IN ('pending_approval','approved') ORDER BY created_at ASC`,
+        [venueId]
+      )
+      return res.json({ ok: true, queue: rows, storageMode: 'postgres' })
+    } catch (err) { console.error('[ticketTapperSpecials] getApprovalQueue DB error:', err.message) }
+  }
+  res.json({ ok: true, localPreview: true, storageMode: 'memory_fallback', queue: [], message: 'Approval queue unavailable — backend not connected.' })
 }

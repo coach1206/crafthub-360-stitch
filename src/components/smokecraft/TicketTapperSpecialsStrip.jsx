@@ -210,7 +210,12 @@ function SpecialCard({ special, inventoryItems, onAdd, venueId, tableLabel, loca
 }
 
 export default function TicketTapperSpecialsStrip({ specials = [], inventoryItems = [], onAddSpecial, venueId, tableLabel, localPreview }) {
-  if (specials.length === 0) return null
+  // Hard filter: customers only see status === 'active' AND approval cleared
+  const customerSpecials = specials.filter(s =>
+    s.status === 'active' &&
+    (!s.approval?.required || s.approval?.status === 'approved')
+  )
+  if (customerSpecials.length === 0) return null
 
   return (
     <div style={{ marginBottom: 22 }}>
@@ -230,7 +235,7 @@ export default function TicketTapperSpecialsStrip({ specials = [], inventoryItem
 
       {/* Horizontal scroll strip */}
       <div style={{ display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 6, WebkitOverflowScrolling: 'touch' }}>
-        {specials.map(special => (
+        {customerSpecials.map(special => (
           <SpecialCard
             key={special.id}
             special={special}

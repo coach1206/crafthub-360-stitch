@@ -121,6 +121,64 @@ export async function updateTicketTapperInventory(itemId, payload) {
   return result
 }
 
+export async function submitSpecialForApproval(specialId, payload) {
+  const result = await apiFetch(`${BASE}/specials/${specialId}/submit-approval`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+  if (result.backendAvailable === false) {
+    return { ok: true, localPreview: true, specialId, status: 'pending_approval', message: 'Submitted for approval locally. Not persisted — backend unavailable.' }
+  }
+  return result
+}
+
+export async function approveTicketTapperSpecial(specialId, payload) {
+  const result = await apiFetch(`${BASE}/specials/${specialId}/approve`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+  if (result.backendAvailable === false) {
+    return { ok: true, localPreview: true, specialId, status: 'approved', message: 'Approved locally. Not persisted — backend unavailable.' }
+  }
+  return result
+}
+
+export async function rejectTicketTapperSpecial(specialId, payload) {
+  const result = await apiFetch(`${BASE}/specials/${specialId}/reject`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+  if (result.backendAvailable === false) {
+    return { ok: true, localPreview: true, specialId, status: 'rejected', message: 'Rejected locally. Not persisted — backend unavailable.' }
+  }
+  return result
+}
+
+export async function publishTicketTapperSpecial(specialId, payload) {
+  const result = await apiFetch(`${BASE}/specials/${specialId}/publish`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+  if (result.backendAvailable === false) {
+    return { ok: true, localPreview: true, specialId, status: 'active', message: 'Published locally. Not persisted — backend unavailable.' }
+  }
+  return result
+}
+
+export async function fetchSpecialsApprovalQueue(venueId) {
+  const result = await apiFetch(`${BASE}/specials-approval-queue/${venueId}`)
+  if (result.ok) return result
+  return {
+    ok: true,
+    backendAvailable: false,
+    localPreview: true,
+    storageMode: 'memory_fallback',
+    venueId,
+    queue: smokeCraftTicketTapperSpecialsSeed.specials
+      .filter(s => s.approval?.status === 'pending_approval'),
+  }
+}
+
 export async function fetchTicketTapperSpecialsReport(venueId) {
   const result = await apiFetch(`${BASE}/specials-report/${venueId}`)
   if (result.ok) return result

@@ -4,6 +4,48 @@
  * Real-Time Ready — attach WebSocket/Supabase realtime here when available.
  */
 
+// ── Approval role constants ───────────────────────────────────────────────────
+
+export const SPECIAL_APPROVAL_ROLES = ['manager', 'owner', 'admin']
+
+export const SPECIAL_SUGGESTION_ROLES = ['bartender', 'chef', 'cook', 'server']
+
+export function canCreateSpecial(role) {
+  return ['manager', 'owner', 'admin', 'bartender', 'chef', 'cook', 'server'].includes(role)
+}
+
+export function canApproveSpecial(role) {
+  return SPECIAL_APPROVAL_ROLES.includes(role)
+}
+
+export function canPublishSpecial(role) {
+  return SPECIAL_APPROVAL_ROLES.includes(role)
+}
+
+export function getInitialSpecialStatusForRole(role) {
+  if (canApproveSpecial(role)) return 'approved'
+  return 'pending_approval'
+}
+
+export function canShowSpecialToCustomer(special) {
+  return special?.status === 'active'
+}
+
+export function buildApprovalBlock(staff) {
+  const now = new Date().toISOString()
+  const requiresApproval = SPECIAL_SUGGESTION_ROLES.includes(staff.role)
+  return {
+    required: requiresApproval,
+    status: requiresApproval ? 'pending_approval' : 'approved',
+    submittedBy: { staffId: staff.staffId, name: staff.name, role: staff.role },
+    submittedAt: now,
+    reviewedBy: requiresApproval ? null : { staffId: staff.staffId, name: staff.name, role: staff.role },
+    reviewedAt: requiresApproval ? null : now,
+    approvalNote: requiresApproval ? '' : 'Manager-created special approved.',
+    rejectionReason: '',
+  }
+}
+
 // ── Inventory helpers ─────────────────────────────────────────────────────────
 
 function resolveInventoryForSpecial(special, inventoryItems) {
@@ -40,9 +82,13 @@ function isExpired(special) {
 export function getActiveTicketTapperSpecials({ specials = [], inventoryItems = [] }) {
   return specials
     .filter(s => {
-      if (s.status === 'paused' || s.status === 'hidden' || s.status === 'ended') return false
+      // Only status === 'active' reaches the customer
       if (s.status !== 'active') return false
       if (isExpired(s)) return false
+      // Must also have approval cleared (approved or manager-created with required: false)
+      if (!canShowSpecialToCustomer(s)) return false
+      const approvalOk = !s.approval?.required || s.approval?.status === 'approved'
+      if (!approvalOk) return false
       return true
     })
     .map(s => enrichSpecialWithInventory({ special: s, inventoryItems }))
