@@ -21,7 +21,8 @@
     "db:migrate": "node server/db/runMigrations.js",
     "verify:pos360": "node server/scripts/verifyPos360PlatformLayer.js",
     "verify:database": "node server/scripts/verifyDatabaseFoundation.js",
-    "verify:payments": "node server/scripts/verifyStripeConnectMoneyBridge.js"
+    "verify:payments": "node server/scripts/verifyStripeConnectMoneyBridge.js",
+    "verify:venue-onboarding": "node server/scripts/verifyVenueOnboardingEngine.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

@@ -260,3 +260,29 @@ export async function getPaymentReadinessHooks(venueId, partnerId = null) {
     payoutReadiness: { venue: venueReadiness?.canReceiveReferralPayout ?? false, partner: partnerReadiness?.canReceivePartnerPayout ?? false },
   }
 }
+
+export async function getVenueOnboardingHooks(venueId) {
+  const { getVenueCommerceReadiness, getVenueReadinessWarnings } = await import('./venue/venueOnboardingEngine.js')
+  const { canVenueDisplayPartnerSpecials, canVenueAcceptPartnerVendorOrders } = await import('./venue/venuePartnerSpecialsLifecycleService.js')
+
+  const [commerce, warnings, canDisplay, canAccept] = await Promise.all([
+    getVenueCommerceReadiness(venueId),
+    getVenueReadinessWarnings(venueId),
+    canVenueDisplayPartnerSpecials(venueId),
+    canVenueAcceptPartnerVendorOrders(venueId),
+  ])
+
+  return {
+    ok: true,
+    venueId,
+    overallStatus: commerce.overallStatus,
+    readinessScore: warnings.readinessScore,
+    ticketTapperStatus: commerce.ticketTapperStatus,
+    moneyBridgeStatus: commerce.moneyBridgeStatus,
+    partnerSpecialsStatus: commerce.partnerSpecialsStatus,
+    canDisplayPartnerSpecials: canDisplay.canDisplay,
+    canAcceptPartnerOrders: canAccept.canAcceptPartnerOrders,
+    warnings: warnings.warnings,
+    message: 'Venue onboarding is the control layer that decides which commerce features a venue can safely use.',
+  }
+}
