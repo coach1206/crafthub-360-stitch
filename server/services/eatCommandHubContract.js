@@ -372,3 +372,38 @@ export async function getTaxReadinessHooks(venueId, partnerId = null) {
     complianceNote: 'This engine supports tax calculation previews and readiness checks, but it does not provide legal tax advice or guarantee tax compliance.',
   }
 }
+
+export async function getKdsRoutingHooks(venueId, partnerId = null) {
+  const { getStationConfigReadiness } = await import('./kds/stationConfigService.js')
+  const { getStationHealthReadiness } = await import('./kds/stationHealthEngine.js')
+  const { getFulfillmentReadiness }   = await import('./kds/fulfillmentStationEngine.js')
+
+  const [configReadiness, healthReadiness, fulfillmentReadiness] = await Promise.all([
+    getStationConfigReadiness(venueId),
+    Promise.resolve(getStationHealthReadiness(venueId)),
+    Promise.resolve(getFulfillmentReadiness({ venueId })),
+  ])
+
+  const hooks = []
+  for (const b of configReadiness.blockers ?? []) {
+    hooks.push({ type: b.type, severity: b.severity, message: b.message ?? b.type })
+  }
+  for (const b of healthReadiness.blockers ?? []) {
+    hooks.push({ type: b.type, severity: b.severity, message: b.message ?? b.type })
+  }
+
+  return {
+    ok: true,
+    venueId,
+    partnerId,
+    kdsStatus:             'kds_routing_pending',
+    routingMode:           'routing_preview',
+    dispatchMode:          'dispatch_preview',
+    stationConfigStatus:   configReadiness.blockers?.some(b => b.type === 'station_config_required') ? 'station_config_required' : 'preview_only',
+    stationMappingStatus:  configReadiness.blockers?.some(b => b.type === 'station_mapping_required') ? 'station_mapping_required' : 'preview_only',
+    overallHealthStatus:   healthReadiness.overallHealthStatus ?? 'station_unavailable',
+    fulfillmentStatus:     fulfillmentReadiness.overallFulfillmentStatus ?? 'fulfillment_pending',
+    kdsHooks:              hooks,
+    message: 'The KDS Fulfillment Station Engine can build routing and dispatch previews, but it does not prove a kitchen, bar, humidor, or partner station was notified unless a live station integration is verified.',
+  }
+}
