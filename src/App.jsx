@@ -105,6 +105,7 @@ import SmokeCraftSessionGuard from './components/smokecraft/SmokeCraftSessionGua
 import { SmokeCraftProgressProvider } from './context/SmokeCraftProgressContext.jsx'
 import { SmokeCraftOrderProvider }   from './context/SmokeCraftOrderContext.jsx'
 import SmokeCraftMenu          from './pages/smokecraft/SmokeCraftMenu.jsx'
+import SmokeCraftVenueCommerce from './pages/smokecraft/SmokeCraftVenueCommerce.jsx'
 import SmokeCraftCart          from './pages/smokecraft/SmokeCraftCart.jsx'
 import SmokeCraftCheckout      from './pages/smokecraft/SmokeCraftCheckout.jsx'
 import SmokeCraftPaymentSuccess from './pages/smokecraft/SmokeCraftPaymentSuccess.jsx'
@@ -383,6 +384,8 @@ export default function App() {
                 <Route path="passport"         element={<Navigate to="/passport" replace />} />
                 {/* Venue commerce flow */}
                 <Route path="menu"             element={<SmokeCraftMenu />} />
+                <Route path="venue-commerce"  element={<SmokeCraftVenueCommerce />} />
+                <Route path="order"           element={<SmokeCraftVenueCommerce />} />
                 <Route path="cart"             element={<SmokeCraftCart />} />
                 <Route path="checkout"         element={<SmokeCraftCheckout />} />
                 <Route path="payment-success"  element={<SmokeCraftPaymentSuccess />} />
