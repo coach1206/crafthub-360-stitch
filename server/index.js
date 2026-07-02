@@ -61,6 +61,7 @@ import paymentMoneyBridgeRoutes        from './routes/paymentMoneyBridgeRoutes.j
 import venueOnboardingRoutes           from './routes/venueOnboardingRoutes.js'
 import partnerVendorRoutes             from './routes/partnerVendorRoutes.js'
 import taxComplianceRoutes             from './routes/taxComplianceRoutes.js'
+import orderLifecycleRoutes           from './routes/orderLifecycleRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -147,6 +148,7 @@ app.use('/api/payments/money-bridge',     paymentMoneyBridgeRoutes)
 app.use('/api/onboarding',               venueOnboardingRoutes)
 app.use('/api/partners',                partnerVendorRoutes)
 app.use('/api/tax',                     taxComplianceRoutes)
+app.use('/api/orders',                  orderLifecycleRoutes)
 app.use('/api/venue-menu',        venueMenuRoutes)
 app.use('/api/pos3',              pos3OrderRoutes)
 

@@ -317,6 +317,34 @@ export async function getPartnerVendorHooks(partnerId, venueId = null) {
   }
 }
 
+export async function getOrderLifecycleHooks(venueId, partnerId = null) {
+  const { getVenueOrderReadiness, getPartnerOrderReadiness } = await import('./order/orderReadinessEngine.js')
+
+  const venueReadiness = venueId ? await getVenueOrderReadiness(venueId) : null
+  const partnerReadiness = partnerId ? await getPartnerOrderReadiness(partnerId, venueId) : null
+
+  const hooks = []
+  for (const blocker of venueReadiness?.blockers ?? []) {
+    hooks.push({ type: blocker.type, severity: blocker.severity, message: blocker.message ?? blocker.type })
+  }
+  for (const blocker of partnerReadiness?.blockers ?? []) {
+    hooks.push({ type: blocker.type, severity: blocker.severity, owner: 'partner_vendor', partnerId })
+  }
+
+  return {
+    ok: true,
+    venueId,
+    partnerId,
+    orderLifecycleStatus: 'order_lifecycle_preview',
+    paymentStatus: 'payment_confirmation_required',
+    taxStatus: 'tax_preview_required',
+    posStatus: 'pos_sync_pending',
+    kdsStatus: 'kds_routing_pending',
+    orderHooks: hooks,
+    message: 'The Order Lifecycle Engine tracks order state and readiness, but it does not prove live payment capture, POS sync, or kitchen routing unless those integrations are verified.',
+  }
+}
+
 export async function getTaxReadinessHooks(venueId, partnerId = null) {
   const { getVenueTaxComplianceReadiness, getPartnerTaxComplianceReadiness, buildTaxReadinessScore } = await import('./tax/taxComplianceReadinessEngine.js')
 
