@@ -55,6 +55,7 @@ import smokecraftVenueCommerceRoutes       from './routes/smokecraftVenueCommerc
 import smokecraftTicketTapperSpecialsRoutes from './routes/smokecraftTicketTapperSpecialsRoutes.js'
 import venueMenuRoutes                  from './routes/venueMenuRoutes.js'
 import pos3OrderRoutes                  from './routes/pos3OrderRoutes.js'
+import pos360IntegrationRoutes          from './routes/pos360IntegrationRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -135,6 +136,7 @@ app.use('/api/venues',            venueCommerceRoutes)
 app.use('/api/smokecraft',                  smokecraftCommerceRoutes)
 app.use('/api/smokecraft/venue-commerce',   smokecraftVenueCommerceRoutes)
 app.use('/api/smokecraft/ticket-tapper',   smokecraftTicketTapperSpecialsRoutes)
+app.use('/api/pos360',                    pos360IntegrationRoutes)
 app.use('/api/venue-menu',        venueMenuRoutes)
 app.use('/api/pos3',              pos3OrderRoutes)
 

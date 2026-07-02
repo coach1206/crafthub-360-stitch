@@ -17,7 +17,9 @@
     "visual:pos3": "node scripts/visualProof.js --family=pos3",
     "visual:eat": "node scripts/visualProof.js --family=eat",
     "visual:dayone360": "node scripts/visualProof.js --family=dayone360",
-    "visual:crafthub": "node scripts/visualProof.js --family=crafthub"
+    "visual:crafthub": "node scripts/visualProof.js --family=crafthub",
+    "db:migrate": "node server/db/runMigrations.js",
+    "verify:pos360": "node server/scripts/verifyPos360PlatformLayer.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

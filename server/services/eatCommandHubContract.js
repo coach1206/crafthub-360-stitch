@@ -157,3 +157,56 @@ export function buildSystemWarnings({ taxStatus, posProviderStatus, kdsStatus, s
 
   return warnings
 }
+
+// ── POS360 Management Hooks ───────────────────────────────────────────────────
+
+export async function getPOS360ReadinessHooks(venueId) {
+  const { getVenuePOSReadiness } = await import('./pos360IntegrationHub.js')
+  const { getEncryptionStatus } = await import('../utils/encryption.js')
+  const { isDbAvailable } = await import('../db/connection.js')
+  const { getItemMappings } = await import('./pos360ItemMappingService.js')
+  const { getProviderHealth } = await import('./pos360ProviderHealthService.js')
+
+  const encStatus = getEncryptionStatus()
+  const dbReady = isDbAvailable()
+  const posReadiness = await getVenuePOSReadiness(venueId)
+
+  const hooks = []
+
+  if (encStatus.status === 'encryption_key_required') {
+    hooks.push({ type: 'encryption_key_required', severity: 'critical', message: 'ENCRYPTION_SECRET not set. Cannot store POS provider tokens.' })
+  }
+  if (!dbReady) {
+    hooks.push({ type: 'database_required', severity: 'warning', message: 'DATABASE_URL not configured. POS data not persisted.' })
+  }
+
+  for (const [provider, status] of Object.entries(posReadiness.providers ?? {})) {
+    if (provider === 'manual_pos360') continue
+    if (status.connectionStatus === 'provider_not_connected' || status.connectionStatus === 'oauth_required' || status.connectionStatus === 'credentials_missing') {
+      hooks.push({ type: 'provider_not_connected', severity: 'info', provider, message: `${provider}: ${status.connectionStatus}` })
+    }
+  }
+
+  // Item mapping check for all known providers
+  const providerNames = ['square', 'toast', 'clover', 'lightspeed', 'shopify_pos']
+  for (const pname of providerNames) {
+    const mappings = await getItemMappings(venueId, pname)
+    const unmapped = (mappings.mappings ?? []).filter(m => m.mappingStatus === 'mapping_required')
+    if (unmapped.length > 0) {
+      hooks.push({ type: 'mapping_required', severity: 'warning', provider: pname, unmappedCount: unmapped.length, message: `${unmapped.length} items need mapping for ${pname}.` })
+    }
+  }
+
+  // Manual mode always available
+  hooks.push({ type: 'manual_mode_available', severity: 'info', message: 'manual_pos360 fallback available for venues without POS connection.' })
+
+  return {
+    ok: true,
+    venueId,
+    posHooks: hooks,
+    manualModeAvailable: true,
+    databaseStatus: dbReady ? 'available' : 'database_required',
+    encryptionStatus: encStatus.status,
+    tenantGuardStatus: 'tenant_guard_active',
+  }
+}
