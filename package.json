@@ -28,7 +28,8 @@
     "verify:orders": "node server/scripts/verifyOrderLifecycleEngine.js",
     "verify:kds": "node server/scripts/verifyKdsFulfillmentEngine.js",
     "verify:ncie": "node server/scripts/verifyNoveeNCIEFoundation.js",
-  "verify:ncie-wiring": "node server/scripts/verifyNcieScreenWiring.js"
+  "verify:ncie-wiring": "node server/scripts/verifyNcieScreenWiring.js",
+  "verify:checkout": "node server/scripts/verifyCustomerCheckoutEngine.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

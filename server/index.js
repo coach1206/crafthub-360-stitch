@@ -63,6 +63,7 @@ import partnerVendorRoutes             from './routes/partnerVendorRoutes.js'
 import taxComplianceRoutes             from './routes/taxComplianceRoutes.js'
 import orderLifecycleRoutes           from './routes/orderLifecycleRoutes.js'
 import kdsRoutingRoutes              from './routes/kdsRoutingRoutes.js'
+import customerCheckoutRoutes        from './routes/customerCheckoutRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -132,6 +133,7 @@ app.use('/api/pairings',          pairingOrderRoutes)
 app.use('/api/smokecraft',        smokecraftRoutes)
 app.use('/api/smokecraft',        smokecraftOrders)
 app.use('/api/eat/smokecraft',    smokecraftEatRoutes)
+app.use('/api/checkout',          customerCheckoutRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)

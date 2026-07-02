@@ -479,3 +479,42 @@ export function getPassportMasteryReadiness() {
     passportNote: 'SmokeCraft Passport stamp locks are enforced by session.js. NCIE provides XP and mastery data only.',
   }
 }
+
+export async function getCheckoutReadinessHooks(venueId, partnerId = null) {
+  const { getCheckoutReadiness, getPartnerCheckoutReadiness } = await import('./checkout/checkoutReadinessEngine.js')
+  const cartPayload = { venue_id: venueId }
+  const [baseReadiness, partnerReadiness] = await Promise.all([
+    getCheckoutReadiness(cartPayload),
+    partnerId ? getPartnerCheckoutReadiness(partnerId, venueId) : Promise.resolve(null),
+  ])
+  return {
+    ok:                 true,
+    venueId,
+    partnerId,
+    checkoutReadiness:  baseReadiness.checkoutReadiness,
+    readinessScore:     baseReadiness.readinessScore,
+    paymentStatus:      'payment_confirmation_required',
+    taxStatus:          'tax_preview_required',
+    posStatus:          'pos_sync_pending',
+    kdsStatus:          'kds_routing_pending',
+    inventoryStatus:    'inventory_unavailable',
+    partnerReadiness:   partnerReadiness,
+    blockers:           baseReadiness.blockers,
+    checkoutNote:       'The Customer Checkout and Self-Order Engine can create cart, checkout, receipt, and order-status previews, but it does not prove live payment capture, POS sync, KDS notification, inventory reservation, or finalized tax collection unless those integrations are verified.',
+  }
+}
+
+export async function getSelfOrderReadinessHooks(venueId) {
+  const { getSelfOrderReadiness } = await import('./checkout/checkoutReadinessEngine.js')
+  return getSelfOrderReadiness(venueId)
+}
+
+export async function getStaffAssistedOrderReadinessHooks(venueId) {
+  const { getStaffAssistedOrderReadiness } = await import('./checkout/checkoutReadinessEngine.js')
+  return getStaffAssistedOrderReadiness(venueId)
+}
+
+export async function getCustomerOrderStatusHooks(orderId) {
+  const { getCustomerOrderStatus } = await import('./checkout/customerOrderStatusService.js')
+  return getCustomerOrderStatus(orderId)
+}
