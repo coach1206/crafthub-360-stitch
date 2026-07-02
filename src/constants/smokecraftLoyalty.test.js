@@ -251,6 +251,52 @@ console.log('\nBonus: getUserSmokeCraftSummary')
     summary.overallScore === Math.round(400*0.4 + 800*0.3 + 1700*0.2 + 500*0.1))
 }
 
+// ── Bonus: Management Sync VIP gate ──────────────────────────────────────────
+console.log('\nBonus: Management Sync (S23) requires Connections + VIP threshold')
+{
+  // Blocked: connections done but VIP threshold not met
+  const noVIP = makeSession({
+    completedSteps: ['final-review', 'passport-stamp', 'connections'],
+    xp: 10, loyaltyPoints: 10,
+  })
+  const blocked = awardPassportStampPoints(noVIP, 'management-sync', { isDemoMode: false })
+  assert('management-sync blocked when VIP threshold not met', blocked === null)
+
+  // Blocked: VIP met but connections not done
+  const noConn = makeSession({
+    completedSteps: ['final-review', 'passport-stamp'],
+    xp: 1000, loyaltyPoints: 1500, skillScore: 600,
+    passportStampCount: 2, pairingPurchases: 3, referralCount: 1,
+  })
+  assert('management-sync blocked when connections not done',
+    awardPassportStampPoints(noConn, 'management-sync', { isDemoMode: false }) === null)
+
+  // Allowed: both met
+  const base = makeSession({
+    completedSteps: ['final-review', 'passport-stamp', 'connections'],
+    xp: 1000, loyaltyPoints: 1500, skillScore: 600,
+    passportStampCount: 2, pairingPurchases: 3, referralCount: 1,
+  })
+  const result = awardPassportStampPoints(base, 'management-sync', { isDemoMode: false })
+  assert('management-sync awards points when threshold met', result !== null)
+  assert('management-sync loyalty delta = +250 (total = base + 250)',
+    result?.loyaltyPoints === base.loyaltyPoints + 250)
+  assert('passportStampCount unchanged for management-sync',
+    result?.passportStampCount === base.passportStampCount)
+}
+
+// ── Bonus: Overall leaderboard weighting (realistic numbers) ──────────────────
+console.log('\nBonus: Overall leaderboard — realistic spender vs skilled player')
+{
+  const spender = { challengeScore: 100, skillScore: 100, journeyXP: 100, loyaltyPoints: 2000 }
+  const skilled = { challengeScore: 1000, skillScore: 900, journeyXP: 800, loyaltyPoints: 50 }
+  assert('Skilled player beats realistic high-spender in overall score',
+    getOverallSmokeCraftScore(skilled) > getOverallSmokeCraftScore(spender))
+  assert('loyaltyPoints capped at 1000 for overall calc (2000 LP treated as 1000)',
+    getOverallSmokeCraftScore({ challengeScore:0, skillScore:0, journeyXP:0, loyaltyPoints:2000 }) ===
+    getOverallSmokeCraftScore({ challengeScore:0, skillScore:0, journeyXP:0, loyaltyPoints:1000 }))
+}
+
 // ── VIP candidate ─────────────────────────────────────────────────────────────
 console.log('\nBonus: VIP candidate signal')
 {

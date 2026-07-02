@@ -149,12 +149,15 @@ export const VIP_THRESHOLD_RULES = {
 
 // ── Leaderboard weighting ─────────────────────────────────────────────────────
 // Overall score = weighted sum — prevents spending from dominating skill.
+// loyaltyPointsCap: only this many LP are counted toward the overall score,
+// regardless of actual balance. Actual balance is never modified.
 export const LEADERBOARD_WEIGHTS = {
   overall: {
-    challengeScore: 0.40,
-    skillScore:     0.30,
-    journeyXP:      0.20,
-    loyaltyPoints:  0.10,
+    challengeScore:  0.40,
+    skillScore:      0.30,
+    journeyXP:       0.20,
+    loyaltyPoints:   0.10,
+    loyaltyPointsCap: 1000,
   },
 }
 

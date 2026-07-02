@@ -307,14 +307,20 @@ export function getLoyaltyLeaderboard(entries) {
 /**
  * Overall SmokeCraft score — weighted to prevent spending from dominating skill.
  * challengeScore 40% · skillScore 30% · journeyXP 20% · loyaltyPoints 10%
+ *
+ * Loyalty contribution is capped at LEADERBOARD_WEIGHTS.overall.loyaltyPointsCap
+ * (default 1000 LP). Actual loyalty balance is never modified — only the
+ * contribution to this weighted score is clamped so whale spending cannot
+ * outrank a skilled player on the overall leaderboard.
  */
 export function getOverallSmokeCraftScore(summary) {
   const w = LEADERBOARD_WEIGHTS.overall
+  const cappedLP = Math.min(summary.loyaltyPoints ?? 0, w.loyaltyPointsCap ?? Infinity)
   return Math.round(
     (summary.challengeScore ?? 0) * w.challengeScore +
     (summary.skillScore     ?? 0) * w.skillScore +
     (summary.journeyXP      ?? 0) * w.journeyXP +
-    (summary.loyaltyPoints  ?? 0) * w.loyaltyPoints
+    cappedLP                       * w.loyaltyPoints
   )
 }
 
