@@ -51,7 +51,8 @@ import tickerRoutes          from './routes/tickerRoutes.js'
 import travelRoutes          from './routes/travelRoutes.js'
 import venueCommerceRoutes              from './routes/venueCommerceRoutes.js'
 import smokecraftCommerceRoutes         from './routes/smokecraftCommerceRoutes.js'
-import smokecraftVenueCommerceRoutes    from './routes/smokecraftVenueCommerceRoutes.js'
+import smokecraftVenueCommerceRoutes       from './routes/smokecraftVenueCommerceRoutes.js'
+import smokecraftTicketTapperSpecialsRoutes from './routes/smokecraftTicketTapperSpecialsRoutes.js'
 import venueMenuRoutes                  from './routes/venueMenuRoutes.js'
 import pos3OrderRoutes                  from './routes/pos3OrderRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
@@ -133,6 +134,7 @@ app.use('/api/travel',            travelRoutes)
 app.use('/api/venues',            venueCommerceRoutes)
 app.use('/api/smokecraft',                  smokecraftCommerceRoutes)
 app.use('/api/smokecraft/venue-commerce',   smokecraftVenueCommerceRoutes)
+app.use('/api/smokecraft/ticket-tapper',   smokecraftTicketTapperSpecialsRoutes)
 app.use('/api/venue-menu',        venueMenuRoutes)
 app.use('/api/pos3',              pos3OrderRoutes)
 

@@ -384,8 +384,9 @@ export default function App() {
                 <Route path="passport"         element={<Navigate to="/passport" replace />} />
                 {/* Venue commerce flow */}
                 <Route path="menu"             element={<SmokeCraftMenu />} />
-                <Route path="venue-commerce"  element={<SmokeCraftVenueCommerce />} />
-                <Route path="order"           element={<SmokeCraftVenueCommerce />} />
+                <Route path="venue-commerce"                    element={<SmokeCraftVenueCommerce />} />
+                <Route path="order"                           element={<SmokeCraftVenueCommerce />} />
+                <Route path="ticket-tapper/staff-specials"    element={<SmokeCraftVenueCommerce />} />
                 <Route path="cart"             element={<SmokeCraftCart />} />
                 <Route path="checkout"         element={<SmokeCraftCheckout />} />
                 <Route path="payment-success"  element={<SmokeCraftPaymentSuccess />} />

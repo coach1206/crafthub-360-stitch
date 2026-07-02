@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   fetchVenueMenu,
   trackPartnerClick,
@@ -14,6 +14,12 @@ import {
   PARTNER_FOODS,
 } from '../../data/smokeCraftVenueCommerce.js'
 import { calculateSmokeCraftMoneyBridge } from '../../utils/smokeCraftMoneyBridge.js'
+import { getActiveTicketTapperSpecials, updateInventoryAfterSpecialAdd } from '../../utils/smokeCraftSpecialsEngine.js'
+import { fetchTicketTapperSpecials, fetchTicketTapperInventory } from '../../services/smokeCraftTicketTapperSpecialsApi.js'
+import TicketTapperSpecialsStrip from '../../components/smokecraft/TicketTapperSpecialsStrip.jsx'
+import StaffSpecialsControlPanel from '../../components/smokecraft/StaffSpecialsControlPanel.jsx'
+import { smokeCraftTicketTapperSpecialsSeed } from '../../data/smokeCraftTicketTapperSpecials.js'
+import { smokeCraftInventorySeed } from '../../data/smokeCraftInventorySeed.js'
 
 const BG_IMAGE = '/cigar , drink & pairingfood 0rdering.png'
 const TABS = ['Smoke', 'Drink', 'Food', 'Partner Network']
@@ -236,6 +242,44 @@ export default function SmokeCraftVenueCommerce({ tableNumber = '1', guestSessio
   const [submitResult, setSubmitResult] = useState(null)
   const [imgErr, setImgErr] = useState(false)
 
+  // Ticket Tapper Specials state
+  const [specialsRaw, setSpecialsRaw] = useState(smokeCraftTicketTapperSpecialsSeed.specials)
+  const [inventoryItems, setInventoryItems] = useState(smokeCraftInventorySeed.items)
+  const [specialsLocalPreview, setSpecialsLocalPreview] = useState(true)
+  const [showStaffControls, setShowStaffControls] = useState(false)
+  const DEMO_STAFF = { staffId: 'staff-preview', name: 'Preview Staff', role: 'manager' }
+
+  useEffect(() => {
+    fetchTicketTapperSpecials(venueId).then(res => {
+      if (res.ok) {
+        setSpecialsRaw(res.specials || smokeCraftTicketTapperSpecialsSeed.specials)
+        setSpecialsLocalPreview(!!res.localPreview)
+      }
+    })
+    fetchTicketTapperInventory(venueId).then(res => {
+      if (res.ok && res.items?.length) setInventoryItems(res.items)
+    })
+  }, [venueId])
+
+  const activeSpecials = getActiveTicketTapperSpecials({ specials: specialsRaw, inventoryItems })
+
+  function handleSpecialAdd({ special, orderItems, addEvent }) {
+    setCart(prev => [...prev, ...orderItems])
+    setInventoryItems(prev => updateInventoryAfterSpecialAdd({ inventoryItems: prev, special }))
+    // Connect partner items to Money Bridge tracking
+    const partnerOrderItems = orderItems.filter(i => i.isPartnerItem)
+    if (partnerOrderItems.length > 0) {
+      const partnerSubtotal = partnerOrderItems.reduce((s, i) => s + i.price * (i.quantity || 1), 0)
+      trackPartnerFoodAdd({
+        venueId, tableLabel,
+        partnerId: partnerOrderItems[0].partnerId,
+        partnerName: partnerOrderItems[0].partnerName,
+        item: partnerOrderItems[0],
+        moneyBridge: { smokeCraftTotalCommission: partnerSubtotal * 0.10, venueTotalReferral: partnerSubtotal * 0.05 },
+      })
+    }
+  }
+
   const cigars = menu?.cigars || SMOKECRAFT_CIGARS
   const drinks = menu?.drinks || SMOKECRAFT_DRINKS
   const partners = menu?.partnerEstablishments || PARTNER_ESTABLISHMENTS
@@ -437,7 +481,7 @@ export default function SmokeCraftVenueCommerce({ tableNumber = '1', guestSessio
         </div>
 
         {/* Tab bar */}
-        <div style={{ display: 'flex', gap: 6, marginBottom: 20, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 6, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
           {TABS.map(t => (
             <button key={t} type="button" onClick={() => setTab(t)}
               style={{
@@ -454,7 +498,60 @@ export default function SmokeCraftVenueCommerce({ tableNumber = '1', guestSessio
               )}
             </button>
           ))}
+          <button type="button" onClick={() => setShowStaffControls(p => !p)}
+            style={{ marginLeft: 'auto', background: 'none', border: `1px solid ${border}`, color: '#888', fontSize: 11, padding: '6px 12px', borderRadius: 16, cursor: 'pointer' }}>
+            {showStaffControls ? '✕ Staff Controls' : '⚙ Staff Specials Preview'}
+          </button>
         </div>
+
+        {/* Staff Specials Control Panel (preview mode) */}
+        {showStaffControls && (
+          <div style={{ marginBottom: 20 }}>
+            <StaffSpecialsControlPanel
+              specials={specialsRaw}
+              venueId={venueId}
+              staff={DEMO_STAFF}
+              localPreview={specialsLocalPreview}
+              onSpecialCreated={result => {
+                if (result.localPreview) {
+                  // Add created special to local state for preview
+                  const newSpecial = {
+                    id: result.specialId,
+                    title: 'New Special (Preview)',
+                    status: 'active',
+                    priority: 99,
+                    promotedByRole: DEMO_STAFF.role,
+                    createdBy: DEMO_STAFF,
+                    inventory: { quantityAvailable: 10, inventoryStatus: 'available', lowInventoryThreshold: 3, allowOversell: false },
+                    pricing: { specialPrice: 0, regularPrice: 0, discountAmount: 0 },
+                    items: [],
+                    moneyBridge: { active: false },
+                    media: { badgeLabel: 'New' },
+                    callToAction: { label: 'Add Special', action: 'one_tap_add' },
+                    startsAt: new Date().toISOString(),
+                    endsAt: null,
+                  }
+                  setSpecialsRaw(prev => [newSpecial, ...prev])
+                }
+              }}
+              onSpecialUpdated={(action, specialId) => {
+                setSpecialsRaw(prev => prev.map(s =>
+                  s.id === specialId ? { ...s, status: action === 'end' ? 'ended' : action === 'pause' ? 'paused' : 'active' } : s
+                ))
+              }}
+            />
+          </div>
+        )}
+
+        {/* Ticket Tapper Real-Time Specials */}
+        <TicketTapperSpecialsStrip
+          specials={activeSpecials}
+          inventoryItems={inventoryItems}
+          onAddSpecial={handleSpecialAdd}
+          venueId={venueId}
+          tableLabel={tableLabel}
+          localPreview={specialsLocalPreview}
+        />
 
         {/* Two-column layout */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 20, alignItems: 'start' }}>
