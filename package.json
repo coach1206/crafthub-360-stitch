@@ -27,7 +27,8 @@
     "verify:tax": "node server/scripts/verifyTaxComplianceEngine.js",
     "verify:orders": "node server/scripts/verifyOrderLifecycleEngine.js",
     "verify:kds": "node server/scripts/verifyKdsFulfillmentEngine.js",
-    "verify:ncie": "node server/scripts/verifyNoveeNCIEFoundation.js"
+    "verify:ncie": "node server/scripts/verifyNoveeNCIEFoundation.js",
+  "verify:ncie-wiring": "node server/scripts/verifyNcieScreenWiring.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

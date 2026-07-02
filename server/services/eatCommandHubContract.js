@@ -407,3 +407,75 @@ export async function getKdsRoutingHooks(venueId, partnerId = null) {
     message: 'The KDS Fulfillment Station Engine can build routing and dispatch previews, but it does not prove a kitchen, bar, humidor, or partner station was notified unless a live station integration is verified.',
   }
 }
+
+export function getNcieScreenWiringReadiness() {
+  return {
+    ok: true,
+    screenWiringStatus:     'screen_wiring_ready',
+    educationStatus:        'ncie_ready',
+    lessonStatus:           'verified_outline_available',
+    adapterMode:            'adapter_only',
+    protectedScreenStatus:  'protected_screen_not_modified',
+    hookStatus:             'hooks_wired',
+    wiringNote: 'NCIE screen wiring connects verified educational outlines, mentors, decisions, recommendations, passport mastery, and analytics previews to screens without making OpenAI the source of truth.',
+  }
+}
+
+export function getCraftEducationTileReadiness(craftType = 'smokecraft') {
+  return {
+    ok: true,
+    craftType,
+    tileStatus:             'educational_tile_ready',
+    lessonStatus:           'verified_outline_available',
+    quizStatus:             'quiz_preview',
+    inventoryStatus:        'inventory_unavailable',
+    tileNote: 'Educational tiles provide verified content outlines. Live inventory and AI personalization require active integrations.',
+  }
+}
+
+export function getSmokeCraftEducationReadiness() {
+  return {
+    ok: true,
+    moduleId:               'smokecraft',
+    educationStatus:        'ncie_ready',
+    lessonStatus:           'verified_outline_available',
+    quizStatus:             'quiz_preview',
+    mentorStatus:           'mentor_preview',
+    decisionStatus:         'decision_preview',
+    recommendationStatus:   'recommendation_preview',
+    screenWiringStatus:     'screen_wiring_ready',
+    protectedScreenStatus:  'protected_screen_not_modified',
+  }
+}
+
+export function getEducationAnalyticsReadiness() {
+  return {
+    ok: true,
+    analyticsStatus:    'analytics_preview',
+    persistenceStatus:  'not_persisted',
+    databaseStatus:     'database_required',
+    analyticsNote: 'Analytics events are buffered in-memory for this session. Persistence requires a connected database.',
+  }
+}
+
+export function getMentorInteractionReadiness() {
+  return {
+    ok: true,
+    mentorStatus:       'mentor_preview',
+    aiStatus:           'ai_unavailable',
+    aiAvailable:        false,
+    sessionStatus:      'session_preview',
+    mentorNote: 'Mentor sessions are available in preview mode using verified content outlines. AI personalization requires an active OpenAI key.',
+  }
+}
+
+export function getPassportMasteryReadiness() {
+  return {
+    ok: true,
+    passportStatus:     'passport_preview',
+    masteryStatus:      'mastery_preview',
+    xpStatus:           'xp_preview',
+    stampLockAuthority: 'session.js',
+    passportNote: 'SmokeCraft Passport stamp locks are enforced by session.js. NCIE provides XP and mastery data only.',
+  }
+}
