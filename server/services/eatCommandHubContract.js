@@ -286,3 +286,33 @@ export async function getVenueOnboardingHooks(venueId) {
     message: 'Venue onboarding is the control layer that decides which commerce features a venue can safely use.',
   }
 }
+
+export async function getPartnerVendorHooks(partnerId, venueId = null) {
+  const { getPartnerCommerceReadiness, getPartnerReadinessWarnings } = await import('./partner/partnerVendorOnboardingEngine.js')
+  const { canPartnerSellAtVenue } = await import('./partner/partnerVenueRelationshipService.js')
+  const { getPartnerPayoutReadiness } = await import('./partner/partnerPayoutReadinessService.js')
+
+  const [commerce, warnings, payoutReadiness] = await Promise.all([
+    getPartnerCommerceReadiness(partnerId),
+    getPartnerReadinessWarnings(partnerId),
+    getPartnerPayoutReadiness(partnerId),
+  ])
+
+  const venueApproval = venueId ? await canPartnerSellAtVenue(partnerId, venueId) : null
+
+  return {
+    ok: true,
+    partnerId,
+    venueId,
+    overallStatus: commerce.overallStatus,
+    readinessScore: warnings.readinessScore,
+    partnerSpecialsStatus: commerce.partnerSpecialsStatus,
+    payoutStatus: payoutReadiness.payoutStatus,
+    canReceivePartnerPayout: payoutReadiness.canReceivePartnerPayout,
+    venueApprovalStatus: venueApproval?.approvalStatus ?? 'venue_approval_required',
+    canSellAtVenue: venueApproval?.canSell ?? false,
+    warnings: warnings.warnings,
+    settlementStatus: 'settlement_pending_preview',
+    message: 'Partner vendors should never become customer-facing until venue approval, product approval, availability, fulfillment rules, and commission rules are in place.',
+  }
+}
