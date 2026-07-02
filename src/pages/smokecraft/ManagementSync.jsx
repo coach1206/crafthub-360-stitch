@@ -1,6 +1,7 @@
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
+import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
 
 export default function ManagementSync() {
   const { awardSessionRewards } = useGuestSession()
@@ -15,11 +16,14 @@ export default function ManagementSync() {
   ]
 
   return (
-    <SmokeCraftAssetRoute
-      src="/assets/smokecraft-reference/approved/smokecraft-venue-management-sync.png"
-      alt="Management Sync"
-      hotspots={HOTSPOTS}
-      route="/smokecraft/management-sync"
-    />
+    <>
+      <SmokeCraftAssetRoute
+        src="/assets/smokecraft-reference/approved/smokecraft-venue-management-sync.png"
+        alt="Management Sync"
+        hotspots={HOTSPOTS}
+        route="/smokecraft/management-sync"
+      />
+      <SmokeCraftHandoffTrigger allowEAT allowPOS360 />
+    </>
   )
 }

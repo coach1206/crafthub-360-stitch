@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
+import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
 
 export default function VisitComplete() {
   const navigate = useNavigate()
@@ -132,6 +133,7 @@ export default function VisitComplete() {
           </p>
         )}
       </div>
+      <SmokeCraftHandoffTrigger allowEAT allowPOS360 />
     </section>
   )
 }

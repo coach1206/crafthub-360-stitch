@@ -48,6 +48,9 @@ import EATReports from './pages/eat/EATReports.jsx'
 import EATDeviceMode from './pages/eat/EATDeviceMode.jsx'
 import EATSettings from './pages/eat/EATSettings.jsx'
 import EATOperations from './pages/eat/EATOperations.jsx'
+import EATSmokeCraftPanel from './pages/eat/EATSmokeCraftPanel.jsx'
+import StaffPinScreen from './pages/staff/StaffPinScreen.jsx'
+import POS360SmokeCraftCheckout from './pages/pos360/POS360SmokeCraftCheckout.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -230,6 +233,7 @@ export default function App() {
 
             {/* ── Login screens — lazy, accessible without boot ─── */}
             <Route path="staff-login"   element={<StaffLogin />} />
+            <Route path="staff/pin"     element={<StaffPinScreen />} />
             <Route path="admin-login"   element={<AdminLogin />} />
             <Route path="founder-login" element={<FounderLogin />} />
             <Route path="mentor-login"  element={<MentorLogin />} />
@@ -573,6 +577,7 @@ export default function App() {
                 <Route path="inventory" element={<InventoryControl />} />
                 <Route path="integrations" element={<POSIntegrationHub />} />
                 <Route path="settings"  element={<POS3Settings />} />
+                <Route path="smokecraft-checkout" element={<POS360SmokeCraftCheckout />} />
               </Route>
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
@@ -604,6 +609,7 @@ export default function App() {
                 <Route path="device-mode" element={<EATDeviceMode />} />
                 <Route path="media"       element={<EATMediaLibrary />} />
                 <Route path="settings"    element={<EATSettings />} />
+                <Route path="smokecraft-panel" element={<EATSmokeCraftPanel />} />
               </Route>
 
               {/* ── Protected: admin+ — BLOCKED in demo mode ──────── */}

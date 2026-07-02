@@ -1,0 +1,74 @@
+/* RippleDissolveTransition — premium dark/gold transition */
+
+.rdt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #050302;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Gold ripple circle */
+.rdt-ripple {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(233, 193, 118, 0.9) 0%,
+    rgba(233, 193, 118, 0.2) 45%,
+    transparent 70%
+  );
+  transform: scale(1);
+  opacity: 1;
+  transition:
+    transform 770ms cubic-bezier(0.2, 0, 0.2, 1),
+    opacity   660ms ease-out;
+}
+
+.rdt-ripple.rdt-ripple-expand {
+  transform: scale(65);
+  opacity: 0;
+}
+
+/* Smoke vignette overlay */
+.rdt-smoke {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle,
+    transparent 0%,
+    rgba(5, 3, 2, 0.4) 55%,
+    rgba(5, 3, 2, 0.97) 100%
+  );
+  opacity: 0;
+  transition: opacity 660ms ease-in;
+  /* subtle blur to sell the smoke effect */
+  backdrop-filter: blur(0px);
+}
+
+.rdt-smoke.rdt-smoke-in {
+  opacity: 1;
+  backdrop-filter: blur(2px);
+}
+
+/* "Opening POS360..." label */
+.rdt-label {
+  position: relative;
+  z-index: 1;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(233, 193, 118, 0.75);
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+.rdt-label.rdt-label-in {
+  opacity: 1;
+}

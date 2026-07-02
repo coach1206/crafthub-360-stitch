@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
+import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
 
 const TASTE_TAGS = ['Dark Cocoa', 'Cedar Smoke', 'Leather', 'Toasted Almond']
 
@@ -30,11 +31,14 @@ export default function SessionComplete() {
   ]
 
   return (
-    <SmokeCraftAssetRoute
-      src="/assets/smokecraft-reference/approved/smokecraft-session-complete.png"
-      alt="Session Complete"
-      hotspots={hotspots}
-      route="/smokecraft/session-complete"
-    />
+    <>
+      <SmokeCraftAssetRoute
+        src="/assets/smokecraft-reference/approved/smokecraft-session-complete.png"
+        alt="Session Complete"
+        hotspots={hotspots}
+        route="/smokecraft/session-complete"
+      />
+      <SmokeCraftHandoffTrigger allowEAT allowPOS360 />
+    </>
   )
 }
