@@ -100,6 +100,12 @@ import FinalReview         from './pages/smokecraft/FinalReview.jsx'
 import VisitLockGuard      from './components/smokecraft/VisitLockGuard.jsx'
 import SmokeCraftSessionGuard from './components/smokecraft/SmokeCraftSessionGuard.jsx'
 import { SmokeCraftProgressProvider } from './context/SmokeCraftProgressContext.jsx'
+import { SmokeCraftOrderProvider }   from './context/SmokeCraftOrderContext.jsx'
+import SmokeCraftMenu          from './pages/smokecraft/SmokeCraftMenu.jsx'
+import SmokeCraftCart          from './pages/smokecraft/SmokeCraftCart.jsx'
+import SmokeCraftCheckout      from './pages/smokecraft/SmokeCraftCheckout.jsx'
+import SmokeCraftPaymentSuccess from './pages/smokecraft/SmokeCraftPaymentSuccess.jsx'
+import SmokeCraftOrderStatus   from './pages/smokecraft/SmokeCraftOrderStatus.jsx'
 import VisitComplete        from './pages/smokecraft/VisitComplete.jsx'
 import HowItWorks       from './pages/smokecraft/HowItWorks.jsx'
 import GuestPass        from './pages/smokecraft/GuestPass.jsx'
@@ -247,7 +253,7 @@ export default function App() {
               <Route path="system-explained" element={<PublicCraftHubLanding />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
-              <Route path="smokecraft" element={<SmokeCraftProgressProvider><Outlet /></SmokeCraftProgressProvider>}>
+              <Route path="smokecraft" element={<SmokeCraftProgressProvider><SmokeCraftOrderProvider><Outlet /></SmokeCraftOrderProvider></SmokeCraftProgressProvider>}>
                 {/* S1 — always unlocked, no guard */}
                 <Route index element={<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraft /></SmokeCraftSessionGuard>} />
 
@@ -371,6 +377,12 @@ export default function App() {
                 <Route path="demo"             element={<Demo />} />
                 <Route path="scan"             element={<Scan />} />
                 <Route path="passport"         element={<Navigate to="/passport" replace />} />
+                {/* Venue commerce flow */}
+                <Route path="menu"             element={<SmokeCraftMenu />} />
+                <Route path="cart"             element={<SmokeCraftCart />} />
+                <Route path="checkout"         element={<SmokeCraftCheckout />} />
+                <Route path="payment-success"  element={<SmokeCraftPaymentSuccess />} />
+                <Route path="order-status"     element={<SmokeCraftOrderStatus />} />
               </Route>
 
               <Route path="signin" element={<SignIn />} />

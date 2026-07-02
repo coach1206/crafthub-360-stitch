@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
+import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
 
 export default function SecondHumidorMatch() {
   const navigate = useNavigate()
   const { awardSessionRewards } = useGuestSession()
+  const { setResumeRoute } = useSmokeCraftOrder()
   const [done, setDone] = useState(false)
 
   function handleContinue() {
@@ -18,11 +21,14 @@ export default function SecondHumidorMatch() {
   }
 
   return (
-    <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
-      <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-second-humidor-match.png"
-        alt="Second Humidor Match"
-      />
-    </div>
+    <>
+      <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
+        <SmokeCraftAssetScreen
+          src="/assets/smokecraft-reference/approved/smokecraft-second-humidor-match.png"
+          alt="Second Humidor Match"
+        />
+      </div>
+      <SmokeCraftMenuButton label="View Menu" />
+    </>
   )
 }
