@@ -153,6 +153,20 @@ export function createNewSession() {
     currentSmokecraftStep: null,
     latestStampId:         null,
     goldenBoxProgress:     null,
+    // Scoring + loyalty (added alongside XP — never merged into xp)
+    skillScore:            0,
+    challengeScore:        0,
+    loyaltyPoints:         0,
+    lifetimeLoyaltyPoints: 0,
+    redeemablePoints:      0,
+    passportStampCount:    0,
+    purchaseCount:         0,
+    houseCigarPurchases:   0,
+    pairingPurchases:      0,
+    eventParticipationCount: 0,
+    referralCount:         0,
+    loyaltyLedger:         [],
+    usedTransactionIds:    [],
     // Phase 4 identity
     guestId:               null,
     venueId:               'novee-grand-lounge',
@@ -316,6 +330,25 @@ export function migrateSessionIfNeeded(session) {
         eatCommand: { ...BLANK_EAT_COMMAND, ...(s.eatCommand || {}) },
         __version:  SCHEMA_VERSION,
       }
+    }
+
+    // Top-up: scoring + loyalty fields for sessions that predate this engine.
+    // Additive only — never overwrites existing non-zero values.
+    s = {
+      skillScore:            s.skillScore            ?? 0,
+      challengeScore:        s.challengeScore        ?? 0,
+      loyaltyPoints:         s.loyaltyPoints         ?? 0,
+      lifetimeLoyaltyPoints: s.lifetimeLoyaltyPoints ?? 0,
+      redeemablePoints:      s.redeemablePoints      ?? 0,
+      passportStampCount:    s.passportStampCount    ?? 0,
+      purchaseCount:         s.purchaseCount         ?? 0,
+      houseCigarPurchases:   s.houseCigarPurchases   ?? 0,
+      pairingPurchases:      s.pairingPurchases      ?? 0,
+      eventParticipationCount: s.eventParticipationCount ?? 0,
+      referralCount:         s.referralCount         ?? 0,
+      loyaltyLedger:         s.loyaltyLedger         ?? [],
+      usedTransactionIds:    s.usedTransactionIds    ?? [],
+      ...s,
     }
 
     // Top-up for sessions already at v4 that predate the Phase 13 networking

@@ -3,6 +3,12 @@ import { registerSmokeEventLogSink } from '../services/smokecraft/smokeSharedSto
 import { getRankFromXP } from '../constants/session.js'
 import { getSessionRewards } from '../constants/smokecraftRewards.js'
 import {
+  awardLoyaltyPoints    as _awardLoyaltyPoints,
+  awardPurchasePoints   as _awardPurchasePoints,
+  awardPassportStampPoints as _awardPassportStampPoints,
+  getUserSmokeCraftSummary as _getUserSmokeCraftSummary,
+} from '../utils/smokecraftLoyaltyEngine.js'
+import {
   awardPassportStamp,
   recordGoldenBoxProgress,
   unlockPassportCeremony,
@@ -133,6 +139,40 @@ export function GuestSessionProvider({ children }) {
       }
     })
   }, [update])
+
+  // ── Scoring + loyalty engine ─────────────────────────────────────────────
+
+  /**
+   * Award loyalty points for a non-purchase journey action (visit, event, referral…).
+   * opts.isDemoMode = true → no-op (demo mode never persists real points).
+   */
+  const awardLoyaltyPointsCb = useCallback((actionType, opts = {}) => {
+    update(prev => _awardLoyaltyPoints(prev, actionType, opts) ?? prev)
+  }, [update])
+
+  /**
+   * Award loyalty points for a POS purchase. Deduplicates by posTransactionId.
+   * opts: { posTransactionId, isDemoMode, isHouseItem, isRecommendedPairing, … }
+   */
+  const awardPurchasePointsCb = useCallback((purchaseType, opts = {}) => {
+    update(prev => _awardPurchasePoints(prev, purchaseType, opts) ?? prev)
+  }, [update])
+
+  /**
+   * Award Passport stamp loyalty points. Enforces lock rules:
+   * passport-stamp requires final-review, connections requires passport-stamp.
+   */
+  const awardPassportStampPointsCb = useCallback((sessionId, opts = {}) => {
+    update(prev => _awardPassportStampPoints(prev, sessionId, opts) ?? prev)
+  }, [update])
+
+  /**
+   * Return a complete SmokeCraft score summary for the current session.
+   * Pure read — does not modify state.
+   */
+  const getUserSmokeCraftSummaryCb = useCallback((opts = {}) => {
+    return _getUserSmokeCraftSummary(session, opts)
+  }, [session])
 
   // ── Passport stamps ───────────────────────────────────────────────────────
   /** Primary stamp award — validates against catalog, prevents duplicates, sets latestStampId. */
@@ -888,6 +928,11 @@ export function GuestSessionProvider({ children }) {
       addXP,
       addBadge,
       awardSessionRewards,
+      // Scoring + loyalty engine
+      awardLoyaltyPoints:       awardLoyaltyPointsCb,
+      awardPurchasePoints:      awardPurchasePointsCb,
+      awardPassportStampPoints: awardPassportStampPointsCb,
+      getUserSmokeCraftSummary: getUserSmokeCraftSummaryCb,
       // Stamps
       awardStamp,
       addSmokecraftStamp,
