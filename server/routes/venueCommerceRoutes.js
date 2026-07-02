@@ -4,6 +4,8 @@
  */
 import { Router } from 'express'
 import * as ctrl from '../controllers/venueCommerceController.js'
+import { requireAuth } from '../middleware/authMiddleware.js'
+import { requireManager } from '../middleware/roleMiddleware.js'
 
 const router = Router()
 
@@ -11,6 +13,35 @@ const router = Router()
 // GET  /api/venues/:venueId/menu               — full menu (all categories)
 // GET  /api/venues/:venueId/menu?category=cigar — filtered
 router.get('/:venueId/menu', ctrl.getVenueMenu)
+
+// ── Menu Item Image Upload (stub — file storage not yet connected) ─────────
+// POST   /api/venues/:venueId/menu/:itemId/image   — set item imageUrl
+// PATCH  /api/venues/:venueId/menu/:itemId/image   — update imageUrl
+// DELETE /api/venues/:venueId/menu/:itemId/image   — clear imageUrl
+//
+// NOTE: Live file storage is not configured. These endpoints accept imageUrl
+// as a URL string (point to cloud storage or CDN). Direct binary upload
+// requires a storage adapter (S3, GCS, etc.) — not connected yet.
+router.post('/:venueId/menu/:itemId/image', requireAuth, requireManager, (req, res) => {
+  const { imageUrl, promoImageUrl, galleryImages } = req.body
+  if (!imageUrl && !promoImageUrl) return res.status(400).json({ success: false, message: 'imageUrl or promoImageUrl required' })
+  res.status(200).json({
+    success: true,
+    message: 'Menu image upload endpoint is prepared, but live file storage is not connected yet. Pass imageUrl as a CDN/cloud URL.',
+    data: { itemId: req.params.itemId, venueId: req.params.venueId, imageUrl: imageUrl || null, promoImageUrl: promoImageUrl || null, galleryImages: galleryImages || [] },
+  })
+})
+router.patch('/:venueId/menu/:itemId/image', requireAuth, requireManager, (req, res) => {
+  const { imageUrl, promoImageUrl, galleryImages } = req.body
+  res.status(200).json({
+    success: true,
+    message: 'Menu image upload endpoint is prepared, but live file storage is not connected yet.',
+    data: { itemId: req.params.itemId, venueId: req.params.venueId, imageUrl: imageUrl || null, promoImageUrl: promoImageUrl || null, galleryImages: galleryImages || [] },
+  })
+})
+router.delete('/:venueId/menu/:itemId/image', requireAuth, requireManager, (req, res) => {
+  res.status(200).json({ success: true, message: 'Image field cleared (stub — no file deleted, storage not connected).', data: { itemId: req.params.itemId } })
+})
 
 // Convenience aliases
 router.get('/:venueId/inventory',      (req, res) => { req.query.category = req.query.category || undefined; ctrl.getVenueMenu(req, res) })
