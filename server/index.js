@@ -60,6 +60,7 @@ import databaseStatusRoutes            from './routes/databaseStatusRoutes.js'
 import paymentMoneyBridgeRoutes        from './routes/paymentMoneyBridgeRoutes.js'
 import venueOnboardingRoutes           from './routes/venueOnboardingRoutes.js'
 import partnerVendorRoutes             from './routes/partnerVendorRoutes.js'
+import taxComplianceRoutes             from './routes/taxComplianceRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -145,6 +146,7 @@ app.use('/api/system/database',           databaseStatusRoutes)
 app.use('/api/payments/money-bridge',     paymentMoneyBridgeRoutes)
 app.use('/api/onboarding',               venueOnboardingRoutes)
 app.use('/api/partners',                partnerVendorRoutes)
+app.use('/api/tax',                     taxComplianceRoutes)
 app.use('/api/venue-menu',        venueMenuRoutes)
 app.use('/api/pos3',              pos3OrderRoutes)
 

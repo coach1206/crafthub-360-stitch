@@ -316,3 +316,31 @@ export async function getPartnerVendorHooks(partnerId, venueId = null) {
     message: 'Partner vendors should never become customer-facing until venue approval, product approval, availability, fulfillment rules, and commission rules are in place.',
   }
 }
+
+export async function getTaxReadinessHooks(venueId, partnerId = null) {
+  const { getVenueTaxComplianceReadiness, getPartnerTaxComplianceReadiness, buildTaxReadinessScore } = await import('./tax/taxComplianceReadinessEngine.js')
+
+  const [venueReadiness, score] = await Promise.all([
+    getVenueTaxComplianceReadiness(venueId),
+    buildTaxReadinessScore(venueId, partnerId),
+  ])
+
+  const partnerReadiness = partnerId ? await getPartnerTaxComplianceReadiness(partnerId, venueId) : null
+
+  return {
+    ok: true,
+    venueId,
+    partnerId,
+    taxReadinessStatus: venueReadiness.taxReadinessStatus,
+    taxReadinessScore: score.taxReadinessScore,
+    maxScore: score.maxScore,
+    profileStatus: venueReadiness.profileStatus,
+    jurisdictionStatus: venueReadiness.jurisdictionStatus,
+    categoryStatus: venueReadiness.categoryStatus,
+    ruleStatus: venueReadiness.ruleStatus,
+    partnerTaxProfileStatus: partnerReadiness?.partnerTaxProfileStatus ?? null,
+    merchantOfRecordStatus: partnerReadiness?.merchantOfRecordStatus ?? null,
+    blockers: venueReadiness.blockers,
+    complianceNote: 'This engine supports tax calculation previews and readiness checks, but it does not provide legal tax advice or guarantee tax compliance.',
+  }
+}

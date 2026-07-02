@@ -23,7 +23,8 @@
     "verify:database": "node server/scripts/verifyDatabaseFoundation.js",
     "verify:payments": "node server/scripts/verifyStripeConnectMoneyBridge.js",
     "verify:venue-onboarding": "node server/scripts/verifyVenueOnboardingEngine.js",
-    "verify:partner-vendors": "node server/scripts/verifyPartnerVendorOnboardingEngine.js"
+    "verify:partner-vendors": "node server/scripts/verifyPartnerVendorOnboardingEngine.js",
+    "verify:tax": "node server/scripts/verifyTaxComplianceEngine.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
