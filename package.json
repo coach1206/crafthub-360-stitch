@@ -26,7 +26,8 @@
     "verify:partner-vendors": "node server/scripts/verifyPartnerVendorOnboardingEngine.js",
     "verify:tax": "node server/scripts/verifyTaxComplianceEngine.js",
     "verify:orders": "node server/scripts/verifyOrderLifecycleEngine.js",
-    "verify:kds": "node server/scripts/verifyKdsFulfillmentEngine.js"
+    "verify:kds": "node server/scripts/verifyKdsFulfillmentEngine.js",
+    "verify:ncie": "node server/scripts/verifyNoveeNCIEFoundation.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

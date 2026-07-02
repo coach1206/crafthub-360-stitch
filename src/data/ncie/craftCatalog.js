@@ -1,0 +1,243 @@
+/**
+ * NCIE Craft Catalog
+ * Full object schema for all 14 Craft360 verticals registered in NOVEE OS.
+ */
+
+export const CRAFT_CATALOG = [
+  {
+    moduleId:       'smokecraft',
+    displayName:    'SmokeCraft 360',
+    verticalType:   'cigar_tobacco',
+    tagline:        'The art and science of premium cigars and tobacco.',
+    description:    'SmokeCraft 360 is the premier vertical for cigar connoisseurs, lounge operators, and tobacco artisans. Explore blends, wrappers, origins, pairings, and the traditions of hand-rolled cigars.',
+    primaryCategory: 'cigar',
+    knowledgeDomains: ['origins', 'construction', 'blending', 'wrapper_varieties', 'fermentation', 'aging', 'pairing', 'storage', 'cutting', 'lighting'],
+    mentorArchetypes: ['master_blender', 'tobacconist', 'lounge_owner', 'grower', 'wrapper_specialist'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master', 'grand_master'],
+    passportEnabled:  true,
+    xpEnabled:        true,
+    masteryEnabled:   true,
+    launchStatus:     'active',
+  },
+  {
+    moduleId:       'pourcraft',
+    displayName:    'PourCraft 360',
+    verticalType:   'spirits_whiskey',
+    tagline:        'Discover the craft of premium spirits and whiskey.',
+    description:    'PourCraft 360 covers spirits education, distillery origins, aging processes, blending, tasting notes, and whiskey culture for enthusiasts and professionals.',
+    primaryCategory: 'alcohol',
+    knowledgeDomains: ['distillation', 'aging', 'blending', 'tasting', 'origins', 'grain_selection', 'barrel_types', 'pairing'],
+    mentorArchetypes: ['master_distiller', 'whiskey_sommelier', 'brand_ambassador', 'blender'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'beercraft',
+    displayName:    'BeerCraft 360',
+    verticalType:   'beer_brewing',
+    tagline:        'The art of craft beer from grain to glass.',
+    description:    'BeerCraft 360 covers brewing science, hop varieties, yeast strains, fermentation, style profiles, and the culture of craft beer for brewers and enthusiasts.',
+    primaryCategory: 'alcohol',
+    knowledgeDomains: ['brewing', 'fermentation', 'hops', 'yeast', 'malt', 'styles', 'pairing', 'tasting'],
+    mentorArchetypes: ['brewmaster', 'cicerone', 'hop_farmer', 'yeast_scientist'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'winecraft',
+    displayName:    'WineCraft 360',
+    verticalType:   'wine',
+    tagline:        'From vineyard to glass — the craft of wine.',
+    description:    'WineCraft 360 covers viticulture, winemaking, varietals, regions, terroir, aging, and wine service for sommeliers and enthusiasts.',
+    primaryCategory: 'alcohol',
+    knowledgeDomains: ['viticulture', 'winemaking', 'varietals', 'regions', 'terroir', 'aging', 'pairing', 'tasting', 'service'],
+    mentorArchetypes: ['master_sommelier', 'winemaker', 'vineyard_manager', 'wine_educator'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'coffeecraft',
+    displayName:    'CoffeeCraft 360',
+    verticalType:   'coffee',
+    tagline:        'The science and art of specialty coffee.',
+    description:    'CoffeeCraft 360 covers coffee origins, processing methods, roasting, brewing techniques, flavor profiles, and barista culture.',
+    primaryCategory: 'beverage',
+    knowledgeDomains: ['origins', 'processing', 'roasting', 'brewing', 'flavor_profiles', 'extraction', 'milk_science', 'cupping'],
+    mentorArchetypes: ['master_roaster', 'barista_champion', 'green_buyer', 'coffee_farmer'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'teacraft',
+    displayName:    'TeaCraft 360',
+    verticalType:   'tea',
+    tagline:        'Ancient traditions and modern tea artistry.',
+    description:    'TeaCraft 360 explores tea cultivation, processing, types, brewing traditions, terroir, and the ceremonial and everyday craft of tea.',
+    primaryCategory: 'beverage',
+    knowledgeDomains: ['cultivation', 'processing', 'types', 'origins', 'brewing', 'ceremony', 'terroir', 'pairing'],
+    mentorArchetypes: ['tea_master', 'tea_farmer', 'blender', 'ceremony_practitioner'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'chocolatecraft',
+    displayName:    'ChocolateCraft 360',
+    verticalType:   'chocolate',
+    tagline:        'Bean-to-bar mastery and chocolate artistry.',
+    description:    'ChocolateCraft 360 covers cacao origins, fermentation, roasting, bean-to-bar production, tempering, flavor profiles, and artisan confectionery.',
+    primaryCategory: 'food',
+    knowledgeDomains: ['cacao_origins', 'fermentation', 'roasting', 'processing', 'tempering', 'flavor_profiles', 'pairing', 'confectionery'],
+    mentorArchetypes: ['chocolatier', 'cacao_farmer', 'pastry_chef', 'bean_to_bar_maker'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'bbqcraft',
+    displayName:    'BBQCraft 360',
+    verticalType:   'bbq_grilling',
+    tagline:        'Low and slow — the craft of live-fire cooking.',
+    description:    'BBQCraft 360 covers barbecue traditions, regional styles, smoke science, wood selection, protein preparation, rubs, sauces, and competition barbecue.',
+    primaryCategory: 'food',
+    knowledgeDomains: ['regional_styles', 'smoke_science', 'wood_selection', 'protein_prep', 'rubs', 'sauces', 'temperature', 'competition'],
+    mentorArchetypes: ['pitmaster', 'competition_champion', 'smoke_scientist', 'butcher'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'steakcraft',
+    displayName:    'SteakCraft 360',
+    verticalType:   'steak_beef',
+    tagline:        'The art of the perfect cut, cook, and service.',
+    description:    'SteakCraft 360 covers beef grading, breed selection, aging, cuts, cooking techniques, doneness science, plating, and steakhouse service culture.',
+    primaryCategory: 'food',
+    knowledgeDomains: ['grading', 'breeds', 'aging', 'cuts', 'cooking_techniques', 'doneness', 'plating', 'sourcing'],
+    mentorArchetypes: ['executive_chef', 'butcher', 'rancher', 'dry_age_specialist'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'chefcraft',
+    displayName:    'ChefCraft 360',
+    verticalType:   'culinary',
+    tagline:        'Culinary mastery from technique to table.',
+    description:    'ChefCraft 360 covers culinary fundamentals, knife skills, flavor theory, classic and modern techniques, menu development, and kitchen leadership.',
+    primaryCategory: 'food',
+    knowledgeDomains: ['knife_skills', 'flavor_theory', 'techniques', 'sauces', 'menu_development', 'kitchen_management', 'plating', 'ingredients'],
+    mentorArchetypes: ['executive_chef', 'sous_chef', 'pastry_chef', 'culinary_instructor'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'mixologycraft',
+    displayName:    'MixologyCraft 360',
+    verticalType:   'mixology',
+    tagline:        'The craft of cocktails from classic to avant-garde.',
+    description:    'MixologyCraft 360 covers cocktail history, spirit knowledge, technique, flavor balance, garnish artistry, and the culture of professional bartending.',
+    primaryCategory: 'alcohol',
+    knowledgeDomains: ['cocktail_history', 'spirits', 'technique', 'flavor_balance', 'syrups', 'garnish', 'glassware', 'service'],
+    mentorArchetypes: ['master_bartender', 'cocktail_historian', 'distiller', 'brand_ambassador'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'cheesecraft',
+    displayName:    'CheeseCraft 360',
+    verticalType:   'cheese',
+    tagline:        'The artisan world of cheese — from curd to cave.',
+    description:    'CheeseCraft 360 covers cheese styles, milk sources, aging, rinds, flavor profiles, regional traditions, pairing, and affinage culture.',
+    primaryCategory: 'food',
+    knowledgeDomains: ['styles', 'milk_sources', 'aging', 'rinds', 'flavor_profiles', 'regional_traditions', 'pairing', 'affinage'],
+    mentorArchetypes: ['affineur', 'cheesemaker', 'cheesemonger', 'dairy_farmer'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'dessertcraft',
+    displayName:    'DessertCraft 360',
+    verticalType:   'dessert',
+    tagline:        'Sugar, science, and artistry at the pastry station.',
+    description:    'DessertCraft 360 covers pastry fundamentals, chocolate work, sugar artistry, ice cream science, plated desserts, and confectionery traditions.',
+    primaryCategory: 'food',
+    knowledgeDomains: ['pastry_fundamentals', 'chocolate_work', 'sugar_artistry', 'ice_cream', 'plated_desserts', 'confectionery', 'baking_science'],
+    mentorArchetypes: ['executive_pastry_chef', 'chocolatier', 'sugar_artist', 'confectioner'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+  {
+    moduleId:       'hospitalitycraft',
+    displayName:    'HospitalityCraft 360',
+    verticalType:   'hospitality',
+    tagline:        'The art of exceptional guest experience.',
+    description:    'HospitalityCraft 360 covers service philosophy, guest experience design, event management, hospitality operations, and the business of venues and lounges.',
+    primaryCategory: 'service_fee',
+    knowledgeDomains: ['service_philosophy', 'guest_experience', 'event_management', 'operations', 'team_leadership', 'menu_curation', 'venue_design'],
+    mentorArchetypes: ['general_manager', 'director_of_hospitality', 'event_director', 'sommelier'],
+    certificationLevels: ['apprentice', 'journeyman', 'artisan', 'master'],
+    passportEnabled:  false,
+    xpEnabled:        false,
+    masteryEnabled:   false,
+    launchStatus:     'craft_vertical_registered',
+  },
+]
+
+export function getCraftEntry(moduleId) {
+  return CRAFT_CATALOG.find(c => c.moduleId === moduleId) ?? null
+}
+
+export function getAllCrafts() {
+  return CRAFT_CATALOG
+}
+
+export function getActiveCrafts() {
+  return CRAFT_CATALOG.filter(c => c.launchStatus === 'active')
+}
+
+export function getCraftsByCategory(primaryCategory) {
+  return CRAFT_CATALOG.filter(c => c.primaryCategory === primaryCategory)
+}
+
+export function getMentorArchetypes(moduleId) {
+  const craft = getCraftEntry(moduleId)
+  return craft?.mentorArchetypes ?? []
+}
+
+export function getKnowledgeDomains(moduleId) {
+  const craft = getCraftEntry(moduleId)
+  return craft?.knowledgeDomains ?? []
+}
