@@ -38,7 +38,8 @@
     "verify:environment-readiness": "node server/scripts/verifyEnvironmentReadiness.js",
     "verify:locc-dashboard": "node server/scripts/verifyLiveOperationsDashboard.js",
     "verify:external-operations-gateway": "node server/scripts/verifyExternalOperationsGateway.js",
-    "verify:final-lockdown": "node server/scripts/verifyFinalLockdown.js"
+    "verify:final-lockdown": "node server/scripts/verifyFinalLockdown.js",
+    "verify:stripe-env": "node server/scripts/verifyStripeEnv.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

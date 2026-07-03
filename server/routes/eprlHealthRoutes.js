@@ -11,6 +11,7 @@ import {
   handleEPRLPOS360,
   handleEPRLNCIE,
   handleDeploymentReadiness,
+  handlePaymentsHealth,
 } from '../controllers/eprlHealthController.js'
 
 const router = Router()
@@ -26,5 +27,6 @@ router.get('/eat',         handleEPRLEAT)
 router.get('/pos360',      handleEPRLPOS360)
 router.get('/ncie',        handleEPRLNCIE)
 router.get('/deployment',  handleDeploymentReadiness)
+router.get('/payments',    handlePaymentsHealth)
 
 export default router

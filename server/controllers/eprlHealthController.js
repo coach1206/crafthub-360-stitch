@@ -126,3 +126,30 @@ export function handleEPRLNCIE(req, res) {
 export function handleDeploymentReadiness(req, res) {
   res.json({ ...buildDeploymentReadinessReport(), service: 'deployment', timestamp: ts() })
 }
+
+export async function handlePaymentsHealth(req, res) {
+  const ts = () => new Date().toISOString()
+  try {
+    const { buildStripeReadinessReport } = await import('../services/payments/stripeReadinessService.js')
+    const report = buildStripeReadinessReport()
+    return res.json({ service: 'payments', ...report, timestamp: ts() })
+  } catch {
+    const hasSecret = !!process.env.STRIPE_SECRET_KEY
+    const hasPublishable = !!(process.env.VITE_STRIPE_PUBLISHABLE_KEY || process.env.STRIPE_PUBLISHABLE_KEY)
+    const hasWebhook = !!process.env.STRIPE_WEBHOOK_SECRET
+    res.json({
+      service: 'payments',
+      paymentStatus: hasSecret && hasPublishable ? 'payment_ready_with_env' : 'payment_blocked_missing_env',
+      stripeSecretStatus: hasSecret ? 'stripe_configured_backend' : 'stripe_secret_key_required',
+      stripePublishableStatus: hasPublishable ? 'stripe_configured_frontend' : 'stripe_publishable_key_required',
+      stripeWebhookStatus: hasWebhook ? 'stripe_webhook_ready' : 'stripe_webhook_secret_required',
+      blockers: [
+        ...(!hasSecret ? ['stripe_secret_key_required'] : []),
+        ...(!hasPublishable ? ['stripe_publishable_key_required'] : []),
+      ],
+      warnings: !hasWebhook ? ['stripe_webhook_secret_required', 'webhook_not_live', 'payment_webhook_pending'] : [],
+      degradedMode: !hasSecret,
+      timestamp: ts(),
+    })
+  }
+}
