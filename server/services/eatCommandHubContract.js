@@ -543,3 +543,69 @@ export async function getManualPOS360HandoffHooks(venueId) {
   const { getManualPOS360Readiness } = await import('./staff/manualPos360HandoffService.js')
   return getManualPOS360Readiness(venueId)
 }
+
+export async function getDragDropLayoutReadinessHooks(venueId) {
+  const { getTableLayoutReadiness } = await import('./staff/tableLayoutService.js')
+  const base = getTableLayoutReadiness(venueId)
+  return {
+    ...base,
+    dragDropStatus:    'drag_drop_active',
+    library:           '@dnd-kit/core',
+    touchMoveReady:    'touch_move_ready',
+    keyboardMoveReady: 'keyboard_move_ready',
+    snapGridReady:     'snap_grid_ready',
+    collisionWarnings: 'collision_warning',
+    boundaryWarnings:  'section_boundary_warning',
+    layoutSaveStatus:  'layout_save_preview',
+    persistenceStatus: 'layout_not_persisted',
+  }
+}
+
+export async function getTableLayoutInteractionReadinessHooks(venueId) {
+  const { getTableLayoutReadiness } = await import('./staff/tableLayoutService.js')
+  const base = getTableLayoutReadiness(venueId)
+  return {
+    ...base,
+    dragDropActive:    'drag_drop_active',
+    keyboardMoveReady: 'keyboard_move_ready',
+    touchMoveReady:    'touch_move_ready',
+    snapGridReady:     'snap_grid_ready',
+    layoutStatus:      'table_layout_preview',
+    persistenceStatus: 'layout_not_persisted',
+  }
+}
+
+export async function getPatioLayoutReadinessHooks(venueId) {
+  const { getTableLayoutReadiness } = await import('./staff/tableLayoutService.js')
+  const base = getTableLayoutReadiness(venueId)
+  return {
+    ...base,
+    patioLayoutStatus: 'patio_layout_preview',
+    dragDropActive:    'drag_drop_active',
+    reservedStatus:    'reserved_preview',
+    persistenceStatus: 'layout_not_persisted',
+  }
+}
+
+export async function getFloorPlanOperationalReadinessHooks(venueId) {
+  const { getTableLayoutReadiness } = await import('./staff/tableLayoutService.js')
+  const { getSectionReadiness }     = await import('./staff/floorSectionService.js')
+  const [tableReady, secReady] = await Promise.all([
+    getTableLayoutReadiness(venueId),
+    getSectionReadiness(venueId),
+  ])
+  return {
+    ok:                tableReady.ok && secReady.ok,
+    venueId,
+    dragDropStatus:    'drag_drop_active',
+    floorLayoutStatus: 'floor_layout_preview',
+    tableLayoutStatus: 'table_layout_preview',
+    patioLayoutStatus: 'patio_layout_preview',
+    layoutSaveStatus:  'layout_save_preview',
+    collisionWarnings: 'collision_warning',
+    boundaryWarnings:  'section_boundary_warning',
+    persistenceStatus: 'layout_not_persisted',
+    tableCount:        tableReady.tableCount,
+    sectionCount:      secReady.sectionCount,
+  }
+}

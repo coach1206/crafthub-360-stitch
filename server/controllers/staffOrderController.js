@@ -17,6 +17,7 @@ import {
 import {
   getVenueTables, getTable, createOrUpdateTable, assignTableToSection,
   updateTableLayoutPosition, getTableLayout, buildLayoutPreview, getTableLayoutReadiness,
+  buildLayoutChangePreview, resetTableLayoutPreview, buildDefaultLayoutForSection,
 } from '../services/staff/tableLayoutService.js'
 
 import {
@@ -74,6 +75,9 @@ export const updatePosition     = safe(req => updateTableLayoutPosition(req.para
 export const getLayout          = safe(req => getTableLayout(req.params.venueId, req.query))
 export const layoutPreview      = safe(req => buildLayoutPreview(req.params.venueId))
 export const tableLayoutReadiness = safe(req => getTableLayoutReadiness(req.params.venueId))
+export const layoutChangePreview  = safe(req => buildLayoutChangePreview(req.params.venueId, req.params.tableId, req.body))
+export const resetLayout          = safe(req => resetTableLayoutPreview(req.params.venueId, req.body.section_id ?? null))
+export const defaultSectionLayout = safe(req => buildDefaultLayoutForSection(req.params.venueId, req.params.sectionId))
 
 // Approval engine
 export const actionPolicy       = safe(req => getStaffActionPolicy(req.params.venueId, req.query.staffRole, req.query.actionType))

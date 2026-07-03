@@ -83,6 +83,14 @@ STAFF ORDER ENGINE connects verified staff order sessions with table layout, flo
 - `GET /venue/:venueId/table-status-board` — Status board
 - `PUT /venue/:venueId/tables/:tableId/status` — Update status
 
+## Phase 13B Drag/Drop Activation Status
+
+- **Drag/drop status**: `drag_drop_active`
+- **Dependency used**: `@dnd-kit/core` v6.x + `@dnd-kit/utilities` v3.x (installed in Phase 13B)
+- **Fallback controls**: Keyboard arrow key movement available when table is selected; touch drag via PointerSensor
+- **Preview-only persistence disclosure**: All position updates return `table_position_updated_preview` + `layout_not_persisted`. Database persistence requires live DATABASE_URL.
+- **Operational limitations**: No multi-user sync. No server-side collision enforcement. No real-time layout push. Layout resets on server restart (in-memory store).
+
 ## Honesty Constraints
 
 - Never claims POS synced unless real POS integration is present

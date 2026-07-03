@@ -43,10 +43,14 @@ export const getSectionReadiness        = venueId => get(`${BASE}/venue/${venueI
 // Tables
 export const listTables                 = venueId => get(`${BASE}/venue/${venueId}/tables`)
 export const upsertTable                = (venueId, payload) => post(`${BASE}/venue/${venueId}/tables`, payload)
-export const updateTablePosition        = (venueId, tableId, pos) => put(`${BASE}/venue/${venueId}/tables/${tableId}/position`, pos)
-export const getTableLayout             = venueId => get(`${BASE}/venue/${venueId}/layout`)
-export const getLayoutPreview           = venueId => get(`${BASE}/venue/${venueId}/layout-preview`)
-export const getTableLayoutReadiness    = venueId => get(`${BASE}/venue/${venueId}/table-layout-readiness`)
+export const updateTablePosition           = (venueId, tableId, pos) => put(`${BASE}/venue/${venueId}/tables/${tableId}/position`, pos)
+export const updateTableLayoutPosition     = (venueId, tableId, pos) => post(`${BASE}/venue/${venueId}/tables/${tableId}/layout-position`, pos)
+export const resetTableLayoutPreview       = (venueId, sectionId) => post(`${BASE}/venue/${venueId}/table-layout/reset-preview`, { section_id: sectionId })
+export const buildDefaultSectionLayout     = (venueId, sectionId) => post(`${BASE}/venue/${venueId}/sections/${sectionId}/default-layout`, {})
+export const getTableLayout                = venueId => get(`${BASE}/venue/${venueId}/layout`)
+export const getLayoutPreview              = venueId => get(`${BASE}/venue/${venueId}/layout-preview`)
+export const getTableLayoutReadiness       = venueId => get(`${BASE}/venue/${venueId}/table-layout-readiness`)
+export const getStaffReadiness             = venueId => get(`${BASE}/venue/${venueId}/readiness`)
 
 // Manager approval
 export const getActionPolicy            = (venueId, staffRole, actionType) => get(`${BASE}/venue/${venueId}/action-policy?staffRole=${staffRole}&actionType=${actionType}`)
@@ -64,6 +68,7 @@ export const getPOS360HandoffReadiness  = venueId => get(`${BASE}/venue/${venueI
 // Table status
 export const getTableStatusBoard        = venueId => get(`${BASE}/venue/${venueId}/table-status-board`)
 export const updateTableStatus          = (venueId, tableId, table_status) => put(`${BASE}/venue/${venueId}/tables/${tableId}/status`, { table_status })
+export const updateTableStatusPreview   = (venueId, tableId, table_status) => put(`${BASE}/venue/${venueId}/tables/${tableId}/status`, { table_status })
 export const getTableStatusReadiness    = venueId => get(`${BASE}/venue/${venueId}/table-status-readiness`)
 
 // Audit

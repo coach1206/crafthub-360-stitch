@@ -15,17 +15,35 @@ const STATUS_COLORS = {
   table_assignment_pending: 'bg-gray-100 border-gray-200 text-gray-500',
 }
 
-export default function TableCard({ table, tableStatus, onSelect, selected }) {
+export default function TableCard({
+  table, tableStatus, onSelect, selected,
+  hasCollision, hasBoundaryWarning, hasManagerApproval,
+  hasHandoff, hasCustomerHandoff,
+}) {
   const status = tableStatus ?? table.table_status ?? 'table_assignment_pending'
   const colors = STATUS_COLORS[status] ?? STATUS_COLORS.table_assignment_pending
+
   return (
-    <button
-      onClick={() => onSelect?.(table)}
-      className={`min-w-[80px] min-h-[64px] rounded-lg border-2 px-3 py-2 text-xs font-semibold transition-all ${colors} ${selected ? 'ring-2 ring-offset-1 ring-blue-500' : ''}`}
+    <div
+      onClick={e => { e.stopPropagation(); onSelect?.(table) }}
+      className={`w-full h-full rounded-lg border-2 px-2 py-1 text-xs font-semibold flex flex-col justify-between transition-all select-none cursor-pointer ${colors} ${selected ? 'ring-2 ring-offset-1 ring-blue-500' : ''} ${hasCollision ? 'ring-2 ring-orange-500' : ''} ${hasBoundaryWarning ? 'outline outline-red-400' : ''}`}
+      aria-label={`Table ${table.table_name}`}
     >
-      <div className="font-bold">{table.table_name}</div>
-      <div className="opacity-70 capitalize text-[10px]">{status.replace(/_/g, ' ')}</div>
-      <div className="opacity-50 text-[10px]">{table.seat_count} seats</div>
-    </button>
+      <div className="font-bold truncate">{table.table_name}</div>
+      <div className="opacity-70 text-[10px] capitalize truncate">{status.replace(/_/g, ' ')}</div>
+      <div className="flex items-center justify-between gap-1 flex-wrap">
+        <span className="opacity-50 text-[10px]">{table.seat_count ?? 2}s · {table.table_type ?? 'std'}</span>
+        <div className="flex gap-0.5">
+          {table.server_id   && <span title="Server assigned" className="text-[10px]">👤</span>}
+          {hasCollision      && <span title="collision_warning" className="text-[10px] text-orange-600">⚠</span>}
+          {hasBoundaryWarning && <span title="section_boundary_warning" className="text-[10px] text-red-600">⛔</span>}
+          {hasManagerApproval && <span title="manager_approval_required" className="text-[10px] text-red-500">M</span>}
+          {hasHandoff        && <span title="manual_pos360_handoff" className="text-[10px] text-yellow-600">P</span>}
+          {hasCustomerHandoff && <span title="customer_handoff" className="text-[10px] text-purple-600">C</span>}
+        </div>
+      </div>
+      {/* Drag handle indicator */}
+      <div className="absolute top-0.5 right-1 text-[8px] text-gray-400 opacity-40 select-none">⠿</div>
+    </div>
   )
 }

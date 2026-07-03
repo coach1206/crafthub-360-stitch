@@ -28,11 +28,14 @@
     "verify:orders": "node server/scripts/verifyOrderLifecycleEngine.js",
     "verify:kds": "node server/scripts/verifyKdsFulfillmentEngine.js",
     "verify:ncie": "node server/scripts/verifyNoveeNCIEFoundation.js",
-  "verify:ncie-wiring": "node server/scripts/verifyNcieScreenWiring.js",
-  "verify:checkout": "node server/scripts/verifyCustomerCheckoutEngine.js",
-  "verify:staff": "node server/scripts/verifyStaffOrderTablePatioEngine.js"
+    "verify:ncie-wiring": "node server/scripts/verifyNcieScreenWiring.js",
+    "verify:checkout": "node server/scripts/verifyCustomerCheckoutEngine.js",
+    "verify:staff": "node server/scripts/verifyStaffOrderTablePatioEngine.js",
+  "verify:staff-dragdrop": "node server/scripts/verifyStaffTableDragDropActivation.js"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/utilities": "^3.2.2",
     "bcrypt": "^6.0.0",
     "clsx": "^1.2.1",
     "cookie-parser": "^1.4.7",
