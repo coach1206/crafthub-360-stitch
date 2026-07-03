@@ -81,6 +81,7 @@ import smokecraftOrderingRoutes     from './routes/smokecraftOrderingRoutes.js'
 import smokecraftPairingRoutes      from './routes/smokecraftPairingRoutes.js'
 import smokecraftRewardsRoutes      from './routes/smokecraftRewardsRoutes.js'
 import smokecraftVenueAdminRoutes   from './routes/smokecraftVenueAdminRoutes.js'
+import smokecraftIntegrationRoutes  from './routes/smokecraftIntegrationRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -167,7 +168,8 @@ app.use('/api/modules/smokecraft', smokecraftModuleRoutes)
 app.use('/api/modules/smokecraft/orders',  smokecraftOrderingRoutes)
 app.use('/api/modules/smokecraft/pairing',  smokecraftPairingRoutes)
 app.use('/api/modules/smokecraft/rewards', smokecraftRewardsRoutes)
-app.use('/api/modules/smokecraft/admin',  smokecraftVenueAdminRoutes)
+app.use('/api/modules/smokecraft/admin',        smokecraftVenueAdminRoutes)
+app.use('/api/modules/smokecraft/integrations', smokecraftIntegrationRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)

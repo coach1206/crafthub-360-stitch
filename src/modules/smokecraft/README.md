@@ -238,8 +238,16 @@ Permission: customer role is blocked. Protected SmokeCraft progression rules can
 
 ---
 
-## Module Build 7 Preview
+## MODULE BUILD 7 (Complete)
 
-**MODULE BUILD 7 OF 9 — SmokeCraft Live Integrations, Provider Connectors, Database Persistence, and Production Sync Readiness**
+MODULE BUILD 7 added the production-readiness integration layer: database persistence detection, provider connector registry (10 connectors), environment variable validation (16 vars), sync event queue with honest status tracking, integration health reporting, secret safety enforcement, and 5 frontend status panels. All connectors report `not_connected`. `productionReady: false` always. Secret values are never sent to the frontend.
 
-Module Build 7 should connect real persistence, provider configuration, integration health checks, POS360/E.A.T. readiness, environment validation, and production sync contracts without faking live vendor connections.
+**Verify:** `npm run verify:smokecraft-production-sync-readiness`
+
+---
+
+## Module Build 8 Preview
+
+**MODULE BUILD 8 OF 9 — SmokeCraft Guest Experience, Mobile Journey, and Passport Deep Integration**
+
+Module Build 8 should wire the guest-facing mobile journey screens, deep passport stamp flows, and QR code session initiation without bypassing the protected visit/session rules.
