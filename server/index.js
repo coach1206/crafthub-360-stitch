@@ -78,6 +78,7 @@ import postPhaseAuditRoutes         from './routes/postPhaseAuditRoutes.js'
 import moduleFoundationRoutes       from './routes/moduleFoundationRoutes.js'
 import smokecraftModuleRoutes       from './routes/smokecraftModuleRoutes.js'
 import smokecraftOrderingRoutes     from './routes/smokecraftOrderingRoutes.js'
+import smokecraftPairingRoutes      from './routes/smokecraftPairingRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -161,7 +162,8 @@ app.use('/api/final-lockdown',    finalLockdownRoutes)
 app.use('/api/post-phase',        postPhaseAuditRoutes)
 app.use('/api/modules',           moduleFoundationRoutes)
 app.use('/api/modules/smokecraft', smokecraftModuleRoutes)
-app.use('/api/modules/smokecraft/orders', smokecraftOrderingRoutes)
+app.use('/api/modules/smokecraft/orders',  smokecraftOrderingRoutes)
+app.use('/api/modules/smokecraft/pairing', smokecraftPairingRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)

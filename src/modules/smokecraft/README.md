@@ -190,8 +190,24 @@ API: `GET|POST /api/modules/smokecraft/orders/*`
 
 ---
 
-## Module Build 4 Preview
+## MODULE BUILD 4 (Complete)
 
-**MODULE BUILD 4 OF 9 — SmokeCraft Live Pairing Engine, Menu Recommendations, and Customer Preference Intelligence**
+MODULE BUILD 4 added the pairing intelligence engine, customer preference profiling, pairing scoring, menu recommendations, mentor influence, flavor memory integration, provider abstraction, and pairing audit trail.
 
-Module Build 4 should connect pairing recommendations to customer profile, cigar preferences, venue menu items, scorecard history, mentor logic, and AI/provider-backed recommendation services.
+See [`docs/SMOKECRAFT_PAIRING_INTELLIGENCE.md`](../../../../docs/SMOKECRAFT_PAIRING_INTELLIGENCE.md) for full documentation.
+
+New backend services: `smokecraftPairingProfileStore.js`, `smokecraftPreferenceIntelligenceService.js`, `smokecraftPairingScoringService.js`, `smokecraftMenuRecommendationService.js`, `smokecraftMentorRecommendationService.js`, `smokecraftFlavorMemoryService.js`, `smokecraftPairingProviderService.js`, `smokecraftPairingAuditService.js`
+
+New frontend components: `SmokeCraftPairingRecommendationPanel`, `SmokeCraftPreferenceProfilePanel`, `SmokeCraftFlavorMemoryPanel`, `SmokeCraftMenuPairingPanel`
+
+API: `GET|POST /api/modules/smokecraft/pairing/*`
+
+Provider status: `local_intelligence` — no live AI provider connected unless `SMOKECRAFT_PAIRING_PROVIDER` is configured.
+
+---
+
+## Module Build 5 Preview
+
+**MODULE BUILD 5 OF 9 — SmokeCraft Passport, Loyalty, Rewards, Visit Progression, and Experience Monetization**
+
+Module Build 5 should connect SmokeCraft pairing, ordering, scorecard, passport stamps, loyalty rewards, XP, visit completion, and monetization logic without weakening the 8-visit / 24-session progression.
