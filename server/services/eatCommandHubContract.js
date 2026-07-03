@@ -609,3 +609,98 @@ export async function getFloorPlanOperationalReadinessHooks(venueId) {
     sectionCount:      secReady.sectionCount,
   }
 }
+
+export async function getInventoryAvailabilityReadinessHooks(venueId) {
+  try {
+    const { getInventoryReadiness } = await import('./inventory/inventoryAvailabilityService.js')
+    const r = getInventoryReadiness(venueId)
+    return {
+      ok: true, venueId,
+      inventoryStatus:    r.inventoryStatus,
+      syncStatus:         r.syncStatus,
+      productCount:       r.productCount,
+      soldOutCount:       r.soldOutCount,
+      lowStockCount:      r.lowStockCount,
+      persistenceStatus:  r.persistenceStatus,
+    }
+  } catch {
+    return { ok: false, venueId, inventoryStatus: 'inventory_sync_pending', syncStatus: 'inventory_sync_pending', persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getProductAvailabilityReadinessHooks(venueId) {
+  try {
+    const { getProductAvailabilityReadiness } = await import('./inventory/productAvailabilityService.js')
+    return getProductAvailabilityReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, availabilityStatus: 'availability_required', persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getDistributorReorderReadinessHooks(venueId) {
+  try {
+    const { getVendorConnectionReadiness } = await import('./reorder/vendorConnectionService.js')
+    const r = getVendorConnectionReadiness(venueId)
+    return {
+      ok: true, venueId,
+      distributorCount:   r.distributorCount,
+      connectionStatus:   r.distributorCount === 0 ? 'distributor_connection_required' : r.connectionStatus,
+      reorderStatus:      'reorder_preview_only',
+      persistenceStatus:  r.persistenceStatus,
+    }
+  } catch {
+    return { ok: false, venueId, connectionStatus: 'distributor_connection_required', persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getManufacturerReorderReadinessHooks(venueId) {
+  try {
+    const { getVendorConnectionReadiness } = await import('./reorder/vendorConnectionService.js')
+    const r = getVendorConnectionReadiness(venueId)
+    return {
+      ok: true, venueId,
+      manufacturerCount:  r.manufacturerCount,
+      connectionStatus:   r.manufacturerCount === 0 ? 'manufacturer_connection_required' : r.connectionStatus,
+      reorderStatus:      'reorder_preview_only',
+      persistenceStatus:  r.persistenceStatus,
+    }
+  } catch {
+    return { ok: false, venueId, connectionStatus: 'manufacturer_connection_required', persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getVendorConnectionReadinessHooks(venueId) {
+  try {
+    const { getVendorConnectionReadiness } = await import('./reorder/vendorConnectionService.js')
+    return getVendorConnectionReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, connectionStatus: 'pending_setup', persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getPurchaseOrderDraftReadinessHooks(venueId) {
+  try {
+    const { getPurchaseOrderReadiness } = await import('./reorder/purchaseOrderDraftService.js')
+    return getPurchaseOrderReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, submissionStatus: 'reorder_not_submitted', approvalStatus: 'pending_manager_approval', persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getReorderApprovalReadinessHooks(venueId) {
+  try {
+    const { getApprovalReadiness } = await import('./reorder/reorderApprovalService.js')
+    return getApprovalReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, approvalStatus: 'pending_manager_approval', submissionStatus: 'reorder_not_submitted', persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getInventoryReceivingReadinessHooks(venueId) {
+  try {
+    const { getReceivingReadiness } = await import('./reorder/inventoryReceivingService.js')
+    return getReceivingReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, receivingStatus: 'receiving_pending', persistenceStatus: 'preview_fallback' }
+  }
+}

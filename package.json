@@ -31,7 +31,9 @@
     "verify:ncie-wiring": "node server/scripts/verifyNcieScreenWiring.js",
     "verify:checkout": "node server/scripts/verifyCustomerCheckoutEngine.js",
     "verify:staff": "node server/scripts/verifyStaffOrderTablePatioEngine.js",
-  "verify:staff-dragdrop": "node server/scripts/verifyStaffTableDragDropActivation.js"
+  "verify:staff-dragdrop": "node server/scripts/verifyStaffTableDragDropActivation.js",
+    "verify:inventory": "node server/scripts/verifyInventoryAvailabilityEngine.js",
+    "verify:reorder-connectors": "node server/scripts/verifyReorderConnectors.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
