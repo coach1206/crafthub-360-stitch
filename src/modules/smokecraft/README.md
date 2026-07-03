@@ -176,16 +176,22 @@ Customer users cannot perform staff-only or manager-only actions.
 
 ---
 
-## Module Build 3 Preview
+## MODULE BUILD 3 (Complete)
 
-**MODULE BUILD 3 OF 9 — SmokeCraft Ordering, Venue Menu, POS360, and Staff Handoff Integration**
+Module Build 3 added the ordering, venue menu, POS360 bridge, E.A.T. sync bridge, and staff queue.
 
-Module Build 3 should:
-- Connect the ordering contract to the real venue menu
-- Implement the POS360 adapter connection
-- Build the staff order queue
-- Connect E.A.T. command layer for management sync
-- Add database persistence for order records
-- Implement live pairing engine connection
+See [`docs/SMOKECRAFT_ORDERING_INTEGRATION.md`](../../../../docs/SMOKECRAFT_ORDERING_INTEGRATION.md) for full documentation.
 
-Do not start Module Build 3 until this prompt is complete.
+New backend services: `smokecraftOrderStore.js`, `smokecraftVenueMenuStore.js`, `smokecraftStaffQueueService.js`, `smokecraftPosBridgeService.js`, `smokecraftEatSyncBridgeService.js`, `smokecraftOrderAuditService.js`
+
+New frontend components: `SmokeCraftVenueMenuPanel`, `SmokeCraftOrderModeSelector`, `SmokeCraftStaffHandoffPanel`, `SmokeCraftOrderStatusPanel`
+
+API: `GET|POST /api/modules/smokecraft/orders/*`
+
+---
+
+## Module Build 4 Preview
+
+**MODULE BUILD 4 OF 9 — SmokeCraft Live Pairing Engine, Menu Recommendations, and Customer Preference Intelligence**
+
+Module Build 4 should connect pairing recommendations to customer profile, cigar preferences, venue menu items, scorecard history, mentor logic, and AI/provider-backed recommendation services.
