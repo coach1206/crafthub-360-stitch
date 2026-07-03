@@ -4,7 +4,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid'
-import { assertManagerRole, assertViewerAccess } from './roleSafetyGateway.js'
+import { assertManagerRole } from './roleSafetyGateway.js'
 
 const dbAvailable = () => !!process.env.DATABASE_URL
 const now = () => new Date().toISOString()

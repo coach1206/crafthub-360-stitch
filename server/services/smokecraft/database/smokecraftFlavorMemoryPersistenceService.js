@@ -5,13 +5,12 @@
  */
 
 import { isDbAvailable } from '../../../db/connection.js'
-import { getPersistenceMode as flavorMode } from '../smokecraftFlavorMemoryService.js'
 
 export function getFlavorMemoryPersistenceStatus() {
   const dbUp = isDbAvailable()
   return {
     areaId: 'flavor_memory', displayName: 'Flavor Memory',
-    currentPersistenceMode: flavorMode(),
+    currentPersistenceMode: dbUp ? 'database_config_detected' : 'memory_fallback',
     databaseReady: true, databaseVerified: false,
     productionReady: false, usesMemoryFallback: !dbUp,
     tableSchema: 'smokecraft_flavor_memory (migration 029)',
