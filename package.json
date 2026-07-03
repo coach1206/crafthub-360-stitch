@@ -39,7 +39,8 @@
     "verify:locc-dashboard": "node server/scripts/verifyLiveOperationsDashboard.js",
     "verify:external-operations-gateway": "node server/scripts/verifyExternalOperationsGateway.js",
     "verify:final-lockdown": "node server/scripts/verifyFinalLockdown.js",
-    "verify:stripe-env": "node server/scripts/verifyStripeEnv.js"
+    "verify:stripe-env": "node server/scripts/verifyStripeEnv.js",
+    "verify:post-phase-audit": "node server/scripts/verifyPostPhaseAudit.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
