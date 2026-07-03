@@ -4,7 +4,7 @@
  */
 
 import { isDbAvailable, query } from '../db/connection.js'
-import auditService from './auditService.js'
+import * as auditService from './auditService.js'
 
 const MANAGER_REQUIRED = ['void', 'comp', 'refund', 'discount']
 const memAdjustments = new Map()
