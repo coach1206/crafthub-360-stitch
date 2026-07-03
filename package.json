@@ -36,7 +36,8 @@
     "verify:reorder-connectors": "node server/scripts/verifyReorderConnectors.js",
     "verify:inventory-persistence-sync": "node server/scripts/verifyInventoryPersistenceSync.js",
     "verify:environment-readiness": "node server/scripts/verifyEnvironmentReadiness.js",
-    "verify:locc-dashboard": "node server/scripts/verifyLiveOperationsDashboard.js"
+    "verify:locc-dashboard": "node server/scripts/verifyLiveOperationsDashboard.js",
+    "verify:external-operations-gateway": "node server/scripts/verifyExternalOperationsGateway.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

@@ -1088,3 +1088,255 @@ export async function getOperationsAuditReadinessHooks(venueId) {
     return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
   }
 }
+
+export async function getLiveExternalOperationsReadinessHooks(venueId) {
+  try {
+    const { getLiveExternalOperationsReadiness } = await import('./externalOps/liveExternalOperationsReadinessService.js')
+    const r = getLiveExternalOperationsReadiness()
+    return {
+      hookId: 'live_external_ops_readiness', system: 'eocg', venueId,
+      readiness: r.databaseRequired ? 'degraded' : 'preview_only',
+      status: r.status,
+      blockers: r.databaseRequired ? ['database_required'] : [],
+      warnings: ['external_sync_not_live', 'real_time_push_pending'],
+      degradedMode: r.degradedMode,
+      databaseRequired: r.databaseRequired,
+      externalCredentialsRequired: r.external_pos_required || r.vendor_api_required,
+      evidence: r,
+      nextRequiredAction: r.databaseRequired ? 'Set DATABASE_URL' : 'Configure external credentials',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getExternalPOSConnectorReadinessHooks(venueId) {
+  try {
+    const { getExternalPOSConnectionStatus } = await import('./externalPos/externalPOSConnectorGateway.js')
+    const r = getExternalPOSConnectionStatus(venueId)
+    return {
+      hookId: 'external_pos_connector', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: r.connectionStatus,
+      blockers: r.external_pos_required ? ['external_pos_credentials_required'] : [],
+      warnings: ['external_sync_not_live', 'real_time_push_pending'],
+      degradedMode: r.degradedMode,
+      databaseRequired: r.databaseRequired,
+      externalCredentialsRequired: r.external_pos_required,
+      evidence: r,
+      nextRequiredAction: 'Set EXTERNAL_POS_API_KEY',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getExternalPOSMappingReadinessHooks(venueId) {
+  try {
+    const { detectUnmappedInventoryProducts } = await import('./externalPos/externalPOSProductMappingService.js')
+    const r = detectUnmappedInventoryProducts(venueId)
+    return {
+      hookId: 'external_pos_mapping', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: r.status,
+      blockers: ['pos_product_mapping_required'],
+      warnings: ['external_pos_required'],
+      degradedMode: r.databaseRequired,
+      databaseRequired: r.databaseRequired,
+      externalCredentialsRequired: true,
+      evidence: r,
+      nextRequiredAction: 'Configure external POS and map products',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getExternalPOSInventorySyncReadinessHooks(venueId) {
+  try {
+    const { getInventorySyncReadiness } = await import('./externalPos/externalPOSInventorySyncService.js')
+    const r = getInventorySyncReadiness(venueId)
+    return {
+      hookId: 'external_pos_inventory_sync', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: 'preview_only',
+      blockers: r.external_pos_required ? ['external_pos_required'] : [],
+      warnings: ['external_sync_not_live', 'real_time_push_pending'],
+      degradedMode: r.databaseRequired,
+      databaseRequired: r.databaseRequired,
+      externalCredentialsRequired: r.external_pos_required,
+      evidence: r,
+      nextRequiredAction: 'Configure EXTERNAL_POS_API_KEY for live inventory sync',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getVendorConnectorReadinessHooks(venueId) {
+  try {
+    const { getVendorConnectorStatus } = await import('./vendorGateway/vendorConnectorGateway.js')
+    const r = getVendorConnectorStatus(venueId, 'all')
+    return {
+      hookId: 'vendor_connector', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: r.connectionStatus,
+      blockers: r.vendor_api_required ? ['vendor_api_required'] : [],
+      warnings: ['reorder_not_submitted', 'purchase_order_not_submitted'],
+      degradedMode: r.degradedMode,
+      databaseRequired: r.databaseRequired,
+      externalCredentialsRequired: r.vendor_api_required,
+      evidence: r,
+      nextRequiredAction: 'Set VENDOR_API_KEY',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getDistributorConnectorReadinessHooks(venueId) {
+  try {
+    const { getDistributorConnectorStatus } = await import('./vendorGateway/distributorConnectorService.js')
+    const r = getDistributorConnectorStatus(venueId, 'all')
+    return {
+      hookId: 'distributor_connector', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: r.distributor_connection_required ? 'distributor_connection_required' : 'disconnected',
+      blockers: r.distributor_connection_required ? ['distributor_connection_required'] : [],
+      warnings: ['reorder_not_submitted'],
+      degradedMode: r.databaseRequired,
+      databaseRequired: r.databaseRequired,
+      externalCredentialsRequired: r.distributor_connection_required,
+      evidence: r,
+      nextRequiredAction: 'Set DISTRIBUTOR_API_KEY',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getManufacturerConnectorReadinessHooks(venueId) {
+  try {
+    const { getManufacturerConnectorStatus } = await import('./vendorGateway/manufacturerConnectorService.js')
+    const r = getManufacturerConnectorStatus(venueId, 'all')
+    return {
+      hookId: 'manufacturer_connector', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: r.manufacturer_connection_required ? 'manufacturer_connection_required' : 'disconnected',
+      blockers: r.manufacturer_connection_required ? ['manufacturer_connection_required'] : [],
+      warnings: ['reorder_not_submitted'],
+      degradedMode: r.databaseRequired,
+      databaseRequired: r.databaseRequired,
+      externalCredentialsRequired: r.manufacturer_connection_required,
+      evidence: r,
+      nextRequiredAction: 'Set MANUFACTURER_API_KEY',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getVendorCatalogSyncReadinessHooks(venueId) {
+  try {
+    const { getCatalogSyncReadiness } = await import('./vendorGateway/vendorCatalogSyncService.js')
+    const r = getCatalogSyncReadiness('all')
+    return {
+      hookId: 'vendor_catalog_sync', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: 'preview_only',
+      blockers: r.vendor_api_required ? ['vendor_api_required'] : [],
+      warnings: ['external_sync_not_live'],
+      degradedMode: false,
+      databaseRequired: false,
+      externalCredentialsRequired: r.vendor_api_required,
+      evidence: r,
+      nextRequiredAction: 'Set VENDOR_API_KEY for live catalog sync',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getPurchaseOrderSubmissionGatewayReadinessHooks(venueId) {
+  try {
+    const { getPurchaseOrderSubmissionReadiness } = await import('./reorder/purchaseOrderSubmissionGateway.js')
+    const r = getPurchaseOrderSubmissionReadiness(venueId)
+    return {
+      hookId: 'po_submission_gateway', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: r.submissionStatus,
+      blockers: ['purchase_order_not_submitted', 'approval_required'],
+      warnings: ['vendor_api_required', 'reorder_not_submitted'],
+      degradedMode: r.databaseRequired,
+      databaseRequired: r.databaseRequired,
+      externalCredentialsRequired: r.vendor_api_required,
+      evidence: r,
+      nextRequiredAction: 'Obtain manager/owner approval and configure vendor credentials',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getOperationalSyncConsumerReadinessHooks(venueId) {
+  try {
+    const { buildSyncConsumerReadinessReport } = await import('./sync/operationalSyncEventConsumer.js')
+    const r = buildSyncConsumerReadinessReport(venueId)
+    return {
+      hookId: 'operational_sync_consumer', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: r.status,
+      blockers: [],
+      warnings: ['real_time_push_pending', 'websocket_required', 'external_sync_not_live'],
+      degradedMode: r.databaseRequired,
+      databaseRequired: r.databaseRequired,
+      externalCredentialsRequired: r.externalPOSRequired,
+      evidence: r,
+      nextRequiredAction: 'Implement WebSocket/SSE for live sync consumer',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getAvailabilityPushReadinessHooks(venueId) {
+  try {
+    const { getAvailabilityPushReadiness } = await import('./realtime/availabilityPushReadinessService.js')
+    const r = getAvailabilityPushReadiness()
+    return {
+      hookId: 'availability_push', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: r.status,
+      blockers: [],
+      warnings: ['real_time_push_pending', 'websocket_required', 'sse_required'],
+      degradedMode: r.databaseRequired,
+      databaseRequired: r.databaseRequired,
+      externalCredentialsRequired: false,
+      evidence: r,
+      nextRequiredAction: 'Implement WebSocket/SSE for live availability push',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getLOCCExternalOpsReadinessHooks(venueId) {
+  try {
+    const { buildLOCCExternalOpsPanelData } = await import('./operations/loccExternalOpsBridgeService.js')
+    const r = buildLOCCExternalOpsPanelData(venueId)
+    return {
+      hookId: 'locc_external_ops', system: 'eocg', venueId,
+      readiness: 'preview_only',
+      status: 'external_sync_not_live',
+      blockers: r.externalOps?.databaseRequired ? ['database_required'] : [],
+      warnings: ['external_sync_not_live', 'real_time_push_pending', 'reorder_not_submitted'],
+      degradedMode: r.externalOps?.databaseRequired ?? false,
+      databaseRequired: r.externalOps?.databaseRequired ?? false,
+      externalCredentialsRequired: true,
+      evidence: r,
+      nextRequiredAction: 'Configure database and external credentials for live LOCC external ops',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}

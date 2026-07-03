@@ -69,6 +69,10 @@ import inventoryRoutes              from './routes/inventoryRoutes.js'
 import reorderRoutes                from './routes/reorderRoutes.js'
 import eprlHealthRoutes             from './routes/eprlHealthRoutes.js'
 import operationsRoutes             from './routes/operationsRoutes.js'
+import externalPOSRoutes            from './routes/externalPOSRoutes.js'
+import vendorGatewayRoutes          from './routes/vendorGatewayRoutes.js'
+import operationalSyncRoutes        from './routes/operationalSyncRoutes.js'
+import liveExternalOpsRoutes        from './routes/liveExternalOpsRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -144,6 +148,10 @@ app.use('/api/inventory',         inventoryRoutes)
 app.use('/api/reorder',           reorderRoutes)
 app.use('/api/health',            eprlHealthRoutes)
 app.use('/api/operations',        operationsRoutes)
+app.use('/api/external-pos',      externalPOSRoutes)
+app.use('/api/vendor-gateway',    vendorGatewayRoutes)
+app.use('/api/operational-sync',  operationalSyncRoutes)
+app.use('/api/live-external-ops', liveExternalOpsRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)
