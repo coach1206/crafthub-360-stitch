@@ -518,3 +518,28 @@ export async function getCustomerOrderStatusHooks(orderId) {
   const { getCustomerOrderStatus } = await import('./checkout/customerOrderStatusService.js')
   return getCustomerOrderStatus(orderId)
 }
+
+export async function getStaffOperationsReadinessHooks(venueId) {
+  const { getStaffOrderReadiness } = await import('./staff/staffOrderService.js')
+  return getStaffOrderReadiness({ venue_id: venueId })
+}
+
+export async function getTableLayoutReadinessHooks(venueId) {
+  const { getTableLayoutReadiness } = await import('./staff/tableLayoutService.js')
+  return getTableLayoutReadiness(venueId)
+}
+
+export async function getStaffOrderReadinessHooks(venueId) {
+  const { getStaffOrderReadiness } = await import('./staff/staffOrderService.js')
+  return getStaffOrderReadiness({ venue_id: venueId })
+}
+
+export async function getManagerApprovalReadinessHooks(venueId) {
+  const { getApprovalReadiness } = await import('./staff/staffApprovalEngine.js')
+  return getApprovalReadiness(venueId)
+}
+
+export async function getManualPOS360HandoffHooks(venueId) {
+  const { getManualPOS360Readiness } = await import('./staff/manualPos360HandoffService.js')
+  return getManualPOS360Readiness(venueId)
+}
