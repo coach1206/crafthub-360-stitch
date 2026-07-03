@@ -246,8 +246,16 @@ MODULE BUILD 7 added the production-readiness integration layer: database persis
 
 ---
 
-## Module Build 8 Preview
+## MODULE BUILD 8 (Complete)
 
-**MODULE BUILD 8 OF 9 — SmokeCraft Guest Experience, Mobile Journey, and Passport Deep Integration**
+MODULE BUILD 8 added enterprise packaging metadata, white-label readiness governance, tenant boundary contracts, license governance preview, marketplace draft hardening (publishing always blocked with 6 documented reasons), upgrade/rollback preview planning, feature flag governance (12 flags), entitlement preview service, 16-dimension enterprise readiness evaluation, and governance audit trail. No live packaging, no live marketplace, no license enforcement.
 
-Module Build 8 should wire the guest-facing mobile journey screens, deep passport stamp flows, and QR code session initiation without bypassing the protected visit/session rules.
+**Verify:** `npm run verify:smokecraft-enterprise-packaging`
+
+---
+
+## Module Build 9 Preview
+
+**MODULE BUILD 9 OF 9 — SmokeCraft Final QA, End-to-End Flow Verification, Documentation Lock, Release Candidate Report, and Handoff Package**
+
+Module Build 9 should run final end-to-end verification across SmokeCraft journey, ordering, pairing, rewards, admin, integrations, enterprise packaging, documentation, protected files, honest statuses, and production blockers. It should produce the release candidate report and handoff package without claiming production readiness that has not been proven.

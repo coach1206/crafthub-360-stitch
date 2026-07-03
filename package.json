@@ -47,7 +47,8 @@
     "verify:smokecraft-pairing-intelligence": "node server/scripts/verifySmokeCraftPairingIntelligence.js",
     "verify:smokecraft-rewards-monetization": "node server/scripts/verifySmokeCraftRewardsMonetization.js",
     "verify:smokecraft-venue-admin-operations": "node server/scripts/verifySmokeCraftVenueAdminOperations.js",
-    "verify:smokecraft-production-sync-readiness": "node server/scripts/verifySmokeCraftProductionSyncReadiness.js"
+    "verify:smokecraft-production-sync-readiness": "node server/scripts/verifySmokeCraftProductionSyncReadiness.js",
+    "verify:smokecraft-enterprise-packaging": "node server/scripts/verifySmokeCraftEnterprisePackaging.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
