@@ -68,6 +68,7 @@ import staffOrderRoutes             from './routes/staffOrderRoutes.js'
 import inventoryRoutes              from './routes/inventoryRoutes.js'
 import reorderRoutes                from './routes/reorderRoutes.js'
 import eprlHealthRoutes             from './routes/eprlHealthRoutes.js'
+import operationsRoutes             from './routes/operationsRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -142,6 +143,7 @@ app.use('/api/staff',             staffOrderRoutes)
 app.use('/api/inventory',         inventoryRoutes)
 app.use('/api/reorder',           reorderRoutes)
 app.use('/api/health',            eprlHealthRoutes)
+app.use('/api/operations',        operationsRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)

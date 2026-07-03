@@ -947,3 +947,144 @@ export async function getRailwayPostgresReadinessHooks(venueId) {
     return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
   }
 }
+
+// ─── Phase 17 LOCC Hooks ─────────────────────────────────────────────────────
+
+export async function getLOCCDashboardReadinessHooks(venueId) {
+  try {
+    const { getLOCCReadiness } = await import('./operations/operationsDashboardService.js')
+    const r = getLOCCReadiness(venueId)
+    return {
+      hookId: 'locc_dashboard', system: 'locc', venueId,
+      readiness: r.status, status: r.status,
+      blockers: r.blockers ?? [],
+      degradedMode: r.degradedMode,
+      persistenceMode: r.persistenceMode,
+      databaseRequired: !process.env.DATABASE_URL,
+      evidence: { degradedCount: r.systemHealth ? Object.values(r.systemHealth).filter(s => s.degraded).length : 0 },
+      nextRequiredAction: r.degradedMode ? 'Set DATABASE_URL to restore persistence' : null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getSyncCommandCenterReadinessHooks(venueId) {
+  try {
+    const { getSyncCommandCenterReadiness } = await import('./operations/syncCommandCenterService.js')
+    const r = getSyncCommandCenterReadiness(venueId)
+    return {
+      hookId: 'sync_command_center', system: 'locc', venueId,
+      readiness: r.externalSyncNotLive ? 'degraded' : 'ready',
+      status: 'external_sync_not_live',
+      blockers: ['external_sync_not_live', 'real_time_push_pending'],
+      degradedMode: r.degradedMode,
+      persistenceMode: r.persistenceMode,
+      databaseRequired: r.databaseRequired,
+      evidence: r,
+      nextRequiredAction: 'Phase 18+ for live external sync integration',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getPendingApprovalsReadinessHooks(venueId) {
+  try {
+    const { getPendingApprovalsReadiness } = await import('./operations/pendingApprovalsQueueService.js')
+    const r = getPendingApprovalsReadiness(venueId)
+    return {
+      hookId: 'pending_approvals', system: 'locc', venueId,
+      readiness: 'ready',
+      status: 'approval_gate_active',
+      blockers: r.degradedMode ? ['database_required — approvals in memory only'] : [],
+      degradedMode: r.degradedMode,
+      persistenceMode: r.persistenceMode,
+      databaseRequired: r.databaseRequired,
+      evidence: r,
+      nextRequiredAction: null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getReorderOperationsReadinessHooks(venueId) {
+  try {
+    const { getReorderSubmissionReadiness } = await import('./operations/reorderOperationsService.js')
+    const r = getReorderSubmissionReadiness(venueId)
+    return {
+      hookId: 'reorder_operations', system: 'locc', venueId,
+      readiness: 'degraded',
+      status: r.submissionStatus,
+      blockers: ['reorder_not_submitted', 'vendor_api_required'],
+      degradedMode: r.degradedMode,
+      persistenceMode: r.persistenceMode,
+      databaseRequired: r.degradedMode,
+      evidence: r,
+      nextRequiredAction: 'Phase 18+ for vendor API integration',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getOwnerControlReadinessHooks(venueId) {
+  try {
+    const { getOwnerControlReadiness } = await import('./operations/ownerControlService.js')
+    const r = getOwnerControlReadiness(venueId)
+    return {
+      hookId: 'owner_control', system: 'locc', venueId,
+      readiness: r.degradedMode ? 'degraded' : 'ready',
+      status: r.degradedMode ? 'database_required' : 'owner_control_active',
+      blockers: r.degradedMode ? ['database_required'] : [],
+      degradedMode: r.degradedMode,
+      persistenceMode: r.persistenceMode,
+      databaseRequired: r.databaseRequired,
+      evidence: { availableControls: r.availableControls?.length ?? 0 },
+      nextRequiredAction: r.degradedMode ? 'Set DATABASE_URL' : null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getFailedSyncRetryReadinessHooks(venueId) {
+  try {
+    const { getRetryReadiness } = await import('./operations/failedSyncRetryService.js')
+    const r = getRetryReadiness(venueId)
+    return {
+      hookId: 'failed_sync_retry', system: 'locc', venueId,
+      readiness: 'ready',
+      status: 'retry_service_active',
+      blockers: ['external_sync_not_live — retries only re-queue events'],
+      degradedMode: r.degradedMode,
+      persistenceMode: r.persistenceMode,
+      databaseRequired: r.databaseRequired,
+      evidence: r,
+      nextRequiredAction: 'Resolve external sync connection before expecting retry success',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getOperationsAuditReadinessHooks(venueId) {
+  try {
+    const { getAuditReadiness } = await import('./operations/operationsAuditService.js')
+    const r = getAuditReadiness(venueId)
+    return {
+      hookId: 'operations_audit', system: 'locc', venueId,
+      readiness: r.degradedMode ? 'degraded' : 'ready',
+      status: r.degradedMode ? 'in_memory_only' : 'audit_persisted',
+      blockers: r.degradedMode ? ['database_required — audit trail in memory only'] : [],
+      degradedMode: r.degradedMode,
+      persistenceMode: r.persistenceMode,
+      databaseRequired: r.databaseRequired,
+      evidence: r,
+      nextRequiredAction: r.degradedMode ? 'Set DATABASE_URL for durable audit trail' : null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
