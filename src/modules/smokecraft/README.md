@@ -254,8 +254,15 @@ MODULE BUILD 8 added enterprise packaging metadata, white-label readiness govern
 
 ---
 
-## Module Build 9 Preview
+## MODULE BUILD 9 (Complete)
 
-**MODULE BUILD 9 OF 9 — SmokeCraft Final QA, End-to-End Flow Verification, Documentation Lock, Release Candidate Report, and Handoff Package**
+MODULE BUILD 9 completed the SmokeCraft 9-build internal release candidate sequence. It added final QA evaluation across 14 categories, end-to-end verification (35 checks), release candidate report with honest approval gates, handoff package index, production blocker registry (12 blockers), and documentation lock service. All 9 verify scripts pass. Documentation locked for internal RC review.
 
-Module Build 9 should run final end-to-end verification across SmokeCraft journey, ordering, pairing, rewards, admin, integrations, enterprise packaging, documentation, protected files, honest statuses, and production blockers. It should produce the release candidate report and handoff package without claiming production readiness that has not been proven.
+**RC Status:** `approvedForInternalDemo: true` | `approvedForProduction: false` | `approvedForMarketplace: false`
+
+**Verify:** `npm run verify:smokecraft-final-qa-release-candidate`
+
+See [`docs/SMOKECRAFT_RELEASE_CANDIDATE_REPORT.md`](../../../../docs/SMOKECRAFT_RELEASE_CANDIDATE_REPORT.md) for full RC report.
+See [`docs/SMOKECRAFT_HANDOFF_PACKAGE.md`](../../../../docs/SMOKECRAFT_HANDOFF_PACKAGE.md) for handoff package index.
+See [`docs/SMOKECRAFT_PRODUCTION_BLOCKERS.md`](../../../../docs/SMOKECRAFT_PRODUCTION_BLOCKERS.md) for production blockers.
+See [`docs/SMOKECRAFT_NEXT_PHASE_ROADMAP.md`](../../../../docs/SMOKECRAFT_NEXT_PHASE_ROADMAP.md) for Phases A–L.
