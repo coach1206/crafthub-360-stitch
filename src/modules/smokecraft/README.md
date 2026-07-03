@@ -206,8 +206,24 @@ Provider status: `local_intelligence` — no live AI provider connected unless `
 
 ---
 
-## Module Build 5 Preview
+## MODULE BUILD 5 (Complete)
 
-**MODULE BUILD 5 OF 9 — SmokeCraft Passport, Loyalty, Rewards, Visit Progression, and Experience Monetization**
+MODULE BUILD 5 added the passport reward service, loyalty engine, XP and loyalty points, visit progression rewards, scorecard rewards, order rewards, pairing rewards, experience monetization preview, reward policy service, and reward audit trail.
 
-Module Build 5 should connect SmokeCraft pairing, ordering, scorecard, passport stamps, loyalty rewards, XP, visit completion, and monetization logic without weakening the 8-visit / 24-session progression.
+See [`docs/SMOKECRAFT_REWARDS_MONETIZATION.md`](../../../../docs/SMOKECRAFT_REWARDS_MONETIZATION.md) for full documentation.
+
+New backend services: `smokecraftRewardStore.js`, `smokecraftRewardPolicyService.js`, `smokecraftRewardAuditService.js`, `smokecraftLoyaltyService.js`, `smokecraftPassportRewardService.js`, `smokecraftVisitProgressionRewardService.js`, `smokecraftScorecardRewardService.js`, `smokecraftOrderRewardService.js`, `smokecraftExperienceMonetizationService.js`, `smokecraftPairingRewardService.js`
+
+New frontend components: `SmokeCraftPassportRewardPanel`, `SmokeCraftLoyaltyProgressPanel`, `SmokeCraftRewardEligibilityPanel`, `SmokeCraftExperienceMonetizationPanel`
+
+API: `GET|POST /api/modules/smokecraft/rewards/*`
+
+Reward status: `preview_only` billing — no charges created. POS-verified spend requires POS360. Passport Stamp requires scorecard + Flavor Memory + session completion.
+
+---
+
+## Module Build 6 Preview
+
+**MODULE BUILD 6 OF 9 — SmokeCraft Venue Admin, Staff Operations, Analytics Dashboard, and Management Controls**
+
+Module Build 6 should connect SmokeCraft orders, rewards, pairings, staff queue, venue activity, management sync, and analytics into a venue-facing admin/control layer without weakening customer progression or faking POS/E.A.T. sync.
