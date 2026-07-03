@@ -280,3 +280,21 @@ PRODUCTION PHASE A hardened SmokeCraft database persistence. It added: a persist
 See [`docs/SMOKECRAFT_DATABASE_PERSISTENCE_HARDENING.md`](../../../../docs/SMOKECRAFT_DATABASE_PERSISTENCE_HARDENING.md) for full documentation.
 
 **Phase B Next:** PRODUCTION PHASE B — POS360 Live Connector Implementation.
+
+---
+
+## PRODUCTION PHASE A.1 — Database Activation (Ready to Run)
+
+PRODUCTION PHASE A.1 activates SmokeCraft database persistence in the live environment. It checks DATABASE_URL, runs migration 029, verifies all 17 unique SmokeCraft tables exist, performs INSERT+SELECT+DELETE tests per table, and updates the persistence registry. Areas that pass move to `database_verified`. Areas that fail remain `memory_fallback`. DATABASE_URL value is never printed or logged.
+
+**Script:** `server/scripts/verifySmokeCraftDatabaseActivation.js`
+
+**Run:** `npm run verify:smokecraft-database-activation`
+
+**Without DATABASE_URL:** Script exits 0 with setup instructions. No error, no fake results.
+
+**With DATABASE_URL:** Migration runs, tables are verified, read/write tests execute. All 8 critical areas must pass before Phase B (POS360) is safe to start.
+
+**Critical areas for Phase B gate:** orders, staff_queue, order_audit, integration_sync_events, production_sync_queue, connector_audit, venue_admin, analytics_snapshots
+
+**DATABASE_URL is never logged. Test data is always cleaned up. No fake verification.**

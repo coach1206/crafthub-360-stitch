@@ -42,26 +42,50 @@ const AREA_META = {
   handoff_records:           { displayName: 'Handoff Records',           table: null },
 }
 
+// Runtime verification results — populated by verifySmokeCraftDatabaseActivation.js
+// when DATABASE_URL is available and migration 029 has been applied.
+const _verifiedAreas = new Map()  // areaId -> { databaseVerified, productionReady, verifiedAt }
+
+export function setAreaVerified(areaId, result) {
+  _verifiedAreas.set(areaId, {
+    databaseVerified: result.databaseVerified ?? false,
+    productionReady:  result.productionReady ?? false,
+    verifiedAt:       new Date().toISOString(),
+  })
+}
+
+export function clearVerificationResults() {
+  _verifiedAreas.clear()
+}
+
 function buildAreaRecord(areaId) {
-  const meta      = AREA_META[areaId] ?? { displayName: areaId, table: null }
-  const dbUp      = isDbAvailable()
-  const hasTable  = meta.table !== null
-  const mode      = dbUp ? 'database_config_detected' : hasTable ? 'database_contract_ready' : 'not_applicable'
+  const meta     = AREA_META[areaId] ?? { displayName: areaId, table: null }
+  const dbUp     = isDbAvailable()
+  const hasTable = meta.table !== null
+  const verified = _verifiedAreas.get(areaId)
+
+  const dbVerified = verified?.databaseVerified ?? false
+  const prodReady  = verified?.productionReady ?? false
+  const mode = dbVerified
+    ? 'database_verified'
+    : dbUp ? 'database_config_detected'
+    : hasTable ? 'database_contract_ready' : 'not_applicable'
 
   return {
     areaId,
-    displayName:           meta.displayName,
+    displayName:            meta.displayName,
     currentPersistenceMode: mode,
-    databaseReady:         hasTable,
-    databaseVerified:      false,
-    productionReady:       false,
-    usesMemoryFallback:    !dbUp,
-    requiresMigration:     hasTable,
-    migrationStatus:       dbUp ? 'migration_required_if_not_applied' : 'migration_pending',
-    recordCountAvailable:  false,
-    lastCheckedAt:         new Date().toISOString(),
-    warnings:              dbUp
-      ? ['DATABASE_URL present — run migration 029 if not already applied to create table schema']
+    databaseReady:          hasTable,
+    databaseVerified:       dbVerified,
+    productionReady:        prodReady,
+    usesMemoryFallback:     !dbUp,
+    requiresMigration:      hasTable && !dbVerified,
+    migrationStatus:        dbVerified ? 'migration_applied_verified'
+      : dbUp ? 'migration_required_if_not_applied' : 'migration_pending',
+    recordCountAvailable:   false,
+    lastCheckedAt:          verified?.verifiedAt ?? new Date().toISOString(),
+    warnings: dbVerified ? [] : dbUp
+      ? ['DATABASE_URL present — run verify:smokecraft-database-activation to verify tables']
       : ['No DATABASE_URL — all data stored in memory only; data lost on server restart'],
   }
 }
@@ -76,24 +100,28 @@ export function getAllAreasStatus() {
 }
 
 export function getRegistrySummary() {
-  const dbUp   = isDbAvailable()
-  const areas  = getAllAreasStatus()
-  const dbMode = areas.filter(a => a.currentPersistenceMode === 'database_config_detected').length
-  const mem    = areas.filter(a => a.usesMemoryFallback).length
+  const dbUp    = isDbAvailable()
+  const areas   = getAllAreasStatus()
+  const dbVerif = areas.filter(a => a.databaseVerified).length
+  const dbMode  = areas.filter(a => a.currentPersistenceMode === 'database_config_detected').length
+  const mem     = areas.filter(a => a.usesMemoryFallback).length
+  const critMem = CRITICAL_AREAS.filter(id => !(_verifiedAreas.get(id)?.databaseVerified))
 
   return {
-    registryId:            'smokecraft-persistence-registry-v1',
-    totalAreas:            PERSISTENCE_AREAS.length,
-    areasDatabaseVerified: 0,
-    areasMemoryFallback:   mem,
-    areasDatabaseConfig:   dbMode,
-    databaseConfigured:    dbUp,
-    databaseVerified:      false,
-    overallProductionReady: false,
-    criticalAreasMemoryFallback: CRITICAL_AREAS.filter(() => !dbUp),
-    lastCheckedAt:         new Date().toISOString(),
-    warning: dbUp
-      ? 'DATABASE_URL detected but database persistence is not yet verified. Run migration 029.'
-      : 'No DATABASE_URL configured. All SmokeCraft data is memory-only and will not survive restarts.',
+    registryId:             'smokecraft-persistence-registry-v1',
+    totalAreas:             PERSISTENCE_AREAS.length,
+    areasDatabaseVerified:  dbVerif,
+    areasMemoryFallback:    mem,
+    areasDatabaseConfig:    dbMode,
+    databaseConfigured:     dbUp,
+    databaseVerified:       dbVerif > 0,
+    overallProductionReady: dbVerif > 0 && critMem.length === 0,
+    criticalAreasNotVerified: critMem,
+    lastCheckedAt:          new Date().toISOString(),
+    warning: dbVerif > 0
+      ? (critMem.length === 0 ? 'All critical areas verified.' : `${critMem.length} critical area(s) not yet verified.`)
+      : dbUp
+        ? 'DATABASE_URL detected but no areas verified yet. Run verify:smokecraft-database-activation.'
+        : 'No DATABASE_URL configured. All SmokeCraft data is memory-only and will not survive restarts.',
   }
 }

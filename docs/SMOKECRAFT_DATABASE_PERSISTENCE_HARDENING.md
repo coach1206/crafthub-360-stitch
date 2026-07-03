@@ -153,6 +153,47 @@ All persistence routes are available under `/api/modules/smokecraft/persistence/
 | POST /migration-plan/create | Create migration plan document |
 | GET /audit | Persistence audit log |
 
+## Production Phase A.1 — Database Activation
+
+**Script:** `server/scripts/verifySmokeCraftDatabaseActivation.js`
+
+**Run:** `npm run verify:smokecraft-database-activation`
+
+Phase A.1 activates and verifies live database persistence. It runs automatically when DATABASE_URL is present.
+
+### Steps performed:
+
+1. **DATABASE_URL check** — If absent, exits 0 with setup instructions. Never prints the value.
+2. **Migration** — Runs `npm run db:migrate` to apply migration 029.
+3. **Connection check** — Calls `isDbAvailable()` to confirm the pool is up.
+4. **Table existence** — Calls `verifyTableExists()` for each of the 17 unique tables.
+5. **Read/write test** — Calls `runTableReadWriteTest()` per table: INSERT a test record, SELECT it, DELETE it. All test data is cleaned up.
+6. **Registry update** — Calls `setAreaVerified(areaId, { databaseVerified, productionReady })` for each area that passes. Areas that fail remain `memory_fallback`.
+7. **Critical area gate** — Checks 8 critical areas. Exits 0 only if all pass.
+
+### Critical areas required for Phase B gate:
+
+- orders, staff_queue, order_audit
+- integration_sync_events, production_sync_queue
+- connector_audit, venue_admin, analytics_snapshots
+
+### DATABASE_URL setup (Railway):
+
+1. Go to Railway → your project → Variables tab
+2. Add `DATABASE_URL` pointing to your Postgres instance
+3. Re-deploy, then run: `npm run verify:smokecraft-database-activation`
+4. If all critical areas pass, Phase B (POS360 Live Connector) is safe to start.
+
+### Area progression after activation:
+
+| Before activation | After activation (table verified) |
+|---|---|
+| `database_contract_ready` | `database_verified` |
+| `productionReady: false` | `productionReady: true` |
+| `usesMemoryFallback: true` | `usesMemoryFallback: false` |
+
+Areas whose table test fails remain `memory_fallback`. DATABASE_URL value is never logged at any step.
+
 ## What Phase B Should Handle Next
 
 **PRODUCTION PHASE B OF L — POS360 Live Connector Implementation**
