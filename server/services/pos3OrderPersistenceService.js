@@ -11,7 +11,7 @@
 
 import { isDbAvailable, query } from '../db/connection.js'
 import { enqueueItems } from './stationQueuePersistenceService.js'
-import auditService from './auditService.js'
+import { auditService } from './auditService.js'
 
 const TAX_RATE = 0.085     // 8.5%
 const SERVICE_FEE_RATE = 0 // configurable per venue; 0 for now
