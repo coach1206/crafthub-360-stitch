@@ -266,3 +266,17 @@ See [`docs/SMOKECRAFT_RELEASE_CANDIDATE_REPORT.md`](../../../../docs/SMOKECRAFT_
 See [`docs/SMOKECRAFT_HANDOFF_PACKAGE.md`](../../../../docs/SMOKECRAFT_HANDOFF_PACKAGE.md) for handoff package index.
 See [`docs/SMOKECRAFT_PRODUCTION_BLOCKERS.md`](../../../../docs/SMOKECRAFT_PRODUCTION_BLOCKERS.md) for production blockers.
 See [`docs/SMOKECRAFT_NEXT_PHASE_ROADMAP.md`](../../../../docs/SMOKECRAFT_NEXT_PHASE_ROADMAP.md) for Phases A–L.
+
+---
+
+## PRODUCTION PHASE A (Complete)
+
+PRODUCTION PHASE A hardened SmokeCraft database persistence. It added: a persistence registry tracking 20 data areas, a database adapter wrapping the existing `pg` layer, persistence health service, migration plan service (plan only — no destructive migrations), persistence audit service, 11 database persistence services (one per SmokeCraft data area), controller and routes under `/api/modules/smokecraft/persistence/*`, 3 data contracts, 4 frontend components, migration 029 (`029_smokecraft_persistence_hardening.sql`) defining all SmokeCraft tables, and documentation.
+
+**All 18 table-backed areas are database-contract-ready.** All remain `memory_fallback` until DATABASE_URL is configured and migration 029 is applied.
+
+**Verify:** `npm run verify:smokecraft-database-persistence`
+
+See [`docs/SMOKECRAFT_DATABASE_PERSISTENCE_HARDENING.md`](../../../../docs/SMOKECRAFT_DATABASE_PERSISTENCE_HARDENING.md) for full documentation.
+
+**Phase B Next:** PRODUCTION PHASE B — POS360 Live Connector Implementation.

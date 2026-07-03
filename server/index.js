@@ -84,6 +84,7 @@ import smokecraftVenueAdminRoutes   from './routes/smokecraftVenueAdminRoutes.js
 import smokecraftIntegrationRoutes  from './routes/smokecraftIntegrationRoutes.js'
 import smokecraftEnterpriseRoutes   from './routes/smokecraftEnterpriseRoutes.js'
 import smokecraftFinalQaRoutes      from './routes/smokecraftFinalQaRoutes.js'
+import smokecraftPersistenceRoutes  from './routes/smokecraftPersistenceRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -173,7 +174,8 @@ app.use('/api/modules/smokecraft/rewards', smokecraftRewardsRoutes)
 app.use('/api/modules/smokecraft/admin',        smokecraftVenueAdminRoutes)
 app.use('/api/modules/smokecraft/integrations', smokecraftIntegrationRoutes)
 app.use('/api/modules/smokecraft/enterprise',   smokecraftEnterpriseRoutes)
-app.use('/api/modules/smokecraft/final-qa',     smokecraftFinalQaRoutes)
+app.use('/api/modules/smokecraft/final-qa',      smokecraftFinalQaRoutes)
+app.use('/api/modules/smokecraft/persistence',   smokecraftPersistenceRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)
