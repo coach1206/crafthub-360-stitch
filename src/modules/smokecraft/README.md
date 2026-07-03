@@ -299,6 +299,6 @@ PRODUCTION PHASE A.1 activates SmokeCraft database persistence in the live envir
 
 **DATABASE_URL is never logged. Test data is always cleaned up. No fake verification.**
 
-### Phase A.2 Result (2026-07-03):
+### Phase A.3 Result (2026-07-03):
 
-DATABASE_URL was not present in the cloud execution environment. Live Railway Postgres verification could not be performed. All 20 SmokeCraft areas remain `memory_fallback`. Phase B is **NOT yet safe to begin**. All verification scripts and build pass. To complete activation: configure DATABASE_URL in Railway Variables, redeploy, then run `npm run verify:smokecraft-database-activation` in the Railway shell. See `docs/SMOKECRAFT_DATABASE_PERSISTENCE_HARDENING.md` for full steps.
+DATABASE_URL was not present in the cloud execution environment. Live Railway Postgres verification could not be performed (Phases A.2, A.2B, A.3 all blocked by same condition). All 20 SmokeCraft areas remain `memory_fallback`. Phase B is **NOT yet safe to begin**. Critical area registry is correct (11 areas: 8 business-critical + 3 infrastructure-critical). All verification scripts and build pass. To complete activation: configure DATABASE_URL in Railway Variables, redeploy, run `npm run db:migrate` then `npm run verify:smokecraft-database-activation`. Phase B gate requires all 11 critical areas to pass. See `docs/SMOKECRAFT_DATABASE_PERSISTENCE_HARDENING.md` for the complete Railway runbook.

@@ -262,10 +262,91 @@ The activation script is deployed and ready. To complete live verification:
    - Verify all 17 unique tables exist
    - Run INSERT → SELECT → DELETE test per table (test data cleaned up)
    - Mark passing areas `database_verified` in the persistence registry
-   - Report critical area gate: all 8 must pass for Phase B to begin
-7. If exit code is 0 and all 8 critical areas pass → Phase B is safe to start
+   - Report critical area gate: all 11 must pass for Phase B to begin
+7. If exit code is 0 and all 11 critical areas pass → Phase B is safe to start
 
 ### DATABASE_URL is never printed at any step. No credentials appear in logs.
+
+## Production Phase A.3 — Live Railway Database Migration and Activation Proof
+
+**Attempted:** 2026-07-03
+
+**Result: BLOCKED — DATABASE_URL not present in cloud execution environment**
+
+Phase A.3 requires DATABASE_URL to be configured in the Railway production environment. This cloud execution agent does not have access to the Railway Postgres credentials. Live table verification, migration, and read/write tests cannot be performed without DATABASE_URL. No results have been fabricated.
+
+### Honest attempt log (Phase A.3):
+
+| Step | Result |
+|---|---|
+| DATABASE_URL detected | NO — not configured in this execution environment |
+| db:migrate | NOT EXECUTED — requires DATABASE_URL |
+| Database connection | NOT AVAILABLE |
+| Tables verified | 0 / 17 |
+| Read/write tests | NOT RUN |
+| Business-critical areas passed | 0 / 8 |
+| Business-critical areas failed | orders, staff_queue, pairing_profiles, flavor_memory, rewards, loyalty, passport_rewards, venue_admin |
+| Infrastructure-critical areas passed | 0 / 3 |
+| Infrastructure-critical areas failed | integration_sync_events, production_sync_queue, order_audit |
+| Critical areas passed (total) | 0 / 11 |
+| Areas database_verified | 0 / 20 |
+| Areas memory_fallback | 20 / 20 |
+| productionReady | false |
+| phaseBSafeToStart | false |
+| Phase B safe to begin | **NO** |
+
+### Scripts that passed without DATABASE_URL:
+
+| Script | Result |
+|---|---|
+| verify:smokecraft-database-activation | Exits 0 — setup instructions printed (correct behavior) |
+| verify:smokecraft-database-persistence | 60/60 PASS |
+| npm run build | PASS |
+
+### Railway runbook to complete Phase A.3:
+
+The migration and activation scripts are deployed and ready. When DATABASE_URL is available, run these commands in order:
+
+```
+npm run db:migrate
+npm run verify:smokecraft-database-activation
+```
+
+The activation script will output a full report structured as:
+
+```
+=== Activation Summary ===
+DATABASE_URL present:              YES (value hidden)
+Migration result:                  PASS / FAIL
+Tables verified:                   N / 17
+Areas database_verified:           N / 18
+Business-critical passed:          N / 8
+Infrastructure-critical passed:    N / 3
+All critical areas ready:          N / 11
+Phase B POS360 safe to start:      YES / NO
+
+=== Honest Status ===
+  businessCriticalPassed:       true / false
+  infrastructureCriticalPassed: true / false
+  productionReady:              true / false
+  POS360 live sync:             still not active (Phase B)
+```
+
+**Phase B is safe to start only when the script exits 0 AND reports:**
+- `Business-critical passed: 8 / 8`
+- `Infrastructure-critical passed: 3 / 3`
+- `Phase B POS360 safe to start: YES`
+
+### What must be true for productionReady to become true:
+
+1. DATABASE_URL is configured in Railway Variables
+2. `npm run db:migrate` applies migration 029 without errors
+3. All 17 unique SmokeCraft tables exist in Railway Postgres
+4. All 8 business-critical areas pass INSERT+SELECT+DELETE: orders, staff_queue, pairing_profiles, flavor_memory, rewards, loyalty, passport_rewards, venue_admin
+5. All 3 infrastructure-critical areas pass INSERT+SELECT+DELETE: integration_sync_events, production_sync_queue, order_audit
+6. `npm run verify:smokecraft-database-activation` exits 0
+
+### DATABASE_URL is never printed. No credentials appear in logs. Test records are always cleaned up.
 
 ## What Phase B Should Handle Next
 
