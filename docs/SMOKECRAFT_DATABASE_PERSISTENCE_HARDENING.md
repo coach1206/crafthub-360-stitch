@@ -171,18 +171,29 @@ Phase A.1 activates and verifies live database persistence. It runs automaticall
 6. **Registry update** — Calls `setAreaVerified(areaId, { databaseVerified, productionReady })` for each area that passes. Areas that fail remain `memory_fallback`.
 7. **Critical area gate** — Checks 8 critical areas. Exits 0 only if all pass.
 
-### Critical areas required for Phase B gate:
+### Critical area source of truth
 
-- orders, staff_queue, order_audit
-- integration_sync_events, production_sync_queue
-- connector_audit, venue_admin, analytics_snapshots
+The activation script imports `CRITICAL_AREAS` from `smokecraftPersistenceRegistry.js`. It does not define its own list. This prevents the script from silently dropping business-critical gameplay areas.
+
+**Business-critical areas** (gameplay, loyalty, rewards, pairing — all 8 must pass):
+
+- orders, staff_queue, pairing_profiles, flavor_memory
+- rewards, loyalty, passport_rewards, venue_admin
+
+**Infrastructure-critical areas** (sync pipeline, audit — all 3 must pass):
+
+- integration_sync_events, production_sync_queue, order_audit
+
+**All 11 CRITICAL_AREAS must pass before Phase B is safe to start.**
+
+Optional/analytics areas (connector_audit, analytics_snapshots, venue_menu, pairing_recommendations, pairing_audit, reward_audit, enterprise_governance_audit) are tracked and verified but are not required for the Phase B gate.
 
 ### DATABASE_URL setup (Railway):
 
 1. Go to Railway → your project → Variables tab
 2. Add `DATABASE_URL` pointing to your Postgres instance
-3. Re-deploy, then run: `npm run verify:smokecraft-database-activation`
-4. If all critical areas pass, Phase B (POS360 Live Connector) is safe to start.
+3. Re-deploy, then run: `npm run db:migrate` then `npm run verify:smokecraft-database-activation`
+4. Phase B (POS360 Live Connector) is safe to start only when **all 8 business-critical AND all 3 infrastructure-critical areas** report `database_verified`.
 
 ### Area progression after activation:
 
