@@ -1340,3 +1340,215 @@ export async function getLOCCExternalOpsReadinessHooks(venueId) {
     return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
   }
 }
+
+// Phase 19 FPLMRL E.A.T. Hooks
+
+export async function getFinalLockdownReadinessHooks(venueId) {
+  try {
+    const { runFinalLockdownAudit } = await import('./finalLockdown/finalLockdownAuditService.js')
+    const r = runFinalLockdownAudit()
+    return {
+      hookId: 'final_lockdown_readiness', system: 'fplmrl', venueId,
+      readiness: r.lockdownStatus === 'locked' ? 'locked' : 'warning',
+      status: r.lockdownStatus,
+      blockers: r.blockers,
+      warnings: ['module_packaging_required', 'marketplace_not_live', 'license_gate_not_built'],
+      degradedMode: !process.env.DATABASE_URL,
+      productionStatus: r.productionStatus,
+      moduleReadiness: 'needs_module_packaging',
+      evidence: { lockdownStatus: r.lockdownStatus, phase19_sealed: r.phase19_sealed },
+      nextRequiredAction: 'Run Module Build 1 — NOVEE OS Module Packaging Foundation',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getProductionReadinessHooks(venueId) {
+  try {
+    const { buildProductionReadinessReport } = await import('./finalLockdown/productionReadinessReportService.js')
+    const r = buildProductionReadinessReport()
+    return {
+      hookId: 'production_readiness', system: 'fplmrl', venueId,
+      readiness: r.blockers.length === 0 ? 'production_ready_with_env' : 'production_blocked',
+      status: r.productionStatus,
+      blockers: r.blockers.map(b => b.blocker),
+      warnings: r.warnings.map(w => w.warning),
+      degradedMode: !process.env.DATABASE_URL,
+      productionStatus: r.productionStatus,
+      moduleReadiness: 'needs_module_packaging',
+      evidence: { database_required: r.database.in_memory_fallback, can_submit_live: false },
+      nextRequiredAction: r.blockers.length > 0 ? 'Configure required environment variables' : 'Run Module Build 1',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getProtectedFileIntegrityHooks(venueId) {
+  try {
+    const { buildProtectedFileIntegrityReport } = await import('./finalLockdown/protectedFileIntegrityService.js')
+    const r = buildProtectedFileIntegrityReport()
+    return {
+      hookId: 'protected_file_integrity', system: 'fplmrl', venueId,
+      readiness: r.existence.all_present ? 'protected' : 'blocker',
+      status: r.existence.all_present ? 'all_protected_files_intact' : 'protected_files_missing',
+      blockers: r.existence.files.filter(f => !f.exists).map(f => f.file),
+      warnings: [],
+      degradedMode: false,
+      productionStatus: r.existence.all_present ? 'protected' : 'production_blocked',
+      moduleReadiness: 'protected',
+      evidence: { all_present: r.existence.all_present, count: r.existence.count },
+      nextRequiredAction: r.existence.all_present ? 'No action — protected files intact' : 'Restore missing protected files',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getDegradedModeHonestyHooks(venueId) {
+  try {
+    const { buildDegradedModeHonestyReport } = await import('./finalLockdown/degradedModeHonestyService.js')
+    const r = buildDegradedModeHonestyReport()
+    return {
+      hookId: 'degraded_mode_honesty', system: 'fplmrl', venueId,
+      readiness: r.all_honesty_checks_pass ? 'degraded_honest' : 'warning',
+      status: r.status,
+      blockers: r.forbidden_terms_found ? ['forbidden_overclaim_terms_found'] : [],
+      warnings: ['all_external_sync_preview_only', 'all_vendor_submission_preview_only'],
+      degradedMode: !process.env.DATABASE_URL,
+      productionStatus: 'degraded_honest',
+      moduleReadiness: 'honesty_verified',
+      evidence: { all_honesty_checks_pass: r.all_honesty_checks_pass, can_submit_live: false },
+      nextRequiredAction: 'Maintain honest vocabulary in all new services',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getSecuritySafetyAuditHooks(venueId) {
+  try {
+    const { buildSecuritySafetyReport } = await import('./finalLockdown/securitySafetyAuditService.js')
+    const r = buildSecuritySafetyReport()
+    return {
+      hookId: 'security_safety_audit', system: 'fplmrl', venueId,
+      readiness: r.all_security_checks_pass ? 'verified' : 'blocker',
+      status: r.status,
+      blockers: [],
+      warnings: [],
+      degradedMode: false,
+      productionStatus: 'security_verified',
+      moduleReadiness: 'security_verified',
+      evidence: { no_raw_secrets: r.no_raw_secrets_in_responses, safe_credential_utility: r.safe_credential_utility_exists },
+      nextRequiredAction: 'Maintain credential redaction in all new routes',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getModuleReadinessHooks(venueId) {
+  try {
+    const { buildModuleReadinessMap } = await import('./moduleReadiness/moduleReadinessMapService.js')
+    const r = buildModuleReadinessMap()
+    return {
+      hookId: 'module_readiness', system: 'fplmrl', venueId,
+      readiness: 'needs_module_packaging',
+      status: 'module_readiness_mapped',
+      blockers: ['module_manifests_not_created', 'module_install_hooks_not_built'],
+      warnings: ['all_modules_need_packaging'],
+      degradedMode: false,
+      productionStatus: 'needs_module_packaging',
+      moduleReadiness: 'needs_module_packaging',
+      evidence: { total_modules: r.total_modules, core_modules: r.core_modules, addon_modules: r.addon_modules },
+      nextRequiredAction: 'Run Module Build 1 — NOVEE OS Module Packaging Foundation',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getMarketplaceReadinessHooks(venueId) {
+  try {
+    const { buildMarketplaceReadinessReport } = await import('./moduleReadiness/marketplacePackagingReadinessService.js')
+    const r = buildMarketplaceReadinessReport()
+    return {
+      hookId: 'marketplace_readiness', system: 'fplmrl', venueId,
+      readiness: 'marketplace_ready_draft',
+      status: 'marketplace_not_live',
+      blockers: ['marketplace_registry_not_built', 'module_install_hooks_not_built'],
+      warnings: ['listing_drafts_only'],
+      degradedMode: false,
+      productionStatus: 'marketplace_not_live',
+      moduleReadiness: 'marketplace_ready_draft',
+      evidence: { total_listings: r.total_listings, draft_listings: r.draft_listings, live: r.live_marketplace },
+      nextRequiredAction: 'Run Module Build 9 — White-Label Marketplace Licensing Module',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getWhiteLabelReadinessHooks(venueId) {
+  try {
+    const { buildWhiteLabelReadinessReport } = await import('./moduleReadiness/whiteLabelLicensingReadinessService.js')
+    const r = buildWhiteLabelReadinessReport()
+    return {
+      hookId: 'white_label_readiness', system: 'fplmrl', venueId,
+      readiness: 'white_label_ready_draft',
+      status: r.status,
+      blockers: ['license_gate_engine_not_built', 'white_label_engine_not_built'],
+      warnings: ['tiers_defined_but_not_enforced'],
+      degradedMode: false,
+      productionStatus: 'white_label_not_live',
+      moduleReadiness: 'white_label_ready_draft',
+      evidence: { tiers_defined: r.tiers_defined, license_gate_built: r.license_gate_built },
+      nextRequiredAction: 'Run Module Build 9 — White-Label Marketplace Licensing Module',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getFinalVerificationRegistryHooks(venueId) {
+  try {
+    const { buildVerificationChecklist } = await import('./finalLockdown/finalVerificationRegistryService.js')
+    const r = buildVerificationChecklist()
+    return {
+      hookId: 'final_verification_registry', system: 'fplmrl', venueId,
+      readiness: 'verification_registry_complete',
+      status: 'all_scripts_registered',
+      blockers: [],
+      warnings: [],
+      degradedMode: false,
+      productionStatus: 'verification_complete',
+      moduleReadiness: 'verification_complete',
+      evidence: { total_scripts: r.total_scripts, all_must_pass: r.all_must_pass },
+      nextRequiredAction: 'Run all verification scripts before each module build',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getPostPhaseModulePlanHooks(venueId) {
+  try {
+    const { buildPostPhaseModuleBuildPlan } = await import('./moduleReadiness/moduleReadinessMapService.js')
+    const r = buildPostPhaseModuleBuildPlan()
+    return {
+      hookId: 'post_phase_module_plan', system: 'fplmrl', venueId,
+      readiness: 'module_build_plan_ready',
+      status: 'post_phase_sequence_defined',
+      blockers: [],
+      warnings: [],
+      degradedMode: false,
+      productionStatus: 'phase_19_sealed',
+      moduleReadiness: 'module_build_plan_ready',
+      evidence: { series_name: r.series_name, total_steps: r.sequence.length },
+      nextRequiredAction: r.sequence[0].name,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}

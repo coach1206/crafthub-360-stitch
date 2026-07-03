@@ -73,6 +73,7 @@ import externalPOSRoutes            from './routes/externalPOSRoutes.js'
 import vendorGatewayRoutes          from './routes/vendorGatewayRoutes.js'
 import operationalSyncRoutes        from './routes/operationalSyncRoutes.js'
 import liveExternalOpsRoutes        from './routes/liveExternalOpsRoutes.js'
+import finalLockdownRoutes          from './routes/finalLockdownRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -152,6 +153,7 @@ app.use('/api/external-pos',      externalPOSRoutes)
 app.use('/api/vendor-gateway',    vendorGatewayRoutes)
 app.use('/api/operational-sync',  operationalSyncRoutes)
 app.use('/api/live-external-ops', liveExternalOpsRoutes)
+app.use('/api/final-lockdown',    finalLockdownRoutes)
 app.use('/api/audit',             auditRoutes)
 app.use('/api/admin',             adminRoutes)
 app.use('/api/founder',           founderRoutes)
