@@ -704,3 +704,84 @@ export async function getInventoryReceivingReadinessHooks(venueId) {
     return { ok: false, venueId, receivingStatus: 'receiving_pending', persistenceStatus: 'preview_fallback' }
   }
 }
+
+export async function getInventoryPersistenceReadinessHooks(venueId) {
+  try {
+    const { getInventoryPersistenceReadiness } = await import('./inventory/inventoryPersistenceService.js')
+    return getInventoryPersistenceReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, persistenceStatus: 'preview_fallback', databaseRequired: true, degradedMode: true }
+  }
+}
+
+export async function getInventoryAdjustmentReadinessHooks(venueId) {
+  try {
+    const { getAdjustmentPersistenceReadiness } = await import('./inventory/inventoryAdjustmentPersistenceService.js')
+    return getAdjustmentPersistenceReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, persistenceStatus: 'preview_fallback', databaseRequired: true, degradedMode: true }
+  }
+}
+
+export async function getReceivingPersistenceReadinessHooks(venueId) {
+  try {
+    const { getReceivingPersistenceReadiness } = await import('./reorder/receivingPersistenceService.js')
+    return getReceivingPersistenceReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, receivingStatus: 'receiving_preview_only', persistenceStatus: 'preview_fallback', databaseRequired: true }
+  }
+}
+
+export async function getPurchaseOrderPersistenceReadinessHooks(venueId) {
+  try {
+    const { getPurchaseOrderPersistenceReadiness } = await import('./reorder/purchaseOrderPersistenceService.js')
+    return getPurchaseOrderPersistenceReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, submissionStatus: 'reorder_not_submitted', persistenceStatus: 'preview_fallback', databaseRequired: true }
+  }
+}
+
+export async function getApprovalPersistenceReadinessHooks(venueId) {
+  try {
+    const { getApprovalPersistenceReadiness } = await import('./reorder/reorderApprovalPersistenceService.js')
+    return getApprovalPersistenceReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, approvalStatus: 'pending_manager_approval', persistenceStatus: 'preview_fallback', databaseRequired: true }
+  }
+}
+
+export async function getInventoryAuditReadinessHooks(venueId) {
+  try {
+    const { getAuditReadiness } = await import('./inventory/inventoryAuditPersistenceService.js')
+    return getAuditReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, persistenceStatus: 'preview_fallback', databaseRequired: true }
+  }
+}
+
+export async function getOperationalSyncEventReadinessHooks(venueId) {
+  try {
+    const { getOperationalSyncReadiness } = await import('./sync/operationalSyncEventService.js')
+    return getOperationalSyncReadiness(venueId)
+  } catch {
+    return { ok: false, venueId, syncStatus: 'database_required', externalSyncNotLive: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getExternalPOSSyncReadinessHooks(venueId) {
+  try {
+    const { buildExternalPOSRequiredSyncResponse } = await import('./sync/operationalSyncEventService.js')
+    return buildExternalPOSRequiredSyncResponse(venueId)
+  } catch {
+    return { ok: false, venueId, syncStatus: 'external_system_required', externalPOSRequired: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getVendorSyncReadinessHooks(venueId) {
+  try {
+    const { buildVendorRequiredSyncResponse } = await import('./sync/operationalSyncEventService.js')
+    return buildVendorRequiredSyncResponse(venueId)
+  } catch {
+    return { ok: false, venueId, syncStatus: 'external_system_required', vendorApiRequired: true, persistenceStatus: 'preview_fallback' }
+  }
+}

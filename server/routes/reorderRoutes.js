@@ -8,6 +8,12 @@ import {
   handleCreateSignal, handleGetSignals, handleSignalReadiness,
   handleCreateReceiving, handleMarkReceived, handleReceivingReadiness,
 } from '../controllers/reorderController.js'
+import {
+  handlePersistPO, handlePersistApprove, handlePersistReject,
+  handleConfirmReceiving, handleGetPOHistory, handleGetPersistedRecommendations,
+  handleGetReorderAudit, handleGetReorderSyncEvents,
+  handleGetReorderPersistenceStatus, handleGetDemandSignalsPersisted,
+} from '../controllers/reorderPersistenceController.js'
 
 const router = Router()
 
@@ -22,6 +28,7 @@ router.get('/venue/:venueId/vendors/readiness',                  handleVendorCon
 router.get('/venue/:venueId/recommendations',                    handleGetRecommendations)
 router.get('/venue/:venueId/recommendations/urgent',             handleUrgentAlert)
 router.post('/venue/:venueId/recommendations/detect',            handleDetectTriggers)
+router.get('/venue/:venueId/recommendations/persisted',          handleGetPersistedRecommendations)
 
 // Purchase orders
 router.post('/venue/:venueId/purchase-orders',                   handleCreatePO)
@@ -29,6 +36,12 @@ router.get('/venue/:venueId/purchase-orders',                    handleListPOs)
 router.get('/purchase-orders/:purchaseOrderId',                  handleGetPO)
 router.post('/purchase-orders/:purchaseOrderId/items',           handleAddPOItem)
 router.get('/venue/:venueId/purchase-orders/readiness',          handlePOReadiness)
+router.get('/purchase-orders/:purchaseOrderId/history',          handleGetPOHistory)
+
+// Purchase order persistence
+router.post('/purchase-order/draft/persist',                           handlePersistPO)
+router.post('/purchase-orders/:purchaseOrderId/approve/persist',       handlePersistApprove)
+router.post('/purchase-orders/:purchaseOrderId/reject/persist',        handlePersistReject)
 
 // Approval
 router.post('/purchase-orders/:purchaseOrderId/approve',         handleApprovePO)
@@ -39,10 +52,17 @@ router.get('/venue/:venueId/approval/readiness',                 handleApprovalR
 router.post('/venue/:venueId/signals',                           handleCreateSignal)
 router.get('/venue/:venueId/signals',                            handleGetSignals)
 router.get('/venue/:venueId/signals/readiness',                  handleSignalReadiness)
+router.get('/venue/:venueId/demand-signals',                     handleGetDemandSignalsPersisted)
 
 // Receiving
 router.post('/venue/:venueId/receiving',                         handleCreateReceiving)
 router.post('/receiving/:receivingId/confirm',                   handleMarkReceived)
 router.get('/venue/:venueId/receiving/readiness',                handleReceivingReadiness)
+router.post('/receiving/:purchaseOrderId/confirm-persist',       handleConfirmReceiving)
+
+// OIPSL persistence meta
+router.get('/persistence/status',                                handleGetReorderPersistenceStatus)
+router.get('/venue/:venueId/audit',                              handleGetReorderAudit)
+router.get('/venue/:venueId/sync-events',                        handleGetReorderSyncEvents)
 
 export default router
