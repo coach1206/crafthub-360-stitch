@@ -785,3 +785,165 @@ export async function getVendorSyncReadinessHooks(venueId) {
     return { ok: false, venueId, syncStatus: 'external_system_required', vendorApiRequired: true, persistenceStatus: 'preview_fallback' }
   }
 }
+
+// ─── Phase 16 EPRL Hooks ─────────────────────────────────────────────────────
+
+export async function getEnvironmentReadinessHooks(venueId) {
+  try {
+    const { buildEnvironmentReadinessReport } = await import('./environment/environmentReadinessService.js')
+    const report = buildEnvironmentReadinessReport()
+    return {
+      hookId: 'environment_readiness', system: 'eprl', venueId,
+      readiness: report.ok ? 'ready' : 'degraded',
+      status: report.environmentMode,
+      blockers: report.blockers,
+      warnings: report.warnings,
+      degradedMode: report.degradedMode,
+      persistenceMode: report.persistenceMode,
+      databaseRequired: !report.databaseUrl?.present,
+      evidence: report,
+      nextRequiredAction: report.degradedMode ? 'Set DATABASE_URL to enable persistence' : null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getDatabaseConnectionReadinessHooks(venueId) {
+  try {
+    const { getDatabaseConnectionStatus } = await import('../db/databaseConnectionManager.js')
+    const conn = getDatabaseConnectionStatus()
+    return {
+      hookId: 'database_connection', system: 'eprl', venueId,
+      readiness: conn.degradedMode ? 'degraded' : 'ready',
+      status: conn.status,
+      blockers: conn.degradedMode ? ['DATABASE_URL missing or invalid'] : [],
+      degradedMode: conn.degradedMode,
+      databaseRequired: conn.databaseRequired,
+      evidence: conn,
+      nextRequiredAction: conn.degradedMode ? 'Set DATABASE_URL environment variable' : null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getMigrationReadinessHooks(venueId) {
+  try {
+    const { buildMigrationReadinessReport } = await import('../db/migrationReadinessService.js')
+    const report = await buildMigrationReadinessReport(null)
+    return {
+      hookId: 'migration_readiness', system: 'eprl', venueId,
+      readiness: report.ok ? 'ready' : 'degraded',
+      status: report.status,
+      blockers: report.pendingMigrations?.length > 0 ? [`${report.pendingMigrations.length} migrations pending`] : [],
+      degradedMode: report.degradedMode,
+      databaseRequired: report.databaseRequired,
+      evidence: { latestExpected: report.latestExpected, latestApplied: report.latestApplied, pendingCount: report.pendingMigrations?.length ?? 0 },
+      nextRequiredAction: report.degradedMode ? 'Run npm run db:migrate' : null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getSchemaReadinessHooks(venueId) {
+  try {
+    const { buildSchemaReadinessReport } = await import('../db/schemaReadinessService.js')
+    const report = await buildSchemaReadinessReport(null)
+    return {
+      hookId: 'schema_readiness', system: 'eprl', venueId,
+      readiness: report.ok ? 'ready' : 'degraded',
+      status: report.status,
+      blockers: report.degradedMode ? ['Schema not yet validated — database required'] : [],
+      degradedMode: report.degradedMode,
+      databaseRequired: true,
+      evidence: report,
+      nextRequiredAction: report.degradedMode ? 'Apply migrations and verify schema' : null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getPersistenceModeReadinessHooks(venueId) {
+  try {
+    const { buildPersistenceModeResponse } = await import('./persistence/persistenceModeService.js')
+    const mode = buildPersistenceModeResponse()
+    return {
+      hookId: 'persistence_mode', system: 'eprl', venueId,
+      readiness: mode.databaseActive ? 'ready' : 'degraded',
+      status: mode.persistenceMode,
+      blockers: mode.degradedMode ? ['No database — in_memory_only mode active'] : [],
+      degradedMode: mode.degradedMode,
+      persistenceMode: mode.persistenceMode,
+      databaseRequired: mode.databaseRequired,
+      evidence: mode,
+      nextRequiredAction: mode.degradedMode ? 'Set DATABASE_URL to switch to real_database mode' : null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getDeploymentReadinessHooks(venueId) {
+  try {
+    const { buildDeploymentReadinessReport } = await import('./deployment/deploymentReadinessService.js')
+    const report = buildDeploymentReadinessReport()
+    return {
+      hookId: 'deployment_readiness', system: 'eprl', venueId,
+      readiness: report.ok ? 'ready' : 'not_ready',
+      status: report.environmentMode,
+      blockers: report.blockers?.map(b => typeof b === 'string' ? b : `${b.key}: ${b.message}`) ?? [],
+      warnings: report.warnings ?? [],
+      degradedMode: report.degradedMode,
+      persistenceMode: report.persistence,
+      databaseRequired: !process.env.DATABASE_URL,
+      evidence: { provider: report.provider, environmentMode: report.environmentMode },
+      nextRequiredAction: report.ok ? null : 'Resolve production blockers before deploy',
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getProductionBlockerReadinessHooks(venueId) {
+  try {
+    const { getProductionBlockers } = await import('./deployment/deploymentReadinessService.js')
+    const blockers = getProductionBlockers()
+    return {
+      hookId: 'production_blockers', system: 'eprl', venueId,
+      readiness: blockers.length === 0 ? 'ready' : 'blocked',
+      status: blockers.length === 0 ? 'no_blockers' : 'production_blockers_present',
+      blockers: blockers.map(b => `${b.key}: ${b.message}`),
+      blockerCount: blockers.length,
+      degradedMode: blockers.length > 0,
+      evidence: blockers,
+      nextRequiredAction: blockers.length > 0 ? 'Resolve all production blockers' : null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
+
+export async function getRailwayPostgresReadinessHooks(venueId) {
+  try {
+    const { buildRailwayReadinessChecklist, buildPostgresReadinessChecklist } = await import('./deployment/deploymentReadinessService.js')
+    const railway  = buildRailwayReadinessChecklist()
+    const postgres = buildPostgresReadinessChecklist()
+    return {
+      hookId: 'railway_postgres_readiness', system: 'eprl', venueId,
+      readiness: railway.ready ? 'ready' : 'not_ready',
+      status: railway.ready ? 'railway_ready' : 'railway_setup_required',
+      blockers: railway.blockers ?? [],
+      railway,
+      postgres,
+      degradedMode: !railway.ready,
+      databaseRequired: !process.env.DATABASE_URL,
+      evidence: { railwayReady: railway.ready, postgresReady: postgres.ready },
+      nextRequiredAction: !railway.ready ? 'Attach Railway Postgres plugin and set DATABASE_URL' : null,
+    }
+  } catch {
+    return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
+  }
+}
