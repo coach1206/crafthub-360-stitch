@@ -194,6 +194,68 @@ Phase A.1 activates and verifies live database persistence. It runs automaticall
 
 Areas whose table test fails remain `memory_fallback`. DATABASE_URL value is never logged at any step.
 
+## Production Phase A.2 — Railway Live Database Activation
+
+**Attempted:** 2026-07-03
+
+**Result: BLOCKED — DATABASE_URL not present in cloud execution environment**
+
+### Honest activation attempt log:
+
+| Step | Result |
+|---|---|
+| DATABASE_URL detected | NO — not configured in this execution environment |
+| Migration run | NOT EXECUTED — requires DATABASE_URL |
+| Database connection | NOT AVAILABLE |
+| Tables verified | 0 / 17 |
+| Read/write tests | NOT RUN |
+| Areas database_verified | 0 / 20 |
+| Areas memory_fallback | 20 / 20 |
+| Critical areas passed | 0 / 8 |
+| productionReady | false |
+| Phase B safe to begin | **NO** |
+
+### What passed without DATABASE_URL:
+
+| Script | Result |
+|---|---|
+| verify:smokecraft-database-activation | Exits 0 — setup instructions printed (correct behavior) |
+| verify:smokecraft-database-persistence | 60/60 PASS |
+| verify:smokecraft-final-qa-release-candidate | PASS |
+| verify:smokecraft-enterprise-packaging | PASS |
+| verify:smokecraft-production-sync-readiness | PASS |
+| verify:smokecraft-venue-admin-operations | PASS |
+| verify:smokecraft-rewards-monetization | PASS |
+| verify:smokecraft-pairing-intelligence | PASS |
+| verify:smokecraft-ordering-integration | PASS |
+| verify:smokecraft-experience-module | PASS |
+| verify:module-foundation | PASS |
+| npm run build | PASS |
+
+### What is required to complete Phase A.2 on Railway:
+
+The activation script is deployed and ready. To complete live verification:
+
+1. In Railway dashboard → your project → **Variables** tab
+2. Provision a Postgres database (Railway Postgres plugin or external)
+3. Copy the `DATABASE_URL` connection string into the Variables tab
+4. **Redeploy** the service so the server picks up the new variable
+5. In Railway's **Shell** or your terminal (with Railway env exported):
+   ```
+   npm run db:migrate
+   npm run verify:smokecraft-database-activation
+   ```
+6. The activation script will:
+   - Detect DATABASE_URL (value never printed)
+   - Apply migration 029 (all 18 SmokeCraft tables, `CREATE TABLE IF NOT EXISTS`)
+   - Verify all 17 unique tables exist
+   - Run INSERT → SELECT → DELETE test per table (test data cleaned up)
+   - Mark passing areas `database_verified` in the persistence registry
+   - Report critical area gate: all 8 must pass for Phase B to begin
+7. If exit code is 0 and all 8 critical areas pass → Phase B is safe to start
+
+### DATABASE_URL is never printed at any step. No credentials appear in logs.
+
 ## What Phase B Should Handle Next
 
 **PRODUCTION PHASE B OF L — POS360 Live Connector Implementation**
