@@ -1552,3 +1552,202 @@ export async function getPostPhaseModulePlanHooks(venueId) {
     return { ok: false, venueId, status: 'preview_fallback', degradedMode: true, persistenceStatus: 'preview_fallback' }
   }
 }
+
+// ── NOMPF Module Foundation E.A.T. Hooks ────────────────────────────────────
+
+export async function getModuleFoundationReadinessHooks(venueId) {
+  try {
+    const { buildModuleRegistryReport } = await import('./modules/moduleRegistryService.js')
+    const r = buildModuleRegistryReport()
+    return {
+      hookId: 'module_foundation_readiness', system: 'nompf', venueId,
+      readiness: 'module_foundation_ready',
+      status: r.registryStatus,
+      blockers: [],
+      warnings: r.database_required ? ['database_required'] : [],
+      degradedMode: r.degradedMode,
+      moduleReadiness: r.registryStatus,
+      nextRequiredAction: 'MODULE BUILD 2 — SmokeCraft Experience Module',
+      evidence: { totalModules: r.totalModules, persistenceMode: r.persistenceMode },
+    }
+  } catch {
+    return { ok: false, venueId, hookId: 'module_foundation_readiness', system: 'nompf', status: 'preview_fallback', degradedMode: true }
+  }
+}
+
+export async function getModuleRegistryReadinessHooks(venueId) {
+  try {
+    const { buildModuleRegistryReport } = await import('./modules/moduleRegistryService.js')
+    const r = buildModuleRegistryReport()
+    return {
+      hookId: 'module_registry_readiness', system: 'nompf', venueId,
+      readiness: 'module_registry_ready',
+      status: r.persistenceMode === 'in_memory_only' ? 'module_registry_in_memory_only' : 'module_registry_active',
+      blockers: r.database_required ? ['database_required'] : [],
+      warnings: [],
+      degradedMode: r.degradedMode,
+      moduleReadiness: 'module_registry_active',
+      nextRequiredAction: 'configure DATABASE_URL for durable module registry',
+      evidence: { totalModules: r.totalModules },
+    }
+  } catch {
+    return { ok: false, venueId, hookId: 'module_registry_readiness', system: 'nompf', status: 'preview_fallback', degradedMode: true }
+  }
+}
+
+export async function getModuleDependencyReadinessHooks(venueId) {
+  try {
+    const { getRegisteredModules } = await import('./modules/moduleRegistryService.js')
+    const { validateModuleDependencies } = await import('./modules/moduleDependencyService.js')
+    const modules = getRegisteredModules()
+    const results = modules.map(m => ({ moduleId: m.moduleId, ...validateModuleDependencies(m.moduleId) }))
+    const blocked = results.filter(r => !r.valid)
+    return {
+      hookId: 'module_dependency_readiness', system: 'nompf', venueId,
+      readiness: blocked.length === 0 ? 'dependencies_ready' : 'dependency_preview',
+      status: 'dependency_preview_only',
+      blockers: blocked.map(r => r.moduleId),
+      warnings: [],
+      degradedMode: false,
+      moduleReadiness: 'dependency_checks_preview',
+      nextRequiredAction: 'install module dependencies when module packaging begins',
+      evidence: { total: modules.length, blocked: blocked.length },
+    }
+  } catch {
+    return { ok: false, venueId, hookId: 'module_dependency_readiness', system: 'nompf', status: 'preview_fallback', degradedMode: true }
+  }
+}
+
+export async function getModuleActivationReadinessHooks(venueId) {
+  try {
+    return {
+      hookId: 'module_activation_readiness', system: 'nompf', venueId,
+      readiness: 'activation_preview_ready',
+      status: 'activated_preview',
+      blockers: [],
+      warnings: ['activation_preview_only'],
+      degradedMode: false,
+      moduleReadiness: 'activation_preview',
+      nextRequiredAction: 'implement physical module activation in Module Build 2+',
+      evidence: { activationMode: 'preview_only' },
+    }
+  } catch {
+    return { ok: false, venueId, hookId: 'module_activation_readiness', system: 'nompf', status: 'preview_fallback', degradedMode: true }
+  }
+}
+
+export async function getModuleLifecycleReadinessHooks(venueId) {
+  try {
+    return {
+      hookId: 'module_lifecycle_readiness', system: 'nompf', venueId,
+      readiness: 'lifecycle_hooks_preview_ready',
+      status: 'install_preview_ready',
+      blockers: [],
+      warnings: ['install_uninstall_preview_only'],
+      degradedMode: false,
+      moduleReadiness: 'lifecycle_hooks_ready',
+      nextRequiredAction: 'implement lifecycle execution in Module Build 2+',
+      evidence: { hooks: ['install', 'uninstall', 'enable', 'disable', 'upgrade', 'rollback'] },
+    }
+  } catch {
+    return { ok: false, venueId, hookId: 'module_lifecycle_readiness', system: 'nompf', status: 'preview_fallback', degradedMode: true }
+  }
+}
+
+export async function getModuleVersioningReadinessHooks(venueId) {
+  try {
+    return {
+      hookId: 'module_versioning_readiness', system: 'nompf', venueId,
+      readiness: 'versioning_preview_ready',
+      status: 'upgrade_preview_ready',
+      blockers: [],
+      warnings: ['versioning_preview_only'],
+      degradedMode: false,
+      moduleReadiness: 'versioning_ready',
+      nextRequiredAction: 'implement version enforcement in Module Build 2+',
+      evidence: { versioningMode: 'semver_preview' },
+    }
+  } catch {
+    return { ok: false, venueId, hookId: 'module_versioning_readiness', system: 'nompf', status: 'preview_fallback', degradedMode: true }
+  }
+}
+
+export async function getModulePermissionReadinessHooks(venueId) {
+  try {
+    const { buildModulePermissionReport } = await import('./modules/modulePermissionService.js')
+    const r = buildModulePermissionReport('nompf-core')
+    return {
+      hookId: 'module_permission_readiness', system: 'nompf', venueId,
+      readiness: 'permission_map_ready',
+      status: 'preview_only',
+      blockers: [],
+      warnings: ['permission_map_preview_only'],
+      degradedMode: false,
+      moduleReadiness: 'permission_mapping_ready',
+      nextRequiredAction: 'wire permission map to role middleware in Module Build 2+',
+      evidence: { roles: r.roles?.length, previewOnly: true },
+    }
+  } catch {
+    return { ok: false, venueId, hookId: 'module_permission_readiness', system: 'nompf', status: 'preview_fallback', degradedMode: true }
+  }
+}
+
+export async function getModuleMarketplaceDraftReadinessHooks(venueId) {
+  try {
+    const { buildMarketplaceDraftReadinessReport } = await import('./modules/moduleMarketplaceDraftService.js')
+    const r = buildMarketplaceDraftReadinessReport()
+    return {
+      hookId: 'module_marketplace_draft_readiness', system: 'nompf', venueId,
+      readiness: 'marketplace_draft_ready',
+      status: 'not_live_marketplace',
+      blockers: [],
+      warnings: ['marketplace_not_live', 'listing_drafts_only'],
+      degradedMode: false,
+      moduleReadiness: 'marketplace_draft_ready',
+      nextRequiredAction: 'build live marketplace in Module Build 9',
+      evidence: { eligible: r.marketplaceEligible, live_marketplace: false },
+    }
+  } catch {
+    return { ok: false, venueId, hookId: 'module_marketplace_draft_readiness', system: 'nompf', status: 'preview_fallback', degradedMode: true }
+  }
+}
+
+export async function getModuleLicenseReadinessHooks(venueId) {
+  try {
+    const { buildModuleLicenseReadinessReport } = await import('./modules/moduleLicenseReadinessService.js')
+    const r = buildModuleLicenseReadinessReport()
+    return {
+      hookId: 'module_license_readiness', system: 'nompf', venueId,
+      readiness: 'license_ready_draft',
+      status: 'license_not_enforced',
+      blockers: [],
+      warnings: ['license_gate_required', 'license_not_enforced'],
+      degradedMode: false,
+      moduleReadiness: 'license_requirements_defined',
+      nextRequiredAction: 'implement license enforcement in Module Build 9',
+      evidence: { licenseGateBuilt: r.licenseGateBuilt, totalModules: r.totalModules },
+    }
+  } catch {
+    return { ok: false, venueId, hookId: 'module_license_readiness', system: 'nompf', status: 'preview_fallback', degradedMode: true }
+  }
+}
+
+export async function getInitialModuleManifestReadinessHooks(venueId) {
+  try {
+    const { getInitialModuleManifests } = await import('./modules/initialModuleManifests.js')
+    const manifests = getInitialModuleManifests()
+    return {
+      hookId: 'initial_module_manifest_readiness', system: 'nompf', venueId,
+      readiness: 'initial_manifests_ready',
+      status: 'not_yet_packaged',
+      blockers: [],
+      warnings: ['needs_module_manifest', 'not_yet_packaged'],
+      degradedMode: false,
+      moduleReadiness: 'draft_manifests_ready',
+      nextRequiredAction: 'MODULE BUILD 2 — SmokeCraft Experience Module',
+      evidence: { totalManifests: manifests.length, allStatus: 'not_yet_packaged' },
+    }
+  } catch {
+    return { ok: false, venueId, hookId: 'initial_module_manifest_readiness', system: 'nompf', status: 'preview_fallback', degradedMode: true }
+  }
+}

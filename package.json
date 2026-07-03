@@ -31,7 +31,7 @@
     "verify:ncie-wiring": "node server/scripts/verifyNcieScreenWiring.js",
     "verify:checkout": "node server/scripts/verifyCustomerCheckoutEngine.js",
     "verify:staff": "node server/scripts/verifyStaffOrderTablePatioEngine.js",
-  "verify:staff-dragdrop": "node server/scripts/verifyStaffTableDragDropActivation.js",
+    "verify:staff-dragdrop": "node server/scripts/verifyStaffTableDragDropActivation.js",
     "verify:inventory": "node server/scripts/verifyInventoryAvailabilityEngine.js",
     "verify:reorder-connectors": "node server/scripts/verifyReorderConnectors.js",
     "verify:inventory-persistence-sync": "node server/scripts/verifyInventoryPersistenceSync.js",
@@ -40,7 +40,8 @@
     "verify:external-operations-gateway": "node server/scripts/verifyExternalOperationsGateway.js",
     "verify:final-lockdown": "node server/scripts/verifyFinalLockdown.js",
     "verify:stripe-env": "node server/scripts/verifyStripeEnv.js",
-    "verify:post-phase-audit": "node server/scripts/verifyPostPhaseAudit.js"
+    "verify:post-phase-audit": "node server/scripts/verifyPostPhaseAudit.js",
+    "verify:module-foundation": "node server/scripts/verifyModuleFoundation.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
