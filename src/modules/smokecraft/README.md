@@ -222,8 +222,24 @@ Reward status: `preview_only` billing — no charges created. POS-verified spend
 
 ---
 
-## Module Build 6 Preview
+## MODULE BUILD 6 (Complete)
 
-**MODULE BUILD 6 OF 9 — SmokeCraft Venue Admin, Staff Operations, Analytics Dashboard, and Management Controls**
+MODULE BUILD 6 added the venue admin foundation, staff operations dashboard, venue analytics, management controls, operational audit trail, and role-gated permission service.
 
-Module Build 6 should connect SmokeCraft orders, rewards, pairings, staff queue, venue activity, management sync, and analytics into a venue-facing admin/control layer without weakening customer progression or faking POS/E.A.T. sync.
+See [`docs/SMOKECRAFT_VENUE_ADMIN_OPERATIONS.md`](../../../../docs/SMOKECRAFT_VENUE_ADMIN_OPERATIONS.md) for full documentation.
+
+New backend services: `smokecraftVenueAdminStore.js`, `smokecraftVenueActivityService.js`, `smokecraftStaffOperationsService.js`, `smokecraftAnalyticsService.js`, `smokecraftManagementControlService.js`, `smokecraftOperationalAuditService.js`, `smokecraftVenuePermissionService.js`, `smokecraftAdminDashboardService.js`
+
+New frontend components: `SmokeCraftVenueAdminDashboard`, `SmokeCraftStaffOperationsPanel`, `SmokeCraftVenueAnalyticsPanel`, `SmokeCraftManagementControlsPanel`, `SmokeCraftOperationalAuditPanel`
+
+API: `GET|POST /api/modules/smokecraft/admin/*`
+
+Permission: customer role is blocked. Protected SmokeCraft progression rules cannot be bypassed from admin. POS360: `not_connected`. E.A.T.: `not_connected`/`preview_only`. Persistence: `memory_fallback`.
+
+---
+
+## Module Build 7 Preview
+
+**MODULE BUILD 7 OF 9 — SmokeCraft Live Integrations, Provider Connectors, Database Persistence, and Production Sync Readiness**
+
+Module Build 7 should connect real persistence, provider configuration, integration health checks, POS360/E.A.T. readiness, environment validation, and production sync contracts without faking live vendor connections.
