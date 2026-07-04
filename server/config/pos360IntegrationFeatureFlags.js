@@ -1,0 +1,46 @@
+// POS360 External Integrations — feature flags
+
+export const DEFAULT_POS360_INTEGRATION_FLAGS = {
+  externalIntegrationsEnabled: true,
+  providerProfilesEnabled: true,
+  overlayConnectorsEnabled: true,
+  capabilityRegistryEnabled: true,
+  readinessChecksEnabled: true,
+  credentialMetadataEnabled: true,
+  webhookEndpointsEnabled: true,
+  webhookIntakeEnabled: true,
+  syncJobDefinitionsEnabled: true,
+  syncJobRunsEnabled: true,
+  retryPoliciesEnabled: true,
+  syncErrorLogsEnabled: true,
+  conflictRecordsEnabled: true,
+  reconciliationEnabled: true,
+  dataMappingProfilesEnabled: true,
+  dataMappingRulesEnabled: true,
+  importBatchEnabled: true,
+  exportBatchEnabled: true,
+  dataLineageEnabled: true,
+  eatSyncVisibilityEnabled: true,
+  smokecraftSyncVisibilityEnabled: true,
+  offlineQueueEnabled: true,
+  auditEnabled: true,
+  idempotencyProtectionEnabled: true,
+  canAccessPOS3ProtectionRequired: true,
+  noSecretsStorageEnforced: true,
+  noFakeProviderConnectionEnforced: true,
+  noFakeConnectorConnectionEnforced: true,
+  noFakeWebhookVerificationEnforced: true,
+  noFakeSyncSuccessEnforced: true,
+  noFakeImportSuccessEnforced: true,
+  noFakeExportCompletionEnforced: true,
+  noFakeReconciliationEnforced: true,
+  noFakeCredentialStorageEnforced: true,
+  noFakeEatSyncEnforced: true,
+  noFakeSmokecraftSyncEnforced: true,
+  noFakeOrderDataEnforced: true,
+  noFakePaymentDataEnforced: true,
+};
+
+export function getIntegrationFlags(venueOverrides = {}) {
+  return { ...DEFAULT_POS360_INTEGRATION_FLAGS, ...venueOverrides };
+}

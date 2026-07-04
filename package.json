@@ -67,7 +67,8 @@
     "verify:pos360-payments-closeout": "node server/scripts/verifyPos360PaymentsCloseout.js",
     "verify:pos360-staff-labor-governance": "node server/scripts/verifyPos360StaffLaborGovernance.js",
     "verify:pos360-reports-analytics-decision": "node server/scripts/verifyPos360ReportsAnalyticsDecision.js",
-    "verify:pos360-settings-venue-admin": "node server/scripts/verifyPos360SettingsVenueAdmin.js"
+    "verify:pos360-settings-venue-admin": "node server/scripts/verifyPos360SettingsVenueAdmin.js",
+    "verify:pos360-external-integrations": "node server/scripts/verifyPos360ExternalIntegrations.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
