@@ -73,7 +73,8 @@
     "verify:pos360-self-ordering": "node server/scripts/verifyPos360SelfOrdering.js",
     "verify:pos360-production-readiness": "node server/scripts/verifyPos360ProductionReadiness.js",
     "verify:novee-os-modules": "node server/scripts/verifyNoveeOSModuleRegistry.js",
-    "verify:novee-os-tenants": "node server/scripts/verifyNoveeOSTenantGovernance.js"
+    "verify:novee-os-tenants": "node server/scripts/verifyNoveeOSTenantGovernance.js",
+    "verify:novee-os-billing": "node server/scripts/verifyNoveeOSBillingGovernance.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
