@@ -52,7 +52,8 @@
     "verify:smokecraft-final-qa-release-candidate": "node server/scripts/verifySmokeCraftFinalQaReleaseCandidate.js",
     "verify:smokecraft-database-persistence": "node server/scripts/verifySmokeCraftDatabasePersistence.js",
     "verify:smokecraft-database-activation": "node server/scripts/verifySmokeCraftDatabaseActivation.js",
-    "verify:railway-env": "node server/scripts/verifyRailwayEnv.js"
+    "verify:railway-env": "node server/scripts/verifyRailwayEnv.js",
+    "verify:smokecraft-db-schema": "node server/scripts/verifySmokeCraftDbSchema.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

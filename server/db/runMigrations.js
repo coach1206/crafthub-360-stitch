@@ -9,6 +9,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { resolve } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -286,4 +287,24 @@ export async function getMigrationStatus() {
     migrations,
     pendingCount,
   };
+}
+
+// ── Self-invoke when run directly: `node server/db/runMigrations.js` ──────────
+// Without this block the file only exports functions and npm run db:migrate
+// exits without applying any migrations.
+if (resolve(__filename) === resolve(process.argv[1] ?? '')) {
+  const result = await runMigrations()
+  const ok = result.status === 'migration_applied'
+           || result.status === 'migration_skipped'
+           || result.status === 'database_required'  // no DB = not an error
+  if (result.applied?.length) {
+    console.log(`[runMigrations] Applied migrations: ${result.applied.join(', ')}`)
+  }
+  if (result.skipped?.length) {
+    console.log(`[runMigrations] Already applied (skipped): ${result.skipped.length}`)
+  }
+  if (!ok) {
+    console.error(`[runMigrations] Exit with error: ${result.message ?? result.status}`)
+  }
+  process.exit(ok ? 0 : 1)
 }
