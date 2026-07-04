@@ -28,6 +28,25 @@ CREATE TABLE IF NOT EXISTS smokecraft_orders (
   updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- smokecraft_orders was first created by migration 015 with a narrower schema.
+-- CREATE TABLE IF NOT EXISTS above is a no-op when the table already exists,
+-- so we must backfill missing columns explicitly before creating the indexes.
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS user_id                 TEXT;
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS session_id              TEXT;
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS visit_id                TEXT;
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS server_id               TEXT;
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS order_mode              TEXT;
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS order_status            TEXT        NOT NULL DEFAULT 'draft';
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS items                   JSONB       NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS pairing_recommendations JSONB       NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS customer_notes          TEXT        NOT NULL DEFAULT '';
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS staff_notes             TEXT        NOT NULL DEFAULT '';
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS source_module           TEXT        NOT NULL DEFAULT 'smokecraft-experience';
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS target_system           TEXT;
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS sync_status             TEXT        NOT NULL DEFAULT 'not_connected';
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS pos_sync_status         TEXT        NOT NULL DEFAULT 'not_connected';
+ALTER TABLE smokecraft_orders ADD COLUMN IF NOT EXISTS eat_sync_status         TEXT        NOT NULL DEFAULT 'not_connected';
+
 CREATE INDEX IF NOT EXISTS idx_sc_orders_venue_id      ON smokecraft_orders(venue_id);
 CREATE INDEX IF NOT EXISTS idx_sc_orders_user_id       ON smokecraft_orders(user_id);
 CREATE INDEX IF NOT EXISTS idx_sc_orders_session_id    ON smokecraft_orders(session_id);
