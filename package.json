@@ -59,7 +59,8 @@
     "verify:pos360-handheld": "node server/scripts/verifyPos360HandheldDeviceSuite.js",
     "verify:pos360-production": "node server/scripts/verifyPos360ProductionDisplaySystem.js",
     "verify:pos360-orders": "node server/scripts/verifyPos360OrderLifecycle.js",
-    "verify:pos360-sync": "node server/scripts/verifyPos360OfflineSync.js"
+    "verify:pos360-sync": "node server/scripts/verifyPos360OfflineSync.js",
+    "verify:pos360-payments": "node server/scripts/verifyPos360Payments.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
