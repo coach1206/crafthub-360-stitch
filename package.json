@@ -56,7 +56,8 @@
     "verify:smokecraft-db-schema": "node server/scripts/verifySmokeCraftDbSchema.js",
     "verify:pos360-floor-management": "node server/scripts/verifyPos360FloorManagement.js",
     "verify:pos360-menu-builder": "node server/scripts/verifyPos360MenuBuilder.js",
-    "verify:pos360-handheld": "node server/scripts/verifyPos360HandheldDeviceSuite.js"
+    "verify:pos360-handheld": "node server/scripts/verifyPos360HandheldDeviceSuite.js",
+    "verify:pos360-production": "node server/scripts/verifyPos360ProductionDisplaySystem.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
