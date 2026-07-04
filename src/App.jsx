@@ -51,6 +51,7 @@ import EATOperations from './pages/eat/EATOperations.jsx'
 import EATSmokeCraftPanel from './pages/eat/EATSmokeCraftPanel.jsx'
 import StaffPinScreen from './pages/staff/StaffPinScreen.jsx'
 import POS360SmokeCraftCheckout from './pages/pos360/POS360SmokeCraftCheckout.jsx'
+import POS360FloorManagement from './pages/pos360/POS360FloorManagement.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -582,6 +583,7 @@ export default function App() {
                 <Route path="integrations" element={<POSIntegrationHub />} />
                 <Route path="settings"  element={<POS3Settings />} />
                 <Route path="smokecraft-checkout" element={<POS360SmokeCraftCheckout />} />
+                <Route path="floor-management"  element={<POS360FloorManagement />} />
               </Route>
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
