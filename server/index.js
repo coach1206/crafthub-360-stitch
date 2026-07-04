@@ -58,6 +58,7 @@ import pos3OrderRoutes                  from './routes/pos3OrderRoutes.js'
 import pos360IntegrationRoutes          from './routes/pos360IntegrationRoutes.js'
 import pos360FloorRoutes                from './routes/pos360FloorRoutes.js'
 import pos360MenuBuilderRoutes          from './routes/pos360MenuBuilderRoutes.js'
+import pos360HandheldRoutes             from './routes/pos360HandheldRoutes.js'
 import databaseStatusRoutes            from './routes/databaseStatusRoutes.js'
 import paymentMoneyBridgeRoutes        from './routes/paymentMoneyBridgeRoutes.js'
 import venueOnboardingRoutes           from './routes/venueOnboardingRoutes.js'
@@ -192,6 +193,7 @@ app.use('/api/smokecraft/ticket-tapper',   smokecraftTicketTapperSpecialsRoutes)
 app.use('/api/pos360',                    pos360IntegrationRoutes)
 app.use('/api/pos360/floor',              pos360FloorRoutes)
 app.use('/api/pos360/menu',              pos360MenuBuilderRoutes)
+app.use('/api/pos360/handheld',          pos360HandheldRoutes)
 app.use('/api/system/database',           databaseStatusRoutes)
 app.use('/api/payments/money-bridge',     paymentMoneyBridgeRoutes)
 app.use('/api/onboarding',               venueOnboardingRoutes)
