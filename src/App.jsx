@@ -55,6 +55,7 @@ import POS360FloorManagement from './pages/pos360/POS360FloorManagement.jsx'
 import POS360VenueMenuBuilder from './pages/pos360/POS360VenueMenuBuilder.jsx'
 import POS360HandheldPOS from './pages/pos360/POS360HandheldPOS.jsx'
 import POS360ProductionDisplay from './pages/pos360/POS360ProductionDisplay.jsx'
+import POS360OrderLifecycle from './pages/pos360/POS360OrderLifecycle.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -590,6 +591,7 @@ export default function App() {
                 <Route path="menu-builder"      element={<POS360VenueMenuBuilder />} />
                 <Route path="handheld"          element={<POS360HandheldPOS />} />
                 <Route path="production"        element={<POS360ProductionDisplay />} />
+                <Route path="orders"           element={<POS360OrderLifecycle />} />
               </Route>
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
