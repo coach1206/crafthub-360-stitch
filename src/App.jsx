@@ -68,6 +68,7 @@ import POS360SettingsVenueAdmin from './pages/pos360/POS360SettingsVenueAdmin.js
 import POS360ExternalIntegrations from './pages/pos360/POS360ExternalIntegrations.jsx'
 import POS360FulfillmentKds from './pages/pos360/POS360FulfillmentKds.jsx'
 import POS360SelfOrdering from './pages/pos360/POS360SelfOrdering.jsx'
+import POS360ProductionReadiness from './pages/pos360/POS360ProductionReadiness.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -616,6 +617,7 @@ export default function App() {
                 <Route path="external-integrations" element={<POS360ExternalIntegrations />} />
                 <Route path="fulfillment-kds" element={<POS360FulfillmentKds />} />
                 <Route path="self-ordering" element={<POS360SelfOrdering />} />
+                <Route path="production-readiness" element={<POS360ProductionReadiness />} />
               </Route>
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}

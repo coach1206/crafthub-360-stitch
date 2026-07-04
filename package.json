@@ -70,7 +70,8 @@
     "verify:pos360-settings-venue-admin": "node server/scripts/verifyPos360SettingsVenueAdmin.js",
     "verify:pos360-external-integrations": "node server/scripts/verifyPos360ExternalIntegrations.js",
     "verify:pos360-fulfillment-kds": "node server/scripts/verifyPos360FulfillmentKds.js",
-    "verify:pos360-self-ordering": "node server/scripts/verifyPos360SelfOrdering.js"
+    "verify:pos360-self-ordering": "node server/scripts/verifyPos360SelfOrdering.js",
+    "verify:pos360-production-readiness": "node server/scripts/verifyPos360ProductionReadiness.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
