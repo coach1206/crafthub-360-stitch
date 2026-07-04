@@ -1,0 +1,46 @@
+// POS360 Self-Ordering — feature flags
+
+export const DEFAULT_POS360_SELF_ORDERING_FLAGS = {
+  selfOrderingEnabled: true,
+  qrMenuSessionsEnabled: true,
+  selfOrderCartsEnabled: true,
+  selfOrderCartItemsEnabled: true,
+  selfOrderSubmissionsEnabled: true,
+  handheldPosSessionsEnabled: true,
+  handheldOrderEntriesEnabled: true,
+  tableOrderingSessionsEnabled: true,
+  guestCheckoutHandoffsEnabled: true,
+  qrCodeRegistryEnabled: true,
+  menuAvailabilitySnapshotsEnabled: true,
+  ageVerificationRecordsEnabled: true,
+  modifierSelectionsEnabled: true,
+  menuItemAvailabilityOverridesEnabled: true,
+  selfOrderOfflineQueueEnabled: true,
+  handheldOfflineQueueEnabled: true,
+  selfOrderVisibilityInsightsEnabled: true,
+  smokecraftSelfOrderHooksEnabled: true,
+  eatSelfOrderHandoffsEnabled: true,
+  multilingualSelfOrderingEnabled: true,
+  privateDataSelfOrderProtectionEnabled: true,
+  financialDataSelfOrderProtectionEnabled: true,
+  noFakeSelfOrderCompletionEnforced: true,
+  noFakePaymentEnforced: true,
+  noFakeExternalPosOrderEnforced: true,
+  noFakeKdsAcceptanceEnforced: true,
+  noFakeMenuAvailabilityEnforced: true,
+  noFakeInventoryDeductionEnforced: true,
+  noFakeAgeVerificationEnforced: true,
+  noFakeEatAiEnforced: true,
+  noFakeSmokecraftSyncEnforced: true,
+  noSecretsStorageEnforced: true,
+  canAccessPOS3ProtectionRequired: true,
+  offlineSelfOrderQueueEnabled: true,
+  qrScanRateTrackingEnabled: true,
+  cartAbandonmentInsightsEnabled: true,
+  tableSelfOrderCoverCountEnabled: true,
+  ageGatingCigarAndAlcoholEnabled: true,
+};
+
+export function getSelfOrderingFlags(venueOverrides = {}) {
+  return { ...DEFAULT_POS360_SELF_ORDERING_FLAGS, ...venueOverrides };
+}
