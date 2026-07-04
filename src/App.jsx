@@ -60,6 +60,7 @@ import POS360OfflineSync from './pages/pos360/POS360OfflineSync.jsx'
 import POS360Payments from './pages/pos360/POS360Payments.jsx'
 import POS360CustomerLoyalty from './pages/pos360/POS360CustomerLoyalty.jsx'
 import POS360ReservationsGuestFlow from './pages/pos360/POS360ReservationsGuestFlow.jsx'
+import POS360EventPackagesMonetization from './pages/pos360/POS360EventPackagesMonetization.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -600,6 +601,7 @@ export default function App() {
                 <Route path="payments"         element={<POS360Payments />} />
                 <Route path="guests"           element={<POS360CustomerLoyalty />} />
                 <Route path="reservations"    element={<POS360ReservationsGuestFlow />} />
+                <Route path="event-packages"  element={<POS360EventPackagesMonetization />} />
               </Route>
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}

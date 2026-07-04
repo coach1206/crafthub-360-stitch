@@ -62,7 +62,8 @@
     "verify:pos360-sync": "node server/scripts/verifyPos360OfflineSync.js",
     "verify:pos360-payments": "node server/scripts/verifyPos360Payments.js",
     "verify:pos360-guests": "node server/scripts/verifyPos360CustomerLoyalty.js",
-    "verify:pos360-reservations": "node server/scripts/verifyPos360ReservationsGuestFlow.js"
+    "verify:pos360-reservations": "node server/scripts/verifyPos360ReservationsGuestFlow.js",
+    "verify:pos360-event-packages": "node server/scripts/verifyPos360EventPackagesMonetization.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
