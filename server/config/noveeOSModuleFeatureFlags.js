@@ -1,0 +1,48 @@
+// NOVEE OS Module Registry Feature Flags
+
+export const DEFAULT_NOVEE_OS_MODULE_FLAGS = {
+  noveeOSModuleRegistryEnabled: true,
+  platformControlCenterEnabled: true,
+  moduleVersioningEnabled: true,
+  moduleRoutesEnabled: true,
+  moduleFrontendRoutesEnabled: true,
+  moduleDependenciesEnabled: true,
+  modulePermissionsEnabled: true,
+  moduleFeatureFlagsEnabled: true,
+  moduleInstallationsEnabled: true,
+  moduleActivationStatesEnabled: true,
+  tenantAvailabilityEnabled: true,
+  venueAvailabilityEnabled: true,
+  planRequirementsEnabled: true,
+  licenseRequirementsEnabled: true,
+  demoLiveModeControlsEnabled: true,
+  moduleReadinessRecordsEnabled: true,
+  moduleHealthChecksEnabled: true,
+  moduleRollbackEnabled: true,
+  platformControlSnapshotsEnabled: true,
+  moduleAuditEnabled: true,
+  installableModulesEnabled: true,
+  marketplacePlaceholderEnabled: true,
+  craftModulesEnabled: true,
+  posModulesEnabled: true,
+  managementModulesEnabled: true,
+  integrationModulesEnabled: true,
+  moduleSearchEnabled: true,
+  moduleFilteringEnabled: true,
+  moduleStatusBadgesEnabled: true,
+  moduleSafeClaimsEnabled: true,
+  moduleUnsafeClaimsEnabled: true,
+  noFakeInstallEnforced: true,
+  noFakeActivationEnforced: true,
+  noFakeMarketplacePurchaseEnforced: true,
+  noFakeLicenseVerificationEnforced: true,
+  noFakeBillingConnectionEnforced: true,
+  noFakeDeploymentEnforced: true,
+  noFakeProviderConnectionEnforced: true,
+  noSecretsStorageEnforced: true,
+  platformAdminGuardRequired: true,
+};
+
+export function getNoveeOSModuleFlags(overrides = {}) {
+  return { ...DEFAULT_NOVEE_OS_MODULE_FLAGS, ...overrides };
+}

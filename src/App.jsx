@@ -69,6 +69,7 @@ import POS360ExternalIntegrations from './pages/pos360/POS360ExternalIntegration
 import POS360FulfillmentKds from './pages/pos360/POS360FulfillmentKds.jsx'
 import POS360SelfOrdering from './pages/pos360/POS360SelfOrdering.jsx'
 import POS360ProductionReadiness from './pages/pos360/POS360ProductionReadiness.jsx'
+import NoveeOSModuleRegistry    from './pages/noveeOS/NoveeOSModuleRegistry.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -619,6 +620,9 @@ export default function App() {
                 <Route path="self-ordering" element={<POS360SelfOrdering />} />
                 <Route path="production-readiness" element={<POS360ProductionReadiness />} />
               </Route>
+
+              {/* ── NOVEE OS — module registry ─────────────────────── */}
+              <Route path="novee-os/modules" element={<NoveeOSModuleRegistry />} />
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
               {/* ── Protected: manager+ — BLOCKED in demo mode ────── */}
