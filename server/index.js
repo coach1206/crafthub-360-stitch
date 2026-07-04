@@ -69,6 +69,7 @@ import pos360EventPackageMonetizationRoutes from './routes/pos360EventPackageMon
 import pos360PaymentCloseoutRoutes from './routes/pos360PaymentCloseoutRoutes.js'
 import pos360StaffLaborGovernanceRoutes from './routes/pos360StaffLaborGovernanceRoutes.js'
 import pos360ReportsAnalyticsDecisionRoutes from './routes/pos360ReportsAnalyticsDecisionRoutes.js'
+import pos360SettingsVenueAdminRoutes from './routes/pos360SettingsVenueAdminRoutes.js'
 import databaseStatusRoutes            from './routes/databaseStatusRoutes.js'
 import paymentMoneyBridgeRoutes        from './routes/paymentMoneyBridgeRoutes.js'
 import venueOnboardingRoutes           from './routes/venueOnboardingRoutes.js'
@@ -214,6 +215,7 @@ app.use('/api/pos360/event-packages',  pos360EventPackageMonetizationRoutes)
 app.use('/api/pos360/payments-closeout', pos360PaymentCloseoutRoutes)
 app.use('/api/pos360/staff',              pos360StaffLaborGovernanceRoutes)
 app.use('/api/pos360/reports',            pos360ReportsAnalyticsDecisionRoutes)
+app.use('/api/pos360/settings',           pos360SettingsVenueAdminRoutes)
 app.use('/api/system/database',           databaseStatusRoutes)
 app.use('/api/payments/money-bridge',     paymentMoneyBridgeRoutes)
 app.use('/api/onboarding',               venueOnboardingRoutes)

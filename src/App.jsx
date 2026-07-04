@@ -64,6 +64,7 @@ import POS360EventPackagesMonetization from './pages/pos360/POS360EventPackagesM
 import POS360PaymentsCloseout from './pages/pos360/POS360PaymentsCloseout.jsx'
 import POS360StaffLaborGovernance from './pages/pos360/POS360StaffLaborGovernance.jsx'
 import POS360ReportsAnalyticsDecision from './pages/pos360/POS360ReportsAnalyticsDecision.jsx'
+import POS360SettingsVenueAdmin from './pages/pos360/POS360SettingsVenueAdmin.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -608,6 +609,7 @@ export default function App() {
                 <Route path="payments-closeout" element={<POS360PaymentsCloseout />} />
                 <Route path="staff-labor-governance" element={<POS360StaffLaborGovernance />} />
                 <Route path="reports-analytics-decision" element={<POS360ReportsAnalyticsDecision />} />
+                <Route path="settings-venue-admin" element={<POS360SettingsVenueAdmin />} />
               </Route>
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
