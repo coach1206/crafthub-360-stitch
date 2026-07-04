@@ -41,19 +41,33 @@ const CONNECTED_SYSTEMS = [
   ['Kitchen Display', 'soup_kitchen'], ['Humidor Lock', 'lock'],
 ]
 
+// Reference image: /smokecraft-pos360.png — approved POS360 SmokeCraft visual
+// (left panel = Floor Management, right panel = Order Entry handheld view)
 const STATUS_DOT = {
-  open: '#2f9e5b', seated: '#c9952c', occupied: '#c9952c', busy: '#c9952c',
+  open: '#2f9e5b', seated: '#3a6ea8', occupied: '#3a6ea8', busy: '#c9952c',
   reserved: '#7e57c2', needsService: '#c0443a', cleaning: '#6b7385', vip: '#c9952c',
 }
+const STATUS_CARD_BG = {
+  open: 'rgba(20,54,34,0.92)', seated: 'rgba(20,38,68,0.92)', occupied: 'rgba(20,38,68,0.92)',
+  busy: 'rgba(54,34,0,0.92)', reserved: 'rgba(40,28,80,0.92)',
+  needsService: 'rgba(58,14,12,0.92)', cleaning: 'rgba(30,32,36,0.88)', vip: 'rgba(54,38,0,0.92)',
+}
 const STATUS_LABEL = {
-  open: 'Available', seated: 'Occupied', occupied: 'Occupied', busy: 'Occupied',
-  reserved: 'Reserved', needsService: 'Needs Attention', cleaning: 'Out of Service', vip: 'Occupied',
+  open: 'Available', seated: 'Seated', occupied: 'Seated', busy: 'Ordering',
+  reserved: 'Reserved', needsService: 'Needs Assist.', cleaning: 'Check Req.', vip: 'VIP',
 }
 const STATUS_ICON = {
-  open: 'check_circle', seated: 'table_bar', occupied: 'table_bar', busy: 'table_bar',
-  reserved: 'event_available', needsService: 'priority_high', cleaning: 'cleaning_services', vip: 'star',
+  open: 'check_circle', seated: 'table_bar', occupied: 'table_bar', busy: 'receipt_long',
+  reserved: 'event_available', needsService: 'priority_high', cleaning: 'receipt', vip: 'star',
 }
 const isOccupied = (s) => s === 'seated' || s === 'busy' || s === 'occupied'
+
+// Dark background color constants for the reference-aligned dark POS theme
+const DARK_BG   = '#080604'
+const DARK_CARD = 'rgba(20,15,8,0.88)'
+const DARK_LINE = 'rgba(201,149,44,0.18)'
+const DARK_TEXT = '#f3eee1'
+const DARK_MUTE = 'rgba(243,238,225,0.5)'
 
 const ZONE_ACCENT = { round: '#3a6ea8', square: '#5a6b80', rect: '#5a6b80', booth: '#7e57c2', chair: '#2f9e5b' }
 
@@ -75,10 +89,13 @@ const UPCOMING_EVENTS = [
   { name: 'Cigar Pairing Dinner', when: 'Sat, May 17 · 9:00 PM', seats: '12 / 25 Seats', status: 'Limited' },
 ]
 
-/** Thin functional overlay chip for a table — number, status ring, optional VIP/staff marker, selection glow, touch target. The real venue image underneath carries all furniture/floor realism; this only adds function. */
+/** Colored rectangular table card matching the SMOKECRAFT POS360 reference design.
+ *  Status = background color tier; number + elapsed time shown inside the card. */
 function FloorTable({ table, selected, onSelect, editable, onDragStart }) {
-  const dot = STATUS_DOT[table.status] || STATUS_DOT.open
-  const size = 36
+  const statusColor  = STATUS_DOT[table.status]  || STATUS_DOT.open
+  const cardBg       = STATUS_CARD_BG[table.status] || STATUS_CARD_BG.open
+  const elapsed      = table.elapsedTime || table.elapsed || null
+
   return (
     <button
       type="button"
@@ -88,28 +105,31 @@ function FloorTable({ table, selected, onSelect, editable, onDragStart }) {
       title={`Table ${table.tableNumber} — ${STATUS_LABEL[table.status] || 'Available'}`}
       style={{
         position: 'absolute', left: `${table.x ?? 10}%`, top: `${table.y ?? 10}%`, zIndex: 1,
-        width: 44, height: 44, transform: 'translate(-50%,-50%)',
-        cursor: editable ? 'grab' : 'pointer', border: 'none', background: 'transparent', padding: 0,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', touchAction: editable ? 'none' : 'auto',
+        width: 46, height: elapsed ? 50 : 42,
+        transform: 'translate(-50%,-50%)',
+        cursor: editable ? 'grab' : 'pointer', border: 'none', padding: 0,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        touchAction: editable ? 'none' : 'auto',
+        borderRadius: 9,
+        background: selected ? `linear-gradient(160deg, ${statusColor}55, ${statusColor}22)` : cardBg,
+        border: `2px solid ${selected ? GOLD : statusColor}`,
+        boxShadow: selected
+          ? `0 0 0 3px rgba(201,149,44,0.35), 0 0 12px ${statusColor}88, 0 2px 8px rgba(0,0,0,0.6)`
+          : `0 0 8px ${statusColor}44, 0 2px 6px rgba(0,0,0,0.5)`,
       }}
     >
-      <span style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        width: size, height: size, borderRadius: '50%',
-        border: `2px solid ${selected ? GOLD : dot}`,
-        background: selected ? 'rgba(28,18,6,0.62)' : 'rgba(10,8,5,0.56)',
-        color: '#fbf6ea', fontSize: 12, fontWeight: 700, letterSpacing: '0.01em',
-        textShadow: '0 1px 2px rgba(0,0,0,0.8)',
-        boxShadow: selected
-          ? `0 0 0 3px rgba(201,149,44,0.32), 0 0 8px rgba(201,149,44,0.55)`
-          : '0 2px 5px rgba(0,0,0,0.45)',
-      }}>
-        T{table.tableNumber}
+      <span style={{ fontSize: 13, fontWeight: 800, color: '#fff', lineHeight: 1, textShadow: '0 1px 3px rgba(0,0,0,0.9)', letterSpacing: '0.01em' }}>
+        {table.tableNumber}
       </span>
+      {elapsed && (
+        <span style={{ fontSize: 9.5, fontWeight: 600, color: statusColor, lineHeight: 1, marginTop: 2, textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
+          {elapsed}
+        </span>
+      )}
       {table.vip && (
         <span className="material-symbols-outlined" style={{
-          position: 'absolute', top: -2, right: -2, fontSize: 12, color: GOLD,
-          background: '#1c1206', borderRadius: '50%', border: `1px solid ${GOLD}`, padding: 1, lineHeight: 1,
+          position: 'absolute', top: -5, right: -5, fontSize: 11, color: GOLD,
+          background: '#0a0600', borderRadius: '50%', border: `1px solid ${GOLD}`, padding: 1.5, lineHeight: 1,
         }}>star</span>
       )}
     </button>
@@ -592,16 +612,18 @@ export default function POS360TableManagement() {
   ]
 
   return (
-    <div style={{ height: '100vh', overflow: 'hidden', display: 'flex', fontFamily: 'system-ui, sans-serif', background: IVORY }}>
+    <div style={{ height: '100vh', overflow: 'hidden', display: 'flex', fontFamily: 'system-ui, sans-serif', background: DARK_BG }}>
       {/* LEFT RAIL */}
       <nav style={{
         width: 220, flexShrink: 0, display: 'flex', flexDirection: 'column', padding: '18px 14px', overflowY: 'auto',
-        background: `linear-gradient(190deg, ${NAVY_SOFT} 0%, ${NAVY} 60%, #0e2040 100%)`, borderRight: '1px solid rgba(201,149,44,0.25)',
+        background: `linear-gradient(190deg, #121008 0%, #0e0b06 60%, #080604 100%)`, borderRight: `1px solid ${DARK_LINE}`,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '2px 4px 0' }}>
-          <span style={{ color: GOLD, fontWeight: 800, fontSize: 18, letterSpacing: '0.04em' }}>POS360</span>
+        {/* Crown + POS360 + NOVEE OS — matches reference header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '2px 4px 0' }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 18, color: GOLD }}>workspace_premium</span>
+          <span style={{ color: GOLD, fontWeight: 800, fontSize: 17, letterSpacing: '0.04em' }}>POS360</span>
         </div>
-        <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, fontWeight: 700, padding: '0 4px 16px', letterSpacing: '0.08em' }}>THE VAULT LOUNGE</div>
+        <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 9.5, fontWeight: 700, padding: '1px 4px 16px', letterSpacing: '0.12em' }}>NOVEE OS</div>
         {NAV_ITEMS.map(([label, to, icon]) => {
           const active = label === 'Tables'
           return (
@@ -641,17 +663,23 @@ export default function POS360TableManagement() {
       </nav>
 
       {/* MAIN */}
-      <div style={{ flex: 1, overflowY: 'auto', position: 'relative' }}>
-        <div style={{ padding: '16px 22px 28px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', position: 'relative', background: DARK_BG }}>
+        <div style={{ padding: '14px 20px 28px' }}>
           {/* TOP BAR */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
             <div>
-              <div style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: GOLD_DEEP, fontWeight: 700 }}>Table Management</div>
-              <select value={section} onChange={(e) => { setSection(e.target.value); setSelectedId(null); setSelectedObjectId(null) }} style={{
-                fontSize: 20, fontWeight: 800, color: NAVY, border: 'none', background: 'transparent', marginTop: 2, cursor: 'pointer',
-              }}>
-                {sections.map((s) => <option key={s} value={s}>The Vault Lounge — {s}</option>)}
-              </select>
+              <div style={{ fontSize: 9.5, letterSpacing: '0.12em', textTransform: 'uppercase', color: GOLD, fontWeight: 700, marginBottom: 2 }}>FLOOR</div>
+              {/* Zone pill tabs — matches reference horizontal zone selector */}
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {sections.map((s) => (
+                  <button key={s} type="button" onClick={() => { setSection(s); setSelectedId(null); setSelectedObjectId(null) }} style={{
+                    padding: '5px 12px', borderRadius: 20, border: `1px solid ${s === section ? GOLD : 'rgba(255,255,255,0.18)'}`,
+                    background: s === section ? GOLD : 'rgba(255,255,255,0.06)',
+                    color: s === section ? '#0a0600' : 'rgba(255,255,255,0.78)',
+                    fontSize: 11.5, fontWeight: s === section ? 800 : 600, cursor: 'pointer', whiteSpace: 'nowrap', letterSpacing: '0.03em',
+                  }}>{s.toUpperCase()}</button>
+                ))}
+              </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <CommandTouchButton style={{ minHeight: 46, padding: '0 16px' }}>
@@ -690,17 +718,17 @@ export default function POS360TableManagement() {
           </div>
 
           {/* KPI STRIP */}
-          <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
             {KPI.map(([label, value, sub, icon, accent]) => (
               <div key={label} className="vault-panel" style={{
-                flex: '1 1 150px', background: 'linear-gradient(165deg,#ffffff,#fbf8f1)', border: `1px solid ${LINE}`, borderRadius: 14, padding: '10px 14px',
-                boxShadow: '0 3px 10px rgba(19,41,75,0.08)', display: 'flex', alignItems: 'center', gap: 10,
+                flex: '1 1 140px', background: 'rgba(20,15,8,0.82)', border: `1px solid ${DARK_LINE}`, borderRadius: 12, padding: '9px 13px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', gap: 9,
               }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 18, color: accent }}>{icon}</span>
+                <span className="material-symbols-outlined" style={{ fontSize: 17, color: accent }}>{icon}</span>
                 <div>
-                  <div style={{ fontSize: 9.5, textTransform: 'uppercase', letterSpacing: '0.06em', color: SLATE, fontWeight: 700 }}>{label}</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: NAVY }}>{value}</div>
-                  <div style={{ fontSize: 10, color: SLATE }}>{sub}</div>
+                  <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.07em', color: DARK_MUTE, fontWeight: 700 }}>{label}</div>
+                  <div style={{ fontSize: 17, fontWeight: 800, color: DARK_TEXT }}>{value}</div>
+                  <div style={{ fontSize: 9.5, color: DARK_MUTE }}>{sub}</div>
                 </div>
               </div>
             ))}
@@ -818,39 +846,37 @@ export default function POS360TableManagement() {
                   Floor plan changes are local/demo until backend persistence is connected.
                 </div>
               </div>
+              {/* STATUS LEGEND — matches reference palette */}
               <div style={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, flexWrap: 'wrap', gap: 10,
-                background: IVORY_PANEL, border: `1px solid ${LINE}`, borderRadius: 12, padding: '8px 14px',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, flexWrap: 'wrap', gap: 8,
+                background: 'rgba(20,15,8,0.75)', border: `1px solid ${DARK_LINE}`, borderRadius: 10, padding: '7px 12px',
               }}>
-                <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-                  {[['Available', '#2f9e5b'], ['Occupied', '#c9952c'], ['Reserved', '#7e57c2'], ['VIP', GOLD], ['Needs Attention', '#c0443a'], ['Offline', '#6b7385']].map(([label, color]) => (
-                    <span key={label} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: NAVY, fontWeight: 600 }}>
-                      <span style={{ width: 8, height: 8, borderRadius: '50%', background: color }} />{label}
+                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                  {[['Available','#2f9e5b'],['Seated','#3a6ea8'],['Ordering','#c9952c'],['Kitchen','#c0443a'],['Drinks','#7e57c2'],['Cigar Service','#8a5a2b'],['Check Req.','#6b7385'],['VIP',GOLD]].map(([label, color]) => (
+                    <span key={label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: DARK_MUTE, fontWeight: 600 }}>
+                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: color, boxShadow: `0 0 4px ${color}88` }} />{label}
                     </span>
                   ))}
                 </div>
-                <CommandTouchButton style={{ minHeight: 34, padding: '0 14px', fontSize: 11.5 }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: 14, marginRight: 4, verticalAlign: '-2px' }}>filter_list</span>Filters
-                </CommandTouchButton>
               </div>
             </div>
 
-            {/* RIGHT FLOATING DETAIL PANEL */}
+            {/* RIGHT FLOATING DETAIL PANEL — dark card matching reference */}
             <div style={{
-              width: 300, flexShrink: 0, borderRadius: 18, background: 'linear-gradient(165deg,#ffffff,#fbf8f1)',
-              border: `1px solid ${LINE}`, boxShadow: '0 10px 30px rgba(19,41,75,0.18)', padding: 16,
+              width: 304, flexShrink: 0, borderRadius: 18, background: 'linear-gradient(165deg,#141008,#0e0b06)',
+              border: `1px solid ${DARK_LINE}`, boxShadow: '0 10px 30px rgba(0,0,0,0.55)', padding: 16, display: 'flex', flexDirection: 'column', gap: 0,
             }}>
               {selectedObject ? (
                 <>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                    <div style={{ fontSize: 15, fontWeight: 800, color: NAVY }}>{FLOOR_OBJECT_TYPE_MAP[selectedObject.objectType]?.label || 'Floor Object'}</div>
+                    <div style={{ fontSize: 14, fontWeight: 800, color: DARK_TEXT }}>{FLOOR_OBJECT_TYPE_MAP[selectedObject.objectType]?.label || 'Floor Object'}</div>
                     <div style={{ display: 'flex', gap: 6 }}>
                       {selectedObject.vip && <CommandStatusBadge color={GOLD_DEEP} icon="workspace_premium">VIP</CommandStatusBadge>}
-                      {selectedObject.locked && <CommandStatusBadge color={SLATE} icon="lock">Locked</CommandStatusBadge>}
+                      {selectedObject.locked && <CommandStatusBadge color={DARK_MUTE} icon="lock">Locked</CommandStatusBadge>}
                     </div>
                   </div>
                   <select value={selectedObject.objectType} onChange={(e) => setFloorObjects(updateFloorObjectType(selectedObject.id, e.target.value))} style={{
-                    width: '100%', minHeight: 44, padding: '0 10px', borderRadius: 10, border: `1px solid ${LINE}`, background: IVORY, color: NAVY, fontSize: 12.5, fontWeight: 700, marginBottom: 10,
+                    width: '100%', minHeight: 42, padding: '0 10px', borderRadius: 10, border: `1px solid ${DARK_LINE}`, background: '#1a1208', color: DARK_TEXT, fontSize: 12.5, fontWeight: 700, marginBottom: 10,
                   }}>
                     {FLOOR_OBJECT_TYPES.map((o) => <option key={o.type} value={o.type}>{o.label}</option>)}
                   </select>
@@ -859,16 +885,16 @@ export default function POS360TableManagement() {
                     ['Section', selectedObject.section || '—'],
                     ['Seats', selectedObject.seats ?? 0],
                     ['Status', selectedObject.status || 'open'],
-                    ['Assigned Staff', selectedObject.assignedStaff || 'Unassigned'],
-                    ['Position (x, y)', `${Math.round(selectedObject.x)}%, ${Math.round(selectedObject.y)}%`],
+                    ['Staff', selectedObject.assignedStaff || 'Unassigned'],
+                    ['Position', `${Math.round(selectedObject.x)}%, ${Math.round(selectedObject.y)}%`],
                     ['Rotation', `${selectedObject.rotation || 0}°`],
                   ].map(([label, value]) => (
-                    <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: SLATE, padding: '5px 0', borderTop: `1px solid ${LINE}` }}>
-                      <span>{label}</span><strong style={{ color: NAVY }}>{value}</strong>
+                    <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: DARK_MUTE, padding: '5px 0', borderTop: `1px solid ${DARK_LINE}` }}>
+                      <span>{label}</span><strong style={{ color: DARK_TEXT }}>{value}</strong>
                     </div>
                   ))}
                   <select onChange={(e) => e.target.value && setFloorObjects(assignStaffToFloorObject(selectedObject.id, e.target.value))} value="" style={{
-                    width: '100%', marginTop: 8, minHeight: 40, padding: '0 10px', borderRadius: 10, border: `1px solid ${LINE}`, background: IVORY, color: NAVY, fontSize: 12,
+                    width: '100%', marginTop: 8, minHeight: 40, padding: '0 10px', borderRadius: 10, border: `1px solid ${DARK_LINE}`, background: '#1a1208', color: DARK_TEXT, fontSize: 12,
                   }}>
                     <option value="">Assign / Reassign Staff…</option>
                     {staff.map((s) => <option key={s.id} value={s.name}>{s.name} ({s.role})</option>)}
@@ -876,7 +902,7 @@ export default function POS360TableManagement() {
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 5, marginTop: 8 }}>
                     {[['arrow_upward', () => handleNudgeObject(0, -2)], ['arrow_downward', () => handleNudgeObject(0, 2)], ['arrow_back', () => handleNudgeObject(-2, 0)], ['arrow_forward', () => handleNudgeObject(2, 0)]].map(([ic, fn]) => (
                       <button key={ic} type="button" className="vault-touch-btn" onClick={fn} title="Move" style={{
-                        minHeight: 32, borderRadius: 8, border: `1px solid ${LINE}`, background: IVORY, color: NAVY, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        minHeight: 32, borderRadius: 8, border: `1px solid ${DARK_LINE}`, background: '#1a1208', color: DARK_TEXT, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
                         <span className="material-symbols-outlined" style={{ fontSize: 15 }}>{ic}</span>
                       </button>
@@ -884,74 +910,165 @@ export default function POS360TableManagement() {
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginTop: 8 }}>
                     {['Open Table', 'Edit Object', 'Move Object', 'VIP', 'Duplicate', 'Rotate', 'Lock', 'Save Layout', 'Delete'].map((tool) => (
-                      <CommandTouchButton key={tool} onClick={() => handleObjectTool(tool)} style={{
-                        minHeight: 42, fontSize: 11.5, ...(tool === 'Delete' ? { border: '1px solid rgba(192,68,58,0.4)', color: '#c0443a' } : {}),
-                      }}>{tool === 'VIP' ? (selectedObject.vip ? 'Unmark VIP' : 'Mark VIP') : tool === 'Lock' ? (selectedObject.locked ? 'Unlock' : 'Lock') : tool}</CommandTouchButton>
+                      <button key={tool} type="button" onClick={() => handleObjectTool(tool)} style={{
+                        minHeight: 38, fontSize: 11, borderRadius: 9, border: `1px solid ${tool === 'Delete' ? 'rgba(192,68,58,0.5)' : DARK_LINE}`,
+                        background: tool === 'Delete' ? 'rgba(192,68,58,0.12)' : 'rgba(255,255,255,0.05)',
+                        color: tool === 'Delete' ? '#c0443a' : DARK_TEXT, cursor: 'pointer', fontWeight: 600,
+                      }}>{tool === 'VIP' ? (selectedObject.vip ? 'Unmark VIP' : 'Mark VIP') : tool === 'Lock' ? (selectedObject.locked ? 'Unlock' : 'Lock') : tool}</button>
                     ))}
                   </div>
                 </>
               ) : !selected ? (
-                <div style={{ fontSize: 12.5, color: SLATE, textAlign: 'center', marginTop: 30 }}>Tap a table or floor object to view live detail.</div>
+                /* No selection — show handheld POS reference panel */
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                  <div style={{ fontSize: 10.5, fontWeight: 700, color: GOLD, letterSpacing: '0.08em', textAlign: 'center', textTransform: 'uppercase' }}>POS360 Reference</div>
+                  <img
+                    src="/smokecraft-pos360.png"
+                    alt="SMOKECRAFT POS360 handheld reference — approved visual anchor"
+                    style={{ width: '100%', borderRadius: 12, border: `1px solid ${DARK_LINE}`, objectFit: 'cover', maxHeight: 380, objectPosition: 'top' }}
+                  />
+                  <div style={{ fontSize: 10, color: DARK_MUTE, textAlign: 'center', lineHeight: 1.4 }}>
+                    Tap any table to view guest intelligence and SmokeCraft journey.
+                  </div>
+                </div>
               ) : (
                 <>
+                  {/* TABLE HEADER — TABLE 28 ★ style */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                    <div style={{ fontSize: 16, fontWeight: 800, color: NAVY }}>TABLE T{selected.tableNumber}</div>
-                    <button type="button" onClick={() => setSelectedId(null)} style={{ border: 'none', background: 'none', cursor: 'pointer', color: SLATE }}>
-                      <span className="material-symbols-outlined" style={{ fontSize: 18 }}>close</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: DARK_TEXT }}>TABLE {selected.tableNumber}</span>
+                      {selected.vip && <span className="material-symbols-outlined" style={{ fontSize: 15, color: GOLD }}>star</span>}
+                      <span style={{
+                        fontSize: 10, fontWeight: 800, padding: '2px 7px', borderRadius: 6,
+                        background: `${STATUS_DOT[selected.status]}22`, border: `1px solid ${STATUS_DOT[selected.status]}`,
+                        color: STATUS_DOT[selected.status],
+                      }}>{STATUS_LABEL[selected.status] || 'Available'}</span>
+                    </div>
+                    <button type="button" onClick={() => setSelectedId(null)} style={{ border: 'none', background: 'none', cursor: 'pointer', color: DARK_MUTE }}>
+                      <span className="material-symbols-outlined" style={{ fontSize: 17 }}>close</span>
                     </button>
                   </div>
-                  <div style={{
-                    height: 100, borderRadius: 12, marginBottom: 10, background: `linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.5)), url('/background-lounge-airy.jpg') center/cover`,
-                  }} />
-                  <div style={{ marginBottom: 10 }}>
-                    <CommandStatusBadge color={STATUS_DOT[selected.status]} icon={STATUS_ICON[selected.status]}>{STATUS_LABEL[selected.status] || 'Available'}</CommandStatusBadge>
-                  </div>
-                  {[
-                    ['Guests', selected.guests || 0],
-                    ['Server', selected.serverName || 'Unassigned'],
-                    ['Order Total', selected.checkTotal ? `$${selected.checkTotal.toFixed(2)}` : '—'],
-                    ['Location', `${selected.section} · Section ${selected.tableNumber}`],
-                  ].map(([label, value]) => (
-                    <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, color: SLATE, padding: '6px 0', borderTop: `1px solid ${LINE}` }}>
-                      <span>{label}</span><strong style={{ color: NAVY }}>{value}</strong>
+
+                  {/* GUEST CARD — matches reference Alexander Martin / VIP / Loyalty: PLATINUM style */}
+                  {guestMemory && (
+                    <div style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${DARK_LINE}`, borderRadius: 12, padding: '10px 12px', marginBottom: 10 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                        <div style={{
+                          width: 40, height: 40, borderRadius: '50%', background: `linear-gradient(135deg,${GOLD},#8a5a1a)`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, color: '#1c1206', flexShrink: 0,
+                        }}>
+                          {guestMemory.name?.charAt(0) || 'G'}
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: 13, fontWeight: 800, color: DARK_TEXT }}>{guestMemory.name || 'Guest'}</span>
+                            {guestMemory.vip && (
+                              <span style={{ fontSize: 9.5, fontWeight: 800, background: 'rgba(201,149,44,0.2)', border: `1px solid ${GOLD}`, color: GOLD, padding: '1px 6px', borderRadius: 5 }}>VIP</span>
+                            )}
+                          </div>
+                          <div style={{ fontSize: 10.5, color: DARK_MUTE, marginTop: 1 }}>Loyalty: PLATINUM · {guestMemory.favoriteDrink && `Fav: ${guestMemory.favoriteDrink}`}</div>
+                        </div>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: 18, color: DARK_MUTE }}>call</span>
+                            <span style={{ fontSize: 8.5, color: DARK_MUTE }}>Call</span>
+                          </button>
+                          <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: 18, color: DARK_MUTE }}>description</span>
+                            <span style={{ fontSize: 8.5, color: DARK_MUTE }}>Notes</span>
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  ))}
+                  )}
+
+                  {/* SMOKECRAFT JOURNEY CARD — matches reference "SMOKECRAFT JOURNEY / Visit 5 • Session 14 of 24 / 58%" */}
+                  <div style={{ background: 'rgba(201,149,44,0.06)', border: `1px solid rgba(201,149,44,0.22)`, borderRadius: 12, padding: '10px 12px', marginBottom: 10 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 7 }}>
+                      <span className="material-symbols-outlined" style={{ fontSize: 16, color: GOLD }}>workspace_premium</span>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: GOLD, letterSpacing: '0.06em' }}>SMOKECRAFT JOURNEY</span>
+                    </div>
+                    {tableIntel ? (
+                      <>
+                        <div style={{ fontSize: 11, color: DARK_MUTE, marginBottom: 5 }}>
+                          Visit {Math.max(1, Math.floor(tableIntel.score / 20) + 1)} &nbsp;•&nbsp; Session {Math.min(24, Math.floor(tableIntel.score / 5) + 1)} of 24
+                        </div>
+                        <div style={{ height: 5, borderRadius: 4, background: 'rgba(255,255,255,0.1)', overflow: 'hidden', marginBottom: 4 }}>
+                          <div style={{ height: '100%', width: `${Math.min(100, tableIntel.score)}%`, borderRadius: 4, background: `linear-gradient(90deg,${GOLD},#e8d080)` }} />
+                        </div>
+                        <div style={{ fontSize: 10, color: GOLD, fontWeight: 700, textAlign: 'right' }}>{tableIntel.score}%</div>
+                      </>
+                    ) : (
+                      <div style={{ fontSize: 11, color: DARK_MUTE }}>No active SmokeCraft session</div>
+                    )}
+                    {pairing && (
+                      <div style={{ marginTop: 6, fontSize: 10.5, color: '#7ddca0', fontWeight: 600 }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 12, verticalAlign: '-2px', marginRight: 3 }}>trending_up</span>
+                        Pairing lift available: +${pairing.liftUsd}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* CHECK TOTALS ROW — CHECK TOTAL / GUESTS / SERVER */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 10 }}>
+                    {[
+                      ['CHECK TOTAL', selected.checkTotal ? `$${selected.checkTotal.toFixed(2)}` : '$0.00', GOLD],
+                      ['GUESTS', String(selected.guests || 0), DARK_TEXT],
+                      ['SERVER', (selected.serverName || 'Unassigned').split(' ')[0], DARK_TEXT],
+                    ].map(([label, value, color]) => (
+                      <div key={label} style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: 8.5, color: DARK_MUTE, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>{label}</div>
+                        <div style={{ fontSize: 15, fontWeight: 800, color }}>{value}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* ACTION BUTTONS — matches reference grid layout */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 8 }}>
+                    {[
+                      ['Open Table', '#2f9e5b'],
+                      ['Transfer Table', null],
+                      ['Merge Tables', null],
+                      ['Split Table', null],
+                    ].map(([label, accent]) => (
+                      <button key={label} type="button" className="vault-touch-btn" onClick={() => handleStatus(label)} style={{
+                        minHeight: 38, borderRadius: 9, border: `1px solid ${accent ? accent + '55' : DARK_LINE}`,
+                        background: accent ? `${accent}18` : 'rgba(255,255,255,0.04)',
+                        color: accent || DARK_TEXT, fontSize: 10.5, fontWeight: 700, cursor: 'pointer',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2,
+                      }}>{label}</button>
+                    ))}
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                    {[
+                      ['Call Server', 'support_agent'],
+                      ['Call Manager', 'manage_accounts'],
+                      ['Req. Assist.', 'emergency'],
+                      ['Seat Guests', 'chair'],
+                      ['Add Note', 'edit_note'],
+                      ['Close Table', 'table_restaurant'],
+                    ].map(([label, icon]) => (
+                      <button key={label} type="button" className="vault-touch-btn" onClick={() => handleStatus(label)} style={{
+                        minHeight: 34, borderRadius: 9, border: `1px solid ${label === 'Close Table' ? 'rgba(192,68,58,0.4)' : DARK_LINE}`,
+                        background: label === 'Close Table' ? 'rgba(192,68,58,0.10)' : 'rgba(255,255,255,0.04)',
+                        color: label === 'Close Table' ? '#c0443a' : DARK_MUTE, fontSize: 10, fontWeight: 600, cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                      }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 13 }}>{icon}</span>{label}
+                      </button>
+                    ))}
+                  </div>
                   <select onChange={(e) => e.target.value && handleAssign(e.target.value)} value="" style={{
-                    width: '100%', marginTop: 10, minHeight: 44, padding: '0 10px', borderRadius: 10, border: `1px solid ${LINE}`, background: IVORY, color: NAVY, fontSize: 12.5,
+                    width: '100%', marginTop: 8, minHeight: 38, padding: '0 10px', borderRadius: 10, border: `1px solid ${DARK_LINE}`, background: '#1a1208', color: DARK_TEXT, fontSize: 12,
                   }}>
                     <option value="">Assign / Reassign Staff…</option>
                     {staff.map((s) => <option key={s.id} value={s.name}>{s.name} ({s.role})</option>)}
                   </select>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginTop: 10 }}>
-                    <CommandTouchButton active onClick={() => handleStatus('Open Table')} style={{ minHeight: 42, fontSize: 11.5 }}>Open Table</CommandTouchButton>
-                    <CommandTouchButton onClick={() => handleStatus('Edit Table')} style={{ minHeight: 42, fontSize: 11.5 }}>Edit Table</CommandTouchButton>
-                    <CommandTouchButton onClick={() => handleStatus('Move Table')} style={{ minHeight: 42, fontSize: 11.5 }}>Move Table</CommandTouchButton>
-                    <CommandTouchButton onClick={() => handleStatus('Seat Guests')} style={{ minHeight: 42, fontSize: 11.5 }}>Seat Guests</CommandTouchButton>
-                    <CommandTouchButton onClick={() => handleStatus('Add Note')} style={{ minHeight: 42, fontSize: 11.5 }}>Add Note</CommandTouchButton>
-                    <CommandTouchButton onClick={() => handleStatus('Close Table')} style={{ minHeight: 42, fontSize: 11.5, border: '1px solid rgba(192,68,58,0.4)', color: '#c0443a' }}>Close Table</CommandTouchButton>
-                  </div>
-                  {tableIntel && (
-                    <CommandGlassPanel title="Table Intelligence">
-                      <div style={{ fontSize: 13, fontWeight: 800, color: NAVY }}>Score: {tableIntel.score}</div>
-                      <div style={{ fontSize: 11.5, color: SLATE }}>Risk: {tableIntel.risk} · Opportunity: {tableIntel.opportunity}</div>
-                    </CommandGlassPanel>
-                  )}
-                  {guestMemory && (
-                    <CommandGlassPanel title="Guest Memory">
-                      <div style={{ fontSize: 12.5, fontWeight: 700, color: NAVY }}>{guestMemory.name}{guestMemory.vip ? ' · VIP' : ''}</div>
-                      <div style={{ fontSize: 11, color: SLATE }}>Favorite drink: {guestMemory.favoriteDrink}</div>
-                    </CommandGlassPanel>
-                  )}
-                  {pairing && (
-                    <CommandGlassPanel title="Pairing Revenue">
-                      <div style={{ fontSize: 11.5, color: SLATE }}>Suggested add-on: {pairing.suggest}</div>
-                      <div style={{ fontSize: 11.5, color: '#2f9e5b', fontWeight: 700 }}>Revenue Lift: +${pairing.liftUsd}</div>
-                    </CommandGlassPanel>
-                  )}
                   {tableAlerts.length > 0 && (
-                    <CommandGlassPanel title="Experience Alerts">
-                      {tableAlerts.map((a, i) => <div key={i} style={{ fontSize: 11, color: a.severity === 'high' ? '#c0443a' : GOLD_DEEP, padding: '2px 0' }}>⚠ {a.message}</div>)}
-                    </CommandGlassPanel>
+                    <div style={{ marginTop: 8, background: 'rgba(192,68,58,0.08)', border: '1px solid rgba(192,68,58,0.3)', borderRadius: 10, padding: '8px 10px' }}>
+                      <div style={{ fontSize: 10, fontWeight: 800, color: '#c0443a', marginBottom: 4, letterSpacing: '0.06em' }}>EXPERIENCE ALERTS</div>
+                      {tableAlerts.map((a, i) => <div key={i} style={{ fontSize: 10.5, color: a.severity === 'high' ? '#c0443a' : GOLD, padding: '1px 0' }}>⚠ {a.message}</div>)}
+                    </div>
                   )}
                 </>
               )}
@@ -959,36 +1076,36 @@ export default function POS360TableManagement() {
           </div>
 
           {/* FLOOR OBJECT LIBRARY + VENUE IMAGE LIBRARY */}
-          <div style={{ display: 'flex', gap: 16, marginBottom: 16, alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', gap: 14, marginBottom: 14, alignItems: 'flex-start' }}>
             <div className="vault-panel" style={{
-              flex: '0 0 42%', minWidth: 320, background: IVORY_PANEL, border: `1px solid ${LINE}`, borderRadius: 16,
-              boxShadow: '0 4px 14px rgba(19,41,75,0.08)', padding: 14,
+              flex: '0 0 42%', minWidth: 320, background: DARK_CARD, border: `1px solid ${DARK_LINE}`, borderRadius: 15,
+              boxShadow: '0 3px 10px rgba(0,0,0,0.35)', padding: 13,
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                <div style={{ fontSize: 12.5, fontWeight: 800, color: NAVY, letterSpacing: '0.04em' }}>FLOOR OBJECT LIBRARY</div>
-                <span className="material-symbols-outlined" style={{ fontSize: 16, color: SLATE }}>swap_horiz</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 9 }}>
+                <div style={{ fontSize: 11.5, fontWeight: 800, color: DARK_TEXT, letterSpacing: '0.06em' }}>FLOOR OBJECT LIBRARY</div>
+                <span className="material-symbols-outlined" style={{ fontSize: 15, color: DARK_MUTE }}>swap_horiz</span>
               </div>
-              <div style={{ display: 'flex', gap: 14 }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flexShrink: 0, width: 110 }}>
+              <div style={{ display: 'flex', gap: 12 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flexShrink: 0, width: 100 }}>
                   {LIBRARY_TABS.map((t) => (
                     <button key={t} type="button" onClick={() => setLibraryTab(t)} style={{
-                      textAlign: 'left', fontSize: 11, fontWeight: 700, padding: '7px 8px', borderRadius: 8, border: 'none', cursor: 'pointer',
-                      background: libraryTab === t ? 'rgba(201,149,44,0.16)' : 'transparent', color: libraryTab === t ? GOLD_DEEP : SLATE,
+                      textAlign: 'left', fontSize: 10.5, fontWeight: 700, padding: '6px 7px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                      background: libraryTab === t ? 'rgba(201,149,44,0.14)' : 'transparent', color: libraryTab === t ? GOLD : DARK_MUTE,
                     }}>{t}</button>
                   ))}
                 </div>
-                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, alignContent: 'start' }}>
+                <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 7, alignContent: 'start' }}>
                   {libraryItems.map((def) => <ObjectLibraryTile key={def.type} def={def} onPlace={handlePlaceObject} />)}
                 </div>
               </div>
             </div>
 
             <div className="vault-panel" style={{
-              flex: 1, minWidth: 0, background: IVORY_PANEL, border: `1px solid ${LINE}`, borderRadius: 16,
-              boxShadow: '0 4px 14px rgba(19,41,75,0.08)', padding: 14,
+              flex: 1, minWidth: 0, background: DARK_CARD, border: `1px solid ${DARK_LINE}`, borderRadius: 15,
+              boxShadow: '0 3px 10px rgba(0,0,0,0.35)', padding: 13,
             }}>
-              <div style={{ fontSize: 12.5, fontWeight: 800, color: NAVY, letterSpacing: '0.04em', marginBottom: 10 }}>VENUE IMAGE LIBRARY &amp; CUSTOMIZATION</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+              <div style={{ fontSize: 11.5, fontWeight: 800, color: DARK_TEXT, letterSpacing: '0.06em', marginBottom: 9 }}>VENUE IMAGE LIBRARY</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 9 }}>
                 {VENUE_IMAGE_CARDS.map((c) => (
                   <VenueImageCard key={c.id} card={c} onAssign={handleAssignImageToLayout} onPreview={handlePreviewImage} />
                 ))}
@@ -1020,88 +1137,88 @@ export default function POS360TableManagement() {
           )}
 
           {/* BOTTOM PANELS */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
-            <div className="vault-panel" style={{ background: IVORY_PANEL, border: `1px solid ${LINE}`, borderRadius: 14, padding: 14, boxShadow: '0 3px 10px rgba(19,41,75,0.07)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+            <div className="vault-panel" style={{ background: DARK_CARD, border: `1px solid ${DARK_LINE}`, borderRadius: 13, padding: 13, boxShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <div style={{ fontSize: 11.5, fontWeight: 800, color: NAVY }}>TODAY'S ACTIVITY FEED</div>
+                <div style={{ fontSize: 10.5, fontWeight: 800, color: DARK_TEXT, letterSpacing: '0.04em' }}>TODAY'S ACTIVITY</div>
                 <CommandStatusBadge color="#2f9e5b" icon="podcasts" pulse>Live</CommandStatusBadge>
               </div>
               {activity.map((a, i) => (
-                <div key={i} style={{ fontSize: 11, padding: '5px 0', borderTop: i ? `1px solid ${LINE}` : 'none' }}>
-                  <div style={{ color: SLATE, fontSize: 10 }}>{a.ts} · {a.tag}</div>
-                  <div style={{ color: NAVY }}>{a.label}</div>
+                <div key={i} style={{ fontSize: 10.5, padding: '5px 0', borderTop: i ? `1px solid ${DARK_LINE}` : 'none' }}>
+                  <div style={{ color: DARK_MUTE, fontSize: 9.5 }}>{a.ts} · {a.tag}</div>
+                  <div style={{ color: DARK_TEXT }}>{a.label}</div>
                 </div>
               ))}
             </div>
 
-            <div className="vault-panel" style={{ background: IVORY_PANEL, border: `1px solid ${LINE}`, borderRadius: 14, padding: 14, boxShadow: '0 3px 10px rgba(19,41,75,0.07)' }}>
+            <div className="vault-panel" style={{ background: DARK_CARD, border: `1px solid ${DARK_LINE}`, borderRadius: 13, padding: 13, boxShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <div style={{ fontSize: 11.5, fontWeight: 800, color: NAVY }}>CONNECTED INVENTORY SNAPSHOT</div>
+                <div style={{ fontSize: 10.5, fontWeight: 800, color: DARK_TEXT, letterSpacing: '0.04em' }}>INVENTORY SNAPSHOT</div>
                 <CommandStatusBadge color="#2f9e5b" icon="podcasts" pulse>Live</CommandStatusBadge>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 {inventory.slice(0, 4).map((c) => (
                   <div key={c.id}>
-                    <div style={{ fontSize: 9.5, color: SLATE, textTransform: 'uppercase' }}>{c.label}</div>
+                    <div style={{ fontSize: 9, color: DARK_MUTE, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{c.label}</div>
                     <div style={{ fontSize: 15, fontWeight: 800, color: c.lowStock > 0 ? '#c0443a' : '#2f9e5b' }}>{Math.max(0, 100 - c.lowStock * 6)}%</div>
-                    <div style={{ fontSize: 9.5, color: SLATE }}>{c.items - c.lowStock} / {c.items}</div>
+                    <div style={{ fontSize: 9, color: DARK_MUTE }}>{c.items - c.lowStock} / {c.items}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="vault-panel" style={{ background: IVORY_PANEL, border: `1px solid ${LINE}`, borderRadius: 14, padding: 14, boxShadow: '0 3px 10px rgba(19,41,75,0.07)' }}>
+            <div className="vault-panel" style={{ background: DARK_CARD, border: `1px solid ${DARK_LINE}`, borderRadius: 13, padding: 13, boxShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <div style={{ fontSize: 11.5, fontWeight: 800, color: NAVY }}>SYSTEM HEALTH</div>
-                <CommandStatusBadge color="#2f9e5b" icon="check_circle">All Operational</CommandStatusBadge>
+                <div style={{ fontSize: 10.5, fontWeight: 800, color: DARK_TEXT, letterSpacing: '0.04em' }}>SYSTEM HEALTH</div>
+                <CommandStatusBadge color="#2f9e5b" icon="check_circle">OK</CommandStatusBadge>
               </div>
               {[['POS Sync Engine', true], ['Oracle Micros', true], ['Stripe Terminal', network.status === 'online'], ['Kitchen Display', true], ['Humidor Lock', devHealth.online === devHealth.total]].map(([label, ok]) => (
-                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11, padding: '4px 0' }}>
-                  <span style={{ color: NAVY }}>{label}</span>
-                  <CommandStatusBadge color={ok ? '#2f9e5b' : '#c9952c'} icon={ok ? 'check_circle' : 'warning'}>{ok ? 'Healthy' : 'Warning'}</CommandStatusBadge>
+                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 10.5, padding: '4px 0' }}>
+                  <span style={{ color: DARK_TEXT }}>{label}</span>
+                  <span style={{ fontSize: 9.5, fontWeight: 700, color: ok ? '#2f9e5b' : '#c9952c' }}>{ok ? '● Healthy' : '⚠ Warning'}</span>
                 </div>
               ))}
             </div>
 
-            <div className="vault-panel" style={{ background: IVORY_PANEL, border: `1px solid ${LINE}`, borderRadius: 14, padding: 14, boxShadow: '0 3px 10px rgba(19,41,75,0.07)' }}>
+            <div className="vault-panel" style={{ background: DARK_CARD, border: `1px solid ${DARK_LINE}`, borderRadius: 13, padding: 13, boxShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <div style={{ fontSize: 11.5, fontWeight: 800, color: NAVY }}>UPCOMING EVENTS</div>
-                <span style={{ fontSize: 10.5, color: GOLD_DEEP, fontWeight: 700 }}>View All</span>
+                <div style={{ fontSize: 10.5, fontWeight: 800, color: DARK_TEXT, letterSpacing: '0.04em' }}>UPCOMING EVENTS</div>
+                <span style={{ fontSize: 10, color: GOLD, fontWeight: 700 }}>View All</span>
               </div>
               {UPCOMING_EVENTS.map((e, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderTop: i ? `1px solid ${LINE}` : 'none' }}>
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderTop: i ? `1px solid ${DARK_LINE}` : 'none' }}>
                   <div>
-                    <div style={{ fontSize: 11.5, fontWeight: 700, color: NAVY }}>{e.name}</div>
-                    <div style={{ fontSize: 10, color: SLATE }}>{e.when} · {e.seats}</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: DARK_TEXT }}>{e.name}</div>
+                    <div style={{ fontSize: 9.5, color: DARK_MUTE }}>{e.when} · {e.seats}</div>
                   </div>
-                  <CommandStatusBadge color={e.status === 'Limited' ? '#c9952c' : '#2f9e5b'} icon={e.status === 'Limited' ? 'warning' : 'check'}>{e.status}</CommandStatusBadge>
+                  <span style={{ fontSize: 9.5, fontWeight: 700, color: e.status === 'Limited' ? '#c9952c' : '#2f9e5b' }}>{e.status}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div style={{ fontSize: 10, color: SLATE, marginTop: 14, textAlign: 'center' }}>
-            Floor layout, inventory snapshot, and event data are local/demo until backend persistence is connected. Venue imagery uses representative local assets pending real venue photography upload.
+          <div style={{ fontSize: 9.5, color: DARK_MUTE, marginTop: 12, textAlign: 'center', opacity: 0.65 }}>
+            Floor layout, inventory snapshot, and event data are local/demo until backend persistence is connected.
           </div>
         </div>
       </div>
 
       {/* OPS DRAWER — approvals / audit log / reservations + waitlist (Phase 4.13) */}
       {opsPanel && (
-        <div onClick={() => setOpsPanel(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(10,8,5,0.55)', zIndex: 60, display: 'flex', justifyContent: 'flex-end' }}>
+        <div onClick={() => setOpsPanel(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 60, display: 'flex', justifyContent: 'flex-end' }}>
           <div onClick={(e) => e.stopPropagation()} className="object-library-drawer--slide" style={{
-            width: 420, maxWidth: '92vw', height: '100%', background: IVORY_PANEL, borderLeft: `1px solid ${LINE}`,
-            boxShadow: '-8px 0 30px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column', overflowY: 'auto',
+            width: 420, maxWidth: '92vw', height: '100%', background: '#0e0b06', borderLeft: `1px solid ${DARK_LINE}`,
+            boxShadow: '-12px 0 40px rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column', overflowY: 'auto',
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 18px', borderBottom: `1px solid ${LINE}` }}>
-              <div style={{ fontSize: 14, fontWeight: 800, color: NAVY, textTransform: 'capitalize' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 18px', borderBottom: `1px solid ${DARK_LINE}` }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: DARK_TEXT, textTransform: 'capitalize' }}>
                 {opsPanel === 'approvals' ? 'Approval Queue' : opsPanel === 'audit' ? 'Audit Log' : 'Reservations & Waitlist'}
               </div>
               <button type="button" onClick={() => setOpsPanel(null)} style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 20, color: SLATE }}>close</span>
+                <span className="material-symbols-outlined" style={{ fontSize: 20, color: DARK_MUTE }}>close</span>
               </button>
             </div>
 
-            <div style={{ padding: '10px 18px', fontSize: 10.5, color: '#8a6a1f', background: 'rgba(201,149,44,0.1)' }}>
+            <div style={{ padding: '10px 18px', fontSize: 10.5, color: '#c9952c', background: 'rgba(201,149,44,0.08)' }}>
               {opsPanel === 'approvals' && APPROVAL_HONESTY_NOTICE}
               {opsPanel === 'audit' && AUDIT_HONESTY_NOTICE}
               {opsPanel === 'reservations' && 'Reservations and waitlist are local/demo state — no backend reservations table is connected yet.'}
@@ -1110,15 +1227,15 @@ export default function POS360TableManagement() {
             <div style={{ padding: 18, flex: 1 }}>
               {opsPanel === 'approvals' && (
                 pendingApprovals.length === 0 ? (
-                  <div style={{ fontSize: 12, color: SLATE }}>No pending approvals.</div>
+                  <div style={{ fontSize: 12, color: DARK_MUTE }}>No pending approvals.</div>
                 ) : pendingApprovals.map((r) => (
-                  <div key={r.id} style={{ border: `1px solid ${LINE}`, borderRadius: 10, padding: 12, marginBottom: 10, background: '#fff' }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: NAVY }}>{r.actionType.replace(/_/g, ' ')}</div>
-                    <div style={{ fontSize: 11, color: SLATE, marginTop: 2 }}>Requested by {r.requestedBy} ({r.requestedByRole}) — needs {r.requiredRole}</div>
-                    {r.reason && <div style={{ fontSize: 11, color: SLATE, marginTop: 2 }}>Reason: {r.reason}</div>}
+                  <div key={r.id} style={{ border: `1px solid ${DARK_LINE}`, borderRadius: 10, padding: 12, marginBottom: 10, background: 'rgba(255,255,255,0.03)' }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: DARK_TEXT }}>{r.actionType.replace(/_/g, ' ')}</div>
+                    <div style={{ fontSize: 11, color: DARK_MUTE, marginTop: 2 }}>Requested by {r.requestedBy} ({r.requestedByRole}) — needs {r.requiredRole}</div>
+                    {r.reason && <div style={{ fontSize: 11, color: DARK_MUTE, marginTop: 2 }}>Reason: {r.reason}</div>}
                     <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                      <CommandTouchButton onClick={() => handleApprove(r.id)} style={{ minHeight: 32, padding: '0 12px', fontSize: 11 }}>Approve</CommandTouchButton>
-                      <CommandTouchButton onClick={() => handleDeny(r.id)} style={{ minHeight: 32, padding: '0 12px', fontSize: 11 }}>Deny</CommandTouchButton>
+                      <button type="button" onClick={() => handleApprove(r.id)} style={{ minHeight: 32, padding: '0 12px', fontSize: 11, borderRadius: 8, border: '1px solid #2f9e5b44', background: 'rgba(47,158,91,0.12)', color: '#2f9e5b', cursor: 'pointer', fontWeight: 700 }}>Approve</button>
+                      <button type="button" onClick={() => handleDeny(r.id)} style={{ minHeight: 32, padding: '0 12px', fontSize: 11, borderRadius: 8, border: '1px solid rgba(192,68,58,0.4)', background: 'rgba(192,68,58,0.1)', color: '#c0443a', cursor: 'pointer', fontWeight: 700 }}>Deny</button>
                     </div>
                   </div>
                 ))
@@ -1126,11 +1243,11 @@ export default function POS360TableManagement() {
 
               {opsPanel === 'audit' && (
                 auditEvents.length === 0 ? (
-                  <div style={{ fontSize: 12, color: SLATE }}>No audit events recorded yet.</div>
+                  <div style={{ fontSize: 12, color: DARK_MUTE }}>No audit events recorded yet.</div>
                 ) : auditEvents.slice(0, 60).map((e) => (
-                  <div key={e.id} style={{ fontSize: 11, padding: '7px 0', borderBottom: `1px solid ${LINE}` }}>
-                    <div style={{ color: SLATE, fontSize: 9.5 }}>{new Date(e.createdAt).toLocaleString()} · {e.eventType.replace(/_/g, ' ')}</div>
-                    <div style={{ color: NAVY }}>{e.summary}</div>
+                  <div key={e.id} style={{ fontSize: 10.5, padding: '7px 0', borderBottom: `1px solid ${DARK_LINE}` }}>
+                    <div style={{ color: DARK_MUTE, fontSize: 9.5 }}>{new Date(e.createdAt).toLocaleString()} · {e.eventType.replace(/_/g, ' ')}</div>
+                    <div style={{ color: DARK_TEXT }}>{e.summary}</div>
                   </div>
                 ))
               )}
@@ -1138,39 +1255,39 @@ export default function POS360TableManagement() {
               {opsPanel === 'reservations' && (
                 <>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                    <div style={{ fontSize: 11.5, fontWeight: 800, color: NAVY }}>UPCOMING RESERVATIONS</div>
+                    <div style={{ fontSize: 11, fontWeight: 800, color: DARK_TEXT, letterSpacing: '0.05em' }}>UPCOMING RESERVATIONS</div>
                     <button type="button" onClick={() => {
                       const guestName = window.prompt('Guest name for reservation:')
                       if (!guestName) return
                       createReservation({ guestName, partySize: 2, reservationTime: new Date(Date.now() + 30 * 60000).toISOString() })
                       refreshOpsData()
-                    }} style={{ border: 'none', background: 'transparent', color: GOLD_DEEP, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>+ Add</button>
+                    }} style={{ border: 'none', background: 'transparent', color: GOLD, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>+ Add</button>
                   </div>
                   {upcomingReservations.length === 0 ? (
-                    <div style={{ fontSize: 12, color: SLATE, marginBottom: 16 }}>No upcoming reservations.</div>
+                    <div style={{ fontSize: 12, color: DARK_MUTE, marginBottom: 16 }}>No upcoming reservations.</div>
                   ) : upcomingReservations.map((r) => (
-                    <div key={r.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 0', borderBottom: `1px solid ${LINE}` }}>
+                    <div key={r.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 0', borderBottom: `1px solid ${DARK_LINE}` }}>
                       <div>
-                        <div style={{ fontSize: 12, fontWeight: 700, color: NAVY }}>{r.guestName}{r.vip ? ' · VIP' : ''}</div>
-                        <div style={{ fontSize: 10.5, color: SLATE }}>Party of {r.partySize} · {new Date(r.reservationTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</div>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: DARK_TEXT }}>{r.guestName}{r.vip ? ' · VIP' : ''}</div>
+                        <div style={{ fontSize: 10.5, color: DARK_MUTE }}>Party of {r.partySize} · {new Date(r.reservationTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</div>
                       </div>
-                      <CommandTouchButton onClick={() => handleSeatReservation(r.id)} style={{ minHeight: 30, padding: '0 10px', fontSize: 10.5 }}>Seat</CommandTouchButton>
+                      <button type="button" onClick={() => handleSeatReservation(r.id)} style={{ minHeight: 28, padding: '0 10px', fontSize: 10.5, borderRadius: 7, border: `1px solid ${DARK_LINE}`, background: 'rgba(255,255,255,0.06)', color: DARK_TEXT, cursor: 'pointer' }}>Seat</button>
                     </div>
                   ))}
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 0 8px' }}>
-                    <div style={{ fontSize: 11.5, fontWeight: 800, color: NAVY }}>ACTIVE WAITLIST</div>
-                    <button type="button" onClick={handleQuickAddWaitlist} style={{ border: 'none', background: 'transparent', color: GOLD_DEEP, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>+ Add</button>
+                    <div style={{ fontSize: 11, fontWeight: 800, color: DARK_TEXT, letterSpacing: '0.05em' }}>ACTIVE WAITLIST</div>
+                    <button type="button" onClick={handleQuickAddWaitlist} style={{ border: 'none', background: 'transparent', color: GOLD, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>+ Add</button>
                   </div>
                   {activeWaitlist.length === 0 ? (
-                    <div style={{ fontSize: 12, color: SLATE }}>Waitlist is empty.</div>
+                    <div style={{ fontSize: 12, color: DARK_MUTE }}>Waitlist is empty.</div>
                   ) : activeWaitlist.map((w) => (
-                    <div key={w.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 0', borderBottom: `1px solid ${LINE}` }}>
+                    <div key={w.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 0', borderBottom: `1px solid ${DARK_LINE}` }}>
                       <div>
-                        <div style={{ fontSize: 12, fontWeight: 700, color: NAVY }}>{w.guestName}</div>
-                        <div style={{ fontSize: 10.5, color: SLATE }}>Party of {w.partySize} · ~{w.quotedWaitMinutes} min quoted</div>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: DARK_TEXT }}>{w.guestName}</div>
+                        <div style={{ fontSize: 10.5, color: DARK_MUTE }}>Party of {w.partySize} · ~{w.quotedWaitMinutes} min quoted</div>
                       </div>
-                      <CommandTouchButton onClick={() => handleSeatWaitlist(w.id)} style={{ minHeight: 30, padding: '0 10px', fontSize: 10.5 }}>Seat</CommandTouchButton>
+                      <button type="button" onClick={() => handleSeatWaitlist(w.id)} style={{ minHeight: 28, padding: '0 10px', fontSize: 10.5, borderRadius: 7, border: `1px solid ${DARK_LINE}`, background: 'rgba(255,255,255,0.06)', color: DARK_TEXT, cursor: 'pointer' }}>Seat</button>
                     </div>
                   ))}
                 </>
