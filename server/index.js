@@ -71,6 +71,7 @@ import pos360StaffLaborGovernanceRoutes from './routes/pos360StaffLaborGovernanc
 import pos360ReportsAnalyticsDecisionRoutes from './routes/pos360ReportsAnalyticsDecisionRoutes.js'
 import pos360SettingsVenueAdminRoutes from './routes/pos360SettingsVenueAdminRoutes.js'
 import pos360ExternalIntegrationsRoutes from './routes/pos360ExternalIntegrationsRoutes.js'
+import pos360FulfillmentKdsRoutes       from './routes/pos360FulfillmentKdsRoutes.js'
 import databaseStatusRoutes            from './routes/databaseStatusRoutes.js'
 import paymentMoneyBridgeRoutes        from './routes/paymentMoneyBridgeRoutes.js'
 import venueOnboardingRoutes           from './routes/venueOnboardingRoutes.js'
@@ -218,6 +219,7 @@ app.use('/api/pos360/staff',              pos360StaffLaborGovernanceRoutes)
 app.use('/api/pos360/reports',            pos360ReportsAnalyticsDecisionRoutes)
 app.use('/api/pos360/settings',           pos360SettingsVenueAdminRoutes)
 app.use('/api/pos360/integrations',       pos360ExternalIntegrationsRoutes)
+app.use('/api/pos360/fulfillment',        pos360FulfillmentKdsRoutes)
 app.use('/api/system/database',           databaseStatusRoutes)
 app.use('/api/payments/money-bridge',     paymentMoneyBridgeRoutes)
 app.use('/api/onboarding',               venueOnboardingRoutes)

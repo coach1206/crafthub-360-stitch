@@ -1,0 +1,48 @@
+// POS360 Fulfillment KDS — feature flags
+
+export const DEFAULT_POS360_FULFILLMENT_FLAGS = {
+  fulfillmentEnabled: true,
+  stationProfilesEnabled: true,
+  stationCapabilitiesEnabled: true,
+  itemRoutingRulesEnabled: true,
+  orderProductionTicketsEnabled: true,
+  productionTicketItemsEnabled: true,
+  kdsQueuesEnabled: true,
+  kitchenQueueEnabled: true,
+  barQueueEnabled: true,
+  humidorQueueEnabled: true,
+  expoQueueEnabled: true,
+  pickupQueueEnabled: true,
+  patioQueueEnabled: true,
+  courseFireControlsEnabled: true,
+  stationStaffAssignmentsEnabled: true,
+  productionHandoffsEnabled: true,
+  itemUnavailableControlsEnabled: true,
+  managerOverridesEnabled: true,
+  productionRefiresEnabled: true,
+  productionRushDelayEnabled: true,
+  guestSelfOrderHandoffEnabled: true,
+  serverOrderHandoffEnabled: true,
+  humidorFulfillmentEnabled: true,
+  barFulfillmentEnabled: true,
+  kitchenFulfillmentEnabled: true,
+  externalKdsProviderContractsEnabled: true,
+  productionVisibilityInsightsEnabled: true,
+  eatOperationalVisibilityEnabled: true,
+  smokecraftHumidorVisibilityEnabled: true,
+  offlineProductionQueueEnabled: true,
+  multilingualFulfillmentEnabled: true,
+  privateDataFulfillmentProtectionEnabled: true,
+  financialDataFulfillmentProtectionEnabled: true,
+  noFakeKdsProviderEnforced: true,
+  noFakePrinterProviderEnforced: true,
+  noFakeInventoryDeductionEnforced: true,
+  noFakeOrderCompletionEnforced: true,
+  noFakeEatAiEnforced: true,
+  noSecretsStorageEnforced: true,
+  canAccessPOS3ProtectionRequired: true,
+};
+
+export function getFulfillmentFlags(venueOverrides = {}) {
+  return { ...DEFAULT_POS360_FULFILLMENT_FLAGS, ...venueOverrides };
+}
