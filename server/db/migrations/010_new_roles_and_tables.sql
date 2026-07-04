@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS access_requests (
   requester_id      TEXT,
   requester_email   TEXT,
   requester_name    TEXT,
-  current_role      TEXT         NOT NULL DEFAULT 'guest',
+  requester_role    TEXT         NOT NULL DEFAULT 'guest',
   requested_role    TEXT         NOT NULL,
   requested_route   TEXT,
   reason            TEXT,

@@ -51,7 +51,7 @@ export async function submitAccessRequest(req, res) {
     await query(
       `INSERT INTO access_requests
          (request_id, requester_id, requester_email, requester_name,
-          current_role, requested_role, requested_route, reason, escalated_to)
+          requester_role, requested_role, requested_route, reason, escalated_to)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
       [
         requestId,
