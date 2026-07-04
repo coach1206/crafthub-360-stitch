@@ -61,6 +61,7 @@ import pos360MenuBuilderRoutes          from './routes/pos360MenuBuilderRoutes.j
 import pos360HandheldRoutes             from './routes/pos360HandheldRoutes.js'
 import pos360ProductionRoutes           from './routes/pos360ProductionRoutes.js'
 import pos360OrderLifecycleRoutes       from './routes/pos360OrderLifecycleRoutes.js'
+import pos360OfflineSyncRoutes          from './routes/pos360OfflineSyncRoutes.js'
 import databaseStatusRoutes            from './routes/databaseStatusRoutes.js'
 import paymentMoneyBridgeRoutes        from './routes/paymentMoneyBridgeRoutes.js'
 import venueOnboardingRoutes           from './routes/venueOnboardingRoutes.js'
@@ -198,6 +199,7 @@ app.use('/api/pos360/menu',              pos360MenuBuilderRoutes)
 app.use('/api/pos360/handheld',          pos360HandheldRoutes)
 app.use('/api/pos360/production',        pos360ProductionRoutes)
 app.use('/api/pos360/orders',            pos360OrderLifecycleRoutes)
+app.use('/api/pos360/sync',             pos360OfflineSyncRoutes)
 app.use('/api/system/database',           databaseStatusRoutes)
 app.use('/api/payments/money-bridge',     paymentMoneyBridgeRoutes)
 app.use('/api/onboarding',               venueOnboardingRoutes)
