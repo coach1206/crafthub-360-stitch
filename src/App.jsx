@@ -74,6 +74,7 @@ import NoveeOSTenantGovernance  from './pages/noveeOS/NoveeOSTenantGovernance.js
 import NoveeOSBillingGovernance  from './pages/noveeOS/NoveeOSBillingGovernance.jsx'
 import NoveeOSSecurityGovernance from './pages/noveeOS/NoveeOSSecurityGovernance.jsx'
 import CraftHubDashboard         from './pages/crafthub/CraftHubDashboard.jsx'
+import CraftHubOnboardingWizard  from './pages/crafthub/CraftHubOnboardingWizard.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -631,6 +632,7 @@ export default function App() {
               <Route path="novee-os/billing" element={<NoveeOSBillingGovernance />} />
               <Route path="novee-os/security" element={<NoveeOSSecurityGovernance />} />
               <Route path="crafthub/dashboard" element={<CraftHubDashboard />} />
+              <Route path="crafthub/onboarding" element={<CraftHubOnboardingWizard />} />
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
               {/* ── Protected: manager+ — BLOCKED in demo mode ────── */}
