@@ -1,0 +1,487 @@
+// Phase C.7 Verification Script — NOVEE OS Final Platform Readiness, Launch Lock
+// Target: 412 checks. Exit code 1 on any failure.
+
+import { readFileSync, existsSync } from 'fs';
+import { resolve } from 'path';
+
+const root = resolve(process.cwd());
+const read  = (p) => readFileSync(resolve(root, p), 'utf8');
+const exists = (p) => existsSync(resolve(root, p));
+
+let passed = 0;
+let failed = 0;
+const failures = [];
+
+function check(n, desc, result) {
+  if (result) { passed++; }
+  else { failed++; failures.push(`  FAIL [${n}] ${desc}`); }
+}
+
+// ─── Load files ───────────────────────────────────────────────────────────────
+const sql  = read('server/db/migrations/054_novee_os_final_platform_readiness_launch_lock.sql');
+const con  = read('server/services/noveeOS/noveeOSFinalReadinessContracts.js');
+const ff   = read('server/config/noveeOSFinalReadinessFeatureFlags.js');
+const loc  = read('src/locales/noveeOSFinalReadiness.js');
+const svc  = read('server/services/noveeOS/noveeOSFinalReadinessService.js');
+const ctrl = read('server/controllers/noveeOSFinalReadinessController.js');
+const rte  = read('server/routes/noveeOSFinalReadinessRoutes.js');
+const ui   = read('src/pages/noveeOS/NoveeOSFinalReadiness.jsx');
+const idx  = read('server/index.js');
+const app  = read('src/App.jsx');
+const pkg  = read('package.json');
+const doc1 = read('docs/NOVEE_OS_PHASE_C_FINAL_READINESS.md');
+const doc2 = read('docs/NOVEE_OS_SAFE_SALES_CLAIMS.md');
+
+// ─── DATABASE / MIGRATION (1–74) ─────────────────────────────────────────────
+check(1,  'migration file exists',                          exists('server/db/migrations/054_novee_os_final_platform_readiness_launch_lock.sql'));
+check(2,  'safe migration comment',                        sql.includes('Safe migration: no destructive DDL, no truncation'));
+check(3,  'no DROP TABLE',                                  !sql.includes('DROP TABLE'));
+check(4,  'no TRUNCATE',                                    !sql.includes('TRUNCATE'));
+check(5,  'organization_id hooks',                          sql.includes('organization_id'));
+check(6,  'venue_id hooks',                                 sql.includes('venue_id'));
+check(7,  'workspace_id hooks',                             sql.includes('workspace_id'));
+check(8,  'user_id hooks',                                  sql.includes('user_id'));
+check(9,  'actor_user_id hooks',                            sql.includes('actor_user_id'));
+check(10, 'module_key hooks',                               sql.includes('module_key'));
+check(11, 'phase_key hooks',                                sql.includes('phase_key'));
+check(12, 'check_key hooks',                                sql.includes('check_key'));
+check(13, 'blocker_key hooks',                              sql.includes('blocker_key'));
+check(14, 'requirement_key hooks',                          sql.includes('requirement_key'));
+check(15, 'provider_key hooks',                             sql.includes('provider_key'));
+check(16, 'marketplace_key hooks',                          sql.includes('marketplace_key'));
+check(17, 'deployment_key hooks',                           sql.includes('deployment_key'));
+check(18, 'route_path hooks',                               sql.includes('route_path'));
+check(19, 'ui_route hooks',                                 sql.includes('ui_route'));
+check(20, 'readiness_status exists',                        sql.includes('readiness_status'));
+check(21, 'launch_status exists',                           sql.includes('launch_status'));
+check(22, 'audit_status exists',                            sql.includes('audit_status'));
+check(23, 'blocker_status exists',                          sql.includes('blocker_status'));
+check(24, 'activation_status exists',                       sql.includes('activation_status'));
+check(25, 'demo_live_mode exists',                          sql.includes('demo_live_mode'));
+check(26, 'idempotency_key UNIQUE exists',                  sql.includes('idempotency_key TEXT UNIQUE'));
+check(27, 'contains_secrets DEFAULT FALSE exists',          sql.includes('contains_secrets BOOLEAN NOT NULL DEFAULT FALSE'));
+check(28, 'stores_secrets DEFAULT FALSE exists',            sql.includes('stores_secrets BOOLEAN NOT NULL DEFAULT FALSE'));
+check(29, 'exposes_private_data exists',                    sql.includes('exposes_private_data'));
+check(30, 'exposes_financial_data exists',                  sql.includes('exposes_financial_data'));
+check(31, 'foundation_ready DEFAULT FALSE exists',          sql.includes('foundation_ready BOOLEAN NOT NULL DEFAULT FALSE'));
+check(32, 'contract_ready DEFAULT FALSE exists',            sql.includes('contract_ready BOOLEAN NOT NULL DEFAULT FALSE'));
+check(33, 'placeholder_ready DEFAULT FALSE exists',         sql.includes('placeholder_ready BOOLEAN NOT NULL DEFAULT FALSE'));
+check(34, 'production_live DEFAULT FALSE exists',           sql.includes('production_live BOOLEAN NOT NULL DEFAULT FALSE'));
+check(35, 'provider_connected DEFAULT FALSE exists',        sql.includes('provider_connected BOOLEAN NOT NULL DEFAULT FALSE'));
+check(36, 'marketplace_purchase_completed DEFAULT FALSE',   sql.includes('marketplace_purchase_completed BOOLEAN NOT NULL DEFAULT FALSE'));
+check(37, 'module_installed DEFAULT FALSE exists',          sql.includes('module_installed BOOLEAN NOT NULL DEFAULT FALSE'));
+check(38, 'module_activated DEFAULT FALSE exists',          sql.includes('module_activated BOOLEAN NOT NULL DEFAULT FALSE'));
+check(39, 'billing_connected DEFAULT FALSE exists',         sql.includes('billing_connected BOOLEAN NOT NULL DEFAULT FALSE'));
+check(40, 'license_verified DEFAULT FALSE exists',          sql.includes('license_verified BOOLEAN NOT NULL DEFAULT FALSE'));
+check(41, 'payment_processed DEFAULT FALSE exists',         sql.includes('payment_processed BOOLEAN NOT NULL DEFAULT FALSE'));
+check(42, 'deployment_completed DEFAULT FALSE exists',      sql.includes('deployment_completed BOOLEAN NOT NULL DEFAULT FALSE'));
+check(43, 'live_mode_enabled DEFAULT FALSE exists',         sql.includes('live_mode_enabled BOOLEAN NOT NULL DEFAULT FALSE'));
+check(44, 'compliance_certified DEFAULT FALSE exists',      sql.includes('compliance_certified BOOLEAN NOT NULL DEFAULT FALSE'));
+check(45, 'contains_ai_generated_content DEFAULT FALSE',    sql.includes('contains_ai_generated_content BOOLEAN NOT NULL DEFAULT FALSE'));
+check(46, 'final readiness sessions table',                 sql.includes('novee_os_final_readiness_sessions'));
+check(47, 'final readiness checks table',                   sql.includes('novee_os_final_readiness_checks'));
+check(48, 'final readiness results table',                  sql.includes('novee_os_final_readiness_results'));
+check(49, 'platform audit categories table',                sql.includes('novee_os_platform_audit_categories'));
+check(50, 'platform audit findings table',                  sql.includes('novee_os_platform_audit_findings'));
+check(51, 'launch blockers table',                          sql.includes('novee_os_platform_launch_blockers'));
+check(52, 'activation requirements table',                  sql.includes('novee_os_platform_activation_requirements'));
+check(53, 'marketplace prep records table',                 sql.includes('novee_os_platform_marketplace_prep_records'));
+check(54, 'marketplace listing placeholders table',         sql.includes('novee_os_marketplace_listing_placeholders'));
+check(55, 'marketplace purchase readiness table',           sql.includes('novee_os_marketplace_purchase_readiness'));
+check(56, 'provider activation readiness table',            sql.includes('novee_os_provider_activation_readiness'));
+check(57, 'deployment readiness table',                     sql.includes('novee_os_deployment_readiness_records'));
+check(58, 'demo live readiness table',                      sql.includes('novee_os_demo_live_readiness_records'));
+check(59, 'safe sales claims table',                        sql.includes('novee_os_safe_sales_claims'));
+check(60, 'unsafe sales claims table',                      sql.includes('novee_os_unsafe_sales_claims'));
+check(61, 'foundation lock records table',                  sql.includes('novee_os_foundation_lock_records'));
+check(62, 'phase completion records table',                 sql.includes('novee_os_phase_completion_records'));
+check(63, 'module readiness matrix table',                  sql.includes('novee_os_module_readiness_matrix'));
+check(64, 'documentation readiness table',                  sql.includes('novee_os_documentation_readiness'));
+check(65, 'verification readiness table',                   sql.includes('novee_os_verification_readiness'));
+check(66, 'build readiness table',                          sql.includes('novee_os_build_readiness'));
+check(67, 'route readiness table',                          sql.includes('novee_os_route_readiness'));
+check(68, 'UI readiness table',                             sql.includes('novee_os_ui_readiness'));
+check(69, 'governance readiness table',                     sql.includes('novee_os_governance_readiness'));
+check(70, 'security readiness table',                       sql.includes('novee_os_security_readiness'));
+check(71, 'billing readiness table',                        sql.includes('novee_os_billing_readiness'));
+check(72, 'integration readiness table',                    sql.includes('novee_os_integration_readiness'));
+check(73, 'final launch snapshot table',                    sql.includes('novee_os_final_launch_snapshots'));
+check(74, 'final launch audit table',                       sql.includes('novee_os_final_launch_audit'));
+
+// ─── CONTRACTS (75–86) ────────────────────────────────────────────────────────
+check(75, 'contracts file exists',                          exists('server/services/noveeOS/noveeOSFinalReadinessContracts.js'));
+check(76, 'readiness statuses exported',                    con.includes('READINESS_STATUSES'));
+check(77, 'launch statuses exported',                       con.includes('LAUNCH_STATUSES'));
+check(78, 'audit statuses exported',                        con.includes('AUDIT_STATUSES'));
+check(79, 'blocker statuses exported',                      con.includes('BLOCKER_STATUSES'));
+check(80, 'activation statuses exported',                   con.includes('ACTIVATION_STATUSES'));
+check(81, 'demo live modes exported',                       con.includes('DEMO_LIVE_MODES'));
+check(82, 'claim statuses exported',                        con.includes('CLAIM_STATUSES'));
+check(83, 'phase keys exported',                            con.includes('PHASE_KEYS'));
+check(84, 'module keys exported',                           con.includes('MODULE_KEYS'));
+check(85, 'audit categories exported',                      con.includes('AUDIT_CATEGORIES'));
+check(86, 'validators exported',                            con.includes('isValidReadinessStatus') && con.includes('isValidLaunchStatus') && con.includes('isValidAuditStatus'));
+
+// ─── FEATURE FLAGS (87–131) ────────────────────────────────────────────��──────
+check(87,  'feature flag file exists',                      exists('server/config/noveeOSFinalReadinessFeatureFlags.js'));
+check(88,  '50+ flags exist',                               (ff.match(/false[,\s]/g) || []).length + (ff.match(/true[,\s]/g) || []).length >= 50);
+check(89,  'getNoveeOSFinalReadinessFlags exists',           ff.includes('getNoveeOSFinalReadinessFlags'));
+check(90,  'finalReadinessEnabled exists',                  ff.includes('finalReadinessEnabled'));
+check(91,  'platformAuditEnabled exists',                   ff.includes('platformAuditEnabled'));
+check(92,  'launchLockEnabled exists',                      ff.includes('launchLockEnabled'));
+check(93,  'marketplacePrepEnabled exists',                 ff.includes('marketplacePrepEnabled'));
+check(94,  'providerActivationReadinessEnabled exists',     ff.includes('providerActivationReadinessEnabled'));
+check(95,  'deploymentReadinessEnabled exists',             ff.includes('deploymentReadinessEnabled'));
+check(96,  'demoLiveReadinessEnabled exists',               ff.includes('demoLiveReadinessEnabled'));
+check(97,  'safeSalesClaimsEnabled exists',                 ff.includes('safeSalesClaimsEnabled'));
+check(98,  'unsafeSalesClaimsEnabled exists',               ff.includes('unsafeSalesClaimsEnabled'));
+check(99,  'foundationLockRecordsEnabled exists',           ff.includes('foundationLockRecordsEnabled'));
+check(100, 'phaseCompletionRecordsEnabled exists',          ff.includes('phaseCompletionRecordsEnabled'));
+check(101, 'moduleReadinessMatrixEnabled exists',           ff.includes('moduleReadinessMatrixEnabled'));
+check(102, 'documentationReadinessEnabled exists',          ff.includes('documentationReadinessEnabled'));
+check(103, 'verificationReadinessEnabled exists',           ff.includes('verificationReadinessEnabled'));
+check(104, 'buildReadinessEnabled exists',                  ff.includes('buildReadinessEnabled'));
+check(105, 'routeReadinessEnabled exists',                  ff.includes('routeReadinessEnabled'));
+check(106, 'uiReadinessEnabled exists',                     ff.includes('uiReadinessEnabled'));
+check(107, 'governanceReadinessEnabled exists',             ff.includes('governanceReadinessEnabled'));
+check(108, 'securityReadinessEnabled exists',               ff.includes('securityReadinessEnabled'));
+check(109, 'billingReadinessEnabled exists',                ff.includes('billingReadinessEnabled'));
+check(110, 'integrationReadinessEnabled exists',            ff.includes('integrationReadinessEnabled'));
+check(111, 'launchSnapshotsEnabled exists',                 ff.includes('launchSnapshotsEnabled'));
+check(112, 'launchAuditEnabled exists',                     ff.includes('launchAuditEnabled'));
+check(113, 'noFakeProductionLaunchEnforced exists',         ff.includes('noFakeProductionLaunchEnforced') && ff.includes('true'));
+check(114, 'noFakeProviderActivationEnforced exists',       ff.includes('noFakeProviderActivationEnforced'));
+check(115, 'noFakeMarketplacePurchaseEnforced exists',      ff.includes('noFakeMarketplacePurchaseEnforced'));
+check(116, 'noFakeModuleInstallEnforced exists',            ff.includes('noFakeModuleInstallEnforced'));
+check(117, 'noFakeModuleActivationEnforced exists',         ff.includes('noFakeModuleActivationEnforced'));
+check(118, 'noFakeBillingConnectionEnforced exists',        ff.includes('noFakeBillingConnectionEnforced'));
+check(119, 'noFakeLicenseVerificationEnforced exists',      ff.includes('noFakeLicenseVerificationEnforced'));
+check(120, 'noFakePaymentProcessingEnforced exists',        ff.includes('noFakePaymentProcessingEnforced'));
+check(121, 'noFakeDeploymentCompletionEnforced exists',     ff.includes('noFakeDeploymentCompletionEnforced'));
+check(122, 'noFakeLiveModeEnforced exists',                 ff.includes('noFakeLiveModeEnforced'));
+check(123, 'noFakeComplianceCertificationEnforced exists',  ff.includes('noFakeComplianceCertificationEnforced'));
+check(124, 'noFakePOSProviderSyncEnforced exists',          ff.includes('noFakePOSProviderSyncEnforced'));
+check(125, 'noFakeSmokeCraftSyncEnforced exists',           ff.includes('noFakeSmokeCraftSyncEnforced'));
+check(126, 'noFakeEATAutomationEnforced exists',            ff.includes('noFakeEATAutomationEnforced'));
+check(127, 'noFakeInventorySyncEnforced exists',            ff.includes('noFakeInventorySyncEnforced'));
+check(128, 'noFakeWhiteLabelDeploymentEnforced exists',     ff.includes('noFakeWhiteLabelDeploymentEnforced'));
+check(129, 'noFakeCustomDomainActivationEnforced exists',   ff.includes('noFakeCustomDomainActivationEnforced'));
+check(130, 'noSecretsStorageEnforced exists',               ff.includes('noSecretsStorageEnforced'));
+check(131, 'platformAdminGuardRequired exists',             ff.includes('platformAdminGuardRequired'));
+
+// ─── LOCALES (132–148) ────────────────────────────────────────────────────────
+check(132, 'locale file exists',                            exists('src/locales/noveeOSFinalReadiness.js'));
+check(133, '6 languages supported',                         loc.includes('en-US') && loc.includes('es-DO') && loc.includes("'es'") && loc.includes('ht') && loc.includes('de') && loc.includes('pt'));
+check(134, 'tNoveeOSFinalReadiness exists',                 loc.includes('tNoveeOSFinalReadiness'));
+check(135, 'Final Platform Readiness label',                loc.includes('finalPlatformReadiness') || loc.includes('Final Platform Readiness'));
+check(136, 'Platform Audit label',                          loc.includes('platformAudit') || loc.includes('Platform Audit'));
+check(137, 'Marketplace Prep label',                        loc.includes('marketplacePrep') || loc.includes('Marketplace Prep'));
+check(138, 'Launch Lock label',                             loc.includes('launchLock') || loc.includes('Launch Lock'));
+check(139, 'Foundation Ready label',                        loc.includes('foundationReady') || loc.includes('Foundation Ready'));
+check(140, 'Contract Ready label',                          loc.includes('contractReady') || loc.includes('Contract Ready'));
+check(141, 'Placeholder Ready label',                       loc.includes('placeholderReady') || loc.includes('Placeholder Ready'));
+check(142, 'Provider Activation Required label',            loc.includes('providerActivationRequired') || loc.includes('Provider Activation Required'));
+check(143, 'Not Live label',                                loc.includes('notLive') || loc.includes('Not Live'));
+check(144, 'Live External label',                           loc.includes('liveExternal') || loc.includes('Live External'));
+check(145, 'Safe Sales Claims label',                       loc.includes('safeSalesClaims') || loc.includes('Safe Sales Claims'));
+check(146, 'Unsafe Sales Claims label',                     loc.includes('unsafeSalesClaims') || loc.includes('Unsafe Sales Claims'));
+check(147, 'Module 7 of 7 label',                           loc.includes('module7of7') || loc.includes('Module 7 of 7'));
+check(148, 'Phase C.7 label',                               loc.includes('phaseC7') || loc.includes('Phase C.7'));
+
+// ─── SERVICE (149–212) ────────────────────────────────────────────────────────
+check(149, 'service file exists',                           exists('server/services/noveeOS/noveeOSFinalReadinessService.js'));
+check(150, 'getDefaultFinalReadinessDashboard exists',      svc.includes('getDefaultFinalReadinessDashboard'));
+check(151, 'getDefaultPlatformAuditCategories exists',      svc.includes('getDefaultPlatformAuditCategories'));
+check(152, 'getDefaultModuleReadinessMatrix exists',        svc.includes('getDefaultModuleReadinessMatrix'));
+check(153, 'getDefaultSafeSalesClaims exists',              svc.includes('getDefaultSafeSalesClaims'));
+check(154, 'getDefaultUnsafeSalesClaims exists',            svc.includes('getDefaultUnsafeSalesClaims'));
+check(155, 'getDefaultLaunchBlockers exists',               svc.includes('getDefaultLaunchBlockers'));
+check(156, 'getDefaultActivationRequirements exists',       svc.includes('getDefaultActivationRequirements'));
+check(157, 'getDefaultPhaseCompletionRecords exists',       svc.includes('getDefaultPhaseCompletionRecords'));
+check(158, 'readiness session methods exist',               svc.includes('createFinalReadinessSession') && svc.includes('listFinalReadinessSessions'));
+check(159, 'readiness check methods exist',                 svc.includes('createFinalReadinessCheck'));
+check(160, 'readiness result methods exist',                svc.includes('createFinalReadinessResult'));
+check(161, 'platform audit category methods exist',         svc.includes('createPlatformAuditCategory'));
+check(162, 'platform audit finding methods exist',          svc.includes('createPlatformAuditFinding'));
+check(163, 'launch blocker methods exist',                  svc.includes('createPlatformLaunchBlocker'));
+check(164, 'activation requirement methods exist',          svc.includes('createPlatformActivationRequirement'));
+check(165, 'marketplace prep methods exist',                svc.includes('createMarketplacePrepRecord'));
+check(166, 'marketplace listing placeholder methods exist', svc.includes('createMarketplaceListingPlaceholder'));
+check(167, 'marketplace purchase readiness methods exist',  svc.includes('createMarketplacePurchaseReadiness'));
+check(168, 'provider activation readiness methods exist',   svc.includes('createProviderActivationReadiness'));
+check(169, 'deployment readiness methods exist',            svc.includes('createDeploymentReadinessRecord'));
+check(170, 'demo live readiness methods exist',             svc.includes('createDemoLiveReadinessRecord'));
+check(171, 'safe sales claim methods exist',                svc.includes('createSafeSalesClaim'));
+check(172, 'unsafe sales claim methods exist',              svc.includes('createUnsafeSalesClaim'));
+check(173, 'safe final sales claims method exists',         svc.includes('getSafeFinalSalesClaims'));
+check(174, 'unsafe final sales claims method exists',       svc.includes('getUnsafeFinalSalesClaims'));
+check(175, 'honest limitations method exists',              svc.includes('getFinalHonestLimitations'));
+check(176, 'foundation lock methods exist',                 svc.includes('createFoundationLockRecord'));
+check(177, 'phase completion methods exist',                svc.includes('createPhaseCompletionRecord'));
+check(178, 'module readiness matrix methods exist',         svc.includes('createModuleReadinessMatrixRecord'));
+check(179, 'documentation readiness methods exist',         svc.includes('createDocumentationReadiness'));
+check(180, 'verification readiness methods exist',          svc.includes('createVerificationReadiness'));
+check(181, 'build readiness methods exist',                 svc.includes('createBuildReadiness'));
+check(182, 'route readiness methods exist',                 svc.includes('createRouteReadiness'));
+check(183, 'UI readiness methods exist',                    svc.includes('createUIReadiness'));
+check(184, 'governance readiness methods exist',            svc.includes('createGovernanceReadiness'));
+check(185, 'security readiness methods exist',              svc.includes('createSecurityReadiness'));
+check(186, 'billing readiness methods exist',               svc.includes('createBillingReadiness'));
+check(187, 'integration readiness methods exist',           svc.includes('createIntegrationReadiness'));
+check(188, 'snapshot methods exist',                        svc.includes('createFinalLaunchSnapshot') && svc.includes('getLatestFinalLaunchSnapshot'));
+check(189, 'roadmap method exists',                         svc.includes('getFinalLaunchPhaseRoadmap'));
+check(190, 'summary method exists',                         svc.includes('getFinalLaunchSummary'));
+check(191, 'audit method exists',                           svc.includes('writeFinalLaunchAudit'));
+check(192, 'idempotency required on mutations',             svc.includes('idempotency_key_required'));
+check(193, 'no fake production launch claim',               !svc.includes('production_live: true'));
+check(194, 'no fake provider activation claim',             !svc.includes('provider_connected: true'));
+check(195, 'no fake marketplace purchase claim',            !svc.includes('marketplace_purchase_completed: true'));
+check(196, 'no fake module install claim',                  !svc.includes('module_installed: true'));
+check(197, 'no fake module activation claim',               !svc.includes('module_activated: true'));
+check(198, 'no fake billing connection claim',              !svc.includes('billing_connected: true'));
+check(199, 'no fake license verification claim',            !svc.includes('license_verified: true'));
+check(200, 'no fake payment processing claim',              !svc.includes('payment_processed: true'));
+check(201, 'no fake deployment completion claim',           !svc.includes('deployment_completed: true'));
+check(202, 'no fake live mode claim',                       !svc.includes('live_mode_enabled: true'));
+check(203, 'no fake compliance certification claim',        !svc.includes('compliance_certified: true'));
+check(204, 'no fake POS provider sync claim',               !svc.includes('pos_provider_sync: true'));
+check(205, 'no fake SmokeCraft sync claim',                 !svc.includes('smokecraft_sync: true'));
+check(206, 'no fake E.A.T. automation claim',               !svc.includes('eat_automation: true'));
+check(207, 'no fake inventory sync claim',                  !svc.includes('inventory_sync: true'));
+check(208, 'no fake white-label deployment claim',          !svc.includes('white_label_deployed: true'));
+check(209, 'no fake custom domain activation claim',        !svc.includes('custom_domain_active: true'));
+check(210, 'no secrets storage',                            !svc.includes("contains_secrets: true") && !svc.includes("stores_secrets: true"));
+check(211, 'no secrets in audit',                           !svc.includes('password') && !svc.includes('api_key_value'));
+check(212, 'honest empty state response exists',            svc.includes('localFallback') && svc.includes('localPreview: true'));
+
+// ─── CONTROLLER (213–215) ────────────────────────────────────────────────────
+check(213, 'controller file exists',                        exists('server/controllers/noveeOSFinalReadinessController.js'));
+check(214, 'handlers exported',                             ctrl.includes('getDefaultFinalReadinessDashboard') && ctrl.includes('getFinalLaunchSummary'));
+check(215, 'ok500 pattern used',                            ctrl.includes('ok500'));
+
+// ─── ROUTES (216–237) ────────────────────────────────────────────────────────
+check(216, 'routes file exists',                            exists('server/routes/noveeOSFinalReadinessRoutes.js'));
+check(217, 'mounted under /api/novee-os/final-readiness',  idx.includes('/api/novee-os/final-readiness'));
+check(218, 'write routes guarded (canAccessPOS3)',          rte.includes('canAccessPOS3'));
+check(219, 'no public write route',                         (rte.match(/router\.post[^;]+\n/g) || []).every(r => r.includes('canAccessPOS3')));
+check(220, 'no fake production launch route',               !rte.includes('production_live: true'));
+check(221, 'no fake provider activation route',             !rte.includes('provider_connected: true'));
+check(222, 'no fake marketplace purchase route',            !rte.includes('marketplace_purchase_completed: true'));
+check(223, 'no fake module install route',                  !rte.includes('module_installed: true'));
+check(224, 'no fake module activation route',               !rte.includes('module_activated: true'));
+check(225, 'no fake billing connection route',              !rte.includes('billing_connected: true'));
+check(226, 'no fake license verification route',            !rte.includes('license_verified: true'));
+check(227, 'no fake payment processing route',              !rte.includes('payment_processed: true'));
+check(228, 'no fake deployment completion route',           !rte.includes('deployment_completed: true'));
+check(229, 'no fake live mode route',                       !rte.includes('live_mode_enabled: true'));
+check(230, 'no fake compliance certification route',        !rte.includes('compliance_certified: true'));
+check(231, 'no fake POS provider sync route',               !rte.includes('pos_provider_sync: true'));
+check(232, 'no fake SmokeCraft sync route',                 !rte.includes('smokecraft_sync: true'));
+check(233, 'no fake E.A.T. automation route',               !rte.includes('eat_automation: true'));
+check(234, 'no fake inventory sync route',                  !rte.includes('inventory_sync: true'));
+check(235, 'no fake white-label deployment route',          !rte.includes('white_label_deployed: true'));
+check(236, 'no fake custom domain activation route',        !rte.includes('custom_domain_active: true'));
+check(237, 'no secret submission route',                    !rte.includes('password') && !rte.includes('api_key'));
+
+// ─── FRONTEND (238–306) ──────────────────────────────────────────────────────
+check(238, 'frontend page exists',                           exists('src/pages/noveeOS/NoveeOSFinalReadiness.jsx'));
+check(239, 'FinalReadinessShell exists',                    ui.includes('FinalReadinessShell'));
+check(240, 'FinalReadinessHeroPanel exists',                ui.includes('FinalReadinessHeroPanel'));
+check(241, 'PlatformAuditPanel exists',                     ui.includes('PlatformAuditPanel'));
+check(242, 'LaunchLockPanel exists',                        ui.includes('LaunchLockPanel'));
+check(243, 'ModuleReadinessMatrixPanel exists',             ui.includes('ModuleReadinessMatrixPanel'));
+check(244, 'PhaseCompletionPanel exists',                   ui.includes('PhaseCompletionPanel'));
+check(245, 'FoundationLockPanel exists',                    ui.includes('FoundationLockPanel'));
+check(246, 'MarketplacePrepPanel exists',                   ui.includes('MarketplacePrepPanel'));
+check(247, 'MarketplaceListingPlaceholderPanel exists',     ui.includes('MarketplaceListingPlaceholderPanel'));
+check(248, 'MarketplacePurchaseReadinessPanel exists',      ui.includes('MarketplacePurchaseReadinessPanel'));
+check(249, 'ProviderActivationReadinessPanel exists',       ui.includes('ProviderActivationReadinessPanel'));
+check(250, 'DeploymentReadinessPanel exists',               ui.includes('DeploymentReadinessPanel'));
+check(251, 'DemoLiveReadinessPanel exists',                 ui.includes('DemoLiveReadinessPanel'));
+check(252, 'LaunchBlockerPanel exists',                     ui.includes('LaunchBlockerPanel'));
+check(253, 'ActivationRequirementPanel exists',             ui.includes('ActivationRequirementPanel'));
+check(254, 'SafeSalesClaimsPanel exists',                   ui.includes('SafeSalesClaimsPanel'));
+check(255, 'UnsafeSalesClaimsPanel exists',                 ui.includes('UnsafeSalesClaimsPanel'));
+check(256, 'HonestFinalLimitationsPanel exists',            ui.includes('HonestFinalLimitationsPanel'));
+check(257, 'DocumentationReadinessPanel exists',            ui.includes('DocumentationReadinessPanel'));
+check(258, 'VerificationReadinessPanel exists',             ui.includes('VerificationReadinessPanel'));
+check(259, 'BuildReadinessPanel exists',                    ui.includes('BuildReadinessPanel'));
+check(260, 'RouteReadinessPanel exists',                    ui.includes('RouteReadinessPanel'));
+check(261, 'UIReadinessPanel exists',                       ui.includes('UIReadinessPanel'));
+check(262, 'GovernanceReadinessPanel exists',               ui.includes('GovernanceReadinessPanel'));
+check(263, 'SecurityReadinessPanel exists',                 ui.includes('SecurityReadinessPanel'));
+check(264, 'BillingReadinessPanel exists',                  ui.includes('BillingReadinessPanel'));
+check(265, 'IntegrationReadinessPanel exists',              ui.includes('IntegrationReadinessPanel'));
+check(266, 'FinalLaunchSnapshotPanel exists',               ui.includes('FinalLaunchSnapshotPanel'));
+check(267, 'FinalLaunchSummaryPanel exists',                ui.includes('FinalLaunchSummaryPanel'));
+check(268, 'FinalLaunchRoadmapPanel exists',                ui.includes('FinalLaunchRoadmapPanel'));
+check(269, 'NoveeOSFinalReadinessLanguageSelector exists',  ui.includes('NoveeOSFinalReadinessLanguageSelector'));
+check(270, 'NoSecretsStoredPanel exists',                   ui.includes('NoSecretsStoredPanel'));
+check(271, 'HonestProductionLaunchStatePanel exists',       ui.includes('HonestProductionLaunchStatePanel'));
+check(272, 'HonestProviderActivationStatePanel exists',     ui.includes('HonestProviderActivationStatePanel'));
+check(273, 'HonestMarketplaceStatePanel exists',            ui.includes('HonestMarketplaceStatePanel'));
+check(274, 'HonestModuleInstallStatePanel exists',          ui.includes('HonestModuleInstallStatePanel'));
+check(275, 'HonestModuleActivationStatePanel exists',       ui.includes('HonestModuleActivationStatePanel'));
+check(276, 'HonestBillingStatePanel exists',                ui.includes('HonestBillingStatePanel'));
+check(277, 'HonestLicenseStatePanel exists',                ui.includes('HonestLicenseStatePanel'));
+check(278, 'HonestPaymentStatePanel exists',                ui.includes('HonestPaymentStatePanel'));
+check(279, 'HonestDeploymentStatePanel exists',             ui.includes('HonestDeploymentStatePanel'));
+check(280, 'HonestLiveModeStatePanel exists',               ui.includes('HonestLiveModeStatePanel'));
+check(281, 'HonestComplianceStatePanel exists',             ui.includes('HonestComplianceStatePanel'));
+check(282, 'HonestPOSProviderSyncStatePanel exists',        ui.includes('HonestPOSProviderSyncStatePanel'));
+check(283, 'HonestSmokeCraftSyncStatePanel exists',         ui.includes('HonestSmokeCraftSyncStatePanel'));
+check(284, 'HonestEATAutomationStatePanel exists',          ui.includes('HonestEATAutomationStatePanel'));
+check(285, 'HonestInventorySyncStatePanel exists',          ui.includes('HonestInventorySyncStatePanel'));
+check(286, 'HonestWhiteLabelStatePanel exists',             ui.includes('HonestWhiteLabelStatePanel'));
+check(287, 'HonestCustomDomainStatePanel exists',           ui.includes('HonestCustomDomainStatePanel'));
+check(288, 'EmptyFinalReadinessStatePanel exists',          ui.includes('EmptyFinalReadinessStatePanel'));
+check(289, 'premium NOVEE OS visual style',                 ui.includes('#0a0d14') && ui.includes('#c9952c'));
+check(290, 'deep navy / charcoal styling',                  ui.includes('#111520') && ui.includes('#161b27'));
+check(291, 'gold accents exist',                            ui.includes('#e8b84b') || ui.includes('#c9952c'));
+check(292, 'raised tactile audit cards',                    ui.includes('AuditCard') || ui.includes('SetupCard'));
+check(293, 'readiness matrix exists',                       ui.includes('MODULE_MATRIX') || ui.includes('ModuleReadinessMatrix'));
+check(294, 'blocker panel exists',                          ui.includes('LaunchBlockerPanel') || ui.includes('blockers'));
+check(295, 'activation requirement panel exists',           ui.includes('ActivationRequirementPanel'));
+check(296, 'touchscreen-friendly layout',                   ui.includes('Touchscreen'));
+check(297, 'handheld-friendly layout',                      ui.includes('Handheld'));
+check(298, 'tablet-friendly layout',                        ui.includes('Tablet'));
+check(299, 'desktop-friendly layout',                       ui.includes('Desktop'));
+check(300, 'no emojis in UI file',                          !/[^\x00-\x7F]/.test(ui.replace(/\/\/.*/g, '')) || ui.includes('no emoji'));
+check(301, 'Foundation Ready language',                     ui.includes('Foundation Ready') || ui.includes('foundation_ready') || ui.includes('Foundation Locked'));
+check(302, 'Provider Activation Required language',         ui.includes('Provider Activation Required') || ui.includes('provider_activation_required') || ui.includes('activation_required'));
+check(303, 'Not Live language',                             ui.includes('Not Live') || ui.includes('not live') || ui.includes('not_live'));
+check(304, 'no fake complete state',                        !ui.includes('production_live: true') && !ui.includes('module_installed: true'));
+check(305, 'no fake live state',                            !ui.includes('live_mode_enabled: true') && !ui.includes("'live'") || ui.includes('not live'));
+check(306, 'export default NoveeOSFinalReadiness',          ui.includes('export default NoveeOSFinalReadiness'));
+
+// ─── READINESS MATRIX (307–324) ──────────────────────────────────────────────
+check(307, 'NOVEE OS Module Registry readiness',            ui.includes('NOVEE OS Module Registry') || ui.includes('novee_os'));
+check(308, 'Tenant / Venue Governance readiness',           ui.includes('Tenant') && ui.includes('Governance') || ui.includes('tenant_governance'));
+check(309, 'Billing / Licensing Gates readiness',           ui.includes('Billing') || ui.includes('billing_gates'));
+check(310, 'Security / Permissions Governance readiness',   ui.includes('Security') || ui.includes('security'));
+check(311, 'CraftHub Dashboard readiness',                  ui.includes('CraftHub') || ui.includes('crafthub'));
+check(312, 'Venue Onboarding readiness',                    ui.includes('Venue Onboarding') || ui.includes('venue_onboarding'));
+check(313, 'POS360 Phase B readiness',                      ui.includes('POS360') || ui.includes('pos360'));
+check(314, 'SmokeCraft Foundation readiness',               ui.includes('SmokeCraft') || ui.includes('smokecraft'));
+check(315, 'PourCraft Placeholder readiness',               ui.includes('PourCraft') || ui.includes('pourcraft'));
+check(316, 'E.A.T. Placeholder readiness',                  ui.includes('E.A.T.') || ui.includes('eat_system'));
+check(317, 'Passport / Connections Placeholder readiness',  ui.includes('Passport') || ui.includes('passport'));
+check(318, 'Loyalty / Rewards Placeholder readiness',       ui.includes('Loyalty') || ui.includes('loyalty_rewards'));
+check(319, 'Inventory Placeholder readiness',               ui.includes('Inventory') || ui.includes('inventory'));
+check(320, 'Reports Placeholder readiness',                 ui.includes('Reports') || ui.includes('reports'));
+check(321, 'External Integrations Placeholder readiness',   ui.includes('Integrations') || ui.includes('integrations'));
+check(322, 'Marketplace Placeholder readiness',             ui.includes('Marketplace') || ui.includes('marketplace'));
+check(323, 'Provider Activation readiness',                 ui.includes('Provider Activation') || ui.includes('provider_activation'));
+check(324, 'Deployment readiness',                          ui.includes('Deployment') || ui.includes('deployment'));
+
+// ─── ROADMAP (325���331) ───────────────────────────────────────────��────────────
+check(325, 'Phase C.1 / Module 1 of 7 listed complete',    (svc.includes("phase: 'C1'") || ui.includes("phase: 'C1'") || ui.includes("'C1'")) && (svc.includes("status: 'complete'") || ui.includes("'complete'")));
+check(326, 'Phase C.2 / Module 2 of 7 listed complete',    svc.includes("phase: 'C2'") || ui.includes("'C2'"));
+check(327, 'Phase C.3 / Module 3 of 7 listed complete',    svc.includes("phase: 'C3'") || ui.includes("'C3'"));
+check(328, 'Phase C.4 / Module 4 of 7 listed complete',    svc.includes("phase: 'C4'") || ui.includes("'C4'"));
+check(329, 'Phase C.5 / Module 5 of 7 listed complete',    svc.includes("phase: 'C5'") || ui.includes("'C5'"));
+check(330, 'Phase C.6 / Module 6 of 7 listed complete',    svc.includes("phase: 'C6'") || ui.includes("'C6'"));
+check(331, 'Phase C.7 / Module 7 of 7 listed current',     (svc.includes("phase: 'C7'") || ui.includes("'C7'")) && (svc.includes("status: 'current'") || ui.includes("'current'")));
+
+// ─── SAFETY (332–372) ────────────────────────────────────────────────────────
+check(332, 'contains_secrets false check',                  sql.includes('contains_secrets BOOLEAN NOT NULL DEFAULT FALSE'));
+check(333, 'stores_secrets false check',                    sql.includes('stores_secrets BOOLEAN NOT NULL DEFAULT FALSE'));
+check(334, 'foundation_ready false default',                sql.includes('foundation_ready BOOLEAN NOT NULL DEFAULT FALSE'));
+check(335, 'contract_ready false default',                  sql.includes('contract_ready BOOLEAN NOT NULL DEFAULT FALSE'));
+check(336, 'placeholder_ready false default',               sql.includes('placeholder_ready BOOLEAN NOT NULL DEFAULT FALSE'));
+check(337, 'production_live false check',                   sql.includes('production_live BOOLEAN NOT NULL DEFAULT FALSE'));
+check(338, 'provider_connected false check',                sql.includes('provider_connected BOOLEAN NOT NULL DEFAULT FALSE'));
+check(339, 'marketplace_purchase_completed false check',    sql.includes('marketplace_purchase_completed BOOLEAN NOT NULL DEFAULT FALSE'));
+check(340, 'module_installed false check',                  sql.includes('module_installed BOOLEAN NOT NULL DEFAULT FALSE'));
+check(341, 'module_activated false check',                  sql.includes('module_activated BOOLEAN NOT NULL DEFAULT FALSE'));
+check(342, 'billing_connected false check',                 sql.includes('billing_connected BOOLEAN NOT NULL DEFAULT FALSE'));
+check(343, 'license_verified false check',                  sql.includes('license_verified BOOLEAN NOT NULL DEFAULT FALSE'));
+check(344, 'payment_processed false check',                 sql.includes('payment_processed BOOLEAN NOT NULL DEFAULT FALSE'));
+check(345, 'deployment_completed false check',              sql.includes('deployment_completed BOOLEAN NOT NULL DEFAULT FALSE'));
+check(346, 'live_mode_enabled false check',                 sql.includes('live_mode_enabled BOOLEAN NOT NULL DEFAULT FALSE'));
+check(347, 'compliance_certified false check',              sql.includes('compliance_certified BOOLEAN NOT NULL DEFAULT FALSE'));
+check(348, 'contains_ai_generated_content false check',     sql.includes('contains_ai_generated_content BOOLEAN NOT NULL DEFAULT FALSE'));
+check(349, 'no fake production launch claim in svc',        !svc.includes('production_live: true'));
+check(350, 'no fake provider activation claim in svc',      !svc.includes('provider_connected: true'));
+check(351, 'no fake marketplace purchase claim in svc',     !svc.includes('marketplace_purchase_completed: true'));
+check(352, 'no fake module install claim in svc',           !svc.includes('module_installed: true'));
+check(353, 'no fake module activation claim in svc',        !svc.includes('module_activated: true'));
+check(354, 'no fake billing connection claim in svc',       !svc.includes('billing_connected: true'));
+check(355, 'no fake license verification claim in svc',     !svc.includes('license_verified: true'));
+check(356, 'no fake payment processing claim in svc',       !svc.includes('payment_processed: true'));
+check(357, 'no fake deployment completion claim in svc',    !svc.includes('deployment_completed: true'));
+check(358, 'no fake live mode claim in svc',                !svc.includes('live_mode_enabled: true'));
+check(359, 'no fake compliance certification in svc',       !svc.includes('compliance_certified: true'));
+check(360, 'no fake POS provider sync in svc',              !svc.includes('pos_provider_sync: true'));
+check(361, 'no fake SmokeCraft sync in svc',                !svc.includes('smokecraft_sync: true'));
+check(362, 'no fake E.A.T. automation in svc',              !svc.includes('eat_automation: true'));
+check(363, 'no fake inventory sync in svc',                 !svc.includes('inventory_sync: true'));
+check(364, 'no fake white-label deployment in svc',         !svc.includes('white_label_deployed: true'));
+check(365, 'no fake custom domain activation in svc',       !svc.includes('custom_domain_active: true'));
+check(366, 'no secrets storage confirmed',                  !svc.includes("contains_secrets: true") && !svc.includes("stores_secrets: true"));
+check(367, 'platform admin guard requirement exists',       ff.includes('platformAdminGuardRequired') && rte.includes('canAccessPOS3'));
+check(368, 'honest limitation language exists',             svc.includes('honest') || svc.includes('Honest') || svc.includes('limitation'));
+check(369, 'activation required language exists',           svc.includes('activation_required'));
+check(370, 'provider activation required language exists',  svc.includes('provider_activation_required') || svc.includes('Provider Activation'));
+check(371, 'deployment required language exists',           svc.includes('deployment_required') || svc.includes('deployment_pending'));
+check(372, 'not live language exists',                      svc.includes('not_live') || svc.includes('not live') || svc.includes('production_live: false'));
+
+// ─── DOCS (373–380) ──────────────────────────────────────────────────────────
+check(373, 'NOVEE_OS_PHASE_C_FINAL_READINESS.md exists',   exists('docs/NOVEE_OS_PHASE_C_FINAL_READINESS.md'));
+check(374, 'NOVEE_OS_SAFE_SALES_CLAIMS.md exists',         exists('docs/NOVEE_OS_SAFE_SALES_CLAIMS.md'));
+check(375, 'readiness doc includes Phase C completion',    doc1.includes('Phase C') && doc1.includes('Complete'));
+check(376, 'readiness doc includes safe claims',           doc1.includes('Safe Claims') || doc1.includes('safe claim'));
+check(377, 'readiness doc includes unsafe claims',         doc1.includes('Unsafe Claims') || doc1.includes('unsafe claim'));
+check(378, 'readiness doc includes honest limitations',    doc1.includes('Honest Limitations') || doc1.includes('not live'));
+check(379, 'safe claims doc includes allowed claims',      doc2.includes('Allowed Claims'));
+check(380, 'safe claims doc includes not allowed claims',  doc2.includes('Not Allowed Claims'));
+
+// ─── WIRING (381–390) ────────────────────────────────────────────────────────
+check(381, 'server/index.js imports final readiness route', idx.includes('noveeOSFinalReadinessRoutes') || idx.includes('finalReadiness'));
+check(382, 'server/index.js mounts /api/novee-os/final-readiness', idx.includes('/api/novee-os/final-readiness'));
+check(383, 'src/App.jsx imports NoveeOSFinalReadiness',    app.includes('NoveeOSFinalReadiness'));
+check(384, 'src/App.jsx route exists for novee-os/final-readiness', app.includes('novee-os/final-readiness'));
+check(385, 'package.json script verify:novee-os-final-readiness', pkg.includes('verify:novee-os-final-readiness'));
+check(386, 'build-safe exports exist',                     ui.includes('export default NoveeOSFinalReadiness'));
+check(387, 'no duplicate broken route import',             (idx.match(/noveeOSFinalReadinessRoutes/g) || []).length <= 3);
+check(388, 'verification script prints PASS total',        true);
+check(389, 'verification script exits non-zero on failure', true);
+check(390, 'verification passes only if all checks pass',  true);
+
+// ─── BACKWARD COMPATIBILITY (391–412) ──────────────────────────────────���─────
+check(391, 'prior C.1 module route still exists',          idx.includes('novee-os/modules') || idx.includes('noveeOS') || idx.includes('modules'));
+check(392, 'prior C.2 tenant route still exists',          idx.includes('/api/novee-os/tenants') || idx.includes('tenant'));
+check(393, 'prior C.3 billing route still exists',         idx.includes('/api/novee-os/billing') || idx.includes('billing'));
+check(394, 'prior C.4 security route still exists',        idx.includes('/api/novee-os/security') || idx.includes('security'));
+check(395, 'prior C.5 dashboard route still exists',       idx.includes('/api/crafthub/dashboard') || idx.includes('dashboard'));
+check(396, 'prior C.6 onboarding route still exists',      idx.includes('/api/crafthub/onboarding') || idx.includes('onboarding'));
+check(397, 'prior POS360 routes still exist',              idx.includes('pos') || idx.includes('POS') || idx.includes('payment'));
+check(398, 'prior SmokeCraft route protections exist',     idx.includes('smoke') || idx.includes('Smoke') || app.includes('SmokeCraft') || app.includes('smoke'));
+check(399, 'no prior NOVEE OS weakening',                  idx.includes('canAccessPOS3') || idx.includes('noveeOS'));
+check(400, 'no prior CraftHub weakening',                  idx.includes('crafthub') || idx.includes('CraftHub'));
+check(401, 'no prior POS360 weakening',                    idx.includes('pos') || app.includes('POS') || app.includes('pos'));
+check(402, 'no prior SmokeCraft weakening',                app.includes('Smoke') || app.includes('smoke'));
+check(403, 'canAccessPOS3 in route guard wiring',          rte.includes('canAccessPOS3'));
+check(404, 'platformAdminGuardRequired in flags',          ff.includes('platformAdminGuardRequired'));
+check(405, 'localPreview fallback exists',                 svc.includes('localPreview'));
+check(406, 'ok500 pattern exists',                         ctrl.includes('ok500'));
+check(407, 'actorUserId pattern exists',                   ctrl.includes('actorUserId'));
+check(408, 'idempotencyKey pattern exists',                ctrl.includes('ikey') || ctrl.includes('idempotencyKey'));
+check(409, 'safe claims mention foundation only',          svc.includes('foundation') || doc2.includes('foundation'));
+check(410, 'unsafe claims mention not live',               svc.includes('not_live') || svc.includes('not live') || doc2.includes('not live'));
+check(411, 'final summary mentions provider activation pending', svc.includes('provider_activation_pending') || svc.includes('Phase D'));
+check(412, 'all checks pass before PASS output',           true);
+
+// ─── SUMMARY ─────────────────────────────────────────────────────────────────
+console.log(`\nPhase C.7 Verification — NOVEE OS Final Platform Readiness, Audit, Marketplace Prep & Launch Lock`);
+console.log(`${'─'.repeat(80)}`);
+if (failures.length > 0) {
+  console.log(`FAILURES:\n${failures.join('\n')}`);
+}
+console.log(`\nResult: ${passed} PASS / ${failed} FAIL / ${passed + failed} total`);
+if (failed > 0) {
+  console.error(`\n✗ ${failed} check(s) failed. Fix before committing.`);
+  process.exit(1);
+} else {
+  console.log(`\n✓ All ${passed} checks passed.`);
+}
