@@ -71,7 +71,8 @@ import POS360SelfOrdering from './pages/pos360/POS360SelfOrdering.jsx'
 import POS360ProductionReadiness from './pages/pos360/POS360ProductionReadiness.jsx'
 import NoveeOSModuleRegistry    from './pages/noveeOS/NoveeOSModuleRegistry.jsx'
 import NoveeOSTenantGovernance  from './pages/noveeOS/NoveeOSTenantGovernance.jsx'
-import NoveeOSBillingGovernance from './pages/noveeOS/NoveeOSBillingGovernance.jsx'
+import NoveeOSBillingGovernance  from './pages/noveeOS/NoveeOSBillingGovernance.jsx'
+import NoveeOSSecurityGovernance from './pages/noveeOS/NoveeOSSecurityGovernance.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -627,6 +628,7 @@ export default function App() {
               <Route path="novee-os/modules" element={<NoveeOSModuleRegistry />} />
               <Route path="novee-os/tenants" element={<NoveeOSTenantGovernance />} />
               <Route path="novee-os/billing" element={<NoveeOSBillingGovernance />} />
+              <Route path="novee-os/security" element={<NoveeOSSecurityGovernance />} />
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
               {/* ── Protected: manager+ — BLOCKED in demo mode ────── */}

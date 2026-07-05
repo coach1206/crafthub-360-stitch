@@ -77,6 +77,7 @@ import pos360ProductionReadinessRoutes  from './routes/pos360ProductionReadiness
 import noveeOSModuleRegistryRoutes      from './routes/noveeOSModuleRegistryRoutes.js'
 import noveeOSTenantGovernanceRoutes    from './routes/noveeOSTenantGovernanceRoutes.js'
 import noveeOSBillingGovernanceRoutes  from './routes/noveeOSBillingGovernanceRoutes.js'
+import noveeOSSecurityGovernanceRoutes from './routes/noveeOSSecurityGovernanceRoutes.js'
 import databaseStatusRoutes            from './routes/databaseStatusRoutes.js'
 import paymentMoneyBridgeRoutes        from './routes/paymentMoneyBridgeRoutes.js'
 import venueOnboardingRoutes           from './routes/venueOnboardingRoutes.js'
@@ -230,6 +231,7 @@ app.use('/api/pos360/production-readiness', pos360ProductionReadinessRoutes)
 app.use('/api/novee-os/modules',           noveeOSModuleRegistryRoutes)
 app.use('/api/novee-os/tenants',          noveeOSTenantGovernanceRoutes)
 app.use('/api/novee-os/billing',          noveeOSBillingGovernanceRoutes)
+app.use('/api/novee-os/security',         noveeOSSecurityGovernanceRoutes)
 app.use('/api/system/database',           databaseStatusRoutes)
 app.use('/api/payments/money-bridge',     paymentMoneyBridgeRoutes)
 app.use('/api/onboarding',               venueOnboardingRoutes)
