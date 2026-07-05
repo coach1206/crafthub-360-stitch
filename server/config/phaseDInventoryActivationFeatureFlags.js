@@ -1,0 +1,79 @@
+/**
+ * Phase D.4 — Inventory Activation Feature Flags
+ * contains_secrets: false
+ * All live/sync/vendor-order processing flags default FALSE.
+ * All enforcement flags default TRUE.
+ */
+
+const PHASE_D_INVENTORY_ACTIVATION_FLAGS = {
+  PHASE_D_INVENTORY_ACTIVATION_ENABLED:           true,
+  INVENTORY_AREA_REGISTRY_ENABLED:                true,
+  INVENTORY_LOCATION_REGISTRY_ENABLED:            true,
+  INVENTORY_STORAGE_ZONE_ENABLED:                 true,
+  INVENTORY_ITEM_REGISTRY_ENABLED:                true,
+  INVENTORY_ITEM_CATEGORY_ENABLED:                true,
+  INVENTORY_ITEM_VARIANT_ENABLED:                 true,
+  INVENTORY_UNIT_REGISTRY_ENABLED:                true,
+  INVENTORY_PAR_LEVEL_ENABLED:                    true,
+  INVENTORY_REORDER_RULE_ENABLED:                 true,
+  INVENTORY_LOW_STOCK_RULE_ENABLED:               true,
+  INVENTORY_COUNT_SESSION_ENABLED:                true,
+  INVENTORY_ADJUSTMENT_RECORD_ENABLED:            true,
+  INVENTORY_TRANSFER_RECORD_ENABLED:              true,
+  INVENTORY_WASTE_SPOILAGE_ENABLED:               true,
+  INVENTORY_VENDOR_REGISTRY_ENABLED:              true,
+  INVENTORY_VENDOR_CATALOG_ENABLED:               true,
+  INVENTORY_VENDOR_ORDER_PREVIEW_ENABLED:         true,
+  INVENTORY_VENDOR_ORDER_APPROVAL_REQUIRED:       true,
+  INVENTORY_PURCHASE_ORDER_PREVIEW_ENABLED:       true,
+  INVENTORY_IMPORT_PROFILE_ENABLED:               true,
+  INVENTORY_IMPORT_TEMPLATE_ENABLED:              true,
+  INVENTORY_IMPORT_BATCH_ENABLED:                 true,
+  INVENTORY_EXPORT_PROFILE_ENABLED:               true,
+  INVENTORY_EXTERNAL_POS_SIGNAL_MAPPING_ENABLED:  true,
+  INVENTORY_HUMIDOR_MAPPING_ENABLED:              true,
+  INVENTORY_BAR_MAPPING_ENABLED:                  true,
+  INVENTORY_KITCHEN_MAPPING_ENABLED:              true,
+  INVENTORY_RETAIL_MAPPING_ENABLED:               true,
+  INVENTORY_MENU_INGREDIENT_MAPPING_ENABLED:      true,
+  INVENTORY_RECIPE_MAPPING_ENABLED:               true,
+  INVENTORY_COGS_PROFILE_ENABLED:                 true,
+  INVENTORY_SHRINKAGE_PROFILE_ENABLED:            true,
+  INVENTORY_ALERT_RULE_ENABLED:                   true,
+  INVENTORY_ALERT_PREVIEW_ENABLED:                true,
+  INVENTORY_LIVE_SYNC_LOCK_ENABLED:               true,
+  INVENTORY_TENANT_MAPPING_ENABLED:               true,
+  INVENTORY_MODULE_MAPPING_ENABLED:               true,
+  INVENTORY_COMPLIANCE_CHECKLIST_ENABLED:         true,
+  INVENTORY_RISK_FLAGS_ENABLED:                   true,
+  INVENTORY_ACTIVATION_AUDIT_ENABLED:             true,
+
+  // Enforcement flags — must remain TRUE
+  INVENTORY_NO_SECRET_STORAGE_ENFORCED:           true,
+  INVENTORY_NO_FAKE_SYNC_ENFORCED:                true,
+  INVENTORY_NO_FAKE_VENDOR_ORDER_ENFORCED:        true,
+  INVENTORY_NO_FAKE_COUNT_ENFORCED:               true,
+  INVENTORY_CAN_ACCESS_POS3_WRITE_REQUIRED:       true,
+  INVENTORY_ADMIN_ONLY_LIVE_REQUEST_REQUIRED:     true,
+  INVENTORY_IDEMPOTENCY_ENFORCED:                 true,
+  INVENTORY_AUDIT_TRAIL_ENFORCED:                 true,
+  INVENTORY_ENVIRONMENT_LOCK_ENFORCED:            true,
+  INVENTORY_VENDOR_ORDER_APPROVAL_GATE_REQUIRED:  true,
+  INVENTORY_LIVE_SYNC_APPROVAL_GATE_REQUIRED:     true,
+
+  // Live/sync/vendor-order processing flags — must remain FALSE
+  INVENTORY_LIVE_SYNC_PROCESSING_ENABLED:         false,
+  INVENTORY_EXTERNAL_POS_SYNC_PROCESSING_ENABLED: false,
+  INVENTORY_AUTO_REORDER_PROCESSING_ENABLED:      false,
+  INVENTORY_VENDOR_ORDER_SUBMISSION_ENABLED:      false,
+  INVENTORY_REAL_VENDOR_EMAIL_ENABLED:            false,
+  INVENTORY_REAL_PURCHASE_ORDER_ENABLED:          false,
+  INVENTORY_REAL_TIME_COUNT_SYNC_ENABLED:         false,
+  INVENTORY_EXTERNAL_STOCK_FEED_ENABLED:          false,
+}
+
+export function getPhaseDInventoryActivationFlags(overrides = {}) {
+  return { ...PHASE_D_INVENTORY_ACTIVATION_FLAGS, ...overrides }
+}
+
+export default PHASE_D_INVENTORY_ACTIVATION_FLAGS

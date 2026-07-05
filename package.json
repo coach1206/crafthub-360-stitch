@@ -81,7 +81,8 @@
     "verify:novee-os-final-readiness": "node server/scripts/verifyNoveeOSFinalReadiness.js",
     "verify:phase-d-provider-activation": "node server/scripts/verifyPhaseDProviderActivation.js",
     "verify:phase-d-payment-provider-activation": "node server/scripts/verifyPhaseDPaymentProviderActivation.js",
-    "verify:phase-d-external-pos-activation": "node server/scripts/verifyPhaseDExternalPOSActivation.js"
+    "verify:phase-d-external-pos-activation": "node server/scripts/verifyPhaseDExternalPOSActivation.js",
+    "verify:phase-d-inventory-activation": "node server/scripts/verifyPhaseDInventoryActivation.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

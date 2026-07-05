@@ -84,6 +84,7 @@ import noveeOSFinalReadinessRoutes     from './routes/noveeOSFinalReadinessRoute
 import phaseDProviderActivationRoutes  from './routes/phaseDProviderActivationRoutes.js'
 import phaseDPaymentProviderActivationRoutes from './routes/phaseDPaymentProviderActivationRoutes.js'
 import phaseDExternalPOSActivationRoutes from './routes/phaseDExternalPOSActivationRoutes.js'
+import phaseDInventoryActivationRoutes from './routes/phaseDInventoryActivationRoutes.js'
 import databaseStatusRoutes            from './routes/databaseStatusRoutes.js'
 import paymentMoneyBridgeRoutes        from './routes/paymentMoneyBridgeRoutes.js'
 import venueOnboardingRoutes           from './routes/venueOnboardingRoutes.js'
@@ -244,6 +245,7 @@ app.use('/api/novee-os/final-readiness',  noveeOSFinalReadinessRoutes)
 app.use('/api/phase-d/provider-activation', phaseDProviderActivationRoutes)
 app.use('/api/phase-d/payment-provider-activation', phaseDPaymentProviderActivationRoutes)
 app.use('/api/phase-d/external-pos-activation', phaseDExternalPOSActivationRoutes)
+app.use('/api/phase-d/inventory-activation', phaseDInventoryActivationRoutes)
 app.use('/api/system/database',           databaseStatusRoutes)
 app.use('/api/payments/money-bridge',     paymentMoneyBridgeRoutes)
 app.use('/api/onboarding',               venueOnboardingRoutes)
