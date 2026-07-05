@@ -77,6 +77,7 @@ import CraftHubDashboard         from './pages/crafthub/CraftHubDashboard.jsx'
 import CraftHubOnboardingWizard  from './pages/crafthub/CraftHubOnboardingWizard.jsx'
 import NoveeOSFinalReadiness     from './pages/noveeOS/NoveeOSFinalReadiness.jsx'
 import PhaseDProviderActivation  from './pages/phaseD/PhaseDProviderActivation.jsx'
+import PhaseDPaymentProviderActivation from './pages/phaseD/PhaseDPaymentProviderActivation.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -637,6 +638,7 @@ export default function App() {
               <Route path="crafthub/onboarding" element={<CraftHubOnboardingWizard />} />
               <Route path="novee-os/final-readiness" element={<NoveeOSFinalReadiness />} />
               <Route path="phase-d/provider-activation" element={<PhaseDProviderActivation />} />
+              <Route path="phase-d/payment-provider-activation" element={<PhaseDPaymentProviderActivation />} />
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
               {/* ── Protected: manager+ — BLOCKED in demo mode ────── */}

@@ -79,7 +79,8 @@
     "verify:crafthub-dashboard": "node server/scripts/verifyCraftHubDashboard.js",
     "verify:crafthub-onboarding": "node server/scripts/verifyCraftHubOnboarding.js",
     "verify:novee-os-final-readiness": "node server/scripts/verifyNoveeOSFinalReadiness.js",
-    "verify:phase-d-provider-activation": "node server/scripts/verifyPhaseDProviderActivation.js"
+    "verify:phase-d-provider-activation": "node server/scripts/verifyPhaseDProviderActivation.js",
+    "verify:phase-d-payment-provider-activation": "node server/scripts/verifyPhaseDPaymentProviderActivation.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
