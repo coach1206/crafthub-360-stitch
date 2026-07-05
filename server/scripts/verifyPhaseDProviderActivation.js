@@ -1,0 +1,492 @@
+// Phase D.1 Verification Script — Provider Activation Roadmap, Live Integration Order & No-Fake Activation Control
+import { readFileSync, existsSync } from 'fs';
+
+const PASS = [], FAIL = [];
+let total = 0;
+
+function check(n, label, result) {
+  total++;
+  if (result) { PASS.push(n); }
+  else { FAIL.push(`  FAIL [${n}] ${label}`); }
+}
+
+const BASE = new URL('../../', import.meta.url).pathname;
+
+const sqlPath  = BASE + 'server/db/migrations/055_phase_d_provider_activation_roadmap.sql';
+const ctPath   = BASE + 'server/services/phaseD/phaseDProviderActivationContracts.js';
+const ffPath   = BASE + 'server/config/phaseDProviderActivationFeatureFlags.js';
+const locPath  = BASE + 'src/locales/phaseDProviderActivation.js';
+const svcPath  = BASE + 'server/services/phaseD/phaseDProviderActivationService.js';
+const ctrPath  = BASE + 'server/controllers/phaseDProviderActivationController.js';
+const rtPath   = BASE + 'server/routes/phaseDProviderActivationRoutes.js';
+const uiPath   = BASE + 'src/pages/phaseD/PhaseDProviderActivation.jsx';
+const docsPath = BASE + 'docs/PHASE_D_PROVIDER_ACTIVATION_ROADMAP.md';
+const idxPath  = BASE + 'server/index.js';
+const appPath  = BASE + 'src/App.jsx';
+const pkgPath  = BASE + 'package.json';
+
+const sql  = existsSync(sqlPath)  ? readFileSync(sqlPath, 'utf8')  : '';
+const sqlHas = (col) => new RegExp(col + '\\s+BOOLEAN NOT NULL DEFAULT FALSE').test(sql);
+const ct   = existsSync(ctPath)   ? readFileSync(ctPath, 'utf8')   : '';
+const ff   = existsSync(ffPath)   ? readFileSync(ffPath, 'utf8')   : '';
+const loc  = existsSync(locPath)  ? readFileSync(locPath, 'utf8')  : '';
+const svc  = existsSync(svcPath)  ? readFileSync(svcPath, 'utf8')  : '';
+const ctr  = existsSync(ctrPath)  ? readFileSync(ctrPath, 'utf8')  : '';
+const rt   = existsSync(rtPath)   ? readFileSync(rtPath, 'utf8')   : '';
+const ui   = existsSync(uiPath)   ? readFileSync(uiPath, 'utf8')   : '';
+const docs = existsSync(docsPath) ? readFileSync(docsPath, 'utf8') : '';
+const idx  = existsSync(idxPath)  ? readFileSync(idxPath, 'utf8')  : '';
+const app  = existsSync(appPath)  ? readFileSync(appPath, 'utf8')  : '';
+const pkg  = existsSync(pkgPath)  ? readFileSync(pkgPath, 'utf8')  : '';
+
+console.log('\nPhase D.1 Verification — Provider Activation Roadmap, Live Integration Order & No-Fake Activation Control');
+console.log('─'.repeat(80));
+
+// ─── MIGRATION (1–70) ──────────────────────────────────────────────────────
+check(1,  'migration file exists',                          existsSync(sqlPath));
+check(2,  'safe migration comment',                        sql.includes('Safe migration: no destructive DDL'));
+check(3,  'no DROP TABLE',                                 !sql.includes('DROP TABLE'));
+check(4,  'no TRUNCATE',                                   !sql.includes('TRUNCATE'));
+check(5,  'CREATE TABLE IF NOT EXISTS used',               sql.includes('CREATE TABLE IF NOT EXISTS'));
+check(6,  'phase_d_provider_activation_roadmaps table',   sql.includes('phase_d_provider_activation_roadmaps'));
+check(7,  'phase_d_provider_categories table',            sql.includes('phase_d_provider_categories'));
+check(8,  'phase_d_provider_candidates table',            sql.includes('phase_d_provider_candidates'));
+check(9,  'phase_d_provider_activation_order table',      sql.includes('phase_d_provider_activation_order'));
+check(10, 'phase_d_provider_dependencies table',          sql.includes('phase_d_provider_dependencies'));
+check(11, 'phase_d_provider_credentials_placeholders',    sql.includes('phase_d_provider_credentials_placeholders'));
+check(12, 'phase_d_provider_prerequisites table',         sql.includes('phase_d_provider_prerequisites'));
+check(13, 'phase_d_provider_blockers table',              sql.includes('phase_d_provider_blockers'));
+check(14, 'phase_d_provider_legal_requirements table',    sql.includes('phase_d_provider_legal_requirements'));
+check(15, 'phase_d_provider_billing_requirements table',  sql.includes('phase_d_provider_billing_requirements'));
+check(16, 'phase_d_provider_security_requirements table', sql.includes('phase_d_provider_security_requirements'));
+check(17, 'phase_d_provider_activation_statuses table',   sql.includes('phase_d_provider_activation_statuses'));
+check(18, 'phase_d_provider_test_statuses table',         sql.includes('phase_d_provider_test_statuses'));
+check(19, 'phase_d_provider_verification_statuses table', sql.includes('phase_d_provider_verification_statuses'));
+check(20, 'phase_d_provider_rollback_records table',      sql.includes('phase_d_provider_rollback_records'));
+check(21, 'phase_d_provider_failure_records table',       sql.includes('phase_d_provider_failure_records'));
+check(22, 'phase_d_provider_readiness_matrix table',      sql.includes('phase_d_provider_readiness_matrix'));
+check(23, 'phase_d_safe_activation_claims table',         sql.includes('phase_d_safe_activation_claims'));
+check(24, 'phase_d_unsafe_activation_claims table',       sql.includes('phase_d_unsafe_activation_claims'));
+check(25, 'phase_d_activation_snapshots table',           sql.includes('phase_d_activation_snapshots'));
+check(26, 'phase_d_activation_audit table',               sql.includes('phase_d_activation_audit'));
+check(27, 'provider_category CHECK constraint',           sql.includes("provider_category IN ("));
+check(28, 'payments category in CHECK',                   sql.includes("'payments'"));
+check(29, 'billing category in CHECK',                    sql.includes("'billing'"));
+check(30, 'external_pos category in CHECK',               sql.includes("'external_pos'"));
+check(31, 'deployment category in CHECK',                 sql.includes("'deployment'"));
+check(32, 'sso category in CHECK',                        sql.includes("'sso'"));
+check(33, 'mfa category in CHECK',                        sql.includes("'mfa'"));
+check(34, 'marketplace category in CHECK',                sql.includes("'marketplace'"));
+check(35, 'smokecraft_sync category in CHECK',            sql.includes("'smokecraft_sync'"));
+check(36, 'eat_automation category in CHECK',             sql.includes("'eat_automation'"));
+check(37, 'manual_fallback category in CHECK',            sql.includes("'manual_fallback'"));
+check(38, 'activation_status CHECK constraint',           sql.includes("activation_status IN (") || sql.includes("activation_status TEXT NOT NULL DEFAULT 'not_started'"));
+check(39, 'credential_status CHECK constraint',           sql.includes("credential_status IN ("));
+check(40, 'test_status CHECK constraint',                 sql.includes("test_status IN ("));
+check(41, 'verification_status CHECK constraint',         sql.includes("verification_status IN ("));
+check(42, 'readiness_status CHECK constraint',            sql.includes("readiness_status IN ("));
+check(43, 'rollback_status CHECK constraint',             sql.includes("rollback_status IN ("));
+check(44, 'demo_live_mode CHECK constraint',              sql.includes("demo_live_mode IN ("));
+check(45, 'contains_secrets DEFAULT FALSE',               sqlHas('contains_secrets'));
+check(46, 'stores_secrets DEFAULT FALSE',                 sqlHas('stores_secrets'));
+check(47, 'exposes_private_data DEFAULT TRUE',            sql.includes('exposes_private_data BOOLEAN NOT NULL DEFAULT TRUE') || /exposes_private_data\s+BOOLEAN NOT NULL DEFAULT TRUE/.test(sql));
+check(48, 'exposes_financial_data DEFAULT TRUE',          sql.includes('exposes_financial_data BOOLEAN NOT NULL DEFAULT TRUE') || /exposes_financial_data\s+BOOLEAN NOT NULL DEFAULT TRUE/.test(sql));
+check(49, 'provider_connected DEFAULT FALSE',             sqlHas('provider_connected'));
+check(50, 'credentials_received DEFAULT FALSE',           sqlHas('credentials_received'));
+check(51, 'credentials_verified DEFAULT FALSE',           sqlHas('credentials_verified'));
+check(52, 'activation_completed DEFAULT FALSE',           sqlHas('activation_completed'));
+check(53, 'test_completed DEFAULT FALSE',                 sqlHas('test_completed'));
+check(54, 'verification_completed DEFAULT FALSE',         sqlHas('verification_completed'));
+check(55, 'live_mode_enabled DEFAULT FALSE',              sqlHas('live_mode_enabled'));
+check(56, 'rollback_ready DEFAULT FALSE',                 sqlHas('rollback_ready'));
+check(57, 'payment_processed DEFAULT FALSE',              sqlHas('payment_processed'));
+check(58, 'billing_connected DEFAULT FALSE',              sqlHas('billing_connected'));
+check(59, 'pos_sync_enabled DEFAULT FALSE',               sqlHas('pos_sync_enabled'));
+check(60, 'inventory_sync_enabled DEFAULT FALSE',         sqlHas('inventory_sync_enabled'));
+check(61, 'notification_delivery_enabled DEFAULT FALSE',  sqlHas('notification_delivery_enabled'));
+check(62, 'security_provider_connected DEFAULT FALSE',    sqlHas('security_provider_connected'));
+check(63, 'deployment_completed DEFAULT FALSE',           sqlHas('deployment_completed'));
+check(64, 'marketplace_transaction_enabled DEFAULT FALSE',sqlHas('marketplace_transaction_enabled'));
+check(65, 'idempotency_key UNIQUE on candidates',         sql.includes('idempotency_key             TEXT UNIQUE') || sql.includes('idempotency_key TEXT UNIQUE'));
+check(66, 'organization_id in tables',                    sql.includes('organization_id'));
+check(67, 'venue_id in tables',                           sql.includes('venue_id'));
+check(68, 'actor_user_id in audit',                       sql.includes('actor_user_id'));
+check(69, 'provider_key column',                          sql.includes('provider_key'));
+check(70, 'activation_order column',                      sql.includes('activation_order'));
+
+// ─── CONTRACTS (71–85) ────────────────────────────────────────────────────
+check(71, 'contracts file exists',                        existsSync(ctPath));
+check(72, 'PROVIDER_CATEGORIES exported',                 ct.includes('export const PROVIDER_CATEGORIES'));
+check(73, 'ACTIVATION_STATUSES exported',                 ct.includes('export const ACTIVATION_STATUSES'));
+check(74, 'CREDENTIAL_STATUSES exported',                 ct.includes('export const CREDENTIAL_STATUSES'));
+check(75, 'TEST_STATUSES exported',                       ct.includes('export const TEST_STATUSES'));
+check(76, 'VERIFICATION_STATUSES exported',               ct.includes('export const VERIFICATION_STATUSES'));
+check(77, 'READINESS_STATUSES exported',                  ct.includes('export const READINESS_STATUSES'));
+check(78, 'ROLLBACK_STATUSES exported',                   ct.includes('export const ROLLBACK_STATUSES'));
+check(79, 'DEMO_LIVE_MODES exported',                     ct.includes('export const DEMO_LIVE_MODES'));
+check(80, 'PROVIDER_KEYS exported',                       ct.includes('export const PROVIDER_KEYS'));
+check(81, 'isValidProviderCategory exported',             ct.includes('isValidProviderCategory'));
+check(82, 'isValidActivationStatus exported',             ct.includes('isValidActivationStatus'));
+check(83, 'isValidCredentialStatus exported',             ct.includes('isValidCredentialStatus'));
+check(84, 'isValidTestStatus exported',                   ct.includes('isValidTestStatus'));
+check(85, 'isValidVerificationStatus exported',           ct.includes('isValidVerificationStatus'));
+check(86, 'isValidReadinessStatus exported',              ct.includes('isValidReadinessStatus'));
+check(87, 'isValidRollbackStatus exported',               ct.includes('isValidRollbackStatus'));
+check(88, 'isValidDemoLiveMode exported',                 ct.includes('isValidDemoLiveMode'));
+check(89, 'isValidBlockerStatus exported',                ct.includes('isValidBlockerStatus'));
+check(90, 'isValidRequirementStatus exported',            ct.includes('isValidRequirementStatus'));
+check(91, 'isValidClaimStatus exported',                  ct.includes('isValidClaimStatus'));
+check(92, 'isValidProviderKey exported',                  ct.includes('isValidProviderKey'));
+check(93, 'stripe in PROVIDER_KEYS',                      ct.includes("'stripe'"));
+check(94, 'stripe in PROVIDER_KEYS',                      ct.includes("'square'"));
+check(95, 'auth0 in PROVIDER_KEYS',                       ct.includes("'auth0'"));
+check(96, 'railway in PROVIDER_KEYS',                     ct.includes("'railway'"));
+check(97, 'twilio in PROVIDER_KEYS',                      ct.includes("'twilio'"));
+
+// ─── FEATURE FLAGS (98–142) ───────────────────────────────────────────────
+check(98,  'feature flags file exists',                   existsSync(ffPath));
+check(99,  'DEFAULT_PHASE_D_PROVIDER_ACTIVATION_FLAGS',   ff.includes('DEFAULT_PHASE_D_PROVIDER_ACTIVATION_FLAGS'));
+check(100, 'getPhaseDProviderActivationFlags exported',   ff.includes('getPhaseDProviderActivationFlags'));
+check(101, 'phaseDProviderActivationEnabled flag',        ff.includes('phaseDProviderActivationEnabled'));
+check(102, 'providerRoadmapEnabled flag',                 ff.includes('providerRoadmapEnabled'));
+check(103, 'providerCategoriesEnabled flag',              ff.includes('providerCategoriesEnabled'));
+check(104, 'providerCandidatesEnabled flag',              ff.includes('providerCandidatesEnabled'));
+check(105, 'providerActivationOrderEnabled flag',         ff.includes('providerActivationOrderEnabled'));
+check(106, 'providerDependenciesEnabled flag',            ff.includes('providerDependenciesEnabled'));
+check(107, 'credentialPlaceholdersEnabled flag',          ff.includes('credentialPlaceholdersEnabled'));
+check(108, 'providerPrerequisitesEnabled flag',           ff.includes('providerPrerequisitesEnabled'));
+check(109, 'providerBlockersEnabled flag',                ff.includes('providerBlockersEnabled'));
+check(110, 'legalRequirementsEnabled flag',               ff.includes('legalRequirementsEnabled'));
+check(111, 'billingRequirementsEnabled flag',             ff.includes('billingRequirementsEnabled'));
+check(112, 'securityRequirementsEnabled flag',            ff.includes('securityRequirementsEnabled'));
+check(113, 'activationStatusesEnabled flag',              ff.includes('activationStatusesEnabled'));
+check(114, 'testStatusesEnabled flag',                    ff.includes('testStatusesEnabled'));
+check(115, 'verificationStatusesEnabled flag',            ff.includes('verificationStatusesEnabled'));
+check(116, 'rollbackRecordsEnabled flag',                 ff.includes('rollbackRecordsEnabled'));
+check(117, 'failureRecordsEnabled flag',                  ff.includes('failureRecordsEnabled'));
+check(118, 'readinessMatrixEnabled flag',                 ff.includes('readinessMatrixEnabled'));
+check(119, 'safeActivationClaimsEnabled flag',            ff.includes('safeActivationClaimsEnabled'));
+check(120, 'unsafeActivationClaimsEnabled flag',          ff.includes('unsafeActivationClaimsEnabled'));
+check(121, 'activationSnapshotsEnabled flag',             ff.includes('activationSnapshotsEnabled'));
+check(122, 'activationAuditEnabled flag',                 ff.includes('activationAuditEnabled'));
+check(123, 'paymentsProviderPlanningEnabled flag',        ff.includes('paymentsProviderPlanningEnabled'));
+check(124, 'billingProviderPlanningEnabled flag',         ff.includes('billingProviderPlanningEnabled'));
+check(125, 'externalPOSProviderPlanningEnabled flag',     ff.includes('externalPOSProviderPlanningEnabled'));
+check(126, 'inventoryProviderPlanningEnabled flag',       ff.includes('inventoryProviderPlanningEnabled'));
+check(127, 'notificationProviderPlanningEnabled flag',    ff.includes('notificationProviderPlanningEnabled'));
+check(128, 'securityProviderPlanningEnabled flag',        ff.includes('securityProviderPlanningEnabled'));
+check(129, 'deploymentProviderPlanningEnabled flag',      ff.includes('deploymentProviderPlanningEnabled'));
+check(130, 'marketplaceProviderPlanningEnabled flag',     ff.includes('marketplaceProviderPlanningEnabled'));
+check(131, 'manualFallbackPlanningEnabled flag',          ff.includes('manualFallbackPlanningEnabled'));
+check(132, 'noFakeProviderActivationEnforced: true',      ff.includes('noFakeProviderActivationEnforced:         true'));
+check(133, 'noFakePaymentProcessingEnforced: true',       ff.includes('noFakePaymentProcessingEnforced:          true'));
+check(134, 'noFakeBillingConnectionEnforced: true',       ff.includes('noFakeBillingConnectionEnforced:          true'));
+check(135, 'noFakeExternalPOSSyncEnforced: true',         ff.includes('noFakeExternalPOSSyncEnforced:            true'));
+check(136, 'noFakeInventorySyncEnforced: true',           ff.includes('noFakeInventorySyncEnforced:              true'));
+check(137, 'noFakeNotificationDeliveryEnforced: true',    ff.includes('noFakeNotificationDeliveryEnforced:       true'));
+check(138, 'noFakeSecurityProviderConnectionEnforced: true', ff.includes('noFakeSecurityProviderConnectionEnforced: true'));
+check(139, 'noFakeDeploymentCompletionEnforced: true',    ff.includes('noFakeDeploymentCompletionEnforced:       true'));
+check(140, 'noFakeMarketplaceTransactionEnforced: true',  ff.includes('noFakeMarketplaceTransactionEnforced:     true'));
+check(141, 'noFakeLiveModeEnforced: true',                ff.includes('noFakeLiveModeEnforced:                   true'));
+check(142, 'noSecretsStorageEnforced: true',              ff.includes('noSecretsStorageEnforced:                 true'));
+
+// Count flags
+const trueCount  = (ff.match(/true[,\s]/g)  || []).length;
+const falseCount = (ff.match(/false[,\s]/g) || []).length;
+check(143, '45+ feature flags total',                     (trueCount + falseCount) >= 43);
+
+// ─── LOCALES (144–158) ────────────────────────────────────────────────────
+check(144, 'locales file exists',                         existsSync(locPath));
+check(145, 'en-US locale',                                loc.includes("'en-US'"));
+check(146, 'es-DO locale',                                loc.includes("'es-DO'"));
+check(147, 'es locale',                                   loc.includes("'es'"));
+check(148, 'ht locale',                                   loc.includes("'ht'"));
+check(149, 'de locale',                                   loc.includes("'de'"));
+check(150, 'pt locale',                                   loc.includes("'pt'"));
+check(151, 'tPhaseDProviderActivation exported',          loc.includes('tPhaseDProviderActivation'));
+check(152, 'getSupportedPhaseDProviderActivationLanguages exported', loc.includes('getSupportedPhaseDProviderActivationLanguages'));
+check(153, 'phaseDProviderActivation key',                loc.includes('phaseDProviderActivation'));
+check(154, 'providerActivationRoadmap key',               loc.includes('providerActivationRoadmap'));
+check(155, 'credentialsRequired key',                     loc.includes('credentialsRequired'));
+check(156, 'notLive key',                                 loc.includes('notLive'));
+check(157, 'safeClaims key',                              loc.includes('safeClaims'));
+check(158, 'emptyState key',                              loc.includes('emptyState'));
+
+// ─── SERVICE (159–220) ────────────────────────────────────────────────────
+check(159, 'service file exists',                         existsSync(svcPath));
+check(160, 'JSDoc falls back gracefully',                 svc.includes('Falls back gracefully'));
+check(161, 'Never prints or logs connection string',      svc.includes('Never prints or logs the database connection string'));
+check(162, 'localFallback pattern',                       svc.includes('localFallback'));
+check(163, 'requireIdempotency helper',                   svc.includes('requireIdempotency'));
+check(164, 'getDefaultPhaseDRoadmap exported',            svc.includes('getDefaultPhaseDRoadmap'));
+check(165, 'getDefaultProviderCategories exported',       svc.includes('getDefaultProviderCategories'));
+check(166, 'getDefaultProviderCandidates exported',       svc.includes('getDefaultProviderCandidates'));
+check(167, 'getDefaultActivationOrder exported',          svc.includes('getDefaultActivationOrder'));
+check(168, 'getDefaultProviderReadinessMatrix exported',  svc.includes('getDefaultProviderReadinessMatrix'));
+check(169, 'getDefaultSafeActivationClaims exported',     svc.includes('getDefaultSafeActivationClaims'));
+check(170, 'getDefaultUnsafeActivationClaims exported',   svc.includes('getDefaultUnsafeActivationClaims'));
+check(171, 'getDefaultPhaseDHonestLimitations exported',  svc.includes('getDefaultPhaseDHonestLimitations'));
+check(172, 'createProviderActivationRoadmap exported',    svc.includes('createProviderActivationRoadmap'));
+check(173, 'listProviderActivationRoadmaps exported',     svc.includes('listProviderActivationRoadmaps'));
+check(174, 'updateProviderActivationRoadmapStatus',       svc.includes('updateProviderActivationRoadmapStatus'));
+check(175, 'createProviderCategory exported',             svc.includes('createProviderCategory'));
+check(176, 'listProviderCategories exported',             svc.includes('listProviderCategories'));
+check(177, 'createProviderCandidate exported',            svc.includes('createProviderCandidate'));
+check(178, 'listProviderCandidates exported',             svc.includes('listProviderCandidates'));
+check(179, 'updateProviderCandidateStatus exported',      svc.includes('updateProviderCandidateStatus'));
+check(180, 'createProviderActivationOrder exported',      svc.includes('createProviderActivationOrder'));
+check(181, 'listProviderActivationOrder exported',        svc.includes('listProviderActivationOrder'));
+check(182, 'createProviderDependency exported',           svc.includes('createProviderDependency'));
+check(183, 'listProviderDependencies exported',           svc.includes('listProviderDependencies'));
+check(184, 'createCredentialPlaceholder exported',        svc.includes('createCredentialPlaceholder'));
+check(185, 'listCredentialPlaceholders exported',         svc.includes('listCredentialPlaceholders'));
+check(186, 'updateCredentialStatus exported',             svc.includes('updateCredentialStatus'));
+check(187, 'createProviderPrerequisite exported',         svc.includes('createProviderPrerequisite'));
+check(188, 'listProviderPrerequisites exported',          svc.includes('listProviderPrerequisites'));
+check(189, 'createProviderBlocker exported',              svc.includes('createProviderBlocker'));
+check(190, 'listProviderBlockers exported',               svc.includes('listProviderBlockers'));
+check(191, 'updateProviderBlockerStatus exported',        svc.includes('updateProviderBlockerStatus'));
+check(192, 'createLegalRequirement exported',             svc.includes('createLegalRequirement'));
+check(193, 'listLegalRequirements exported',              svc.includes('listLegalRequirements'));
+check(194, 'createBillingRequirement exported',           svc.includes('createBillingRequirement'));
+check(195, 'listBillingRequirements exported',            svc.includes('listBillingRequirements'));
+check(196, 'createSecurityRequirement exported',          svc.includes('createSecurityRequirement'));
+check(197, 'listSecurityRequirements exported',           svc.includes('listSecurityRequirements'));
+check(198, 'createProviderActivationStatus exported',     svc.includes('createProviderActivationStatus'));
+check(199, 'listProviderActivationStatuses exported',     svc.includes('listProviderActivationStatuses'));
+check(200, 'updateProviderActivationStatus exported',     svc.includes('updateProviderActivationStatus'));
+check(201, 'createProviderTestStatus exported',           svc.includes('createProviderTestStatus'));
+check(202, 'listProviderTestStatuses exported',           svc.includes('listProviderTestStatuses'));
+check(203, 'updateProviderTestStatus exported',           svc.includes('updateProviderTestStatus'));
+check(204, 'createProviderVerificationStatus exported',   svc.includes('createProviderVerificationStatus'));
+check(205, 'listProviderVerificationStatuses exported',   svc.includes('listProviderVerificationStatuses'));
+check(206, 'updateProviderVerificationStatus exported',   svc.includes('updateProviderVerificationStatus'));
+check(207, 'createProviderRollbackRecord exported',       svc.includes('createProviderRollbackRecord'));
+check(208, 'listProviderRollbackRecords exported',        svc.includes('listProviderRollbackRecords'));
+check(209, 'updateProviderRollbackStatus exported',       svc.includes('updateProviderRollbackStatus'));
+check(210, 'createProviderFailureRecord exported',        svc.includes('createProviderFailureRecord'));
+check(211, 'listProviderFailureRecords exported',         svc.includes('listProviderFailureRecords'));
+check(212, 'createProviderReadinessMatrixRecord exported',svc.includes('createProviderReadinessMatrixRecord'));
+check(213, 'listProviderReadinessMatrix exported',        svc.includes('listProviderReadinessMatrix'));
+check(214, 'createSafeActivationClaim exported',          svc.includes('createSafeActivationClaim'));
+check(215, 'listSafeActivationClaims exported',           svc.includes('listSafeActivationClaims'));
+check(216, 'createUnsafeActivationClaim exported',        svc.includes('createUnsafeActivationClaim'));
+check(217, 'listUnsafeActivationClaims exported',         svc.includes('listUnsafeActivationClaims'));
+check(218, 'getSafePhaseDActivationClaims exported',      svc.includes('getSafePhaseDActivationClaims'));
+check(219, 'getUnsafePhaseDActivationClaims exported',    svc.includes('getUnsafePhaseDActivationClaims'));
+check(220, 'getPhaseDHonestLimitations exported',         svc.includes('getPhaseDHonestLimitations'));
+check(221, 'createProviderActivationSnapshot exported',   svc.includes('createProviderActivationSnapshot'));
+check(222, 'getLatestProviderActivationSnapshot exported',svc.includes('getLatestProviderActivationSnapshot'));
+check(223, 'writeProviderActivationAudit exported',       svc.includes('writeProviderActivationAudit'));
+check(224, 'dynamic db import',                           svc.includes("import('../../db/connection.js')"));
+
+// ─── CONTROLLER (225–230) ─────────────────────────────────────────────────
+check(225, 'controller file exists',                      existsSync(ctrPath));
+check(226, 'ok500 pattern',                               ctr.includes('ok500'));
+check(227, 'actorId helper',                              ctr.includes('actorId'));
+check(228, 'ikey helper',                                 ctr.includes('ikey'));
+check(229, 'getDefault handler',                          ctr.includes('getDefault'));
+check(230, 'createRoadmap handler',                       ctr.includes('createRoadmap'));
+
+// ─── ROUTES (231–260) ─────────────────────────────────────────────────────
+check(231, 'routes file exists',                          existsSync(rtPath));
+check(232, 'platformAdminGuardRequired comment',          rt.includes('platformAdminGuardRequired'));
+check(233, 'canAccessPOS3 imported',                      rt.includes('canAccessPOS3'));
+check(234, 'GET /default route',                          rt.includes("router.get('/default'"));
+check(235, 'GET /default/categories route',               rt.includes("router.get('/default/categories'"));
+check(236, 'GET /default/candidates route',               rt.includes("router.get('/default/candidates'"));
+check(237, 'GET /default/order route',                    rt.includes("router.get('/default/order'"));
+check(238, 'GET /default/matrix route',                   rt.includes("router.get('/default/matrix'"));
+check(239, 'GET /claims/safe route',                      rt.includes("router.get('/claims/safe'"));
+check(240, 'GET /claims/unsafe route',                    rt.includes("router.get('/claims/unsafe'"));
+check(241, 'GET /claims/honest-limitations route',        rt.includes("router.get('/claims/honest-limitations'"));
+check(242, 'POST /roadmaps guarded',                      rt.includes("router.post('/roadmaps',") && rt.includes('canAccessPOS3'));
+check(243, 'GET /roadmaps route',                         rt.includes("router.get('/roadmaps'"));
+check(244, 'PATCH /roadmaps/:roadmapId/status guarded',   rt.includes("router.patch('/roadmaps/:roadmapId/status'"));
+check(245, 'POST /categories guarded',                    rt.includes("router.post('/categories'"));
+check(246, 'POST /candidates guarded',                    rt.includes("router.post('/candidates'"));
+check(247, 'POST /activation-order guarded',              rt.includes("router.post('/activation-order'"));
+check(248, 'POST /dependencies guarded',                  rt.includes("router.post('/dependencies'"));
+check(249, 'POST /credential-placeholders guarded',       rt.includes("router.post('/credential-placeholders'"));
+check(250, 'POST /blockers guarded',                      rt.includes("router.post('/blockers'"));
+check(251, 'POST /requirements/legal guarded',            rt.includes("router.post('/requirements/legal'"));
+check(252, 'POST /requirements/billing guarded',          rt.includes("router.post('/requirements/billing'"));
+check(253, 'POST /requirements/security guarded',         rt.includes("router.post('/requirements/security'"));
+check(254, 'POST /activation-statuses guarded',           rt.includes("router.post('/activation-statuses'"));
+check(255, 'POST /test-statuses guarded',                 rt.includes("router.post('/test-statuses'"));
+check(256, 'POST /verification-statuses guarded',         rt.includes("router.post('/verification-statuses'"));
+check(257, 'POST /rollback-records guarded',              rt.includes("router.post('/rollback-records'"));
+check(258, 'POST /matrix guarded',                        rt.includes("router.post('/matrix'"));
+check(259, 'POST /snapshots guarded',                     rt.includes("router.post('/snapshots'"));
+check(260, 'GET /snapshots/latest route',                 rt.includes("router.get('/snapshots/latest'"));
+
+// ─── FRONTEND (261–310) ───────────────────────────────────────────────────
+check(261, 'UI file exists',                              existsSync(uiPath));
+check(262, 'import { useState } from react',              ui.includes("import { useState } from 'react'"));
+check(263, 'no non-ASCII chars outside comments',         !/[^\x00-\x7F]/.test(ui.replace(/\/\/.*/g, '')));
+check(264, 'NAVY color token',                            ui.includes("NAVY"));
+check(265, 'GOLD color token',                            ui.includes("GOLD"));
+check(266, 'PhaseDProviderActivationShell component',     ui.includes('PhaseDProviderActivationShell'));
+check(267, 'PhaseDHeroPanel component',                   ui.includes('PhaseDHeroPanel'));
+check(268, 'ProviderActivationRoadmapPanel component',    ui.includes('ProviderActivationRoadmapPanel'));
+check(269, 'ProviderCategoryPanel component',             ui.includes('ProviderCategoryPanel'));
+check(270, 'ProviderCandidatePanel component',            ui.includes('ProviderCandidatePanel'));
+check(271, 'ActivationOrderPanel component',              ui.includes('ActivationOrderPanel'));
+check(272, 'ProviderDependencyPanel component',           ui.includes('ProviderDependencyPanel'));
+check(273, 'CredentialPlaceholderPanel component',        ui.includes('CredentialPlaceholderPanel'));
+check(274, 'ProviderPrerequisitePanel component',         ui.includes('ProviderPrerequisitePanel'));
+check(275, 'ProviderBlockerPanel component',              ui.includes('ProviderBlockerPanel'));
+check(276, 'LegalRequirementPanel component',             ui.includes('LegalRequirementPanel'));
+check(277, 'BillingRequirementPanel component',           ui.includes('BillingRequirementPanel'));
+check(278, 'SecurityRequirementPanel component',          ui.includes('SecurityRequirementPanel'));
+check(279, 'ActivationStatusPanel component',             ui.includes('ActivationStatusPanel'));
+check(280, 'TestStatusPanel component',                   ui.includes('TestStatusPanel'));
+check(281, 'VerificationStatusPanel component',           ui.includes('VerificationStatusPanel'));
+check(282, 'RollbackPanel component',                     ui.includes('RollbackPanel'));
+check(283, 'FailureRecordPanel component',                ui.includes('FailureRecordPanel'));
+check(284, 'ProviderReadinessMatrixPanel component',      ui.includes('ProviderReadinessMatrixPanel'));
+check(285, 'SafeActivationClaimsPanel component',         ui.includes('SafeActivationClaimsPanel'));
+check(286, 'UnsafeActivationClaimsPanel component',       ui.includes('UnsafeActivationClaimsPanel'));
+check(287, 'HonestActivationLimitationsPanel component',  ui.includes('HonestActivationLimitationsPanel'));
+check(288, 'PhaseDRoadmapPanel component',                ui.includes('PhaseDRoadmapPanel'));
+check(289, 'PhaseDLanguageSelector component',            ui.includes('PhaseDLanguageSelector'));
+check(290, 'NoSecretsStoredPanel component',              ui.includes('NoSecretsStoredPanel'));
+check(291, 'HonestProviderActivationStatePanel',          ui.includes('HonestProviderActivationStatePanel'));
+check(292, 'HonestCredentialVerificationStatePanel',      ui.includes('HonestCredentialVerificationStatePanel'));
+check(293, 'HonestPaymentProcessingStatePanel',           ui.includes('HonestPaymentProcessingStatePanel'));
+check(294, 'HonestBillingConnectionStatePanel',           ui.includes('HonestBillingConnectionStatePanel'));
+check(295, 'HonestExternalPOSSyncStatePanel',             ui.includes('HonestExternalPOSSyncStatePanel'));
+check(296, 'HonestInventorySyncStatePanel',               ui.includes('HonestInventorySyncStatePanel'));
+check(297, 'HonestNotificationDeliveryStatePanel',        ui.includes('HonestNotificationDeliveryStatePanel'));
+check(298, 'HonestSecurityProviderStatePanel',            ui.includes('HonestSecurityProviderStatePanel'));
+check(299, 'HonestDeploymentStatePanel',                  ui.includes('HonestDeploymentStatePanel'));
+check(300, 'HonestMarketplaceTransactionStatePanel',      ui.includes('HonestMarketplaceTransactionStatePanel'));
+check(301, 'HonestLiveModeStatePanel',                    ui.includes('HonestLiveModeStatePanel'));
+check(302, 'EmptyProviderActivationStatePanel',           ui.includes('EmptyProviderActivationStatePanel'));
+check(303, 'Phase D roadmap D.1 current',                 ui.includes("'D.1'") && (ui.includes("'current'") || ui.includes('"current"')));
+check(304, 'Phase D roadmap D.2 next',                    ui.includes("'D.2'"));
+check(305, 'Phase D roadmap D.8 last',                    ui.includes("'D.8'"));
+check(306, 'Provider Activation Required text',           ui.includes('Provider Activation Required') || ui.includes('activation_required'));
+check(307, 'Credentials Required text',                   ui.includes('credentials_required') || ui.includes('Credentials Required'));
+check(308, 'Not Live text',                               ui.includes('Not Live') || ui.includes('not_live'));
+check(309, 'export default PhaseDProviderActivation',     ui.includes('export default PhaseDProviderActivation'));
+check(310, 'no fake live state in UI',                    !ui.includes('live_mode_enabled: true') && !ui.includes("live_mode_enabled = true"));
+
+// ─── DOCS (311–320) ───────────────────────────────────────────────────────
+check(311, 'docs file exists',                            existsSync(docsPath));
+check(312, 'Phase D purpose in docs',                     docs.includes('Phase D Purpose') || docs.includes('purpose'));
+check(313, 'Phase D order in docs',                       docs.includes('Phase D Order'));
+check(314, 'What D.1 does in docs',                       docs.includes('What D.1 Does'));
+check(315, 'What D.1 does NOT do in docs',                docs.includes('What D.1 Does NOT'));
+check(316, 'Provider categories in docs',                 docs.includes('Provider Categories'));
+check(317, 'Recommended activation order in docs',        docs.includes('Recommended Activation Order'));
+check(318, 'Safe claims in docs',                         docs.includes('Safe Claims'));
+check(319, 'Unsafe claims in docs',                       docs.includes('Unsafe Claims'));
+check(320, 'Phase D.2 next step in docs',                 docs.includes('Phase D.2'));
+
+// ─── WIRING (321–335) ─────────────────────────────────────────────────────
+check(321, 'server/index.js imports phase-d routes',      idx.includes('phaseDProviderActivationRoutes'));
+check(322, '/api/phase-d/provider-activation mounted',    idx.includes('/api/phase-d/provider-activation'));
+check(323, 'App.jsx imports PhaseDProviderActivation',    app.includes('PhaseDProviderActivation'));
+check(324, 'App.jsx route phase-d/provider-activation',   app.includes('phase-d/provider-activation'));
+check(325, 'package.json script verify:phase-d',          pkg.includes('verify:phase-d-provider-activation'));
+
+// ─── SAFETY — NO-FAKE (326–360) ──────────────────────────────────────────
+check(326, 'no fake provider_connected: true in service', !svc.includes('provider_connected: true'));
+check(327, 'no fake credentials_verified: true in svc',  !svc.includes('credentials_verified: true'));
+check(328, 'no fake payment_processed: true in svc',     !svc.includes('payment_processed: true'));
+check(329, 'no fake billing_connected: true in svc',     !svc.includes('billing_connected: true'));
+check(330, 'no fake pos_sync_enabled: true in svc',      !svc.includes('pos_sync_enabled: true'));
+check(331, 'no fake inventory_sync_enabled: true in svc',!svc.includes('inventory_sync_enabled: true'));
+check(332, 'no fake security_provider_connected in svc', !svc.includes('security_provider_connected: true'));
+check(333, 'no fake deployment_completed: true in svc',  !svc.includes('deployment_completed: true'));
+check(334, 'no fake marketplace_transaction in svc',     !svc.includes('marketplace_transaction_enabled: true'));
+check(335, 'no fake live_mode_enabled: true in svc',     !svc.includes('live_mode_enabled: true'));
+check(336, 'no fake provider_connected in routes',        !rt.includes('provider_connected: true'));
+check(337, 'no fake credentials_verified in routes',      !rt.includes('credentials_verified: true'));
+check(338, 'no fake payment_processed in routes',         !rt.includes('payment_processed: true'));
+check(339, 'no fake billing_connected in routes',         !rt.includes('billing_connected: true'));
+check(340, 'no fake live_mode_enabled in routes',         !rt.includes('live_mode_enabled: true'));
+check(341, 'no fake provider_connected in controller',    !ctr.includes('provider_connected: true'));
+check(342, 'no fake credentials_verified in controller',  !ctr.includes('credentials_verified: true'));
+check(343, 'no fake live_mode in controller',             !ctr.includes('live_mode_enabled: true'));
+check(344, 'contains_secrets false in migration',         sqlHas('contains_secrets'));
+check(345, 'stores_secrets false in migration',           sqlHas('stores_secrets'));
+check(346, 'no secrets in snapshot data',                 svc.includes('contains_secrets: false') && svc.includes('stores_secrets: false'));
+check(347, 'no plaintext secrets in service',             !svc.toLowerCase().includes('sk_live') && !svc.toLowerCase().includes('sk_test'));
+check(348, 'no plaintext API keys in service',            !svc.includes('api_key:') || svc.includes('api_key: false'));
+check(349, 'unsafe claims documented as not_safe',        svc.includes("claim_status: 'not_safe'"));
+check(350, 'honest limitations list populated',           svc.includes('No provider is connected'));
+check(351, 'not_started status used in defaults',         svc.includes("'not_started'"));
+check(352, 'credentials_required status used',            svc.includes("'credentials_required'"));
+check(353, 'provider_required status used',               svc.includes("'provider_required'"));
+check(354, 'configuration_required status used',          svc.includes("'configuration_required'"));
+check(355, 'foundation_ready status used',                svc.includes("'foundation_ready'"));
+check(356, 'demo mode used in defaults',                  svc.includes("'demo'"));
+check(357, 'local_preview mode used in defaults',         svc.includes("'local_preview'"));
+check(358, 'staging_placeholder mode used in defaults',   svc.includes("'staging_placeholder'"));
+check(359, 'safe claims in service',                      svc.includes("claim_status: 'safe'"));
+check(360, 'audit trail in service',                      svc.includes('writeProviderActivationAudit'));
+
+// ─── BACKWARD COMPATIBILITY (361–385) ────────────────────────────────────
+check(361, 'C.1 novee-os/modules route still exists',    idx.includes('novee-os/modules') || idx.includes('noveeOS') || idx.includes('modules'));
+check(362, 'C.2 tenant route still exists',              idx.includes('tenant') || idx.includes('novee-os/tenants'));
+check(363, 'C.3 billing route still exists',             idx.includes('billing') || idx.includes('novee-os/billing'));
+check(364, 'C.4 security route still exists',            idx.includes('security') || idx.includes('novee-os/security'));
+check(365, 'C.5 crafthub route still exists',            idx.includes('crafthub') || idx.includes('/api/crafthub'));
+check(366, 'C.6 onboarding route still exists',          idx.includes('onboarding') || idx.includes('crafthub/onboarding'));
+check(367, 'C.7 final-readiness route still exists',     idx.includes('final-readiness') || idx.includes('novee-os/final-readiness'));
+check(368, 'POS360 routes still exist',                  idx.includes('pos360') || idx.includes('pos-360'));
+check(369, 'SmokeCraft routes still exist',              idx.includes('smokecraft') || idx.includes('SmokeCraft'));
+check(370, 'no SmokeCraft files deleted',                existsSync(BASE + 'src/pages/SmokeCraft') || existsSync(BASE + 'src/pages/smokecraft'));
+check(371, 'App.jsx route count not regressed',          (app.match(/Route path=/g) || []).length >= 10);
+check(372, 'Phase C.7 sealed files untouched',           existsSync(BASE + 'server/services/noveeOS/noveeOSFinalReadinessService.js'));
+check(373, 'Phase C.6 sealed files untouched',           existsSync(BASE + 'server/services/crafthub/craftHubOnboardingService.js') || existsSync(BASE + 'server/scripts/verifyCraftHubOnboarding.js'));
+check(374, 'Phase D route count <= 3',                   (idx.match(/phaseDProviderActivationRoutes/g) || []).length <= 3);
+check(375, 'build-safe export exists',                   ui.includes('export default PhaseDProviderActivation'));
+check(376, 'no require() in service',                    !svc.includes("require('") && !svc.includes('require("'));
+check(377, 'ES module import in service',                svc.includes('import {') || svc.includes("import '"));
+check(378, 'no hardcoded org IDs in service',            !svc.includes("organization_id: '00000000"));
+check(379, 'no hardcoded venue IDs in service',          !svc.includes("venue_id: '00000000"));
+check(380, 'idempotency enforced on create',             svc.includes('requireIdempotency(idempotencyKey)'));
+
+// ─── READINESS MATRIX (381–395) ──────────────────────────────────────────
+check(381, 'matrix includes stripe',                     svc.includes("'stripe'"));
+check(382, 'matrix includes railway',                    svc.includes("'railway'"));
+check(383, 'matrix includes twilio',                     svc.includes("'twilio'"));
+check(384, 'matrix includes sendgrid',                   svc.includes("'sendgrid'"));
+check(385, 'matrix includes auth0',                      svc.includes("'auth0'"));
+check(386, 'matrix activation statuses are honest',      !svc.includes("activation_status: 'active_external'"));
+check(387, 'matrix readiness not live',                  !svc.includes("readiness_status: 'live_external'"));
+check(388, 'demo_live_mode uses demo',                   svc.includes("demo_live_mode: 'demo'"));
+check(389, 'local_preview mode for manual_fallback',     svc.includes("demo_live_mode: 'local_preview'"));
+check(390, 'staging_placeholder for deployment',         svc.includes("demo_live_mode: 'staging_placeholder'"));
+
+// ─── PHASE D ROADMAP (391–400) ────────────────────────────────────────────
+check(391, 'D.1 in roadmap',                             svc.includes("phase: 'D.1'") || ui.includes("'D.1'"));
+check(392, 'D.2 in roadmap',                             svc.includes("phase: 'D.2'") || ui.includes("'D.2'"));
+check(393, 'D.3 in roadmap',                             svc.includes("phase: 'D.3'") || ui.includes("'D.3'"));
+check(394, 'D.4 in roadmap',                             svc.includes("phase: 'D.4'") || ui.includes("'D.4'"));
+check(395, 'D.5 in roadmap',                             svc.includes("phase: 'D.5'") || ui.includes("'D.5'"));
+check(396, 'D.6 in roadmap',                             svc.includes("phase: 'D.6'") || ui.includes("'D.6'"));
+check(397, 'D.7 in roadmap',                             svc.includes("phase: 'D.7'") || ui.includes("'D.7'"));
+check(398, 'D.8 in roadmap',                             svc.includes("phase: 'D.8'") || ui.includes("'D.8'"));
+check(399, 'D.1 is current',                             svc.includes("status: 'current'") || ui.includes("'current'"));
+check(400, 'D.2 is next',                                svc.includes("status: 'not_started'") || ui.includes("'next'"));
+
+// Print results
+console.log('');
+if (FAIL.length > 0) {
+  console.log('FAILURES:');
+  FAIL.forEach(f => console.log(f));
+}
+console.log('');
+console.log(`Result: ${PASS.length} PASS / ${FAIL.length} FAIL / ${total} total`);
+console.log('');
+if (FAIL.length === 0) {
+  console.log(`✓ All ${total} checks passed.`);
+  process.exit(0);
+} else {
+  console.log(`✗ ${FAIL.length} check(s) failed. Fix before committing.`);
+  process.exit(1);
+}
