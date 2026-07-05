@@ -78,6 +78,7 @@ import noveeOSModuleRegistryRoutes      from './routes/noveeOSModuleRegistryRout
 import noveeOSTenantGovernanceRoutes    from './routes/noveeOSTenantGovernanceRoutes.js'
 import noveeOSBillingGovernanceRoutes  from './routes/noveeOSBillingGovernanceRoutes.js'
 import noveeOSSecurityGovernanceRoutes from './routes/noveeOSSecurityGovernanceRoutes.js'
+import craftHubDashboardRoutes         from './routes/craftHubDashboardRoutes.js'
 import databaseStatusRoutes            from './routes/databaseStatusRoutes.js'
 import paymentMoneyBridgeRoutes        from './routes/paymentMoneyBridgeRoutes.js'
 import venueOnboardingRoutes           from './routes/venueOnboardingRoutes.js'
@@ -232,6 +233,7 @@ app.use('/api/novee-os/modules',           noveeOSModuleRegistryRoutes)
 app.use('/api/novee-os/tenants',          noveeOSTenantGovernanceRoutes)
 app.use('/api/novee-os/billing',          noveeOSBillingGovernanceRoutes)
 app.use('/api/novee-os/security',         noveeOSSecurityGovernanceRoutes)
+app.use('/api/crafthub/dashboard',        craftHubDashboardRoutes)
 app.use('/api/system/database',           databaseStatusRoutes)
 app.use('/api/payments/money-bridge',     paymentMoneyBridgeRoutes)
 app.use('/api/onboarding',               venueOnboardingRoutes)

@@ -75,7 +75,8 @@
     "verify:novee-os-modules": "node server/scripts/verifyNoveeOSModuleRegistry.js",
     "verify:novee-os-tenants": "node server/scripts/verifyNoveeOSTenantGovernance.js",
     "verify:novee-os-billing": "node server/scripts/verifyNoveeOSBillingGovernance.js",
-    "verify:novee-os-security": "node server/scripts/verifyNoveeOSSecurityGovernance.js"
+    "verify:novee-os-security": "node server/scripts/verifyNoveeOSSecurityGovernance.js",
+    "verify:crafthub-dashboard": "node server/scripts/verifyCraftHubDashboard.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
