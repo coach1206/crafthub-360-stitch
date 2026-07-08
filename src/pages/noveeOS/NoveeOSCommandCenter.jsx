@@ -111,7 +111,7 @@ const PHASE_D = [
   { title: 'D.5 — Communication',        desc: '10 providers, 10 channels, 20 message areas. Build-only, no real delivery.', status: 'built-hidden', statusLabel: 'built', route: '/phase-d/communication-activation' },
   { title: 'D.6 — Security Activation',  desc: 'Security gates, provider registry, risk registry, audit log. Production enforcement disabled.', status: 'built-hidden', statusLabel: 'built', route: '/phase-d/security-activation' },
   { title: 'D.7 — Deployment Activation',desc: '19 deployment gates, 8 environments, 8 packages, rollback plans. Live deployment disabled.', status: 'built-hidden', statusLabel: 'built', route: '/phase-d/deployment-activation' },
-  { title: 'D.8 — Live Pilot Readiness', desc: 'Production environment checklist, pilot sign-off gate.',                  status: 'missing',      statusLabel: 'not built', route: '/placeholder/phase-d-live-pilot',       disabled: true },
+  { title: 'D.8 — Live Pilot Readiness', desc: '22 readiness gates, 13 modules, pilot venue registry, acceptance layer. Live approval disabled.', status: 'built-hidden', statusLabel: 'built', route: '/phase-d/live-pilot-readiness' },
 ]
 
 // ── Section D: Phase E Readiness ──────────────────────────────
@@ -120,7 +120,7 @@ const PHASE_E = [
   { title: 'E.2 — Command Center',       desc: 'This page — dashboard visibility + navigation hub.',                      status: 'active',       statusLabel: 'this page', route: '/novee-os/command-center',             disabled: true },
   { title: 'E.3 — D.6 Security Build',   desc: 'Security activation contracts and audit foundation.',                     status: 'missing',      statusLabel: 'pending',  route: '/placeholder/e3',                       disabled: true },
   { title: 'E.4 — D.7 Deployment Build', desc: 'Deployment activation contracts and pipeline gates.',                     status: 'missing',      statusLabel: 'pending',  route: '/placeholder/e4',                       disabled: true },
-  { title: 'E.5 — D.8 Live Pilot',       desc: 'Live pilot readiness gates and environment sign-off.',                    status: 'missing',      statusLabel: 'pending',  route: '/placeholder/e5',                       disabled: true },
+  { title: 'E.5 — D.8 Live Pilot',       desc: 'Live pilot readiness gates, module registry, acceptance layer. No live approval.',           status: 'built-hidden', statusLabel: 'built',    route: '/phase-d/live-pilot-readiness' },
   { title: 'E.6 — Remote Module Distribution', desc: 'Real remote module packaging and distribution system.',             status: 'missing',      statusLabel: 'pending',  route: '/placeholder/e6',                       disabled: true },
   { title: 'E.7 — Onboarding + Training',desc: 'Operator onboarding flows, training center, role guides.',                status: 'missing',      statusLabel: 'pending',  route: '/placeholder/e7',                       disabled: true },
   { title: 'E.8 — AMBI Foundation',      desc: 'AMBI intelligence platform — software layer only.',                       status: 'missing',      statusLabel: 'pending',  route: '/placeholder/e8',                       disabled: true },
@@ -206,7 +206,7 @@ export default function NoveeOSCommandCenter() {
         </div>
 
         {/* C. Phase D */}
-        <SectionHeader title="C — Phase D Activation Centers" note="D.1–D.5 built (hidden); D.6–D.8 not built" />
+        <SectionHeader title="C — Phase D Activation Centers" note="D.1–D.5 built (hidden); D.6–D.8 built" />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
           {PHASE_D.map(p => <PlatformCard key={p.title} {...p} />)}
         </div>

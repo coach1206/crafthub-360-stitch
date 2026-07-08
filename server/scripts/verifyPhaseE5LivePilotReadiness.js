@@ -1,0 +1,242 @@
+// Phase E.5 Verification Script — NOVEE OS Live Pilot Readiness Center
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const root = path.resolve(__dirname, '../../')
+
+const pass = []
+const fail = []
+
+function check(label, condition) {
+  if (condition) pass.push(label)
+  else fail.push(label)
+}
+
+function readFile(rel) {
+  try { return fs.readFileSync(path.join(root, rel), 'utf8') } catch { return '' }
+}
+
+// ── Migration ─────────────────────────────────────────────────────────────────
+const sql = readFile('server/db/migrations/063_novee_os_live_pilot_readiness.sql')
+check('MIGRATION: file exists', sql.length > 0)
+check('MIGRATION: pilot_venue_registry table', sql.includes('novee_os_pilot_venue_registry'))
+check('MIGRATION: live_pilot_readiness_gates table', sql.includes('novee_os_live_pilot_readiness_gates'))
+check('MIGRATION: pilot_module_readiness_registry table', sql.includes('novee_os_pilot_module_readiness_registry'))
+check('MIGRATION: pilot_checklist_registry table', sql.includes('novee_os_pilot_checklist_registry'))
+check('MIGRATION: pilot_evidence_registry table', sql.includes('novee_os_pilot_evidence_registry'))
+check('MIGRATION: pilot_audit_log table', sql.includes('novee_os_pilot_audit_log'))
+check('MIGRATION: pilot_acceptance_registry table', sql.includes('novee_os_pilot_acceptance_registry'))
+check('MIGRATION: no DROP statements', !sql.includes('DROP TABLE'))
+check('MIGRATION: CREATE TABLE IF NOT EXISTS used', sql.includes('CREATE TABLE IF NOT EXISTS'))
+check('MIGRATION: pilot_approved DEFAULT FALSE', sql.includes('pilot_approved BOOLEAN NOT NULL DEFAULT FALSE'))
+check('MIGRATION: go_live_approved DEFAULT FALSE', sql.includes('go_live_approved BOOLEAN NOT NULL DEFAULT FALSE'))
+check('MIGRATION: live_pilot_enabled DEFAULT FALSE', sql.includes('live_pilot_enabled BOOLEAN NOT NULL DEFAULT FALSE'))
+check('MIGRATION: public_go_live_enabled DEFAULT FALSE', sql.includes('public_go_live_enabled BOOLEAN NOT NULL DEFAULT FALSE'))
+check('MIGRATION: remote_distribution_enabled DEFAULT FALSE', sql.includes('remote_distribution_enabled BOOLEAN NOT NULL DEFAULT FALSE'))
+check('MIGRATION: idempotency_key UNIQUE in audit_log', sql.includes('idempotency_key TEXT UNIQUE'))
+
+// ── Contracts ─────────────────────────────────────────────────────────────────
+const contracts = readFile('server/services/noveeOS/noveeOSLivePilotReadinessContracts.js')
+check('CONTRACTS: file exists', contracts.length > 0)
+check('CONTRACTS: assertNoFakePilotApprovalClaims', contracts.includes('assertNoFakePilotApprovalClaims'))
+check('CONTRACTS: assertNoFakeGoLiveClaims', contracts.includes('assertNoFakeGoLiveClaims'))
+check('CONTRACTS: assertNoFakeRemoteDistributionClaims', contracts.includes('assertNoFakeRemoteDistributionClaims'))
+check('CONTRACTS: assertNoFakeProductionReadyClaims', contracts.includes('assertNoFakeProductionReadyClaims'))
+check('CONTRACTS: assertNoPilotStartWithoutApproval', contracts.includes('assertNoPilotStartWithoutApproval'))
+check('CONTRACTS: assertNoExposedPilotSecrets', contracts.includes('assertNoExposedPilotSecrets'))
+check('CONTRACTS: assertSecurityGateRequired', contracts.includes('assertSecurityGateRequired'))
+check('CONTRACTS: assertNoBypassOfE3SecurityActivation', contracts.includes('assertNoBypassOfE3SecurityActivation'))
+check('CONTRACTS: assertNoBypassOfE4DeploymentActivation', contracts.includes('assertNoBypassOfE4DeploymentActivation'))
+check('CONTRACTS: assertNoFakeLicenseKeyClaims', contracts.includes('assertNoFakeLicenseKeyClaims'))
+check('CONTRACTS: assertNoClientProvisioningClaims', contracts.includes('assertNoClientProvisioningClaims'))
+check('CONTRACTS: assertNoRollbackExecutionClaims', contracts.includes('assertNoRollbackExecutionClaims'))
+check('CONTRACTS: assertNoFakeVerificationPassClaims', contracts.includes('assertNoFakeVerificationPassClaims'))
+check('CONTRACTS: validatePilotVenuePayload', contracts.includes('validatePilotVenuePayload'))
+check('CONTRACTS: validatePilotGatePayload', contracts.includes('validatePilotGatePayload'))
+check('CONTRACTS: validateModuleReadinessPayload', contracts.includes('validateModuleReadinessPayload'))
+check('CONTRACTS: validatePilotChecklistPayload', contracts.includes('validatePilotChecklistPayload'))
+check('CONTRACTS: validatePilotEvidencePayload', contracts.includes('validatePilotEvidencePayload'))
+check('CONTRACTS: validateAcceptancePayload', contracts.includes('validateAcceptancePayload'))
+check('CONTRACTS: DEFAULT_PILOT_READINESS_GATES (22)', contracts.includes('DEFAULT_PILOT_READINESS_GATES') && (contracts.match(/gate_key:/g) || []).length >= 22)
+check('CONTRACTS: DEFAULT_PILOT_MODULES (13)', contracts.includes('DEFAULT_PILOT_MODULES') && (contracts.match(/module_key:/g) || []).length >= 13)
+
+// ── Feature Flags ─────────────────────────────────────────────────────────────
+const flags = readFile('server/config/noveeOSLivePilotReadinessFeatureFlags.js')
+check('FLAGS: file exists', flags.length > 0)
+check('FLAGS: NOVEE_PILOT_READINESS_ENABLED: true', flags.includes('NOVEE_PILOT_READINESS_ENABLED: true'))
+check('FLAGS: NOVEE_LIVE_PILOT_APPROVAL_ENABLED: false', flags.includes('NOVEE_LIVE_PILOT_APPROVAL_ENABLED: false'))
+check('FLAGS: NOVEE_LIVE_PILOT_REMOTE_DISTRIBUTION_ENABLED: false', flags.includes('NOVEE_LIVE_PILOT_REMOTE_DISTRIBUTION_ENABLED: false'))
+check('FLAGS: NOVEE_LIVE_PILOT_PUBLIC_GO_LIVE_ENABLED: false', flags.includes('NOVEE_LIVE_PILOT_PUBLIC_GO_LIVE_ENABLED: false'))
+check('FLAGS: NOVEE_PILOT_FAKE_APPROVAL_BLOCKED: true', flags.includes('NOVEE_PILOT_FAKE_APPROVAL_BLOCKED: true'))
+check('FLAGS: NOVEE_PILOT_FAKE_GO_LIVE_BLOCKED: true', flags.includes('NOVEE_PILOT_FAKE_GO_LIVE_BLOCKED: true'))
+check('FLAGS: NOVEE_PILOT_SECRET_EXPOSURE_BLOCKED: true', flags.includes('NOVEE_PILOT_SECRET_EXPOSURE_BLOCKED: true'))
+check('FLAGS: NOVEE_PILOT_SECURITY_GATE_REQUIRED: true', flags.includes('NOVEE_PILOT_SECURITY_GATE_REQUIRED: true'))
+check('FLAGS: NOVEE_PILOT_E3_BYPASS_BLOCKED: true', flags.includes('NOVEE_PILOT_E3_BYPASS_BLOCKED: true'))
+check('FLAGS: NOVEE_PILOT_E4_BYPASS_BLOCKED: true', flags.includes('NOVEE_PILOT_E4_BYPASS_BLOCKED: true'))
+check('FLAGS: NOVEE_PILOT_FRONTEND_SAFE_CLAIMS_ENABLED: true', flags.includes('NOVEE_PILOT_FRONTEND_SAFE_CLAIMS_ENABLED: true'))
+check('FLAGS: NOVEE_PILOT_AUDIT_LOGGING_ENABLED: true', flags.includes('NOVEE_PILOT_AUDIT_LOGGING_ENABLED: true'))
+check('FLAGS: getNoveeOSLivePilotReadinessFlags exported', flags.includes('getNoveeOSLivePilotReadinessFlags'))
+check('FLAGS: export default', flags.includes('export default'))
+
+// ── Service ──────────────────────────────────────────────────────────────────
+const svc = readFile('server/services/noveeOS/noveeOSLivePilotReadinessService.js')
+check('SERVICE: file exists', svc.length > 0)
+check('SERVICE: listPilotVenues', svc.includes('export async function listPilotVenues'))
+check('SERVICE: getPilotVenue', svc.includes('export async function getPilotVenue'))
+check('SERVICE: createPilotVenuePreview', svc.includes('export async function createPilotVenuePreview'))
+check('SERVICE: listPilotReadinessGates', svc.includes('export async function listPilotReadinessGates'))
+check('SERVICE: getPilotReadinessGate', svc.includes('export async function getPilotReadinessGate'))
+check('SERVICE: updatePilotReadinessGatePreview', svc.includes('export async function updatePilotReadinessGatePreview'))
+check('SERVICE: listModuleReadiness', svc.includes('export async function listModuleReadiness'))
+check('SERVICE: getModuleReadiness', svc.includes('export async function getModuleReadiness'))
+check('SERVICE: updateModuleReadinessPreview', svc.includes('export async function updateModuleReadinessPreview'))
+check('SERVICE: listPilotChecklist', svc.includes('export async function listPilotChecklist'))
+check('SERVICE: updatePilotChecklistItem', svc.includes('export async function updatePilotChecklistItem'))
+check('SERVICE: listPilotEvidence', svc.includes('export async function listPilotEvidence'))
+check('SERVICE: submitPilotEvidencePreview', svc.includes('export async function submitPilotEvidencePreview'))
+check('SERVICE: listPilotAuditLog', svc.includes('export async function listPilotAuditLog'))
+check('SERVICE: logPilotAuditEvent', svc.includes('export async function logPilotAuditEvent'))
+check('SERVICE: listAcceptanceRegistry', svc.includes('export async function listAcceptanceRegistry'))
+check('SERVICE: createAcceptancePreview', svc.includes('export async function createAcceptancePreview'))
+check('SERVICE: getPilotReadinessScore', svc.includes('export async function getPilotReadinessScore'))
+check('SERVICE: getPilotBlockers', svc.includes('export async function getPilotBlockers'))
+check('SERVICE: getSafePilotClaims', svc.includes('export async function getSafePilotClaims'))
+check('SERVICE: getPilotFeatureFlagSnapshot', svc.includes('export async function getPilotFeatureFlagSnapshot'))
+check('SERVICE: validateLivePilotReadiness', svc.includes('export async function validateLivePilotReadiness'))
+check('SERVICE: safety_status BUILD_ONLY_NO_LIVE_PILOT', svc.includes("'BUILD_ONLY_NO_LIVE_PILOT'"))
+check('SERVICE: pilot_approved: false hardcoded', svc.includes('pilot_approved: false'))
+check('SERVICE: go_live_approved: false hardcoded', svc.includes('go_live_approved: false'))
+check('SERVICE: remote_distribution_ready: false hardcoded', svc.includes('remote_distribution_ready: false'))
+check('SERVICE: localFallback pattern', svc.includes('localFallback'))
+
+// ── Controller ────────────────────────────────────────────────────────────────
+const ctrl = readFile('server/controllers/noveeOSLivePilotReadinessController.js')
+check('CONTROLLER: file exists', ctrl.length > 0)
+check('CONTROLLER: ok500 pattern', ctrl.includes('const ok500 = (res, fn)'))
+check('CONTROLLER: actorId pattern', ctrl.includes('const actorId = req =>'))
+check('CONTROLLER: ikey pattern', ctrl.includes('const ikey = req =>'))
+check('CONTROLLER: tenantId pattern', ctrl.includes('const tenantId = req =>'))
+check('CONTROLLER: wrap helper', ctrl.includes('const wrap = (res, data)'))
+check('CONTROLLER: productionReady: false in wrap', ctrl.includes('productionReady: false'))
+check('CONTROLLER: pilotReady: false in wrap', ctrl.includes('pilotReady: false'))
+check('CONTROLLER: remoteDistributionReady: false in wrap', ctrl.includes('remoteDistributionReady: false'))
+check('CONTROLLER: safeClaim live_pilot_readiness_center_exists', ctrl.includes('live_pilot_readiness_center_exists'))
+check('CONTROLLER: listPilotVenues', ctrl.includes('export async function listPilotVenues'))
+check('CONTROLLER: getPilotVenue', ctrl.includes('export async function getPilotVenue'))
+check('CONTROLLER: createPilotVenuePreview', ctrl.includes('export async function createPilotVenuePreview'))
+check('CONTROLLER: listPilotReadinessGates', ctrl.includes('export async function listPilotReadinessGates'))
+check('CONTROLLER: getPilotReadinessGate', ctrl.includes('export async function getPilotReadinessGate'))
+check('CONTROLLER: updatePilotReadinessGatePreview', ctrl.includes('export async function updatePilotReadinessGatePreview'))
+check('CONTROLLER: listModuleReadiness', ctrl.includes('export async function listModuleReadiness'))
+check('CONTROLLER: getModuleReadiness', ctrl.includes('export async function getModuleReadiness'))
+check('CONTROLLER: updateModuleReadinessPreview', ctrl.includes('export async function updateModuleReadinessPreview'))
+check('CONTROLLER: listPilotChecklist', ctrl.includes('export async function listPilotChecklist'))
+check('CONTROLLER: listPilotEvidence', ctrl.includes('export async function listPilotEvidence'))
+check('CONTROLLER: submitPilotEvidencePreview', ctrl.includes('export async function submitPilotEvidencePreview'))
+check('CONTROLLER: listPilotAuditLog', ctrl.includes('export async function listPilotAuditLog'))
+check('CONTROLLER: logPilotAuditEvent', ctrl.includes('export async function logPilotAuditEvent'))
+check('CONTROLLER: listAcceptanceRegistry', ctrl.includes('export async function listAcceptanceRegistry'))
+check('CONTROLLER: createAcceptancePreview', ctrl.includes('export async function createAcceptancePreview'))
+check('CONTROLLER: getPilotReadinessScore', ctrl.includes('export async function getPilotReadinessScore'))
+check('CONTROLLER: getPilotBlockers', ctrl.includes('export async function getPilotBlockers'))
+check('CONTROLLER: getSafePilotClaims', ctrl.includes('export async function getSafePilotClaims'))
+check('CONTROLLER: getPilotFeatureFlagSnapshot', ctrl.includes('export async function getPilotFeatureFlagSnapshot'))
+check('CONTROLLER: validateLivePilotReadiness', ctrl.includes('export async function validateLivePilotReadiness'))
+
+// ── Routes ────────────────────────────────────────────────────────────────────
+const routes = readFile('server/routes/noveeOSLivePilotReadinessRoutes.js')
+check('ROUTES: file exists', routes.length > 0)
+check('ROUTES: import express', routes.includes("import express from 'express'"))
+check('ROUTES: import canAccessPOS3', routes.includes('canAccessPOS3'))
+check('ROUTES: import ctrl', routes.includes('noveeOSLivePilotReadinessController'))
+check('ROUTES: export default router', routes.includes('export default router'))
+check('ROUTES: GET /venues', routes.includes("router.get('/venues'"))
+check('ROUTES: GET /venues/:venueId', routes.includes("router.get('/venues/:venueId'"))
+check('ROUTES: POST /venues canAccessPOS3', routes.includes("router.post('/venues', canAccessPOS3"))
+check('ROUTES: GET /gates', routes.includes("router.get('/gates'"))
+check('ROUTES: GET /gates/:gateKey', routes.includes("router.get('/gates/:gateKey'"))
+check('ROUTES: PATCH /gates/:gateKey canAccessPOS3', routes.includes("router.patch('/gates/:gateKey', canAccessPOS3"))
+check('ROUTES: GET /modules', routes.includes("router.get('/modules'"))
+check('ROUTES: GET /modules/:moduleKey', routes.includes("router.get('/modules/:moduleKey'"))
+check('ROUTES: PATCH /modules/:moduleKey canAccessPOS3', routes.includes("router.patch('/modules/:moduleKey', canAccessPOS3"))
+check('ROUTES: GET /checklist', routes.includes("router.get('/checklist'"))
+check('ROUTES: GET /evidence', routes.includes("router.get('/evidence'"))
+check('ROUTES: POST /evidence canAccessPOS3', routes.includes("router.post('/evidence', canAccessPOS3"))
+check('ROUTES: GET /audit-log', routes.includes("router.get('/audit-log'"))
+check('ROUTES: GET /acceptance', routes.includes("router.get('/acceptance'"))
+check('ROUTES: GET /score', routes.includes("router.get('/score'"))
+check('ROUTES: GET /blockers', routes.includes("router.get('/blockers'"))
+check('ROUTES: GET /safe-claims', routes.includes("router.get('/safe-claims'"))
+check('ROUTES: GET /feature-flags', routes.includes("router.get('/feature-flags'"))
+check('ROUTES: GET /validate', routes.includes("router.get('/validate'"))
+
+// ── server/index.js wiring ────────────────────────────────────────────────────
+const idx = readFile('server/index.js')
+check('INDEX: import noveeOSLivePilotReadinessRoutes', idx.includes('noveeOSLivePilotReadinessRoutes'))
+check('INDEX: mount /api/phase-d/live-pilot-readiness', idx.includes('/api/phase-d/live-pilot-readiness'))
+
+// ── Frontend page ─────────────────────────────────────────────────────────────
+const page = readFile('src/pages/phaseD/LivePilotReadiness.jsx')
+check('FRONTEND: file exists', page.length > 0)
+check('FRONTEND: export default function LivePilotReadiness', page.includes('export default function LivePilotReadiness'))
+check('FRONTEND: API = /api/phase-d/live-pilot-readiness', page.includes('/api/phase-d/live-pilot-readiness'))
+check('FRONTEND: Panel A — Summary', page.includes('A —'))
+check('FRONTEND: Panel B — Venue Registry', page.includes('B —'))
+check('FRONTEND: Panel C — Readiness Gates', page.includes('C —'))
+check('FRONTEND: Panel D — Module Readiness', page.includes('D —'))
+check('FRONTEND: Panel E — Checklist', page.includes('E —'))
+check('FRONTEND: Panel F — Evidence', page.includes('F —'))
+check('FRONTEND: Panel G — Blockers', page.includes('G —'))
+check('FRONTEND: Panel H — Acceptance Registry', page.includes('H —'))
+check('FRONTEND: Panel I — Safe Claims', page.includes('I —'))
+check('FRONTEND: Panel J — Feature Flags', page.includes('J —'))
+check('FRONTEND: safety banner BUILD ONLY', page.includes('BUILD ONLY'))
+check('FRONTEND: NO live pilot approved label', page.includes('No live pilot approved') || page.includes('no live pilot approved') || page.includes('No live pilot'))
+check('FRONTEND: NAVY color', page.includes('#0a0d14'))
+check('FRONTEND: GOLD color', page.includes('#c9952c'))
+
+// ── App.jsx ───────────────────────────────────────────────────────────────────
+const app = readFile('src/App.jsx')
+check('APP: import LivePilotReadiness', app.includes('LivePilotReadiness'))
+check('APP: route phase-d/live-pilot-readiness', app.includes('phase-d/live-pilot-readiness'))
+
+// ── NoveeOSCommandCenter.jsx ──────────────────────────────────────────────────
+const cmd = readFile('src/pages/noveeOS/NoveeOSCommandCenter.jsx')
+check('COMMAND CENTER: D.8 built-hidden status', cmd.includes("'D.8 — Live Pilot Readiness'") && cmd.includes('built-hidden'))
+check('COMMAND CENTER: route /phase-d/live-pilot-readiness', cmd.includes('/phase-d/live-pilot-readiness'))
+check('COMMAND CENTER: E.5 updated', cmd.includes("'E.5 — D.8 Live Pilot'") && cmd.includes('built-hidden'))
+
+// ── NoveeHome.jsx ─────────────────────────────────────────────────────────────
+const home = readFile('src/pages/NoveeHome.jsx')
+check('NOVEE HOME: D.8 Live Pilot Readiness link', home.includes('D.8 Live Pilot Readiness') || home.includes('live-pilot-readiness'))
+
+// ── Docs ─────────────────────────────────────────────────────────────────────
+const docs = readFile('docs/PHASE_E_5_LIVE_PILOT_READINESS.md')
+check('DOCS: file exists', docs.length > 0)
+check('DOCS: BUILD ONLY safety note', docs.includes('BUILD ONLY') || docs.includes('BUILD_ONLY'))
+check('DOCS: pilot_approved: false', docs.includes('pilot_approved'))
+check('DOCS: What Is NOT Live section', docs.includes('NOT Live'))
+check('DOCS: Safe Language section', docs.includes('Safe Language'))
+check('DOCS: Do NOT Say section', docs.includes('Do NOT Say'))
+
+// ── package.json ──────────────────────────────────────────────────────────────
+const pkg = readFile('package.json')
+check('PACKAGE: verify:phase-e5-live-pilot-readiness script', pkg.includes('verify:phase-e5-live-pilot-readiness'))
+
+// ── Summary ───────────────────────────────────────────────────────────────────
+console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+console.log('  Phase E.5 — NOVEE OS Live Pilot Readiness Center Verification')
+console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+console.log(`\n  PASS: ${pass.length}`)
+console.log(`  FAIL: ${fail.length}`)
+if (fail.length > 0) {
+  console.log('\n  FAILURES:')
+  fail.forEach(f => console.log(`    ✗ ${f}`))
+}
+console.log('\n' + (fail.length === 0
+  ? `  ✓ ALL ${pass.length} CHECKS PASSED — Phase E.5 verified`
+  : `  ✗ ${fail.length} checks failed — fix before committing`))
+console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
+process.exit(fail.length > 0 ? 1 : 0)
