@@ -109,7 +109,7 @@ const PHASE_D = [
   { title: 'D.3 — External POS',         desc: 'Third-party POS integration contracts and readiness gates.',              status: 'built-hidden', statusLabel: 'built', route: '/phase-d/external-pos-activation' },
   { title: 'D.4 — Inventory Activation', desc: 'Inventory provider contracts, sync rules, reorder connectors.',           status: 'built-hidden', statusLabel: 'built', route: '/phase-d/inventory-activation' },
   { title: 'D.5 — Communication',        desc: '10 providers, 10 channels, 20 message areas. Build-only, no real delivery.', status: 'built-hidden', statusLabel: 'built', route: '/phase-d/communication-activation' },
-  { title: 'D.6 — Security Activation',  desc: 'Security provider contracts, audit logging, policy enforcement.',         status: 'missing',      statusLabel: 'not built', route: '/placeholder/phase-d-security',         disabled: true },
+  { title: 'D.6 — Security Activation',  desc: 'Security gates, provider registry, risk registry, audit log. Production enforcement disabled.', status: 'built-hidden', statusLabel: 'built', route: '/phase-d/security-activation' },
   { title: 'D.7 — Deployment Activation',desc: 'Deployment provider contracts, pipeline gates, environment locks.',       status: 'missing',      statusLabel: 'not built', route: '/placeholder/phase-d-deployment',       disabled: true },
   { title: 'D.8 — Live Pilot Readiness', desc: 'Production environment checklist, pilot sign-off gate.',                  status: 'missing',      statusLabel: 'not built', route: '/placeholder/phase-d-live-pilot',       disabled: true },
 ]
