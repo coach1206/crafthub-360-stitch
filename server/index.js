@@ -81,6 +81,7 @@ import noveeOSSecurityGovernanceRoutes from './routes/noveeOSSecurityGovernanceR
 import craftHubDashboardRoutes         from './routes/craftHubDashboardRoutes.js'
 import craftHubOnboardingRoutes        from './routes/craftHubOnboardingRoutes.js'
 import noveeOSFinalReadinessRoutes     from './routes/noveeOSFinalReadinessRoutes.js'
+import noveeOS360PlatformRegistryRoutes from './routes/noveeOS360PlatformRegistryRoutes.js'
 import phaseDProviderActivationRoutes  from './routes/phaseDProviderActivationRoutes.js'
 import phaseDPaymentProviderActivationRoutes from './routes/phaseDPaymentProviderActivationRoutes.js'
 import phaseDExternalPOSActivationRoutes from './routes/phaseDExternalPOSActivationRoutes.js'
@@ -243,6 +244,7 @@ app.use('/api/novee-os/security',         noveeOSSecurityGovernanceRoutes)
 app.use('/api/crafthub/dashboard',        craftHubDashboardRoutes)
 app.use('/api/crafthub/onboarding',       craftHubOnboardingRoutes)
 app.use('/api/novee-os/final-readiness',  noveeOSFinalReadinessRoutes)
+app.use('/api/novee-os/360-platforms',    noveeOS360PlatformRegistryRoutes)
 app.use('/api/phase-d/provider-activation', phaseDProviderActivationRoutes)
 app.use('/api/phase-d/payment-provider-activation', phaseDPaymentProviderActivationRoutes)
 app.use('/api/phase-d/external-pos-activation', phaseDExternalPOSActivationRoutes)
