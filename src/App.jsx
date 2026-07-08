@@ -82,6 +82,7 @@ import PhaseDExternalPOSActivation from './pages/phaseD/PhaseDExternalPOSActivat
 import PhaseDInventoryActivation from './pages/phaseD/PhaseDInventoryActivation.jsx'
 import PhaseDCommunicationActivation from './pages/phaseD/PhaseDCommunicationActivation.jsx'
 import SecurityActivation            from './pages/phaseD/SecurityActivation.jsx'
+import DeploymentActivation          from './pages/phaseD/DeploymentActivation.jsx'
 import NoveeOSCommandCenter          from './pages/noveeOS/NoveeOSCommandCenter.jsx'
 import NoveeOS360PlatformRegistry    from './pages/noveeOS/NoveeOS360PlatformRegistry.jsx'
 import ModulePlaceholderReserved     from './pages/ModulePlaceholderReserved.jsx'
@@ -650,6 +651,7 @@ export default function App() {
               <Route path="phase-d/inventory-activation" element={<PhaseDInventoryActivation />} />
               <Route path="phase-d/communication-activation" element={<PhaseDCommunicationActivation />} />
               <Route path="phase-d/security-activation"      element={<SecurityActivation />} />
+              <Route path="phase-d/deployment-activation"    element={<DeploymentActivation />} />
               <Route path="novee-os/command-center"         element={<NoveeOSCommandCenter />} />
               <Route path="novee-os/360-platforms"          element={<NoveeOS360PlatformRegistry />} />
               <Route path="placeholder/*"                   element={<ModulePlaceholderReserved />} />

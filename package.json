@@ -86,7 +86,8 @@
     "verify:phase-d-communication-activation": "node server/scripts/verifyPhaseDCommunicationActivation.js",
     "verify:novee-360-platform-registry": "node server/scripts/verifyNovee360PlatformRegistry.js",
     "verify:phase-e2-dashboard-visibility": "node server/scripts/verifyPhaseE2DashboardVisibility.js",
-    "verify:phase-e3-security-activation": "node server/scripts/verifyPhaseE3SecurityActivation.js"
+    "verify:phase-e3-security-activation": "node server/scripts/verifyPhaseE3SecurityActivation.js",
+    "verify:phase-e4-deployment-activation": "node server/scripts/verifyPhaseE4DeploymentActivation.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

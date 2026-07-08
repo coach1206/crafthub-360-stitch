@@ -15,6 +15,7 @@ const ADMIN_LINKS = [
   { label: 'D.4 Inventory Activation',    to: '/phase-d/inventory-activation',        note: 'Phase D.4 — built' },
   { label: 'D.5 Communication',           to: '/phase-d/communication-activation',    note: 'Phase D.5 — built' },
   { label: 'D.6 Security Activation',    to: '/phase-d/security-activation',         note: 'Phase D.6 — built' },
+  { label: 'D.7 Deployment Activation', to: '/phase-d/deployment-activation',       note: 'Phase D.7 — built' },
 ]
 
 const CARDS = [
