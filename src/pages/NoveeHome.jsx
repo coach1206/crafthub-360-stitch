@@ -1,6 +1,21 @@
 import { useNavigate } from 'react-router-dom'
 import { useDemoMode } from '../context/DemoModeContext.jsx'
 
+const ADMIN_LINKS = [
+  { label: 'NOVEE OS Command Center',      to: '/novee-os/command-center',   note: 'All platform areas — one hub' },
+  { label: 'Universal 360 Platform Registry', to: '/novee-os/360-platforms', note: '14 platforms, status & blockers' },
+  { label: 'Module Registry',              to: '/novee-os/modules',           note: 'Module activation matrix' },
+  { label: 'Tenant Governance',            to: '/novee-os/tenants',           note: 'Multi-tenant isolation' },
+  { label: 'Billing Governance',           to: '/novee-os/billing',           note: 'Plan gates & entitlements' },
+  { label: 'Security Governance',          to: '/novee-os/security',          note: 'Roles & access controls' },
+  { label: 'Final Readiness',              to: '/novee-os/final-readiness',   note: 'System-wide launch gate' },
+  { label: 'D.1 Provider Activation',     to: '/phase-d/provider-activation',        note: 'Phase D.1 — built' },
+  { label: 'D.2 Payment Providers',       to: '/phase-d/payment-provider-activation', note: 'Phase D.2 — built' },
+  { label: 'D.3 External POS',            to: '/phase-d/external-pos-activation',     note: 'Phase D.3 — built' },
+  { label: 'D.4 Inventory Activation',    to: '/phase-d/inventory-activation',        note: 'Phase D.4 — built' },
+  { label: 'D.5 Communication',           to: '/phase-d/communication-activation',    note: 'Phase D.5 — built' },
+]
+
 const CARDS = [
   { title: 'CraftHub 360',              desc: 'Guest craft module grid — SmokeCraft, PourCraft, WineCraft, BeerCraft.', status: 'Active', to: '/crafthub' },
   { title: 'SmokeCraft 360',            desc: 'Guided cigar pairing, mentor tasting, scorecard, passport stamp.',      status: 'Active', to: '/smokecraft' },
@@ -78,6 +93,31 @@ export default function NoveeHome() {
       </section>
 
       <main style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 32px 80px' }}>
+        {/* NOVEE OS Admin Navigation */}
+        <div style={{ marginBottom: 40, padding: '20px 24px', background: 'rgba(10,13,20,0.85)', border: '1px solid rgba(201,149,44,0.18)', borderRadius: 16 }}>
+          <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 9, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(201,149,44,0.7)', marginBottom: 14 }}>
+            NOVEE OS — Operator &amp; Admin Access
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {ADMIN_LINKS.map(link => (
+              <button
+                key={link.to}
+                onClick={() => navigate(link.to)}
+                title={link.note}
+                style={{
+                  fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.1em',
+                  color: '#9cc2e8', background: 'rgba(41,128,185,0.08)', border: '1px solid rgba(91,143,201,0.25)',
+                  borderRadius: 20, padding: '6px 14px', cursor: 'pointer', whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(91,143,201,0.6)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(91,143,201,0.25)' }}
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div
           style={{
             display: 'grid',
