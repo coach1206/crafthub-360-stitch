@@ -80,6 +80,7 @@ import PhaseDProviderActivation  from './pages/phaseD/PhaseDProviderActivation.j
 import PhaseDPaymentProviderActivation from './pages/phaseD/PhaseDPaymentProviderActivation.jsx'
 import PhaseDExternalPOSActivation from './pages/phaseD/PhaseDExternalPOSActivation.jsx'
 import PhaseDInventoryActivation from './pages/phaseD/PhaseDInventoryActivation.jsx'
+import PhaseDCommunicationActivation from './pages/phaseD/PhaseDCommunicationActivation.jsx'
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
@@ -643,6 +644,7 @@ export default function App() {
               <Route path="phase-d/payment-provider-activation" element={<PhaseDPaymentProviderActivation />} />
               <Route path="phase-d/external-pos-activation" element={<PhaseDExternalPOSActivation />} />
               <Route path="phase-d/inventory-activation" element={<PhaseDInventoryActivation />} />
+              <Route path="phase-d/communication-activation" element={<PhaseDCommunicationActivation />} />
 
               {/* ── NEW E.A.T. management system — nested route tree ── */}
               {/* ── Protected: manager+ — BLOCKED in demo mode ────── */}
