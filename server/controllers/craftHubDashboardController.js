@@ -1,7 +1,8 @@
 // CraftHub Dashboard Controller — Phase C.5
 // contains_secrets: false, stores_secrets: false — hardcoded; audit rows never hold secrets
 
-import db from '../db/connection.js';
+import { getDb } from '../db/connection.js';
+const db = getDb();
 import * as svc from '../services/crafthub/craftHubDashboardService.js';
 
 const ok500 = (res, fn) => fn().catch(e => res.status(500).json({ ok: false, error: e.message }));
