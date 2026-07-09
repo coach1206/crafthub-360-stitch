@@ -138,7 +138,16 @@ function ensureAnimStyles() {
 function shortLabel(label = '') {
   if (!label) return 'Continue'
   const lower = label.toLowerCase()
+  // Navigation labels (check specific combos first)
   if (lower.includes('start new') || lower.includes('new smokecraft') || lower.includes('new session')) return 'Start New Session →'
+  if (lower.includes('continue previous') || lower.includes('previous session')) return 'Continue Session →'
+  if (lower.includes('enter event') || lower.includes('event challenge')) return 'Enter Challenge →'
+  if (lower.includes('browse humidor')) return 'Browse Humidor →'
+  if (lower.includes('view my passport') || lower.includes('my passport')) return 'My Passport →'
+  if (lower.includes('how it works')) return 'How It Works →'
+  if (lower.includes('demo experience') || lower.includes('demo')) return 'Demo Experience →'
+  if (lower.includes('view pairing')) return 'View Pairing →'
+  // Journey labels
   if (lower.includes('accept')) return 'Accept the Challenge'
   if (lower.includes('complete') && lower.includes('session')) return 'Complete Journey'
   if (lower.includes('stamp')) return 'Claim Passport Stamp'
@@ -368,10 +377,17 @@ export default function SmokeCraftHotspotLayer({ hotspots = [], route = '' }) {
     <div
       aria-hidden={hotspots.every(h => h.disabled)}
       style={{
-        position: 'fixed',
+        /*
+         * IMPORTANT: position:absolute (not fixed) so this layer is sized and
+         * positioned relative to the parent image container inside
+         * SmokeCraftAssetScreen. Hotspot x/y/width/height percentages are then
+         * correctly image-relative, not viewport-relative. This fixes the
+         * misplaced pill bug on portrait images shown on landscape viewports.
+         */
+        position: 'absolute',
         inset: 0,
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
         pointerEvents: 'none',
         zIndex: 10,
       }}

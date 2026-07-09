@@ -1,6 +1,16 @@
 import { useState } from 'react'
 
-export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen' }) {
+/**
+ * Renders a full-viewport SmokeCraft screen image.
+ *
+ * The image is contained within the viewport (objectFit: contain, centered).
+ * Children are rendered in a position:absolute overlay that is EXACTLY sized
+ * to the rendered image — not the viewport. This ensures that any overlaid
+ * hotspot/button percentage coordinates are relative to the image content,
+ * not the viewport, fixing the "misplaced pill" bug on non-matching aspect
+ * ratios (e.g. portrait image on landscape desktop).
+ */
+export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen', children }) {
   const [failed, setFailed] = useState(false)
 
   if (failed) {
@@ -51,29 +61,49 @@ export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen' }
         background: '#050505',
       }}
     >
-      <img
-        src={src}
-        alt={alt}
-        onError={() => setFailed(true)}
-        draggable={false}
-        style={{
-          display: 'block',
-          maxWidth: '100vw',
-          maxHeight: '100vh',
-          width: 'auto',
-          height: 'auto',
-          objectFit: 'contain',
-          objectPosition: 'center center',
-          margin: 0,
-          padding: 0,
-          border: 0,
-          borderRadius: 0,
-          boxShadow: 'none',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          touchAction: 'manipulation',
-        }}
-      />
+      {/*
+        Wrapper div sizes itself to the intrinsic rendered image dimensions.
+        With width/height: auto and max constraints, the <img> takes the largest
+        size that fits inside the viewport while maintaining aspect ratio.
+        The wrapper (display: inline-block) matches this size exactly, giving
+        child overlays a coordinate system that is IMAGE-relative, not viewport-relative.
+      */}
+      <div style={{ position: 'relative', lineHeight: 0, display: 'inline-block' }}>
+        <img
+          src={src}
+          alt={alt}
+          onError={() => setFailed(true)}
+          draggable={false}
+          style={{
+            display: 'block',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            width: 'auto',
+            height: 'auto',
+            margin: 0,
+            padding: 0,
+            border: 0,
+            borderRadius: 0,
+            boxShadow: 'none',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            touchAction: 'manipulation',
+          }}
+        />
+        {children && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              pointerEvents: 'none',
+            }}
+          >
+            {children}
+          </div>
+        )}
+      </div>
     </main>
   )
 }
