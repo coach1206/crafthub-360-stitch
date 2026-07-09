@@ -125,14 +125,14 @@ const PHASE_E = [
   { title: 'E.7 — Onboarding + Training',desc: '10 programs, 19 manuals, 16 lessons, checklists, progress, acceptance. Publication and completion disabled by default.', status: 'built-hidden', statusLabel: 'built', route: '/novee-os/onboarding-training' },
   { title: 'E.8 — AMBI Foundation',      desc: 'Software foundation: device registry, pairing, firmware, aura states, environment signals, privacy/consent. No hardware. No live telemetry.', status: 'built-hidden', statusLabel: 'built', route: '/novee-os/ambi-foundation' },
   { title: 'E.9 — Documentation Portal', desc: '21-manual library with cover-to-cover seeded professional draft content. Publication, export, and client-ready disabled by default.', status: 'built-hidden', statusLabel: 'built', route: '/novee-os/documentation-portal' },
-  { title: 'E.10 — Final Go-Live Gate',  desc: 'System-wide production readiness and go-live verification.',              status: 'missing',      statusLabel: 'deferred', route: '/placeholder/e10',                      disabled: true },
+  { title: 'E.10 — Final Go-Live Gate',  desc: 'NOVEE_OS_FINAL_GO_LIVE_GATE_PASSED_INTERNAL. SmokeCraft 360: PRODUCTION_READY_INTERNAL_GATE_PASSED. Passport/E.A.T./POS360 bridges verified. Payments NOT live. Third-party POS NOT connected. Public deployment requires live environment.', status: 'active', statusLabel: 'gate passed', route: '/novee-os/command-center' },
 ]
 
 // ── Section E: Risk / Audit / Compliance ──────────────────────
 const RISK = [
   { title: 'POS360 Production Readiness',  desc: 'POS360 system-wide production readiness audit.',                                              status: 'active', route: '/pos360/production-readiness' },
   { title: 'SmokeCraft DB Activation',     desc: 'SmokeCraft database activation and schema audit.',                                            status: 'active', route: '/smokecraft/visual-proof' },
-  { title: 'SmokeCraft Venue Pilot Pkg',   desc: 'Staff/admin pilot package: status, checklists, safe claims, known blockers. Not guest-facing. Not production-ready.', status: 'active', route: '/smokecraft/venue-pilot-package' },
+  { title: 'SmokeCraft F.9 Gate',          desc: 'PRODUCTION_READY_INTERNAL_GATE_PASSED. Passport 360 + E.A.T. + POS360 internal bridges verified. Payments NOT live. Third-party POS NOT connected.', status: 'active', route: '/smokecraft/venue-pilot-package' },
 ]
 
 export default function NoveeOSCommandCenter() {
@@ -213,7 +213,7 @@ export default function NoveeOSCommandCenter() {
         </div>
 
         {/* D. Phase E */}
-        <SectionHeader title="D — Phase E Readiness" note="E.1–E.9 built; E.10 deferred" />
+        <SectionHeader title="D — Phase E Readiness" note="E.1–E.9 built; E.10 GATE PASSED — NOVEE_OS_FINAL_GO_LIVE_GATE_PASSED_INTERNAL" />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
           {PHASE_E.map(p => <PlatformCard key={p.title} {...p} />)}
         </div>
