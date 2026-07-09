@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS pos360_split_tender_groups (
   tenant_id           TEXT,
   venue_id            TEXT NOT NULL,
   order_id            TEXT,
-  payment_intent_id   INTEGER REFERENCES pos360_payment_intents(id),
+  payment_intent_id   INTEGER, -- fk-ref: pos360_payment_intents; omitted — 037 uses UUID PK incompatible with INTEGER
   expected_total      NUMERIC(12,2) NOT NULL DEFAULT 0,
   current_total       NUMERIC(12,2) NOT NULL DEFAULT 0,
   remaining_total     NUMERIC(12,2) NOT NULL DEFAULT 0,
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS pos360_payment_records (
   id                          SERIAL PRIMARY KEY,
   tenant_id                   TEXT,
   venue_id                    TEXT NOT NULL,
-  payment_intent_id           INTEGER REFERENCES pos360_payment_intents(id),
+  payment_intent_id           INTEGER, -- fk-ref: pos360_payment_intents; omitted — 037 uses UUID PK incompatible with INTEGER
   split_tender_group_id       INTEGER REFERENCES pos360_split_tender_groups(id),
   order_id                    TEXT,
   reservation_id              TEXT,

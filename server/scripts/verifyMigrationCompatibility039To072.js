@@ -176,6 +176,19 @@ if (m041) {
   const m041noComments = m041.split('\n').filter(l => !l.trim().startsWith('--')).join('\n')
   check('041 does not contain DROP TABLE', !m041noComments.match(/\bDROP\s+TABLE\b/i))
   check('041 does not contain DROP COLUMN', !m041noComments.match(/\bDROP\s+COLUMN\b/i))
+  // FK type mismatch: 037 uses UUID PK for pos360_payment_intents; 041 must not FK with INTEGER
+  check(
+    '041 pos360_split_tender_groups.payment_intent_id has no REFERENCES pos360_payment_intents (type mismatch with 037 UUID PK)',
+    !m041.match(/pos360_split_tender_groups[\s\S]*?payment_intent_id\s+INTEGER\s+REFERENCES\s+pos360_payment_intents/i),
+  )
+  check(
+    '041 pos360_payment_records.payment_intent_id has no REFERENCES pos360_payment_intents (type mismatch with 037 UUID PK)',
+    !m041.match(/pos360_payment_records[\s\S]*?payment_intent_id\s+INTEGER\s+REFERENCES\s+pos360_payment_intents/i),
+  )
+  check(
+    '041 payment_intent_id columns retained as plain INTEGER (fk-ref comment present)',
+    m041.includes('fk-ref: pos360_payment_intents'),
+  )
 } else {
   check('041_pos360_payments_tips_closeout.sql exists', false)
 }
