@@ -9,6 +9,8 @@ export default function Identity() {
     {
       label: 'Continue to Gold Box',
       x: 10, y: 75, width: 80, height: 20,
+      // 'enroll' is the SESSION_REWARDS key for session 2 — the identity/profile-capture step.
+      // Route is /smokecraft/identity (alias of /smokecraft/enroll). Key must stay 'enroll'.
       onClick: () => { triggerHaptic('medium'); awardSessionRewards('enroll') },
       to: '/smokecraft/golden-box',
     },

@@ -62,6 +62,30 @@ const proofScreens = [
     phase: "FinalThird.jsx"
   },
   {
+    title: "Shape / Size / Burn (Vitola)",
+    asset: "/assets/smokecraft-reference/approved/smokecraft-vitola.png",
+    source: "public/assets/smokecraft-reference/approved/smokecraft-vitola.png",
+    phase: "Format.jsx"
+  },
+  {
+    title: "First Third Tasting",
+    asset: "/assets/smokecraft-reference/approved/smokecraft-first-third.png",
+    source: "public/assets/smokecraft-reference/approved/smokecraft-first-third.png",
+    phase: "FirstThird.jsx"
+  },
+  {
+    title: "Second Third Tasting",
+    asset: "/assets/smokecraft-reference/approved/smokecraft-second-third.png",
+    source: "public/assets/smokecraft-reference/approved/smokecraft-second-third.png",
+    phase: "SecondThird.jsx"
+  },
+  {
+    title: "Final Review",
+    asset: "/assets/smokecraft-reference/approved/smokecraft-final-review.png",
+    source: "public/assets/smokecraft-reference/approved/smokecraft-final-review.png",
+    phase: "FinalReview.jsx"
+  },
+  {
     title: "Scorecard / Ranking",
     asset: "/assets/smokecraft-reference/approved/smokecraft-scorecard-ranking.png",
     source: "public/assets/smokecraft/smokecraft-scorecard.png",
@@ -88,10 +112,10 @@ const proofScreens = [
 ]
 
 const missingScreens = [
-  { title: "Shape / Size / Burn", note: "No approved full reference image found" },
-  { title: "First Third", note: "Only a 521×119 strip exists — no full reference" },
-  { title: "Second Third", note: "flavor-dna.png currently used — may not be Second Third specifically" },
-  { title: "Final Review", note: "final-review-bg.jpg (1536×1024) exists — needs visual confirmation" },
+  // All previously-flagged images have been confirmed present in approved/:
+  // smokecraft-vitola.png (Shape/Size/Burn), smokecraft-first-third.png,
+  // smokecraft-second-third.png, smokecraft-final-review.png
+  // No missing screens remain for the locked 18-screen journey.
 ]
 
 function ProofImage({ screen, index }) {

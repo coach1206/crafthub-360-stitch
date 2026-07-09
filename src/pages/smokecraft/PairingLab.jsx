@@ -1,33 +1,28 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
-import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
 
 export default function PairingLab() {
-  const navigate = useNavigate()
   const { awardSessionRewards } = useGuestSession()
-  const { setResumeRoute } = useSmokeCraftOrder()
-  const [done, setDone] = useState(false)
 
-  function handleContinue() {
-    if (done) return
-    setDone(true)
-    triggerHaptic('medium')
-    awardSessionRewards('pairing-lab')
-    navigate('/smokecraft/visit-complete')
-  }
+  const HOTSPOTS = [
+    {
+      label: 'Continue to Visit Complete',
+      x: 10, y: 75, width: 80, height: 20,
+      onClick: () => { triggerHaptic('medium'); awardSessionRewards('pairing-lab') },
+      to: '/smokecraft/visit-complete',
+    },
+  ]
 
   return (
     <>
-      <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
-        <SmokeCraftAssetScreen
-          src="/assets/smokecraft-reference/approved/smokecraft-pairing-lab.png"
-          alt="Pairing Lab"
-        />
-      </div>
+      <SmokeCraftAssetRoute
+        src="/assets/smokecraft-reference/approved/smokecraft-pairing-lab.png"
+        alt="Pairing Lab"
+        hotspots={HOTSPOTS}
+        route="/smokecraft/pairing-lab"
+      />
       <SmokeCraftMenuButton label="Order Pairing" />
     </>
   )
