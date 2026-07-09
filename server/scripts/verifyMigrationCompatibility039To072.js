@@ -153,6 +153,33 @@ if (m039) {
   )
 }
 
+// ── Gate 6b: Migration 041 cross-migration column guards ─────────────────────
+console.log('\nGate 6b — Migration 041: guards for columns missing from migration 037 version of pos360_payment_intents')
+const m041 = read('041_pos360_payments_tips_closeout.sql')
+if (m041) {
+  check(
+    '041 has ADD COLUMN IF NOT EXISTS reservation_id for pos360_payment_intents',
+    /ALTER\s+TABLE\s+IF\s+EXISTS\s+pos360_payment_intents\s+ADD\s+COLUMN\s+IF\s+NOT\s+EXISTS\s+reservation_id/i.test(m041),
+  )
+  check(
+    '041 has ADD COLUMN IF NOT EXISTS private_event_id for pos360_payment_intents',
+    /ALTER\s+TABLE\s+IF\s+EXISTS\s+pos360_payment_intents\s+ADD\s+COLUMN\s+IF\s+NOT\s+EXISTS\s+private_event_id/i.test(m041),
+  )
+  check(
+    '041 has ADD COLUMN IF NOT EXISTS customer_id for pos360_payment_intents',
+    /ALTER\s+TABLE\s+IF\s+EXISTS\s+pos360_payment_intents\s+ADD\s+COLUMN\s+IF\s+NOT\s+EXISTS\s+customer_id/i.test(m041),
+  )
+  check(
+    '041 has ADD COLUMN IF NOT EXISTS payment_intent_status for pos360_payment_intents',
+    /ALTER\s+TABLE\s+IF\s+EXISTS\s+pos360_payment_intents\s+ADD\s+COLUMN\s+IF\s+NOT\s+EXISTS\s+payment_intent_status/i.test(m041),
+  )
+  const m041noComments = m041.split('\n').filter(l => !l.trim().startsWith('--')).join('\n')
+  check('041 does not contain DROP TABLE', !m041noComments.match(/\bDROP\s+TABLE\b/i))
+  check('041 does not contain DROP COLUMN', !m041noComments.match(/\bDROP\s+COLUMN\b/i))
+} else {
+  check('041_pos360_payments_tips_closeout.sql exists', false)
+}
+
 // ── Gate 6: Migration count ───────────────────────────────────────────────────
 console.log('\nGate 6 — Expected migrations present')
 const expected = [

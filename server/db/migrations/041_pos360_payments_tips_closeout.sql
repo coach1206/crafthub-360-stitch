@@ -2,6 +2,13 @@
 -- Phase B.11 Prompt X
 -- Uses CREATE TABLE IF NOT EXISTS. No DROP TABLE. No destructive column changes.
 
+-- Compatibility: pos360_payment_intents was created by migration 037 with a different schema
+-- (UUID PK, payment_status column). Add columns that migration 041 indexes but 037 omitted.
+ALTER TABLE IF EXISTS pos360_payment_intents ADD COLUMN IF NOT EXISTS reservation_id TEXT;
+ALTER TABLE IF EXISTS pos360_payment_intents ADD COLUMN IF NOT EXISTS private_event_id TEXT;
+ALTER TABLE IF EXISTS pos360_payment_intents ADD COLUMN IF NOT EXISTS customer_id TEXT;
+ALTER TABLE IF EXISTS pos360_payment_intents ADD COLUMN IF NOT EXISTS payment_intent_status TEXT NOT NULL DEFAULT 'draft';
+
 -- Payment provider profiles
 CREATE TABLE IF NOT EXISTS pos360_payment_provider_profiles (
   id                  SERIAL PRIMARY KEY,
