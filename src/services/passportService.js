@@ -6,7 +6,7 @@
 import { loadSession, saveSession } from './sessionStorageService.js'
 import { syncPassportToBackend } from './syncService.js'
 import { saveEvent } from './syncQueueService.js'
-import { awardStampToBackend, awardXPToBackend, getBackendEarnedStamps, writeSyncAuditEvent } from './passportAdapter.js'
+import { awardStampToBackend, awardXPToBackend, getBackendEarnedStamps, getReturnVisitProgress, writeSyncAuditEvent } from './passportAdapter.js'
 
 function genPassportId() {
   return `PP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
@@ -153,6 +153,38 @@ export function markCeremonySeen() {
     ...session,
     passport: { ...session.passport, ceremonySeen: true },
   })
+}
+
+/**
+ * Returns return visit progress from backend when available.
+ * Falls back to local session count (smokeCraft.completedSessions).
+ * Returns { returnVisitCount, lastSessionKey, backendConnected, persistenceMode }.
+ */
+export async function getReturnVisitProgressWithBackend() {
+  const session = loadSession()
+  const passportId = session?.passport?.passportId
+  const localCount = (session?.smokeCraft?.completedSessions || []).length
+
+  if (passportId) {
+    const result = await getReturnVisitProgress({ guestId: passportId }).catch(() => null)
+    if (result?.backendConnected) {
+      return {
+        returnVisitCount: result.returnVisitCount ?? localCount,
+        lastSessionKey: result.lastSessionKey || null,
+        backendConnected: true,
+        persistenceMode: 'database',
+        safeClaim: 'return_visit_progress_from_backend',
+      }
+    }
+  }
+
+  return {
+    returnVisitCount: localCount,
+    lastSessionKey: null,
+    backendConnected: false,
+    persistenceMode: 'local_fallback',
+    safeClaim: 'return_visit_count_from_local_session_only',
+  }
 }
 
 /**
