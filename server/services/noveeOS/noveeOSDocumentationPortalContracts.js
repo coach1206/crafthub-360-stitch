@@ -529,7 +529,7 @@ export const DEFAULT_SEEDED_MANUAL_CONTENT = [
     audience_role: 'venue_owner',
     module_key: 'passport',
     block_type: 'paragraph',
-    content_body: 'Passport 360 is the cross-venue guest identity and experience continuity layer built on NOVEE OS. It allows guests who have an established experience record at one NOVEE OS venue to carry meaningful context — not raw personal data — to other participating venues. Passport 360 is not a universal loyalty points program. It is an experience continuity bridge. A guest who is a verified returning visitor at a SmokeCraft 360 venue, for example, may be recognized at a partner venue through their Passport 360 reference, allowing staff at that venue to understand the guest's experience tier and deliver an appropriately attentive welcome. Passport 360 requires explicit guest consent and venue participation agreements before it is active.',
+    content_body: "Passport 360 is the cross-venue guest identity and experience continuity layer built on NOVEE OS. It allows guests who have an established experience record at one NOVEE OS venue to carry meaningful context — not raw personal data — to other participating venues. Passport 360 is not a universal loyalty points program. It is an experience continuity bridge. A guest who is a verified returning visitor at a SmokeCraft 360 venue, for example, may be recognized at a partner venue through their Passport 360 reference, allowing staff at that venue to understand the guest's experience tier and deliver an appropriately attentive welcome. Passport 360 requires explicit guest consent and venue participation agreements before it is active.",
     content_depth_status: 'seeded_professional_draft',
     needs_human_review: true,
     published: false,
