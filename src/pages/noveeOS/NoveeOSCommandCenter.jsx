@@ -123,7 +123,7 @@ const PHASE_E = [
   { title: 'E.5 — D.8 Live Pilot',       desc: 'Live pilot readiness gates, module registry, acceptance layer. No live approval.',          status: 'built-hidden', statusLabel: 'built',   route: '/phase-d/live-pilot-readiness' },
   { title: 'E.6 — Remote Module Distribution', desc: '11 packages, 13 module activations, provisioning, invite sessions, license keys. Live delivery disabled.', status: 'built-hidden', statusLabel: 'built', route: '/novee-os/remote-distribution' },
   { title: 'E.7 — Onboarding + Training',desc: '10 programs, 19 manuals, 16 lessons, checklists, progress, acceptance. Publication and completion disabled by default.', status: 'built-hidden', statusLabel: 'built', route: '/novee-os/onboarding-training' },
-  { title: 'E.8 — AMBI Foundation',      desc: 'AMBI intelligence platform — software layer only.',                       status: 'missing',      statusLabel: 'pending',  route: '/placeholder/e8',                       disabled: true },
+  { title: 'E.8 — AMBI Foundation',      desc: 'Software foundation: device registry, pairing, firmware, aura states, environment signals, privacy/consent. No hardware. No live telemetry.', status: 'built-hidden', statusLabel: 'built', route: '/novee-os/ambi-foundation' },
   { title: 'E.9 — Documentation Portal', desc: 'Operator and developer documentation hub.',                               status: 'missing',      statusLabel: 'pending',  route: '/placeholder/e9',                       disabled: true },
   { title: 'E.10 — Final Go-Live Gate',  desc: 'System-wide production readiness and go-live verification.',              status: 'missing',      statusLabel: 'pending',  route: '/placeholder/e10',                      disabled: true },
 ]
@@ -212,7 +212,7 @@ export default function NoveeOSCommandCenter() {
         </div>
 
         {/* D. Phase E */}
-        <SectionHeader title="D — Phase E Readiness" note="E.1–E.7 built; E.8–E.10 pending" />
+        <SectionHeader title="D — Phase E Readiness" note="E.1–E.8 built; E.9–E.10 pending" />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
           {PHASE_E.map(p => <PlatformCard key={p.title} {...p} />)}
         </div>
