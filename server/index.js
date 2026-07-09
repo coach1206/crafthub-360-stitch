@@ -19,6 +19,7 @@ import sessionRoutes         from './routes/sessionRoutes.js'
 import passportRoutes        from './routes/passportRoutes.js'
 import passport360SmokeCraftRoutes from './routes/passport360SmokeCraftRoutes.js'
 import eatSmokeCraftLiveSyncRoutes from './routes/eatSmokeCraftLiveSyncRoutes.js'
+import pos360SmokeCraftOrderBridgeRoutes from './routes/pos360SmokeCraftOrderBridgeRoutes.js'
 import leaderboardRoutes     from './routes/leaderboardRoutes.js'
 import pos3Routes            from './routes/pos3Routes.js'
 import eatRoutes             from './routes/eatRoutes.js'
@@ -176,6 +177,7 @@ app.use('/api/sessions',          sessionRoutes)
 app.use('/api/passport',          passportRoutes)
 app.use('/api/passport-360/smokecraft', passport360SmokeCraftRoutes)
 app.use('/api/eat-360/smokecraft',     eatSmokeCraftLiveSyncRoutes)
+app.use('/api/pos360/smokecraft',      pos360SmokeCraftOrderBridgeRoutes)
 app.use('/api/leaderboard',       leaderboardRoutes)
 app.use('/api/pos3',              pos3Routes)
 app.use('/api/pos3/sync',         pos3SyncRouter)

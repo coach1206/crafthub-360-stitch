@@ -13,7 +13,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { saveGuestResumeState, saveHandoffMeta } from '../../services/staffHandoffResumeService.js'
-import { startHandoff } from '../../services/smokecraftHandoffService.js'
+import { startHandoff, createPOS360HandoffRequest, writePOS360AuditEvent } from '../../services/smokecraftHandoffService.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 
 export default function SmokeCraftHandoffTrigger({ allowEAT = true, allowPOS360 = true }) {
@@ -50,6 +50,36 @@ export default function SmokeCraftHandoffTrigger({ allowEAT = true, allowPOS360 
       currentVisit,
       currentSession,
     }).catch(() => {})
+
+    if (target === 'pos360') {
+      ;(async () => {
+        try {
+          const result = await createPOS360HandoffRequest({
+            venueId:            'novee-grand-lounge',
+            guestId:            session?.sessionId || null,
+            smokecraftSessionId: currentSession?.sessionId || null,
+            source:             'smokecraft',
+            targetSystem:       'pos360',
+            handoffPayload:     { startRoute: location.pathname, currentVisit, currentSession },
+            staffActionRequired: true,
+          })
+          if (result?.backendConnected) {
+            await writePOS360AuditEvent({
+              venueId:            'novee-grand-lounge',
+              guestId:            session?.sessionId || null,
+              handoffId:          result?.handoff?.handoff_id || null,
+              smokecraftSessionId: currentSession?.sessionId || null,
+              eventType:          'pos360_handoff_triggered',
+              syncStatus:         'ok',
+              backendConnected:   true,
+              summary:            'Guest triggered POS360 handoff from SmokeCraft',
+            })
+          }
+        } catch {
+          // backend failure must never surface to guest
+        }
+      })()
+    }
 
     navigate(`/staff/pin?target=${target}`)
   }

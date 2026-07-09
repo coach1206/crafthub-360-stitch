@@ -5,6 +5,75 @@
  */
 
 const BASE = '/api/venues'
+const POS360_BASE = '/api/pos360/smokecraft'
+const POS360_SAFE_CLAIM = 'pos360_smokecraft_order_bridge'
+
+function pos360LocalFallback(area, extra = {}) {
+  return {
+    ok: false, backendConnected: false, orderStatus: 'local_fallback',
+    persistenceMode: 'local_fallback', safeClaim: POS360_SAFE_CLAIM, area, ...extra,
+  }
+}
+
+async function pos360Fetch(path, opts = {}) {
+  try {
+    const res = await fetch(`${POS360_BASE}${path}`, {
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
+      ...opts,
+    })
+    const json = await res.json()
+    return json
+  } catch {
+    return null
+  }
+}
+
+export async function createPOS360OrderIntent({
+  venueId, guestId, smokecraftSessionId, passportSessionId,
+  cigarReference, menuItemReference, quantity, modifiers,
+  orderPayload, orderSource, orderType,
+}) {
+  const json = await pos360Fetch('/order-intent', {
+    method: 'POST',
+    body: JSON.stringify({
+      venueId, guestId, smokecraftSessionId, passportSessionId,
+      cigarReference, menuItemReference, quantity, modifiers,
+      orderPayload, orderSource, orderType,
+    }),
+  })
+  if (!json?.success || !json?.backendConnected) return pos360LocalFallback('createPOS360OrderIntent')
+  return { ok: true, backendConnected: true, orderStatus: json.orderStatus, persistenceMode: json.persistenceMode, safeClaim: POS360_SAFE_CLAIM, orderIntent: json.data?.orderIntent }
+}
+
+export async function createPOS360HandoffRequest({
+  venueId, guestId, smokecraftSessionId, passportSessionId,
+  source, targetSystem, handoffPayload, staffActionRequired,
+}) {
+  const json = await pos360Fetch('/handoff-request', {
+    method: 'POST',
+    body: JSON.stringify({
+      venueId, guestId, smokecraftSessionId, passportSessionId,
+      source, targetSystem, handoffPayload, staffActionRequired,
+    }),
+  })
+  if (!json?.success || !json?.backendConnected) return pos360LocalFallback('createPOS360HandoffRequest')
+  return { ok: true, backendConnected: true, orderStatus: json.orderStatus, persistenceMode: json.persistenceMode, safeClaim: POS360_SAFE_CLAIM, handoff: json.data?.handoff }
+}
+
+export async function writePOS360AuditEvent({
+  venueId, guestId, orderIntentId, handoffId, smokecraftSessionId,
+  eventType, syncStatus, backendConnected, summary, metadata,
+}) {
+  const json = await pos360Fetch('/audit/event', {
+    method: 'POST',
+    body: JSON.stringify({
+      venueId, guestId, orderIntentId, handoffId, smokecraftSessionId,
+      eventType, syncStatus, backendConnected, summary, metadata,
+    }),
+  })
+  return json || pos360LocalFallback('writePOS360AuditEvent')
+}
 
 async function safeFetch(url, opts = {}) {
   try {

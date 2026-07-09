@@ -6,6 +6,7 @@ import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRou
 import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
 import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
 import VenueMenuOverlay from '../../components/venue/VenueMenuOverlay.jsx'
+import { createPOS360OrderIntent, writePOS360AuditEvent } from '../../services/smokecraftHandoffService.js'
 
 const GOLD = '#E9C176'
 
@@ -14,14 +15,41 @@ export default function RequestPurchase() {
   const { setResumeRoute } = useSmokeCraftOrder()
   const [menuOpen, setMenuOpen] = useState(false)
 
+  function onOrderPairingTap() {
+    triggerHaptic('medium')
+    setResumeRoute('/smokecraft/request-purchase')
+    // Fire-and-forget POS360 order intent — never blocks guest screen
+    ;(async () => {
+      try {
+        const result = await createPOS360OrderIntent({
+          venueId:     'novee-grand-lounge',
+          guestId:     session?.sessionId || null,
+          orderSource: 'smokecraft',
+          orderType:   'cigar_request',
+          orderPayload: { resumeRoute: '/smokecraft/request-purchase' },
+        })
+        if (result?.backendConnected) {
+          await writePOS360AuditEvent({
+            venueId:        'novee-grand-lounge',
+            guestId:        session?.sessionId || null,
+            orderIntentId:  result?.orderIntent?.order_intent_id || null,
+            eventType:      'order_intent_created',
+            syncStatus:     'ok',
+            backendConnected: true,
+            summary:        'Guest initiated purchase / pairing request from SmokeCraft',
+          })
+        }
+      } catch {
+        // backend failure must never surface to guest
+      }
+    })()
+  }
+
   const HOTSPOTS = [
     {
       label: 'Order Pairing / Request Purchase',
       x: 10, y: 60, width: 80, height: 18,
-      onClick: () => {
-        triggerHaptic('medium')
-        setResumeRoute('/smokecraft/request-purchase')
-      },
+      onClick: onOrderPairingTap,
       to: '/smokecraft/menu',
     },
     {
