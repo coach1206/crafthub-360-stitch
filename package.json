@@ -91,7 +91,8 @@
     "verify:phase-e5-live-pilot-readiness": "node server/scripts/verifyPhaseE5LivePilotReadiness.js",
     "verify:phase-e6-remote-module-distribution": "node server/scripts/verifyPhaseE6RemoteModuleDistribution.js",
     "verify:phase-e7-onboarding-training-center": "node server/scripts/verifyPhaseE7OnboardingTrainingCenter.js",
-    "verify:phase-e8-ambi-foundation": "node server/scripts/verifyPhaseE8AMBIFoundation.js"
+    "verify:phase-e8-ambi-foundation": "node server/scripts/verifyPhaseE8AMBIFoundation.js",
+    "verify:phase-e9-documentation-portal": "node server/scripts/verifyPhaseE9DocumentationPortal.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

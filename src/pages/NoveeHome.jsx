@@ -20,6 +20,7 @@ const ADMIN_LINKS = [
   { label: 'E.6 Remote Module Distribution', to: '/novee-os/remote-distribution',  note: 'Phase E.6 — built' },
   { label: 'E.7 Onboarding + Training',      to: '/novee-os/onboarding-training',  note: 'Phase E.7 — built' },
   { label: 'E.8 AMBI Foundation',            to: '/novee-os/ambi-foundation',      note: 'Phase E.8 — built (software foundation only)' },
+  { label: 'E.9 Documentation Portal',       to: '/novee-os/documentation-portal', note: 'Phase E.9 — built (seeded professional draft content)' },
 ]
 
 const CARDS = [
