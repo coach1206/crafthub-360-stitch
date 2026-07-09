@@ -103,7 +103,9 @@
     "verify:phase-f8-pos360-smokecraft-order-bridge": "node server/scripts/verifyPhaseF8POS360SmokeCraftOrderBridge.js",
     "verify:phase-f9-smokecraft-production-readiness-gate": "node server/scripts/verifyPhaseF9SmokeCraftProductionReadinessGate.js",
     "verify:phase-e10-novee-os-final-go-live-gate": "node server/scripts/verifyPhaseE10NoveeOSFinalGoLiveGate.js",
-    "verify:phase-f10-smokecraft-full-internal-experience": "node server/scripts/verifyPhaseF10SmokeCraftFullInternalExperience.js"
+    "verify:phase-f10-smokecraft-full-internal-experience": "node server/scripts/verifyPhaseF10SmokeCraftFullInternalExperience.js",
+    "verify:server-runtime-imports": "node server/scripts/auditServerRuntimeImports.js",
+    "verify:server-module-load": "node server/scripts/verifyServerModuleLoad.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

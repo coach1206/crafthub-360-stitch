@@ -1,7 +1,7 @@
 // Phase E.8 — NOVEE OS AMBI Foundation Service
 // SOFTWARE FOUNDATION ONLY — hardware_ready=false, live_telemetry=false, live_control=false
 
-import { isDbAvailable, db } from '../../db/connection.js'
+import { isDbAvailable, getDb } from '../../db/connection.js'
 import AMBI_FLAGS from '../../config/noveeOSAMBIFoundationFeatureFlags.js'
 import {
   DEFAULT_AMBI_DEVICES, DEFAULT_AMBI_FIRMWARE, DEFAULT_AMBI_HARDWARE_PROVIDERS,
@@ -44,7 +44,7 @@ export async function getAMBIFoundationSummary({ tenantId = null } = {}) {
 export async function listAMBIDevices({ tenantId = null } = {}) {
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, devices: DEFAULT_AMBI_DEVICES }
   try {
-    const d = await db()
+    const d = getDb()
     const q = tenantId
       ? 'SELECT id, device_key, device_name, device_type, device_status, hardware_ready, software_ready, connected, live_telemetry_enabled, live_control_enabled, consent_required, safe_claim, created_at FROM novee_os_ambi_device_registry WHERE tenant_id=$1 ORDER BY created_at DESC'
       : 'SELECT id, device_key, device_name, device_type, device_status, hardware_ready, software_ready, connected, live_telemetry_enabled, live_control_enabled, consent_required, safe_claim, created_at FROM novee_os_ambi_device_registry ORDER BY created_at DESC'
@@ -56,7 +56,7 @@ export async function listAMBIDevices({ tenantId = null } = {}) {
 export async function getAMBIDevice(id) {
   if (!(await isDbAvailable())) return localFallback('device')
   try {
-    const res = await (await db()).query('SELECT id, device_key, device_name, device_type, device_status, hardware_ready, software_ready, connected, live_telemetry_enabled, live_control_enabled, consent_required, safe_claim FROM novee_os_ambi_device_registry WHERE id=$1', [id])
+    const res = await (getDb()).query('SELECT id, device_key, device_name, device_type, device_status, hardware_ready, software_ready, connected, live_telemetry_enabled, live_control_enabled, consent_required, safe_claim FROM novee_os_ambi_device_registry WHERE id=$1', [id])
     return { ok: true, device: res.rows[0] || null }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -66,7 +66,7 @@ export async function createAMBIDevicePreview(payload, { actorId = 'system', ike
   assertNoFakeAMBIHardwareClaims(payload)
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, device: { ...payload, hardware_ready: false, connected: false, live_telemetry_enabled: false, live_control_enabled: false, safe_claim: 'ambi_device_record_exists' } }
   try {
-    const d = await db()
+    const d = getDb()
     const res = await d.query(
       `INSERT INTO novee_os_ambi_device_registry (device_key, device_name, device_type, device_status, hardware_ready, software_ready, connected, live_telemetry_enabled, live_control_enabled, consent_required, safe_claim)
        VALUES ($1,$2,$3,$4,FALSE,FALSE,FALSE,FALSE,FALSE,$5,'ambi_device_record_exists')
@@ -82,7 +82,7 @@ export async function updateAMBIDeviceStatusPreview(id, payload, { actorId = 'sy
   assertNoFakeAMBITelemetryClaims(payload)
   if (!(await isDbAvailable())) return localFallback('device_status')
   try {
-    await (await db()).query('UPDATE novee_os_ambi_device_registry SET device_status=$1, updated_at=now() WHERE id=$2', [payload.device_status || 'draft', id])
+    await (getDb()).query('UPDATE novee_os_ambi_device_registry SET device_status=$1, updated_at=now() WHERE id=$2', [payload.device_status || 'draft', id])
     return { ok: true, updated: true }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -90,7 +90,7 @@ export async function updateAMBIDeviceStatusPreview(id, payload, { actorId = 'sy
 export async function listAMBIDevicePairings({ tenantId = null } = {}) {
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, pairings: [] }
   try {
-    const d = await db()
+    const d = getDb()
     // pairing_token_reference_only is not selected — tokens never exposed
     const q = tenantId
       ? 'SELECT id, ambi_device_id, pairing_status, pairing_mode, pairing_reference_only, paired_by_reference_only, paired_at, expires_at, live_pairing_enabled, safe_claim FROM novee_os_ambi_device_pairing_registry WHERE tenant_id=$1 ORDER BY created_at DESC'
@@ -103,7 +103,7 @@ export async function listAMBIDevicePairings({ tenantId = null } = {}) {
 export async function getAMBIDevicePairing(id) {
   if (!(await isDbAvailable())) return localFallback('pairing')
   try {
-    const res = await (await db()).query('SELECT id, ambi_device_id, pairing_status, pairing_mode, pairing_reference_only, paired_by_reference_only, live_pairing_enabled, safe_claim FROM novee_os_ambi_device_pairing_registry WHERE id=$1', [id])
+    const res = await (getDb()).query('SELECT id, ambi_device_id, pairing_status, pairing_mode, pairing_reference_only, paired_by_reference_only, live_pairing_enabled, safe_claim FROM novee_os_ambi_device_pairing_registry WHERE id=$1', [id])
     return { ok: true, pairing: res.rows[0] || null }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -113,7 +113,7 @@ export async function createAMBIDevicePairingPreview(payload, { actorId = 'syste
   assertNoFakeAMBIPairingClaims(payload)
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, pairing: { ...payload, live_pairing_enabled: false, safe_claim: 'ambi_pairing_record_exists' } }
   try {
-    const d = await db()
+    const d = getDb()
     const res = await d.query(
       `INSERT INTO novee_os_ambi_device_pairing_registry (ambi_device_id, pairing_status, pairing_mode, pairing_reference_only, live_pairing_enabled, safe_claim, idempotency_key)
        VALUES ($1,$2,$3,$4,FALSE,'ambi_pairing_record_exists',$5)
@@ -128,7 +128,7 @@ export async function updateAMBIDevicePairingStatusPreview(id, payload, { actorI
   assertNoFakeAMBIPairingClaims(payload)
   if (!(await isDbAvailable())) return localFallback('pairing_status')
   try {
-    await (await db()).query('UPDATE novee_os_ambi_device_pairing_registry SET pairing_status=$1, updated_at=now() WHERE id=$2', [payload.pairing_status || 'not_started', id])
+    await (getDb()).query('UPDATE novee_os_ambi_device_pairing_registry SET pairing_status=$1, updated_at=now() WHERE id=$2', [payload.pairing_status || 'not_started', id])
     return { ok: true, updated: true }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -136,7 +136,7 @@ export async function updateAMBIDevicePairingStatusPreview(id, payload, { actorI
 export async function listAMBIFirmwareReadiness({ tenantId = null } = {}) {
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, firmware: DEFAULT_AMBI_FIRMWARE }
   try {
-    const d = await db()
+    const d = getDb()
     const q = tenantId
       ? 'SELECT id, ambi_device_id, firmware_version_label, firmware_status, update_available, update_required, update_tested, rollback_available, live_update_enabled, safe_claim FROM novee_os_ambi_firmware_readiness_registry WHERE tenant_id=$1 ORDER BY created_at DESC'
       : 'SELECT id, ambi_device_id, firmware_version_label, firmware_status, update_available, update_required, update_tested, rollback_available, live_update_enabled, safe_claim FROM novee_os_ambi_firmware_readiness_registry ORDER BY created_at DESC'
@@ -148,7 +148,7 @@ export async function listAMBIFirmwareReadiness({ tenantId = null } = {}) {
 export async function getAMBIFirmwareReadiness(id) {
   if (!(await isDbAvailable())) return localFallback('firmware')
   try {
-    const res = await (await db()).query('SELECT id, firmware_version_label, firmware_status, update_available, update_required, update_tested, rollback_available, live_update_enabled, safe_claim FROM novee_os_ambi_firmware_readiness_registry WHERE id=$1', [id])
+    const res = await (getDb()).query('SELECT id, firmware_version_label, firmware_status, update_available, update_required, update_tested, rollback_available, live_update_enabled, safe_claim FROM novee_os_ambi_firmware_readiness_registry WHERE id=$1', [id])
     return { ok: true, firmware: res.rows[0] || null }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -157,7 +157,7 @@ export async function createAMBIFirmwareReadinessPreview(payload, { actorId = 's
   validateAMBIFirmwarePayload(payload)
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, firmware: { ...payload, live_update_enabled: false, safe_claim: 'ambi_firmware_record_exists' } }
   try {
-    const d = await db()
+    const d = getDb()
     const res = await d.query(
       `INSERT INTO novee_os_ambi_firmware_readiness_registry (ambi_device_id, firmware_version_label, firmware_status, live_update_enabled, idempotency_key)
        VALUES ($1,$2,$3,FALSE,$4) ON CONFLICT (idempotency_key) DO NOTHING RETURNING *`,
@@ -171,7 +171,7 @@ export async function updateAMBIFirmwareReadinessStatusPreview(id, payload, { ac
   assertNoFakeAMBIFirmwareClaims(payload)
   if (!(await isDbAvailable())) return localFallback('firmware_status')
   try {
-    await (await db()).query('UPDATE novee_os_ambi_firmware_readiness_registry SET firmware_status=$1, updated_at=now() WHERE id=$2', [payload.firmware_status || 'draft', id])
+    await (getDb()).query('UPDATE novee_os_ambi_firmware_readiness_registry SET firmware_status=$1, updated_at=now() WHERE id=$2', [payload.firmware_status || 'draft', id])
     return { ok: true, updated: true }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -179,7 +179,7 @@ export async function updateAMBIFirmwareReadinessStatusPreview(id, payload, { ac
 export async function listAMBIHardwareProviders({ tenantId = null } = {}) {
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, providers: DEFAULT_AMBI_HARDWARE_PROVIDERS }
   try {
-    const d = await db()
+    const d = getDb()
     // credential_reference_only is excluded from list
     const q = tenantId
       ? 'SELECT id, provider_key, provider_name, provider_type, provider_status, configured, verified, live_connection_enabled, safe_claim FROM novee_os_ambi_hardware_provider_registry WHERE tenant_id=$1 ORDER BY created_at DESC'
@@ -192,7 +192,7 @@ export async function listAMBIHardwareProviders({ tenantId = null } = {}) {
 export async function getAMBIHardwareProvider(id) {
   if (!(await isDbAvailable())) return localFallback('provider')
   try {
-    const res = await (await db()).query('SELECT id, provider_key, provider_name, provider_type, provider_status, configured, verified, live_connection_enabled, safe_claim FROM novee_os_ambi_hardware_provider_registry WHERE id=$1', [id])
+    const res = await (getDb()).query('SELECT id, provider_key, provider_name, provider_type, provider_status, configured, verified, live_connection_enabled, safe_claim FROM novee_os_ambi_hardware_provider_registry WHERE id=$1', [id])
     return { ok: true, provider: res.rows[0] || null }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -201,7 +201,7 @@ export async function createAMBIHardwareProviderPreview(payload, { actorId = 'sy
   validateAMBIHardwareProviderPayload(payload)
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, provider: { ...payload, verified: false, live_connection_enabled: false, safe_claim: 'ambi_hardware_provider_record_exists' } }
   try {
-    const d = await db()
+    const d = getDb()
     const res = await d.query(
       `INSERT INTO novee_os_ambi_hardware_provider_registry (provider_key, provider_name, provider_type, provider_status, configured, verified, live_connection_enabled)
        VALUES ($1,$2,$3,$4,FALSE,FALSE,FALSE) ON CONFLICT (provider_key) DO NOTHING RETURNING *`,
@@ -215,7 +215,7 @@ export async function updateAMBIHardwareProviderStatusPreview(id, payload, { act
   assertNoFakeAMBIProviderClaims(payload)
   if (!(await isDbAvailable())) return localFallback('provider_status')
   try {
-    await (await db()).query('UPDATE novee_os_ambi_hardware_provider_registry SET provider_status=$1, updated_at=now() WHERE id=$2', [payload.provider_status || 'draft', id])
+    await (getDb()).query('UPDATE novee_os_ambi_hardware_provider_registry SET provider_status=$1, updated_at=now() WHERE id=$2', [payload.provider_status || 'draft', id])
     return { ok: true, updated: true }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -223,7 +223,7 @@ export async function updateAMBIHardwareProviderStatusPreview(id, payload, { act
 export async function listAMBIAuraStates({ tenantId = null } = {}) {
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, aura_states: DEFAULT_AMBI_AURA_STATES }
   try {
-    const d = await db()
+    const d = getDb()
     const q = tenantId
       ? 'SELECT id, aura_key, aura_name, aura_category, state_status, active, preview_only, live_automation_enabled, required_consent, safe_claim FROM novee_os_ambi_aura_state_registry WHERE tenant_id=$1 ORDER BY created_at DESC'
       : 'SELECT id, aura_key, aura_name, aura_category, state_status, active, preview_only, live_automation_enabled, required_consent, safe_claim FROM novee_os_ambi_aura_state_registry ORDER BY created_at DESC'
@@ -235,7 +235,7 @@ export async function listAMBIAuraStates({ tenantId = null } = {}) {
 export async function getAMBIAuraState(id) {
   if (!(await isDbAvailable())) return localFallback('aura_state')
   try {
-    const res = await (await db()).query('SELECT id, aura_key, aura_name, aura_category, state_status, active, preview_only, live_automation_enabled, required_consent, safe_claim FROM novee_os_ambi_aura_state_registry WHERE id=$1', [id])
+    const res = await (getDb()).query('SELECT id, aura_key, aura_name, aura_category, state_status, active, preview_only, live_automation_enabled, required_consent, safe_claim FROM novee_os_ambi_aura_state_registry WHERE id=$1', [id])
     return { ok: true, aura_state: res.rows[0] || null }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -244,7 +244,7 @@ export async function createAMBIAuraStatePreview(payload, { actorId = 'system', 
   validateAMBIAuraStatePayload(payload)
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, aura_state: { ...payload, active: false, preview_only: true, live_automation_enabled: false, safe_claim: 'ambi_aura_state_record_exists' } }
   try {
-    const d = await db()
+    const d = getDb()
     const res = await d.query(
       `INSERT INTO novee_os_ambi_aura_state_registry (aura_key, aura_name, aura_category, state_status, active, preview_only, live_automation_enabled, required_consent)
        VALUES ($1,$2,$3,$4,FALSE,TRUE,FALSE,$5) ON CONFLICT (aura_key) DO NOTHING RETURNING *`,
@@ -258,7 +258,7 @@ export async function updateAMBIAuraStateStatusPreview(id, payload, { actorId = 
   if (payload.live_automation_enabled === true) throw new Error('live_automation_enabled must remain false in this phase')
   if (!(await isDbAvailable())) return localFallback('aura_status')
   try {
-    await (await db()).query('UPDATE novee_os_ambi_aura_state_registry SET state_status=$1, updated_at=now() WHERE id=$2', [payload.state_status || 'draft', id])
+    await (getDb()).query('UPDATE novee_os_ambi_aura_state_registry SET state_status=$1, updated_at=now() WHERE id=$2', [payload.state_status || 'draft', id])
     return { ok: true, updated: true }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -266,7 +266,7 @@ export async function updateAMBIAuraStateStatusPreview(id, payload, { actorId = 
 export async function listAMBIEnvironmentSignals({ tenantId = null } = {}) {
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, signals: DEFAULT_AMBI_ENVIRONMENT_SIGNALS }
   try {
-    const d = await db()
+    const d = getDb()
     const q = tenantId
       ? 'SELECT id, signal_key, signal_name, signal_type, signal_status, source_type, live_ingestion_enabled, simulated, consent_required, safe_claim FROM novee_os_ambi_environment_signal_registry WHERE tenant_id=$1 ORDER BY created_at DESC'
       : 'SELECT id, signal_key, signal_name, signal_type, signal_status, source_type, live_ingestion_enabled, simulated, consent_required, safe_claim FROM novee_os_ambi_environment_signal_registry ORDER BY created_at DESC'
@@ -278,7 +278,7 @@ export async function listAMBIEnvironmentSignals({ tenantId = null } = {}) {
 export async function getAMBIEnvironmentSignal(id) {
   if (!(await isDbAvailable())) return localFallback('signal')
   try {
-    const res = await (await db()).query('SELECT id, signal_key, signal_name, signal_type, signal_status, source_type, live_ingestion_enabled, simulated, consent_required, safe_claim FROM novee_os_ambi_environment_signal_registry WHERE id=$1', [id])
+    const res = await (getDb()).query('SELECT id, signal_key, signal_name, signal_type, signal_status, source_type, live_ingestion_enabled, simulated, consent_required, safe_claim FROM novee_os_ambi_environment_signal_registry WHERE id=$1', [id])
     return { ok: true, signal: res.rows[0] || null }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -287,7 +287,7 @@ export async function createAMBIEnvironmentSignalPreview(payload, { actorId = 's
   validateAMBIEnvironmentSignalPayload(payload)
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, signal: { ...payload, live_ingestion_enabled: false, simulated: true, safe_claim: 'ambi_environment_signal_record_exists' } }
   try {
-    const d = await db()
+    const d = getDb()
     const res = await d.query(
       `INSERT INTO novee_os_ambi_environment_signal_registry (signal_key, signal_name, signal_type, signal_status, source_type, live_ingestion_enabled, simulated, consent_required)
        VALUES ($1,$2,$3,$4,$5,FALSE,TRUE,$6) ON CONFLICT (signal_key) DO NOTHING RETURNING *`,
@@ -301,7 +301,7 @@ export async function updateAMBIEnvironmentSignalStatusPreview(id, payload, { ac
   assertNoFakeAMBITelemetryClaims(payload)
   if (!(await isDbAvailable())) return localFallback('signal_status')
   try {
-    await (await db()).query('UPDATE novee_os_ambi_environment_signal_registry SET signal_status=$1, updated_at=now() WHERE id=$2', [payload.signal_status || 'draft', id])
+    await (getDb()).query('UPDATE novee_os_ambi_environment_signal_registry SET signal_status=$1, updated_at=now() WHERE id=$2', [payload.signal_status || 'draft', id])
     return { ok: true, updated: true }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -309,7 +309,7 @@ export async function updateAMBIEnvironmentSignalStatusPreview(id, payload, { ac
 export async function listAMBIPrivacyConsent({ tenantId = null } = {}) {
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, consents: DEFAULT_AMBI_CONSENT_RECORDS }
   try {
-    const d = await db()
+    const d = getDb()
     // subject_reference_only excluded from list
     const q = tenantId
       ? 'SELECT id, consent_type, consent_status, required_for_feature, accepted_at, revoked_at, evidence_reference, safe_claim FROM novee_os_ambi_privacy_consent_registry WHERE tenant_id=$1 ORDER BY created_at DESC'
@@ -322,7 +322,7 @@ export async function listAMBIPrivacyConsent({ tenantId = null } = {}) {
 export async function getAMBIPrivacyConsent(id) {
   if (!(await isDbAvailable())) return localFallback('consent')
   try {
-    const res = await (await db()).query('SELECT id, consent_type, consent_status, required_for_feature, accepted_at, revoked_at, evidence_reference, safe_claim FROM novee_os_ambi_privacy_consent_registry WHERE id=$1', [id])
+    const res = await (getDb()).query('SELECT id, consent_type, consent_status, required_for_feature, accepted_at, revoked_at, evidence_reference, safe_claim FROM novee_os_ambi_privacy_consent_registry WHERE id=$1', [id])
     return { ok: true, consent: res.rows[0] || null }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -332,7 +332,7 @@ export async function createAMBIPrivacyConsentPreview(payload, { actorId = 'syst
   assertNoRawAMBISecrets(payload)
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, consent: { ...payload, consent_status: 'pending', safe_claim: 'ambi_consent_record_exists' } }
   try {
-    const d = await db()
+    const d = getDb()
     const res = await d.query(
       `INSERT INTO novee_os_ambi_privacy_consent_registry (consent_type, consent_status, required_for_feature, idempotency_key)
        VALUES ($1,'pending',$2,$3) ON CONFLICT (idempotency_key) DO NOTHING RETURNING *`,
@@ -346,7 +346,7 @@ export async function updateAMBIPrivacyConsentStatusPreview(id, payload, { actor
   assertNoRawAMBISecrets(payload)
   if (!(await isDbAvailable())) return localFallback('consent_status')
   try {
-    await (await db()).query('UPDATE novee_os_ambi_privacy_consent_registry SET consent_status=$1, updated_at=now() WHERE id=$2', [payload.consent_status || 'pending', id])
+    await (getDb()).query('UPDATE novee_os_ambi_privacy_consent_registry SET consent_status=$1, updated_at=now() WHERE id=$2', [payload.consent_status || 'pending', id])
     return { ok: true, updated: true }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -355,7 +355,7 @@ export async function updateAMBIPrivacyConsentStatusPreview(id, payload, { actor
 export async function listAMBIPresenceAccessEvents({ tenantId = null } = {}) {
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, events: DEFAULT_AMBI_PRESENCE_EVENTS }
   try {
-    const d = await db()
+    const d = getDb()
     const q = tenantId
       ? 'SELECT id, event_type, event_status, source_type, consent_status, live_tracking_enabled, simulated, safe_claim, created_at FROM novee_os_ambi_presence_access_event_registry WHERE tenant_id=$1 ORDER BY created_at DESC'
       : 'SELECT id, event_type, event_status, source_type, consent_status, live_tracking_enabled, simulated, safe_claim, created_at FROM novee_os_ambi_presence_access_event_registry ORDER BY created_at DESC'
@@ -367,7 +367,7 @@ export async function listAMBIPresenceAccessEvents({ tenantId = null } = {}) {
 export async function getAMBIPresenceAccessEvent(id) {
   if (!(await isDbAvailable())) return localFallback('presence_event')
   try {
-    const res = await (await db()).query('SELECT id, event_type, event_status, source_type, consent_status, live_tracking_enabled, simulated, safe_claim FROM novee_os_ambi_presence_access_event_registry WHERE id=$1', [id])
+    const res = await (getDb()).query('SELECT id, event_type, event_status, source_type, consent_status, live_tracking_enabled, simulated, safe_claim FROM novee_os_ambi_presence_access_event_registry WHERE id=$1', [id])
     return { ok: true, event: res.rows[0] || null }
   } catch (e) { return { ok: false, error: e.message } }
 }
@@ -376,7 +376,7 @@ export async function createAMBIPresenceAccessEventPreview(payload, { actorId = 
   validateAMBIPresenceAccessEventPayload(payload)
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, event: { ...payload, live_tracking_enabled: false, simulated: true, safe_claim: 'ambi_presence_event_record_exists' } }
   try {
-    const d = await db()
+    const d = getDb()
     const res = await d.query(
       `INSERT INTO novee_os_ambi_presence_access_event_registry (event_type, event_status, source_type, consent_status, live_tracking_enabled, simulated, idempotency_key)
        VALUES ($1,$2,$3,'pending',FALSE,TRUE,$4) ON CONFLICT (idempotency_key) DO NOTHING RETURNING *`,
@@ -447,7 +447,7 @@ export async function getSafeAMBIClaims() {
 export async function writeAMBIAuditEvent({ tenantId = null, actorId = 'system', actorRole = null, eventType, eventCategory = 'general', severity = 'info', summary, metadata = null, ikey = null } = {}) {
   if (!(await isDbAvailable())) return { ok: true, localPreview: true }
   try {
-    await (await db()).query(
+    await (getDb()).query(
       `INSERT INTO novee_os_ambi_audit_log (tenant_id, actor_id, actor_role, event_type, event_category, severity, summary, metadata_json, idempotency_key)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT (idempotency_key) DO NOTHING`,
       [tenantId, actorId, actorRole, eventType, eventCategory, severity, summary, metadata ? JSON.stringify(metadata) : null, ikey]
@@ -459,7 +459,7 @@ export async function writeAMBIAuditEvent({ tenantId = null, actorId = 'system',
 export async function getAMBIAuditLog({ tenantId = null, limit = 50 } = {}) {
   if (!(await isDbAvailable())) return { ok: true, localPreview: true, events: [] }
   try {
-    const d = await db()
+    const d = getDb()
     const q = tenantId
       ? 'SELECT id, actor_id, actor_role, event_type, event_category, severity, summary, created_at FROM novee_os_ambi_audit_log WHERE tenant_id=$1 ORDER BY created_at DESC LIMIT $2'
       : 'SELECT id, actor_id, actor_role, event_type, event_category, severity, summary, created_at FROM novee_os_ambi_audit_log ORDER BY created_at DESC LIMIT $1'
