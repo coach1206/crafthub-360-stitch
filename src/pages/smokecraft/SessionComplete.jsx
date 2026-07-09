@@ -44,9 +44,14 @@ export default function SessionComplete() {
 
   const hotspots = [
     {
-      label: 'Staff Handoff',
+      // POS360 routes are nested under /pos3 — this is the correct staff route.
+      // Handoff is preview/internal: no live payment processing, no external POS provider.
+      label: 'Staff Handoff — Preview',
       x: 10, y: 75, width: 80, height: 20,
       to: '/pos3',
+      handoffType: 'pos360_preview',
+      backendConnected: false,
+      safeClaim: 'POS360 handoff is preview/internal — provider connection not yet enabled',
     },
   ]
 

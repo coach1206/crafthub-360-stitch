@@ -40,9 +40,11 @@ export async function startHandoff({ guestSessionId, venueId, tabletId, target, 
   return {
     ok: true,
     handoffId,
-    handoff: { handoff_id: handoffId, guest_session_id: guestSessionId, target, status: 'started' },
+    handoff: { handoff_id: handoffId, guest_session_id: guestSessionId, target, status: 'initiated_local_only' },
     storageMode: 'local_preview',
     localPreview: true,
+    backendConnected: false,
+    safeClaim: 'POS360/E.A.T. handoff is preview/internal — provider connection not yet enabled',
     notice: 'LOCAL PREVIEW MODE: handoff recorded locally only.',
   }
 }
@@ -72,6 +74,8 @@ export async function syncToEAT({ guestSessionId, venueId, handoffId, staffUserI
   return {
     ok: false,
     localPreview: true,
+    backendConnected: false,
+    safeClaim: 'E.A.T. management sync is preview/internal — backend connection not enabled',
     error: 'LOCAL PREVIEW MODE: E.A.T. sync requires backend.',
     notice: 'Backend unavailable. Sync not sent to management.',
   }

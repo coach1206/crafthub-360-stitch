@@ -15,6 +15,8 @@ export function syncManagement(payload) {
     source: 'local_fallback',
     eatConnected: false,
     preview_only: true,
+    backendConnected: false,
+    safeClaim: 'E.A.T. management sync is preview/internal — backend connection not enabled',
     message: 'Management sync is demo_only. E.A.T. command hub connection required for live sync.',
     payload,
     syncedAt: null,
@@ -31,6 +33,8 @@ export function getManagementSyncStatus(venueId) {
     lastSyncedAt: null,
     syncStatus: 'not_connected',
     preview_only: true,
+    backendConnected: false,
+    safeClaim: 'E.A.T. management sync is preview/internal — backend connection not enabled',
   }
 }
 
@@ -40,6 +44,8 @@ export function buildManagementSyncReport() {
     eatConnected: false,
     syncStatus: 'not_connected',
     preview_only: true,
+    backendConnected: false,
+    safeClaim: 'E.A.T. management sync is preview/internal — backend connection not enabled',
     message: 'Management sync requires E.A.T. command hub. Connect in Module Build 4.',
   }
 }

@@ -2,7 +2,7 @@
  * SmokeCraftHandoffTrigger — discreet staff handoff button for SmokeCraft screens.
  *
  * Sits as a small fixed dot (hidden from guests). When tapped, shows choices:
- *   Switch to E.A.T. | Switch to POS360
+ *   Request E.A.T. Handoff | Request POS360 Handoff (both labeled PILOT PREVIEW)
  * Then saves guest resume state and navigates to /staff/pin?target=...
  *
  * Never exposes staff tools casually. Requires deliberate double-tap to reveal.
@@ -68,15 +68,17 @@ export default function SmokeCraftHandoffTrigger({ allowEAT = true, allowPOS360 
 
   return (
     <div style={styles.panel}>
-      <div style={styles.panelTitle}>Staff Access</div>
+      <div style={styles.panelTitle}>Staff Handoff</div>
+      {/* Handoff is initiated/requested locally — not confirmed as live-delivered */}
+      <div style={styles.pilotLabel}>PILOT PREVIEW — Internal Only</div>
       {allowEAT && (
         <button onClick={() => triggerHandoff('eat')} style={styles.choice}>
-          Switch to E.A.T.
+          Request E.A.T. Handoff
         </button>
       )}
       {allowPOS360 && (
         <button onClick={() => triggerHandoff('pos360')} style={styles.choice}>
-          Switch to POS360
+          Request POS360 Handoff
         </button>
       )}
       <button onClick={() => setRevealed(false)} style={styles.cancel}>Cancel</button>
@@ -110,6 +112,11 @@ const styles = {
     border: `1px solid rgba(233,193,118,0.25)`, borderRadius: 8,
     color: G, fontFamily: '"Georgia", serif', fontSize: 13,
     cursor: 'pointer', textAlign: 'left',
+  },
+  pilotLabel: {
+    fontFamily: '"JetBrains Mono", monospace', fontSize: 8,
+    letterSpacing: '0.12em', textTransform: 'uppercase',
+    color: 'rgba(192,57,43,0.7)', padding: '4px 0',
   },
   cancel: {
     padding: '8px 14px', background: 'none',
