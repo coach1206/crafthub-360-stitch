@@ -6,6 +6,7 @@
 import { loadSession, saveSession } from './sessionStorageService.js'
 import { syncPassportToBackend } from './syncService.js'
 import { saveEvent } from './syncQueueService.js'
+import { awardStampToBackend, awardXPToBackend, getBackendEarnedStamps, writeSyncAuditEvent } from './passportAdapter.js'
 
 function genPassportId() {
   return `PP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
@@ -63,10 +64,34 @@ export function awardStamp(stampData) {
     latestStampId: stamp.stampId,
   }
   saveSession(updatedSession)
-  // Fire-and-forget passport sync after local save
+  // Fire-and-forget backend persistence — local stamp is already saved above.
+  // backendConnected is set only if the API confirms real database storage.
+  const passportId = updatedSession.passport?.passportId
+  awardStampToBackend({
+    guestId: passportId,
+    stampId: stamp.stampId,
+    moduleKey: stamp.sourceModule || 'smokecraft-360',
+    xpAwarded: stamp.points || 0,
+  }).then(result => {
+    if (result?.backendConnected) {
+      awardXPToBackend({
+        guestId: passportId,
+        moduleKey: stamp.sourceModule || 'smokecraft-360',
+        xpAmount: stamp.points || 0,
+        lastSessionKey: stamp.sourceModule,
+      }).catch(() => {})
+      writeSyncAuditEvent({
+        guestId: passportId,
+        eventType: 'stamp_awarded',
+        syncStatus: 'ok',
+        backendConnected: true,
+        summary: `Stamp ${stamp.stampId} awarded and synced to backend`,
+        metadata: { stampId: stamp.stampId },
+      }).catch(() => {})
+    }
+  }).catch(() => {})
   syncPassportToBackend(updatedSession).catch(() => {})
   // Durable outbox entry — separate from the existing fire-and-forget sync above.
-  const passportId = updatedSession.passport?.passportId
   if (passportId) {
     saveEvent({
       sourceSystem: 'PASSPORT',
@@ -76,6 +101,22 @@ export function awardStamp(stampData) {
     }).catch(() => {})
   }
   return stamp
+}
+
+/**
+ * Fetches earned stamps from backend when available, falls back to local.
+ * Returns { stamps, backendConnected, persistenceMode }.
+ */
+export async function getEarnedStampsWithBackend() {
+  const session = loadSession()
+  const passportId = session?.passport?.passportId
+  if (passportId) {
+    const result = await getBackendEarnedStamps({ guestId: passportId }).catch(() => null)
+    if (result?.backendConnected && Array.isArray(result.stamps)) {
+      return { stamps: result.stamps, backendConnected: true, persistenceMode: 'database' }
+    }
+  }
+  return { stamps: getEarnedStamps(), backendConnected: false, persistenceMode: 'local_fallback' }
 }
 
 /** Returns all earned stamps from the passport (new model) + legacy smokecraftStamps. */

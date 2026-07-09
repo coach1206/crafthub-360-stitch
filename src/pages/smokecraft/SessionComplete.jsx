@@ -3,6 +3,8 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
+import { syncSmokeCraftSessionToBackend, saveFlavorMemoryToBackend, writeSyncAuditEvent } from '../../services/passportAdapter.js'
+import { createPassportId } from '../../services/passportService.js'
 
 function readLocalFlavorMemory() {
   try {
@@ -39,6 +41,57 @@ export default function SessionComplete() {
     })
     syncPos3Activity()
     syncEATActivity()
+
+    // Fire-and-forget backend sync — does NOT block guest screen.
+    // backendConnected in context stays false; only backend returns true.
+    ;(async () => {
+      try {
+        const guestId = createPassportId()
+        const completedSteps = session.completedSteps || []
+        const xpSummary = session.smokeCraft?.xp || {}
+        const stampSummary = session.passport?.earnedStamps || []
+
+        const [sessionResult, flavorResult] = await Promise.allSettled([
+          syncSmokeCraftSessionToBackend({
+            guestId,
+            completedSteps,
+            tasteProfile: tasteTags,
+            xpSummary,
+            stampSummary,
+            completedRoute: session.smokeCraft?.selectedRoute || null,
+            sessionStatus: 'completed',
+            completedAt: new Date().toISOString(),
+          }),
+          tasteTags.length > 0
+            ? saveFlavorMemoryToBackend({
+                guestId,
+                tasteTags,
+                tastingNotes: flavorMemory?.tastingNotes || {},
+                flavorProfileSource: tasteProfileSource,
+                dataQualityStatus: tasteProfileSource === 'local_session' ? 'partial' : 'observe_confirm_only',
+              })
+            : Promise.resolve({ ok: false, backendConnected: false }),
+        ])
+
+        const sessionOk = sessionResult.status === 'fulfilled' && sessionResult.value?.backendConnected
+        await writeSyncAuditEvent({
+          guestId,
+          eventType: 'session_complete_sync',
+          syncStatus: sessionOk ? 'ok' : 'fallback',
+          backendConnected: sessionOk,
+          summary: sessionOk
+            ? 'SmokeCraft session synced to Passport 360 backend'
+            : 'SmokeCraft session stored locally — backend not available',
+          metadata: {
+            completedStepsCount: completedSteps.length,
+            tasteProfileSource,
+            flavorSynced: flavorResult.status === 'fulfilled' && flavorResult.value?.backendConnected,
+          },
+        })
+      } catch {
+        // backend sync failure must never surface to guest
+      }
+    })()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

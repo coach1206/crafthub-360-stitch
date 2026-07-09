@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getRankFromXP } from '../../constants/session.js'
 import { getEarnedPassportStamps } from '../../utils/passportProgress.js'
+import { getEarnedStampsWithBackend } from '../../services/passportService.js'
 import PassportBottomNav from '../../components/PassportBottomNav.jsx'
 
 const FILL1 = { fontVariationSettings:"'FILL' 1" }
@@ -186,6 +187,18 @@ export default function PassportStamps() {
   // Locally earned stamps from this session (SmokeCraft journey stamps)
   const localStamps = getEarnedPassportStamps(session)
 
+  // Backend-fetched stamps — populated when backend is available
+  const [backendStamps, setBackendStamps] = useState(null)
+  const [backendConnected, setBackendConnected] = useState(false)
+  useEffect(() => {
+    getEarnedStampsWithBackend().then(result => {
+      if (result?.backendConnected && Array.isArray(result.stamps)) {
+        setBackendStamps(result.stamps)
+        setBackendConnected(true)
+      }
+    }).catch(() => {})
+  }, [])
+
   return (
     <div className="min-h-screen pb-28 overflow-x-hidden"
       style={{ background:'linear-gradient(160deg,#0c0904,#100c07,#080605)' }}>
@@ -231,11 +244,13 @@ export default function PassportStamps() {
           }}>
             <span className="material-symbols-outlined" style={{ fontSize:16, color:'#c0392b', flexShrink:0, marginTop:1 }}>info</span>
             <div>
-              <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:10, fontWeight:700, color:'#c0392b', textTransform:'uppercase', letterSpacing:'0.15em', marginBottom:3 }}>
-                LOCAL PASSPORT PREVIEW — Backend Not Connected
+              <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:10, fontWeight:700, color: backendConnected ? '#27ae60' : '#c0392b', textTransform:'uppercase', letterSpacing:'0.15em', marginBottom:3 }}>
+                {backendConnected ? 'PASSPORT BACKEND CONNECTED' : 'LOCAL PASSPORT PREVIEW — Backend Not Connected'}
               </p>
               <p style={{ fontFamily:'"Hanken Grotesk",sans-serif', fontSize:12, color:'rgba(255,255,255,0.5)', lineHeight:1.5 }}>
-                Stamp collection shown below is a pilot preview. Stamps earned in your current session appear separately. Backend sync is not active — no data leaves this device.
+                {backendConnected
+                  ? `${backendStamps?.length || 0} stamp${(backendStamps?.length || 0) !== 1 ? 's' : ''} retrieved from Passport 360 backend.`
+                  : 'Stamp collection shown below is a pilot preview. Stamps earned in your current session appear separately. Backend sync is not active — no data leaves this device.'}
               </p>
             </div>
           </div>
@@ -268,6 +283,40 @@ export default function PassportStamps() {
                     </div>
                     <p style={{ fontFamily:'"Playfair Display",serif', fontWeight:700, fontSize:10, color:'#e8e4d8', textAlign:'center', lineHeight:1.3 }}>{stamp.name}</p>
                     <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8, color:'rgba(39,174,96,0.6)', textTransform:'uppercase', letterSpacing:'0.1em' }}>Local</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ═══ BACKEND-SYNCED STAMPS ════════════════════════════ */}
+        {backendConnected && backendStamps && backendStamps.length > 0 && (
+          <section>
+            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10 }}>
+              <span className="material-symbols-outlined" style={{ fontSize:16, color:'#3498db' }}>cloud_done</span>
+              <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:10, fontWeight:700, color:'#3498db', textTransform:'uppercase', letterSpacing:'0.15em' }}>
+                Synced to Passport 360 Backend
+              </p>
+            </div>
+            <div style={{
+              borderRadius:16, padding:'16px',
+              background:'rgba(52,152,219,0.06)',
+              border:'1px solid rgba(52,152,219,0.25)',
+            }}>
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'16px 8px', placeItems:'center' }}>
+                {backendStamps.map(stamp => (
+                  <div key={stamp.earned_stamp_id || stamp.stamp_id} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:5 }}>
+                    <div style={{
+                      width:56, height:56, borderRadius:'50%',
+                      background:'rgba(52,152,219,0.15)',
+                      border:'2px solid rgba(52,152,219,0.4)',
+                      display:'flex', alignItems:'center', justifyContent:'center',
+                    }}>
+                      <span style={{ fontSize:22 }}>🏅</span>
+                    </div>
+                    <p style={{ fontFamily:'"Playfair Display",serif', fontWeight:700, fontSize:10, color:'#e8e4d8', textAlign:'center', lineHeight:1.3 }}>{stamp.stamp_id}</p>
+                    <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8, color:'rgba(52,152,219,0.6)', textTransform:'uppercase', letterSpacing:'0.1em' }}>Backend</p>
                   </div>
                 ))}
               </div>
