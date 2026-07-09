@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS pos360_tables (
   id                        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id                 UUID NOT NULL,
   venue_id                  UUID NOT NULL,
-  section_id                UUID REFERENCES pos360_floor_sections(id),
+  section_id                UUID, -- fk-ref: pos360_floor_sections; omitted — 031 uses SERIAL PK incompatible with UUID
   table_name                TEXT NOT NULL,
   table_number              TEXT,
   capacity_min              INTEGER NOT NULL DEFAULT 1,
@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS pos360_table_status_history (
   id                        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id                 UUID NOT NULL,
   venue_id                  UUID NOT NULL,
-  table_id                  UUID NOT NULL REFERENCES pos360_tables(id) ON DELETE CASCADE,
+  table_id                  UUID NOT NULL, -- fk-ref: pos360_tables; omitted — 031 uses SERIAL PK incompatible with UUID
   from_status               TEXT,
   to_status                 TEXT NOT NULL,
   reason                    TEXT,
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS pos360_table_assignments (
   id                        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id                 UUID NOT NULL,
   venue_id                  UUID NOT NULL,
-  table_id                  UUID NOT NULL REFERENCES pos360_tables(id),
+  table_id                  UUID NOT NULL, -- fk-ref: pos360_tables; omitted — 031 uses SERIAL PK incompatible with UUID
   reservation_id            UUID REFERENCES pos360_reservations(id),
   waitlist_entry_id         UUID REFERENCES pos360_waitlist_entries(id),
   seating_session_id        UUID,
@@ -244,7 +244,7 @@ CREATE TABLE IF NOT EXISTS pos360_table_merge_groups (
   id                        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id                 UUID NOT NULL,
   venue_id                  UUID NOT NULL,
-  primary_table_id          UUID NOT NULL REFERENCES pos360_tables(id),
+  primary_table_id          UUID NOT NULL, -- fk-ref: pos360_tables; omitted — 031 uses SERIAL PK incompatible with UUID
   merged_table_ids          UUID[] NOT NULL DEFAULT '{}',
   combined_capacity         INTEGER NOT NULL DEFAULT 0,
   status                    TEXT NOT NULL DEFAULT 'active',
@@ -263,7 +263,7 @@ CREATE TABLE IF NOT EXISTS pos360_seating_sessions (
   id                        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id                 UUID NOT NULL,
   venue_id                  UUID NOT NULL,
-  table_id                  UUID NOT NULL REFERENCES pos360_tables(id),
+  table_id                  UUID NOT NULL, -- fk-ref: pos360_tables; omitted — 031 uses SERIAL PK incompatible with UUID
   reservation_id            UUID REFERENCES pos360_reservations(id),
   waitlist_entry_id         UUID REFERENCES pos360_waitlist_entries(id),
   customer_id               UUID,
@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS pos360_private_events (
   start_time                TIME NOT NULL,
   end_time                  TIME,
   guest_count               INTEGER NOT NULL DEFAULT 1,
-  section_id                UUID REFERENCES pos360_floor_sections(id),
+  section_id                UUID, -- fk-ref: pos360_floor_sections; omitted — 031 uses SERIAL PK incompatible with UUID
   status                    TEXT NOT NULL DEFAULT 'inquiry'
     CHECK (status IN ('inquiry','proposed','hold','confirmed','deposit_pending','deposit_paid','completed','cancelled')),
   contract_status           TEXT NOT NULL DEFAULT 'not_required'

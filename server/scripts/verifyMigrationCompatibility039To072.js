@@ -128,6 +128,31 @@ if (!bareCreateFound) {
   check('All migrations 039–072 use CREATE TABLE IF NOT EXISTS', true)
 }
 
+// ── Gate 5b: Migration 039 cross-migration FK check ──────────────────────────
+console.log('\nGate 5b — Migration 039: no cross-migration FK type mismatches')
+// Migration 031 uses SERIAL PRIMARY KEY for pos360_tables and pos360_floor_sections.
+// Migration 039 must NOT reference pos360_tables(id) or pos360_floor_sections(id) with UUID columns
+// (type mismatch: UUID vs SERIAL/integer).
+if (m039) {
+  check(
+    '039: no REFERENCES pos360_tables(id) that would conflict with SERIAL PK from migration 031',
+    !m039.match(/REFERENCES\s+pos360_tables\s*\(\s*id\s*\)/i),
+  )
+  check(
+    '039: no REFERENCES pos360_floor_sections(id) that would conflict with SERIAL PK from migration 031',
+    !m039.match(/REFERENCES\s+pos360_floor_sections\s*\(\s*id\s*\)/i),
+  )
+  check(
+    '039: cross-migration FK columns are documented with fk-ref comments',
+    m039.includes('fk-ref: pos360_tables') && m039.includes('fk-ref: pos360_floor_sections'),
+  )
+  // Internal FKs within 039 are fine — reservations, waitlist, private_events are all UUID
+  check(
+    '039: internal FKs to pos360_reservations still present (same-migration UUID ref)',
+    m039.match(/REFERENCES\s+pos360_reservations\s*\(\s*id\s*\)/i) !== null,
+  )
+}
+
 // ── Gate 6: Migration count ───────────────────────────────────────────────────
 console.log('\nGate 6 — Expected migrations present')
 const expected = [
