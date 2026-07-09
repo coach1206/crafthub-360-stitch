@@ -6,6 +6,7 @@ import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHand
 import { syncSmokeCraftSessionToBackend, saveFlavorMemoryToBackend, writeSyncAuditEvent } from '../../services/passportAdapter.js'
 import { createPassportId } from '../../services/passportService.js'
 import { syncManagement, recordGuestActivity, createManagerAlertSync, createInventorySignalSync, writeEATSyncAuditEvent } from '../../modules/smokecraft/services/smokecraftManagementSyncService.js'
+import { createSmokeCraftDayOneConnection, recordDayOneGuestWorkflowEvent, writeDayOneConnectionAuditEvent } from '../../services/dayone360SmokeCraftConnectionService.js'
 
 function readLocalFlavorMemory() {
   try {
@@ -141,6 +142,40 @@ export default function SessionComplete() {
             : 'E.A.T. sync skipped — backend not available',
           metadata: { completedStepsCount: completedSteps.length, tasteProfileSource },
         })
+
+        // DayOne360 internal workflow connection — fire-and-forget, never blocks guest screen.
+        // Does NOT claim live travel/relocation/concierge fulfillment.
+        const d1ConnectionResult = await createSmokeCraftDayOneConnection({
+          venueId: 'novee-grand-lounge',
+          guestId,
+          smokecraftSessionId: guestId,
+          connectionType: 'smokecraft_session_link',
+          workflowReference: `smokecraft-session-${guestId}`,
+          metadata: { completedSteps: completedSteps.length, tasteProfileSource },
+        }).catch(() => ({ ok: false, backendConnected: false }))
+
+        const d1Ok = d1ConnectionResult?.backendConnected === true
+
+        if (d1Ok) {
+          await Promise.allSettled([
+            recordDayOneGuestWorkflowEvent({
+              connectionId: d1ConnectionResult?.connection?.connection_id || null,
+              venueId: 'novee-grand-lounge',
+              guestId,
+              smokecraftSessionId: guestId,
+              eventType: 'session_complete',
+              eventPayload: { completedSteps: completedSteps.length, tasteProfileSource, xpTotal: xpSummary?.total || 0 },
+            }),
+            writeDayOneConnectionAuditEvent({
+              connectionId: d1ConnectionResult?.connection?.connection_id || null,
+              venueId: 'novee-grand-lounge',
+              eventType: 'session_complete_dayone360_link',
+              syncStatus: 'ok',
+              backendConnected: true,
+              metadata: { guestId, completedSteps: completedSteps.length },
+            }),
+          ]).catch(() => {})
+        }
       } catch {
         // backend sync failure must never surface to guest
       }

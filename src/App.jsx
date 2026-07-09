@@ -171,6 +171,7 @@ import PassportScan        from './pages/passport/PassportScan.jsx'
 import PassportHowItWorks  from './pages/passport/PassportHowItWorks.jsx'
 
 import DayOneTravel from './pages/DayOneTravel.jsx'
+import TicketTapperManagement from './pages/ticketTapper/TicketTapperManagement.jsx'
 import ModulePlaceholder from './pages/ModulePlaceholder.jsx'
 
 // ── Craft modules — moderate size, eager ─────────────────────
@@ -455,6 +456,7 @@ export default function App() {
               <Route path="grand-lounge-ranking" element={<Leaderboard />} />
               <Route path="dayone360-travel"    element={<DayOneTravel />} />
               <Route path="dayone360"           element={<DayOneTravel />} />
+              <Route path="ticket-tapper/management" element={<TicketTapperManagement />} />
               <Route path="leaderboard"         element={<Leaderboard />} />
               <Route path="pourcraft"  element={<PourCraft />} />
               <Route path="beercraft"  element={<BeerCraft />} />

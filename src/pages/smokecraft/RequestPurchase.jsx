@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
@@ -14,6 +14,19 @@ export default function RequestPurchase() {
   const { awardSessionRewards, session } = useGuestSession()
   const { setResumeRoute } = useSmokeCraftOrder()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [activePromotions, setActivePromotions] = useState([])
+
+  useEffect(() => {
+    // Fire-and-forget — fetch active Ticket Tapper promotions from backend for reference
+    fetch('/api/ticket-tapper/promotions/smokecraft/active?venueId=novee-grand-lounge')
+      .then(r => r.ok ? r.json() : null)
+      .then(json => {
+        if (json?.success && Array.isArray(json?.data?.promotions)) {
+          setActivePromotions(json.data.promotions)
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   function onOrderPairingTap() {
     triggerHaptic('medium')
@@ -99,6 +112,22 @@ export default function RequestPurchase() {
         tableNumber="SmokeCraft"
         source="customer_self_order"
       />
+
+      {/* Active Ticket Tapper promotions from backend — reference only, no payment */}
+      {activePromotions.length > 0 && (
+        <div style={{ position: 'fixed', bottom: 130, left: 0, right: 0, zIndex: 200, padding: '0 16px', pointerEvents: 'none' }}>
+          <div style={{ maxWidth: 480, margin: '0 auto', background: 'rgba(10,6,3,0.92)', border: '1px solid rgba(233,193,118,0.18)', borderRadius: 10, padding: '8px 12px' }}>
+            <div style={{ fontSize: 9, color: '#E9C176', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
+              Tonight's Specials
+            </div>
+            {activePromotions.slice(0, 2).map(p => (
+              <div key={p.promotion_id} style={{ fontSize: 11, color: '#E5E2E1', marginBottom: 2 }}>
+                {p.title}{p.special_price ? ` — $${parseFloat(p.special_price).toFixed(2)}` : ''}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   )
 }

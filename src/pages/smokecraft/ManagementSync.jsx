@@ -4,6 +4,7 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
 import { getManagementSyncStatus, syncManagement, recordGuestActivity, createManagerAlertSync } from '../../modules/smokecraft/services/smokecraftManagementSyncService.js'
+import { createSmokeCraftDayOneConnection, recordDayOneGuestWorkflowEvent } from '../../services/dayone360SmokeCraftConnectionService.js'
 
 export default function ManagementSync() {
   const { session, awardSessionRewards } = useGuestSession()
@@ -49,8 +50,29 @@ export default function ManagementSync() {
             alertMessage: 'SmokeCraft guest approaching session complete. Management sync screen reached.',
           })
         }
+        // DayOne360 internal workflow reference — fire-and-forget, never blocks guest
+        // Does NOT claim live travel/relocation/concierge services
+        const d1Result = await createSmokeCraftDayOneConnection({
+          venueId: session?.venueId || 'novee-grand-lounge',
+          guestId: session?.passport?.passportId || null,
+          smokecraftSessionId: session?.sessionId || null,
+          connectionType: 'guest_workflow_reference',
+          workflowReference: 'management-sync-milestone',
+          metadata: { step: 'management_sync', completedSteps: (session?.completedSteps || []).length },
+        }).catch(() => ({ ok: false, backendConnected: false }))
+
+        if (d1Result?.backendConnected) {
+          await recordDayOneGuestWorkflowEvent({
+            connectionId: d1Result?.connection?.connection_id || null,
+            venueId: session?.venueId || 'novee-grand-lounge',
+            guestId: session?.passport?.passportId || null,
+            smokecraftSessionId: session?.sessionId || null,
+            eventType: 'journey_milestone',
+            eventPayload: { milestone: 'management_sync', completedSteps: (session?.completedSteps || []).length },
+          }).catch(() => {})
+        }
       } catch {
-        // E.A.T. sync failure must never surface to guest
+        // E.A.T. / DayOne360 sync failure must never surface to guest
       }
     })()
   // eslint-disable-next-line react-hooks/exhaustive-deps

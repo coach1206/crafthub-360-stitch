@@ -250,12 +250,44 @@ export default function SmokeCraftVenueCommerce({ tableNumber = '1', guestSessio
   const DEMO_STAFF = { staffId: 'staff-preview', name: 'Preview Staff', role: 'manager' }
 
   useEffect(() => {
+    // Fetch from legacy local-first API (seeds fallback)
     fetchTicketTapperSpecials(venueId).then(res => {
       if (res.ok) {
         setSpecialsRaw(res.specials || smokeCraftTicketTapperSpecialsSeed.specials)
         setSpecialsLocalPreview(!!res.localPreview)
       }
     })
+    // Supplement with Ticket Tapper promotion backend (real DB when available)
+    fetch(`/api/ticket-tapper/promotions/smokecraft/active?venueId=${encodeURIComponent(venueId)}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(json => {
+        if (json?.success && json?.backendConnected && Array.isArray(json?.data?.promotions) && json.data.promotions.length > 0) {
+          const backendPromotions = json.data.promotions.map(p => ({
+            id: p.promotion_id,
+            title: p.title,
+            subtitle: p.subtitle || '',
+            description: p.description || '',
+            specialType: p.promotion_type,
+            source: 'backend',
+            promotedByRole: p.promoted_by_role || 'manager',
+            status: p.status,
+            approval: { required: false, status: 'approved' },
+            inventory: { quantityAvailable: 99, inventoryStatus: 'available', allowOversell: true },
+            pricing: { regularPrice: parseFloat(p.regular_price) || 0, specialPrice: parseFloat(p.special_price) || 0, discountAmount: parseFloat(p.discount_amount) || 0 },
+            items: [],
+            media: { imageUrl: p.image_path || null, badgeLabel: p.badge_label || null },
+            moneyBridge: { active: false },
+            callToAction: { label: p.call_to_action || 'Add Special', action: 'one_tap_add' },
+          }))
+          setSpecialsRaw(prev => {
+            const existingIds = new Set(prev.map(s => s.id))
+            const newOnes = backendPromotions.filter(p => !existingIds.has(p.id))
+            return newOnes.length > 0 ? [...prev, ...newOnes] : prev
+          })
+          setSpecialsLocalPreview(false)
+        }
+      })
+      .catch(() => {})
     fetchTicketTapperInventory(venueId).then(res => {
       if (res.ok && res.items?.length) setInventoryItems(res.items)
     })
