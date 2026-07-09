@@ -110,7 +110,8 @@
     "verify:smokecraft-live-hotspots": "node server/scripts/verifySmokeCraftLiveHotspots.js",
     "verify:smokecraft-landing-interactions": "node server/scripts/verifySmokeCraftLandingInteractions.js",
     "verify:smokecraft-touch-response": "node server/scripts/verifySmokeCraftTouchResponse.js",
-    "verify:smokecraft-frontend-interactions": "node server/scripts/verifySmokeCraftFrontendInteractions.js"
+    "verify:smokecraft-frontend-interactions": "node server/scripts/verifySmokeCraftFrontendInteractions.js",
+    "verify:smokecraft-identity-live-buttons": "node server/scripts/verifySmokeCraftIdentityLiveButtons.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

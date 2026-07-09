@@ -168,7 +168,7 @@ function shortLabel(label = '') {
   if (lower.includes('connection')) return 'View Connections'
   if (lower.includes('seed') || lower.includes('soil')) return 'Seed & Soil'
   if (lower.includes('cut') || lower.includes('toast')) return 'Cut · Toast · Light'
-  if (lower.includes('golden') || lower.includes('box')) return 'Open the Box'
+  if (lower.includes('golden box') || lower.includes('gold box') || lower === 'golden-box' || lower === 'open the box') return 'Open the Box'
   return 'Continue →'
 }
 
