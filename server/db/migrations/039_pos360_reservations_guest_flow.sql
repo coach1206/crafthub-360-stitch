@@ -3,6 +3,13 @@
 -- No DROP TABLE, no DROP COLUMN, no data destruction.
 -- Uses CREATE TABLE IF NOT EXISTS throughout.
 
+-- ── Compatibility: add missing 'active' column to tables created by migration 031 ──────
+-- Migration 031 created pos360_floor_sections and pos360_tables with column 'is_active'.
+-- This migration expects 'active'. These ALTER TABLE statements are safe no-ops on fresh
+-- installs (table does not exist yet) and safe additive operations on existing databases.
+ALTER TABLE IF EXISTS pos360_floor_sections ADD COLUMN IF NOT EXISTS active BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE IF EXISTS pos360_tables         ADD COLUMN IF NOT EXISTS active BOOLEAN NOT NULL DEFAULT TRUE;
+
 -- ── Reservations ──────────────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS pos360_reservations (
