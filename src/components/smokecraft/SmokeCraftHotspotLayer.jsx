@@ -1,3 +1,4 @@
+import { useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 /**
@@ -10,15 +11,17 @@ import { useNavigate } from 'react-router-dom'
  *   to                   — optional react-router navigate target
  *   disabled             — skip rendering this hotspot
  *
- * Each hotspot renders a visible CTA pill (dark+gold, pulse animation) so
- * guests on touchscreen devices see a clear, pressable call-to-action.
+ * Interaction model (instant — no 300ms delay):
+ *   pointerdown  → immediate pressed state + haptic vibration + "Starting..." label
+ *   click        → navigate (debounced; pointerdown already gave feedback)
+ *   pointerup/cancel/leave → release pressed state
  *
- * Debug mode: set sessionStorage key `smokecraft_hotspot_debug=1` to show
- * full translucent hotspot area outlines in addition to the CTA pills.
+ * Debug mode: sessionStorage `smokecraft_hotspot_debug=1`
+ * Interaction debug: sessionStorage `smokecraftInteractionDebug=1`
  */
 
-// Injected once; drives the pulse glow and press-flash animations.
 const STYLE_ID = 'sc-hotspot-anim'
+
 function ensureAnimStyles() {
   if (typeof document === 'undefined') return
   if (document.getElementById(STYLE_ID)) return
@@ -30,9 +33,15 @@ function ensureAnimStyles() {
       50%      { box-shadow: 0 0 0 4px rgba(233,193,118,0.18), 0 0 18px 2px rgba(233,193,118,0.28); }
     }
     @keyframes sc-tap-flash {
-      0%   { background: rgba(233,193,118,0.22); }
-      100% { background: rgba(0,0,0,0.65); }
+      0%   { background: rgba(233,193,118,0.28); border-color: #e9c176; }
+      100% { background: rgba(0,0,0,0.65);       border-color: rgba(233,193,118,0.65); }
     }
+    @keyframes sc-ripple {
+      0%   { transform: scale(0.92) translateY(2px); opacity: 1; }
+      60%  { transform: scale(1.02) translateY(-1px); opacity: 0.9; }
+      100% { transform: scale(1)   translateY(0);     opacity: 1; }
+    }
+
     .sc-cta-pill {
       display: inline-flex;
       align-items: center;
@@ -52,13 +61,16 @@ function ensureAnimStyles() {
       pointer-events: none;
       user-select: none;
       min-width: 160px;
-      max-width: 260px;
+      max-width: 280px;
       min-height: 44px;
       animation: sc-pulse 2.4s ease-in-out infinite;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
-      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.1s ease, box-shadow 0.12s ease;
+      will-change: transform;
     }
+
+    /* Hover / focus */
     .sc-hotspot-btn:hover .sc-cta-pill,
     .sc-hotspot-btn:focus-visible .sc-cta-pill {
       background: rgba(233,193,118,0.12);
@@ -67,24 +79,62 @@ function ensureAnimStyles() {
       animation: none;
       box-shadow: 0 0 0 4px rgba(233,193,118,0.2), 0 0 20px 4px rgba(233,193,118,0.25);
     }
+
+    /* CSS :active fallback (desktop/mouse) */
     .sc-hotspot-btn:active .sc-cta-pill {
+      transform: scale(0.965) translateY(2px);
       background: rgba(233,193,118,0.22);
       border-color: #e9c176;
       color: #e9c176;
-      animation: sc-tap-flash 0.18s ease forwards;
-      box-shadow: 0 0 0 6px rgba(233,193,118,0.25);
-      transform: scale(0.97);
-      transition: transform 0.08s ease;
+      animation: none;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.4), 0 0 0 3px rgba(233,193,118,0.3);
+      transition: transform 0.06s ease, background 0.06s ease;
     }
+
+    /* JS-driven pressed state — fires immediately on pointerdown */
+    .sc-hotspot-btn.sc-pressed .sc-cta-pill {
+      transform: scale(0.965) translateY(2px);
+      background: rgba(233,193,118,0.22);
+      border-color: #e9c176;
+      color: #e9c176;
+      animation: none;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.4), 0 0 0 3px rgba(233,193,118,0.3);
+      transition: transform 0.06s ease, background 0.06s ease, color 0.06s ease;
+    }
+
+    /* Release spring animation */
+    .sc-hotspot-btn.sc-released .sc-cta-pill {
+      animation: sc-ripple 0.22s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+
+    /* Focus ring */
     .sc-hotspot-btn:focus-visible {
       outline: 2px solid rgba(233,193,118,0.6);
       outline-offset: 3px;
+    }
+
+    /* Reduced motion: disable heavy animations, keep instant color feedback */
+    @media (prefers-reduced-motion: reduce) {
+      .sc-cta-pill {
+        animation: none !important;
+        transition: background 0.08s ease, border-color 0.08s ease, color 0.08s ease !important;
+      }
+      .sc-hotspot-btn.sc-pressed .sc-cta-pill,
+      .sc-hotspot-btn:active .sc-cta-pill {
+        transform: none !important;
+        background: rgba(233,193,118,0.28) !important;
+        border-color: #e9c176 !important;
+        color: #e9c176 !important;
+      }
+      .sc-hotspot-btn.sc-released .sc-cta-pill {
+        animation: none !important;
+      }
     }
   `
   document.head.appendChild(el)
 }
 
-// Derive a short, guest-facing label from the internal route label.
+// Guest-facing label from internal route label
 function shortLabel(label = '') {
   if (!label) return 'Continue'
   const lower = label.toLowerCase()
@@ -113,6 +163,178 @@ function shortLabel(label = '') {
   return 'Continue →'
 }
 
+// "Starting..." label for in-flight state
+function loadingLabel(label = '') {
+  const lower = label.toLowerCase()
+  if (lower.includes('start') || lower.includes('begin') || lower.includes('session')) return 'Starting...'
+  if (lower.includes('continue') || lower.includes('gold') || lower.includes('mentor')) return 'Opening...'
+  if (lower.includes('accept') || lower.includes('challenge')) return 'Accepting...'
+  return 'Loading...'
+}
+
+// Safe vibration — only from a direct user gesture, no throw
+function hapticTap(ms = 12) {
+  try { navigator.vibrate?.(ms) } catch (_) { /* unsupported */ }
+}
+
+// Per-button interaction hook
+function useHotspotInteraction(h, navigate, interactionDebug) {
+  const [phase, setPhase] = useState('idle') // idle | pressed | released | navigating
+  const navigatedRef = useRef(false)
+  const pointerDownTimeRef = useRef(0)
+
+  const handlePointerDown = useCallback((e) => {
+    if (e.button !== undefined && e.button > 0) return // only primary button
+    e.currentTarget.setPointerCapture?.(e.pointerId)
+    navigatedRef.current = false
+    pointerDownTimeRef.current = Date.now()
+    setPhase('pressed')
+    hapticTap(12)
+
+    if (interactionDebug) {
+      // eslint-disable-next-line no-console
+      console.log('[SC Interaction] pointerdown', {
+        label: h.label,
+        target: h.to,
+        ts: pointerDownTimeRef.current,
+      })
+    }
+  }, [h.label, h.to, interactionDebug])
+
+  const handlePointerUp = useCallback(() => {
+    setPhase(prev => prev === 'pressed' ? 'released' : prev)
+    // Auto-clear released state after spring animation
+    setTimeout(() => setPhase('idle'), 260)
+  }, [])
+
+  const handlePointerCancel = useCallback(() => {
+    setPhase('idle')
+  }, [])
+
+  const handleClick = useCallback((e) => {
+    e.preventDefault()
+    if (navigatedRef.current) return // double-tap guard
+    navigatedRef.current = true
+
+    const elapsed = Date.now() - pointerDownTimeRef.current
+
+    if (interactionDebug) {
+      // eslint-disable-next-line no-console
+      console.log('[SC Interaction] click → navigate', {
+        label: h.label,
+        target: h.to,
+        msSincePointerDown: elapsed,
+      })
+    }
+
+    // Non-critical callbacks fire-and-forget — do NOT block navigation
+    if (h.onClick) {
+      try { h.onClick() } catch (_) { /* never block nav */ }
+    }
+
+    setPhase('navigating')
+
+    if (h.to) {
+      navigate(h.to)
+    }
+  }, [h, navigate, interactionDebug])
+
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      setPhase('pressed')
+      hapticTap(10)
+    }
+  }, [])
+
+  const handleKeyUp = useCallback((e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      setPhase('released')
+      setTimeout(() => setPhase('idle'), 260)
+    }
+  }, [])
+
+  return { phase, handlePointerDown, handlePointerUp, handlePointerCancel, handleClick, handleKeyDown, handleKeyUp }
+}
+
+// Single hotspot button — isolated so each has its own interaction state
+function HotspotButton({ h, navigate, debug, interactionDebug }) {
+  const {
+    phase,
+    handlePointerDown,
+    handlePointerUp,
+    handlePointerCancel,
+    handleClick,
+    handleKeyDown,
+    handleKeyUp,
+  } = useHotspotInteraction(h, navigate, interactionDebug)
+
+  const pill = shortLabel(h.label)
+  const isNavigating = phase === 'navigating'
+  const displayLabel = isNavigating ? loadingLabel(h.label) : pill
+
+  const btnClass = [
+    'sc-hotspot-btn',
+    phase === 'pressed' ? 'sc-pressed' : '',
+    phase === 'released' ? 'sc-released' : '',
+  ].filter(Boolean).join(' ')
+
+  return (
+    <button
+      className={btnClass}
+      aria-label={h.label}
+      aria-busy={isNavigating}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
+      onPointerLeave={handlePointerUp}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
+      disabled={isNavigating}
+      style={{
+        position: 'absolute',
+        left: h.x + '%',
+        top: h.y + '%',
+        width: h.width + '%',
+        height: h.height + '%',
+        background: debug ? 'rgba(233,193,118,0.10)' : 'transparent',
+        border: debug ? '1px dashed rgba(233,193,118,0.45)' : 'none',
+        outline: 'none',
+        cursor: isNavigating ? 'default' : 'pointer',
+        pointerEvents: 'auto',
+        WebkitTapHighlightColor: 'transparent',
+        touchAction: 'manipulation',
+        padding: 0,
+        margin: 0,
+        borderRadius: 0,
+        display: 'flex',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        paddingBottom: '12%',
+        userSelect: 'none',
+      }}
+    >
+      <span className="sc-cta-pill">
+        {displayLabel}
+      </span>
+      {debug && (
+        <span style={{
+          position: 'absolute',
+          top: 4,
+          left: 6,
+          fontSize: 8,
+          color: 'rgba(233,193,118,0.5)',
+          fontFamily: 'monospace',
+          pointerEvents: 'none',
+        }}>
+          {h.x},{h.y} {h.width}×{h.height} [{phase}]
+        </span>
+      )}
+    </button>
+  )
+}
+
 export default function SmokeCraftHotspotLayer({ hotspots = [], route = '' }) {
   const navigate = useNavigate()
 
@@ -121,6 +343,10 @@ export default function SmokeCraftHotspotLayer({ hotspots = [], route = '' }) {
   const debug =
     typeof window !== 'undefined' &&
     sessionStorage.getItem('smokecraft_hotspot_debug') === '1'
+
+  const interactionDebug =
+    typeof window !== 'undefined' &&
+    sessionStorage.getItem('smokecraftInteractionDebug') === '1'
 
   if (debug) {
     hotspots.forEach(h => {
@@ -152,60 +378,14 @@ export default function SmokeCraftHotspotLayer({ hotspots = [], route = '' }) {
     >
       {hotspots.map((h, i) => {
         if (h.disabled) return null
-
-        function handleAction() {
-          if (h.onClick) h.onClick()
-          if (h.to) navigate(h.to)
-        }
-
-        const pill = shortLabel(h.label)
-
         return (
-          <button
+          <HotspotButton
             key={i}
-            className="sc-hotspot-btn"
-            aria-label={h.label}
-            onClick={handleAction}
-            style={{
-              position: 'absolute',
-              left: h.x + '%',
-              top: h.y + '%',
-              width: h.width + '%',
-              height: h.height + '%',
-              background: debug ? 'rgba(233,193,118,0.10)' : 'transparent',
-              border: debug ? '1px dashed rgba(233,193,118,0.45)' : 'none',
-              outline: 'none',
-              cursor: 'pointer',
-              pointerEvents: 'auto',
-              WebkitTapHighlightColor: 'transparent',
-              touchAction: 'manipulation',
-              padding: 0,
-              margin: 0,
-              borderRadius: 0,
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              paddingBottom: '12%',
-              userSelect: 'none',
-            }}
-          >
-            <span className="sc-cta-pill">
-              {pill}
-            </span>
-            {debug && (
-              <span style={{
-                position: 'absolute',
-                top: 4,
-                left: 6,
-                fontSize: 8,
-                color: 'rgba(233,193,118,0.5)',
-                fontFamily: 'monospace',
-                pointerEvents: 'none',
-              }}>
-                {h.x},{h.y} {h.width}×{h.height}
-              </span>
-            )}
-          </button>
+            h={h}
+            navigate={navigate}
+            debug={debug}
+            interactionDebug={interactionDebug}
+          />
         )
       })}
     </div>

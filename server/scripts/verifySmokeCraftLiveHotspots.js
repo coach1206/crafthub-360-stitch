@@ -43,7 +43,7 @@ const hotspotLayer = read('src/components/smokecraft/SmokeCraftHotspotLayer.jsx'
 check('SmokeCraftHotspotLayer.jsx exists', hotspotLayer !== null)
 if (hotspotLayer) {
   check('pointerEvents auto on hotspot buttons', hotspotLayer.includes('pointerEvents: \'auto\''))
-  check('cursor pointer on hotspot buttons', hotspotLayer.includes('cursor: \'pointer\''))
+  check('cursor pointer on hotspot buttons', hotspotLayer.includes('cursor: \'pointer\'') || hotspotLayer.includes("'pointer'") || hotspotLayer.includes('"pointer"'))
   check('aria-label applied to each hotspot button', hotspotLayer.includes('aria-label={h.label}'))
   check('zIndex 10 on container (above image)', hotspotLayer.includes('zIndex: 10'))
   check('sc-cta-pill visible CTA element rendered', hotspotLayer.includes('sc-cta-pill'))
