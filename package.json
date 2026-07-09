@@ -100,7 +100,8 @@
     "verify:phase-f5-passport-live-persistence": "node server/scripts/verifyPhaseF5PassportLivePersistence.js",
     "verify:phase-f6-passport-live-backend": "node server/scripts/verifyPhaseF6PassportLiveBackend.js",
     "verify:phase-f7-eat-smokecraft-live-sync": "node server/scripts/verifyPhaseF7EATSmokeCraftLiveSync.js",
-    "verify:phase-f8-pos360-smokecraft-order-bridge": "node server/scripts/verifyPhaseF8POS360SmokeCraftOrderBridge.js"
+    "verify:phase-f8-pos360-smokecraft-order-bridge": "node server/scripts/verifyPhaseF8POS360SmokeCraftOrderBridge.js",
+    "verify:phase-f9-smokecraft-production-readiness-gate": "node server/scripts/verifyPhaseF9SmokeCraftProductionReadinessGate.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
