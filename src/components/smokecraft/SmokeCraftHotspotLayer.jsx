@@ -88,6 +88,7 @@ function ensureAnimStyles() {
 function shortLabel(label = '') {
   if (!label) return 'Continue'
   const lower = label.toLowerCase()
+  if (lower.includes('start new') || lower.includes('new smokecraft') || lower.includes('new session')) return 'Start New Session →'
   if (lower.includes('accept')) return 'Accept the Challenge'
   if (lower.includes('complete') && lower.includes('session')) return 'Complete Journey'
   if (lower.includes('stamp')) return 'Claim Passport Stamp'

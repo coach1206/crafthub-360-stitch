@@ -209,7 +209,72 @@ function SpecialCard({ special, inventoryItems, onAdd, venueId, tableLabel, loca
   )
 }
 
+// Injected once; drives the ticker marquee scroll animation.
+const TICKER_STYLE_ID = 'sc-ticker-anim'
+function ensureTickerStyles() {
+  if (typeof document === 'undefined') return
+  if (document.getElementById(TICKER_STYLE_ID)) return
+  const el = document.createElement('style')
+  el.id = TICKER_STYLE_ID
+  el.textContent = `
+    @keyframes sc-ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes sc-ticker-pulse {
+      0%, 100% { opacity: 0.5; }
+      50%       { opacity: 1; }
+    }
+    .sc-ticker-track {
+      display: flex;
+      gap: 14px;
+      animation: sc-ticker-scroll 28s linear infinite;
+      will-change: transform;
+    }
+    .sc-ticker-track:hover {
+      animation-play-state: paused;
+    }
+    .sc-ticker-wrapper {
+      overflow: hidden;
+      -webkit-overflow-scrolling: touch;
+      cursor: grab;
+      position: relative;
+    }
+    .sc-ticker-wrapper::before,
+    .sc-ticker-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 40px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .sc-ticker-wrapper::before {
+      left: 0;
+      background: linear-gradient(90deg, rgba(10,6,3,0.9), transparent);
+    }
+    .sc-ticker-wrapper::after {
+      right: 0;
+      background: linear-gradient(270deg, rgba(10,6,3,0.9), transparent);
+    }
+    .sc-ticker-empty-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(233,193,118,0.5);
+      animation: sc-ticker-pulse 1.8s ease-in-out infinite;
+    }
+    .sc-ticker-empty-dot:nth-child(2) { animation-delay: 0.3s; }
+    .sc-ticker-empty-dot:nth-child(3) { animation-delay: 0.6s; }
+  `
+  document.head.appendChild(el)
+}
+
 export default function TicketTapperSpecialsStrip({ specials = [], inventoryItems = [], onAddSpecial, venueId, tableLabel, localPreview, venueFeatureSettings = null }) {
+  if (typeof window !== 'undefined') ensureTickerStyles()
+
   // Hard filter: customers only see status === 'active' AND approval cleared
   // Partner specials also require venue opt-in
   const partnerSpecialsAllowed = venueFeatureSettings?.partnerSpecialsAllowed !== false
@@ -220,7 +285,6 @@ export default function TicketTapperSpecialsStrip({ specials = [], inventoryItem
     if ((s.isPartnerSpecial || s.source === 'partner_network') && !partnerSpecialsAllowed) return false
     return true
   })
-  if (customerSpecials.length === 0) return null
 
   return (
     <div style={{ marginBottom: 22 }}>
@@ -238,20 +302,40 @@ export default function TicketTapperSpecialsStrip({ specials = [], inventoryItem
         )}
       </div>
 
-      {/* Horizontal scroll strip */}
-      <div style={{ display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 6, WebkitOverflowScrolling: 'touch' }}>
-        {customerSpecials.map(special => (
-          <SpecialCard
-            key={special.id}
-            special={special}
-            inventoryItems={inventoryItems}
-            onAdd={onAddSpecial}
-            venueId={venueId}
-            tableLabel={tableLabel}
-            localPreview={localPreview}
-          />
-        ))}
-      </div>
+      {customerSpecials.length === 0 ? (
+        /* Placeholder when no active specials are configured */
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+          height: 64, borderRadius: 12,
+          border: `1px dashed rgba(233,193,118,0.18)`,
+          background: 'rgba(233,193,118,0.03)',
+          color: 'rgba(233,193,118,0.35)',
+          fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
+        }}>
+          <span className="sc-ticker-empty-dot" />
+          <span className="sc-ticker-empty-dot" />
+          <span className="sc-ticker-empty-dot" />
+          <span style={{ marginLeft: 6 }}>Specials coming soon</span>
+        </div>
+      ) : (
+        /* Auto-scrolling marquee ticker — pauses on hover/touch */
+        <div className="sc-ticker-wrapper" style={{ paddingBottom: 6 }}>
+          <div className="sc-ticker-track" style={{ paddingRight: 14 }}>
+            {/* Duplicate cards so the scroll loops seamlessly */}
+            {[...customerSpecials, ...customerSpecials].map((special, idx) => (
+              <SpecialCard
+                key={`${special.id}-${idx}`}
+                special={special}
+                inventoryItems={inventoryItems}
+                onAdd={onAddSpecial}
+                venueId={venueId}
+                tableLabel={tableLabel}
+                localPreview={localPreview}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Divider */}
       <div style={{ height: 1, background: `linear-gradient(90deg, transparent, ${border}, transparent)`, marginTop: 16 }} />
