@@ -11,7 +11,12 @@ export default function SecondThird() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
+    // observe_confirm_step: guest confirmed they were present — no tasting input collected at this stage
     setSecondThirdTasting({
+      status: 'observe_confirm_step',
+      source: 'local_only',
+      tasteProfileSource: 'not_collected',
+      safeClaim: 'Guest confirmed observation — no tasting input captured',
       notesSelected: [],
       notesCount: 0,
       rating: null,

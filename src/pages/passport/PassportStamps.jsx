@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getRankFromXP } from '../../constants/session.js'
+import { getEarnedPassportStamps } from '../../utils/passportProgress.js'
 import PassportBottomNav from '../../components/PassportBottomNav.jsx'
 
 const FILL1 = { fontVariationSettings:"'FILL' 1" }
@@ -182,6 +183,9 @@ export default function PassportStamps() {
   const total  = CATS.reduce((n, c) => n + c.total,  0)
   const pct    = Math.round((earned / total) * 100)
 
+  // Locally earned stamps from this session (SmokeCraft journey stamps)
+  const localStamps = getEarnedPassportStamps(session)
+
   return (
     <div className="min-h-screen pb-28 overflow-x-hidden"
       style={{ background:'linear-gradient(160deg,#0c0904,#100c07,#080605)' }}>
@@ -216,6 +220,60 @@ export default function PassportStamps() {
       </header>
 
       <main className="relative z-10 max-w-2xl mx-auto px-4 pt-5 space-y-6">
+
+        {/* ═══ PILOT PREVIEW BANNER ════════════════════════════ */}
+        <section>
+          <div style={{
+            borderRadius:12, padding:'12px 16px',
+            background:'rgba(192,57,43,0.08)',
+            border:'1px solid rgba(192,57,43,0.3)',
+            display:'flex', alignItems:'flex-start', gap:10,
+          }}>
+            <span className="material-symbols-outlined" style={{ fontSize:16, color:'#c0392b', flexShrink:0, marginTop:1 }}>info</span>
+            <div>
+              <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:10, fontWeight:700, color:'#c0392b', textTransform:'uppercase', letterSpacing:'0.15em', marginBottom:3 }}>
+                LOCAL PASSPORT PREVIEW — Backend Not Connected
+              </p>
+              <p style={{ fontFamily:'"Hanken Grotesk",sans-serif', fontSize:12, color:'rgba(255,255,255,0.5)', lineHeight:1.5 }}>
+                Stamp collection shown below is a pilot preview. Stamps earned in your current session appear separately. Backend sync is not active — no data leaves this device.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ LOCALLY EARNED STAMPS (this session) ═══════════ */}
+        {localStamps.length > 0 && (
+          <section>
+            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10 }}>
+              <span className="material-symbols-outlined" style={{ fontSize:16, color:'#27ae60' }}>check_circle</span>
+              <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:10, fontWeight:700, color:'#27ae60', textTransform:'uppercase', letterSpacing:'0.15em' }}>
+                Earned This Session — Local Only
+              </p>
+            </div>
+            <div style={{
+              borderRadius:16, padding:'16px',
+              background:'rgba(39,174,96,0.06)',
+              border:'1px solid rgba(39,174,96,0.25)',
+            }}>
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'16px 8px', placeItems:'center' }}>
+                {localStamps.map(stamp => (
+                  <div key={stamp.id} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:5 }}>
+                    <div style={{
+                      width:56, height:56, borderRadius:'50%',
+                      background:'rgba(39,174,96,0.15)',
+                      border:'2px solid rgba(39,174,96,0.4)',
+                      display:'flex', alignItems:'center', justifyContent:'center',
+                    }}>
+                      <span style={{ fontSize:22 }}>{stamp.icon || '🏅'}</span>
+                    </div>
+                    <p style={{ fontFamily:'"Playfair Display",serif', fontWeight:700, fontSize:10, color:'#e8e4d8', textAlign:'center', lineHeight:1.3 }}>{stamp.name}</p>
+                    <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:8, color:'rgba(39,174,96,0.6)', textTransform:'uppercase', letterSpacing:'0.1em' }}>Local</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ═══ COLLECTION HEADER — parchment with wax seal ═════ */}
         <section>
@@ -279,7 +337,13 @@ export default function PassportStamps() {
           </div>
         </section>
 
-        {/* ═══ STAMP CATEGORY PAGES ════════════════════════════ */}
+        {/* ═══ STAMP CATEGORY PAGES — PILOT DEMO PREVIEW ══════ */}
+        <div style={{ display:'flex', alignItems:'center', gap:8, paddingBottom:4, borderBottom:'1px solid rgba(197,160,89,0.12)' }}>
+          <span className="material-symbols-outlined" style={{ fontSize:14, color:'rgba(197,160,89,0.5)' }}>preview</span>
+          <p style={{ fontFamily:'"JetBrains Mono",monospace', fontSize:9, fontWeight:700, color:'rgba(197,160,89,0.45)', textTransform:'uppercase', letterSpacing:'0.15em' }}>
+            Demo Preview — Stamps shown below are not live-earned
+          </p>
+        </div>
         {CATS.map((cat, catIdx) => (
           <section key={cat.id}>
 

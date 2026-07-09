@@ -4,7 +4,13 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
 
-const TASTE_TAGS = ['Dark Cocoa', 'Cedar Smoke', 'Leather', 'Toasted Almond']
+function readLocalFlavorMemory() {
+  try {
+    const raw = sessionStorage.getItem('smokecraftFlavorMemory')
+    if (raw) return JSON.parse(raw)
+  } catch {}
+  return null
+}
 
 export default function SessionComplete() {
   const { session, awardSessionRewards, awardStamp, completeSmokeCraftSession, syncPos3Activity, syncEATActivity } = useGuestSession()
@@ -16,7 +22,21 @@ export default function SessionComplete() {
       awardStamp('journey-complete', 'session-complete')
       triggerHaptic('success')
     }
-    completeSmokeCraftSession({ tasteProfile: TASTE_TAGS })
+    // Read taste profile from session data — honest fallback if not collected
+    const flavorMemory = readLocalFlavorMemory()
+    const tasteTags =
+      flavorMemory?.tasteTags?.length > 0 ? flavorMemory.tasteTags
+      : session?.smokeCraft?.finalThird?.notesSelected?.length > 0 ? session.smokeCraft.finalThird.notesSelected
+      : []
+    const tasteProfileSource = tasteTags.length > 0 ? 'local_session' : 'not_collected'
+    completeSmokeCraftSession({
+      tasteProfile: tasteTags,
+      tasteProfileSource,
+      backendConnected: false,
+      safeClaim: tasteProfileSource === 'not_collected'
+        ? 'No guest taste data collected at this pilot stage'
+        : 'Taste profile from local session only — not synced to backend',
+    })
     syncPos3Activity()
     syncEATActivity()
   // eslint-disable-next-line react-hooks/exhaustive-deps

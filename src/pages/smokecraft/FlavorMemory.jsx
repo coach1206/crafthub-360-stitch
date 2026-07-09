@@ -11,6 +11,18 @@ export default function FlavorMemory() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
+    // Save local flavor memory record — pilot preview, no live backend, no tasting input collected yet
+    try {
+      sessionStorage.setItem('smokecraftFlavorMemory', JSON.stringify({
+        status: 'pilot_preview',
+        source: 'local_only',
+        backendConnected: false,
+        tasteTags: [],
+        tasteProfileSource: 'not_collected',
+        safeClaim: 'Flavor Memory screen visited — no guest input captured at this pilot stage',
+        savedAt: Date.now(),
+      }))
+    } catch {}
     awardSessionRewards('flavor-memory')
   }
 
