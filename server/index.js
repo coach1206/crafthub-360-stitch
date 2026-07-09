@@ -91,6 +91,7 @@ import noveeOSSecurityActivationRoutes    from './routes/noveeOSSecurityActivati
 import noveeOSDeploymentActivationRoutes  from './routes/noveeOSDeploymentActivationRoutes.js'
 import noveeOSLivePilotReadinessRoutes   from './routes/noveeOSLivePilotReadinessRoutes.js'
 import noveeOSRemoteModuleDistributionRoutes from './routes/noveeOSRemoteModuleDistributionRoutes.js'
+import noveeOSOnboardingTrainingRoutes from './routes/noveeOSOnboardingTrainingRoutes.js'
 import databaseStatusRoutes            from './routes/databaseStatusRoutes.js'
 import paymentMoneyBridgeRoutes        from './routes/paymentMoneyBridgeRoutes.js'
 import venueOnboardingRoutes           from './routes/venueOnboardingRoutes.js'
@@ -258,6 +259,7 @@ app.use('/api/phase-d/security-activation',     noveeOSSecurityActivationRoutes)
 app.use('/api/phase-d/deployment-activation',   noveeOSDeploymentActivationRoutes)
 app.use('/api/phase-d/live-pilot-readiness',    noveeOSLivePilotReadinessRoutes)
 app.use('/api/novee-os/remote-distribution',   noveeOSRemoteModuleDistributionRoutes)
+app.use('/api/novee-os/onboarding-training',  noveeOSOnboardingTrainingRoutes)
 app.use('/api/system/database',           databaseStatusRoutes)
 app.use('/api/payments/money-bridge',     paymentMoneyBridgeRoutes)
 app.use('/api/onboarding',               venueOnboardingRoutes)

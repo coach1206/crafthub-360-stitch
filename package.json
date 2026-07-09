@@ -89,7 +89,8 @@
     "verify:phase-e3-security-activation": "node server/scripts/verifyPhaseE3SecurityActivation.js",
     "verify:phase-e4-deployment-activation": "node server/scripts/verifyPhaseE4DeploymentActivation.js",
     "verify:phase-e5-live-pilot-readiness": "node server/scripts/verifyPhaseE5LivePilotReadiness.js",
-    "verify:phase-e6-remote-module-distribution": "node server/scripts/verifyPhaseE6RemoteModuleDistribution.js"
+    "verify:phase-e6-remote-module-distribution": "node server/scripts/verifyPhaseE6RemoteModuleDistribution.js",
+    "verify:phase-e7-onboarding-training-center": "node server/scripts/verifyPhaseE7OnboardingTrainingCenter.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
