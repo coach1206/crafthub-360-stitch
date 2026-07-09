@@ -98,7 +98,8 @@
     "verify:phase-f4-smokecraft-handoff-hardening": "node server/scripts/verifyPhaseF4SmokeCraftHandoffHardening.js",
     "verify:phase-f5-smokecraft-venue-pilot-package": "node server/scripts/verifyPhaseF5SmokeCraftVenuePilotPackage.js",
     "verify:phase-f5-passport-live-persistence": "node server/scripts/verifyPhaseF5PassportLivePersistence.js",
-    "verify:phase-f6-passport-live-backend": "node server/scripts/verifyPhaseF6PassportLiveBackend.js"
+    "verify:phase-f6-passport-live-backend": "node server/scripts/verifyPhaseF6PassportLiveBackend.js",
+    "verify:phase-f7-eat-smokecraft-live-sync": "node server/scripts/verifyPhaseF7EATSmokeCraftLiveSync.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

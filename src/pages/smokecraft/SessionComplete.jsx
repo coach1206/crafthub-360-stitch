@@ -5,6 +5,7 @@ import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRou
 import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
 import { syncSmokeCraftSessionToBackend, saveFlavorMemoryToBackend, writeSyncAuditEvent } from '../../services/passportAdapter.js'
 import { createPassportId } from '../../services/passportService.js'
+import { syncManagement, recordGuestActivity, createManagerAlertSync, createInventorySignalSync, writeEATSyncAuditEvent } from '../../modules/smokecraft/services/smokecraftManagementSyncService.js'
 
 function readLocalFlavorMemory() {
   try {
@@ -87,6 +88,58 @@ export default function SessionComplete() {
             tasteProfileSource,
             flavorSynced: flavorResult.status === 'fulfilled' && flavorResult.value?.backendConnected,
           },
+        })
+
+        // E.A.T. backend sync — fire-and-forget, never blocks guest screen
+        const [eatSessionResult] = await Promise.allSettled([
+          syncManagement({
+            guestId,
+            completedSteps,
+            xpSummary,
+            stampSummary,
+            tasteProfile: tasteTags,
+            sessionStatus: 'completed',
+            completedRoute: session.smokeCraft?.selectedRoute || null,
+          }),
+        ])
+
+        const eatOk = eatSessionResult.status === 'fulfilled' && eatSessionResult.value?.backendConnected
+
+        await Promise.allSettled([
+          recordGuestActivity({
+            guestId,
+            activityType: 'session_complete',
+            activitySummary: `SmokeCraft journey complete — ${completedSteps.length} steps, ${tasteTags.length > 0 ? tasteTags.join(', ') : 'no taste data'}`,
+            flavorTags: tasteTags,
+            loyaltySignal: completedSteps.length >= 15 ? 'high' : 'medium',
+            managerVisibility: true,
+          }),
+          createManagerAlertSync({
+            guestId,
+            alertType: 'session_complete',
+            alertPriority: 'normal',
+            alertMessage: `SmokeCraft session complete. Steps: ${completedSteps.length}. XP: ${xpSummary?.total || 0}.`,
+          }),
+          // Inventory signal only if cigar/menu data exists in session
+          session.smokeCraft?.selectedCigar
+            ? createInventorySignalSync({
+                smokecraftSessionId: guestId,
+                cigarReference: session.smokeCraft.selectedCigar,
+                inventorySignalType: 'purchase_request',
+                reorderSignal: false,
+              })
+            : Promise.resolve(),
+        ])
+
+        await writeEATSyncAuditEvent({
+          guestId,
+          eventType: 'session_complete_eat_sync',
+          syncStatus: eatOk ? 'ok' : 'fallback',
+          backendConnected: eatOk,
+          summary: eatOk
+            ? 'SmokeCraft session synced to E.A.T. backend'
+            : 'E.A.T. sync skipped — backend not available',
+          metadata: { completedStepsCount: completedSteps.length, tasteProfileSource },
         })
       } catch {
         // backend sync failure must never surface to guest
