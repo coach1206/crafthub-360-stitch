@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS pos360_external_provider_profiles (
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_pos_overlay_connectors (
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS pos360_pos_overlay_connectors (
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_provider_capability_registry (
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS pos360_provider_capability_registry (
   idempotency_key          TEXT,
   created_at               TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at               TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_provider_readiness_results (
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS pos360_provider_readiness_results (
   idempotency_key         TEXT,
   created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_integration_credential_metadata (
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS pos360_integration_credential_metadata (
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_webhook_endpoint_contracts (
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS pos360_webhook_endpoint_contracts (
   idempotency_key          TEXT,
   created_at               TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at               TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_webhook_event_intake_log (
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS pos360_webhook_event_intake_log (
   exposes_financial_data   BOOLEAN NOT NULL DEFAULT TRUE,
   idempotency_key          TEXT,
   created_at               TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_sync_job_definitions (
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS pos360_sync_job_definitions (
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_sync_job_runs (
@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS pos360_sync_job_runs (
   idempotency_key            TEXT,
   created_at                 TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                 TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_sync_retry_policies (
@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS pos360_sync_retry_policies (
   idempotency_key      TEXT,
   created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_sync_error_logs (
@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS pos360_sync_error_logs (
   created_by            TEXT,
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_sync_conflict_records (
@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS pos360_sync_conflict_records (
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_sync_reconciliation_records (
@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS pos360_sync_reconciliation_records (
   idempotency_key             TEXT,
   created_at                  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_data_mapping_profiles (
@@ -267,7 +267,7 @@ CREATE TABLE IF NOT EXISTS pos360_data_mapping_profiles (
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_data_mapping_rules (
@@ -283,7 +283,7 @@ CREATE TABLE IF NOT EXISTS pos360_data_mapping_rules (
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_import_batch_records (
@@ -304,7 +304,7 @@ CREATE TABLE IF NOT EXISTS pos360_import_batch_records (
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_import_batch_items (
@@ -319,7 +319,7 @@ CREATE TABLE IF NOT EXISTS pos360_import_batch_items (
   exposes_financial_data BOOLEAN NOT NULL DEFAULT FALSE,
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_export_batch_records (
@@ -338,7 +338,7 @@ CREATE TABLE IF NOT EXISTS pos360_export_batch_records (
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_export_batch_items (
@@ -351,7 +351,7 @@ CREATE TABLE IF NOT EXISTS pos360_export_batch_items (
   exposes_financial_data BOOLEAN NOT NULL DEFAULT FALSE,
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_data_lineage_records (
@@ -370,7 +370,7 @@ CREATE TABLE IF NOT EXISTS pos360_data_lineage_records (
   created_by            TEXT,
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_eat_sync_visibility_records (
@@ -385,7 +385,7 @@ CREATE TABLE IF NOT EXISTS pos360_eat_sync_visibility_records (
   created_by                  TEXT,
   idempotency_key             TEXT,
   created_at                  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_smokecraft_sync_visibility_records (
@@ -400,7 +400,7 @@ CREATE TABLE IF NOT EXISTS pos360_smokecraft_sync_visibility_records (
   created_by            TEXT,
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_integration_offline_queue (
@@ -415,7 +415,7 @@ CREATE TABLE IF NOT EXISTS pos360_integration_offline_queue (
   idempotency_key TEXT,
   created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_integration_audit (

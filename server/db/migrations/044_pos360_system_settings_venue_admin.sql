@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS pos360_venue_profiles (
   idempotency_key        TEXT,
   created_at             TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at             TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_venue_regional_settings (
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS pos360_venue_regional_settings (
   idempotency_key      TEXT,
   created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_venue_operating_rules (
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS pos360_venue_operating_rules (
   idempotency_key            TEXT,
   created_at                 TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                 TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_venue_financial_policies (
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS pos360_venue_financial_policies (
   idempotency_key                 TEXT,
   created_at                      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_venue_compliance_settings (
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS pos360_venue_compliance_settings (
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_venue_privacy_notices (
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS pos360_venue_privacy_notices (
   idempotency_key      TEXT,
   created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_white_label_profiles (
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS pos360_white_label_profiles (
   idempotency_key         TEXT,
   created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_white_label_theme_tokens (
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS pos360_white_label_theme_tokens (
   idempotency_key         TEXT,
   created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_module_registry (
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS pos360_module_governance_rules (
   idempotency_key            TEXT,
   created_at                 TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                 TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_feature_flag_overrides (
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS pos360_feature_flag_overrides (
   idempotency_key         TEXT,
   created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_integration_status_registry (
@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS pos360_integration_status_registry (
   idempotency_key         TEXT,
   created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_provider_readiness_checks (
@@ -231,7 +231,7 @@ CREATE TABLE IF NOT EXISTS pos360_provider_readiness_checks (
   idempotency_key         TEXT,
   created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_admin_console_profiles (
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS pos360_admin_console_profiles (
   idempotency_key TEXT,
   created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_admin_settings_views (
@@ -258,7 +258,7 @@ CREATE TABLE IF NOT EXISTS pos360_admin_settings_views (
   exposes_private_data  BOOLEAN NOT NULL DEFAULT FALSE,
   exposes_financial_data BOOLEAN NOT NULL DEFAULT FALSE,
   idempotency_key       TEXT,
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_settings_change_requests (
@@ -278,7 +278,7 @@ CREATE TABLE IF NOT EXISTS pos360_settings_change_requests (
   idempotency_key      TEXT,
   created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_settings_approval_requests (
@@ -298,7 +298,7 @@ CREATE TABLE IF NOT EXISTS pos360_settings_approval_requests (
   idempotency_key          TEXT,
   created_at               TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at               TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_settings_version_history (
@@ -313,7 +313,7 @@ CREATE TABLE IF NOT EXISTS pos360_settings_version_history (
   rollback_available BOOLEAN NOT NULL DEFAULT TRUE,
   idempotency_key  TEXT,
   created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_settings_rollback_records (
@@ -328,7 +328,7 @@ CREATE TABLE IF NOT EXISTS pos360_settings_rollback_records (
   idempotency_key     TEXT,
   created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_settings_export_requests (
@@ -344,7 +344,7 @@ CREATE TABLE IF NOT EXISTS pos360_settings_export_requests (
   idempotency_key       TEXT,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_settings_offline_queue (
@@ -359,7 +359,7 @@ CREATE TABLE IF NOT EXISTS pos360_settings_offline_queue (
   idempotency_key TEXT,
   created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 CREATE TABLE IF NOT EXISTS pos360_settings_audit (

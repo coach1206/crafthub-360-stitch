@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS pos360_fulfillment_station_profiles (
   updated_by UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_fulfillment_station_profiles_venue ON pos360_fulfillment_station_profiles (venue_id);
 CREATE INDEX IF NOT EXISTS idx_fulfillment_station_profiles_type ON pos360_fulfillment_station_profiles (station_type);
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS pos360_fulfillment_station_capabilities (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE (venue_id, station_id, capability_key),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_fulfillment_station_caps_venue ON pos360_fulfillment_station_capabilities (venue_id);
 CREATE INDEX IF NOT EXISTS idx_fulfillment_station_caps_station ON pos360_fulfillment_station_capabilities (station_id);
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS pos360_item_routing_rules (
   updated_by UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_item_routing_rules_venue ON pos360_item_routing_rules (venue_id);
 CREATE INDEX IF NOT EXISTS idx_item_routing_rules_station ON pos360_item_routing_rules (target_station_id);
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS pos360_order_production_tickets (
   updated_by UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_order_prod_tickets_venue ON pos360_order_production_tickets (venue_id);
 CREATE INDEX IF NOT EXISTS idx_order_prod_tickets_order ON pos360_order_production_tickets (order_id);
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS pos360_order_production_ticket_items (
   updated_by UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_prod_ticket_items_venue ON pos360_order_production_ticket_items (venue_id);
 CREATE INDEX IF NOT EXISTS idx_prod_ticket_items_ticket ON pos360_order_production_ticket_items (ticket_id);
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS pos360_kds_queue_records (
   updated_by UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_kds_queue_venue ON pos360_kds_queue_records (venue_id);
 CREATE INDEX IF NOT EXISTS idx_kds_queue_station ON pos360_kds_queue_records (station_id);
@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS pos360_course_fire_controls (
   idempotency_key TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_course_fire_venue ON pos360_course_fire_controls (venue_id);
 CREATE INDEX IF NOT EXISTS idx_course_fire_ticket ON pos360_course_fire_controls (ticket_id);
@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS pos360_station_staff_assignments (
   created_by UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_station_staff_assign_venue ON pos360_station_staff_assignments (venue_id);
 CREATE INDEX IF NOT EXISTS idx_station_staff_assign_station ON pos360_station_staff_assignments (station_id);
@@ -226,7 +226,7 @@ CREATE TABLE IF NOT EXISTS pos360_production_handoff_records (
   updated_by UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_prod_handoff_venue ON pos360_production_handoff_records (venue_id);
 CREATE INDEX IF NOT EXISTS idx_prod_handoff_ticket ON pos360_production_handoff_records (ticket_id);
@@ -245,7 +245,7 @@ CREATE TABLE IF NOT EXISTS pos360_item_unavailable_records (
   idempotency_key TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_item_unavailable_venue ON pos360_item_unavailable_records (venue_id);
 CREATE INDEX IF NOT EXISTS idx_item_unavailable_ticket_item ON pos360_item_unavailable_records (ticket_item_id);
@@ -268,7 +268,7 @@ CREATE TABLE IF NOT EXISTS pos360_production_manager_overrides (
   exposes_financial_data BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_prod_manager_overrides_venue ON pos360_production_manager_overrides (venue_id);
 CREATE INDEX IF NOT EXISTS idx_prod_manager_overrides_status ON pos360_production_manager_overrides (override_status);
@@ -285,7 +285,7 @@ CREATE TABLE IF NOT EXISTS pos360_production_refire_records (
   manager_approved_by UUID,
   idempotency_key TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_prod_refire_venue ON pos360_production_refire_records (venue_id);
 CREATE INDEX IF NOT EXISTS idx_prod_refire_ticket ON pos360_production_refire_records (ticket_id);
@@ -302,7 +302,7 @@ CREATE TABLE IF NOT EXISTS pos360_production_rush_delay_records (
   manager_approved_by UUID,
   idempotency_key TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_prod_rush_delay_venue ON pos360_production_rush_delay_records (venue_id);
 
@@ -325,7 +325,7 @@ CREATE TABLE IF NOT EXISTS pos360_guest_self_order_handoff_records (
   exposes_financial_data BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_guest_self_order_handoff_venue ON pos360_guest_self_order_handoff_records (venue_id);
 CREATE INDEX IF NOT EXISTS idx_guest_self_order_handoff_guest ON pos360_guest_self_order_handoff_records (guest_profile_id);
@@ -352,7 +352,7 @@ CREATE TABLE IF NOT EXISTS pos360_server_order_handoff_records (
   exposes_financial_data BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_server_order_handoff_venue ON pos360_server_order_handoff_records (venue_id);
 CREATE INDEX IF NOT EXISTS idx_server_order_handoff_staff ON pos360_server_order_handoff_records (staff_profile_id);
@@ -382,7 +382,7 @@ CREATE TABLE IF NOT EXISTS pos360_humidor_fulfillment_records (
   updated_by UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_humidor_fulfillment_venue ON pos360_humidor_fulfillment_records (venue_id);
 CREATE INDEX IF NOT EXISTS idx_humidor_fulfillment_ticket ON pos360_humidor_fulfillment_records (ticket_id);
@@ -404,7 +404,7 @@ CREATE TABLE IF NOT EXISTS pos360_bar_fulfillment_records (
   updated_by UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_bar_fulfillment_venue ON pos360_bar_fulfillment_records (venue_id);
 CREATE INDEX IF NOT EXISTS idx_bar_fulfillment_ticket ON pos360_bar_fulfillment_records (ticket_id);
@@ -428,7 +428,7 @@ CREATE TABLE IF NOT EXISTS pos360_kitchen_fulfillment_records (
   updated_by UUID,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_kitchen_fulfillment_venue ON pos360_kitchen_fulfillment_records (venue_id);
 CREATE INDEX IF NOT EXISTS idx_kitchen_fulfillment_ticket ON pos360_kitchen_fulfillment_records (ticket_id);
@@ -453,7 +453,7 @@ CREATE TABLE IF NOT EXISTS pos360_external_kds_provider_profiles (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   UNIQUE (venue_id, provider_key),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_external_kds_provider_venue ON pos360_external_kds_provider_profiles (venue_id);
 
@@ -469,7 +469,7 @@ CREATE TABLE IF NOT EXISTS pos360_production_visibility_insights (
   idempotency_key TEXT,
   exposes_private_data BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 CREATE INDEX IF NOT EXISTS idx_prod_visibility_venue ON pos360_production_visibility_insights (venue_id);
 CREATE INDEX IF NOT EXISTS idx_prod_visibility_type ON pos360_production_visibility_insights (insight_type);

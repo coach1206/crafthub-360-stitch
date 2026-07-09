@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS pos360_qr_menu_sessions (
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Self-order carts (guest builds order before submitting)
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS pos360_self_order_carts (
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Self-order cart items
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS pos360_self_order_cart_items (
   kds_accepted              BOOLEAN NOT NULL DEFAULT FALSE,
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Self-order submissions (cart → submitted order)
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS pos360_self_order_submissions (
   idempotency_key           TEXT,
   submitted_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Handheld POS sessions (server/staff uses handheld device)
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS pos360_handheld_pos_sessions (
   idempotency_key           TEXT,
   started_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   ended_at                  TIMESTAMPTZ,
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Handheld order entries (orders placed via handheld)
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS pos360_handheld_order_entries (
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Table ordering sessions (server assigns orders to tables)
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS pos360_table_ordering_sessions (
   idempotency_key           TEXT,
   opened_at                 TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   closed_at                 TIMESTAMPTZ,
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Guest checkout handoffs (self-order → checkout flow)
@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS pos360_guest_checkout_handoffs (
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- QR code registry (venue-level QR codes for tables/sections/menus)
@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS pos360_qr_code_registry (
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Menu availability snapshots (what's available at time of self-order)
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS pos360_menu_availability_snapshots (
   snapshot_data             JSONB,
   idempotency_key           TEXT,
   taken_at                  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Age verification records (for alcohol/cigar items)
@@ -265,7 +265,7 @@ CREATE TABLE IF NOT EXISTS pos360_age_verification_records (
   exposes_private_data      BOOLEAN NOT NULL DEFAULT TRUE,
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Self-ordering modifier selections
@@ -279,7 +279,7 @@ CREATE TABLE IF NOT EXISTS pos360_self_order_modifier_selections (
   price_adjustment_cents    INTEGER NOT NULL DEFAULT 0,
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Guest checkout audit log
@@ -314,7 +314,7 @@ CREATE TABLE IF NOT EXISTS pos360_self_order_offline_queue (
   exposes_private_data      BOOLEAN NOT NULL DEFAULT FALSE,
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Menu item availability overrides (86'd items etc.)
@@ -331,7 +331,7 @@ CREATE TABLE IF NOT EXISTS pos360_menu_item_availability_overrides (
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   expires_at                TIMESTAMPTZ,
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Handheld POS offline queue
@@ -349,7 +349,7 @@ CREATE TABLE IF NOT EXISTS pos360_handheld_offline_queue (
   exposes_private_data      BOOLEAN NOT NULL DEFAULT FALSE,
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- Self-order visibility insights
@@ -365,7 +365,7 @@ CREATE TABLE IF NOT EXISTS pos360_self_order_visibility_insights (
   external_sync_completed   BOOLEAN NOT NULL DEFAULT FALSE,
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- SmokeCraft self-order hooks (cigar items routed through SmokeCraft humidor)
@@ -383,7 +383,7 @@ CREATE TABLE IF NOT EXISTS pos360_smokecraft_self_order_hooks (
   contains_ai_generated_content BOOLEAN NOT NULL DEFAULT FALSE,
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );
 
 -- E.A.T. self-order handoff records
@@ -402,5 +402,5 @@ CREATE TABLE IF NOT EXISTS pos360_eat_self_order_handoffs (
   exposes_financial_data    BOOLEAN NOT NULL DEFAULT TRUE,
   idempotency_key           TEXT,
   created_at                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (idempotency_key, venue_id) WHERE idempotency_key IS NOT NULL
+  UNIQUE (idempotency_key, venue_id)
 );

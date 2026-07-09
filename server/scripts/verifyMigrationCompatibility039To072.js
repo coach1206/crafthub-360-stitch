@@ -209,6 +209,22 @@ for (const f of expected) {
   check(`${f} exists`, existsSync(resolve(MIGRATIONS_DIR, f)))
 }
 
+// ── Gate 7: No inline UNIQUE ... WHERE in migrations 044–072 ─────────────────
+console.log('\nGate 7 — Migrations 044–072: no invalid inline UNIQUE ... WHERE constraint syntax')
+const migrations044to072 = getMigrations(44, 72)
+let illegalUniqueWhere = false
+for (const filename of migrations044to072) {
+  const sql = read(filename)
+  if (!sql) continue
+  if (/UNIQUE\s*\([^)]+\)\s+WHERE/i.test(sql)) {
+    check(`${filename}: no illegal inline UNIQUE ... WHERE`, false, 'partial UNIQUE must use CREATE UNIQUE INDEX')
+    illegalUniqueWhere = true
+  }
+}
+if (!illegalUniqueWhere) {
+  check('No illegal inline UNIQUE ... WHERE found in migrations 044–072', true)
+}
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log(`\n─────────────────────────────────────────────────`)
 console.log(`Migration Compatibility 039–072: ${passed + failed} checks, ${passed} passed, ${failed} failed`)
