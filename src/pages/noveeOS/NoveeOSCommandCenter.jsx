@@ -130,8 +130,9 @@ const PHASE_E = [
 
 // ── Section E: Risk / Audit / Compliance ──────────────────────
 const RISK = [
-  { title: 'POS360 Production Readiness',desc: 'POS360 system-wide production readiness audit.',                           status: 'active',       route: '/pos360/production-readiness' },
-  { title: 'SmokeCraft DB Activation',   desc: 'SmokeCraft database activation and schema audit.',                         status: 'active',       route: '/smokecraft/visual-proof' },
+  { title: 'POS360 Production Readiness',  desc: 'POS360 system-wide production readiness audit.',                                              status: 'active', route: '/pos360/production-readiness' },
+  { title: 'SmokeCraft DB Activation',     desc: 'SmokeCraft database activation and schema audit.',                                            status: 'active', route: '/smokecraft/visual-proof' },
+  { title: 'SmokeCraft Venue Pilot Pkg',   desc: 'Staff/admin pilot package: status, checklists, safe claims, known blockers. Not guest-facing. Not production-ready.', status: 'active', route: '/smokecraft/venue-pilot-package' },
 ]
 
 export default function NoveeOSCommandCenter() {

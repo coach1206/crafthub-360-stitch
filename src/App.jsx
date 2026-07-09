@@ -96,6 +96,7 @@ import ModulePlaceholderReserved     from './pages/ModulePlaceholderReserved.jsx
 import SmokeCraft       from './pages/SmokeCraft.jsx'
 import SmokeCraftVisualProof from './pages/smokecraft/SmokeCraftVisualProof.jsx'
 import SmokeCraftImageDiagnostic from './pages/smokecraft/SmokeCraftImageDiagnostic.jsx'
+import SmokeCraftVenuePilotPackage from './pages/smokecraft/SmokeCraftVenuePilotPackage.jsx'
 import Enroll           from './pages/smokecraft/Enroll.jsx'
 import GoldenBox        from './pages/smokecraft/GoldenBox.jsx'
 import GoldenBoxStatus  from './pages/smokecraft/GoldenBoxStatus.jsx'
@@ -594,6 +595,8 @@ export default function App() {
               <Route path="pos360-visual-proof" element={<POS360VisualProof />} />
               <Route path="smokecraft-visual-proof" element={<SmokeCraftVisualProof />} />
               <Route path="smokecraft-image-diagnostic" element={<SmokeCraftImageDiagnostic />} />
+              {/* Staff/admin facing — not part of guest journey */}
+              <Route path="smokecraft/venue-pilot-package" element={<SmokeCraftVenuePilotPackage />} />
 
               {/* ── NEW POS 3 system — nested route tree ───────────── */}
               {/* ── Protected: staff+ — BLOCKED in demo mode ────── */}
