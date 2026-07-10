@@ -26,50 +26,71 @@ export default function SmokeCraft() {
   // container bottom, so the lower portion of the image (where CTAs live)
   // is always fully visible. Enable debug mode to verify alignment:
   //   sessionStorage.setItem('smokecraft_hotspot_debug', '1')
+  // Hotspot positions calibrated to discover-your-profile-111 (1456×816 landscape).
+  // Left column: primary CTAs stacked vertically (y 46–78%).
+  // Right column: passport card VIEW PASSPORT link + pairing card VIEW PAIRING link.
+  // Image bottom nav bar (y 88–100%) is intentionally unmapped — app nav covers it.
   const HOTSPOTS = [
-    // Primary journey CTA — large tap zone at lower image area
+    // Primary gold CTA — "START NEW SMOKECRAFT SESSION >"
     {
       label: 'Start New SmokeCraft Session',
-      x: 5, y: 66, width: 90, height: 21,
+      x: 4, y: 46, width: 24, height: 8,
       to: '/smokecraft/identity',
     },
-    // Secondary CTA — clearly above primary, no vertical overlap
+    // Secondary dark CTA — "CONTINUE PREVIOUS SESSION"
     {
       label: 'Continue Previous Session',
-      x: 5, y: 50, width: 90, height: 14,
+      x: 4, y: 55, width: 22, height: 8,
       onClick: continueSession,
     },
-    // Third-row icon buttons
+    // Icon button row 1: Enter Event Challenge | View My Passport
     {
-      label: 'Browse Humidor',
-      x: 5, y: 34, width: 42, height: 13,
-      to: '/smokecraft/humidor-match',
+      label: 'Enter Event Challenge',
+      x: 4, y: 64, width: 14, height: 7,
+      to: '/smokecraft/identity',
     },
     {
       label: 'View My Passport',
-      x: 53, y: 34, width: 42, height: 13,
+      x: 19, y: 64, width: 13, height: 7,
       to: '/smokecraft/passport-stamp',
     },
-    // Top-row icon buttons
+    // Icon button row 2: Browse Humidor | Demo Experience | How It Works
     {
-      label: 'How It Works',
-      x: 5, y: 20, width: 42, height: 12,
-      to: '/smokecraft/how-it-works',
+      label: 'Browse Humidor',
+      x: 4, y: 72, width: 11, height: 7,
+      to: '/smokecraft/humidor-match',
     },
     {
       label: 'Demo Experience',
-      x: 53, y: 20, width: 42, height: 12,
+      x: 16, y: 72, width: 13, height: 7,
       to: '/smokecraft/golden-box',
+    },
+    {
+      label: 'How It Works',
+      x: 30, y: 72, width: 11, height: 7,
+      to: '/smokecraft/how-it-works',
+    },
+    // Right panel — 360 Passport card: VIEW PASSPORT >
+    {
+      label: 'View My Passport',
+      x: 69, y: 28, width: 14, height: 6,
+      to: '/smokecraft/passport-stamp',
+    },
+    // Right panel — Recommended Pairing card: VIEW PAIRING >
+    {
+      label: 'View Pairing',
+      x: 69, y: 74, width: 13, height: 6,
+      to: '/smokecraft/humidor-match',
     },
   ]
 
   return (
     <SmokeCraftAssetRoute
-      src="/assets/smokecraft-reference/approved/smokecraft-landing.png"
-      alt="SmokeCraft"
+      src="/assets/smokecraft/DISOVER YOUR CIGAR PROFILE.png"
+      alt="SmokeCraft — Discover Your Cigar Profile"
       hotspots={HOTSPOTS}
       route="/smokecraft"
-      objectPosition="center bottom"
+      objectPosition="center center"
     />
   )
 }

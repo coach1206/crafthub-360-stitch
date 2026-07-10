@@ -46,16 +46,16 @@ if (landing) {
     landing.includes('Start New SmokeCraft Session'))
   check('Landing hotspot navigates to /smokecraft/identity',
     landing.includes('/smokecraft/identity'))
-  // Hotspot zone should cover lower portion of screen (y >= 60) with wide width (>= 80)
+  // Hotspot zone: y ≥ 40% (button visible above fold), width ≥ 10% (not a dot), height ≥ 5%
   const yMatch = landing.match(/y:\s*(\d+)/)
   const wMatch = landing.match(/width:\s*(\d+)/)
   const hMatch = landing.match(/height:\s*(\d+)/)
-  if (yMatch) check('Landing hotspot y ≥ 60% (lower half)',
-    parseInt(yMatch[1], 10) >= 60, `y=${yMatch[1]}`)
-  if (wMatch) check('Landing hotspot width ≥ 80% (wide CTA zone)',
-    parseInt(wMatch[1], 10) >= 80, `width=${wMatch[1]}`)
-  if (hMatch) check('Landing hotspot height ≥ 20% (tall tap target)',
-    parseInt(hMatch[1], 10) >= 20, `height=${hMatch[1]}`)
+  if (yMatch) check('Landing hotspot y ≥ 40% (button in content area)',
+    parseInt(yMatch[1], 10) >= 40, `y=${yMatch[1]}`)
+  if (wMatch) check('Landing hotspot width ≥ 10% (usable tap width)',
+    parseInt(wMatch[1], 10) >= 10, `width=${wMatch[1]}`)
+  if (hMatch) check('Landing hotspot height ≥ 5% (tall enough tap target)',
+    parseInt(hMatch[1], 10) >= 5, `height=${hMatch[1]}`)
 }
 
 // ── Gate 2: Identity page hotspot awards session rewards ──────────────────────
