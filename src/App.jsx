@@ -99,6 +99,7 @@ import MiniTastingRound    from './pages/smokecraft/MiniTastingRound.jsx'
 import FinalReview         from './pages/smokecraft/FinalReview.jsx'
 import VisitLockGuard      from './components/smokecraft/VisitLockGuard.jsx'
 import SmokeCraftSessionGuard from './components/smokecraft/SmokeCraftSessionGuard.jsx'
+import SmokeCraftBottomNav from './components/smokecraft/SmokeCraftBottomNav.jsx'
 import { SmokeCraftProgressProvider } from './context/SmokeCraftProgressContext.jsx'
 import VisitComplete        from './pages/smokecraft/VisitComplete.jsx'
 import HowItWorks       from './pages/smokecraft/HowItWorks.jsx'
@@ -247,15 +248,14 @@ export default function App() {
               <Route path="system-explained" element={<PublicCraftHubLanding />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
-              <Route path="smokecraft" element={<SmokeCraftProgressProvider><Outlet /></SmokeCraftProgressProvider>}>
+              <Route path="smokecraft" element={<SmokeCraftProgressProvider><Outlet /><SmokeCraftBottomNav /></SmokeCraftProgressProvider>}>
                 {/* S1 — always unlocked, no guard */}
                 <Route index element={<SmokeCraftSessionGuard sessionNumber={1} hideHeader><SmokeCraft /></SmokeCraftSessionGuard>} />
 
-                {/* S2 — profile/enroll */}
-                <Route path="enroll"           element={<SmokeCraftSessionGuard sessionNumber={2}><Enroll /></SmokeCraftSessionGuard>} />
+                {/* Redirects / aliases */}
+                <Route path="enroll"           element={<SmokeCraftSessionGuard sessionNumber={1}><Enroll /></SmokeCraftSessionGuard>} />
                 <Route path="intake"           element={<Navigate to="/smokecraft/enroll" replace />} />
                 <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
-                {/* profile → identity (alias per spec) */}
                 <Route path="profile"          element={<Navigate to="/smokecraft/identity" replace />} />
                 <Route path="education"        element={<Navigate to="/smokecraft/format" replace />} />
                 <Route path="mentors"          element={<Navigate to="/smokecraft/mentor-selection" replace />} />
@@ -263,84 +263,73 @@ export default function App() {
                 <Route path="light"            element={<Navigate to="/smokecraft/cut-toast-light" replace />} />
                 <Route path="complete"         element={<Navigate to="/smokecraft/session-complete" replace />} />
 
-                {/* S3 — golden-box (aliases: gold-box, golden-box) */}
+                {/* S2 — golden-box */}
                 <Route path="golden-box">
-                  <Route index             element={<SmokeCraftSessionGuard sessionNumber={3}><GoldenBox /></SmokeCraftSessionGuard>} />
+                  <Route index             element={<SmokeCraftSessionGuard sessionNumber={2}><GoldenBox /></SmokeCraftSessionGuard>} />
                   <Route path="status"     element={<GoldenBoxStatus />} />
                 </Route>
-                {/* gold-box → golden-box alias per spec */}
                 <Route path="gold-box"       element={<Navigate to="/smokecraft/golden-box" replace />} />
 
-                {/* S4 — mentor-selection */}
+                {/* S3 — mentor-selection */}
                 <Route path="art"            element={<Art />} />
-                <Route path="mentor-selection" element={<SmokeCraftSessionGuard sessionNumber={4}><Mentor /></SmokeCraftSessionGuard>} />
+                <Route path="mentor-selection" element={<SmokeCraftSessionGuard sessionNumber={3}><Mentor /></SmokeCraftSessionGuard>} />
                 <Route path="mentor"         element={<Navigate to="/smokecraft/mentor-selection" replace />} />
 
-                {/* S5 — format / shape-size-burn */}
-                <Route path="format"         element={<SmokeCraftSessionGuard sessionNumber={5}><Format /></SmokeCraftSessionGuard>} />
-                {/* shape-size-burn is the official route alias for format */}
-                <Route path="shape-size-burn" element={<SmokeCraftSessionGuard sessionNumber={5}><Format /></SmokeCraftSessionGuard>} />
-                <Route path="cigar-gauge-guide" element={<SmokeCraftSessionGuard sessionNumber={5}><CigarGaugeGuide /></SmokeCraftSessionGuard>} />
+                {/* S4 — seed-soil */}
+                <Route path="seed-soil"        element={<SmokeCraftSessionGuard sessionNumber={4}><SeedSoil /></SmokeCraftSessionGuard>} />
 
-                {/* S6 — wrapper-strength */}
-                <Route path="wrapper-strength" element={<SmokeCraftSessionGuard sessionNumber={6}><WrapperStrength /></SmokeCraftSessionGuard>} />
+                {/* S5 — pairing-lab */}
+                <Route path="pairing-lab"      element={<SmokeCraftSessionGuard sessionNumber={5}><PairingLab /></SmokeCraftSessionGuard>} />
 
-                {/* S7 — seed-soil */}
-                <Route path="seed-soil"        element={<SmokeCraftSessionGuard sessionNumber={7}><SeedSoil /></SmokeCraftSessionGuard>} />
+                {/* S6 — humidor-match */}
+                <Route path="humidor-match"    element={<SmokeCraftSessionGuard sessionNumber={6}><HumidorMatch /></SmokeCraftSessionGuard>} />
 
-                {/* S8 — pairing-lab */}
-                <Route path="pairing-lab"      element={<SmokeCraftSessionGuard sessionNumber={8}><PairingLab /></SmokeCraftSessionGuard>} />
+                {/* S7 — request-purchase */}
+                <Route path="request-purchase" element={<SmokeCraftSessionGuard sessionNumber={7}><RequestPurchase /></SmokeCraftSessionGuard>} />
 
-                {/* S9 — humidor-match */}
-                <Route path="humidor-match"    element={<SmokeCraftSessionGuard sessionNumber={9}><HumidorMatch /></SmokeCraftSessionGuard>} />
+                {/* S8 — cut-toast-light */}
+                <Route path="cut-toast-light"  element={<SmokeCraftSessionGuard sessionNumber={8}><CutToastLight /></SmokeCraftSessionGuard>} />
 
-                {/* S10 — request-purchase */}
-                <Route path="request-purchase" element={<SmokeCraftSessionGuard sessionNumber={10}><RequestPurchase /></SmokeCraftSessionGuard>} />
+                {/* S9 — first-third */}
+                <Route path="first-third"      element={<SmokeCraftSessionGuard sessionNumber={9}><FirstThird /></SmokeCraftSessionGuard>} />
 
-                {/* S11 — cut-toast-light */}
-                <Route path="cut-toast-light"  element={<SmokeCraftSessionGuard sessionNumber={11}><CutToastLight /></SmokeCraftSessionGuard>} />
+                {/* S10 — second-third */}
+                <Route path="second-third"     element={<SmokeCraftSessionGuard sessionNumber={10}><SecondThird /></SmokeCraftSessionGuard>} />
 
-                {/* S12 — first-third */}
-                <Route path="first-third"      element={<SmokeCraftSessionGuard sessionNumber={12}><FirstThird /></SmokeCraftSessionGuard>} />
+                {/* S11 — flavor-memory */}
+                <Route path="flavor-memory"    element={<SmokeCraftSessionGuard sessionNumber={11}><FlavorMemory /></SmokeCraftSessionGuard>} />
 
-                {/* S13 — second-third */}
-                <Route path="second-third"     element={<SmokeCraftSessionGuard sessionNumber={13}><SecondThird /></SmokeCraftSessionGuard>} />
+                {/* S12 — final-third */}
+                <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={12}><FinalThird /></SmokeCraftSessionGuard>} />
 
-                {/* S14 — flavor-memory */}
-                <Route path="flavor-memory"    element={<SmokeCraftSessionGuard sessionNumber={14}><FlavorMemory /></SmokeCraftSessionGuard>} />
+                {/* S13 — scorecard */}
+                <Route path="scorecard"        element={<SmokeCraftSessionGuard sessionNumber={13}><Scorecard /></SmokeCraftSessionGuard>} />
 
-                {/* S15 — final-third */}
-                <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={15}><FinalThird /></SmokeCraftSessionGuard>} />
+                {/* S14 — final-review (directly reachable after scorecard) */}
+                <Route path="final-review"     element={<SmokeCraftSessionGuard sessionNumber={14}><FinalReview /></SmokeCraftSessionGuard>} />
 
-                {/* S16 — scorecard */}
-                <Route path="scorecard"        element={<SmokeCraftSessionGuard sessionNumber={16}><Scorecard /></SmokeCraftSessionGuard>} />
+                {/* S15 — passport-stamp */}
+                <Route path="passport-stamp"   element={<SmokeCraftSessionGuard sessionNumber={15}><PassportStamp /></SmokeCraftSessionGuard>} />
 
-                {/* S17 — smokecraft-challenge (alias: challenge) */}
-                <Route path="smokecraft-challenge"  element={<SmokeCraftSessionGuard sessionNumber={17}><SmokeCraftChallenge /></SmokeCraftSessionGuard>} />
-                {/* challenge now points to smokecraft-challenge per spec (not leaf-challenge) */}
-                <Route path="challenge"        element={<Navigate to="/smokecraft/smokecraft-challenge" replace />} />
+                {/* S16 — connections */}
+                <Route path="connections"      element={<SmokeCraftSessionGuard sessionNumber={16}><Connections /></SmokeCraftSessionGuard>} />
 
-                {/* S18 — second-humidor-match */}
-                <Route path="second-humidor-match"  element={<SmokeCraftSessionGuard sessionNumber={18}><SecondHumidorMatch /></SmokeCraftSessionGuard>} />
+                {/* S17 — management-sync */}
+                <Route path="management-sync"  element={<SmokeCraftSessionGuard sessionNumber={17}><ManagementSync /></SmokeCraftSessionGuard>} />
 
-                {/* S19 — mini-tasting (alias: mini-tasting-round per spec) */}
-                <Route path="mini-tasting"          element={<SmokeCraftSessionGuard sessionNumber={19}><MiniTastingRound /></SmokeCraftSessionGuard>} />
+                {/* S18 — session-complete */}
+                <Route path="session-complete" element={<SmokeCraftSessionGuard sessionNumber={18}><SessionComplete /></SmokeCraftSessionGuard>} />
+
+                {/* Supplemental routes — not in required path, accessible without session guard */}
+                <Route path="format"              element={<Format />} />
+                <Route path="shape-size-burn"     element={<Format />} />
+                <Route path="cigar-gauge-guide"   element={<CigarGaugeGuide />} />
+                <Route path="wrapper-strength"    element={<WrapperStrength />} />
+                <Route path="smokecraft-challenge"  element={<SmokeCraftChallenge />} />
+                <Route path="challenge"             element={<Navigate to="/smokecraft/smokecraft-challenge" replace />} />
+                <Route path="second-humidor-match"  element={<SecondHumidorMatch />} />
+                <Route path="mini-tasting"          element={<MiniTastingRound />} />
                 <Route path="mini-tasting-round"    element={<Navigate to="/smokecraft/mini-tasting" replace />} />
-
-                {/* S20 — final-review */}
-                <Route path="final-review"          element={<SmokeCraftSessionGuard sessionNumber={20}><FinalReview /></SmokeCraftSessionGuard>} />
-
-                {/* S21 — passport-stamp (locked until S20 complete) */}
-                <Route path="passport-stamp"   element={<SmokeCraftSessionGuard sessionNumber={21}><PassportStamp /></SmokeCraftSessionGuard>} />
-
-                {/* S22 — connections (locked until S21 complete) */}
-                <Route path="connections"      element={<SmokeCraftSessionGuard sessionNumber={22}><Connections /></SmokeCraftSessionGuard>} />
-
-                {/* S23 — management-sync (admin-facing, locked until S22 complete) */}
-                <Route path="management-sync"  element={<SmokeCraftSessionGuard sessionNumber={23}><ManagementSync /></SmokeCraftSessionGuard>} />
-
-                {/* S24 — session-complete */}
-                <Route path="session-complete" element={<SmokeCraftSessionGuard sessionNumber={24}><SessionComplete /></SmokeCraftSessionGuard>} />
 
                 {/* Visit complete interstitial */}
                 <Route path="visit-complete"   element={<VisitComplete />} />
@@ -361,8 +350,8 @@ export default function App() {
                 <Route path="terroir"        element={<Terroir />} />
                 <Route path="pairing-mastery" element={<PairingMastery />} />
                 <Route path="vitola"         element={<Vitola />} />
-                {/* S2 alias: identity = profile */}
-                <Route path="identity"       element={<SmokeCraftSessionGuard sessionNumber={2}><Identity /></SmokeCraftSessionGuard>} />
+                {/* identity — always accessible (entry-level, leads to golden-box S2) */}
+                <Route path="identity"       element={<SmokeCraftSessionGuard sessionNumber={1}><Identity /></SmokeCraftSessionGuard>} />
                 <Route path="leaderboard"    element={<Leaderboard />} />
                 <Route path="event-challenge"  element={<EventChallenge />} />
                 <Route path="how-it-works"     element={<HowItWorks />} />

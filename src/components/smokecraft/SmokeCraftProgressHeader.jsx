@@ -6,9 +6,14 @@
  * the visual-first design. Dark/gold aesthetic matches the kiosk-first look.
  *
  * Props:
- *   sessionNumber  — optional 1–24 override; defaults to context's currentSession
+ *   sessionNumber  — 1–18 session number for the page being viewed.
+ *                    The header derives the visit title from this number so
+ *                    the label always matches the actual screen, not the global
+ *                    progress cursor. Falls back to context's currentSession
+ *                    if not provided.
  */
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
+import { getSessionByNumber } from '../../constants/smokecraftJourney.js'
 
 export default function SmokeCraftProgressHeader({ sessionNumber }) {
   const {
@@ -18,12 +23,15 @@ export default function SmokeCraftProgressHeader({ sessionNumber }) {
     totalVisits,
     totalSessions,
     isDemoMode,
-    isLocalPreviewMode,
-    modeLabel,
   } = useSmokeCraftProgress()
 
   const displaySession = sessionNumber || currentSession
-  const displayVisit   = currentVisit
+
+  // Derive title from the actual page being viewed (not the global cursor)
+  // so "Challenge / Second Cigar" cannot bleed onto unrelated screens.
+  const pageSession = sessionNumber ? getSessionByNumber(sessionNumber) : null
+  const displayVisit = pageSession ? pageSession.visitNumber : currentVisit
+  const displayTitle = pageSession ? pageSession.visitTitle : currentVisitTitle
 
   return (
     <div
@@ -72,7 +80,7 @@ export default function SmokeCraftProgressHeader({ sessionNumber }) {
         </span>
       </div>
 
-      {/* Center: Visit title (truncated) */}
+      {/* Center: Visit title for THIS page (not the global cursor) */}
       <div
         style={{
           fontFamily: 'Georgia, serif',
@@ -87,23 +95,23 @@ export default function SmokeCraftProgressHeader({ sessionNumber }) {
           pointerEvents: 'none',
         }}
       >
-        {currentVisitTitle}
+        {displayTitle}
       </div>
 
-      {/* Right: Mode label */}
-      {(isDemoMode || isLocalPreviewMode) && (
+      {/* Right: Demo label only — Local Preview suppressed in production guest flow */}
+      {isDemoMode && (
         <div
           style={{
             fontFamily: 'Georgia, serif',
             fontSize: '8px',
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: isDemoMode ? 'rgba(233,193,118,0.6)' : 'rgba(201,168,76,0.35)',
+            color: 'rgba(233,193,118,0.6)',
             whiteSpace: 'nowrap',
             pointerEvents: 'none',
           }}
         >
-          {isDemoMode ? 'Demo Preview' : 'Local Preview'}
+          Demo Preview
         </div>
       )}
     </div>

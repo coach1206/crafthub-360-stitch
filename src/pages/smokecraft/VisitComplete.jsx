@@ -30,7 +30,7 @@ export default function VisitComplete() {
         alignItems: 'center',
         justifyContent: 'center',
         fontFamily: 'Georgia, serif',
-        padding: '2rem 1.5rem',
+        padding: 'calc(2rem + 44px) 1.5rem 2rem',
         textAlign: 'center',
       }}
     >
@@ -98,7 +98,7 @@ export default function VisitComplete() {
         }}
       >
         {isJourneyComplete
-          ? 'You have completed all 8 visits of your SmokeCraft journey. Congratulations — your SmokeCraft Passport is ready.'
+          ? `You have completed all ${totalVisits} visits of your SmokeCraft journey. Congratulations — your SmokeCraft Passport is ready.`
           : `Return on your next venue visit to unlock Visit ${nextVisit} of ${totalVisits}.`}
       </p>
 
@@ -129,9 +129,10 @@ export default function VisitComplete() {
           letterSpacing: '0.18em',
           textTransform: 'uppercase',
           boxShadow: '0 4px 24px rgba(201,168,76,0.3)',
-          display: 'flex',
+          display: 'inline-flex',
           alignItems: 'center',
           gap: '0.6rem',
+          flexShrink: 0,
           transition: 'opacity 0.2s',
         }}
         onMouseEnter={e => { e.currentTarget.style.opacity = '0.85' }}
@@ -142,7 +143,7 @@ export default function VisitComplete() {
       </button>
 
       {/* Mode notice */}
-      {(isDemoMode || true) && (
+      {isDemoMode && (
         <p
           style={{
             marginTop: '2rem',

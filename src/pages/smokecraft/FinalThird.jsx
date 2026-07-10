@@ -1,49 +1,64 @@
-import { useState } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
+import { injectScTouchStyles } from '../../utils/scTouch.js'
+import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import ScTastingPanel from '../../components/smokecraft/ScTastingPanel.jsx'
+
+const FLAVOR_NOTES = ['Char','Caramel','Toast','Woodsmoke','Sweet','Bitter','Mineral','Leather','Dark Fruit','Spice','Coffee','Earth']
+const RATINGS = [1, 2, 3, 4, 5]
+const RATING_LABELS = ['Poor','Fair','Good','Very Good','Exceptional']
 
 export default function FinalThird() {
+  const navigate = useNavigate()
   const { completeStep, addXP, setFinalThirdTasting } = useGuestSession()
-  const [done, setDone] = useState(false)
+  const [notes, setNotes] = useState(new Set())
+  const [overallRating, setOverallRating] = useState(null)
+  const [proceeded, setProceeded] = useState(false)
 
-  function handleContinue() {
-    if (done) return
-    setDone(true)
-    triggerHaptic('medium')
-    setFinalThirdTasting({
-      notesSelected: [],
-      notesCount: 0,
-      overallRating: null,
-      hasOverallRating: false,
-      finalStrength: null,
-      finalBody: null,
-      heatHarshness: null,
-      burnFinish: null,
-      finalPairingReaction: null,
-      wouldSmokeAgain: null,
-      mentorTip: null,
-      mentorName: null,
-    })
+  useEffect(() => { injectScTouchStyles() }, [])
+
+  const canContinue = notes.size > 0 && overallRating !== null
+
+  const toggleNote = useCallback((note) => {
+    setNotes(prev => { const n = new Set(prev); n.has(note) ? n.delete(note) : n.add(note); return n })
+  }, [])
+
+  const handleRating = useCallback((r) => {
+    setOverallRating(prev => prev === r ? null : r)
+  }, [])
+
+  const handleContinue = useCallback(() => {
+    if (!canContinue || proceeded) return
+    setProceeded(true)
+    const notesArr = Array.from(notes)
+    setFinalThirdTasting({ notesSelected: notesArr, notesCount: notesArr.length, overallRating, hasOverallRating: true })
     completeStep('final-third')
-    addXP(5)
-  }
-
-  const hotspots = [
-    {
-      label: 'Continue to Scorecard',
-      x: 10, y: 75, width: 80, height: 20,
-      onClick: handleContinue,
-      to: '/smokecraft/scorecard',
-    },
-  ]
+    addXP(75)
+    navigate('/smokecraft/scorecard')
+  }, [canContinue, proceeded, notes, overallRating, setFinalThirdTasting, completeStep, addXP, navigate])
 
   return (
-    <SmokeCraftAssetRoute
+    <SmokeCraftAssetScreen
       src="/assets/smokecraft-reference/approved/smokecraft-final-third.png"
       alt="Final Third Tasting"
-      hotspots={hotspots}
-      route="/smokecraft/final-third"
-    />
+    >
+      <ScTastingPanel
+        title="Final Third — Overall Impression"
+        flavorNotes={FLAVOR_NOTES}
+        selectedNotes={notes}
+        onToggleNote={toggleNote}
+        ratingLabel="Overall Score"
+        ratings={RATINGS}
+        ratingLabels={RATING_LABELS}
+        selectedRating={overallRating}
+        onSelectRating={handleRating}
+        canContinue={canContinue}
+        proceeded={proceeded}
+        onContinue={handleContinue}
+        continueLabel="Continue to Scorecard →"
+        notReadyLabel={`Select ${notes.size === 0 ? 'a flavor note' : 'an overall rating'} to continue`}
+      />
+    </SmokeCraftAssetScreen>
   )
 }

@@ -87,89 +87,89 @@ export function getLastSmokecraftRoute(currentStep) {
 // `id` values match the exact string each page passes to completeStep(id)
 // in GuestSessionContext, except 'entry' (the index page has no discrete
 // completion event — it is always treated as satisfied).
-export const TOTAL_VISITS = 8
-export const TOTAL_SESSIONS = 24
+//
+// OFFICIAL 18-STEP / 7-SESSION JOURNEY
+// Sessions 1-7 map to the required SmokeCraft route order.
+// Format, WrapperStrength, SmokeCraftChallenge, SecondHumidorMatch, and
+// MiniTastingRound are preserved as supplemental routes but are NOT required
+// gates in this structure. They remain accessible as stand-alone pages.
+export const TOTAL_VISITS = 7
+export const TOTAL_SESSIONS = 18
 
 export const VISIT_STRUCTURE = [
+  // Session 1: Identity + Golden Box Rules
   {
     visit: 1,
-    title: 'Entry / Profile / Gold Box / Mentor Setup',
+    title: 'Identity & Golden Box Rules',
     sessions: [
-      { session: 1, id: 'entry',           route: '/smokecraft',                  label: 'SmokeCraft Entry' },
-      { session: 2, id: 'enroll',          route: '/smokecraft/enroll',           label: 'User Profile Capture' },
-      { session: 3, id: 'golden-box',      route: '/smokecraft/golden-box',       label: 'Gold Box Rules' },
-      { session: 4, id: 'mentor',          route: '/smokecraft/mentor-selection', label: 'Mentor Selection' },
+      { session: 1,  id: 'entry',      route: '/smokecraft',            label: 'SmokeCraft Entry' },
+      { session: 2,  id: 'golden-box', route: '/smokecraft/golden-box', label: 'Golden Box Rules' },
     ],
-    badges: ['Profile Started Badge', 'Gold Box Entry Badge', 'Mentor Pair Badge'],
+    badges: ['SmokeCraft Entry Badge', 'Golden Box Entry Badge'],
   },
+  // Session 2: Mentor Selection + Seed & Soil
   {
     visit: 2,
-    title: 'Cigar Education',
+    title: 'Mentor Selection & Seed & Soil',
     sessions: [
-      { session: 5, id: 'format',           route: '/smokecraft/format',           label: 'Shape, Size & Burn Time' },
-      { session: 6, id: 'wrapper-strength', route: '/smokecraft/wrapper-strength', label: 'Wrapper / Strength Education' },
+      { session: 3,  id: 'mentor',    route: '/smokecraft/mentor-selection', label: 'Mentor Selection' },
+      { session: 4,  id: 'seed-soil', route: '/smokecraft/seed-soil',        label: 'Seed & Soil Pairing' },
     ],
-    badges: ['Cigar Format Badge', 'Wrapper Knowledge Badge', 'Burn Time Badge'],
+    badges: ['Mentor Pair Badge', 'Seed & Soil Badge'],
   },
+  // Session 3: Pairing Lab + Humidor Match
   {
     visit: 3,
-    title: 'Seed & Soil Pairing',
+    title: 'Pairing Lab & Humidor Match',
     sessions: [
-      { session: 7, id: 'seed-soil',   route: '/smokecraft/seed-soil',   label: 'Seed & Soil Pairing' },
-      { session: 8, id: 'pairing-lab', route: '/smokecraft/pairing-lab', label: 'Pairing Lab' },
+      { session: 5,  id: 'pairing-lab',   route: '/smokecraft/pairing-lab',   label: 'Pairing Lab' },
+      { session: 6,  id: 'humidor-match', route: '/smokecraft/humidor-match', label: 'Humidor Match' },
     ],
-    badges: ['Seed & Soil Badge', 'Pairing Explorer Badge', 'Origin Knowledge Badge'],
+    badges: ['Pairing Explorer Badge', 'Humidor Match Badge'],
   },
+  // Session 4: Request Purchase + Cut, Toast & Light
   {
     visit: 4,
-    title: 'First Official Cigar Match',
+    title: 'First Cigar — Purchase & Light',
     sessions: [
-      { session: 9,  id: 'humidor-match',    route: '/smokecraft/humidor-match',    label: 'Humidor Match' },
-      { session: 10, id: 'request-purchase', route: '/smokecraft/request-purchase', label: 'Request / Purchase' },
-      { session: 11, id: 'cut-toast-light',  route: '/smokecraft/cut-toast-light',  label: 'Cut, Toast & Light' },
-      { session: 12, id: 'first-third',      route: '/smokecraft/first-third',      label: 'First Third Tasting' },
+      { session: 7,  id: 'request-purchase', route: '/smokecraft/request-purchase', label: 'Request / Purchase' },
+      { session: 8,  id: 'cut-toast-light',  route: '/smokecraft/cut-toast-light',  label: 'Cut, Toast & Light' },
     ],
-    badges: ['First Official Smoke Badge', 'Cut & Light Badge', 'First Third Badge'],
+    badges: ['First Official Smoke Badge', 'Cut & Light Badge'],
   },
+  // Session 5: First Third + Second Third + Flavor Memory + Final Third
   {
     visit: 5,
-    title: 'Flavor Transition',
+    title: 'Tasting — All Thirds & Flavor Memory',
     sessions: [
-      { session: 13, id: 'second-third',  route: '/smokecraft/second-third',  label: 'Second Third Tasting' },
-      { session: 14, id: 'flavor-memory', route: '/smokecraft/flavor-memory', label: 'Flavor Memory Session' },
+      { session: 9,  id: 'first-third',    route: '/smokecraft/first-third',    label: 'First Third Tasting' },
+      { session: 10, id: 'second-third',   route: '/smokecraft/second-third',   label: 'Second Third Tasting' },
+      { session: 11, id: 'flavor-memory',  route: '/smokecraft/flavor-memory',  label: 'Flavor Memory Session' },
+      { session: 12, id: 'final-third',    route: '/smokecraft/final-third',    label: 'Final Third Tasting' },
     ],
-    badges: ['Flavor Tracker Badge', 'Second Third Badge', 'Transition Badge'],
+    badges: ['First Third Badge', 'Flavor Tracker Badge', 'Final Third Badge'],
   },
+  // Session 6: Scorecard + Final Review
   {
     visit: 6,
-    title: 'Final Third / Scorecard',
+    title: 'Scorecard & Final Review',
     sessions: [
-      { session: 15, id: 'final-third', route: '/smokecraft/final-third', label: 'Final Third Tasting' },
-      { session: 16, id: 'scorecard',   route: '/smokecraft/scorecard',   label: 'Scorecard / Ranking' },
+      { session: 13, id: 'scorecard',    route: '/smokecraft/scorecard',    label: 'Scorecard / Ranking' },
+      { session: 14, id: 'final-review', route: '/smokecraft/final-review', label: 'SmokeCraft Final Review' },
     ],
-    badges: ['Final Third Badge', 'Completed Cigar Review Badge', 'SmokeCraft Scorecard Badge'],
+    badges: ['SmokeCraft Scorecard Badge', 'Completed Cigar Review Badge'],
   },
+  // Session 7: Passport Stamp + Connections + Management Sync + Session Complete
   {
     visit: 7,
-    title: 'Challenge / Second Cigar',
-    sessions: [
-      { session: 17, id: 'smokecraft-challenge', route: '/smokecraft/smokecraft-challenge', label: 'SmokeCraft Challenge' },
-      { session: 18, id: 'second-humidor-match', route: '/smokecraft/second-humidor-match', label: 'Second Humidor Match' },
-      { session: 19, id: 'mini-tasting',         route: '/smokecraft/mini-tasting',         label: 'Mini Tasting Round' },
-    ],
-    badges: ['Challenge Badge', 'Second Cigar Badge', 'Taste Growth Badge'],
-  },
-  {
-    visit: 8,
     title: 'Passport Completion',
     sessions: [
-      { session: 20, id: 'final-review',     route: '/smokecraft/final-review',     label: 'SmokeCraft Final Review' },
-      { session: 21, id: 'passport-stamp',   route: '/smokecraft/passport-stamp',   label: '360 Passport Stamp' },
-      { session: 22, id: 'connections',      route: '/smokecraft/connections',      label: '360 Passport Connections' },
-      { session: 23, id: 'management-sync',  route: '/smokecraft/management-sync',  label: 'Management Sync' },
-      { session: 24, id: 'session-complete', route: '/smokecraft/session-complete', label: 'Session Complete' },
+      { session: 15, id: 'passport-stamp',   route: '/smokecraft/passport-stamp',   label: '360 Passport Stamp' },
+      { session: 16, id: 'connections',      route: '/smokecraft/connections',      label: '360 Passport Connections' },
+      { session: 17, id: 'management-sync',  route: '/smokecraft/management-sync',  label: 'Management Sync' },
+      { session: 18, id: 'session-complete', route: '/smokecraft/session-complete', label: 'Session Complete' },
     ],
-    badges: ['SmokeCraft Passport Stamp', 'Passport Connections Access', 'VIP Candidate Signal', 'Next SmokeCraft Season'],
+    badges: ['SmokeCraft Passport Stamp', 'Passport Connections Access', 'VIP Candidate Signal', 'SmokeCraft Complete'],
   },
 ]
 
@@ -193,6 +193,7 @@ export function isVisitUnlocked(completedSteps, visitNumber) {
   if (!prevVisit) return true
   return prevVisit.sessions.every(s => isSessionComplete(completedSteps, s.id))
 }
+
 
 /** Returns the current visit/session pointer, derived from completedSteps — no separate counters to keep in sync. */
 export function getVisitProgress(completedSteps) {

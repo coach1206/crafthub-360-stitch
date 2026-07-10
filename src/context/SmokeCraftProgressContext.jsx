@@ -97,6 +97,7 @@ export function SmokeCraftProgressProvider({ children }) {
 
   const value = useMemo(() => ({
     // Current cursor
+    currentAllowed,
     currentVisit:    currentAllowed.visitNumber,
     currentSession:  currentAllowed.session,
     currentLabel:    currentAllowed.label,

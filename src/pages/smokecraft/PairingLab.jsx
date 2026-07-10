@@ -1,29 +1,30 @@
-import { useState } from 'react'
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 
 export default function PairingLab() {
   const navigate = useNavigate()
   const { completeStep, addXP } = useGuestSession()
-  const [done, setDone] = useState(false)
 
-  function handleContinue() {
-    if (done) return
-    setDone(true)
+  const handleContinue = useCallback(() => {
     triggerHaptic('medium')
     completeStep('pairing-lab')
     addXP(75)
-    navigate('/smokecraft/visit-complete')
-  }
+    navigate('/smokecraft/humidor-match')
+  }, [navigate, completeStep, addXP])
+
+  const HOTSPOTS = [
+    { label: 'Continue to Humidor Match', x: 10, y: 75, width: 80, height: 20, onClick: handleContinue },
+  ]
 
   return (
-    <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
-      <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-pairing-lab.png"
-        alt="Pairing Lab"
-      />
-    </div>
+    <SmokeCraftAssetRoute
+      src="/assets/smokecraft-reference/approved/smokecraft-pairing-lab.png"
+      alt="Pairing Lab"
+      hotspots={HOTSPOTS}
+      route="/smokecraft/pairing-lab"
+    />
   )
 }

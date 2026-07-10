@@ -8,10 +8,10 @@
  */
 
 const PATTERNS = {
-  light:   [30],
-  medium:  [60],
-  success: [30, 40, 80],
-  warning: [100, 40, 100],
+  light:   [8],
+  medium:  [15],
+  success: [15, 30, 25],
+  warning: [25, 20, 25],
 }
 
 /**
