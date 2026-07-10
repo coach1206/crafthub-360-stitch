@@ -4,23 +4,34 @@ import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetSc
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 
-/*
- * Mentor Selection — /smokecraft/mentor-selection
- *
- * Three mentor card zones cover the image. Tapping a card visually selects
- * that mentor. A Proceed button at the bottom unlocks once a mentor is chosen.
- * Proceed routes to /smokecraft/seed-soil.
- *
- * Cards are identified by position (left / center / right) since this is an
- * image-overlay implementation. Selection state is tracked locally and saved
- * via completeStep('mentor') on proceed.
- */
-
-const MENTOR_ZONES = [
-  { id: 'left',   label: 'El Maestro',     x: 2,  y: 20, width: 30, height: 48 },
-  { id: 'center', label: 'La Directora',   x: 35, y: 20, width: 30, height: 48 },
-  { id: 'right',  label: 'The Cultivator', x: 68, y: 20, width: 30, height: 48 },
+const MENTORS = [
+  {
+    id: 'left',
+    label: 'El Maestro',
+    country: 'Dominican Republic',
+    bio: 'Legendary torcedor with 40 years of artistry. Specializes in medium-bodied Coronas with cedar and dried-fruit complexity.',
+    style: 'Medium · Cedar · Dried Fruit',
+    x: 2, y: 10, width: 30, height: 58,
+  },
+  {
+    id: 'center',
+    label: 'La Directora',
+    country: 'Nicaragua',
+    bio: 'Master blender renowned for bold, full-bodied selections. Pepper, earth, and dark cocoa define her powerful profile.',
+    style: 'Full · Pepper · Dark Cocoa',
+    x: 35, y: 10, width: 30, height: 58,
+  },
+  {
+    id: 'right',
+    label: 'The Cultivator',
+    country: 'Honduras',
+    bio: 'Farm-to-leaf pioneer. Her cigars express pure terroir — Connecticut shade wrappers with cream, almond, and light spice.',
+    style: 'Light-Med · Cream · Almond',
+    x: 68, y: 10, width: 30, height: 58,
+  },
 ]
+
+const ANIM = `@keyframes sc-mentor-pulse{0%,100%{box-shadow:0 0 0 0 rgba(233,193,118,0)}50%{box-shadow:0 0 0 6px rgba(233,193,118,.22)}}`
 
 export default function Mentor() {
   const navigate = useNavigate()
@@ -28,9 +39,9 @@ export default function Mentor() {
   const [selected, setSelected] = useState(null)
   const [proceeded, setProceeded] = useState(false)
 
-  const handleSelectMentor = useCallback((mentorId) => {
+  const handleSelect = useCallback((id) => {
     triggerHaptic('light')
-    setSelected(mentorId)
+    setSelected(prev => prev === id ? null : id)
   }, [])
 
   const handleProceed = useCallback(() => {
@@ -42,154 +53,96 @@ export default function Mentor() {
     navigate('/smokecraft/seed-soil')
   }, [selected, proceeded, completeStep, addXP, navigate])
 
-  const selectedMentor = MENTOR_ZONES.find(m => m.id === selected)
+  const selectedMentor = MENTORS.find(m => m.id === selected)
 
   return (
     <SmokeCraftAssetScreen
       src="/assets/smokecraft-reference/approved/smokecraft-mentor-selection.png"
       alt="Mentor Selection"
     >
-      {/* Inject global styles once */}
-      <style>{`
-        @keyframes sc-mentor-select-pulse {
-          0%,100% { box-shadow: 0 0 0 0 rgba(233,193,118,0); }
-          50%      { box-shadow: 0 0 0 6px rgba(233,193,118,0.22); }
-        }
-      `}</style>
+      <style>{ANIM}</style>
 
-      {/* Mentor card tap zones */}
-      {MENTOR_ZONES.map((zone) => {
-        const isSelected = selected === zone.id
+      {/* Tap zones over mentor card positions */}
+      {MENTORS.map(m => {
+        const isSel = selected === m.id
         return (
           <button
-            key={zone.id}
-            aria-label={`Select mentor: ${zone.label}`}
-            aria-pressed={isSelected}
-            onClick={() => handleSelectMentor(zone.id)}
+            key={m.id}
+            aria-label={`Select mentor: ${m.label}`}
+            aria-pressed={isSel}
+            onClick={() => handleSelect(m.id)}
             style={{
               position: 'absolute',
-              left:   `${zone.x}%`,
-              top:    `${zone.y}%`,
-              width:  `${zone.width}%`,
-              height: `${zone.height}%`,
-              background: isSelected
-                ? 'rgba(233,193,118,0.15)'
-                : 'rgba(0,0,0,0)',
-              border: isSelected
-                ? '2px solid rgba(233,193,118,0.8)'
-                : '2px solid rgba(233,193,118,0.0)',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              pointerEvents: 'auto',
-              touchAction: 'manipulation',
-              transition: 'background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease',
-              boxShadow: isSelected
-                ? '0 0 0 4px rgba(233,193,118,0.18), inset 0 0 20px rgba(233,193,118,0.06)'
-                : 'none',
-              outline: 'none',
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              paddingBottom: '8px',
-            }}
-            onFocus={e => { e.currentTarget.style.outline = '2px solid rgba(233,193,118,0.5)' }}
-            onBlur={e => { e.currentTarget.style.outline = 'none' }}
-          >
-            {isSelected && (
+              left: `${m.x}%`, top: `${m.y}%`,
+              width: `${m.width}%`, height: `${m.height}%`,
+              background: isSel ? 'rgba(233,193,118,0.14)' : 'transparent',
+              border: isSel ? '2px solid rgba(233,193,118,0.8)' : '2px solid transparent',
+              borderRadius: '12px', cursor: 'pointer', pointerEvents: 'auto',
+              touchAction: 'manipulation', transition: 'all 0.18s ease',
+              boxShadow: isSel ? '0 0 0 3px rgba(233,193,118,0.14), inset 0 0 20px rgba(233,193,118,0.06)' : 'none',
+              outline: 'none', WebkitTapHighlightColor: 'transparent',
+              display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '6px',
+              animation: isSel ? 'sc-mentor-pulse 2.4s ease-in-out infinite' : 'none',
+            }}>
+            {isSel && (
               <span style={{
-                fontFamily: 'Georgia, serif',
-                fontSize: '9px',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'rgba(233,193,118,0.9)',
-                background: 'rgba(0,0,0,0.7)',
-                padding: '3px 10px',
-                borderRadius: '20px',
-                border: '1px solid rgba(233,193,118,0.4)',
-                pointerEvents: 'none',
-                userSelect: 'none',
+                fontFamily: 'Georgia,serif', fontSize: '8px', letterSpacing: '0.18em', textTransform: 'uppercase',
+                color: 'rgba(233,193,118,0.9)', background: 'rgba(0,0,0,0.72)',
+                padding: '3px 10px', borderRadius: '20px', border: '1px solid rgba(233,193,118,0.4)',
+                pointerEvents: 'none', userSelect: 'none',
               }}>
-                Selected
+                ✓ Selected
               </span>
             )}
           </button>
         )
       })}
 
-      {/* Selection name badge — shows above proceed button when selected */}
-      {selectedMentor && (
-        <div style={{
-          position: 'absolute',
-          left: '10%',
-          bottom: '26%',
-          width: '80%',
-          textAlign: 'center',
-          pointerEvents: 'none',
-        }}>
-          <span style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: '10px',
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'rgba(233,193,118,0.85)',
-            background: 'rgba(0,0,0,0.6)',
-            padding: '4px 16px',
-            borderRadius: '20px',
-            border: '1px solid rgba(233,193,118,0.3)',
-          }}>
-            {selectedMentor.label} — Selected
-          </span>
-        </div>
-      )}
+      {/* Bio panel — slides in over lower 40% when mentor is selected */}
+      <div style={{
+        position: 'absolute', left: 0, right: 0, bottom: 0,
+        height: selectedMentor ? '42%' : '22%',
+        background: 'linear-gradient(180deg,rgba(5,3,1,0) 0%,rgba(5,3,1,0.88) 16%,rgba(5,3,1,0.97) 100%)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end',
+        gap: '0.6rem', padding: '0 5% 1.5%',
+        transition: 'height 0.28s ease',
+        pointerEvents: 'none',
+      }}>
+        {selectedMentor && (
+          <>
+            <div style={{ textAlign: 'center', pointerEvents: 'none' }}>
+              <div style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(11px,1.6vw,15px)', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.95)', fontWeight: 700 }}>
+                {selectedMentor.label}
+              </div>
+              <div style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(8px,1vw,10px)', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.5)', marginTop: 2 }}>
+                {selectedMentor.country} · {selectedMentor.style}
+              </div>
+              <div style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.1vw,11px)', color: 'rgba(240,230,204,0.7)', lineHeight: 1.55, marginTop: '0.5rem', maxWidth: '480px', fontStyle: 'italic' }}>
+                {selectedMentor.bio}
+              </div>
+            </div>
+          </>
+        )}
 
-      {/* Proceed button — locked until a mentor is selected */}
-      <button
-        onClick={handleProceed}
-        disabled={!selected || proceeded}
-        aria-label="Proceed to Seed and Soil"
-        style={{
-          position: 'absolute',
-          left: '10%',
-          top: '75%',
-          width: '80%',
-          height: '18%',
-          background: selected
-            ? 'linear-gradient(135deg, rgba(233,193,118,0.28), rgba(201,168,76,0.18))'
-            : 'rgba(0,0,0,0.45)',
-          border: selected
-            ? '1.5px solid rgba(233,193,118,0.75)'
-            : '1.5px solid rgba(233,193,118,0.2)',
-          borderRadius: '14px',
-          cursor: selected ? 'pointer' : 'not-allowed',
-          pointerEvents: 'auto',
-          touchAction: 'manipulation',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '8px',
-          transition: 'all 0.2s ease',
-          backdropFilter: 'blur(6px)',
-          WebkitBackdropFilter: 'blur(6px)',
-          opacity: selected ? 1 : 0.5,
-          outline: 'none',
-          animation: selected ? 'sc-mentor-select-pulse 2.4s ease-in-out infinite' : 'none',
-        }}
-        onFocus={e => { if (selected) e.currentTarget.style.outline = '2px solid rgba(233,193,118,0.5)' }}
-        onBlur={e => { e.currentTarget.style.outline = 'none' }}
-      >
-        <span style={{
-          fontFamily: 'Georgia, serif',
-          fontSize: '11px',
-          letterSpacing: '0.2em',
-          textTransform: 'uppercase',
-          color: selected ? 'rgba(233,193,118,0.95)' : 'rgba(233,193,118,0.4)',
-          fontWeight: 600,
-          pointerEvents: 'none',
-          userSelect: 'none',
-        }}>
-          {proceeded ? 'Continuing...' : selected ? 'Proceed to Seed & Soil' : 'Select a Mentor to Continue'}
-        </span>
-      </button>
+        <button
+          onClick={handleProceed}
+          disabled={!selected || proceeded}
+          aria-label="Proceed to Seed and Soil"
+          style={{
+            width: '80%', padding: '3.5% 0',
+            background: selected ? 'linear-gradient(135deg,rgba(233,193,118,.28),rgba(201,168,76,.18))' : 'rgba(0,0,0,0.45)',
+            border: selected ? '1.5px solid rgba(233,193,118,0.75)' : '1.5px solid rgba(233,193,118,0.2)',
+            borderRadius: '14px', cursor: selected ? 'pointer' : 'not-allowed', pointerEvents: 'auto',
+            touchAction: 'manipulation', opacity: selected ? 1 : 0.5,
+            backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+            transition: 'all 0.2s ease', outline: 'none', WebkitTapHighlightColor: 'transparent',
+            animation: selected ? 'sc-mentor-pulse 2.4s ease-in-out infinite' : 'none',
+          }}>
+          <span style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.3vw,12px)', letterSpacing: '0.2em', textTransform: 'uppercase', color: selected ? 'rgba(233,193,118,0.95)' : 'rgba(233,193,118,0.4)', fontWeight: 600, pointerEvents: 'none' }}>
+            {proceeded ? 'Continuing...' : selected ? `Proceed with ${selectedMentor?.label} →` : 'Select a Mentor to Continue'}
+          </span>
+        </button>
+      </div>
     </SmokeCraftAssetScreen>
   )
 }

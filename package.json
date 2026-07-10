@@ -23,7 +23,8 @@
     "verify:smokecraft-touch-response": "node server/scripts/verifySmokeCraftTouchResponse.js",
     "verify:smokecraft-live-hotspots": "node server/scripts/verifySmokeCraftLiveHotspots.js",
     "verify:smokecraft-landing-interactions": "node server/scripts/verifySmokeCraftLandingInteractions.js",
-    "verify:smokecraft-flow-order": "node server/scripts/verifySmokeCraftFlowOrder.js"
+    "verify:smokecraft-flow-order": "node server/scripts/verifySmokeCraftFlowOrder.js",
+    "verify:smokecraft-live-interactions": "node server/scripts/verifySmokeCraftLiveInteractions.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

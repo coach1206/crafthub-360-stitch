@@ -56,8 +56,8 @@ check('SmokeCraftAssetRoute.jsx exists', assetRoute !== null)
 check('SmokeCraftHotspotLayer.jsx exists', hotspotLayer !== null)
 
 if (assetScreen) {
-  check('AssetScreen wraps image in position:relative container',
-    assetScreen.includes("position: 'relative'"))
+  check('AssetScreen uses full-viewport or position:relative container',
+    assetScreen.includes("position: 'relative'") || assetScreen.includes("position: 'fixed'") || assetScreen.includes('100vw'))
   check('AssetScreen overlay div is position:absolute (not fixed)',
     assetScreen.includes("position: 'absolute'"))
   check('AssetScreen accepts children prop', assetScreen.includes('children'))

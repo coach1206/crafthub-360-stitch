@@ -1,5 +1,18 @@
 import { useState } from 'react'
 
+/**
+ * SmokeCraftAssetScreen
+ *
+ * Full-viewport image layer for SmokeCraft screens.
+ * Image fills the entire viewport via object-fit: cover — no black bars.
+ * Children are rendered in an absolute overlay that covers the full viewport,
+ * so hotspot/overlay percentages are relative to the viewport (0–100%).
+ *
+ * Props:
+ *   src      — image path
+ *   alt      — accessible label
+ *   children — interactive overlays (hotspot layers, UI panels, etc.)
+ */
 export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen', children }) {
   const [failed, setFailed] = useState(false)
 
@@ -9,8 +22,6 @@ export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen', 
         style={{
           position: 'fixed',
           inset: 0,
-          width: '100vw',
-          height: '100vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -45,54 +56,47 @@ export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen', 
         margin: 0,
         padding: 0,
         overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         background: '#050505',
       }}
     >
-      {/*
-        inline-block wrapper sizes itself to the rendered image dimensions.
-        Children rendered inside get percentage coordinates relative to the
-        image, not the full viewport — fixing hotspot drift on non-matching
-        aspect ratios (portrait image on landscape desktop).
-      */}
-      <div style={{ position: 'relative', lineHeight: 0, display: 'inline-block' }}>
-        <img
-          src={src}
-          alt={alt}
-          onError={() => setFailed(true)}
-          draggable={false}
+      {/* Full-viewport cover image — no letter-box bars on any orientation */}
+      <img
+        src={src}
+        alt={alt}
+        onError={() => setFailed(true)}
+        draggable={false}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center center',
+          display: 'block',
+          margin: 0,
+          padding: 0,
+          border: 0,
+          borderRadius: 0,
+          boxShadow: 'none',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          touchAction: 'manipulation',
+        }}
+      />
+      {/* Interactive overlay — full-viewport; children use position:absolute + % coords */}
+      {children && (
+        <div
           style={{
-            display: 'block',
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            width: 'auto',
-            height: 'auto',
-            margin: 0,
-            padding: 0,
-            border: 0,
-            borderRadius: 0,
-            boxShadow: 'none',
-            userSelect: 'none',
-            WebkitUserSelect: 'none',
-            touchAction: 'manipulation',
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
           }}
-        />
-        {children && (
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              pointerEvents: 'none',
-            }}
-          >
-            {children}
-          </div>
-        )}
-      </div>
+        >
+          {children}
+        </div>
+      )}
     </main>
   )
 }

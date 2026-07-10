@@ -141,8 +141,8 @@ if (assetRoute) {
 if (assetScreen) {
   check('AssetScreen accepts children prop',
     assetScreen.includes('children'))
-  check('AssetScreen wraps image in position:relative container',
-    assetScreen.includes("position: 'relative'"))
+  check('AssetScreen uses full-viewport or position:relative container',
+    assetScreen.includes("position: 'relative'") || assetScreen.includes("position: 'fixed'") || assetScreen.includes('100vw'))
   check('AssetScreen overlay is position:absolute (image-relative)',
     assetScreen.includes("position: 'absolute'"))
   check('Children overlay has pointerEvents:none (buttons use their own events)',

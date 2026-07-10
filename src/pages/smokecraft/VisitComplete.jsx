@@ -98,7 +98,7 @@ export default function VisitComplete() {
         }}
       >
         {isJourneyComplete
-          ? 'You have completed all 8 visits of your SmokeCraft journey. Congratulations — your SmokeCraft Passport is ready.'
+          ? `You have completed all ${totalVisits} visits of your SmokeCraft journey. Congratulations — your SmokeCraft Passport is ready.`
           : `Return on your next venue visit to unlock Visit ${nextVisit} of ${totalVisits}.`}
       </p>
 
