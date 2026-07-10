@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen' }) {
+export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen', children }) {
   const [failed, setFailed] = useState(false)
 
   if (failed) {
@@ -51,29 +51,48 @@ export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen' }
         background: '#050505',
       }}
     >
-      <img
-        src={src}
-        alt={alt}
-        onError={() => setFailed(true)}
-        draggable={false}
-        style={{
-          display: 'block',
-          maxWidth: '100vw',
-          maxHeight: '100vh',
-          width: 'auto',
-          height: 'auto',
-          objectFit: 'contain',
-          objectPosition: 'center center',
-          margin: 0,
-          padding: 0,
-          border: 0,
-          borderRadius: 0,
-          boxShadow: 'none',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          touchAction: 'manipulation',
-        }}
-      />
+      {/*
+        inline-block wrapper sizes itself to the rendered image dimensions.
+        Children rendered inside get percentage coordinates relative to the
+        image, not the full viewport — fixing hotspot drift on non-matching
+        aspect ratios (portrait image on landscape desktop).
+      */}
+      <div style={{ position: 'relative', lineHeight: 0, display: 'inline-block' }}>
+        <img
+          src={src}
+          alt={alt}
+          onError={() => setFailed(true)}
+          draggable={false}
+          style={{
+            display: 'block',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            width: 'auto',
+            height: 'auto',
+            margin: 0,
+            padding: 0,
+            border: 0,
+            borderRadius: 0,
+            boxShadow: 'none',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            touchAction: 'manipulation',
+          }}
+        />
+        {children && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              pointerEvents: 'none',
+            }}
+          >
+            {children}
+          </div>
+        )}
+      </div>
     </main>
   )
 }

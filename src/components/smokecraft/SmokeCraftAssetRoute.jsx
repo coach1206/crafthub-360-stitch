@@ -12,9 +12,8 @@ import SmokeCraftHotspotLayer from './SmokeCraftHotspotLayer.jsx'
  */
 export default function SmokeCraftAssetRoute({ src, alt, hotspots = [], route = '' }) {
   return (
-    <>
-      <SmokeCraftAssetScreen src={src} alt={alt} />
+    <SmokeCraftAssetScreen src={src} alt={alt}>
       {hotspots.length > 0 && <SmokeCraftHotspotLayer hotspots={hotspots} route={route} />}
-    </>
+    </SmokeCraftAssetScreen>
   )
 }
