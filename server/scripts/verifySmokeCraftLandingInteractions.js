@@ -166,6 +166,54 @@ if (fsExists(approvedDir)) {
   check('public/assets/smokecraft-reference/approved/ exists', false)
 }
 
+// ── Gate 8: Hotspot pills hidden in production (no visible labels on image) ───
+console.log('\nGate 8 — SmokeCraftHotspotLayer: pills visually hidden in production, debug-only')
+if (hotspotLayer) {
+  // Pill <span> must be wrapped in a debug conditional so it never renders for guests
+  check('sc-cta-pill span is gated on debug (not rendered unconditionally)',
+    !!hotspotLayer.match(/\{debug\s*&&[\s\S]*?sc-cta-pill/) ||
+    !!hotspotLayer.match(/sc-cta-pill[\s\S]{0,200}\{debug\s*&&/))
+  check('Production buttons are transparent (background: transparent when not debug)',
+    hotspotLayer.includes("'transparent'") || hotspotLayer.includes('"transparent"') ||
+    hotspotLayer.match(/background:.*debug.*transparent/s))
+  check('Debug mode controlled by sessionStorage smokecraft_hotspot_debug',
+    hotspotLayer.includes('smokecraft_hotspot_debug'))
+  check('Debug mode flag defaults to off (=== "1" check)',
+    hotspotLayer.includes("=== '1'") || hotspotLayer.includes('=== "1"'))
+  check('Buttons still have aria-label for accessibility',
+    hotspotLayer.includes('aria-label'))
+  check('Buttons still have title attribute for accessibility',
+    hotspotLayer.includes('title={h.label}') || hotspotLayer.includes("title="))
+}
+
+// ── Gate 9: /smokecraft landing has no stale 8/24 progress header ────────────
+console.log('\nGate 9 — /smokecraft landing: progress header suppressed, no stale 8/24 labels')
+const appJsx = read('src/App.jsx')
+check('App.jsx exists', appJsx !== null)
+if (appJsx) {
+  check('/smokecraft index route uses hideHeader to suppress progress overlay',
+    !!appJsx.match(/Route\s+index[^>]*SmokeCraftSessionGuard[^>]*hideHeader/) ||
+    !!appJsx.match(/hideHeader[^>]*SmokeCraft\s*\//))
+  check('TOTAL_VISITS is 7 (not 8)',
+    !!(read('src/constants/session.js') || '').includes('TOTAL_VISITS = 7'))
+  check('TOTAL_SESSIONS is 18 (not 24)',
+    !!(read('src/constants/session.js') || '').includes('TOTAL_SESSIONS = 18'))
+  check('"Challenge / Second Cigar" not in session constants',
+    !(read('src/constants/session.js') || '').includes('Challenge / Second Cigar'))
+}
+
+// ── Gate 10: How It Works does NOT route to /smokecraft/enroll ───────────────
+console.log('\nGate 10 — SmokeCraft.jsx landing: How It Works routes to /smokecraft/how-it-works')
+if (landing) {
+  check('How It Works hotspot routes to /smokecraft/how-it-works',
+    landing.includes('/smokecraft/how-it-works'))
+  check('How It Works does NOT route to /smokecraft/enroll',
+    !landing.match(/How It Works[\s\S]{0,200}\/smokecraft\/enroll/))
+  check('Continue Previous Session uses currentAllowed (not hardcoded enroll)',
+    landing.includes('currentAllowed') &&
+    !landing.match(/Continue Previous Session[\s\S]{0,200}\/smokecraft\/enroll/))
+}
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log(`\n─────────────────────────────────────────────────`)
 console.log(`SmokeCraft Landing Interactions: ${passed + failed} checks, ${passed} passed, ${failed} failed`)

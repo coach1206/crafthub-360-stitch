@@ -270,6 +270,7 @@ function HotspotButton({ h, navigate, debug, interactionDebug }) {
     <button
       className={btnClass}
       aria-label={h.label}
+      title={h.label}
       aria-busy={isNavigating}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
@@ -302,9 +303,12 @@ function HotspotButton({ h, navigate, debug, interactionDebug }) {
         userSelect: 'none',
       }}
     >
-      <span className="sc-cta-pill">
-        {displayLabel}
-      </span>
+      {/* Pills are only visible in debug mode — production buttons are transparent zones */}
+      {debug && (
+        <span className="sc-cta-pill">
+          {displayLabel}
+        </span>
+      )}
       {debug && (
         <span style={{
           position: 'absolute',
