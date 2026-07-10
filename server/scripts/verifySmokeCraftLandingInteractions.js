@@ -151,19 +151,21 @@ if (guard) {
     guard.includes('LockedSmokeCraftScreen'))
 }
 
-// ── Gate 7: SmokeCraft images unmodified ─────────────────────────────────────
-console.log('\nGate 7 — SmokeCraft images: unmodified')
-const approvedDir = resolve(ROOT, 'public/assets/smokecraft-reference/approved')
+// ── Gate 7: Landing image asset exists at the referenced path ────────────────
+console.log('\nGate 7 — Landing image: approved asset exists on disk')
 const { readdirSync, existsSync: fsExists } = await import('fs')
-if (fsExists(approvedDir)) {
-  const files = readdirSync(approvedDir)
-  const images = files.filter(f => /\.(png|jpg|jpeg|webp|avif|svg)$/i.test(f))
-  const nonImages = files.filter(f => !/\.(png|jpg|jpeg|webp|avif|svg|gif)$/i.test(f) && !f.startsWith('.'))
-  check(`Approved images present (found ${images.length})`, images.length > 0)
-  check('No non-image files in approved/ directory', nonImages.length === 0,
-    nonImages.length ? `found: ${nonImages.join(', ')}` : '')
-} else {
-  check('public/assets/smokecraft-reference/approved/ exists', false)
+// Extract src path from SmokeCraft.jsx
+const srcMatch = landing && landing.match(/src=["']([^"']+)["']/)
+const referencedSrc = srcMatch ? srcMatch[1] : null
+check('SmokeCraft.jsx references a src path', !!referencedSrc, referencedSrc || 'no src found')
+if (referencedSrc) {
+  // Resolve the public-relative URL to the actual file (strip leading /)
+  const assetPath = resolve(ROOT, 'public', referencedSrc.replace(/^\//, ''))
+  check(`Asset exists at public${referencedSrc}`, fsExists(assetPath), assetPath)
+  check('No longer references old smokecraft-landing.png',
+    !landing.includes('smokecraft-landing.png'))
+  check('No longer references DISOVER (misspelled) asset',
+    !landing.includes('DISOVER YOUR CIGAR PROFILE'))
 }
 
 // ── Gate 8: Hotspot pills hidden in production — no browser tooltips ─────────

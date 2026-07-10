@@ -26,67 +26,89 @@ export default function SmokeCraft() {
   // container bottom, so the lower portion of the image (where CTAs live)
   // is always fully visible. Enable debug mode to verify alignment:
   //   sessionStorage.setItem('smokecraft_hotspot_debug', '1')
-  // Hotspot positions calibrated to discover-your-profile-111 (1456×816 landscape).
-  // Left column: primary CTAs stacked vertically (y 46–78%).
-  // Right column: passport card VIEW PASSPORT link + pairing card VIEW PAIRING link.
-  // Image bottom nav bar (y 88–100%) is intentionally unmapped — app nav covers it.
+  // Hotspot positions calibrated to PROFILE DISCOVER 11.png (1456×816 landscape).
+  // Enable debug to verify zones: sessionStorage.setItem('smokecraft_hotspot_debug','1')
   const HOTSPOTS = [
-    // Primary gold CTA — "START NEW SMOKECRAFT SESSION >"
+    // ── Left column — primary CTAs ──────────────────────────────────────────────
+    // Gold CTA: "START YOUR SMOKECRAFT SESSION >"
     {
       label: 'Start New SmokeCraft Session',
-      x: 4, y: 46, width: 24, height: 8,
+      x: 4, y: 56, width: 32, height: 8,
       to: '/smokecraft/identity',
     },
-    // Secondary dark CTA — "CONTINUE PREVIOUS SESSION"
-    {
-      label: 'Continue Previous Session',
-      x: 4, y: 55, width: 22, height: 8,
-      onClick: continueSession,
-    },
-    // Icon button row 1: Enter Event Challenge | View My Passport
-    {
-      label: 'Enter Event Challenge',
-      x: 4, y: 64, width: 14, height: 7,
-      to: '/smokecraft/identity',
-    },
-    {
-      label: 'View My Passport',
-      x: 19, y: 64, width: 13, height: 7,
-      to: '/smokecraft/passport-stamp',
-    },
-    // Icon button row 2: Browse Humidor | Demo Experience | How It Works
-    {
-      label: 'Browse Humidor',
-      x: 4, y: 72, width: 11, height: 7,
-      to: '/smokecraft/humidor-match',
-    },
-    {
-      label: 'Demo Experience',
-      x: 16, y: 72, width: 13, height: 7,
-      to: '/smokecraft/golden-box',
-    },
+    // Icon row: "HOW IT WORKS"
     {
       label: 'How It Works',
-      x: 30, y: 72, width: 11, height: 7,
+      x: 4, y: 66, width: 14, height: 7,
       to: '/smokecraft/how-it-works',
     },
-    // Right panel — 360 Passport card: VIEW PASSPORT >
+    // Icon row: "ENTER CHALLENGE"
+    {
+      label: 'Enter Event Challenge',
+      x: 19, y: 66, width: 14, height: 7,
+      to: '/smokecraft/identity',
+    },
+    // Dark CTA: "CONTINUE PREVIOUS SESSION"
+    {
+      label: 'Continue Previous Session',
+      x: 4, y: 74, width: 27, height: 7,
+      onClick: continueSession,
+    },
+
+    // ── Right column — 360 Passport card ────────────────────────────────────────
+    // Passport card body (tap anywhere on card)
     {
       label: 'View My Passport',
-      x: 69, y: 28, width: 14, height: 6,
+      x: 49, y: 7, width: 50, height: 43,
       to: '/smokecraft/passport-stamp',
     },
-    // Right panel — Recommended Pairing card: VIEW PAIRING >
+    // "VIEW PASSPORT >" link
     {
-      label: 'View Pairing',
-      x: 69, y: 74, width: 13, height: 6,
+      label: 'View Passport',
+      x: 56, y: 34, width: 14, height: 6,
+      to: '/smokecraft/passport-stamp',
+    },
+
+    // ── Right column — Tonight's Featured Pairing card ──────────────────────────
+    // Pairing card body
+    {
+      label: 'Explore Pairing',
+      x: 49, y: 52, width: 50, height: 35,
       to: '/smokecraft/humidor-match',
+    },
+    // "EXPLORE PAIRING >" link
+    {
+      label: 'Explore Pairing',
+      x: 56, y: 75, width: 14, height: 6,
+      to: '/smokecraft/humidor-match',
+    },
+
+    // ── Image bottom nav bar (y 88–100%) — mirrors app SmokeCraftBottomNav ──────
+    {
+      label: 'SmokeCraft — Current Journey',
+      x: 0, y: 88, width: 26, height: 12,
+      to: '/smokecraft',
+    },
+    {
+      label: 'Rewards — Earn. Unlock. Enjoy.',
+      x: 26, y: 88, width: 24, height: 12,
+      to: '/smokecraft/leaderboard',
+    },
+    {
+      label: 'Passport — Track Your Journey',
+      x: 50, y: 88, width: 25, height: 12,
+      to: '/passport-connection',
+    },
+    {
+      label: 'CraftHub — Explore. Learn. Connect.',
+      x: 75, y: 88, width: 25, height: 12,
+      to: '/crafthub',
     },
   ]
 
   return (
     <SmokeCraftAssetRoute
-      src="/assets/smokecraft/DISOVER YOUR CIGAR PROFILE.png"
+      src="/PROFILE DISCOVER 11.png"
       alt="SmokeCraft — Discover Your Cigar Profile"
       hotspots={HOTSPOTS}
       route="/smokecraft"
