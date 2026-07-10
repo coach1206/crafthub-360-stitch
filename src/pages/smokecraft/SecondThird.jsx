@@ -43,6 +43,12 @@ export default function SecondThird() {
       src="/assets/smokecraft-reference/approved/smokecraft-second-third.png"
       alt="Second Third Tasting"
     >
+      {/* Cover strip — hides stale "ROUND 3 OF 3 · VISIT 7 OF 8 · SESSION 17 OF 24"
+          baked into the top ~44px of the approved image. */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: 44,
+        background: 'rgba(5,3,1,0.97)', zIndex: 10, pointerEvents: 'none',
+      }} />
       <ScTastingPanel
         title="Second Third — Flavor Evolution"
         flavorNotes={FLAVOR_NOTES}
