@@ -1,4 +1,6 @@
+import { useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { hapticTap, playClickSound } from '../../utils/scTouch.js'
 
 const NAV_ITEMS = [
   { label: 'SmokeCraft', icon: 'local_fire_department', path: '/smokecraft' },
@@ -11,13 +13,33 @@ export default function SmokeCraftBottomNav() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
+  const handlePress = useCallback((e, path) => {
+    const btn = e.currentTarget
+    hapticTap('light')
+    playClickSound(660, 0.05, 0.05)
+    btn.style.transform = 'scale(0.88)'
+    btn.style.transition = 'transform 0.08s ease'
+    setTimeout(() => {
+      btn.style.transform = 'scale(1.04)'
+      btn.style.transition = 'transform 0.12s cubic-bezier(0.34,1.56,0.64,1)'
+      setTimeout(() => {
+        btn.style.transform = 'scale(1)'
+        btn.style.transition = 'transform 0.1s ease'
+      }, 120)
+    }, 80)
+    navigate(path)
+  }, [navigate])
+
   return (
     <>
       <style>{`
-        @keyframes sc-nav-tap { 0%{transform:scale(1)} 40%{transform:scale(0.88)} 100%{transform:scale(1)} }
-        .sc-nav-btn:active { animation: sc-nav-tap 0.18s ease-out both; }
+        .sc-nav-btn:focus-visible {
+          outline: 2px solid rgba(233,193,118,0.6);
+          outline-offset: -2px;
+          border-radius: 8px;
+        }
         @media (prefers-reduced-motion: reduce) {
-          .sc-nav-btn:active { animation: none; }
+          .sc-nav-btn { transition: none !important; }
         }
       `}</style>
       <nav
@@ -31,10 +53,10 @@ export default function SmokeCraftBottomNav() {
           display: 'flex',
           alignItems: 'stretch',
           height: 64,
-          background: 'linear-gradient(180deg, rgba(5,3,1,0.82) 0%, rgba(5,3,1,0.97) 100%)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderTop: '1px solid rgba(201,168,76,0.18)',
+          background: 'linear-gradient(180deg, rgba(5,3,1,0.88) 0%, rgba(5,3,1,0.98) 100%)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          borderTop: '1px solid rgba(201,168,76,0.2)',
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         }}
       >
@@ -47,7 +69,7 @@ export default function SmokeCraftBottomNav() {
               className="sc-nav-btn"
               aria-label={item.label}
               aria-current={isActive ? 'page' : undefined}
-              onClick={() => navigate(item.path)}
+              onPointerDown={e => handlePress(e, item.path)}
               style={{
                 flex: 1,
                 display: 'flex',
@@ -55,18 +77,20 @@ export default function SmokeCraftBottomNav() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 3,
-                background: 'transparent',
-                border: 'none',
+                background: isActive ? 'rgba(233,193,118,0.06)' : 'transparent',
+                borderTop: isActive ? '2px solid rgba(233,193,118,0.6)' : '2px solid transparent',
+                borderLeft: 'none',
+                borderRight: 'none',
+                borderBottom: 'none',
                 cursor: 'pointer',
                 padding: '6px 0 4px',
                 touchAction: 'manipulation',
                 WebkitTapHighlightColor: 'transparent',
                 outline: 'none',
                 color: isActive ? 'rgba(233,193,118,1)' : 'rgba(240,230,204,0.38)',
-                transition: 'color 0.15s',
+                transition: 'color 0.15s, background 0.15s',
+                willChange: 'transform',
               }}
-              onFocus={e => { e.currentTarget.style.outline = '2px solid rgba(233,193,118,0.6)'; e.currentTarget.style.outlineOffset = '-2px' }}
-              onBlur={e => { e.currentTarget.style.outline = 'none' }}
             >
               <span
                 className="material-symbols-outlined"
@@ -75,6 +99,7 @@ export default function SmokeCraftBottomNav() {
                   fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
                   transition: 'font-variation-settings 0.15s',
                   lineHeight: 1,
+                  filter: isActive ? 'drop-shadow(0 0 4px rgba(233,193,118,0.5))' : 'none',
                 }}
               >
                 {item.icon}

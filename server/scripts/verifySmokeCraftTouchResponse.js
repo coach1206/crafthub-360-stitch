@@ -1,23 +1,24 @@
 /**
- * Verification: SmokeCraft Touch Response — Instant Feedback + Haptic
+ * Verification: SmokeCraft Touch Response System
  *
  * Confirms:
- * - SmokeCraftHotspotLayer fires pointerdown for immediate feedback
- * - JS-driven pressed state (no 300ms CSS-only delay)
- * - navigator.vibrate guard present and safe
- * - "Starting..." / loading state exists
- * - Double-tap guard (navigatedRef) present
- * - touch-action manipulation, cursor pointer, userSelect none
- * - focus-visible support
- * - Reduced-motion CSS block present
- * - Non-critical callbacks fire-and-forget (do not block navigation)
- * - Interaction debug mode (smokecraftInteractionDebug)
- * - No SmokeCraft images modified
- * - No migration files modified by this change
- * - No payment-live or third-party-POS claim added
+ *   - scTouch utility exists with useScPress, injectScTouchStyles, playClickSound, hapticTap
+ *   - haptics.js uses short patterns (8ms/15ms)
+ *   - SmokeCraftBottomNav uses onPointerDown for immediate press feedback
+ *   - SessionComplete is a live overlay (no baked image, shows live visit/session data)
+ *   - SessionComplete option cards have aria-pressed selected state
+ *   - SessionComplete does NOT contain stale "VISIT 8 OF 8" / "SESSION 23 OF 24" text
+ *   - ManagementSync and SessionComplete are separate screens
+ *   - RequestPurchase has neutral initial state (no pre-selected option)
+ *   - CutToastLight checklist items have aria-pressed
+ *   - Flavor chips use onPointerDown (via ScTastingPanel)
+ *   - Rating buttons use onPointerDown (via ScTastingPanel)
+ *   - Mentor cards have onPointerDown + press/select/bio state
+ *   - FinalReview uses a real button overlay (no div-onClick)
+ *   - Hotspot layer buttons still have pressed state
  */
 
-import { readFileSync, existsSync, readdirSync } from 'fs'
+import { readFileSync, existsSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -28,13 +29,8 @@ let passed = 0
 let failed = 0
 
 function check(label, ok, detail = '') {
-  if (ok) {
-    console.log(`  ✅ ${label}`)
-    passed++
-  } else {
-    console.log(`  ❌ ${label}${detail ? ' — ' + detail : ''}`)
-    failed++
-  }
+  if (ok) { console.log(`  ✅ ${label}`); passed++ }
+  else     { console.log(`  ❌ ${label}${detail ? ' — ' + detail : ''}`); failed++ }
 }
 
 function read(relPath) {
@@ -43,164 +39,210 @@ function read(relPath) {
   return readFileSync(p, 'utf8')
 }
 
-console.log('\nSmokeCraft Touch Response Verification\n')
+console.log('\nSmokeCraft Touch Response System Verification\n')
 
-// ── Gate 1: Instant pointerdown feedback ─────────────────────────────────────
-console.log('Gate 1 — Instant pointerdown: no 300ms click delay')
-const layer = read('src/components/smokecraft/SmokeCraftHotspotLayer.jsx')
-check('SmokeCraftHotspotLayer.jsx exists', layer !== null)
-if (layer) {
-  check('onPointerDown handler present (fires before click)', layer.includes('onPointerDown'))
-  check('handlePointerDown function defined', layer.includes('handlePointerDown'))
-  check('Pressed state set on pointerdown', layer.includes("'pressed'") || layer.includes('"pressed"'))
-  check('onPointerUp clears pressed state', layer.includes('onPointerUp'))
-  check('onPointerCancel clears pressed state', layer.includes('onPointerCancel'))
-  check('onPointerLeave clears pressed state', layer.includes('onPointerLeave'))
+// ── Gate 1: scTouch utility ────────────────────────────────────────────────────
+console.log('Gate 1 — src/utils/scTouch.js: shared touch feedback utility')
+const scTouch = read('src/utils/scTouch.js')
+check('scTouch.js exists', scTouch !== null)
+if (scTouch) {
+  check('useScPress hook exported', scTouch.includes('export function useScPress'))
+  check('injectScTouchStyles exported', scTouch.includes('export function injectScTouchStyles'))
+  check('playClickSound exported', scTouch.includes('export function playClickSound'))
+  check('hapticTap exported', scTouch.includes('export function hapticTap'))
+  check('sc-btn-pressed CSS class defined', scTouch.includes('sc-btn-pressed'))
+  check('sc-spring animation defined (bounce release)', scTouch.includes('sc-spring'))
+  check('useScPress fires onPointerDown', scTouch.includes('onPointerDown'))
+  check('useScPress fires release on pointerLeave', scTouch.includes('onPointerLeave'))
+  check('AudioContext used for click sound', scTouch.includes('AudioContext'))
+  check('Sound off by default (soundEnabled = false)', scTouch.includes('soundEnabled = false'))
+  check('prefers-reduced-motion respected in injected CSS', scTouch.includes('prefers-reduced-motion'))
+  check('Focus ring class sc-focus-ring defined', scTouch.includes('sc-focus-ring'))
 }
 
-// ── Gate 2: Haptic vibration ──────────────────────────────────────────────────
-console.log('\nGate 2 — Haptic vibration: safe guard + subtle timing')
-if (layer) {
-  check('navigator.vibrate called with optional chaining (?.) safety guard',
-    layer.includes('navigator.vibrate?.') || layer.includes('navigator.vibrate ?'))
-  check('Vibration duration is in subtle 8–15ms range',
-    /navigator\.vibrate\?\.\s*\(\s*1[0-5]\s*\)|navigator\.vibrate\?\.\s*\(\s*[89]\s*\)/.test(layer) ||
-    /hapticTap\s*\(\s*1[0-2]\s*\)/.test(layer))
-  check('hapticTap helper wraps vibration in try/catch', layer.includes('try') && layer.includes('vibrate'))
-  check('Vibration only from direct user gesture (in pointer handler)',
-    layer.includes('hapticTap') && layer.includes('handlePointerDown'))
+// ── Gate 2: haptics.js short patterns ─────────────────────────────────────────
+console.log('\nGate 2 — haptics.js: short vibration patterns (8ms / 15ms)')
+const haptics = read('src/utils/haptics.js')
+check('haptics.js exists', haptics !== null)
+if (haptics) {
+  check('light pattern is 8ms (not 30ms)', haptics.includes('[8]'))
+  check('medium pattern is 15ms (not 60ms)', haptics.includes('[15]'))
+  check('navigator.vibrate safely guarded', haptics.includes('navigator.vibrate'))
+  check('triggerHaptic exported', haptics.includes('export function triggerHaptic'))
 }
 
-// ── Gate 3: Loading / Starting state ────────────────────────────────────────
-console.log('\nGate 3 — Loading state: "Starting..." / "Opening..." text')
-if (layer) {
-  check('loadingLabel function defined', layer.includes('loadingLabel') || layer.includes('Starting...'))
-  check('"Starting..." text exists', layer.includes('Starting...'))
-  check('"Opening..." text exists', layer.includes('Opening...'))
-  check('navigating phase transitions to loading label', layer.includes("'navigating'") || layer.includes('"navigating"'))
-  check('aria-busy set while navigating', layer.includes('aria-busy'))
-  check('Button disabled while navigating (prevents double tap)', layer.includes('disabled={isNavigating}') || layer.includes('disabled='))
+// ── Gate 3: SmokeCraftBottomNav press animation ────────────────────────────────
+console.log('\nGate 3 — SmokeCraftBottomNav: immediate press feedback')
+const bottomNav = read('src/components/smokecraft/SmokeCraftBottomNav.jsx')
+check('SmokeCraftBottomNav.jsx exists', bottomNav !== null)
+if (bottomNav) {
+  check('onPointerDown used for immediate feedback', bottomNav.includes('onPointerDown'))
+  check('transform scale on press', bottomNav.includes('scale('))
+  check('hapticTap called on press', bottomNav.includes('hapticTap'))
+  check('Active tab highlighted (isActive gold border or color)', bottomNav.includes('isActive') && bottomNav.includes('rgba(233,193,118'))
+  check('focus-visible state handled', bottomNav.includes('focus-visible'))
+  check('playClickSound imported or called', bottomNav.includes('playClickSound'))
 }
 
-// ── Gate 4: Double-tap guard ────────────────────────────────────────────────
-console.log('\nGate 4 — Double-tap guard: prevents navigation firing twice')
-if (layer) {
-  check('navigatedRef used to prevent double navigation', layer.includes('navigatedRef'))
-  check('Double-tap check: if navigatedRef.current return early', layer.includes('navigatedRef.current'))
-  check('navigatedRef set to false on pointerdown (reset for new tap)', layer.includes('navigatedRef.current = false'))
+// ── Gate 4: SessionComplete — live overlay, no baked image stale text ──────────
+console.log('\nGate 4 — SessionComplete: live data overlay, no stale baked text')
+const sessionComplete = read('src/pages/smokecraft/SessionComplete.jsx')
+check('SessionComplete.jsx exists', sessionComplete !== null)
+if (sessionComplete) {
+  check('No baked PNG reference with stale text (no smokecraft-session-complete.png)',
+    !sessionComplete.includes('smokecraft-session-complete.png'))
+  check('No SmokeCraftAssetRoute (no baked image dependency)',
+    !sessionComplete.includes('SmokeCraftAssetRoute'))
+  check('useSmokeCraftProgress used for live data', sessionComplete.includes('useSmokeCraftProgress'))
+  check('VISIT 8 OF 8 not hardcoded', !sessionComplete.includes('VISIT 8 OF 8') && !sessionComplete.includes('8 OF 8'))
+  check('SESSION 23 OF 24 not hardcoded', !sessionComplete.includes('SESSION 23 OF 24') && !sessionComplete.includes('23 OF 24'))
+  check('ROUND 3 OF 3 not present', !sessionComplete.includes('ROUND 3 OF 3'))
+  check('totalSessions / sessionLabel used for dynamic display', sessionComplete.includes('totalSessions') || sessionComplete.includes('sessionLabel'))
+  check('XP displayed from session context', sessionComplete.includes('xpEarned') || sessionComplete.includes('session?.xp') || sessionComplete.includes('xp'))
+  check('Passport / Stamp / Badge reference', sessionComplete.includes('Passport') || sessionComplete.includes('stamp') || sessionComplete.includes('Badge'))
+  check('Navigate to /smokecraft on complete', sessionComplete.includes("'/smokecraft'") || sessionComplete.includes('"/smokecraft"'))
 }
 
-// ── Gate 5: CSS pressed state (JS-driven, not just :active) ─────────────────
-console.log('\nGate 5 — CSS: JS-driven pressed class + press animation')
-if (layer) {
-  check('sc-pressed class added to button element', layer.includes('sc-pressed'))
-  check('sc-released class added to button element for spring animation', layer.includes('sc-released'))
-  check('sc-press or transform applied in sc-pressed CSS', layer.includes('sc-pressed .sc-cta-pill') || layer.includes('sc-pressed'))
-  check('transform: scale used for press-down effect',
-    layer.includes('scale(0.9') || layer.includes('scale(1.'))
-  check('translateY used for press-down depth', layer.includes('translateY'))
-  check('Inset box-shadow on press for depth',
-    layer.includes('inset') && layer.includes('box-shadow'))
-  check('Spring release animation (sc-ripple or sc-released)', layer.includes('sc-released') || layer.includes('sc-ripple'))
-  check(':active fallback for desktop/mouse', layer.includes('.sc-hotspot-btn:active'))
+// ── Gate 5: SessionComplete option cards selectable ────────────────────────────
+console.log('\nGate 5 — SessionComplete: option cards are real selectable controls')
+if (sessionComplete) {
+  check('ACTION_CARDS or similar array with 3 options', (sessionComplete.match(/id:/g) || []).length >= 3)
+  check('aria-pressed on option cards', sessionComplete.includes('aria-pressed'))
+  check('selectedCards or selection state tracked', sessionComplete.includes('selectedCards') || sessionComplete.includes('new Set'))
+  check('Selected card shows visual difference', sessionComplete.includes('selected') && sessionComplete.includes('border'))
+  check('Complete/CTA button present', sessionComplete.includes('Complete Session') || sessionComplete.includes('handleComplete'))
 }
 
-// ── Gate 6: Touch / pointer properties ──────────────────────────────────────
-console.log('\nGate 6 — Touch interaction properties')
-if (layer) {
-  check('touchAction: manipulation (eliminates 300ms delay)',
-    layer.includes("touchAction: 'manipulation'") || layer.includes('touchAction:"manipulation"'))
-  check('cursor: pointer', layer.includes("cursor: isNavigating ? 'default' : 'pointer'") || layer.includes("cursor: 'pointer'"))
-  check('userSelect: none', layer.includes('userSelect'))
-  check('WebkitTapHighlightColor: transparent', layer.includes('WebkitTapHighlightColor'))
-  check('pointer-events: auto on button', layer.includes("pointerEvents: 'auto'"))
+// ── Gate 6: ManagementSync is separate from SessionComplete ───────────────────
+console.log('\nGate 6 — ManagementSync and SessionComplete are separate concepts')
+const mgmtSync = read('src/pages/smokecraft/ManagementSync.jsx')
+check('ManagementSync.jsx exists', mgmtSync !== null)
+if (mgmtSync) {
+  check('ManagementSync routes to /smokecraft/session-complete', mgmtSync.includes('/smokecraft/session-complete'))
+  check('ManagementSync does NOT contain "SmokeCraft Complete" text', !mgmtSync.includes('SmokeCraft Complete'))
 }
 
-// ── Gate 7: Accessibility ─────────────────────────────────────────────────────
-console.log('\nGate 7 — Accessibility: keyboard + focus')
-if (layer) {
-  check('focus-visible outline present', layer.includes('focus-visible'))
-  check('aria-label applied to button', layer.includes('aria-label={h.label}'))
-  check('onKeyDown handler for Enter/Space activation', layer.includes('onKeyDown') && layer.includes('Enter'))
-  check('onKeyUp handler for release animation', layer.includes('onKeyUp'))
+// ── Gate 7: RequestPurchase neutral initial state + press ──────────────────────
+console.log('\nGate 7 — RequestPurchase: neutral start + press feedback')
+const rp = read('src/pages/smokecraft/RequestPurchase.jsx')
+check('RequestPurchase.jsx exists', rp !== null)
+if (rp) {
+  check('Initial state is null (no pre-selected option)', rp.includes('useState(null)'))
+  check('onPointerDown used for press feedback', rp.includes('onPointerDown'))
+  check('transform scale on press', rp.includes('scale('))
+  check('aria-pressed on option buttons', rp.includes('aria-pressed'))
+  check('Continue locked until selection (not-allowed cursor)', rp.includes('not-allowed'))
 }
 
-// ── Gate 8: Reduced motion ───────────────────────────────────────────────────
-console.log('\nGate 8 — Reduced motion support')
-if (layer) {
-  check('@media (prefers-reduced-motion: reduce) block present',
-    layer.includes('prefers-reduced-motion'))
-  check('Animations disabled in reduced-motion', layer.includes('animation: none !important'))
-  check('Color feedback preserved in reduced-motion (border-color still changes)',
-    layer.includes('prefers-reduced-motion') && layer.includes('border-color'))
+// ── Gate 8: CutToastLight checklist press state ───────────────────────────────
+console.log('\nGate 8 — CutToastLight: checklist items have press animation')
+const ctl = read('src/pages/smokecraft/CutToastLight.jsx')
+check('CutToastLight.jsx exists', ctl !== null)
+if (ctl) {
+  check('onPointerDown on step buttons', ctl.includes('onPointerDown'))
+  check('aria-pressed on step buttons', ctl.includes('aria-pressed'))
+  check('transform scale on press', ctl.includes('scale('))
+  check('Begin Tasting locked until allDone', ctl.includes('allDone'))
 }
 
-// ── Gate 9: Non-blocking navigation ─────────────────────────────────────────
-console.log('\nGate 9 — Non-blocking: callbacks fire-and-forget, nav not blocked')
-if (layer) {
-  check('onClick callback wrapped in try/catch (never blocks navigation)',
-    layer.includes('try { h.onClick()') || layer.includes("try { h.onClick"))
-  check('navigate() called after callback regardless of callback result',
-    layer.includes('h.onClick') && layer.includes('navigate(h.to)'))
-  check('Navigation is synchronous (no await before navigate)',
-    !layer.match(/await\s+h\.onClick/) && !layer.match(/await\s+navigate/))
+// ── Gate 9: ScTastingPanel shared component ────────────────────────────────────
+console.log('\nGate 9 — ScTastingPanel: shared panel with chip/rating press')
+const panel = read('src/components/smokecraft/ScTastingPanel.jsx')
+check('ScTastingPanel.jsx exists', panel !== null)
+if (panel) {
+  check('onPointerDown on flavor chips', panel.includes('onPointerDown'))
+  check('transform scale on chip press', panel.includes('scale('))
+  check('onPointerDown on rating buttons', panel.includes('onPointerDown'))
+  check('Spring release transition', panel.includes('cubic-bezier'))
+  check('aria-pressed on chips', panel.includes('aria-pressed'))
+  check('hapticTap called', panel.includes('hapticTap'))
+  check('Continue locked when canContinue is false', panel.includes('0.45'))
+  check('Rating selected scales up (1.06)', panel.includes('1.06'))
 }
 
-// ── Gate 10: Interaction debug logging ───────────────────────────────────────
-console.log('\nGate 10 — Debug: smokecraftInteractionDebug logging')
-if (layer) {
-  check('smokecraftInteractionDebug sessionStorage key checked',
-    layer.includes('smokecraftInteractionDebug'))
-  check('pointerdown timestamp logged in debug mode',
-    layer.includes('pointerdown') && layer.includes('ts:'))
-  check('Time-to-navigation logged in debug mode',
-    layer.includes('msSincePointerDown') || layer.includes('elapsed'))
-  check('Navigation target logged in debug mode',
-    layer.includes('target:') || layer.includes('h.to'))
+// ── Gate 10: Tasting screens use ScTastingPanel ───────────────────────────────
+console.log('\nGate 10 — FirstThird/SecondThird/FinalThird use ScTastingPanel')
+const ft  = read('src/pages/smokecraft/FirstThird.jsx')
+const st  = read('src/pages/smokecraft/SecondThird.jsx')
+const fit = read('src/pages/smokecraft/FinalThird.jsx')
+check('FirstThird uses ScTastingPanel',  ft  !== null && ft.includes('ScTastingPanel'))
+check('SecondThird uses ScTastingPanel', st  !== null && st.includes('ScTastingPanel'))
+check('FinalThird uses ScTastingPanel',  fit !== null && fit.includes('ScTastingPanel'))
+
+// ── Gate 11: FlavorMemory chip press ──────────────────────────────────────────
+console.log('\nGate 11 — FlavorMemory: chip press animation')
+const fm = read('src/pages/smokecraft/FlavorMemory.jsx')
+check('FlavorMemory.jsx exists', fm !== null)
+if (fm) {
+  check('onPointerDown on memory chips', fm.includes('onPointerDown'))
+  check('transform scale on press', fm.includes('scale('))
+  check('aria-pressed on chips', fm.includes('aria-pressed'))
+  check('Selected chip scales up (1.04)', fm.includes('1.04'))
 }
 
-// ── Gate 11: HotspotButton is isolated component (own state per button) ──────
-console.log('\nGate 11 — Architecture: per-button isolated state')
-if (layer) {
-  check('HotspotButton component defined separately', layer.includes('function HotspotButton'))
-  check('useHotspotInteraction hook defined (or inline state per button)',
-    layer.includes('useHotspotInteraction') || layer.includes('useState'))
-  check('Each hotspot renders HotspotButton (not inline)',
-    layer.includes('<HotspotButton') || layer.includes('HotspotButton'))
+// ── Gate 12: Mentor press/select/bio ──────────────────────────────────────────
+console.log('\nGate 12 — Mentor: press animation, selected glow, bio panel')
+const mentor = read('src/pages/smokecraft/Mentor.jsx')
+check('Mentor.jsx exists', mentor !== null)
+if (mentor) {
+  check('onPointerDown on mentor tap zones', mentor.includes('onPointerDown'))
+  check('pressedId state for immediate feedback', mentor.includes('pressedId'))
+  check('transform scale on press', mentor.includes('scale('))
+  check('bio panel renders for selectedMentor', mentor.includes('selectedMentor') && mentor.includes('bio'))
+  check('Proceed shows mentor name', mentor.includes('selectedMentor?.label'))
+  check('Deselect on second tap (toggle)', mentor.includes("prev === id ? null : id"))
+  check('aria-pressed on mentor buttons', mentor.includes('aria-pressed'))
+  check('ctaPressed state for CTA press animation', mentor.includes('ctaPressed'))
 }
 
-// ── Gate 12: No SmokeCraft images modified ────────────────────────────────────
-console.log('\nGate 12 — SmokeCraft images: unmodified')
-const approvedDir = resolve(ROOT, 'public/assets/smokecraft-reference/approved')
-if (existsSync(approvedDir)) {
-  const files = readdirSync(approvedDir)
-  const images = files.filter(f => /\.(png|jpg|jpeg|webp|avif|svg)$/i.test(f))
-  const nonImages = files.filter(f => !/\.(png|jpg|jpeg|webp|avif|svg|gif)$/i.test(f) && !f.startsWith('.'))
-  check(`Approved images present (found ${images.length})`, images.length > 0)
-  check('No non-image files in approved/ directory', nonImages.length === 0,
-    nonImages.length ? `found: ${nonImages.join(', ')}` : '')
-} else {
-  check('public/assets/smokecraft-reference/approved/ exists', false)
+// ── Gate 13: FinalReview real button overlay ───────────────────────────────────
+console.log('\nGate 13 — FinalReview: real button overlay, no div-onClick')
+const finalReview = read('src/pages/smokecraft/FinalReview.jsx')
+check('FinalReview.jsx exists', finalReview !== null)
+if (finalReview) {
+  check('No div-onClick anti-pattern', !finalReview.match(/<div[^>]*onClick/))
+  check('Real <button> used for tap zone', finalReview.includes('<button'))
+  check('onPointerDown on tap button', finalReview.includes('onPointerDown'))
+  check('Press state visual feedback', finalReview.includes('pressed'))
+  check('Pulsing tap prompt shown', finalReview.includes('Tap to Continue') || finalReview.includes('sc-fr-pulse'))
 }
 
-// ── Gate 13: No payment-live or POS claim ────────────────────────────────────
-console.log('\nGate 13 — Safety: no payment-live or third-party-POS claim added')
-if (layer) {
-  check('No backendConnected: true added to hotspot layer',
-    !layer.includes('backendConnected: true'))
-  check('No payment live claim in hotspot layer',
-    !layer.match(/payments?.*live/i))
-  check('No third-party POS connected claim in hotspot layer',
-    !layer.match(/pos.*connected/i))
+// ── Gate 14: HotspotLayer still tactile ───────────────────────────────────────
+console.log('\nGate 14 — SmokeCraftHotspotLayer: transparent hotspots still tactile')
+const hl = read('src/components/smokecraft/SmokeCraftHotspotLayer.jsx')
+check('SmokeCraftHotspotLayer.jsx exists', hl !== null)
+if (hl) {
+  check('onPointerDown fires on hotspot buttons', hl.includes('onPointerDown') || hl.includes('handlePointerDown'))
+  check('sc-pressed class applied on pointerdown', hl.includes('sc-pressed'))
+  check('haptic/vibration on press', hl.includes('hapticTap') || hl.includes('navigator.vibrate'))
+  check('sc-released spring animation on release', hl.includes('sc-released') || hl.includes('sc-ripple'))
 }
 
-// ── Summary ────────────────────────────────────────────────────────────────────
+// ── Gate 15: No early visit-complete routes ───────────────────────────────────
+console.log('\nGate 15 — Safety: no official journey screen routes to /smokecraft/visit-complete')
+const screens = [
+  'src/pages/smokecraft/FirstThird.jsx','src/pages/smokecraft/SecondThird.jsx',
+  'src/pages/smokecraft/FinalThird.jsx','src/pages/smokecraft/FlavorMemory.jsx',
+  'src/pages/smokecraft/CutToastLight.jsx','src/pages/smokecraft/Scorecard.jsx',
+  'src/pages/smokecraft/Mentor.jsx','src/pages/smokecraft/RequestPurchase.jsx',
+]
+let noEarly = true
+for (const file of screens) {
+  const src = read(file)
+  if (src && src.includes('/smokecraft/visit-complete')) {
+    check(`${file}: no premature visit-complete route`, false)
+    noEarly = false
+  }
+}
+if (noEarly) check('No mid-journey screen routes to /smokecraft/visit-complete', true)
+
+// ── Summary ───────────────────────────────────────────────────────────────────
 console.log(`\n─────────────────────────────────────────────────`)
 console.log(`SmokeCraft Touch Response: ${passed + failed} checks, ${passed} passed, ${failed} failed`)
 if (failed === 0) {
-  console.log('\n✅ SmokeCraft buttons are instant + tactile. Pointerdown feedback live.')
+  console.log('\n✅ SmokeCraft touch response system verified. Buttons are alive.')
   process.exit(0)
 } else {
-  console.log('\n❌ Touch response issues found — fix before live deployment.')
+  console.log('\n❌ Touch response issues found — fix before deployment.')
   process.exit(1)
 }

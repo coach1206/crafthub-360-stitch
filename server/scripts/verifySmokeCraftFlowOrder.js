@@ -114,8 +114,8 @@ if (mentor) {
     mentor.includes('Proceed') || mentor.includes('Continue'))
   check('Mentor calls completeStep(\'mentor\')',
     mentor.includes("completeStep('mentor')"))
-  check('Mentor uses triggerHaptic',
-    mentor.includes('triggerHaptic'))
+  check('Mentor uses haptic feedback (triggerHaptic or hapticTap)',
+    mentor.includes('triggerHaptic') || mentor.includes('hapticTap'))
 }
 
 // ── Gate 4: PairingLab routes to humidor-match ───────────────────────────────

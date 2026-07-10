@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { triggerHaptic } from '../../utils/haptics.js'
+import { injectScTouchStyles, hapticTap } from '../../utils/scTouch.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 
 const STEPS = [
@@ -10,18 +10,21 @@ const STEPS = [
   { id: 'light', label: 'Take the First Draw',  desc: 'Draw slowly while applying flame — do not puff rapidly.' },
 ]
 
-const ANIM = `@keyframes sc-ctl-check{0%{transform:scale(0)}100%{transform:scale(1)}}`
+const ANIM = `@keyframes sc-ctl-check{0%{transform:scale(0) rotate(-20deg)}100%{transform:scale(1) rotate(0deg)}}`
 
 export default function CutToastLight() {
   const navigate = useNavigate()
   const { completeStep, addXP } = useGuestSession()
   const [checked, setChecked] = useState(new Set())
   const [proceeded, setProceeded] = useState(false)
+  const [pressedStep, setPressedStep] = useState(null)
+  const [ctaPressed, setCtaPressed] = useState(false)
+
+  useEffect(() => { injectScTouchStyles() }, [])
 
   const allDone = checked.size === STEPS.length
 
   const toggleStep = useCallback((id) => {
-    triggerHaptic('light')
     setChecked(prev => {
       const next = new Set(prev)
       next.has(id) ? next.delete(id) : next.add(id)
@@ -32,7 +35,7 @@ export default function CutToastLight() {
   const handleBeginTasting = useCallback(() => {
     if (!allDone || proceeded) return
     setProceeded(true)
-    triggerHaptic('success')
+    hapticTap('success')
     completeStep('cut-toast-light')
     addXP(75)
     navigate('/smokecraft/first-third')
@@ -58,19 +61,28 @@ export default function CutToastLight() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', width: '80%', pointerEvents: 'auto' }}>
           {STEPS.map((step, i) => {
             const isChecked = checked.has(step.id)
+            const isPressed = pressedStep === step.id
             return (
-              <button key={step.id} aria-label={step.label} aria-pressed={isChecked}
-                onClick={() => toggleStep(step.id)}
+              <button
+                key={step.id}
+                aria-label={step.label}
+                aria-pressed={isChecked}
+                onPointerDown={() => { hapticTap('light'); setPressedStep(step.id) }}
+                onPointerUp={() => { setPressedStep(null); toggleStep(step.id) }}
+                onPointerLeave={() => setPressedStep(null)}
+                onPointerCancel={() => setPressedStep(null)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   padding: '3.5% 4%', borderRadius: '12px', cursor: 'pointer',
                   touchAction: 'manipulation',
                   background: isChecked ? 'linear-gradient(135deg,rgba(233,193,118,.18),rgba(201,168,76,.1))' : 'rgba(0,0,0,0.5)',
                   border: isChecked ? '1.5px solid rgba(233,193,118,0.7)' : '1.5px solid rgba(233,193,118,0.2)',
-                  transition: 'all 0.18s ease', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+                  backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
                   outline: 'none', WebkitTapHighlightColor: 'transparent', textAlign: 'left',
+                  transform: isPressed ? 'scale(0.95)' : 'scale(1)',
+                  boxShadow: isPressed ? '0 0 0 3px rgba(233,193,118,0.35)' : 'none',
+                  transition: isPressed ? 'transform 0.06s ease' : 'transform 0.22s cubic-bezier(0.34,1.56,0.64,1), background 0.18s, border-color 0.18s',
                 }}>
-                {/* Step number / checkmark */}
                 <span style={{
                   width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -99,16 +111,23 @@ export default function CutToastLight() {
           })}
         </div>
 
-        <button onClick={handleBeginTasting} disabled={!allDone || proceeded}
-          aria-label="Begin Tasting — First Third"
+        <button
+          aria-label={allDone ? 'Begin First Third Tasting' : `Complete all ${STEPS.length} steps to continue`}
+          disabled={!allDone || proceeded}
+          onPointerDown={() => { if (allDone && !proceeded) { setCtaPressed(true); hapticTap('success') } }}
+          onPointerUp={() => { setCtaPressed(false); handleBeginTasting() }}
+          onPointerLeave={() => setCtaPressed(false)}
+          onPointerCancel={() => setCtaPressed(false)}
           style={{
             width: '80%', padding: '3.5% 0',
             background: allDone ? 'linear-gradient(135deg,rgba(233,193,118,.3),rgba(201,168,76,.18))' : 'rgba(0,0,0,0.4)',
             border: allDone ? '1.5px solid rgba(233,193,118,0.8)' : '1.5px solid rgba(233,193,118,0.15)',
             borderRadius: '12px', cursor: allDone ? 'pointer' : 'not-allowed', pointerEvents: 'auto',
             touchAction: 'manipulation', opacity: allDone ? 1 : 0.45, backdropFilter: 'blur(6px)',
-            WebkitBackdropFilter: 'blur(6px)', transition: 'all 0.22s ease', outline: 'none',
-            WebkitTapHighlightColor: 'transparent',
+            WebkitBackdropFilter: 'blur(6px)', outline: 'none', WebkitTapHighlightColor: 'transparent',
+            transform: ctaPressed ? 'scale(0.95)' : 'scale(1)',
+            boxShadow: ctaPressed ? '0 0 0 3px rgba(233,193,118,0.4)' : 'none',
+            transition: ctaPressed ? 'transform 0.06s ease' : 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1), all 0.22s ease',
           }}>
           <span style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.3vw,12px)', letterSpacing: '0.2em', textTransform: 'uppercase', color: allDone ? 'rgba(233,193,118,0.95)' : 'rgba(233,193,118,0.35)', fontWeight: 600 }}>
             {proceeded ? 'Beginning Tasting...' : allDone ? 'Begin First Third Tasting →' : `Complete All ${STEPS.length} Steps to Continue`}
