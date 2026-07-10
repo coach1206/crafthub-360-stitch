@@ -125,7 +125,7 @@ export default function Mentor() {
         height: selectedMentor ? '44%' : '22%',
         background: 'linear-gradient(180deg,rgba(5,3,1,0) 0%,rgba(5,3,1,0.88) 16%,rgba(5,3,1,0.97) 100%)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end',
-        gap: '0.6rem', padding: '0 5% 1.5%',
+        gap: '0.6rem', padding: '0 5% calc(1.5% + 68px)',
         transition: 'height 0.28s ease',
         pointerEvents: 'none',
       }}>

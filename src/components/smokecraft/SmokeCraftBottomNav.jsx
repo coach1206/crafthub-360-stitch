@@ -13,7 +13,9 @@ export default function SmokeCraftBottomNav() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
-  const handlePress = useCallback((e, path) => {
+  // onPointerDown handles ONLY the spring animation + haptic — no navigation.
+  // Navigation fires on onClick so it doesn't cross-fire with content button presses.
+  const handlePointerDown = useCallback((e) => {
     const btn = e.currentTarget
     hapticTap('light')
     playClickSound(660, 0.05, 0.05)
@@ -27,8 +29,7 @@ export default function SmokeCraftBottomNav() {
         btn.style.transition = 'transform 0.1s ease'
       }, 120)
     }, 80)
-    navigate(path)
-  }, [navigate])
+  }, [])
 
   return (
     <>
@@ -69,7 +70,8 @@ export default function SmokeCraftBottomNav() {
               className="sc-nav-btn"
               aria-label={item.label}
               aria-current={isActive ? 'page' : undefined}
-              onPointerDown={e => handlePress(e, item.path)}
+              onPointerDown={handlePointerDown}
+              onClick={() => navigate(item.path)}
               style={{
                 flex: 1,
                 display: 'flex',

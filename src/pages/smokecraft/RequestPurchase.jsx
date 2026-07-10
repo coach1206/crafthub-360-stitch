@@ -52,10 +52,10 @@ export default function RequestPurchase() {
       <style>{ANIM}</style>
 
       <div style={{
-        position: 'absolute', left: 0, right: 0, bottom: 0, height: '55%',
+        position: 'absolute', left: 0, right: 0, bottom: 0, height: '60%',
         background: 'linear-gradient(180deg,rgba(5,3,1,0) 0%,rgba(5,3,1,0.88) 18%,rgba(5,3,1,0.96) 100%)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        gap: '1rem', padding: '0 5%', pointerEvents: 'none',
+        gap: '1rem', padding: '0 5% 76px', pointerEvents: 'none',
       }}>
         <p style={{ fontFamily: 'Georgia,serif', fontSize: 'clamp(9px,1.3vw,12px)', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(233,193,118,0.7)', margin: 0 }}>
           How would you like to proceed?
