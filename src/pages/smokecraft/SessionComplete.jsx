@@ -25,9 +25,9 @@ export default function SessionComplete() {
 
   const hotspots = [
     {
-      label: 'Staff Handoff',
+      label: 'Return to SmokeCraft Hub',
       x: 10, y: 75, width: 80, height: 20,
-      to: '/pos3',
+      to: '/smokecraft',
     },
   ]
 
