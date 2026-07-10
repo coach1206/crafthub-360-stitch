@@ -99,6 +99,7 @@ import MiniTastingRound    from './pages/smokecraft/MiniTastingRound.jsx'
 import FinalReview         from './pages/smokecraft/FinalReview.jsx'
 import VisitLockGuard      from './components/smokecraft/VisitLockGuard.jsx'
 import SmokeCraftSessionGuard from './components/smokecraft/SmokeCraftSessionGuard.jsx'
+import SmokeCraftBottomNav from './components/smokecraft/SmokeCraftBottomNav.jsx'
 import { SmokeCraftProgressProvider } from './context/SmokeCraftProgressContext.jsx'
 import VisitComplete        from './pages/smokecraft/VisitComplete.jsx'
 import HowItWorks       from './pages/smokecraft/HowItWorks.jsx'
@@ -247,7 +248,7 @@ export default function App() {
               <Route path="system-explained" element={<PublicCraftHubLanding />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
-              <Route path="smokecraft" element={<SmokeCraftProgressProvider><Outlet /></SmokeCraftProgressProvider>}>
+              <Route path="smokecraft" element={<SmokeCraftProgressProvider><Outlet /><SmokeCraftBottomNav /></SmokeCraftProgressProvider>}>
                 {/* S1 — always unlocked, no guard */}
                 <Route index element={<SmokeCraftSessionGuard sessionNumber={1} hideHeader><SmokeCraft /></SmokeCraftSessionGuard>} />
 

@@ -233,6 +233,24 @@ if (assetRoute) {
   check('AssetRoute passes hotspots prop to HotspotLayer', assetRoute.includes('hotspots={hotspots}') || assetRoute.includes('hotspots='))
 }
 
+// ── Gate 16: SmokeCraftBottomNav — real navigation tabs ──────────────────────
+console.log('\nGate 16 — SmokeCraftBottomNav: real navigation, all 4 tabs wired')
+const bottomNav = read('src/components/smokecraft/SmokeCraftBottomNav.jsx')
+check('SmokeCraftBottomNav.jsx exists', bottomNav !== null)
+if (bottomNav) {
+  check('SmokeCraft tab navigates to /smokecraft', bottomNav.includes("'/smokecraft'") || bottomNav.includes('"/smokecraft"'))
+  check('Rewards/Leaderboard tab present', bottomNav.includes('leaderboard') || bottomNav.includes('Rewards'))
+  check('Passport tab navigates to /passport-connection', bottomNav.includes('/passport-connection'))
+  check('CraftHub tab navigates to /crafthub', bottomNav.includes('/crafthub'))
+  check('Nav uses useNavigate (not anchor tags)', bottomNav.includes('useNavigate'))
+  check('Active state indicated (aria-current or isActive check)', bottomNav.includes('aria-current') || bottomNav.includes('isActive'))
+  check('Buttons have aria-label', bottomNav.includes('aria-label'))
+  check('No dead tabs — all paths are defined strings', (bottomNav.match(/path:/g) || []).length >= 4)
+}
+const appJsx = read('src/App.jsx')
+check('SmokeCraftBottomNav imported in App.jsx', appJsx !== null && appJsx.includes('SmokeCraftBottomNav'))
+check('SmokeCraftBottomNav rendered inside SmokeCraftProgressProvider', appJsx !== null && appJsx.match(/SmokeCraftProgressProvider[\s\S]{0,200}SmokeCraftBottomNav/))
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log(`\n─────────────────────────────────────────────────`)
 console.log(`SmokeCraft Live Interactions: ${passed + failed} checks, ${passed} passed, ${failed} failed`)
