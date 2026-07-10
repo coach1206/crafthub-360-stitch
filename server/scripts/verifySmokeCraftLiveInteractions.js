@@ -47,7 +47,8 @@ if (assetScreen) {
   check('Image is position absolute (full viewport)', assetScreen.includes("position: 'absolute'") || assetScreen.includes('position:"absolute"') || assetScreen.includes("position:'absolute'"))
   check('Image uses width 100% (not maxWidth: 100vw)', assetScreen.includes("width: '100%'") || assetScreen.includes('width:"100%"'))
   check('Image uses height 100% (not maxHeight: 100vh)', assetScreen.includes("height: '100%'") || assetScreen.includes('height:"100%"'))
-  check('Main container is position fixed, full viewport', assetScreen.includes("position: 'fixed'") && assetScreen.includes('100vw') && assetScreen.includes('100vh'))
+  check('Main container is position fixed, stops above bottom nav (NAV_HEIGHT or bottom:64)',
+    assetScreen.includes("position: 'fixed'") && (assetScreen.includes('NAV_HEIGHT') || assetScreen.includes('bottom: 64') || assetScreen.includes('bottom:64')))
   check('No inline-block sizing wrapper (children are full viewport)',
     !assetScreen.includes("display: 'inline-block'") && !assetScreen.includes('display:"inline-block"'))
 }

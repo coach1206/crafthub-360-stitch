@@ -270,7 +270,6 @@ function HotspotButton({ h, navigate, debug, interactionDebug }) {
     <button
       className={btnClass}
       aria-label={h.label}
-      title={h.label}
       aria-busy={isNavigating}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}

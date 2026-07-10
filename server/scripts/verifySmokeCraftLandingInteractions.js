@@ -166,10 +166,9 @@ if (fsExists(approvedDir)) {
   check('public/assets/smokecraft-reference/approved/ exists', false)
 }
 
-// ── Gate 8: Hotspot pills hidden in production (no visible labels on image) ───
-console.log('\nGate 8 — SmokeCraftHotspotLayer: pills visually hidden in production, debug-only')
+// ── Gate 8: Hotspot pills hidden in production — no browser tooltips ─────────
+console.log('\nGate 8 — SmokeCraftHotspotLayer: pills hidden in production, no browser tooltips')
 if (hotspotLayer) {
-  // Pill <span> must be wrapped in a debug conditional so it never renders for guests
   check('sc-cta-pill span is gated on debug (not rendered unconditionally)',
     !!hotspotLayer.match(/\{debug\s*&&[\s\S]*?sc-cta-pill/) ||
     !!hotspotLayer.match(/sc-cta-pill[\s\S]{0,200}\{debug\s*&&/))
@@ -180,10 +179,47 @@ if (hotspotLayer) {
     hotspotLayer.includes('smokecraft_hotspot_debug'))
   check('Debug mode flag defaults to off (=== "1" check)',
     hotspotLayer.includes("=== '1'") || hotspotLayer.includes('=== "1"'))
-  check('Buttons still have aria-label for accessibility',
+  check('Buttons have aria-label for accessibility (screen readers)',
     hotspotLayer.includes('aria-label'))
-  check('Buttons still have title attribute for accessibility',
-    hotspotLayer.includes('title={h.label}') || hotspotLayer.includes("title="))
+  // title= creates native browser tooltips — must be ABSENT in production hotspot buttons
+  check('NO title attribute on hotspot buttons (prevents "Continue Previous Session" tooltip leak)',
+    !hotspotLayer.includes('title={h.label}') && !hotspotLayer.match(/HotspotButton[\s\S]{0,800}title=\{/))
+}
+
+// ── Gate 8b: SmokeCraftAssetScreen — image clears bottom nav ─────────────────
+console.log('\nGate 8b — SmokeCraftAssetScreen: image stops at nav top (bottom: 64px)')
+const assetScreen = read('src/components/smokecraft/SmokeCraftAssetScreen.jsx')
+check('SmokeCraftAssetScreen.jsx exists', assetScreen !== null)
+if (assetScreen) {
+  check('Container uses bottom: NAV_HEIGHT or bottom: 64 (not inset:0 to 100vh)',
+    assetScreen.includes('NAV_HEIGHT') || assetScreen.includes('bottom: 64') || assetScreen.includes('bottom:64'))
+  check('NAV_HEIGHT constant defined (64px)',
+    assetScreen.includes('NAV_HEIGHT = 64') || assetScreen.includes('64px'))
+  check('objectPosition prop accepted (allows per-screen anchor)',
+    assetScreen.includes('objectPosition'))
+  check('Image does NOT use fixed height: 100vh (would extend under nav)',
+    !assetScreen.match(/height:\s*['"]?100vh/))
+}
+
+// ── Gate 8c: Landing page safe-area anchor + hotspot separation ──────────────
+console.log('\nGate 8c — Landing page: objectPosition bottom + non-overlapping hotspots')
+if (landing) {
+  check('Landing uses objectPosition center bottom (anchors image to show CTA area)',
+    landing.includes('center bottom') || landing.includes('objectPosition'))
+  // Verify Start and Continue hotspots do not overlap in y-axis
+  const allY = [...landing.matchAll(/label:\s*'([^']+)'[\s\S]{0,200}?y:\s*(\d+)[\s\S]{0,100}?height:\s*(\d+)/g)]
+  let startEntry = null; let continueEntry = null
+  for (const m of allY) {
+    if (m[1].toLowerCase().includes('start new')) startEntry = { y: +m[2], h: +m[3] }
+    if (m[1].toLowerCase().includes('continue')) continueEntry = { y: +m[2], h: +m[3] }
+  }
+  if (startEntry && continueEntry) {
+    const startBottom = startEntry.y + startEntry.h
+    const continueBottom = continueEntry.y + continueEntry.h
+    const noOverlap = continueBottom <= startEntry.y || startBottom <= continueEntry.y
+    check('Start New and Continue hotspots do not overlap vertically', noOverlap,
+      `Start y:${startEntry.y}+${startEntry.h}, Continue y:${continueEntry.y}+${continueEntry.h}`)
+  }
 }
 
 // ── Gate 9: /smokecraft landing has no stale 8/24 progress header ────────────

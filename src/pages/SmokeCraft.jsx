@@ -21,41 +21,45 @@ export default function SmokeCraft() {
     navigate(dest)
   }, [navigate, currentAllowed])
 
+  // Hotspot zones are calibrated to the VISIBLE image area.
+  // objectPosition="center bottom" anchors the image bottom edge to the
+  // container bottom, so the lower portion of the image (where CTAs live)
+  // is always fully visible. Enable debug mode to verify alignment:
+  //   sessionStorage.setItem('smokecraft_hotspot_debug', '1')
   const HOTSPOTS = [
+    // Primary journey CTA — large tap zone at lower image area
     {
       label: 'Start New SmokeCraft Session',
-      x: 5, y: 62, width: 90, height: 20,
+      x: 5, y: 66, width: 90, height: 21,
       to: '/smokecraft/identity',
     },
+    // Secondary CTA — clearly above primary, no vertical overlap
     {
       label: 'Continue Previous Session',
-      x: 5, y: 46, width: 90, height: 14,
+      x: 5, y: 50, width: 90, height: 14,
       onClick: continueSession,
     },
+    // Third-row icon buttons
     {
       label: 'Browse Humidor',
-      x: 5, y: 33, width: 42, height: 11,
+      x: 5, y: 34, width: 42, height: 13,
       to: '/smokecraft/humidor-match',
     },
     {
       label: 'View My Passport',
-      x: 53, y: 33, width: 42, height: 11,
+      x: 53, y: 34, width: 42, height: 13,
       to: '/smokecraft/passport-stamp',
     },
+    // Top-row icon buttons
     {
       label: 'How It Works',
-      x: 5, y: 22, width: 42, height: 9,
+      x: 5, y: 20, width: 42, height: 12,
       to: '/smokecraft/how-it-works',
     },
     {
       label: 'Demo Experience',
-      x: 53, y: 22, width: 42, height: 9,
+      x: 53, y: 20, width: 42, height: 12,
       to: '/smokecraft/golden-box',
-    },
-    {
-      label: 'View Pairing',
-      x: 5, y: 84, width: 20, height: 12,
-      to: '/smokecraft/pairing-lab',
     },
   ]
 
@@ -65,6 +69,7 @@ export default function SmokeCraft() {
       alt="SmokeCraft"
       hotspots={HOTSPOTS}
       route="/smokecraft"
+      objectPosition="center bottom"
     />
   )
 }
