@@ -324,7 +324,7 @@ function HotspotButton({ h, navigate, debug, interactionDebug }) {
   )
 }
 
-export default function SmokeCraftHotspotLayer({ hotspots = [], route = '' }) {
+export default function SmokeCraftHotspotLayer({ hotspots = [], route = '', imageBounds = null }) {
   const navigate = useNavigate()
 
   if (typeof window !== 'undefined') ensureAnimStyles()
@@ -350,24 +350,32 @@ export default function SmokeCraftHotspotLayer({ hotspots = [], route = '' }) {
     })
   }
 
-  return (
-    <div
-      aria-hidden={hotspots.every(h => h.disabled)}
-      style={{
-        /*
-         * position:absolute (not fixed) — sized relative to the parent
-         * inline-block image container inside SmokeCraftAssetScreen.
-         * Hotspot x/y/width/height percentages are image-relative,
-         * not viewport-relative. Fixes misplaced pill bug on portrait
-         * images displayed on landscape viewports.
-         */
+  // When imageBounds is provided (from ResizeObserver in SmokeCraftAssetRoute),
+  // position the overlay exactly over the rendered image rect to keep hotspot
+  // % coordinates aligned after object-fit:contain letterboxing.
+  const overlayStyle = imageBounds
+    ? {
+        position: 'absolute',
+        left: imageBounds.left,
+        top: imageBounds.top,
+        width: imageBounds.width,
+        height: imageBounds.height,
+        pointerEvents: 'none',
+        zIndex: 10,
+      }
+    : {
         position: 'absolute',
         inset: 0,
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
         zIndex: 10,
-      }}
+      }
+
+  return (
+    <div
+      aria-hidden={hotspots.every(h => h.disabled)}
+      style={overlayStyle}
     >
       {hotspots.map((h, i) => {
         if (h.disabled) return null

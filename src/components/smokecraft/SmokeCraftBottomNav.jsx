@@ -1,6 +1,7 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { hapticTap, playClickSound } from '../../utils/scTouch.js'
+import { injectScResponsiveVars } from '../../utils/scResponsive.js'
 
 const NAV_ITEMS = [
   { label: 'SmokeCraft', icon: 'local_fire_department', path: '/smokecraft' },
@@ -12,6 +13,8 @@ const NAV_ITEMS = [
 export default function SmokeCraftBottomNav() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+
+  useEffect(() => { injectScResponsiveVars() }, [])
 
   // onPointerDown handles ONLY the spring animation + haptic — no navigation.
   // Navigation fires on onClick so it doesn't cross-fire with content button presses.
@@ -53,7 +56,7 @@ export default function SmokeCraftBottomNav() {
           zIndex: 200,
           display: 'flex',
           alignItems: 'stretch',
-          height: 64,
+          height: 'var(--sc-bottom-nav-h, 64px)',
           background: 'linear-gradient(180deg, rgba(5,3,1,0.88) 0%, rgba(5,3,1,0.98) 100%)',
           backdropFilter: 'blur(14px)',
           WebkitBackdropFilter: 'blur(14px)',
@@ -97,7 +100,7 @@ export default function SmokeCraftBottomNav() {
               <span
                 className="material-symbols-outlined"
                 style={{
-                  fontSize: 22,
+                  fontSize: 'clamp(20px, 2.2vw, 28px)',
                   fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
                   transition: 'font-variation-settings 0.15s',
                   lineHeight: 1,
@@ -108,7 +111,7 @@ export default function SmokeCraftBottomNav() {
               </span>
               <span
                 style={{
-                  fontSize: 9,
+                  fontSize: 'clamp(8px, 0.9vw, 12px)',
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   fontFamily: 'Georgia, serif',

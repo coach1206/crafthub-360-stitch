@@ -38,17 +38,15 @@ function read(relPath) {
 
 console.log('\nSmokeCraft Live Interaction Layer Verification\n')
 
-// ── Gate 1: Full-screen layout (object-fit cover) ────────────────────────────
-console.log('Gate 1 — SmokeCraftAssetScreen: object-fit cover, no inline-block sizing')
+// ── Gate 1: Full-screen layout (object-fit contain with responsive safe-pad) ─
+console.log('Gate 1 — SmokeCraftAssetScreen: object-fit contain, responsive nav height')
 const assetScreen = read('src/components/smokecraft/SmokeCraftAssetScreen.jsx')
 check('SmokeCraftAssetScreen.jsx exists', assetScreen !== null)
 if (assetScreen) {
-  check('Image uses object-fit cover', assetScreen.includes('objectFit') && assetScreen.includes('cover'))
+  check('Image uses object-fit contain', assetScreen.includes('objectFit') && assetScreen.includes('contain'))
   check('Image is position absolute (full viewport)', assetScreen.includes("position: 'absolute'") || assetScreen.includes('position:"absolute"') || assetScreen.includes("position:'absolute'"))
-  check('Image uses width 100% (not maxWidth: 100vw)', assetScreen.includes("width: '100%'") || assetScreen.includes('width:"100%"'))
-  check('Image uses height 100% (not maxHeight: 100vh)', assetScreen.includes("height: '100%'") || assetScreen.includes('height:"100%"'))
-  check('Main container is position fixed, stops above bottom nav (NAV_HEIGHT or bottom:64)',
-    assetScreen.includes("position: 'fixed'") && (assetScreen.includes('NAV_HEIGHT') || assetScreen.includes('bottom: 64') || assetScreen.includes('bottom:64')))
+  check('Main container is position fixed, stops above bottom nav (CSS var or fallback)',
+    assetScreen.includes("position: 'fixed'") && (assetScreen.includes('--sc-bottom-nav-h') || assetScreen.includes('NAV_HEIGHT') || assetScreen.includes('bottom: 64') || assetScreen.includes('bottom:64')))
   check('No inline-block sizing wrapper (children are full viewport)',
     !assetScreen.includes("display: 'inline-block'") && !assetScreen.includes('display:"inline-block"'))
 }
