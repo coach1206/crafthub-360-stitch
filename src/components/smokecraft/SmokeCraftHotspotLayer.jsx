@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { hapticTap } from '../../utils/scTouch.js'
 
 /**
  * Renders percentage-based tap/click targets over a full-viewport asset screen.
@@ -176,9 +177,7 @@ function loadingLabel(label = '') {
   return 'Loading...'
 }
 
-function hapticTap(ms = 12) {
-  try { navigator.vibrate?.(ms) } catch (_) { /* unsupported */ }
-}
+// hapticTap is imported from scTouch.js (wraps triggerHaptic from haptics.js)
 
 function useHotspotInteraction(h, navigate, interactionDebug) {
   const [phase, setPhase] = useState('idle')
@@ -191,7 +190,7 @@ function useHotspotInteraction(h, navigate, interactionDebug) {
     navigatedRef.current = false
     pointerDownTimeRef.current = Date.now()
     setPhase('pressed')
-    hapticTap(12)
+    hapticTap('light')
 
     if (interactionDebug) {
       console.log('[SC Interaction] pointerdown', { label: h.label, target: h.to, ts: pointerDownTimeRef.current }) // eslint-disable-line no-console
@@ -231,7 +230,7 @@ function useHotspotInteraction(h, navigate, interactionDebug) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       setPhase('pressed')
-      hapticTap(10)
+      hapticTap('light')
     }
   }, [])
 

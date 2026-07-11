@@ -147,7 +147,13 @@ if (existsSync(approvedDir)) {
 
   // Verification: none of these files were touched by this session (component only changed .jsx)
   // We confirm the approved dir contains only image files (no .jsx/.js/.css injected)
-  const nonImages = readdirSync(approvedDir).filter(f => !/\.(png|jpg|jpeg|webp|avif|svg|gif)$/i.test(f) && !f.startsWith('.'))
+  const { statSync } = await import('fs')
+  const nonImages = readdirSync(approvedDir).filter(f => {
+    if (f.startsWith('.')) return false
+    const full = resolve(approvedDir, f)
+    try { if (statSync(full).isDirectory()) return false } catch { return false }
+    return !/\.(png|jpg|jpeg|webp|avif|svg|gif)$/i.test(f)
+  })
   check('No non-image files injected into approved/ directory', nonImages.length === 0,
     nonImages.length ? `found: ${nonImages.join(', ')}` : '')
 } else {
