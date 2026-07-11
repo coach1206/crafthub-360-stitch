@@ -1,83 +1,97 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { injectScResponsiveVars } from '../../utils/scResponsive.js'
 
 /**
  * SmokeCraftAssetScreen
  *
  * Full-viewport image layer for SmokeCraft screens.
- * The image fills the area ABOVE the 64px bottom navigation bar so the nav
- * never covers image content. objectFit:cover fills without letterbox bars.
- * Children are rendered in an absolute overlay covering the same area, so
- * hotspot/overlay percentages are relative to the visible image area only.
+ * The image fills the area ABOVE the bottom navigation bar (height from
+ * --sc-bottom-nav-h CSS variable, injected by injectScResponsiveVars).
+ *
+ * objectFit:contain preserves the full image without cropping, with a small
+ * safe-pad inset. When used via SmokeCraftAssetRoute, a ResizeObserver tracks
+ * the actual rendered image bounds so hotspot overlays align correctly.
  *
  * Props:
  *   src            — image path
  *   alt            — accessible label
  *   objectPosition — CSS object-position value (default: 'center center')
- *                    Use 'center bottom' on screens whose CTAs are at image bottom
+ *   imageRef       — optional ref forwarded to the <img> element
+ *   containerRef   — optional ref forwarded to the <main> element
  *   children       — interactive overlays (hotspot layers, UI panels, etc.)
  */
-export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen', objectPosition = 'center center', children }) {
+export default function SmokeCraftAssetScreen({
+  src,
+  alt = 'SmokeCraft screen',
+  objectPosition = 'center center',
+  imageRef,
+  containerRef,
+  children,
+}) {
   const [failed, setFailed] = useState(false)
 
-  // 64px = SmokeCraftBottomNav height. Image stops at the top of the nav bar.
-  const NAV_HEIGHT = 64
+  useEffect(() => { injectScResponsiveVars() }, [])
 
-  if (failed) {
-    return (
-      <main
+  const failedUI = (
+    <main
+      ref={containerRef}
+      style={{
+        position: 'fixed',
+        top: 0, left: 0, right: 0,
+        bottom: 'var(--sc-bottom-nav-h, 64px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#050505',
+        color: '#f5d28a',
+        padding: 24,
+        textAlign: 'center',
+      }}
+    >
+      <div
         style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: NAV_HEIGHT,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#050505',
-          color: '#f5d28a',
-          padding: 24,
-          textAlign: 'center',
+          border: '1px solid rgba(212,175,55,0.6)',
+          borderRadius: 20,
+          padding: 28,
+          background: 'rgba(20,13,6,0.92)',
         }}
       >
-        <div
-          style={{
-            border: '1px solid rgba(212,175,55,0.6)',
-            borderRadius: 20,
-            padding: 28,
-            background: 'rgba(20,13,6,0.92)',
-          }}
-        >
-          Image failed to load:<br />{src}
-        </div>
-      </main>
-    )
-  }
+        Image failed to load:<br />{src}
+      </div>
+    </main>
+  )
+
+  if (failed) return failedUI
 
   return (
     <main
+      ref={containerRef}
       aria-label={alt}
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
-        bottom: NAV_HEIGHT,
+        bottom: 'var(--sc-bottom-nav-h, 64px)',
         margin: 0,
         padding: 0,
         overflow: 'hidden',
         background: '#050505',
       }}
     >
-      {/* Cover image — fills the area above the bottom nav bar */}
+      {/* Contain image — preserves full image, safe-pad inset prevents edge clipping */}
       <img
+        ref={imageRef}
         src={src}
         alt={alt}
         onError={() => setFailed(true)}
         draggable={false}
         style={{
           position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
+          inset: 'var(--sc-safe-pad, 8px)',
+          width: 'calc(100% - 2 * var(--sc-safe-pad, 8px))',
+          height: 'calc(100% - 2 * var(--sc-safe-pad, 8px))',
+          objectFit: 'contain',
           objectPosition,
           display: 'block',
           margin: 0,
@@ -90,7 +104,7 @@ export default function SmokeCraftAssetScreen({ src, alt = 'SmokeCraft screen', 
           touchAction: 'manipulation',
         }}
       />
-      {/* Interactive overlay — same bounds as image; children use position:absolute + % coords */}
+      {/* Interactive overlay — children use position:absolute + % coords */}
       {children && (
         <div
           style={{

@@ -40,7 +40,7 @@ export default function FinalReview() {
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           background: pressed ? 'rgba(233,193,118,0.04)' : 'transparent',
           border: 'none', cursor: done ? 'default' : 'pointer',
-          touchAction: 'manipulation', outline: 'none',
+          touchAction: 'manipulation', outline: 'none', userSelect: 'none',
           WebkitTapHighlightColor: 'transparent',
           transition: 'background 0.12s ease',
           pointerEvents: 'auto',

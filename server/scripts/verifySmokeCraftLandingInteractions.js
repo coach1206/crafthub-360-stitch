@@ -46,16 +46,16 @@ if (landing) {
     landing.includes('Start New SmokeCraft Session'))
   check('Landing hotspot navigates to /smokecraft/identity',
     landing.includes('/smokecraft/identity'))
-  // Hotspot zone should cover lower portion of screen (y >= 60) with wide width (>= 80)
+  // Hotspot zone: y ≥ 40% (button visible above fold), width ≥ 10% (not a dot), height ≥ 5%
   const yMatch = landing.match(/y:\s*(\d+)/)
   const wMatch = landing.match(/width:\s*(\d+)/)
   const hMatch = landing.match(/height:\s*(\d+)/)
-  if (yMatch) check('Landing hotspot y ≥ 60% (lower half)',
-    parseInt(yMatch[1], 10) >= 60, `y=${yMatch[1]}`)
-  if (wMatch) check('Landing hotspot width ≥ 80% (wide CTA zone)',
-    parseInt(wMatch[1], 10) >= 80, `width=${wMatch[1]}`)
-  if (hMatch) check('Landing hotspot height ≥ 20% (tall tap target)',
-    parseInt(hMatch[1], 10) >= 20, `height=${hMatch[1]}`)
+  if (yMatch) check('Landing hotspot y ≥ 40% (button in content area)',
+    parseInt(yMatch[1], 10) >= 40, `y=${yMatch[1]}`)
+  if (wMatch) check('Landing hotspot width ≥ 10% (usable tap width)',
+    parseInt(wMatch[1], 10) >= 10, `width=${wMatch[1]}`)
+  if (hMatch) check('Landing hotspot height ≥ 5% (tall enough tap target)',
+    parseInt(hMatch[1], 10) >= 5, `height=${hMatch[1]}`)
 }
 
 // ── Gate 2: Identity page hotspot awards session rewards ──────────────────────
@@ -151,19 +151,21 @@ if (guard) {
     guard.includes('LockedSmokeCraftScreen'))
 }
 
-// ── Gate 7: SmokeCraft images unmodified ─────────────────────────────────────
-console.log('\nGate 7 — SmokeCraft images: unmodified')
-const approvedDir = resolve(ROOT, 'public/assets/smokecraft-reference/approved')
+// ── Gate 7: Landing image asset exists at the referenced path ────────────────
+console.log('\nGate 7 — Landing image: approved asset exists on disk')
 const { readdirSync, existsSync: fsExists } = await import('fs')
-if (fsExists(approvedDir)) {
-  const files = readdirSync(approvedDir)
-  const images = files.filter(f => /\.(png|jpg|jpeg|webp|avif|svg)$/i.test(f))
-  const nonImages = files.filter(f => !/\.(png|jpg|jpeg|webp|avif|svg|gif)$/i.test(f) && !f.startsWith('.'))
-  check(`Approved images present (found ${images.length})`, images.length > 0)
-  check('No non-image files in approved/ directory', nonImages.length === 0,
-    nonImages.length ? `found: ${nonImages.join(', ')}` : '')
-} else {
-  check('public/assets/smokecraft-reference/approved/ exists', false)
+// Extract src path from SmokeCraft.jsx
+const srcMatch = landing && landing.match(/src=["']([^"']+)["']/)
+const referencedSrc = srcMatch ? srcMatch[1] : null
+check('SmokeCraft.jsx references a src path', !!referencedSrc, referencedSrc || 'no src found')
+if (referencedSrc) {
+  // Resolve the public-relative URL to the actual file (strip leading /)
+  const assetPath = resolve(ROOT, 'public', referencedSrc.replace(/^\//, ''))
+  check(`Asset exists at public${referencedSrc}`, fsExists(assetPath), assetPath)
+  check('No longer references old smokecraft-landing.png',
+    !landing.includes('smokecraft-landing.png'))
+  check('No longer references DISOVER (misspelled) asset',
+    !landing.includes('DISOVER YOUR CIGAR PROFILE'))
 }
 
 // ── Gate 8: Hotspot pills hidden in production — no browser tooltips ─────────

@@ -73,8 +73,8 @@ export default function CutToastLight() {
                 onPointerCancel={() => setPressedStep(null)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
-                  padding: '3.5% 4%', borderRadius: '12px', cursor: 'pointer',
-                  touchAction: 'manipulation',
+                  padding: '3.5% 4%', minHeight: 56, borderRadius: '12px', cursor: 'pointer',
+                  touchAction: 'manipulation', userSelect: 'none',
                   background: isChecked ? 'linear-gradient(135deg,rgba(233,193,118,.18),rgba(201,168,76,.1))' : 'rgba(0,0,0,0.5)',
                   border: isChecked ? '1.5px solid rgba(233,193,118,0.7)' : '1.5px solid rgba(233,193,118,0.2)',
                   backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
@@ -119,12 +119,12 @@ export default function CutToastLight() {
           onPointerLeave={() => setCtaPressed(false)}
           onPointerCancel={() => setCtaPressed(false)}
           style={{
-            width: '80%', padding: '3.5% 0',
+            width: '80%', padding: '3.5% 0', minHeight: 72,
             background: allDone ? 'linear-gradient(135deg,rgba(233,193,118,.3),rgba(201,168,76,.18))' : 'rgba(0,0,0,0.4)',
             border: allDone ? '1.5px solid rgba(233,193,118,0.8)' : '1.5px solid rgba(233,193,118,0.15)',
             borderRadius: '12px', cursor: allDone ? 'pointer' : 'not-allowed', pointerEvents: 'auto',
             touchAction: 'manipulation', opacity: allDone ? 1 : 0.45, backdropFilter: 'blur(6px)',
-            WebkitBackdropFilter: 'blur(6px)', outline: 'none', WebkitTapHighlightColor: 'transparent',
+            WebkitBackdropFilter: 'blur(6px)', outline: 'none', WebkitTapHighlightColor: 'transparent', userSelect: 'none',
             transform: ctaPressed ? 'scale(0.95)' : 'scale(1)',
             boxShadow: ctaPressed ? '0 0 0 3px rgba(233,193,118,0.4)' : 'none',
             transition: ctaPressed ? 'transform 0.06s ease' : 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1), all 0.22s ease',

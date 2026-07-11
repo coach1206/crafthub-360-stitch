@@ -185,13 +185,29 @@ export default function SessionComplete() {
   return (
     <div style={{
       position: 'fixed', inset: 0, overflow: 'hidden',
-      background: 'linear-gradient(160deg,#090603 0%,#0d0806 55%,#090603 100%)',
+      background: '#090603',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',
       fontFamily: 'Georgia,serif',
       overflowY: 'auto',
       paddingBottom: 80, // room for bottom nav
     }}>
+      {/* Approved SmokeCraft Complete background image */}
+      <img
+        src="/assets/smokecraft-reference/approved/batch-22/smokecraft comple 1.png"
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        style={{
+          position: 'fixed', inset: 0, width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: 'center top',
+          opacity: 0.22, pointerEvents: 'none', userSelect: 'none',
+          zIndex: 0,
+        }}
+      />
       <style>{ANIM}</style>
+
+      {/* Content layer sits above background image */}
+      <div style={{ position: 'relative', zIndex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
       {/* Header glow band */}
       <div style={{
@@ -326,6 +342,7 @@ export default function SessionComplete() {
       }}>
         SmokeCraft 360 · Passport Logged
       </p>
+      </div>{/* end content layer */}
     </div>
   )
 }

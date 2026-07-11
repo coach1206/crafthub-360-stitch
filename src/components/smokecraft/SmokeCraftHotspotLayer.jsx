@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { hapticTap } from '../../utils/scTouch.js'
 
 /**
  * Renders percentage-based tap/click targets over a full-viewport asset screen.
@@ -176,9 +177,7 @@ function loadingLabel(label = '') {
   return 'Loading...'
 }
 
-function hapticTap(ms = 12) {
-  try { navigator.vibrate?.(ms) } catch (_) { /* unsupported */ }
-}
+// hapticTap is imported from scTouch.js (wraps triggerHaptic from haptics.js)
 
 function useHotspotInteraction(h, navigate, interactionDebug) {
   const [phase, setPhase] = useState('idle')
@@ -191,7 +190,7 @@ function useHotspotInteraction(h, navigate, interactionDebug) {
     navigatedRef.current = false
     pointerDownTimeRef.current = Date.now()
     setPhase('pressed')
-    hapticTap(12)
+    hapticTap('light')
 
     if (interactionDebug) {
       console.log('[SC Interaction] pointerdown', { label: h.label, target: h.to, ts: pointerDownTimeRef.current }) // eslint-disable-line no-console
@@ -231,7 +230,7 @@ function useHotspotInteraction(h, navigate, interactionDebug) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       setPhase('pressed')
-      hapticTap(10)
+      hapticTap('light')
     }
   }, [])
 
@@ -325,7 +324,7 @@ function HotspotButton({ h, navigate, debug, interactionDebug }) {
   )
 }
 
-export default function SmokeCraftHotspotLayer({ hotspots = [], route = '' }) {
+export default function SmokeCraftHotspotLayer({ hotspots = [], route = '', imageBounds = null }) {
   const navigate = useNavigate()
 
   if (typeof window !== 'undefined') ensureAnimStyles()
@@ -351,24 +350,32 @@ export default function SmokeCraftHotspotLayer({ hotspots = [], route = '' }) {
     })
   }
 
-  return (
-    <div
-      aria-hidden={hotspots.every(h => h.disabled)}
-      style={{
-        /*
-         * position:absolute (not fixed) — sized relative to the parent
-         * inline-block image container inside SmokeCraftAssetScreen.
-         * Hotspot x/y/width/height percentages are image-relative,
-         * not viewport-relative. Fixes misplaced pill bug on portrait
-         * images displayed on landscape viewports.
-         */
+  // When imageBounds is provided (from ResizeObserver in SmokeCraftAssetRoute),
+  // position the overlay exactly over the rendered image rect to keep hotspot
+  // % coordinates aligned after object-fit:contain letterboxing.
+  const overlayStyle = imageBounds
+    ? {
+        position: 'absolute',
+        left: imageBounds.left,
+        top: imageBounds.top,
+        width: imageBounds.width,
+        height: imageBounds.height,
+        pointerEvents: 'none',
+        zIndex: 10,
+      }
+    : {
         position: 'absolute',
         inset: 0,
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
         zIndex: 10,
-      }}
+      }
+
+  return (
+    <div
+      aria-hidden={hotspots.every(h => h.disabled)}
+      style={overlayStyle}
     >
       {hotspots.map((h, i) => {
         if (h.disabled) return null

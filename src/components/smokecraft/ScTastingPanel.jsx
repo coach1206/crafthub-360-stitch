@@ -75,14 +75,14 @@ export default function ScTastingPanel({
               onPointerLeave={notePressState.onUp}
               onPointerCancel={notePressState.onUp}
               style={{
-                padding: '5px 14px', borderRadius: '20px', cursor: 'pointer', touchAction: 'manipulation',
+                padding: '5px 14px', minHeight: 40, borderRadius: '20px', cursor: 'pointer', touchAction: 'manipulation',
                 background: sel ? 'rgba(233,193,118,0.22)' : 'rgba(0,0,0,0.55)',
                 border: sel ? '1px solid rgba(233,193,118,0.8)' : '1px solid rgba(233,193,118,0.25)',
                 color: sel ? 'rgba(233,193,118,0.95)' : 'rgba(233,193,118,0.5)',
                 fontFamily: 'Georgia,serif', fontSize: 'clamp(8px,1vw,10px)', letterSpacing: '0.1em',
                 textTransform: 'uppercase', fontWeight: sel ? 600 : 400,
                 backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
-                outline: 'none', WebkitTapHighlightColor: 'transparent',
+                outline: 'none', WebkitTapHighlightColor: 'transparent', userSelect: 'none',
                 transform: isPressed ? 'scale(0.91)' : 'scale(1)',
                 boxShadow: isPressed ? '0 0 0 3px rgba(233,193,118,0.35), 0 0 12px rgba(233,193,118,0.18)' : sel ? '0 0 6px rgba(233,193,118,0.15)' : 'none',
                 transition: isPressed ? 'transform 0.05s ease' : 'transform 0.22s cubic-bezier(0.34,1.56,0.64,1), background 0.14s, border-color 0.14s, color 0.14s, box-shadow 0.14s',
@@ -112,12 +112,12 @@ export default function ScTastingPanel({
                 onPointerLeave={ratingPressState.onUp}
                 onPointerCancel={ratingPressState.onUp}
                 style={{
-                  width: 42, height: 42, borderRadius: '50%', cursor: 'pointer', touchAction: 'manipulation',
+                  width: 44, height: 44, borderRadius: '50%', cursor: 'pointer', touchAction: 'manipulation',
                   background: isSel ? 'rgba(233,193,118,0.9)' : 'rgba(0,0,0,0.55)',
                   border: isSel ? 'none' : '1px solid rgba(233,193,118,0.3)',
                   color: isSel ? '#0a0603' : 'rgba(233,193,118,0.6)',
                   fontFamily: 'Georgia,serif', fontSize: '13px', fontWeight: 700,
-                  outline: 'none', WebkitTapHighlightColor: 'transparent',
+                  outline: 'none', WebkitTapHighlightColor: 'transparent', userSelect: 'none',
                   transform: isPressed ? 'scale(0.88)' : isSel ? 'scale(1.06)' : 'scale(1)',
                   boxShadow: isPressed ? '0 0 0 3px rgba(233,193,118,0.4)' : isSel ? '0 0 12px rgba(233,193,118,0.4)' : 'none',
                   transition: isPressed ? 'transform 0.05s ease' : 'transform 0.22s cubic-bezier(0.34,1.56,0.64,1), background 0.14s, box-shadow 0.14s',
@@ -138,12 +138,12 @@ export default function ScTastingPanel({
         onPointerLeave={() => setCtaPressed(false)}
         onPointerCancel={() => setCtaPressed(false)}
         style={{
-          width: '80%', padding: '3.5% 0',
+          width: '80%', padding: '3.5% 0', minHeight: 72,
           background: canContinue ? 'linear-gradient(135deg,rgba(233,193,118,.28),rgba(201,168,76,.18))' : 'rgba(0,0,0,0.4)',
           border: canContinue ? '1.5px solid rgba(233,193,118,0.75)' : '1.5px solid rgba(233,193,118,0.18)',
           borderRadius: '12px', cursor: canContinue ? 'pointer' : 'not-allowed', pointerEvents: 'auto',
           touchAction: 'manipulation', opacity: canContinue ? 1 : 0.45, backdropFilter: 'blur(6px)',
-          WebkitBackdropFilter: 'blur(6px)', outline: 'none', WebkitTapHighlightColor: 'transparent',
+          WebkitBackdropFilter: 'blur(6px)', outline: 'none', WebkitTapHighlightColor: 'transparent', userSelect: 'none',
           transform: ctaPressed ? 'scale(0.95)' : 'scale(1)',
           boxShadow: ctaPressed ? '0 0 0 3px rgba(233,193,118,0.4)' : 'none',
           transition: ctaPressed ? 'transform 0.06s ease' : 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1), all 0.15s ease',

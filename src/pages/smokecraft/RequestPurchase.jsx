@@ -75,14 +75,14 @@ export default function RequestPurchase() {
                 onPointerLeave={onUp}
                 onPointerCancel={onUp}
                 style={{
-                  flex: '1 1 0', maxWidth: '44%', padding: '5% 4%',
+                  flex: '1 1 0', maxWidth: '44%', padding: '5% 4%', minHeight: 88,
                   background: isSel ? 'linear-gradient(135deg,rgba(233,193,118,.22),rgba(201,168,76,.12))' : 'rgba(0,0,0,0.55)',
                   border: isSel ? '1.5px solid rgba(233,193,118,0.8)' : '1.5px solid rgba(233,193,118,0.2)',
                   borderRadius: '14px', cursor: 'pointer', touchAction: 'manipulation',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
                   backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
                   animation: isSel ? 'sc-rp-glow 2.4s ease-in-out infinite' : 'none',
-                  outline: 'none', WebkitTapHighlightColor: 'transparent',
+                  outline: 'none', WebkitTapHighlightColor: 'transparent', userSelect: 'none',
                   transform: isPressed ? 'scale(0.93)' : 'scale(1)',
                   boxShadow: isPressed ? '0 0 0 3px rgba(233,193,118,0.3)' : isSel ? '0 0 0 3px rgba(233,193,118,0.15)' : 'none',
                   transition: isPressed ? 'transform 0.06s ease, box-shadow 0.06s ease' : 'transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s ease, background 0.15s, border-color 0.15s',
@@ -118,13 +118,13 @@ export default function RequestPurchase() {
           onPointerLeave={() => setContinuePressing(false)}
           onPointerCancel={() => setContinuePressing(false)}
           style={{
-            width: '80%', padding: '3.5% 0',
+            width: '80%', padding: '3.5% 0', minHeight: 72,
             background: selected ? 'linear-gradient(135deg,rgba(233,193,118,.28),rgba(201,168,76,.18))' : 'rgba(0,0,0,0.4)',
             border: selected ? '1.5px solid rgba(233,193,118,0.75)' : '1.5px solid rgba(233,193,118,0.18)',
             borderRadius: '12px', cursor: selected ? 'pointer' : 'not-allowed', pointerEvents: 'auto',
             touchAction: 'manipulation', opacity: selected ? 1 : 0.45, backdropFilter: 'blur(6px)',
             WebkitBackdropFilter: 'blur(6px)', transition: continuePressing ? 'transform 0.06s ease' : 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1), all 0.15s ease', outline: 'none',
-            WebkitTapHighlightColor: 'transparent',
+            WebkitTapHighlightColor: 'transparent', userSelect: 'none',
             transform: continuePressing ? 'scale(0.95)' : 'scale(1)',
             boxShadow: continuePressing ? '0 0 0 3px rgba(233,193,118,0.35)' : 'none',
           }}>

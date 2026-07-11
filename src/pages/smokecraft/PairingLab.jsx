@@ -21,7 +21,7 @@ export default function PairingLab() {
 
   return (
     <SmokeCraftAssetRoute
-      src="/assets/smokecraft-reference/approved/smokecraft-pairing-lab.png"
+      src="/assets/smokecraft-reference/approved/batch-22/pairing lab hotspot.png"
       alt="Pairing Lab"
       hotspots={HOTSPOTS}
       route="/smokecraft/pairing-lab"

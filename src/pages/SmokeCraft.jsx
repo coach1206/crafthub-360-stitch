@@ -26,50 +26,93 @@ export default function SmokeCraft() {
   // container bottom, so the lower portion of the image (where CTAs live)
   // is always fully visible. Enable debug mode to verify alignment:
   //   sessionStorage.setItem('smokecraft_hotspot_debug', '1')
+  // Hotspot positions calibrated to PROFILE DISCOVER 11.png (1456×816 landscape).
+  // Enable debug to verify zones: sessionStorage.setItem('smokecraft_hotspot_debug','1')
   const HOTSPOTS = [
-    // Primary journey CTA — large tap zone at lower image area
+    // ── Left column — primary CTAs ──────────────────────────────────────────────
+    // Gold CTA: "START YOUR SMOKECRAFT SESSION >"
     {
       label: 'Start New SmokeCraft Session',
-      x: 5, y: 66, width: 90, height: 21,
+      x: 4, y: 56, width: 32, height: 8,
       to: '/smokecraft/identity',
     },
-    // Secondary CTA — clearly above primary, no vertical overlap
-    {
-      label: 'Continue Previous Session',
-      x: 5, y: 50, width: 90, height: 14,
-      onClick: continueSession,
-    },
-    // Third-row icon buttons
-    {
-      label: 'Browse Humidor',
-      x: 5, y: 34, width: 42, height: 13,
-      to: '/smokecraft/humidor-match',
-    },
-    {
-      label: 'View My Passport',
-      x: 53, y: 34, width: 42, height: 13,
-      to: '/smokecraft/passport-stamp',
-    },
-    // Top-row icon buttons
+    // Icon row: "HOW IT WORKS"
     {
       label: 'How It Works',
-      x: 5, y: 20, width: 42, height: 12,
+      x: 4, y: 66, width: 14, height: 7,
       to: '/smokecraft/how-it-works',
     },
+    // Icon row: "ENTER CHALLENGE"
     {
-      label: 'Demo Experience',
-      x: 53, y: 20, width: 42, height: 12,
-      to: '/smokecraft/golden-box',
+      label: 'Enter Event Challenge',
+      x: 19, y: 66, width: 14, height: 7,
+      to: '/smokecraft/event-challenge',
+    },
+    // Dark CTA: "CONTINUE PREVIOUS SESSION"
+    {
+      label: 'Continue Previous Session',
+      x: 4, y: 74, width: 27, height: 7,
+      onClick: continueSession,
+    },
+
+    // ── Right column — 360 Passport card ────────────────────────────────────────
+    // Passport card body (tap anywhere on card)
+    {
+      label: 'View My Passport',
+      x: 49, y: 7, width: 50, height: 43,
+      to: '/smokecraft/passport-stamp',
+    },
+    // "VIEW PASSPORT >" link
+    {
+      label: 'View Passport',
+      x: 56, y: 34, width: 14, height: 6,
+      to: '/smokecraft/passport-stamp',
+    },
+
+    // ── Right column — Tonight's Featured Pairing card ──────────────────────────
+    // Pairing card body
+    {
+      label: 'Explore Pairing',
+      x: 49, y: 52, width: 50, height: 35,
+      to: '/smokecraft/humidor-match',
+    },
+    // "EXPLORE PAIRING >" link
+    {
+      label: 'Explore Pairing',
+      x: 56, y: 75, width: 14, height: 6,
+      to: '/smokecraft/humidor-match',
+    },
+
+    // ── Image bottom nav bar (y 88–100%) — mirrors app SmokeCraftBottomNav ──────
+    {
+      label: 'SmokeCraft — Current Journey',
+      x: 0, y: 88, width: 26, height: 12,
+      to: '/smokecraft',
+    },
+    {
+      label: 'Rewards — Earn. Unlock. Enjoy.',
+      x: 26, y: 88, width: 24, height: 12,
+      to: '/smokecraft/leaderboard',
+    },
+    {
+      label: 'Passport — Track Your Journey',
+      x: 50, y: 88, width: 25, height: 12,
+      to: '/passport-connection',
+    },
+    {
+      label: 'CraftHub — Explore. Learn. Connect.',
+      x: 75, y: 88, width: 25, height: 12,
+      to: '/crafthub',
     },
   ]
 
   return (
     <SmokeCraftAssetRoute
-      src="/assets/smokecraft-reference/approved/smokecraft-landing.png"
-      alt="SmokeCraft"
+      src="/PROFILE DISCOVER 11.png"
+      alt="SmokeCraft — Discover Your Cigar Profile"
       hotspots={HOTSPOTS}
       route="/smokecraft"
-      objectPosition="center bottom"
+      objectPosition="center center"
     />
   )
 }
