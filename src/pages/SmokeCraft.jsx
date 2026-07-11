@@ -46,7 +46,7 @@ export default function SmokeCraft() {
     {
       label: 'Enter Event Challenge',
       x: 19, y: 66, width: 14, height: 7,
-      to: '/smokecraft/identity',
+      to: '/smokecraft/event-challenge',
     },
     // Dark CTA: "CONTINUE PREVIOUS SESSION"
     {
