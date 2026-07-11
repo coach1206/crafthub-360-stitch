@@ -1,28 +1,96 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
+import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
+
+const GOLD = '#E9C176'
+const DARK = '#0a0603'
+
+const PAIRING_TYPES = [
+  'Whiskey', 'Rum', 'Cognac', 'Coffee', 'Red Wine', 'Dark Chocolate', 'Craft Beer',
+]
 
 export default function PairingLab() {
   const { awardSessionRewards } = useGuestSession()
+  const navigate = useNavigate()
+  const [selectedPairings, setSelectedPairings] = useState([])
 
-  const HOTSPOTS = [
-    {
-      label: 'Continue to Visit Complete',
-      x: 10, y: 75, width: 80, height: 20,
-      onClick: () => { triggerHaptic('medium'); awardSessionRewards('pairing-lab') },
-      to: '/smokecraft/visit-complete',
-    },
-  ]
+  function togglePairing(p) {
+    triggerHaptic('light')
+    setSelectedPairings(prev =>
+      prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p]
+    )
+  }
+
+  function handleContinue() {
+    awardSessionRewards('pairing-lab')
+    navigate('/smokecraft/visit-complete')
+  }
 
   return (
     <>
-      <SmokeCraftAssetRoute
-        src="/assets/smokecraft-reference/approved/smokecraft-pairing-lab.png"
-        alt="Pairing Lab"
-        hotspots={HOTSPOTS}
-        route="/smokecraft/pairing-lab"
+      <SmokeCraftAssetScreen
+        src="/assets/smokecraft/PAIRING%20LAB1.png"
+        alt="SmokeCraft Pairing Lab — Build Your Pairing Profile"
       />
+
+      {/* Pairing type selector — real React chips */}
+      <div style={{
+        position: 'fixed',
+        bottom: 110, left: 0, right: 0,
+        zIndex: 400,
+        padding: '0 16px',
+        pointerEvents: 'none',
+      }}>
+        <div style={{
+          pointerEvents: 'auto',
+          background: 'rgba(10,6,3,0.94)',
+          border: '1px solid rgba(233,193,118,0.2)',
+          borderRadius: 12,
+          padding: '10px 12px',
+          maxWidth: 500,
+          margin: '0 auto',
+        }}>
+          <div style={{ fontSize: 10, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>
+            Pairing Type
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {PAIRING_TYPES.map(p => {
+              const active = selectedPairings.includes(p)
+              return (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => togglePairing(p)}
+                  style={{
+                    background: active ? GOLD : 'transparent',
+                    color: active ? DARK : GOLD,
+                    border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.4)'}`,
+                    borderRadius: 20,
+                    padding: '5px 13px',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    fontFamily: 'Georgia, serif',
+                    cursor: 'pointer',
+                    letterSpacing: '0.04em',
+                  }}
+                >
+                  {p}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      <SmokeCraftNavBar
+        primary="Continue — Visit 2 Complete →"
+        onPrimary={handleContinue}
+      />
+
       <SmokeCraftMenuButton label="Order Pairing" />
     </>
   )

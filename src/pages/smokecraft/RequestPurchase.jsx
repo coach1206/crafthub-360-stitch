@@ -2,22 +2,30 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
+import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
 import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
 import VenueMenuOverlay from '../../components/venue/VenueMenuOverlay.jsx'
 import { createPOS360OrderIntent, writePOS360AuditEvent } from '../../services/smokecraftHandoffService.js'
 
 const GOLD = '#E9C176'
+const DARK = '#0a0603'
+
+const ORDER_PATHS = [
+  { id: 'self', label: 'Self-Order', desc: 'Order directly through the app' },
+  { id: 'staff', label: 'Request Staff Assistance', desc: 'A team member will assist you' },
+]
 
 export default function RequestPurchase() {
   const { awardSessionRewards, session } = useGuestSession()
   const { setResumeRoute } = useSmokeCraftOrder()
+  const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [orderPath, setOrderPath] = useState(null)
   const [activePromotions, setActivePromotions] = useState([])
 
   useEffect(() => {
-    // Fire-and-forget — fetch active Ticket Tapper promotions from backend for reference
     fetch('/api/ticket-tapper/promotions/smokecraft/active?venueId=novee-grand-lounge')
       .then(r => r.ok ? r.json() : null)
       .then(json => {
@@ -29,81 +37,138 @@ export default function RequestPurchase() {
   }, [])
 
   function onOrderPairingTap() {
-    triggerHaptic('medium')
     setResumeRoute('/smokecraft/request-purchase')
-    // Fire-and-forget POS360 order intent — never blocks guest screen
     ;(async () => {
       try {
         const result = await createPOS360OrderIntent({
-          venueId:     'novee-grand-lounge',
-          guestId:     session?.sessionId || null,
+          venueId: 'novee-grand-lounge',
+          guestId: session?.sessionId || null,
           orderSource: 'smokecraft',
-          orderType:   'cigar_request',
+          orderType: 'cigar_request',
           orderPayload: { resumeRoute: '/smokecraft/request-purchase' },
         })
         if (result?.backendConnected) {
           await writePOS360AuditEvent({
-            venueId:        'novee-grand-lounge',
-            guestId:        session?.sessionId || null,
-            orderIntentId:  result?.orderIntent?.order_intent_id || null,
-            eventType:      'order_intent_created',
-            syncStatus:     'ok',
+            venueId: 'novee-grand-lounge',
+            guestId: session?.sessionId || null,
+            orderIntentId: result?.orderIntent?.order_intent_id || null,
+            eventType: 'order_intent_created',
+            syncStatus: 'ok',
             backendConnected: true,
-            summary:        'Guest initiated purchase / pairing request from SmokeCraft',
+            summary: 'Guest initiated purchase / pairing request from SmokeCraft',
           })
         }
-      } catch {
-        // backend failure must never surface to guest
-      }
+      } catch {}
     })()
+    setMenuOpen(true)
   }
 
-  const HOTSPOTS = [
-    {
-      label: 'Order Pairing / Request Purchase',
-      x: 10, y: 60, width: 80, height: 18,
-      onClick: onOrderPairingTap,
-      to: '/smokecraft/menu',
-    },
-    {
-      label: 'Continue to Cut Toast Light',
-      x: 10, y: 80, width: 80, height: 15,
-      onClick: () => { triggerHaptic('medium'); awardSessionRewards('request-purchase') },
-      to: '/smokecraft/cut-toast-light',
-    },
-  ]
+  function handleContinue() {
+    awardSessionRewards('request-purchase')
+    navigate('/smokecraft/cut-toast-light')
+  }
 
   return (
     <>
-      <SmokeCraftAssetRoute
-        src="/assets/smokecraft-reference/approved/smokecraft-request-purchase.png"
-        alt="Request Purchase"
-        hotspots={HOTSPOTS}
-        route="/smokecraft/request-purchase"
+      <SmokeCraftAssetScreen
+        src="/assets/smokecraft/REQUEST%20PURCHASE.png"
+        alt="SmokeCraft Request Purchase — Choose Your Ordering Path"
       />
-      <SmokeCraftMenuButton label="Order Pairing" />
 
-      {/* Venue menu entry — floating bottom bar */}
+      {/* Ordering path selector + venue menu button */}
       <div style={{
-        position: 'fixed', bottom: 72, left: 0, right: 0,
-        display: 'flex', justifyContent: 'center', zIndex: 300, pointerEvents: 'none',
+        position: 'fixed',
+        bottom: 110, left: 0, right: 0,
+        zIndex: 400,
+        padding: '0 16px',
+        pointerEvents: 'none',
       }}>
-        <button
-          type="button"
-          onClick={() => { triggerHaptic('medium'); setMenuOpen(true) }}
-          style={{
-            pointerEvents: 'auto',
-            background: GOLD, color: '#0a0603',
-            border: 'none', borderRadius: 28,
-            padding: '13px 28px', fontSize: 14, fontWeight: 700,
-            fontFamily: 'Georgia, serif', letterSpacing: '0.08em',
-            boxShadow: '0 6px 24px rgba(0,0,0,0.45)',
-            cursor: 'pointer',
-          }}
-        >
-          View Venue Menu &amp; Order
-        </button>
+        <div style={{
+          pointerEvents: 'auto',
+          background: 'rgba(10,6,3,0.94)',
+          border: '1px solid rgba(233,193,118,0.2)',
+          borderRadius: 12,
+          padding: '10px 12px',
+          maxWidth: 500,
+          margin: '0 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+        }}>
+          {/* Ordering path */}
+          <div style={{ fontSize: 10, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>
+            Choose Ordering Path
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {ORDER_PATHS.map(p => {
+              const active = orderPath === p.id
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => { triggerHaptic('light'); setOrderPath(active ? null : p.id) }}
+                  style={{
+                    flex: 1,
+                    background: active ? GOLD : 'transparent',
+                    color: active ? DARK : GOLD,
+                    border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.35)'}`,
+                    borderRadius: 10,
+                    padding: '8px 10px',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    fontFamily: 'Georgia, serif',
+                    cursor: 'pointer',
+                    textAlign: 'center',
+                  }}
+                >
+                  {p.label}
+                </button>
+              )
+            })}
+          </div>
+
+          {/* View Venue Menu — real button */}
+          <button
+            type="button"
+            onClick={onOrderPairingTap}
+            style={{
+              background: 'transparent',
+              color: GOLD,
+              border: `1px solid rgba(233,193,118,0.4)`,
+              borderRadius: 20,
+              padding: '9px 20px',
+              fontSize: 13,
+              fontWeight: 700,
+              fontFamily: 'Georgia, serif',
+              letterSpacing: '0.06em',
+              cursor: 'pointer',
+            }}
+          >
+            View Venue Menu &amp; Order
+          </button>
+
+          {/* Active promotions from backend */}
+          {activePromotions.length > 0 && (
+            <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', paddingTop: 6 }}>
+              <div style={{ fontSize: 9, color: GOLD, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 3 }}>
+                Tonight's Specials
+              </div>
+              {activePromotions.slice(0, 2).map(p => (
+                <div key={p.promotion_id} style={{ fontSize: 11, color: '#E5E2E1' }}>
+                  {p.title}{p.special_price ? ` — $${parseFloat(p.special_price).toFixed(2)}` : ''}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
+      <SmokeCraftNavBar
+        primary="Continue to Cut, Toast & Light →"
+        onPrimary={handleContinue}
+      />
+
+      <SmokeCraftMenuButton label="Order Pairing" />
 
       <VenueMenuOverlay
         open={menuOpen}
@@ -112,22 +177,6 @@ export default function RequestPurchase() {
         tableNumber="SmokeCraft"
         source="customer_self_order"
       />
-
-      {/* Active Ticket Tapper promotions from backend — reference only, no payment */}
-      {activePromotions.length > 0 && (
-        <div style={{ position: 'fixed', bottom: 130, left: 0, right: 0, zIndex: 200, padding: '0 16px', pointerEvents: 'none' }}>
-          <div style={{ maxWidth: 480, margin: '0 auto', background: 'rgba(10,6,3,0.92)', border: '1px solid rgba(233,193,118,0.18)', borderRadius: 10, padding: '8px 12px' }}>
-            <div style={{ fontSize: 9, color: '#E9C176', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
-              Tonight's Specials
-            </div>
-            {activePromotions.slice(0, 2).map(p => (
-              <div key={p.promotion_id} style={{ fontSize: 11, color: '#E5E2E1', marginBottom: 2 }}>
-                {p.title}{p.special_price ? ` — $${parseFloat(p.special_price).toFixed(2)}` : ''}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </>
   )
 }

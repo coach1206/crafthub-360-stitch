@@ -1,0 +1,562 @@
+{
+  "passed": 12,
+  "total": 12,
+  "results": [
+    {
+      "route": "/smokecraft/identity",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/identity",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/IDENTY.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/golden-box",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/golden-box",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/GOLDEN%20BOX%20RULES.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/mentor-selection",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/mentor-selection",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/MENTOR%20SELECTION1.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/visit-complete (nav click skipped — multi-visit route)",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/pairing-lab",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/PAIRING%20LAB1.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/visit-complete (nav click skipped — multi-visit route)",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/seed-soil",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/seed-soil",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/SEED & SOIL.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/pairing-lab",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/request-purchase",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/request-purchase",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/REQUEST%20PURCHASE.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/cut-toast-light",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/cut-toast-light",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/cut-toast-light",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/CUT, TOAST,& LIGHT22.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/first-third",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/first-third",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/FIRST%20%20THIRD1.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/visit-complete (nav click skipped — multi-visit route)",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/second-third",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/second-third",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/SECOND%20THIRD.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/flavor-memory",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/final-review",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/FINAL%20REVIEW.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/passport-stamp",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/management-sync",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/management-sync",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/MANAGEMENT%20SYNC.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/smokecraft/session-complete",
+        "navigationCorrect": true
+      },
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "checks": {
+        "routeLoads": true,
+        "landedAt": "/smokecraft/session-complete",
+        "redesignedImagePresent": true,
+        "imageSrc": "/assets/smokecraft/SESSION%20COMPLETE.png",
+        "realNavButtonPresent": true,
+        "worksWithoutImage": true,
+        "navigationTarget": "/pos3",
+        "navigationCorrect": true
+      },
+      "pass": true
+    }
+  ],
+  "consoleErrors": [
+    {
+      "route": "http://localhost:4173/smokecraft/identity",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/identity",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/identity",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/identity",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/identity",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/golden-box",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/golden-box",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/golden-box",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/golden-box",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/mentor-selection",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/mentor-selection",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/pairing-lab",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/pairing-lab",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/seed-soil",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/seed-soil",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/seed-soil",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/seed-soil",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/request-purchase",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/request-purchase",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/request-purchase",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/request-purchase",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/request-purchase",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/request-purchase",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/request-purchase",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/cut-toast-light",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/cut-toast-light",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/cut-toast-light",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/cut-toast-light",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/first-third",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/first-third",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/second-third",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/second-third",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/second-third",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/second-third",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/final-review",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/final-review",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/final-review",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/management-sync",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    },
+    {
+      "route": "http://localhost:4173/smokecraft/session-complete",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    }
+  ],
+  "failedRequests": [
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/assets/smokecraft/SEED%20&%20SOIL.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/ticket-tapper/promotions/smokecraft/active?venueId=novee-grand-lounge",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/assets/smokecraft/REQUEST%20PURCHASE.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/ticket-tapper/promotions/smokecraft/active?venueId=novee-grand-lounge",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/ticket-tapper/promotions/smokecraft/active?venueId=novee-grand-lounge",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/ticket-tapper/promotions/smokecraft/active?venueId=novee-grand-lounge",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/dayone360/smokecraft/connection",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/dayone360/smokecraft/connection",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/dayone360/smokecraft/connection",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/dayone360/smokecraft/connection",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/dayone360/smokecraft/connection",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/passport-360/smokecraft/audit/event",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/dayone360/smokecraft/connection",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/eat-360/smokecraft/session/sync",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/dayone360/smokecraft/connection",
+      "failure": "net::ERR_ABORTED"
+    }
+  ]
+}

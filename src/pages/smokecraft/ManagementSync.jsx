@@ -1,24 +1,26 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
+import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
 import { getManagementSyncStatus, syncManagement, recordGuestActivity, createManagerAlertSync } from '../../modules/smokecraft/services/smokecraftManagementSyncService.js'
 import { createSmokeCraftDayOneConnection, recordDayOneGuestWorkflowEvent } from '../../services/dayone360SmokeCraftConnectionService.js'
 
 export default function ManagementSync() {
   const { session, awardSessionRewards } = useGuestSession()
+  const navigate = useNavigate()
   const [eatStatus, setEATStatus] = useState(null)
+  const [syncing, setSyncing] = useState(false)
 
   useEffect(() => {
-    // Check E.A.T. backend status and fire management activity sync — fire-and-forget
     ;(async () => {
       try {
         const status = await getManagementSyncStatus(session?.venueId || 'novee-grand-lounge')
         setEATStatus(status)
 
         if (status?.backendConnected) {
-          // Sync management activity record
           const passportId = session?.passport?.passportId || null
           await syncManagement({
             guestId: passportId,
@@ -29,8 +31,6 @@ export default function ManagementSync() {
             tasteProfile: session?.smokeCraft?.tasteProfile || {},
             sessionStatus: 'completed',
           })
-
-          // Record guest activity visible to manager
           await recordGuestActivity({
             guestId: passportId,
             venueId: session?.venueId || null,
@@ -40,8 +40,6 @@ export default function ManagementSync() {
             loyaltySignal: 'medium',
             managerVisibility: true,
           })
-
-          // Create manager visibility alert
           await createManagerAlertSync({
             guestId: passportId,
             venueId: session?.venueId || null,
@@ -50,8 +48,7 @@ export default function ManagementSync() {
             alertMessage: 'SmokeCraft guest approaching session complete. Management sync screen reached.',
           })
         }
-        // DayOne360 internal workflow reference — fire-and-forget, never blocks guest
-        // Does NOT claim live travel/relocation/concierge services
+
         const d1Result = await createSmokeCraftDayOneConnection({
           venueId: session?.venueId || 'novee-grand-lounge',
           guestId: session?.passport?.passportId || null,
@@ -71,25 +68,21 @@ export default function ManagementSync() {
             eventPayload: { milestone: 'management_sync', completedSteps: (session?.completedSteps || []).length },
           }).catch(() => {})
         }
-      } catch {
-        // E.A.T. / DayOne360 sync failure must never surface to guest
-      }
+      } catch {}
     })()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const HOTSPOTS = [
-    {
-      label: 'Complete SmokeCraft',
-      x: 10, y: 75, width: 80, height: 20,
-      onClick: () => { triggerHaptic('medium'); awardSessionRewards('management-sync') },
-      to: '/smokecraft/session-complete',
-    },
-  ]
+  function handleComplete() {
+    setSyncing(true)
+    triggerHaptic('medium')
+    awardSessionRewards('management-sync')
+    navigate('/smokecraft/session-complete')
+  }
 
   return (
     <>
-      {/* E.A.T. sync status — staff/admin only, shown as overlay if backend connected */}
+      {/* E.A.T. backend status indicator — staff-visible, real React state */}
       {eatStatus !== null && (
         <div style={{
           position: 'fixed', top: 8, right: 8, zIndex: 9999,
@@ -105,12 +98,16 @@ export default function ManagementSync() {
         </div>
       )}
 
-      <SmokeCraftAssetRoute
-        src="/assets/smokecraft-reference/approved/smokecraft-venue-management-sync.png"
-        alt="Management Sync"
-        hotspots={HOTSPOTS}
-        route="/smokecraft/management-sync"
+      <SmokeCraftAssetScreen
+        src="/assets/smokecraft/MANAGEMENT%20SYNC.png"
+        alt="SmokeCraft Management Sync — Session Data Synced"
       />
+
+      <SmokeCraftNavBar
+        primary={syncing ? 'Completing…' : 'Complete SmokeCraft Journey →'}
+        onPrimary={handleComplete}
+      />
+
       <SmokeCraftHandoffTrigger allowEAT allowPOS360 />
     </>
   )
