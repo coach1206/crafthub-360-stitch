@@ -27,7 +27,7 @@ export default function PairingLab() {
 
   function handleContinue() {
     awardSessionRewards('pairing-lab')
-    navigate('/smokecraft/visit-complete')
+    navigate('/smokecraft/humidor-match')
   }
 
   return (
@@ -87,7 +87,7 @@ export default function PairingLab() {
       </div>
 
       <SmokeCraftNavBar
-        primary="Continue — Visit 2 Complete →"
+        primary="Continue to Humidor Match →"
         onPrimary={handleContinue}
       />
 

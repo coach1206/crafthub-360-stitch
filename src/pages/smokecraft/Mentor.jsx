@@ -35,7 +35,7 @@ export default function Mentor() {
 
   function handleContinue() {
     awardSessionRewards('mentor')
-    navigate('/smokecraft/visit-complete')
+    navigate('/smokecraft/format')
   }
 
   return (
@@ -95,7 +95,7 @@ export default function Mentor() {
       </div>
 
       <SmokeCraftNavBar
-        primary="Continue — Visit 1 Complete →"
+        primary="Continue to Shape, Size & Burn →"
         onPrimary={handleContinue}
       />
     </>

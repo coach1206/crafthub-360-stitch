@@ -41,7 +41,7 @@ export default function FirstThird() {
       mentorTip: null, mentorName: null,
     })
     awardSessionRewards('first-third')
-    navigate('/smokecraft/visit-complete')
+    navigate('/smokecraft/second-third')
   }
 
   return (
@@ -91,7 +91,7 @@ export default function FirstThird() {
       </div>
 
       <SmokeCraftNavBar
-        primary="Continue — Visit 4 Complete →"
+        primary="Continue to Second Third →"
         onPrimary={handleContinue}
       />
     </>

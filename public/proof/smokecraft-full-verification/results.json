@@ -1,0 +1,282 @@
+{
+  "journeyOrder": [
+    {
+      "label": "identity → golden-box",
+      "from": "/smokecraft/identity",
+      "expected": "/smokecraft/golden-box",
+      "landed": "/smokecraft/golden-box",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "golden-box → mentor-selection",
+      "from": "/smokecraft/golden-box",
+      "expected": "/smokecraft/mentor-selection",
+      "landed": "/smokecraft/mentor-selection",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "mentor-selection → format (S5) ← CORRECTED",
+      "from": "/smokecraft/mentor-selection",
+      "expected": "/smokecraft/format",
+      "landed": "/smokecraft/format",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "seed-soil → pairing-lab",
+      "from": "/smokecraft/seed-soil",
+      "expected": "/smokecraft/pairing-lab",
+      "landed": "/smokecraft/pairing-lab",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "pairing-lab → humidor-match (S9) ← CORRECTED",
+      "from": "/smokecraft/pairing-lab",
+      "expected": "/smokecraft/humidor-match",
+      "landed": "/smokecraft/humidor-match",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "request-purchase → cut-toast-light",
+      "from": "/smokecraft/request-purchase",
+      "expected": "/smokecraft/cut-toast-light",
+      "landed": "/smokecraft/cut-toast-light",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "cut-toast-light → first-third",
+      "from": "/smokecraft/cut-toast-light",
+      "expected": "/smokecraft/first-third",
+      "landed": "/smokecraft/first-third",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "first-third → second-third (S13) ← CORRECTED",
+      "from": "/smokecraft/first-third",
+      "expected": "/smokecraft/second-third",
+      "landed": "/smokecraft/second-third",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "second-third → flavor-memory",
+      "from": "/smokecraft/second-third",
+      "expected": "/smokecraft/flavor-memory",
+      "landed": "/smokecraft/flavor-memory",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "final-review → passport-stamp",
+      "from": "/smokecraft/final-review",
+      "expected": "/smokecraft/passport-stamp",
+      "landed": "/smokecraft/passport-stamp",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "management-sync → session-complete",
+      "from": "/smokecraft/management-sync",
+      "expected": "/smokecraft/session-complete",
+      "landed": "/smokecraft/session-complete",
+      "pass": true,
+      "noVisitComplete": true
+    },
+    {
+      "label": "session-complete → /pos3",
+      "from": "/smokecraft/session-complete",
+      "expected": "/pos3",
+      "landed": "/pos3",
+      "pass": true,
+      "noVisitComplete": true
+    }
+  ],
+  "persistence": [
+    {
+      "screen": "mentor-selection",
+      "action": "chip click",
+      "selected": true
+    },
+    {
+      "screen": "seed-soil",
+      "action": "chip selection",
+      "withinSession": true,
+      "note": "chip state is per-mount UI state (correct — no stale baked data)",
+      "beforeReload": "rgb(233, 193, 118) none repeat scroll 0% 0% / auto padding-box border-box"
+    },
+    {
+      "screen": "golden-box",
+      "action": "awardSessionRewards persists to localStorage",
+      "pass": true
+    }
+  ],
+  "backButton": {
+    "fromMentorContinue": "/smokecraft/format",
+    "afterGoBack": "/smokecraft/mentor-selection",
+    "pass": true
+  },
+  "noVisitComplete": {
+    "violations": [],
+    "pass": true
+  },
+  "managementSync": {
+    "eatStatusDisplayed": true,
+    "eatStatusText": "E.A.T. Local Fallback — Backend Not Connected",
+    "navBtnText": "Complete SmokeCraft Journey →",
+    "pass": true
+  },
+  "sessionComplete": {
+    "navBtnText": "Staff Handoff — Preview",
+    "pass": true
+  },
+  "noStaticHotspots": [
+    {
+      "route": "/smokecraft/mentor-selection",
+      "hasOldHotspots": false,
+      "realNavButtons": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "hasOldHotspots": false,
+      "realNavButtons": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "hasOldHotspots": false,
+      "realNavButtons": 1,
+      "pass": true
+    }
+  ],
+  "worksWithoutImage": [
+    {
+      "route": "/smokecraft/identity",
+      "navBtnsVisible": 2,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "navBtnsVisible": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "navBtnsVisible": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "navBtnsVisible": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/seed-soil",
+      "navBtnsVisible": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/request-purchase",
+      "navBtnsVisible": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/cut-toast-light",
+      "navBtnsVisible": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "navBtnsVisible": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/second-third",
+      "navBtnsVisible": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "navBtnsVisible": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/management-sync",
+      "navBtnsVisible": 1,
+      "pass": true
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "navBtnsVisible": 1,
+      "pass": true
+    }
+  ],
+  "apiResults": {
+    "/api/health": {
+      "status": 200,
+      "ok": true
+    },
+    "/api/auth/me": {
+      "status": 200,
+      "ok": true
+    },
+    "/api/eat-360/smokecraft/health": {
+      "status": 200,
+      "ok": true
+    },
+    "/api/passport-360/smokecraft/session/complete": {
+      "status": 200,
+      "ok": true
+    },
+    "/api/ticket-tapper/promotions/smokecraft/active?venueId=novee-grand-lounge": {
+      "status": 200,
+      "ok": true
+    },
+    "/api/dayone360/smokecraft/connection": {
+      "status": 200,
+      "ok": true
+    },
+    "/api/eat-360/smokecraft/session/sync": {
+      "status": 200,
+      "ok": true
+    },
+    "/api/eat-360/smokecraft/guest-activity": {
+      "status": 200,
+      "ok": true
+    },
+    "/api/eat-360/smokecraft/manager-alert": {
+      "status": 200,
+      "ok": true
+    }
+  },
+  "consoleErrors": {
+    "total": 1,
+    "frontend": [
+      {
+        "url": "http://localhost:4173/smokecraft/identity",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      }
+    ],
+    "network": 0
+  },
+  "failedRequests": [
+    {
+      "url": "http://localhost:4173/fonts/montserrat-400.ttf",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/assets/smokecraft/SEED%20&%20SOIL.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/assets/smokecraft/FINAL%20REVIEW.png",
+      "failure": "net::ERR_ABORTED"
+    }
+  ]
+}
