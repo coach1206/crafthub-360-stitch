@@ -1,0 +1,699 @@
+{
+  "runAt": "2026-07-12T03:12:52.163Z",
+  "total": 115,
+  "pass": 115,
+  "fail": 0,
+  "passRate": "100%",
+  "checks": [
+    {
+      "name": "R01 Route /smokecraft loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:09.919Z"
+    },
+    {
+      "name": "R01 No locked redirect",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:09.919Z"
+    },
+    {
+      "name": "R01 Background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:09.945Z"
+    },
+    {
+      "name": "R01 Image or overlay layer present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:09.950Z"
+    },
+    {
+      "name": "R01 Interactive element present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:09.953Z"
+    },
+    {
+      "name": "R02 Route /smokecraft/enroll loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:10.846Z"
+    },
+    {
+      "name": "R02 Image or interactive element present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:10.862Z"
+    },
+    {
+      "name": "R03 Route /smokecraft/golden-box loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:11.754Z"
+    },
+    {
+      "name": "R03 Background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:11.769Z"
+    },
+    {
+      "name": "R04 Route /smokecraft/mentor-selection loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:12.586Z"
+    },
+    {
+      "name": "R04 Content present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:12.602Z"
+    },
+    {
+      "name": "R05 Route /smokecraft/format loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:13.407Z"
+    },
+    {
+      "name": "R05 Background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:13.422Z"
+    },
+    {
+      "name": "R06 Route /smokecraft/seed-soil loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:14.253Z"
+    },
+    {
+      "name": "R06 Background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:14.267Z"
+    },
+    {
+      "name": "R07 Route /smokecraft/pairing-lab loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:15.070Z"
+    },
+    {
+      "name": "R07 Background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:15.085Z"
+    },
+    {
+      "name": "R07 No fake guest names",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:15.087Z"
+    },
+    {
+      "name": "R08 Route /smokecraft/humidor-match loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:15.887Z"
+    },
+    {
+      "name": "R08 Humidor background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:15.901Z"
+    },
+    {
+      "name": "R09 Route /smokecraft/request-purchase loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:16.687Z"
+    },
+    {
+      "name": "R09 Background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:16.704Z"
+    },
+    {
+      "name": "R10 Route /smokecraft/cut-toast-light loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:17.514Z"
+    },
+    {
+      "name": "R10 cut-toast-light image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:17.528Z"
+    },
+    {
+      "name": "R11 Route /smokecraft/first-third loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:18.343Z"
+    },
+    {
+      "name": "R11 Background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:18.359Z"
+    },
+    {
+      "name": "R11 Image or overlay layer present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:18.362Z"
+    },
+    {
+      "name": "R12 Route /smokecraft/second-third loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:19.180Z"
+    },
+    {
+      "name": "R12 Background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:19.195Z"
+    },
+    {
+      "name": "R13 Route /smokecraft/flavor-memory loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:20.024Z"
+    },
+    {
+      "name": "R13 flavor-memory image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:20.038Z"
+    },
+    {
+      "name": "R13 No baked flavor counts",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:20.041Z"
+    },
+    {
+      "name": "R14 Route /smokecraft/final-third loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:20.837Z"
+    },
+    {
+      "name": "R14 Background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:20.850Z"
+    },
+    {
+      "name": "R15 Route /smokecraft/scorecard loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:21.644Z"
+    },
+    {
+      "name": "R15 Scorecard background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:21.659Z"
+    },
+    {
+      "name": "R15 6 scoring sliders present",
+      "ok": true,
+      "detail": "found 6",
+      "ts": "2026-07-12T03:12:21.661Z"
+    },
+    {
+      "name": "R15 No baked \"87/100\" score",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:21.663Z"
+    },
+    {
+      "name": "R15 No baked \"Excellent Smoke\"",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:21.663Z"
+    },
+    {
+      "name": "R15 cigar-details section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:21.665Z"
+    },
+    {
+      "name": "R15 pairing-summary section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:21.667Z"
+    },
+    {
+      "name": "R15 tasting-summary section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:21.668Z"
+    },
+    {
+      "name": "R15 Score label updates after slider change",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:21.985Z"
+    },
+    {
+      "name": "R15 localStorage persists scorecard after submit",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:23.016Z"
+    },
+    {
+      "name": "R16 Route /smokecraft/final-review loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:23.837Z"
+    },
+    {
+      "name": "R16 final-review image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:23.851Z"
+    },
+    {
+      "name": "R16 Continue button present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:23.853Z"
+    },
+    {
+      "name": "R16 Continue → /smokecraft/passport-stamp",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:24.704Z"
+    },
+    {
+      "name": "R17 Route /smokecraft/passport-stamp loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.505Z"
+    },
+    {
+      "name": "R17 Passport background image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.520Z"
+    },
+    {
+      "name": "R17 Stamp seal SVG present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.521Z"
+    },
+    {
+      "name": "R17 session-summary section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.523Z"
+    },
+    {
+      "name": "R17 cigar-pairing section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.524Z"
+    },
+    {
+      "name": "R17 score-rewards section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.525Z"
+    },
+    {
+      "name": "R17 eligibility section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.526Z"
+    },
+    {
+      "name": "R17 next-unlock section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.527Z"
+    },
+    {
+      "name": "R17 No baked \"13/16 stamps\"",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.529Z"
+    },
+    {
+      "name": "R17 No baked \"EXPLORER\" level",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.529Z"
+    },
+    {
+      "name": "R17 No baked \"+150 XP\"",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.529Z"
+    },
+    {
+      "name": "R17 XP +75 indicator present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:25.529Z"
+    },
+    {
+      "name": "R17 Continue → /smokecraft/connections",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:26.376Z"
+    },
+    {
+      "name": "R17 Back → /smokecraft/final-review",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:27.776Z"
+    },
+    {
+      "name": "R18 Route /smokecraft/connections loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:28.590Z"
+    },
+    {
+      "name": "R18 connections-hero.jpg image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:28.603Z"
+    },
+    {
+      "name": "R18 Gradient mask overlay present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:28.605Z"
+    },
+    {
+      "name": "R18 All 7 action cards present",
+      "ok": true,
+      "detail": "found 7/7",
+      "ts": "2026-07-12T03:12:28.613Z"
+    },
+    {
+      "name": "R18 privacy-note section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:28.615Z"
+    },
+    {
+      "name": "R18 passport360-sync section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:28.616Z"
+    },
+    {
+      "name": "R18 passport-sync section present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:28.617Z"
+    },
+    {
+      "name": "R18 Confirm button appears after selection",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:28.945Z"
+    },
+    {
+      "name": "R18 Back → /smokecraft/passport-stamp",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:29.586Z"
+    },
+    {
+      "name": "R19 Route /smokecraft/management-sync loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:31.138Z"
+    },
+    {
+      "name": "R19 management-sync image present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:31.151Z"
+    },
+    {
+      "name": "R19 Content present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:31.153Z"
+    },
+    {
+      "name": "R20 Route /smokecraft/session-complete loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:31.969Z"
+    },
+    {
+      "name": "R20 Image or interactive element present",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:31.989Z"
+    },
+    {
+      "name": "RSA Route /smokecraft/identity loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:32.807Z"
+    },
+    {
+      "name": "RSB Route /smokecraft/blend loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:33.611Z"
+    },
+    {
+      "name": "RSC Route /smokecraft/menu loads",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:34.500Z"
+    },
+    {
+      "name": "No invisible hotspots — Connections",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:12:35.339Z"
+    },
+    {
+      "name": "No invisible hotspots — PassportStamp",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:12:36.105Z"
+    },
+    {
+      "name": "No invisible hotspots — Scorecard",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:12:36.871Z"
+    },
+    {
+      "name": "No invisible hotspots — FinalReview",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:12:37.637Z"
+    },
+    {
+      "name": "Functional without image — Connections",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:38.428Z"
+    },
+    {
+      "name": "Functional without image — PassportStamp",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:39.203Z"
+    },
+    {
+      "name": "Functional without image — Scorecard",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:39.999Z"
+    },
+    {
+      "name": "Responsive iPhone-SE (375×667) — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:40.788Z"
+    },
+    {
+      "name": "Responsive iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:40.788Z"
+    },
+    {
+      "name": "Responsive iPhone-14 (390×844) — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:41.616Z"
+    },
+    {
+      "name": "Responsive iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:41.616Z"
+    },
+    {
+      "name": "Responsive iPhone-14-Plus (430×932) — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:42.434Z"
+    },
+    {
+      "name": "Responsive iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:42.434Z"
+    },
+    {
+      "name": "Responsive iPad-Mini (768×1024) — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:43.285Z"
+    },
+    {
+      "name": "Responsive iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:43.285Z"
+    },
+    {
+      "name": "Responsive iPad-Pro (1024×1366) — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:44.128Z"
+    },
+    {
+      "name": "Responsive iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:44.128Z"
+    },
+    {
+      "name": "Responsive Desktop-1280 (1280×800) — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:44.985Z"
+    },
+    {
+      "name": "Responsive Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:44.985Z"
+    },
+    {
+      "name": "Truthful status audit — Connections",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:45.832Z"
+    },
+    {
+      "name": "Truthful status audit — ManagementSync",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:46.602Z"
+    },
+    {
+      "name": "Truthful status audit — SessionComplete",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:47.390Z"
+    },
+    {
+      "name": "A11y — no unnamed buttons — Connections",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:12:48.155Z"
+    },
+    {
+      "name": "A11y — images have alt attributes — Connections",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:12:48.156Z"
+    },
+    {
+      "name": "A11y — no unnamed buttons — PassportStamp",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:12:48.919Z"
+    },
+    {
+      "name": "A11y — images have alt attributes — PassportStamp",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:12:48.920Z"
+    },
+    {
+      "name": "A11y — no unnamed buttons — Scorecard",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:12:49.684Z"
+    },
+    {
+      "name": "A11y — images have alt attributes — Scorecard",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:12:49.686Z"
+    },
+    {
+      "name": "API scorecard /labels/all returns ok",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:49.705Z"
+    },
+    {
+      "name": "API scorecard /submit returns ok with scorecardId",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:49.712Z"
+    },
+    {
+      "name": "API passport-stamp /eligibility returns eligible:false for empty",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:49.714Z"
+    },
+    {
+      "name": "API passport-stamp /eligibility returns eligible:true with all steps",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:49.715Z"
+    },
+    {
+      "name": "API connections /status returns ok with actions array",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:49.718Z"
+    },
+    {
+      "name": "API connections /action POST records follow-venue",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:49.721Z"
+    },
+    {
+      "name": "Flow: final-review → passport-stamp",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:51.334Z"
+    },
+    {
+      "name": "Flow: passport-stamp → connections",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:12:52.163Z"
+    }
+  ]
+}
