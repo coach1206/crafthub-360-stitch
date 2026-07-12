@@ -8,31 +8,48 @@ const baseBtn = {
   width: '100%',
   border: 'none',
   borderRadius: 28,
-  padding: '14px 24px',
-  fontSize: 15,
+  padding: '16px 24px',
+  fontSize: 16,
   fontWeight: 700,
   fontFamily: 'Georgia, serif',
-  letterSpacing: '0.08em',
+  letterSpacing: '0.06em',
   textTransform: 'uppercase',
   cursor: 'pointer',
-  pointerEvents: 'auto',
+  touchAction: 'manipulation',
+  WebkitTapHighlightColor: 'transparent',
+  minHeight: 52,
 }
 
 /**
- * Fixed bottom navigation bar — always a real React button, never a transparent hotspot.
- * Screen remains operable when the background image is hidden or fails to load.
+ * Bottom action bar — always real React buttons, never transparent hotspots.
+ * Sits at the bottom of SmokeCraftAppShell or fixed on legacy pages.
  */
-export default function SmokeCraftNavBar({ primary, onPrimary, primaryDisabled, secondary, onSecondary }) {
+export default function SmokeCraftNavBar({
+  primary,
+  onPrimary,
+  primaryDisabled,
+  secondary,
+  onSecondary,
+  fixed = true,
+}) {
+  const wrapper = fixed
+    ? {
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 500,
+      }
+    : {}
+
   return (
     <div
       role="navigation"
       aria-label="Screen navigation"
       style={{
-        position: 'fixed',
-        bottom: 0, left: 0, right: 0,
-        zIndex: 500,
-        padding: '16px 20px 32px',
-        background: 'linear-gradient(to top, rgba(5,5,5,1) 55%, rgba(5,5,5,0))',
+        ...wrapper,
+        padding: '14px 20px max(env(safe-area-inset-bottom, 16px), 20px)',
+        background: 'linear-gradient(to top, rgba(5,5,5,0.97) 60%, rgba(5,5,5,0))',
         display: 'flex',
         flexDirection: 'column',
         gap: 10,
@@ -45,11 +62,12 @@ export default function SmokeCraftNavBar({ primary, onPrimary, primaryDisabled, 
           onClick={() => { triggerHaptic('light'); onSecondary() }}
           style={{
             ...baseBtn,
+            pointerEvents: 'auto',
             background: 'transparent',
             color: GOLD,
-            border: `1px solid ${GOLD}`,
-            padding: '12px 24px',
-            fontSize: 14,
+            border: `1.5px solid ${GOLD}`,
+            fontSize: 15,
+            padding: '14px 24px',
           }}
         >
           {secondary}
@@ -61,9 +79,10 @@ export default function SmokeCraftNavBar({ primary, onPrimary, primaryDisabled, 
         onClick={() => { if (!primaryDisabled) { triggerHaptic('medium'); onPrimary() } }}
         style={{
           ...baseBtn,
-          background: primaryDisabled ? 'rgba(233,193,118,0.25)' : GOLD,
-          color: primaryDisabled ? 'rgba(10,6,3,0.4)' : DARK,
-          boxShadow: primaryDisabled ? 'none' : '0 4px 20px rgba(233,193,118,0.4)',
+          pointerEvents: 'auto',
+          background: primaryDisabled ? 'rgba(233,193,118,0.2)' : GOLD,
+          color: primaryDisabled ? 'rgba(10,6,3,0.35)' : DARK,
+          boxShadow: primaryDisabled ? 'none' : '0 4px 24px rgba(233,193,118,0.45)',
           cursor: primaryDisabled ? 'not-allowed' : 'pointer',
         }}
       >
