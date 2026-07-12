@@ -1,12 +1,6 @@
 /**
  * SmokeCraftAssetScreen — responsive background screen wrapper.
  *
- * All SmokeCraft background images are high-fidelity design mockups containing
- * printed UI chrome (buttons, nav bars, form fields, labels). The dark overlay
- * (rgba 0.72) suppresses printed elements so they do not compete with live React
- * controls, while letting atmospheric image elements (smoke, leather, amber glow,
- * cigar texture) show through.
- *
  * classification controls background rendering:
  *   DECORATIVE_BACKGROUND      — cover; no essential content in image
  *   LIVE_REACT_PAGE_ARTWORK    — cover; all controls/text in React overlays
@@ -46,34 +40,7 @@ export default function SmokeCraftAssetScreen({
         ...fitStyle,
       }}
     >
-      {/* Suppress printed UI chrome in design-mockup images.
-          pointerEvents:none passes all touch/click to React overlays above. */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(5,5,5,0.82)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      {/* Children rendered above the overlay */}
-      {children != null && (
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            flex: 1,
-            overflow: 'hidden',
-          }}
-        >
-          {children}
-        </div>
-      )}
+      {children}
     </div>
   )
 }
