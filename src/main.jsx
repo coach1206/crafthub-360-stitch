@@ -10,6 +10,14 @@ import { initSyncQueueRetryTriggers } from './services/syncQueueService.js'
 import './fonts.css'
 import './styles.css'
 
+// Deployment identity — check in browser console: window.__SMOKECRAFT_BUILD__
+window.__SMOKECRAFT_BUILD__ = {
+  commit:  __BUILD_COMMIT__,
+  branch:  __BUILD_BRANCH__,
+  builtAt: __BUILD_TIME__,
+  app:     'SmokeCraft360',
+}
+
 // Flush any sync items queued during a previous offline session
 flushOfflineQueue().catch(() => {})
 
