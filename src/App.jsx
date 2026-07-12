@@ -153,6 +153,7 @@ import SmokeCraftPaymentSuccess from './pages/smokecraft/SmokeCraftPaymentSucces
 import SmokeCraftOrderStatus   from './pages/smokecraft/SmokeCraftOrderStatus.jsx'
 import VisitComplete        from './pages/smokecraft/VisitComplete.jsx'
 import HowItWorks       from './pages/smokecraft/HowItWorks.jsx'
+import SmokeCraftDemoReset from './components/smokecraft/SmokeCraftDemoReset.jsx'
 import GuestPass        from './pages/smokecraft/GuestPass.jsx'
 import Demo             from './pages/smokecraft/Demo.jsx'
 import Scan             from './pages/smokecraft/Scan.jsx'
@@ -419,6 +420,7 @@ export default function App() {
                 <Route path="leaderboard"    element={<Leaderboard />} />
                 <Route path="event-challenge"  element={<EventChallenge />} />
                 <Route path="how-it-works"     element={<HowItWorks />} />
+                <Route path="demo-reset"       element={<SmokeCraftDemoReset />} />
                 <Route path="session/start"    element={<Navigate to="/smokecraft/enroll" replace />} />
                 <Route path="guest-pass"       element={<GuestPass />} />
                 <Route path="demo"             element={<Demo />} />
