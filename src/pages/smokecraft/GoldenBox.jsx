@@ -46,7 +46,7 @@ export default function GoldenBox() {
           cursor: 'pointer',
           color: GOLD,
           fontFamily: 'Georgia, serif',
-          fontSize: 13,
+          fontSize: 16,
           letterSpacing: '0.05em',
         }}>
           <input

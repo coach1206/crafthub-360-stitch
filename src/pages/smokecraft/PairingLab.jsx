@@ -54,7 +54,7 @@ export default function PairingLab() {
           maxWidth: 500,
           margin: '0 auto',
         }}>
-          <div style={{ fontSize: 10, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>
+          <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>
             Pairing Type
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -70,9 +70,9 @@ export default function PairingLab() {
                     color: active ? DARK : GOLD,
                     border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.4)'}`,
                     borderRadius: 20,
-                    padding: '11px 14px',
+                    padding: '11px 16px',
                     minHeight: 44,
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: 600,
                     fontFamily: 'Georgia, serif',
                     cursor: 'pointer',

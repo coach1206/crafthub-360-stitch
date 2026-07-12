@@ -14,7 +14,7 @@ const SOIL_TYPES = ['Sandy Loam', 'Clay Loam', 'Volcanic', 'Limestone']
 function ChipGroup({ label, options, value, onChange }) {
   return (
     <div style={{ marginBottom: 8 }}>
-      <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
+      <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
         {label}
       </div>
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -30,9 +30,9 @@ function ChipGroup({ label, options, value, onChange }) {
                 color: active ? DARK : GOLD,
                 border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.4)'}`,
                 borderRadius: 20,
-                padding: '11px 14px',
+                padding: '11px 16px',
                 minHeight: 44,
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: 600,
                 fontFamily: 'Georgia, serif',
                 cursor: 'pointer',

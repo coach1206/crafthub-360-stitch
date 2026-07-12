@@ -60,7 +60,7 @@ export default function SmokeCraft() {
           margin: '0 auto',
         }}>
           <div style={{
-            fontSize: 9,
+            fontSize: 11,
             color: GOLD,
             fontWeight: 700,
             letterSpacing: '0.12em',
@@ -81,9 +81,9 @@ export default function SmokeCraft() {
                   color: GOLD,
                   border: '1px solid rgba(233,193,118,0.35)',
                   borderRadius: 20,
-                  padding: '11px 14px',
+                  padding: '11px 16px',
                   minHeight: 44,
-                  fontSize: 11,
+                  fontSize: 14,
                   fontWeight: 600,
                   fontFamily: 'Georgia, serif',
                   cursor: 'pointer',

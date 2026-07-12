@@ -69,21 +69,21 @@ export default function SecondThird() {
           maxWidth: 500,
           margin: '0 auto',
         }}>
-          <div style={{ fontSize: 10, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
+          <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
             Second Third Observations
           </div>
           {OBSERVATIONS.map(obs => (
             <label key={obs} style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              marginBottom: 6, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 10,
+              marginBottom: 8, cursor: 'pointer', minHeight: 44,
               color: checked.includes(obs) ? GOLD : 'rgba(229,226,225,0.7)',
-              fontSize: 12, fontFamily: 'Georgia, serif',
+              fontSize: 16, fontFamily: 'Georgia, serif',
             }}>
               <input
                 type="checkbox"
                 checked={checked.includes(obs)}
                 onChange={() => toggleItem(obs)}
-                style={{ width: 16, height: 16, accentColor: GOLD, cursor: 'pointer' }}
+                style={{ width: 20, height: 20, accentColor: GOLD, cursor: 'pointer', flexShrink: 0 }}
               />
               {obs}
             </label>

@@ -57,7 +57,7 @@ export default function Format() {
           maxWidth: 500,
           margin: '0 auto',
         }}>
-          <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+          <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
             Choose Your Format
           </div>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -75,9 +75,9 @@ export default function Format() {
                     color: active ? DARK : GOLD,
                     border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.4)'}`,
                     borderRadius: 20,
-                    padding: '11px 14px',
+                    padding: '11px 16px',
                     minHeight: 44,
-                    fontSize: 11,
+                    fontSize: 14,
                     fontWeight: 600,
                     fontFamily: 'Georgia, serif',
                     cursor: 'pointer',
@@ -90,7 +90,7 @@ export default function Format() {
             })}
           </div>
           {selected && (
-            <div style={{ marginTop: 6, fontSize: 11, color: 'rgba(233,193,118,0.7)', fontFamily: 'Georgia, serif' }}>
+            <div style={{ marginTop: 6, fontSize: 14, color: 'rgba(233,193,118,0.7)', fontFamily: 'Georgia, serif' }}>
               {FORMATS.find(f => f.id === selected)?.desc}
             </div>
           )}
