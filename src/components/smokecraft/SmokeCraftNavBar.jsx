@@ -54,6 +54,7 @@ export default function SmokeCraftNavBar({
         flexDirection: 'column',
         gap: 10,
         pointerEvents: 'none',
+        maxWidth: '100%',
       }}
     >
       {secondary && onSecondary && (

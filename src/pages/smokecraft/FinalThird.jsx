@@ -116,13 +116,13 @@ function computePairingResult(pairingLab, selectedFlavors) {
 function ThirdComparison({ label, data }) {
   if (!data || data.status === 'observe_confirm_step' || !data.notesSelected?.length) {
     return (
-      <div style={{ fontSize: 10, color: DIM, fontStyle: 'italic' }}>
+      <div style={{ fontSize: 15, color: DIM, fontStyle: 'italic' }}>
         {label}: No tasting data recorded — only observation was confirmed.
       </div>
     )
   }
   return (
-    <div style={{ fontSize: 10, color: DIM, lineHeight: 1.7 }}>
+    <div style={{ fontSize: 15, color: DIM, lineHeight: 1.7 }}>
       <span style={{ color: GOLD, fontWeight: 600 }}>{label}</span>
       {data.notesSelected.length > 0 && (
         <div>Notes: <span style={{ color: GOLD }}>{data.notesSelected.join(', ')}</span></div>
@@ -149,7 +149,7 @@ function StarRating({ value, onChange }) {
           }}
         >★</button>
       ))}
-      {value && <span style={{ fontSize: 10, color: DIM, marginLeft: 4, alignSelf: 'center' }}>{value}/5</span>}
+      {value && <span style={{ fontSize: 15, color: DIM, marginLeft: 4, alignSelf: 'center' }}>{value}/5</span>}
     </div>
   )
 }
@@ -169,7 +169,7 @@ function ChipRow({ options, value, onChange, dataPrefix }) {
               color: active ? DARK : GOLD,
               border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.28)'}`,
               borderRadius: 20, padding: '10px 12px', minHeight: 44,
-              fontSize: 11, fontWeight: 600, fontFamily: 'Georgia, serif', cursor: 'pointer',
+              fontSize: 15, fontWeight: 600, fontFamily: 'Georgia, serif', cursor: 'pointer',
             }}
           >{opt}</button>
         )
@@ -180,7 +180,7 @@ function ChipRow({ options, value, onChange, dataPrefix }) {
 
 // ── Section label ─────────────────────────────────────────────────────────────
 function SL({ children }) {
-  return <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>{children}</div>
+  return <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>{children}</div>
 }
 function HR() {
   return <div style={{ borderTop: `1px solid ${BORDER}`, margin: '8px 0' }} />
@@ -310,13 +310,13 @@ export default function FinalThird() {
         pointerEvents: 'none',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 500, margin: '0 auto' }}>
-          <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
             Final Third — Session 15
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
-            <span style={{ fontSize: 9, color: DIM }}>Steps: <span style={{ color: GOLD, fontWeight: 700 }}>{stepsCount}</span></span>
-            <span style={{ fontSize: 9, color: DIM }}>XP: <span style={{ color: GOLD, fontWeight: 700 }}>{currentXP}</span>
-              <span style={{ color: 'rgba(233,193,118,0.4)', fontSize: 8 }}> +75</span>
+            <span style={{ fontSize: 15, color: DIM }}>Steps: <span style={{ color: GOLD, fontWeight: 700 }}>{stepsCount}</span></span>
+            <span style={{ fontSize: 15, color: DIM }}>XP: <span style={{ color: GOLD, fontWeight: 700 }}>{currentXP}</span>
+              <span style={{ color: 'rgba(233,193,118,0.4)', fontSize: 10 }}> +75</span>
             </span>
           </div>
         </div>
@@ -350,7 +350,7 @@ export default function FinalThird() {
                     color: active ? '#fffde8' : GOLD,
                     border: `1px solid ${active ? col : 'rgba(233,193,118,0.28)'}`,
                     borderRadius: 20, padding: '10px 12px', minHeight: 44,
-                    fontSize: 11, fontWeight: 600, fontFamily: 'Georgia, serif', cursor: 'pointer',
+                    fontSize: 15, fontWeight: 600, fontFamily: 'Georgia, serif', cursor: 'pointer',
                   }}
                 >{f.label}</button>
               )
@@ -371,7 +371,7 @@ export default function FinalThird() {
                       style={{
                         background: active ? GOLD : 'transparent', color: active ? DARK : GOLD,
                         border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.22)'}`,
-                        borderRadius: 6, padding: '10px 8px', minHeight: 44, fontSize: 10, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
+                        borderRadius: 6, padding: '10px 8px', minHeight: 44, fontSize: 15, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
                       }}
                     >{opt}</button>
                   )
@@ -389,7 +389,7 @@ export default function FinalThird() {
                       style={{
                         background: active ? GOLD : 'transparent', color: active ? DARK : GOLD,
                         border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.22)'}`,
-                        borderRadius: 6, padding: '10px 8px', minHeight: 44, fontSize: 10, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
+                        borderRadius: 6, padding: '10px 8px', minHeight: 44, fontSize: 15, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
                       }}
                     >{opt}</button>
                   )
@@ -407,7 +407,7 @@ export default function FinalThird() {
                       style={{
                         background: active ? GOLD : 'transparent', color: active ? DARK : GOLD,
                         border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.22)'}`,
-                        borderRadius: 6, padding: '10px 8px', minHeight: 44, fontSize: 10, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
+                        borderRadius: 6, padding: '10px 8px', minHeight: 44, fontSize: 15, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
                       }}
                     >{opt}</button>
                   )
@@ -447,19 +447,19 @@ export default function FinalThird() {
               background: 'rgba(0,0,0,0.3)', border: `1px solid ${pairingColor}30`,
               borderRadius: 8, padding: '7px 10px',
             }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: pairingColor, fontFamily: 'Georgia, serif' }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: pairingColor, fontFamily: 'Georgia, serif' }}>
                 {pairingResult.label}
               </div>
-              <div style={{ fontSize: 9, color: DIM, marginTop: 2 }}>
+              <div style={{ fontSize: 15, color: DIM, marginTop: 2 }}>
                 Affinity score: {pairingResult.score}% — calculated from session pairing selections and final flavor notes
               </div>
             </div>
           ) : pairingLabData ? (
-            <div style={{ fontSize: 10, color: DIM, fontStyle: 'italic' }}>
+            <div style={{ fontSize: 15, color: DIM, fontStyle: 'italic' }}>
               Select final flavor notes above to calculate pairing affinity.
             </div>
           ) : (
-            <div style={{ fontSize: 10, color: DIM, fontStyle: 'italic' }}>
+            <div style={{ fontSize: 15, color: DIM, fontStyle: 'italic' }}>
               No pairing data from this session. Complete Pairing Lab to enable this comparison.
             </div>
           )}
@@ -485,14 +485,14 @@ export default function FinalThird() {
             <>
               <HR />
               <SL>Flavor Memory Reference</SL>
-              <div style={{ fontSize: 10, color: DIM }}>
+              <div style={{ fontSize: 15, color: DIM }}>
                 Recorded in Flavor Memory: <span style={{ color: GOLD }}>{flavorMemory.tasteTags.join(', ')}</span>
               </div>
               {ft.selectedFlavors.length > 0 && (() => {
                 const overlap = ft.selectedFlavors.filter(f => flavorMemory.tasteTags.includes(f))
                 return overlap.length > 0
-                  ? <div style={{ fontSize: 10, color: GREEN, marginTop: 2 }}>Recurring in final third: {overlap.join(', ')}</div>
-                  : <div style={{ fontSize: 10, color: DIM, marginTop: 2, fontStyle: 'italic' }}>No overlap with Flavor Memory notes.</div>
+                  ? <div style={{ fontSize: 15, color: GREEN, marginTop: 2 }}>Recurring in final third: {overlap.join(', ')}</div>
+                  : <div style={{ fontSize: 15, color: DIM, marginTop: 2, fontStyle: 'italic' }}>No overlap with Flavor Memory notes.</div>
               })()}
             </>
           )}
@@ -514,7 +514,7 @@ export default function FinalThird() {
               style={{
                 width: '100%', boxSizing: 'border-box',
                 background: 'rgba(255,255,255,0.05)', border: `1px solid ${BORDER}`,
-                borderRadius: 8, color: '#fff', fontSize: 12, padding: '8px 10px',
+                borderRadius: 8, color: '#fff', fontSize: 14, padding: '8px 10px',
                 fontFamily: 'Georgia, serif', resize: 'vertical', marginTop: 4,
               }}
             />
@@ -523,7 +523,7 @@ export default function FinalThird() {
           {/* ── Save status ─────────────────────────── */}
           {saveStatus !== 'idle' && (
             <div style={{
-              fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', marginTop: 8,
+              fontSize: 15, fontWeight: 700, letterSpacing: '0.08em', marginTop: 8,
               padding: '4px 8px', borderRadius: 6, textAlign: 'center',
               color: saveStatus === 'saved' ? GREEN : saveStatus === 'saving' ? GOLD : RED,
               background: saveStatus === 'saved' ? 'rgba(90,219,142,0.08)' : saveStatus === 'saving' ? 'rgba(233,193,118,0.08)' : 'rgba(224,90,90,0.08)',
@@ -536,7 +536,7 @@ export default function FinalThird() {
           )}
 
           {ft.savedAt && saveStatus === 'idle' && (
-            <div style={{ fontSize: 9, color: 'rgba(229,226,225,0.28)', textAlign: 'right', marginTop: 4 }}>
+            <div style={{ fontSize: 15, color: 'rgba(229,226,225,0.28)', textAlign: 'right', marginTop: 4 }}>
               Last saved {new Date(ft.savedAt).toLocaleTimeString()}
             </div>
           )}

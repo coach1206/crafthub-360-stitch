@@ -1,0 +1,1586 @@
+{
+  "suiteName": "e2e-smokecraft-final-root-fix",
+  "runAt": "2026-07-12T19:21:07.676Z",
+  "baseUrl": "http://localhost:5173",
+  "elapsedSeconds": 199.1,
+  "total": 95,
+  "passed": 95,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "blocked": 0,
+  "results": [
+    {
+      "route": "/smokecraft",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/enroll",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/identity",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "WARN: btn at y=2373-2457 vs vh=844",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "N/A",
+        "bg_size_appropriate": "N/A",
+        "golden_box_live_form": "PASS",
+        "golden_box_acknowledgement": "PASS",
+        "golden_box_continue_btn": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/format",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/wrapper-strength",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "N/A",
+        "bg_size_appropriate": "N/A"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/seed-soil",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "N/A",
+        "bg_size_appropriate": "N/A"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "N/A",
+        "bg_size_appropriate": "N/A"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/request-purchase",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/cut-toast-light",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "N/A",
+        "bg_size_appropriate": "N/A"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/second-third",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "N/A",
+        "bg_size_appropriate": "N/A"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/final-third",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "N/A",
+        "bg_size_appropriate": "N/A"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/passport-stamp",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "N/A",
+        "bg_size_appropriate": "N/A"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/connections",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/management-sync",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.; Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
+        "primary_btn_touch_target": "N/A",
+        "primary_btn_visible": "N/A",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/leaderboard",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "N/A",
+        "primary_btn_visible": "N/A",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/event-challenge",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "N/A",
+        "primary_btn_visible": "N/A",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft/how-it-works",
+      "viewport": "structural",
+      "checks": {
+        "renders": "PASS",
+        "no_hotspot_layer": "PASS",
+        "no_duplicate_controls": "PASS",
+        "no_console_errors": "WARN: Failed to load resource: the server responded with a status of 500 (Internal Server Error); Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "primary_btn_touch_target": "PASS",
+        "primary_btn_visible": "PASS",
+        "no_horizontal_overflow": "PASS",
+        "no_broken_images": "PASS",
+        "bg_image_present": "PASS",
+        "bg_size_appropriate": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": null
+    },
+    {
+      "route": "/smokecraft",
+      "viewport": "desktop-1440x900",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-desktop-1440x900.png"
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "viewport": "desktop-1440x900",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "golden_box_principles_present": "PASS",
+        "golden_box_ack_reachable": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-golden-box-desktop-1440x900.png"
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "viewport": "desktop-1440x900",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-mentor-selection-desktop-1440x900.png"
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "desktop-1440x900",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-pairing-lab-desktop-1440x900.png"
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "viewport": "desktop-1440x900",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "WARN: 7 elements below 14px"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-humidor-match-desktop-1440x900.png"
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "viewport": "desktop-1440x900",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-first-third-desktop-1440x900.png"
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "desktop-1440x900",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-flavor-memory-desktop-1440x900.png"
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "viewport": "desktop-1440x900",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-scorecard-desktop-1440x900.png"
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "viewport": "desktop-1440x900",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-final-review-desktop-1440x900.png"
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "viewport": "desktop-1440x900",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-session-complete-desktop-1440x900.png"
+    },
+    {
+      "route": "/smokecraft",
+      "viewport": "tablet-land-1180x820",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-tablet-land-1180x820.png"
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "viewport": "tablet-land-1180x820",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "golden_box_principles_present": "PASS",
+        "golden_box_ack_reachable": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-golden-box-tablet-land-1180x820.png"
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "viewport": "tablet-land-1180x820",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-mentor-selection-tablet-land-1180x820.png"
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "tablet-land-1180x820",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-pairing-lab-tablet-land-1180x820.png"
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "viewport": "tablet-land-1180x820",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "WARN: 7 elements below 14px"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-humidor-match-tablet-land-1180x820.png"
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "viewport": "tablet-land-1180x820",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-first-third-tablet-land-1180x820.png"
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "tablet-land-1180x820",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-flavor-memory-tablet-land-1180x820.png"
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "viewport": "tablet-land-1180x820",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-scorecard-tablet-land-1180x820.png"
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "viewport": "tablet-land-1180x820",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-final-review-tablet-land-1180x820.png"
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "viewport": "tablet-land-1180x820",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-session-complete-tablet-land-1180x820.png"
+    },
+    {
+      "route": "/smokecraft",
+      "viewport": "tablet-land-1024x768",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-tablet-land-1024x768.png"
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "viewport": "tablet-land-1024x768",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "golden_box_principles_present": "PASS",
+        "golden_box_ack_reachable": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-golden-box-tablet-land-1024x768.png"
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "viewport": "tablet-land-1024x768",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-mentor-selection-tablet-land-1024x768.png"
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "tablet-land-1024x768",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-pairing-lab-tablet-land-1024x768.png"
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "viewport": "tablet-land-1024x768",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "WARN: 7 elements below 14px"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-humidor-match-tablet-land-1024x768.png"
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "viewport": "tablet-land-1024x768",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-first-third-tablet-land-1024x768.png"
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "tablet-land-1024x768",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-flavor-memory-tablet-land-1024x768.png"
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "viewport": "tablet-land-1024x768",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-scorecard-tablet-land-1024x768.png"
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "viewport": "tablet-land-1024x768",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-final-review-tablet-land-1024x768.png"
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "viewport": "tablet-land-1024x768",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "tablet_full_width": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-session-complete-tablet-land-1024x768.png"
+    },
+    {
+      "route": "/smokecraft",
+      "viewport": "tablet-port-820x1180",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-tablet-port-820x1180.png"
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "viewport": "tablet-port-820x1180",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "golden_box_principles_present": "PASS",
+        "golden_box_ack_reachable": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-golden-box-tablet-port-820x1180.png"
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "viewport": "tablet-port-820x1180",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-mentor-selection-tablet-port-820x1180.png"
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "tablet-port-820x1180",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-pairing-lab-tablet-port-820x1180.png"
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "viewport": "tablet-port-820x1180",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "typography_interactive": "WARN: 7 elements below 14px"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-humidor-match-tablet-port-820x1180.png"
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "viewport": "tablet-port-820x1180",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-first-third-tablet-port-820x1180.png"
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "tablet-port-820x1180",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-flavor-memory-tablet-port-820x1180.png"
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "viewport": "tablet-port-820x1180",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-scorecard-tablet-port-820x1180.png"
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "viewport": "tablet-port-820x1180",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-final-review-tablet-port-820x1180.png"
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "viewport": "tablet-port-820x1180",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-session-complete-tablet-port-820x1180.png"
+    },
+    {
+      "route": "/smokecraft",
+      "viewport": "tablet-port-768x1024",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-tablet-port-768x1024.png"
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "viewport": "tablet-port-768x1024",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "golden_box_principles_present": "PASS",
+        "golden_box_ack_reachable": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-golden-box-tablet-port-768x1024.png"
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "viewport": "tablet-port-768x1024",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-mentor-selection-tablet-port-768x1024.png"
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "tablet-port-768x1024",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-pairing-lab-tablet-port-768x1024.png"
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "viewport": "tablet-port-768x1024",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "typography_interactive": "WARN: 7 elements below 14px"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-humidor-match-tablet-port-768x1024.png"
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "viewport": "tablet-port-768x1024",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-first-third-tablet-port-768x1024.png"
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "tablet-port-768x1024",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-flavor-memory-tablet-port-768x1024.png"
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "viewport": "tablet-port-768x1024",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-scorecard-tablet-port-768x1024.png"
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "viewport": "tablet-port-768x1024",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-final-review-tablet-port-768x1024.png"
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "viewport": "tablet-port-768x1024",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-session-complete-tablet-port-768x1024.png"
+    },
+    {
+      "route": "/smokecraft",
+      "viewport": "handheld-430x932",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-handheld-430x932.png"
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "viewport": "handheld-430x932",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "golden_box_principles_present": "PASS",
+        "golden_box_ack_reachable": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-golden-box-handheld-430x932.png"
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "viewport": "handheld-430x932",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-mentor-selection-handheld-430x932.png"
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "handheld-430x932",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-pairing-lab-handheld-430x932.png"
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "viewport": "handheld-430x932",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "typography_interactive": "WARN: 7 elements below 14px"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-humidor-match-handheld-430x932.png"
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "viewport": "handheld-430x932",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-first-third-handheld-430x932.png"
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "handheld-430x932",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-flavor-memory-handheld-430x932.png"
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "viewport": "handheld-430x932",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-scorecard-handheld-430x932.png"
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "viewport": "handheld-430x932",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-final-review-handheld-430x932.png"
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "viewport": "handheld-430x932",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-session-complete-handheld-430x932.png"
+    },
+    {
+      "route": "/smokecraft",
+      "viewport": "mobile-390x844",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-mobile-390x844.png"
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "viewport": "mobile-390x844",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "golden_box_principles_present": "PASS",
+        "golden_box_ack_reachable": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-golden-box-mobile-390x844.png"
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "viewport": "mobile-390x844",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-mentor-selection-mobile-390x844.png"
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "mobile-390x844",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-pairing-lab-mobile-390x844.png"
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "viewport": "mobile-390x844",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "typography_interactive": "WARN: 7 elements below 14px"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-humidor-match-mobile-390x844.png"
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "viewport": "mobile-390x844",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-first-third-mobile-390x844.png"
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "mobile-390x844",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "N/A",
+        "bg_rendering": "N/A",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-flavor-memory-mobile-390x844.png"
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "viewport": "mobile-390x844",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-scorecard-mobile-390x844.png"
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "viewport": "mobile-390x844",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-final-review-mobile-390x844.png"
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "viewport": "mobile-390x844",
+      "checks": {
+        "no_horizontal_overflow": "PASS",
+        "primary_btn_reachable": "PASS",
+        "primary_btn_size": "PASS",
+        "bg_size": "PASS",
+        "bg_rendering": "PASS",
+        "typography_interactive": "PASS"
+      },
+      "status": "PASS",
+      "failures": [],
+      "screenshotPath": "public/proof/smokecraft-final-root-fix/screenshots/smokecraft-session-complete-mobile-390x844.png"
+    }
+  ]
+}

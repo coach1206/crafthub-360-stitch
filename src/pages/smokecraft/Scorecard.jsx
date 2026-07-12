@@ -141,12 +141,12 @@ function RatingSlider({ category, value, onChange }) {
         <ScoreRing value={value} />
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: 11, color: GOLD, fontWeight: 700, fontFamily: 'Georgia, serif' }}>{def.label}</span>
-            <span style={{ fontSize: 10, color: value != null ? GOLD : DIM }}>
+            <span style={{ fontSize: 15, color: GOLD, fontWeight: 700, fontFamily: 'Georgia, serif' }}>{def.label}</span>
+            <span style={{ fontSize: 15, color: value != null ? GOLD : DIM }}>
               {value != null ? `${value}/25 (${pct}%)` : 'Not rated'}
             </span>
           </div>
-          <div style={{ fontSize: 9, color: DIM, lineHeight: 1.4, marginTop: 1 }}>{def.desc}</div>
+          <div style={{ fontSize: 15, color: DIM, lineHeight: 1.4, marginTop: 1 }}>{def.desc}</div>
         </div>
       </div>
       <input type="range" min={0} max={25} value={value ?? 0}
@@ -156,8 +156,8 @@ function RatingSlider({ category, value, onChange }) {
         style={{ width: '100%', accentColor: GOLD, cursor: 'pointer' }}
       />
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 1 }}>
-        <span style={{ fontSize: 8, color: 'rgba(229,226,225,0.28)' }}>0</span>
-        <span style={{ fontSize: 8, color: 'rgba(229,226,225,0.28)' }}>25</span>
+        <span style={{ fontSize: 15, color: 'rgba(229,226,225,0.28)' }}>0</span>
+        <span style={{ fontSize: 15, color: 'rgba(229,226,225,0.28)' }}>25</span>
       </div>
     </div>
   )
@@ -176,14 +176,14 @@ function ThirdSummary({ label, data, sessionKey }) {
 
   if (!hasData) {
     return (
-      <div style={{ fontSize: 10, color: DIM, fontStyle: 'italic', padding: '2px 0' }}>
+      <div style={{ fontSize: 15, color: DIM, fontStyle: 'italic', padding: '2px 0' }}>
         {label}: No tasting data recorded.
       </div>
     )
   }
 
   return (
-    <div style={{ fontSize: 10, color: DIM, lineHeight: 1.6, padding: '2px 0' }}>
+    <div style={{ fontSize: 15, color: DIM, lineHeight: 1.6, padding: '2px 0' }}>
       <span style={{ color: GOLD, fontWeight: 600 }}>{label} </span>
       {d.notesSelected?.length > 0 && <span>Notes: <span style={{ color: GOLD }}>{d.notesSelected.slice(0, 4).join(', ')}</span>{d.notesSelected.length > 4 ? ` +${d.notesSelected.length - 4}` : ''} </span>}
       {d.finalStrength && <span>Strength: <span style={{ color: GOLD }}>{d.finalStrength}</span> </span>}
@@ -197,7 +197,7 @@ function ThirdSummary({ label, data, sessionKey }) {
 function MetaField({ label, value, min, max, unit, onChange, dataAttr }) {
   return (
     <div>
-      <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>{label}</div>
+      <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>{label}</div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
         <input type="number" min={min} max={max} value={value ?? ''}
           onChange={e => { const v = e.target.value; onChange(v === '' ? null : Number(v)) }}
@@ -206,11 +206,11 @@ function MetaField({ label, value, min, max, unit, onChange, dataAttr }) {
           style={{
             width: 60, background: 'rgba(255,255,255,0.06)',
             border: `1px solid rgba(233,193,118,0.3)`, borderRadius: 6,
-            color: '#fff', fontSize: 13, padding: '5px 8px',
+            color: '#fff', fontSize: 15, padding: '5px 8px',
             fontFamily: 'Georgia, serif', boxSizing: 'border-box',
           }}
         />
-        <span style={{ fontSize: 10, color: DIM }}>{unit}</span>
+        <span style={{ fontSize: 15, color: DIM }}>{unit}</span>
       </div>
     </div>
   )
@@ -218,7 +218,7 @@ function MetaField({ label, value, min, max, unit, onChange, dataAttr }) {
 
 // ── Section helpers ───────────────────────────────────────────────────────────
 function SL({ children }) {
-  return <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>{children}</div>
+  return <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>{children}</div>
 }
 function HR() { return <div style={{ borderTop: `1px solid ${BORDER}`, margin: '10px 0' }} /> }
 
@@ -329,16 +329,16 @@ export default function Scorecard() {
         pointerEvents: 'none',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 500, margin: '0 auto' }}>
-          <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
             Scorecard — Session 16
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
-            <span style={{ fontSize: 9, color: DIM }}>Steps: <span style={{ color: GOLD, fontWeight: 700 }}>{stepsCount}</span></span>
-            <span style={{ fontSize: 9, color: DIM }}>
+            <span style={{ fontSize: 15, color: DIM }}>Steps: <span style={{ color: GOLD, fontWeight: 700 }}>{stepsCount}</span></span>
+            <span style={{ fontSize: 15, color: DIM }}>
               XP: <span style={{ color: GOLD, fontWeight: 700 }}>{currentXP}</span>
-              <span style={{ color: 'rgba(233,193,118,0.4)', fontSize: 8 }}> +{xpToEarn}</span>
+              <span style={{ color: 'rgba(233,193,118,0.4)', fontSize: 10 }}> +{xpToEarn}</span>
             </span>
-            <span style={{ fontSize: 9, color: DIM }}>Rank: <span style={{ color: GOLD, fontWeight: 700 }}>{currentRank}</span></span>
+            <span style={{ fontSize: 15, color: DIM }}>Rank: <span style={{ color: GOLD, fontWeight: 700 }}>{currentRank}</span></span>
           </div>
         </div>
       </div>
@@ -364,7 +364,7 @@ export default function Scorecard() {
               <ScoreRing value={overall} max={100} size={80}
                 color={scoreInfo.color === DIM ? 'rgba(233,193,118,0.25)' : scoreInfo.color} />
               {overall != null && (
-                <div style={{ position: 'absolute', bottom: -14, left: 0, right: 0, textAlign: 'center', fontSize: 8, color: DIM }}>/ 100</div>
+                <div style={{ position: 'absolute', bottom: -14, left: 0, right: 0, textAlign: 'center', fontSize: 15, color: DIM }}>/ 100</div>
               )}
             </div>
             <div style={{ flex: 1 }}>
@@ -373,14 +373,14 @@ export default function Scorecard() {
                   <div style={{ fontSize: 16, fontWeight: 700, color: scoreInfo.color, fontFamily: 'Georgia, serif', lineHeight: 1.1 }}>
                     {scoreInfo.label}
                   </div>
-                  <div style={{ fontSize: 9, color: DIM, marginTop: 3, lineHeight: 1.4 }}>
+                  <div style={{ fontSize: 15, color: DIM, marginTop: 3, lineHeight: 1.4 }}>
                     Calculated from {completedCount}/{totalCats} categories rated
                   </div>
                 </>
               ) : (
                 <>
-                  <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.3)', fontFamily: 'Georgia, serif' }}>No score yet</div>
-                  <div style={{ fontSize: 9, color: DIM, marginTop: 3 }}>
+                  <div style={{ fontSize: 15, color: 'rgba(229,226,225,0.3)', fontFamily: 'Georgia, serif' }}>No score yet</div>
+                  <div style={{ fontSize: 15, color: DIM, marginTop: 3 }}>
                     {isPartial ? `${completedCount}/${totalCats} categories rated — complete all for final score` : 'Rate all 6 categories to generate your score'}
                   </div>
                 </>
@@ -394,7 +394,7 @@ export default function Scorecard() {
               <div style={{ height: 3, background: 'rgba(233,193,118,0.12)', borderRadius: 2, overflow: 'hidden' }}>
                 <div style={{ height: '100%', width: `${(completedCount / totalCats) * 100}%`, background: isComplete ? GREEN : GOLD, borderRadius: 2, transition: 'width 0.3s' }} />
               </div>
-              <div style={{ fontSize: 8, color: DIM, marginTop: 2, textAlign: 'right' }}>
+              <div style={{ fontSize: 15, color: DIM, marginTop: 2, textAlign: 'right' }}>
                 {isComplete ? 'All categories rated' : `${completedCount}/${totalCats} rated`}
               </div>
             </div>
@@ -411,7 +411,7 @@ export default function Scorecard() {
           {activeCategory && (
             <div style={{
               background: 'rgba(233,193,118,0.07)', border: `1px solid ${BORDER}`,
-              borderRadius: 8, padding: '6px 10px', marginBottom: 8, fontSize: 10, color: DIM,
+              borderRadius: 8, padding: '6px 10px', marginBottom: 8, fontSize: 15, color: DIM,
             }}>
               <span style={{ color: GOLD, fontWeight: 700 }}>{CATEGORY_DEFS[activeCategory].label}: </span>
               {CATEGORY_DEFS[activeCategory].desc}
@@ -430,7 +430,7 @@ export default function Scorecard() {
               <div style={{ color: DIM }}>Size <span style={{ color: GOLD }}>{cigarDetails.size}</span></div>
             </div>
           ) : (
-            <div style={{ fontSize: 10, color: DIM, fontStyle: 'italic' }}>
+            <div style={{ fontSize: 15, color: DIM, fontStyle: 'italic' }}>
               No cigar selection recorded. Complete Humidor Match to populate these fields.
             </div>
           )}
@@ -442,9 +442,9 @@ export default function Scorecard() {
           <div data-section="pairing-summary">
           <SL>Pairing</SL>
           {pairingDetails?.length > 0 ? (
-            <div style={{ fontSize: 10, color: GOLD }}>{pairingDetails.join(', ')}</div>
+            <div style={{ fontSize: 15, color: GOLD }}>{pairingDetails.join(', ')}</div>
           ) : (
-            <div style={{ fontSize: 10, color: DIM, fontStyle: 'italic' }}>No pairing selection recorded.</div>
+            <div style={{ fontSize: 15, color: DIM, fontStyle: 'italic' }}>No pairing selection recorded.</div>
           )}
 
           </div>
@@ -457,7 +457,7 @@ export default function Scorecard() {
           <ThirdSummary label="Second Third" data={secondThird} />
           <ThirdSummary label="Final Third"  data={finalThird}  sessionKey="smokecraftFinalThird" />
           {flavorMemory?.tasteTags?.length > 0 && (
-            <div style={{ fontSize: 10, color: DIM, marginTop: 4 }}>
+            <div style={{ fontSize: 15, color: DIM, marginTop: 4 }}>
               Flavor Memory tags: <span style={{ color: GOLD }}>{flavorMemory.tasteTags.slice(0, 6).join(', ')}{flavorMemory.tasteTags.length > 6 ? ' …' : ''}</span>
             </div>
           )}
@@ -467,7 +467,7 @@ export default function Scorecard() {
           {/* ── Session Meta ────────────────────────── */}
           <HR />
           <SL>Session Metrics</SL>
-          <div style={{ fontSize: 9, color: DIM, marginBottom: 8 }}>
+          <div style={{ fontSize: 15, color: DIM, marginBottom: 8 }}>
             Values come from your session. Enter manually if not tracked automatically.
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
@@ -480,11 +480,11 @@ export default function Scorecard() {
           <HR />
           <SL>Rewards</SL>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-            <div style={{ fontSize: 10, color: DIM }}>
+            <div style={{ fontSize: 15, color: DIM }}>
               XP earned this session: <span style={{ color: GOLD, fontWeight: 700 }}>{currentXP}</span>
               {!done && <span style={{ color: 'rgba(233,193,118,0.5)' }}> (+{xpToEarn} on submit)</span>}
             </div>
-            <div style={{ fontSize: 10, color: DIM }}>
+            <div style={{ fontSize: 15, color: DIM }}>
               Current rank: <span style={{ color: GOLD, fontWeight: 700 }}>{currentRank}</span>
             </div>
           </div>
@@ -493,13 +493,13 @@ export default function Scorecard() {
               {scorecardBadges.map(b => (
                 <div key={b.id} style={{
                   background: 'rgba(233,193,118,0.1)', border: `1px solid rgba(233,193,118,0.3)`,
-                  borderRadius: 8, padding: '3px 10px', fontSize: 10, color: GOLD,
+                  borderRadius: 8, padding: '3px 10px', fontSize: 15, color: GOLD,
                 }}>{b.label}</div>
               ))}
             </div>
           )}
           {scorecardBadges.length === 0 && (
-            <div style={{ fontSize: 9, color: DIM, fontStyle: 'italic', marginTop: 4 }}>
+            <div style={{ fontSize: 15, color: DIM, fontStyle: 'italic', marginTop: 4 }}>
               Badges awarded on submit — not shown until earned.
             </div>
           )}
@@ -519,7 +519,7 @@ export default function Scorecard() {
               style={{
                 width: '100%', boxSizing: 'border-box',
                 background: 'rgba(255,255,255,0.05)', border: `1px solid ${BORDER}`,
-                borderRadius: 8, color: '#fff', fontSize: 12, padding: '8px 10px',
+                borderRadius: 8, color: '#fff', fontSize: 14, padding: '8px 10px',
                 fontFamily: 'Georgia, serif', resize: 'vertical', marginTop: 4,
               }}
             />
@@ -531,14 +531,14 @@ export default function Scorecard() {
               marginTop: 10, padding: '8px 12px', borderRadius: 8,
               background: 'rgba(90,219,142,0.08)', border: '1px solid rgba(90,219,142,0.3)',
             }}>
-              <div style={{ fontSize: 12, color: GREEN, fontWeight: 700, fontFamily: 'Georgia, serif' }}>
+              <div style={{ fontSize: 14, color: GREEN, fontWeight: 700, fontFamily: 'Georgia, serif' }}>
                 {submitted.scoreLabel || 'Scorecard Submitted'}
               </div>
-              <div style={{ fontSize: 9, color: DIM, marginTop: 2 }}>
+              <div style={{ fontSize: 15, color: DIM, marginTop: 2 }}>
                 Score: {submitted.overall}/100 · ID: {submitted.scorecardId}
               </div>
               {submitted.scoreDescription && (
-                <div style={{ fontSize: 10, color: DIM, marginTop: 3 }}>{submitted.scoreDescription}</div>
+                <div style={{ fontSize: 15, color: DIM, marginTop: 3 }}>{submitted.scoreDescription}</div>
               )}
             </div>
           )}
@@ -546,7 +546,7 @@ export default function Scorecard() {
           {/* ── API Status ──────────────────────────── */}
           {apiStatus !== 'idle' && !submitted && (
             <div style={{
-              fontSize: 9, fontWeight: 700, marginTop: 8, padding: '4px 8px', borderRadius: 6, textAlign: 'center',
+              fontSize: 15, fontWeight: 700, marginTop: 8, padding: '4px 8px', borderRadius: 6, textAlign: 'center',
               color: apiStatus === 'saving' ? GOLD : apiStatus === 'offline' ? AMBER : RED,
               background: apiStatus === 'saving' ? 'rgba(233,193,118,0.08)' : apiStatus === 'offline' ? 'rgba(240,168,48,0.08)' : 'rgba(224,90,90,0.08)',
               border: `1px solid ${apiStatus === 'saving' ? 'rgba(233,193,118,0.3)' : apiStatus === 'offline' ? 'rgba(240,168,48,0.3)' : 'rgba(224,90,90,0.3)'}`,
@@ -558,7 +558,7 @@ export default function Scorecard() {
           )}
 
           {sc.savedAt && apiStatus === 'idle' && (
-            <div style={{ fontSize: 9, color: 'rgba(229,226,225,0.28)', textAlign: 'right', marginTop: 4 }}>
+            <div style={{ fontSize: 15, color: 'rgba(229,226,225,0.28)', textAlign: 'right', marginTop: 4 }}>
               Last saved {new Date(sc.savedAt).toLocaleTimeString()}
             </div>
           )}

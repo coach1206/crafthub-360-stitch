@@ -109,7 +109,7 @@ function readStampId() {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 function SL({ children }) {
-  return <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>{children}</div>
+  return <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>{children}</div>
 }
 function HR() { return <div style={{ borderTop: `1px solid ${BORDER}`, margin: '10px 0' }} /> }
 
@@ -127,7 +127,7 @@ function StatusPill({ status }) {
   const { label, color } = map[status] || map.idle
   return (
     <span style={{
-      fontSize: 9, color, fontWeight: 700, letterSpacing: '0.08em',
+      fontSize: 15, color, fontWeight: 700, letterSpacing: '0.08em',
       background: `${color}14`, border: `1px solid ${color}44`,
       borderRadius: 10, padding: '2px 8px',
     }}>{label}</span>
@@ -140,8 +140,8 @@ function ConsentGate({ onAccept, onDecline }) {
       background: 'rgba(233,193,118,0.07)', border: `1px solid rgba(233,193,118,0.3)`,
       borderRadius: 10, padding: '12px 14px', marginTop: 8,
     }} data-section="consent-gate">
-      <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, marginBottom: 6 }}>Privacy Permission Required</div>
-      <div style={{ fontSize: 10, color: DIM, lineHeight: 1.5, marginBottom: 10 }}>
+      <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, marginBottom: 6 }}>Privacy Permission Required</div>
+      <div style={{ fontSize: 15, color: DIM, lineHeight: 1.5, marginBottom: 10 }}>
         Exchanging a contact card will share your guest profile information (name, email if provided)
         with another guest. Only do this with people you choose to connect with.
         <br /><br />
@@ -149,11 +149,11 @@ function ConsentGate({ onAccept, onDecline }) {
       </div>
       <div style={{ display: 'flex', gap: 8 }}>
         <button type="button" onClick={onAccept}
-          style={{ flex: 1, background: GOLD, color: DARK, border: 'none', borderRadius: 20, padding: '8px', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'Georgia, serif' }}>
+          style={{ flex: 1, background: GOLD, color: DARK, border: 'none', borderRadius: 20, padding: '8px', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'Georgia, serif' }}>
           I Consent — Exchange
         </button>
         <button type="button" onClick={onDecline}
-          style={{ flex: 1, background: 'transparent', color: DIM, border: `1px solid ${BORDER}`, borderRadius: 20, padding: '8px', fontSize: 12, cursor: 'pointer', fontFamily: 'Georgia, serif' }}>
+          style={{ flex: 1, background: 'transparent', color: DIM, border: `1px solid ${BORDER}`, borderRadius: 20, padding: '8px', fontSize: 14, cursor: 'pointer', fontFamily: 'Georgia, serif' }}>
           Cancel
         </button>
       </div>
@@ -167,43 +167,43 @@ function QRPanel({ qrState, onStartScan, onCancel }) {
       background: 'rgba(90,184,219,0.06)', border: `1px solid rgba(90,184,219,0.25)`,
       borderRadius: 10, padding: '12px 14px', marginTop: 8,
     }} data-section="qr-panel">
-      <div style={{ fontSize: 11, color: BLUE, fontWeight: 700, marginBottom: 6 }}>QR Code Scanner</div>
+      <div style={{ fontSize: 15, color: BLUE, fontWeight: 700, marginBottom: 6 }}>QR Code Scanner</div>
       {qrState === 'idle' && (
         <>
-          <div style={{ fontSize: 10, color: DIM, marginBottom: 10, lineHeight: 1.5 }}>
+          <div style={{ fontSize: 15, color: DIM, marginBottom: 10, lineHeight: 1.5 }}>
             Point your camera at another guest's QR code to connect directly.
             Camera access is required.
           </div>
           <button type="button" onClick={onStartScan} data-action="start-qr-scan"
-            style={{ width: '100%', background: BLUE, color: DARK, border: 'none', borderRadius: 20, padding: '9px', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'Georgia, serif' }}>
+            style={{ width: '100%', background: BLUE, color: DARK, border: 'none', borderRadius: 20, padding: '9px', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'Georgia, serif' }}>
             Open Camera
           </button>
         </>
       )}
       {qrState === 'requesting' && (
-        <div style={{ fontSize: 10, color: DIM, textAlign: 'center', padding: '8px 0' }}>Requesting camera access…</div>
+        <div style={{ fontSize: 15, color: DIM, textAlign: 'center', padding: '8px 0' }}>Requesting camera access…</div>
       )}
       {qrState === 'scanning' && (
-        <div style={{ fontSize: 10, color: BLUE, textAlign: 'center', padding: '8px 0' }}>
+        <div style={{ fontSize: 15, color: BLUE, textAlign: 'center', padding: '8px 0' }}>
           <div style={{ fontSize: 28, marginBottom: 6 }}>📷</div>
           Camera active — position QR code in frame
           <br />
-          <span style={{ fontSize: 9, color: DIM }}>(Demo mode: camera stream not available in preview)</span>
+          <span style={{ fontSize: 15, color: DIM }}>(Demo mode: camera stream not available in preview)</span>
         </div>
       )}
       {qrState === 'denied' && (
-        <div style={{ fontSize: 10, color: AMBER, padding: '4px 0', lineHeight: 1.5 }}>
+        <div style={{ fontSize: 15, color: AMBER, padding: '4px 0', lineHeight: 1.5 }}>
           Camera access was denied. To scan QR codes, allow camera access in your browser settings and try again.
         </div>
       )}
       {qrState === 'unavailable' && (
-        <div style={{ fontSize: 10, color: AMBER, padding: '4px 0', lineHeight: 1.5 }}>
+        <div style={{ fontSize: 15, color: AMBER, padding: '4px 0', lineHeight: 1.5 }}>
           Camera not available on this device or browser. Use a device with a camera to scan QR codes.
         </div>
       )}
       {qrState !== 'idle' && qrState !== 'requesting' && (
         <button type="button" onClick={onCancel}
-          style={{ marginTop: 8, width: '100%', background: 'transparent', color: DIM, border: `1px solid ${BORDER}`, borderRadius: 20, padding: '7px', fontSize: 11, cursor: 'pointer' }}>
+          style={{ marginTop: 8, width: '100%', background: 'transparent', color: DIM, border: `1px solid ${BORDER}`, borderRadius: 20, padding: '7px', fontSize: 15, cursor: 'pointer' }}>
           Cancel
         </button>
       )}
@@ -228,18 +228,18 @@ function ActionCard({ action, status, onToggle, onExpand, isExpanded, mentorName
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <span style={{ fontSize: 20 }}>{action.icon}</span>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 11, color: isCompleted ? GREEN : GOLD, fontWeight: 700 }}>{action.label}</div>
-          <div style={{ fontSize: 9, color: DIM, marginTop: 1 }}>{action.desc}</div>
+          <div style={{ fontSize: 15, color: isCompleted ? GREEN : GOLD, fontWeight: 700 }}>{action.label}</div>
+          <div style={{ fontSize: 15, color: DIM, marginTop: 1 }}>{action.desc}</div>
           {isBlocked && (
-            <div style={{ fontSize: 9, color: AMBER, marginTop: 2 }}>
+            <div style={{ fontSize: 15, color: AMBER, marginTop: 2 }}>
               {needsMentor ? 'No mentor selected in this session' : 'No passport stamp claimed yet'}
             </div>
           )}
           {action.requiresMentor && mentorName && (
-            <div style={{ fontSize: 9, color: DIM, marginTop: 2 }}>Mentor: <span style={{ color: GOLD }}>{mentorName}</span></div>
+            <div style={{ fontSize: 15, color: DIM, marginTop: 2 }}>Mentor: <span style={{ color: GOLD }}>{mentorName}</span></div>
           )}
           {action.requiresStamp && stampId && (
-            <div style={{ fontSize: 9, color: DIM, marginTop: 2 }}>Stamp: <span style={{ color: GOLD }}>{stampId}</span></div>
+            <div style={{ fontSize: 15, color: DIM, marginTop: 2 }}>Stamp: <span style={{ color: GOLD }}>{stampId}</span></div>
           )}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
@@ -252,7 +252,7 @@ function ActionCard({ action, status, onToggle, onExpand, isExpanded, mentorName
                 background: isSelected ? GOLD : 'transparent',
                 color: isSelected ? DARK : GOLD,
                 border: `1px solid ${GOLD}`,
-                borderRadius: 14, padding: '10px 16px', fontSize: 10,
+                borderRadius: 14, padding: '10px 16px', fontSize: 15,
                 minHeight: 44, minWidth: 44,
                 fontWeight: 700, cursor: 'pointer', fontFamily: 'Georgia, serif',
               }}>
@@ -265,10 +265,10 @@ function ActionCard({ action, status, onToggle, onExpand, isExpanded, mentorName
       {/* Expand detail for QR / consent when selected */}
       {isSelected && !isCompleted && (
         <div style={{ marginTop: 6 }}>
-          {action.isQR && <span data-qr-toggle style={{ cursor: 'pointer', fontSize: 9, color: BLUE }} onClick={() => onExpand(action.id)}>
+          {action.isQR && <span data-qr-toggle style={{ cursor: 'pointer', fontSize: 15, color: BLUE }} onClick={() => onExpand(action.id)}>
             {isExpanded ? 'Hide QR panel ▲' : 'Open QR scanner ▼'}
           </span>}
-          {action.requiresConsent && <span data-consent-toggle style={{ cursor: 'pointer', fontSize: 9, color: AMBER }} onClick={() => onExpand(action.id)}>
+          {action.requiresConsent && <span data-consent-toggle style={{ cursor: 'pointer', fontSize: 15, color: AMBER }} onClick={() => onExpand(action.id)}>
             {isExpanded ? 'Hide consent ▲' : 'Review privacy consent ▼'}
           </span>}
         </div>
@@ -475,12 +475,12 @@ export default function Connections() {
         pointerEvents: 'none',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 500, margin: '0 auto' }}>
-          <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
             Connections — Session 22
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
-            {syncLabel && <span style={{ fontSize: 9, color: syncStatus === 'synced' ? GREEN : AMBER }}>{syncLabel}</span>}
-            <span style={{ fontSize: 9, color: DIM }}>{completedCount} completed</span>
+            {syncLabel && <span style={{ fontSize: 15, color: syncStatus === 'synced' ? GREEN : AMBER }}>{syncLabel}</span>}
+            <span style={{ fontSize: 15, color: DIM }}>{completedCount} completed</span>
           </div>
         </div>
       </div>
@@ -504,7 +504,7 @@ export default function Connections() {
             <div style={{ fontSize: 16, fontWeight: 700, color: GOLD, fontFamily: 'Georgia, serif', lineHeight: 1.2, marginBottom: 3 }}>
               SmokeCraft Connections
             </div>
-            <div style={{ fontSize: 10, color: DIM }}>
+            <div style={{ fontSize: 15, color: DIM }}>
               Select the connections you'd like to make. Select multiple — confirm when ready.
             </div>
           </div>
@@ -517,7 +517,7 @@ export default function Connections() {
             border: `1px solid ${stampId ? 'rgba(90,219,142,0.2)' : BORDER}`,
           }}>
             <span style={{ fontSize: 14 }}>{stampId ? '✓' : '○'}</span>
-            <div style={{ flex: 1, fontSize: 9, color: DIM }}>
+            <div style={{ flex: 1, fontSize: 15, color: DIM }}>
               Passport Stamp:{' '}
               {stampId
                 ? <span style={{ color: GREEN }}>Claimed — {stampId}</span>
@@ -569,13 +569,13 @@ export default function Connections() {
                 style={{
                   width: '100%', background: syncStatus === 'syncing' ? 'rgba(233,193,118,0.3)' : GOLD,
                   color: DARK, border: 'none', borderRadius: 28,
-                  padding: '12px', fontSize: 13, fontWeight: 700,
+                  padding: '12px', fontSize: 15, fontWeight: 700,
                   fontFamily: 'Georgia, serif', letterSpacing: '0.06em',
                   textTransform: 'uppercase', cursor: syncStatus === 'syncing' ? 'default' : 'pointer',
                 }}>
                 {syncStatus === 'syncing' ? 'Saving…' : `Confirm ${selectedCount} Connection${selectedCount > 1 ? 's' : ''}`}
               </button>
-              <div style={{ fontSize: 9, color: DIM, textAlign: 'center', marginTop: 4 }}>
+              <div style={{ fontSize: 15, color: DIM, textAlign: 'center', marginTop: 4 }}>
                 Saves to your Passport 360 record
               </div>
             </>
@@ -589,8 +589,8 @@ export default function Connections() {
                 <SL>Completed Connections ({completedCount})</SL>
                 {ACTIONS.filter(a => actionStatus[a.id] === 'success' || actionStatus[a.id] === 'duplicate').map(a => (
                   <div key={a.id} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                    <span style={{ fontSize: 12, color: GREEN }}>✓</span>
-                    <span style={{ fontSize: 10, color: DIM }}>{a.label}</span>
+                    <span style={{ fontSize: 14, color: GREEN }}>✓</span>
+                    <span style={{ fontSize: 15, color: DIM }}>{a.label}</span>
                   </div>
                 ))}
               </div>
@@ -599,7 +599,7 @@ export default function Connections() {
 
           {/* ── Privacy Note ─────────────────────────── */}
           <HR />
-          <div data-section="privacy-note" style={{ fontSize: 9, color: DIM, lineHeight: 1.5 }}>
+          <div data-section="privacy-note" style={{ fontSize: 15, color: DIM, lineHeight: 1.5 }}>
             <span style={{ color: GOLD, fontWeight: 700 }}>Privacy: </span>
             Your personal information is never shared without your explicit consent.
             Contact card exchange requires separate approval. You can skip any or all connections.
@@ -609,7 +609,7 @@ export default function Connections() {
           <HR />
           <div data-section="passport360-sync">
             <SL>Passport 360 Sync</SL>
-            <div style={{ fontSize: 10, color: syncStatus === 'synced' ? GREEN : DIM }}>
+            <div style={{ fontSize: 15, color: syncStatus === 'synced' ? GREEN : DIM }}>
               {syncStatus === 'synced'
                 ? 'All connections recorded in Passport 360'
                 : syncStatus === 'syncing'

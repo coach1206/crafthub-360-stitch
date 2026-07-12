@@ -87,7 +87,7 @@ function FlavorChart({ selections, intensity, body, strength }) {
   const empty = selections.length === 0 && intensity === 3 && body === 3 && strength === 3
   if (empty) {
     return (
-      <div style={{ textAlign: 'center', color: DIM, fontSize: 10, padding: '6px 0', fontStyle: 'italic' }}>
+      <div style={{ textAlign: 'center', color: DIM, fontSize: 15, padding: '6px 0', fontStyle: 'italic' }}>
         Select flavor notes above to populate the chart
       </div>
     )
@@ -125,7 +125,7 @@ function FlavorChart({ selections, intensity, body, strength }) {
         return (
           <text key={i} x={bx + (dx / len) * 9} y={by + (dy / len) * 9}
             textAnchor="middle" dominantBaseline="middle"
-            style={{ fontSize: 8, fill: DIM, fontFamily: 'Georgia, serif' }}>
+            style={{ fontSize: 15, fill: DIM, fontFamily: 'Georgia, serif' }}>
             {a.label}
           </text>
         )
@@ -270,13 +270,13 @@ export default function FlavorMemory() {
         pointerEvents: 'none',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 500, margin: '0 auto' }}>
-          <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
             Flavor Memory — Session 14
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <span style={{ fontSize: 9, color: DIM }}>Steps: <span style={{ color: GOLD, fontWeight: 700 }}>{stepsCount}</span></span>
-            <span style={{ fontSize: 9, color: DIM }}>XP: <span style={{ color: GOLD, fontWeight: 700 }}>{currentXP}</span>
-              <span style={{ color: 'rgba(233,193,118,0.4)', fontSize: 8 }}> +75</span>
+            <span style={{ fontSize: 15, color: DIM }}>Steps: <span style={{ color: GOLD, fontWeight: 700 }}>{stepsCount}</span></span>
+            <span style={{ fontSize: 15, color: DIM }}>XP: <span style={{ color: GOLD, fontWeight: 700 }}>{currentXP}</span>
+              <span style={{ color: 'rgba(233,193,118,0.4)', fontSize: 10 }}> +75</span>
             </span>
           </div>
         </div>
@@ -310,7 +310,7 @@ export default function FlavorMemory() {
                     color: active ? '#fffde8' : GOLD,
                     border: `1px solid ${active ? col : 'rgba(233,193,118,0.28)'}`,
                     borderRadius: 20, padding: '10px 12px', minHeight: 44,
-                    fontSize: 11, fontWeight: 600, fontFamily: 'Georgia, serif',
+                    fontSize: 15, fontWeight: 600, fontFamily: 'Georgia, serif',
                     cursor: 'pointer', letterSpacing: '0.03em',
                   }}
                 >{f.label}</button>
@@ -324,8 +324,8 @@ export default function FlavorMemory() {
               background: 'rgba(233,193,118,0.07)', border: `1px solid ${BORDER}`,
               borderRadius: 8, padding: '7px 10px', marginBottom: 8,
             }}>
-              <div style={{ fontSize: 10, color: GOLD, fontWeight: 700, marginBottom: 2 }}>{activeDefinition.label}</div>
-              <div style={{ fontSize: 10, color: DIM, lineHeight: 1.5 }}>{activeDefinition.def}</div>
+              <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, marginBottom: 2 }}>{activeDefinition.label}</div>
+              <div style={{ fontSize: 15, color: DIM, lineHeight: 1.5 }}>{activeDefinition.def}</div>
             </div>
           )}
 
@@ -347,7 +347,7 @@ export default function FlavorMemory() {
                     background: active ? 'rgba(233,193,118,0.15)' : 'transparent',
                     color: active ? GOLD : DIM,
                     border: `1px solid ${active ? GOLD : 'rgba(229,226,225,0.2)'}`,
-                    borderRadius: 20, padding: '10px 12px', minHeight: 44, fontSize: 10, cursor: 'pointer',
+                    borderRadius: 20, padding: '10px 12px', minHeight: 44, fontSize: 15, cursor: 'pointer',
                   }}
                 >{tag}</button>
               )
@@ -374,7 +374,7 @@ export default function FlavorMemory() {
                     background: active ? GOLD : 'transparent',
                     color: active ? DARK : GOLD,
                     border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.3)'}`,
-                    borderRadius: 20, padding: '10px 12px', minHeight: 44, fontSize: 11, fontWeight: 600,
+                    borderRadius: 20, padding: '10px 12px', minHeight: 44, fontSize: 15, fontWeight: 600,
                     fontFamily: 'Georgia, serif', cursor: 'pointer',
                   }}
                 >{p}</button>
@@ -399,7 +399,7 @@ export default function FlavorMemory() {
               style={{
                 width: '100%', boxSizing: 'border-box',
                 background: 'rgba(255,255,255,0.05)', border: `1px solid ${BORDER}`,
-                borderRadius: 8, color: '#fff', fontSize: 12, padding: '8px 10px',
+                borderRadius: 8, color: '#fff', fontSize: 14, padding: '8px 10px',
                 fontFamily: 'Georgia, serif', resize: 'vertical', marginTop: 4,
               }}
             />
@@ -409,7 +409,7 @@ export default function FlavorMemory() {
           <Divider />
           <SectionLabel>Previous Session Comparison</SectionLabel>
           {prevSession ? (
-            <div style={{ fontSize: 10, color: DIM, lineHeight: 1.7 }}>
+            <div style={{ fontSize: 15, color: DIM, lineHeight: 1.7 }}>
               <div>Session: <span style={{ color: GOLD }}>{prevSession.sessionId || 'prior visit'}</span></div>
               {(prevSession.flavorNotes?.length > 0) && (
                 <div>Flavors recorded: <span style={{ color: GOLD }}>{prevSession.flavorNotes.join(', ')}</span></div>
@@ -425,7 +425,7 @@ export default function FlavorMemory() {
               })()}
             </div>
           ) : (
-            <div style={{ fontSize: 10, color: DIM, fontStyle: 'italic' }}>
+            <div style={{ fontSize: 15, color: DIM, fontStyle: 'italic' }}>
               No previous session data available. Complete your first full journey to unlock comparison.
             </div>
           )}
@@ -433,7 +433,7 @@ export default function FlavorMemory() {
           {/* ── Save status ─────────────────────── */}
           {apiStatus !== 'idle' && (
             <div style={{
-              fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', marginTop: 8, padding: '5px 10px',
+              fontSize: 15, fontWeight: 700, letterSpacing: '0.08em', marginTop: 8, padding: '5px 10px',
               borderRadius: 6, textAlign: 'center',
               color: apiStatus === 'saved' ? GREEN : apiStatus === 'saving' ? GOLD : apiStatus === 'offline' ? AMBER : RED,
               background: apiStatus === 'saved' ? 'rgba(90,219,142,0.08)' : apiStatus === 'saving' ? 'rgba(233,193,118,0.08)' : apiStatus === 'offline' ? 'rgba(240,168,48,0.08)' : 'rgba(224,90,90,0.08)',
@@ -446,7 +446,7 @@ export default function FlavorMemory() {
             </div>
           )}
           {fm.savedAt && apiStatus === 'idle' && (
-            <div style={{ fontSize: 9, color: 'rgba(229,226,225,0.28)', textAlign: 'right', marginTop: 4 }}>
+            <div style={{ fontSize: 15, color: 'rgba(229,226,225,0.28)', textAlign: 'right', marginTop: 4 }}>
               Last saved {new Date(fm.savedAt).toLocaleTimeString()}
             </div>
           )}
@@ -463,7 +463,7 @@ export default function FlavorMemory() {
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
 function SectionLabel({ children }) {
-  return <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>{children}</div>
+  return <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>{children}</div>
 }
 function Count({ n }) {
   return n ? <span style={{ color: GOLD, fontWeight: 400 }}> ({n})</span> : null
@@ -475,8 +475,8 @@ function SliderRow({ label, value, labels, onChange }) {
   return (
     <div style={{ marginBottom: 8 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-        <span style={{ fontSize: 10, color: DIM }}>{label}</span>
-        <span style={{ fontSize: 10, color: GOLD, fontWeight: 700 }}>{labels[value - 1]}</span>
+        <span style={{ fontSize: 15, color: DIM }}>{label}</span>
+        <span style={{ fontSize: 15, color: GOLD, fontWeight: 700 }}>{labels[value - 1]}</span>
       </div>
       <input type="range" min={1} max={5} value={value}
         onChange={e => onChange(e.target.value)}
@@ -484,8 +484,8 @@ function SliderRow({ label, value, labels, onChange }) {
         style={{ width: '100%', accentColor: GOLD, cursor: 'pointer' }}
       />
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 1 }}>
-        <span style={{ fontSize: 8, color: 'rgba(229,226,225,0.28)' }}>{labels[0]}</span>
-        <span style={{ fontSize: 8, color: 'rgba(229,226,225,0.28)' }}>{labels[4]}</span>
+        <span style={{ fontSize: 15, color: 'rgba(229,226,225,0.28)' }}>{labels[0]}</span>
+        <span style={{ fontSize: 15, color: 'rgba(229,226,225,0.28)' }}>{labels[4]}</span>
       </div>
     </div>
   )

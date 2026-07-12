@@ -11,8 +11,60 @@
  *   'optimized'  — WebP-compressed copy (output of image-audit --fix)
  *   'missing'    — referenced but file not confirmed on disk
  *
+ * classification values (asset rendering policy):
+ *   'DECORATIVE_BACKGROUND'     — cover allowed; no essential content in image
+ *   'LIVE_REACT_PAGE_ARTWORK'   — cover allowed; all controls/text are React DOM
+ *   'PORTRAIT_PRODUCTION_SHELL' — preserve portrait composition; use contain
+ *   'LANDSCAPE_HERO_TOP'        — cover with center-top anchor; content is React
+ *
+ * nativeWidth/nativeHeight: measured pixel dimensions of the source file.
+ * containsEssentialPrintedUI: true when the image has printed text/forms users must read.
+ * liveReactControlsRequired: true when forms/chips/inputs overlay this image.
+ *
  * NEVER delete entries. Set status to 'legacy' when superseding.
  */
+
+/**
+ * Asset classification constants for SmokeCraftAssetScreen.
+ */
+export const ASSET_CLASSIFICATIONS = Object.freeze({
+  DECORATIVE_BACKGROUND:     'DECORATIVE_BACKGROUND',
+  LIVE_REACT_PAGE_ARTWORK:   'LIVE_REACT_PAGE_ARTWORK',
+  PORTRAIT_PRODUCTION_SHELL: 'PORTRAIT_PRODUCTION_SHELL',
+  LANDSCAPE_HERO_TOP:        'LANDSCAPE_HERO_TOP',
+})
+
+/**
+ * Active route → classification map for quick lookup.
+ */
+export const ROUTE_ASSET_CLASSIFICATION = Object.freeze({
+  '/smokecraft':                   'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/enroll':            'PORTRAIT_PRODUCTION_SHELL',  // 941×1672 portrait
+  '/smokecraft/identity':          'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/golden-box':        'LANDSCAPE_HERO_TOP',         // rebuilt as live form
+  '/smokecraft/mentor-selection':  'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/format':            'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/wrapper-strength':  'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/seed-soil':         'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/pairing-lab':       'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/humidor-match':     'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/request-purchase':  'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/cut-toast-light':   'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/first-third':       'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/second-third':      'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/flavor-memory':     'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/final-third':       'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/scorecard':         'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/final-review':      'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/passport-stamp':    'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/connections':       'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/session-complete':  'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/leaderboard':       'DECORATIVE_BACKGROUND',
+  '/smokecraft/event-challenge':   'DECORATIVE_BACKGROUND',
+  '/smokecraft/how-it-works':      'DECORATIVE_BACKGROUND',
+  '/smokecraft/management-sync':   'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft/visit-complete':    'PORTRAIT_PRODUCTION_SHELL',  // 1086×1448 portrait
+})
 
 export const SMOKECRAFT_ASSET_REGISTRY = Object.freeze([
   {

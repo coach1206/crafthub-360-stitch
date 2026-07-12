@@ -40,7 +40,7 @@ export default function DevRoleSwitcher() {
       right:     '1.25rem',
       zIndex:    9999,
       fontFamily: 'monospace',
-      fontSize:  '11px',
+      fontSize:  '14px',
     }}>
       {open && (
         <div style={{
@@ -157,7 +157,7 @@ export default function DevRoleSwitcher() {
           display:      'flex',
           alignItems:   'center',
           gap:          '6px',
-          fontSize:     '11px',
+          fontSize:     '14px',
         }}
       >
         <span style={{ fontSize: '8px' }}>{isRealSession ? '🔐' : '●'}</span>

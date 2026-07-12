@@ -102,7 +102,7 @@ function readSessionDuration() {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 function SL({ children }) {
-  return <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>{children}</div>
+  return <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>{children}</div>
 }
 function HR() { return <div style={{ borderTop: `1px solid ${BORDER}`, margin: '10px 0' }} /> }
 
@@ -112,7 +112,7 @@ function Row({ label, value, empty }) {
       <span style={{ color: DIM, fontSize: 10 }}>{label}</span>
       {value != null
         ? <span style={{ color: GOLD, fontWeight: 700, fontSize: 10 }}>{value}</span>
-        : <span style={{ color: DIM, fontSize: 10, fontStyle: 'italic' }}>{empty || '—'}</span>
+        : <span style={{ color: DIM, fontSize: 15, fontStyle: 'italic' }}>{empty || '—'}</span>
       }
     </div>
   )
@@ -125,14 +125,14 @@ function EligibilityChecklist({ completedSteps, scorecardId }) {
         const done = completedSteps.includes(step)
         return (
           <div key={step} data-req={step} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontSize: 13, color: done ? GREEN : 'rgba(229,226,225,0.3)' }}>{done ? '✓' : '○'}</span>
-            <span style={{ fontSize: 10, color: done ? DIM : 'rgba(229,226,225,0.35)' }}>{STEP_LABELS[step]}</span>
+            <span style={{ fontSize: 15, color: done ? GREEN : 'rgba(229,226,225,0.3)' }}>{done ? '✓' : '○'}</span>
+            <span style={{ fontSize: 15, color: done ? DIM : 'rgba(229,226,225,0.35)' }}>{STEP_LABELS[step]}</span>
           </div>
         )
       })}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <span style={{ fontSize: 13, color: scorecardId ? GREEN : 'rgba(229,226,225,0.3)' }}>{scorecardId ? '✓' : '○'}</span>
-        <span style={{ fontSize: 10, color: scorecardId ? DIM : 'rgba(229,226,225,0.35)' }}>Scorecard submitted</span>
+        <span style={{ fontSize: 15, color: scorecardId ? GREEN : 'rgba(229,226,225,0.3)' }}>{scorecardId ? '✓' : '○'}</span>
+        <span style={{ fontSize: 15, color: scorecardId ? DIM : 'rgba(229,226,225,0.35)' }}>Scorecard submitted</span>
       </div>
     </div>
   )
@@ -153,13 +153,13 @@ function StampSeal({ claimed }) {
       {claimed ? (
         <>
           <text x={45} y={38} textAnchor="middle" style={{ fontSize: 20, fill: GOLD, fontFamily: 'Georgia, serif' }}>✦</text>
-          <text x={45} y={53} textAnchor="middle" style={{ fontSize: 8, fill: GOLD, fontFamily: 'Georgia, serif', fontWeight: 700, letterSpacing: '0.15em' }}>CERTIFIED</text>
+          <text x={45} y={53} textAnchor="middle" style={{ fontSize: 15, fill: GOLD, fontFamily: 'Georgia, serif', fontWeight: 700, letterSpacing: '0.15em' }}>CERTIFIED</text>
           <text x={45} y={63} textAnchor="middle" style={{ fontSize: 7, fill: 'rgba(233,193,118,0.6)', fontFamily: 'Georgia, serif' }}>SmokeCraft</text>
         </>
       ) : (
         <>
-          <text x={45} y={42} textAnchor="middle" style={{ fontSize: 10, fill: 'rgba(229,226,225,0.25)', fontFamily: 'Georgia, serif' }}>NOT YET</text>
-          <text x={45} y={56} textAnchor="middle" style={{ fontSize: 9, fill: 'rgba(229,226,225,0.2)', fontFamily: 'Georgia, serif', letterSpacing: '0.1em' }}>CLAIMED</text>
+          <text x={45} y={42} textAnchor="middle" style={{ fontSize: 15, fill: 'rgba(229,226,225,0.25)', fontFamily: 'Georgia, serif' }}>NOT YET</text>
+          <text x={45} y={56} textAnchor="middle" style={{ fontSize: 15, fill: 'rgba(229,226,225,0.2)', fontFamily: 'Georgia, serif', letterSpacing: '0.1em' }}>CLAIMED</text>
         </>
       )}
     </svg>
@@ -321,14 +321,14 @@ export default function PassportStamp() {
         pointerEvents: 'none',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 500, margin: '0 auto' }}>
-          <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
             Passport Stamp — Session 21
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
-            <span style={{ fontSize: 9, color: DIM }}>XP: <span style={{ color: GOLD, fontWeight: 700 }}>{totalXP}</span>
-              <span style={{ color: 'rgba(233,193,118,0.45)', fontSize: 8 }}> +{xpFromRewards}</span>
+            <span style={{ fontSize: 15, color: DIM }}>XP: <span style={{ color: GOLD, fontWeight: 700 }}>{totalXP}</span>
+              <span style={{ color: 'rgba(233,193,118,0.45)', fontSize: 10 }}> +{xpFromRewards}</span>
             </span>
-            <span style={{ fontSize: 9, color: DIM }}>Rank: <span style={{ color: GOLD, fontWeight: 700 }}>{currentRank}</span></span>
+            <span style={{ fontSize: 15, color: DIM }}>Rank: <span style={{ color: GOLD, fontWeight: 700 }}>{currentRank}</span></span>
           </div>
         </div>
       </div>
@@ -354,7 +354,7 @@ export default function PassportStamp() {
               <div style={{ fontSize: 15, fontWeight: 700, color: isClaimed ? GOLD : 'rgba(229,226,225,0.35)', fontFamily: 'Georgia, serif', lineHeight: 1.2 }}>
                 SmokeCraft Passport
               </div>
-              <div style={{ fontSize: 11, color: isClaimed ? GREEN : DIM, marginTop: 2, fontStyle: isClaimed ? 'normal' : 'italic' }}>
+              <div style={{ fontSize: 15, color: isClaimed ? GREEN : DIM, marginTop: 2, fontStyle: isClaimed ? 'normal' : 'italic' }}>
                 {isClaimed
                   ? `Certified — ${new Date(claimedStamp?.claimedAt || Date.now()).toLocaleDateString()}`
                   : isEligible
@@ -362,7 +362,7 @@ export default function PassportStamp() {
                     : `${completedCount}/${totalReqs} requirements met`
                 }
               </div>
-              <div style={{ fontSize: 9, color: DIM, marginTop: 1 }}>Session 21 of 24 · Visit 8</div>
+              <div style={{ fontSize: 15, color: DIM, marginTop: 1 }}>Session 21 of 24 · Visit 8</div>
             </div>
           </div>
 
@@ -375,7 +375,7 @@ export default function PassportStamp() {
                 borderRadius: 2, transition: 'width 0.4s',
               }} data-testid="progress-bar" />
             </div>
-            <div style={{ fontSize: 8, color: DIM, marginTop: 2, textAlign: 'right' }}>
+            <div style={{ fontSize: 15, color: DIM, marginTop: 2, textAlign: 'right' }}>
               {isClaimed ? 'All requirements met — stamp claimed' : `${completedCount}/${totalReqs} complete`}
             </div>
           </div>
@@ -421,7 +421,7 @@ export default function PassportStamp() {
                   {favoriteFlavors.map(f => (
                     <span key={f} style={{
                       background: 'rgba(233,193,118,0.1)', border: `1px solid rgba(233,193,118,0.25)`,
-                      borderRadius: 6, padding: '2px 8px', fontSize: 10, color: GOLD,
+                      borderRadius: 6, padding: '2px 8px', fontSize: 15, color: GOLD,
                     }}>{f}</span>
                   ))}
                 </div>
@@ -457,7 +457,7 @@ export default function PassportStamp() {
                 >
                   {claimStatus === 'claiming' ? 'Claiming Stamp…' : 'Claim Passport Stamp'}
                 </button>
-                <div style={{ fontSize: 9, color: DIM, marginTop: 5 }}>
+                <div style={{ fontSize: 15, color: DIM, marginTop: 5 }}>
                   Creates a permanent Passport 360 record
                 </div>
               </div>
@@ -468,11 +468,11 @@ export default function PassportStamp() {
           {!isClaimed && !isEligible && (
             <>
               <HR />
-              <div style={{ fontSize: 10, color: AMBER, fontStyle: 'italic', padding: '4px 0' }}>
+              <div style={{ fontSize: 15, color: AMBER, fontStyle: 'italic', padding: '4px 0' }}>
                 Complete all requirements above to unlock your passport stamp.
               </div>
               {!hasScorecard && (
-                <div style={{ fontSize: 9, color: DIM, marginTop: 3 }}>
+                <div style={{ fontSize: 15, color: DIM, marginTop: 3 }}>
                   Scorecard not submitted — return to /smokecraft/scorecard to submit.
                 </div>
               )}
@@ -487,17 +487,17 @@ export default function PassportStamp() {
                 padding: '10px 12px', borderRadius: 8,
                 background: 'rgba(90,219,142,0.07)', border: '1px solid rgba(90,219,142,0.3)',
               }}>
-                <div style={{ fontSize: 13, color: GREEN, fontWeight: 700, fontFamily: 'Georgia, serif', marginBottom: 4 }}>
+                <div style={{ fontSize: 15, color: GREEN, fontWeight: 700, fontFamily: 'Georgia, serif', marginBottom: 4 }}>
                   {claimStatus === 'duplicate' ? 'Already Claimed' : 'Passport Stamp Earned'}
                 </div>
-                <div style={{ fontSize: 9, color: DIM }}>
+                <div style={{ fontSize: 15, color: DIM }}>
                   Stamp ID: <span style={{ color: GOLD }}>{claimedStamp.stampId}</span>
                 </div>
-                <div style={{ fontSize: 9, color: DIM, marginTop: 2 }}>
+                <div style={{ fontSize: 15, color: DIM, marginTop: 2 }}>
                   Recorded: {new Date(claimedStamp.claimedAt).toLocaleString()}
                 </div>
                 {claimedStamp.finalScore != null && (
-                  <div style={{ fontSize: 9, color: DIM, marginTop: 2 }}>
+                  <div style={{ fontSize: 15, color: DIM, marginTop: 2 }}>
                     Final Score: <span style={{ color: GOLD }}>{claimedStamp.finalScore}/100</span>
                   </div>
                 )}
@@ -514,7 +514,7 @@ export default function PassportStamp() {
                 {passportBadges.map(b => (
                   <div key={b.id} data-badge={b.id} style={{
                     background: 'rgba(233,193,118,0.1)', border: `1px solid rgba(233,193,118,0.3)`,
-                    borderRadius: 8, padding: '3px 10px', fontSize: 10, color: GOLD,
+                    borderRadius: 8, padding: '3px 10px', fontSize: 15, color: GOLD,
                   }}>{b.label}</div>
                 ))}
               </div>
@@ -524,7 +524,7 @@ export default function PassportStamp() {
           {/* ── API error state ──────────────────────── */}
           {(claimStatus === 'error' || claimStatus === 'offline') && (
             <div style={{
-              marginTop: 8, fontSize: 9,
+              marginTop: 8, fontSize: 15,
               color: claimStatus === 'offline' ? AMBER : RED,
               background: claimStatus === 'offline' ? 'rgba(240,168,48,0.08)' : 'rgba(224,90,90,0.08)',
               border: `1px solid ${claimStatus === 'offline' ? 'rgba(240,168,48,0.3)' : 'rgba(224,90,90,0.3)'}`,
@@ -538,7 +538,7 @@ export default function PassportStamp() {
           <HR />
           <div data-section="next-unlock">
             <SL>Next Unlock</SL>
-            <div style={{ fontSize: 10, color: DIM }}>
+            <div style={{ fontSize: 15, color: DIM }}>
               {isClaimed
                 ? <span>Continue to <span style={{ color: GOLD }}>SmokeCraft Connections</span> — Session 22</span>
                 : <span>Claim your passport stamp to unlock <span style={{ color: GOLD }}>Connections</span></span>
