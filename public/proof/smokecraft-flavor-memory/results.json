@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-07-12T02:23:10.732Z",
+  "total": 23,
+  "passed": 23,
+  "failed": 0,
+  "jsErrors": 0,
+  "results": [
+    {
+      "label": "Route /smokecraft/flavor-memory loads",
+      "ok": true
+    },
+    {
+      "label": "Redesigned image (FLAVOR MEMORY.png) present",
+      "ok": true
+    },
+    {
+      "label": "Baked-value mask overlay present",
+      "ok": true
+    },
+    {
+      "label": "All 18 required flavor chips present and neutral",
+      "ok": true
+    },
+    {
+      "label": "Flavor chip: clicking changes visual state (background changes)",
+      "ok": true
+    },
+    {
+      "label": "Multiple flavors selected simultaneously — count displayed",
+      "ok": true
+    },
+    {
+      "label": "Flavor definition displayed after selection",
+      "ok": true
+    },
+    {
+      "label": "Clicking selected flavor deselects it (background reverts)",
+      "ok": true
+    },
+    {
+      "label": "Flavor chart SVG present with 5 polygon(s) — renders from session data",
+      "ok": true
+    },
+    {
+      "label": "3 real range slider inputs present",
+      "ok": true
+    },
+    {
+      "label": "Slider update: moving to 5 shows \"Full\" label",
+      "ok": true
+    },
+    {
+      "label": "Aromatic nuances: Floral chip toggles visual state",
+      "ok": true
+    },
+    {
+      "label": "Pairing recall: Whiskey chip selected with gold background",
+      "ok": true
+    },
+    {
+      "label": "Personal notes: textarea expands and accepts text",
+      "ok": true
+    },
+    {
+      "label": "XP displayed from session state with +75 reward indicator",
+      "ok": true
+    },
+    {
+      "label": "Previous session: truthful empty state shown when no history exists",
+      "ok": true
+    },
+    {
+      "label": "Selections persist in localStorage: [cedar, leather, espresso]",
+      "ok": true
+    },
+    {
+      "label": "No invisible hotspot buttons (old-style overlay)",
+      "ok": true
+    },
+    {
+      "label": "Real nav button(s) present: 1",
+      "ok": true
+    },
+    {
+      "label": "Works without background image: nav button visible",
+      "ok": true
+    },
+    {
+      "label": "Continue → /smokecraft/final-third (correct)",
+      "ok": true
+    },
+    {
+      "label": "Back → /smokecraft/flavor-memory",
+      "ok": true
+    },
+    {
+      "label": "Backend save fired: 4 API request(s) — undefined",
+      "ok": true
+    }
+  ]
+}
