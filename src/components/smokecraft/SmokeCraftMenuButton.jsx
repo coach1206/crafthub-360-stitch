@@ -40,7 +40,7 @@ export default function SmokeCraftMenuButton({ label = 'View Menu', cartCountOve
 const styles = {
   btn: {
     position: 'fixed',
-    bottom: 24,
+    bottom: 160,
     right: 20,
     zIndex: 200,
     background: '#8b6914',

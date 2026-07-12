@@ -119,7 +119,7 @@ export default function SmokeCraftHandoffTrigger({ allowEAT = true, allowPOS360 
 const G = '#E9C176'
 const styles = {
   dot: {
-    position: 'fixed', bottom: 14, left: 14, zIndex: 150,
+    position: 'fixed', bottom: 160, left: 14, zIndex: 150,
     width: 44, height: 44, borderRadius: '50%',
     background: 'rgba(10,6,3,0.5)', border: '1px solid rgba(233,193,118,0.15)',
     color: 'rgba(233,193,118,0.3)', fontSize: 9, cursor: 'pointer',
@@ -127,7 +127,7 @@ const styles = {
     display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
   panel: {
-    position: 'fixed', bottom: 14, left: 14, zIndex: 150,
+    position: 'fixed', bottom: 160, left: 14, zIndex: 150,
     background: 'rgba(14,10,6,0.97)', border: `1px solid rgba(233,193,118,0.25)`,
     borderRadius: 12, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8,
     boxShadow: '0 8px 32px rgba(0,0,0,0.6)',

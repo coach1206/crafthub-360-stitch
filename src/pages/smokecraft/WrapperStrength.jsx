@@ -1,37 +1,22 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetRoute from '../../components/smokecraft/SmokeCraftAssetRoute.jsx'
 
+/**
+ * WrapperStrength — pass-through redirect.
+ *
+ * This screen was removed from the main SmokeCraft journey (format now goes
+ * directly to seed-soil, awarding this step). If a user arrives here via a
+ * saved URL, award the step and redirect to seed-soil to keep the flow intact.
+ */
 export default function WrapperStrength() {
-  const navigate = useNavigate()
   const { awardSessionRewards } = useGuestSession()
-  const [done, setDone] = useState(false)
+  const navigate = useNavigate()
 
-  function handleContinue() {
-    if (done) return
-    setDone(true)
-    triggerHaptic('medium')
-    awardSessionRewards('wrapper-strength')
-    navigate('/smokecraft/visit-complete')
-  }
+  useEffect(() => {
+    try { awardSessionRewards('wrapper-strength') } catch (_) {}
+    navigate('/smokecraft/seed-soil', { replace: true })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const HOTSPOTS = [
-    {
-      label: 'Visit 2 Complete — Return on your next visit',
-      x: 10, y: 75, width: 80, height: 20,
-      onClick: handleContinue,
-      to: '/smokecraft/visit-complete',
-    },
-  ]
-
-  return (
-    <SmokeCraftAssetRoute
-      src="/smokecraft-wrapper-strength.png"
-      alt="Wrapper / Strength Education"
-      hotspots={HOTSPOTS}
-      route="/smokecraft/wrapper-strength"
-    />
-  )
+  return null
 }

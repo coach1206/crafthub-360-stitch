@@ -1,0 +1,183 @@
+{
+  "totalChecks": 137,
+  "pass": 137,
+  "fail": 0,
+  "verdict": "✅ ALL PASS",
+  "routeResultMap": {
+    "S01": {
+      "label": "Landing",
+      "pillCount": 0,
+      "btnCount": 8,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S02": {
+      "label": "Enroll",
+      "pillCount": 0,
+      "btnCount": 1,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S02b": {
+      "label": "Identity",
+      "pillCount": 0,
+      "btnCount": 2,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S03": {
+      "label": "GoldenBox",
+      "pillCount": 0,
+      "btnCount": 1,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S04": {
+      "label": "MentorSelection",
+      "pillCount": 0,
+      "btnCount": 9,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S05": {
+      "label": "Format",
+      "pillCount": 0,
+      "btnCount": 7,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S06": {
+      "label": "SeedSoil",
+      "pillCount": 0,
+      "btnCount": 9,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S07": {
+      "label": "PairingLab",
+      "pillCount": 0,
+      "btnCount": 9,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S08": {
+      "label": "HumidorMatch",
+      "pillCount": 0,
+      "btnCount": 9,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S09": {
+      "label": "RequestPurchase",
+      "pillCount": 0,
+      "btnCount": 5,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S10": {
+      "label": "CutToastLight",
+      "pillCount": 0,
+      "btnCount": 10,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S11": {
+      "label": "FirstThird",
+      "pillCount": 0,
+      "btnCount": 1,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S12": {
+      "label": "SecondThird",
+      "pillCount": 0,
+      "btnCount": 1,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S13": {
+      "label": "FlavorMemory",
+      "pillCount": 0,
+      "btnCount": 35,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S14": {
+      "label": "FinalThird",
+      "pillCount": 0,
+      "btnCount": 58,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S15": {
+      "label": "Scorecard",
+      "pillCount": 0,
+      "btnCount": 4,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S16": {
+      "label": "FinalReview",
+      "pillCount": 0,
+      "btnCount": 1,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S17": {
+      "label": "PassportStamp",
+      "pillCount": 0,
+      "btnCount": 3,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S18": {
+      "label": "Connections",
+      "pillCount": 0,
+      "btnCount": 8,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S19": {
+      "label": "ManagementSync",
+      "pillCount": 0,
+      "btnCount": 2,
+      "hasCorrectImage": true,
+      "overlap": []
+    },
+    "S20": {
+      "label": "SessionComplete",
+      "pillCount": 0,
+      "btnCount": 2,
+      "hasCorrectImage": true,
+      "overlap": []
+    }
+  },
+  "respResults": {
+    "1366x768-desktop": {
+      "pass": 7,
+      "total": 7
+    },
+    "1024x768-tablet-land": {
+      "pass": 7,
+      "total": 7
+    },
+    "820x1180-iPad-Air": {
+      "pass": 7,
+      "total": 7
+    },
+    "768x1024-iPad-Mini": {
+      "pass": 7,
+      "total": 7
+    },
+    "390x844-iPhone14": {
+      "pass": 7,
+      "total": 7
+    },
+    "375x667-iPhone-SE": {
+      "pass": 7,
+      "total": 7
+    }
+  },
+  "consoleErrors": [],
+  "imageFailures": []
+}

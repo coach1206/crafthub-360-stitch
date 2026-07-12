@@ -1,73 +1,108 @@
-import SmokeCraftAssetRoute from '../components/smokecraft/SmokeCraftAssetRoute.jsx'
+import { useNavigate } from 'react-router-dom'
+import { useGuestSession } from '../context/GuestSessionContext.jsx'
+import { triggerHaptic } from '../utils/haptics.js'
+import SmokeCraftAssetScreen from '../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftNavBar from '../components/smokecraft/SmokeCraftNavBar.jsx'
 
-/*
- * SmokeCraft landing page — /smokecraft
- *
- * Hotspot positions are image-relative percentages (x/y/width/height as % of image).
- * The SmokeCraftAssetScreen coordinate-fix ensures these map exactly to the visual
- * button areas in smokecraft-landing.png on any viewport/device size.
- *
- * Positions cover the standard SmokeCraft landing image layout:
- *   – Primary CTA (Start New SmokeCraft Session): lower third of image
- *   – Secondary nav row: middle band
- *   – Bottom nav items: bottom strip
- *
- * If the image layout differs, enable debug mode to fine-tune:
- *   sessionStorage.setItem('smokecraft_hotspot_debug', '1')
- */
-const HOTSPOTS = [
-  // ── Primary CTA ───────────────────────────────────────────────────────────
-  {
-    label: 'Start New SmokeCraft Session',
-    x: 5, y: 62, width: 90, height: 20,
-    to: '/smokecraft/identity',
-  },
-  // ── Secondary navigation ──────────────────────────────────────────────────
-  {
-    label: 'Continue Previous Session',
-    x: 5, y: 46, width: 90, height: 14,
-    to: '/smokecraft/enroll',
-  },
-  {
-    label: 'Enter Event Challenge',
-    x: 5, y: 33, width: 42, height: 11,
-    to: '/smokecraft/smokecraft-challenge',
-  },
-  {
-    label: 'Browse Humidor',
-    x: 53, y: 33, width: 42, height: 11,
-    to: '/smokecraft/humidor-match',
-  },
-  {
-    label: 'View My Passport',
-    x: 5, y: 22, width: 42, height: 9,
-    to: '/smokecraft/passport-stamp',
-  },
-  {
-    label: 'How It Works',
-    x: 53, y: 22, width: 42, height: 9,
-    to: '/smokecraft/how-it-works',
-  },
-  // ── Bottom nav (if image has bottom nav strip) ────────────────────────────
-  {
-    label: 'View Pairing',
-    x: 5, y: 84, width: 20, height: 12,
-    to: '/smokecraft/pairing-lab',
-  },
-  {
-    label: 'Demo Experience',
-    x: 75, y: 84, width: 20, height: 12,
-    to: '/smokecraft/golden-box',
-  },
+const GOLD = '#E9C176'
+const DARK = '#0a0603'
+
+const SECONDARY_NAV = [
+  { label: 'Browse Humidor', to: '/smokecraft/humidor-match' },
+  { label: 'Enter Challenge', to: '/smokecraft/smokecraft-challenge' },
+  { label: 'How It Works', to: '/smokecraft/how-it-works' },
+  { label: 'View Pairing', to: '/smokecraft/pairing-lab' },
+  { label: 'My Passport', to: '/smokecraft/passport-stamp' },
+  { label: 'Rankings', to: '/smokecraft/leaderboard' },
 ]
 
 export default function SmokeCraft() {
+  const { awardSessionRewards } = useGuestSession()
+  const navigate = useNavigate()
+
+  function handleStartNew() {
+    triggerHaptic('medium')
+    navigate('/smokecraft/identity')
+  }
+
+  function handleContinue() {
+    triggerHaptic('light')
+    navigate('/smokecraft/enroll')
+  }
+
+  function handleSecondary(to) {
+    triggerHaptic('light')
+    navigate(to)
+  }
+
   return (
-    <SmokeCraftAssetRoute
-      src="/assets/smokecraft-reference/approved/smokecraft-landing.png"
-      alt="SmokeCraft"
-      hotspots={HOTSPOTS}
-      route="/smokecraft"
-    />
+    <>
+      <SmokeCraftAssetScreen
+        src="/assets/smokecraft-reference/approved/smokecraft-landing.png"
+        alt="SmokeCraft 360 — The Guided Cigar Experience"
+      />
+
+      {/* Secondary navigation grid */}
+      <div style={{
+        position: 'fixed',
+        bottom: 168, left: 0, right: 0,
+        zIndex: 400,
+        padding: '0 16px',
+        pointerEvents: 'none',
+      }}>
+        <div style={{
+          pointerEvents: 'auto',
+          background: 'rgba(10,6,3,0.93)',
+          border: '1px solid rgba(233,193,118,0.18)',
+          borderRadius: 12,
+          padding: '10px 12px',
+          maxWidth: 520,
+          margin: '0 auto',
+        }}>
+          <div style={{
+            fontSize: 9,
+            color: GOLD,
+            fontWeight: 700,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            marginBottom: 8,
+          }}>
+            SmokeCraft 360
+          </div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {SECONDARY_NAV.map(item => (
+              <button
+                key={item.to}
+                type="button"
+                aria-label={item.label}
+                onClick={() => handleSecondary(item.to)}
+                style={{
+                  background: 'transparent',
+                  color: GOLD,
+                  border: '1px solid rgba(233,193,118,0.35)',
+                  borderRadius: 20,
+                  padding: '11px 14px',
+                  minHeight: 44,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  fontFamily: 'Georgia, serif',
+                  cursor: 'pointer',
+                  letterSpacing: '0.04em',
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <SmokeCraftNavBar
+        primary="Start New SmokeCraft Session →"
+        onPrimary={handleStartNew}
+        secondary="Continue Previous Session"
+        onSecondary={handleContinue}
+      />
+    </>
   )
 }
