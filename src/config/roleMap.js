@@ -101,6 +101,11 @@ export const ROLE_MAP = Object.freeze({
     'view_table_status',
     'view_inventory_status',
     'view_guest_assistance',
+    // SmokeCraft staff-specific
+    'smokecraft_view_guest_sessions',
+    'smokecraft_assist_guest',
+    'smokecraft_confirm_purchase',
+    'smokecraft_view_floor_requests',
   ],
 
   manager: [
@@ -123,6 +128,15 @@ export const ROLE_MAP = Object.freeze({
     'manage_inventory',
     'view_guest_assistance',
     'manage_ticker',
+    // SmokeCraft manager-specific
+    'smokecraft_view_guest_sessions',
+    'smokecraft_assist_guest',
+    'smokecraft_confirm_purchase',
+    'smokecraft_view_floor_requests',
+    'smokecraft_view_management_sync',
+    'smokecraft_configure_venue',
+    'smokecraft_view_error_logs',
+    'smokecraft_view_conflict_reports',
   ],
 
   admin: [
@@ -160,6 +174,17 @@ export const ROLE_MAP = Object.freeze({
     'manage_admin_inbox',
     'view_access_requests',
     'view_security_events',
+    // SmokeCraft admin-specific
+    'smokecraft_view_guest_sessions',
+    'smokecraft_assist_guest',
+    'smokecraft_confirm_purchase',
+    'smokecraft_view_floor_requests',
+    'smokecraft_view_management_sync',
+    'smokecraft_configure_venue',
+    'smokecraft_view_error_logs',
+    'smokecraft_view_conflict_reports',
+    'smokecraft_reset_demo',
+    'smokecraft_configure_integrations',
   ],
 
   founder_level_0: [
@@ -185,6 +210,13 @@ export const ROLE_MAP = Object.freeze({
     'manage_system_settings', 'manage_feature_flags',
     'manage_environment_settings', 'manage_founder_recovery',
     'transfer_ownership',
+    // SmokeCraft founder-specific
+    'smokecraft_view_guest_sessions', 'smokecraft_assist_guest',
+    'smokecraft_confirm_purchase', 'smokecraft_view_floor_requests',
+    'smokecraft_view_management_sync', 'smokecraft_configure_venue',
+    'smokecraft_view_error_logs', 'smokecraft_view_conflict_reports',
+    'smokecraft_reset_demo', 'smokecraft_configure_integrations',
+    'smokecraft_manage_feature_flags', 'smokecraft_release_tag',
     // Mentor + developer + passport — founder can access all
     'access_mentor_console', 'view_assigned_sessions', 'add_guidance_notes',
     'trigger_mentor_content', 'view_learner_progress',

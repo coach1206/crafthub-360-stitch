@@ -1,10 +1,10 @@
 /**
  * SmokeCraft Progress Service (module layer)
  * Thin contract layer over the existing progress context/utils.
- * Does not replace or duplicate src/services/smokecraftProgressService.js.
+ * Sources from the canonical 24-session smokecraftJourneyContract.
  */
 
-import { JOURNEY_STEPS, JOURNEY_RULES } from '../data/smokecraftJourneyContract.js'
+import { JOURNEY_STEPS, JOURNEY_RULES, getNextRoute, getPrevRoute } from '../data/smokecraftJourneyContract.js'
 
 /**
  * Returns whether a given step ID is unlocked based on completed steps.
@@ -51,11 +51,14 @@ export function canUnlockConnections(completedSteps = []) {
  * Returns a progress summary for the current user session.
  */
 export function buildProgressSummary(completedSteps = []) {
+  const currentStep = JOURNEY_STEPS.find(s => !completedSteps.includes(s.id)) ?? null
   return {
-    totalSteps: JOURNEY_STEPS.length,
+    totalSteps: JOURNEY_STEPS.length,  // 24
     completedCount: completedSteps.length,
     completedSteps,
-    currentStep: JOURNEY_STEPS.find(s => !completedSteps.includes(s.id)) ?? null,
+    currentStep,
+    nextRoute: currentStep ? getNextRoute(currentStep.id) : null,
+    prevRoute: currentStep ? getPrevRoute(currentStep.id) : null,
     passportStampEarned: completedSteps.includes('passport-stamp'),
     connectionsUnlocked: completedSteps.includes('connections'),
     sessionComplete: completedSteps.includes('session-complete'),
@@ -63,3 +66,5 @@ export function buildProgressSummary(completedSteps = []) {
     journeyRules: JOURNEY_RULES,
   }
 }
+
+export { getNextRoute, getPrevRoute }

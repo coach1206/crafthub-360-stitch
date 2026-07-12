@@ -157,6 +157,8 @@ import SmokeCraftDemoReset from './components/smokecraft/SmokeCraftDemoReset.jsx
 import GuestPass        from './pages/smokecraft/GuestPass.jsx'
 import Demo             from './pages/smokecraft/Demo.jsx'
 import Scan             from './pages/smokecraft/Scan.jsx'
+import FeatureFlagAdmin from './pages/smokecraft/FeatureFlagAdmin.jsx'
+import ErrorLogViewer  from './pages/smokecraft/ErrorLogViewer.jsx'
 import SignIn           from './pages/SignIn.jsx'
 
 // ── Passport — guest-accessible, eager ───────────────────────
@@ -862,6 +864,32 @@ export default function App() {
                   demoBlocked
                 >
                   <SystemOverview />
+                </ProtectedRoute>
+              } />
+
+              {/* ── Protected: admin+ — Error log viewer (R19) ── */}
+              <Route path="smokecraft/error-log" element={
+                <ProtectedRoute
+                  allowedRoles={['admin','founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin Login"
+                  lockedMessage="Error log viewer requires admin-level access or higher."
+                  demoBlocked
+                >
+                  <ErrorLogViewer />
+                </ProtectedRoute>
+              } />
+
+              {/* ── Protected: admin+ — Feature flag administration (R18) ── */}
+              <Route path="smokecraft/feature-flag-admin" element={
+                <ProtectedRoute
+                  allowedRoles={['admin','founder_level_0']}
+                  loginRoute="/admin-login"
+                  loginLabel="Admin Login"
+                  lockedMessage="Feature flag administration requires admin-level access or higher."
+                  demoBlocked
+                >
+                  <FeatureFlagAdmin />
                 </ProtectedRoute>
               } />
 
