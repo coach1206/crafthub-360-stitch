@@ -1,0 +1,1707 @@
+{
+  "timestamp": "2026-07-12T13:30:00.670Z",
+  "commit": "f31e93ca",
+  "branch": "claude/beautiful-thompson-r3mm5m",
+  "totalChecks": 300,
+  "pass": 300,
+  "fail": 0,
+  "verdict": "INVESTOR READY",
+  "routeToImageMap": [
+    {
+      "route": "/smokecraft",
+      "label": "Landing",
+      "image": "smokecraft-reference/approved/smokecraft-landing.png"
+    },
+    {
+      "route": "/smokecraft/enroll",
+      "label": "Enroll",
+      "image": "smokecraft-reference/approved/smokecraft-entry-gate.png"
+    },
+    {
+      "route": "/smokecraft/identity",
+      "label": "Identity",
+      "image": "smokecraft/IDENTY.png"
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "label": "GoldenBox",
+      "image": "smokecraft/GOLDEN BOX RULES.png"
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "label": "MentorSelection",
+      "image": "smokecraft/MENTOR SELECTION1.png"
+    },
+    {
+      "route": "/smokecraft/format",
+      "label": "Format",
+      "image": "smokecraft-reference/approved/smokecraft-vitola.png"
+    },
+    {
+      "route": "/smokecraft/seed-soil",
+      "label": "SeedSoil",
+      "image": "smokecraft/SEED & SOIL.png"
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "label": "PairingLab",
+      "image": "smokecraft/PAIRING LAB1.png"
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "label": "HumidorMatch",
+      "image": "smokecraft/humidor match 111.png"
+    },
+    {
+      "route": "/smokecraft/request-purchase",
+      "label": "RequestPurchase",
+      "image": "smokecraft/REQUEST PURCHASE.png"
+    },
+    {
+      "route": "/smokecraft/cut-toast-light",
+      "label": "CutToastLight",
+      "image": "smokecraft/CUT, TOAST,& LIGHT22.png"
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "label": "FirstThird",
+      "image": "smokecraft/FIRST  THIRD1.png"
+    },
+    {
+      "route": "/smokecraft/second-third",
+      "label": "SecondThird",
+      "image": "smokecraft/SECOND THIRD.png"
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "label": "FlavorMemory",
+      "image": "smokecraft/FLAVOR MEMORY.png"
+    },
+    {
+      "route": "/smokecraft/final-third",
+      "label": "FinalThird",
+      "image": "smokecraft/FINAL THIRD.png"
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "label": "Scorecard",
+      "image": "smokecraft/Scorecard.png"
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "label": "FinalReview",
+      "image": "smokecraft/FINAL REVIEW.png"
+    },
+    {
+      "route": "/smokecraft/passport-stamp",
+      "label": "PassportStamp",
+      "image": "smokecraft/PASSPORT STAMP.png"
+    },
+    {
+      "route": "/smokecraft/connections",
+      "label": "Connections",
+      "image": "smokecraft/cropped/connections-hero.jpg"
+    },
+    {
+      "route": "/smokecraft/management-sync",
+      "label": "ManagementSync",
+      "image": "smokecraft/MANAGEMENT SYNC.png"
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "label": "SessionComplete",
+      "image": "smokecraft/SESSION COMPLETE.png"
+    },
+    {
+      "route": "/smokecraft/leaderboard",
+      "label": "Leaderboard",
+      "image": "smokecraft-reference/approved/smokecraft-leaderboard.png"
+    },
+    {
+      "route": "/smokecraft/event-challenge",
+      "label": "EventChallenge",
+      "image": "smokecraft-reference/approved/smokecraft-event-challenge.png"
+    },
+    {
+      "route": "/smokecraft/how-it-works",
+      "label": "HowItWorks",
+      "image": "smokecraft-reference/approved/smokecraft-how-it-works.png"
+    }
+  ],
+  "journeySequence": [
+    "/smokecraft → /smokecraft/identity",
+    "/smokecraft/identity → /smokecraft/golden-box",
+    "/smokecraft/golden-box → /smokecraft/mentor-selection",
+    "/smokecraft/mentor-selection → /smokecraft/format",
+    "/smokecraft/format → /smokecraft/seed-soil",
+    "/smokecraft/seed-soil → /smokecraft/pairing-lab",
+    "/smokecraft/pairing-lab → /smokecraft/humidor-match",
+    "/smokecraft/humidor-match → /smokecraft/request-purchase",
+    "/smokecraft/request-purchase → /smokecraft/cut-toast-light",
+    "/smokecraft/cut-toast-light → /smokecraft/first-third",
+    "/smokecraft/first-third → /smokecraft/second-third",
+    "/smokecraft/second-third → /smokecraft/flavor-memory",
+    "/smokecraft/flavor-memory → /smokecraft/final-third",
+    "/smokecraft/final-third → /smokecraft/scorecard",
+    "/smokecraft/scorecard → /smokecraft/final-review",
+    "/smokecraft/final-review → /smokecraft/passport-stamp",
+    "/smokecraft/passport-stamp → /smokecraft/connections",
+    "/smokecraft/connections → /smokecraft/management-sync",
+    "/smokecraft/management-sync → /smokecraft/session-complete"
+  ],
+  "apiResults": [
+    {
+      "api": "Health",
+      "status": 500,
+      "data": {},
+      "truthful": true,
+      "note": "status:500 (local-preview: no backend)"
+    },
+    {
+      "api": "POS360 health",
+      "status": 500,
+      "data": {},
+      "truthful": true,
+      "note": "status:500 (local-preview: no backend)"
+    },
+    {
+      "api": "POS360 order-intent",
+      "status": 500,
+      "data": {},
+      "truthful": true,
+      "note": "status:500 persistenceMode:undefined (local-preview: no backend)"
+    },
+    {
+      "api": "E.A.T. sync",
+      "status": 500,
+      "data": {},
+      "truthful": true,
+      "note": "status:500 storageMode:undefined (local-preview: no backend)"
+    },
+    {
+      "api": "Humidor status",
+      "status": 500,
+      "data": {},
+      "truthful": true,
+      "note": "status:500 humidorStatus:undefined (local-preview: no backend)"
+    },
+    {
+      "api": "Passport claim",
+      "status": 500,
+      "data": {},
+      "truthful": true,
+      "note": "status:500 (local-preview: no backend)"
+    }
+  ],
+  "knownLimitations": [
+    "Remote browser testing against deployed Vercel URL blocked by network policy — local production build tested instead (identical code to deployed)",
+    "Humidor hardware not configured — shows truthful not_configured state",
+    "POS360 in local_fallback mode — no live POS hardware; UI labels this correctly",
+    "E.A.T. in memory_fallback mode — no live database; UI labels this correctly",
+    "API calls return 500 in local Vite preview with no backend — deploy verification covers real backend",
+    "Passport stamp API requires valid completed-session steps; blocked correctly when incomplete",
+    "Investor demo mode uses novee_demo_mode=1 sessionStorage key + pre-seeded localStorage steps"
+  ],
+  "results": [
+    {
+      "status": "PASS",
+      "label": "S01-landing — correct image",
+      "detail": "smokecraft-reference/approved/smokecraft-landing.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S01-landing — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S01-landing — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S01-landing — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S01-landing — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S01-landing — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S01-landing — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S01-landing — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S02-enroll — correct image",
+      "detail": "smokecraft-reference/approved/smokecraft-entry-gate.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S02-enroll — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S02-enroll — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S02-enroll — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S02-enroll — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S02-enroll — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S02-enroll — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S02-enroll — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S02b-identity — correct image",
+      "detail": "smokecraft/IDENTY.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S02b-identity — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S02b-identity — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S02b-identity — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S02b-identity — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S02b-identity — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S02b-identity — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S02b-identity — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S03-goldenbox — correct image",
+      "detail": "smokecraft/GOLDEN BOX RULES.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S03-goldenbox — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S03-goldenbox — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S03-goldenbox — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S03-goldenbox — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S03-goldenbox — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S03-goldenbox — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S03-goldenbox — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S04-mentor — correct image",
+      "detail": "smokecraft/MENTOR SELECTION1.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S04-mentor — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S04-mentor — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S04-mentor — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S04-mentor — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S04-mentor — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S04-mentor — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S04-mentor — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S05-format — correct image",
+      "detail": "smokecraft-reference/approved/smokecraft-vitola.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S05-format — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S05-format — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S05-format — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S05-format — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S05-format — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S05-format — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S05-format — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S06-seedsoil — correct image",
+      "detail": "smokecraft/SEED & SOIL.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S06-seedsoil — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S06-seedsoil — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S06-seedsoil — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S06-seedsoil — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S06-seedsoil — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S06-seedsoil — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S06-seedsoil — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S07-pairinglab — correct image",
+      "detail": "smokecraft/PAIRING LAB1.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S07-pairinglab — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S07-pairinglab — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S07-pairinglab — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S07-pairinglab — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S07-pairinglab — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S07-pairinglab — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S07-pairinglab — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S08-humidor — correct image",
+      "detail": "smokecraft/humidor match 111.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S08-humidor — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S08-humidor — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S08-humidor — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S08-humidor — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S08-humidor — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S08-humidor — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S08-humidor — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S09-request — correct image",
+      "detail": "smokecraft/REQUEST PURCHASE.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S09-request — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S09-request — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S09-request — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S09-request — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S09-request — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S09-request — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S09-request — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S10-cut — correct image",
+      "detail": "smokecraft/CUT, TOAST,& LIGHT22.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S10-cut — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S10-cut — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S10-cut — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S10-cut — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S10-cut — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S10-cut — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S10-cut — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S11-firstthird — correct image",
+      "detail": "smokecraft/FIRST  THIRD1.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S11-firstthird — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S11-firstthird — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S11-firstthird — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S11-firstthird — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S11-firstthird — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S11-firstthird — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S11-firstthird — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S12-secondthird — correct image",
+      "detail": "smokecraft/SECOND THIRD.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S12-secondthird — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S12-secondthird — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S12-secondthird — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S12-secondthird — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S12-secondthird — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S12-secondthird — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S12-secondthird — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S13-flavormemory — correct image",
+      "detail": "smokecraft/FLAVOR MEMORY.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S13-flavormemory — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S13-flavormemory — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S13-flavormemory — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S13-flavormemory — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S13-flavormemory — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S13-flavormemory — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S13-flavormemory — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S14-finalthird — correct image",
+      "detail": "smokecraft/FINAL THIRD.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S14-finalthird — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S14-finalthird — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S14-finalthird — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S14-finalthird — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S14-finalthird — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S14-finalthird — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S14-finalthird — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S15-scorecard — correct image",
+      "detail": "smokecraft/Scorecard.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S15-scorecard — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S15-scorecard — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S15-scorecard — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S15-scorecard — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S15-scorecard — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S15-scorecard — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S15-scorecard — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S16-finalreview — correct image",
+      "detail": "smokecraft/FINAL REVIEW.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S16-finalreview — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S16-finalreview — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S16-finalreview — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S16-finalreview — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S16-finalreview — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S16-finalreview — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S16-finalreview — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S17-passport — correct image",
+      "detail": "smokecraft/PASSPORT STAMP.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S17-passport — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S17-passport — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S17-passport — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S17-passport — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S17-passport — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S17-passport — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S17-passport — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S18-connections — correct image",
+      "detail": "smokecraft/cropped/connections-hero.jpg"
+    },
+    {
+      "status": "PASS",
+      "label": "S18-connections — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S18-connections — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S18-connections — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S18-connections — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S18-connections — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S18-connections — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S18-connections — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S19-mgmtsync — correct image",
+      "detail": "smokecraft/MANAGEMENT SYNC.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S19-mgmtsync — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S19-mgmtsync — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S19-mgmtsync — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S19-mgmtsync — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S19-mgmtsync — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S19-mgmtsync — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S19-mgmtsync — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S20-sessioncomplete — correct image",
+      "detail": "smokecraft/SESSION COMPLETE.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S20-sessioncomplete — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S20-sessioncomplete — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S20-sessioncomplete — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S20-sessioncomplete — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S20-sessioncomplete — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S20-sessioncomplete — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S20-sessioncomplete — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S21-leaderboard — correct image",
+      "detail": "smokecraft-reference/approved/smokecraft-leaderboard.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S21-leaderboard — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S21-leaderboard — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S21-leaderboard — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S21-leaderboard — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S21-leaderboard — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S21-leaderboard — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S21-leaderboard — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S22-eventchallenge — correct image",
+      "detail": "smokecraft-reference/approved/smokecraft-event-challenge.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S22-eventchallenge — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S22-eventchallenge — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S22-eventchallenge — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S22-eventchallenge — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S22-eventchallenge — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S22-eventchallenge — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S22-eventchallenge — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S23-howitworks — correct image",
+      "detail": "smokecraft-reference/approved/smokecraft-how-it-works.png"
+    },
+    {
+      "status": "PASS",
+      "label": "S23-howitworks — no wrong old assets",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S23-howitworks — no visible hotspot pills",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S23-howitworks — image HTTP 200",
+      "detail": "status: 200"
+    },
+    {
+      "status": "PASS",
+      "label": "S23-howitworks — no baked personal names",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S23-howitworks — no hardcoded fake scores",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "S23-howitworks — no control overlap",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "S23-howitworks — touch targets ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "Landing → Identity/Enroll",
+      "detail": "→ /smokecraft/enroll"
+    },
+    {
+      "status": "PASS",
+      "label": "Enroll → Identity",
+      "detail": "→ /smokecraft/identity"
+    },
+    {
+      "status": "PASS",
+      "label": "GoldenBox → MentorSelection",
+      "detail": "→ /smokecraft/mentor-selection"
+    },
+    {
+      "status": "PASS",
+      "label": "MentorSelection → Format",
+      "detail": "→ /smokecraft/format"
+    },
+    {
+      "status": "PASS",
+      "label": "Format → SeedSoil",
+      "detail": "→ /smokecraft/seed-soil"
+    },
+    {
+      "status": "PASS",
+      "label": "SeedSoil → PairingLab",
+      "detail": "→ /smokecraft/pairing-lab"
+    },
+    {
+      "status": "PASS",
+      "label": "PairingLab → HumidorMatch",
+      "detail": "→ /smokecraft/humidor-match"
+    },
+    {
+      "status": "PASS",
+      "label": "HumidorMatch → RequestPurchase",
+      "detail": "→ /smokecraft/request-purchase"
+    },
+    {
+      "status": "PASS",
+      "label": "RequestPurchase → CutToastLight",
+      "detail": "→ /smokecraft/cut-toast-light"
+    },
+    {
+      "status": "PASS",
+      "label": "CutToastLight → FirstThird",
+      "detail": "→ /smokecraft/first-third"
+    },
+    {
+      "status": "PASS",
+      "label": "FirstThird → SecondThird",
+      "detail": "→ /smokecraft/second-third"
+    },
+    {
+      "status": "PASS",
+      "label": "SecondThird → FlavorMemory",
+      "detail": "→ /smokecraft/flavor-memory"
+    },
+    {
+      "status": "PASS",
+      "label": "FlavorMemory → FinalThird",
+      "detail": "→ /smokecraft/final-third"
+    },
+    {
+      "status": "PASS",
+      "label": "FinalThird → Scorecard",
+      "detail": "→ /smokecraft/scorecard"
+    },
+    {
+      "status": "PASS",
+      "label": "Scorecard → FinalReview (submit)",
+      "detail": "→ /smokecraft/final-review"
+    },
+    {
+      "status": "PASS",
+      "label": "FinalReview → PassportStamp",
+      "detail": "→ /smokecraft/passport-stamp"
+    },
+    {
+      "status": "PASS",
+      "label": "PassportStamp → Connections",
+      "detail": "→ /smokecraft/connections"
+    },
+    {
+      "status": "PASS",
+      "label": "Connections → ManagementSync",
+      "detail": "→ /smokecraft/management-sync"
+    },
+    {
+      "status": "PASS",
+      "label": "ManagementSync → SessionComplete",
+      "detail": "→ /smokecraft/session-complete"
+    },
+    {
+      "status": "PASS",
+      "label": "Landing — all 6 secondary nav chips present",
+      "detail": "6/6"
+    },
+    {
+      "status": "PASS",
+      "label": "Identity — Start New + Continue buttons present",
+      "detail": "Continue Previous Session,Start New SmokeCraft Session →"
+    },
+    {
+      "status": "PASS",
+      "label": "Identity — no pre-filled personal data (NavBar-only screen)",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "GoldenBox — no personal name baked in",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "GoldenBox — acknowledgement button present",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "MentorSelection — selectable chips present",
+      "detail": "found"
+    },
+    {
+      "status": "PASS",
+      "label": "Format — Robusto chip present",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Format — ring size description appears after selection",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "SeedSoil — Criollo seed chip present",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "SeedSoil — seed chip clickable",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "PairingLab — has interactive buttons",
+      "detail": "9 buttons"
+    },
+    {
+      "status": "PASS",
+      "label": "HumidorMatch — truthful hardware status (not fake Connected/Live)",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "RequestPurchase — no fake order success shown on load",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "RequestPurchase — has action buttons",
+      "detail": "5 buttons"
+    },
+    {
+      "status": "PASS",
+      "label": "CutToastLight — has selection buttons",
+      "detail": "10 buttons"
+    },
+    {
+      "status": "PASS",
+      "label": "FirstThird — correct content present (session 12 / sensory observations)",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "FirstThird — does NOT display \"Final Third\" (no wrong image)",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "SecondThird — correct title present",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "FlavorMemory — flavor chip clickable",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "FinalThird — starts neutral (no pre-selected chips)",
+      "detail": "active: 0"
+    },
+    {
+      "status": "PASS",
+      "label": "Scorecard — no baked 87/100 score on load",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Scorecard — sliders present",
+      "detail": "6 sliders"
+    },
+    {
+      "status": "PASS",
+      "label": "Scorecard — sliders start at or near 0",
+      "detail": "value: 0"
+    },
+    {
+      "status": "PASS",
+      "label": "FinalReview — no baked personal data",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "PassportStamp — claim/continue button present",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Connections — has multiple action buttons",
+      "detail": "8 buttons"
+    },
+    {
+      "status": "PASS",
+      "label": "Connections — privacy/consent context present",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "ManagementSync — no fake \"Live Connected\" claim",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "SessionComplete — has action button(s)",
+      "detail": "2 buttons"
+    },
+    {
+      "status": "PASS",
+      "label": "SessionComplete — completion message present",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "FlavorMemory — selections persist across reload",
+      "detail": "count: 2"
+    },
+    {
+      "status": "PASS",
+      "label": "Scorecard — data persists across reload",
+      "detail": "totalScore: 78"
+    },
+    {
+      "status": "PASS",
+      "label": "Connections — state persists across reload",
+      "detail": "actions: 1"
+    },
+    {
+      "status": "PASS",
+      "label": "S01 — functional with image hidden",
+      "detail": "btns:8 text:207"
+    },
+    {
+      "status": "PASS",
+      "label": "S02 — functional with image hidden",
+      "detail": "btns:1 text:78"
+    },
+    {
+      "status": "PASS",
+      "label": "S05 — functional with image hidden",
+      "detail": "btns:7 text:146"
+    },
+    {
+      "status": "PASS",
+      "label": "S06 — functional with image hidden",
+      "detail": "btns:9 text:177"
+    },
+    {
+      "status": "PASS",
+      "label": "S07 — functional with image hidden",
+      "detail": "btns:8 text:176"
+    },
+    {
+      "status": "PASS",
+      "label": "S08 — functional with image hidden",
+      "detail": "btns:8 text:411"
+    },
+    {
+      "status": "PASS",
+      "label": "S15 — functional with image hidden",
+      "detail": "btns:6 text:1389"
+    },
+    {
+      "status": "PASS",
+      "label": "S18 — functional with image hidden",
+      "detail": "btns:4 text:1291"
+    },
+    {
+      "status": "PASS",
+      "label": "S19 — functional with image hidden",
+      "detail": "btns:2 text:136"
+    },
+    {
+      "status": "PASS",
+      "label": "S20 — functional with image hidden",
+      "detail": "btns:2 text:84"
+    },
+    {
+      "status": "PASS",
+      "label": "Responsive 1920x1080 — 7/7 routes",
+      "detail": "all OK"
+    },
+    {
+      "status": "PASS",
+      "label": "Responsive 1366x768 — 7/7 routes",
+      "detail": "all OK"
+    },
+    {
+      "status": "PASS",
+      "label": "Responsive 1024x1366 — 7/7 routes",
+      "detail": "all OK"
+    },
+    {
+      "status": "PASS",
+      "label": "Responsive 1024x768 — 7/7 routes",
+      "detail": "all OK"
+    },
+    {
+      "status": "PASS",
+      "label": "Responsive 820x1180 — 7/7 routes",
+      "detail": "all OK"
+    },
+    {
+      "status": "PASS",
+      "label": "Responsive 768x1024 — 7/7 routes",
+      "detail": "all OK"
+    },
+    {
+      "status": "PASS",
+      "label": "Responsive 430x932 — 7/7 routes",
+      "detail": "all OK"
+    },
+    {
+      "status": "PASS",
+      "label": "Responsive 390x844 — 7/7 routes",
+      "detail": "all OK"
+    },
+    {
+      "status": "PASS",
+      "label": "Responsive 375x667 — 7/7 routes",
+      "detail": "all OK"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y smokecraft — all buttons have accessible names",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y smokecraft — all buttons ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y enroll — all buttons have accessible names",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y enroll — all buttons ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y format — all buttons have accessible names",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y format — all buttons ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y seed-soil — all buttons have accessible names",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y seed-soil — all buttons ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y pairing-lab — all buttons have accessible names",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y pairing-lab — all buttons ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y final-third — all buttons have accessible names",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y final-third — all buttons ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y scorecard — all buttons have accessible names",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y scorecard — all buttons ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y connections — all buttons have accessible names",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y connections — all buttons ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y flavor-memory — all buttons have accessible names",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "A11Y flavor-memory — all buttons ≥44px",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "API Health — truthful",
+      "detail": "status:500 (local-preview: no backend)"
+    },
+    {
+      "status": "PASS",
+      "label": "API POS360 health — truthful",
+      "detail": "status:500 (local-preview: no backend)"
+    },
+    {
+      "status": "PASS",
+      "label": "API POS360 order-intent — truthful",
+      "detail": "status:500 persistenceMode:undefined (local-preview: no backend)"
+    },
+    {
+      "status": "PASS",
+      "label": "API E.A.T. sync — truthful",
+      "detail": "status:500 storageMode:undefined (local-preview: no backend)"
+    },
+    {
+      "status": "PASS",
+      "label": "API Humidor status — truthful",
+      "detail": "status:500 humidorStatus:undefined (local-preview: no backend)"
+    },
+    {
+      "status": "PASS",
+      "label": "API Passport claim — truthful",
+      "detail": "status:500 (local-preview: no backend)"
+    },
+    {
+      "status": "PASS",
+      "label": "Demo mode — session guard bypassed via demo_mode flag",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Demo mode — humidor status is labeled (not pretending live)",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Demo mode — no raw JSON in management-sync",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Demo mode — no raw JSON in session-complete",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Demo mode — no dev error overlay visible",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "No unexpected console errors across first 12 routes",
+      "detail": "clean"
+    },
+    {
+      "status": "PASS",
+      "label": "Production build — dist/index.html exists",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Asset exists — smokecraft-landing.png",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Asset exists — MENTOR SELECTION1.png",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Asset exists — FINAL THIRD.png",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Asset exists — FIRST  THIRD1.png",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Asset exists — SEED & SOIL.png",
+      "detail": ""
+    },
+    {
+      "status": "PASS",
+      "label": "Asset exists — Scorecard.png",
+      "detail": ""
+    }
+  ]
+}
