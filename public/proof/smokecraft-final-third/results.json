@@ -1,0 +1,117 @@
+{
+  "timestamp": "2026-07-12T02:28:02.967Z",
+  "total": 27,
+  "passed": 27,
+  "failed": 0,
+  "jsErrors": 0,
+  "results": [
+    {
+      "label": "Route /smokecraft/final-third loads",
+      "ok": true
+    },
+    {
+      "label": "Redesigned image (FINAL THIRD.png) present",
+      "ok": true
+    },
+    {
+      "label": "Baked-value mask overlay present",
+      "ok": true
+    },
+    {
+      "label": "All 18 flavor chips present and neutral",
+      "ok": true
+    },
+    {
+      "label": "Flavor chip: clicking changes background (selects)",
+      "ok": true
+    },
+    {
+      "label": "Multiple flavor notes selected simultaneously",
+      "ok": true
+    },
+    {
+      "label": "Flavor chip: clicking again deselects (reverts background)",
+      "ok": true
+    },
+    {
+      "label": "Finish Length: \"Long\" selects with gold background",
+      "ok": true
+    },
+    {
+      "label": "Strength: \"Medium\" selects with gold background",
+      "ok": true
+    },
+    {
+      "label": "Body: \"Medium\" selects with gold background",
+      "ok": true
+    },
+    {
+      "label": "Draw Quality: \"Perfect\" selects",
+      "ok": true
+    },
+    {
+      "label": "Burn Quality: \"Even\" selects",
+      "ok": true
+    },
+    {
+      "label": "Ash Color: \"White\" selects",
+      "ok": true
+    },
+    {
+      "label": "Smoke Texture: \"Full\" selects",
+      "ok": true
+    },
+    {
+      "label": "No \"Perfect Match\" shown without real pairing calculation",
+      "ok": true
+    },
+    {
+      "label": "Pairing Result section present — truthful no-data state",
+      "ok": true
+    },
+    {
+      "label": "Star rating: clicking 4th star shows \"4/5\"",
+      "ok": true
+    },
+    {
+      "label": "Third comparison: truthful empty state when no prior tasting data",
+      "ok": true
+    },
+    {
+      "label": "XP from session state with +75 reward indicator",
+      "ok": true
+    },
+    {
+      "label": "Personal notes: textarea accepts text after expand",
+      "ok": true
+    },
+    {
+      "label": "Selections persist in localStorage: flavors=[cedar,leather] finish=Long rating=4",
+      "ok": true
+    },
+    {
+      "label": "No invisible hotspot buttons",
+      "ok": true
+    },
+    {
+      "label": "1 real nav button(s) present",
+      "ok": true
+    },
+    {
+      "label": "Works without background image",
+      "ok": true
+    },
+    {
+      "label": "Continue → /smokecraft/scorecard (correct)",
+      "ok": true
+    },
+    {
+      "label": "Back → /smokecraft/final-third (browser back works)",
+      "ok": true
+    },
+    {
+      "label": "setFinalThirdTasting: session state written with selected flavors and rating",
+      "ok": true
+    }
+  ]
+}
