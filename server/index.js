@@ -52,6 +52,7 @@ import smokecraftRoutes      from './routes/smokecraftRoutes.js'
 import smokecraftHumidorEnvRoutes from './routes/smokecraftHumidorEnvironmentRoutes.js'
 import smokecraftScorecardRoutes      from './routes/smokecraftScorecardRoutes.js'
 import smokecraftPassportStampRoutes  from './routes/smokecraftPassportStampRoutes.js'
+import smokecraftConnectionsRoutes    from './routes/smokecraftConnectionsRoutes.js'
 import smokecraftEatRoutes   from './routes/smokecraftEatRoutes.js'
 import rankingRoutes         from './routes/rankingRoutes.js'
 import badgeRoutes           from './routes/badgeRoutes.js'
@@ -207,6 +208,7 @@ app.use('/api/smokecraft',        smokecraftOrders)
 app.use('/api/smokecraft/humidor',    smokecraftHumidorEnvRoutes)
 app.use('/api/smokecraft/scorecard',       smokecraftScorecardRoutes)
 app.use('/api/smokecraft/passport-stamp',  smokecraftPassportStampRoutes)
+app.use('/api/smokecraft/connections',     smokecraftConnectionsRoutes)
 app.use('/api/eat/smokecraft',    smokecraftEatRoutes)
 app.use('/api/checkout',          customerCheckoutRoutes)
 app.use('/api/staff',             staffOrderRoutes)
