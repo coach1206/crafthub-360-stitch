@@ -1,0 +1,798 @@
+{
+  "generatedAt": "2026-07-12T20:45:59.953Z",
+  "totalPass": 91,
+  "totalFail": 0,
+  "totalSkip": 0,
+  "total": 91,
+  "routeMatrix": [
+    {
+      "route": "/smokecraft",
+      "session": 1,
+      "label": "Landing",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/enroll",
+      "session": 2,
+      "label": "Enroll",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/identity",
+      "session": 3,
+      "label": "Identity",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/golden-box",
+      "session": 3,
+      "label": "GoldenBox",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/mentor-selection",
+      "session": 4,
+      "label": "MentorSelection",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/format",
+      "session": 5,
+      "label": "Format",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/wrapper-strength",
+      "session": 6,
+      "label": "WrapperStrength",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/seed-soil",
+      "session": 7,
+      "label": "SeedSoil",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/pairing-lab",
+      "session": 8,
+      "label": "PairingLab",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/humidor-match",
+      "session": 9,
+      "label": "HumidorMatch",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/request-purchase",
+      "session": 10,
+      "label": "RequestPurchase",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/cut-toast-light",
+      "session": 11,
+      "label": "CutToastLight",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/first-third",
+      "session": 12,
+      "label": "FirstThird",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/second-third",
+      "session": 13,
+      "label": "SecondThird",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/flavor-memory",
+      "session": 14,
+      "label": "FlavorMemory",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/final-third",
+      "session": 15,
+      "label": "FinalThird",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/scorecard",
+      "session": 16,
+      "label": "Scorecard",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/final-review",
+      "session": 17,
+      "label": "FinalReview",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/passport-stamp",
+      "session": 18,
+      "label": "PassportStamp",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/connections",
+      "session": 19,
+      "label": "Connections",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/management-sync",
+      "session": 20,
+      "label": "ManagementSync",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/session-complete",
+      "session": 21,
+      "label": "SessionComplete",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/leaderboard",
+      "session": 22,
+      "label": "Leaderboard",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/event-challenge",
+      "session": 23,
+      "label": "EventChallenge",
+      "responds": true
+    },
+    {
+      "route": "/smokecraft/how-it-works",
+      "session": 24,
+      "label": "HowItWorks",
+      "responds": true
+    }
+  ],
+  "checks": [
+    {
+      "section": "A",
+      "route": "/smokecraft",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/enroll",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/identity",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/golden-box",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/mentor-selection",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/format",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/wrapper-strength",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/seed-soil",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/pairing-lab",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/humidor-match",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/request-purchase",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/cut-toast-light",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/first-third",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/second-third",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/flavor-memory",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/final-third",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/scorecard",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/final-review",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/passport-stamp",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/connections",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/management-sync",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/session-complete",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/leaderboard",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/event-challenge",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "A",
+      "route": "/smokecraft/how-it-works",
+      "check": "http_200",
+      "value": "200",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "B",
+      "route": "/smokecraft",
+      "check": "start_button_present",
+      "value": "1",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "B",
+      "route": "/smokecraft",
+      "check": "start_navigates_correctly",
+      "value": "http://localhost:5000/smokecraft/identity",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "B",
+      "route": "/smokecraft",
+      "check": "secondary_nav_chips",
+      "value": "all present",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "B",
+      "route": "/smokecraft/how-it-works",
+      "check": "how_it_works_renders",
+      "value": "http://localhost:5000/smokecraft/how-it-works",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "C",
+      "route": "/smokecraft/golden-box",
+      "check": "checkbox_present",
+      "value": "1",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "C",
+      "route": "/smokecraft/golden-box",
+      "check": "continue_enabled",
+      "value": "1",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "C",
+      "route": "/smokecraft/golden-box",
+      "check": "continues_to_mentor",
+      "value": "http://localhost:5000/smokecraft/mentor-selection",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "D",
+      "route": "/smokecraft/golden-box",
+      "check": "locked_without_progress",
+      "value": "locked",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "E",
+      "route": "/smokecraft",
+      "check": "approved_asset_active",
+      "value": "smokecraft-landing.png",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "E",
+      "route": "/smokecraft/golden-box",
+      "check": "approved_asset_active",
+      "value": "GOLDEN%20BOX",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "E",
+      "route": "/smokecraft/identity",
+      "check": "approved_asset_active",
+      "value": "IDENTY.png",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "F",
+      "route": "/smokecraft",
+      "check": "unauthorized_art_bg_absent",
+      "value": "absent",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "F",
+      "route": "/smokecraft",
+      "check": "no_claude_normal_flow_h1_panel",
+      "value": "absent",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "F",
+      "route": "/smokecraft",
+      "check": "approved_landing_png_active",
+      "value": "present",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "F",
+      "route": "/smokecraft/golden-box",
+      "check": "not_generic_form_rebuild",
+      "value": "1 inputs",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "F",
+      "route": "/smokecraft",
+      "check": "no_global_dark_overlay",
+      "value": "absent",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "G",
+      "route": "/smokecraft",
+      "check": "start_button_unique",
+      "value": "1",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "G",
+      "route": "/smokecraft",
+      "check": "how_it_works_unique",
+      "value": "1",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "H",
+      "route": "/smokecraft",
+      "check": "progress_header_state_approved",
+      "value": "present (approved)",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "I",
+      "route": "/smokecraft/golden-box",
+      "check": "checkbox_present",
+      "value": "1",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "I",
+      "route": "/smokecraft/golden-box",
+      "check": "checkbox_functional",
+      "value": "true",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "I",
+      "route": "/smokecraft/golden-box",
+      "check": "continue_enabled_after_ack",
+      "value": "true",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "I",
+      "route": "/smokecraft/identity",
+      "check": "start_new_button",
+      "value": "true",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "I",
+      "route": "/smokecraft/identity",
+      "check": "continue_prev_button",
+      "value": "true",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "J",
+      "route": "/smokecraft/golden-box",
+      "check": "reloads_no_crash",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "K",
+      "route": "/smokecraft/management-sync",
+      "check": "no_fake_sync_success",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft",
+      "check": "no_horiz_overflow_1440x900",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/identity",
+      "check": "no_horiz_overflow_1440x900",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/golden-box",
+      "check": "no_horiz_overflow_1440x900",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/mentor-selection",
+      "check": "no_horiz_overflow_1440x900",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/pairing-lab",
+      "check": "no_horiz_overflow_1440x900",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/first-third",
+      "check": "no_horiz_overflow_1440x900",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/scorecard",
+      "check": "no_horiz_overflow_1440x900",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/session-complete",
+      "check": "no_horiz_overflow_1440x900",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft",
+      "check": "no_horiz_overflow_1024x768",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/identity",
+      "check": "no_horiz_overflow_1024x768",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/golden-box",
+      "check": "no_horiz_overflow_1024x768",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/mentor-selection",
+      "check": "no_horiz_overflow_1024x768",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/pairing-lab",
+      "check": "no_horiz_overflow_1024x768",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/first-third",
+      "check": "no_horiz_overflow_1024x768",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/scorecard",
+      "check": "no_horiz_overflow_1024x768",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/session-complete",
+      "check": "no_horiz_overflow_1024x768",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft",
+      "check": "no_horiz_overflow_768x1024",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/identity",
+      "check": "no_horiz_overflow_768x1024",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/golden-box",
+      "check": "no_horiz_overflow_768x1024",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/mentor-selection",
+      "check": "no_horiz_overflow_768x1024",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/pairing-lab",
+      "check": "no_horiz_overflow_768x1024",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/first-third",
+      "check": "no_horiz_overflow_768x1024",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/scorecard",
+      "check": "no_horiz_overflow_768x1024",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/session-complete",
+      "check": "no_horiz_overflow_768x1024",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft",
+      "check": "no_horiz_overflow_390x844",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/identity",
+      "check": "no_horiz_overflow_390x844",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/golden-box",
+      "check": "no_horiz_overflow_390x844",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/mentor-selection",
+      "check": "no_horiz_overflow_390x844",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/pairing-lab",
+      "check": "no_horiz_overflow_390x844",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/first-third",
+      "check": "no_horiz_overflow_390x844",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/scorecard",
+      "check": "no_horiz_overflow_390x844",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "L",
+      "route": "/smokecraft/session-complete",
+      "check": "no_horiz_overflow_390x844",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "M",
+      "route": "/smokecraft",
+      "check": "touch_targets_44x44",
+      "value": "0 tiny",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "N",
+      "route": "/smokecraft",
+      "check": "no_console_errors",
+      "value": "none",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "N",
+      "route": "/smokecraft",
+      "check": "no_broken_images",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "N",
+      "route": "/smokecraft/identity",
+      "check": "no_console_errors",
+      "value": "none",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "N",
+      "route": "/smokecraft/identity",
+      "check": "no_broken_images",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "N",
+      "route": "/smokecraft/golden-box",
+      "check": "no_console_errors",
+      "value": "none",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "N",
+      "route": "/smokecraft/golden-box",
+      "check": "no_broken_images",
+      "value": "ok",
+      "status": "✅ PASS"
+    },
+    {
+      "section": "O",
+      "route": "/smokecraft",
+      "check": "build_identity_present",
+      "value": "41bcbac14e",
+      "status": "✅ PASS"
+    }
+  ]
+}

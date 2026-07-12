@@ -305,7 +305,7 @@ export default function App() {
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
               <Route path="smokecraft" element={<SmokeCraftProgressProvider><SmokeCraftOrderProvider><Outlet /></SmokeCraftOrderProvider></SmokeCraftProgressProvider>}>
                 {/* S1 — always unlocked, no guard */}
-                <Route index element={<SmokeCraftSessionGuard sessionNumber={1} hideHeader><SmokeCraft /></SmokeCraftSessionGuard>} />
+                <Route index element={<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraft /></SmokeCraftSessionGuard>} />
 
                 {/* S2 — profile/enroll */}
                 <Route path="enroll"           element={<SmokeCraftSessionGuard sessionNumber={2}><Enroll /></SmokeCraftSessionGuard>} />
