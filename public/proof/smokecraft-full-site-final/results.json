@@ -1,0 +1,159 @@
+{
+  "capturedAt": "2026-07-12T18:42:05.437Z",
+  "viewport": "390x844 @2x",
+  "totalScreens": 25,
+  "passed": 25,
+  "failed": 0,
+  "screens": [
+    {
+      "screen": "S1-landing",
+      "path": "/smokecraft",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S2-enroll",
+      "path": "/smokecraft/enroll",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S3-identity",
+      "path": "/smokecraft/identity",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S3-golden-box",
+      "path": "/smokecraft/golden-box",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S4-mentor",
+      "path": "/smokecraft/mentor-selection",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S5-format",
+      "path": "/smokecraft/format",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S6-wrapper",
+      "path": "/smokecraft/wrapper-strength",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S7-seed-soil",
+      "path": "/smokecraft/seed-soil",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S8-pairing-lab",
+      "path": "/smokecraft/pairing-lab",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S9-humidor",
+      "path": "/smokecraft/humidor-match",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S10-request",
+      "path": "/smokecraft/request-purchase",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S11-cut-toast",
+      "path": "/smokecraft/cut-toast-light",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S12-first-third",
+      "path": "/smokecraft/first-third",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S13-second-third",
+      "path": "/smokecraft/second-third",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S14-flavor-memory",
+      "path": "/smokecraft/flavor-memory",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S15-final-third",
+      "path": "/smokecraft/final-third",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S16-scorecard",
+      "path": "/smokecraft/scorecard",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S17-connections",
+      "path": "/smokecraft/connections",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S18-pairing-review",
+      "path": "/smokecraft/pairing-review",
+      "bgSize": "n/a",
+      "status": "PASS"
+    },
+    {
+      "screen": "S19-final-review",
+      "path": "/smokecraft/final-review",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S20-visit-complete",
+      "path": "/smokecraft/visit-complete",
+      "bgSize": "auto",
+      "status": "PASS"
+    },
+    {
+      "screen": "S21-passport",
+      "path": "/smokecraft/passport-stamp",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S22-leaderboard",
+      "path": "/smokecraft/leaderboard",
+      "bgSize": "cover",
+      "status": "PASS"
+    },
+    {
+      "screen": "S23-passport-connections",
+      "path": "/smokecraft/passport-connections",
+      "bgSize": "n/a",
+      "status": "PASS"
+    },
+    {
+      "screen": "S24-session-complete",
+      "path": "/smokecraft/session-complete",
+      "bgSize": "cover",
+      "status": "PASS"
+    }
+  ]
+}

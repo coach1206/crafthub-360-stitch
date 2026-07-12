@@ -12,52 +12,41 @@ export default function VisitComplete() {
 
   return (
     <section
+      aria-label={isJourneyComplete ? 'SmokeCraft Journey Complete' : `Visit ${justCompleted} Complete`}
       style={{
-        position: 'relative',
-        width: '100%',
-        height: '100vh',
+        position: 'fixed',
+        inset: 0,
+        width: '100dvw',
+        height: '100dvh',
         overflow: 'hidden',
-        background: '#050505',
+        backgroundImage: 'url(/smokecraft-visit-complete.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center top',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: '#050505',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        flexDirection: 'column',
       }}
     >
-      {/* Full-screen visit complete asset */}
-      <img
-        src="/smokecraft-visit-complete.png"
-        alt={isJourneyComplete ? 'SmokeCraft Journey Complete' : `Visit ${justCompleted} Complete`}
-        style={{
-          display: 'block',
-          maxWidth: '100%',
-          maxHeight: '100vh',
-          width: 'auto',
-          height: 'auto',
-          objectFit: 'contain',
-          objectPosition: 'center center',
-          pointerEvents: 'none',
-        }}
-      />
-
       {/* Overlay layer */}
       <div
         style={{
-          position: 'absolute',
-          inset: 0,
+          flex: 1,
           zIndex: 5,
           pointerEvents: 'none',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'flex-end',
-          paddingBottom: '8vh',
+          paddingBottom: 'max(env(safe-area-inset-bottom, 20px), 40px)',
           gap: '0.75rem',
+          padding: '0 20px max(env(safe-area-inset-bottom, 20px), 40px)',
         }}
       >
         {/* Visit complete label */}
         <p
           style={{
-            fontSize: '10px',
+            fontSize: '14px',
             letterSpacing: '0.28em',
             textTransform: 'uppercase',
             color: 'rgba(201,168,76,0.85)',
@@ -73,7 +62,7 @@ export default function VisitComplete() {
         {!isJourneyComplete && (
           <p
             style={{
-              fontSize: '12px',
+              fontSize: '16px',
               color: 'rgba(240,230,204,0.7)',
               fontFamily: 'Georgia, serif',
               maxWidth: 380,
@@ -99,9 +88,9 @@ export default function VisitComplete() {
             background: 'linear-gradient(135deg, #e9c176, #c5a059)',
             color: '#131314',
             fontFamily: 'Georgia, serif',
-            fontSize: '11px',
+            fontSize: '14px',
             fontWeight: 700,
-            letterSpacing: '0.18em',
+            letterSpacing: '0.12em',
             textTransform: 'uppercase',
             boxShadow: '0 4px 24px rgba(201,168,76,0.35)',
             display: 'flex',
