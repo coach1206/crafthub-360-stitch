@@ -13,6 +13,7 @@ export default function GoldenBox() {
   const [acknowledged, setAcknowledged] = useState(false)
 
   function handleContinue() {
+    if (!acknowledged) return
     awardSessionRewards('golden-box')
     navigate('/smokecraft/mentor-selection')
   }
@@ -61,6 +62,7 @@ export default function GoldenBox() {
       <SmokeCraftNavBar
         primary="Continue to Mentor Selection →"
         onPrimary={handleContinue}
+        primaryDisabled={!acknowledged}
       />
     </>
   )

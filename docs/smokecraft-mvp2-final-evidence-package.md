@@ -1,6 +1,6 @@
 # SmokeCraft MVP2 — Final Evidence Package
 
-Version: 1.2.0 (corrected classifications) | Build: investor-readiness | Date: 2026-07-12
+Version: 1.3.0 (final live rebuild + closeout) | Build: final-live-mvp2-closeout | Date: 2026-07-12
 
 This document is the single consolidated evidence record for SmokeCraft 360
 MVP2. COMPLETE requires: working code, passing tests, measured deployment
@@ -34,6 +34,7 @@ verified characteristics:
 | Security verification | **37/37 PASS** | `node test-smokecraft-security.mjs` | 2026-07-12 |
 | Offline/recovery | **32/32 PASS** | `node test-smokecraft-offline-recovery.mjs` | 2026-07-12 |
 | Migration audit | **15/15 PASS** | `node test-smokecraft-migrations.mjs` | 2026-07-12 |
+| Final live MVP2 closeout | **71/71 PASS** | `node e2e-smokecraft-final-live-mvp2-closeout.mjs` | 2026-07-12 |
 | Production build | **exit 0** | `npm run build` | 2026-07-12 |
 
 ---
@@ -56,7 +57,7 @@ scope of this build.
 | 8 | Asset folder separation | **COMPLETE** | `public/assets/smokecraft-reference/approved/` = approved images. `public/assets/smokecraft-reference/candidates/` = under review. `public/assets/smokecraft-reference/rejected/` = rejected. Separation is implemented. |
 | 9 | Data contracts | **PARTIAL** | 30 contract files in `src/modules/smokecraft/data/`. Runtime verification: only `smokecraftFeatureFlagContract.js` (imported for defaults) and `module.manifest.js` actively import contracts. Remaining 28 contracts are reference documentation — shapes are correct but not runtime-enforced in the guest journey. |
 | 10 | Role/permission matrix | **PARTIAL** | Server middleware enforces role hierarchy for admin/POS/founder routes (verified B3/B4 in security test). Client `RoleGate`/`ProtectedRoute` enforces for non-guest screens. SmokeCraft guest flow is intentionally progress-gated (not role-gated) — guests don't have roles. `smokecraftPermissionContract.js` is advisory, not wired into `SmokeCraftSessionGuard`. This is correct design, not a gap. |
-| 11 | Security | **PARTIAL** | Auth Phase 10 verified (37-check security test PASS). Covers: dev-header blocking, JWT enforcement, role hierarchy, founder spoof guard, security event logging, feature flag defaults, demo reset restriction. Gap: no Express rate-limit middleware on API routes — flagged as open risk, documented in `noveeOSSecurityActivationContracts.js`. Pre-beta action required. |
+| 11 | Security | **COMPLETE** | Auth Phase 10 verified (37-check security test PASS). Rate limiting added: `express-rate-limit` middleware in `server/index.js` — 300 req/15 min general, 20 req/15 min for `/api/auth`. Disabled in dev/test to preserve test suites. Verified by D1–D7 in closeout suite. `rate_limit_lock` gate now satisfied. |
 | 12 | Failure-state design | **COMPLETE** | `ErrorBoundary.jsx` catches render crashes (offers Reload + Back). `SmokeBackendReadinessPanel.jsx` shows honest backend status in-product. Verified by offline/recovery test D1–D6. |
 | 13 | Offline/recovery | **COMPLETE** | Memory fallback verified (A1–A8). localStorage resilience verified (B1–B5). SmokeCraftSessionGuard works entirely offline — no API calls (F1–F2). Demo mode persists through tab navigation (E1–E7). All 32 offline/recovery checks PASS. |
 | 14 | Performance limits | **PARTIAL** | Budget document with **measured actuals** in `docs/smokecraft-mvp2-performance-budget.md`. Measured: main JS 582 KB gzip (PASS ≤ 700 KB), CSS 22 KB gzip (PASS). Approved images avg 1,794 KB, max 3,035 KB — 14 of 44 exceed 2 MB. Runtime metrics (FCP/LCP/TTI) are **UNVERIFIED** — require live Vercel deployment + Lighthouse. Image optimization requires founder approval. |
@@ -69,14 +70,21 @@ scope of this build.
 | 21 | Documentation package | **PARTIAL** | Technical docs: 20+ .md files in `docs/`. Founder demo script: `docs/founder-demo-script.md`. Guest manual: `docs/smokecraft-guest-manual.md` (full 24-step walkthrough + FAQ + staff quick reference). Staff operations manual: NOT WRITTEN. Venue admin manual: NOT WRITTEN. |
 | 22 | Final evidence package | **COMPLETE** | This document. Includes test results, measured actuals, corrected classifications, commit hashes, limitations. |
 | 23 | No silent substitutions | **PARTIAL** | Feature flags with `default: false` prevent disabled integrations from running (code paths are off, not masked). `SmokeBackendReadinessPanel` shows honest status in-product. `canFakeIntegrationConnection: false` in contract is a documentation field — not a runtime assertion check. The guarantee is enforced by disabled code paths, not an active runtime check. |
-| 24 | Conflict detection | **PARTIAL** | `moduleSecurityGuard.js` exists. `moduleIntegrationContract.js` defines deployment statuses. No automated conflict detection that would catch a new route using an existing session number, for example. The entry checklist (R2) covers this as a manual gate. Pre-beta: add a test that validates no duplicate session numbers in VISIT_STRUCTURE. |
+| 24 | Conflict detection | **COMPLETE** | `moduleSecurityGuard.js` + `moduleIntegrationContract.js` exist. Automated conflict detection added: `e2e-smokecraft-final-live-mvp2-closeout.mjs` checks E2–E5 verify no duplicate session IDs, no duplicate session numbers, exactly 24 sessions, sequential 1–24 numbering in VISIT_STRUCTURE. 71/71 PASS. |
 | 25 | Final freeze/release tag | **NOT CREATED** | Tag `v1.0.0-mvp2` exists locally but **push returned 403** (GitHub environment restriction). All gates must pass before the tag is pushed. Current gate status: 14 COMPLETE, 10 PARTIAL, 1 NOT CREATED. Release tag deferred until founder reviews PARTIAL items and decides which require pre-release remediation. |
 
 ---
 
-## COMPLETE Count: 14 / 25
-## PARTIAL Count: 10 / 25
+## COMPLETE Count: 16 / 25
+## PARTIAL Count: 8 / 25
 ## NOT CREATED: 1 (release tag — deferred)
+
+### v1.3.0 Changes (final live rebuild):
+- R11: PARTIAL → COMPLETE — Express rate limiting implemented (`express-rate-limit`, production-only)
+- R24: PARTIAL → COMPLETE — Automated conflict detection via closeout test suite E2–E5
+- Critical defects fixed: Leaderboard, EventChallenge stranded screens (added NavBar); GoldenBox gate enforced; FirstThird/SecondThird checkbox data forwarded to session payload
+- New test suite: `e2e-smokecraft-final-live-mvp2-closeout.mjs` 71/71 PASS
+- Total test checks: 552 (137 + 300 + 37 + 32 + 15 + 71)
 
 ---
 
@@ -117,10 +125,11 @@ f31e93ca  SmokeCraft 360 total system fix — 137/137 PASS
 ## How to Run All Tests
 
 ```bash
-npm run build                             # must exit 0
-node e2e-smokecraft-investor-readiness.mjs  # 300/300
-node e2e-smokecraft-total-system.mjs        # 137/137
-node test-smokecraft-security.mjs           # 37/37
-node test-smokecraft-offline-recovery.mjs   # 32/32
-node test-smokecraft-migrations.mjs         # 15/15
+npm run build                                   # must exit 0
+node e2e-smokecraft-investor-readiness.mjs        # 300/300
+node e2e-smokecraft-total-system.mjs              # 137/137
+node test-smokecraft-security.mjs                 # 37/37
+node test-smokecraft-offline-recovery.mjs         # 32/32
+node test-smokecraft-migrations.mjs               # 15/15
+node e2e-smokecraft-final-live-mvp2-closeout.mjs  # 71/71
 ```

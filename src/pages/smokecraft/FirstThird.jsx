@@ -31,10 +31,12 @@ export default function FirstThird() {
     setFirstThirdTasting({
       status: 'observe_confirm_step',
       source: 'local_only',
-      tasteProfileSource: 'not_collected',
-      safeClaim: 'Guest confirmed observation — no tasting input captured',
-      notesSelected: [],
-      notesCount: 0,
+      tasteProfileSource: checked.length > 0 ? 'guest_selected' : 'not_collected',
+      safeClaim: checked.length > 0
+        ? 'Guest confirmed observations — selections captured'
+        : 'Guest confirmed observation — no tasting input captured',
+      notesSelected: checked,
+      notesCount: checked.length,
       drawRating: null, hasDrawRating: false,
       strength: null, body: null, smokeOutput: null,
       burnQuality: null, pairingReaction: null,

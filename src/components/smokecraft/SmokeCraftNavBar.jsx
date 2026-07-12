@@ -22,7 +22,7 @@ const baseBtn = {
  * Fixed bottom navigation bar — always a real React button, never a transparent hotspot.
  * Screen remains operable when the background image is hidden or fails to load.
  */
-export default function SmokeCraftNavBar({ primary, onPrimary, secondary, onSecondary }) {
+export default function SmokeCraftNavBar({ primary, onPrimary, primaryDisabled, secondary, onSecondary }) {
   return (
     <div
       role="navigation"
@@ -57,12 +57,14 @@ export default function SmokeCraftNavBar({ primary, onPrimary, secondary, onSeco
       )}
       <button
         type="button"
-        onClick={() => { triggerHaptic('medium'); onPrimary() }}
+        disabled={!!primaryDisabled}
+        onClick={() => { if (!primaryDisabled) { triggerHaptic('medium'); onPrimary() } }}
         style={{
           ...baseBtn,
-          background: GOLD,
-          color: DARK,
-          boxShadow: '0 4px 20px rgba(233,193,118,0.4)',
+          background: primaryDisabled ? 'rgba(233,193,118,0.25)' : GOLD,
+          color: primaryDisabled ? 'rgba(10,6,3,0.4)' : DARK,
+          boxShadow: primaryDisabled ? 'none' : '0 4px 20px rgba(233,193,118,0.4)',
+          cursor: primaryDisabled ? 'not-allowed' : 'pointer',
         }}
       >
         {primary}

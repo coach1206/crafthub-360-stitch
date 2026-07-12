@@ -138,6 +138,7 @@ import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
 import { startPOS3AutoSync }  from './services/pos3AutoSyncService.js'
 import { initScheduler }     from './services/resetScheduleService.js'
 import { validateEnv }        from './config/envValidator.js'
+import rateLimit              from 'express-rate-limit'
 
 // Validate environment variables on startup
 validateEnv()
@@ -175,6 +176,28 @@ app.use(cors({
 app.use(cookieParser())
 app.use(express.json({ limit: '1mb' }))
 app.use(express.urlencoded({ extended: true }))
+
+// ── Rate limiting ─────────────────────────────────────────────
+// General limit: 300 req / 15 min per IP (covers most API traffic)
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests — please slow down.' },
+  skip: () => !IS_PROD,  // disabled in dev/test to preserve existing test suites
+})
+// Auth routes: tighter limit — 20 req / 15 min per IP
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many authentication attempts — please try again later.' },
+  skip: () => !IS_PROD,
+})
+app.use('/api/auth', authLimiter)
+app.use('/api', generalLimiter)
 
 // ── Routes ────────────────────────────────────────────────────
 app.use('/api',                   healthRoutes)
