@@ -38,7 +38,7 @@ export const ASSET_CLASSIFICATIONS = Object.freeze({
  * Active route → classification map for quick lookup.
  */
 export const ROUTE_ASSET_CLASSIFICATION = Object.freeze({
-  '/smokecraft':                   'LIVE_REACT_PAGE_ARTWORK',
+  '/smokecraft':                   'DECORATIVE_BACKGROUND',
   '/smokecraft/enroll':            'PORTRAIT_PRODUCTION_SHELL',  // 941×1672 portrait
   '/smokecraft/identity':          'LIVE_REACT_PAGE_ARTWORK',
   '/smokecraft/golden-box':        'LANDSCAPE_HERO_TOP',         // rebuilt as live form
