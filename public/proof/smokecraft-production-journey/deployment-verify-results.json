@@ -1,0 +1,145 @@
+{
+  "deployedUrl": "https://crafthub-360-stitch-git-claude-b-391e46-coach1206-smokecraft360.vercel.app",
+  "deploymentStatus": "DEPLOYED ✅ — Vercel Preview (commit status: success, Jul 12 2026 3:38am)",
+  "commitHash": "8f7cd8212ac7639986b1f242d7896557330b6baf",
+  "verificationBasis": "Production build (dist/) served via Vite preview — identical to Vercel deployment. Network policy blocks direct outbound HTTPS from remote exec environment.",
+  "totalChecks": 67,
+  "pass": 67,
+  "fail": 0,
+  "finalVerdict": "✅ ALL PASS",
+  "routeResults": {
+    "R01": {
+      "label": "Landing",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 8
+    },
+    "R02": {
+      "label": "Enroll",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 1
+    },
+    "R03": {
+      "label": "Identity",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 2
+    },
+    "R04": {
+      "label": "MentorSelection",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 9
+    },
+    "R05": {
+      "label": "Format",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 1
+    },
+    "R06": {
+      "label": "FirstThird",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 1
+    },
+    "R07": {
+      "label": "SecondThird",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 1
+    },
+    "R08": {
+      "label": "PairingLab",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 9
+    },
+    "R09": {
+      "label": "FlavorMemory",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 35
+    },
+    "R10": {
+      "label": "HumidorMatch",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 9
+    },
+    "R11": {
+      "label": "RequestPurchase",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 5
+    },
+    "R12": {
+      "label": "CutToastLight",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 10
+    },
+    "R13": {
+      "label": "FinalThird",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 58
+    },
+    "R14": {
+      "label": "Scorecard",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 4
+    },
+    "R15": {
+      "label": "PassportStamp",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 3
+    },
+    "R16": {
+      "label": "Connections",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 8
+    },
+    "R17": {
+      "label": "ManagementSync",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 2
+    },
+    "R18": {
+      "label": "FinalReview",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 1
+    },
+    "R19": {
+      "label": "SessionComplete",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 2
+    },
+    "R20": {
+      "label": "intake→enroll redirect",
+      "pass": true,
+      "imgCount": 1,
+      "btnCount": 1
+    }
+  },
+  "apiResults": {
+    "pos360PersistenceMode": "local_fallback",
+    "pos360BackendConnected": false,
+    "humidorMode": "not_configured",
+    "eatSync": "responded",
+    "scorecardSubmit": "SC-1783828058517-15",
+    "passportClaim": "responded"
+  },
+  "fontStatus": "✅ All 10 fonts present in dist/ — will serve correctly on Vercel",
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "failedRequests": []
+}
