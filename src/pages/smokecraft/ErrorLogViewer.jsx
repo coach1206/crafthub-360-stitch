@@ -9,6 +9,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSecurity } from '../../context/SecurityContext.jsx'
 import { meetsMinRole } from '../../config/roleMap.js'
+import { canViewErrorLogs } from '../../services/smokecraft/smokecraftPermissionMatrix.js'
 
 const GOLD  = '#E9C176'
 const DARK  = '#0a0603'
@@ -33,7 +34,8 @@ const CATEGORIES = [
 
 export default function ErrorLogViewer() {
   const { role } = useSecurity()
-  const isAdmin = meetsMinRole(role, 'admin')
+  // R10: use permission matrix — managers with view_error_logs are also allowed
+  const isAdmin = meetsMinRole(role, 'admin') || canViewErrorLogs(role)
 
   const [entries, setEntries]     = useState([])
   const [loading, setLoading]     = useState(false)

@@ -15,6 +15,7 @@
  * conflict with its routes.
  */
 import { Router } from 'express'
+import { safeValidate } from '../lib/smokecraftRuntimeContractValidator.js'
 import { isDbAvailable, query } from '../db/connection.js'
 
 const router = Router()
@@ -57,6 +58,10 @@ async function withDbFallback(dbFn, memFn) {
 router.post('/sessions', async (req, res) => {
   const { sessionId, venueId = null, xp = 0, rank = null, completedSteps = null, finalScore = null, challengeStatus = null } = req.body || {}
   if (!sessionId) return respond(res, { ok: false, status: 'failed', storageMode: 'none', error: 'sessionId is required' }, 400)
+
+  // Contract validation (R9) — reject malformed session record before persistence
+  const v = safeValidate('smoke_session', { sessionId, venueId, xp, completedSteps, finalScore, challengeStatus })
+  if (!v.valid) return respond(res, { ok: false, status: 'failed', storageMode: 'none', error: 'Contract validation failed', detail: v.error }, 422)
 
   const { data: session, usedDb } = await withDbFallback(
     async () => {

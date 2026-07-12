@@ -14,6 +14,7 @@
 import { useState, useCallback } from 'react'
 import { useSecurity } from '../../context/SecurityContext.jsx'
 import { meetsMinRole } from '../../config/roleMap.js'
+import { canManageFeatureFlags, canSmokeCraft, SMOKECRAFT_CAPABILITIES } from '../../services/smokecraft/smokecraftPermissionMatrix.js'
 import { FEATURE_FLAGS, getDefaultFlags } from '../../modules/smokecraft/data/smokecraftFeatureFlagContract.js'
 
 const GOLD  = '#E9C176'
@@ -44,9 +45,11 @@ const VENUE_SCOPED_FLAGS = new Set([
 
 export default function FeatureFlagAdmin() {
   const { role } = useSecurity()
-  const isFounder  = meetsMinRole(role, 'founder_level_0')
-  const isAdmin    = meetsMinRole(role, 'admin')
+  const isFounder    = meetsMinRole(role, 'founder_level_0')
+  const isAdmin      = meetsMinRole(role, 'admin')
   const isVenueAdmin = role === 'admin'
+  // R10: enforce via permission matrix — not just role hierarchy
+  const canManage    = canManageFeatureFlags(role) || (isAdmin && canSmokeCraft(role, SMOKECRAFT_CAPABILITIES.CONFIGURE_VENUE))
 
   if (!isAdmin) {
     return (

@@ -196,6 +196,12 @@ export const JOURNEY_STEPS = [
   },
 ]
 
+// Journey metadata — canonical totals (alias for JOURNEY_RULES for test/external consumers)
+export const JOURNEY_META = {
+  totalSessions: 24,
+  totalVisits: 8,
+}
+
 // Hard sequence rules — must never be violated
 export const JOURNEY_RULES = {
   totalVisits: 8,

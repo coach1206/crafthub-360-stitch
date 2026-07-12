@@ -8,6 +8,7 @@ import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButt
 import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
 import VenueMenuOverlay from '../../components/venue/VenueMenuOverlay.jsx'
 import { createPOS360OrderIntent, writePOS360AuditEvent } from '../../services/smokecraftHandoffService.js'
+import { purchaseRequestStatus } from '../../services/smokecraft/smokecraftTruthfulStatusGuard.js'
 
 const GOLD = '#E9C176'
 const DARK = '#0a0603'
@@ -24,6 +25,9 @@ export default function RequestPurchase() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [orderPath, setOrderPath] = useState(null)
   const [activePromotions, setActivePromotions] = useState([])
+  const [orderRecord, setOrderRecord] = useState(null)
+  // R23: derive truthful status from evidence record
+  const orderStatus = purchaseRequestStatus(orderRecord)
 
   useEffect(() => {
     fetch('/api/ticket-tapper/promotions/smokecraft/active?venueId=novee-grand-lounge')
@@ -48,6 +52,8 @@ export default function RequestPurchase() {
           orderPayload: { resumeRoute: '/smokecraft/request-purchase' },
         })
         if (result?.backendConnected) {
+          // R23: record evidence so truthful status can show "Ordered"
+          setOrderRecord({ requestId: result?.orderIntent?.order_intent_id, saved: true, requestedAt: new Date().toISOString() })
           await writePOS360AuditEvent({
             venueId: 'novee-grand-lounge',
             guestId: session?.sessionId || null,

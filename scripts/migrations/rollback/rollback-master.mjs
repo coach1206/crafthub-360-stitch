@@ -66,6 +66,10 @@ const ROLLBACKS = [
     drops: ['deployment_checks', 'device_events', 'venue_devices'],
   },
   {
+    id: '007', name: 'audit_trail',
+    drops: ['audit_trail_events', 'audit_trail'],
+  },
+  {
     id: '008', name: 'venue_testing',
     drops: ['observer_notes', 'venue_test_sessions', 'venue_tests'],
   },

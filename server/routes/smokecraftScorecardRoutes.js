@@ -7,6 +7,7 @@
  * Never computes 87/100 or "Excellent Smoke" without real category scores.
  */
 import { Router } from 'express'
+import { safeValidate } from '../lib/smokecraftRuntimeContractValidator.js'
 
 const router = Router()
 const store = new Map()   // in-memory; survives session, resets on server restart
@@ -48,6 +49,12 @@ router.post('/submit', (req, res) => {
   const { sessionId, guestId, categories, cigarDetails, pairingDetails, tastingData, sessionMeta, notes } = req.body || {}
 
   if (!sessionId) return res.status(400).json({ ok: false, error: 'sessionId required' })
+
+  // Contract validation (R9) — reject malformed scorecard before persistence
+  const validation = safeValidate('scorecard_submission', { sessionId, guestId, categories })
+  if (!validation.valid) {
+    return res.status(422).json({ ok: false, error: 'Contract validation failed', detail: validation.error })
+  }
 
   const cats = categories || {}
   const overall = calcOverall(cats)

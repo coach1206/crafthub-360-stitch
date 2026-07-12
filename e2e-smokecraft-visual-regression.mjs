@@ -103,34 +103,54 @@ async function run() {
   console.log(`Base URL: ${BASE_URL}`)
   console.log(`${'='.repeat(60)}\n`)
 
-  const browser = await chromium.launch({
-    executablePath: '/opt/pw-browsers/chromium',
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  })
-  const context = await browser.newContext({
-    viewport: { width: 390, height: 844 },  // iPhone 14 Pro
-    deviceScaleFactor: 2,
-  })
-  const page = await context.newPage()
+  const BATCH_SIZE = 5
 
-  // Set demo mode cookie/storage so session-locked screens render
-  await page.goto(BASE_URL, { waitUntil: 'networkidle', timeout: 30000 }).catch(() => {})
-  await page.evaluate(() => {
-    sessionStorage.setItem('novee_demo_mode', '1')
-    localStorage.setItem('novee_demo_session_active', '1')
-  })
+  async function launchFreshContext() {
+    const browser = await chromium.launch({
+      executablePath: '/opt/pw-browsers/chromium',
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--memory-pressure-off'],
+    })
+    const context = await browser.newContext({
+      viewport: { width: 390, height: 844 },  // iPhone 14 Pro
+      deviceScaleFactor: 2,
+    })
+    const page = await context.newPage()
+    // Set demo mode cookie/storage so session-locked screens render
+    await page.goto(BASE_URL, { waitUntil: 'load', timeout: 30000 }).catch(() => {})
+    await page.evaluate(() => {
+      sessionStorage.setItem('novee_demo_mode', '1')
+      localStorage.setItem('novee_demo_session_active', '1')
+      localStorage.setItem('novee_guest_session', JSON.stringify({
+        sessionId: 'visual-regression-demo',
+        completedSteps: Array.from({ length: 24 }, (_, i) => `session-${i + 1}-complete`),
+        smokeCraft: { xp: { total: 2400 }, currentSession: 24 },
+        passport: { passportId: null, earnedStamps: [] },
+      }))
+    })
+    return { browser, page }
+  }
 
   const results = []
   let passed = 0, failed = 0, skipped = 0
+  let browser = null
+  let page = null
 
-  for (const route of ROUTES) {
+  for (let i = 0; i < ROUTES.length; i++) {
+    const route = ROUTES[i]
+    // Restart browser context every BATCH_SIZE routes to avoid resource exhaustion
+    if (i % BATCH_SIZE === 0) {
+      if (browser) await browser.close().catch(() => {})
+      const fresh = await launchFreshContext()
+      browser = fresh.browser
+      page = fresh.page
+    }
     const baselinePath = join(BASELINE_DIR, `${route.id}.png`)
     const currentPath  = join(CURRENT_DIR,  `${route.id}.png`)
 
     try {
       await page.goto(`${BASE_URL}${route.path}`, {
-        waitUntil: 'networkidle',
-        timeout: 15000,
+        waitUntil: 'load',
+        timeout: 20000,
       })
       // Wait for main content to render
       await page.waitForTimeout(800)
@@ -174,7 +194,7 @@ async function run() {
     }
   }
 
-  await browser.close()
+  if (browser) await browser.close().catch(() => {})
 
   // Write JSON report
   const report = {

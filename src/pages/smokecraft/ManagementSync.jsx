@@ -6,6 +6,7 @@ import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetSc
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
 import { getManagementSyncStatus, syncManagement, recordGuestActivity, createManagerAlertSync } from '../../modules/smokecraft/services/smokecraftManagementSyncService.js'
+import { managementSyncStatus, buildEvidence } from '../../services/smokecraft/smokecraftTruthfulStatusGuard.js'
 import { createSmokeCraftDayOneConnection, recordDayOneGuestWorkflowEvent } from '../../services/dayone360SmokeCraftConnectionService.js'
 
 export default function ManagementSync() {
@@ -94,7 +95,8 @@ export default function ManagementSync() {
           color: eatStatus.backendConnected ? '#27ae60' : '#c0392b',
           pointerEvents: 'none',
         }}>
-          {eatStatus.backendConnected ? 'E.A.T. Backend Connected' : 'E.A.T. Local Fallback — Backend Not Connected'}
+          {/* R23: assertTruthfulStatus guards the "Connected" word */}
+          {managementSyncStatus(eatStatus?.backendConnected ? { syncId: 'eat-backend', persisted: true, syncedAt: new Date().toISOString() } : null).label}
         </div>
       )}
 

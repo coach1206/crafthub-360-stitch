@@ -1,0 +1,159 @@
+{
+  "runAt": "2026-07-12T17:58:38.416Z",
+  "mode": "update_baseline",
+  "threshold": null,
+  "baseUrl": "http://localhost:5173",
+  "summary": {
+    "total": 29,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 29
+  },
+  "results": [
+    {
+      "id": "smokecraft-home",
+      "label": "SmokeCraft Home",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-enroll",
+      "label": "Enroll",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-golden-box",
+      "label": "Golden Box",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-art",
+      "label": "Art",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-mentor",
+      "label": "Mentor",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-format",
+      "label": "Format",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-origins",
+      "label": "Origins",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-curation",
+      "label": "Curation",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-leaves",
+      "label": "Leaves",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-cultivation",
+      "label": "Cultivation",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-blend",
+      "label": "Blend",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-flavor-dna",
+      "label": "Flavor DNA",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-pairing",
+      "label": "Pairing",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-available",
+      "label": "Available",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-assistant",
+      "label": "Assistant",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-terroir",
+      "label": "Terroir",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-pairing-mastery",
+      "label": "Pairing Mastery",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-vitola",
+      "label": "Vitola",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-identity",
+      "label": "Identity",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-seed-soil",
+      "label": "Seed & Soil",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-humidor-match",
+      "label": "Humidor Match",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-cut-toast",
+      "label": "Cut Toast Light",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-first-third",
+      "label": "First Third",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-second-third",
+      "label": "Second Third",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-final-third",
+      "label": "Final Third",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-scorecard",
+      "label": "Scorecard",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-leaderboard",
+      "label": "Leaderboard",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-passport-stamp",
+      "label": "Passport Stamp",
+      "status": "baseline_written"
+    },
+    {
+      "id": "smokecraft-session-complete",
+      "label": "Session Complete",
+      "status": "baseline_written"
+    }
+  ]
+}
