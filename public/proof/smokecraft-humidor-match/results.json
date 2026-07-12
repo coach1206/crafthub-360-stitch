@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-07-12T02:15:40.275Z",
+  "total": 19,
+  "passed": 19,
+  "failed": 0,
+  "results": [
+    {
+      "label": "Route /smokecraft/humidor-match loads",
+      "ok": true
+    },
+    {
+      "label": "Redesigned image (humidor match 111.png) present",
+      "ok": true
+    },
+    {
+      "label": "Baked-value mask overlay present (aria-hidden gradient)",
+      "ok": true
+    },
+    {
+      "label": "NOT CONFIGURED state shown when no device paired",
+      "ok": true
+    },
+    {
+      "label": "DEMO MODE pill shown after switching to demo mode",
+      "ok": true
+    },
+    {
+      "label": "Demo readings (temp + humidity) rendered from API",
+      "ok": true
+    },
+    {
+      "label": "Data source label shown: DEMO — synthetic values",
+      "ok": true
+    },
+    {
+      "label": "Manual Entry: values saved, mode labeled MANUAL ENTRY",
+      "ok": true
+    },
+    {
+      "label": "Manual validation rejects temp outside 55–85°F",
+      "ok": true
+    },
+    {
+      "label": "Mode switcher: switched to OFFLINE, pill updated",
+      "ok": true
+    },
+    {
+      "label": "Environment selection persists in localStorage: walk_in",
+      "ok": true
+    },
+    {
+      "label": "Environment chip active state restored after reload",
+      "ok": true
+    },
+    {
+      "label": "Real nav button(s) present: 1",
+      "ok": true
+    },
+    {
+      "label": "No invisible hotspot buttons (old-style overlay)",
+      "ok": true
+    },
+    {
+      "label": "Screen works without image: nav button(s) still visible",
+      "ok": true
+    },
+    {
+      "label": "Continue → /smokecraft/request-purchase (correct)",
+      "ok": true
+    },
+    {
+      "label": "Back → /smokecraft/humidor-match",
+      "ok": true
+    },
+    {
+      "label": "No forbidden status words (CONNECTED/SYNCED/ACTIVE) shown without verified data",
+      "ok": true
+    },
+    {
+      "label": "Refresh button present and clickable",
+      "ok": true
+    }
+  ]
+}
