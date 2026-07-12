@@ -1,0 +1,1733 @@
+{
+  "runAt": "2026-07-12T03:37:26.710Z",
+  "total": 272,
+  "pass": 272,
+  "fail": 0,
+  "passRate": "100%",
+  "canonicalRouteDecision": {
+    "canonical": "/smokecraft/enroll",
+    "alias": "/smokecraft/identity",
+    "verdict": "enroll is canonical S2 entry (SmokeCraftAssetRoute, hotspot-driven, session guard sessionNumber=2). identity is a separate S2 component (SmokeCraftAssetScreen + NavBar with Start/Continue session logic) — it is NOT a duplicate or alias in UI terms; it serves as the session-picker vs the initial asset. intake → enroll redirect is in place. profile → identity redirect is in place.",
+    "outdated": "Neither route is outdated. intake alias is kept as redirect. profile alias is kept as redirect."
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
+  ],
+  "failedRequests": [
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/playfair-700.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/material-symbols-outlined-400.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/playfair-700.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/material-symbols-outlined-400.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/material-symbols-outlined-400.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/material-symbols-outlined-400.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/material-symbols-outlined-400.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/material-symbols-outlined-400.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/material-symbols-outlined-400.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/material-symbols-outlined-400.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/material-symbols-outlined-400.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/fonts/material-symbols-outlined-400.ttf",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "reason": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4173/api/auth/me",
+      "reason": "net::ERR_ABORTED"
+    }
+  ],
+  "checks": [
+    {
+      "name": "GAP1 /smokecraft/enroll — loads without error",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:35:50.502Z"
+    },
+    {
+      "name": "GAP1 /smokecraft/enroll — renders content (image or interactive)",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:35:50.502Z"
+    },
+    {
+      "name": "GAP1 /smokecraft/identity — loads without error",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:35:51.535Z"
+    },
+    {
+      "name": "GAP1 /smokecraft/identity — renders identity image (IDENTY.png)",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:35:51.535Z"
+    },
+    {
+      "name": "GAP1 /smokecraft/identity — has Start New + Continue buttons",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:35:51.535Z"
+    },
+    {
+      "name": "GAP1 /smokecraft/intake → redirects to /smokecraft/enroll",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:35:52.156Z"
+    },
+    {
+      "name": "GAP1 /smokecraft/profile → redirects to /smokecraft/identity",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:35:52.719Z"
+    },
+    {
+      "name": "IMG-HIDDEN Landing — functional without images",
+      "ok": true,
+      "detail": "text:193 btns:8",
+      "ts": "2026-07-12T03:35:53.606Z"
+    },
+    {
+      "name": "IMG-HIDDEN Enroll — functional without images",
+      "ok": true,
+      "detail": "text:68 btns:1",
+      "ts": "2026-07-12T03:35:54.486Z"
+    },
+    {
+      "name": "IMG-HIDDEN GoldenBox — functional without images",
+      "ok": true,
+      "detail": "text:152 btns:1",
+      "ts": "2026-07-12T03:35:55.360Z"
+    },
+    {
+      "name": "IMG-HIDDEN MentorSelection — functional without images",
+      "ok": true,
+      "detail": "text:238 btns:9",
+      "ts": "2026-07-12T03:35:56.243Z"
+    },
+    {
+      "name": "IMG-HIDDEN Format — functional without images",
+      "ok": true,
+      "detail": "text:68 btns:1",
+      "ts": "2026-07-12T03:35:57.137Z"
+    },
+    {
+      "name": "IMG-HIDDEN SeedSoil — functional without images",
+      "ok": true,
+      "detail": "text:177 btns:9",
+      "ts": "2026-07-12T03:35:58.017Z"
+    },
+    {
+      "name": "IMG-HIDDEN PairingLab — functional without images",
+      "ok": true,
+      "detail": "text:176 btns:9",
+      "ts": "2026-07-12T03:35:58.899Z"
+    },
+    {
+      "name": "IMG-HIDDEN HumidorMatch — functional without images",
+      "ok": true,
+      "detail": "text:531 btns:9",
+      "ts": "2026-07-12T03:35:59.784Z"
+    },
+    {
+      "name": "IMG-HIDDEN RequestPurchase — functional without images",
+      "ok": true,
+      "detail": "text:189 btns:5",
+      "ts": "2026-07-12T03:36:00.665Z"
+    },
+    {
+      "name": "IMG-HIDDEN CutToastLight — functional without images",
+      "ok": true,
+      "detail": "text:235 btns:10",
+      "ts": "2026-07-12T03:36:01.546Z"
+    },
+    {
+      "name": "IMG-HIDDEN FirstThird — functional without images",
+      "ok": true,
+      "detail": "text:182 btns:1",
+      "ts": "2026-07-12T03:36:02.425Z"
+    },
+    {
+      "name": "IMG-HIDDEN SecondThird — functional without images",
+      "ok": true,
+      "detail": "text:203 btns:1",
+      "ts": "2026-07-12T03:36:03.311Z"
+    },
+    {
+      "name": "IMG-HIDDEN FlavorMemory — functional without images",
+      "ok": true,
+      "detail": "text:745 btns:35",
+      "ts": "2026-07-12T03:36:04.192Z"
+    },
+    {
+      "name": "IMG-HIDDEN FinalThird — functional without images",
+      "ok": true,
+      "detail": "text:943 btns:58",
+      "ts": "2026-07-12T03:36:05.066Z"
+    },
+    {
+      "name": "IMG-HIDDEN Scorecard — functional without images",
+      "ok": true,
+      "detail": "text:1388 btns:4",
+      "ts": "2026-07-12T03:36:05.947Z"
+    },
+    {
+      "name": "IMG-HIDDEN FinalReview — functional without images",
+      "ok": true,
+      "detail": "text:277 btns:1",
+      "ts": "2026-07-12T03:36:06.837Z"
+    },
+    {
+      "name": "IMG-HIDDEN PassportStamp — functional without images",
+      "ok": true,
+      "detail": "text:999 btns:3",
+      "ts": "2026-07-12T03:36:07.715Z"
+    },
+    {
+      "name": "IMG-HIDDEN Connections — functional without images",
+      "ok": true,
+      "detail": "text:1291 btns:8",
+      "ts": "2026-07-12T03:36:08.600Z"
+    },
+    {
+      "name": "IMG-HIDDEN ManagementSync — functional without images",
+      "ok": true,
+      "detail": "text:136 btns:2",
+      "ts": "2026-07-12T03:36:09.486Z"
+    },
+    {
+      "name": "IMG-HIDDEN SessionComplete — functional without images",
+      "ok": true,
+      "detail": "text:84 btns:2",
+      "ts": "2026-07-12T03:36:10.363Z"
+    },
+    {
+      "name": "RESP MentorSelection @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:11.064Z"
+    },
+    {
+      "name": "RESP MentorSelection @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:11.064Z"
+    },
+    {
+      "name": "RESP MentorSelection @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:11.746Z"
+    },
+    {
+      "name": "RESP MentorSelection @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:11.746Z"
+    },
+    {
+      "name": "RESP MentorSelection @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:12.427Z"
+    },
+    {
+      "name": "RESP MentorSelection @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:12.427Z"
+    },
+    {
+      "name": "RESP MentorSelection @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:13.107Z"
+    },
+    {
+      "name": "RESP MentorSelection @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:13.107Z"
+    },
+    {
+      "name": "RESP MentorSelection @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:13.799Z"
+    },
+    {
+      "name": "RESP MentorSelection @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:13.799Z"
+    },
+    {
+      "name": "RESP MentorSelection @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:14.503Z"
+    },
+    {
+      "name": "RESP MentorSelection @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:14.503Z"
+    },
+    {
+      "name": "RESP PairingLab @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:15.513Z"
+    },
+    {
+      "name": "RESP PairingLab @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:15.513Z"
+    },
+    {
+      "name": "RESP PairingLab @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:16.198Z"
+    },
+    {
+      "name": "RESP PairingLab @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:16.198Z"
+    },
+    {
+      "name": "RESP PairingLab @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:16.880Z"
+    },
+    {
+      "name": "RESP PairingLab @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:16.880Z"
+    },
+    {
+      "name": "RESP PairingLab @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:17.567Z"
+    },
+    {
+      "name": "RESP PairingLab @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:17.567Z"
+    },
+    {
+      "name": "RESP PairingLab @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:18.252Z"
+    },
+    {
+      "name": "RESP PairingLab @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:18.252Z"
+    },
+    {
+      "name": "RESP PairingLab @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:18.946Z"
+    },
+    {
+      "name": "RESP PairingLab @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:18.946Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:19.922Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:19.922Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:20.615Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:20.615Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:21.299Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:21.299Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:21.989Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:21.989Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:22.683Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:22.683Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:23.390Z"
+    },
+    {
+      "name": "RESP HumidorMatch @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:23.390Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:24.314Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:24.314Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:24.999Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:24.999Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:25.706Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:25.706Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:26.391Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:26.391Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:27.090Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:27.090Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:27.794Z"
+    },
+    {
+      "name": "RESP RequestPurchase @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:27.794Z"
+    },
+    {
+      "name": "RESP FirstThird @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:28.783Z"
+    },
+    {
+      "name": "RESP FirstThird @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:28.783Z"
+    },
+    {
+      "name": "RESP FirstThird @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:29.475Z"
+    },
+    {
+      "name": "RESP FirstThird @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:29.475Z"
+    },
+    {
+      "name": "RESP FirstThird @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:30.152Z"
+    },
+    {
+      "name": "RESP FirstThird @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:30.152Z"
+    },
+    {
+      "name": "RESP FirstThird @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:30.834Z"
+    },
+    {
+      "name": "RESP FirstThird @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:30.834Z"
+    },
+    {
+      "name": "RESP FirstThird @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:31.530Z"
+    },
+    {
+      "name": "RESP FirstThird @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:31.530Z"
+    },
+    {
+      "name": "RESP FirstThird @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:32.241Z"
+    },
+    {
+      "name": "RESP FirstThird @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:32.241Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:33.205Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:33.205Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:33.885Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:33.885Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:34.566Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:34.566Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:35.259Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:35.259Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:35.961Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:35.961Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:36.664Z"
+    },
+    {
+      "name": "RESP FlavorMemory @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:36.664Z"
+    },
+    {
+      "name": "RESP FinalThird @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:37.541Z"
+    },
+    {
+      "name": "RESP FinalThird @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:37.541Z"
+    },
+    {
+      "name": "RESP FinalThird @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:38.225Z"
+    },
+    {
+      "name": "RESP FinalThird @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:38.225Z"
+    },
+    {
+      "name": "RESP FinalThird @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:38.904Z"
+    },
+    {
+      "name": "RESP FinalThird @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:38.904Z"
+    },
+    {
+      "name": "RESP FinalThird @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:39.595Z"
+    },
+    {
+      "name": "RESP FinalThird @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:39.595Z"
+    },
+    {
+      "name": "RESP FinalThird @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:40.310Z"
+    },
+    {
+      "name": "RESP FinalThird @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:40.310Z"
+    },
+    {
+      "name": "RESP FinalThird @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:41.003Z"
+    },
+    {
+      "name": "RESP FinalThird @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:41.004Z"
+    },
+    {
+      "name": "RESP Scorecard @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:41.885Z"
+    },
+    {
+      "name": "RESP Scorecard @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:41.885Z"
+    },
+    {
+      "name": "RESP Scorecard @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:42.573Z"
+    },
+    {
+      "name": "RESP Scorecard @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:42.573Z"
+    },
+    {
+      "name": "RESP Scorecard @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:43.258Z"
+    },
+    {
+      "name": "RESP Scorecard @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:43.258Z"
+    },
+    {
+      "name": "RESP Scorecard @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:43.950Z"
+    },
+    {
+      "name": "RESP Scorecard @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:43.950Z"
+    },
+    {
+      "name": "RESP Scorecard @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:44.709Z"
+    },
+    {
+      "name": "RESP Scorecard @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:44.709Z"
+    },
+    {
+      "name": "RESP Scorecard @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:45.406Z"
+    },
+    {
+      "name": "RESP Scorecard @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:45.406Z"
+    },
+    {
+      "name": "RESP FinalReview @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:46.314Z"
+    },
+    {
+      "name": "RESP FinalReview @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:46.314Z"
+    },
+    {
+      "name": "RESP FinalReview @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:46.997Z"
+    },
+    {
+      "name": "RESP FinalReview @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:46.997Z"
+    },
+    {
+      "name": "RESP FinalReview @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:47.679Z"
+    },
+    {
+      "name": "RESP FinalReview @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:47.679Z"
+    },
+    {
+      "name": "RESP FinalReview @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:48.364Z"
+    },
+    {
+      "name": "RESP FinalReview @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:48.364Z"
+    },
+    {
+      "name": "RESP FinalReview @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:49.087Z"
+    },
+    {
+      "name": "RESP FinalReview @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:49.087Z"
+    },
+    {
+      "name": "RESP FinalReview @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:49.789Z"
+    },
+    {
+      "name": "RESP FinalReview @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:49.789Z"
+    },
+    {
+      "name": "RESP ManagementSync @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:50.713Z"
+    },
+    {
+      "name": "RESP ManagementSync @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:50.713Z"
+    },
+    {
+      "name": "RESP ManagementSync @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:51.392Z"
+    },
+    {
+      "name": "RESP ManagementSync @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:51.392Z"
+    },
+    {
+      "name": "RESP ManagementSync @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:52.073Z"
+    },
+    {
+      "name": "RESP ManagementSync @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:52.073Z"
+    },
+    {
+      "name": "RESP ManagementSync @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:52.759Z"
+    },
+    {
+      "name": "RESP ManagementSync @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:52.759Z"
+    },
+    {
+      "name": "RESP ManagementSync @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:53.456Z"
+    },
+    {
+      "name": "RESP ManagementSync @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:53.456Z"
+    },
+    {
+      "name": "RESP ManagementSync @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:54.139Z"
+    },
+    {
+      "name": "RESP ManagementSync @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:54.139Z"
+    },
+    {
+      "name": "RESP SessionComplete @ iPhone-SE — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:55.092Z"
+    },
+    {
+      "name": "RESP SessionComplete @ iPhone-SE — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:55.092Z"
+    },
+    {
+      "name": "RESP SessionComplete @ iPhone-14 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:55.773Z"
+    },
+    {
+      "name": "RESP SessionComplete @ iPhone-14 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:55.773Z"
+    },
+    {
+      "name": "RESP SessionComplete @ iPhone-14-Plus — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:56.452Z"
+    },
+    {
+      "name": "RESP SessionComplete @ iPhone-14-Plus — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:56.452Z"
+    },
+    {
+      "name": "RESP SessionComplete @ iPad-Mini — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:57.134Z"
+    },
+    {
+      "name": "RESP SessionComplete @ iPad-Mini — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:57.134Z"
+    },
+    {
+      "name": "RESP SessionComplete @ iPad-Pro — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:57.844Z"
+    },
+    {
+      "name": "RESP SessionComplete @ iPad-Pro — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:57.844Z"
+    },
+    {
+      "name": "RESP SessionComplete @ Desktop-1280 — no horizontal overflow",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:58.533Z"
+    },
+    {
+      "name": "RESP SessionComplete @ Desktop-1280 — content renders",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:58.533Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — Landing",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:36:59.497Z"
+    },
+    {
+      "name": "A11Y images have alt — Landing",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:36:59.498Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — Landing",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:59.500Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — Landing",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:36:59.502Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — Identity",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:00.165Z"
+    },
+    {
+      "name": "A11Y images have alt — Identity",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:00.166Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — Identity",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:00.168Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — Identity",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:00.169Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — GoldenBox",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:00.833Z"
+    },
+    {
+      "name": "A11Y images have alt — GoldenBox",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:00.834Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — GoldenBox",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:00.836Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — GoldenBox",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:00.837Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — MentorSelection",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:01.496Z"
+    },
+    {
+      "name": "A11Y images have alt — MentorSelection",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:01.497Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — MentorSelection",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:01.498Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — MentorSelection",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:01.500Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — Format",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:02.178Z"
+    },
+    {
+      "name": "A11Y images have alt — Format",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:02.179Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — Format",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:02.181Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — Format",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:02.182Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — PairingLab",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:02.841Z"
+    },
+    {
+      "name": "A11Y images have alt — PairingLab",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:02.842Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — PairingLab",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:02.844Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — PairingLab",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:02.847Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — HumidorMatch",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:03.511Z"
+    },
+    {
+      "name": "A11Y images have alt — HumidorMatch",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:03.512Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — HumidorMatch",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:03.514Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — HumidorMatch",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:03.515Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — RequestPurchase",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:04.177Z"
+    },
+    {
+      "name": "A11Y images have alt — RequestPurchase",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:04.178Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — RequestPurchase",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:04.179Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — RequestPurchase",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:04.180Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — FirstThird",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:04.839Z"
+    },
+    {
+      "name": "A11Y images have alt — FirstThird",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:04.841Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — FirstThird",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:04.843Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — FirstThird",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:04.844Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — SecondThird",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:05.510Z"
+    },
+    {
+      "name": "A11Y images have alt — SecondThird",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:05.511Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — SecondThird",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:05.513Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — SecondThird",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:05.514Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — FlavorMemory",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:06.187Z"
+    },
+    {
+      "name": "A11Y images have alt — FlavorMemory",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:06.189Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — FlavorMemory",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:06.190Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — FlavorMemory",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:06.191Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — FinalThird",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:06.852Z"
+    },
+    {
+      "name": "A11Y images have alt — FinalThird",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:06.853Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — FinalThird",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:06.854Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — FinalThird",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:06.857Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — Scorecard",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:07.514Z"
+    },
+    {
+      "name": "A11Y images have alt — Scorecard",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:07.515Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — Scorecard",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:07.517Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — Scorecard",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:07.518Z"
+    },
+    {
+      "name": "A11Y scorecard sliders have labels",
+      "ok": true,
+      "detail": "sliders:6 labels:10",
+      "ts": "2026-07-12T03:37:07.533Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — FinalReview",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:08.192Z"
+    },
+    {
+      "name": "A11Y images have alt — FinalReview",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:08.193Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — FinalReview",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:08.194Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — FinalReview",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:08.196Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — PassportStamp",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:08.857Z"
+    },
+    {
+      "name": "A11Y images have alt — PassportStamp",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:08.858Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — PassportStamp",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:08.860Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — PassportStamp",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:08.861Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — Connections",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:09.524Z"
+    },
+    {
+      "name": "A11Y images have alt — Connections",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:09.526Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — Connections",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:09.527Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — Connections",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:09.529Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — ManagementSync",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:10.201Z"
+    },
+    {
+      "name": "A11Y images have alt — ManagementSync",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:10.202Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — ManagementSync",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:10.203Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — ManagementSync",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:10.205Z"
+    },
+    {
+      "name": "A11Y unnamed buttons — SessionComplete",
+      "ok": true,
+      "detail": "found 0",
+      "ts": "2026-07-12T03:37:10.863Z"
+    },
+    {
+      "name": "A11Y images have alt — SessionComplete",
+      "ok": true,
+      "detail": "found 0 missing alt",
+      "ts": "2026-07-12T03:37:10.864Z"
+    },
+    {
+      "name": "A11Y keyboard focusable — SessionComplete",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:10.866Z"
+    },
+    {
+      "name": "A11Y touch targets >= 44px — SessionComplete",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:10.868Z"
+    },
+    {
+      "name": "GAP5 POS360 health responds",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:10.890Z"
+    },
+    {
+      "name": "GAP5 POS360 reports truthful connection state (not fake \"Connected\")",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:10.890Z"
+    },
+    {
+      "name": "GAP5 POS360 /order-intent POST responds without crash",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:10.898Z"
+    },
+    {
+      "name": "GAP5 POS360 order-intent reports truthful local_fallback state",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:10.898Z"
+    },
+    {
+      "name": "GAP5 POS360 /handoff-requests returns (local_fallback is ok)",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:10.900Z"
+    },
+    {
+      "name": "GAP5 POS360 handoff failure state is truthful (not fake success)",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:10.900Z"
+    },
+    {
+      "name": "GAP5 UI /request-purchase loads with content",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:11.784Z"
+    },
+    {
+      "name": "GAP5 UI no fake \"Order Confirmed\" on load",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:11.784Z"
+    },
+    {
+      "name": "GAP5 UI no fake \"In Stock\" without backend",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:11.784Z"
+    },
+    {
+      "name": "GAP6 EAT /handoffs returns ok",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:11.831Z"
+    },
+    {
+      "name": "GAP6 EAT /handoffs storageMode is truthful",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:11.831Z"
+    },
+    {
+      "name": "GAP6 EAT /sync POST responds (ok or storage error)",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:11.834Z"
+    },
+    {
+      "name": "GAP6 EAT sync returns structured response",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:11.834Z"
+    },
+    {
+      "name": "GAP6 Management Sync UI loads content",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:12.708Z"
+    },
+    {
+      "name": "GAP6 Management Sync UI shows E.A.T. status indicator",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:12.708Z"
+    },
+    {
+      "name": "GAP6 Management Sync no fake \"Online\" without backend",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:12.708Z"
+    },
+    {
+      "name": "GAP6 Sync action does not crash or produce error page",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.329Z"
+    },
+    {
+      "name": "GAP6 Management Sync persists after refresh",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.965Z"
+    },
+    {
+      "name": "GAP7 Humidor mode: not_configured returns correct mode",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.970Z"
+    },
+    {
+      "name": "GAP7 Humidor not_configured has no temp/humidity",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.970Z"
+    },
+    {
+      "name": "GAP7 Humidor mode: demo returns temp and humidity",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.974Z"
+    },
+    {
+      "name": "GAP7 Humidor demo mode is labeled truthfully (mode=demo, not live)",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.974Z"
+    },
+    {
+      "name": "GAP7 Humidor manual entry records values",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.976Z"
+    },
+    {
+      "name": "GAP7 Humidor manual entry labeled as MANUAL (not live sensor)",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.976Z"
+    },
+    {
+      "name": "GAP7 Humidor live mode: responds without crash",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.979Z"
+    },
+    {
+      "name": "GAP7 Humidor live mode: shows offline when no hardware",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.979Z"
+    },
+    {
+      "name": "GAP7 Humidor live mode: not faking live sensor data",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.979Z"
+    },
+    {
+      "name": "GAP7 Humidor manual rejects out-of-range values",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:14.980Z"
+    },
+    {
+      "name": "GAP7 HumidorMatch UI shows mode indicator",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:15.865Z"
+    },
+    {
+      "name": "GAP7 HumidorMatch no fake \"RESERVED\" without real reserve",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:15.865Z"
+    },
+    {
+      "name": "GAP7 HumidorMatch localStorage key exists or server state is current",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:16.734Z"
+    },
+    {
+      "name": "GAP8 FlavorMemory — localStorage key written",
+      "ok": true,
+      "detail": "found",
+      "ts": "2026-07-12T03:37:18.069Z"
+    },
+    {
+      "name": "GAP8 FirstThird — page renders and is interactive",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:19.372Z"
+    },
+    {
+      "name": "GAP8 FirstThird — persistence is session or local (no key = pass-through ok)",
+      "ok": true,
+      "detail": "pass-through design (no persist key required)",
+      "ts": "2026-07-12T03:37:19.372Z"
+    },
+    {
+      "name": "GAP8 Scorecard — localStorage written after submit",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:21.586Z"
+    },
+    {
+      "name": "GAP8 Scorecard — localStorage survives reload",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:22.212Z"
+    },
+    {
+      "name": "GAP8 PassportStamp — claimed state restores from localStorage after reload",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:23.809Z"
+    },
+    {
+      "name": "GAP8 Connections — localStorage written after selection",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:25.118Z"
+    },
+    {
+      "name": "GAP8 Connections — localStorage survives reload",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:25.844Z"
+    },
+    {
+      "name": "GAP8 HumidorMatch — env key present or server loaded",
+      "ok": true,
+      "detail": "",
+      "ts": "2026-07-12T03:37:26.710Z"
+    }
+  ]
+}

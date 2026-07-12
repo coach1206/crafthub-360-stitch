@@ -309,7 +309,7 @@ export default function FlavorMemory() {
                     background: active ? col : 'transparent',
                     color: active ? '#fffde8' : GOLD,
                     border: `1px solid ${active ? col : 'rgba(233,193,118,0.28)'}`,
-                    borderRadius: 20, padding: '4px 11px',
+                    borderRadius: 20, padding: '10px 12px', minHeight: 44,
                     fontSize: 11, fontWeight: 600, fontFamily: 'Georgia, serif',
                     cursor: 'pointer', letterSpacing: '0.03em',
                   }}
@@ -347,7 +347,7 @@ export default function FlavorMemory() {
                     background: active ? 'rgba(233,193,118,0.15)' : 'transparent',
                     color: active ? GOLD : DIM,
                     border: `1px solid ${active ? GOLD : 'rgba(229,226,225,0.2)'}`,
-                    borderRadius: 20, padding: '3px 10px', fontSize: 10, cursor: 'pointer',
+                    borderRadius: 20, padding: '10px 12px', minHeight: 44, fontSize: 10, cursor: 'pointer',
                   }}
                 >{tag}</button>
               )
@@ -374,7 +374,7 @@ export default function FlavorMemory() {
                     background: active ? GOLD : 'transparent',
                     color: active ? DARK : GOLD,
                     border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.3)'}`,
-                    borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 600,
+                    borderRadius: 20, padding: '10px 12px', minHeight: 44, fontSize: 11, fontWeight: 600,
                     fontFamily: 'Georgia, serif', cursor: 'pointer',
                   }}
                 >{p}</button>
@@ -386,7 +386,8 @@ export default function FlavorMemory() {
           <Divider />
           <button type="button"
             onClick={() => { setExpandNotes(p => !p); setTimeout(() => notesRef.current?.focus(), 60) }}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, width: '100%', textAlign: 'left' }}>
+            aria-label="Toggle Personal Notes"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '10px 0', minHeight: 44, width: '100%', textAlign: 'left' }}>
             <SectionLabel>{expandNotes ? '▾' : '▸'} Personal Notes</SectionLabel>
           </button>
           {expandNotes && (

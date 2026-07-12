@@ -120,10 +120,11 @@ const G = '#E9C176'
 const styles = {
   dot: {
     position: 'fixed', bottom: 14, left: 14, zIndex: 150,
-    width: 30, height: 30, borderRadius: '50%',
+    width: 44, height: 44, borderRadius: '50%',
     background: 'rgba(10,6,3,0.5)', border: '1px solid rgba(233,193,118,0.15)',
     color: 'rgba(233,193,118,0.3)', fontSize: 9, cursor: 'pointer',
     fontFamily: '"JetBrains Mono", monospace',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
   panel: {
     position: 'fixed', bottom: 14, left: 14, zIndex: 150,

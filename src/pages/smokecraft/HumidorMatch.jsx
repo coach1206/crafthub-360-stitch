@@ -378,7 +378,7 @@ export default function HumidorMatch() {
                         background: active ? GOLD : 'transparent',
                         color: active ? DARK : GOLD,
                         border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.35)'}`,
-                        borderRadius: 20, padding: '4px 12px',
+                        borderRadius: 20, padding: '11px 14px', minHeight: 44,
                         fontSize: 11, fontWeight: 600, fontFamily: 'Georgia, serif',
                         cursor: 'pointer', letterSpacing: '0.03em',
                       }}
@@ -407,7 +407,7 @@ export default function HumidorMatch() {
 function btnStyle(variant) {
   const base = {
     borderRadius: 20, fontSize: 11, fontWeight: 700, fontFamily: 'Georgia, serif',
-    cursor: 'pointer', letterSpacing: '0.04em', padding: '5px 13px',
+    cursor: 'pointer', letterSpacing: '0.04em', padding: '11px 14px', minHeight: 44,
   }
   if (variant === 'primary') return { ...base, background: GOLD, color: DARK, border: 'none' }
   if (variant === 'outline') return { ...base, background: 'transparent', color: GOLD, border: `1px solid rgba(233,193,118,0.5)` }

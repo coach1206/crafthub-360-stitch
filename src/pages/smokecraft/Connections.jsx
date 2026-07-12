@@ -252,7 +252,8 @@ function ActionCard({ action, status, onToggle, onExpand, isExpanded, mentorName
                 background: isSelected ? GOLD : 'transparent',
                 color: isSelected ? DARK : GOLD,
                 border: `1px solid ${GOLD}`,
-                borderRadius: 14, padding: '4px 12px', fontSize: 10,
+                borderRadius: 14, padding: '10px 16px', fontSize: 10,
+                minHeight: 44, minWidth: 44,
                 fontWeight: 700, cursor: 'pointer', fontFamily: 'Georgia, serif',
               }}>
               {isSelected ? 'Deselect' : 'Select'}

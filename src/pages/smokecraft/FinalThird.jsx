@@ -141,7 +141,8 @@ function StarRating({ value, onChange }) {
         <button key={n} type="button" data-star={n}
           onClick={() => { triggerHaptic('light'); onChange(n === value ? null : n) }}
           style={{
-            background: 'none', border: 'none', cursor: 'pointer', padding: 2,
+            background: 'none', border: 'none', cursor: 'pointer', padding: '10px 6px',
+            minWidth: 44, minHeight: 44,
             fontSize: 22, lineHeight: 1,
             color: n <= (value || 0) ? GOLD : 'rgba(233,193,118,0.2)',
             filter: n <= (value || 0) ? 'drop-shadow(0 0 3px rgba(233,193,118,0.4))' : 'none',
@@ -167,7 +168,7 @@ function ChipRow({ options, value, onChange, dataPrefix }) {
               background: active ? GOLD : 'transparent',
               color: active ? DARK : GOLD,
               border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.28)'}`,
-              borderRadius: 20, padding: '3px 10px',
+              borderRadius: 20, padding: '10px 12px', minHeight: 44,
               fontSize: 11, fontWeight: 600, fontFamily: 'Georgia, serif', cursor: 'pointer',
             }}
           >{opt}</button>
@@ -348,7 +349,7 @@ export default function FinalThird() {
                     background: active ? col : 'transparent',
                     color: active ? '#fffde8' : GOLD,
                     border: `1px solid ${active ? col : 'rgba(233,193,118,0.28)'}`,
-                    borderRadius: 20, padding: '4px 11px',
+                    borderRadius: 20, padding: '10px 12px', minHeight: 44,
                     fontSize: 11, fontWeight: 600, fontFamily: 'Georgia, serif', cursor: 'pointer',
                   }}
                 >{f.label}</button>
@@ -370,7 +371,7 @@ export default function FinalThird() {
                       style={{
                         background: active ? GOLD : 'transparent', color: active ? DARK : GOLD,
                         border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.22)'}`,
-                        borderRadius: 6, padding: '3px 6px', fontSize: 10, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
+                        borderRadius: 6, padding: '10px 8px', minHeight: 44, fontSize: 10, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
                       }}
                     >{opt}</button>
                   )
@@ -388,7 +389,7 @@ export default function FinalThird() {
                       style={{
                         background: active ? GOLD : 'transparent', color: active ? DARK : GOLD,
                         border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.22)'}`,
-                        borderRadius: 6, padding: '3px 6px', fontSize: 10, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
+                        borderRadius: 6, padding: '10px 8px', minHeight: 44, fontSize: 10, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
                       }}
                     >{opt}</button>
                   )
@@ -406,7 +407,7 @@ export default function FinalThird() {
                       style={{
                         background: active ? GOLD : 'transparent', color: active ? DARK : GOLD,
                         border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.22)'}`,
-                        borderRadius: 6, padding: '3px 6px', fontSize: 10, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
+                        borderRadius: 6, padding: '10px 8px', minHeight: 44, fontSize: 10, fontFamily: 'Georgia, serif', cursor: 'pointer', textAlign: 'left',
                       }}
                     >{opt}</button>
                   )
@@ -500,7 +501,8 @@ export default function FinalThird() {
           <HR />
           <button type="button"
             onClick={() => setExpandNotes(p => !p)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, width: '100%', textAlign: 'left' }}>
+            aria-label="Toggle Personal Notes"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '10px 0', minHeight: 44, width: '100%', textAlign: 'left' }}>
             <SL>{expandNotes ? '▾' : '▸'} Personal Notes</SL>
           </button>
           {expandNotes && (

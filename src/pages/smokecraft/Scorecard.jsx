@@ -152,6 +152,7 @@ function RatingSlider({ category, value, onChange }) {
       <input type="range" min={0} max={25} value={value ?? 0}
         onChange={e => { const v = Number(e.target.value); onChange(v === 0 ? null : v) }}
         data-slider={`score-${category}`}
+        aria-label={`${def.label} score (0 to 25)`}
         style={{ width: '100%', accentColor: GOLD, cursor: 'pointer' }}
       />
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 1 }}>
@@ -506,7 +507,8 @@ export default function Scorecard() {
           {/* ── Personal Notes ──────────────────────── */}
           <HR />
           <button type="button" onClick={() => setExpandNotes(p => !p)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, width: '100%', textAlign: 'left' }}>
+            aria-label="Toggle Personal Notes"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '10px 0', minHeight: 44, width: '100%', textAlign: 'left' }}>
             <SL>{expandNotes ? '▾' : '▸'} Personal Notes</SL>
           </button>
           {expandNotes && (
