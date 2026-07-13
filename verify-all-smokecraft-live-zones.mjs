@@ -24,9 +24,10 @@ const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromi
 const ctx = await browser.newContext()
 const page = await ctx.newPage()
 await page.setViewportSize({ width: 1440, height: 900 })
+await page.addInitScript(() => { sessionStorage.setItem('novee_demo_mode', '1') })
 
 // ── Identity: form saves to sc_identity_v1 and restores on reload ────────────
-await page.goto(`${BASE}/smokecraft/identity`, { waitUntil: 'networkidle', timeout: 20000 })
+await page.goto(`${BASE}/smokecraft/identity`, { waitUntil: 'load', timeout: 20000 })
 await page.waitForTimeout(800)
 
 const nameInput = page.locator('input[autocomplete="name"], input[placeholder*="Last Name"], input[placeholder*="First"]').first()
@@ -42,7 +43,7 @@ if (hasNameInput) {
   log(saved === 'Test Smoker', 'Identity: fullName persists to sc_identity_v1', `got: ${saved}`)
 
   // Reload and check restoration
-  await page.reload({ waitUntil: 'networkidle' })
+  await page.reload({ waitUntil: 'load' })
   await page.waitForTimeout(600)
   const restored = await page.evaluate(() => {
     try { return JSON.parse(localStorage.getItem('sc_identity_v1') || '{}').fullName } catch { return null }
@@ -55,7 +56,7 @@ if (hasNameInput) {
 }
 
 // ── Format: selection saves and persists ─────────────────────────────────────
-await page.goto(`${BASE}/smokecraft/format`, { waitUntil: 'networkidle', timeout: 20000 })
+await page.goto(`${BASE}/smokecraft/format`, { waitUntil: 'load', timeout: 20000 })
 await page.waitForTimeout(800)
 
 const robusto = page.locator('button[aria-label*="Robusto"], button:has-text("Robusto")').first()
@@ -72,7 +73,7 @@ if (hasRobusto) {
 }
 
 // ── Seed & Soil: selections save ────────────────────────────────────────────
-await page.goto(`${BASE}/smokecraft/seed-soil`, { waitUntil: 'networkidle', timeout: 20000 })
+await page.goto(`${BASE}/smokecraft/seed-soil`, { waitUntil: 'load', timeout: 20000 })
 await page.waitForTimeout(800)
 
 const criollo = page.locator('button:has-text("Criollo")').first()
@@ -89,7 +90,7 @@ if (hasCriollo) {
 }
 
 // ── Mentor: selection state ──────────────────────────────────────────────────
-await page.goto(`${BASE}/smokecraft/mentor-selection`, { waitUntil: 'networkidle', timeout: 20000 })
+await page.goto(`${BASE}/smokecraft/mentor-selection`, { waitUntil: 'load', timeout: 20000 })
 await page.waitForTimeout(800)
 
 const mentorBtn = page.locator('button:has-text("Don Alejandro")').first()
@@ -106,7 +107,7 @@ if (hasMentor) {
 }
 
 // ── Golden Box: acknowledgement checkbox ─────────────────────────────────────
-await page.goto(`${BASE}/smokecraft/golden-box`, { waitUntil: 'networkidle', timeout: 20000 })
+await page.goto(`${BASE}/smokecraft/golden-box`, { waitUntil: 'load', timeout: 20000 })
 await page.waitForTimeout(800)
 
 const checkbox = page.locator('input[type="checkbox"]').first()
@@ -129,25 +130,25 @@ if (hasCheckbox) {
 }
 
 // ── Cut Toast Light: continue button exists ──────────────────────────────────
-await page.goto(`${BASE}/smokecraft/cut-toast-light`, { waitUntil: 'networkidle', timeout: 20000 })
+await page.goto(`${BASE}/smokecraft/cut-toast-light`, { waitUntil: 'load', timeout: 20000 })
 await page.waitForTimeout(800)
 const pageLoaded = await page.locator('body').count() > 0
 log(pageLoaded, 'Cut Toast Light: page loads without error')
 
 // ── First Third: page loads ──────────────────────────────────────────────────
-await page.goto(`${BASE}/smokecraft/first-third`, { waitUntil: 'networkidle', timeout: 20000 })
+await page.goto(`${BASE}/smokecraft/first-third`, { waitUntil: 'load', timeout: 20000 })
 await page.waitForTimeout(800)
 const firstThirdLoaded = await page.locator('body').count() > 0
 log(firstThirdLoaded, 'First Third: page loads without error')
 
 // ── Scorecard: page loads ────────────────────────────────────────────────────
-await page.goto(`${BASE}/smokecraft/scorecard`, { waitUntil: 'networkidle', timeout: 20000 })
+await page.goto(`${BASE}/smokecraft/scorecard`, { waitUntil: 'load', timeout: 20000 })
 await page.waitForTimeout(800)
 const scorecardLoaded = await page.locator('body').count() > 0
 log(scorecardLoaded, 'Scorecard: page loads without error')
 
 // ── Passport Stamp: page loads ───────────────────────────────────────────────
-await page.goto(`${BASE}/smokecraft/passport-stamp`, { waitUntil: 'networkidle', timeout: 20000 })
+await page.goto(`${BASE}/smokecraft/passport-stamp`, { waitUntil: 'load', timeout: 20000 })
 await page.waitForTimeout(800)
 const passportLoaded = await page.locator('body').count() > 0
 log(passportLoaded, 'Passport Stamp: page loads without error')

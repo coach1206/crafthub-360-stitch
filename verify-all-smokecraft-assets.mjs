@@ -162,7 +162,7 @@ async function testRoute(page, spec) {
   page.on('request', onRequest)
 
   try {
-    await page.goto(`${BASE}${spec.route}`, { waitUntil: 'networkidle', timeout: 20000 })
+    await page.goto(`${BASE}${spec.route}`, { waitUntil: 'load', timeout: 30000 })
     await page.waitForTimeout(1000)
 
     // Check required image was requested
@@ -191,11 +191,13 @@ async function testRoute(page, spec) {
 }
 
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', headless: true })
-const page = await browser.newPage()
-await page.setViewportSize({ width: 1440, height: 900 })
 
 for (const spec of ROUTE_SPECS) {
+  const page = await browser.newPage()
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.addInitScript(() => { sessionStorage.setItem('novee_demo_mode', '1') })
   await testRoute(page, spec)
+  await page.close()
 }
 
 await browser.close()

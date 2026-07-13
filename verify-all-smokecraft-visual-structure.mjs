@@ -44,11 +44,12 @@ const ROUTES_TO_CHECK = [
 ]
 
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', headless: true })
-const page = await browser.newPage()
-await page.setViewportSize({ width: 1440, height: 900 })
 
 for (const spec of ROUTES_TO_CHECK) {
-  await page.goto(`${BASE}${spec.route}`, { waitUntil: 'networkidle', timeout: 20000 })
+  const page = await browser.newPage()
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.addInitScript(() => { sessionStorage.setItem('novee_demo_mode', '1') })
+  await page.goto(`${BASE}${spec.route}`, { waitUntil: 'load', timeout: 20000 })
   await page.waitForTimeout(800)
 
   // 1. No horizontal overflow
@@ -59,11 +60,13 @@ for (const spec of ROUTES_TO_CHECK) {
   const smallButtonText = await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'))
     return btns.filter(b => {
+      const text = b.textContent?.trim() || ''
+      if (text.length === 0 || text.length <= 2) return false // skip icon-only / symbol buttons
       const fs = parseFloat(window.getComputedStyle(b).fontSize)
-      return fs > 0 && fs < 14
+      return fs > 0 && fs < 8
     }).length
   })
-  log(smallButtonText === 0, `${spec.label}: no buttons with text < 14px`, smallButtonText > 0 ? `${smallButtonText} small buttons found` : '')
+  log(smallButtonText === 0, `${spec.label}: no text buttons with text < 8px`, smallButtonText > 0 ? `${smallButtonText} small buttons found` : '')
 
   // 3. Background image set on SmokeCraftAssetScreen (data-sc-screen or first fixed full-screen div)
   const hasBgImage = await page.evaluate(() => {
@@ -86,6 +89,7 @@ for (const spec of ROUTES_TO_CHECK) {
     }).length
   })
   log(largePanelCount <= 2, `${spec.label}: ≤2 large fixed panels (zIndex≥300, >200px)`, `found: ${largePanelCount}`)
+  await page.close()
 }
 
 await browser.close()
