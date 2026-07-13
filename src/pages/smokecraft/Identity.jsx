@@ -141,8 +141,8 @@ export default function Identity() {
             position: fixed !important;
             top: clamp(60px, 8vh, 100px) !important;
             bottom: 110px !important;
-            left: 50% !important;
-            right: 0 !important;
+            left: 0 !important;
+            right: 52% !important;
             width: auto !important;
             max-width: none !important;
           }
@@ -166,7 +166,7 @@ export default function Identity() {
       }}>
         <div style={{
           pointerEvents: 'auto',
-          background: 'rgba(5,3,1,0.92)',
+          background: 'rgba(5,3,1,0.88)',
           border: `1px solid ${BORDER}`,
           borderRadius: 14,
           padding: 'clamp(14px,2.5vw,22px) clamp(14px,2.5vw,22px)',
@@ -174,33 +174,6 @@ export default function Identity() {
           margin: '0 auto',
           boxSizing: 'border-box',
         }}>
-
-          {/* Section heading — 20px, readable */}
-          <div style={{ marginBottom: 20 }}>
-            <div style={{
-              fontSize: 13,
-              fontWeight: 700,
-              color: GOLD,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              marginBottom: 6,
-            }}>
-              SmokeCraft 360
-            </div>
-            <div style={{
-              fontSize: 'clamp(18px, 2.5vw, 20px)',
-              fontFamily: 'Georgia, serif',
-              fontWeight: 700,
-              color: '#e5e2e1',
-              lineHeight: 1.3,
-              marginBottom: 6,
-            }}>
-              Begin Your Journey
-            </div>
-            <div style={{ fontSize: 15, color: DIM, fontFamily: 'Georgia, serif', lineHeight: 1.5 }}>
-              Tell us about yourself so we can personalize your SmokeCraft experience.
-            </div>
-          </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
 

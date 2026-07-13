@@ -126,7 +126,7 @@ export default function Mentor() {
       */}
       <div style={{
         position: 'fixed',
-        bottom: 110,
+        bottom: 165,
         left: 0,
         right: 0,
         zIndex: 400,
@@ -211,6 +211,7 @@ export default function Mentor() {
                 {activeMentors.map(m => (
                   <div key={m.id} style={{ fontSize: 14, color: DIM, fontFamily: 'Georgia, serif' }}>
                     <span style={{ color: GOLD, fontWeight: 700 }}>{m.name}</span>
+                    {' · '}<span style={{ color: 'rgba(233,193,118,0.60)' }}>{m.origin}</span>
                     {' — '}{m.expertise}
                   </div>
                 ))}
