@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 export default function SmokeCraftChallenge() {
   const navigate = useNavigate()
@@ -18,11 +20,18 @@ export default function SmokeCraftChallenge() {
   }
 
   return (
-    <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
+    <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-challenge.png"
-        alt="SmokeCraft Challenge"
+        src={SC_ASSETS.smokecraftChallenge}
+        alt="SmokeCraft Challenge — Advanced Cigar Recognition"
+        classification="DECORATIVE_BACKGROUND"
       />
-    </div>
+      <SmokeCraftNavBar
+        primary={done ? 'Continuing…' : 'Accept the Challenge →'}
+        onPrimary={handleContinue}
+        secondary="← Back"
+        onSecondary={() => navigate(-1)}
+      />
+    </>
   )
 }

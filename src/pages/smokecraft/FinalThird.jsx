@@ -4,6 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const GOLD   = '#E9C176'
@@ -292,7 +293,7 @@ export default function FinalThird() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/FINAL THIRD.png"
+        src={SC_ASSETS.finalThird}
         alt="SmokeCraft Final Third — Complete Your Tasting Journey"
       />
 

@@ -6,6 +6,7 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const GOLD   = '#E9C176'
@@ -303,7 +304,7 @@ export default function PassportStamp() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/PASSPORT STAMP.png"
+        src={SC_ASSETS.passportStamp}
         alt="SmokeCraft Passport Stamp — Journey Certification"
       />
 

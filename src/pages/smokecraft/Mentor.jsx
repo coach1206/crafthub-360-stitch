@@ -4,6 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD = '#E9C176'
 const DARK = '#0a0603'
@@ -41,8 +42,9 @@ export default function Mentor() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/MENTOR%20SELECTION1.png"
+        src={SC_ASSETS.mentorSelection}
         alt="SmokeCraft Mentor Selection — Choose Your Guide"
+        classification="DECORATIVE_BACKGROUND"
       />
 
       {/* Mentor selection chips — real React state, select up to 2 */}

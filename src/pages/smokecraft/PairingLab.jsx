@@ -4,6 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
 
 const GOLD = '#E9C176'
@@ -33,7 +34,7 @@ export default function PairingLab() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/PAIRING%20LAB1.png"
+        src={SC_ASSETS.pairingLab}
         alt="SmokeCraft Pairing Lab — Build Your Pairing Profile"
       />
 

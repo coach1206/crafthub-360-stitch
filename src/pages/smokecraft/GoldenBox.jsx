@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD    = '#E9C176'
 const GOLD_DIM = 'rgba(233,193,118,0.70)'
@@ -118,9 +119,9 @@ export default function GoldenBox() {
 
   return (
     <SmokeCraftAssetScreen
-      src="/assets/smokecraft/GOLDEN BOX RULES.png"
-      alt="SmokeCraft Golden Box — The Five Golden Principles"
-      classification="LIVE_REACT_PAGE_ARTWORK"
+      src={SC_ASSETS.goldenBox}
+      alt="SmokeCraft Golden Box — Guest & Venue Information"
+      classification="DECORATIVE_BACKGROUND"
     >
       <div
         style={{

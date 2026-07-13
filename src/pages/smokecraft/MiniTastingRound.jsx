@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 export default function MiniTastingRound() {
   const navigate = useNavigate()
@@ -18,11 +20,18 @@ export default function MiniTastingRound() {
   }
 
   return (
-    <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
+    <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-mini-tasting-round.png"
-        alt="Mini Tasting Round"
+        src={SC_ASSETS.miniTasting}
+        alt="SmokeCraft Mini Tasting Round — Comparative Evaluation"
+        classification="DECORATIVE_BACKGROUND"
       />
-    </div>
+      <SmokeCraftNavBar
+        primary={done ? 'Continuing…' : 'Complete Tasting Round →'}
+        onPrimary={handleContinue}
+        secondary="← Back"
+        onSecondary={() => navigate(-1)}
+      />
+    </>
   )
 }

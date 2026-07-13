@@ -9,6 +9,7 @@ import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
 import VenueMenuOverlay from '../../components/venue/VenueMenuOverlay.jsx'
 import { createPOS360OrderIntent, writePOS360AuditEvent } from '../../services/smokecraftHandoffService.js'
 import { purchaseRequestStatus } from '../../services/smokecraft/smokecraftTruthfulStatusGuard.js'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD = '#E9C176'
 const DARK = '#0a0603'
@@ -77,8 +78,9 @@ export default function RequestPurchase() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/REQUEST%20PURCHASE.png"
+        src={SC_ASSETS.requestPurchase}
         alt="SmokeCraft Request Purchase — Choose Your Ordering Path"
+        classification="DECORATIVE_BACKGROUND"
       />
 
       {/* Ordering path selector + venue menu button */}

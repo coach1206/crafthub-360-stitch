@@ -4,6 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD = '#E9C176'
 const DARK = '#0a0603'
@@ -64,7 +65,7 @@ export default function CutToastLight() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/CUT, TOAST,& LIGHT22.png"
+        src={SC_ASSETS.cutToastLight}
         alt="SmokeCraft Cut, Toast & Light — Preparation Methods"
       />
 

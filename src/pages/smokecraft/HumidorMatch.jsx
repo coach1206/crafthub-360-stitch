@@ -5,6 +5,7 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD = '#E9C176'
 const DARK = '#0a0603'
@@ -184,8 +185,8 @@ export default function HumidorMatch() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/humidor match 111.png"
-        alt="SmokeCraft Humidor Match — Environment Conditions"
+        src={SC_ASSETS.humidorMatch}
+        alt="SmokeCraft Humidor Match — Select Your Cigar"
       />
 
       {/* Mask strip — covers baked values in image */}

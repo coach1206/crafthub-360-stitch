@@ -370,6 +370,39 @@ export default function Identity() {
           </div>
         </div>
       </div>
+
+      {/* Desktop-only: covers the printed "NEXT: GOLDEN BOX RULES" zone in IDENTY.png at ≥1024px */}
+      <button
+        type="button"
+        onClick={handleBegin}
+        disabled={submitting}
+        aria-label="Next: Golden Box Rules"
+        className="sc-identity-desktop-next"
+        style={{
+          position: 'fixed',
+          bottom: 52,
+          right: 'clamp(16px, 3vw, 40px)',
+          zIndex: 410,
+          background: submitting ? 'rgba(10,6,3,0.7)' : 'rgba(10,6,3,0.92)',
+          color: GOLD,
+          border: `1.5px solid ${GOLD}`,
+          borderRadius: 8,
+          padding: '12px 22px',
+          fontSize: 14,
+          fontWeight: 700,
+          fontFamily: 'Georgia, serif',
+          letterSpacing: '0.06em',
+          cursor: submitting ? 'not-allowed' : 'pointer',
+          minHeight: 48,
+          minWidth: 180,
+          touchAction: 'manipulation',
+          WebkitTapHighlightColor: 'transparent',
+          display: 'none',
+        }}
+      >
+        Next: Golden Box Rules →
+      </button>
+      <style>{`@media (min-width: 1024px) { .sc-identity-desktop-next { display: block !important; } }`}</style>
     </SmokeCraftAssetScreen>
   )
 }

@@ -1,80 +1,31 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
-import { getManagementSyncStatus, syncManagement, recordGuestActivity, createManagerAlertSync } from '../../modules/smokecraft/services/smokecraftManagementSyncService.js'
-import { managementSyncStatus, buildEvidence } from '../../services/smokecraft/smokecraftTruthfulStatusGuard.js'
-import { createSmokeCraftDayOneConnection, recordDayOneGuestWorkflowEvent } from '../../services/dayone360SmokeCraftConnectionService.js'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+
+const GOLD = '#E9C176'
+const GOLD_DIM = 'rgba(233,193,118,0.70)'
+const PANEL = 'rgba(5,3,1,0.92)'
+const BORDER = 'rgba(233,193,118,0.18)'
+
+const SHARING_ITEMS = [
+  'Cigar selection and pairing preference',
+  'Tasting notes and flavor journey',
+  'Session date and visit number',
+  'Earned badges and XP level',
+]
 
 export default function ManagementSync() {
-  const { session, awardSessionRewards } = useGuestSession()
+  const { awardSessionRewards } = useGuestSession()
   const navigate = useNavigate()
-  const [eatStatus, setEATStatus] = useState(null)
+  const [staffFollowUp, setStaffFollowUp] = useState(false)
   const [syncing, setSyncing] = useState(false)
 
-  useEffect(() => {
-    ;(async () => {
-      try {
-        const status = await getManagementSyncStatus(session?.venueId || 'novee-grand-lounge')
-        setEATStatus(status)
-
-        if (status?.backendConnected) {
-          const passportId = session?.passport?.passportId || null
-          await syncManagement({
-            guestId: passportId,
-            venueId: session?.venueId || null,
-            completedSteps: session?.completedSteps || [],
-            xpSummary: session?.smokeCraft?.xp || {},
-            stampSummary: session?.passport?.earnedStamps || [],
-            tasteProfile: session?.smokeCraft?.tasteProfile || {},
-            sessionStatus: 'completed',
-          })
-          await recordGuestActivity({
-            guestId: passportId,
-            venueId: session?.venueId || null,
-            activityType: 'management_sync_screen',
-            activitySummary: 'Guest reached Management Sync screen — SmokeCraft journey near completion',
-            flavorTags: session?.smokeCraft?.tasteProfile || [],
-            loyaltySignal: 'medium',
-            managerVisibility: true,
-          })
-          await createManagerAlertSync({
-            guestId: passportId,
-            venueId: session?.venueId || null,
-            alertType: 'journey_near_complete',
-            alertPriority: 'normal',
-            alertMessage: 'SmokeCraft guest approaching session complete. Management sync screen reached.',
-          })
-        }
-
-        const d1Result = await createSmokeCraftDayOneConnection({
-          venueId: session?.venueId || 'novee-grand-lounge',
-          guestId: session?.passport?.passportId || null,
-          smokecraftSessionId: session?.sessionId || null,
-          connectionType: 'guest_workflow_reference',
-          workflowReference: 'management-sync-milestone',
-          metadata: { step: 'management_sync', completedSteps: (session?.completedSteps || []).length },
-        }).catch(() => ({ ok: false, backendConnected: false }))
-
-        if (d1Result?.backendConnected) {
-          await recordDayOneGuestWorkflowEvent({
-            connectionId: d1Result?.connection?.connection_id || null,
-            venueId: session?.venueId || 'novee-grand-lounge',
-            guestId: session?.passport?.passportId || null,
-            smokecraftSessionId: session?.sessionId || null,
-            eventType: 'journey_milestone',
-            eventPayload: { milestone: 'management_sync', completedSteps: (session?.completedSteps || []).length },
-          }).catch(() => {})
-        }
-      } catch {}
-    })()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   function handleComplete() {
+    if (syncing) return
     setSyncing(true)
     triggerHaptic('medium')
     awardSessionRewards('management-sync')
@@ -83,34 +34,103 @@ export default function ManagementSync() {
 
   return (
     <>
-      {/* E.A.T. backend status indicator — staff-visible, real React state */}
-      {eatStatus !== null && (
-        <div style={{
-          position: 'fixed', top: 8, right: 8, zIndex: 9999,
-          padding: '4px 10px', borderRadius: 8, fontSize: 9,
-          fontFamily: '"JetBrains Mono", monospace',
-          fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em',
-          background: eatStatus.backendConnected ? 'rgba(39,174,96,0.15)' : 'rgba(192,57,43,0.12)',
-          border: `1px solid ${eatStatus.backendConnected ? 'rgba(39,174,96,0.4)' : 'rgba(192,57,43,0.3)'}`,
-          color: eatStatus.backendConnected ? '#27ae60' : '#c0392b',
-          pointerEvents: 'none',
-        }}>
-          {/* R23: assertTruthfulStatus guards the "Connected" word */}
-          {managementSyncStatus(eatStatus?.backendConnected ? { syncId: 'eat-backend', persisted: true, syncedAt: new Date().toISOString() } : null).label}
-        </div>
-      )}
-
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/MANAGEMENT%20SYNC.png"
-        alt="SmokeCraft Management Sync — Session Data Synced"
-      />
+        src={SC_ASSETS.managementSync}
+        alt="SmokeCraft Management Sync — Session Summary"
+        classification="DECORATIVE_BACKGROUND"
+      >
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-end',
+        }}>
+          <div style={{
+            background: PANEL,
+            borderTop: `1px solid ${BORDER}`,
+            padding: 'clamp(16px,3vw,28px) clamp(16px,5vw,36px) clamp(20px,4vh,36px)',
+            maxWidth: 540,
+            width: '100%',
+            margin: '0 auto',
+            boxSizing: 'border-box',
+            maxHeight: '70dvh',
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
+          }}>
+            <div style={{ marginBottom: 16, textAlign: 'center' }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 4 }}>
+                SmokeCraft 360
+              </div>
+              <div style={{ fontSize: 'clamp(18px,3.5vw,22px)', fontFamily: 'Georgia, serif', fontWeight: 700, color: '#e5e2e1' }}>
+                Session Saved
+              </div>
+              <div style={{ fontSize: 15, color: 'rgba(229,226,225,0.6)', fontFamily: 'Georgia, serif', marginTop: 6, lineHeight: 1.5 }}>
+                Your SmokeCraft experience has been recorded locally on this device.
+              </div>
+            </div>
+
+            <div style={{
+              background: 'rgba(233,193,118,0.06)',
+              border: `1px solid ${BORDER}`,
+              borderRadius: 10,
+              padding: '14px 16px',
+              marginBottom: 16,
+            }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>
+                What may be shared with the venue
+              </div>
+              {SHARING_ITEMS.map(item => (
+                <div key={item} style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  marginBottom: 8,
+                  fontSize: 15,
+                  fontFamily: 'Georgia, serif',
+                  color: 'rgba(229,226,225,0.8)',
+                }}>
+                  <span style={{ color: GOLD, fontSize: 16, flexShrink: 0 }}>✓</span>
+                  {item}
+                </div>
+              ))}
+              <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.45)', fontFamily: 'Georgia, serif', marginTop: 8, lineHeight: 1.5 }}>
+                Personal contact information is never shared without your explicit consent.
+              </div>
+            </div>
+
+            <label style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 12,
+              cursor: 'pointer',
+              marginBottom: 0,
+            }}>
+              <input
+                type="checkbox"
+                checked={staffFollowUp}
+                onChange={e => { triggerHaptic('light'); setStaffFollowUp(e.target.checked) }}
+                style={{ width: 20, height: 20, accentColor: GOLD, cursor: 'pointer', flexShrink: 0, marginTop: 2 }}
+              />
+              <span style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: 15,
+                color: staffFollowUp ? '#e5e2e1' : 'rgba(229,226,225,0.6)',
+                lineHeight: 1.5,
+              }}>
+                Request staff follow-up or a personal recommendation before I leave
+              </span>
+            </label>
+          </div>
+        </div>
+      </SmokeCraftAssetScreen>
 
       <SmokeCraftNavBar
         primary={syncing ? 'Completing…' : 'Complete SmokeCraft Journey →'}
         onPrimary={handleComplete}
+        secondary="← Back"
+        onSecondary={() => navigate(-1)}
       />
-
-      <SmokeCraftHandoffTrigger allowEAT allowPOS360 />
     </>
   )
 }

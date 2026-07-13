@@ -4,136 +4,153 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
-import { syncSmokeCraftSessionToBackend, saveFlavorMemoryToBackend, writeSyncAuditEvent } from '../../services/passportAdapter.js'
-import { createPassportId } from '../../services/passportService.js'
-import { syncManagement, recordGuestActivity, createManagerAlertSync, createInventorySignalSync, writeEATSyncAuditEvent } from '../../modules/smokecraft/services/smokecraftManagementSyncService.js'
-import { createSmokeCraftDayOneConnection, recordDayOneGuestWorkflowEvent, writeDayOneConnectionAuditEvent } from '../../services/dayone360SmokeCraftConnectionService.js'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import { getRankFromXP } from '../../constants/session.js'
 
-function readLocalFlavorMemory() {
-  try {
-    const raw = sessionStorage.getItem('smokecraftFlavorMemory')
-    if (raw) return JSON.parse(raw)
-  } catch {}
-  return null
-}
+const GOLD = '#E9C176'
+const PANEL = 'rgba(5,3,1,0.92)'
+const BORDER = 'rgba(233,193,118,0.18)'
 
 export default function SessionComplete() {
-  const { session, awardSessionRewards, awardStamp, completeSmokeCraftSession, syncPos3Activity, syncEATActivity } = useGuestSession()
+  const { session, awardSessionRewards, awardStamp } = useGuestSession()
   const navigate = useNavigate()
 
   useEffect(() => {
-    const alreadyDone = session.completedSteps.includes('session-complete')
-    if (!alreadyDone) {
+    if (!session.completedSteps.includes('session-complete')) {
       awardSessionRewards('session-complete')
       awardStamp('journey-complete', 'session-complete')
       triggerHaptic('success')
     }
-
-    const flavorMemory = readLocalFlavorMemory()
-    const tasteTags =
-      flavorMemory?.tasteTags?.length > 0 ? flavorMemory.tasteTags
-      : session?.smokeCraft?.finalThird?.notesSelected?.length > 0 ? session.smokeCraft.finalThird.notesSelected
-      : []
-    const tasteProfileSource = tasteTags.length > 0 ? 'local_session' : 'not_collected'
-
-    completeSmokeCraftSession({
-      tasteProfile: tasteTags,
-      tasteProfileSource,
-      backendConnected: false,
-      safeClaim: tasteProfileSource === 'not_collected'
-        ? 'No guest taste data collected at this pilot stage'
-        : 'Taste profile from local session only — not synced to backend',
-    })
-    syncPos3Activity()
-    syncEATActivity()
-
-    ;(async () => {
-      try {
-        const guestId = createPassportId()
-        const completedSteps = session.completedSteps || []
-        const xpSummary = session.smokeCraft?.xp || {}
-        const stampSummary = session.passport?.earnedStamps || []
-
-        const [sessionResult, flavorResult] = await Promise.allSettled([
-          syncSmokeCraftSessionToBackend({
-            guestId, completedSteps, tasteProfile: tasteTags,
-            xpSummary, stampSummary,
-            completedRoute: session.smokeCraft?.selectedRoute || null,
-            sessionStatus: 'completed',
-            completedAt: new Date().toISOString(),
-          }),
-          tasteTags.length > 0
-            ? saveFlavorMemoryToBackend({
-                guestId, tasteTags,
-                tastingNotes: flavorMemory?.tastingNotes || {},
-                flavorProfileSource: tasteProfileSource,
-                dataQualityStatus: tasteProfileSource === 'local_session' ? 'partial' : 'observe_confirm_only',
-              })
-            : Promise.resolve({ ok: false, backendConnected: false }),
-        ])
-
-        const sessionOk = sessionResult.status === 'fulfilled' && sessionResult.value?.backendConnected
-        await writeSyncAuditEvent({
-          guestId, eventType: 'session_complete_sync',
-          syncStatus: sessionOk ? 'ok' : 'fallback',
-          backendConnected: sessionOk,
-          summary: sessionOk
-            ? 'SmokeCraft session synced to Passport 360 backend'
-            : 'SmokeCraft session stored locally — backend not available',
-          metadata: {
-            completedStepsCount: completedSteps.length, tasteProfileSource,
-            flavorSynced: flavorResult.status === 'fulfilled' && flavorResult.value?.backendConnected,
-          },
-        })
-
-        const [eatSessionResult] = await Promise.allSettled([
-          syncManagement({ guestId, completedSteps, xpSummary, stampSummary, tasteProfile: tasteTags, sessionStatus: 'completed', completedRoute: session.smokeCraft?.selectedRoute || null }),
-        ])
-        const eatOk = eatSessionResult.status === 'fulfilled' && eatSessionResult.value?.backendConnected
-
-        await Promise.allSettled([
-          recordGuestActivity({ guestId, activityType: 'session_complete', activitySummary: `SmokeCraft journey complete — ${completedSteps.length} steps`, flavorTags: tasteTags, loyaltySignal: completedSteps.length >= 15 ? 'high' : 'medium', managerVisibility: true }),
-          createManagerAlertSync({ guestId, alertType: 'session_complete', alertPriority: 'normal', alertMessage: `SmokeCraft session complete. Steps: ${completedSteps.length}.` }),
-          session.smokeCraft?.selectedCigar
-            ? createInventorySignalSync({ smokecraftSessionId: guestId, cigarReference: session.smokeCraft.selectedCigar, inventorySignalType: 'purchase_request', reorderSignal: false })
-            : Promise.resolve(),
-        ])
-
-        await writeEATSyncAuditEvent({ guestId, eventType: 'session_complete_eat_sync', syncStatus: eatOk ? 'ok' : 'fallback', backendConnected: eatOk, summary: eatOk ? 'SmokeCraft session synced to E.A.T. backend' : 'E.A.T. sync skipped — backend not available', metadata: { completedStepsCount: completedSteps.length, tasteProfileSource } })
-
-        const d1ConnectionResult = await createSmokeCraftDayOneConnection({ venueId: 'novee-grand-lounge', guestId, smokecraftSessionId: guestId, connectionType: 'smokecraft_session_link', workflowReference: `smokecraft-session-${guestId}`, metadata: { completedSteps: completedSteps.length, tasteProfileSource } }).catch(() => ({ ok: false, backendConnected: false }))
-        const d1Ok = d1ConnectionResult?.backendConnected === true
-
-        if (d1Ok) {
-          await Promise.allSettled([
-            recordDayOneGuestWorkflowEvent({ connectionId: d1ConnectionResult?.connection?.connection_id || null, venueId: 'novee-grand-lounge', guestId, smokecraftSessionId: guestId, eventType: 'session_complete', eventPayload: { completedSteps: completedSteps.length, tasteProfileSource, xpTotal: xpSummary?.total || 0 } }),
-            writeDayOneConnectionAuditEvent({ connectionId: d1ConnectionResult?.connection?.connection_id || null, venueId: 'novee-grand-lounge', eventType: 'session_complete_dayone360_link', syncStatus: 'ok', backendConnected: true, metadata: { guestId, completedSteps: completedSteps.length } }),
-          ]).catch(() => {})
-        }
-      } catch {}
-    })()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  function handleHandoff() {
+  const xpTotal = session?.smokeCraft?.xp?.total || 0
+  const rank = getRankFromXP(xpTotal)
+  const guestName = (() => {
+    try {
+      const raw = localStorage.getItem('sc_identity_v1')
+      if (raw) {
+        const d = JSON.parse(raw)
+        return d.preferredName || d.fullName || null
+      }
+    } catch {}
+    return null
+  })()
+  const stepsCompleted = (session?.completedSteps || []).length
+
+  function handleReturn() {
     triggerHaptic('medium')
-    navigate('/pos3')
+    navigate('/smokecraft')
+  }
+
+  function handlePassport() {
+    triggerHaptic('light')
+    navigate('/passport')
   }
 
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/SESSION%20COMPLETE.png"
-        alt="SmokeCraft Session Complete — Your Journey is Recorded"
-      />
+        src={SC_ASSETS.sessionComplete}
+        alt="SmokeCraft 360 — Session Complete"
+        classification="DECORATIVE_BACKGROUND"
+      >
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-end',
+        }}>
+          <div style={{
+            background: PANEL,
+            borderTop: `1px solid ${BORDER}`,
+            padding: 'clamp(20px,3vw,32px) clamp(20px,5vw,40px) clamp(80px,12vh,120px)',
+            maxWidth: 560,
+            width: '100%',
+            margin: '0 auto',
+            boxSizing: 'border-box',
+          }}>
+            <div style={{ textAlign: 'center', marginBottom: 20 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: GOLD, letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 8, fontFamily: 'Georgia, serif' }}>
+                SmokeCraft 360 · Journey Complete
+              </div>
+              {guestName && (
+                <div style={{ fontSize: 'clamp(20px,3.5vw,26px)', fontFamily: 'Georgia, serif', fontWeight: 700, color: '#e5e2e1', marginBottom: 6 }}>
+                  Well done, {guestName}.
+                </div>
+              )}
+              <div style={{ fontSize: 16, fontFamily: 'Georgia, serif', color: 'rgba(229,226,225,0.7)', lineHeight: 1.5 }}>
+                Your first SmokeCraft session is complete and saved.
+              </div>
+            </div>
+
+            <div style={{
+              display: 'flex',
+              gap: 12,
+              justifyContent: 'center',
+              marginBottom: 20,
+              flexWrap: 'wrap',
+            }}>
+              <div style={{
+                background: 'rgba(233,193,118,0.08)',
+                border: `1px solid ${BORDER}`,
+                borderRadius: 10,
+                padding: '12px 20px',
+                textAlign: 'center',
+                flex: '1 1 120px',
+              }}>
+                <div style={{ fontSize: 22, fontWeight: 700, color: GOLD, fontFamily: 'Georgia, serif' }}>{xpTotal}</div>
+                <div style={{ fontSize: 10, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2 }}>XP Earned</div>
+              </div>
+              <div style={{
+                background: 'rgba(233,193,118,0.08)',
+                border: `1px solid ${BORDER}`,
+                borderRadius: 10,
+                padding: '12px 20px',
+                textAlign: 'center',
+                flex: '1 1 120px',
+              }}>
+                <div style={{ fontSize: 18, fontWeight: 700, color: GOLD, fontFamily: 'Georgia, serif' }}>{rank?.name || 'Novice'}</div>
+                <div style={{ fontSize: 10, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2 }}>Current Rank</div>
+              </div>
+              <div style={{
+                background: 'rgba(233,193,118,0.08)',
+                border: `1px solid ${BORDER}`,
+                borderRadius: 10,
+                padding: '12px 20px',
+                textAlign: 'center',
+                flex: '1 1 120px',
+              }}>
+                <div style={{ fontSize: 22, fontWeight: 700, color: GOLD, fontFamily: 'Georgia, serif' }}>{stepsCompleted}</div>
+                <div style={{ fontSize: 10, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2 }}>Steps Completed</div>
+              </div>
+            </div>
+
+            <div style={{
+              background: 'rgba(233,193,118,0.05)',
+              border: `1px solid ${BORDER}`,
+              borderRadius: 10,
+              padding: '12px 16px',
+              marginBottom: 4,
+              fontSize: 14,
+              fontFamily: 'Georgia, serif',
+              color: 'rgba(229,226,225,0.65)',
+              lineHeight: 1.6,
+              textAlign: 'center',
+            }}>
+              Return on your next visit to unlock the next chapter of your SmokeCraft journey.
+            </div>
+          </div>
+        </div>
+      </SmokeCraftAssetScreen>
 
       <SmokeCraftNavBar
-        primary="Staff Handoff — Preview"
-        onPrimary={handleHandoff}
+        primary="Return to SmokeCraft Hub"
+        onPrimary={handleReturn}
+        secondary="View My Passport"
+        onSecondary={handlePassport}
       />
-
-      <SmokeCraftHandoffTrigger allowEAT allowPOS360 />
     </>
   )
 }

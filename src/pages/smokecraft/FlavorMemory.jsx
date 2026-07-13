@@ -4,6 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const GOLD   = '#E9C176'
@@ -252,7 +253,7 @@ export default function FlavorMemory() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/FLAVOR MEMORY.png"
+        src={SC_ASSETS.flavorMemory}
         alt="SmokeCraft Flavor Memory — Capture Your Sensory Experience"
       />
 

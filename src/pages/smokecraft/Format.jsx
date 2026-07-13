@@ -4,6 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD = '#E9C176'
 const DARK = '#0a0603'
@@ -36,8 +37,9 @@ export default function Format() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-vitola.png"
+        src={SC_ASSETS.format}
         alt="SmokeCraft Format — Shape, Size & Burn Time"
+        classification="DECORATIVE_BACKGROUND"
       />
 
       {/* Format selector — real React state */}

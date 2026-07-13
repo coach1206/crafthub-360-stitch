@@ -5,6 +5,7 @@ import { getRankFromXP } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
@@ -311,7 +312,7 @@ export default function Scorecard() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/Scorecard.png"
+        src={SC_ASSETS.scorecard}
         alt="SmokeCraft Scorecard — Your Complete Cigar Review"
       />
 

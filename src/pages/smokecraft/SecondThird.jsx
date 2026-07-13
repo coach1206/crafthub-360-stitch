@@ -4,6 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD = '#E9C176'
 
@@ -48,8 +49,9 @@ export default function SecondThird() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/SECOND%20THIRD.png"
+        src={SC_ASSETS.secondThird}
         alt="SmokeCraft Second Third — Flavor Development"
+        classification="DECORATIVE_BACKGROUND"
       />
 
       {/* Observation checklist */}

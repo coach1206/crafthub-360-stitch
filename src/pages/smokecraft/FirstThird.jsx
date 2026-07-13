@@ -4,6 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD = '#E9C176'
 
@@ -49,7 +50,7 @@ export default function FirstThird() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/FIRST%20%20THIRD1.png"
+        src={SC_ASSETS.firstThird}
         alt="SmokeCraft First Third — Discover the Opening Expression"
       />
 
