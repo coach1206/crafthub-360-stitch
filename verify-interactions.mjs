@@ -284,6 +284,56 @@ async function suiteBackNavigation() {
   }
 }
 
+// ── SUITE 9: Identity field completeness ─────────────────────────────────────
+async function suiteIdentityFields() {
+  console.log('\n── Suite 9: Identity Field Completeness ──')
+  const p = await browser.newPage()
+  try {
+    await p.goto(`${BASE}/smokecraft/identity`, { waitUntil: 'domcontentloaded', timeout: 20000 })
+    await p.waitForTimeout(500)
+
+    const hasFullName = await p.locator('input[autocomplete="name"]').count() > 0
+    log(hasFullName, 'Full Name input present')
+
+    const hasBirthDate = await p.locator('input[type="date"]').count() > 0
+    log(hasBirthDate, 'Birth Date input present')
+
+    const chipCount = await p.locator('button[aria-pressed]').count()
+    log(chipCount >= 5, `Experience Level chips present (found ${chipCount}, expected >= 5)`)
+  } finally {
+    await p.close()
+  }
+}
+
+// ── SUITE 10: Mentor emoji-free and card presence ────────────────────────────
+async function suiteMentorEmojiAndCards() {
+  console.log('\n── Suite 10: Mentor Emoji-Free & Cards ──')
+  const p = await browser.newPage()
+  try {
+    await p.goto(`${BASE}/smokecraft`, { waitUntil: 'domcontentloaded', timeout: 20000 })
+    await p.evaluate(() => { sessionStorage.setItem('novee_demo_mode', '1') })
+    await p.goto(`${BASE}/smokecraft/mentor`, { waitUntil: 'domcontentloaded', timeout: 20000 })
+    await p.waitForTimeout(500)
+
+    const cardCount = await p.locator('button[aria-pressed]').count()
+    log(cardCount === 8, `8 mentor cards present (found ${cardCount})`)
+
+    const bodyText = await p.locator('body').innerText()
+    // Flag emoji range: \u{1F1E0}-\u{1F1FF}
+    const emojiFlagRegex = /[\u{1F1E0}-\u{1F1FF}]{2}/u
+    const hasEmojiFlags = emojiFlagRegex.test(bodyText)
+    log(!hasEmojiFlags, 'No emoji flags rendered on mentor page')
+
+    // Click first card and confirm selection state
+    await p.locator('button[aria-pressed]').first().click()
+    await p.waitForTimeout(300)
+    const pressedCount = await p.locator('button[aria-pressed="true"]').count()
+    log(pressedCount === 1, 'First mentor card becomes selected after click')
+  } finally {
+    await p.close()
+  }
+}
+
 // ── MAIN ─────────────────────────────────────────────────────────────────────
 ;(async () => {
   console.log('SmokeCraft 360 — Live Interaction Test Suite')
@@ -310,6 +360,8 @@ async function suiteBackNavigation() {
     await suiteCutToastLight()
     await suiteSessionComplete()
     await suiteBackNavigation()
+    await suiteIdentityFields()
+    await suiteMentorEmojiAndCards()
 
   } finally {
     await browser.close()

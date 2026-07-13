@@ -9,18 +9,74 @@ import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD   = '#E9C176'
 const DARK   = '#0a0603'
-const DIM    = 'rgba(229,226,225,0.55)'
+const DIM    = 'rgba(229,226,225,0.70)'
 const BORDER = 'rgba(233,193,118,0.22)'
 
 const MENTORS = [
-  { id: 'alejandro', name: 'Don Alejandro',      origin: 'Dominican Republic', flag: '🇩🇴', expertise: 'Aged blends & terroir depth',        tags: ['Complexity', 'Floral Notes'] },
-  { id: 'javier',    name: 'Javier Estelí',       origin: 'Nicaragua',          flag: '🇳🇮', expertise: 'Bold ligero & volcanic soil',         tags: ['Full Body', 'Strength'] },
-  { id: 'jamastrán', name: 'Doña Jamastrán',      origin: 'Honduras',           flag: '🇭🇳', expertise: 'Jamastrán valley leaf craft',         tags: ['Rich Cedar', 'Corojo'] },
-  { id: 'mateo',     name: 'Mateo San Andrés',    origin: 'Mexico',             flag: '🇲🇽', expertise: 'San Andrés maduro mastery',           tags: ['Dark Cocoa', 'Maduro Expert'] },
-  { id: 'rafael',    name: 'Maestro Rafael',       origin: 'Cuba',               flag: '🇨🇺', expertise: 'Classic Vuelta Abajo traditions',    tags: ['Tradition', 'Balance'] },
-  { id: 'carlos',    name: 'Carlos Mendoza',       origin: 'Peru',               flag: '🇵🇪', expertise: 'Emerging origin & binder work',      tags: ['Emerging', 'Binder Craft'] },
-  { id: 'blackwell', name: 'Thomas A. Blackwell', origin: 'USA',                flag: '🇺🇸', expertise: 'Boutique blending & education',      tags: ['Education', 'Service'] },
-  { id: 'paulo',     name: 'Paulo Oliveira',       origin: 'Brazil',             flag: '🇧🇷', expertise: 'Arapiraca wrapper & fermentation',   tags: ['Mata Fina', 'Research'] },
+  {
+    id: 'alejandro',
+    name: 'Don Alejandro',
+    origin: 'Dominican Republic',
+    expertise: 'Aged blends & terroir depth',
+    biography: 'The best cigar begins in how you treat the soil and the leaf over time.',
+    tags: ['Complexity', 'Floral Notes'],
+  },
+  {
+    id: 'javier',
+    name: 'Javier Estelí',
+    origin: 'Nicaragua',
+    expertise: 'Bold ligero & volcanic soil',
+    biography: 'Strength is not harshness. A full-bodied cigar must balance power with grace.',
+    tags: ['Full Body', 'Strength'],
+  },
+  {
+    id: 'jamastrán',
+    name: 'Doña Jamastrán',
+    origin: 'Honduras',
+    expertise: 'Jamastrán valley leaf craft',
+    biography: 'The Jamastrán valley teaches patience. Every leaf has its own pace.',
+    tags: ['Rich Cedar', 'Corojo'],
+  },
+  {
+    id: 'mateo',
+    name: 'Mateo San Andrés',
+    origin: 'Mexico',
+    expertise: 'San Andrés maduro mastery',
+    biography: 'Maduro is not just a color — it is a transformation of character.',
+    tags: ['Dark Cocoa', 'Maduro Expert'],
+  },
+  {
+    id: 'rafael',
+    name: 'Maestro Rafael',
+    origin: 'Cuba',
+    expertise: 'Classic Vuelta Abajo traditions',
+    biography: 'Tradition is not a limitation. It is the foundation on which mastery is built.',
+    tags: ['Tradition', 'Balance'],
+  },
+  {
+    id: 'carlos',
+    name: 'Carlos Mendoza',
+    origin: 'Peru',
+    expertise: 'Emerging origin & binder work',
+    biography: 'The world is full of undiscovered terroir. Curiosity is the finest blending tool.',
+    tags: ['Emerging', 'Binder Craft'],
+  },
+  {
+    id: 'blackwell',
+    name: 'Thomas A. Blackwell',
+    origin: 'USA',
+    expertise: 'Boutique blending & education',
+    biography: 'Education changes how people taste. Every session is an opportunity to elevate.',
+    tags: ['Education', 'Service'],
+  },
+  {
+    id: 'paulo',
+    name: 'Paulo Oliveira',
+    origin: 'Brazil',
+    expertise: 'Arapiraca wrapper & fermentation',
+    biography: 'Arapiraca is one of the world\'s great leaves. Few know it. That is about to change.',
+    tags: ['Mata Fina', 'Research'],
+  },
 ]
 
 export default function Mentor() {
@@ -63,10 +119,9 @@ export default function Mentor() {
         classification="DECORATIVE_BACKGROUND"
       />
 
-      {/* Scrollable card grid — positioned below the upper branding area of the image */}
       <div style={{
         position: 'fixed',
-        top: 'clamp(140px, 18vh, 200px)',
+        top: 'clamp(150px, 18vh, 220px)',
         bottom: 110,
         left: 0,
         right: 0,
@@ -81,29 +136,45 @@ export default function Mentor() {
           maxWidth: 700,
           margin: '0 auto',
         }}>
-          {/* Instruction header */}
-          <div style={{
-            textAlign: 'center',
-            marginBottom: 10,
-          }}>
-            <div style={{ fontSize: 9, fontWeight: 700, color: GOLD, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 2 }}>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: 14 }}>
+            <div style={{
+              fontSize: 13,
+              fontWeight: 700,
+              color: GOLD,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              marginBottom: 4,
+            }}>
               SmokeCraft 360
             </div>
-            <div style={{ fontSize: 'clamp(13px,2vw,16px)', fontFamily: 'Georgia, serif', color: '#e5e2e1', fontWeight: 700 }}>
+            <div style={{
+              fontSize: 18,
+              fontFamily: 'Georgia, serif',
+              color: '#e5e2e1',
+              fontWeight: 700,
+              lineHeight: 1.3,
+              marginBottom: 4,
+            }}>
               Choose up to 2 Mentors
             </div>
             {selected.length > 0 && (
-              <div style={{ fontSize: 11, color: GOLD, marginTop: 2, fontFamily: 'Georgia, serif' }}>
+              <div style={{
+                fontSize: 14,
+                color: GOLD,
+                fontFamily: 'Georgia, serif',
+                lineHeight: 1.4,
+              }}>
                 {selected.length === 1 ? '1 selected' : '2 selected — maximum reached'}
               </div>
             )}
           </div>
 
-          {/* 2-column card grid */}
+          {/* Card grid — 1 col on handheld, 2 col on tablet, 3 col on desktop */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(140px,28vw,200px), 1fr))',
-            gap: 8,
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
+            gap: 10,
           }}>
             {MENTORS.map(m => {
               const active = selected.includes(m.id)
@@ -115,65 +186,97 @@ export default function Mentor() {
                   aria-pressed={active}
                   onClick={() => !maxed && toggle(m.id)}
                   style={{
-                    background: active
-                      ? 'rgba(233,193,118,0.14)'
-                      : 'rgba(5,3,1,0.88)',
+                    background: active ? 'rgba(233,193,118,0.14)' : 'rgba(5,3,1,0.90)',
                     border: `${active ? 2 : 1}px solid ${active ? GOLD : BORDER}`,
                     borderRadius: 10,
-                    padding: '10px 12px',
+                    padding: '14px 16px',
                     textAlign: 'left',
                     cursor: maxed ? 'not-allowed' : 'pointer',
                     opacity: maxed ? 0.45 : 1,
                     touchAction: 'manipulation',
                     position: 'relative',
                     transition: 'border-color 0.15s, background 0.15s',
-                    minHeight: 80,
+                    minHeight: 88,
                   }}
                 >
-                  {/* Selected indicator */}
                   {active && (
                     <div style={{
                       position: 'absolute',
-                      top: 8, right: 8,
-                      width: 18, height: 18,
+                      top: 10, right: 10,
+                      width: 22, height: 22,
                       borderRadius: '50%',
                       background: GOLD,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 11, color: DARK, fontWeight: 800,
+                      fontSize: 13, color: DARK, fontWeight: 800,
                     }}>
                       ✓
                     </div>
                   )}
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 4 }}>
-                    <span style={{ fontSize: 16 }}>{m.flag}</span>
-                    <span style={{ fontSize: 9, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                      {m.origin}
-                    </span>
-                  </div>
+                  {/* Country */}
                   <div style={{
-                    fontSize: 'clamp(12px,1.8vw,14px)',
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: active ? GOLD : DIM,
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    marginBottom: 5,
+                    lineHeight: 1.3,
+                    fontFamily: 'Georgia, serif',
+                  }}>
+                    {m.origin}
+                  </div>
+
+                  {/* Name */}
+                  <div style={{
+                    fontSize: 18,
                     fontFamily: 'Georgia, serif',
                     fontWeight: 700,
                     color: active ? GOLD : '#e5e2e1',
-                    marginBottom: 3,
-                    lineHeight: 1.2,
+                    marginBottom: 5,
+                    lineHeight: 1.25,
+                    paddingRight: active ? 28 : 0,
                   }}>
                     {m.name}
                   </div>
-                  <div style={{ fontSize: 10, color: DIM, fontFamily: 'Georgia, serif', lineHeight: 1.4, marginBottom: 5 }}>
+
+                  {/* Expertise */}
+                  <div style={{
+                    fontSize: 15,
+                    color: DIM,
+                    fontFamily: 'Georgia, serif',
+                    lineHeight: 1.45,
+                    marginBottom: 6,
+                  }}>
                     {m.expertise}
                   </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+
+                  {/* Biography */}
+                  <div style={{
+                    fontSize: 15,
+                    color: active ? 'rgba(229,226,225,0.85)' : 'rgba(229,226,225,0.60)',
+                    fontFamily: 'Georgia, serif',
+                    fontStyle: 'italic',
+                    lineHeight: 1.5,
+                    marginBottom: 8,
+                  }}>
+                    "{m.biography}"
+                  </div>
+
+                  {/* Tags */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                     {m.tags.map(t => (
                       <span key={t} style={{
-                        fontSize: 9, fontWeight: 700, letterSpacing: '0.06em',
+                        fontSize: 14,
+                        fontWeight: 700,
+                        letterSpacing: '0.05em',
                         textTransform: 'uppercase',
                         color: active ? GOLD : DIM,
                         background: active ? 'rgba(233,193,118,0.1)' : 'rgba(229,226,225,0.06)',
                         border: `1px solid ${active ? 'rgba(233,193,118,0.35)' : 'rgba(229,226,225,0.12)'}`,
                         borderRadius: 4,
-                        padding: '2px 5px',
+                        padding: '4px 8px',
+                        lineHeight: 1.3,
                       }}>{t}</span>
                     ))}
                   </div>
@@ -185,10 +288,10 @@ export default function Mentor() {
       </div>
 
       <SmokeCraftNavBar
-        primary="Continue to Shape, Size & Burn →"
+        primary="Continue to Shape, Size & Burn"
         onPrimary={handleContinue}
         primaryDisabled={selected.length === 0}
-        secondary="← Back"
+        secondary="Back"
         onSecondary={() => navigate(-1)}
       />
     </>

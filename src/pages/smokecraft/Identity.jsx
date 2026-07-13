@@ -8,10 +8,10 @@ import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetSc
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 
 const GOLD     = '#E9C176'
-const GOLD_DIM = 'rgba(233,193,118,0.70)'
+const GOLD_DIM = 'rgba(233,193,118,0.80)'
 const DARK     = '#0a0603'
-const BORDER   = 'rgba(233,193,118,0.18)'
-const DIM      = 'rgba(229,226,225,0.55)'
+const BORDER   = 'rgba(233,193,118,0.22)'
+const DIM      = 'rgba(229,226,225,0.70)'
 const LS_KEY   = 'sc_identity_v1'
 
 const EXPERIENCE_LEVELS = [
@@ -49,30 +49,33 @@ function loadSaved() {
   } catch { return { ...EMPTY } }
 }
 
+// All labels at least 15px — readable for ages 40–70
+const labelStyle = {
+  display: 'block',
+  fontSize: 15,
+  fontWeight: 600,
+  color: GOLD_DIM,
+  marginBottom: 6,
+  fontFamily: 'Georgia, serif',
+  lineHeight: 1.4,
+}
+
+// All inputs at least 17px with 52px minimum height
 const inputStyle = {
   display: 'block',
   width: '100%',
-  background: 'rgba(10,6,3,0.88)',
+  background: 'rgba(10,6,3,0.90)',
   border: `1px solid ${BORDER}`,
   borderRadius: 8,
-  padding: '10px 12px',
-  fontSize: 14,
+  padding: '14px 14px',
+  fontSize: 17,
   fontFamily: 'Georgia, serif',
   color: '#e5e2e1',
   boxSizing: 'border-box',
   outline: 'none',
   WebkitAppearance: 'none',
-  minHeight: 44,
-}
-
-const labelStyle = {
-  display: 'block',
-  fontSize: 10,
-  fontWeight: 700,
-  color: GOLD_DIM,
-  letterSpacing: '0.12em',
-  textTransform: 'uppercase',
-  marginBottom: 4,
+  minHeight: 52,
+  lineHeight: 1.45,
 }
 
 export default function Identity() {
@@ -97,8 +100,8 @@ export default function Identity() {
 
   function validate() {
     const e = {}
-    if (!form.fullName.trim()) e.fullName = 'Required'
-    if (!form.experienceLevel) e.experienceLevel = 'Select your level'
+    if (!form.fullName.trim()) e.fullName = 'Full name is required'
+    if (!form.experienceLevel) e.experienceLevel = 'Please select your experience level'
     return e
   }
 
@@ -120,53 +123,86 @@ export default function Identity() {
     <>
       <SmokeCraftAssetScreen
         src="/assets/smokecraft/cropped/discover-profile-bg.jpg"
-        alt="SmokeCraft Identity — Let's Get To Know You"
+        alt="SmokeCraft Identity — Begin Your Journey"
         classification="DECORATIVE_BACKGROUND"
       />
 
-      {/* Compact form panel — sits above the NavBar, does not cover the portrait or upper artwork */}
+      {/*
+        Scrollable form panel — fixed from below the portrait area to above the NavBar.
+        Content scrolls inside so the NavBar never covers any field.
+        top offset exposes the background photography (portrait).
+      */}
       <div style={{
         position: 'fixed',
+        top: 'clamp(180px, 24vh, 280px)',
         bottom: 110,
         left: 0,
         right: 0,
         zIndex: 400,
-        padding: '0 12px',
-        pointerEvents: 'none',
-        maxHeight: '52vh',
         overflowY: 'auto',
         WebkitOverflowScrolling: 'touch',
+        padding: '0 12px 8px',
+        pointerEvents: 'none',
       }}>
         <div style={{
           pointerEvents: 'auto',
-          background: 'rgba(5,3,1,0.95)',
+          background: 'rgba(5,3,1,0.96)',
           border: `1px solid ${BORDER}`,
           borderRadius: 14,
-          padding: 'clamp(12px,2vw,18px) clamp(12px,3vw,22px)',
-          maxWidth: 520,
+          padding: 'clamp(18px,3vw,28px) clamp(16px,3vw,28px)',
+          maxWidth: 560,
           margin: '0 auto',
           boxSizing: 'border-box',
         }}>
-          <div style={{ fontSize: 9, fontWeight: 700, color: GOLD, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 10 }}>
-            Begin Your Journey — Tell Us About You
+
+          {/* Section heading — 20px, readable */}
+          <div style={{ marginBottom: 20 }}>
+            <div style={{
+              fontSize: 13,
+              fontWeight: 700,
+              color: GOLD,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              marginBottom: 6,
+            }}>
+              SmokeCraft 360
+            </div>
+            <div style={{
+              fontSize: 'clamp(18px, 2.5vw, 20px)',
+              fontFamily: 'Georgia, serif',
+              fontWeight: 700,
+              color: '#e5e2e1',
+              lineHeight: 1.3,
+              marginBottom: 6,
+            }}>
+              Begin Your Journey
+            </div>
+            <div style={{ fontSize: 15, color: DIM, fontFamily: 'Georgia, serif', lineHeight: 1.5 }}>
+              Tell us about yourself so we can personalize your SmokeCraft experience.
+            </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+
             {/* Full Name + Preferred Name */}
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <div style={{ flex: '1 1 160px' }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <div style={{ flex: '1 1 200px' }}>
                 <label style={labelStyle}>Full Name *</label>
                 <input
                   type="text"
-                  placeholder="First & Last Name"
+                  placeholder="First and Last Name"
                   value={form.fullName}
                   onChange={e => set('fullName', e.target.value)}
                   style={{ ...inputStyle, borderColor: errors.fullName ? '#e05a5a' : BORDER }}
                   autoComplete="name"
                 />
-                {errors.fullName && <div style={{ color: '#e05a5a', fontSize: 10, marginTop: 2 }}>{errors.fullName}</div>}
+                {errors.fullName && (
+                  <div style={{ color: '#e05a5a', fontSize: 14, marginTop: 5, lineHeight: 1.4 }}>
+                    {errors.fullName}
+                  </div>
+                )}
               </div>
-              <div style={{ flex: '1 1 120px' }}>
+              <div style={{ flex: '1 1 160px' }}>
                 <label style={labelStyle}>Preferred Name</label>
                 <input
                   type="text"
@@ -179,10 +215,10 @@ export default function Identity() {
               </div>
             </div>
 
-            {/* Experience Level */}
+            {/* Cigar Experience Level */}
             <div>
               <label style={labelStyle}>Cigar Experience Level *</label>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {EXPERIENCE_LEVELS.map(l => {
                   const active = form.experienceLevel === l.id
                   return (
@@ -194,15 +230,16 @@ export default function Identity() {
                       style={{
                         background: active ? GOLD : 'transparent',
                         color: active ? DARK : GOLD_DIM,
-                        border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.28)'}`,
-                        borderRadius: 20,
-                        padding: '8px 12px',
-                        minHeight: 44,
-                        fontSize: 12,
+                        border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.32)'}`,
+                        borderRadius: 24,
+                        padding: '12px 18px',
+                        minHeight: 48,
+                        fontSize: 15,
                         fontWeight: 600,
                         fontFamily: 'Georgia, serif',
                         cursor: 'pointer',
                         touchAction: 'manipulation',
+                        lineHeight: 1.3,
                       }}
                     >
                       {l.label}
@@ -210,13 +247,17 @@ export default function Identity() {
                   )
                 })}
               </div>
-              {errors.experienceLevel && <div style={{ color: '#e05a5a', fontSize: 10, marginTop: 2 }}>{errors.experienceLevel}</div>}
+              {errors.experienceLevel && (
+                <div style={{ color: '#e05a5a', fontSize: 14, marginTop: 5, lineHeight: 1.4 }}>
+                  {errors.experienceLevel}
+                </div>
+              )}
             </div>
 
             {/* What Excites You Most */}
             <div>
               <label style={labelStyle}>What Excites You Most</label>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {FOCUS_AREAS.map(f => {
                   const active = form.focusArea === f.id
                   return (
@@ -226,16 +267,17 @@ export default function Identity() {
                       aria-pressed={active}
                       onClick={() => { triggerHaptic('light'); set('focusArea', f.id) }}
                       style={{
-                        background: active ? 'rgba(233,193,118,0.15)' : 'transparent',
+                        background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
                         color: active ? GOLD : GOLD_DIM,
-                        border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.22)'}`,
-                        borderRadius: 20,
-                        padding: '8px 12px',
-                        minHeight: 44,
-                        fontSize: 12,
+                        border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.28)'}`,
+                        borderRadius: 24,
+                        padding: '12px 18px',
+                        minHeight: 48,
+                        fontSize: 15,
                         fontFamily: 'Georgia, serif',
                         cursor: 'pointer',
                         touchAction: 'manipulation',
+                        lineHeight: 1.3,
                       }}
                     >
                       {f.label}
@@ -245,10 +287,10 @@ export default function Identity() {
               </div>
             </div>
 
-            {/* Optional: Email + Country in collapsed row */}
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <div style={{ flex: '1 1 160px' }}>
-                <label style={labelStyle}>Email (optional)</label>
+            {/* Email + Birth Date */}
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <div style={{ flex: '1 1 180px' }}>
+                <label style={labelStyle}>Email Address</label>
                 <input
                   type="email"
                   placeholder="your@email.com"
@@ -258,22 +300,34 @@ export default function Identity() {
                   autoComplete="email"
                 />
               </div>
-              <div style={{ flex: '1 1 130px' }}>
-                <label style={labelStyle}>Country (optional)</label>
-                <select
-                  value={form.country}
-                  onChange={e => set('country', e.target.value)}
-                  style={{ ...inputStyle, color: form.country ? '#e5e2e1' : DIM }}
-                >
-                  <option value="">Select…</option>
-                  {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
+              <div style={{ flex: '1 1 150px' }}>
+                <label style={labelStyle}>Birth Date</label>
+                <input
+                  type="date"
+                  value={form.birthDate}
+                  onChange={e => set('birthDate', e.target.value)}
+                  style={{ ...inputStyle, colorScheme: 'dark' }}
+                />
               </div>
             </div>
+
+            {/* Country */}
+            <div>
+              <label style={labelStyle}>Country</label>
+              <select
+                value={form.country}
+                onChange={e => set('country', e.target.value)}
+                style={{ ...inputStyle, color: form.country ? '#e5e2e1' : DIM }}
+              >
+                <option value="">Select your country...</option>
+                {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+
           </div>
 
           {canResume && (
-            <div style={{ marginTop: 8, textAlign: 'center' }}>
+            <div style={{ marginTop: 18, textAlign: 'center' }}>
               <button
                 type="button"
                 onClick={() => navigate(currentAllowed.route)}
@@ -281,15 +335,16 @@ export default function Identity() {
                   background: 'transparent',
                   border: 'none',
                   color: GOLD_DIM,
-                  fontSize: 12,
+                  fontSize: 15,
                   fontFamily: 'Georgia, serif',
                   cursor: 'pointer',
-                  padding: '4px 0',
+                  padding: '8px 0',
                   textDecoration: 'underline',
                   touchAction: 'manipulation',
+                  lineHeight: 1.4,
                 }}
               >
-                Continue Previous Session →
+                Continue Previous Session
               </button>
             </div>
           )}
@@ -297,9 +352,9 @@ export default function Identity() {
       </div>
 
       <SmokeCraftNavBar
-        primary="Begin My Journey →"
+        primary="Begin My Journey"
         onPrimary={handleBegin}
-        secondary="← Back"
+        secondary="Back"
         onSecondary={() => navigate(-1)}
       />
     </>
