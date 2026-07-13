@@ -145,6 +145,7 @@ import VisitLockGuard      from './components/smokecraft/VisitLockGuard.jsx'
 import SmokeCraftSessionGuard from './components/smokecraft/SmokeCraftSessionGuard.jsx'
 import { SmokeCraftProgressProvider } from './context/SmokeCraftProgressContext.jsx'
 import { SmokeCraftOrderProvider }   from './context/SmokeCraftOrderContext.jsx'
+import { SmokeCraftJourneyProvider } from './context/SmokeCraftJourneyContext.jsx'
 import SmokeCraftMenu          from './pages/smokecraft/SmokeCraftMenu.jsx'
 import SmokeCraftVenueCommerce from './pages/smokecraft/SmokeCraftVenueCommerce.jsx'
 import SmokeCraftCart          from './pages/smokecraft/SmokeCraftCart.jsx'
@@ -303,7 +304,7 @@ export default function App() {
               <Route path="system-explained" element={<PublicCraftHubLanding />} />
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
-              <Route path="smokecraft" element={<SmokeCraftProgressProvider><SmokeCraftOrderProvider><Outlet /></SmokeCraftOrderProvider></SmokeCraftProgressProvider>}>
+              <Route path="smokecraft" element={<SmokeCraftJourneyProvider><SmokeCraftProgressProvider><SmokeCraftOrderProvider><Outlet /></SmokeCraftOrderProvider></SmokeCraftProgressProvider></SmokeCraftJourneyProvider>}>
                 {/* S1 — always unlocked, no guard */}
                 <Route index element={<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraft /></SmokeCraftSessionGuard>} />
 

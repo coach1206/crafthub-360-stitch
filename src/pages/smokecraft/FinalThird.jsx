@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -190,6 +191,7 @@ function HR() {
 // ── Main component ────────────────────────────────────────────────────────────
 export default function FinalThird() {
   const { awardSessionRewards, setFinalThirdTasting, session } = useGuestSession()
+  const { setFinalThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
   const smokeCraft = session?.smokeCraft || {}
@@ -268,6 +270,7 @@ export default function FinalThird() {
     }
 
     setFinalThirdTasting(payload)
+    setFinalThird(payload)
 
     // Save to localStorage with timestamp
     setFt(prev => ({ ...prev, savedAt: Date.now() }))

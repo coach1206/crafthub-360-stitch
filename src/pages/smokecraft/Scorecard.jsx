@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { getRankFromXP } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
@@ -226,6 +227,7 @@ function HR() { return <div style={{ borderTop: `1px solid ${BORDER}`, margin: '
 // ── Main component ────────────────────────────────────────────────────────────
 export default function Scorecard() {
   const { awardSessionRewards, session } = useGuestSession()
+  const { journey } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
   const smokeCraft = session?.smokeCraft || {}
@@ -234,7 +236,13 @@ export default function Scorecard() {
   const stepsCount = session?.completedSteps?.length || 0
   const badges = session?.badges || []
 
-  const cigarDetails  = readCigarDetails(smokeCraft)
+  // Read cigar from GuestSessionContext first, then fall back to journey canonical state
+  const cigarDetails = readCigarDetails(smokeCraft) || (journey.selectedCigar ? {
+    name:    journey.selectedCigar.name || '—',
+    country: journey.selectedCigar.origin || '—',
+    type:    journey.selectedCigar.wrapper || '—',
+    size:    journey.selectedCigar.format || journey.format?.label || '—',
+  } : null)
   const pairingDetails = readPairingDetails(smokeCraft)
   const { firstThird, secondThird, finalThird, flavorMemory } = readTastingData(smokeCraft)
 

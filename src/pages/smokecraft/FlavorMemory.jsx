@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -138,6 +139,7 @@ function FlavorChart({ selections, intensity, body, strength }) {
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function FlavorMemory() {
   const { awardSessionRewards, session } = useGuestSession()
+  const { setFlavorMemory } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
   const smokeCraft = session?.smokeCraft || {}
@@ -152,7 +154,10 @@ export default function FlavorMemory() {
   const [apiStatus, setApiStatus] = useState('idle')
   const notesRef = useRef(null)
 
-  useEffect(() => { saveLocal(fm) }, [fm])
+  useEffect(() => {
+    saveLocal(fm)
+    setFlavorMemory(fm)
+  }, [fm]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function toggleFlavor(id) {
     triggerHaptic('light')

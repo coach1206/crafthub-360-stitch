@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 
@@ -77,16 +78,18 @@ const labelStyle = {
 export default function Identity() {
   const { awardSessionRewards } = useGuestSession()
   const { currentAllowed } = useSmokeCraftProgress()
+  const { setIdentity } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
   const [form, setForm] = useState(loadSaved)
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
 
-  // Auto-save to localStorage on change
+  // Auto-save to localStorage and journey context on change
   useEffect(() => {
     try { localStorage.setItem(LS_KEY, JSON.stringify(form)) } catch (_) {}
-  }, [form])
+    setIdentity(form)
+  }, [form]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function set(field, value) {
     setForm(prev => ({ ...prev, [field]: value }))

@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -8,24 +9,37 @@ import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD = '#E9C176'
 const DARK = '#0a0603'
+const DIM  = 'rgba(229,226,225,0.55)'
 
-const SEED_TYPES = ['Criollo', 'Corojo', 'Habano', 'Connecticut']
-const SOIL_TYPES = ['Sandy Loam', 'Clay Loam', 'Volcanic', 'Limestone']
+const SEED_TYPES = [
+  { id: 'Criollo',     notes: 'Native Cuban lineage. Earthy, complex, balanced strength.' },
+  { id: 'Corojo',      notes: 'Vuelta Abajo royalty. Bold spice and aromatic depth.' },
+  { id: 'Habano',      notes: 'Cuban heritage bred worldwide. Medium-full with pepper edge.' },
+  { id: 'Connecticut', notes: 'Creamier, smoother character. Popular for milder profiles.' },
+]
+
+const SOIL_TYPES = [
+  { id: 'Sandy Loam',  notes: 'Well-draining, warm. Produces lighter, aromatic leaf.' },
+  { id: 'Clay Loam',   notes: 'Dense, mineral-rich. Builds body and structural strength.' },
+  { id: 'Volcanic',    notes: 'Ash-enriched. Signature bold Nicaraguan terroir character.' },
+  { id: 'Limestone',   notes: 'Calcium-rich. Refines flavor and creates bright, clean notes.' },
+]
 
 function ChipGroup({ label, options, value, onChange }) {
   return (
-    <div style={{ marginBottom: 8 }}>
+    <div style={{ marginBottom: 10 }}>
       <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
         {label}
       </div>
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
         {options.map(opt => {
-          const active = value === opt
+          const active = value === opt.id
           return (
             <button
-              key={opt}
+              key={opt.id}
               type="button"
-              onClick={() => { triggerHaptic('light'); onChange(active ? null : opt) }}
+              aria-pressed={active}
+              onClick={() => { triggerHaptic('light'); onChange(active ? null : opt.id) }}
               style={{
                 background: active ? GOLD : 'transparent',
                 color: active ? DARK : GOLD,
@@ -40,20 +54,39 @@ function ChipGroup({ label, options, value, onChange }) {
                 letterSpacing: '0.04em',
               }}
             >
-              {opt}
+              {opt.id}
             </button>
           )
         })}
       </div>
+      {value && (() => {
+        const notes = options.find(o => o.id === value)?.notes
+        return notes ? (
+          <div style={{ fontSize: 11, color: DIM, fontFamily: 'Georgia, serif', fontStyle: 'italic', marginTop: 5 }}>
+            {notes}
+          </div>
+        ) : null
+      })()}
     </div>
   )
 }
 
 export default function SeedSoil() {
   const { awardSessionRewards } = useGuestSession()
+  const { journey, setSeedSoil } = useSmokeCraftJourney()
   const navigate = useNavigate()
-  const [seedType, setSeedType] = useState(null)
-  const [soilType, setSoilType] = useState(null)
+
+  const [seedType, setSeedType] = useState(() => journey.seedSoil?.seedType || null)
+  const [soilType, setSoilType] = useState(() => journey.seedSoil?.soilType || null)
+
+  // Persist to journey state whenever selections change
+  useEffect(() => {
+    setSeedSoil(
+      seedType || soilType
+        ? { seedType: seedType || null, soilType: soilType || null }
+        : null
+    )
+  }, [seedType, soilType, setSeedSoil])
 
   function handleContinue() {
     awardSessionRewards('seed-soil')
@@ -67,7 +100,6 @@ export default function SeedSoil() {
         alt="SmokeCraft Seed & Soil — The Origin of Your Cigar"
       />
 
-      {/* Seed & soil selectors — real React state */}
       <div style={{
         position: 'fixed',
         bottom: 110, left: 0, right: 0,
@@ -92,6 +124,8 @@ export default function SeedSoil() {
       <SmokeCraftNavBar
         primary="Continue to Pairing Lab →"
         onPrimary={handleContinue}
+        secondary="← Back"
+        onSecondary={() => navigate(-1)}
       />
     </>
   )

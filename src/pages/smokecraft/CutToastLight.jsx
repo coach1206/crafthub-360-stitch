@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -52,12 +53,14 @@ function MethodGroup({ label, options, value, onChange }) {
 
 export default function CutToastLight() {
   const { awardSessionRewards } = useGuestSession()
+  const { journey, setCutToastLight } = useSmokeCraftJourney()
   const navigate = useNavigate()
-  const [cutMethod, setCutMethod] = useState(null)
-  const [toastMethod, setToastMethod] = useState(null)
-  const [lightMethod, setLightMethod] = useState(null)
+  const [cutMethod, setCutMethod] = useState(() => journey.cutToastLight?.cut || null)
+  const [toastMethod, setToastMethod] = useState(() => journey.cutToastLight?.toast || null)
+  const [lightMethod, setLightMethod] = useState(() => journey.cutToastLight?.light || null)
 
   function handleContinue() {
+    setCutToastLight({ cut: cutMethod, toast: toastMethod, light: lightMethod })
     awardSessionRewards('cut-toast-light')
     navigate('/smokecraft/first-third')
   }

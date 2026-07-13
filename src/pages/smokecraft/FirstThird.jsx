@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -17,8 +18,9 @@ const OBSERVATIONS = [
 
 export default function FirstThird() {
   const { awardSessionRewards, setFirstThirdTasting } = useGuestSession()
+  const { journey, setFirstThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
-  const [checked, setChecked] = useState([])
+  const [checked, setChecked] = useState(() => journey.firstThird?.notesSelected || [])
   const [done, setDone] = useState(false)
 
   function toggleItem(item) {
@@ -29,7 +31,7 @@ export default function FirstThird() {
   function handleContinue() {
     if (done) return
     setDone(true)
-    setFirstThirdTasting({
+    const payload = {
       status: 'observe_confirm_step',
       source: 'local_only',
       tasteProfileSource: checked.length > 0 ? 'guest_selected' : 'not_collected',
@@ -42,7 +44,9 @@ export default function FirstThird() {
       strength: null, body: null, smokeOutput: null,
       burnQuality: null, pairingReaction: null,
       mentorTip: null, mentorName: null,
-    })
+    }
+    setFirstThirdTasting(payload)
+    setFirstThird(payload)
     awardSessionRewards('first-third')
     navigate('/smokecraft/second-third')
   }
