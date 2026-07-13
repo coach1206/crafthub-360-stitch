@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
 
@@ -457,7 +458,7 @@ export default function Connections() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/cropped/connections-hero.jpg"
+        src={SC_ASSETS.connections}
         alt="SmokeCraft Connections"
       />
 

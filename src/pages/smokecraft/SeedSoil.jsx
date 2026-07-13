@@ -109,11 +109,11 @@ export default function SeedSoil() {
       }}>
         <div style={{
           pointerEvents: 'auto',
-          background: 'rgba(10,6,3,0.94)',
+          background: 'rgba(5,3,1,0.93)',
           border: '1px solid rgba(233,193,118,0.2)',
           borderRadius: 12,
-          padding: '10px 12px',
-          maxWidth: 500,
+          padding: '10px 14px',
+          maxWidth: 560,
           margin: '0 auto',
         }}>
           <ChipGroup label="Seed Type" options={SEED_TYPES} value={seedType} onChange={setSeedType} />

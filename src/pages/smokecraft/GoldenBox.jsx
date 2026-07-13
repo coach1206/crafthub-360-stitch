@@ -56,25 +56,22 @@ export default function GoldenBox() {
         classification="DECORATIVE_BACKGROUND"
       />
 
-      {/* Principles + acknowledgement — compact bottom panel */}
+      {/* Acknowledgement — compact bottom panel; artwork visible above */}
       <div style={{
         position: 'fixed',
         bottom: 110,
         left: 0,
         right: 0,
         zIndex: 400,
-        padding: '0 12px',
-        maxHeight: '58vh',
-        overflowY: 'auto',
-        WebkitOverflowScrolling: 'touch',
+        padding: '0 16px',
         pointerEvents: 'none',
       }}>
         <div style={{
           pointerEvents: 'auto',
-          background: 'rgba(5,3,1,0.95)',
+          background: 'rgba(5,3,1,0.93)',
           border: `1px solid ${BORDER}`,
-          borderRadius: 14,
-          padding: 'clamp(12px,2vw,20px) clamp(14px,3vw,24px)',
+          borderRadius: 12,
+          padding: '14px 16px',
           maxWidth: 520,
           margin: '0 auto',
           boxSizing: 'border-box',
@@ -92,28 +89,6 @@ export default function GoldenBox() {
                 The Golden Box Principles
               </div>
             )}
-          </div>
-
-          {/* The five principles */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
-            {GOLDEN_BOX_PRINCIPLES.map(p => (
-              <div key={p.num} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                <div style={{
-                  fontSize: 11, fontWeight: 800, color: GOLD, letterSpacing: '0.08em',
-                  minWidth: 20, paddingTop: 3, flexShrink: 0,
-                }}>
-                  {p.num}
-                </div>
-                <div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: '#e5e2e1', fontFamily: 'Georgia, serif', marginBottom: 2 }}>
-                    {p.title}
-                  </div>
-                  <div style={{ fontSize: 15, color: DIM, fontFamily: 'Georgia, serif', lineHeight: 1.5 }}>
-                    {p.body}
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
 
           {/* Acknowledgement */}

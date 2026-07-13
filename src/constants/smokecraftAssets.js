@@ -7,6 +7,9 @@
  *   - Commas ( , ) must remain literal — do NOT encode as %2C
  *   - Ampersands ( & ) must remain literal — do NOT encode as %26
  *   - Never use template strings with unencoded spaces
+ *
+ * Priority rule (2026-07-11): RAW full-composition uploads take precedence
+ * over CROPPED atmosphere backgrounds when they exist and match the route.
  */
 
 // ── Cropped clean photography backgrounds ──────────────────────────────────
@@ -15,7 +18,7 @@ const CROPPED = '/assets/smokecraft/cropped'
 // ── Approved reference full compositions ──────────────────────────────────
 const REF = '/assets/smokecraft-reference/approved'
 
-// ── Raw approved uploads ───────────────────────────────────────────────────
+// ── Raw approved uploads (2026-07-11 — newest, highest priority) ───────────
 const RAW = '/assets/smokecraft'
 
 export const SC_ASSETS = {
@@ -41,64 +44,66 @@ export const SC_ASSETS = {
   // S7 — Seed & Soil
   seedSoil:            `${RAW}/SEED%20&%20SOIL.png`,
 
-  // S8 — Pairing Lab
-  pairingLab:          `${CROPPED}/pairing-lab-hero.jpg`,
+  // S8 — Pairing Lab — raw full composition takes precedence
+  pairingLab:          `${RAW}/PAIRING%20LAB1.png`,
 
-  // S9 — Humidor Match
-  humidorMatch:        `${CROPPED}/humidor-match-bg-v2.jpg`,
+  // S9 — Humidor Match — raw full composition takes precedence
+  humidorMatch:        `${RAW}/Humidor%20Match%201.png`,
 
-  // S10 — Request Purchase
-  requestPurchase:     `${CROPPED}/request-purchase-hero.jpg`,
+  // S10 — Request Purchase — raw full composition takes precedence
+  requestPurchase:     `${RAW}/REQUEST%20PURCHASE.png`,
 
-  // S11 — Cut, Toast & Light
-  cutToastLight:       `${CROPPED}/cut-toast-light-hero.jpg`,
+  // S11 — Cut, Toast & Light — raw full composition takes precedence
+  // Filename: "CUT  TOAST, & LIGHT.png" (double space between CUT and TOAST)
+  cutToastLight:       `${RAW}/CUT%20%20TOAST,%20&%20LIGHT.png`,
 
-  // S12 — First Third
-  firstThird:          `${CROPPED}/first-third-bg.png`,
+  // S12 — First Third — raw full composition takes precedence
+  // Filename: "FIRST  THIRD1.png" (double space)
+  firstThird:          `${RAW}/FIRST%20%20THIRD1.png`,
 
-  // S13 — Second Third
-  secondThird:         `${REF}/smokecraft-second-third.png`,
+  // S13 — Second Third — raw full composition takes precedence
+  secondThird:         `${RAW}/SECOND%20THIRD.png`,
 
-  // S14 — Flavor Memory
-  flavorMemory:        `${CROPPED}/flavor-memory-hero.jpg`,
+  // S14 — Flavor Memory — raw full composition takes precedence
+  flavorMemory:        `${RAW}/FLAVOR%20MEMORY.png`,
 
-  // S15 — Final Third
-  finalThird:          `${CROPPED}/final-third-bg.jpg`,
+  // S15 — Final Third — raw full composition takes precedence
+  finalThird:          `${RAW}/FINAL%20THIRD.png`,
 
-  // S16 — Scorecard
-  scorecard:           `${CROPPED}/scorecard-bg-v2.jpg`,
+  // S16 — Scorecard — raw full composition takes precedence
+  scorecard:           `${RAW}/Scorecard.png`,
 
-  // S17 — SmokeCraft Challenge
-  smokecraftChallenge: `${CROPPED}/smokecraft-challenge-bg.jpg`,
+  // S17 — SmokeCraft Challenge — use approved reference
+  smokecraftChallenge: `${REF}/smokecraft-challenge.png`,
 
-  // S18 — Second Humidor Match
-  secondHumidorMatch:  `${CROPPED}/second-humidor-match-bg.jpg`,
+  // S18 — Second Humidor Match — use approved reference
+  secondHumidorMatch:  `${REF}/smokecraft-second-humidor-match.png`,
 
-  // S19 — Mini Tasting Round
-  miniTasting:         `${CROPPED}/mini-tasting-bg.jpg`,
+  // S19 — Mini Tasting Round — use approved reference
+  miniTasting:         `${REF}/smokecraft-mini-tasting-round.png`,
 
-  // S20 — Final Review
-  finalReview:         `${CROPPED}/final-review-bg.jpg`,
+  // S20 — Final Review — raw full composition takes precedence
+  finalReview:         `${RAW}/FINAL%20REVIEW.png`,
 
-  // S21 — Passport Stamp
-  passportStamp:       `${CROPPED}/passport-stamp-hero.jpg`,
+  // S21 — Passport Stamp — raw full composition takes precedence
+  passportStamp:       `${RAW}/PASSPORT%20STAMP.png`,
 
-  // S22 — Connections
+  // S22 — Connections — keep cropped (no raw full-composition equivalent)
   connections:         `${CROPPED}/connections-hero.jpg`,
 
-  // S23 — Management Sync
-  managementSync:      `${CROPPED}/management-sync-hero.jpg`,
+  // S23 — Management Sync — raw full composition
+  managementSync:      `${RAW}/MANAGEMENT%20SYNC.png`,
 
-  // S24 — Session Complete
-  sessionComplete:     `${REF}/smokecraft-session-complete.png`,
+  // S24 — Session Complete — raw full composition
+  sessionComplete:     `${RAW}/SESSION%20COMPLETE.png`,
 
   // Supplemental / unguarded
-  leaderboard:         `${REF}/smokecraft-leaderboard.png`,
+  leaderboard:         `${RAW}/NEW%20DEMO%20LOUNG%20RANKING.png`,
   eventChallenge:      `${REF}/smokecraft-event-challenge.png`,
   howItWorks:          `${REF}/smokecraft-how-it-works.png`,
   visitComplete:       '/smokecraft-visit-complete.png',
 
-  // Approved raw uploads — used only where no clean bg exists
+  // Legacy aliases — kept for backward compat
   managementSyncRaw:   `${RAW}/MANAGEMENT%20SYNC.png`,
   sessionCompleteRaw:  `${RAW}/SESSION%20COMPLETE.png`,
 }

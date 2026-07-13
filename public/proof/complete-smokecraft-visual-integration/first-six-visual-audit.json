@@ -1,0 +1,114 @@
+{
+  "auditDate": "2026-07-13",
+  "screenshots": [
+    {
+      "file": "landing-1440x900.png",
+      "route": "/smokecraft",
+      "approvedImage": "smokecraft-landing.png",
+      "result": "PASS",
+      "compositionVisible": true,
+      "panelCoversArtwork": false,
+      "duplicateControls": false,
+      "artworkHidden": false,
+      "notes": "Composition fully visible. React CTAs complement artwork."
+    },
+    {
+      "file": "identity-1440x900.png",
+      "route": "/smokecraft/identity",
+      "approvedImage": "IDENTY.png",
+      "result": "FAIL",
+      "compositionVisible": false,
+      "panelCoversArtwork": true,
+      "duplicateControls": true,
+      "artworkHidden": true,
+      "notes": "Dark panel covers ~70% of viewport. Portrait visible top 20% only. Duplicate form zones."
+    },
+    {
+      "file": "golden-box-1440x900.png",
+      "route": "/smokecraft/golden-box",
+      "approvedImage": "GOLDEN BOX RULES.png",
+      "result": "FAIL",
+      "compositionVisible": false,
+      "panelCoversArtwork": true,
+      "duplicateControls": true,
+      "artworkHidden": false,
+      "notes": "React principles list uses DIFFERENT content from printed image. Two conflicting principle sets visible."
+    },
+    {
+      "file": "mentor-selection-1440x900.png",
+      "route": "/smokecraft/mentor-selection",
+      "approvedImage": "MENTOR SELECTION1.png",
+      "result": "FAIL",
+      "compositionVisible": false,
+      "panelCoversArtwork": true,
+      "duplicateControls": true,
+      "artworkHidden": true,
+      "notes": "React card grid covers most of portrait grid. Mentor portraits barely visible at edges."
+    },
+    {
+      "file": "format-1440x900.png",
+      "route": "/smokecraft/format",
+      "approvedImage": "smokecraft-vitola.png",
+      "result": "FAIL",
+      "compositionVisible": false,
+      "panelCoversArtwork": true,
+      "duplicateControls": true,
+      "artworkHidden": true,
+      "notes": "Screenshot shows old full-page React layout. Current code already fixed to compact bottom strip."
+    },
+    {
+      "file": "seed-soil-1440x900.png",
+      "route": "/smokecraft/seed-soil",
+      "approvedImage": "SEED & SOIL.png",
+      "result": "PARTIAL_FAIL",
+      "compositionVisible": true,
+      "panelCoversArtwork": true,
+      "duplicateControls": true,
+      "artworkHidden": false,
+      "notes": "Top 65% of composition visible. React chips at bottom duplicate printed seed/soil panels."
+    },
+    {
+      "file": "identity-390x844.png",
+      "route": "/smokecraft/identity",
+      "viewport": "mobile",
+      "approvedImage": "IDENTY.png",
+      "result": "FAIL",
+      "compositionVisible": false,
+      "panelCoversArtwork": true,
+      "duplicateControls": false,
+      "artworkHidden": true,
+      "notes": "Portrait visible top 20% only. React form dominates 80% of mobile screen."
+    },
+    {
+      "file": "golden-box-390x844.png",
+      "route": "/smokecraft/golden-box",
+      "viewport": "mobile",
+      "approvedImage": "GOLDEN BOX RULES.png",
+      "result": "FAIL",
+      "compositionVisible": false,
+      "panelCoversArtwork": true,
+      "duplicateControls": false,
+      "artworkHidden": true,
+      "notes": "React panel covers 85%+ of mobile viewport. Composition nearly entirely hidden."
+    },
+    {
+      "file": "mentor-selection-390x844.png",
+      "route": "/smokecraft/mentor-selection",
+      "viewport": "mobile",
+      "approvedImage": "MENTOR SELECTION1.png",
+      "result": "FAIL",
+      "compositionVisible": false,
+      "panelCoversArtwork": true,
+      "duplicateControls": false,
+      "artworkHidden": true,
+      "notes": "React card list covers 85% of mobile viewport. Portrait grid ghosted behind solid cards."
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "pass": 1,
+    "partialFail": 1,
+    "fail": 7,
+    "routesRequiringCorrection": ["identity", "golden-box", "mentor-selection", "seed-soil"]
+  }
+}

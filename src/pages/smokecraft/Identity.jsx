@@ -129,16 +129,35 @@ export default function Identity() {
       />
 
       {/*
-        Scrollable form panel — fixed from below the portrait area to above the NavBar.
-        Content scrolls inside so the NavBar never covers any field.
-        top offset exposes the background photography (portrait).
+        Scrollable form panel.
+        Desktop (≥ 640px): anchored to the RIGHT half of the screen so the portrait
+        on the left remains fully visible and the form overlays the printed form zones
+        on the right side of IDENTY.png.
+        Mobile (< 640px): bottom-anchored panel exposing the portrait at the top.
       */}
-      <div style={{
-        position: 'fixed',
-        top: 'clamp(180px, 24vh, 280px)',
-        bottom: 110,
-        left: 0,
-        right: 0,
+      <style>{`
+        @media (min-width: 640px) {
+          .sc-identity-panel {
+            position: fixed !important;
+            top: clamp(60px, 8vh, 100px) !important;
+            bottom: 110px !important;
+            left: 50% !important;
+            right: 0 !important;
+            width: auto !important;
+            max-width: none !important;
+          }
+        }
+        @media (max-width: 639px) {
+          .sc-identity-panel {
+            position: fixed !important;
+            top: clamp(160px, 28vh, 220px) !important;
+            bottom: 110px !important;
+            left: 0 !important;
+            right: 0 !important;
+          }
+        }
+      `}</style>
+      <div className="sc-identity-panel" style={{
         zIndex: 400,
         overflowY: 'auto',
         WebkitOverflowScrolling: 'touch',
@@ -147,11 +166,11 @@ export default function Identity() {
       }}>
         <div style={{
           pointerEvents: 'auto',
-          background: 'rgba(5,3,1,0.96)',
+          background: 'rgba(5,3,1,0.92)',
           border: `1px solid ${BORDER}`,
           borderRadius: 14,
-          padding: 'clamp(18px,3vw,28px) clamp(16px,3vw,28px)',
-          maxWidth: 560,
+          padding: 'clamp(14px,2.5vw,22px) clamp(14px,2.5vw,22px)',
+          maxWidth: 480,
           margin: '0 auto',
           boxSizing: 'border-box',
         }}>

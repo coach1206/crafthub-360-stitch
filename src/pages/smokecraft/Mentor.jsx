@@ -119,62 +119,49 @@ export default function Mentor() {
         classification="DECORATIVE_BACKGROUND"
       />
 
+      {/*
+        Compact bottom selection strip — the MENTOR SELECTION1.png portrait grid
+        is the primary visual. This strip provides only what the printed image cannot:
+        interactive selection state, a selection counter, and selected mentor details.
+      */}
       <div style={{
         position: 'fixed',
-        top: 'clamp(150px, 18vh, 220px)',
         bottom: 110,
         left: 0,
         right: 0,
         zIndex: 400,
-        overflowY: 'auto',
-        WebkitOverflowScrolling: 'touch',
-        padding: '0 12px 8px',
+        padding: '0 12px',
         pointerEvents: 'none',
       }}>
         <div style={{
           pointerEvents: 'auto',
-          maxWidth: 700,
+          background: 'rgba(5,3,1,0.93)',
+          border: '1px solid rgba(233,193,118,0.22)',
+          borderRadius: 12,
+          padding: '10px 14px',
+          maxWidth: 680,
           margin: '0 auto',
+          boxSizing: 'border-box',
         }}>
-          {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: 14 }}>
-            <div style={{
-              fontSize: 13,
-              fontWeight: 700,
-              color: GOLD,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              marginBottom: 4,
-            }}>
-              SmokeCraft 360
-            </div>
-            <div style={{
-              fontSize: 18,
-              fontFamily: 'Georgia, serif',
-              color: '#e5e2e1',
-              fontWeight: 700,
-              lineHeight: 1.3,
-              marginBottom: 4,
-            }}>
+          {/* Header row */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
               Choose up to 2 Mentors
             </div>
             {selected.length > 0 && (
-              <div style={{
-                fontSize: 14,
-                color: GOLD,
-                fontFamily: 'Georgia, serif',
-                lineHeight: 1.4,
-              }}>
-                {selected.length === 1 ? '1 selected' : '2 selected — maximum reached'}
+              <div style={{ fontSize: 14, color: GOLD, fontFamily: 'Georgia, serif' }}>
+                {selected.length === 2 ? '2 of 2 selected' : '1 of 2 selected'}
               </div>
             )}
           </div>
 
-          {/* Card grid — 1 col on handheld, 2 col on tablet, 3 col on desktop */}
+          {/* Horizontal scrolling mentor chips */}
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
-            gap: 10,
+            display: 'flex',
+            gap: 8,
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            paddingBottom: 4,
           }}>
             {MENTORS.map(m => {
               const active = selected.includes(m.id)
@@ -186,104 +173,50 @@ export default function Mentor() {
                   aria-pressed={active}
                   onClick={() => !maxed && toggle(m.id)}
                   style={{
-                    background: active ? 'rgba(233,193,118,0.14)' : 'rgba(5,3,1,0.90)',
-                    border: `${active ? 2 : 1}px solid ${active ? GOLD : BORDER}`,
-                    borderRadius: 10,
-                    padding: '14px 16px',
-                    textAlign: 'left',
+                    background: active ? GOLD : 'rgba(10,6,3,0.85)',
+                    color: active ? DARK : GOLD,
+                    border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.38)'}`,
+                    borderRadius: 24,
+                    padding: '10px 16px',
+                    minHeight: 44,
+                    fontSize: 15,
+                    fontWeight: 600,
+                    fontFamily: 'Georgia, serif',
                     cursor: maxed ? 'not-allowed' : 'pointer',
                     opacity: maxed ? 0.45 : 1,
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0,
                     touchAction: 'manipulation',
-                    position: 'relative',
-                    transition: 'border-color 0.15s, background 0.15s',
-                    minHeight: 88,
+                    transition: 'background 0.12s, border-color 0.12s',
                   }}
                 >
-                  {active && (
-                    <div style={{
-                      position: 'absolute',
-                      top: 10, right: 10,
-                      width: 22, height: 22,
-                      borderRadius: '50%',
-                      background: GOLD,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 13, color: DARK, fontWeight: 800,
-                    }}>
-                      ✓
-                    </div>
-                  )}
-
-                  {/* Country */}
-                  <div style={{
-                    fontSize: 15,
-                    fontWeight: 700,
-                    color: active ? GOLD : DIM,
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
-                    marginBottom: 5,
-                    lineHeight: 1.3,
-                    fontFamily: 'Georgia, serif',
-                  }}>
-                    {m.origin}
-                  </div>
-
-                  {/* Name */}
-                  <div style={{
-                    fontSize: 18,
-                    fontFamily: 'Georgia, serif',
-                    fontWeight: 700,
-                    color: active ? GOLD : '#e5e2e1',
-                    marginBottom: 5,
-                    lineHeight: 1.25,
-                    paddingRight: active ? 28 : 0,
-                  }}>
-                    {m.name}
-                  </div>
-
-                  {/* Expertise */}
-                  <div style={{
-                    fontSize: 15,
-                    color: DIM,
-                    fontFamily: 'Georgia, serif',
-                    lineHeight: 1.45,
-                    marginBottom: 6,
-                  }}>
-                    {m.expertise}
-                  </div>
-
-                  {/* Biography */}
-                  <div style={{
-                    fontSize: 15,
-                    color: active ? 'rgba(229,226,225,0.85)' : 'rgba(229,226,225,0.60)',
-                    fontFamily: 'Georgia, serif',
-                    fontStyle: 'italic',
-                    lineHeight: 1.5,
-                    marginBottom: 8,
-                  }}>
-                    "{m.biography}"
-                  </div>
-
-                  {/* Tags */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                    {m.tags.map(t => (
-                      <span key={t} style={{
-                        fontSize: 14,
-                        fontWeight: 700,
-                        letterSpacing: '0.05em',
-                        textTransform: 'uppercase',
-                        color: active ? GOLD : DIM,
-                        background: active ? 'rgba(233,193,118,0.1)' : 'rgba(229,226,225,0.06)',
-                        border: `1px solid ${active ? 'rgba(233,193,118,0.35)' : 'rgba(229,226,225,0.12)'}`,
-                        borderRadius: 4,
-                        padding: '4px 8px',
-                        lineHeight: 1.3,
-                      }}>{t}</span>
-                    ))}
-                  </div>
+                  {active ? `✓ ${m.name}` : m.name}
                 </button>
               )
             })}
           </div>
+
+          {/* Selected mentor detail strip */}
+          {selected.length > 0 && (() => {
+            const activeMentors = MENTORS.filter(m => selected.includes(m.id))
+            return (
+              <div style={{
+                marginTop: 8,
+                borderTop: '1px solid rgba(233,193,118,0.14)',
+                paddingTop: 8,
+                display: 'flex',
+                gap: 16,
+                flexWrap: 'wrap',
+              }}>
+                {activeMentors.map(m => (
+                  <div key={m.id} style={{ fontSize: 14, color: DIM, fontFamily: 'Georgia, serif' }}>
+                    <span style={{ color: GOLD, fontWeight: 700 }}>{m.name}</span>
+                    {' — '}{m.expertise}
+                  </div>
+                ))}
+              </div>
+            )
+          })()}
         </div>
       </div>
 
