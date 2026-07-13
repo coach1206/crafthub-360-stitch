@@ -30,7 +30,7 @@ export const SC_ASSETS = {
   goldenBox:           `${CROPPED}/golden-box-hero.jpg`,
 
   // S4 — Mentor Selection
-  mentorSelection:     `${CROPPED}/humidor-match-hero.jpg`, // best available portrait-style bg
+  mentorSelection:     `${RAW}/MENTOR%20SELECTION1.png`,
 
   // S5 — Format / Vitola
   format:              `${CROPPED}/format-master-tip-v2.jpg`,
