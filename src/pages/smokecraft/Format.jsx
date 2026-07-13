@@ -69,7 +69,7 @@ export default function Format() {
           maxWidth: 500,
           margin: '0 auto',
         }}>
-          <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
+          <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
             Choose Your Format
           </div>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 6 }}>
@@ -87,9 +87,9 @@ export default function Format() {
                     color: active ? DARK : GOLD,
                     border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.4)'}`,
                     borderRadius: 20,
-                    padding: '11px 16px',
-                    minHeight: 44,
-                    fontSize: 14,
+                    padding: '12px 16px',
+                    minHeight: 48,
+                    fontSize: 16,
                     fontWeight: 600,
                     fontFamily: 'Georgia, serif',
                     cursor: 'pointer',
@@ -112,19 +112,19 @@ export default function Format() {
               <div style={{ display: 'flex', gap: 16 }}>
                 <div>
                   <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Size</div>
-                  <div style={{ fontSize: 13, color: '#e5e2e1', fontFamily: 'Georgia, serif' }}>{selectedFmt.desc}</div>
+                  <div style={{ fontSize: 16, color: '#e5e2e1', fontFamily: 'Georgia, serif' }}>{selectedFmt.desc}</div>
                 </div>
                 <div>
                   <div style={{ fontSize: 9, color: GOLD, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Burn Time</div>
-                  <div style={{ fontSize: 13, color: '#e5e2e1', fontFamily: 'Georgia, serif' }}>{selectedFmt.burnTime}</div>
+                  <div style={{ fontSize: 16, color: '#e5e2e1', fontFamily: 'Georgia, serif' }}>{selectedFmt.burnTime}</div>
                 </div>
               </div>
-              <div style={{ fontSize: 11, color: DIM, fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+              <div style={{ fontSize: 15, color: DIM, fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
                 {selectedFmt.notes}
               </div>
             </div>
           ) : (
-            <div style={{ fontSize: 11, color: DIM, paddingTop: 4 }}>
+            <div style={{ fontSize: 14, color: DIM, paddingTop: 4 }}>
               No format selected — choose one above.
             </div>
           )}

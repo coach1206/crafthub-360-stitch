@@ -27,19 +27,19 @@ export const SC_ASSETS = {
   identity:            `${RAW}/IDENTY.png`,
 
   // S3 — Golden Box
-  goldenBox:           `${CROPPED}/golden-box-hero.jpg`,
+  goldenBox:           `${RAW}/GOLDEN%20BOX%20RULES.png`,
 
   // S4 — Mentor Selection
   mentorSelection:     `${RAW}/MENTOR%20SELECTION1.png`,
 
   // S5 — Format / Vitola
-  format:              `${CROPPED}/format-master-tip-v2.jpg`,
+  format:              `${REF}/smokecraft-vitola.png`,
 
   // S6 — Wrapper Strength (redirect-only, no visual needed)
   wrapperStrength:     null,
 
   // S7 — Seed & Soil
-  seedSoil:            `${CROPPED}/seed-soil-bg.jpg`,
+  seedSoil:            `${RAW}/SEED%20&%20SOIL.png`,
 
   // S8 — Pairing Lab
   pairingLab:          `${CROPPED}/pairing-lab-hero.jpg`,

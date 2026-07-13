@@ -28,7 +28,7 @@ const SOIL_TYPES = [
 function ChipGroup({ label, options, value, onChange }) {
   return (
     <div style={{ marginBottom: 10 }}>
-      <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
+      <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
         {label}
       </div>
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -45,9 +45,9 @@ function ChipGroup({ label, options, value, onChange }) {
                 color: active ? DARK : GOLD,
                 border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.4)'}`,
                 borderRadius: 20,
-                padding: '11px 16px',
-                minHeight: 44,
-                fontSize: 14,
+                padding: '12px 16px',
+                minHeight: 48,
+                fontSize: 16,
                 fontWeight: 600,
                 fontFamily: 'Georgia, serif',
                 cursor: 'pointer',
@@ -62,7 +62,7 @@ function ChipGroup({ label, options, value, onChange }) {
       {value && (() => {
         const notes = options.find(o => o.id === value)?.notes
         return notes ? (
-          <div style={{ fontSize: 11, color: DIM, fontFamily: 'Georgia, serif', fontStyle: 'italic', marginTop: 5 }}>
+          <div style={{ fontSize: 14, color: DIM, fontFamily: 'Georgia, serif', fontStyle: 'italic', marginTop: 5 }}>
             {notes}
           </div>
         ) : null

@@ -81,14 +81,14 @@ export default function GoldenBox() {
         }}>
           {/* Header */}
           <div style={{ marginBottom: 14, textAlign: 'center' }}>
-            <div style={{ fontSize: 9, fontWeight: 700, color: GOLD, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 4 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 4 }}>
               SmokeCraft 360
             </div>
             <div style={{ fontSize: 'clamp(15px,2.5vw,18px)', fontFamily: 'Georgia, serif', fontWeight: 700, color: '#e5e2e1' }}>
               {guestName ? `Welcome, ${guestName}.` : 'The Golden Box Principles'}
             </div>
             {guestName && (
-              <div style={{ fontSize: 12, color: DIM, fontFamily: 'Georgia, serif', marginTop: 3 }}>
+              <div style={{ fontSize: 14, color: DIM, fontFamily: 'Georgia, serif', marginTop: 3 }}>
                 The Golden Box Principles
               </div>
             )}
@@ -99,16 +99,16 @@ export default function GoldenBox() {
             {GOLDEN_BOX_PRINCIPLES.map(p => (
               <div key={p.num} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                 <div style={{
-                  fontSize: 9, fontWeight: 800, color: GOLD, letterSpacing: '0.08em',
+                  fontSize: 11, fontWeight: 800, color: GOLD, letterSpacing: '0.08em',
                   minWidth: 20, paddingTop: 3, flexShrink: 0,
                 }}>
                   {p.num}
                 </div>
                 <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: '#e5e2e1', fontFamily: 'Georgia, serif', marginBottom: 2 }}>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: '#e5e2e1', fontFamily: 'Georgia, serif', marginBottom: 2 }}>
                     {p.title}
                   </div>
-                  <div style={{ fontSize: 11, color: DIM, fontFamily: 'Georgia, serif', lineHeight: 1.5 }}>
+                  <div style={{ fontSize: 15, color: DIM, fontFamily: 'Georgia, serif', lineHeight: 1.5 }}>
                     {p.body}
                   </div>
                 </div>
@@ -132,7 +132,7 @@ export default function GoldenBox() {
               />
               <span style={{
                 fontFamily: 'Georgia, serif',
-                fontSize: 13,
+                fontSize: 15,
                 color: acknowledged ? '#e5e2e1' : DIM,
                 lineHeight: 1.5,
               }}>
@@ -142,7 +142,7 @@ export default function GoldenBox() {
           </div>
 
           {!acknowledged && (
-            <div style={{ fontSize: 11, color: DIM, textAlign: 'center', marginTop: 6, fontFamily: 'Georgia, serif' }}>
+            <div style={{ fontSize: 14, color: DIM, textAlign: 'center', marginTop: 6, fontFamily: 'Georgia, serif' }}>
               Acknowledge the principles above to continue.
             </div>
           )}

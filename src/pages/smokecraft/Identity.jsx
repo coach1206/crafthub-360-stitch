@@ -6,6 +6,7 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD     = '#E9C176'
 const GOLD_DIM = 'rgba(233,193,118,0.80)'
@@ -122,7 +123,7 @@ export default function Identity() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/cropped/discover-profile-bg.jpg"
+        src={SC_ASSETS.identity}
         alt="SmokeCraft Identity — Begin Your Journey"
         classification="DECORATIVE_BACKGROUND"
       />

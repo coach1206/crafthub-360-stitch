@@ -2,9 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../utils/haptics.js'
 import SmokeCraftAssetScreen from '../components/smokecraft/SmokeCraftAssetScreen.jsx'
-
-// Approved landing reference — wide CraftHub 360 composition
-const LANDING_SRC = '/assets/smokecraft-reference/approved/smokecraft-landing.png'
+import { SC_ASSETS } from '../constants/smokecraftAssets.js'
 
 const GOLD    = '#E9C176'
 const GOLD_DIM = 'rgba(233,193,118,0.65)'
@@ -60,7 +58,7 @@ export default function SmokeCraft() {
 
   return (
     <SmokeCraftAssetScreen
-      src={LANDING_SRC}
+      src={SC_ASSETS.landing}
       classification="DECORATIVE_BACKGROUND"
       alt="SmokeCraft 360 — The Guided Cigar Experience"
     >
