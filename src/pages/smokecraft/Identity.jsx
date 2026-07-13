@@ -119,9 +119,9 @@ export default function Identity() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft/IDENTY.png"
+        src="/assets/smokecraft/cropped/discover-profile-bg.jpg"
         alt="SmokeCraft Identity — Let's Get To Know You"
-        classification="LIVE_REACT_PAGE_ARTWORK"
+        classification="DECORATIVE_BACKGROUND"
       />
 
       {/* Compact form panel — sits above the NavBar, does not cover the portrait or upper artwork */}
