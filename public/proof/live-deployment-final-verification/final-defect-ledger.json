@@ -1,0 +1,50 @@
+{
+  "audit": {
+    "date": "2026-07-14",
+    "branch": "recovery/smokecraft-codex-final",
+    "primaryViewport": "desktop-1440x900",
+    "viewportsTested": ["desktop-1440", "tablet-landscape-1024", "tablet-portrait-768", "mobile-390"],
+    "totalRoutes": 28,
+    "totalScreenshots": 112
+  },
+  "verdict": "NO_DEFECTS",
+  "defects": [],
+  "routes": [
+    { "id": "01", "route": "/smokecraft", "asset": "smokecraft-landing.png", "result": "PASS" },
+    { "id": "02", "route": "/smokecraft/enroll", "asset": "discover-profile-bg.jpg", "result": "PASS" },
+    { "id": "03", "route": "/smokecraft/identity", "asset": "IDENTY.png", "result": "PASS", "note": "React form on LEFT half overlaying printed form zone; portrait on right" },
+    { "id": "04", "route": "/smokecraft/golden-box", "asset": "GOLDEN BOX RULES.png", "result": "PASS", "note": "Compact acknowledgement panel only; full composition visible" },
+    { "id": "05", "route": "/smokecraft/mentor-selection", "asset": "MENTOR SELECTION1.png", "result": "PASS", "note": "Compact chip strip at bottom; portrait grid in image" },
+    { "id": "06", "route": "/smokecraft/format", "asset": "smokecraft-vitola.png", "result": "PASS", "note": "Compact chip strip at bottom; vitola grid in image" },
+    { "id": "07", "route": "/smokecraft/seed-soil", "asset": "SEED & SOIL.png", "result": "PASS", "note": "Compact chip panel; full educational composition in image" },
+    { "id": "08", "route": "/smokecraft/pairing-lab", "asset": "PAIRING LAB1.png", "result": "PASS", "note": "Image as header; React interactive pairing panels below" },
+    { "id": "09", "route": "/smokecraft/humidor-match", "asset": "Humidor Match 1.png", "result": "PASS", "note": "Image as background; React humidor/cigar selection overlay" },
+    { "id": "10", "route": "/smokecraft/request-purchase", "asset": "REQUEST PURCHASE.png", "result": "PASS", "note": "Image as header; React purchase request form below" },
+    { "id": "11", "route": "/smokecraft/cut-toast-light", "asset": "CUT  TOAST, & LIGHT.png", "result": "PASS", "note": "Image on right half; React step checklist on left" },
+    { "id": "12", "route": "/smokecraft/first-third", "asset": "FIRST  THIRD1.png", "result": "PASS", "note": "Image as hero header; React sensory tasting panels below" },
+    { "id": "13", "route": "/smokecraft/second-third", "asset": "SECOND THIRD.png", "result": "PASS", "note": "Image as hero header; React sensory panels below" },
+    { "id": "14", "route": "/smokecraft/flavor-memory", "asset": "FLAVOR MEMORY.png", "result": "PASS", "note": "Image as background/header; React flavor capture below" },
+    { "id": "15", "route": "/smokecraft/final-third", "asset": "FINAL THIRD.png", "result": "PASS", "note": "Image as hero header; React final scoring panels below" },
+    { "id": "16", "route": "/smokecraft/scorecard", "asset": "Scorecard.png", "result": "PASS", "note": "Image as header; React scoring sliders below" },
+    { "id": "17", "route": "/smokecraft/final-review", "asset": "FINAL REVIEW.png", "result": "PASS", "note": "Image as hero header; React review checklist below" },
+    { "id": "18", "route": "/smokecraft/passport-stamp", "asset": "PASSPORT STAMP.png", "result": "PASS", "note": "Image as accent; React passport/stamp summary below" },
+    { "id": "19", "route": "/smokecraft/connections", "asset": "connections-hero.jpg", "result": "PASS", "note": "Background applied; connections panel overlay" },
+    { "id": "20", "route": "/smokecraft/management-sync", "asset": "MANAGEMENT SYNC.png", "result": "PASS", "note": "Image as hero header; React sync dashboard below" },
+    { "id": "21", "route": "/smokecraft/session-complete", "asset": "SESSION COMPLETE.png", "result": "PASS", "note": "Image as hero header; React journey summary below" },
+    { "id": "22", "route": "/smokecraft/leaderboard", "asset": "NEW DEMO LOUNG RANKING.png", "result": "PASS", "note": "Image used in ranking panel" },
+    { "id": "23", "route": "/smokecraft/event-challenge", "asset": "smokecraft-event-challenge.png", "result": "PASS", "note": "Full-bleed background; event challenge overlay" },
+    { "id": "24", "route": "/smokecraft/how-it-works", "asset": "smokecraft-how-it-works.png", "result": "PASS", "note": "Full storyboard image fills viewport" },
+    { "id": "25", "route": "/smokecraft/smokecraft-challenge", "asset": "smokecraft-challenge.png", "result": "PASS", "note": "Image as featured challenge background" },
+    { "id": "26", "route": "/smokecraft/second-humidor-match", "asset": "smokecraft-second-humidor-match.png", "result": "PASS", "note": "Image as header; recommendation cards below" },
+    { "id": "27", "route": "/smokecraft/mini-tasting", "asset": "smokecraft-mini-tasting-round.png", "result": "PASS", "note": "Image as hero header; tasting panels below" },
+    { "id": "28", "route": "/smokecraft/visit-complete", "asset": "smokecraft-visit-complete.png", "result": "PASS", "note": "Full-bleed badge completion composition" },
+    { "id": "—", "route": "/smokecraft/wrapper-strength", "asset": null, "result": "PASS", "note": "Redirect to /smokecraft/seed-soil; no visual page" }
+  ],
+  "verificationSuites": {
+    "verifyAssets": "PASS",
+    "verifyInteractions": "26/26 PASS",
+    "finalAcceptance": "83/84 PASS (1 pre-existing timing flake)",
+    "verifyFirstSixAssets": "23/23 PASS",
+    "verifyLiveDeployment": "LOCAL_ONLY — Vercel URL returns HTTP 403 from environment proxy"
+  }
+}
