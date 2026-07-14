@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
@@ -6,6 +5,58 @@ import { SC_ASSETS } from '../constants/smokecraftAssets.js'
 
 const NAT_W = 1189
 const NAT_H = 667
+
+// Read a guest session step from novee_guest_session.completedSteps
+function guestStepDone(stepId) {
+  try {
+    const s = JSON.parse(localStorage.getItem('novee_guest_session') || 'null')
+    return Array.isArray(s?.completedSteps) && s.completedSteps.includes(stepId)
+  } catch { return false }
+}
+
+// Ordered resume steps starting from identity (enroll is handled separately as
+// the no-key-in-storage default). Each entry: route to send the user to when
+// that step has NOT yet been completed.
+const RESUME_SEQUENCE = [
+  { route: '/smokecraft/identity',         done: j => !!(j.identity?.preferredName || j.identity?.fullName) },
+  { route: '/smokecraft/golden-box',       done: j => !!j.selectedCigar },
+  { route: '/smokecraft/mentor-selection', done: j => !!j.mentor },
+  { route: '/smokecraft/format',           done: j => !!j.format },
+  { route: '/smokecraft/seed-soil',        done: j => !!j.pairing },
+  { route: '/smokecraft/pairing-lab',      done: j => !!j.pairing?.primary },
+  { route: '/smokecraft/humidor-match',    done: j => !!j.selectedCigar?.name },
+  { route: '/smokecraft/request-purchase', done: j => !!j.requestPurchase },
+  { route: '/smokecraft/cut-toast-light',  done: j => !!j.cutToastLight },
+  { route: '/smokecraft/first-third',      done: j => !!j.flavorMemory },
+  { route: '/smokecraft/second-third',     done: j => Array.isArray(j.flavorMemory?.selectedFlavors) && j.flavorMemory.selectedFlavors.length >= 2 },
+  { route: '/smokecraft/flavor-memory',    done: j => Array.isArray(j.flavorMemory?.selectedFlavors) && j.flavorMemory.selectedFlavors.length >= 3 },
+  { route: '/smokecraft/final-third',      done: j => !!j.flavorMemory?.intensity },
+  { route: '/smokecraft/scorecard',        done: j => !!j.flavorMemory?.body },
+  { route: '/smokecraft/final-review',     done: j => !!j.flavorMemory?.strength },
+  { route: '/smokecraft/passport-stamp',   done: j => !!j.flavorMemory?.notes },
+  { route: '/smokecraft/connections',      done: () => { try { const c = JSON.parse(localStorage.getItem('sc_connections_v1') || '[]'); return Array.isArray(c) && c.length > 0 } catch { return false } } },
+  { route: '/smokecraft/management-sync',  done: () => guestStepDone('management-sync') },
+  { route: '/smokecraft/session-complete', done: () => guestStepDone('session-complete') },
+]
+
+function getResumeRoute() {
+  try {
+    const raw = localStorage.getItem('sc_journey_v1')
+    // No stored journey key → brand new session → enroll
+    if (!raw) return '/smokecraft/enroll'
+    const j = JSON.parse(raw)
+    // Missing or corrupt stateVersion → enroll
+    if (!j || !j.stateVersion) return '/smokecraft/enroll'
+    // Find the first step not yet completed
+    for (const step of RESUME_SEQUENCE) {
+      if (!step.done(j)) return step.route
+    }
+    // All 20 steps complete → fresh start
+    return '/smokecraft/enroll'
+  } catch {
+    return '/smokecraft/enroll'
+  }
+}
 
 // Screen-reader-only text — visible to Playwright hasText, invisible on screen
 const srOnly = {
@@ -45,24 +96,14 @@ function Hotspot({ label, onClick, style }) {
 export default function SmokeCraft() {
   const navigate = useNavigate()
 
-  const [hasSavedProgress] = useState(() => {
-    try {
-      const raw = localStorage.getItem('smokecraft_progress')
-      if (!raw) return false
-      const d = JSON.parse(raw)
-      return Array.isArray(d.completedSessions) && d.completedSessions.length > 0
-    } catch { return false }
-  })
-
   function go(to) {
     triggerHaptic('light')
     navigate(to)
   }
 
-  // If a saved session exists, the printed Start SmokeCraft region resumes it
   function handleStartSmokeCraft() {
     triggerHaptic('medium')
-    navigate(hasSavedProgress ? '/smokecraft/enroll' : '/smokecraft/identity')
+    navigate(getResumeRoute())
   }
 
   return (
