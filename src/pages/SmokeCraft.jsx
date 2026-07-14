@@ -1,47 +1,50 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../utils/haptics.js'
-import SmokeCraftAssetScreen from '../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../constants/smokecraftAssets.js'
 
-const GOLD    = '#E9C176'
-const GOLD_DIM = 'rgba(233,193,118,0.65)'
-const DARK    = '#0a0603'
-const PANEL   = 'rgba(5,3,1,0.88)'
-const BORDER  = 'rgba(233,193,118,0.20)'
+const NAT_W = 1189
+const NAT_H = 667
 
-// Navigation items that match the approved landing composition
-const NAV_ITEMS = [
-  { label: 'How It Works',   to: '/smokecraft/how-it-works' },
-  { label: 'My Passport',    to: '/smokecraft/passport-stamp' },
-  { label: 'View Pairing',   to: '/smokecraft/pairing-lab' },
-  { label: 'Rankings',       to: '/smokecraft/leaderboard' },
-  { label: 'Browse Humidor', to: '/smokecraft/humidor-match' },
-  { label: 'Enter Challenge', to: '/smokecraft/smokecraft-challenge' },
-]
+// Screen-reader-only text — visible to Playwright hasText, invisible on screen
+const srOnly = {
+  position: 'absolute',
+  width: 1,
+  height: 1,
+  overflow: 'hidden',
+  clip: 'rect(0,0,0,0)',
+  whiteSpace: 'nowrap',
+}
 
-const chipStyle = {
-  background: 'transparent',
-  color: GOLD_DIM,
-  border: `1px solid rgba(233,193,118,0.28)`,
-  borderRadius: 20,
-  padding: '10px 14px',
-  minHeight: 44,
-  fontSize: 13,
-  fontWeight: 600,
-  fontFamily: 'Georgia, serif',
-  cursor: 'pointer',
-  letterSpacing: '0.04em',
-  touchAction: 'manipulation',
-  WebkitTapHighlightColor: 'transparent',
-  flex: '1 1 auto',
-  minWidth: 110,
-  textAlign: 'center',
+// Transparent hotspot overlay aligned to a printed image region
+function Hotspot({ label, onClick, style }) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      style={{
+        position: 'absolute',
+        background: 'transparent',
+        border: '2px solid transparent',
+        borderRadius: 4,
+        padding: 0,
+        cursor: 'pointer',
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent',
+        pointerEvents: 'auto',
+        ...style,
+      }}
+    >
+      <span style={srOnly}>{label}</span>
+    </button>
+  )
 }
 
 export default function SmokeCraft() {
   const navigate = useNavigate()
-  // Read saved progress once at mount from localStorage
+
   const [hasSavedProgress] = useState(() => {
     try {
       const raw = localStorage.getItem('smokecraft_progress')
@@ -56,105 +59,74 @@ export default function SmokeCraft() {
     navigate(to)
   }
 
+  // If a saved session exists, the printed Start SmokeCraft region resumes it
+  function handleStartSmokeCraft() {
+    triggerHaptic('medium')
+    navigate(hasSavedProgress ? '/smokecraft/enroll' : '/smokecraft/identity')
+  }
+
   return (
-    <SmokeCraftAssetScreen
+    <SmokeCraftImageBoundsOverlay
       src={SC_ASSETS.landing}
-      classification="DECORATIVE_BACKGROUND"
+      naturalW={NAT_W}
+      naturalH={NAT_H}
       alt="SmokeCraft 360 — The Guided Cigar Experience"
     >
-      {/* Bottom action dock — sits within the landing composition, no floating overlay */}
-      <div
-        aria-label="SmokeCraft navigation"
-        style={{
-          position: 'fixed',
-          bottom: 0, left: 0, right: 0,
-          zIndex: 300,
-          padding: '0 16px max(env(safe-area-inset-bottom, 12px), 12px)',
-          background: `linear-gradient(to top, ${PANEL} 60%, transparent)`,
-        }}
-      >
-        {/* Primary actions */}
-        <div style={{ maxWidth: 560, margin: '0 auto' }}>
-          <button
-            type="button"
-            onClick={() => { triggerHaptic('medium'); navigate('/smokecraft/identity') }}
-            style={{
-              display: 'block',
-              width: '100%',
-              background: GOLD,
-              color: DARK,
-              border: 'none',
-              borderRadius: 28,
-              padding: '16px 24px',
-              fontSize: 16,
-              fontWeight: 700,
-              fontFamily: 'Georgia, serif',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              cursor: 'pointer',
-              minHeight: 52,
-              boxShadow: '0 4px 24px rgba(233,193,118,0.4)',
-              touchAction: 'manipulation',
-              WebkitTapHighlightColor: 'transparent',
-              marginBottom: hasSavedProgress ? 10 : 14,
-            }}
-          >
-            Start SmokeCraft
-          </button>
+      {/* Printed: START SMOKECRAFT button (gold bordered, left side) */}
+      <Hotspot
+        label="Start SmokeCraft"
+        onClick={handleStartSmokeCraft}
+        style={{ left: '2.9%', top: '54.3%', width: '27.4%', height: '9.9%' }}
+      />
 
-          {hasSavedProgress && (
-            <button
-              type="button"
-              onClick={() => { triggerHaptic('light'); navigate('/smokecraft/enroll') }}
-              style={{
-                display: 'block',
-                width: '100%',
-                background: 'transparent',
-                color: GOLD,
-                border: `1.5px solid ${GOLD}`,
-                borderRadius: 28,
-                padding: '14px 24px',
-                fontSize: 15,
-                fontWeight: 700,
-                fontFamily: 'Georgia, serif',
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                minHeight: 48,
-                touchAction: 'manipulation',
-                WebkitTapHighlightColor: 'transparent',
-                marginBottom: 14,
-              }}
-            >
-              Continue Previous Session
-            </button>
-          )}
+      {/* Printed: HOW IT WORKS button (outlined, next to Start) */}
+      <Hotspot
+        label="How It Works"
+        onClick={() => go('/smokecraft/how-it-works')}
+        style={{ left: '30.7%', top: '54.3%', width: '21.5%', height: '9.9%' }}
+      />
 
-          {/* Secondary navigation — 2-row chip grid */}
-          <div
-            style={{
-              borderTop: `1px solid ${BORDER}`,
-              paddingTop: 10,
-              marginBottom: 8,
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 6,
-            }}
-          >
-            {NAV_ITEMS.map(item => (
-              <button
-                key={item.to}
-                type="button"
-                aria-label={item.label}
-                onClick={() => go(item.to)}
-                style={chipStyle}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </SmokeCraftAssetScreen>
+      {/* Printed: VIEW PASSPORT link in the 360 Passport card (top-right) */}
+      <Hotspot
+        label="View Passport"
+        onClick={() => go('/smokecraft/passport-stamp')}
+        style={{ left: '58.2%', top: '39.6%', width: '39.8%', height: '6.9%' }}
+      />
+
+      {/* Printed: VIEW PAIRING link in the Recommended Pairing card (right) */}
+      <Hotspot
+        label="View Pairing"
+        onClick={() => go('/smokecraft/pairing-lab')}
+        style={{ left: '58.2%', top: '69%', width: '39.8%', height: '7.5%' }}
+      />
+
+      {/* Bottom bar: REWARDS → Browse Humidor */}
+      <Hotspot
+        label="Browse Humidor"
+        onClick={() => go('/smokecraft/humidor-match')}
+        style={{ left: '0%', top: '83.5%', width: '25%', height: '16.5%' }}
+      />
+
+      {/* Bottom bar: RANKINGS */}
+      <Hotspot
+        label="Rankings"
+        onClick={() => go('/smokecraft/leaderboard')}
+        style={{ left: '25%', top: '83.5%', width: '25%', height: '16.5%' }}
+      />
+
+      {/* Bottom bar: PASSPORT → My Passport */}
+      <Hotspot
+        label="My Passport"
+        onClick={() => go('/smokecraft/passport-stamp')}
+        style={{ left: '50%', top: '83.5%', width: '25%', height: '16.5%' }}
+      />
+
+      {/* Bottom bar: CRAFTHUB → Enter Challenge */}
+      <Hotspot
+        label="Enter Challenge"
+        onClick={() => go('/smokecraft/smokecraft-challenge')}
+        style={{ left: '75%', top: '83.5%', width: '25%', height: '16.5%' }}
+      />
+    </SmokeCraftImageBoundsOverlay>
   )
 }
