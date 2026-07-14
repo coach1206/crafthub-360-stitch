@@ -11,10 +11,9 @@ const NAT_W = 1448
 const NAT_H = 1086
 
 const GOLD = '#E9C176'
-
 const LS_KEY = 'sc_flavor_memory_v1'
 
-// 8 flavor note cards in a horizontal row (y≈29.3–43.5%)
+// 8 flavor note zones in horizontal row (y≈29.3–43.5%)
 const FLAVOR_ZONES = [
   { id: 'earth',  label: 'Earth',  x: 10.5, y: 29.3, w: 9.7, h: 14.2 },
   { id: 'wood',   label: 'Wood',   x: 21.0, y: 29.3, w: 9.7, h: 14.2 },
@@ -41,6 +40,99 @@ function loadLocal() {
 }
 function saveLocal(s) {
   try { localStorage.setItem(LS_KEY, JSON.stringify({ ...s, savedAt: s.savedAt || Date.now() })) } catch {}
+}
+
+// Live SVG radar chart — 8-axis polygon
+function RadarChart({ flavors }) {
+  const SIZE = 100
+  const CX = 50, CY = 50, R = 38
+  const axes = FLAVOR_ZONES.map(z => z.id)
+  const N = axes.length
+
+  function polarPoint(i, r) {
+    const angle = (i / N) * 2 * Math.PI - Math.PI / 2
+    return [CX + r * Math.cos(angle), CY + r * Math.sin(angle)]
+  }
+
+  // Grid rings
+  const rings = [0.25, 0.5, 0.75, 1.0]
+
+  // Data polygon
+  const pts = axes.map((ax, i) => {
+    const val = flavors.includes(ax) ? 1.0 : 0.1
+    return polarPoint(i, R * val)
+  })
+  const polygon = pts.map(p => p.join(',')).join(' ')
+
+  // Axis lines and labels
+  const axisLines = axes.map((_, i) => {
+    const [x, y] = polarPoint(i, R)
+    return { x1: CX, y1: CY, x2: x, y2: y }
+  })
+
+  const labels = axes.map((ax, i) => {
+    const [x, y] = polarPoint(i, R + 9)
+    return { x, y, text: FLAVOR_ZONES[i].label }
+  })
+
+  return (
+    <svg
+      viewBox={`0 0 ${SIZE} ${SIZE}`}
+      width="100%" height="100%"
+      style={{ display: 'block', overflow: 'visible' }}
+      aria-label="Flavor memory radar chart"
+    >
+      {/* Grid rings */}
+      {rings.map((r, ri) => {
+        const pts = axes.map((_, i) => polarPoint(i, R * r).join(',')).join(' ')
+        return (
+          <polygon
+            key={ri}
+            points={pts}
+            fill="none"
+            stroke="rgba(233,193,118,0.18)"
+            strokeWidth={0.4}
+          />
+        )
+      })}
+
+      {/* Axis lines */}
+      {axisLines.map((l, i) => (
+        <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
+          stroke="rgba(233,193,118,0.22)" strokeWidth={0.4} />
+      ))}
+
+      {/* Data polygon */}
+      <polygon
+        points={polygon}
+        fill="rgba(233,193,118,0.25)"
+        stroke={GOLD}
+        strokeWidth={0.8}
+      />
+
+      {/* Data points */}
+      {pts.map(([x, y], i) => (
+        flavors.includes(axes[i]) && (
+          <circle key={i} cx={x} cy={y} r={1.4} fill={GOLD} />
+        )
+      ))}
+
+      {/* Axis labels */}
+      {labels.map((l, i) => (
+        <text
+          key={i}
+          x={l.x} y={l.y}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize={4.5}
+          fill="rgba(229,226,225,0.75)"
+          style={{ userSelect: 'none', fontFamily: 'Georgia, serif' }}
+        >
+          {l.text}
+        </text>
+      ))}
+    </svg>
+  )
 }
 
 export default function FlavorMemory() {
@@ -139,6 +231,7 @@ export default function FlavorMemory() {
         naturalH={NAT_H}
         alt="SmokeCraft Flavor Memory — Capture Your Sensory Experience"
       >
+        {/* Flavor zone selectors */}
         {FLAVOR_ZONES.map(zone => {
           const active = fm.selectedFlavors.includes(zone.id)
           return (
@@ -154,7 +247,7 @@ export default function FlavorMemory() {
                 width: `${zone.w}%`, height: `${zone.h}%`,
                 pointerEvents: 'auto',
                 background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
-                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
+                border: `2.5px solid ${active ? GOLD : 'transparent'}`,
                 borderRadius: 4,
                 cursor: 'pointer',
                 boxSizing: 'border-box',
@@ -171,6 +264,19 @@ export default function FlavorMemory() {
             </button>
           )
         })}
+
+        {/* Live SVG radar chart — positioned in the chart zone (lower half) */}
+        <div
+          aria-label="flavor radar chart"
+          style={{
+            position: 'absolute',
+            left: '5%', top: '52%',
+            width: '45%', height: '42%',
+            pointerEvents: 'none',
+          }}
+        >
+          <RadarChart flavors={fm.selectedFlavors} />
+        </div>
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar

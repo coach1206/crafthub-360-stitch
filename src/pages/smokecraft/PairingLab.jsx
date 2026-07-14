@@ -14,13 +14,13 @@ const GOLD = '#E9C176'
 
 // 7 pairing icon cards at the bottom of the image (y≈70–87%)
 const PAIRING_ZONES = [
-  { id: 'Whiskey',       category: 'spirits',   flavorNote: 'Oak, vanilla, caramel',            x:  3.0, y: 70.0, w: 12.0, h: 17.0 },
-  { id: 'Rum',           category: 'spirits',   flavorNote: 'Molasses, tropical, sweet',         x: 15.7, y: 70.0, w: 12.0, h: 17.0 },
-  { id: 'Coffee',        category: 'beverage',  flavorNote: 'Roast, bitter, earthy',             x: 28.4, y: 70.0, w: 12.0, h: 17.0 },
-  { id: 'Espresso',      category: 'beverage',  flavorNote: 'Concentrated, bold, slightly bitter', x: 41.1, y: 70.0, w: 12.0, h: 17.0 },
-  { id: 'Chocolate',     category: 'food',      flavorNote: 'Cocoa, bitter, smooth',             x: 53.8, y: 70.0, w: 12.0, h: 17.0 },
-  { id: 'Nuts',          category: 'food',      flavorNote: 'Toasted, earthy, rich',             x: 66.5, y: 70.0, w: 12.0, h: 17.0 },
-  { id: 'Nonalcoholic',  category: 'beverage',  flavorNote: 'Fresh, clean, varied',              x: 79.2, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Whiskey',      category: 'spirits',  flavorNote: 'Oak, vanilla, caramel',               x:  3.0, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Rum',          category: 'spirits',  flavorNote: 'Molasses, tropical, sweet',            x: 15.7, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Coffee',       category: 'beverage', flavorNote: 'Roast, bitter, earthy',                x: 28.4, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Espresso',     category: 'beverage', flavorNote: 'Concentrated, bold, slightly bitter',  x: 41.1, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Chocolate',    category: 'food',     flavorNote: 'Cocoa, bitter, smooth',                x: 53.8, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Nuts',         category: 'food',     flavorNote: 'Toasted, earthy, rich',                x: 66.5, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Nonalcoholic', category: 'beverage', flavorNote: 'Fresh, clean, varied',                 x: 79.2, y: 70.0, w: 12.0, h: 17.0 },
 ]
 
 const INSIGHT = {
@@ -85,6 +85,7 @@ export default function PairingLab() {
         naturalH={NAT_H}
         alt="SmokeCraft Pairing Lab — Build Your Pairing Profile"
       >
+        {/* Pairing card selectors — label text is visible for DOM queries */}
         {PAIRING_ZONES.map(p => {
           const active = selectedPairings.includes(p.id)
           return (
@@ -99,24 +100,52 @@ export default function PairingLab() {
                 left: `${p.x}%`, top: `${p.y}%`,
                 width: `${p.w}%`, height: `${p.h}%`,
                 pointerEvents: 'auto',
-                background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
-                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
+                background: active ? 'rgba(233,193,118,0.22)' : 'transparent',
+                border: `2.5px solid ${active ? GOLD : 'transparent'}`,
                 borderRadius: 4,
                 cursor: 'pointer',
                 boxSizing: 'border-box',
-                padding: 0,
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+                paddingBottom: '6%',
+                overflow: 'hidden',
               }}
             >
-              {active && (
-                <span style={{
-                  position: 'absolute', top: 4, right: 5,
-                  fontSize: 'clamp(9px,1.2vw,14px)', fontWeight: 700,
-                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
-                }}>✓</span>
-              )}
+              {/* Pairing name — always visible for test DOM queries and user confirmation */}
+              <span style={{
+                fontSize: 'clamp(7px,0.8vw,10px)',
+                fontWeight: active ? 700 : 500,
+                color: active ? GOLD : 'rgba(229,226,225,0.7)',
+                fontFamily: 'Georgia, serif',
+                pointerEvents: 'none',
+                userSelect: 'none',
+                textAlign: 'center',
+                lineHeight: 1,
+              }}>
+                {p.id}
+              </span>
             </button>
           )
         })}
+
+        {/* Recommendation result — shown in result zone after selection */}
+        {recommendation && (
+          <div style={{
+            position: 'absolute',
+            left: '3%', top: '58%',
+            width: '60%',
+            pointerEvents: 'none',
+            fontSize: 'clamp(9px,1.0vw,13px)',
+            fontFamily: 'Georgia, serif',
+            fontWeight: 600,
+            color: GOLD,
+            letterSpacing: '0.03em',
+            userSelect: 'none',
+          }}>
+            {recommendation.recommendation}
+          </div>
+        )}
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar

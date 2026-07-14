@@ -12,7 +12,7 @@ const NAT_H = 941
 
 const GOLD = '#E9C176'
 
-// 2 ordering path cards (x≈43.8–82.6%, y≈68.5–86.8%)
+// 2 ordering path cards in the lower-right zone of the image
 const ORDERING_ZONES = [
   { id: 'self',  label: 'Self-Order',              x: 43.8, y: 68.5, w: 19.0, h: 18.3 },
   { id: 'staff', label: 'Request Staff Assistance', x: 63.6, y: 68.5, w: 19.0, h: 18.3 },
@@ -23,14 +23,17 @@ export default function RequestPurchase() {
   const { journey, setRequestPurchase } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
+  const cigar   = journey.selectedCigar
+  const pairing = journey.pairing
+
   const [orderPath, setOrderPath] = useState(() => journey.requestPurchase?.orderPath || null)
-  const [awarded, setAwarded] = useState(false)
+  const [awarded,   setAwarded]   = useState(false)
 
   useEffect(() => {
     setRequestPurchase({
       orderPath,
-      selectedCigar: journey.selectedCigar,
-      selectedPairing: journey.pairing,
+      selectedCigar: cigar,
+      selectedPairing: pairing,
       savedAt: Date.now(),
     })
   }, [orderPath]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -56,6 +59,25 @@ export default function RequestPurchase() {
         naturalH={NAT_H}
         alt="SmokeCraft Request Purchase — Choose Your Ordering Path"
       >
+        {/* Selected cigar name — visible in the top info zone */}
+        {cigar?.name && (
+          <div style={{
+            position: 'absolute',
+            left: '4%', top: '8%',
+            width: '60%',
+            pointerEvents: 'none',
+            fontSize: 'clamp(10px,1.2vw,16px)',
+            fontFamily: 'Georgia, serif',
+            fontWeight: 700,
+            color: GOLD,
+            letterSpacing: '0.03em',
+            userSelect: 'none',
+          }}>
+            {cigar.name}
+          </div>
+        )}
+
+        {/* Ordering path selectors */}
         {ORDERING_ZONES.map(zone => {
           const active = orderPath === zone.id
           return (
@@ -70,19 +92,39 @@ export default function RequestPurchase() {
                 left: `${zone.x}%`, top: `${zone.y}%`,
                 width: `${zone.w}%`, height: `${zone.h}%`,
                 pointerEvents: 'auto',
-                background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
-                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
+                background: active ? 'rgba(233,193,118,0.22)' : 'rgba(0,0,0,0.38)',
+                border: `2px solid ${active ? GOLD : 'rgba(233,193,118,0.28)'}`,
                 borderRadius: 4,
                 cursor: 'pointer',
                 boxSizing: 'border-box',
-                padding: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                gap: 4,
               }}
             >
+              <span style={{
+                fontSize: 'clamp(8px,0.95vw,12px)',
+                fontWeight: active ? 700 : 500,
+                color: active ? GOLD : 'rgba(229,226,225,0.82)',
+                fontFamily: 'Georgia, serif',
+                letterSpacing: '0.02em',
+                pointerEvents: 'none',
+                userSelect: 'none',
+                textAlign: 'center',
+                lineHeight: 1.2,
+                padding: '0 4px',
+              }}>
+                {zone.label}
+              </span>
               {active && (
                 <span style={{
-                  position: 'absolute', top: 4, right: 6,
-                  fontSize: 'clamp(9px,1.2vw,14px)', fontWeight: 700,
-                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
+                  fontSize: 'clamp(8px,0.9vw,11px)',
+                  color: GOLD,
+                  fontWeight: 700,
+                  pointerEvents: 'none',
                 }}>✓</span>
               )}
             </button>
