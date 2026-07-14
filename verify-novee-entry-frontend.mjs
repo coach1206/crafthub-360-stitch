@@ -104,10 +104,13 @@ async function run() {
       check('POST demo/start → 200', startR.status === 200, `got ${startR.status}`)
       const startD = await startR.json()
       check('Returns success:true',       startD.success === true)
-      check('Returns demoSessionId',      typeof startD.demoSessionId === 'string')
       check('Returns expiresAt',          typeof startD.expiresAt === 'string')
       check('Mode is demo',               startD.mode === 'demo')
-      demoSessionId = startD.demoSessionId
+      // demoSessionId is in httpOnly cookie only — extract from Set-Cookie header for test use
+      const setCookie = startR.headers.get('set-cookie') || ''
+      const match = setCookie.match(/novee_demo_session=([^;]+)/)
+      demoSessionId = match ? match[1] : null
+      check('demoSessionId in httpOnly cookie', !!demoSessionId, `Set-Cookie: ${setCookie.slice(0,60)}`)
 
       // Check status with session header
       const statusR = await fetch(`${API}/api/novee/demo/status`, {
@@ -134,10 +137,11 @@ async function run() {
 
     section('Backend API: Demo mode allows guest to open novee')
     {
-      // Start a demo session
+      // Start a demo session — extract ID from httpOnly cookie
       const startR = await fetch(`${API}/api/novee/demo/start`, { method: 'POST' })
-      const startD = await startR.json()
-      const sid = startD.demoSessionId
+      const setCookie = startR.headers.get('set-cookie') || ''
+      const match = setCookie.match(/novee_demo_session=([^;]+)/)
+      const sid = match ? match[1] : null
 
       // Try to open novee with demo session header
       const openR = await fetch(`${API}/api/novee/entry/open`, {

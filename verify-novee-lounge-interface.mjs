@@ -89,26 +89,30 @@ async function run() {
       if (vp.name === 'desktop-1440x900') {
         console.log('\n── Navigation Tests (desktop) ──────────────────────────────')
 
-        // Test Enter NOVEE OS → /home
-        await page.goto(`${BASE}/`, { waitUntil: 'networkidle', timeout: 15000 })
-        await page.click('[aria-label="Enter NOVEE OS"]')
-        await page.waitForTimeout(800)
-        const urlNovee = page.url()
-        check('Enter NOVEE OS → /home', urlNovee.includes('/home'), urlNovee)
+        // NOVEE OS is intentionally blocked for unauthenticated guests (aria-disabled)
+        // Navigation check is covered in verify-novee-entry-frontend.mjs (auth flow)
 
-        // Test Enter CraftHub 360 → /crafthub
-        await page.goto(`${BASE}/`, { waitUntil: 'networkidle', timeout: 15000 })
-        await page.click('[aria-label="Enter CraftHub 360"]')
-        await page.waitForTimeout(800)
-        const urlCraft = page.url()
+        // Use a fresh page WITHOUT api stub so novee API calls pass through
+        const navPage = await browser.newPage()
+        await navPage.setViewportSize({ width: 1440, height: 900 })
+
+        // Test Enter CraftHub 360 → /crafthub (guest-accessible)
+        await navPage.goto(`${BASE}/`, { waitUntil: 'networkidle', timeout: 15000 })
+        await navPage.waitForTimeout(1200)
+        await navPage.click('[aria-label="Enter CraftHub 360"]')
+        await navPage.waitForTimeout(2500)
+        const urlCraft = navPage.url()
         check('Enter CraftHub 360 → /crafthub', urlCraft.includes('/crafthub'), urlCraft)
 
-        // Test Enter SmokeCraft 360 → /smokecraft
-        await page.goto(`${BASE}/`, { waitUntil: 'networkidle', timeout: 15000 })
-        await page.click('[aria-label="Enter SmokeCraft 360"]')
-        await page.waitForTimeout(800)
-        const urlSmoke = page.url()
+        // Test Enter SmokeCraft 360 → /smokecraft (guest-accessible)
+        await navPage.goto(`${BASE}/`, { waitUntil: 'networkidle', timeout: 15000 })
+        await navPage.waitForTimeout(1200)
+        await navPage.click('[aria-label="Enter SmokeCraft 360"]')
+        await navPage.waitForTimeout(2500)
+        const urlSmoke = navPage.url()
         check('Enter SmokeCraft 360 → /smokecraft', urlSmoke.includes('/smokecraft'), urlSmoke)
+
+        await navPage.close()
       }
 
       await page.close()
