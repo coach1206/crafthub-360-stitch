@@ -3,17 +3,23 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
+const NAT_W = 1672
+const NAT_H = 941
+
 const GOLD = '#E9C176'
 
-const OBSERVATIONS = [
-  'Opening flavors noted',
-  'Burn line checked',
-  'Draw assessed',
-  'Smoke output observed',
+// 6 EXPLORE header cards (single row, y≈25.1–36.1%)
+const EXPLORE_ZONES = [
+  { id: 'Aroma Opening', x:  3.0, y: 25.1, w: 14.5, h: 11.0 },
+  { id: 'Draw Ease',     x: 19.0, y: 25.1, w: 14.5, h: 11.0 },
+  { id: 'Body Start',    x: 35.0, y: 25.1, w: 14.5, h: 11.0 },
+  { id: 'Flavor Notes',  x: 51.0, y: 25.1, w: 14.5, h: 11.0 },
+  { id: 'Burn Line',     x: 67.0, y: 25.1, w: 14.5, h: 11.0 },
+  { id: 'Ash Quality',   x: 83.0, y: 25.1, w: 14.5, h: 11.0 },
 ]
 
 export default function FirstThird() {
@@ -23,9 +29,9 @@ export default function FirstThird() {
   const [checked, setChecked] = useState(() => journey.firstThird?.notesSelected || [])
   const [done, setDone] = useState(false)
 
-  function toggleItem(item) {
+  function toggleItem(id) {
     triggerHaptic('light')
-    setChecked(prev => prev.includes(item) ? prev.filter(x => x !== item) : [...prev, item])
+    setChecked(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
   }
 
   function handleContinue() {
@@ -53,49 +59,45 @@ export default function FirstThird() {
 
   return (
     <>
-      <SmokeCraftAssetScreen
+      <SmokeCraftImageBoundsOverlay
         src={SC_ASSETS.firstThird}
+        naturalW={NAT_W}
+        naturalH={NAT_H}
         alt="SmokeCraft First Third — Discover the Opening Expression"
-      />
-
-      {/* Observation checklist — real React checkboxes */}
-      <div style={{
-        position: 'fixed',
-        bottom: 110, left: 0, right: 0,
-        zIndex: 400,
-        padding: '0 16px',
-        pointerEvents: 'none',
-      }}>
-        <div style={{
-          pointerEvents: 'auto',
-          background: 'rgba(10,6,3,0.94)',
-          border: '1px solid rgba(233,193,118,0.2)',
-          borderRadius: 12,
-          padding: '10px 14px',
-          maxWidth: 500,
-          margin: '0 auto',
-        }}>
-          <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
-            Sensory Observations
-          </div>
-          {OBSERVATIONS.map(obs => (
-            <label key={obs} style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              marginBottom: 8, cursor: 'pointer', minHeight: 44,
-              color: checked.includes(obs) ? GOLD : 'rgba(229,226,225,0.7)',
-              fontSize: 16, fontFamily: 'Georgia, serif',
-            }}>
-              <input
-                type="checkbox"
-                checked={checked.includes(obs)}
-                onChange={() => toggleItem(obs)}
-                style={{ width: 20, height: 20, accentColor: GOLD, cursor: 'pointer', flexShrink: 0 }}
-              />
-              {obs}
-            </label>
-          ))}
-        </div>
-      </div>
+      >
+        {EXPLORE_ZONES.map(zone => {
+          const active = checked.includes(zone.id)
+          return (
+            <button
+              key={zone.id}
+              type="button"
+              aria-label={`${zone.id}${active ? ' (selected)' : ''}`}
+              aria-pressed={active}
+              onClick={() => toggleItem(zone.id)}
+              style={{
+                position: 'absolute',
+                left: `${zone.x}%`, top: `${zone.y}%`,
+                width: `${zone.w}%`, height: `${zone.h}%`,
+                pointerEvents: 'auto',
+                background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
+                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
+                borderRadius: 4,
+                cursor: 'pointer',
+                boxSizing: 'border-box',
+                padding: 0,
+              }}
+            >
+              {active && (
+                <span style={{
+                  position: 'absolute', top: 4, right: 5,
+                  fontSize: 'clamp(9px,1.2vw,14px)', fontWeight: 700,
+                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
+                }}>✓</span>
+              )}
+            </button>
+          )
+        })}
+      </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
         primary="Continue to Second Third →"

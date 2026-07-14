@@ -3,97 +3,88 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
+const NAT_W = 1672
+const NAT_H = 941
+
 const GOLD = '#E9C176'
-const DARK = '#0a0603'
 
-const CUT_METHODS = ['Straight Cut', 'V-Cut', 'Punch Cut']
-const TOAST_METHODS = ['Gentle Toast', 'Foot Toast', 'Full Toast']
-const LIGHT_METHODS = ['Cedar Spill', 'Torch Lighter', 'Soft Flame']
-
-function MethodGroup({ label, options, value, onChange }) {
-  return (
-    <div style={{ marginBottom: 6 }}>
-      <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>
-        {label}
-      </div>
-      <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-        {options.map(opt => {
-          const active = value === opt
-          return (
-            <button
-              key={opt}
-              type="button"
-              onClick={() => { triggerHaptic('light'); onChange(active ? null : opt) }}
-              style={{
-                background: active ? GOLD : 'transparent',
-                color: active ? DARK : GOLD,
-                border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.4)'}`,
-                borderRadius: 20,
-                padding: '11px 16px',
-                minHeight: 44,
-                fontSize: 14,
-                fontWeight: 600,
-                fontFamily: 'Georgia, serif',
-                cursor: 'pointer',
-                letterSpacing: '0.03em',
-              }}
-            >
-              {opt}
-            </button>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
+// Step rows as % of natural image dimensions
+const STEP_ZONES = [
+  { id: 'cut',   label: 'Cut the Cap',   x: 3.7, y: 26.3, w: 56.9, h: 18.7 },
+  { id: 'toast', label: 'Toast the Foot', x: 3.7, y: 47.5, w: 56.9, h: 17.5 },
+  { id: 'light', label: 'Light Evenly',  x: 3.7, y: 67.0, w: 56.9, h: 17.0 },
+]
 
 export default function CutToastLight() {
   const { awardSessionRewards } = useGuestSession()
-  const { journey, setCutToastLight } = useSmokeCraftJourney()
+  const { setCutToastLight } = useSmokeCraftJourney()
   const navigate = useNavigate()
-  const [cutMethod, setCutMethod] = useState(() => journey.cutToastLight?.cut || null)
-  const [toastMethod, setToastMethod] = useState(() => journey.cutToastLight?.toast || null)
-  const [lightMethod, setLightMethod] = useState(() => journey.cutToastLight?.light || null)
+  const [done, setDone] = useState(() => new Set())
+
+  function toggle(id) {
+    triggerHaptic('light')
+    setDone(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
 
   function handleContinue() {
-    setCutToastLight({ cut: cutMethod, toast: toastMethod, light: lightMethod })
+    setCutToastLight({
+      cut:   done.has('cut')   ? 'done' : null,
+      toast: done.has('toast') ? 'done' : null,
+      light: done.has('light') ? 'done' : null,
+    })
     awardSessionRewards('cut-toast-light')
     navigate('/smokecraft/first-third')
   }
 
   return (
     <>
-      <SmokeCraftAssetScreen
+      <SmokeCraftImageBoundsOverlay
         src={SC_ASSETS.cutToastLight}
-        alt="SmokeCraft Cut, Toast & Light — Preparation Methods"
-      />
-
-      {/* Method selectors — real React state */}
-      <div style={{
-        position: 'fixed',
-        bottom: 110, left: 0, right: 0,
-        zIndex: 400,
-        padding: '0 16px',
-        pointerEvents: 'none',
-      }}>
-        <div style={{
-          pointerEvents: 'auto',
-          background: 'rgba(10,6,3,0.94)',
-          border: '1px solid rgba(233,193,118,0.2)',
-          borderRadius: 12,
-          padding: '10px 12px',
-          maxWidth: 500,
-          margin: '0 auto',
-        }}>
-          <MethodGroup label="Cutting Method" options={CUT_METHODS} value={cutMethod} onChange={setCutMethod} />
-          <MethodGroup label="Toasting Technique" options={TOAST_METHODS} value={toastMethod} onChange={setToastMethod} />
-          <MethodGroup label="Lighting Method" options={LIGHT_METHODS} value={lightMethod} onChange={setLightMethod} />
-        </div>
-      </div>
+        naturalW={NAT_W}
+        naturalH={NAT_H}
+        alt="SmokeCraft Cut, Toast & Light — Preparation Steps"
+      >
+        {STEP_ZONES.map(step => {
+          const active = done.has(step.id)
+          return (
+            <button
+              key={step.id}
+              type="button"
+              aria-label={`${step.label}${active ? ' (done)' : ''}`}
+              aria-pressed={active}
+              onClick={() => toggle(step.id)}
+              style={{
+                position: 'absolute',
+                left: `${step.x}%`, top: `${step.y}%`,
+                width: `${step.w}%`, height: `${step.h}%`,
+                pointerEvents: 'auto',
+                background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
+                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
+                borderRadius: 4,
+                cursor: 'pointer',
+                boxSizing: 'border-box',
+                padding: 0,
+              }}
+            >
+              {active && (
+                <span style={{
+                  position: 'absolute', top: 4, right: 6,
+                  fontSize: 'clamp(9px,1.2vw,14px)', fontWeight: 700,
+                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
+                }}>✓</span>
+              )}
+            </button>
+          )
+        })}
+      </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
         primary="Continue to First Third →"

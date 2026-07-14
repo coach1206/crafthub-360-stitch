@@ -3,54 +3,50 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
-import SmokeCraftMenuButton from '../../components/smokecraft/SmokeCraftMenuButton.jsx'
+
+const NAT_W = 1672
+const NAT_H = 941
 
 const GOLD = '#E9C176'
-const DARK = '#0a0603'
-const DIM  = 'rgba(229,226,225,0.55)'
 
-const PAIRING_OPTIONS = [
-  { id: 'Whiskey',         category: 'spirits',     flavorNote: 'Oak, vanilla, caramel' },
-  { id: 'Rum',             category: 'spirits',     flavorNote: 'Molasses, tropical, sweet' },
-  { id: 'Cognac',          category: 'spirits',     flavorNote: 'Dried fruit, oak, floral' },
-  { id: 'Coffee',          category: 'beverage',    flavorNote: 'Roast, bitter, earthy' },
-  { id: 'Espresso',        category: 'beverage',    flavorNote: 'Concentrated, bold, slightly bitter' },
-  { id: 'Red Wine',        category: 'wine',        flavorNote: 'Tannin, dark fruit, cedar' },
-  { id: 'Dark Chocolate',  category: 'food',        flavorNote: 'Cocoa, bitter, smooth' },
-  { id: 'Craft Beer',      category: 'beverage',    flavorNote: 'Malt, hops, varied' },
+// 7 pairing icon cards at the bottom of the image (y≈70–87%)
+const PAIRING_ZONES = [
+  { id: 'Whiskey',       category: 'spirits',   flavorNote: 'Oak, vanilla, caramel',            x:  3.0, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Rum',           category: 'spirits',   flavorNote: 'Molasses, tropical, sweet',         x: 15.7, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Coffee',        category: 'beverage',  flavorNote: 'Roast, bitter, earthy',             x: 28.4, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Espresso',      category: 'beverage',  flavorNote: 'Concentrated, bold, slightly bitter', x: 41.1, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Chocolate',     category: 'food',      flavorNote: 'Cocoa, bitter, smooth',             x: 53.8, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Nuts',          category: 'food',      flavorNote: 'Toasted, earthy, rich',             x: 66.5, y: 70.0, w: 12.0, h: 17.0 },
+  { id: 'Nonalcoholic',  category: 'beverage',  flavorNote: 'Fresh, clean, varied',              x: 79.2, y: 70.0, w: 12.0, h: 17.0 },
 ]
 
-// Simple pairing recommendation generator from selections
+const INSIGHT = {
+  Whiskey:      'The barrel aging of whiskey mirrors the tobacco curing process — shared toasty, woody notes create harmony.',
+  Rum:          "Rum's natural sweetness softens any pepper or spice, bringing out the leaf's hidden sugar tones.",
+  Coffee:       'Coffee amplifies the roasted, nutty qualities in medium-to-full body blends.',
+  Espresso:     'Espresso concentrates bitterness that balances full-bodied, ligero-forward sticks.',
+  Chocolate:    'Bittersweet cocoa creates a buttery, dessert-like finish when paired with medium blends.',
+  Nuts:         'Nutty accents bridge the earthy and sweet registers — ideal for Connecticut or natural wrappers.',
+  Nonalcoholic: 'Sparkling water or cold brew cleanses the palate between draws — lets the wrapper speak.',
+}
+
 function buildRecommendation(selections) {
   if (selections.length === 0) return null
   const primary = selections[0]
-  const opt = PAIRING_OPTIONS.find(p => p.id === primary)
-  const flavorHarmony = selections.length > 1
-    ? `${primary} anchors the session, with ${selections[1]} extending the mid-palate.`
-    : `${primary} provides a clean, focused complement.`
-
-  const insight = {
-    Whiskey:        'The barrel aging of whiskey mirrors the tobacco curing process — shared toasty, woody notes create harmony.',
-    Rum:            'Rum\'s natural sweetness softens any pepper or spice, bringing out the leaf\'s hidden sugar tones.',
-    Cognac:         'Cognac\'s dried fruit character bridges the gap between earthy tobacco and elegant finish.',
-    Coffee:         'Coffee amplifies the roasted, nutty qualities in medium-to-full body blends.',
-    Espresso:       'Espresso concentrates bitterness that balances full-bodied, ligero-forward sticks.',
-    'Red Wine':     'Tannins in red wine engage with the cigar\'s structure — choose bold reds with full-bodied cigars.',
-    'Dark Chocolate': 'Bittersweet cocoa creates a buttery, dessert-like finish when paired with medium blends.',
-    'Craft Beer':   'Malt complexity and carbonation cleanse the palate between draws — especially effective with thick smoke.',
-  }
-
+  const zone = PAIRING_ZONES.find(p => p.id === primary)
   return {
     primary,
     selections,
-    flavorHarmony,
-    insight: insight[primary] || 'A considered pairing that will complement the session\'s flavor arc.',
-    flavorNote: opt?.flavorNote || '',
-    recommendation: `${primary}${selections.length > 1 ? ' + ' + selections[1] : ''}`,
-    category: opt?.category || 'spirits',
+    flavorHarmony: selections.length > 1
+      ? `${primary} anchors the session, with ${selections[1]} extending the mid-palate.`
+      : `${primary} provides a clean, focused complement.`,
+    insight: INSIGHT[primary] || `${primary} creates a cohesive tasting session.`,
+    flavorNote: zone?.flavorNote || '',
+    recommendation: selections.join(' + '),
+    category: zone?.category || 'beverage',
   }
 }
 
@@ -65,15 +61,14 @@ export default function PairingLab() {
 
   const recommendation = buildRecommendation(selectedPairings)
 
-  // Persist to journey state whenever selections change
   useEffect(() => {
     setPairing(recommendation)
   }, [selectedPairings]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  function togglePairing(p) {
+  function togglePairing(id) {
     triggerHaptic('light')
     setSelectedPairings(prev =>
-      prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p]
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
     )
   }
 
@@ -84,82 +79,45 @@ export default function PairingLab() {
 
   return (
     <>
-      <SmokeCraftAssetScreen
+      <SmokeCraftImageBoundsOverlay
         src={SC_ASSETS.pairingLab}
+        naturalW={NAT_W}
+        naturalH={NAT_H}
         alt="SmokeCraft Pairing Lab — Build Your Pairing Profile"
-      />
-
-      <div style={{
-        position: 'fixed',
-        bottom: 110, left: 0, right: 0,
-        zIndex: 400,
-        padding: '0 16px',
-        pointerEvents: 'none',
-      }}>
-        <div style={{
-          pointerEvents: 'auto',
-          background: 'rgba(10,6,3,0.94)',
-          border: '1px solid rgba(233,193,118,0.2)',
-          borderRadius: 12,
-          padding: '10px 12px',
-          maxWidth: 500,
-          margin: '0 auto',
-        }}>
-          <div style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>
-            Choose Your Pairing
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
-            {PAIRING_OPTIONS.map(p => {
-              const active = selectedPairings.includes(p.id)
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => togglePairing(p.id)}
-                  style={{
-                    background: active ? GOLD : 'transparent',
-                    color: active ? DARK : GOLD,
-                    border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.4)'}`,
-                    borderRadius: 20,
-                    padding: '11px 16px',
-                    minHeight: 44,
-                    fontSize: 14,
-                    fontWeight: 600,
-                    fontFamily: 'Georgia, serif',
-                    cursor: 'pointer',
-                    letterSpacing: '0.04em',
-                  }}
-                >
-                  {p.id}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Live pairing recommendation */}
-          {recommendation ? (
-            <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', paddingTop: 8 }}>
-              <div style={{ fontSize: 9, color: GOLD, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4 }}>
-                Pairing Recommendation
-              </div>
-              <div style={{ fontSize: 14, color: '#e5e2e1', fontFamily: 'Georgia, serif', fontWeight: 600, marginBottom: 3 }}>
-                {recommendation.recommendation}
-              </div>
-              <div style={{ fontSize: 11, color: DIM, fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
-                {recommendation.flavorHarmony}
-              </div>
-              <div style={{ fontSize: 11, color: DIM, marginTop: 4 }}>
-                {recommendation.insight}
-              </div>
-            </div>
-          ) : (
-            <div style={{ fontSize: 11, color: DIM, paddingTop: 4 }}>
-              Select a pairing above to generate a recommendation.
-            </div>
-          )}
-        </div>
-      </div>
+      >
+        {PAIRING_ZONES.map(p => {
+          const active = selectedPairings.includes(p.id)
+          return (
+            <button
+              key={p.id}
+              type="button"
+              aria-label={`${p.id} pairing${active ? ' (selected)' : ''}`}
+              aria-pressed={active}
+              onClick={() => togglePairing(p.id)}
+              style={{
+                position: 'absolute',
+                left: `${p.x}%`, top: `${p.y}%`,
+                width: `${p.w}%`, height: `${p.h}%`,
+                pointerEvents: 'auto',
+                background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
+                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
+                borderRadius: 4,
+                cursor: 'pointer',
+                boxSizing: 'border-box',
+                padding: 0,
+              }}
+            >
+              {active && (
+                <span style={{
+                  position: 'absolute', top: 4, right: 5,
+                  fontSize: 'clamp(9px,1.2vw,14px)', fontWeight: 700,
+                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
+                }}>✓</span>
+              )}
+            </button>
+          )
+        })}
+      </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
         primary="Continue to Humidor Match →"
@@ -167,8 +125,6 @@ export default function PairingLab() {
         secondary="← Back"
         onSecondary={() => navigate(-1)}
       />
-
-      <SmokeCraftMenuButton label="Order Pairing" />
     </>
   )
 }
