@@ -3,73 +3,30 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
+// Natural dimensions of SEED & SOIL.png
+const NAT_W = 1672
+const NAT_H = 941
+
 const GOLD = '#E9C176'
-const DARK = '#0a0603'
-const DIM  = 'rgba(229,226,225,0.55)'
 
-const SEED_TYPES = [
-  { id: 'Criollo',     notes: 'Native Cuban lineage. Earthy, complex, balanced strength.' },
-  { id: 'Corojo',      notes: 'Vuelta Abajo royalty. Bold spice and aromatic depth.' },
-  { id: 'Habano',      notes: 'Cuban heritage bred worldwide. Medium-full with pepper edge.' },
-  { id: 'Connecticut', notes: 'Creamier, smoother character. Popular for milder profiles.' },
+// Card zones as % of natural image dimensions (x, y, w, h)
+const SEED_ZONES = [
+  { id: 'Criollo',     group: 'seed', x:  7.77, y: 43.0, w: 32.9, h: 6.9 },
+  { id: 'Corojo',      group: 'seed', x:  7.77, y: 50.2, w: 32.9, h: 6.9 },
+  { id: 'Habano',      group: 'seed', x:  7.77, y: 57.4, w: 32.9, h: 6.9 },
+  { id: 'Connecticut', group: 'seed', x:  7.77, y: 64.6, w: 32.9, h: 8.5 },
 ]
-
-const SOIL_TYPES = [
-  { id: 'Sandy Loam',  notes: 'Well-draining, warm. Produces lighter, aromatic leaf.' },
-  { id: 'Clay Loam',   notes: 'Dense, mineral-rich. Builds body and structural strength.' },
-  { id: 'Volcanic',    notes: 'Ash-enriched. Signature bold Nicaraguan terroir character.' },
-  { id: 'Limestone',   notes: 'Calcium-rich. Refines flavor and creates bright, clean notes.' },
+const SOIL_ZONES = [
+  { id: 'Sandy Loam', group: 'soil', x: 41.9, y: 43.0, w: 44.7, h: 6.9 },
+  { id: 'Clay Loam',  group: 'soil', x: 41.9, y: 50.2, w: 44.7, h: 6.9 },
+  { id: 'Volcanic',   group: 'soil', x: 41.9, y: 57.4, w: 44.7, h: 6.9 },
+  { id: 'Limestone',  group: 'soil', x: 41.9, y: 64.6, w: 44.7, h: 8.5 },
 ]
-
-function ChipGroup({ label, options, value, onChange }) {
-  return (
-    <div style={{ marginBottom: 10 }}>
-      <div style={{ fontSize: 15, color: GOLD, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
-        {label}
-      </div>
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-        {options.map(opt => {
-          const active = value === opt.id
-          return (
-            <button
-              key={opt.id}
-              type="button"
-              aria-pressed={active}
-              onClick={() => { triggerHaptic('light'); onChange(active ? null : opt.id) }}
-              style={{
-                background: active ? GOLD : 'transparent',
-                color: active ? DARK : GOLD,
-                border: `1px solid ${active ? GOLD : 'rgba(233,193,118,0.4)'}`,
-                borderRadius: 20,
-                padding: '12px 16px',
-                minHeight: 48,
-                fontSize: 16,
-                fontWeight: 600,
-                fontFamily: 'Georgia, serif',
-                cursor: 'pointer',
-                letterSpacing: '0.04em',
-              }}
-            >
-              {opt.id}
-            </button>
-          )
-        })}
-      </div>
-      {value && (() => {
-        const notes = options.find(o => o.id === value)?.notes
-        return notes ? (
-          <div style={{ fontSize: 14, color: DIM, fontFamily: 'Georgia, serif', fontStyle: 'italic', marginTop: 5 }}>
-            {notes}
-          </div>
-        ) : null
-      })()}
-    </div>
-  )
-}
+const ALL_ZONES = [...SEED_ZONES, ...SOIL_ZONES]
 
 export default function SeedSoil() {
   const { awardSessionRewards } = useGuestSession()
@@ -79,7 +36,6 @@ export default function SeedSoil() {
   const [seedType, setSeedType] = useState(() => journey.seedSoil?.seedType || null)
   const [soilType, setSoilType] = useState(() => journey.seedSoil?.soilType || null)
 
-  // Persist to journey state whenever selections change
   useEffect(() => {
     setSeedSoil(
       seedType || soilType
@@ -88,6 +44,15 @@ export default function SeedSoil() {
     )
   }, [seedType, soilType, setSeedSoil])
 
+  function handleToggle(zone) {
+    triggerHaptic('light')
+    if (zone.group === 'seed') {
+      setSeedType(prev => prev === zone.id ? null : zone.id)
+    } else {
+      setSoilType(prev => prev === zone.id ? null : zone.id)
+    }
+  }
+
   function handleContinue() {
     awardSessionRewards('seed-soil')
     navigate('/smokecraft/pairing-lab')
@@ -95,31 +60,54 @@ export default function SeedSoil() {
 
   return (
     <>
-      <SmokeCraftAssetScreen
+      <SmokeCraftImageBoundsOverlay
         src={SC_ASSETS.seedSoil}
+        naturalW={NAT_W}
+        naturalH={NAT_H}
         alt="SmokeCraft Seed & Soil — The Origin of Your Cigar"
-      />
-
-      <div style={{
-        position: 'fixed',
-        bottom: 110, left: 0, right: 0,
-        zIndex: 400,
-        padding: '0 16px',
-        pointerEvents: 'none',
-      }}>
-        <div style={{
-          pointerEvents: 'auto',
-          background: 'rgba(5,3,1,0.93)',
-          border: '1px solid rgba(233,193,118,0.2)',
-          borderRadius: 12,
-          padding: '10px 14px',
-          maxWidth: 560,
-          margin: '0 auto',
-        }}>
-          <ChipGroup label="Seed Type" options={SEED_TYPES} value={seedType} onChange={setSeedType} />
-          <ChipGroup label="Soil Type" options={SOIL_TYPES} value={soilType} onChange={setSoilType} />
-        </div>
-      </div>
+      >
+        {ALL_ZONES.map(zone => {
+          const active = zone.group === 'seed' ? seedType === zone.id : soilType === zone.id
+          return (
+            <button
+              key={zone.id}
+              type="button"
+              aria-label={`${zone.id}${active ? ' (selected)' : ''}`}
+              aria-pressed={active}
+              onClick={() => handleToggle(zone)}
+              style={{
+                position: 'absolute',
+                left: `${zone.x}%`,
+                top: `${zone.y}%`,
+                width: `${zone.w}%`,
+                height: `${zone.h}%`,
+                pointerEvents: 'auto',
+                background: active ? 'rgba(233,193,118,0.15)' : 'transparent',
+                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
+                borderRadius: 3,
+                cursor: 'pointer',
+                boxSizing: 'border-box',
+                padding: 0,
+              }}
+            >
+              {active && (
+                <span style={{
+                  position: 'absolute',
+                  top: 3,
+                  right: 6,
+                  fontSize: 'clamp(9px,1.2vw,14px)',
+                  fontWeight: 700,
+                  color: GOLD,
+                  lineHeight: 1,
+                  pointerEvents: 'none',
+                }}>
+                  ✓
+                </span>
+              )}
+            </button>
+          )
+        })}
+      </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
         primary="Continue to Pairing Lab →"
