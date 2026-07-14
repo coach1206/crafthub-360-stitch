@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 export default function HowItWorks() {
   const navigate = useNavigate()
@@ -14,12 +15,14 @@ export default function HowItWorks() {
   return (
     <>
       <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-how-it-works.png"
-        alt="How SmokeCraft Works"
+        src={SC_ASSETS.howItWorks}
+        alt="How SmokeCraft Works — Educational Overview"
       />
       <SmokeCraftNavBar
         primary="Get Started →"
         onPrimary={handleGetStarted}
+        secondary="← Back"
+        onSecondary={() => navigate(-1)}
       />
     </>
   )
