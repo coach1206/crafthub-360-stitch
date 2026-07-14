@@ -62,7 +62,7 @@ export default function FinalReview() {
                 left: `${zone.x}%`, top: `${zone.y}%`,
                 width: `${zone.w}%`, height: `${zone.h}%`,
                 pointerEvents: 'auto',
-                background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
+                background: 'transparent',
                 border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
                 borderRadius: 3,
                 cursor: 'pointer',

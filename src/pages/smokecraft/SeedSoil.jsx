@@ -7,13 +7,11 @@ import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraft
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
-// Natural dimensions of SEED & SOIL.png
 const NAT_W = 1672
 const NAT_H = 941
 
 const GOLD = '#E9C176'
 
-// Card zones as % of natural image dimensions (x, y, w, h)
 const SEED_ZONES = [
   { id: 'Criollo',     group: 'seed', x:  7.77, y: 43.0, w: 32.9, h: 6.9 },
   { id: 'Corojo',      group: 'seed', x:  7.77, y: 50.2, w: 32.9, h: 6.9 },
@@ -35,14 +33,15 @@ export default function SeedSoil() {
 
   const [seedType, setSeedType] = useState(() => journey.seedSoil?.seedType || null)
   const [soilType, setSoilType] = useState(() => journey.seedSoil?.soilType || null)
+  const [notes,    setNotes]    = useState(() => journey.seedSoil?.notes || '')
 
   useEffect(() => {
     setSeedSoil(
-      seedType || soilType
-        ? { seedType: seedType || null, soilType: soilType || null }
+      seedType || soilType || notes
+        ? { seedType: seedType || null, soilType: soilType || null, notes }
         : null
     )
-  }, [seedType, soilType, setSeedSoil])
+  }, [seedType, soilType, notes, setSeedSoil])
 
   function handleToggle(zone) {
     triggerHaptic('light')
@@ -77,36 +76,63 @@ export default function SeedSoil() {
               onClick={() => handleToggle(zone)}
               style={{
                 position: 'absolute',
-                left: `${zone.x}%`,
-                top: `${zone.y}%`,
-                width: `${zone.w}%`,
-                height: `${zone.h}%`,
+                left: `${zone.x}%`, top: `${zone.y}%`,
+                width: `${zone.w}%`, height: `${zone.h}%`,
                 pointerEvents: 'auto',
-                background: active ? 'rgba(233,193,118,0.15)' : 'transparent',
+                background: 'transparent',
                 border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
                 borderRadius: 3,
                 cursor: 'pointer',
                 boxSizing: 'border-box',
                 padding: 0,
+                outline: 'none',
               }}
             >
               {active && (
                 <span style={{
-                  position: 'absolute',
-                  top: 3,
-                  right: 6,
-                  fontSize: 'clamp(9px,1.2vw,14px)',
-                  fontWeight: 700,
-                  color: GOLD,
-                  lineHeight: 1,
-                  pointerEvents: 'none',
-                }}>
-                  ✓
-                </span>
+                  position: 'absolute', top: 3, right: 6,
+                  fontSize: 'clamp(9px,1.2vw,14px)', fontWeight: 700,
+                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
+                }}>✓</span>
               )}
             </button>
           )
         })}
+
+        {/* Notes textarea panel — bottom right */}
+        <div style={{
+          position: 'absolute',
+          left: '7%', top: '76%', width: '86%', height: '18%',
+          background: 'rgba(5,5,5,0.88)',
+          border: '1px solid rgba(233,193,118,0.22)',
+          borderRadius: 6, boxSizing: 'border-box',
+          padding: 'clamp(5px,0.8vw,10px)',
+          display: 'flex', flexDirection: 'column', gap: 4,
+          pointerEvents: 'auto',
+        }}>
+          <span style={{
+            fontSize: 'clamp(7px,0.58vw,8px)',
+            color: 'rgba(233,193,118,0.5)',
+            textTransform: 'uppercase', letterSpacing: '0.08em',
+            fontFamily: 'Georgia, serif',
+          }}>
+            Tasting Notes
+          </span>
+          <textarea
+            value={notes}
+            onChange={e => setNotes(e.target.value)}
+            placeholder="Impressions about seed variety and growing soil…"
+            aria-label="Seed and soil tasting notes"
+            style={{
+              flex: 1, resize: 'none',
+              background: 'transparent',
+              border: 'none', outline: 'none',
+              color: 'rgba(229,226,225,0.8)',
+              fontSize: 'clamp(8px,0.72vw,10px)',
+              fontFamily: 'Georgia, serif', lineHeight: 1.5,
+            }}
+          />
+        </div>
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar

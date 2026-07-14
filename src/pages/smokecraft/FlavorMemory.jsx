@@ -246,12 +246,13 @@ export default function FlavorMemory() {
                 left: `${zone.x}%`, top: `${zone.y}%`,
                 width: `${zone.w}%`, height: `${zone.h}%`,
                 pointerEvents: 'auto',
-                background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
+                background: 'transparent',
                 border: `2.5px solid ${active ? GOLD : 'transparent'}`,
                 borderRadius: 4,
                 cursor: 'pointer',
                 boxSizing: 'border-box',
                 padding: 0,
+                outline: 'none',
               }}
             >
               {active && (
@@ -265,17 +266,86 @@ export default function FlavorMemory() {
           )
         })}
 
-        {/* Live SVG radar chart — positioned in the chart zone (lower half) */}
+        {/* Live SVG radar chart — left side of lower half */}
         <div
           aria-label="flavor radar chart"
           style={{
             position: 'absolute',
             left: '5%', top: '52%',
-            width: '45%', height: '42%',
+            width: '42%', height: '42%',
             pointerEvents: 'none',
           }}
         >
           <RadarChart flavors={fm.selectedFlavors} />
+        </div>
+
+        {/* Perception sliders — right side */}
+        <div style={{
+          position: 'absolute',
+          left: '51%', top: '52%', width: '44%', height: '26%',
+          background: 'rgba(5,5,5,0.88)',
+          border: '1px solid rgba(233,193,118,0.22)',
+          borderRadius: 6, boxSizing: 'border-box',
+          padding: 'clamp(5px,0.8vw,10px)',
+          pointerEvents: 'auto',
+          fontFamily: 'Georgia, serif',
+        }}>
+          <div style={{ fontSize: 'clamp(7px,0.58vw,8px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
+            Perception
+          </div>
+          {[
+            { key: 'intensity', label: 'Intensity' },
+            { key: 'body',      label: 'Body' },
+            { key: 'strength',  label: 'Strength' },
+          ].map(({ key, label }) => (
+            <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <span style={{ fontSize: 'clamp(7px,0.62vw,9px)', color: 'rgba(229,226,225,0.55)', width: 52, flexShrink: 0 }}>{label}</span>
+              <input
+                type="range"
+                min={1} max={5}
+                value={fm[key]}
+                aria-label={`${label} perception`}
+                onChange={e => {
+                  triggerHaptic('light')
+                  setFm(prev => ({ ...prev, [key]: Number(e.target.value) }))
+                }}
+                style={{ flex: 1, accentColor: GOLD, cursor: 'pointer', height: 4 }}
+              />
+              <span style={{ fontSize: 'clamp(7px,0.62vw,9px)', color: GOLD, fontWeight: 700, width: 16, textAlign: 'right' }}>
+                {fm[key]}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Personal notes — right side, below sliders */}
+        <div style={{
+          position: 'absolute',
+          left: '51%', top: '81%', width: '44%', height: '13%',
+          background: 'rgba(5,5,5,0.88)',
+          border: '1px solid rgba(233,193,118,0.22)',
+          borderRadius: 6, boxSizing: 'border-box',
+          padding: 'clamp(4px,0.6vw,7px)',
+          display: 'flex', flexDirection: 'column', gap: 3,
+          pointerEvents: 'auto',
+          fontFamily: 'Georgia, serif',
+        }}>
+          <span style={{ fontSize: 'clamp(7px,0.58vw,8px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            Personal Notes
+          </span>
+          <textarea
+            value={fm.personalNotes}
+            onChange={e => setFm(prev => ({ ...prev, personalNotes: e.target.value }))}
+            placeholder="Your sensory memory in your own words…"
+            aria-label="Flavor memory personal notes"
+            style={{
+              flex: 1, resize: 'none',
+              background: 'transparent', border: 'none', outline: 'none',
+              color: 'rgba(229,226,225,0.8)',
+              fontSize: 'clamp(8px,0.72vw,10px)',
+              fontFamily: 'Georgia, serif', lineHeight: 1.4,
+            }}
+          />
         </div>
       </SmokeCraftImageBoundsOverlay>
 

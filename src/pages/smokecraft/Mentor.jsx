@@ -82,27 +82,28 @@ export default function Mentor() {
                 width: `${m.w}%`,
                 height: `${m.h}%`,
                 pointerEvents: 'auto',
-                background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
+                background: 'transparent',
                 border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
                 borderRadius: 4,
                 cursor: maxed ? 'not-allowed' : 'pointer',
+                outline: 'none',
                 boxSizing: 'border-box',
                 padding: 0,
               }}
             >
               {active && (
-                <span style={{
-                  position: 'absolute',
-                  top: 4,
-                  right: 6,
-                  fontSize: 'clamp(10px,1.4vw,16px)',
-                  fontWeight: 700,
-                  color: GOLD,
-                  lineHeight: 1,
-                  pointerEvents: 'none',
-                }}>
-                  ✓
-                </span>
+                <>
+                  <span style={{
+                    position: 'absolute', top: 4, left: 6,
+                    fontSize: 'clamp(9px,1.1vw,13px)', fontWeight: 700,
+                    color: GOLD, lineHeight: 1, pointerEvents: 'none',
+                  }}>✓</span>
+                  <span style={{
+                    position: 'absolute', top: 3, right: 5,
+                    fontSize: 'clamp(9px,1.2vw,14px)', fontWeight: 700,
+                    color: 'rgba(233,193,118,0.6)', lineHeight: 1, pointerEvents: 'none',
+                  }}>×</span>
+                </>
               )}
             </button>
           )

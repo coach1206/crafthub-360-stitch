@@ -16,7 +16,18 @@ const CUT_METHODS   = ['Straight Cut', 'V-Cut', 'Punch Cut']
 const TOAST_METHODS = ['Gentle Toast', 'Foot Toast', 'Full Toast']
 const LIGHT_METHODS = ['Cedar Spill', 'Torch Lighter', 'Soft Flame']
 
-// Three method groups positioned in their printed step rows (left column, x 3.7–62%)
+const METHOD_TIPS = {
+  'Straight Cut':  'Clean guillotine cut removes the cap in one motion. Produces an open, unrestricted draw. Best for Parejo shapes.',
+  'V-Cut':         'Creates a wedge channel into the cap. Concentrates smoke through a focused point — enhances flavor intensity.',
+  'Punch Cut':     'Circular punch removes a small plug. Minimal cut exposure, tight draw, excellent for Robusto and Toro formats.',
+  'Gentle Toast':  'Rotate the foot slowly above flame. Warms the tobacco without burning — primes the blend before lighting.',
+  'Foot Toast':    'Toast the full foot circumference evenly. Creates an even ember foundation for a consistent first third burn.',
+  'Full Toast':    'Toast aggressively across the foot and edges. Faster ignition — recommended for Maduros and thick ring gauges.',
+  'Cedar Spill':   'Ignite a cedar spill from a candle. The cedar aromatics complement tobacco naturally. Classic lounge method.',
+  'Torch Lighter': 'Butane torch lights quickly and evenly. Best for outdoor use or when cedar isn\'t available. Keep flame moving.',
+  'Soft Flame':    'Soft butane or match flame. Slower ignition preserves delicate top notes. Preferred for Connecticut wrappers.',
+}
+
 const STEP_GROUPS = [
   { id: 'cut',   methods: CUT_METHODS,   y: 30.5 },
   { id: 'toast', methods: TOAST_METHODS, y: 50.0 },
@@ -48,6 +59,9 @@ export default function CutToastLight() {
     return lightMethod
   }
 
+  const activeMethod = lightMethod || toastMethod || cutMethod
+  const tip = activeMethod ? METHOD_TIPS[activeMethod] : null
+
   function handleContinue() {
     setCutToastLight({ cut: cutMethod, toast: toastMethod, light: lightMethod })
     awardSessionRewards('cut-toast-light')
@@ -78,34 +92,49 @@ export default function CutToastLight() {
                   left: `${x}%`, top: `${group.y}%`,
                   width: `${BTN_W}%`, height: `${BTN_H}%`,
                   pointerEvents: 'auto',
-                  background: active ? 'rgba(233,193,118,0.22)' : 'transparent',
+                  background: 'transparent',
                   border: `2px solid ${active ? GOLD : 'transparent'}`,
                   borderRadius: 4,
                   cursor: 'pointer',
                   boxSizing: 'border-box',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
+                  outline: 'none',
                 }}
               >
-                <span style={{
-                  fontSize: 'clamp(8px,1.05vw,13px)',
-                  fontWeight: active ? 700 : 500,
-                  color: active ? GOLD : 'rgba(229,226,225,0.82)',
-                  fontFamily: 'Georgia, serif',
-                  letterSpacing: '0.02em',
-                  pointerEvents: 'none',
-                  userSelect: 'none',
-                  textAlign: 'center',
-                  lineHeight: 1.2,
-                  padding: '0 4px',
-                }}>
-                  {method}
-                </span>
+                {active && (
+                  <span style={{
+                    position: 'absolute', top: 3, right: 5,
+                    fontSize: 'clamp(9px,1.0vw,12px)', fontWeight: 700,
+                    color: GOLD, lineHeight: 1, pointerEvents: 'none',
+                  }}>✓</span>
+                )}
               </button>
             )
           })
+        )}
+
+        {/* Instruction tip panel — bottom strip */}
+        {tip && (
+          <div style={{
+            position: 'absolute',
+            left: '3%', top: '83%', width: '94%', height: '12%',
+            background: 'rgba(5,5,5,0.9)',
+            border: '1px solid rgba(233,193,118,0.22)',
+            borderRadius: 5, boxSizing: 'border-box',
+            padding: 'clamp(5px,0.8vw,10px) clamp(8px,1vw,14px)',
+            display: 'flex', alignItems: 'center', gap: 10,
+            pointerEvents: 'none',
+          }}>
+            <span style={{ fontSize: 'clamp(9px,1.1vw,14px)', color: GOLD, flexShrink: 0 }}>◦</span>
+            <span style={{
+              fontSize: 'clamp(8px,0.75vw,10px)',
+              color: 'rgba(229,226,225,0.75)',
+              fontFamily: 'Georgia, serif',
+              lineHeight: 1.4,
+            }}>
+              <strong style={{ color: GOLD, marginRight: 4 }}>{activeMethod}:</strong>
+              {tip}
+            </span>
+          </div>
         )}
       </SmokeCraftImageBoundsOverlay>
 

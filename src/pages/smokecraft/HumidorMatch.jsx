@@ -11,15 +11,22 @@ const NAT_W = 1672
 const NAT_H = 941
 
 const GOLD = '#E9C176'
+const PANEL = {
+  background: 'rgba(5,5,5,0.92)',
+  border: '1px solid rgba(233,193,118,0.28)',
+  borderRadius: 8,
+  position: 'absolute',
+  boxSizing: 'border-box',
+  fontFamily: 'Georgia, serif',
+}
 
-// 3 humidor environment rows (left-centre zone of image)
+// 3 humidor environment rows
 const HUMIDOR_ZONES = [
-  { id: 'main_floor', label: 'Main Floor Humidor', x: 18.7, y: 24.3, w: 41.4, h: 12.3 },
-  { id: 'walk_in',    label: 'Walk-In Humidor',    x: 18.7, y: 39.5, w: 41.4, h: 12.7 },
-  { id: 'vip_lounge', label: 'VIP Lounge Humidor', x: 18.7, y: 54.9, w: 41.4, h: 12.6 },
+  { id: 'virtual_humidor', label: 'Virtual Humidor', x: 18.7, y: 24.3, w: 41.4, h: 12.3 },
+  { id: 'dry_box',         label: 'Dry Box',         x: 18.7, y: 39.5, w: 41.4, h: 12.7 },
+  { id: 'travel_case',     label: 'Travel Case',     x: 18.7, y: 54.9, w: 41.4, h: 12.6 },
 ]
 
-// Cigar presets — brand names must match test filter: Oliva|Fuente|Padron|Macanudo|CAO|Romeo|Father|Cohiba
 const CIGAR_PRESETS = [
   { name: 'Oliva Serie V',        origin: 'Nicaragua',          wrapper: 'Habano Maduro',   strength: 'Full',        body: 'Full',   tastingProfile: 'Dark chocolate, leather, espresso' },
   { name: 'Arturo Fuente Opus X', origin: 'Dominican Republic', wrapper: 'Dominican',       strength: 'Full',        body: 'Full',   tastingProfile: 'Spice, cedar, roasted coffee' },
@@ -31,7 +38,6 @@ const CIGAR_PRESETS = [
   { name: 'Cohiba Siglo VI',      origin: 'Dominican Republic', wrapper: 'Ecuador Natural', strength: 'Medium',      body: 'Medium', tastingProfile: 'Floral, cedar, subtle pepper' },
 ]
 
-// 8 cigar preset buttons in 2 rows of 4 (lower section of image, y≈70–90%)
 const CIGAR_LAYOUT = CIGAR_PRESETS.map((c, i) => ({
   ...c,
   x: 1.5 + (i % 4) * 24.5,
@@ -40,6 +46,76 @@ const CIGAR_LAYOUT = CIGAR_PRESETS.map((c, i) => ({
   h: 9.5,
 }))
 
+function Stepper({ label, value, unit, onDec, onInc, min, max }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+      <span style={{ fontSize: 'clamp(8px,0.7vw,10px)', color: 'rgba(229,226,225,0.6)', width: 62, flexShrink: 0 }}>
+        {label}
+      </span>
+      <button
+        type="button"
+        aria-label={`Decrease ${label}`}
+        onClick={() => { triggerHaptic('light'); onDec() }}
+        disabled={value <= min}
+        style={{
+          width: 20, height: 20, borderRadius: 4,
+          border: `1px solid rgba(233,193,118,0.4)`,
+          background: 'transparent',
+          color: GOLD, cursor: value <= min ? 'not-allowed' : 'pointer',
+          fontSize: 14, lineHeight: 1, padding: 0, outline: 'none',
+          opacity: value <= min ? 0.4 : 1,
+        }}
+      >−</button>
+      <span style={{ fontSize: 'clamp(9px,0.8vw,11px)', color: GOLD, fontWeight: 700, minWidth: 38, textAlign: 'center' }}>
+        {value}{unit}
+      </span>
+      <button
+        type="button"
+        aria-label={`Increase ${label}`}
+        onClick={() => { triggerHaptic('light'); onInc() }}
+        disabled={value >= max}
+        style={{
+          width: 20, height: 20, borderRadius: 4,
+          border: `1px solid rgba(233,193,118,0.4)`,
+          background: 'transparent',
+          color: GOLD, cursor: value >= max ? 'not-allowed' : 'pointer',
+          fontSize: 14, lineHeight: 1, padding: 0, outline: 'none',
+          opacity: value >= max ? 0.4 : 1,
+        }}
+      >+</button>
+    </div>
+  )
+}
+
+function Toggle({ label, value, onChange }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+      <span style={{ fontSize: 'clamp(8px,0.7vw,10px)', color: 'rgba(229,226,225,0.6)' }}>{label}</span>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={value}
+        aria-label={label}
+        onClick={() => { triggerHaptic('light'); onChange(!value) }}
+        style={{
+          width: 36, height: 18, borderRadius: 9,
+          border: `1px solid ${value ? GOLD : 'rgba(233,193,118,0.3)'}`,
+          background: value ? 'rgba(233,193,118,0.2)' : 'transparent',
+          cursor: 'pointer', outline: 'none', position: 'relative', padding: 0,
+          transition: 'background 0.2s, border-color 0.2s',
+        }}
+      >
+        <span style={{
+          position: 'absolute', top: 2, left: value ? 18 : 2,
+          width: 12, height: 12, borderRadius: '50%',
+          background: value ? GOLD : 'rgba(229,226,225,0.4)',
+          transition: 'left 0.15s, background 0.15s',
+        }} />
+      </button>
+    </div>
+  )
+}
+
 export default function HumidorMatch() {
   const { awardSessionRewards, setHumidorMatchSelection, setSelectedHumidorRecommendation } = useGuestSession()
   const { setSelectedCigar } = useSmokeCraftJourney()
@@ -47,12 +123,18 @@ export default function HumidorMatch() {
 
   const [selectedEnv,   setSelectedEnv]   = useState(() => localStorage.getItem('sc_humidor_env') || null)
   const [selectedCigar, setLocalCigar]    = useState(null)
-  const [done, setDone] = useState(false)
+  const [temp,          setTemp]          = useState(70)
+  const [humidity,      setHumidity]      = useState(70)
+  const [sealOn,        setSealOn]        = useState(false)
+  const [airflowOn,     setAirflowOn]     = useState(true)
+  const [applyStatus,   setApplyStatus]   = useState('idle')
+  const [done,          setDone]          = useState(false)
 
   function pickEnv(envId) {
     triggerHaptic('light')
     const next = envId === selectedEnv ? null : envId
     setSelectedEnv(next)
+    if (applyStatus === 'applied') setApplyStatus('idle')
     if (next) localStorage.setItem('sc_humidor_env', next)
     else localStorage.removeItem('sc_humidor_env')
   }
@@ -63,6 +145,14 @@ export default function HumidorMatch() {
     setLocalCigar(next)
     if (next) setSelectedCigar({ name: next.name, origin: next.origin, wrapper: next.wrapper, strength: next.strength, body: next.body, tastingProfile: next.tastingProfile })
     else setSelectedCigar(null)
+  }
+
+  function handleApply() {
+    triggerHaptic('medium')
+    setApplyStatus('applied')
+    try {
+      localStorage.setItem('sc_humidor_settings', JSON.stringify({ temp, humidity, sealOn, airflowOn, env: selectedEnv, appliedAt: Date.now() }))
+    } catch {}
   }
 
   function handleContinue() {
@@ -77,6 +167,7 @@ export default function HumidorMatch() {
         environment: selectedEnv,
         environmentLabel: envLabel,
         selectedCigarName: selectedCigar?.name || null,
+        settings: { temp, humidity, sealOn, airflowOn },
       })
     }
     awardSessionRewards('humidor-match')
@@ -106,12 +197,13 @@ export default function HumidorMatch() {
                 left: `${zone.x}%`, top: `${zone.y}%`,
                 width: `${zone.w}%`, height: `${zone.h}%`,
                 pointerEvents: 'auto',
-                background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
+                background: 'transparent',
                 border: `2.5px solid ${active ? GOLD : 'transparent'}`,
                 borderRadius: 4,
                 cursor: 'pointer',
                 boxSizing: 'border-box',
                 padding: 0,
+                outline: 'none',
               }}
             >
               {active && (
@@ -124,6 +216,83 @@ export default function HumidorMatch() {
             </button>
           )
         })}
+
+        {/* Environment controls panel — right side */}
+        <div style={{
+          ...PANEL,
+          left: '63%', top: '22%', width: '34%', height: '46%',
+          padding: 'clamp(6px,1vw,14px)',
+          pointerEvents: 'auto',
+        }}>
+          {/* Manual Mode status */}
+          <div style={{
+            fontSize: 'clamp(7px,0.6vw,9px)',
+            color: 'rgba(233,193,118,0.55)',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            marginBottom: 8,
+          }}>
+            ◦ Manual Mode — No Hardware Connected
+          </div>
+
+          {selectedEnv && (
+            <div style={{
+              fontSize: 'clamp(8px,0.7vw,10px)',
+              color: GOLD,
+              fontWeight: 700,
+              marginBottom: 10,
+              letterSpacing: '0.04em',
+            }}>
+              {HUMIDOR_ZONES.find(z => z.id === selectedEnv)?.label || ''}
+            </div>
+          )}
+
+          <Stepper
+            label="Temperature"
+            value={temp}
+            unit="°F"
+            min={60} max={80}
+            onDec={() => setTemp(v => Math.max(60, v - 1))}
+            onInc={() => setTemp(v => Math.min(80, v + 1))}
+          />
+          <Stepper
+            label="Humidity"
+            value={humidity}
+            unit="%"
+            min={55} max={80}
+            onDec={() => setHumidity(v => Math.max(55, v - 1))}
+            onInc={() => setHumidity(v => Math.min(80, v + 1))}
+          />
+
+          <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', margin: '10px 0 8px' }} />
+
+          <Toggle label="Seal" value={sealOn} onChange={setSealOn} />
+          <Toggle label="Airflow" value={airflowOn} onChange={setAirflowOn} />
+
+          <div style={{ borderTop: '1px solid rgba(233,193,118,0.15)', margin: '10px 0 8px' }} />
+
+          <button
+            type="button"
+            aria-label="Apply humidor settings"
+            onClick={handleApply}
+            style={{
+              width: '100%',
+              padding: '5px 0',
+              borderRadius: 5,
+              border: `1px solid ${applyStatus === 'applied' ? 'rgba(233,193,118,0.5)' : GOLD}`,
+              background: applyStatus === 'applied' ? 'rgba(233,193,118,0.12)' : 'rgba(233,193,118,0.08)',
+              color: GOLD,
+              fontSize: 'clamp(8px,0.72vw,10px)',
+              fontFamily: 'Georgia, serif',
+              fontWeight: 700,
+              letterSpacing: '0.05em',
+              cursor: 'pointer',
+              outline: 'none',
+            }}
+          >
+            {applyStatus === 'applied' ? '✓ Settings Applied' : 'Apply Settings'}
+          </button>
+        </div>
 
         {/* Cigar preset selector buttons */}
         {CIGAR_LAYOUT.map(cigar => {
@@ -140,7 +309,7 @@ export default function HumidorMatch() {
                 left: `${cigar.x}%`, top: `${cigar.y}%`,
                 width: `${cigar.w}%`, height: `${cigar.h}%`,
                 pointerEvents: 'auto',
-                background: active ? 'rgba(233,193,118,0.22)' : 'transparent',
+                background: 'transparent',
                 border: `2px solid ${active ? GOLD : 'transparent'}`,
                 borderRadius: 4,
                 cursor: 'pointer',
@@ -149,22 +318,16 @@ export default function HumidorMatch() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 overflow: 'hidden',
+                outline: 'none',
               }}
             >
-              <span style={{
-                fontSize: 'clamp(7px,0.85vw,11px)',
-                fontWeight: active ? 700 : 500,
-                color: active ? GOLD : 'rgba(229,226,225,0.8)',
-                fontFamily: 'Georgia, serif',
-                letterSpacing: '0.02em',
-                pointerEvents: 'none',
-                userSelect: 'none',
-                textAlign: 'center',
-                lineHeight: 1.2,
-                padding: '0 4px',
-              }}>
-                {cigar.name}
-              </span>
+              {active && (
+                <span style={{
+                  position: 'absolute', top: 3, right: 5,
+                  fontSize: 'clamp(8px,0.9vw,11px)', fontWeight: 700,
+                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
+                }}>✓</span>
+              )}
             </button>
           )
         })}
