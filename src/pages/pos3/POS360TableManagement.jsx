@@ -107,7 +107,7 @@ function FloorTable({ table, selected, onSelect, editable, onDragStart }) {
         position: 'absolute', left: `${table.x ?? 10}%`, top: `${table.y ?? 10}%`, zIndex: 1,
         width: 46, height: elapsed ? 50 : 42,
         transform: 'translate(-50%,-50%)',
-        cursor: editable ? 'grab' : 'pointer', outline: 'none', padding: 0,
+        cursor: editable ? 'grab' : 'pointer', border: 'none', padding: 0,
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         touchAction: editable ? 'none' : 'auto',
         borderRadius: 9,
