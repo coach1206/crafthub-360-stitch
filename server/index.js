@@ -83,6 +83,7 @@ import pos360ExternalIntegrationsRoutes from './routes/pos360ExternalIntegration
 import pos360FulfillmentKdsRoutes       from './routes/pos360FulfillmentKdsRoutes.js'
 import pos360SelfOrderingRoutes         from './routes/pos360SelfOrderingRoutes.js'
 import pos360ProductionReadinessRoutes  from './routes/pos360ProductionReadinessRoutes.js'
+import noveeEntryRoutes                 from './routes/noveeEntryRoutes.js'
 import noveeOSModuleRegistryRoutes      from './routes/noveeOSModuleRegistryRoutes.js'
 import noveeOSTenantGovernanceRoutes    from './routes/noveeOSTenantGovernanceRoutes.js'
 import noveeOSBillingGovernanceRoutes  from './routes/noveeOSBillingGovernanceRoutes.js'
@@ -287,6 +288,7 @@ app.use('/api/pos360/integrations',       pos360ExternalIntegrationsRoutes)
 app.use('/api/pos360/fulfillment',        pos360FulfillmentKdsRoutes)
 app.use('/api/pos360/self-ordering',     pos360SelfOrderingRoutes)
 app.use('/api/pos360/production-readiness', pos360ProductionReadinessRoutes)
+app.use('/api/novee',                      noveeEntryRoutes)
 app.use('/api/novee-os/modules',           noveeOSModuleRegistryRoutes)
 app.use('/api/novee-os/tenants',          noveeOSTenantGovernanceRoutes)
 app.use('/api/novee-os/billing',          noveeOSBillingGovernanceRoutes)
