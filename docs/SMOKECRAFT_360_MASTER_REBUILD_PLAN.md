@@ -536,3 +536,195 @@ SmokeCraft may be declared complete and frozen only when:
 ## Planning Methodology Note
 
 This revision was produced by re-reading the user-approved 27-session Master Journey specification supplied in the correction mandate, then re-mapping every finding already established in `docs/SMOKECRAFT_360_MASTER_AUDIT.md` onto that locked structure — no new repository scanning was performed, and no application file was read for the purpose of altering it. Where a mapping required a judgment call (e.g., whether a route should be renamed or only its session number changed), this plan states that as an open decision point rather than resolving it unilaterally.
+
+---
+
+# PACKAGE 0: LOCKED PRODUCTION ARCHITECTURE
+
+**Status:** This section resolves every open decision point left in §14/§25/§27 of the plan above (route-naming, Back/Continue chain, resume behavior, completion behavior, supporting-module placement) into one authoritative, locked architecture. Once approved, no later package may silently renumber, re-route, or re-scope a session — any change to what's locked here is a new planning cycle, not a mid-implementation adjustment (§29).
+
+**Governing decision rules applied throughout this section** (per the Package 0 mandate):
+- Existing working route URLs are preserved wherever the underlying screen is reused, renamed, or merged-into — only genuinely new screens get new routes.
+- No route is invented where an existing one already serves the purpose.
+- No session is forced into its own screen where a live multi-tab/multi-panel component safely serves multiple sessions (S8+S9, S12+S13, S16+S17+S18, S19+S20, S25+S26).
+- No screen is merged where the result would be crowded or confusing — each merge below was checked against this before being locked (see per-merge notes in Table 2).
+- No screen is preserved merely because it exists — GoldenBox, SmokeCraftChallenge, SecondHumidorMatch, and MiniTastingRound are demoted to supporting modules specifically because their current content doesn't earn a numbered main-journey slot in the locked 27, not out of inertia.
+- No approved visual identity is discarded — every reused screen keeps its current SC_ASSETS background image.
+- Supporting modules are never substituted for a required main-journey session — every one of the 27 sessions has its own authoritative screen or tab in Table 1, independent of any supporting module.
+- The legacy 24-session / 8-visit structure, and any code construct built around it (`VISIT_STRUCTURE`, `TOTAL_VISITS`, `isVisitUnlocked`, old session numbers S1–S24), is retired by this lock — Package B is responsible for removing or fully superseding these constructs so no conflicting count remains anywhere in the codebase, docs, or UI copy.
+
+---
+
+## Table 1: Final Journey Map
+
+| Final Screen ID | Phase | Session | Final Screen Name | Final Route | Main Journey / Supporting Module | Back Destination | Continue Destination | Resume Target | Completion Trigger |
+|---|---|---|---|---|---|---|---|---|---|
+| E1 | Entry/Auth | — | Launch Screen | `/smokecraft` (unchanged) | Main Journey (Entry layer) | — (first screen) | E2 | E1 itself if never entered | Guest taps Enter/Continue |
+| E2 | Entry/Auth | — | Sign In / Guest Mode | `/smokecraft/enroll` (unchanged) | Main Journey (Entry layer) | E1 | E3 | E2 if incomplete | Guest signs in or selects Guest Mode |
+| E3 | Entry/Auth | — | Select Venue or Lounge | `/smokecraft/venue-select` (NEW) | Main Journey (Entry layer) | E2 | E4 | E3 if incomplete | Venue/lounge selected |
+| E4 | Entry/Auth | — | Personal Dashboard | `/smokecraft/identity` (unchanged, guard fixed) | Main Journey (Entry layer) | E3 | E5 | E4 if incomplete | Profile fields confirmed |
+| E5 | Entry/Auth | — | Resume or Start New Journey | `/smokecraft/resume` (NEW) | Main Journey (Entry layer) | E4 | S1 (new) or last incomplete session (resume) | E5 itself (this *is* the resume screen) | Guest chooses Resume or Start New |
+| S1 | 2 — Session Preparation | 1 | Welcome to Today's Experience | `/smokecraft/welcome` (NEW) | Main Journey | E5 | S2 | S1 if incomplete | Guest acknowledges welcome |
+| S2 | 2 | 2 | Choose Your Cigar | `/smokecraft/humidor-match` (unchanged) | Main Journey | S1 | S3 | S2 if incomplete | Cigar selected (+ optional RequestPurchase drawer completed) |
+| S3 | 2 | 3 | Meet Your Cigar | `/smokecraft/meet-your-cigar` (NEW; absorbs Mentor selection as internal tab) | Main Journey | S2 | S4 | S3 if incomplete | Cigar intro viewed + mentor selected |
+| S4 | 2 | 4 | Terroir | `/smokecraft/terroir` (unchanged, content added; absorbs Seed & Soil as tab) | Main Journey | S3 | S5 | S4 if incomplete | Terroir + seed/soil content engaged |
+| S5 | 2 | 5 | Construction Inspection | `/smokecraft/format` (unchanged; absorbs Cigar Gauge Guide + Wrapper/Strength as tabs) | Main Journey | S4 | S6 | S5 if incomplete | Shape/size/wrapper/strength inspection complete |
+| S6 | 2 | 6 | Choose Your Cut | `/smokecraft/choose-cut` (NEW, split from Cut/Toast/Light) | Main Journey | S5 | S7 | S6 if incomplete | Cut method selected |
+| S7 | 2 | 7 | Lighting Tutorial | `/smokecraft/cut-toast-light` (unchanged; now toast+light only) | Main Journey | S6 | S8 | S7 if incomplete | Toast + light method selected |
+| S8 | 3 — First Third | 8 | First Draw | `/smokecraft/first-third` (unchanged, tab 1) | Main Journey | S7 | (tab) S9 | S8 if incomplete | Draw observations recorded |
+| S9 | 3 | 9 | Flavor Discovery | same route as S8, tab 2 | Main Journey | (tab) S8 | S10 | S8/S9 host screen if incomplete | Flavor notes recorded |
+| S10 | 3 | 10 | Flavor Memory Exercise | `/smokecraft/flavor-memory` (unchanged) | Main Journey | S9 | S11 | S10 if incomplete | Flavor memory exercise recorded |
+| S11 | 3 | 11 | Suggested Pairings | `/smokecraft/pairing-lab` (unchanged) | Main Journey | S10 | S12 | S11 if incomplete | Pairing recommendation generated |
+| S12 | 4 — Second Third | 12 | Flavor Evolution | `/smokecraft/second-third` (unchanged, tab 1) | Main Journey | S11 | (tab) S13 | S12 if incomplete | Evolution observations recorded |
+| S13 | 4 | 13 | Construction Check | same route as S12, tab 2 | Main Journey | (tab) S12 | S14 | S12/S13 host screen if incomplete | Mid-smoke construction check recorded |
+| S14 | 4 | 14 | Mentor Commentary | `/smokecraft/mentor-commentary` (NEW) | Main Journey | S13 | S15 | S14 if incomplete | Mentor commentary viewed |
+| S15 | 4 | 15 | Knowledge Drop | `/smokecraft/knowledge-drop` (NEW; absorbs Origins, Vitola, Pairing Mastery, Flavor DNA) | Main Journey | S14 | S16 | S15 if incomplete | At least one knowledge module engaged |
+| S16 | 5 — Final Third | 16 | Flavor Finish | `/smokecraft/final-third` (unchanged, tab 1) | Main Journey | S15 | (tab) S17 | S16 if incomplete | Finish notes recorded |
+| S17 | 5 | 17 | Strength Progression | same route as S16, tab 2 | Main Journey | (tab) S16 | (tab) S18 | S16/S17/S18 host screen if incomplete | Strength progression recorded |
+| S18 | 5 | 18 | Overall Experience Notes | same route as S16, tab 3 | Main Journey | (tab) S17 | S19 | S16/S17/S18 host screen if incomplete | Overall notes entered |
+| S19 | 6 — Reflection | 19 | Rate Every Category | `/smokecraft/scorecard` (unchanged, section 1) | Main Journey | S18 | (section) S20 | S19 if incomplete | All 6 categories rated |
+| S20 | 6 | 20 | Personal Notes | same route as S19, section 2 | Main Journey | (section) S19 | S21 | S19/S20 host screen if incomplete | Personal notes entered (optional field, non-blocking) |
+| S21 | 7 — Results | 21 | AI Summary | `/smokecraft/ai-summary` (NEW) | Main Journey | S20 | S22 | S21 if incomplete | AI summary viewed or honest fallback shown |
+| S22 | 7 | 22 | Personalized Pairing Recommendations | `/smokecraft/pairing-recommendations` (NEW; reuses PairingLab's `buildRecommendation` logic) | Main Journey | S21 | S23 | S22 if incomplete | Recommendation viewed |
+| S23 | 7 | 23 | Passport Stamp Animation | `/smokecraft/passport-stamp` (unchanged) | Main Journey | S22 | S24 | S23 if incomplete | Stamp animation played + claimed |
+| S24 | 7 | 24 | Completed Scorecard | `/smokecraft/final-review` (unchanged; repurposed as read-only recap) | Main Journey | S23 | S25 | S24 if incomplete | Recap viewed |
+| S25 | 7 | 25 | Rewards and XP | `/smokecraft/rewards` (NEW, tab 1) | Main Journey | S24 | (tab) S26 | S25 if incomplete | Rewards/XP viewed |
+| S26 | 7 | 26 | Achievements | same route as S25, tab 2 | Main Journey | (tab) S25 | S27 | S25/S26 host screen if incomplete | Achievements viewed |
+| S27 | 7 | 27 | Recommended Next Journey | `/smokecraft/session-complete` (unchanged; repurposed) | Main Journey | S26 | E5 (Resume/Dashboard) or SmokeCraft Home | N/A — journey terminal screen | Journey marked complete; next-journey recommendation shown |
+
+---
+
+## Table 2: Existing-to-Final Mapping
+
+| Existing Screen | Existing Route | Existing Component | Existing Asset | Final Screen ID | Final Session | Final Classification | Reuse | Rename | Merge | Split | Redesign | Create | Archive | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| SmokeCraft (landing) | `/smokecraft` | SmokeCraft.jsx | landing | E1 | Entry | Main Journey | Y | Y | | | | | | role renamed to Launch Screen |
+| Enroll | `/smokecraft/enroll` | Enroll.jsx | enroll | E2 | Entry | Main Journey | Y | Y | | | | | | role renamed to Sign In/Guest Mode |
+| Identity | `/smokecraft/identity` | Identity.jsx | identity | E4 | Entry | Main Journey | Y | Y | | | | | | duplicate S2 guard resolved by giving it its own Entry slot |
+| GoldenBox | `/smokecraft/golden-box` | GoldenBox.jsx | goldenBox | — | — | Supporting Module | Y | | | | | | | demoted from main spine; linked from S1 |
+| GoldenBoxStatus | `/smokecraft/golden-box/status` | GoldenBoxStatus.jsx | goldenBox | — | — | Supporting Module (sub-page of GoldenBox) | Y | | | | | | | unchanged, follows GoldenBox |
+| Mentor (selection) | `/smokecraft/mentor-selection` | Mentor.jsx | mentorSelection | S3 | 3 | Main Journey (tab) | Y | Y | Y | | | | | folds into Meet Your Cigar as a tab; old route becomes a redirect to S3 |
+| Format | `/smokecraft/format` | Format.jsx | format | S5 | 5 | Main Journey | Y | Y | Y | | | | | renamed Construction Inspection; absorbs CigarGaugeGuide + WrapperStrength |
+| `shape-size-burn` alias | `/smokecraft/shape-size-burn` | Format.jsx (dup) | format | — | — | obsolete alias | | | | | | | Y | becomes `Navigate`→S5's route, or removed |
+| CigarGaugeGuide | `/smokecraft/cigar-gauge-guide` | CigarGaugeGuide.jsx | format | S5 | 5 | Main Journey (tab) | Y | | Y | | | | | merges into Construction Inspection as a tab |
+| WrapperStrength | `/smokecraft/wrapper-strength` | WrapperStrength.jsx | (none) | S5 | 5 | Main Journey (tab) | | | Y | | | | | currently renders null; content merges into Construction Inspection as a tab |
+| SeedSoil | `/smokecraft/seed-soil` | SeedSoil.jsx | seedSoil | S4 | 4 | Main Journey (tab) | Y | | Y | | | | | merges into Terroir as a tab; old route becomes a redirect |
+| PairingLab | `/smokecraft/pairing-lab` | PairingLab.jsx | pairingLab | S11 | 11 | Main Journey | Y | Y | | | | | | renamed Suggested Pairings |
+| HumidorMatch | `/smokecraft/humidor-match` | HumidorMatch.jsx | humidorMatch | S2 | 2 | Main Journey | Y | Y | | | | | | renamed Choose Your Cigar |
+| RequestPurchase | `/smokecraft/request-purchase` | RequestPurchase.jsx | requestPurchase | — | — | Supporting Module (drawer from S2) | Y | | | | | | | demoted from numbered session to embedded ordering drawer |
+| CutToastLight | `/smokecraft/cut-toast-light` | CutToastLight.jsx | cutToastLight | S6 + S7 | 6, 7 | Main Journey (split) | Y | Y | | Y | | | | cut portion → new S6 screen; toast+light portion stays on this route as S7 |
+| FirstThird | `/smokecraft/first-third` | FirstThird.jsx | firstThird | S8 + S9 | 8, 9 | Main Journey (+tab) | Y | Y | | | | | | renamed First Draw; gains Flavor Discovery as tab 2 |
+| SecondThird | `/smokecraft/second-third` | SecondThird.jsx | secondThird | S12 + S13 | 12, 13 | Main Journey (+tab) | Y | Y | | | | | | renamed Flavor Evolution; gains Construction Check as tab 2 |
+| FlavorMemory | `/smokecraft/flavor-memory` | FlavorMemory.jsx | flavorMemory | S10 | 10 | Main Journey | Y | | | | | | | route/name unchanged, moved earlier in sequence |
+| FinalThird | `/smokecraft/final-third` | FinalThird.jsx | finalThird | S16 + S17 + S18 | 16, 17, 18 | Main Journey (+2 tabs) | Y | Y | | | | | | renamed Flavor Finish; gains Strength Progression + Overall Experience Notes tabs |
+| Scorecard | `/smokecraft/scorecard` | Scorecard.jsx | scorecard | S19 + S20 | 19, 20 | Main Journey (+section) | Y | Y | | | | | | renamed Rate Every Category; existing `personalNotes` field becomes S20 |
+| SmokeCraftChallenge | `/smokecraft/smokecraft-challenge` | SmokeCraftChallenge.jsx | smokecraftChallenge | — | — | Supporting Module | Y | | | | Y | | | demoted; still needs redesign from static stub; linked from S27 |
+| SecondHumidorMatch | `/smokecraft/second-humidor-match` | SecondHumidorMatch.jsx | secondHumidorMatch | — | — | Supporting Module | Y | | | | Y | | | demoted; reuses S2's HumidorMatch component; linked from S27 |
+| MiniTastingRound | `/smokecraft/mini-tasting` | MiniTastingRound.jsx | miniTasting | — | — | Supporting Module | Y | | | | Y | | | demoted; still needs redesign; linked from S27 |
+| FinalReview | `/smokecraft/final-review` | FinalReview.jsx | finalReview | S24 | 24 | Main Journey | Y | Y | Y | | | | | renamed Completed Scorecard; repurposed as read-only recap |
+| PassportStamp | `/smokecraft/passport-stamp` | PassportStamp.jsx | passportStamp | S23 | 23 | Main Journey | Y | Y | | | | | | renamed Passport Stamp Animation |
+| Connections | `/smokecraft/connections` | Connections.jsx | connections | — | — | Supporting Module | Y | | | | | | | demoted; social/community, linked post-journey |
+| ManagementSync | `/smokecraft/management-sync` | ManagementSync.jsx | managementSync | — | — | Supporting Module | Y | | | | | | | demoted; venue-ops, linked post-journey |
+| SessionComplete | `/smokecraft/session-complete` | SessionComplete.jsx | sessionComplete | S27 | 27 | Main Journey | Y | Y | Y | | | | | renamed Recommended Next Journey; repurposed |
+| Leaderboard | `/smokecraft/leaderboard` | Leaderboard.jsx | leaderboard | — | — | Supporting Module | Y | | | | Y | | | unchanged classification; still needs redesign |
+| HowItWorks | `/smokecraft/how-it-works` | HowItWorks.jsx | howItWorks | — | — | Supporting Module | Y | | | | (decide) | | | may remain static-informational by product decision |
+| EventChallenge | `/smokecraft/event-challenge` | EventChallenge.jsx | eventChallenge | — | — | Supporting Module | Y | | | | Y | | | unchanged classification; still needs redesign |
+| Origins | `/smokecraft/origins` | Origins.jsx | (unreferenced) | S15 | 15 | Main Journey (tab, via merge) | | | Y | | | | | merges into Knowledge Drop; old route becomes redirect |
+| Terroir (old stub) | `/smokecraft/terroir` | Terroir.jsx | (unreferenced) | S4 | 4 | Main Journey | | | | | | Y | | this is the *screen*, kept as S4's route; content created fresh (not a Knowledge Drop merge target — see §20 correction) |
+| Vitola | `/smokecraft/vitola` | Vitola.jsx | (unreferenced) | S15 | 15 | Main Journey (tab, via merge) | | | Y | | | | | merges into Knowledge Drop; old route becomes redirect |
+| PairingMastery | `/smokecraft/pairing-mastery` | PairingMastery.jsx | (unreferenced) | S15 | 15 | Main Journey (tab, via merge) | | | Y | | | | | merges into Knowledge Drop; old route becomes redirect |
+| FlavorDNA | `/smokecraft/flavor-dna` | FlavorDNA.jsx | (unreferenced) | S15 | 15 | Main Journey (tab, via merge) | | | Y | | | | | merges into Knowledge Drop; old route becomes redirect |
+| Assistant | `/smokecraft/assistant` | Assistant.jsx | (none) | — | — | Supporting Module (or S21 source) | | | | | (decide) | | | subject to AI decision gate; may feed S21 or remain a standalone help module |
+| Rewards | *(does not exist)* | *(none)* | *(new/reused icons)* | S25 + S26 | 25, 26 | Main Journey (new screen, +tab) | | | | | | Y | | net-new; also covers Achievements as tab 2 |
+| Scan | `/smokecraft/scan` | Scan.jsx | (existing) | — | — | Supporting Module | Y | | | | | | | full-card hotspot needs replacing; linked from E2 |
+| GuestPass | `/smokecraft/guest-pass` | GuestPass.jsx | (existing) | — | — | Supporting Module | Y | | | | | | | full-card hotspot needs replacing; linked from E2 |
+| Meet Your Cigar | *(does not exist)* | *(CigarIntelligencePanel exists)* | *(new)* | S3 | 3 | Main Journey (new screen) | | | | | | Y | | wraps existing panel component |
+| Construction Check | *(does not exist)* | *(none)* | *(new/reused)* | S13 | 13 | Main Journey (new tab) | | | | | | Y | | |
+| Mentor Commentary | *(does not exist)* | *(none)* | *(new)* | S14 | 14 | Main Journey (new screen) | | | | | | Y | | fed by S3's mentor selection |
+| Strength Progression | *(does not exist)* | *(none)* | *(new tab)* | S17 | 17 | Main Journey (new tab) | | | | | | Y | | |
+| Overall Experience Notes | *(does not exist)* | *(existing notes pattern reused)* | *(new tab)* | S18 | 18 | Main Journey (new tab) | | | | | | Y | | reuses established notes-textarea pattern |
+| AI Summary | *(does not exist)* | *(none)* | *(new)* | S21 | 21 | Main Journey (new screen) | | | | | | Y | | subject to AI decision gate |
+| Personalized Pairing Recommendations | *(does not exist)* | *(PairingLab logic reused)* | *(new)* | S22 | 22 | Main Journey (new screen) | | | | | | Y | | reuses `buildRecommendation`, not the PairingLab screen itself |
+| Venue Select | *(does not exist)* | *(none)* | *(new)* | E3 | Entry | Main Journey (new screen) | | | | | | Y | | |
+| Resume or Start New Journey | *(does not exist; logic exists)* | *(wraps `SmokeCraftProgressContext`)* | *(new)* | E5 | Entry | Main Journey (new screen) | | | | | | Y | | thin wrapper around already-correct resume logic |
+| `smokecraft/session-1..session-4` legacy aliases | `/smokecraft/session-1` .. `-4` | Navigate stubs | — | — | — | obsolete | | | | | | | Y | dead-end aliases, all collapse to `/smokecraft` today; removed or repointed to E5 |
+| `order` / `ticket-tapper/staff-specials` duplicate | both routes | SmokeCraftVenueCommerce.jsx | — | — | — | out of SmokeCraft-journey scope | | | | | | | | flagged for owning team, no action in this plan |
+| Format.legacy.jsx | none (unrouted) | Format.legacy.jsx | — | — | — | obsolete | | | | | | | Y | dead code, 1,571 lines, fully superseded |
+| 12 orphaned components | none | (12 files, Audit §4c) | — | — | — | obsolete | | | | | | | Y | zero references outside own file |
+| ~100+ orphaned image files | various | — | 4 asset directories | — | — | obsolete/archive | | | | | | | Y | archived last, after all reuse decisions locked |
+
+---
+
+## Table 3: Supporting Module Map
+
+| Module | Route | Entry Point | Return Point | Data In | Data Out | Progress Preservation | Dashboard Access | Required Changes |
+|---|---|---|---|---|---|---|---|---|
+| GoldenBox (+Status) | `/smokecraft/golden-box` | Linked from S1 Welcome | Back to S1 | — | acknowledged flag → `journey` (post-migration) | Y | Y — reachable from E4 Personal Dashboard | migrate off private `LS_KEY` (Package A) |
+| Request Purchase | `/smokecraft/request-purchase` (embedded drawer) | Opened from S2 Choose Your Cigar | Closes back into S2 | selected cigar | `journey.requestPurchase` | Y | N (contextual to S2 only) | none functional; already canonical per prior mandate |
+| Pairing Lab | *(now S11, not a supporting module — see Table 1)* | — | — | — | — | — | — | reclassified as Main Journey per locked structure |
+| Flavor Memory Module | *(now S10, not a supporting module — see Table 1)* | — | — | — | — | — | — | reclassified as Main Journey per locked structure |
+| Mentor Library | folds into S3 (tab), not a standalone module | — | — | — | — | — | — | reclassified as Main Journey tab per locked structure |
+| Terroir Module | *(now S4, not a supporting module — see Table 1)* | — | — | — | — | — | — | reclassified as Main Journey per locked structure |
+| Humidor Match | *(now S2, not a supporting module — see Table 1)* | — | — | — | — | — | — | reclassified as Main Journey per locked structure |
+| Passport | *(now S23, not a supporting module — see Table 1)* | — | — | — | — | — | — | reclassified as Main Journey per locked structure |
+| Leaderboard | `/smokecraft/leaderboard` | Linked from S25/S26 Rewards, or E4 Dashboard | Back to caller | guest XP/rank | none written (read-only) | N/A | Y — reachable from E4 | redesign from static stub; honest "Shared ranking unavailable" state required |
+| Community (Connections) | `/smokecraft/connections` | Linked post-journey (from S27) or E4 Dashboard | Back to caller | — | `journey.connections` (post-migration) | Y | Y — reachable from E4 | migrate off private `LS_KEY` (Package A) |
+| Event Challenge | `/smokecraft/event-challenge` | Linked from S27 Recommended Next Journey | Back to S27 | — | TBD once redesigned | N/A today | N (journey-completion contextual) | redesign from static stub |
+| Connections | *(see Community, above — same module, not duplicated)* | | | | | | | |
+| Request Purchase | *(see above — listed once, not duplicated)* | | | | | | | |
+| Management Sync | `/smokecraft/management-sync` | Linked post-journey, staff-facing | Back to caller | — | TBD | Y | Y — staff-only access point | unchanged; out of guest-journey critical path |
+| SmokeCraftChallenge | `/smokecraft/smokecraft-challenge` | Linked from S27 Recommended Next Journey | Back to S27 | — | TBD once redesigned | N/A today | N | redesign from static stub |
+| SecondHumidorMatch | `/smokecraft/second-humidor-match` | Linked from S27, reuses S2's HumidorMatch component | Back to S27 | prior cigar choice | new cigar choice | Y | N | reuse S2 component, don't rebuild |
+| MiniTastingRound | `/smokecraft/mini-tasting` | Linked from S27 | Back to S27 | — | TBD once redesigned | N/A today | N | redesign from static stub |
+| HowItWorks | `/smokecraft/how-it-works` | Linked from E1/E2 or help menu | Back to caller | — | none | N/A | Y — general help access | may remain static-informational by product decision |
+| Assistant | `/smokecraft/assistant` | Linked from any screen (global help) or specifically from S21 | Back to caller | user question/context | AI response or honest fallback | N/A | Y — global help access | subject to §21 AI decision gate |
+| Scan | `/smokecraft/scan` | Linked from E2 | Back to E2 | — | none | N/A | N | replace full-card hotspot |
+| GuestPass | `/smokecraft/guest-pass` | Linked from E2 | Back to E2 | — | none | N/A | N | replace full-card hotspot |
+
+*(Note: Pairing Lab, Flavor Memory Module, Mentor Library, Terroir Module, Humidor Match, and Passport were listed as "supporting modules" in the correction mandate's generic module list, but the locked 27-session structure places each of them as a required numbered main-journey session instead — per the decision rule "do not treat supporting modules as substitutes for missing main-journey screens," they are not demoted, they were never optional. Table 1 is authoritative for their placement.)*
+
+**Final supporting-module count: 13** — GoldenBox, RequestPurchase, Leaderboard, Connections, EventChallenge, ManagementSync, SmokeCraftChallenge, SecondHumidorMatch, MiniTastingRound, HowItWorks, Assistant, Scan, GuestPass.
+
+---
+
+## Table 4: Dependency Map
+
+| Work Item | Depends On | Blocks | Can Run in Parallel With | Must Be Sequential With | Verification Required |
+|---|---|---|---|---|---|
+| Package 0 lock (this section, once approved) | Audit + prior plan revisions | every later package | — | nothing (first) | explicit user sign-off |
+| Persistence consolidation (shadow-key removal) | Package 0 lock | Screen split/merge/create work that reads/writes those fields | Route corrections | must precede any screen work touching Connections, GoldenBox, Identity, Scorecard, FinalThird, FlavorMemory, PassportStamp, SessionComplete | persistence test suite |
+| New canonical journey fields (§16 list) | Package 0 lock (field names must be final) | all net-new screen builds (E3, E5, S1, S3, S14, S15, S21, S22, S25/S26) | Route corrections | must precede those screens' persistence wiring | field-presence test with safe defaults |
+| STATE_VERSION 2→3 migration | New canonical fields defined | any guest session created/resumed after this ships | — | must ship in the same package as the new fields | migration non-destructiveness test against a v2 fixture session |
+| Route corrections (3 original bugs + route-naming decision) | Package 0 lock | screen split/merge work that depends on final URLs | Persistence consolidation | must precede Package C/D/E/F/G/H's route wiring | route-table smoke test |
+| CutToastLight split (S6/S7) | Route corrections, persistence | S6/S7 individual content builds | Merge-screen work (Package D) | must precede any content build for S6 or S7 | dual-screen interaction test, functionality-preservation check |
+| Merge-screen work (S4+SeedSoil, S5+CigarGaugeGuide+WrapperStrength, S15 four-way merge, S24 repurpose, S27 repurpose, S20 field reuse) | Route corrections, persistence | later content-authoring for merged screens | Split-screen work (Package C) | must precede Package I (cleanup/archival of the merged-away screens' old routes) | content-completeness test per merge |
+| New Entry-layer + Session-Prep screens (E3, E5, S1, S3) | Route corrections, persistence | Mentor Commentary (S14, depends on S3's mentor data) | Merge-screen work | — | new interaction tests per screen |
+| New tab content (S9, S13, S17, S18, S20) | Persistence (host screens' fields) | nothing further downstream | New Entry-layer screens, Merge-screen work | must land on top of the already-reused host screens (S8, S12, S16, S19) without disturbing their existing tabs | per-tab persistence test |
+| Mentor Commentary (S14) | S3 (Meet Your Cigar) must exist and persist mentor selection | Knowledge Drop content authoring order is independent, no hard block | Results-phase work | must follow Package E | mentor-content-matches-selection test |
+| Knowledge Drop (S15) | Merge-screen work (4-way merge locked) | nothing further downstream | Mentor Commentary, Results-phase work | — | content-presence test across all 4 merged topics |
+| AI decision gate resolution (§21) | Package 0 lock | S21 AI Summary completion (not S22/S25/S26, which are independent) | all other packages | must resolve before Package H is considered complete | AI-honesty test or de-scope confirmation |
+| Results-phase screens (S21, S22, S25, S26) | New canonical fields, S11's `buildRecommendation` logic (reused for S22) | Supporting-module redesign (SmokeCraftChallenge/MiniTastingRound/SecondHumidorMatch surfaced from S27) | Mentor Commentary, Knowledge Drop | S21 specifically blocked on the AI decision gate; S22/S25/S26 are not | rewards/achievements data test, recommendation-reuse test |
+| Supporting-module redesign + cleanup (SmokeCraftChallenge, MiniTastingRound, Leaderboard, EventChallenge, Scan, GuestPass hotspots, dead-code/asset archival) | All prior packages substantially complete (so nothing scheduled for reuse is deleted prematurely) | Final accessibility pass | — | must be last content package, before Accessibility pass | full asset-verification script + build |
+| Accessibility/Responsive final pass | All content packages substantially complete | End-to-end testing | — | must precede Phase 12 | accessibility matrix, 4 viewports |
+| End-to-end testing (Phase 12) | Accessibility pass | Freeze | — | must precede Freeze | full E1→E5→S1→S27 journey test + all supporting modules, proof screenshots |
+| Freeze | End-to-end testing passed with zero P0 findings | — | — | terminal step | re-confirmation of all 9 Freeze Criteria (§30) |
+
+---
+
+## PACKAGE 0 — REQUIRED FINAL OUTPUT
+
+1. **Final journey count:** 27 sessions, 7 phases.
+2. **Final entry-screen count:** 5 (E1–E5).
+3. **Final main-session screen count:** 21 screens covering the 27 sessions (screens shared via tabs: S8+S9, S12+S13, S16+S17+S18, S19+S20, S25+S26 — see Table 1).
+4. **Final supporting-module count:** 13 (Table 3).
+5. **Existing screens reused:** 18 — SmokeCraft landing(→E1), Enroll(→E2), Identity(→E4), Mentor(→S3 tab), Format(→S5), PairingLab(→S11), HumidorMatch(→S2), CutToastLight(→S7, split), FirstThird(→S8/S9), SecondThird(→S12/S13), FlavorMemory(→S10), FinalThird(→S16/S17/S18), Scorecard(→S19/S20), FinalReview(→S24), PassportStamp(→S23), SessionComplete(→S27), plus GoldenBox and CigarGaugeGuide reused in their new (supporting-module / merged-tab) roles.
+6. **Existing screens renamed:** 12 — SmokeCraft landing, Enroll, Identity, Mentor(role), Format, PairingLab, HumidorMatch, CutToastLight, FirstThird, SecondThird, FinalThird, Scorecard, FinalReview, SessionComplete carry new session titles (some screens both reused and renamed — see Table 2's Rename column for the exact set).
+7. **Existing screens merged:** 8 — Mentor(→S3 tab), SeedSoil(→S4 tab), CigarGaugeGuide(→S5 tab), WrapperStrength(→S5 tab), Origins/Vitola/PairingMastery/FlavorDNA (4 screens →S15 Knowledge Drop), FinalReview(→S24 repurpose), SessionComplete(→S27 repurpose), Scorecard's notes field(→S20).
+8. **Existing screens split:** 1 — CutToastLight → S6 (new) + S7 (existing route retained).
+9. **Existing screens redesigned:** 4 (as supporting modules) — SmokeCraftChallenge, SecondHumidorMatch, MiniTastingRound, Leaderboard; +2 more flagged for redesign-or-decide — EventChallenge (redesign), HowItWorks (decide).
+10. **New screens required:** 10 — Venue Select(E3), Resume(E5), Welcome(S1), Meet Your Cigar(S3), Mentor Commentary(S14), Knowledge Drop(S15), AI Summary(S21), Personalized Pairing Recommendations(S22), Rewards(S25), Achievements(S26, tab of S25's screen).
+11. **New routes required:** 8 — `/smokecraft/venue-select`, `/smokecraft/resume`, `/smokecraft/welcome`, `/smokecraft/meet-your-cigar`, `/smokecraft/choose-cut`, `/smokecraft/mentor-commentary`, `/smokecraft/knowledge-drop`, `/smokecraft/ai-summary`, `/smokecraft/pairing-recommendations`, `/smokecraft/rewards` (10 routes; existing working routes are preserved unchanged per the locked decision rule, not renamed).
+12. **Obsolete routes or screens:** `shape-size-burn` alias, `smokecraft/session-1..session-4` legacy aliases, old `mentor-selection`/`seed-soil`/`origins`/`vitola`/`pairing-mastery`/`flavor-dna`/`wrapper-strength` routes (become redirects into their merge targets or are removed), `Format.legacy.jsx`, 12 orphaned components, ~100+ orphaned image files, and the entire legacy `VISIT_STRUCTURE`/8-visit/24-session code construct.
+13. **First technical implementation package after Package 0:** **Package A — Persistence Consolidation (expanded scope)**.
+14. **Exact files expected to change in that next package:** `src/context/SmokeCraftJourneyContext.jsx` (new canonical fields + STATE_VERSION 2→3 migration) + the 8 shadow-key page files — `src/pages/smokecraft/Connections.jsx`, `GoldenBox.jsx`, `Identity.jsx`, `Scorecard.jsx`, `FinalThird.jsx`, `FlavorMemory.jsx`, `PassportStamp.jsx`, `SessionComplete.jsx`. No route files, no other React components, no images.
+15. **Tests required before moving forward:** persistence suite confirming zero shadow localStorage/sessionStorage keys remain across all 8 files; new-field presence test confirming every field listed in §16 exists with a safe default; STATE_VERSION migration test confirming a fixture v2 session upgrades to v3 without data loss; full existing regression suite (`verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`) must not regress below its current pass count; `npm run build` green.
