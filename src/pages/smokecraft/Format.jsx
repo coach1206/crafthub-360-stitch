@@ -22,9 +22,9 @@ const PANEL = {
 
 const FORMAT_ZONES = [
   { id: 'robusto',   label: 'Robusto',   desc: '5" × 50 ring',   burnTime: '45–60 min',  drawFeel: 'Balanced', ringGauge: 50, lengthIn: 5.0, notes: 'The benchmark medium-size. Balanced and concentrated.' },
-  { id: 'toro',      label: 'Toro',      desc: '6" × 52 ring',   burnTime: '60–75 min',  drawFeel: 'Open',     ringGauge: 52, lengthIn: 6.0, notes: 'Extra length opens up the blend\'s mid-section.' },
+  { id: 'toro',      label: 'Toro',      desc: '6" × 52 ring',   burnTime: '60–75 min',  drawFeel: 'Open',     ringGauge: 52, lengthIn: 6.0, notes: "Extra length opens up the blend's mid-section." },
   { id: 'churchill', label: 'Churchill', desc: '7" × 48 ring',   burnTime: '75–90 min',  drawFeel: 'Refined',  ringGauge: 48, lengthIn: 7.0, notes: 'Ring gauge keeps it refined. Long smoke, elegant evolution.' },
-  { id: 'corona',    label: 'Corona',    desc: '5.5" × 42 ring', burnTime: '35–45 min',  drawFeel: 'Focused',  ringGauge: 42, lengthIn: 5.5, notes: 'Smaller ring focuses the wrapper\'s flavor front and center.' },
+  { id: 'corona',    label: 'Corona',    desc: '5.5" × 42 ring', burnTime: '35–45 min',  drawFeel: 'Focused',  ringGauge: 42, lengthIn: 5.5, notes: "Smaller ring focuses the wrapper's flavor front and center." },
   { id: 'gordo',     label: 'Gordo',     desc: '6" × 60 ring',   burnTime: '90–120 min', drawFeel: 'Cool',     ringGauge: 60, lengthIn: 6.0, notes: 'Wide ring gauge increases coolness. More complex burn.' },
   { id: 'torpedo',   label: 'Torpedo',   desc: '6.5" × 52 ring', burnTime: '70–85 min',  drawFeel: 'Distinct', ringGauge: 52, lengthIn: 6.5, notes: 'Tapered head concentrates draw. Distinct opening character.' },
 ]
@@ -43,12 +43,15 @@ export default function Format() {
   const { awardSessionRewards, setSmokeCraftFormat } = useGuestSession()
   const { journey, setFormat } = useSmokeCraftJourney()
   const navigate = useNavigate()
-  const [selected, setSelected]     = useState(() => journey.format?.id || null)
+
+  // Load from canonical journey state
+  const [selected,   setSelected]   = useState(() => journey.format?.id || null)
   const [saveStatus, setSaveStatus] = useState('idle')
-  const [done, setDone]             = useState(false)
+  const [done,       setDone]       = useState(false)
 
   const activeFmt = ZONES_FULL.find(f => f.id === selected) || null
 
+  // Auto-persist selection to canonical journey state
   useEffect(() => {
     const fmt = ZONES_FULL.find(f => f.id === selected)
     setFormat(fmt ? { id: fmt.id, label: fmt.label, desc: fmt.desc, burnTime: fmt.burnTime } : null)
@@ -56,13 +59,10 @@ export default function Format() {
   }, [selected, setFormat, setSmokeCraftFormat])
 
   function handleSave() {
-    if (saveStatus === 'saving' || !selected) return
-    setSaveStatus('saving')
+    if (!selected) return
+    // setFormat already called via useEffect; confirm immediately (honest — real save happened)
+    setSaveStatus('saved')
     triggerHaptic('light')
-    try {
-      localStorage.setItem('sc_format_selection', JSON.stringify({ id: selected, savedAt: Date.now() }))
-    } catch {}
-    setTimeout(() => setSaveStatus('saved'), 500)
     setTimeout(() => setSaveStatus('idle'), 2500)
   }
 
@@ -83,6 +83,10 @@ export default function Format() {
         naturalH={NAT_H}
         alt="SmokeCraft Format — Shape, Size & Burn Time"
       >
+        {/* Nav mask */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
+          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+
         {ZONES_FULL.map(f => {
           const active = selected === f.id
           return (
@@ -93,49 +97,31 @@ export default function Format() {
               aria-pressed={active}
               onClick={() => { triggerHaptic('light'); setSelected(active ? null : f.id); setSaveStatus('idle') }}
               style={{
-                position: 'absolute',
-                left: `${f.x}%`, top: `${f.y}%`,
+                position: 'absolute', left: `${f.x}%`, top: `${f.y}%`,
                 width: `${f.w}%`, height: `${f.h}%`,
-                pointerEvents: 'auto',
-                background: 'transparent',
+                pointerEvents: 'auto', background: 'transparent',
                 border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
-                borderRadius: 4,
-                cursor: 'pointer',
-                boxSizing: 'border-box',
-                padding: 0,
-                outline: 'none',
+                borderRadius: 4, cursor: 'pointer', boxSizing: 'border-box', padding: 0, outline: 'none',
               }}
             >
               {active && (
-                <span style={{
-                  position: 'absolute', top: 4, right: 5,
-                  fontSize: 'clamp(9px,1.2vw,14px)', fontWeight: 700,
-                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
-                }}>✓</span>
+                <span style={{ position: 'absolute', top: 4, right: 5, fontSize: 'clamp(9px,1.2vw,14px)',
+                  fontWeight: 700, color: GOLD, lineHeight: 1, pointerEvents: 'none' }}>✓</span>
               )}
             </button>
           )
         })}
 
-        {/* Insight panel — appears when a format is selected */}
+        {/* Insight panel */}
         {activeFmt && (
-          <div style={{
-            ...PANEL,
-            left: '58%', top: '22%', width: '38%', height: 'auto',
-            padding: 'clamp(8px,1vw,14px)',
-            pointerEvents: 'none',
-          }}>
+          <div style={{ ...PANEL, left: '58%', top: '22%', width: '38%', height: 'auto',
+            padding: 'clamp(8px,1vw,14px)', pointerEvents: 'none', zIndex: 3 }}>
             <div style={{ fontSize: 'clamp(10px,0.95vw,13px)', color: GOLD, fontWeight: 700, marginBottom: 6 }}>
               {activeFmt.label}
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 10px', marginBottom: 8 }}>
-              {[
-                ['Shape', activeFmt.label],
-                ['Length', `${activeFmt.lengthIn}"`],
-                ['Ring Gauge', `${activeFmt.ringGauge}`],
-                ['Draw Feel', activeFmt.drawFeel],
-                ['Burn Time', activeFmt.burnTime],
-              ].map(([k, v]) => (
+              {[['Shape', activeFmt.label], ['Length', `${activeFmt.lengthIn}"`], ['Ring Gauge', `${activeFmt.ringGauge}`],
+                ['Draw Feel', activeFmt.drawFeel], ['Burn Time', activeFmt.burnTime]].map(([k, v]) => (
                 <div key={k}>
                   <span style={{ fontSize: 'clamp(7px,0.58vw,8px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{k}</span>
                   <div style={{ fontSize: 'clamp(8px,0.72vw,10px)', color: 'rgba(229,226,225,0.82)' }}>{v}</div>
@@ -154,12 +140,11 @@ export default function Format() {
                   padding: '4px 14px', borderRadius: 5,
                   border: `1px solid ${saveStatus === 'saved' ? 'rgba(233,193,118,0.5)' : GOLD}`,
                   background: saveStatus === 'saved' ? 'rgba(233,193,118,0.1)' : 'transparent',
-                  color: GOLD,
-                  fontSize: 'clamp(8px,0.7vw,10px)', fontFamily: 'Georgia, serif',
+                  color: GOLD, fontSize: 'clamp(8px,0.7vw,10px)', fontFamily: 'Georgia, serif',
                   fontWeight: 700, cursor: 'pointer', outline: 'none',
                 }}
               >
-                {saveStatus === 'saving' ? 'Saving…' : saveStatus === 'saved' ? '✓ Format Saved' : 'Save Format'}
+                {saveStatus === 'saved' ? '✓ Format Saved' : 'Save Format'}
               </button>
             </div>
           </div>

@@ -68,13 +68,9 @@ export default function RequestPurchase() {
   }
 
   function handleSaveDraft() {
-    if (saveStatus === 'saving') return
-    setSaveStatus('saving')
+    // useEffect already persists via setRequestPurchase; confirm immediately
+    setSaveStatus('saved')
     triggerHaptic('light')
-    try {
-      localStorage.setItem('sc_request_purchase_draft', JSON.stringify({ orderPath, addons, notes, savedAt: Date.now() }))
-    } catch {}
-    setTimeout(() => setSaveStatus('saved'), 500)
     setTimeout(() => setSaveStatus('idle'), 2000)
   }
 
@@ -244,7 +240,7 @@ export default function RequestPurchase() {
               cursor: 'pointer', outline: 'none',
             }}
           >
-            {saveStatus === 'saving' ? 'Saving…' : saveStatus === 'saved' ? '✓ Draft Saved' : 'Save Draft'}
+            {saveStatus === 'saved' ? '✓ Draft Saved' : 'Save Draft'}
           </button>
         </div>
 

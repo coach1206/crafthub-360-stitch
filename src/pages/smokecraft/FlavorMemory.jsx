@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
@@ -11,7 +11,6 @@ const NAT_W = 1448
 const NAT_H = 1086
 
 const GOLD = '#E9C176'
-const LS_KEY = 'sc_flavor_memory_v1'
 
 // 8 flavor note zones in horizontal row (y≈29.3–43.5%)
 const FLAVOR_ZONES = [
@@ -29,17 +28,7 @@ const EMPTY_STATE = {
   selectedFlavors: [],
   intensity: 3, body: 3, strength: 3,
   aromaNotes: [], pairingRecall: '', personalNotes: '',
-  savedAt: null, saveStatus: 'neutral', persistenceMode: null,
-}
-
-function loadLocal() {
-  try {
-    const raw = localStorage.getItem(LS_KEY)
-    return raw ? { ...EMPTY_STATE, ...JSON.parse(raw) } : { ...EMPTY_STATE }
-  } catch { return { ...EMPTY_STATE } }
-}
-function saveLocal(s) {
-  try { localStorage.setItem(LS_KEY, JSON.stringify({ ...s, savedAt: s.savedAt || Date.now() })) } catch {}
+  savedAt: null,
 }
 
 // Live SVG radar chart — 8-axis polygon
@@ -137,14 +126,18 @@ function RadarChart({ flavors }) {
 
 export default function FlavorMemory() {
   const { awardSessionRewards, session } = useGuestSession()
-  const { setFlavorMemory } = useSmokeCraftJourney()
+  const { journey, setFlavorMemory } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  const [fm, setFm] = useState(loadLocal)
+  const [fm, setFm] = useState(() => {
+    const saved = journey.flavorMemory
+    return saved ? { ...EMPTY_STATE, ...saved } : { ...EMPTY_STATE }
+  })
   const [done, setDone] = useState(false)
+  const initialized = useRef(false)
 
   useEffect(() => {
-    saveLocal(fm)
+    if (!initialized.current) { initialized.current = true; return }
     setFlavorMemory(fm)
   }, [fm]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -231,6 +224,10 @@ export default function FlavorMemory() {
         naturalH={NAT_H}
         alt="SmokeCraft Flavor Memory — Capture Your Sensory Experience"
       >
+        {/* Nav mask */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
+          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+
         {/* Flavor zone selectors */}
         {FLAVOR_ZONES.map(zone => {
           const active = fm.selectedFlavors.includes(zone.id)

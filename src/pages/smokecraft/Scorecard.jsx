@@ -93,7 +93,7 @@ function RatingDots({ value, onChange, label }) {
 
 export default function Scorecard() {
   const { awardSessionRewards, session } = useGuestSession()
-  const { journey } = useSmokeCraftJourney()
+  const { journey, setScorecard } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
   const smokeCraft  = session?.smokeCraft || {}
@@ -136,12 +136,12 @@ export default function Scorecard() {
   }
 
   function handleSaveDraft() {
-    setSave('saving')
     const snap = { ...sc, savedAt: Date.now() }
     saveLocal(snap)
     setSc(prev => ({ ...prev, savedAt: snap.savedAt }))
-    setTimeout(() => setSave('saved'), 400)
-    setTimeout(() => setSave('idle'), 2400)
+    setScorecard(snap)
+    setSave('saved')
+    setTimeout(() => setSave('idle'), 2000)
   }
 
   const submitScorecard = useCallback(async (data) => {
@@ -174,6 +174,7 @@ export default function Scorecard() {
     triggerHaptic('medium')
     const snap = { ...sc, savedAt: Date.now() }
     saveLocal(snap)
+    setScorecard(snap)
     await submitScorecard(snap)
     awardSessionRewards('scorecard')
     navigate('/smokecraft/final-review')
@@ -197,6 +198,10 @@ export default function Scorecard() {
         naturalH={NAT_H}
         alt="SmokeCraft Scorecard — Your Complete Cigar Review"
       >
+        {/* Nav mask */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
+          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+
         {/* ── Cigar summary strip ── */}
         {cigarDetails && (
           <div style={{

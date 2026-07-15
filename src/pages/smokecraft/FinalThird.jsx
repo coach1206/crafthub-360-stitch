@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
@@ -11,8 +11,6 @@ const NAT_W = 1448
 const NAT_H = 1086
 
 const GOLD = '#E9C176'
-
-const LS_KEY = 'sc_final_third_v1'
 
 // Section 1 — 4 focus cards (stacked vertically, y≈29.4–51.4%)
 const FOCUS_ZONES = [
@@ -38,26 +36,22 @@ const FLAVOR_ZONES = [
 
 const EMPTY = { selectedFlavors: [], focusSelected: [], savedAt: null }
 
-function loadLocal() {
-  try {
-    const raw = localStorage.getItem(LS_KEY)
-    return raw ? { ...EMPTY, ...JSON.parse(raw) } : { ...EMPTY }
-  } catch { return { ...EMPTY } }
-}
-
-function saveLocal(s) {
-  try { localStorage.setItem(LS_KEY, JSON.stringify({ ...s, savedAt: s.savedAt || Date.now() })) } catch {}
-}
-
 export default function FinalThird() {
   const { awardSessionRewards, setFinalThirdTasting } = useGuestSession()
-  const { setFinalThird } = useSmokeCraftJourney()
+  const { journey, setFinalThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  const [ft, setFt] = useState(loadLocal)
+  const [ft, setFt] = useState(() => {
+    const saved = journey.finalThird
+    return saved ? { ...EMPTY, ...saved } : { ...EMPTY }
+  })
   const [done, setDone] = useState(false)
+  const initialized = useRef(false)
 
-  useEffect(() => { saveLocal(ft) }, [ft])
+  useEffect(() => {
+    if (!initialized.current) { initialized.current = true; return }
+    setFinalThird(ft)
+  }, [ft]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function toggleFlavor(id) {
     triggerHaptic('light')
@@ -123,6 +117,10 @@ export default function FinalThird() {
         naturalH={NAT_H}
         alt="SmokeCraft Final Third — Complete Your Tasting Journey"
       >
+        {/* Nav mask */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
+          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+
         {/* Section 1: focus cards */}
         {FOCUS_ZONES.map(zone => {
           const active = (ft.focusSelected || []).includes(zone.id)

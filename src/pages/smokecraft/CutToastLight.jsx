@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
@@ -45,6 +45,13 @@ export default function CutToastLight() {
   const [cutMethod,   setCutMethod]   = useState(() => journey.cutToastLight?.cut   || null)
   const [toastMethod, setToastMethod] = useState(() => journey.cutToastLight?.toast || null)
   const [lightMethod, setLightMethod] = useState(() => journey.cutToastLight?.light || null)
+
+  // Auto-persist to canonical journey state
+  useEffect(() => {
+    if (cutMethod || toastMethod || lightMethod) {
+      setCutToastLight({ cut: cutMethod, toast: toastMethod, light: lightMethod })
+    }
+  }, [cutMethod, toastMethod, lightMethod]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function pick(step, val) {
     triggerHaptic('light')
@@ -112,6 +119,10 @@ export default function CutToastLight() {
           })
         )}
 
+        {/* Nav mask */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
+          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+
         {/* Instruction tip panel — bottom strip */}
         {tip && (
           <div style={{
@@ -141,6 +152,7 @@ export default function CutToastLight() {
       <SmokeCraftNavBar
         primary="Continue to First Third →"
         onPrimary={handleContinue}
+        primaryDisabled={!cutMethod || !toastMethod || !lightMethod}
         secondary="← Back"
         onSecondary={() => navigate(-1)}
       />

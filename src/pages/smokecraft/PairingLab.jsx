@@ -232,6 +232,10 @@ export default function PairingLab() {
         naturalH={NAT_H}
         alt="SmokeCraft Pairing Lab — Build Your Pairing Profile"
       >
+        {/* Nav mask */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
+          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+
         {/* ── Selector panel (left) ── */}
         <div style={{
           position: 'absolute',

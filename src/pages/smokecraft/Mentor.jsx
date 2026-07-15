@@ -65,6 +65,10 @@ export default function Mentor() {
         naturalH={NAT_H}
         alt="SmokeCraft Mentor Selection — Choose Your Guide"
       >
+        {/* Nav mask */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
+          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+
         {MENTOR_ZONES.map(m => {
           const active = selected.includes(m.id)
           const maxed = selected.length >= 2 && !active

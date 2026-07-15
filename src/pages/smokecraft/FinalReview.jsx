@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -23,8 +24,13 @@ const READINESS_ZONES = [
 
 export default function FinalReview() {
   const { awardSessionRewards } = useGuestSession()
+  const { journey, setFinalReview } = useSmokeCraftJourney()
   const navigate = useNavigate()
-  const [checked, setChecked] = useState(new Set())
+  const [checked, setChecked] = useState(() => new Set(journey.finalReview?.checked || []))
+
+  useEffect(() => {
+    setFinalReview({ checked: [...checked] })
+  }, [checked]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function toggle(id) {
     triggerHaptic('light')
@@ -48,6 +54,10 @@ export default function FinalReview() {
         naturalH={NAT_H}
         alt="SmokeCraft Final Review — Journey Readiness Check"
       >
+        {/* Nav mask */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
+          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+
         {READINESS_ZONES.map(zone => {
           const active = checked.has(zone.id)
           return (

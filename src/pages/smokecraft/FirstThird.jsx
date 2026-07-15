@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
@@ -25,10 +25,31 @@ export default function FirstThird() {
   const { awardSessionRewards, setFirstThirdTasting } = useGuestSession()
   const { journey, setFirstThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
+
+  // Load from canonical journey state
   const [checked,    setChecked]    = useState(() => journey.firstThird?.notesSelected || [])
   const [notes,      setNotes]      = useState(() => journey.firstThird?.personalNotes || '')
   const [saveStatus, setSaveStatus] = useState('idle')
   const [done,       setDone]       = useState(false)
+
+  // Auto-persist every change to canonical journey state (no private keys)
+  useEffect(() => {
+    setFirstThird({
+      status: 'in_progress',
+      source: 'local_only',
+      tasteProfileSource: checked.length > 0 ? 'guest_selected' : 'not_collected',
+      safeClaim: checked.length > 0
+        ? 'Guest confirmed observations — selections captured'
+        : 'Guest observing — not yet confirmed',
+      notesSelected: checked,
+      notesCount: checked.length,
+      personalNotes: notes,
+      drawRating: null, hasDrawRating: false,
+      strength: null, body: null, smokeOutput: null,
+      burnQuality: null, pairingReaction: null,
+      mentorTip: null, mentorName: null,
+    })
+  }, [checked, notes]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function toggleItem(id) {
     triggerHaptic('light')
@@ -36,14 +57,10 @@ export default function FirstThird() {
   }
 
   function handleSaveDraft() {
-    if (saveStatus === 'saving') return
-    setSaveStatus('saving')
+    // State is already persisted via useEffect; confirm immediately
+    setSaveStatus('saved')
     triggerHaptic('light')
-    try {
-      localStorage.setItem('sc_first_third_draft', JSON.stringify({ notesSelected: checked, personalNotes: notes, savedAt: Date.now() }))
-    } catch {}
-    setTimeout(() => setSaveStatus('saved'), 500)
-    setTimeout(() => setSaveStatus('idle'), 2500)
+    setTimeout(() => setSaveStatus('idle'), 2000)
   }
 
   function handleContinue() {
@@ -78,6 +95,10 @@ export default function FirstThird() {
         naturalH={NAT_H}
         alt="SmokeCraft First Third — Discover the Opening Expression"
       >
+        {/* Nav mask */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
+          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+
         {EXPLORE_ZONES.map(zone => {
           const active = checked.includes(zone.id)
           return (
@@ -88,48 +109,34 @@ export default function FirstThird() {
               aria-pressed={active}
               onClick={() => toggleItem(zone.id)}
               style={{
-                position: 'absolute',
-                left: `${zone.x}%`, top: `${zone.y}%`,
+                position: 'absolute', left: `${zone.x}%`, top: `${zone.y}%`,
                 width: `${zone.w}%`, height: `${zone.h}%`,
-                pointerEvents: 'auto',
-                background: 'transparent',
+                pointerEvents: 'auto', background: 'transparent',
                 border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
-                borderRadius: 4,
-                cursor: 'pointer',
-                boxSizing: 'border-box',
-                padding: 0,
-                outline: 'none',
+                borderRadius: 4, cursor: 'pointer', boxSizing: 'border-box', padding: 0, outline: 'none',
               }}
             >
               {active && (
-                <span style={{
-                  position: 'absolute', top: 4, right: 5,
-                  fontSize: 'clamp(9px,1.2vw,14px)', fontWeight: 700,
-                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
-                }}>✓</span>
+                <span style={{ position: 'absolute', top: 4, right: 5, fontSize: 'clamp(9px,1.2vw,14px)',
+                  fontWeight: 700, color: GOLD, lineHeight: 1, pointerEvents: 'none' }}>✓</span>
               )}
             </button>
           )
         })}
 
-        {/* Notes panel — bottom */}
+        {/* Notes panel */}
         <div style={{
-          position: 'absolute',
-          left: '3%', top: '80%', width: '94%', height: '16%',
-          background: 'rgba(5,5,5,0.88)',
-          border: '1px solid rgba(233,193,118,0.22)',
+          position: 'absolute', left: '3%', top: '80%', width: '94%', height: '16%',
+          background: 'rgba(5,5,5,0.88)', border: '1px solid rgba(233,193,118,0.22)',
           borderRadius: 5, boxSizing: 'border-box',
           padding: 'clamp(4px,0.7vw,8px) clamp(6px,0.9vw,12px)',
-          display: 'flex', flexDirection: 'column', gap: 3,
-          pointerEvents: 'auto',
+          display: 'flex', flexDirection: 'column', gap: 3, pointerEvents: 'auto', zIndex: 3,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{
-              fontSize: 'clamp(7px,0.58vw,8px)',
-              color: 'rgba(233,193,118,0.5)',
-              textTransform: 'uppercase', letterSpacing: '0.08em',
-              fontFamily: 'Georgia, serif',
-            }}>First Third Observations</span>
+            <span style={{ fontSize: 'clamp(7px,0.58vw,8px)', color: 'rgba(233,193,118,0.5)',
+              textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: 'Georgia, serif' }}>
+              First Third Observations
+            </span>
             <button
               type="button"
               aria-label="Save draft"
@@ -143,7 +150,7 @@ export default function FirstThird() {
                 cursor: 'pointer', outline: 'none',
               }}
             >
-              {saveStatus === 'saving' ? 'Saving…' : saveStatus === 'saved' ? '✓ Saved' : 'Save Draft'}
+              {saveStatus === 'saved' ? '✓ Saved' : 'Save Draft'}
             </button>
           </div>
           <textarea
@@ -152,12 +159,9 @@ export default function FirstThird() {
             placeholder="First impressions, aroma, draw feel, opening flavors…"
             aria-label="First third personal notes"
             style={{
-              flex: 1, resize: 'none',
-              background: 'transparent',
-              border: 'none', outline: 'none',
-              color: 'rgba(229,226,225,0.8)',
-              fontSize: 'clamp(8px,0.72vw,10px)',
-              fontFamily: 'Georgia, serif', lineHeight: 1.4,
+              flex: 1, resize: 'none', background: 'transparent',
+              border: 'none', outline: 'none', color: 'rgba(229,226,225,0.8)',
+              fontSize: 'clamp(8px,0.72vw,10px)', fontFamily: 'Georgia, serif', lineHeight: 1.4,
             }}
           />
         </div>
