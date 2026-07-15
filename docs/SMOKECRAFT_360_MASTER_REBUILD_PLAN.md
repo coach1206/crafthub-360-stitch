@@ -1,566 +1,538 @@
 # SmokeCraft 360 — Master Rebuild Plan
 
 **Status:** Planning document only. No application code, routes, components, images, or database files were changed to produce this plan.
-**Source of truth:** `docs/SMOKECRAFT_360_MASTER_AUDIT.md`
+**Source of truth:** `docs/SMOKECRAFT_360_MASTER_AUDIT.md` + the user-approved 27-session SmokeCraft 360 Master Journey specification.
 **Repo:** coach1206/crafthub-360-stitch
 **Branch:** recovery/smokecraft-codex-final
-**HEAD at planning time:** `f3adf191f16f8248833cbf26a68267c01a049f85`
+**HEAD at planning time:** `87fd5be7a87e47f51a68c272ae635d8bb07b4a1f`
+
+> **Revision notice:** This version corrects the master-journey decision in the prior revision of this document, which incorrectly treated the repository's current 24-session/8-visit implementation as the target structure. The current 24-session structure is the *existing implementation*, not the *product requirement*. The product requirement is the user-approved 27-session SmokeCraft 360 Master Journey below. This plan now locks to 27 and maps every existing screen, route, component, and asset onto it — treating gaps as work to build, not as evidence the requirement doesn't apply.
 
 ---
 
 ## 1. Executive Summary
 
-The audit found a codebase where the core tasting journey (19 screens) is genuinely interactive and mostly wired to canonical persistence, but is surrounded by three categories of debt: (a) 17 supplemental/in-spine screens that are static stubs or `ComingSoon` placeholders, (b) 8 shadow localStorage/sessionStorage keys that fragment persistence outside the canonical `sc_journey_v1` context, and (c) ~100+ orphaned/duplicate image files left over from repeated incomplete asset-repair passes. Routing has three concrete correctness bugs (duplicate Session-2 guard, duplicate Format route, dead-end legacy session aliases). No Rewards page exists despite being referenced by UI. No AI feature exists beyond a placeholder. Only one real quiz mechanic exists in the entire app.
+The audit (`docs/SMOKECRAFT_360_MASTER_AUDIT.md`) found a codebase with 19 genuinely interactive, canonically-persisted core screens, 17 static-stub or placeholder screens, 8 residual persistence shadow-keys, three route-correctness bugs, and ~100+ orphaned image files. That inventory remains fully valid and is reused throughout this plan. What changes in this revision is the target structure those findings are mapped against: not the current 24-session/8-visit implementation, but the **locked 27-session SmokeCraft 360 Master Journey**, organized into 7 phases plus a 5-screen Entry/Authentication layer that sits in front of it.
 
-This plan sequences the fix so that **no screen is rebuilt twice**: persistence is consolidated before screens are redesigned against it, routing is corrected before new screens are added to the route table, and the journey-count decision is locked before any screen numbering is touched.
+Most of the 24 existing sessions map directly or with light modification onto the 27-session spec. A minority require splitting (CutToastLight → Choose Your Cut + Lighting Tutorial), merging (SeedSoil → folded into Terroir; several existing supplemental education stubs → folded into one Knowledge Drop session), or reclassification from "main journey" to "supporting module" (GoldenBox, RequestPurchase, SmokeCraftChallenge, MiniTastingRound, SecondHumidorMatch, Connections, ManagementSync, Leaderboard, EventChallenge, HowItWorks, Assistant, Scan, GuestPass). A genuine set of new sessions has no existing analog at all (Meet Your Cigar, Mentor Commentary, Knowledge Drop as a unified experience, AI Summary, Personalized Pairing Recommendations as a results screen, Rewards & Achievements, Recommended Next Journey, plus the Entry/Authentication layer's Venue Select and Resume screens).
+
+Per the mandate's explicit instruction, this plan does **not** force one screen per session where a session represents an additional interaction stage within an existing flow — several adjacent sessions are combined into a single screen using tabs/panels (e.g., Sessions 8–9, 16–18, 19–20, 25–26), which keeps the main-journey **screen** count below the **session** count without violating the locked 27-session sequence.
 
 ---
 
 ## 2. Audit Findings Used
 
-Every section of this plan traces to a numbered section of `docs/SMOKECRAFT_360_MASTER_AUDIT.md`:
+All findings from `docs/SMOKECRAFT_360_MASTER_AUDIT.md` remain the factual basis for this plan — the audit describes what exists in the repository today; this plan describes how that inventory maps onto the locked 27-session target. Specifically reused without re-verification:
 
-- Journey structure & gating logic → Audit §1
 - Route table, aliases, duplicate guards → Audit §2, §5
 - Asset inventory & duplicates → Audit §3, §5
 - Screen/component catalog, static-only screens, orphaned components → Audit §4, §6
-- Live-image / journey-count mismatch → Audit §7
 - Persistence shadow keys → Audit §8
-- Missing controls → Audit §9
-- Missing education → Audit §10
-- Missing AI → Audit §11/§13
-- Missing quizzes/XP/rewards → Audit §12
-- Missing states (loading/error/offline/retry) → Audit §14
-- Screen counts → Audit §15
-- Full screen table → Audit §16
-- Prior proposed order (superseded by this plan's dependency-driven order) → Audit §17
+- Missing controls, education, AI, quizzes/XP/rewards, missing states → Audit §9–§14
+- Existing screen counts (19 reusable / 17 static-stub) → Audit §15
+- Full current-state screen table → Audit §16
 
 ---
 
 ## 3. Master Journey Decision
 
-### 3a. 24-session (current, coded) vs 27-session (proposed) comparison
+### 3a. Locked Final Master Journey (27 sessions, 7 phases, + 5-screen Entry layer)
 
-| Dimension | 24-session (current) | 27-session (proposed) |
+| Phase | Session | Title |
 |---|---|---|
-| Coded in `session.js` / routed in `App.jsx` | Yes, fully | No — never defined anywhere in the repo |
-| Gating logic (`isSessionUnlocked`/`isVisitUnlocked`) | Built and working for 24/8 | Would need to be re-derived from scratch |
-| Persistence (`sc_journey_v1`) | Has slots for most of the 24 (missing wrapperStrength, origins, terroir, vitola, blend, flavorDNA — Audit §8) | Unknown — no spec exists for what the extra 3 sessions would be |
-| Existing working screens | 19 of 24 numbered sessions already interactive | N/A — can't map until the 3 extra sessions are defined |
-| Verification scripts / prior test suites | Written against 24-session routes (`verify-interactions.mjs`, `final-acceptance.mjs`, etc.) | Would need rewriting |
+| Entry/Auth (not counted in the 27) | E1 | Launch Screen |
+| Entry/Auth | E2 | Sign In / Guest Mode |
+| Entry/Auth | E3 | Select Venue or Lounge |
+| Entry/Auth | E4 | Personal Dashboard |
+| Entry/Auth | E5 | Resume or Start New Journey |
+| 2 — Session Preparation | S1 | Welcome to Today's Experience |
+| 2 | S2 | Choose Your Cigar |
+| 2 | S3 | Meet Your Cigar |
+| 2 | S4 | Terroir |
+| 2 | S5 | Construction Inspection |
+| 2 | S6 | Choose Your Cut |
+| 2 | S7 | Lighting Tutorial |
+| 3 — First Third | S8 | First Draw |
+| 3 | S9 | Flavor Discovery |
+| 3 | S10 | Flavor Memory Exercise |
+| 3 | S11 | Suggested Pairings |
+| 4 — Second Third | S12 | Flavor Evolution |
+| 4 | S13 | Construction Check |
+| 4 | S14 | Mentor Commentary |
+| 4 | S15 | Knowledge Drop |
+| 5 — Final Third | S16 | Flavor Finish |
+| 5 | S17 | Strength Progression |
+| 5 | S18 | Overall Experience Notes |
+| 6 — Reflection | S19 | Rate Every Category |
+| 6 | S20 | Personal Notes |
+| 7 — Results | S21 | AI Summary |
+| 7 | S22 | Personalized Pairing Recommendations |
+| 7 | S23 | Passport Stamp Animation |
+| 7 | S24 | Completed Scorecard |
+| 7 | S25 | Rewards and XP |
+| 7 | S26 | Achievements |
+| 7 | S27 | Recommended Next Journey |
 
-### 3b. Session-by-session mapping
+This is the **locked final journey**. It is not a synthesis or compromise with the current 24-session implementation — it is the target, and the current implementation is evaluated against it.
 
-1. **Direct 1:1 mapping**: All 24 current sessions (S1–S24) map cleanly to a real, distinct step in the guest journey — entry, enroll, golden-box, mentor-selection, format, wrapper-strength, seed-soil, pairing-lab, humidor-match, request-purchase, cut-toast-light, first-third, second-third, flavor-memory, final-third, scorecard, smokecraft-challenge, second-humidor-match, mini-tasting, final-review, passport-stamp, connections, management-sync, session-complete. None of these need renaming, merging, or splitting to remain coherent.
-2. **Sessions that would be renamed**: none required. `identity` should stop being co-guarded as "Session 2" (see §14/Route Correction Plan) but the session itself (`enroll`) keeps its name and number.
-3. **Sessions that would be merged**: `second-humidor-match` (S18) is a strong candidate to merge into the `humidor-match` (S9) pattern rather than exist as a separate near-duplicate stub — see Audit §5 finding 4. This reduces the count to 23 *unique* interaction patterns while keeping 24 numbered checkpoints (S18 becomes a "revisit" checkpoint reusing S9's component in a second-visit configuration, not a rebuild).
-4. **Sessions that would be split**: none identified. No existing session is overloaded enough to require splitting into two.
-5. **Sessions that are missing from the 24-count**: none confirmed. The audit found zero evidence of what 3 additional sessions the "27" figure would represent — no design doc, no orphaned route, no batch-22 asset set that maps to unbuilt *numbered* sessions (batch-22 appears to be general staging/reference material, not session-specific — Audit §3).
-6. **Existing sessions that would become supporting modules**: `smokecraft-challenge` (S17) and `mini-tasting` (S19) are thin enough (static stub, single Continue button) that they are better classified as **supporting-module-style checkpoints inside the spine** — they get real content (Phase 6/7) but do not need to become full "main journey" screens with their own sub-navigation.
+### 3b. Existing-to-new session mapping
 
-### 3c. Recommendation
+| New session | Existing session/screen | Mapping type |
+|---|---|---|
+| E1 Launch Screen | current S1 (`/smokecraft` landing, SmokeCraft.jsx) | Reuse, rename role to "Entry" layer |
+| E2 Sign In / Guest Mode | current S2 (Enroll.jsx) | Reuse, rename |
+| E3 Select Venue or Lounge | *(none)* | **Missing — create** |
+| E4 Personal Dashboard | Identity.jsx (currently co-guarded as S2) | Reuse, rename, and resolve its duplicate-guard bug (Audit §5) as part of the move |
+| E5 Resume or Start New Journey | *(no dedicated screen; resume logic exists in `SmokeCraftProgressContext`)* | **Missing screen — create**, wrapping existing (already-correct) resume logic |
+| S1 Welcome to Today's Experience | *(none directly; closest is GoldenBox's rules framing)* | **Missing — create**; GoldenBox becomes a supporting module reachable from here, not this session itself |
+| S2 Choose Your Cigar | current S9 (HumidorMatch.jsx) | Reuse, rename, move earlier in sequence |
+| S3 Meet Your Cigar | *(none as a screen; `CigarIntelligencePanel` component already exists and is active per Audit §4c)* | **Create** screen, reusing the existing panel component; current Mentor-selection (S4) folds in here as a tab |
+| S4 Terroir | current Terroir.jsx (unguarded `ComingSoon` stub) | **Update/create real content**; current SeedSoil (S7) merges in as a tab (seed/soil is thematically terroir) |
+| S5 Construction Inspection | current Format.jsx (S5) + CigarGaugeGuide.jsx | Reuse Format's shape/size logic, merge CigarGaugeGuide content in as a tab, rename session |
+| S6 Choose Your Cut | current CutToastLight.jsx (S11), cut portion only | **Split** — cut selection becomes its own session/screen |
+| S7 Lighting Tutorial | current CutToastLight.jsx (S11), toast+light portion | **Split** — toast/light becomes its own session/screen |
+| S8 First Draw | current FirstThird.jsx (S12) | Reuse; combined into one screen with S9 via tabs (not forced into 2 screens) |
+| S9 Flavor Discovery | *(currently folded into FirstThird's existing notes/selection controls)* | Reuse as a tab within the same FirstThird screen |
+| S10 Flavor Memory Exercise | current FlavorMemory.jsx (S14) | Reuse, move earlier in sequence |
+| S11 Suggested Pairings | current PairingLab.jsx (S8) | Reuse, move later in sequence |
+| S12 Flavor Evolution | current SecondThird.jsx (S13) | Reuse |
+| S13 Construction Check | *(none)* | **Create** as a tab within the same screen as S12, reusing Format/CigarGaugeGuide-style inspection controls |
+| S14 Mentor Commentary | *(none — current Mentor.jsx is a selection screen, not a commentary/tip screen)* | **Create**, fed by the mentor chosen in S3 |
+| S15 Knowledge Drop | current Origins.jsx, Vitola.jsx, PairingMastery.jsx, FlavorDNA.jsx (all `ComingSoon`/image-only stubs) | **Merge** all four into one tabbed Knowledge Drop screen rather than 4 separate main-journey screens |
+| S16 Flavor Finish | current FinalThird.jsx (S15) | Reuse; combined with S17/S18 in one screen via tabs |
+| S17 Strength Progression | *(none)* | **Create** as a tab within the same screen as S16 |
+| S18 Overall Experience Notes | *(reuses the existing personal-notes textarea pattern already used across FirstThird/SecondThird/FlavorMemory)* | **Create** as a tab within the same screen, reusing the established notes-field pattern |
+| S19 Rate Every Category | current Scorecard.jsx (S16) | Reuse |
+| S20 Personal Notes | current Scorecard.jsx already has a `personalNotes` field | **Merge** into the same Scorecard screen as a section, not a separate screen |
+| S21 AI Summary | *(none — no AI feature exists, Audit §11)* | **Create**, subject to the AI Plan decision gate (§21) |
+| S22 Personalized Pairing Recommendations | current PairingLab.jsx's `buildRecommendation` logic (Audit §14 confirms this is real rule-based logic) | **Create** a distinct results-recap screen that *reuses* the existing recommendation logic rather than re-deriving it |
+| S23 Passport Stamp Animation | current PassportStamp.jsx (S21) | Reuse |
+| S24 Completed Scorecard | current FinalReview.jsx (S20) | **Merge** — FinalReview becomes the read-only completed-scorecard recap rather than a separate readiness-checklist screen |
+| S25 Rewards and XP | *(none — confirmed missing in Audit §12)* | **Create** (same net-new Rewards page identified in the audit) |
+| S26 Achievements | *(none)* | **Create** as a tab within the same Rewards screen, not a separate screen |
+| S27 Recommended Next Journey | current SessionComplete.jsx (S24) | **Merge** — SessionComplete's completion framing extends into a "what's next" recommendation rather than being replaced |
 
-**Do not adopt 27 as the locked count.** There is no artifact anywhere in this repository — no design doc, no route, no asset set, no journey constant — that defines what the 3 additional sessions would contain. Locking to an undefined number would force either (a) inventing 3 sessions with no product basis, which risks being thrown away, or (b) leaving 3 numbered gaps in a "locked" journey, which is worse than the current honest 24.
+### 3c. Sessions renamed (same underlying screen, new session identity/number)
 
-**Recommended final journey: 24 sessions, 8 visits — unchanged from current coded structure.**
+HumidorMatch (old S9 → new S2), Mentor selection (old S4 → folds into new S3 as a tab), PairingLab (old S8 → new S11), FlavorMemory (old S14 → new S10), Format (old S5 → new S5, renamed "Construction Inspection"), Enroll (old S2 → E2), Identity (old co-guarded S2 → E4), SmokeCraft landing (old S1 → E1).
 
-This is the smallest safe final journey because:
-- 19 of 24 sessions are already real, working, interactive screens (Audit §15) — rebuilding to a different count would put all 19 at risk of unnecessary rework.
-- The persistence layer (`sc_journey_v1`), gating logic, and existing test suites are all built against 24/8 — changing the count invalidates all of them simultaneously.
-- Every genuine gap found in the audit (Rewards page, 3 static stubs, 6 education stubs, AI placeholder) can be closed as **supporting modules or in-place content upgrades** without changing the session count at all.
-- If a genuine 27-session (or any other count) product spec is produced later, it can be layered on top of a *stable* 24-session core with far less risk than trying to hit an undefined target now.
+### 3d. Sessions merged
 
-**Recommended final session count: 24.**
-**Recommended final main-journey screen count: 24** (one screen per session; S18 reuses S9's component under a distinct route rather than a hand-built duplicate).
-**Recommended final supporting-module count: 13** — Rewards (new), Leaderboard, HowItWorks, EventChallenge, Origins, Terroir, Vitola, PairingMastery, FlavorDNA, Assistant, GoldenBoxStatus, Scan, GuestPass. (WrapperStrength is *not* counted here — it is S6, inside the main spine, and must become a real main-journey screen, not a supporting module.)
+- SeedSoil (old S7) → merges into Terroir (new S4) as a tab.
+- CigarGaugeGuide → merges into Construction Inspection (new S5) as a tab.
+- Origins, Vitola, PairingMastery, FlavorDNA (4 stub screens) → merge into one Knowledge Drop screen (new S15).
+- FinalReview (old S20) → merges into Completed Scorecard (new S24) as its live content source.
+- SessionComplete (old S24) → merges into Recommended Next Journey (new S27).
+- Scorecard's existing `personalNotes` field → absorbs new S20 Personal Notes rather than spawning a separate screen.
 
-This structure minimizes rebuilding because it changes **zero** existing working routes, preserves all 19 reusable screens untouched at the routing/session level, and converts every audit-identified gap into additive work rather than structural change.
+### 3e. Sessions split
+
+- CutToastLight (old S11) → splits into Choose Your Cut (new S6) and Lighting Tutorial (new S7), since the new spec treats cut selection and the lighting tutorial as two distinct sessions with two distinct pieces of content (cut technique vs. toast/light technique).
+
+### 3f. Sessions/screens missing entirely (must be created)
+
+E3 Select Venue or Lounge, E5 Resume or Start New Journey, S1 Welcome to Today's Experience, S3 Meet Your Cigar (screen wrapper; component exists), S13 Construction Check (as new tab content), S14 Mentor Commentary, S17 Strength Progression (as new tab content), S18 Overall Experience Notes (as new tab content, reusing existing notes pattern), S21 AI Summary, S22 Personalized Pairing Recommendations (as a distinct results screen; underlying logic exists), S25 Rewards and XP, S26 Achievements (as new tab content).
+
+### 3g. Existing sessions that become supporting modules (not part of the 27-session spine)
+
+GoldenBox (old S3) — becomes a supporting rules/orientation module reachable from S1 Welcome, not a numbered session itself.
+RequestPurchase (old S10) — becomes an embedded ordering drawer/panel reachable from S2 Choose Your Cigar, per the mandate's instruction to "use live React panels, tabs, overlays, drawers, and dynamic zones where they provide a cleaner experience" rather than a standalone numbered session.
+SmokeCraftChallenge (old S17), SecondHumidorMatch (old S18), MiniTastingRound (old S19) — become optional supporting-module side-experiences reachable from Recommended Next Journey (new S27), not required numbered sessions in the core 27.
+Connections (old S22), ManagementSync (old S23) — become supporting modules reachable post-journey (social/venue-ops), consistent with their current non-tasting-flow content.
+Leaderboard, EventChallenge, HowItWorks, Assistant, Scan, GuestPass — remain supporting modules, as in the prior audit's classification; unchanged by the journey renumbering.
+
+### 3h. Recommendation
+
+**Locked final journey: 27 sessions, 7 phases, plus a 5-screen Entry/Authentication layer (32 numbered checkpoints total, 27 of which are the "Master Journey" proper).**
+
+This does not minimize rebuilding by *avoiding* the 27-session structure — it minimizes rebuilding *within* the locked 27-session structure by:
+- Reusing all 14 of the existing screens whose content already matches a new session's intent, without rebuilding their working interaction logic (only renaming/reordering/re-routing them).
+- Using tabs/panels to satisfy sessions that represent an additional interaction stage of an existing flow (S9 within S8's screen, S13 within S12's screen, S17/S18 within S16's screen, S20 within S19's screen, S26 within S25's screen) rather than inflating the screen count 1:1 with the session count, per the mandate's explicit instruction.
+- Converting existing static-stub screens (Origins/Vitola/PairingMastery/FlavorDNA, GoldenBox, SmokeCraftChallenge, MiniTastingRound, SecondHumidorMatch) into either real Knowledge Drop content or supporting modules, so no static-stub screen is silently kept in its current non-functional state.
+- Treating every currently "missing" 27-session item as a **build gap**, not a reason to fall back to 24 — consistent with this revision's explicit correction.
 
 ---
 
 ## 4. Final Recommended Journey
 
-24 sessions / 8 visits, unchanged from Audit §1's coded structure. See §3c.
+27 sessions across 7 phases, preceded by a 5-screen Entry/Authentication layer (E1–E5). See §3a.
 
-## 5. Final Recommended Screen Count
+## 5. Final Recommended Main-Screen Count
 
-- Main journey: **24**
-- Supporting modules: **13**
-- Total addressable SmokeCraft screens: **37** (matches Audit §16's enumerated table, which already lists 37 numbered rows).
+**21 main-journey screens** covering all 27 sessions (several sessions share a screen via tabs, per §3h) **+ 5 Entry/Authentication screens = 26 total spine screens.**
+
+Screen-to-session breakdown:
+S1(1) · S2(1) · S3(1) · S4(1) · S5(1) · S6(1) · S7(1) · S8+S9(1) · S10(1) · S11(1) · S12+S13(1) · S14(1) · S15(1) · S16+S17+S18(1) · S19+S20(1) · S21(1) · S22(1) · S23(1) · S24(1) · S25+S26(1) · S27(1) = **21 screens / 27 sessions**, plus E1–E5 = **5 screens / 5 entries**. Total = **26**.
 
 ## 6. Final Recommended Supporting-Module Count
 
-**13** — see §3c list.
+**13** — GoldenBox, RequestPurchase, SmokeCraftChallenge, SecondHumidorMatch, MiniTastingRound, Connections, ManagementSync, Leaderboard, EventChallenge, HowItWorks, Assistant, Scan, GuestPass.
 
 ---
 
-## 7. Screens to Keep
+## 7. Existing Screens Reused (14)
 
-FirstThird (S12), SecondThird (S13), HumidorMatch (S9), CutToastLight (S11), Format (S5), Mentor (S4), PairingLab (S8), RequestPurchase (S10), ManagementSync (S23), FinalReview (S20) — 10 screens require **zero** structural or persistence change. (FlavorMemory, FinalThird, Scorecard, Connections, GoldenBox, Identity, PassportStamp, SessionComplete are functionally "keep" at the UI level but require the persistence fix in §9, so they are listed under Update, not here, to avoid double-counting.)
+HumidorMatch (→S2), PairingLab (→S11), FlavorMemory (→S10), Format (→S5, +CigarGaugeGuide merged), SecondThird (→S12, +new S13 tab), FirstThird (→S8, +new S9 tab), FinalThird (→S16, +new S17/S18 tabs), Scorecard (→S19, +new S20 section), PassportStamp (→S23), FinalReview (→S24, repurposed as read-only recap), Mentor (→folds into S3 as a tab), SmokeCraft landing (→E1), Enroll (→E2), Identity (→E4).
 
-## 8. Screens to Update
+## 8. Existing Screens Updated (persistence-only, independent of renumbering)
 
-FlavorMemory (S14), FinalThird (S15), Scorecard (S16), Connections (S22), GoldenBox (S3), Identity (S2), PassportStamp (S21), SessionComplete (S24) — persistence-only fixes (remove shadow keys, read/write exclusively through `useSmokeCraftJourney()`). No visual redesign required for any of these 8.
+Connections, GoldenBox, Identity, Scorecard, FinalThird, FlavorMemory, PassportStamp, SessionComplete — same 8-screen shadow-key elimination identified in Audit §8, now layered onto their new session identities from §3b/§3c. This work is renumbering-agnostic and should not be re-scoped by the journey correction.
 
-Scan.jsx, GuestPass.jsx — replace the single full-card invisible hotspot with real, image-aligned controls (same anti-pattern the prior mandate banned for core screens).
+## 9. Screens Merged
 
-## 9. Screens to Merge
+SeedSoil→Terroir(S4), CigarGaugeGuide→Construction Inspection(S5), Origins+Vitola+PairingMastery+FlavorDNA→Knowledge Drop(S15), FinalReview→Completed Scorecard(S24), SessionComplete→Recommended Next Journey(S27), Scorecard's existing notes field→Personal Notes(S20).
 
-SecondHumidorMatch (S18) → merge into the HumidorMatch (S9) component, parameterized for a "second visit" presentation rather than maintained as a separate static stub.
+## 10. Screens Split
 
-## 10. Screens to Split
+CutToastLight → Choose Your Cut(S6) + Lighting Tutorial(S7).
 
-None identified. No screen in the audit is overloaded enough to require splitting.
+## 11. Screens Redesigned
 
-## 11. Screens to Redesign
+SmokeCraftChallenge, MiniTastingRound (now supporting modules, still need conversion from static stub to real interactive content before they're worth surfacing from Recommended Next Journey), Leaderboard, EventChallenge — same redesign need as identified in the audit, now scoped as supporting-module work rather than in-spine work.
 
-SmokeCraftChallenge (S17), MiniTastingRound (S19), Leaderboard, EventChallenge — currently static-only, need real interactive content and (for Leaderboard) real or honestly-empty ranking data.
+## 12. New Screens Required (10)
 
-## 12. Screens to Create
+E3 Select Venue or Lounge, E5 Resume or Start New Journey, S1 Welcome to Today's Experience, S3 Meet Your Cigar, S14 Mentor Commentary, S15 Knowledge Drop (net-new *screen*, even though its content sources are merged-in stubs), S21 AI Summary, S22 Personalized Pairing Recommendations, S25/S26 Rewards and Achievements, and the merge target for S13/S17/S18/S20/S24/S27 count as *new tab content within reused screens*, not new screens — see §5's screen-count math, which already reflects this distinction.
 
-- `/smokecraft/rewards` — confirmed missing, referenced by existing UI (Audit §12).
-- WrapperStrength (S6) — currently renders null; needs real educational content since it sits inside the guarded spine.
-- Origins, Terroir, Vitola, PairingMastery, FlavorDNA — currently `ComingSoon`/image-only; need real content (supporting modules, not spine-blocking).
-- Assistant — currently `ComingSoon`; creation here means *deciding and building*, or explicitly de-scoping per §21 (AI Plan) — this plan does not assume AI must ship, only that the placeholder must be resolved one way or the other before freeze.
+## 13. New Visual Assets Required
 
-## 13. Screens to Archive
+- Likely new: Welcome (S1), Meet Your Cigar (S3), Mentor Commentary (S14), AI Summary (S21), Rewards/Achievements (S25/S26), Venue Select (E3), Resume (E5) — background artwork does not yet exist for these under any current SC_ASSETS key.
+- Likely reusable without new photography: Knowledge Drop (S15) can probably reuse existing orphaned assets already sitting unreferenced in `public/*.png` (`smokecraft-origins.png`, `smokecraft-terroir.png`, etc., per Audit §3) rather than requiring net-new commissioned art — this should be confirmed screen-by-screen during Phase 5 (Dynamic Visual System), not assumed.
+- Personalized Pairing Recommendations (S22) can likely reuse PairingLab's existing background/visual language since it's a results view of the same domain.
 
-`Format.legacy.jsx` (1,571-line superseded file) and the 12 orphaned components listed in Audit §4c — archived (not hard-deleted in the first pass) pending a final zero-reference re-check, since deletion is irreversible and this plan treats it as a late-phase, low-risk cleanup step (Phase 9 in Rebuild Priority Order, Package F below).
+## 14. Missing Routes Required
 
----
+`/smokecraft/venue-select` (E3), `/smokecraft/resume` (E5), `/smokecraft/welcome` (S1), `/smokecraft/choose-cigar` (S2, replaces/renames `humidor-match`), `/smokecraft/meet-your-cigar` (S3), `/smokecraft/terroir` (S4, already exists as a route, needs real content + SeedSoil merge), `/smokecraft/construction-inspection` (S5, replaces/renames `format`), `/smokecraft/choose-cut` (S6, new — split from `cut-toast-light`), `/smokecraft/lighting-tutorial` (S7, new — split from `cut-toast-light`), `/smokecraft/first-draw` (S8/S9, replaces/renames `first-third`), `/smokecraft/flavor-memory` (S10, unchanged), `/smokecraft/suggested-pairings` (S11, replaces/renames `pairing-lab`), `/smokecraft/flavor-evolution` (S12/S13, replaces/renames `second-third`), `/smokecraft/mentor-commentary` (S14, new), `/smokecraft/knowledge-drop` (S15, new), `/smokecraft/final-third` (S16/S17/S18, unchanged route, expanded content), `/smokecraft/scorecard` (S19/S20, unchanged route, expanded content), `/smokecraft/ai-summary` (S21, new), `/smokecraft/pairing-recommendations` (S22, new), `/smokecraft/passport-stamp` (S23, unchanged), `/smokecraft/completed-scorecard` (S24, replaces/renames `final-review`), `/smokecraft/rewards` (S25/S26, new — same page previously identified as missing in the audit), `/smokecraft/next-journey` (S27, replaces/renames `session-complete`).
 
-## 14. Route Correction Plan
-
-| Issue | Fix | Risk |
-|---|---|---|
-| `identity` and `enroll` both guarded as Session 2 | Change `identity`'s guard to a distinct, correctly-ordered session number, or explicitly demote `identity` to an unguarded profile-edit route reachable *from* S2 rather than co-occupying S2's gate | Low — no visual change, pure guard correctness |
-| `shape-size-burn` duplicates `format` (same element, same guard) | Make `shape-size-burn` a `Navigate` alias to `/smokecraft/format` instead of an independent route rendering the same element | Low |
-| `smokecraft/session-1..session-4` collapse to `/smokecraft` regardless of target | Route each to the guest's actual `currentSession`/`nextSessionId` via `useSmokeCraftProgress()`, or remove the aliases entirely if nothing external still links to them | Low — legacy alias cleanup only |
-| No `/smokecraft/rewards` route exists | Add the route once the Rewards screen is built (§12); repoint every "Rewards" CTA (PairingLab, SmokeCraftChallenge, SmokeCraft landing) away from `/smokecraft/humidor-match` | Medium — touches 3 existing files' CTA targets |
-| `order` and `ticket-tapper/staff-specials` both render `SmokeCraftVenueCommerce` directly | Out of SmokeCraft-journey scope (venue-commerce subsystem) — flag for the owning team, no action in this plan | N/A |
-
-All route corrections are additive or alias-only — none require deleting a currently-working route.
+**Route-renaming caution:** several of the above are proposed renames of existing, working routes (`humidor-match`→`choose-cigar`, `format`→`construction-inspection`, `first-third`→`first-draw`, `pairing-lab`→`suggested-pairings`, `second-third`→`flavor-evolution`, `final-review`→`completed-scorecard`, `session-complete`→`next-journey`). Renaming a working route has real risk (external links, bookmarks, analytics continuity) — this plan recommends keeping the **existing route paths** as the actual URLs and only changing the **session number/label/order** they're gated under, unless product explicitly requires URL changes too. This is flagged as a decision point for Package B (§27), not assumed here.
 
 ---
 
-## 15. Persistence Consolidation Plan
+## 15. Route Correction Plan
 
-**Target state:** every SmokeCraft screen reads and writes exclusively through `useSmokeCraftJourney()` against `sc_journey_v1`. No screen owns a private `localStorage`/`sessionStorage` key.
+Unchanged from the audit's original 3 findings — these are correctness bugs independent of journey renumbering and should be fixed regardless of which session-count decision governs the rest of the plan:
 
-**Remaining shadow keys to eliminate** (Audit §8 — the prior mandate already fixed FirstThird/SecondThird/RequestPurchase/FlavorMemory-partial/FinalThird-partial/Scorecard-partial/FinalReview):
-
-| File | Shadow key | Action |
-|---|---|---|
-| Connections.jsx | private `LS_KEY` | migrate connections list into `journey.connections` |
-| GoldenBox.jsx | private `LS_KEY` | migrate acknowledged flag into `journey` (new field or reuse `sessionCompletion`) |
-| Identity.jsx | `sc_identity_v1` | migrate into `journey.identity` (already has a canonical setter — `setIdentity` exists per Audit §8) |
-| Scorecard.jsx | `sc_scorecard_v1` (residual) | finish migration onto `setScorecard`; stop reading `sessionStorage.smokecraftFinalThird` directly — read `journey.finalThird` instead |
-| FinalThird.jsx | `sessionStorage.smokecraftFinalThird` (residual) | finish migration onto `setFinalThird` |
-| FlavorMemory.jsx | `sessionStorage.smokecraftFlavorMemory` (residual) | finish migration onto `setFlavorMemory` |
-| PassportStamp.jsx | private `LS_KEY` + raw reads of `sc_scorecard_v1`/`smokecraftFlavorMemory` | migrate own state into `journey.passportStamp`; read scorecard/flavor data via `journey.scorecard`/`journey.flavorMemory` |
-| SessionComplete.jsx | raw reads of `sc_journey_v1`/`sc_identity_v1` | replace manual `localStorage.getItem` calls with `useSmokeCraftJourney()` hook |
-| LeafChallenge.jsx / LeafChallengeResult.jsx | `sessionStorage.leafChallengeResult` | out of core-spine scope (supporting module) — migrate onto journey context as a new `journey.leafChallenge` field if LeafChallenge is retained as a supporting module |
-
-**New canonical journey fields required:** `wrapperStrength`, `origins`, `terroir`, `vitola`, `blend`, `flavorDNA` (Audit §8) — add empty default slots to `DEFAULT_STATE` before any of those screens gain real content, so the content-creation work in Phase 7 has somewhere real to persist to from day one.
-
-**Backward compatibility:** `STATE_VERSION` bump from 2→3 with a real migration function (the current v1→v2 migration is a no-op relabel per Audit §8 — this plan requires the v2→v3 migration to actually carry forward any existing `sc_identity_v1`/`sc_scorecard_v1`/`sessionStorage` values into the new canonical fields on first load, so in-progress guest sessions are not silently reset).
-
-**Offline/resume behavior:** canonical state already persists via `useEffect` on every change (existing pattern) — no new mechanism needed, just consistent application across the 8 remaining files.
-
-**Duplicate XP/lost-data prevention:** already sound (`GuestSessionContext.jsx` completedSteps check — Audit §12); no change required, only continued use.
-
----
-
-## 16. Live Interface Conversion Plan
-
-Applies the Permanent Live Interface Directive to every screen in §11 (Redesign) and §12 (Create).
-
-For each such screen, before implementation begins, explicitly separate:
-
-| Layer | Examples for these screens |
+| Issue | Fix |
 |---|---|
-| Static background artwork | Approved photography, decorative framing, permanent headings (unchanged, reused from existing SC_ASSETS where available) |
-| Replaceable image zones | Cigar/pairing/mentor thumbnails inside Leaderboard entries, Rewards badge icons, EventChallenge photo |
-| Live React controls | Every clickable selection, toggle, input — no full-card invisible hotspots (per the existing project-wide ban) |
-| Live data | Rankings (Leaderboard), reward/claim status (Rewards), quiz question/answer state (S17/S19 if quizzed), score/XP/session counts |
-| Persistent user state | All of the above written through `useSmokeCraftJourney()` per §15 |
-| API/DB data | Only where a real backend exists (leaderboard shared ranking, staff request) — otherwise honest local/empty state, never fabricated |
+| `identity` and `enroll` both guarded as old Session 2 | Resolved naturally by the new mapping — Identity becomes E4 (Personal Dashboard), Enroll becomes E2 (Sign In/Guest Mode); they no longer share a gate once each has its own Entry-layer position |
+| `shape-size-burn` duplicates `format` | Make `shape-size-burn` a `Navigate` alias to whatever the final Construction Inspection (S5) route is |
+| `smokecraft/session-1..session-4` collapse to `/smokecraft` regardless of target | Route each to the guest's actual current position in the new 27-session sequence, or remove if unused externally |
 
-No screen in this plan may bake user data, scores, XP, rankings, or selections into static image content — this repeats the audit's explicit static-vs-live boundary and is a **verification gate**, not a suggestion.
+Additionally, per §14, the route-renaming decision (keep existing URLs vs. rename to match new session titles) must be locked before Package B begins.
 
 ---
 
-## 17. Dynamic Visual System Plan
+## 16. Persistence Consolidation Plan
 
-- **Approved asset libraries**: the existing `SC_ASSETS` map (Audit §3) stays authoritative for background artwork. No new background photography is required for any Keep/Update screen.
-- **Replaceable image zones**: define per screen in §16. For Rewards specifically, badge/achievement icons must come from a defined icon set (reuse `PremiumIcons.jsx`, already active per Audit §4c, rather than commissioning new art).
-- **Cigar/flavor/pairing/mentor images**: already connected correctly in the 19 reusable screens (HumidorMatch, PairingLab, Mentor) — no rework needed there, only reuse of the same connection pattern in Leaderboard/Rewards where a cigar/mentor needs to be displayed.
-- **Terroir/region/soil/factory/blender images**: needed only if Origins/Terroir/Vitola (§12, Create) are built with location-specific imagery — if no such approved photography exists yet, use neutral fallback graphics rather than placeholder photos, consistent with the Directive's "neutral fallback images" requirement.
-- **Neutral fallback images**: required wherever a selection is optional and unmade (e.g., Rewards showing a locked-reward silhouette, Leaderboard showing a placeholder avatar for an unranked guest).
-- **Visual-result-matches-data guarantee**: verification gate — every dynamic image slot must be tested against at least one "selected" and one "not yet selected" state (see Phase 12 verification).
+Unchanged in substance from the prior plan — the shadow-key elimination work (Audit §8) is independent of session renumbering. What changes is that the canonical journey context needs new fields for the genuinely new sessions:
 
----
+**Shadow keys to eliminate** (same 8 files as before): Connections, GoldenBox, Identity, Scorecard, FinalThird, FlavorMemory, PassportStamp, SessionComplete.
 
-## 18. Missing Screen Plan
+**New canonical journey fields required** (superset of the prior plan's list, expanded for the 27-session content):
+- `venueSelection` (E3), `dashboardState` (E4, if distinct from Identity), `welcomeAcknowledged` (S1), `meetYourCigar` (S3), `terroir` (S4, absorbing old `seedSoil`), `constructionInspection` (S5, replaces `format` conceptually — recommend keeping `format` field name for backward compatibility and adding new fields alongside it rather than renaming, per the STATE_VERSION migration discipline below), `chooseYourCut` + `lightingTutorial` (S6/S7, split from `cutToastLight`), `flavorDiscovery` (S9, new sub-field of `firstThird`), `constructionCheck` (S13, new sub-field of `secondThird`), `mentorCommentary` (S14), `knowledgeDrop` (S15), `strengthProgression` + `overallExperienceNotes` (S17/S18, new sub-fields of `finalThird`), `personalNotes` (S20 — reuse `scorecard.personalNotes`, already exists), `aiSummary` (S21), `pairingRecommendations` (S22, distinct from `journey.pairing`), `rewards` + `achievements` (S25/S26), `nextJourney` (S27).
 
-Only one screen is a confirmed net-new build with no existing analog: **`/smokecraft/rewards`**. Required content per the mandate: earned rewards, locked rewards, unlock requirement, XP earned, badges earned, passport stamps earned, claim status, claimedAt, source session — all sourced from `journey` + `GuestSessionContext` XP ledger, no fabricated data.
+**STATE_VERSION:** bump 2→3 (already planned in the prior version) must now also carry forward `journey.format`→construction-inspection and `journey.pairing`/`journey.selectedCigar`→choose-your-cigar mappings so that in-progress guest sessions under the old 24-session field names are not silently lost when the new fields are introduced. This migration requirement is larger than the prior plan anticipated and should be scoped as its own sub-task within Package A.
 
-All other "missing" items (AI Summary, Mentor Commentary, Knowledge Drop, Personal Notes) are **content additions to existing screens**, not new screens:
-- AI Summary / Personalized Pairing Recommendations → extend PairingLab's existing real rule-based recommendation engine (Audit §14's confirmation that `buildRecommendation` is genuine logic, not static text) — see §21 AI Plan for the honesty boundary between rule-based and actual AI.
-- Mentor Commentary → extend Mentor.jsx / relevant tasting screens with mentor-attributed tips, sourced from a real content table, not fabricated per-render text.
-- Knowledge Drop → extend the 6 education screens being created/updated in Phase 7.
-- Personal Notes → already exists as a pattern (FirstThird/SecondThird/FlavorMemory notes fields per the prior mandate) — extend the same textarea+persist pattern to any remaining screen missing it (GoldenBox, Connections).
-
-No duplicate screens are created where an existing screen can be safely updated — this satisfies the mandate's explicit instruction.
+**Backward compatibility principle:** do not rename existing canonical field names (`journey.format`, `journey.pairing`, `journey.selectedCigar`, etc.) purely to match new session titles — add new fields for genuinely new content, and reuse existing fields under their existing names where the underlying data is the same thing with a new session label. This avoids an unnecessary, purely-cosmetic migration burden.
 
 ---
 
-## 19. Education and Quiz Plan
+## 17. Live Interface Conversion Plan
 
-- **Missing content**: Origins, Terroir, Vitola, WrapperStrength (S6, in-spine), PairingMastery, FlavorDNA — all need real educational copy/media (Audit §10).
-- **Knowledge checks**: only `LeafChallenge` currently has real scored questions (Audit §12). Extend the same pattern (question bank + scoring + persisted result) to WrapperStrength at minimum, since it's the one education gap inside the guarded main spine; the 5 supporting-module education screens may ship with read-only content first and gain quizzes in a later pass without blocking freeze.
-- **Answer validation**: reuse `LeafChallenge`'s existing scoring logic as the reference implementation rather than inventing a second validation pattern.
-- **Correct/incorrect feedback**: must be real, derived from the answer key — no static "Great job!" regardless of answer.
-- **Quiz persistence**: quiz results write to `journey` (new fields, e.g. `journey.wrapperStrengthQuiz`), not a shadow key — enforced by §15.
-- **Mentor commentary + voice/text fallback**: text-first (already the pattern across the app); voice is an enhancement, not required for freeze unless separately mandated.
-- **Connect education to selected cigar/tasting stage**: where a guest has already selected a cigar (HumidorMatch/PairingLab), education content should reference that selection contextually rather than being fully generic — this is a P2 quality bar, not a P0 blocker.
+Unchanged in principle from the prior plan (Permanent Live Interface Directive applies identically), now scoped to the 26 spine screens (§5) and 13 supporting modules (§6):
+
+For every screen, separate static background artwork / approved photography / replaceable image zones / live React controls / live data / persistent user state / API-DB data, exactly as specified in the Directive. No screen may bake user data, scores, XP, rankings, selections, or AI output into static image content.
+
+**New emphasis from this revision:** the tabbed/panel-merged screens (S8+S9, S12+S13, S16+S17+S18, S19+S20, S25+S26) must each render their constituent sessions as genuinely separate, independently-testable live panels within the shared screen — not as one undifferentiated blob. Each sub-session's live data must be independently verifiable in Phase 12 testing (§29) even though they share a route/component shell.
 
 ---
 
-## 20. AI Plan
+## 18. Dynamic Visual System Plan
 
-- **Current state**: zero real AI integration exists (Audit §11). `Assistant.jsx` is a placeholder; PairingLab/HumidorMatch "recommendations" are rule-based formulas, explicitly confirmed as non-AI (Audit §14/§16 cross-reference).
-- **AI inputs** (if built): selected cigar, selected pairing, tasting notes, scorecard ratings, mentor selection.
-- **AI outputs** (if built): a natural-language summary/insight — must be visually and textually labeled as AI-generated, distinct from the existing rule-based recommendation panels.
-- **Data-source labeling**: every AI output must carry a clear "AI-generated" or equivalent label; the existing rule-based PairingLab/HumidorMatch logic must NOT be relabeled as AI just to satisfy this requirement — that would be dishonest per the Directive's own "no fake AI responses" rule.
-- **Failure/fallback behavior**: if the AI call fails or is unavailable, show an honest "Not available" state — never a fabricated response baked into static content.
-- **Decision point required before Phase 8 begins**: build the Assistant as a real AI feature, or explicitly de-scope it and change `Assistant.jsx`'s route/label to something honest (e.g., a static FAQ) instead of a permanent "Coming Soon." This plan does not make that product decision — it flags it as a required approval gate (Phase 8 gate, §26).
+Unchanged in principle from the prior plan. Newly relevant per this revision:
+- Knowledge Drop (S15) should attempt to reuse the orphaned `public/*.png` education-adjacent images identified in Audit §3 before requesting new photography.
+- Mentor Commentary (S14) should reuse the existing per-mentor imagery already defined in Mentor.jsx's `MENTOR_ZONES` data (mentor portraits/origin info) rather than commissioning new mentor art.
+- AI Summary (S21) and Personalized Pairing Recommendations (S22) are primarily data/text-driven results screens — they need a results-panel visual treatment consistent with the existing gold/dark theme, not necessarily new background photography at all.
 
 ---
 
-## 21. XP, Rewards, Achievement, and Passport Plan
+## 19. Missing Screen Plan
 
-- **XP triggers**: continue using the existing `awardSessionRewards(sessionId)` per-session pattern (Audit §12 confirms idempotency already works) — extend it to the new Rewards page's earn events and to any new quiz completions from §19.
-- **Duplicate-award prevention**: already implemented correctly via `completedSteps.includes(sessionId)` — no change, only continued use for new award sources.
-- **Rewards**: define reward catalog (badges, passport stamps, unlockable content) sourced from real XP thresholds and completed-session data — no fabricated "3 rewards earned" unless 3 real award events occurred.
-- **Achievement rules**: derive from `completedSteps`/`completedVisits` + quiz scores, not hardcoded per-guest text.
-- **Claim behavior**: Rewards page claim action must reflect real claim state (`claimedAt` persisted to journey) — no "claimed" UI without a real state write succeeding.
-- **Passport eligibility**: reuse existing `passportStampUnlocked` logic already present in `SmokeCraftProgressContext` (confirmed in the earlier session-progression diagnostic pass, not re-audited here but already known-real from prior work).
-- **Leaderboard updates**: honest state only — real shared-backend data when available, or "Shared ranking unavailable" + the guest's own real local result, never invented competitors (mirrors the earlier session's diagnostic finding on this exact point).
-- **Persistence**: all of the above through `journey.rewards`/`journey.achievements` (new canonical fields) rather than a new shadow key — enforced by §15's consolidation rule extending to any new state this phase introduces.
+Superseded by §12 (New Screens Required) and §3f — this section is retained for structural parity with the required-output list but points to those sections rather than duplicating them.
 
 ---
 
-## 22. Supporting Module Plan
+## 20. Education and Quiz Plan
 
-| Module | Entry route | Exit/return | Data in | Data out | Progress preserved | Error/offline |
-|---|---|---|---|---|---|---|
-| Pairing Lab | `/smokecraft/pairing-lab` (already in spine, S8) | Continue → S9 | selectedCigar (if any) | `journey.pairing` | Y (canonical) | N/A (local-only today) |
-| Flavor Memory | `/smokecraft/flavor-memory` (spine, S14) | Continue → S15 | prior selections | `journey.flavorMemory` | Y | N/A |
-| Mentor Library | `/smokecraft/mentor-selection` (spine, S4) | Continue → S5 | — | `journey.mentor` | Y | N/A |
-| Humidor Match | `/smokecraft/humidor-match` (spine, S9) | Continue → S10 | `journey.pairing` | `journey.selectedCigar` | Y | N/A |
-| Passport | `/smokecraft/passport-stamp` (spine, S21) | Continue → S22 | `journey.scorecard`, `journey.flavorMemory` (via canonical fields post-§15) | `journey.passportStamp` | Y | needs real claim error state (Audit §14 confirms `claimStatus` already models error/offline) |
-| Leaderboard | `/smokecraft/leaderboard` (supporting) | Back → caller | guest XP/rank | none written | N/A (read-only) | required: "Shared ranking unavailable" honest state |
-| Community/Connections | `/smokecraft/connections` (spine, S22) | Continue → S23 | — | `journey.connections` (post-migration) | Y | N/A |
-| Event Challenge | `/smokecraft/event-challenge` (supporting) | Back → caller | — | TBD once redesigned | N/A today | needs definition during Phase 6 |
-| Request Purchase | `/smokecraft/request-purchase` (spine, S10) | Continue → S11 | `journey.selectedCigar`, `journey.pairing` | `journey.requestPurchase` | Y | staff-request unavailable state already modeled per prior mandate |
-| Management Sync | `/smokecraft/management-sync` (spine, S23) | Continue → S24 | — | `journey.managementSync`(if applicable) | Y | N/A |
-
-Rewards (new) joins this table once built: entry from Rewards CTA (multiple screens per §14), exit Back to caller, data in = XP/completedSteps/journey.rewards, data out = claim state, progress preserved via journey, error state = "Reward unavailable" honest fallback.
+- Knowledge Drop (S15) consolidates Origins/Terroir(partially, since Terroir is its own session S4)/Vitola/PairingMastery/FlavorDNA content. Note: Terroir is *its own numbered session* (S4) in the locked journey, so it is **not** folded into Knowledge Drop — only Origins, Vitola, PairingMastery, and FlavorDNA merge into S15. This corrects an internal consistency risk: Terroir must get its own real content (§3b), separate from the Knowledge Drop merge.
+- Construction Inspection (S5) and Construction Check (S13) both need real inspection-style content — S5 is the initial physical inspection (pre-lighting), S13 is a mid-smoke re-check; these are genuinely distinct sessions despite the similar name and should not be collapsed into each other.
+- Only `LeafChallenge`/`LeafChallengeResult` currently has a real scored quiz mechanic (Audit §12) — extend this pattern to at least one of the Knowledge Drop sub-topics as the reference implementation for education-with-assessment, consistent with the mandate's "missing quizzes" requirement.
+- Mentor Commentary (S14) is content-delivery, not assessment — no quiz required there by definition, but it must be sourced from real per-mentor content tied to the mentor selected in S3, not generic text.
 
 ---
 
-## 23. Accessibility and Responsive Plan
+## 21. AI Plan
 
-Applies uniformly to every screen touched in Phases 4–7 (not a one-time pass — build it into each screen's implementation, not bolted on after):
+Unchanged in substance from the prior plan's AI Plan, now explicitly tied to the locked S21 AI Summary session:
 
-- Viewports: 10", 12", 15" tablet, desktop, handheld where applicable — both portrait and landscape.
-- Font sizing legible for ages 40–65 (the existing `clamp()`-based sizing pattern already used across reusable screens should be the baseline — reuse, don't reinvent).
-- Touch targets sized for kiosk/tablet use (existing reusable screens already model this via percentage-based hit zones — reuse the pattern).
-- Contrast: gold-on-dark theme already established; verify contrast ratios on any new screen against the same palette rather than introducing new colors.
-- Keyboard navigation + visible focus states: the earlier persistence-gate mandate already established "no browser-default blue focus rectangle, thin gold border instead" — carry this rule into every new/redesigned screen.
-- Screen-reader labels: `aria-label`/`aria-pressed` pattern already used throughout reusable screens (Audit §4a) — mandatory on every new control.
-- Reduced motion: honor `prefers-reduced-motion` for any new animated element (Rewards claim animation, quiz feedback, etc.).
+- **AI inputs**: selections and data gathered across S2–S20 (cigar, terroir, construction, cut/light method, flavor notes across all three thirds, mentor, scorecard ratings, personal notes).
+- **AI outputs**: a natural-language summary, clearly labeled as AI-generated, distinct from the rule-based Personalized Pairing Recommendations (S22), which must remain labeled as rule-based/algorithmic, not AI, per the existing Audit §14 finding that this logic is real but not AI-driven.
+- **Decision gate**: build S21 as a real AI feature, or explicitly de-scope it — this remains a required human approval gate before Package G (§28) begins, unchanged from the prior plan.
+- **Failure/fallback**: honest "Not available" state, never a fabricated response.
 
 ---
 
-## 24. Screen-by-Screen Rebuild Table
+## 22. XP, Rewards, Achievement, and Passport Plan
 
-Full 37-row table, extending Audit §16 with rebuild-specific columns. Session/route/asset/classification columns are carried from the audit; new columns added per this plan's requirements.
+Unchanged in substance, now explicitly mapped to S25 (Rewards and XP) and S26 (Achievements) as a single screen with two tabs (§3d, §5):
 
-| ID | Screen | Session | Route | Final Route | Component | Asset | Audit Class | Rebuild Class | Journey/Module | Static Art Kept | Live Controls Req'd | New Images Req'd | Persistence Req'd | Education | Quiz | AI | XP Trigger | Reward Trigger | Back Dest | Continue Dest | Dependencies | Verify Test | Priority | Complexity |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| S1 | SmokeCraft (landing) | 1 | `/smokecraft` | same | SmokeCraft.jsx | landing | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | N | N | — | S2 | none | route smoke test | P1 | Small |
-| S2a | Enroll | 2 | `/smokecraft/enroll` | same | Enroll.jsx | enroll | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | Y | N | S1 | S3 | none | existing suite | P1 | Small |
-| S2b | Identity | 2(dup) | `/smokecraft/identity` | unguarded profile-edit or renumbered | Identity.jsx | identity | UPDATE | Update+Route fix | Journey | Y | existing | N | migrate off `sc_identity_v1` | N | N | N | N | N | S1 | S3 | §14 route fix, §15 persistence | new persistence test | P0 | Medium |
-| S3 | GoldenBox | 3 | `/smokecraft/golden-box` | same | GoldenBox.jsx | goldenBox | UPDATE | Update | Journey | Y | existing | N | migrate off private LS_KEY | N | N | N | Y | N | S2 | S4 | §15 | persistence test | P0 | Small |
-| — | GoldenBoxStatus | — | `/smokecraft/golden-box/status` | same | GoldenBoxStatus.jsx | goldenBox | REDESIGN | Update | Module | Y | add | N | journey | N | N | N | N | N | S3 | caller | Phase 4 | new UI test | P2 | Small |
-| S4 | Mentor | 4 | `/smokecraft/mentor-selection` | same | Mentor.jsx | mentorSelection | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | Y | N | S3 | S5 | none | existing suite | P1 | Small |
-| S5 | Format | 5 | `/smokecraft/format` | same | Format.jsx | format | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | Y | N | S4 | S6 | none | existing suite | P1 | Small |
-| — | shape-size-burn alias | 5 | `/smokecraft/shape-size-burn` | Navigate→format | Format.jsx | format | dup | Route fix | Journey | — | — | N | — | N | N | N | N | N | — | — | §14 | route test | P1 | Small |
-| S6 | WrapperStrength | 6 | `/smokecraft/wrapper-strength` | same | WrapperStrength.jsx | (none) | CREATE | Create | Journey | new | full | possible | new journey field | Y | Y (P1 target) | N | Y | N | S5 | S7 | §15 new field, §19 quiz pattern | new content+quiz test | P0 | Medium |
-| S7 | SeedSoil | 7 | `/smokecraft/seed-soil` | same | SeedSoil.jsx | seedSoil | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | Y | N | S6 | S8 | none | existing suite | P1 | Small |
-| S8 | PairingLab | 8 | `/smokecraft/pairing-lab` | same | PairingLab.jsx | pairingLab | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | Y | N | S7 | S9 | none | existing suite | P1 | Small |
-| S9 | HumidorMatch | 9 | `/smokecraft/humidor-match` | same | HumidorMatch.jsx | humidorMatch | KEEP | Keep (+reused by S18) | Journey | Y | existing | N | journey | N | N | N | Y | N | S8 | S10 | none | existing suite | P1 | Medium |
-| S10 | RequestPurchase | 10 | `/smokecraft/request-purchase` | same | RequestPurchase.jsx | requestPurchase | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | Y | N | S9 | S11 | none | existing suite | P1 | Small |
-| S11 | CutToastLight | 11 | `/smokecraft/cut-toast-light` | same | CutToastLight.jsx | cutToastLight | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | Y | N | S10 | S12 | none | existing suite | P1 | Small |
-| S12 | FirstThird | 12 | `/smokecraft/first-third` | same | FirstThird.jsx | firstThird | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | Y | N | S11 | S13 | none | existing suite | P1 | Small |
-| S13 | SecondThird | 13 | `/smokecraft/second-third` | same | SecondThird.jsx | secondThird | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | Y | N | S12 | S14 | none | existing suite | P1 | Small |
-| S14 | FlavorMemory | 14 | `/smokecraft/flavor-memory` | same | FlavorMemory.jsx | flavorMemory | UPDATE | Update | Journey | Y | existing | N | finish shadow-key migration | N | N | N | Y | N | S13 | S15 | §15 | persistence test | P0 | Small |
-| S15 | FinalThird | 15 | `/smokecraft/final-third` | same | FinalThird.jsx | finalThird | UPDATE | Update | Journey | Y | existing | N | finish shadow-key migration | N | N | N | Y | N | S14 | S16 | §15 | persistence test | P0 | Small |
-| S16 | Scorecard | 16 | `/smokecraft/scorecard` | same | Scorecard.jsx | scorecard | UPDATE | Update | Journey | Y | existing | N | finish shadow-key migration | N | N | N | Y | N | S15 | S17 | §15 | persistence test | P0 | Small |
-| S17 | SmokeCraftChallenge | 17 | `/smokecraft/smokecraft-challenge` | same | SmokeCraftChallenge.jsx | smokecraftChallenge | REDESIGN | Redesign | Journey | Y | full | possible | journey | possible | possible | N | Y | possible | S16 | S18 | §6 content decision | new interaction test | P0 | Medium |
-| S18 | SecondHumidorMatch | 18 | `/smokecraft/second-humidor-match` | same | HumidorMatch.jsx (merged) | secondHumidorMatch | MERGE | Merge | Journey | Y | reuse S9 | N | journey | N | N | N | Y | N | S17 | S19 | S9 component finalized first | reuse-component test | P1 | Medium |
-| S19 | MiniTastingRound | 19 | `/smokecraft/mini-tasting` | same | MiniTastingRound.jsx | miniTasting | REDESIGN | Redesign | Journey | Y | full | possible | journey | possible | N | N | Y | possible | S18 | S20 | §6 content decision | new interaction test | P0 | Medium |
-| S20 | FinalReview | 20 | `/smokecraft/final-review` | same | FinalReview.jsx | finalReview | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | Y | N | S19 | S21 | none | existing suite | P1 | Small |
-| S21 | PassportStamp | 21 | `/smokecraft/passport-stamp` | same | PassportStamp.jsx | passportStamp | UPDATE | Update | Journey | Y | existing | N | finish shadow-key migration | N | N | N | Y | Y | S20 | S22 | §15 | persistence test | P0 | Medium |
-| S22 | Connections | 22 | `/smokecraft/connections` | same | Connections.jsx | connections | UPDATE | Update | Journey | Y | existing | N | migrate off private LS_KEY | N | N | N | Y | N | S21 | S23 | §15 | persistence test | P0 | Small |
-| S23 | ManagementSync | 23 | `/smokecraft/management-sync` | same | ManagementSync.jsx | managementSync | KEEP | Keep | Journey | Y | existing | N | journey | N | N | N | N | N | S22 | S24 | none | existing suite | P1 | Small |
-| S24 | SessionComplete | 24 | `/smokecraft/session-complete` | same | SessionComplete.jsx | sessionComplete | UPDATE | Update | Journey | Y | existing | N | replace raw LS reads with hook | N | N | N | Y | Y | S23 | Passport/Leaderboard | §15 | persistence test | P0 | Small |
-| M1 | Leaderboard | — | `/smokecraft/leaderboard` | same | Leaderboard.jsx | leaderboard | REDESIGN | Redesign | Module | Y | full | N | none (read-only) | N | N | N | N | N | caller | caller | §21 leaderboard honesty rule | scroll+data test | P1 | Medium |
-| M2 | HowItWorks | — | `/smokecraft/how-it-works` | same | HowItWorks.jsx | howItWorks | REDESIGN/KEEP | decide | Module | Y | maybe none | N | none | possible | N | N | N | N | caller | caller | product decision | none required if static-informational | P3 | Small |
-| M3 | EventChallenge | — | `/smokecraft/event-challenge` | same | EventChallenge.jsx | eventChallenge | REDESIGN | Redesign | Module | Y | full | possible | journey (new field) | possible | possible | N | Y | possible | caller | caller | §6 content decision | new interaction test | P2 | Medium |
-| M4 | Origins | — | `/smokecraft/origins` | same | Origins.jsx | (unref'd) | CREATE | Create | Module | Y | full | possible | journey (new field) | Y | possible | N | Y | N | caller | caller | §19 content | content test | P2 | Small |
-| M5 | Terroir | — | `/smokecraft/terroir` | same | Terroir.jsx | (unref'd) | CREATE | Create | Module | Y | full | possible | journey (new field) | Y | possible | N | Y | N | caller | caller | §19 content | content test | P2 | Small |
-| M6 | Vitola | — | `/smokecraft/vitola` | same | Vitola.jsx | (unref'd) | CREATE | Create | Module | Y | full | possible | journey (new field) | Y | possible | N | Y | N | caller | caller | §19 content | content test | P2 | Small |
-| M7 | PairingMastery | — | `/smokecraft/pairing-mastery` | same | PairingMastery.jsx | (unref'd) | CREATE | Create | Module | Y | full | possible | journey (new field) | Y | possible | N | Y | N | caller | caller | §19 content | content test | P2 | Small |
-| M8 | FlavorDNA | — | `/smokecraft/flavor-dna` | same | FlavorDNA.jsx | (unref'd) | CREATE | Create | Module | Y | full | possible | journey (new field) | Y | possible | N | Y | N | caller | caller | §19 content | content test | P2 | Small |
-| M9 | Assistant | — | `/smokecraft/assistant` | same or repurposed | Assistant.jsx | (none) | CREATE/DECIDE | Create or honest de-scope | Module | Y | TBD by decision gate | N | journey (if built) | N | N | Y (if built) | N | N | caller | caller | §20 approval gate | AI honesty test or de-scope confirmation | P2 | Large (if AI) / Small (if de-scoped) |
-| M10 | Rewards (new) | — | none | `/smokecraft/rewards` | new file | new/reused icons | CREATE | Create | Module | N (new) | full | possible (icons) | journey (new field) | N | N | N | N | Y | caller | caller | §21, all XP sources | rewards routing+data test | P0 | Medium |
-| M11 | Scan | — | `/smokecraft/scan` | same | Scan.jsx | (existing) | UPDATE | Update | Module | Y | replace hotspot | N | none | N | N | N | N | N | caller | Enroll | none | control test | P2 | Small |
-| M12 | GuestPass | — | `/smokecraft/guest-pass` | same | GuestPass.jsx | (existing) | UPDATE | Update | Module | Y | replace hotspot | N | none | N | N | N | N | N | caller | Enroll | none | control test | P2 | Small |
-| DEL1 | Format.legacy.jsx | — | none | removed | — | — | dead code | Archive | — | — | — | — | — | — | — | — | — | — | — | zero-ref re-check | build passes without it | P3 | Small |
-| DEL2 | 12 orphaned components | — | none | removed | — | — | dead code | Archive | — | — | — | — | — | — | — | — | — | — | — | zero-ref re-check | build passes without them | P3 | Small |
-| DEL3 | ~100+ orphaned images | — | none | archived/removed | — | — | dead assets | Archive | — | — | — | — | — | — | — | — | — | — | — | all rebuild decisions locked first | build/asset-verify scripts pass | P3 | Medium |
+- XP triggers extend to every new session in the 27-session journey, using the existing idempotent `completedSteps.includes(sessionId)` pattern (Audit §12) — no new duplicate-prevention mechanism needed, only broader application.
+- Rewards catalog, achievement rules, claim behavior, and Passport eligibility (S23) all persist through `journey.rewards`/`journey.achievements`/`journey.passportStamp` per §16's consolidation rule.
+- Recommended Next Journey (S27) should surface which supporting modules (SmokeCraftChallenge, MiniTastingRound, SecondHumidorMatch, etc.) remain unexplored, using real completion state, not a fixed suggestion list.
 
 ---
 
-## 25. Dependency Map
+## 23. Supporting Module Plan
+
+| Module | Entry point | Data in | Data out | Progress preserved | Notes |
+|---|---|---|---|---|---|
+| GoldenBox | linked from S1 Welcome | — | acknowledged flag → journey (post-migration) | Y | orientation/rules content |
+| RequestPurchase | embedded drawer from S2 Choose Your Cigar | selected cigar | `journey.requestPurchase` | Y | no longer a separate numbered session, per §3g |
+| SmokeCraftChallenge | linked from S27 Recommended Next Journey | — | TBD once redesigned | N/A today | needs real content per Audit §6 regardless of module status |
+| SecondHumidorMatch | linked from S27, reuses S2's HumidorMatch component | prior cigar choice | new cigar choice | Y | merge target confirmed in prior plan (§9, prior revision), unchanged |
+| MiniTastingRound | linked from S27 | — | TBD once redesigned | N/A today | same redesign need as SmokeCraftChallenge |
+| Connections | linked post-journey | — | `journey.connections` (post-migration) | Y | social/community |
+| ManagementSync | linked post-journey, staff-facing | — | TBD | Y | venue-ops |
+| Leaderboard | linked from S25/S26 Rewards or post-journey | guest XP/rank | none written | N/A (read-only) | honest "Shared ranking unavailable" state required, per prior plan |
+| EventChallenge | linked from S27 | — | TBD once redesigned | N/A today | |
+| HowItWorks | linked from E1/E2 or help menu | — | none | N/A | may remain static-informational by product decision |
+| Assistant | linked from any screen (global help) or specifically from S21 | user question/context | AI response or honest fallback | N/A | subject to §21 decision gate |
+| Scan | linked from E2 | — | none | N/A | replace full-card hotspot per Audit §9 |
+| GuestPass | linked from E2 | — | none | N/A | replace full-card hotspot per Audit §9 |
+
+---
+
+## 24. Accessibility and Responsive Plan
+
+Unchanged from the prior plan — applies to all 26 spine screens and 13 supporting modules uniformly: 10"/12"/15" tablet + desktop + handheld, portrait/landscape, age-40–65-legible font sizing, touch targets, contrast, keyboard navigation, visible gold-border focus states (no browser-default blue rectangles), `aria-label`/`aria-pressed` on every control, reduced-motion support.
+
+---
+
+## 25. Screen-by-Screen Rebuild Table
+
+| Session | Title | Existing screen(s) | Route (existing→proposed) | Rebuild class | Reused screen | Live controls req'd | New assets | Persistence field | Education | Quiz | AI | XP | Reward | Back dest | Continue dest | Priority | Complexity |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| E1 | Launch Screen | SmokeCraft.jsx | `/smokecraft`→unchanged | Reuse | Y | existing | N | — | N | N | N | N | N | — | E2 | P0 | Small |
+| E2 | Sign In / Guest Mode | Enroll.jsx | `/smokecraft/enroll`→unchanged | Reuse | Y | existing | N | — | N | N | N | Y | N | E1 | E3 | P0 | Small |
+| E3 | Select Venue or Lounge | *(none)* | new `/smokecraft/venue-select` | Create | N | full | possible | `venueSelection` | N | N | N | N | N | E2 | E4 | P0 | Medium |
+| E4 | Personal Dashboard | Identity.jsx | `/smokecraft/identity`→unchanged, guard fixed | Reuse+fix | Y | existing | N | migrate off `sc_identity_v1` | N | N | N | N | N | E3 | E5 | P0 | Medium |
+| E5 | Resume or Start New Journey | *(none; logic exists)* | new `/smokecraft/resume` | Create | N | full (wraps existing logic) | N | — | N | N | N | N | N | E4 | S1 or last incomplete session | P0 | Small |
+| S1 | Welcome to Today's Experience | *(none)* | new `/smokecraft/welcome` | Create | N | full | Y | `welcomeAcknowledged` | N | N | N | Y | N | E5 | S2 | P0 | Small |
+| S2 | Choose Your Cigar | HumidorMatch.jsx (+RequestPurchase drawer) | `humidor-match`→keep URL, renumber | Reuse | Y | existing +drawer | N | `selectedCigar` (existing) | N | N | N | Y | N | S1 | S3 | P0 | Medium |
+| S3 | Meet Your Cigar | *(none; CigarIntelligencePanel exists)* | new `/smokecraft/meet-your-cigar` | Create | N (component reused) | full | possible | `meetYourCigar` | Y | N | N | Y | N | S2 | S4 | P0 | Medium |
+| S4 | Terroir | Terroir.jsx (+SeedSoil merged) | `terroir`→keep URL, add content | Update+Merge | Y (SeedSoil) | full | possible (reuse orphaned assets) | `terroir` (absorbs `seedSoil`) | Y | possible | N | Y | N | S3 | S5 | P0 | Medium |
+| S5 | Construction Inspection | Format.jsx (+CigarGaugeGuide merged) | `format`→keep URL, renumber+merge | Reuse+Merge | Y | existing +tab | N | `format` (kept name) | possible | N | N | Y | N | S4 | S6 | P1 | Medium |
+| S6 | Choose Your Cut | CutToastLight.jsx (cut portion) | new `/smokecraft/choose-cut` | Split | Y (partial) | existing (subset) | N | `chooseYourCut` | N | N | N | Y | N | S5 | S7 | P0 | Medium |
+| S7 | Lighting Tutorial | CutToastLight.jsx (toast+light portion) | new `/smokecraft/lighting-tutorial` | Split | Y (partial) | existing (subset) | N | `lightingTutorial` | Y | N | N | Y | N | S6 | S8 | P0 | Medium |
+| S8 | First Draw | FirstThird.jsx | `first-third`→keep URL, renumber | Reuse | Y | existing | N | `firstThird` (existing) | N | N | N | Y | N | S7 | (tab) S9 | P0 | Small |
+| S9 | Flavor Discovery | *(tab within FirstThird)* | same route as S8, tab 2 | Reuse (tab) | Y | existing | N | `firstThird.flavorDiscovery` | N | N | N | Y | N | (tab) S8 | S10 | P1 | Small |
+| S10 | Flavor Memory Exercise | FlavorMemory.jsx | `flavor-memory`→keep URL, renumber | Reuse | Y | existing | N | `flavorMemory` (existing) | N | N | N | Y | N | S9 | S11 | P0 | Small |
+| S11 | Suggested Pairings | PairingLab.jsx | `pairing-lab`→keep URL, renumber | Reuse | Y | existing | N | `pairing` (existing) | N | N | N | Y | N | S10 | S12 | P0 | Small |
+| S12 | Flavor Evolution | SecondThird.jsx | `second-third`→keep URL, renumber | Reuse | Y | existing | N | `secondThird` (existing) | N | N | N | Y | N | S11 | (tab) S13 | P0 | Small |
+| S13 | Construction Check | *(tab within SecondThird screen)* | same route as S12, tab 2 | Create (tab) | Y (host screen) | full (new tab) | possible | `secondThird.constructionCheck` | possible | N | N | Y | N | (tab) S12 | S14 | P1 | Small |
+| S14 | Mentor Commentary | *(none)* | new `/smokecraft/mentor-commentary` | Create | N | full | possible (reuse mentor imagery) | `mentorCommentary` | Y | N | N | Y | N | S13 | S15 | P1 | Medium |
+| S15 | Knowledge Drop | Origins/Vitola/PairingMastery/FlavorDNA.jsx | new `/smokecraft/knowledge-drop` | Merge+Create | Y (content sources) | full (new tabbed screen) | possible (reuse orphaned assets) | `knowledgeDrop` | Y | possible | N | Y | N | S14 | S16 | P1 | Large |
+| S16 | Flavor Finish | FinalThird.jsx | `final-third`→keep URL, renumber | Reuse | Y | existing | N | `finalThird` (existing) | N | N | N | Y | N | S15 | (tab) S17 | P0 | Small |
+| S17 | Strength Progression | *(tab within FinalThird screen)* | same route as S16, tab 2 | Create (tab) | Y (host) | full (new tab) | N | `finalThird.strengthProgression` | N | N | N | Y | N | (tab) S16 | (tab) S18 | P1 | Small |
+| S18 | Overall Experience Notes | *(tab within FinalThird screen, reuses notes pattern)* | same route as S16, tab 3 | Create (tab) | Y (host) | full (new tab) | N | `finalThird.overallExperienceNotes` | N | N | N | Y | N | (tab) S17 | S19 | P1 | Small |
+| S19 | Rate Every Category | Scorecard.jsx | `scorecard`→keep URL, renumber | Reuse | Y | existing | N | `scorecard` (existing) | N | N | N | Y | N | S18 | (section) S20 | P0 | Small |
+| S20 | Personal Notes | Scorecard.jsx (`personalNotes` field, existing) | same route as S19, section 2 | Merge | Y (host) | existing field | N | `scorecard.personalNotes` (existing) | N | N | N | Y | N | (section) S19 | S21 | P1 | Small |
+| S21 | AI Summary | *(none)* | new `/smokecraft/ai-summary` | Create | N | full | possible | `aiSummary` | N | N | Y | Y | N | S20 | S22 | P2 | Large |
+| S22 | Personalized Pairing Recommendations | PairingLab.jsx's `buildRecommendation` logic (reused, not the screen) | new `/smokecraft/pairing-recommendations` | Create | N (logic reused) | full (new results screen) | possible (reuse PairingLab visuals) | `pairingRecommendations` | N | N | N | Y | N | S21 | S23 | P1 | Medium |
+| S23 | Passport Stamp Animation | PassportStamp.jsx | `passport-stamp`→keep URL, renumber | Reuse | Y | existing | N | `passportStamp` (existing, migrate off shadow key) | N | N | N | Y | Y | S22 | S24 | P0 | Small |
+| S24 | Completed Scorecard | FinalReview.jsx (repurposed) | `final-review`→keep URL, repurpose | Merge | Y | existing (repurposed) | N | reads `scorecard` (existing) | N | N | N | N | N | S23 | S25 | P1 | Small |
+| S25 | Rewards and XP | *(none)* | new `/smokecraft/rewards` | Create | N | full | possible (reuse PremiumIcons) | `rewards` | N | N | N | N | Y | S24 | (tab) S26 | P0 | Medium |
+| S26 | Achievements | *(tab within Rewards screen)* | same route as S25, tab 2 | Create (tab) | Y (host) | full (new tab) | N | `achievements` | N | N | N | N | Y | (tab) S25 | S27 | P1 | Small |
+| S27 | Recommended Next Journey | SessionComplete.jsx (repurposed) | `session-complete`→keep URL, repurpose | Merge | Y | existing (repurposed) | N | reads `sessionCompletion` (existing) + surfaces supporting-module completion | N | N | N | N | N | S26 | E5/Home | P1 | Medium |
+
+Supporting modules retain the classifications from the prior plan's §11/§25 (SmokeCraftChallenge, SecondHumidorMatch, MiniTastingRound = Redesign; GoldenBox, RequestPurchase, Connections, ManagementSync, Scan, GuestPass = Update; Leaderboard, EventChallenge = Redesign; HowItWorks = decide; Assistant = decide per §21) — unchanged by this revision except that their entry points now originate from the new session numbers per §23, not the old ones.
+
+---
+
+## 26. Dependency Map
 
 ```
-Persistence consolidation (§15)
-        │
-        ├──> Route corrections (§14)   [independent of persistence, but both must land before...]
-        │
-        ▼
-Screen redesign/creation (§16, Phases 4-7)
-        │
-        ├──> Dynamic visual system (§17)   [runs alongside screen work]
+LOCK: 27-session sequence, session IDs, route map,
+      existing→new mapping, supporting-module placement,
+      Back/Continue destinations, resume behavior, completion behavior   (§3, §14, §23 decisions)
         │
         ▼
-XP / Rewards / Achievements activated (§21)
+Persistence consolidation (§16)   — shadow-key removal + new canonical fields for genuinely new sessions
         │
-        ├──> requires Persistence (§15) AND Rewards screen built (§18/§12)
-        │
-        ▼
-AI connected (§20)                     [gated on product decision — may run in parallel with XP/Rewards, not dependent on it]
+        ├──> Route corrections (§15)   [parallel, different files]
         │
         ▼
-Supporting modules connected (§22)     [depends on the specific module's screen being built/updated first]
+Screen split/merge/reuse work (S6/S7 split; S4+SeedSoil, S5+CigarGaugeGuide,
+S15 four-way merge, S24/S27 repurposing)
         │
         ▼
-Accessibility/Responsive pass (§23)    [applies incrementally per screen, but a final full-app pass happens here]
+New-screen creation (E3, E5, S1, S3, S14, S15-as-screen, S21, S22, S25/S26)
+        │
+        ├──> Dynamic visual system (§18)   [runs alongside screen work]
         │
         ▼
-End-to-end testing (Phase 12)
+XP / Rewards / Achievements activated (S25/S26 must exist first)
         │
         ▼
-Freeze (Phase 13)
+AI connected (S21)   [gated on product decision, §21 — may run parallel to XP/Rewards]
+        │
+        ▼
+Supporting modules connected (§23)   [each depends on its own entry-point session existing first]
+        │
+        ▼
+Accessibility/Responsive pass (§24)
+        │
+        ▼
+End-to-end testing (Phase 12, §29)
+        │
+        ▼
+Freeze (§30)
 ```
 
-**Must happen before routes are changed:** nothing — route corrections in §14 are low-risk and can start immediately, in parallel with persistence work, since they touch different files.
+**Critical addition in this revision:** the 27-session sequence, session IDs, route map, existing→new mapping, supporting-module placement, Back/Continue destinations, resume behavior, and completion behavior **must all be explicitly locked and approved before Package A begins** — this is a new upstream gate that did not exist in the prior plan, per the mandate's explicit "Implementation Package Correction" instruction.
 
-**Must happen before persistence is migrated:** nothing blocking — this is the safe starting point (Audit §17's own conclusion, retained here).
-
-**Must happen before screens are redesigned:** persistence consolidation for any screen being redesigned that currently reads a shadow key (Scorecard, PassportStamp, SessionComplete) — redesigning against data about to be deleted would cause rework.
-
-**Must happen before AI is connected:** the Phase 8 approval gate (§20 decision point) — build vs. honest de-scope — must be resolved by a human decision-maker, not inferred.
-
-**Must happen before XP and rewards are activated:** Rewards screen must exist (§12/§18) and persistence must be consolidated (§15), since reward state needs a stable, canonical home.
-
-**Must happen before supporting modules are connected:** each module's own screen work (§11/§12) must be complete before its entry in the Supporting Module Plan (§22) table can be verified end-to-end.
-
-**Must happen before end-to-end testing:** all of Phases 2–11 substantially complete — E2E testing is deliberately last so it isn't re-run after every incremental screen fix.
-
-**Must happen before SmokeCraft is frozen:** all Phase 12 verification gates pass (§27) with zero P0 findings outstanding.
-
-**May run in parallel:**
-- Route corrections (§14) and persistence consolidation (§15) — different files, no shared dependency.
-- Education content creation (§19) and Rewards screen build (§18) — independent screens.
-- Accessibility considerations (§23) — should be built into each screen as it's touched, not deferred as a single blocking phase, though a final full-app pass still happens at the end.
+**May run in parallel:** route corrections and persistence consolidation (different files); education content creation (S4, S15) and Rewards screen build (S25/S26) once both are past the lock gate; accessibility work, built incrementally into each screen rather than deferred.
 
 ---
 
-## 26. Implementation Packages
+## 27. Implementation Packages (revised order and content)
 
-Packages are intentionally small — each is independently verifiable and revertible without touching the others.
+### Package 0 — Lock the 27-Session Structure *(new — must complete before Package A)*
+- **Objective:** obtain explicit, recorded approval of §3a's session table, §3b's mapping, §14's route-naming decision (keep existing URLs vs. rename), Back/Continue destinations per §25's table, resume behavior (E5), and completion behavior (S27).
+- **Included files:** none — this is a documentation/approval package, not a code package. Deliverable is confirmation added to this plan or a follow-up doc, not application code.
+- **Dependencies:** none.
+- **Completion gate:** explicit user sign-off on the locked structure; no ambiguity remains about which existing route serves which new session number.
+- **Exact deliverable:** recorded approval (no commit required unless the approval itself is documented in a new doc revision).
 
-### Package A — Persistence Consolidation
-- **Objective:** eliminate all remaining shadow storage keys (§15).
-- **Included screens:** Connections, GoldenBox, Identity, Scorecard, FinalThird, FlavorMemory, PassportStamp, SessionComplete.
-- **Included files:** the 8 page files above + `SmokeCraftJourneyContext.jsx` (new fields + STATE_VERSION 2→3 migration).
-- **Dependencies:** none — first package.
-- **Files that must not be touched:** any file outside the 8 pages + context file; no route changes in this package.
-- **Required tests:** new/extended `verify-smokecraft-functional-recovery.mjs`-style suite covering all 8 screens' save→reload persistence.
-- **Required proof:** localStorage inspection showing zero shadow keys remain after a full guest journey.
-- **Rollback point:** revert this package's commit; no other package depends on partial completion.
-- **Completion gate:** `git status` shows only the 9 expected files changed; all 8 persistence tests pass; `npm run build` green.
-- **Exact deliverable:** one commit, `fix(smokecraft): consolidate remaining shadow persistence keys into canonical journey state`.
+### Package A — Persistence Consolidation (expanded scope)
+- **Objective:** eliminate remaining shadow storage keys (§16) AND add the new canonical journey fields required for the 27-session structure's genuinely new sessions.
+- **Included files:** the 8 shadow-key page files (Connections, GoldenBox, Identity, Scorecard, FinalThird, FlavorMemory, PassportStamp, SessionComplete) + `SmokeCraftJourneyContext.jsx` (new fields per §16 + STATE_VERSION 2→3 migration, now larger in scope than the prior plan anticipated).
+- **Dependencies:** Package 0 (must know the final field names before adding them).
+- **Required tests:** persistence suite covering all 8 shadow-key fixes + presence of all new fields with correct defaults.
+- **Completion gate:** zero shadow keys remain; all new fields exist with safe defaults; migration verified non-destructive to existing in-progress sessions.
+- **Exact deliverable:** one commit, `fix(smokecraft): consolidate persistence and add canonical fields for 27-session journey`.
 
-### Package B — Route Corrections
-- **Objective:** fix the 3 route-correctness bugs (§14).
-- **Included files:** `App.jsx` only.
-- **Dependencies:** none (can run parallel to Package A).
-- **Files that must not be touched:** all page/component files.
-- **Required tests:** route-table smoke test (each affected path resolves to the intended target).
-- **Required proof:** before/after route table diff matching §14 exactly.
-- **Rollback point:** revert this package's commit independently.
-- **Completion gate:** no route regressions in existing `verify-interactions.mjs`/`final-acceptance.mjs`.
-- **Exact deliverable:** one commit, `fix(smokecraft): correct duplicate guards and dead-end legacy route aliases`.
+### Package B — Route Corrections + Route Map Finalization
+- **Objective:** fix the 3 original route bugs (§15) AND implement whichever route-naming decision was locked in Package 0 (§14).
+- **Included files:** `App.jsx` (+ new route files for genuinely new screens, added as stubs in this package, filled in by later packages).
+- **Dependencies:** Package 0.
+- **Completion gate:** route table matches the locked structure exactly; no regressions in existing working routes.
+- **Exact deliverable:** one commit, `fix(smokecraft): correct routing and align route map to locked 27-session structure`.
 
-### Package C — Rewards Screen
-- **Objective:** build `/smokecraft/rewards` and repoint all Rewards CTAs (§12, §14, §18).
-- **Included screens:** new Rewards page; CTA edits in PairingLab.jsx, SmokeCraftChallenge.jsx, SmokeCraft.jsx.
-- **Dependencies:** Package A (needs canonical journey fields for reward/claim state).
-- **Files that must not be touched:** any screen not listed above.
-- **Required tests:** Rewards routing test (never lands on humidor-match), Rewards data-honesty test (no fabricated claim success).
-- **Required proof:** screenshot of Rewards page with real earned/locked state from a test guest session.
-- **Rollback point:** independent commit; removing it reverts CTAs to their prior (broken) target, not to a worse state.
-- **Completion gate:** all 3 CTA sites verified pointing at `/smokecraft/rewards`; new route registered; build green.
-- **Exact deliverable:** one commit, `feat(smokecraft): add Rewards screen and correct Rewards routing`.
+### Package C — Split Screens (Choose Your Cut / Lighting Tutorial)
+- **Objective:** split CutToastLight into S6 and S7 (§3e, §10).
+- **Dependencies:** Packages 0, A, B.
+- **Completion gate:** both new screens function independently with correct Back/Continue chaining; existing CutToastLight functionality fully preserved across the split, no capability lost.
+- **Exact deliverable:** one commit, `feat(smokecraft): split Choose Your Cut and Lighting Tutorial into distinct sessions`.
 
-### Package D — In-Spine Stub Redesign (S17, S18, S19)
-- **Objective:** convert SmokeCraftChallenge, SecondHumidorMatch, MiniTastingRound from static stubs into real interactive content (§9, §11).
-- **Included screens:** the 3 above.
-- **Dependencies:** Package A (persistence must be stable first); S18 additionally depends on S9 (HumidorMatch) remaining unchanged, which it already is (Keep).
-- **Files that must not be touched:** the other 21 spine screens.
-- **Required tests:** new interaction tests for each of the 3 screens (real controls, aria-pressed, persistence, reload).
-- **Required proof:** screenshots showing real controls, not single-button stubs.
-- **Rollback point:** independent per-screen commits if desired, or one combined commit — revertible without affecting Packages A/B/C.
-- **Completion gate:** zero single-full-card-hotspot patterns remain in these 3 files; build green; new tests pass.
-- **Exact deliverable:** one commit, `feat(smokecraft): convert Session 17/18/19 stub screens into live interfaces`.
+### Package D — Merge Screens (Terroir+SeedSoil, Construction Inspection+CigarGaugeGuide, Knowledge Drop, Completed Scorecard, Next Journey)
+- **Objective:** implement all 6 merges from §9/§3d.
+- **Dependencies:** Packages 0, A, B.
+- **Completion gate:** each merge target screen contains all constituent content, reachable via tabs where specified; no functionality from a merged-away screen is silently dropped.
+- **Exact deliverable:** one commit, `feat(smokecraft): merge Terroir/SeedSoil, Construction Inspection/CigarGaugeGuide, Knowledge Drop, Completed Scorecard, and Next Journey`.
 
-### Package E — Education Content (Origins, Terroir, Vitola, PairingMastery, FlavorDNA, WrapperStrength)
-- **Objective:** replace `ComingSoon`/null-render stubs with real content (§19).
-- **Included screens:** the 6 above.
-- **Dependencies:** Package A (new journey fields must exist for any screen that persists a quiz/interaction result).
-- **Files that must not be touched:** journey-spine screens not in this list.
-- **Required tests:** content-presence test per screen; quiz test for WrapperStrength if a quiz is included in this pass.
-- **Required proof:** screenshots of each screen showing real content, not placeholder text.
-- **Rollback point:** independent commit.
-- **Completion gate:** no `ComingSoon` wrapper remains on any of these 6; WrapperStrength no longer renders null; build green.
-- **Exact deliverable:** one commit, `feat(smokecraft): build real educational content for Origins, Terroir, Vitola, PairingMastery, FlavorDNA, and Wrapper/Strength`.
+### Package E — New Screens: Entry Layer (E3, E5) + Session Prep (S1, S3)
+- **Objective:** build the 4 net-new Entry/Session-1-3 screens.
+- **Dependencies:** Packages 0, A, B.
+- **Completion gate:** all 4 render real content with live controls (no static stubs), persist correctly, chain Back/Continue correctly.
+- **Exact deliverable:** one commit, `feat(smokecraft): build Venue Select, Resume, Welcome, and Meet Your Cigar screens`.
 
-### Package F — Leaderboard, EventChallenge, Scan/GuestPass, Cleanup
-- **Objective:** finish remaining redesigns/updates + archive dead code and orphaned assets (§11, §13, Phase 9/10).
-- **Included screens:** Leaderboard, EventChallenge, Scan, GuestPass.
-- **Included files:** + `Format.legacy.jsx` and 12 orphaned components (delete after re-confirming zero references), + orphaned image cleanup across the 4 asset directories.
-- **Dependencies:** all prior packages (this is deliberately last, per the audit's own §17 ordering, so nothing scheduled for reuse elsewhere is deleted prematurely).
-- **Files that must not be touched:** anything still referenced — re-verify with a fresh grep pass immediately before deletion, not from memory.
-- **Required tests:** existing `verify-all-smokecraft-assets.mjs` must still pass after cleanup; build green with zero missing-import errors.
-- **Required proof:** final `git diff --stat` showing only intended deletions; before/after file-count in each asset directory.
-- **Rollback point:** independent commit; asset deletions should be a separate commit from the Leaderboard/EventChallenge/Scan/GuestPass code changes within this package, for a cleaner revert path if the cleanup over-reaches.
-- **Completion gate:** zero broken references anywhere in the app after cleanup.
-- **Exact deliverable:** two commits — `feat(smokecraft): redesign Leaderboard, EventChallenge, and fix Scan/GuestPass hotspots` and `chore(smokecraft): archive dead code and orphaned assets after final reference check`.
+### Package F — New Tab Content: S9, S13, S17, S18, S20
+- **Objective:** add the 5 new tab-based sub-sessions to their host screens (FirstThird, SecondThird, FinalThird, Scorecard).
+- **Dependencies:** Packages 0, A.
+- **Completion gate:** each tab is independently testable and persists to its own canonical field; host screens' existing (reused) tabs remain unaffected.
+- **Exact deliverable:** one commit, `feat(smokecraft): add Flavor Discovery, Construction Check, Strength Progression, Overall Experience Notes, and Personal Notes tabs`.
 
-### Package G — AI Decision & Implementation (conditional)
-- **Objective:** execute whatever decision is made at the Phase 8 gate (§20).
-- **Included screens:** Assistant.jsx, and any screen gaining an "AI-generated" label.
-- **Dependencies:** explicit human approval of the build-vs-de-scope decision; Package A for persistence if built.
-- **Files that must not be touched:** the rule-based PairingLab/HumidorMatch recommendation logic must not be relabeled as AI.
-- **Required tests:** AI-honesty test (labels present, fallback state works) or de-scope confirmation test (route no longer claims "Coming Soon" indefinitely).
-- **Required proof:** screenshot of either the real AI feature with fallback state demonstrated, or the de-scoped honest replacement.
-- **Rollback point:** independent commit.
-- **Completion gate:** decision executed and verified either way.
-- **Exact deliverable:** one commit, message dependent on the decision taken.
+### Package G — Mentor Commentary (S14)
+- **Objective:** build the net-new S14 screen, fed by the mentor selected in S3.
+- **Dependencies:** Package E (S3 must exist and persist mentor selection first).
+- **Completion gate:** real per-mentor content renders based on actual selected mentor, not generic text.
+- **Exact deliverable:** one commit, `feat(smokecraft): build Mentor Commentary session`.
 
-### Package H — XP/Rewards/Achievements Activation & Accessibility Pass
-- **Objective:** wire new award sources into the existing idempotent XP system (§21), and run the final full-app accessibility/responsive pass (§23).
-- **Included screens:** all screens touched in Packages C–G, re-checked for accessibility.
-- **Dependencies:** Packages A–G substantially complete.
-- **Files that must not be touched:** none excluded — this is a cross-cutting pass, but changes should be additive (aria-labels, focus styles) not structural.
-- **Required tests:** accessibility test matrix across the 4 required viewports.
-- **Required proof:** screenshots at 1440×900, 1024×768, 768×1024, 390×844 for every screen touched in this plan.
-- **Rollback point:** independent commit per screen group if issues found.
-- **Completion gate:** zero browser-default focus rectangles, zero contrast failures, all touch targets meet minimum size.
+### Package H — Results Phase: AI Summary (S21) + Personalized Pairing Recommendations (S22) + Rewards/Achievements (S25/S26)
+- **Objective:** build the Results-phase net-new screens.
+- **Dependencies:** Package 0 (AI decision gate must be resolved for S21 before this package can fully complete — S22, S25, S26 can proceed independently of the AI decision).
+- **Completion gate:** S22 correctly reuses (not re-derives) PairingLab's existing recommendation logic; S25/S26 show real XP/reward/achievement data; S21 either shows real AI output with honest fallback or is explicitly de-scoped per the gate.
+- **Exact deliverable:** one commit (or two, if AI is de-scoped separately), `feat(smokecraft): build AI Summary, Personalized Pairing Recommendations, Rewards, and Achievements screens`.
+
+### Package I — Supporting Module Redesign + Cleanup
+- **Objective:** redesign SmokeCraftChallenge, MiniTastingRound, Leaderboard, EventChallenge; update Scan/GuestPass hotspots; archive dead code (`Format.legacy.jsx`, 12 orphaned components) and orphaned assets.
+- **Dependencies:** all prior packages (deliberately last, per original audit ordering logic, so nothing scheduled for reuse — e.g., orphaned Knowledge Drop images — is deleted prematurely).
+- **Completion gate:** zero broken references after cleanup; all supporting modules reachable from their new (§23) entry points.
+- **Exact deliverable:** two commits — `feat(smokecraft): redesign remaining supporting modules` and `chore(smokecraft): archive dead code and orphaned assets after final reference check`.
+
+### Package J — Accessibility/Responsive Final Pass
+- **Objective:** full-app accessibility/responsive verification across all 26 spine + 13 supporting-module screens.
+- **Dependencies:** Packages A–I substantially complete.
+- **Completion gate:** zero accessibility gate failures across all 4 required viewports.
 - **Exact deliverable:** one commit, `fix(smokecraft): final accessibility and responsive verification pass`.
 
 ---
 
-## 27. Verification Gates
+## 28. Verification Gates
 
-Run after **every** package above, not just at the end:
+Unchanged in mechanics from the prior plan, run after every package:
 
-1. `npm run build` — must be green.
-2. Package-specific new test script — must pass 100%.
-3. Full existing regression suite (`verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, and any package-specific script created in Packages A/D/E) — must not regress below its pre-package pass count.
-4. `git status`/`git diff --stat` — confirm only the package's declared files changed.
-5. Manual screenshot review at the 4 required viewports for any screen with a UI change in that package.
-6. Diff Guard re-check: confirm no NOVEE backend, POS360, E.A.T., or approved-image file was touched (carried forward from every prior mandate's standing constraint).
-
----
-
-## 28. Rollback Strategy
-
-- Every package is its own commit (or tightly-scoped commit pair, per Package F). A bad package is reverted with a single `git revert` without touching unrelated work, because packages are ordered to avoid file overlap wherever possible.
-- Persistence migration (Package A) includes a STATE_VERSION bump specifically so that if a later package needs to roll back, in-progress guest sessions on the new version are not corrupted by a partial downgrade — the migration function should be forward-only and idempotent, never destructive to unrecognized-but-present fields.
-- Asset deletion (Package F) is deliberately the last and most reversible-in-spirit package — nothing else in this plan depends on the deleted files still existing, by construction of the dependency map (§25).
-- No package should ever be force-pushed or squashed in a way that hides its individual verification trail — the packages exist specifically so each can be independently audited later.
+1. `npm run build` green.
+2. Package-specific new test passes 100%.
+3. Full existing regression suite does not regress below its pre-package pass count.
+4. `git status`/`git diff --stat` confirms only the package's declared files changed.
+5. Manual screenshot review at 1440×900, 1024×768, 768×1024, 390×844 for any screen with a UI change.
+6. Diff Guard re-check: no NOVEE backend, POS360, E.A.T., or approved-image file touched.
+7. **New for this revision:** confirm the screen/session actually implemented matches its locked entry in §3a/§25 exactly — no silent renumbering or re-scoping mid-implementation.
 
 ---
 
-## 29. Final Production Freeze Criteria
+## 29. Rollback Strategy
 
-SmokeCraft may be declared complete and frozen only when **all** of the following hold simultaneously:
-
-1. All 8 packages (A–H) are merged and their individual completion gates passed.
-2. Zero static-only production screens remain among the 24 main-journey + 13 supporting-module screens (HowItWorks may remain intentionally static only if that is an explicit product decision, documented at the time — not a default).
-3. Zero fake/baked live data remains anywhere (no hardcoded scores, XP, rankings, rewards, cigar/pairing details).
-4. Zero duplicate or conflicting journey-count references remain in code, docs, or UI copy — everything says "24 sessions / 8 visits" consistently.
-5. Every one of the 24 main-journey screens maps 1:1 to a locked session number with no double-guarded sessions remaining.
-6. Every supporting module's entry/exit/return behavior (§22) is verified working, including honest error/offline states.
-7. All required data persists exclusively through `sc_journey_v1` — zero shadow keys remain anywhere in `src/pages/smokecraft`.
-8. Full end-to-end journey test (S1→S24, plus each supporting module reachable and returning correctly) passes with proof screenshots at all 4 required viewports.
-9. The AI decision gate (§20) has been explicitly resolved, one way or the other — no indefinite "Coming Soon" placeholder remains without a documented decision.
+Unchanged in mechanics from the prior plan — one package per commit (or tightly-scoped pair), independently revertible, STATE_VERSION migration forward-only and idempotent, asset deletion last and most reversible-in-spirit. New for this revision: **Package 0's lock must not be revisited mid-implementation** — if the locked structure needs to change after Package A begins, that is a new planning cycle, not a rollback, since later packages depend on field names and route decisions made at the lock.
 
 ---
 
-## 30. Exact Recommended Execution Order
+## 30. Final Production Freeze Criteria
 
-This is the practical order in which implementation prompts should be issued — not a repeat of the phase headings.
+SmokeCraft may be declared complete and frozen only when:
 
-1. **Package A — Persistence Consolidation.**
-   *Changed:* 8 page files + journey context (new fields, STATE_VERSION bump). *Preserved:* all 19 already-working screens' UI and routes, untouched. *Test:* new persistence suite, full existing regression suite. *Approve before continuing:* zero shadow keys remain; build green.
+1. All packages (0–J) are merged and their individual completion gates passed.
+2. All 27 sessions map to a working, live-interactive screen or tab per §25 — zero static-only production screens remain among them.
+3. Zero fake/baked live data remains anywhere.
+4. The journey consistently reads as 27 sessions / 7 phases + 5-entry layer everywhere in code, docs, and UI copy — no residual "24-session" references remain.
+5. Every one of the 27 sessions maps 1:1 to a locked session number, with no double-guarded or ambiguous sessions.
+6. Every supporting module's entry/exit/return behavior (§23) is verified working.
+7. All required data persists exclusively through `sc_journey_v1` — zero shadow keys remain.
+8. Full end-to-end journey test (E1→E5→S1→S27, plus every supporting module reachable and returning correctly) passes with proof screenshots at all 4 required viewports.
+9. The AI decision gate (§21) has been explicitly resolved.
 
-2. **Package B — Route Corrections.**
-   *Changed:* `App.jsx` only (3 fixes). *Preserved:* every currently-working route continues to work; only the 3 identified bugs change behavior. *Test:* route-table smoke test + full existing regression suite. *Approve before continuing:* route table matches §14 exactly; no regressions.
+---
 
-3. **Package C — Rewards Screen.**
-   *Changed:* new Rewards page + 3 CTA edits. *Preserved:* everything else. *Test:* Rewards routing + data-honesty test. *Approve before continuing:* Rewards page shows real data for a test guest; no CTA still points at humidor-match.
+## 31. Exact Recommended Execution Order
 
-4. **Package D — In-Spine Stub Redesign (S17/S18/S19).**
-   *Changed:* 3 screens converted from stub to live interface. *Preserved:* HumidorMatch (S9) component reused, not forked, for S18. *Test:* new interaction tests for all 3. *Approve before continuing:* zero single-hotspot stub patterns remain in the guarded spine.
-
-5. **Package E — Education Content.**
-   *Changed:* 6 screens gain real content (5 supporting-module + WrapperStrength in-spine). *Preserved:* everything outside these 6. *Test:* content-presence + WrapperStrength quiz test. *Approve before continuing:* no `ComingSoon`/null-render remains among these 6; WrapperStrength (S6) has real content since it blocks the main spine.
-
-6. **Package F — Leaderboard/EventChallenge/Scan/GuestPass + Dead-Code & Asset Cleanup.**
-   *Changed:* 4 screens redesigned/updated; `Format.legacy.jsx`, 12 orphaned components, and confirmed-orphaned images archived. *Preserved:* every file still referenced anywhere, re-verified immediately before deletion. *Test:* full asset-verification script + build. *Approve before continuing:* `git diff --stat` shows only intended deletions; zero broken references.
-
-7. **Package G — AI Decision & Implementation.**
-   *Changed:* Assistant.jsx and any newly AI-labeled output, per whichever decision is approved. *Preserved:* the existing rule-based PairingLab/HumidorMatch recommendation logic, explicitly not relabeled as AI. *Test:* AI-honesty test or de-scope confirmation. *Approve before continuing:* the Phase 8 decision gate is closed one way or the other — this step cannot proceed without that approval.
-
-8. **Package H — XP/Rewards/Achievements Activation + Final Accessibility/Responsive Pass.**
-   *Changed:* award-source wiring for all new screens from Packages C–G; accessibility/focus/contrast fixes across all touched screens. *Preserved:* the already-sound duplicate-XP-prevention mechanism, reused rather than reimplemented. *Test:* full accessibility matrix at all 4 required viewports. *Approve before continuing:* zero accessibility gate failures.
-
-9. **Phase 12 — Full Production Verification.**
-   *Changed:* nothing (verification-only pass). *Preserved:* everything. *Test:* the complete end-to-end journey test (S1→S24 + all supporting modules) with proof screenshots at all 4 viewports. *Approve before continuing:* all §27 verification gates pass with zero P0 findings outstanding.
-
-10. **Phase 13 — Freeze.**
-    *Changed:* nothing (declaration only). *Preserved:* everything. *Test:* re-confirmation of all 9 Freeze Criteria in §29. *Approve:* final sign-off that SmokeCraft is frozen against unapproved visual or sequence changes.
+1. **Package 0 — Lock the 27-Session Structure.** *Changed:* nothing (approval only). *Test:* none (human sign-off). *Approve before continuing:* explicit confirmation of §3a/§3b/§14/§25's Back-Continue chain, resume behavior, and completion behavior.
+2. **Package A — Persistence Consolidation (expanded).** *Changed:* 8 page files + journey context. *Preserved:* all 19 already-working screens' UI and routes untouched. *Test:* new persistence suite + full regression. *Approve before continuing:* zero shadow keys; all new fields present; migration non-destructive.
+3. **Package B — Route Corrections + Route Map Finalization.** *Changed:* `App.jsx` + new route stubs. *Preserved:* every currently-working route. *Test:* route-table smoke test + full regression. *Approve before continuing:* route table matches locked structure exactly.
+4. **Package C — Split Screens.** *Changed:* CutToastLight split into 2. *Preserved:* all cut/toast/light functionality, none lost in the split. *Test:* new interaction tests for both halves. *Approve before continuing:* both screens function independently, chain correctly.
+5. **Package D — Merge Screens.** *Changed:* 6 merge targets built. *Preserved:* all constituent content from merged-away screens. *Test:* content-completeness test per merge. *Approve before continuing:* no functionality silently dropped.
+6. **Package E — New Entry/Prep Screens (E3, E5, S1, S3).** *Changed:* 4 new screens. *Preserved:* everything else. *Test:* new interaction tests. *Approve before continuing:* all 4 real, live, persisted.
+7. **Package F — New Tab Content (S9, S13, S17, S18, S20).** *Changed:* 5 new tabs on 4 existing screens. *Preserved:* existing reused tabs on those same screens. *Test:* per-tab persistence test. *Approve before continuing:* each tab independently verifiable.
+8. **Package G — Mentor Commentary (S14).** *Changed:* 1 new screen. *Preserved:* S3's mentor-selection data flow. *Test:* mentor-content-matches-selection test. *Approve before continuing:* real per-mentor content confirmed.
+9. **Package H — Results Phase (S21, S22, S25, S26).** *Changed:* 4 new screens/tabs. *Preserved:* PairingLab's existing recommendation logic, reused not rebuilt. *Test:* AI-honesty test (or de-scope confirmation) + rewards/achievements data test. *Approve before continuing:* AI decision gate resolved; results screens show real data.
+10. **Package I — Supporting Module Redesign + Cleanup.** *Changed:* 4 supporting modules redesigned, hotspots fixed, dead code/assets archived. *Preserved:* every still-referenced file, re-verified before deletion. *Test:* full asset-verification + build. *Approve before continuing:* zero broken references.
+11. **Package J — Accessibility/Responsive Final Pass.** *Changed:* cross-cutting a11y/focus/contrast fixes. *Preserved:* underlying screen logic, additive changes only. *Test:* full accessibility matrix, 4 viewports. *Approve before continuing:* zero gate failures.
+12. **Phase 12 — Full Production Verification.** *Changed:* nothing (verification-only). *Test:* complete E1→E5→S1→S27 end-to-end test + all supporting modules, proof screenshots at 4 viewports. *Approve before continuing:* all §28 gates pass, zero P0 findings.
+13. **Phase 13 — Freeze.** *Changed:* nothing (declaration only). *Test:* re-confirmation of §30's 9 criteria. *Approve:* final sign-off.
 
 ---
 
 ## Planning Methodology Note
 
-This plan was produced by reading `docs/SMOKECRAFT_360_MASTER_AUDIT.md` in full and mapping every audit finding to a specific plan section, package, or table row — no new repository scanning was performed, and no application file was read for the purpose of altering it. All screen/route/persistence facts are inherited directly from the audit; where the audit flagged something as unconfirmed (e.g., Leaderboard's scroll-trap location, whether 3 additional sessions were ever specified anywhere), this plan states that uncertainty explicitly rather than resolving it by assumption.
+This revision was produced by re-reading the user-approved 27-session Master Journey specification supplied in the correction mandate, then re-mapping every finding already established in `docs/SMOKECRAFT_360_MASTER_AUDIT.md` onto that locked structure — no new repository scanning was performed, and no application file was read for the purpose of altering it. Where a mapping required a judgment call (e.g., whether a route should be renamed or only its session number changed), this plan states that as an open decision point rather than resolving it unilaterally.
