@@ -101,6 +101,10 @@ export function SmokeCraftProgressProvider({ children }) {
     currentSession:  currentAllowed.session,
     currentLabel:    currentAllowed.label,
     currentVisitTitle: currentAllowed.visitTitle,
+    // Full current-allowed session object (includes .route) — the canonical
+    // resume target. Consumers should read currentAllowed?.route rather than
+    // hardcoding a path when routing "Back to Current Session"/"Resume".
+    currentAllowed,
     // Completed sets
     completedSessions,
     completedVisits,

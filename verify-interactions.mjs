@@ -289,6 +289,8 @@ async function suiteIdentityFields() {
   console.log('\n── Suite 9: Identity Field Completeness ──')
   const p = await browser.newPage()
   try {
+    await p.goto(`${BASE}/smokecraft`, { waitUntil: 'domcontentloaded', timeout: 20000 })
+    await p.evaluate(() => { sessionStorage.setItem('novee_demo_mode', '1') })
     await p.goto(`${BASE}/smokecraft/identity`, { waitUntil: 'domcontentloaded', timeout: 20000 })
     await p.waitForTimeout(500)
 

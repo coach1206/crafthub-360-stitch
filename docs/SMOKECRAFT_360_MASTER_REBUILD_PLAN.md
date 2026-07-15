@@ -485,6 +485,59 @@ No test was skipped. Every pre-existing failure was independently reproduced aga
 - **Completion gate:** route table matches the locked structure exactly; no regressions in existing working routes.
 - **Exact deliverable:** one commit, `fix(smokecraft): correct routing and align route map to locked 27-session structure`.
 
+#### Package B — Implementation Evidence (completed)
+
+**Scope actually implemented:** limited to route corrections, guards, and navigation targets within the *current* 24-session structure — no route-naming/renumbering decision from §14 was implemented (that remains deferred to whichever package builds the 27-session Entry layer), no screens were created or redesigned, and no new placeholder routes were added (none were required for the fixes below).
+
+**Exact files changed:**
+- `src/App.jsx` — `shape-size-burn` changed from an independent guarded route to a `Navigate` alias into `/smokecraft/format`; legacy `smokecraft/session-2`/`-3`/`-4` changed from all collapsing to `/smokecraft` to redirecting at their real Session 2/3/4 destinations (`/smokecraft/enroll`, `/smokecraft/golden-box`, `/smokecraft/mentor-selection`); `session-1` left pointing at `/smokecraft` since Session 1 *is* the index route.
+- `src/components/smokecraft/LockedSmokeCraftScreen.jsx` — "Back to Current Session" button now navigates to `currentAllowed?.route` (the guest's real current session) instead of hardcoded `/smokecraft`, with a safe `'/smokecraft'` fallback when no resume route is available. Removed a dead, unused `getCurrentAllowedSession` import that had been left in place from an earlier, never-finished attempt at this exact fix.
+- `src/context/SmokeCraftProgressContext.jsx` — **root-cause fix**: the context's exported `value` object never included the `currentAllowed` object itself (only its flattened sub-fields `currentVisit`/`currentSession`/`currentLabel`/`currentVisitTitle`), so every consumer reading `currentAllowed?.route` — including Identity.jsx's pre-existing "Continue Previous Session" link, which predates this package — was silently reading `undefined` and never worked. Added `currentAllowed` itself to the exported context value so `.route` is actually reachable. This is the single change that makes the entire "use canonical persisted resume route" requirement (item D) actually function, for both the fix in this package and the already-existing Identity.jsx feature it fixes for free.
+- `src/pages/smokecraft/Identity.jsx` — resolves the duplicate Session-2 guard (item A): added an explicit `useEffect` that redirects to `/smokecraft/enroll` if the guest hasn't completed `'enroll'` yet (skipped in demo mode, matching the rest of the app's demo-mode-bypass convention). Enroll remains the sole authoritative Session-2 checkpoint; Identity is now only reachable after it, resolving the audit's "two distinct pages ambiguously satisfy the same completion gate" finding without renumbering the 24-session catalog.
+- `verify-interactions.mjs` — Suite 9 ("Identity Field Completeness") previously navigated directly to `/smokecraft/identity` with no demo-mode flag and no prior `enroll` completion, which is exactly the ambiguous-access pattern this package's fix closes. Updated to inject demo mode before navigating (the identical `goto → sessionStorage.setItem('novee_demo_mode','1') → goto` pattern already used by every other suite in this same file), so the suite verifies field completeness independent of the (now-enforced) sequential gate rather than depending on it being absent.
+- `verify-smokecraft-route-corrections.mjs` (new) — 12-check Playwright suite for this package.
+
+**Routes corrected:** `shape-size-burn` (duplicate→alias), `smokecraft/session-2`, `smokecraft/session-3`, `smokecraft/session-4` (dead-end→real destination).
+
+**Aliases corrected:** all 3 of the above are now genuine aliases (redirect to canonical destination) rather than either duplicating a route's guard or collapsing to the wrong page.
+
+**Duplicate routes removed or redirected:** `shape-size-burn` — redirected (not removed), preserving the backward-compatible URL per the locked decision rule.
+
+**Session guards corrected:** Enroll/Identity — Enroll remains `sessionNumber={2}`-guarded (unchanged); Identity gained an explicit sequential dependency on `'enroll'` being complete, resolving the ambiguity without touching `VISIT_STRUCTURE` or any other guard's `sessionNumber`.
+
+**Back targets corrected:** none needed changing — every main-journey screen already uses `navigate(-1)` (browser history back), confirmed via full-repo grep across all 19 reusable screens plus the supporting-module screens named in the mandate (Leaderboard, EventChallenge, etc.); this is the correct "return to whatever the entry point was" pattern and was not a bug.
+
+**Continue targets corrected:** none needed changing — the main-spine screens' hardcoded forward-progression `navigate('/smokecraft/next-route')` calls are intentional and correct for a linear guided journey, not a routing bug.
+
+**Resume behavior corrected:** `LockedSmokeCraftScreen.jsx`'s "Back to Current Session" button (item D) — now uses `currentAllowed?.route`, which required fixing the context root cause described above. `VisitComplete.jsx` and `LockedVisit.jsx`'s "Return to SmokeCraft"/"Return to SmokeCraft Hub" buttons were reviewed and intentionally left unchanged — those are genuine "go to the top-level hub" actions (a visit just completed, or a future visit is locked; there is nothing to resume), not mislabeled resume bugs. `SessionComplete.jsx`'s "Return to SmokeCraft" was reviewed and left unchanged for the same reason — the journey is finished, not paused.
+
+**Supporting-module return routes corrected:** none required a code change. Every module named in the mandate (Pairing Lab, Flavor Memory, Mentor Library, Terroir, Humidor Match, Passport, Leaderboard, Community, Event Challenge, Connections, Request Purchase, Management Sync) was individually confirmed via grep to already use `navigate(-1)` for its Back action — this is the correct, already-working "return to caller" pattern the mandate asks for, not a defect.
+
+**Deferred future routes:** the full §14 route-naming decision (whether to rename working URLs to match new session titles, or add the 10 net-new routes for E3/E5/S1/S3/S6/S14/S15/S21/S22/S25) remains deferred to the packages that actually build those screens (Packages C–H) — Package B intentionally did not add any placeholder routes, since none of the corrections in scope required one.
+
+**Tests added:** `verify-smokecraft-route-corrections.mjs` — 7 suites / 12 checks covering: `shape-size-burn` alias resolution, all 4 legacy session aliases, the Identity/Enroll sequential gate (both blocked and allowed cases, plus demo-mode bypass), locked-screen resume routing to the real current session, all 25 main-spine routes resolving with content, route guards still enforcing progression outside demo mode, and no route loop between Enroll and Identity.
+
+**Tests run:** `verify-smokecraft-route-corrections.mjs` (new), `verify-smokecraft-persistence-consolidation.mjs` (Package A regression check), `verify-interactions.mjs` (existing, 1 suite updated per above), `verify-all-smokecraft-assets.mjs` (existing), `final-acceptance.mjs` (existing), `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — Package A unaffected |
+| `verify-interactions.mjs` | 19 passed, 3 failed — **identical to the Package A baseline** after the necessary Suite 9 update described above; without that update this package showed 6 failures (a real, self-inflicted regression) that was caught, root-caused (not just patched), and resolved |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — **byte-identical failure list to the Package A baseline**, confirmed via `diff` |
+| `npm run build` | **green** |
+
+**Manual verification performed:** via the automated Playwright suite (real browser against the built app): started at Launch, confirmed Enroll must be completed before Identity is reachable outside demo mode, moved through the main-spine screens, exercised Back (`navigate(-1)`) and Continue on representative screens, triggered a locked-screen state and confirmed "Back to Current Session" lands on the guest's real current session rather than always the index, confirmed all 4 legacy session aliases and the `shape-size-burn` alias land correctly, and confirmed no loop forms between Enroll and Identity once enroll is complete.
+
+**Known limitations:**
+- The §14 route-naming decision (keep existing URLs vs. rename to match new 27-session titles) is still open — Package B did not need to resolve it since none of its corrections required a URL rename.
+- Identity's new sequential gate is enforced at the component level (a `useEffect` redirect), not via `SmokeCraftSessionGuard`'s numeric `sessionNumber` mechanism, since the guard only accepts a session number and Identity's real dependency is a specific step id (`'enroll'`), not a numeric threshold. This is consistent with the guard's existing capabilities and does not require modifying the shared guard component.
+- The `currentAllowed` context fix is a genuine bug fix with a larger blast radius than initially scoped (it also fixes Identity.jsx's pre-existing, never-working "Continue Previous Session" link) — this was verified safe via the full regression suite rather than assumed, since it touches a shared context consumed by other screens.
+
+**Intentionally deferred to later packages:** the CutToastLight split (Package C), all screen merges (Package D), all net-new Entry/Session-Prep/Results screens (Packages E, G, H), supporting-module redesigns and dead-code/asset cleanup (Package I), accessibility pass (Package J), and the §14 route-naming/renumbering decision itself.
+
 ### Package C — Split Screens (Choose Your Cut / Lighting Tutorial)
 - **Objective:** split CutToastLight into S6 and S7 (§3e, §10).
 - **Dependencies:** Packages 0, A, B.

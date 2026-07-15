@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import {
   getVisitBySession,
   getLockedReason,
-  getCurrentAllowedSession,
   TOTAL_VISITS,
 } from '../../constants/smokecraftJourney.js'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
@@ -16,7 +15,8 @@ const DEFAULT_LOCKED_ASSET = '/smokecraft-future-visit-locked.png'
 
 export default function LockedSmokeCraftScreen({ sessionNumber }) {
   const navigate = useNavigate()
-  const { isDemoMode, isLocalPreviewMode, modeLabel } = useSmokeCraftProgress()
+  const { isDemoMode, isLocalPreviewMode, modeLabel, currentAllowed } = useSmokeCraftProgress()
+  const resumeRoute = currentAllowed?.route || '/smokecraft'
 
   const visit      = getVisitBySession(sessionNumber)
   const visitNumber = visit?.visit || 1
@@ -104,7 +104,7 @@ export default function LockedSmokeCraftScreen({ sessionNumber }) {
 
         {/* Back button — pointer-events: auto so it's clickable */}
         <button
-          onClick={() => navigate('/smokecraft')}
+          onClick={() => navigate(resumeRoute)}
           style={{
             height: 52,
             paddingInline: 32,

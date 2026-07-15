@@ -335,8 +335,8 @@ export default function App() {
 
                 {/* S5 — format / shape-size-burn */}
                 <Route path="format"         element={<SmokeCraftSessionGuard sessionNumber={5}><Format /></SmokeCraftSessionGuard>} />
-                {/* shape-size-burn is the official route alias for format */}
-                <Route path="shape-size-burn" element={<SmokeCraftSessionGuard sessionNumber={5}><Format /></SmokeCraftSessionGuard>} />
+                {/* shape-size-burn is a backward-compatible alias for format, not an independent route */}
+                <Route path="shape-size-burn" element={<Navigate to="/smokecraft/format" replace />} />
                 <Route path="cigar-gauge-guide" element={<SmokeCraftSessionGuard sessionNumber={5}><CigarGaugeGuide /></SmokeCraftSessionGuard>} />
 
                 {/* S6 — wrapper-strength */}
@@ -908,10 +908,11 @@ export default function App() {
               {/* NOTE: pos3 -> /pos redirect removed; /pos3 is now a real route tree */}
               <Route path="founder-command" element={<Navigate to="/founder" replace />} />
               <Route path="admin-command" element={<Navigate to="/admin" replace />} />
+              {/* Legacy per-session URLs — each redirects to its actual Session N route, not the index */}
               <Route path="smokecraft/session-1" element={<Navigate to="/smokecraft" replace />} />
-              <Route path="smokecraft/session-2" element={<Navigate to="/smokecraft" replace />} />
-              <Route path="smokecraft/session-3" element={<Navigate to="/smokecraft" replace />} />
-              <Route path="smokecraft/session-4" element={<Navigate to="/smokecraft" replace />} />
+              <Route path="smokecraft/session-2" element={<Navigate to="/smokecraft/enroll" replace />} />
+              <Route path="smokecraft/session-3" element={<Navigate to="/smokecraft/golden-box" replace />} />
+              <Route path="smokecraft/session-4" element={<Navigate to="/smokecraft/mentor-selection" replace />} />
 
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>

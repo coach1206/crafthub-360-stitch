@@ -72,8 +72,8 @@ const inputStyle = {
 }
 
 export default function Identity() {
-  const { awardSessionRewards } = useGuestSession()
-  const { currentAllowed } = useSmokeCraftProgress()
+  const { awardSessionRewards, session } = useGuestSession()
+  const { currentAllowed, isDemoMode } = useSmokeCraftProgress()
   const { journey, setIdentity } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
@@ -81,6 +81,15 @@ export default function Identity() {
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const initialized = useRef(false)
+
+  // Identity shares the guard's Session 2 numeric checkpoint with Enroll, so the
+  // guard alone can't tell them apart. Enroll is the authoritative Session 2
+  // screen; Identity is only reachable after it, enforced here explicitly.
+  useEffect(() => {
+    if (!isDemoMode && !session.completedSteps.includes('enroll')) {
+      navigate('/smokecraft/enroll', { replace: true })
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!initialized.current) { initialized.current = true; return }
