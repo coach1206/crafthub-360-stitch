@@ -16,8 +16,6 @@ const DARK = '#0a0603'
 const GLASS = 'rgba(5,5,5,0.88)'
 const BORDER = 'rgba(233,193,118,0.28)'
 
-const LS_KEY = 'sc_scorecard_v1'
-
 const CATEGORIES = [
   { id: 'appearance',   label: 'Appearance',   hint: 'Color, veins, oiliness, seam' },
   { id: 'construction', label: 'Construction',  hint: 'Feel, weight, firmness' },
@@ -42,18 +40,6 @@ const EMPTY_STATE = {
   personalNotes: '',
   savedAt: null,
   submittedScorecardId: null,
-}
-
-function loadLocal() {
-  try {
-    const raw = localStorage.getItem(LS_KEY)
-    if (!raw) return { ...EMPTY_STATE }
-    const p = JSON.parse(raw)
-    return { ...EMPTY_STATE, ...p, categories: { ...EMPTY_STATE.categories, ...(p.categories || {}) }, meta: { ...EMPTY_STATE.meta, ...(p.meta || {}) } }
-  } catch { return { ...EMPTY_STATE } }
-}
-function saveLocal(s) {
-  try { localStorage.setItem(LS_KEY, JSON.stringify({ ...s, savedAt: s.savedAt || Date.now() })) } catch {}
 }
 
 function calcOverall(cats) {
@@ -105,16 +91,25 @@ export default function Scorecard() {
 
   const firstThird  = smokeCraft?.firstThird  || null
   const secondThird = smokeCraft?.secondThird  || null
-  const finalThird  = (() => { try { return JSON.parse(sessionStorage.getItem('smokecraftFinalThird') || 'null') } catch { return null } })()
+  const finalThird  = journey.finalThird || null
 
-  const [sc, setSc]           = useState(loadLocal)
+  const [sc, setSc] = useState(() => {
+    const saved = journey.scorecard
+    if (!saved) return { ...EMPTY_STATE }
+    return {
+      ...EMPTY_STATE,
+      ...saved,
+      categories: { ...EMPTY_STATE.categories, ...(saved.categories || {}) },
+      meta: { ...EMPTY_STATE.meta, ...(saved.meta || {}) },
+    }
+  })
   const [done, setDone]       = useState(false)
   const [saveStatus, setSave] = useState('idle')
 
   function setCategory(id, val) {
     setSc(prev => {
       const next = { ...prev, categories: { ...prev.categories, [id]: val } }
-      saveLocal(next)
+      setScorecard(next)
       return next
     })
   }
@@ -122,7 +117,7 @@ export default function Scorecard() {
   function setMeta(key, val) {
     setSc(prev => {
       const next = { ...prev, meta: { ...prev.meta, [key]: val } }
-      saveLocal(next)
+      setScorecard(next)
       return next
     })
   }
@@ -130,14 +125,13 @@ export default function Scorecard() {
   function setNotes(val) {
     setSc(prev => {
       const next = { ...prev, personalNotes: val }
-      saveLocal(next)
+      setScorecard(next)
       return next
     })
   }
 
   function handleSaveDraft() {
-    const snap = { ...sc, savedAt: Date.now() }
-    saveLocal(snap)
+    const snap = { ...sc, savedAt: Date.now(), overall: calcOverall(sc.categories) }
     setSc(prev => ({ ...prev, savedAt: snap.savedAt }))
     setScorecard(snap)
     setSave('saved')
@@ -163,17 +157,20 @@ export default function Scorecard() {
       })
       if (r.ok) {
         const result = await r.json()
-        setSc(prev => ({ ...prev, submittedScorecardId: result.scorecard?.scorecardId, savedAt: Date.now() }))
+        setSc(prev => {
+          const next = { ...prev, submittedScorecardId: result.scorecard?.scorecardId, savedAt: Date.now() }
+          setScorecard(next)
+          return next
+        })
       }
     } catch {}
-  }, [session, cigarDetails, pairingDetails, firstThird, secondThird, finalThird, currentXP, currentRank, stepsCount]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [session, cigarDetails, pairingDetails, firstThird, secondThird, finalThird, currentXP, currentRank, stepsCount, setScorecard]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function handleContinue() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
-    const snap = { ...sc, savedAt: Date.now() }
-    saveLocal(snap)
+    const snap = { ...sc, savedAt: Date.now(), overall: calcOverall(sc.categories) }
     setScorecard(snap)
     await submitScorecard(snap)
     awardSessionRewards('scorecard')

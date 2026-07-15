@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
@@ -13,7 +13,6 @@ const GOLD_DIM = 'rgba(233,193,118,0.80)'
 const DARK     = '#0a0603'
 const BORDER   = 'rgba(233,193,118,0.22)'
 const DIM      = 'rgba(229,226,225,0.70)'
-const LS_KEY   = 'sc_identity_v1'
 
 const EXPERIENCE_LEVELS = [
   { id: 'beginner',     label: 'New to Cigars' },
@@ -41,13 +40,6 @@ const COUNTRIES = [
 const EMPTY = {
   fullName: '', email: '', preferredName: '', birthDate: '',
   country: '', experienceLevel: '', focusArea: '',
-}
-
-function loadSaved() {
-  try {
-    const raw = localStorage.getItem(LS_KEY)
-    return raw ? { ...EMPTY, ...JSON.parse(raw) } : { ...EMPTY }
-  } catch { return { ...EMPTY } }
 }
 
 // All labels at least 15px — readable for ages 40–70
@@ -82,15 +74,16 @@ const inputStyle = {
 export default function Identity() {
   const { awardSessionRewards } = useGuestSession()
   const { currentAllowed } = useSmokeCraftProgress()
-  const { setIdentity } = useSmokeCraftJourney()
+  const { journey, setIdentity } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  const [form, setForm] = useState(loadSaved)
+  const [form, setForm] = useState(() => journey.identity ? { ...EMPTY, ...journey.identity } : { ...EMPTY })
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
+  const initialized = useRef(false)
 
   useEffect(() => {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(form)) } catch (_) {}
+    if (!initialized.current) { initialized.current = true; return }
     setIdentity(form)
   }, [form]) // eslint-disable-line react-hooks/exhaustive-deps
 

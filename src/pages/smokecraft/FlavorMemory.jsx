@@ -195,22 +195,6 @@ export default function FlavorMemory() {
     const snapshot = { ...fm, savedAt: Date.now() }
     setFm(prev => ({ ...prev, savedAt: snapshot.savedAt }))
 
-    try {
-      sessionStorage.setItem('smokecraftFlavorMemory', JSON.stringify({
-        status: fm.selectedFlavors.length > 0 ? 'guest_input_collected' : 'skipped',
-        source: 'interactive',
-        backendConnected: true,
-        tasteTags: fm.selectedFlavors,
-        aromaNotes: fm.aromaNotes,
-        strengthPerception: fm.strength,
-        bodyPerception: fm.body,
-        intensity: fm.intensity,
-        pairingRecall: fm.pairingRecall,
-        personalNotes: fm.personalNotes,
-        savedAt: snapshot.savedAt,
-      }))
-    } catch {}
-
     await Promise.all([saveToBackend(snapshot), saveToPassport(snapshot)])
     awardSessionRewards('flavor-memory')
     navigate('/smokecraft/final-third')

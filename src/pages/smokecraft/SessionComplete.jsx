@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -11,26 +12,17 @@ const NAT_H = 1086
 
 const GOLD = '#E9C176'
 
-function readJourney() {
-  try { return JSON.parse(localStorage.getItem('sc_journey_v1') || 'null') } catch { return null }
-}
-function readIdentity() {
-  try { return JSON.parse(localStorage.getItem('sc_identity_v1') || 'null') } catch { return null }
-}
-
 export default function SessionComplete() {
   const { session, awardSessionRewards, awardStamp } = useGuestSession()
+  const { journey } = useSmokeCraftJourney()
   const navigate = useNavigate()
-
-  const [journey]  = useState(readJourney)
-  const [identity] = useState(readIdentity)
 
   const cigarName     = journey?.selectedCigar?.name   || null
   const pairingRec    = journey?.pairing?.recommendation || null
   const mentorName    = Array.isArray(journey?.mentor) && journey.mentor.length > 0
     ? journey.mentor[0]?.name || null : null
   const flavors       = journey?.flavorMemory?.selectedFlavors || []
-  const guestName     = identity?.preferredName || journey?.identity?.preferredName || null
+  const guestName     = journey?.identity?.preferredName || journey?.identity?.fullName || null
   const formatLabel   = journey?.format?.label || null
 
   useEffect(() => {

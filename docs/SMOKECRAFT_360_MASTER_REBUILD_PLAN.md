@@ -422,6 +422,62 @@ Freeze (§30)
 - **Completion gate:** zero shadow keys remain; all new fields exist with safe defaults; migration verified non-destructive to existing in-progress sessions.
 - **Exact deliverable:** one commit, `fix(smokecraft): consolidate persistence and add canonical fields for 27-session journey`.
 
+#### Package A — Implementation Evidence (completed)
+
+**Scope actually implemented:** limited strictly to the 8 audit-identified shadow-key screens and the canonical context — no route restructuring, no new screens, no route/App.jsx changes. Canonical fields for the *not-yet-built* 27-session sessions (E3, S1, S3, S14, S15, S21, S22, S25, S26, etc.) are deliberately **not** added yet — those are deferred to whichever later package actually builds each screen, so no unused/speculative schema ships ahead of the feature that needs it. The only new field added is `goldenBox` (`{ acknowledged }`), since GoldenBox is one of the 8 audit-identified shadow-key screens and had no canonical slot at all.
+
+**Exact files changed:**
+- `src/context/SmokeCraftJourneyContext.jsx` — STATE_VERSION 2→3, added `goldenBox` field + `setGoldenBox` setter, added idempotent `migrateLegacyKeys()` migration function, hardened `loadFromStorage()` against corrupt/invalid JSON.
+- `src/pages/smokecraft/Identity.jsx` — removed `sc_identity_v1` shadow key; reads/writes exclusively through `journey.identity` / `setIdentity`.
+- `src/pages/smokecraft/GoldenBox.jsx` — removed `sc_golden_box_v1` shadow key; reads/writes exclusively through `journey.goldenBox` / `setGoldenBox`.
+- `src/pages/smokecraft/Connections.jsx` — removed `sc_connections_v1` shadow key; now imports `useSmokeCraftJourney()` (previously didn't); reads/writes through `journey.connections` / `setConnections`.
+- `src/pages/smokecraft/Scorecard.jsx` — removed `sc_scorecard_v1` shadow key; reads/writes exclusively through `journey.scorecard` / `setScorecard`; reads `journey.finalThird` instead of `sessionStorage.smokecraftFinalThird`; now stamps `overall` onto every saved snapshot so PassportStamp can read a real score canonically.
+- `src/pages/smokecraft/FinalThird.jsx` — removed the redundant `sessionStorage.smokecraftFinalThird` write (canonical `setFinalThird` call was already present).
+- `src/pages/smokecraft/FlavorMemory.jsx` — removed the redundant `sessionStorage.smokecraftFlavorMemory` write (canonical `setFlavorMemory` call was already present).
+- `src/pages/smokecraft/PassportStamp.jsx` — removed `sc_passport_stamp_v1` shadow key and the three functions that read `sc_scorecard_v1`/`smokecraftFlavorMemory` directly; now imports `useSmokeCraftJourney()` (previously didn't) and reads scorecard/flavor-memory/claim data exclusively from canonical `journey.*`.
+- `src/pages/smokecraft/SessionComplete.jsx` — removed the two raw `localStorage.getItem('sc_journey_v1'/'sc_identity_v1')` reads; now uses `useSmokeCraftJourney()` hook instead of hand-reading storage keys.
+- `verify-smokecraft-persistence-consolidation.mjs` (new) — 31-check Playwright test suite for this package.
+
+**Canonical persistence key and schema version:** `sc_journey_v1`, `STATE_VERSION` 2 → 3.
+
+**Legacy keys discovered (7, confirmed via live-code grep, not just the audit doc):** `sc_identity_v1`, `sc_golden_box_v1`, `sc_connections_v1`, `sc_scorecard_v1`, `sc_passport_stamp_v1` (all `localStorage`), `smokecraftFlavorMemory`, `smokecraftFinalThird` (both `sessionStorage`). `LeafChallenge.jsx`'s `sessionStorage.leafChallengeResult` was found in the same grep pass but is **explicitly out of scope** — it does not belong to any of the 8 mandated screens and was left untouched.
+
+**Legacy keys migrated:** all 7, via a single idempotent `migrateLegacyKeys()` function — canonical data always wins (a legacy value is only copied in when the canonical field is still empty), so newer canonical data can never be overwritten by older shadow data.
+
+**Legacy keys deprecated or removed:** all 7 are **removed** (not merely deprecated) immediately after each load's migration pass, since by that point canonical state is confirmed authoritative for that field either way (freshly merged, or already populated). Removal makes re-running migration a safe no-op — the keys are simply absent on subsequent loads.
+
+**Fields added to the canonical record:** `goldenBox: { acknowledged }` (new). All other 7 shadow keys mapped onto fields that already existed in `DEFAULT_STATE` (`identity`, `connections`, `scorecard`, `passportStamp`, `flavorMemory`, `finalThird`) — confirmed by direct inspection of the context file before editing, not assumed from the audit.
+
+**Context actions added or updated:** `setGoldenBox` (new setter, added to both the `value` object and the exported callback list). No existing setters were removed or renamed — `setConnections`, `setScorecard`, `setPassportStamp`, `setFlavorMemory`, `setFinalThird`, `setIdentity` already existed and are now the *only* write path for their respective screens.
+
+**Pages converted away from shadow storage:** Identity, GoldenBox, Connections, Scorecard, FinalThird, FlavorMemory, PassportStamp, SessionComplete — all 8.
+
+**XP duplicate-prevention method:** unchanged — `GuestSessionContext.jsx`'s existing `awardSessionRewards(sessionId)` already guards with `if (prev.completedSteps.includes(sessionId)) return prev` before applying any XP/badge award. This mechanism lives outside the SmokeCraft journey context (it's part of `GuestSessionContext`, a separate, already-correct system) and was not modified — Package A verified it rather than rebuilding it, since duplicating a working idempotency guard would itself be a regression risk.
+
+**Tests added:** `verify-smokecraft-persistence-consolidation.mjs` — 9 suites / 31 checks covering: shadow-key migration (7 keys), migration idempotency, canonical-data-never-overwritten, live screen writes with zero new shadow-key writes (6 screens spot-checked), Back/refresh/dashboard-return/resume data preservation, XP duplicate-prevention, corrupt-storage fallback, all 17 previously-shadow-touched-adjacent screens still rendering, and SessionComplete's canonical-only reads.
+
+**Tests run:** `verify-smokecraft-persistence-consolidation.mjs` (new), `verify-interactions.mjs` (existing), `verify-all-smokecraft-assets.mjs` (existing), `final-acceptance.mjs` (existing), `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** |
+| `verify-interactions.mjs` | 19 passed, 3 failed — **identical to the pre-Package-A baseline**, confirmed by stashing this package's changes, rebuilding, and re-running against the locked HEAD (`feba62cd`); the 3 failures (PairingLab recommendation persistence, HumidorMatch cigar-preset buttons, CutToastLight option rendering) are pre-existing and untouched by this package |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — **byte-identical failure list to the pre-Package-A baseline** (`diff` confirmed no difference), verified the same way via stash-and-rebuild comparison |
+| `npm run build` | **green**, no errors |
+
+No test was skipped. Every pre-existing failure was independently reproduced against the locked baseline commit before being accepted as "not a regression" — this package does not claim success on any suite it did not actually run to completion.
+
+**Manual verification performed:** via the automated Playwright suite (equivalent to the required manual checklist, run against a real browser against the built app, not mocked): started a fresh journey, entered identity information, completed Golden Box acknowledgement, saved Connections selections, submitted Scorecard ratings, triggered Flavor Memory and Final Third selections, refreshed after each major step, navigated backward/forward, returned to the dashboard/entry screen, and confirmed all values remained present with zero XP duplication.
+
+**Known limitations:**
+- `LeafChallenge.jsx`'s separate `sessionStorage.leafChallengeResult` shadow key was identified but intentionally left unmigrated — it's outside this package's 8-screen mandate.
+- PassportStamp's `finalScore` now reads `journey.scorecard.overall`, which Scorecard only populates on save/continue (via `calcOverall()`) — a guest who never saves/continues past Scorecard will see `finalScore: null` on PassportStamp, matching the pre-existing behavior (the old shadow-key read of `submittedOverall` was effectively always null too, since nothing ever wrote that exact key).
+- Golden Box's canonical shape is `{ acknowledged: boolean }`, matching its pre-existing local shape exactly — no additional fields were speculatively added.
+
+**Intentionally deferred to later packages:** route corrections (Package B), CutToastLight split (Package C), all screen merges (Package D), all net-new Entry/Session-Prep/Results screens and their canonical fields (Packages E, G, H), supporting-module redesigns and dead-code/asset cleanup (Package I), accessibility pass (Package J).
+
 ### Package B — Route Corrections + Route Map Finalization
 - **Objective:** fix the 3 original route bugs (§15) AND implement whichever route-naming decision was locked in Package 0 (§14).
 - **Included files:** `App.jsx` (+ new route files for genuinely new screens, added as stubs in this package, filled in by later packages).

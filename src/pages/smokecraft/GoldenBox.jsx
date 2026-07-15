@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
@@ -11,7 +11,6 @@ const GOLD   = '#E9C176'
 const DARK   = '#0a0603'
 const BORDER = 'rgba(233,193,118,0.18)'
 const DIM    = 'rgba(229,226,225,0.55)'
-const LS_KEY = 'sc_golden_box_v1'
 
 const GOLDEN_BOX_PRINCIPLES = [
   { num: '01', title: 'Excellence in Every Draw',    body: 'Approach each cigar with intention. The ritual of preparation, lighting, and tasting is the experience itself.' },
@@ -21,23 +20,18 @@ const GOLDEN_BOX_PRINCIPLES = [
   { num: '05', title: 'Build Your Legacy',           body: 'Your SmokeCraft journey accumulates into a personal record of taste, discovery, and growth over time.' },
 ]
 
-function loadSaved() {
-  try {
-    const raw = localStorage.getItem(LS_KEY)
-    return raw ? JSON.parse(raw) : { acknowledged: false }
-  } catch { return { acknowledged: false } }
-}
-
 export default function GoldenBox() {
   const { awardSessionRewards } = useGuestSession()
-  const { journey } = useSmokeCraftJourney()
+  const { journey, setGoldenBox } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  const [acknowledged, setAcknowledged] = useState(() => loadSaved().acknowledged)
+  const [acknowledged, setAcknowledged] = useState(() => journey.goldenBox?.acknowledged ?? false)
+  const initialized = useRef(false)
 
   useEffect(() => {
-    try { localStorage.setItem(LS_KEY, JSON.stringify({ acknowledged })) } catch (_) {}
-  }, [acknowledged])
+    if (!initialized.current) { initialized.current = true; return }
+    setGoldenBox({ acknowledged })
+  }, [acknowledged]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleContinue() {
     if (!acknowledged) return

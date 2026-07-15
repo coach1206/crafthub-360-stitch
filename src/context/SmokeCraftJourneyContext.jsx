@@ -13,13 +13,30 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 
 const LS_KEY = 'sc_journey_v1'
-const STATE_VERSION = 2
+const STATE_VERSION = 3
+
+// Legacy shadow keys consolidated into this canonical record as of STATE_VERSION 3.
+// Kept here (rather than in each page) so migration logic has one authoritative list.
+const LEGACY_LOCAL_KEYS = {
+  identity: 'sc_identity_v1',
+  goldenBox: 'sc_golden_box_v1',
+  connections: 'sc_connections_v1',
+  scorecard: 'sc_scorecard_v1',
+  passportStamp: 'sc_passport_stamp_v1',
+}
+const LEGACY_SESSION_KEYS = {
+  flavorMemory: 'smokecraftFlavorMemory',
+  finalThird: 'smokecraftFinalThird',
+}
 
 const DEFAULT_STATE = {
   stateVersion: STATE_VERSION,
 
-  // Identity (mirrors sc_identity_v1 for cross-route reads)
+  // Identity (canonical — legacy sc_identity_v1 migrated in, then removed)
   identity: null, // { fullName, preferredName, email, birthDate, country, experienceLevel, focusArea }
+
+  // Golden Box acknowledgement (canonical — legacy sc_golden_box_v1 migrated in, then removed)
+  goldenBox: null, // { acknowledged }
 
   // Mentor selection
   mentor: null, // { id, name, origin, country }
@@ -57,26 +74,112 @@ const DEFAULT_STATE = {
   // Passport Stamp
   passportStamp: null, // { stamped: bool, stampedAt }
 
-  // Connections
-  connections: null, // { shareConsent, followUpConsent }
+  // Connections (canonical — legacy sc_connections_v1 migrated in, then removed)
+  connections: null, // { selected: string[] }
 
   // Session completion
   sessionCompletion: null, // { completedAt, xpTotal, rank }
 }
 
+function readLegacyLocal(key) {
+  try {
+    const raw = localStorage.getItem(key)
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+
+function readLegacySession(key) {
+  try {
+    const raw = sessionStorage.getItem(key)
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Migrates any remaining legacy shadow localStorage/sessionStorage keys into the
+ * canonical journey record, then removes those keys so they stop being written to.
+ *
+ * Rules:
+ *  - Canonical data always wins: a legacy value is only copied in when the
+ *    canonical field is still empty (null/undefined). Existing canonical data
+ *    is never overwritten by older shadow data.
+ *  - Idempotent: once a legacy key is merged it is deleted, so re-running this
+ *    function is a no-op for that key on every subsequent load.
+ *  - Legacy keys are removed once merged (or once confirmed already superseded
+ *    by existing canonical data), so pages can stop writing to them entirely.
+ */
+function migrateLegacyKeys(state) {
+  let next = state
+  let changed = false
+
+  const mergeLocal = (field, key, transform) => {
+    if (!next[field]) {
+      const legacy = readLegacyLocal(key)
+      if (legacy) {
+        next = { ...next, [field]: transform ? transform(legacy) : legacy }
+        changed = true
+      }
+    }
+    try {
+      if (localStorage.getItem(key) !== null) localStorage.removeItem(key)
+    } catch {}
+  }
+
+  const mergeSession = (field, key) => {
+    if (!next[field]) {
+      const legacy = readLegacySession(key)
+      if (legacy) {
+        next = { ...next, [field]: legacy }
+        changed = true
+      }
+    }
+    try {
+      if (sessionStorage.getItem(key) !== null) sessionStorage.removeItem(key)
+    } catch {}
+  }
+
+  mergeLocal('identity', LEGACY_LOCAL_KEYS.identity)
+  mergeLocal('goldenBox', LEGACY_LOCAL_KEYS.goldenBox)
+  mergeLocal('connections', LEGACY_LOCAL_KEYS.connections, (legacy) =>
+    Array.isArray(legacy) ? { selected: legacy } : legacy
+  )
+  mergeLocal('scorecard', LEGACY_LOCAL_KEYS.scorecard)
+  mergeLocal('passportStamp', LEGACY_LOCAL_KEYS.passportStamp)
+  mergeSession('flavorMemory', LEGACY_SESSION_KEYS.flavorMemory)
+  mergeSession('finalThird', LEGACY_SESSION_KEYS.finalThird)
+
+  return changed ? next : state
+}
+
 function loadFromStorage() {
+  let state
   try {
     const raw = localStorage.getItem(LS_KEY)
-    if (!raw) return { ...DEFAULT_STATE }
-    const parsed = JSON.parse(raw)
-    // Version migration: if stateVersion missing or old, merge with defaults
-    if (!parsed.stateVersion || parsed.stateVersion < 1) {
-      return { ...DEFAULT_STATE }
+    if (!raw) {
+      state = { ...DEFAULT_STATE }
+    } else {
+      const parsed = JSON.parse(raw)
+      // Version migration: if stateVersion missing, invalid, or old, fall back to defaults
+      if (!parsed || typeof parsed !== 'object' || !parsed.stateVersion || parsed.stateVersion < 1) {
+        state = { ...DEFAULT_STATE }
+      } else {
+        state = { ...DEFAULT_STATE, ...parsed, stateVersion: STATE_VERSION }
+      }
     }
-    return { ...DEFAULT_STATE, ...parsed, stateVersion: STATE_VERSION }
   } catch {
-    return { ...DEFAULT_STATE }
+    state = { ...DEFAULT_STATE }
   }
+
+  // Consolidate any remaining shadow-key data into the canonical record (idempotent).
+  const migrated = migrateLegacyKeys(state)
+  if (migrated !== state) {
+    saveToStorage(migrated)
+  }
+  return migrated
 }
 
 function saveToStorage(state) {
@@ -106,6 +209,10 @@ export function SmokeCraftJourneyProvider({ children }) {
 
   const setIdentity = useCallback((data) => {
     updateJourney({ identity: data })
+  }, [updateJourney])
+
+  const setGoldenBox = useCallback((data) => {
+    updateJourney({ goldenBox: data })
   }, [updateJourney])
 
   const setMentor = useCallback((mentor) => {
@@ -181,6 +288,7 @@ export function SmokeCraftJourneyProvider({ children }) {
   const value = {
     journey,
     setIdentity,
+    setGoldenBox,
     setMentor,
     setFormat,
     setSeedSoil,

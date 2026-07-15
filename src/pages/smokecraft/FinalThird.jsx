@@ -101,10 +101,6 @@ export default function FinalThird() {
     setFinalThirdTasting(payload)
     setFinalThird(payload)
 
-    try {
-      sessionStorage.setItem('smokecraftFinalThird', JSON.stringify(payload))
-    } catch {}
-
     awardSessionRewards('final-third')
     navigate('/smokecraft/scorecard')
   }

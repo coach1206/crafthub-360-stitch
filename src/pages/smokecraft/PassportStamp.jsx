@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { getRankFromXP } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
@@ -10,29 +11,11 @@ import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 const NAT_W = 1448
 const NAT_H = 1086
 
-const LS_KEY = 'sc_passport_stamp_v1'
-
 const REQUIRED_STEPS = [
   'humidor-match', 'first-third', 'second-third',
   'flavor-memory', 'final-third', 'scorecard', 'final-review',
 ]
 
-function loadLocal() {
-  try {
-    const raw = localStorage.getItem(LS_KEY)
-    return raw ? JSON.parse(raw) : null
-  } catch { return null }
-}
-function saveLocal(data) {
-  try { localStorage.setItem(LS_KEY, JSON.stringify(data)) } catch {}
-}
-
-function readScorecardId() {
-  try { return JSON.parse(localStorage.getItem('sc_scorecard_v1') || 'null')?.submittedScorecardId || null } catch { return null }
-}
-function readFinalScore() {
-  try { return JSON.parse(localStorage.getItem('sc_scorecard_v1') || 'null')?.submittedOverall ?? null } catch { return null }
-}
 function readCigarName(smokeCraft) {
   const rec = smokeCraft?.selectedHumidorRecommendation
   if (rec?.selectedCigarName) return rec.selectedCigarName
@@ -48,19 +31,9 @@ function readMentorNames(smokeCraft) {
   if (!m) return []
   return [m.name || m.id].filter(Boolean)
 }
-function readFavoriteFlavors() {
-  try {
-    const fm = JSON.parse(sessionStorage.getItem('smokecraftFlavorMemory') || 'null')
-    if (fm?.selectedFlavors?.length) return fm.selectedFlavors.slice(0, 6)
-  } catch {}
-  return []
-}
-function readSessionDuration() {
-  try { return JSON.parse(localStorage.getItem('sc_scorecard_v1') || 'null')?.meta?.durationMinutes ?? null } catch { return null }
-}
-
 export default function PassportStamp() {
   const { awardSessionRewards, session } = useGuestSession()
+  const { journey, setPassportStamp } = useSmokeCraftJourney()
   const navigate = useNavigate()
   const claimFiredRef = useRef(false)
 
@@ -69,13 +42,13 @@ export default function PassportStamp() {
   const currentXP      = session?.xp || 0
   const currentRank    = session?.rank || getRankFromXP(currentXP).name
 
-  const scorecardId     = readScorecardId()
-  const finalScore      = readFinalScore()
+  const scorecardId     = journey.scorecard?.submittedScorecardId || null
+  const finalScore      = journey.scorecard?.overall ?? null
   const cigarName       = readCigarName(smokeCraft)
   const pairingName     = readPairingName(smokeCraft)
   const mentorNames     = readMentorNames(smokeCraft)
-  const favoriteFlavors = readFavoriteFlavors()
-  const durationMinutes = readSessionDuration()
+  const favoriteFlavors = journey.flavorMemory?.selectedFlavors?.slice(0, 6) || []
+  const durationMinutes = journey.scorecard?.meta?.durationMinutes ?? null
 
   const totalXP      = currentXP
   const stampCount   = smokeCraft?.completedSessions?.length || 0
@@ -85,20 +58,14 @@ export default function PassportStamp() {
   const hasScorecard = Boolean(scorecardId)
   const isEligible  = missing.length === 0 && hasScorecard
 
-  const [claimStatus, setClaimStatus] = useState('idle')
-  const [claimedStamp, setClaimedStamp] = useState(null)
+  // Restore persisted claim from canonical journey state
+  const [claimStatus, setClaimStatus] = useState(() =>
+    journey.passportStamp?.claimed && journey.passportStamp?.stamp ? 'claimed' : 'idle'
+  )
+  const [claimedStamp, setClaimedStamp] = useState(() => journey.passportStamp?.stamp || null)
   const [done, setDone] = useState(false)
 
   const sessionId = session?.sessionId || 'local-session'
-
-  // Restore persisted claim
-  useEffect(() => {
-    const saved = loadLocal()
-    if (saved?.claimed && saved?.stamp) {
-      setClaimStatus('claimed')
-      setClaimedStamp(saved.stamp)
-    }
-  }, [])
 
   // Check server for duplicate
   useEffect(() => {
@@ -109,11 +76,11 @@ export default function PassportStamp() {
         if (data?.claimed && data?.stamp) {
           setClaimStatus('duplicate')
           setClaimedStamp(data.stamp)
-          saveLocal({ claimed: true, stamp: data.stamp })
+          setPassportStamp({ claimed: true, stamp: data.stamp })
         }
       })
       .catch(() => {})
-  }, [sessionId, claimStatus])
+  }, [sessionId, claimStatus]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleClaimStamp = useCallback(async () => {
     if (claimFiredRef.current || !isEligible) return
@@ -142,19 +109,19 @@ export default function PassportStamp() {
       if (r.status === 409 || data.duplicate) {
         setClaimStatus('duplicate')
         setClaimedStamp(data.stamp)
-        saveLocal({ claimed: true, stamp: data.stamp })
+        setPassportStamp({ claimed: true, stamp: data.stamp })
         return
       }
       if (!r.ok) { setClaimStatus('error'); claimFiredRef.current = false; return }
       setClaimStatus('claimed')
       setClaimedStamp(data.stamp)
-      saveLocal({ claimed: true, stamp: data.stamp })
+      setPassportStamp({ claimed: true, stamp: data.stamp })
       awardSessionRewards('passport-stamp')
     } catch {
       setClaimStatus('offline')
       claimFiredRef.current = false
     }
-  }, [isEligible, claimStatus, sessionId, session, completedSteps, scorecardId, cigarName, pairingName, mentorNames, finalScore, totalXP, currentRank, stampCount, journeyCount, favoriteFlavors, durationMinutes, awardSessionRewards]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isEligible, claimStatus, sessionId, session, completedSteps, scorecardId, cigarName, pairingName, mentorNames, finalScore, totalXP, currentRank, stampCount, journeyCount, favoriteFlavors, durationMinutes, awardSessionRewards, setPassportStamp]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleContinue() {
     if (done) return

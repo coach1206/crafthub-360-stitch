@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -10,8 +11,6 @@ const NAT_W = 1672
 const NAT_H = 941
 
 const GOLD = '#E9C176'
-
-const LS_KEY = 'sc_connections_v1'
 
 const CONNECTION_OPTIONS = [
   { id: 'instagram', label: 'Instagram',   x:  3.0, y: 65.0, w: 12.5, h: 14.0 },
@@ -23,25 +22,19 @@ const CONNECTION_OPTIONS = [
   { id: 'passport',  label: 'NoveePassport', x: 84.0, y: 65.0, w: 12.5, h: 14.0 },
 ]
 
-function loadLocal() {
-  try { return new Set(JSON.parse(localStorage.getItem(LS_KEY) || '[]')) } catch { return new Set() }
-}
-function saveLocal(set) {
-  try { localStorage.setItem(LS_KEY, JSON.stringify([...set])) } catch {}
-}
-
 export default function Connections() {
   const { awardSessionRewards } = useGuestSession()
+  const { journey, setConnections } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  const [selected, setSelected] = useState(loadLocal)
+  const [selected, setSelected] = useState(() => new Set(journey.connections?.selected || []))
 
   function toggle(id) {
     triggerHaptic('light')
     setSelected(prev => {
       const next = new Set(prev)
       next.has(id) ? next.delete(id) : next.add(id)
-      saveLocal(next)
+      setConnections({ selected: [...next] })
       return next
     })
   }
