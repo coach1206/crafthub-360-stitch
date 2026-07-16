@@ -192,6 +192,30 @@ export const SESSION_REWARDS = {
     sessionBadges: [SMOKECRAFT_BADGES.NEXT_SEASON],
     unlockSignal: 'journey-complete',
   },
+
+  // ── Package L additions — new 27-session spine ids (S25 Rewards and XP,
+  // S26 Achievements) ─────────────────────────────────────────────────────
+  // sessionNumber/visit below reuse the OLD 24-session/8-visit numbering
+  // scheme already used throughout this file (unused elsewhere — purely
+  // descriptive, see file header) and are not meaningful outside this table.
+  // These two entries exist so awardSessionRewards('rewards' |
+  // 'achievements') can actually mark the sessions complete: without an
+  // entry here, awardSessionRewards() is a documented no-op (see its
+  // `if (!rewards) return` guard in GuestSessionContext.jsx), which would
+  // otherwise leave S25/S26 permanently uncompletable outside demo mode.
+  // No new badges invented — modest completion XP only, matching the value
+  // already used for comparable filler sessions elsewhere in this table
+  // (e.g. 'request-purchase', 'connections').
+  rewards: {
+    sessionNumber: 25, visit: 8, xp: 50,
+    sessionBadges: [],
+    unlockSignal: 'achievements',
+  },
+  achievements: {
+    sessionNumber: 26, visit: 8, xp: 50,
+    sessionBadges: [],
+    unlockSignal: 'session-complete',
+  },
 }
 
 // ── Helper: session rewards lookup ────────────────────────────────────────────

@@ -147,6 +147,7 @@ import SmokeCraftChallenge from './pages/smokecraft/SmokeCraftChallenge.jsx'
 import SecondHumidorMatch  from './pages/smokecraft/SecondHumidorMatch.jsx'
 import MiniTastingRound    from './pages/smokecraft/MiniTastingRound.jsx'
 import FinalReview         from './pages/smokecraft/FinalReview.jsx'
+import Rewards             from './pages/smokecraft/Rewards.jsx'
 import VisitLockGuard      from './components/smokecraft/VisitLockGuard.jsx'
 import SmokeCraftSessionGuard from './components/smokecraft/SmokeCraftSessionGuard.jsx'
 import { SmokeCraftProgressProvider } from './context/SmokeCraftProgressContext.jsx'
@@ -428,6 +429,11 @@ export default function App() {
 
                 {/* S24 — final-review (Completed Scorecard) */}
                 <Route path="final-review"          element={<SmokeCraftSessionGuard sessionNumber={24}><FinalReview /></SmokeCraftSessionGuard>} />
+
+                {/* S25 Rewards and XP / S26 Achievements — one shared route/component
+                    (see session.js `sharedComponent`); S26's own gate is enforced
+                    inside Rewards.jsx (same route, can't have two <Route> entries). */}
+                <Route path="rewards"          element={<SmokeCraftSessionGuard sessionNumber={25}><Rewards /></SmokeCraftSessionGuard>} />
 
                 {/* S25/S26 — Rewards and XP / Achievements are honestly deferred (no
                     screen exists, no route registered) per Package J's deferred-session

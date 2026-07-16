@@ -34,7 +34,9 @@ async function nav(page, path) {
   await page.waitForTimeout(500)
 }
 
-// The 19 implemented spine routes, in locked S-number order (Package K added S21/S22).
+// The 20 implemented spine routes, in locked S-number order (Package K added
+// S21/S22; Package L added S25, sharing /smokecraft/rewards with S26
+// Achievements — S26 has no separate route, so it isn't a separate entry here).
 const IMPLEMENTED_SPINE = [
   { session: 2,  route: '/smokecraft/humidor-match' },
   { session: 3,  route: '/smokecraft/meet-your-cigar' },
@@ -54,16 +56,18 @@ const IMPLEMENTED_SPINE = [
   { session: 22, route: '/smokecraft/pairing-recommendations' },
   { session: 23, route: '/smokecraft/passport-stamp' },
   { session: 24, route: '/smokecraft/final-review' },
+  { session: 25, route: '/smokecraft/rewards' },
   { session: 27, route: '/smokecraft/session-complete' },
 ]
 
 // Deterministic prerequisite chain (completedSteps ids) in spine order.
-// ai-summary/pairing-recommendations (S21/S22) added — Package K implemented
-// them as real spine sessions, no longer auto-skipped stand-ins.
+// ai-summary/pairing-recommendations (S21/S22, Package K) and rewards/
+// achievements (S25/S26, Package L) added — all real spine sessions now,
+// no longer auto-skipped stand-ins.
 const CHAIN = ['entry', 'humidor-match', 'meet-your-cigar', 'terroir', 'format', 'cut-toast-light',
   'lighting-tutorial', 'first-third', 'flavor-memory', 'pairing-lab', 'second-third',
   'mentor-commentary', 'knowledge-drop', 'final-third', 'scorecard', 'ai-summary',
-  'pairing-recommendations', 'passport-stamp', 'final-review']
+  'pairing-recommendations', 'passport-stamp', 'final-review', 'rewards', 'achievements']
 
 /** completedSteps needed so `route` is the guest's legitimate current session. */
 const ROUTE_TO_ID = {
@@ -85,6 +89,7 @@ const ROUTE_TO_ID = {
   '/smokecraft/pairing-recommendations': 'pairing-recommendations',
   '/smokecraft/passport-stamp': 'passport-stamp',
   '/smokecraft/final-review': 'final-review',
+  '/smokecraft/rewards': 'rewards',
   '/smokecraft/session-complete': 'session-complete',
 }
 
@@ -108,7 +113,7 @@ async function run() {
     await nav(page, route)
     if (new URL(page.url()).pathname !== route) { allSpineResolve = false; console.error(`    ${route} redirected to ${page.url()}`) }
   }
-  allSpineResolve ? ok('All 19 implemented numbered-spine routes resolve (demo mode)') : bad('A spine route failed to resolve to itself')
+  allSpineResolve ? ok('All 20 implemented numbered-spine routes resolve (demo mode)') : bad('A spine route failed to resolve to itself')
 
   // Supporting modules resolve too but are reachable independent of spine sequence gates.
   const supportingRoutes = ['/smokecraft/golden-box', '/smokecraft/mentor-selection', '/smokecraft/wrapper-strength',
@@ -281,31 +286,24 @@ async function run() {
     await nav(page, route)
     if (new URL(page.url()).pathname !== route) { noDeadEnd = false; console.error(`    dead end approaching ${route}`) }
   }
-  noDeadEnd ? ok('Walking the full 19-route implemented chain with exact prerequisites hits no dead end') : bad('A dead end was found walking the implemented chain')
+  noDeadEnd ? ok('Walking the full 20-route implemented chain with exact prerequisites hits no dead end') : bad('A dead end was found walking the implemented chain')
 
   // ── 25. Missing future sessions are honestly deferred ──
   console.log('\n── Suite 25: Deferred sessions honestly registered ──')
   // Package K implemented AI Summary (S21) and Personalized Pairing
-  // Recommendations (S22) — they are real, routed screens now, not deferred.
-  // Only Rewards (S25) and Achievements (S26) remain honestly deferred.
-  await seedGuest(page, { demoMode: true })
-  const deferredRoutes = ['/smokecraft/rewards', '/smokecraft/achievements']
-  let noneFabricated = true
-  for (const route of deferredRoutes) {
-    await nav(page, route)
-    // A truly unregistered route falls through to the catch-all/404 or redirects elsewhere — either way, it must not render as if it were a real, complete session screen.
-    const hasNavBar = await page.$('div[role="navigation"]')
-    if (hasNavBar && new URL(page.url()).pathname === route) { noneFabricated = false; console.error(`    ${route} rendered as if implemented`) }
-  }
-  noneFabricated
-    ? ok('Rewards and Achievements have no fabricated screen — honestly deferred')
-    : bad('A deferred session route rendered as if it were a real implemented screen')
-  // AI Summary and Pairing Recommendations, by contrast, ARE now real implemented screens.
+  // Recommendations (S22); Package L implemented Rewards and XP (S25) and
+  // Achievements (S26, sharing /smokecraft/rewards). Only S1 Welcome remains
+  // an honestly deferred stand-in (reuses the Entry/Launch screen).
   await seedGuest(page, { completedSteps: chainUpTo('/smokecraft/scorecard'), demoMode: false })
   await nav(page, '/smokecraft/ai-summary')
   new URL(page.url()).pathname === '/smokecraft/ai-summary'
     ? ok('AI Summary (S21) is a real implemented screen (Package K)')
     : bad(`AI Summary did not resolve as implemented, landed on ${page.url()}`)
+  await seedGuest(page, { completedSteps: chainUpTo('/smokecraft/rewards'), demoMode: false })
+  await nav(page, '/smokecraft/rewards')
+  new URL(page.url()).pathname === '/smokecraft/rewards'
+    ? ok('Rewards and XP (S25) is a real implemented screen (Package L)')
+    : bad(`Rewards did not resolve as implemented, landed on ${page.url()}`)
   // Passport Stamp (S23) remains reachable once S21/S22 (now implemented) are complete.
   await seedGuest(page, { completedSteps: chainUpTo('/smokecraft/passport-stamp'), demoMode: false })
   await nav(page, '/smokecraft/passport-stamp')

@@ -100,6 +100,15 @@ const DEFAULT_STATE = {
   // pairing engine (src/utils/pairingEngine.js), not a separate/AI system.
   pairingRecommendations: null, // { engineInput, primary, alternates: [], savedRecommendation, completedAt, generatedAt }
 
+  // Rewards and XP (S25) — shares /smokecraft/rewards with Achievements (S26).
+  // XP itself is NOT duplicated here — session.xp (GuestSessionContext) is the
+  // one authoritative XP ledger; this field stores only the claim/view state
+  // that is specific to the Rewards screen.
+  rewards: null, // { activeMode, claimedTiers: [], viewedAt, completedAt, updatedAt }
+
+  // Achievements (S26) — shares /smokecraft/rewards with Rewards and XP (S25).
+  achievements: null, // { earned: { [id]: { earnedAt } }, claimed: [], completedAt, updatedAt }
+
   // Final Review
   finalReview: null, // { reviewNotes, editRequested }
 
@@ -327,6 +336,14 @@ export function SmokeCraftJourneyProvider({ children }) {
     updateJourney({ pairingRecommendations: data })
   }, [updateJourney])
 
+  const setRewards = useCallback((data) => {
+    updateJourney({ rewards: data })
+  }, [updateJourney])
+
+  const setAchievements = useCallback((data) => {
+    updateJourney({ achievements: data })
+  }, [updateJourney])
+
   const setPassportStamp = useCallback((data) => {
     updateJourney({ passportStamp: data })
   }, [updateJourney])
@@ -368,6 +385,8 @@ export function SmokeCraftJourneyProvider({ children }) {
     setFinalReview,
     setAiSummary,
     setPairingRecommendations,
+    setRewards,
+    setAchievements,
     setPassportStamp,
     setConnections,
     setSessionCompletion,

@@ -43,7 +43,7 @@ export default function FinalReview() {
 
   function handleContinue() {
     awardSessionRewards('final-review')
-    navigate('/smokecraft/session-complete')
+    navigate('/smokecraft/rewards')
   }
 
   return (
@@ -93,7 +93,7 @@ export default function FinalReview() {
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
-        primary="Continue to Recommended Next Journey →"
+        primary="Continue to Rewards →"
         onPrimary={handleContinue}
       />
     </>
