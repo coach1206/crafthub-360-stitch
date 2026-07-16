@@ -41,7 +41,7 @@ export default function LockedSmokeCraftScreen({ sessionNumber }) {
       {/* Full-screen asset image */}
       <img
         src={imgSrc}
-        alt={`Locked — Visit ${visitNumber} of ${TOTAL_VISITS}: ${visitTitle}`}
+        alt={`Locked — Phase ${visitNumber} of ${TOTAL_VISITS}: ${visitTitle}`}
         style={{
           display: 'block',
           maxWidth: '100%',
@@ -82,7 +82,7 @@ export default function LockedSmokeCraftScreen({ sessionNumber }) {
             pointerEvents: 'none',
           }}
         >
-          Visit {visitNumber} of {TOTAL_VISITS} — {visitTitle}
+          Phase {visitNumber} of {TOTAL_VISITS} — {visitTitle}
         </p>
 
         {lockedReason && (

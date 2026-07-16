@@ -149,7 +149,7 @@ export default function LightingTutorial() {
       lightingTutorialCompleted: true,
       lightingTutorialCompletedAt: Date.now(),
     })
-    awardSessionRewards('cut-toast-light')
+    awardSessionRewards('lighting-tutorial')
     navigate('/smokecraft/first-third')
   }
 

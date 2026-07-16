@@ -128,7 +128,7 @@ export default function PassportStamp() {
     setDone(true)
     const isClaimed = claimStatus === 'claimed' || claimStatus === 'duplicate'
     if (!isClaimed) awardSessionRewards('passport-stamp')
-    navigate('/smokecraft/connections')
+    navigate('/smokecraft/final-review')
   }
 
   // Auto-claim when eligible and page loads
@@ -148,10 +148,10 @@ export default function PassportStamp() {
       />
 
       <SmokeCraftNavBar
-        primary={done ? 'Continuing…' : 'Continue to Connections →'}
+        primary={done ? 'Continuing…' : 'Continue to Completed Scorecard →'}
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate(-1)}
+        onSecondary={() => navigate('/smokecraft/scorecard')}
       />
     </>
   )

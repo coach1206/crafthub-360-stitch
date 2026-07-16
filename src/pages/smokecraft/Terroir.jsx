@@ -61,12 +61,12 @@ export default function Terroir() {
   const { journey, setTerroir } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  // Mentor Selection (currently standing in for the not-yet-built Meet Your
-  // Cigar) must be completed first — mirrors the Identity/Enroll and
-  // cut-toast-light/lighting-tutorial sequential-gate pattern.
+  // Meet Your Cigar (S3, built in Package I) must be completed first — the
+  // true locked predecessor per Package J's spine, superseding Mentor
+  // Selection which Package H used only as a stand-in.
   useEffect(() => {
-    if (!isDemoMode && !session.completedSteps.includes('mentor')) {
-      navigate('/smokecraft/mentor-selection', { replace: true })
+    if (!isDemoMode && !session.completedSteps.includes('meet-your-cigar')) {
+      navigate('/smokecraft/meet-your-cigar', { replace: true })
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

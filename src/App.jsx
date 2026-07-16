@@ -312,8 +312,8 @@ export default function App() {
                 {/* S1 — always unlocked, no guard */}
                 <Route index element={<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraft /></SmokeCraftSessionGuard>} />
 
-                {/* S2 — profile/enroll */}
-                <Route path="enroll"           element={<SmokeCraftSessionGuard sessionNumber={2}><Enroll /></SmokeCraftSessionGuard>} />
+                {/* E2 — Sign In / Guest Mode (entry-layer, outside the 27-session spine) */}
+                <Route path="enroll"           element={<SmokeCraftSessionGuard requires="entry"><Enroll /></SmokeCraftSessionGuard>} />
                 <Route path="intake"           element={<Navigate to="/smokecraft/enroll" replace />} />
                 <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
                 {/* profile → identity (alias per spec) */}
@@ -324,119 +324,115 @@ export default function App() {
                 <Route path="light"            element={<Navigate to="/smokecraft/cut-toast-light" replace />} />
                 <Route path="complete"         element={<Navigate to="/smokecraft/session-complete" replace />} />
 
-                {/* S3 — golden-box (aliases: gold-box, golden-box) */}
+                {/* Golden Box — supporting module (outside the 27-session spine), reachable from S1 */}
                 <Route path="golden-box">
-                  <Route index             element={<SmokeCraftSessionGuard sessionNumber={3}><GoldenBox /></SmokeCraftSessionGuard>} />
+                  <Route index             element={<SmokeCraftSessionGuard requires="entry"><GoldenBox /></SmokeCraftSessionGuard>} />
                   <Route path="status"     element={<GoldenBoxStatus />} />
                 </Route>
                 {/* gold-box → golden-box alias per spec */}
                 <Route path="gold-box"       element={<Navigate to="/smokecraft/golden-box" replace />} />
 
-                {/* S4 — mentor-selection */}
+                {/* Mentor Selection — supporting module (outside the 27-session spine).
+                    Not yet folded into Meet Your Cigar (S3) as an internal tab per the
+                    locked plan's longer-term note — that consolidation is a screen
+                    redesign, explicitly out of scope for Package J. */}
                 <Route path="art"            element={<Art />} />
-                <Route path="mentor-selection" element={<SmokeCraftSessionGuard sessionNumber={4}><Mentor /></SmokeCraftSessionGuard>} />
+                <Route path="mentor-selection" element={<SmokeCraftSessionGuard requires="entry"><Mentor /></SmokeCraftSessionGuard>} />
                 <Route path="mentor"         element={<Navigate to="/smokecraft/mentor-selection" replace />} />
 
-                {/* Terroir (locked S4) — placed immediately after mentor-selection, which
-                    currently stands in for the not-yet-built Meet Your Cigar (locked S3)
-                    per the rebuild plan's own merge note ("current Mentor-selection (S4)
-                    folds in here as a tab"). Shares mentor-selection's checkpoint number
-                    and additionally requires mentor-selection to be complete (enforced in
-                    the screen itself, mirroring the cut-toast-light/lighting-tutorial
-                    interstitial pattern from Package E). */}
+                {/* S2 — humidor-match (Choose Your Cigar) */}
+                <Route path="humidor-match"    element={<SmokeCraftSessionGuard sessionNumber={2}><HumidorMatch /></SmokeCraftSessionGuard>} />
+
+                {/* S3 — meet-your-cigar (Meet Your Cigar) */}
+                <Route path="meet-your-cigar"  element={<SmokeCraftSessionGuard sessionNumber={3}><MeetYourCigar /></SmokeCraftSessionGuard>} />
+
+                {/* S4 — terroir (Terroir) */}
                 <Route path="terroir"        element={<SmokeCraftSessionGuard sessionNumber={4}><Terroir /></SmokeCraftSessionGuard>} />
 
-                {/* S5 — format / shape-size-burn */}
+                {/* S5 — format (Construction Inspection) */}
                 <Route path="format"         element={<SmokeCraftSessionGuard sessionNumber={5}><Format /></SmokeCraftSessionGuard>} />
                 {/* shape-size-burn is a backward-compatible alias for format, not an independent route */}
                 <Route path="shape-size-burn" element={<Navigate to="/smokecraft/format" replace />} />
                 <Route path="cigar-gauge-guide" element={<SmokeCraftSessionGuard sessionNumber={5}><CigarGaugeGuide /></SmokeCraftSessionGuard>} />
 
-                {/* S6 — wrapper-strength */}
-                <Route path="wrapper-strength" element={<SmokeCraftSessionGuard sessionNumber={6}><WrapperStrength /></SmokeCraftSessionGuard>} />
+                {/* Wrapper/Strength Education — supporting module, reachable from S5 */}
+                <Route path="wrapper-strength" element={<SmokeCraftSessionGuard requires="format"><WrapperStrength /></SmokeCraftSessionGuard>} />
 
-                {/* S7 — seed-soil */}
-                <Route path="seed-soil"        element={<SmokeCraftSessionGuard sessionNumber={7}><SeedSoil /></SmokeCraftSessionGuard>} />
+                {/* Seed & Soil — supporting module. Package 0 eventually merges this
+                    content into Terroir (S4) as a tab; that merge is a screen redesign,
+                    explicitly out of scope for Package J, so the route remains standalone. */}
+                <Route path="seed-soil"        element={<SmokeCraftSessionGuard requires="format"><SeedSoil /></SmokeCraftSessionGuard>} />
 
-                {/* S8 — pairing-lab */}
-                <Route path="pairing-lab"      element={<SmokeCraftSessionGuard sessionNumber={8}><PairingLab /></SmokeCraftSessionGuard>} />
+                {/* S6 — cut-toast-light (Choose Your Cut) */}
+                <Route path="cut-toast-light"  element={<SmokeCraftSessionGuard sessionNumber={6}><CutToastLight /></SmokeCraftSessionGuard>} />
+                {/* S7 — lighting-tutorial (Lighting Tutorial) */}
+                <Route path="lighting-tutorial" element={<SmokeCraftSessionGuard sessionNumber={7}><LightingTutorial /></SmokeCraftSessionGuard>} />
 
-                {/* S9 — humidor-match (Choose Your Cigar) */}
-                <Route path="humidor-match"    element={<SmokeCraftSessionGuard sessionNumber={9}><HumidorMatch /></SmokeCraftSessionGuard>} />
+                {/* S8/S9 — first-third (First Draw / Flavor Discovery, merged — see session.js) */}
+                <Route path="first-third"      element={<SmokeCraftSessionGuard sessionNumber={8}><FirstThird /></SmokeCraftSessionGuard>} />
 
-                {/* Meet Your Cigar (locked S3) — placed immediately after humidor-match
-                    (Choose Your Cigar), its true authoritative predecessor per Package 0.
-                    Shares humidor-match's checkpoint number and additionally requires
-                    humidor-match to be complete (enforced in the screen itself, mirroring
-                    the cut-toast-light/lighting-tutorial interstitial pattern). */}
-                <Route path="meet-your-cigar"  element={<SmokeCraftSessionGuard sessionNumber={9}><MeetYourCigar /></SmokeCraftSessionGuard>} />
+                {/* S10 — flavor-memory (Flavor Memory Exercise) */}
+                <Route path="flavor-memory"    element={<SmokeCraftSessionGuard sessionNumber={10}><FlavorMemory /></SmokeCraftSessionGuard>} />
 
-                {/* S10 — request-purchase */}
-                <Route path="request-purchase" element={<SmokeCraftSessionGuard sessionNumber={10}><RequestPurchase /></SmokeCraftSessionGuard>} />
+                {/* S11 — pairing-lab (Suggested Pairings) */}
+                <Route path="pairing-lab"      element={<SmokeCraftSessionGuard sessionNumber={11}><PairingLab /></SmokeCraftSessionGuard>} />
 
-                {/* S11 — cut-toast-light (Choose Your Cut) */}
-                <Route path="cut-toast-light"  element={<SmokeCraftSessionGuard sessionNumber={11}><CutToastLight /></SmokeCraftSessionGuard>} />
-                {/* Lighting Tutorial — placed immediately after cut-toast-light; shares its
-                    session checkpoint and additionally requires cut-toast-light to be complete
-                    (enforced in the screen itself, mirroring the Identity/Enroll gate pattern). */}
-                <Route path="lighting-tutorial" element={<SmokeCraftSessionGuard sessionNumber={11}><LightingTutorial /></SmokeCraftSessionGuard>} />
+                {/* Request/Purchase — supporting module (an embedded drawer per the
+                    locked plan; kept as a standalone route since folding it into S2 as
+                    a drawer is a screen redesign, out of scope for Package J) */}
+                <Route path="request-purchase" element={<SmokeCraftSessionGuard requires="humidor-match"><RequestPurchase /></SmokeCraftSessionGuard>} />
 
-                {/* S12 — first-third */}
-                <Route path="first-third"      element={<SmokeCraftSessionGuard sessionNumber={12}><FirstThird /></SmokeCraftSessionGuard>} />
+                {/* S12/S13 — second-third (Flavor Evolution / Construction Check, merged — see session.js) */}
+                <Route path="second-third"     element={<SmokeCraftSessionGuard sessionNumber={12}><SecondThird /></SmokeCraftSessionGuard>} />
 
-                {/* S13 — second-third (Construction Check / Flavor Evolution) */}
-                <Route path="second-third"     element={<SmokeCraftSessionGuard sessionNumber={13}><SecondThird /></SmokeCraftSessionGuard>} />
+                {/* S14 — mentor-commentary (Mentor Commentary) */}
+                <Route path="mentor-commentary" element={<SmokeCraftSessionGuard sessionNumber={14}><MentorCommentary /></SmokeCraftSessionGuard>} />
 
-                {/* Mentor Commentary (locked S14) — placed immediately after second-third
-                    (Construction Check / Flavor Evolution), its true authoritative
-                    predecessor per Package 0. Shares second-third's checkpoint number and
-                    additionally requires second-third to be complete (enforced in the
-                    screen itself, mirroring the cut-toast-light/lighting-tutorial pattern). */}
-                <Route path="mentor-commentary" element={<SmokeCraftSessionGuard sessionNumber={13}><MentorCommentary /></SmokeCraftSessionGuard>} />
+                {/* S15 — knowledge-drop (Knowledge Drop) */}
+                <Route path="knowledge-drop"   element={<SmokeCraftSessionGuard sessionNumber={15}><KnowledgeDrop /></SmokeCraftSessionGuard>} />
 
-                {/* Knowledge Drop (locked S15) — now placed immediately after Mentor
-                    Commentary (locked S14), its true authoritative predecessor. Guard
-                    checkpoint moved from 15 to 13 (shared with second-third/Mentor
-                    Commentary) since Mentor Commentary — not flavor-memory — is now its
-                    real prerequisite; the screen's own internal gate (updated from
-                    'flavor-memory' to 'mentor-commentary') enforces the true order. */}
-                <Route path="knowledge-drop"   element={<SmokeCraftSessionGuard sessionNumber={13}><KnowledgeDrop /></SmokeCraftSessionGuard>} />
+                {/* S16/S17/S18 — final-third (Flavor Finish / Strength Progression / Overall Experience Notes, merged — see session.js) */}
+                <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={16}><FinalThird /></SmokeCraftSessionGuard>} />
 
-                {/* S14 — flavor-memory */}
-                <Route path="flavor-memory"    element={<SmokeCraftSessionGuard sessionNumber={14}><FlavorMemory /></SmokeCraftSessionGuard>} />
+                {/* S19/S20 — scorecard (Rate Every Category / Personal Notes, merged — see session.js) */}
+                <Route path="scorecard"        element={<SmokeCraftSessionGuard sessionNumber={19}><Scorecard /></SmokeCraftSessionGuard>} />
 
-                {/* S15 — final-third */}
-                <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={15}><FinalThird /></SmokeCraftSessionGuard>} />
-
-                {/* S16 — scorecard */}
-                <Route path="scorecard"        element={<SmokeCraftSessionGuard sessionNumber={16}><Scorecard /></SmokeCraftSessionGuard>} />
-
-                {/* S17 — smokecraft-challenge (alias: challenge) */}
-                <Route path="smokecraft-challenge"  element={<SmokeCraftSessionGuard sessionNumber={17}><SmokeCraftChallenge /></SmokeCraftSessionGuard>} />
+                {/* SmokeCraft Challenge — supporting module, reachable from S19/S20 */}
+                <Route path="smokecraft-challenge"  element={<SmokeCraftSessionGuard requires="scorecard"><SmokeCraftChallenge /></SmokeCraftSessionGuard>} />
                 {/* challenge now points to smokecraft-challenge per spec (not leaf-challenge) */}
                 <Route path="challenge"        element={<Navigate to="/smokecraft/smokecraft-challenge" replace />} />
 
-                {/* S18 — second-humidor-match */}
-                <Route path="second-humidor-match"  element={<SmokeCraftSessionGuard sessionNumber={18}><SecondHumidorMatch /></SmokeCraftSessionGuard>} />
+                {/* Second Humidor Match — supporting module, reachable from S19/S20 */}
+                <Route path="second-humidor-match"  element={<SmokeCraftSessionGuard requires="scorecard"><SecondHumidorMatch /></SmokeCraftSessionGuard>} />
 
-                {/* S19 — mini-tasting (alias: mini-tasting-round per spec) */}
-                <Route path="mini-tasting"          element={<SmokeCraftSessionGuard sessionNumber={19}><MiniTastingRound /></SmokeCraftSessionGuard>} />
+                {/* Mini Tasting Round — supporting module, reachable from S19/S20 */}
+                <Route path="mini-tasting"          element={<SmokeCraftSessionGuard requires="scorecard"><MiniTastingRound /></SmokeCraftSessionGuard>} />
                 <Route path="mini-tasting-round"    element={<Navigate to="/smokecraft/mini-tasting" replace />} />
 
-                {/* S20 — final-review */}
-                <Route path="final-review"          element={<SmokeCraftSessionGuard sessionNumber={20}><FinalReview /></SmokeCraftSessionGuard>} />
+                {/* S21/S22 — AI Summary / Personalized Pairing Recommendations are
+                    honestly deferred (no screen exists, no route registered) per
+                    Package J's deferred-session rule — explicitly not built this
+                    package. isSessionUnlocked() skips them automatically so S23/S24
+                    remain reachable; see session.js `implemented: false`. */}
 
-                {/* S21 — passport-stamp (locked until S20 complete) */}
-                <Route path="passport-stamp"   element={<SmokeCraftSessionGuard sessionNumber={21}><PassportStamp /></SmokeCraftSessionGuard>} />
+                {/* S23 — passport-stamp (Passport Stamp Animation) */}
+                <Route path="passport-stamp"   element={<SmokeCraftSessionGuard sessionNumber={23}><PassportStamp /></SmokeCraftSessionGuard>} />
 
-                {/* S22 — connections (locked until S21 complete) */}
-                <Route path="connections"      element={<SmokeCraftSessionGuard sessionNumber={22}><Connections /></SmokeCraftSessionGuard>} />
+                {/* Connections — supporting module, reachable from S23 */}
+                <Route path="connections"      element={<SmokeCraftSessionGuard requires="passport-stamp"><Connections /></SmokeCraftSessionGuard>} />
 
-                {/* S23 — management-sync (admin-facing, locked until S22 complete) */}
-                <Route path="management-sync"  element={<SmokeCraftSessionGuard sessionNumber={23}><ManagementSync /></SmokeCraftSessionGuard>} />
+                {/* Management Sync — supporting module (admin-facing), reachable from S23 */}
+                <Route path="management-sync"  element={<SmokeCraftSessionGuard requires="passport-stamp"><ManagementSync /></SmokeCraftSessionGuard>} />
 
-                {/* S24 — session-complete */}
-                <Route path="session-complete" element={<SmokeCraftSessionGuard sessionNumber={24}><SessionComplete /></SmokeCraftSessionGuard>} />
+                {/* S24 — final-review (Completed Scorecard) */}
+                <Route path="final-review"          element={<SmokeCraftSessionGuard sessionNumber={24}><FinalReview /></SmokeCraftSessionGuard>} />
+
+                {/* S25/S26 — Rewards and XP / Achievements are honestly deferred (no
+                    screen exists, no route registered) per Package J's deferred-session
+                    rule — explicitly not built this package. */}
+
+                {/* S27 — session-complete (Recommended Next Journey) */}
+                <Route path="session-complete" element={<SmokeCraftSessionGuard sessionNumber={27}><SessionComplete /></SmokeCraftSessionGuard>} />
 
                 {/* Visit complete interstitial */}
                 <Route path="visit-complete"   element={<VisitComplete />} />
@@ -456,8 +452,10 @@ export default function App() {
                 <Route path="assistant"      element={<Assistant />} />
                 <Route path="pairing-mastery" element={<PairingMastery />} />
                 <Route path="vitola"         element={<Vitola />} />
-                {/* S2 alias: identity = profile */}
-                <Route path="identity"       element={<SmokeCraftSessionGuard sessionNumber={2}><Identity /></SmokeCraftSessionGuard>} />
+                {/* E4 — Personal Dashboard (entry-layer, outside the 27-session spine).
+                    Identity's own useEffect gate already requires 'enroll' complete
+                    (Package B); requires="entry" here is a permissive outer guard. */}
+                <Route path="identity"       element={<SmokeCraftSessionGuard requires="entry"><Identity /></SmokeCraftSessionGuard>} />
                 <Route path="leaderboard"    element={<Leaderboard />} />
                 <Route path="event-challenge"  element={<EventChallenge />} />
                 <Route path="how-it-works"     element={<HowItWorks />} />

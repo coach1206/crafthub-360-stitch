@@ -197,7 +197,7 @@ export default function FlavorMemory() {
 
     await Promise.all([saveToBackend(snapshot), saveToPassport(snapshot)])
     awardSessionRewards('flavor-memory')
-    navigate('/smokecraft/final-third')
+    navigate('/smokecraft/pairing-lab')
   }
 
   return (
@@ -331,7 +331,7 @@ export default function FlavorMemory() {
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
-        primary={done ? 'Saving…' : 'Continue to Final Third →'}
+        primary={done ? 'Saving…' : 'Continue to Suggested Pairings →'}
         onPrimary={handleContinue}
       />
     </>

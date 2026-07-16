@@ -72,7 +72,7 @@ export default function Format() {
     triggerHaptic('medium')
     awardSessionRewards('format')
     awardSessionRewards('wrapper-strength')
-    navigate('/smokecraft/seed-soil')
+    navigate('/smokecraft/cut-toast-light')
   }
 
   return (
@@ -152,10 +152,10 @@ export default function Format() {
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
-        primary={done ? 'Continuing…' : 'Continue to Seed & Soil →'}
+        primary={done ? 'Continuing…' : 'Continue to Choose Your Cut →'}
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate(-1)}
+        onSecondary={() => navigate('/smokecraft/terroir')}
       />
     </>
   )

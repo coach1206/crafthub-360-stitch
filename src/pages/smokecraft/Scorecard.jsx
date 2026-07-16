@@ -174,7 +174,7 @@ export default function Scorecard() {
     setScorecard(snap)
     await submitScorecard(snap)
     awardSessionRewards('scorecard')
-    navigate('/smokecraft/final-review')
+    navigate('/smokecraft/passport-stamp')
   }
 
   const overall    = calcOverall(sc.categories)
@@ -386,10 +386,10 @@ export default function Scorecard() {
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
-        primary={done ? 'Continuing…' : 'Continue to Final Review →'}
+        primary={done ? 'Continuing…' : 'Continue to Passport Stamp →'}
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate(-1)}
+        onSecondary={() => navigate('/smokecraft/final-third')}
       />
     </>
   )

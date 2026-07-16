@@ -171,7 +171,7 @@ export default function PairingLab() {
 
   function handleContinue() {
     awardSessionRewards('pairing-lab')
-    navigate('/smokecraft/humidor-match')
+    navigate('/smokecraft/second-third')
   }
 
   const glassStyle = (extra = {}) => ({
@@ -386,10 +386,10 @@ export default function PairingLab() {
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
-        primary="Continue to Humidor Match →"
+        primary="Continue to Flavor Evolution →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate(-1)}
+        onSecondary={() => navigate('/smokecraft/flavor-memory')}
       />
     </>
   )

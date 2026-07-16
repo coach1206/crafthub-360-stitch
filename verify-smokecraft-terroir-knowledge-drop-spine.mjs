@@ -145,7 +145,9 @@ async function run() {
 
   // ── 9. Resume returns to Terroir when active ──
   console.log('\n── Suite 9: Resume returns to Terroir ──')
-  await seedGuest(page, { completedSteps: PREREQS_TO_MENTOR, demoMode: false, activeScreen: '/smokecraft/terroir' })
+  // Resume requires the guest to actually have reached Terroir (meet-your-cigar
+  // complete, per Package J's real S3→S4 prerequisite), not just mentor-selection.
+  await seedGuest(page, { completedSteps: [...PREREQS_TO_MENTOR, 'humidor-match', 'meet-your-cigar'], demoMode: false, activeScreen: '/smokecraft/terroir' })
   await page.goto(`${BASE}/smokecraft/scorecard`, { waitUntil: 'domcontentloaded' })
   await page.waitForTimeout(600)
   let resumeBtn = await page.$('button:has-text("Back to Current Session")')

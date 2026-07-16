@@ -90,19 +90,22 @@ async function run() {
   // Suite 4: Locked screen "Back to Current Session" uses canonical resume route
   // ─────────────────────────────────────────────────────────────
   console.log('\n── Suite 4: Locked screen resume routing ──')
-  await seedGuest(page, ['entry', 'enroll'], false)
-  // Session 9 (humidor-match) should be locked since only entry+enroll are complete
-  await page.goto(`${BASE}/smokecraft/humidor-match`, { waitUntil: 'domcontentloaded' })
+  // Package J renumbered the main spine to 27 sessions; golden-box is now a
+  // supporting module (no longer S3), so it no longer gates humidor-match.
+  // Session 4 (terroir) should be locked with only entry+humidor-match done
+  // (meet-your-cigar, S3, not yet complete).
+  await seedGuest(page, ['entry', 'humidor-match'], false)
+  await page.goto(`${BASE}/smokecraft/terroir`, { waitUntil: 'domcontentloaded' })
   await page.waitForTimeout(600)
   const lockedBtn = await page.$('button:has-text("Back to Current Session")')
   if (lockedBtn) {
     await lockedBtn.click()
     await page.waitForTimeout(600)
     const landedPath = new URL(page.url()).pathname
-    // With entry+enroll complete, the guest's current allowed session should be golden-box
-    landedPath === '/smokecraft/golden-box'
-      ? ok('Back to Current Session routes to the real current session (golden-box), not always /smokecraft')
-      : bad(`Back to Current Session routed to ${landedPath}, expected /smokecraft/golden-box`)
+    // With entry+humidor-match complete, the guest's current allowed session should be meet-your-cigar
+    landedPath === '/smokecraft/meet-your-cigar'
+      ? ok('Back to Current Session routes to the real current session (meet-your-cigar), not always /smokecraft')
+      : bad(`Back to Current Session routed to ${landedPath}, expected /smokecraft/meet-your-cigar`)
   } else {
     bad('Locked screen "Back to Current Session" button not found (session may not have been locked as expected)')
   }

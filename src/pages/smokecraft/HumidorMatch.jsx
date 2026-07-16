@@ -181,7 +181,7 @@ export default function HumidorMatch() {
       })
     }
     awardSessionRewards('humidor-match')
-    navigate('/smokecraft/request-purchase')
+    navigate('/smokecraft/meet-your-cigar')
   }
 
   return (
@@ -284,10 +284,10 @@ export default function HumidorMatch() {
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
-        primary="Continue to Request Purchase →"
+        primary="Continue to Meet Your Cigar →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate(-1)}
+        onSecondary={() => navigate('/smokecraft')}
       />
     </>
   )

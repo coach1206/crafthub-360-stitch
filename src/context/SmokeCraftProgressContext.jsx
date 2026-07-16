@@ -65,7 +65,7 @@ export function SmokeCraftProgressProvider({ children }) {
   const ACTIVE_SCREEN_OVERRIDES = [
     { route: '/smokecraft/lighting-tutorial', label: 'Lighting Tutorial', requires: 'cut-toast-light' },
     { route: '/smokecraft/meet-your-cigar',   label: 'Meet Your Cigar',   requires: 'humidor-match' },
-    { route: '/smokecraft/terroir',           label: 'Terroir',           requires: 'mentor' },
+    { route: '/smokecraft/terroir',           label: 'Terroir',           requires: 'meet-your-cigar' },
     { route: '/smokecraft/mentor-commentary', label: 'Mentor Commentary', requires: 'second-third' },
     { route: '/smokecraft/knowledge-drop',    label: 'Knowledge Drop',    requires: 'mentor-commentary' },
   ]

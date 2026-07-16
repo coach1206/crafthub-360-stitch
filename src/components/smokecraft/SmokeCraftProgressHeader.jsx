@@ -6,7 +6,7 @@
  * the visual-first design. Dark/gold aesthetic matches the kiosk-first look.
  *
  * Props:
- *   sessionNumber  — optional 1–24 override; defaults to context's currentSession
+ *   sessionNumber  — optional 1–27 override; defaults to context's currentSession
  */
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 
@@ -55,7 +55,7 @@ export default function SmokeCraftProgressHeader({ sessionNumber }) {
             fontWeight: 600,
           }}
         >
-          Visit {displayVisit}/{totalVisits}
+          Phase {displayVisit}/{totalVisits}
         </span>
         <span style={{ color: 'rgba(201,168,76,0.3)', fontSize: '10px' }}>·</span>
         <span

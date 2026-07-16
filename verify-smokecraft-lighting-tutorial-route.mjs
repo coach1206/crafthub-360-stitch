@@ -54,7 +54,8 @@ async function run() {
   await page.goto(`${BASE}/smokecraft/lighting-tutorial`, { waitUntil: 'domcontentloaded' })
   await page.waitForTimeout(600)
   const bodyLocked = await page.evaluate(() => document.body.innerText.toLowerCase())
-  bodyLocked.includes('locked') ? ok('Guard blocks lighting-tutorial with no progress (non-demo)') : bad('Guard did not block access')
+  const blocked = bodyLocked.includes('locked') || bodyLocked.includes('required:') || bodyLocked.includes('back to current session')
+  blocked ? ok('Guard blocks lighting-tutorial with no progress (non-demo)') : bad('Guard did not block access')
 
   // ── 3. Back returns to Choose Your Cut (cut-toast-light) ──
   console.log('\n── Suite 3: Back target ──')

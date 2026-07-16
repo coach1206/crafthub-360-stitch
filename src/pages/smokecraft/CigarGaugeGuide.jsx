@@ -35,7 +35,7 @@ export default function CigarGaugeGuide() {
       </header>
       <main className="relative pt-28 pb-36 px-6 max-w-[800px] mx-auto">
         <p className="font-label-lg text-label-lg text-primary uppercase tracking-[0.25em] mb-3">
-          Round {stepProgress.round} of 3 &middot; Visit {stepProgress.visit} of {stepProgress.totalVisits} &middot; Session {stepProgress.session} of {stepProgress.totalSessions} &middot; Cigar Gauge Guide
+          Round {stepProgress.round} of 3 &middot; Phase {stepProgress.visit} of {stepProgress.totalVisits} &middot; Session {stepProgress.session} of {stepProgress.totalSessions} &middot; Cigar Gauge Guide
         </p>
         <h2 className="font-headline-md text-on-surface mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>Cigar Gauge Guide</h2>
         <p className="font-body-lg text-body-lg text-on-surface-variant mb-10" style={{ maxWidth: 560 }}>

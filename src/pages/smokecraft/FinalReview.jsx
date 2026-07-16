@@ -43,7 +43,7 @@ export default function FinalReview() {
 
   function handleContinue() {
     awardSessionRewards('final-review')
-    navigate('/smokecraft/passport-stamp')
+    navigate('/smokecraft/session-complete')
   }
 
   return (
@@ -93,7 +93,7 @@ export default function FinalReview() {
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
-        primary="Continue to Passport Stamp →"
+        primary="Continue to Recommended Next Journey →"
         onPrimary={handleContinue}
       />
     </>

@@ -15,6 +15,16 @@ import { createContext, useContext, useState, useCallback, useEffect } from 'rea
 const LS_KEY = 'sc_journey_v1'
 const STATE_VERSION = 3
 
+// Package J — locked 27-session spine migration marker. No completedSteps
+// id was renamed except cut-toast-light/lighting-tutorial's split (see
+// LightingTutorial.jsx), so no data transform is required here: every other
+// existing id in a guest's completedSteps array (novee_guest_session, a
+// separate store from this one) remains valid verbatim against the new
+// spine numbering, since guard unlocking is id-based, not number-based.
+// This flag only records that the spine migration has been observed for
+// this journey record — idempotent, safe to run on every load.
+const SPINE_VERSION = 1
+
 // Legacy shadow keys consolidated into this canonical record as of STATE_VERSION 3.
 // Kept here (rather than in each page) so migration logic has one authoritative list.
 const LEGACY_LOCAL_KEYS = {
@@ -31,6 +41,7 @@ const LEGACY_SESSION_KEYS = {
 
 const DEFAULT_STATE = {
   stateVersion: STATE_VERSION,
+  spineVersion: SPINE_VERSION,
 
   // Identity (canonical — legacy sc_identity_v1 migrated in, then removed)
   identity: null, // { fullName, preferredName, email, birthDate, country, experienceLevel, focusArea }
@@ -179,7 +190,11 @@ function loadFromStorage() {
       if (!parsed || typeof parsed !== 'object' || !parsed.stateVersion || parsed.stateVersion < 1) {
         state = { ...DEFAULT_STATE }
       } else {
-        state = { ...DEFAULT_STATE, ...parsed, stateVersion: STATE_VERSION }
+        // spineVersion is stamped/refreshed on every load — idempotent, and
+        // safe to run repeatedly since it never transforms existing field
+        // data, only records that this record has passed through the
+        // Package J spine migration check.
+        state = { ...DEFAULT_STATE, ...parsed, stateVersion: STATE_VERSION, spineVersion: SPINE_VERSION }
       }
     }
   } catch {

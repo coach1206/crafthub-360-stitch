@@ -1,7 +1,7 @@
 /**
  * smokecraftJourney.js
  *
- * Source-of-truth helpers for the SmokeCraft 8-visit / 24-session gamified
+ * Source-of-truth helpers for the SmokeCraft 6-phase / 27-session gamified
  * progression system. Builds on the VISIT_STRUCTURE defined in session.js and
  * adds the route-aware, progress-aware helpers needed by the new guard and
  * header components.
@@ -36,8 +36,15 @@ function resolveCompletedSteps(progress) {
   return progress.completedSteps || []
 }
 
-function isStepComplete(completedSteps, sessionId) {
-  return sessionId === 'entry' ? true : completedSteps.includes(sessionId)
+// A session counts as satisfied for unlock purposes when it is the always-true
+// entry pseudo-step, or a session with no built screen yet (implemented:
+// false — see session.js). Evidence can never be recorded for a session that
+// does not exist, so it is skipped rather than fabricated as complete or left
+// to permanently block every later session (Package J deferred-session rule).
+function isStepComplete(completedSteps, session) {
+  if (session.id === 'entry') return true
+  if (session.implemented === false) return true
+  return completedSteps.includes(session.id)
 }
 
 // ── Session lookup ──────────────────────────────────────────────────────────
@@ -65,7 +72,7 @@ export function getSessionByKey(key) {
   return null
 }
 
-/** Find a session by its 1-based global session number (1–24). */
+/** Find a session by its 1-based global session number (1–27). */
 export function getSessionByNumber(sessionNumber) {
   for (const v of VISIT_STRUCTURE) {
     for (const s of v.sessions) {
@@ -75,7 +82,7 @@ export function getSessionByNumber(sessionNumber) {
   return null
 }
 
-/** Find the visit object that contains the given session number (1–24). */
+/** Find the visit object that contains the given session number (1–27). */
 export function getVisitBySession(sessionNumber) {
   for (const v of VISIT_STRUCTURE) {
     if (v.sessions.some(s => s.session === sessionNumber)) return v
@@ -94,7 +101,7 @@ export function isVisitUnlocked(visitNumber, progress) {
   const completedSteps = resolveCompletedSteps(progress)
   const prevVisit = VISIT_STRUCTURE.find(v => v.visit === visitNumber - 1)
   if (!prevVisit) return true
-  return prevVisit.sessions.every(s => isStepComplete(completedSteps, s.id))
+  return prevVisit.sessions.every(s => isStepComplete(completedSteps, s))
 }
 
 /**
@@ -112,7 +119,7 @@ export function isSessionUnlocked(sessionNumber, progress) {
   for (const v of VISIT_STRUCTURE) {
     for (const s of v.sessions) {
       if (s.session >= sessionNumber) return true
-      if (!isStepComplete(completedSteps, s.id)) return false
+      if (!isStepComplete(completedSteps, s)) return false
     }
   }
   return true
@@ -120,23 +127,29 @@ export function isSessionUnlocked(sessionNumber, progress) {
 
 // ── Specific journey gates ──────────────────────────────────────────────────
 
-/** Session 21 (passport-stamp) unlocks only after Session 20 (final-review) is done. */
+/** Session 23 (passport-stamp) unlocks only after Session 20 (personal notes) is done — sessions 21/22 are deferred and auto-skipped. */
 export function isPassportStampUnlocked(progress) {
-  return isSessionUnlocked(21, progress)
-}
-
-/** Session 22 (connections) unlocks only after Session 21 (passport-stamp) is done. */
-export function isPassportConnectionsUnlocked(progress) {
-  return isSessionUnlocked(22, progress)
+  return isSessionUnlocked(23, progress)
 }
 
 /**
- * Management Sync (Session 23) is an admin-facing handoff summary — visible
- * once Visit 8 is fully underway (Session 20 started). It is NOT an early
- * user reward; it surfaces for venue staff review during the final visit.
+ * Connections is a supporting module (outside the 27-session spine per
+ * Package J), reachable once Session 23 (passport-stamp) is complete.
+ */
+export function isPassportConnectionsUnlocked(progress) {
+  const completedSteps = resolveCompletedSteps(progress)
+  return completedSteps.includes('passport-stamp')
+}
+
+/**
+ * Management Sync is a supporting module (outside the 27-session spine per
+ * Package J) — an admin-facing handoff summary, visible once Session 23
+ * (passport-stamp) is complete. It is NOT an early user reward; it surfaces
+ * for venue staff review during the final phase.
  */
 export function isManagementSyncVisible(progress) {
-  return isSessionUnlocked(23, progress)
+  const completedSteps = resolveCompletedSteps(progress)
+  return completedSteps.includes('passport-stamp')
 }
 
 // ── Journey cursor ──────────────────────────────────────────────────────────
@@ -149,7 +162,7 @@ export function getCurrentAllowedSession(progress) {
   const completedSteps = resolveCompletedSteps(progress)
   for (const v of VISIT_STRUCTURE) {
     for (const s of v.sessions) {
-      if (!isStepComplete(completedSteps, s.id)) {
+      if (!isStepComplete(completedSteps, s)) {
         return { ...s, visitNumber: v.visit, visitTitle: v.title }
       }
     }
@@ -178,21 +191,29 @@ export function getLockedReason(sessionNumber, progress) {
   if (!session) return 'Unknown session.'
   const visit = getVisitBySession(sessionNumber)
   if (!visit) return 'Unknown visit.'
-  // Visit-level lock
+  // Phase-level lock
   if (!isVisitUnlocked(session.visitNumber, progress)) {
     const prevVisitNum = session.visitNumber - 1
     const prevVisit = VISIT_STRUCTURE.find(v => v.visit === prevVisitNum)
     if (prevVisit) {
-      return `Visit ${session.visitNumber} of ${TOTAL_VISITS} is locked. Complete all sessions in Visit ${prevVisitNum} (${prevVisit.title}) first.`
+      return `Phase ${session.visitNumber} of ${TOTAL_VISITS} is locked. Complete all sessions in Phase ${prevVisitNum} (${prevVisit.title}) first.`
     }
-    return `Visit ${session.visitNumber} of ${TOTAL_VISITS} is locked. Complete the previous visit first.`
+    return `Phase ${session.visitNumber} of ${TOTAL_VISITS} is locked. Complete the previous phase first.`
   }
-  // Within-visit session ordering lock
-  const blockerSession = getSessionByNumber(sessionNumber - 1)
-  if (blockerSession) {
-    return `Required: Complete Session ${blockerSession.session} (${blockerSession.label}) first.`
+  // Within-visit session ordering lock — find the actual first incomplete
+  // earlier session (skipping deferred/merged entries that are always
+  // treated as satisfied) rather than assuming sessionNumber - 1, which may
+  // itself be an implemented: false stand-in.
+  const completedSteps = resolveCompletedSteps(progress)
+  for (const v of VISIT_STRUCTURE) {
+    for (const s of v.sessions) {
+      if (s.session >= sessionNumber) break
+      if (!isStepComplete(completedSteps, s)) {
+        return `Required: Complete Session ${s.session} (${s.label}) first.`
+      }
+    }
   }
-  return `Complete earlier sessions in Visit ${session.visitNumber} first.`
+  return `Complete earlier sessions in Phase ${session.visitNumber} first.`
 }
 
 // ── End-of-visit detection ──────────────────────────────────────────────────

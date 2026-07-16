@@ -84,7 +84,7 @@ export default function FirstThird() {
     setFirstThirdTasting(payload)
     setFirstThird(payload)
     awardSessionRewards('first-third')
-    navigate('/smokecraft/second-third')
+    navigate('/smokecraft/flavor-memory')
   }
 
   return (
