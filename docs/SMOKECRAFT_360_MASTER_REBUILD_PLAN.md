@@ -544,6 +544,28 @@ No test was skipped. Every pre-existing failure was independently reproduced aga
 - **Completion gate:** both new screens function independently with correct Back/Continue chaining; existing CutToastLight functionality fully preserved across the split, no capability lost.
 - **Exact deliverable:** one commit, `feat(smokecraft): split Choose Your Cut and Lighting Tutorial into distinct sessions`.
 
+#### Lighting Tutorial (S7) — Implementation Evidence (screen built, not yet routed)
+
+**Scope actually implemented:** builds only the Lighting Tutorial (S7) screen component, per an explicit single-screen mandate that also prohibited modifying routes. Choose Your Cut (S6) and the CutToastLight split itself remain unbuilt — this entry covers S7 in isolation, not the full Package C split described above.
+
+**Exact files changed:** `src/pages/smokecraft/LightingTutorial.jsx` (new) — no other file touched.
+
+**Screen contents:** 8-step tutorial covering toasting the foot, lighting technique, even burn, avoiding tunneling, avoiding overheating, correct flame distance, proper first draw, and burn inspection. Every required live zone is present and React-driven: tutorial text, step indicator (`role="progressbar"` with 8 clickable step dots), educational media area (honestly labeled "Media pending production upload" — no fabricated image), live viewed-step progress (`X of 8 steps remaining`, derived from real component state, not a fake score), Continue/Back buttons via the existing `SmokeCraftNavBar` pattern, a real toggleable Help panel, a Mentor Tip panel, and a Knowledge Drop panel per step. Continue is disabled on the final step until all 8 steps have actually been viewed. Static artwork is a CSS-composed navy/gold/wood-tone atmosphere (no new image file — none was requested or generated); all step content, progress, and controls are React state, satisfying the Live Interface Directive's static-vs-live separation.
+
+**Persistence:** calls the existing canonical `setCutToastLight()` setter (from `SmokeCraftJourneyContext`, unmodified) to record `lightingTutorialCompleted`/`lightingTutorialCompletedAt` once the guest finishes all 8 steps and continues — no new persistence field, key, or context change was made; the screen only *consumes* Package A's already-existing setter.
+
+**Routing:** intentionally **not wired into `App.jsx`** — the mandate explicitly prohibited modifying routes. The component is complete and self-contained but is not yet reachable via the live route tree. Wiring it to `/smokecraft/lighting-tutorial` (or repurposing the existing `/smokecraft/cut-toast-light` route once Choose Your Cut is also built) remains a follow-up step for whoever completes the full CutToastLight split.
+
+**No fake data:** confirmed no hardcoded XP, score, "connected" status, or baked selection anywhere in the file — completion status and step progress are both derived from real `useState` tracking of which steps the guest has actually viewed.
+
+**Tests run:** since the screen cannot be reached via a real route without violating the "do not modify routes" constraint, verification used a temporary, non-committed test harness (a throwaway entry file + HTML page, both deleted before this commit — confirmed absent from the final `git status`) mounting `<LightingTutorial />` directly under the same `GuestSessionProvider`/`SmokeCraftJourneyProvider`/`BrowserRouter` wrapping used everywhere else in the app, served via the Vite dev server, and driven with a real Playwright browser. `npm run build` was also run to confirm the new file doesn't break the production build (it doesn't — Vite excludes it from the bundle since nothing imports it yet, which is expected given it isn't routed).
+
+**Test results:** 31/31 checks passed — 4 viewports (1440×900, 1024×768, 768×1024, 390×844) each confirmed: zero page errors, title renders, nav-bar buttons present, step-indicator progressbar present, help button present, no horizontal overflow. Interaction checks confirmed: Step 1 shows "Toasting the Foot", stepping through all 8 lands on "Burn Inspection", the final-step button correctly reads "Continue to First Draw →" and is disabled until all steps are viewed then becomes enabled, all 8 step-indicator dots are present and clicking one jumps directly to that step, and the Help panel opens on click. `npm run build`: green.
+
+**Known limitations:** not reachable from the live app until a route is added (explicitly out of this mandate's scope). No demonstration video/image asset exists yet (correctly and honestly labeled as pending rather than faked, consistent with the image-reconciliation plan's finding that no dedicated Lighting Tutorial artwork currently exists).
+
+**Intentionally deferred:** Choose Your Cut (S6), the actual CutToastLight route split, and wiring this screen into `App.jsx` — all remain for a future, explicitly-authorized routing/screen-split package.
+
 ### Package D — Merge Screens (Terroir+SeedSoil, Construction Inspection+CigarGaugeGuide, Knowledge Drop, Completed Scorecard, Next Journey)
 - **Objective:** implement all 6 merges from §9/§3d.
 - **Dependencies:** Packages 0, A, B.
