@@ -72,7 +72,7 @@ export default function CutToastLight() {
   function handleContinue() {
     setCutToastLight({ cut: cutMethod, toast: toastMethod, light: lightMethod })
     awardSessionRewards('cut-toast-light')
-    navigate('/smokecraft/first-third')
+    navigate('/smokecraft/lighting-tutorial')
   }
 
   return (
@@ -150,7 +150,7 @@ export default function CutToastLight() {
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
-        primary="Continue to First Third →"
+        primary="Continue to Lighting Tutorial →"
         onPrimary={handleContinue}
         primaryDisabled={!cutMethod || !toastMethod || !lightMethod}
         secondary="← Back"

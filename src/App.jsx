@@ -126,6 +126,7 @@ import SeedSoil         from './pages/smokecraft/SeedSoil.jsx'
 import HumidorMatch     from './pages/smokecraft/HumidorMatch.jsx'
 import RequestPurchase  from './pages/smokecraft/RequestPurchase.jsx'
 import CutToastLight    from './pages/smokecraft/CutToastLight.jsx'
+import LightingTutorial from './pages/smokecraft/LightingTutorial.jsx'
 import FirstThird       from './pages/smokecraft/FirstThird.jsx'
 import SecondThird      from './pages/smokecraft/SecondThird.jsx'
 import FinalThird       from './pages/smokecraft/FinalThird.jsx'
@@ -354,8 +355,12 @@ export default function App() {
                 {/* S10 — request-purchase */}
                 <Route path="request-purchase" element={<SmokeCraftSessionGuard sessionNumber={10}><RequestPurchase /></SmokeCraftSessionGuard>} />
 
-                {/* S11 — cut-toast-light */}
+                {/* S11 — cut-toast-light (Choose Your Cut) */}
                 <Route path="cut-toast-light"  element={<SmokeCraftSessionGuard sessionNumber={11}><CutToastLight /></SmokeCraftSessionGuard>} />
+                {/* Lighting Tutorial — placed immediately after cut-toast-light; shares its
+                    session checkpoint and additionally requires cut-toast-light to be complete
+                    (enforced in the screen itself, mirroring the Identity/Enroll gate pattern). */}
+                <Route path="lighting-tutorial" element={<SmokeCraftSessionGuard sessionNumber={11}><LightingTutorial /></SmokeCraftSessionGuard>} />
 
                 {/* S12 — first-third */}
                 <Route path="first-third"      element={<SmokeCraftSessionGuard sessionNumber={12}><FirstThird /></SmokeCraftSessionGuard>} />

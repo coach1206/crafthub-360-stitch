@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -75,9 +76,34 @@ const STEPS = [
 ]
 
 export default function LightingTutorial() {
-  const { awardSessionRewards } = useGuestSession()
+  const { awardSessionRewards, session } = useGuestSession()
+  const { isDemoMode } = useSmokeCraftProgress()
   const { setCutToastLight, journey } = useSmokeCraftJourney()
   const navigate = useNavigate()
+
+  // Choose Your Cut (currently the combined cut-toast-light screen) must be
+  // completed first — mirrors the Identity/Enroll sequential-gate pattern.
+  useEffect(() => {
+    if (!isDemoMode && !session.completedSteps.includes('cut-toast-light')) {
+      navigate('/smokecraft/cut-toast-light', { replace: true })
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Mark this screen as the guest's active mid-tutorial position for Resume.
+  // A dedicated sessionStorage flag (not the generic per-navigation
+  // lastVisitedRoute, which gets overwritten by every screen visit including
+  // a locked screen) so SmokeCraftProgressContext can route "Back to Current
+  // Session" here specifically. Cleared once the guest continues onward.
+  useEffect(() => {
+    try { sessionStorage.setItem('sc_active_screen', '/smokecraft/lighting-tutorial') } catch {}
+    return () => {
+      try {
+        if (sessionStorage.getItem('sc_active_screen') === '/smokecraft/lighting-tutorial') {
+          sessionStorage.removeItem('sc_active_screen')
+        }
+      } catch {}
+    }
+  }, [])
 
   const [stepIndex, setStepIndex]   = useState(0)
   const [viewedSteps, setViewedSteps] = useState(() => new Set([0]))
@@ -103,7 +129,7 @@ export default function LightingTutorial() {
 
   function handleBack() {
     if (isFirstStep) {
-      navigate(-1)
+      navigate('/smokecraft/cut-toast-light')
       return
     }
     goToStep(stepIndex - 1)

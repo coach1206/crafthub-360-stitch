@@ -566,6 +566,48 @@ No test was skipped. Every pre-existing failure was independently reproduced aga
 
 **Intentionally deferred:** Choose Your Cut (S6), the actual CutToastLight route split, and wiring this screen into `App.jsx` — all remain for a future, explicitly-authorized routing/screen-split package.
 
+#### Lighting Tutorial (S7) — Routing Follow-Up (screen wired into the live journey)
+
+**Scope actually implemented:** wires the previously-built Lighting Tutorial screen into the live route tree at `/smokecraft/lighting-tutorial`, placed immediately after the existing `cut-toast-light` route (standing in for the not-yet-split Choose Your Cut screen). Choose Your Cut (S6) and the actual CutToastLight component split remain unbuilt — that stays deferred to a future package; this entry only makes the already-built Lighting Tutorial screen reachable.
+
+**Exact files changed:**
+- `src/App.jsx` — added the `LightingTutorial` import and the new `lighting-tutorial` route (guarded with the same `sessionNumber={11}` as `cut-toast-light`, since Lighting Tutorial is an interstitial add-on to that checkpoint, not a new numbered session in `VISIT_STRUCTURE`).
+- `src/pages/smokecraft/CutToastLight.jsx` — Continue target changed from `/smokecraft/first-third` to `/smokecraft/lighting-tutorial` so the new screen is actually inserted into the live chain instead of being bypassed; nav-bar label updated to match.
+- `src/pages/smokecraft/LightingTutorial.jsx` — added a sequential-completion gate mirroring the Identity/Enroll pattern (`cut-toast-light` must be complete first, demo-mode bypassed); Back on step 1 changed from `navigate(-1)` to a deterministic `navigate('/smokecraft/cut-toast-light')`; added a dedicated `sessionStorage` "active screen" marker (set on mount, cleared on unmount) used by the Resume fix below.
+- `src/context/SmokeCraftProgressContext.jsx` — added a `currentAllowed` override so "Back to Current Session"/Resume can route to Lighting Tutorial specifically. **Root-cause note:** the first implementation attempt used the existing, already-automatic `lastVisitedRoute` guest-session field, but that field is overwritten on *every* route navigation (including the act of visiting the locked screen itself, per the same automatic tracker used everywhere else), so it could never actually signal "the guest was last active on Lighting Tutorial" by the time the resume button rendered. Caught by the new test suite, not shipped — replaced with a dedicated `sessionStorage.sc_active_screen` flag set only by `LightingTutorial.jsx`, which isn't touched by any other screen's navigation.
+- `verify-smokecraft-lighting-tutorial-route.mjs` (new) — 12-check Playwright suite for this package.
+
+**Route added:** `/smokecraft/lighting-tutorial`, guarded by `SmokeCraftSessionGuard sessionNumber={11}` (same checkpoint as `cut-toast-light`) plus the screen's own `cut-toast-light`-completion gate.
+
+**Back target:** `/smokecraft/cut-toast-light` (deterministic, not `navigate(-1)`).
+
+**Continue target:** `/smokecraft/first-third`, gated — disabled until all 8 tutorial steps have been viewed.
+
+**Resume behavior:** `SmokeCraftProgressContext`'s `currentAllowed.route` resolves to `/smokecraft/lighting-tutorial` whenever the guest is actively on that screen (tracked via the dedicated `sessionStorage` flag, not the generic per-navigation tracker) and has already completed `cut-toast-light`; falls back to the standard next-incomplete-session logic otherwise. No `VISIT_STRUCTURE`/session-catalog change was needed.
+
+**Persistence:** Package A's `sc_journey_v1` schema, setters, and migration are untouched — this package only calls the already-existing `setCutToastLight()` setter (unchanged) and adds a session-only `sessionStorage` UI marker that is not part of the canonical journey or guest-session persistence schema.
+
+**Tests added:** `verify-smokecraft-lighting-tutorial-route.mjs` — 9 suites / 12 checks: route resolves, guard blocks unauthorized access, Back targets `cut-toast-light`, Continue targets `first-third` and stays gated until all steps are viewed (including when steps are skipped via direct step-dot navigation), Resume routes to Lighting Tutorial when it's the guest's active screen, refresh preserves the route, CutToastLight's Continue correctly chains into Lighting Tutorial (no loop), and the full Choose Your Cut → Lighting Tutorial → First Draw chain completes end-to-end with no dead end.
+
+**Tests run:** new suite, `verify-smokecraft-persistence-consolidation.mjs` (Package A regression), `verify-smokecraft-route-corrections.mjs` (Package B regression), `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — Package A unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — Package B unaffected |
+| `verify-interactions.mjs` | 19 passed, 3 failed — identical to the established baseline (same 3 pre-existing, unrelated failures) |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — byte-identical failure list to the established baseline, confirmed via `diff` |
+| `npm run build` | **green** |
+
+**Responsive/accessibility:** re-confirmed via the original Lighting Tutorial build's 4-viewport check (1440×900, 1024×768, 768×1024, 390×844) — unaffected by this routing-only change, since the screen's own markup was not modified.
+
+**Known limitations:** Choose Your Cut (S6) still does not exist as its own screen — `cut-toast-light` continues to stand in for it. The `sessionStorage` resume marker is session-scoped (cleared on tab close), so a guest who closes the tab mid-tutorial and returns later will not be resumed directly to Lighting Tutorial — an accepted, documented limitation rather than a silent gap.
+
+**Intentionally deferred:** Choose Your Cut (S6) as its own screen, the actual CutToastLight component split, and giving Lighting Tutorial its own distinct session number in `VISIT_STRUCTURE` — all remain for the full Package C split described earlier in this document.
+
 ### Package D — Merge Screens (Terroir+SeedSoil, Construction Inspection+CigarGaugeGuide, Knowledge Drop, Completed Scorecard, Next Journey)
 - **Objective:** implement all 6 merges from §9/§3d.
 - **Dependencies:** Packages 0, A, B.

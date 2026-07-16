@@ -48,11 +48,28 @@ export function SmokeCraftProgressProvider({ children }) {
 
   const isLocalPreviewMode = !isDemoMode
 
-  const currentAllowed = useMemo(
+  const baseCurrentAllowed = useMemo(
     () => getCurrentAllowedSession(effectiveCompleted),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [effectiveCompleted.join(','), isDemoMode]
   )
+
+  // Lighting Tutorial sits between Session 11 (cut-toast-light) and Session 12
+  // (first-third) but isn't its own VISIT_STRUCTURE session, so the standard
+  // "next incomplete session" resume logic can't see it. LightingTutorial.jsx
+  // sets a dedicated sessionStorage flag while mounted (cleared on navigating
+  // away) — read that instead of the generic per-navigation lastVisitedRoute,
+  // which gets overwritten by every screen visit including a locked screen
+  // and so can't reliably signal "the guest was last actively here."
+  const currentAllowed = useMemo(() => {
+    let activeScreen = null
+    try { activeScreen = sessionStorage.getItem('sc_active_screen') } catch {}
+    if (activeScreen === '/smokecraft/lighting-tutorial' && completedSteps.includes('cut-toast-light')) {
+      return { ...baseCurrentAllowed, route: '/smokecraft/lighting-tutorial', label: 'Lighting Tutorial' }
+    }
+    return baseCurrentAllowed
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseCurrentAllowed, completedSteps.join(',')])
 
   const completedSessions = useMemo(
     () => {
