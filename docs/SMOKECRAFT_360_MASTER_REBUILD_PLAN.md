@@ -690,6 +690,50 @@ No test was skipped. Every pre-existing failure was independently reproduced aga
 
 **Intentionally deferred:** Choose Your Cut (S6) as its own screen, the actual CutToastLight component split, and giving Lighting Tutorial its own distinct session number in `VISIT_STRUCTURE` — all remain for the full Package C split described earlier in this document.
 
+#### Terroir (S4) + Knowledge Drop (S15) — Routing Follow-Up (Package H: Wire Terroir and Knowledge Drop into the Guarded Main Journey)
+
+**Scope actually implemented:** wires the two previously-standalone/unguarded screens built in Package G into the guarded main-journey spine, using the exact interstitial pattern established by Package E for Lighting Tutorial (share the nearest already-built predecessor's checkpoint number, add the screen's own prerequisite gate, add a dedicated `sc_active_screen` Resume flag). Meet Your Cigar (locked S3) and Mentor Commentary (locked S14) — the screens' true locked predecessors per Package 0 — remain unbuilt and were explicitly out of scope for this package, so each screen is instead chained immediately after the real, already-built screen that currently stands in for its unbuilt predecessor (`mentor-selection` for Meet Your Cigar; `flavor-memory` for Mentor Commentary), exactly as `cut-toast-light` stood in for the not-yet-split Choose Your Cut when Lighting Tutorial was wired in.
+
+**Exact files changed:**
+- `src/App.jsx` — removed the two unguarded `terroir`/`knowledge-drop` routes from the "Supplemental / unguarded pages" group; re-added `terroir` guarded with `SmokeCraftSessionGuard sessionNumber={4}` immediately after `mentor-selection` (same checkpoint, since Terroir's own prerequisite gate — mentor-selection complete — is enforced in the screen); added `knowledge-drop` guarded with `SmokeCraftSessionGuard sessionNumber={15}` immediately after `flavor-memory` (same checkpoint as `final-third`, since Knowledge Drop's own prerequisite gate — flavor-memory complete — is enforced in the screen).
+- `src/pages/smokecraft/Terroir.jsx` — added a sequential-completion gate (mentor-selection must be complete first, demo-mode bypassed, mirroring Identity/Enroll and cut-toast-light/lighting-tutorial); added the `sc_active_screen` Resume flag (set on mount, cleared on unmount); Back changed from `navigate(-1)` to deterministic `navigate('/smokecraft/mentor-selection')`; Continue changed from `navigate('/smokecraft')` to deterministic `navigate('/smokecraft/format')`, and now also writes a `completedAt` timestamp into the persisted `journey.terroir` record on Continue (idempotent — only set once).
+- `src/pages/smokecraft/KnowledgeDrop.jsx` — same set of changes: gate requires `flavor-memory` complete; `sc_active_screen` Resume flag; Back changed to deterministic `navigate('/smokecraft/flavor-memory')`; Continue changed to deterministic `navigate('/smokecraft/final-third')` with a `completedAt` timestamp written into `journey.knowledgeDrop`.
+- `src/context/SmokeCraftProgressContext.jsx` — generalized the single-entry Lighting-Tutorial-only `currentAllowed` override (added in Package E) into an `ACTIVE_SCREEN_OVERRIDES` list covering all three interstitial screens (Lighting Tutorial, Terroir, Knowledge Drop), each keyed by its own required prerequisite step. No change to the override's underlying mechanism — only extended to more entries.
+- `verify-smokecraft-terroir-knowledge-drop.mjs` (Package G's suite) — updated the two Continue-target assertions (Suite 8) from `/smokecraft` to `/smokecraft/format` (Terroir) and `/smokecraft/final-third` (Knowledge Drop), reflecting the now-deterministic routing; all other assertions in that suite were unaffected since they already ran with demo mode enabled.
+- `verify-smokecraft-terroir-knowledge-drop-spine.mjs` (new) — 15-suite / 17-check Playwright suite for this package.
+
+**Final Terroir guard and route:** `/smokecraft/terroir`, guarded by `SmokeCraftSessionGuard sessionNumber={4}` (unlocked once sessions 1–3 — entry/enroll/golden-box — are complete) plus the screen's own gate requiring `mentor` (mentor-selection) complete.
+
+**Final Knowledge Drop guard and route:** `/smokecraft/knowledge-drop`, guarded by `SmokeCraftSessionGuard sessionNumber={15}` (unlocked once sessions 1–14 — through `flavor-memory` — are complete) plus the screen's own gate requiring `flavor-memory` complete.
+
+**Back / Continue targets:** Terroir Back → `/smokecraft/mentor-selection`; Terroir Continue → `/smokecraft/format` (Construction Inspection, S5 — matches the locked map's "Next" exactly, since `format` already *is* the locked S5 route). Knowledge Drop Back → `/smokecraft/flavor-memory`; Knowledge Drop Continue → `/smokecraft/final-third` (Flavor Finish, S16 — matches the locked map's "Next" exactly, since `final-third` already *is* the locked S16 route). Neither Continue button points to `/smokecraft` any longer; neither Back button uses `navigate(-1)`.
+
+**Resume behavior:** `SmokeCraftProgressContext`'s `currentAllowed.route` now resolves to `/smokecraft/terroir` or `/smokecraft/knowledge-drop` whenever the guest is actively on that screen (via its dedicated `sc_active_screen` flag) and has completed that screen's specific prerequisite (`mentor` / `flavor-memory` respectively) — the same mechanism Package E built for Lighting Tutorial, now covering three interstitials via one shared override list.
+
+**Persistence:** Package A's `sc_journey_v1` schema, setters, and migration remain untouched. Completion now writes a `completedAt` timestamp (set once, preserved on re-entry via `journey.terroir?.completedAt || Date.now()`) into the existing `terroir`/`knowledgeDrop` fields added in Package G — no schema change. `awardSessionRewards('terroir')` / `awardSessionRewards('knowledge-drop')` retain the existing, unmodified idempotency guard (checks `completedSteps.includes(sessionId)` before granting XP), confirmed via a dedicated re-entry test (Suite 13) showing XP does not increase on a second completion.
+
+**Tests added:** `verify-smokecraft-terroir-knowledge-drop-spine.mjs` — 15 suites / 17 checks: both routes resolve; both screens are guarded at their correct journey position (blocked pre-prerequisite, accessible post-prerequisite, non-demo); Back and Continue targets are correct and deterministic for both screens; Resume returns to each screen when it was the guest's last active screen; refresh preserves progress; completed state (6/6 sections) persists to `sc_journey_v1`; XP is not duplicated on re-entering a completed Terroir; no route loop; full chain Mentor Selection → Terroir → Construction Inspection completes with no dead end.
+
+**Tests run:** new suite, updated Package G suite, `verify-smokecraft-persistence-consolidation.mjs` (Package A regression), `verify-smokecraft-route-corrections.mjs` (Package B regression), `verify-smokecraft-lighting-tutorial-route.mjs` (Package E regression), `verify-smokecraft-choose-your-cut.mjs` (Package F regression), `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-terroir-knowledge-drop-spine.mjs` | **17 passed, 0 failed** |
+| `verify-smokecraft-terroir-knowledge-drop.mjs` (Package G, updated) | **19 passed, 0 failed** |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — Package A unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — Package B unaffected |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** — Package E unaffected |
+| `verify-smokecraft-choose-your-cut.mjs` | **16 passed, 0 failed** — Package F unaffected |
+| `verify-interactions.mjs` | 20 passed, 2 failed — identical to the established post-Package-G baseline (same 2 pre-existing, unrelated failures) |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | identical count/failure profile to the established baseline (confirmed via direct run) |
+| `npm run build` | **green** |
+
+**Confirmed no unrelated files changed:** `git status --short` before commit showed only `src/App.jsx`, `src/context/SmokeCraftProgressContext.jsx`, `src/pages/smokecraft/Terroir.jsx`, `src/pages/smokecraft/KnowledgeDrop.jsx`, `verify-smokecraft-terroir-knowledge-drop.mjs` (all modified), and `verify-smokecraft-terroir-knowledge-drop-spine.mjs` (new) — no Mentor Commentary, AI Summary, Rewards, Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge, production image, database, or deployment files touched; no later package started; regenerated `public/proof/final-live-acceptance/*.png` screenshots were discarded via `git checkout --` before commit.
+
+**Known limitations:** Terroir and Knowledge Drop are chained after their current real-world stand-in predecessors (`mentor-selection`, `flavor-memory`) rather than their true locked S3/S14 predecessors (Meet Your Cigar, Mentor Commentary), since building those screens was explicitly out of scope for this package. When Meet Your Cigar and Mentor Commentary are eventually built, this package's Back targets (and the corresponding `ACTIVE_SCREEN_OVERRIDES` prerequisite checks) will need a follow-up update to point at them instead — a known, documented, forward-compatible seam, not a silent gap. Neither Terroir nor Knowledge Drop yet has its own distinct session number in `VISIT_STRUCTURE` (they remain interstitials sharing a neighboring checkpoint's number, exactly like Lighting Tutorial) — full spine renumbering to the locked 27-session structure remains deferred to a future package, as previously noted for Choose Your Cut/Lighting Tutorial.
+
 ### Package D — Merge Screens (Terroir+SeedSoil, Construction Inspection+CigarGaugeGuide, Knowledge Drop, Completed Scorecard, Next Journey)
 - **Objective:** implement all 6 merges from §9/§3d.
 - **Dependencies:** Packages 0, A, B.

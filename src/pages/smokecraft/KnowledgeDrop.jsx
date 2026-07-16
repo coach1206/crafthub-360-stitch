@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -63,9 +64,32 @@ const TOPICS = [
 ]
 
 export default function KnowledgeDrop() {
-  const { awardSessionRewards } = useGuestSession()
+  const { awardSessionRewards, session } = useGuestSession()
+  const { isDemoMode } = useSmokeCraftProgress()
   const { journey, setKnowledgeDrop } = useSmokeCraftJourney()
   const navigate = useNavigate()
+
+  // Flavor Memory (currently standing in for the not-yet-built Mentor
+  // Commentary) must be completed first — mirrors the Identity/Enroll and
+  // cut-toast-light/lighting-tutorial sequential-gate pattern.
+  useEffect(() => {
+    if (!isDemoMode && !session.completedSteps.includes('flavor-memory')) {
+      navigate('/smokecraft/flavor-memory', { replace: true })
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Mark this screen as the guest's active position for Resume, exactly like
+  // LightingTutorial.jsx's dedicated sessionStorage flag (Package E).
+  useEffect(() => {
+    try { sessionStorage.setItem('sc_active_screen', '/smokecraft/knowledge-drop') } catch {}
+    return () => {
+      try {
+        if (sessionStorage.getItem('sc_active_screen') === '/smokecraft/knowledge-drop') {
+          sessionStorage.removeItem('sc_active_screen')
+        }
+      } catch {}
+    }
+  }, [])
 
   const savedViewed = journey.knowledgeDrop?.viewedTopics || []
   const savedScore  = journey.knowledgeDrop?.quizScore ?? null
@@ -110,8 +134,13 @@ export default function KnowledgeDrop() {
   }
 
   function handleContinue() {
+    setKnowledgeDrop({
+      viewedTopics: Array.from(viewedTopics),
+      quizScore,
+      completedAt: journey.knowledgeDrop?.completedAt || Date.now(),
+    })
     awardSessionRewards('knowledge-drop')
-    navigate('/smokecraft')
+    navigate('/smokecraft/final-third')
   }
 
   return (
@@ -335,7 +364,7 @@ export default function KnowledgeDrop() {
         primary="Continue →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate(-1)}
+        onSecondary={() => navigate('/smokecraft/flavor-memory')}
       />
     </div>
   )

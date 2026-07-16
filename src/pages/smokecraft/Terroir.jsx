@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -55,9 +56,32 @@ const SECTIONS = [
 ]
 
 export default function Terroir() {
-  const { awardSessionRewards } = useGuestSession()
+  const { awardSessionRewards, session } = useGuestSession()
+  const { isDemoMode } = useSmokeCraftProgress()
   const { journey, setTerroir } = useSmokeCraftJourney()
   const navigate = useNavigate()
+
+  // Mentor Selection (currently standing in for the not-yet-built Meet Your
+  // Cigar) must be completed first — mirrors the Identity/Enroll and
+  // cut-toast-light/lighting-tutorial sequential-gate pattern.
+  useEffect(() => {
+    if (!isDemoMode && !session.completedSteps.includes('mentor')) {
+      navigate('/smokecraft/mentor-selection', { replace: true })
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Mark this screen as the guest's active position for Resume, exactly like
+  // LightingTutorial.jsx's dedicated sessionStorage flag (Package E).
+  useEffect(() => {
+    try { sessionStorage.setItem('sc_active_screen', '/smokecraft/terroir') } catch {}
+    return () => {
+      try {
+        if (sessionStorage.getItem('sc_active_screen') === '/smokecraft/terroir') {
+          sessionStorage.removeItem('sc_active_screen')
+        }
+      } catch {}
+    }
+  }, [])
 
   const savedViewed = journey.terroir?.viewedSections || []
   const [sectionId, setSectionId]   = useState(null)
@@ -88,8 +112,9 @@ export default function Terroir() {
   }
 
   function handleContinue() {
+    setTerroir({ viewedSections: Array.from(viewedSections), completedAt: journey.terroir?.completedAt || Date.now() })
     awardSessionRewards('terroir')
-    navigate('/smokecraft')
+    navigate('/smokecraft/format')
   }
 
   return (
@@ -253,7 +278,7 @@ export default function Terroir() {
         primary="Continue →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate(-1)}
+        onSecondary={() => navigate('/smokecraft/mentor-selection')}
       />
     </div>
   )

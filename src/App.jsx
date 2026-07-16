@@ -335,6 +335,15 @@ export default function App() {
                 <Route path="mentor-selection" element={<SmokeCraftSessionGuard sessionNumber={4}><Mentor /></SmokeCraftSessionGuard>} />
                 <Route path="mentor"         element={<Navigate to="/smokecraft/mentor-selection" replace />} />
 
+                {/* Terroir (locked S4) — placed immediately after mentor-selection, which
+                    currently stands in for the not-yet-built Meet Your Cigar (locked S3)
+                    per the rebuild plan's own merge note ("current Mentor-selection (S4)
+                    folds in here as a tab"). Shares mentor-selection's checkpoint number
+                    and additionally requires mentor-selection to be complete (enforced in
+                    the screen itself, mirroring the cut-toast-light/lighting-tutorial
+                    interstitial pattern from Package E). */}
+                <Route path="terroir"        element={<SmokeCraftSessionGuard sessionNumber={4}><Terroir /></SmokeCraftSessionGuard>} />
+
                 {/* S5 — format / shape-size-burn */}
                 <Route path="format"         element={<SmokeCraftSessionGuard sessionNumber={5}><Format /></SmokeCraftSessionGuard>} />
                 {/* shape-size-burn is a backward-compatible alias for format, not an independent route */}
@@ -371,6 +380,14 @@ export default function App() {
 
                 {/* S14 — flavor-memory */}
                 <Route path="flavor-memory"    element={<SmokeCraftSessionGuard sessionNumber={14}><FlavorMemory /></SmokeCraftSessionGuard>} />
+
+                {/* Knowledge Drop (locked S15) — placed immediately after flavor-memory,
+                    which currently stands in for the not-yet-built Mentor Commentary
+                    (locked S14), since Mentor Commentary is explicitly out of scope for
+                    this package. Shares final-third's checkpoint number and additionally
+                    requires flavor-memory to be complete (enforced in the screen itself,
+                    mirroring the cut-toast-light/lighting-tutorial interstitial pattern). */}
+                <Route path="knowledge-drop"   element={<SmokeCraftSessionGuard sessionNumber={15}><KnowledgeDrop /></SmokeCraftSessionGuard>} />
 
                 {/* S15 — final-third */}
                 <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={15}><FinalThird /></SmokeCraftSessionGuard>} />
@@ -421,8 +438,6 @@ export default function App() {
                 <Route path="pairing"        element={<Pairing />} />
                 <Route path="available"      element={<Available />} />
                 <Route path="assistant"      element={<Assistant />} />
-                <Route path="terroir"        element={<Terroir />} />
-                <Route path="knowledge-drop" element={<KnowledgeDrop />} />
                 <Route path="pairing-mastery" element={<PairingMastery />} />
                 <Route path="vitola"         element={<Vitola />} />
                 {/* S2 alias: identity = profile */}

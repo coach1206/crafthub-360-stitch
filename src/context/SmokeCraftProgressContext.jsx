@@ -54,18 +54,28 @@ export function SmokeCraftProgressProvider({ children }) {
     [effectiveCompleted.join(','), isDemoMode]
   )
 
-  // Lighting Tutorial sits between Session 11 (cut-toast-light) and Session 12
-  // (first-third) but isn't its own VISIT_STRUCTURE session, so the standard
-  // "next incomplete session" resume logic can't see it. LightingTutorial.jsx
-  // sets a dedicated sessionStorage flag while mounted (cleared on navigating
-  // away) — read that instead of the generic per-navigation lastVisitedRoute,
-  // which gets overwritten by every screen visit including a locked screen
-  // and so can't reliably signal "the guest was last actively here."
+  // Lighting Tutorial, Terroir, and Knowledge Drop each sit at an interstitial
+  // position between two VISIT_STRUCTURE sessions but aren't themselves a
+  // catalog session, so the standard "next incomplete session" resume logic
+  // can't see them. Each screen sets a dedicated sessionStorage flag while
+  // mounted (cleared on navigating away) — read that instead of the generic
+  // per-navigation lastVisitedRoute, which gets overwritten by every screen
+  // visit including a locked screen and so can't reliably signal "the guest
+  // was last actively here."
+  const ACTIVE_SCREEN_OVERRIDES = [
+    { route: '/smokecraft/lighting-tutorial', label: 'Lighting Tutorial', requires: 'cut-toast-light' },
+    { route: '/smokecraft/terroir',           label: 'Terroir',           requires: 'mentor' },
+    { route: '/smokecraft/knowledge-drop',    label: 'Knowledge Drop',    requires: 'flavor-memory' },
+  ]
+
   const currentAllowed = useMemo(() => {
     let activeScreen = null
     try { activeScreen = sessionStorage.getItem('sc_active_screen') } catch {}
-    if (activeScreen === '/smokecraft/lighting-tutorial' && completedSteps.includes('cut-toast-light')) {
-      return { ...baseCurrentAllowed, route: '/smokecraft/lighting-tutorial', label: 'Lighting Tutorial' }
+    const override = ACTIVE_SCREEN_OVERRIDES.find(
+      o => o.route === activeScreen && completedSteps.includes(o.requires)
+    )
+    if (override) {
+      return { ...baseCurrentAllowed, route: override.route, label: override.label }
     }
     return baseCurrentAllowed
     // eslint-disable-next-line react-hooks/exhaustive-deps

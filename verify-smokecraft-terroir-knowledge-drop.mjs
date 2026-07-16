@@ -128,8 +128,8 @@ async function run() {
   await nav(page, '/smokecraft/knowledge-drop')
   await page.click('div[role="navigation"] button:last-of-type')
   await page.waitForTimeout(500)
-  new URL(page.url()).pathname === '/smokecraft'
-    ? ok('Continue on Knowledge Drop navigates to /smokecraft')
+  new URL(page.url()).pathname === '/smokecraft/final-third'
+    ? ok('Continue on Knowledge Drop navigates to /smokecraft/final-third')
     : bad(`Continue landed on ${page.url()}`)
 
   // Terroir Continue too
@@ -138,8 +138,8 @@ async function run() {
   await page.waitForTimeout(150)
   await page.click('div[role="navigation"] button:last-of-type')
   await page.waitForTimeout(500)
-  new URL(page.url()).pathname === '/smokecraft'
-    ? ok('Continue on Terroir navigates to /smokecraft')
+  new URL(page.url()).pathname === '/smokecraft/format'
+    ? ok('Continue on Terroir navigates to /smokecraft/format')
     : bad(`Terroir Continue landed on ${page.url()}`)
 
   // ── 9. Resume works — pre-seeded canonical selection restored ──
