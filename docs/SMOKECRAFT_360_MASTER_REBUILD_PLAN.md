@@ -643,6 +643,51 @@ No test was skipped. Every pre-existing failure was independently reproduced aga
 
 **Known limitations:** the approved Choose Your Cut background image continues to be the shared `SC_ASSETS.cutToastLight` asset (not renamed or replaced), since the mandate scoped image changes to "only if the approved Choose Your Cut image must be connected" and the existing asset already serves this narrowed screen correctly.
 
+#### Terroir (S4) + Knowledge Drop (S15) — Implementation Evidence (Package G: Terroir + Knowledge Drop Live Experience)
+
+**Scope actually implemented:** replaces the unbuilt `Terroir.jsx` `ComingSoon` stub with a real, live React screen covering Country/Region/Soil/Climate/Growing Conditions/Why It Matters, and builds a brand-new `KnowledgeDrop.jsx` screen covering Tobacco/Fermentation/Aging/Factory Story with an optional per-topic knowledge check. Both reuse approved existing imagery (`smokecraft-terroir.png`, `smokecraft-seed-soil.png`, and the previously-orphaned `smokecraft-origins.png` / `smokecraft-vitola.png` / `smokecraft-pairing-mastery.png` / `smokecraft-flavor-dna.png`) rather than requesting new photography, per the rebuild plan's own guidance (§"Likely reusable without new photography… Knowledge Drop"). Neither screen was wired into the guarded main-journey spine (`SmokeCraftSessionGuard`) — both remain standalone/unguarded, matching their pre-existing status (Terroir was already unguarded; the four merge-source stubs it draws from were also unguarded) and staying inside this package's explicit scope of "Terroir + Knowledge Drop" only, not spine renumbering.
+
+**Exact files changed:**
+- `src/pages/smokecraft/Terroir.jsx` — full rewrite from the `ComingSoon` stub to a live tabbed content screen: 6 selectable sections, a replaceable image zone with real `onLoad`/`onError` states (not a fabricated loading animation), an educational content panel, empty state (no section chosen yet), completed state (all 6 viewed), Back (`navigate(-1)`) and Continue (`navigate('/smokecraft')`) via `SmokeCraftNavBar`, and progress persisted through the new `setTerroir()` setter.
+- `src/pages/smokecraft/KnowledgeDrop.jsx` (new) — same architecture as Terroir: 4 selectable topics, replaceable image zone with real load/error states, educational panel, an optional per-topic knowledge-check quiz (real multiple-choice state, real right/wrong feedback, contributes to a real `quizScore`, never auto-completed), empty/completed states, Back/Continue via `SmokeCraftNavBar`, progress persisted through the new `setKnowledgeDrop()` setter.
+- `src/context/SmokeCraftJourneyContext.jsx` — added two missing canonical fields (`terroir: null`, `knowledgeDrop: null`) and their setters (`setTerroir`, `setKnowledgeDrop`), following the exact existing per-step-setter pattern (e.g. `setSeedSoil`). No existing field, setter, migration, or `STATE_VERSION` was touched.
+- `src/constants/smokecraftAssets.js` — added `terroir`, `terroirSoil`, `knowledgeDropTobacco`, `knowledgeDropFermentation`, `knowledgeDropAging`, `knowledgeDropFactory` entries, all pointing at already-approved reference images already present in the repo (`public/assets/smokecraft-reference/approved/`) — no new image files were created or requested.
+- `src/App.jsx` — added the `KnowledgeDrop` import and a new unguarded `knowledge-drop` route (`/smokecraft/knowledge-drop`), placed next to the existing `terroir` route in the "Supplemental / unguarded pages" group. The `terroir` route itself was not moved, renamed, or reguarded — only its element's internal implementation changed.
+- `verify-smokecraft-terroir-knowledge-drop.mjs` (new) — 12-suite / 19-check Playwright suite for this package.
+
+**Terroir route:** `/smokecraft/terroir` (route path unchanged — only the screen behind it was built out from a stub).
+
+**Knowledge Drop route:** `/smokecraft/knowledge-drop` (new route, added because the locked route did not yet exist, per the mandate's allowed-file-scope exception for `src/App.jsx`).
+
+**Back target (both screens):** `navigate(-1)` — matches the established "supporting/standalone module returns to caller" convention confirmed in Package B for every other unguarded module.
+
+**Continue target (both screens):** `navigate('/smokecraft')` — a deterministic, safe fallback to the SmokeCraft entry/dashboard, consistent with the existing `ComingSoon` component's own fallback pattern (`nextRoute || prevRoute || '/smokecraft'`). Neither screen is yet wired into the guarded main-journey spine, so there is no locked "next screen" for Continue to chain into within this package's scope.
+
+**Persistence behavior:** both screens read their initial state from `journey.terroir` / `journey.knowledgeDrop` on mount (Resume support) and call `setTerroir()` / `setKnowledgeDrop()` — both pre-existing-pattern setters added this package — whenever the guest's viewed-section/topic set (or quiz score) changes. Data is stored under the existing `sc_journey_v1` canonical key; no new localStorage/sessionStorage key was created, no shadow-key pattern was reintroduced, and Package A's migration and `STATE_VERSION` are untouched.
+
+**Images reused (no new photography):** `smokecraft-terroir.png` (Terroir — Country/Region/Climate/Growing Conditions/Why It Matters), `smokecraft-seed-soil.png` (Terroir — Soil), `smokecraft-origins.png` (Knowledge Drop — Tobacco), `smokecraft-vitola.png` (Knowledge Drop — Fermentation), `smokecraft-pairing-mastery.png` (Knowledge Drop — Aging), `smokecraft-flavor-dna.png` (Knowledge Drop — Factory Story). All six were already present and approved in `public/assets/smokecraft-reference/approved/`.
+
+**Tests added:** `verify-smokecraft-terroir-knowledge-drop.mjs` — 12 suites / 19 checks: both routes resolve; all 6 Terroir sections and all 4 Knowledge Drop topics are independently selectable; content updates correctly per selection; progress persists to `sc_journey_v1`; refresh restores viewed-count state; Back and Continue both work on both screens; Resume restores a pre-seeded viewed-sections/topics set (and quiz score) on fresh mount; no horizontal overflow at desktop width; tablet (768×1024) and mobile (390×844) layouts render without overflow and with a visible nav bar; ARIA `role="tablist"`/`aria-label` accessibility markers are present on both screens' selectors.
+
+**Tests run:** new suite, `verify-smokecraft-persistence-consolidation.mjs` (Package A regression), `verify-smokecraft-route-corrections.mjs` (Package B regression), `verify-smokecraft-lighting-tutorial-route.mjs` (Package E regression), `verify-smokecraft-choose-your-cut.mjs` (Package F regression), `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-terroir-knowledge-drop.mjs` | **19 passed, 0 failed** |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — Package A unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — Package B unaffected |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** — Package E unaffected |
+| `verify-smokecraft-choose-your-cut.mjs` | **16 passed, 0 failed** — Package F unaffected |
+| `verify-interactions.mjs` | 20 passed, 2 failed — identical to the established post-Package-F baseline (same 2 pre-existing, unrelated failures) |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — identical count/failure profile to the established baseline |
+| `npm run build` | **green** |
+
+**Confirmed no unrelated files changed:** `git status --short` before commit showed only `src/App.jsx`, `src/constants/smokecraftAssets.js`, `src/context/SmokeCraftJourneyContext.jsx`, `src/pages/smokecraft/Terroir.jsx` (all modified), `src/pages/smokecraft/KnowledgeDrop.jsx` and `verify-smokecraft-terroir-knowledge-drop.mjs` (both new) — no Choose Your Cut, Lighting Tutorial, AI Summary, Rewards, Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge, or unrelated-route/image files touched; regenerated `public/proof/final-live-acceptance/*.png` screenshots were discarded via `git checkout --` before commit.
+
+**Known limitations:** neither screen is yet wired into the guarded 27-session main-journey spine (`SmokeCraftSessionGuard`) — both remain reachable only via direct navigation or existing links to `/smokecraft/terroir` / `/smokecraft/knowledge-drop`, exactly as `Origins`/`Vitola`/`PairingMastery`/`FlavorDNA` (their still-unmerged legacy source stubs) already were. Wiring Terroir into its locked S4 spine position (between Meet Your Cigar and Construction Inspection) and Knowledge Drop into its locked S15 spine position (after Mentor Commentary) is deferred to a future routing/spine package, consistent with how Package E deferred the Choose Your Cut/Lighting Tutorial split's own spine placement work. The four legacy stub screens (`Origins.jsx`, `Vitola.jsx`, `PairingMastery.jsx`, `FlavorDNA.jsx`) were left completely untouched, per the mandate's "do not modify any unrelated route or image" — their eventual redirect-to-Knowledge-Drop consolidation is also deferred.
+
 **Intentionally deferred:** Choose Your Cut (S6) as its own screen, the actual CutToastLight component split, and giving Lighting Tutorial its own distinct session number in `VISIT_STRUCTURE` — all remain for the full Package C split described earlier in this document.
 
 ### Package D — Merge Screens (Terroir+SeedSoil, Construction Inspection+CigarGaugeGuide, Knowledge Drop, Completed Scorecard, Next Journey)

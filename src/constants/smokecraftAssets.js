@@ -97,6 +97,18 @@ export const SC_ASSETS = {
   // S24 — Session Complete — raw full composition
   sessionComplete:     `${RAW}/SESSION%20COMPLETE.png`,
 
+  // Terroir (Country/Region/Soil/Climate/Growing Conditions/Why It Matters)
+  terroir:             `${REF}/smokecraft-terroir.png`,
+  terroirSoil:         `${REF}/smokecraft-seed-soil.png`,
+
+  // Knowledge Drop (Tobacco/Fermentation/Aging/Factory Story) — reuses the
+  // orphaned Origins/Vitola/PairingMastery/FlavorDNA approved reference images
+  // per the locked rebuild plan's merge guidance, rather than commissioning new art.
+  knowledgeDropTobacco:      `${REF}/smokecraft-origins.png`,
+  knowledgeDropFermentation: `${REF}/smokecraft-vitola.png`,
+  knowledgeDropAging:        `${REF}/smokecraft-pairing-mastery.png`,
+  knowledgeDropFactory:      `${REF}/smokecraft-flavor-dna.png`,
+
   // Supplemental / unguarded
   leaderboard:         `${RAW}/NEW%20DEMO%20LOUNG%20RANKING.png`,
   eventChallenge:      `${REF}/smokecraft-event-challenge.png`,

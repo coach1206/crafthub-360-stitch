@@ -47,6 +47,12 @@ const DEFAULT_STATE = {
   // Seed & Soil
   seedSoil: null, // { seedType, soilType, origin }
 
+  // Terroir (Country / Region / Soil / Climate / Growing Conditions / Why It Matters)
+  terroir: null, // { viewedSections: string[], selectedCountry }
+
+  // Knowledge Drop (Tobacco / Fermentation / Aging / Factory Story)
+  knowledgeDrop: null, // { viewedTopics: string[], quizScore }
+
   // Pairing Lab
   pairing: null, // { selections: string[], primary: string, recommendation: string }
 
@@ -227,6 +233,14 @@ export function SmokeCraftJourneyProvider({ children }) {
     updateJourney({ seedSoil: data })
   }, [updateJourney])
 
+  const setTerroir = useCallback((data) => {
+    updateJourney({ terroir: data })
+  }, [updateJourney])
+
+  const setKnowledgeDrop = useCallback((data) => {
+    updateJourney({ knowledgeDrop: data })
+  }, [updateJourney])
+
   const setPairing = useCallback((data) => {
     updateJourney({ pairing: data })
   }, [updateJourney])
@@ -292,6 +306,8 @@ export function SmokeCraftJourneyProvider({ children }) {
     setMentor,
     setFormat,
     setSeedSoil,
+    setTerroir,
+    setKnowledgeDrop,
     setPairing,
     setSelectedCigar,
     setRequestPurchase,

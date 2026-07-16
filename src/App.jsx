@@ -117,6 +117,7 @@ import Available        from './pages/smokecraft/Available.jsx'
 import Assistant        from './pages/smokecraft/Assistant.jsx'
 import SessionComplete  from './pages/smokecraft/SessionComplete.jsx'
 import Terroir          from './pages/smokecraft/Terroir.jsx'
+import KnowledgeDrop    from './pages/smokecraft/KnowledgeDrop.jsx'
 import PairingMastery   from './pages/smokecraft/PairingMastery.jsx'
 import Vitola           from './pages/smokecraft/Vitola.jsx'
 import Identity         from './pages/smokecraft/Identity.jsx'
@@ -421,6 +422,7 @@ export default function App() {
                 <Route path="available"      element={<Available />} />
                 <Route path="assistant"      element={<Assistant />} />
                 <Route path="terroir"        element={<Terroir />} />
+                <Route path="knowledge-drop" element={<KnowledgeDrop />} />
                 <Route path="pairing-mastery" element={<PairingMastery />} />
                 <Route path="vitola"         element={<Vitola />} />
                 {/* S2 alias: identity = profile */}
