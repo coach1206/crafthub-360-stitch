@@ -12,65 +12,52 @@ const NAT_H = 941
 
 const GOLD = '#E9C176'
 
-const CUT_METHODS   = ['Straight Cut', 'V-Cut', 'Punch Cut']
-const TOAST_METHODS = ['Gentle Toast', 'Foot Toast', 'Full Toast']
-const LIGHT_METHODS = ['Cedar Spill', 'Torch Lighter', 'Soft Flame']
+const CUT_METHODS = ['Straight Cut', 'V-Cut', 'Punch Cut']
 
 const METHOD_TIPS = {
-  'Straight Cut':  'Clean guillotine cut removes the cap in one motion. Produces an open, unrestricted draw. Best for Parejo shapes.',
-  'V-Cut':         'Creates a wedge channel into the cap. Concentrates smoke through a focused point — enhances flavor intensity.',
-  'Punch Cut':     'Circular punch removes a small plug. Minimal cut exposure, tight draw, excellent for Robusto and Toro formats.',
-  'Gentle Toast':  'Rotate the foot slowly above flame. Warms the tobacco without burning — primes the blend before lighting.',
-  'Foot Toast':    'Toast the full foot circumference evenly. Creates an even ember foundation for a consistent first third burn.',
-  'Full Toast':    'Toast aggressively across the foot and edges. Faster ignition — recommended for Maduros and thick ring gauges.',
-  'Cedar Spill':   'Ignite a cedar spill from a candle. The cedar aromatics complement tobacco naturally. Classic lounge method.',
-  'Torch Lighter': 'Butane torch lights quickly and evenly. Best for outdoor use or when cedar isn\'t available. Keep flame moving.',
-  'Soft Flame':    'Soft butane or match flame. Slower ignition preserves delicate top notes. Preferred for Connecticut wrappers.',
+  'Straight Cut': 'Clean guillotine cut removes the cap in one motion. Produces an open, unrestricted draw. Best for Parejo shapes.',
+  'V-Cut':        'Creates a wedge channel into the cap. Concentrates smoke through a focused point — enhances flavor intensity.',
+  'Punch Cut':    'Circular punch removes a small plug. Minimal cut exposure, tight draw, excellent for Robusto and Toro formats.',
 }
 
-const STEP_GROUPS = [
-  { id: 'cut',   methods: CUT_METHODS,   y: 30.5 },
-  { id: 'toast', methods: TOAST_METHODS, y: 50.0 },
-  { id: 'light', methods: LIGHT_METHODS, y: 69.0 },
-]
+const METHOD_WHY = {
+  'Straight Cut': 'The Straight Cut is the traditional choice because it removes the entire cap cleanly, opening the full diameter of the cigar for an unrestricted, even draw. It works on nearly every shape and is the most forgiving cut for beginners.',
+  'V-Cut':        'The V-Cut is chosen when a taster wants to concentrate the smoke through a narrow channel, which intensifies the flavor at the point of the tongue. It suits cigars with a firm cap and is popular with tasters who prefer a more focused draw.',
+  'Punch Cut':    'The Punch Cut is chosen to preserve the structural integrity of the cap while still opening a tight draw. It resists unraveling, making it a preferred method for Robusto and Toro vitolas smoked over a longer session.',
+}
+
 const BTN_W = 18.2
 const BTN_H = 9.0
 const BTN_GAP = 1.2
+const CUT_ROW_Y = 42.0
 
 export default function CutToastLight() {
   const { awardSessionRewards } = useGuestSession()
   const { journey, setCutToastLight } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  const [cutMethod,   setCutMethod]   = useState(() => journey.cutToastLight?.cut   || null)
-  const [toastMethod, setToastMethod] = useState(() => journey.cutToastLight?.toast || null)
-  const [lightMethod, setLightMethod] = useState(() => journey.cutToastLight?.light || null)
+  const [cutMethod, setCutMethod] = useState(() => journey.cutToastLight?.cut || null)
+  const [learnWhyOpen, setLearnWhyOpen] = useState(false)
 
-  // Auto-persist to canonical journey state
+  // Auto-persist to canonical journey state (Saved state)
   useEffect(() => {
-    if (cutMethod || toastMethod || lightMethod) {
-      setCutToastLight({ cut: cutMethod, toast: toastMethod, light: lightMethod })
+    if (cutMethod) {
+      setCutToastLight({ ...(journey.cutToastLight || {}), cut: cutMethod })
     }
-  }, [cutMethod, toastMethod, lightMethod]) // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cutMethod])
 
-  function pick(step, val) {
+  function pick(method) {
     triggerHaptic('light')
-    if (step === 'cut')   setCutMethod(prev   => prev === val ? null : val)
-    if (step === 'toast') setToastMethod(prev => prev === val ? null : val)
-    if (step === 'light') setLightMethod(prev => prev === val ? null : val)
+    setCutMethod(prev => (prev === method ? null : method))
   }
 
-  function getValue(step) {
-    if (step === 'cut')   return cutMethod
-    if (step === 'toast') return toastMethod
-    return lightMethod
-  }
-
-  const activeMethod = lightMethod || toastMethod || cutMethod
-  const tip = activeMethod ? METHOD_TIPS[activeMethod] : null
+  const tip = cutMethod ? METHOD_TIPS[cutMethod] : null
+  const why = cutMethod ? METHOD_WHY[cutMethod] : null
 
   function handleContinue() {
-    setCutToastLight({ cut: cutMethod, toast: toastMethod, light: lightMethod })
+    if (!cutMethod) return
+    setCutToastLight({ ...(journey.cutToastLight || {}), cut: cutMethod })
     awardSessionRewards('cut-toast-light')
     navigate('/smokecraft/lighting-tutorial')
   }
@@ -81,50 +68,90 @@ export default function CutToastLight() {
         src={SC_ASSETS.cutToastLight}
         naturalW={NAT_W}
         naturalH={NAT_H}
-        alt="SmokeCraft Cut, Toast & Light — Preparation Methods"
+        alt="SmokeCraft Choose Your Cut"
       >
-        {STEP_GROUPS.map(group =>
-          group.methods.map((method, i) => {
-            const active = getValue(group.id) === method
-            const x = 3.7 + i * (BTN_W + BTN_GAP)
-            return (
-              <button
-                key={`${group.id}-${method}`}
-                type="button"
-                aria-label={method}
-                aria-pressed={active}
-                onClick={() => pick(group.id, method)}
-                style={{
-                  position: 'absolute',
-                  left: `${x}%`, top: `${group.y}%`,
-                  width: `${BTN_W}%`, height: `${BTN_H}%`,
-                  pointerEvents: 'auto',
-                  background: 'transparent',
-                  border: `2px solid ${active ? GOLD : 'transparent'}`,
-                  borderRadius: 4,
-                  cursor: 'pointer',
-                  boxSizing: 'border-box',
-                  outline: 'none',
-                }}
-              >
-                {active && (
-                  <span style={{
-                    position: 'absolute', top: 3, right: 5,
-                    fontSize: 'clamp(9px,1.0vw,12px)', fontWeight: 700,
-                    color: GOLD, lineHeight: 1, pointerEvents: 'none',
-                  }}>✓</span>
-                )}
-              </button>
-            )
-          })
-        )}
+        {CUT_METHODS.map((method, i) => {
+          const active = cutMethod === method
+          const x = 3.7 + i * (BTN_W + BTN_GAP)
+          return (
+            <button
+              key={method}
+              type="button"
+              aria-label={method}
+              aria-pressed={active}
+              onClick={() => pick(method)}
+              style={{
+                position: 'absolute',
+                left: `${x}%`, top: `${CUT_ROW_Y}%`,
+                width: `${BTN_W}%`, height: `${BTN_H}%`,
+                pointerEvents: 'auto',
+                background: 'transparent',
+                border: `2px solid ${active ? GOLD : 'transparent'}`,
+                borderRadius: 4,
+                cursor: 'pointer',
+                boxSizing: 'border-box',
+                outline: 'none',
+              }}
+            >
+              {active && (
+                <span style={{
+                  position: 'absolute', top: 3, right: 5,
+                  fontSize: 'clamp(9px,1.0vw,12px)', fontWeight: 700,
+                  color: GOLD, lineHeight: 1, pointerEvents: 'none',
+                }}>✓</span>
+              )}
+            </button>
+          )
+        })}
+
+        {/* Learn Why toggle */}
+        <button
+          type="button"
+          onClick={() => setLearnWhyOpen(prev => !prev)}
+          aria-pressed={learnWhyOpen}
+          style={{
+            position: 'absolute',
+            left: '3.7%', top: '56%', width: `${BTN_W}%`, height: '6%',
+            pointerEvents: 'auto',
+            background: 'transparent',
+            border: `1.5px solid ${GOLD}`,
+            borderRadius: 4,
+            color: GOLD,
+            fontFamily: 'Georgia, serif',
+            fontSize: 'clamp(9px,0.9vw,12px)',
+            cursor: 'pointer',
+            boxSizing: 'border-box',
+          }}
+        >
+          {learnWhyOpen ? 'Hide Why ▲' : 'Learn Why ▼'}
+        </button>
 
         {/* Nav mask */}
         <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
           background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
 
+        {/* Learn Why panel */}
+        {learnWhyOpen && (
+          <div style={{
+            position: 'absolute',
+            left: '3%', top: '63%', width: '94%', height: '18%',
+            background: 'rgba(5,5,5,0.94)',
+            border: '1px solid rgba(233,193,118,0.3)',
+            borderRadius: 5, boxSizing: 'border-box',
+            padding: 'clamp(6px,1vw,12px) clamp(8px,1vw,14px)',
+            overflow: 'auto',
+            fontFamily: 'Georgia, serif',
+            fontSize: 'clamp(8px,0.75vw,10px)',
+            color: 'rgba(229,226,225,0.85)',
+            lineHeight: 1.5,
+            pointerEvents: 'auto',
+          }}>
+            {why || 'Select a cut above to learn why it is chosen.'}
+          </div>
+        )}
+
         {/* Instruction tip panel — bottom strip */}
-        {tip && (
+        {tip && !learnWhyOpen && (
           <div style={{
             position: 'absolute',
             left: '3%', top: '83%', width: '94%', height: '12%',
@@ -142,7 +169,7 @@ export default function CutToastLight() {
               fontFamily: 'Georgia, serif',
               lineHeight: 1.4,
             }}>
-              <strong style={{ color: GOLD, marginRight: 4 }}>{activeMethod}:</strong>
+              <strong style={{ color: GOLD, marginRight: 4 }}>{cutMethod}:</strong>
               {tip}
             </span>
           </div>
@@ -152,7 +179,7 @@ export default function CutToastLight() {
       <SmokeCraftNavBar
         primary="Continue to Lighting Tutorial →"
         onPrimary={handleContinue}
-        primaryDisabled={!cutMethod || !toastMethod || !lightMethod}
+        primaryDisabled={!cutMethod}
         secondary="← Back"
         onSecondary={() => navigate(-1)}
       />

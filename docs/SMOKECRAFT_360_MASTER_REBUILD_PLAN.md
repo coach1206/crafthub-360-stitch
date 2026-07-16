@@ -606,6 +606,43 @@ No test was skipped. Every pre-existing failure was independently reproduced aga
 
 **Known limitations:** Choose Your Cut (S6) still does not exist as its own screen — `cut-toast-light` continues to stand in for it. The `sessionStorage` resume marker is session-scoped (cleared on tab close), so a guest who closes the tab mid-tutorial and returns later will not be resumed directly to Lighting Tutorial — an accepted, documented limitation rather than a silent gap.
 
+#### Choose Your Cut (S6) — Implementation Evidence (Package F: Complete Choose Your Cut)
+
+**Scope actually implemented:** refactors the overloaded `cut-toast-light` screen so it represents Choose Your Cut only — cut selection (Straight/V/Punch), a real "Learn Why" toggle, and live selected/educational state. Toast-method and light-method selection are removed from this screen entirely (toasting/lighting technique is now taught in the Lighting Tutorial screen built in the prior package, which never depended on those sub-fields). The route path, guard, and Continue/Back targets already established in Package E are preserved unchanged.
+
+**Exact files changed:**
+- `src/pages/smokecraft/CutToastLight.jsx` — removed `TOAST_METHODS`, `LIGHT_METHODS`, their `METHOD_TIPS` entries, and the toast/light `STEP_GROUPS` rows and state; now renders only the three cut buttons plus a new explicit "Learn Why" toggle button that opens a panel with cut-specific rationale text (`METHOD_WHY`); `primaryDisabled` now depends solely on `!cutMethod`; persisted payload narrowed to `{ cut: cutMethod }` merged over any existing `journey.cutToastLight` fields (non-destructive to other keys such as `lightingTutorialCompleted`); Back and Continue logic unchanged (`navigate(-1)` / `/smokecraft/lighting-tutorial`).
+- `verify-smokecraft-lighting-tutorial-route.mjs` — updated two test steps (Suites 8 and 9) that clicked now-removed `Gentle Toast`/`Cedar Spill` selectors; they now only select a cut, matching the refactored screen.
+- `verify-smokecraft-choose-your-cut.mjs` (new) — 13-suite / 16-check Playwright suite for this package.
+
+**Final Choose Your Cut route:** `/smokecraft/cut-toast-light` (unchanged from Package E — the route path itself was not renamed, only the screen's content was narrowed to represent Choose Your Cut only, per the mandate's "if overloaded, refactor it so it represents Choose Your Cut only" instruction).
+
+**Back target:** `navigate(-1)` (unchanged, existing codebase convention — no internal step ambiguity on this screen to warrant a hardcoded target).
+
+**Continue target:** `/smokecraft/lighting-tutorial` (unchanged from Package E).
+
+**Persistence behavior:** uses the existing, unmodified `setCutToastLight()` setter from `SmokeCraftJourneyContext`. On selection the screen now persists `{ ...(journey.cutToastLight || {}), cut: cutMethod }` — the spread preserves any other fields already on the record (e.g. `lightingTutorialCompleted` written later by `LightingTutorial.jsx`) instead of overwriting them, and drops `toast`/`light` since they are no longer collected here. Selection is restored on mount from `journey.cutToastLight?.cut`, so refresh and Resume both work through the existing canonical persistence path with no schema or migration change. Neither `SmokeCraftJourneyContext.jsx` nor `SmokeCraftProgressContext.jsx` required any changes — Choose Your Cut's resume already worked via the standard `getCurrentAllowedSession` mechanism (`cut-toast-light` is session 11 in `VISIT_STRUCTURE`), untouched by the Lighting-Tutorial-specific `sc_active_screen` override, which only activates for `/smokecraft/lighting-tutorial` itself.
+
+**Tests added:** `verify-smokecraft-choose-your-cut.mjs` — 13 suites / 16 checks: route resolves; Straight/V/Punch Cut each independently selectable; only one cut selected at a time; Learn Why content updates to match the selected cut; Continue blocked with no cut selected then enabled once one is chosen; Continue routes to Lighting Tutorial; Back navigates away; selection survives refresh; selection survives Back-then-revisit-then-Continue; Resume (fresh mount with a pre-seeded canonical selection) restores the saved cut; Lighting Tutorial still resolves and renders correctly.
+
+**Tests run:** new suite, `verify-smokecraft-persistence-consolidation.mjs` (Package A regression), `verify-smokecraft-route-corrections.mjs` (Package B regression), `verify-smokecraft-lighting-tutorial-route.mjs` (Package E regression), `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-choose-your-cut.mjs` | **16 passed, 0 failed** |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — Package A unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — Package B unaffected |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** — Package E unaffected (selectors updated to match the refactor, behavior unchanged) |
+| `verify-interactions.mjs` | 20 passed, 2 failed — Suite 6 ("CutToastLight Restoration"), a previously-known pre-existing failure, now passes as a side effect of this refactor; the 2 remaining failures (PairingLab recommendation, HumidorMatch preset buttons) are the same pre-existing, unrelated failures as every prior baseline |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — identical count/failure profile to the established baseline |
+| `npm run build` | **green** |
+
+**Confirmed no unrelated files changed:** `git status --short` before commit showed only `src/pages/smokecraft/CutToastLight.jsx` (modified), `verify-smokecraft-lighting-tutorial-route.mjs` (modified, selector-only), and `verify-smokecraft-choose-your-cut.mjs` (new) — no image, persistence, unrelated-route, or unrelated-screen files touched; regenerated `public/proof/final-live-acceptance/*.png` screenshots were discarded via `git checkout --` before commit.
+
+**Known limitations:** the approved Choose Your Cut background image continues to be the shared `SC_ASSETS.cutToastLight` asset (not renamed or replaced), since the mandate scoped image changes to "only if the approved Choose Your Cut image must be connected" and the existing asset already serves this narrowed screen correctly.
+
 **Intentionally deferred:** Choose Your Cut (S6) as its own screen, the actual CutToastLight component split, and giving Lighting Tutorial its own distinct session number in `VISIT_STRUCTURE` — all remain for the full Package C split described earlier in this document.
 
 ### Package D — Merge Screens (Terroir+SeedSoil, Construction Inspection+CigarGaugeGuide, Knowledge Drop, Completed Scorecard, Next Journey)
