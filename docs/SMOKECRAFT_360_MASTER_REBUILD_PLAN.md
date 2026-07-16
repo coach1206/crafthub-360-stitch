@@ -1156,7 +1156,64 @@ S1 Welcome (deferred, stand-in `/smokecraft`) · S2 Choose Your Cigar `/smokecra
 
 **Known limitations:** the one deliberate exception to this package's strict file list is the 2-line `App.jsx` diff plus the new `KnowledgeCheckDemo.jsx` QA harness — necessary because this repo has no component-level test runner, so a real served route was the only way to exercise the reusable component with Playwright per the package's own required-tests list. The harness is not linked from, and does not affect, any educational screen. The reusable component is **not** wired into Terroir, Meet Your Cigar, Construction Inspection, Choose Your Cut, Lighting Tutorial, Flavor Discovery, Mentor Commentary, Knowledge Drop, or Suggested Pairings this package — per the objective, it is built to be launched after those sections, not launched by them yet; integrating it into each screen is future, explicitly out-of-scope work.
 
-**Recommended next package:** wire `KnowledgeCheck` into one or more real educational screens (e.g. Knowledge Drop or Terroir), and/or continue with the remaining static-stub supporting modules (Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge, deeper Recommended Next Journey content).
+**Recommended next package (superseded by Package P below):** ~~wire `KnowledgeCheck` into one or more real educational screens, and/or continue with the remaining static-stub supporting modules (Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge, deeper Recommended Next Journey content)~~ — Leaderboard now complete.
+
+---
+
+#### Live Leaderboard Module — Implementation Evidence (Package P)
+
+**Scope actually implemented:** rebuilt the static, image-only Leaderboard screen (`/smokecraft/leaderboard`) into a live, data-driven React screen. This is a supporting module, explicitly outside the numbered 27-session spine and Entry layer — no Knowledge Check/Text Quiz, Mini Tasting, SmokeCraft Challenge, Event Challenge, Recommended Next Journey, numbered journey session, Entry-layer screen, AI Summary, Pairing Recommendations, Rewards, or Achievements screen was modified.
+
+**Exact files changed:**
+- `src/pages/smokecraft/Leaderboard.jsx` — rewritten from a 17-line static `SmokeCraftAssetScreen` stub into a live component with filters, states, and a real current-user entry.
+- `verify-smokecraft-leaderboard.mjs` (new) — 29-suite / 36-check Playwright suite for this package.
+- `docs/SMOKECRAFT_360_MASTER_REBUILD_PLAN.md` — this evidence section only.
+
+No `App.jsx` change was needed (route already existed and required no cleanup) and no `smokecraftAssets.js` change was needed (`SC_ASSETS.leaderboard` already existed and was reused as-is, unmodified).
+
+**Leaderboard route:** `/smokecraft/leaderboard` (unchanged, already guarded `requires="entry"`).
+
+**Data source used:** `src/services/smokecraft/smokeLeaderboardService.js` (`getLeaderboardSnapshot(session)`) — the one existing leaderboard service that is already honest about having no real multi-user backend (`communityEntries: []`, `communityStatus: 'empty'`, an explicit `communityMessage` disclosing that community rankings require a real backend). The other candidate, `src/services/leaderboardService.js`, was deliberately **not** used because it contains a hardcoded `DEMO_PLAYERS` array of fabricated names, which would have violated the "never fabricate names/rankings/scores/venues/activity" requirement. The one real, live entry (the current guest) is built directly from canonical, already-persisted session/journey data (XP, tier via the existing `getRankFromXP`, completed journeys, passport stamps, achievements, Knowledge Check scores, selected venue, last activity timestamp) — no data is invented.
+
+**Honest fallback behavior:** because no real backend/community data source exists, the screen never fabricates other players. It shows exactly one real entry (the current user) plus an explicit, honestly-worded banner (`snapshot.communityMessage`) disclosing that full community rankings require a real backend integration. This is the documented integration seam for future work — no fake backend was built.
+
+**Filters implemented:** Venue, Global, Weekly, Monthly, All Time, and Experience Tier — all functionally real, evaluated against the one real entry using genuine predicates (venue match, tier match, time-window match against real activity timestamps), so filters correctly include/exclude the real entry rather than toggling fake data. Friends/Community was deliberately omitted — no relationship/friends data source exists anywhere in the codebase, per the package's own "only when real relationship data exists" condition.
+
+**Privacy behavior:** only public identity is shown (preferred name or an honest "Guest" anonymous fallback when no public identity is set); no email address, phone number, legal name, or private profile data is ever rendered. Quiz score and challenge points are shown as "Not available" rather than fabricated when no real value exists.
+
+**Scroll and pagination behavior:** entries render inside a `role="list"` scrollable `<main>` container (`overflowY: auto`) with `overscrollBehavior: contain` set specifically to prevent the list's scroll from trapping/propagating to the page.
+
+**Persistence behavior:** canonical only — `session.smokeCraft.leaderboardPrefs = { scope, timeRange, tierFilter }` plus `lastRefreshedAt`, written via the guest session's existing generic `update()` action, inside the existing `novee_guest_session` storage key. No new storage key was created. Filter selections are restored on reload/refresh. No XP is awarded from opening or using the Leaderboard screen (verified directly — XP unchanged after navigation).
+
+**Tests run:** new suite (`verify-smokecraft-leaderboard.mjs`), `verify-smokecraft-27-session-spine.mjs`, `verify-smokecraft-persistence-consolidation.mjs`, `verify-smokecraft-route-corrections.mjs`, `verify-smokecraft-lighting-tutorial-route.mjs`, `verify-smokecraft-choose-your-cut.mjs`, `verify-smokecraft-terroir-knowledge-drop.mjs`, `verify-smokecraft-terroir-knowledge-drop-spine.mjs`, `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs`, `verify-smokecraft-ai-summary-pairing-recommendations.mjs`, `verify-smokecraft-rewards-achievements.mjs`, `verify-smokecraft-venue-select-resume.mjs`, `verify-smokecraft-welcome-experience.mjs`, `verify-smokecraft-knowledge-check.mjs`, `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-leaderboard.mjs` | **36 passed, 0 failed** |
+| `verify-smokecraft-27-session-spine.mjs` | **24 passed, 0 failed** — unaffected |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-choose-your-cut.mjs` | **16 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop.mjs` | **19 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop-spine.mjs` | **17 passed, 0 failed** — unaffected |
+| `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-ai-summary-pairing-recommendations.mjs` | **35 passed, 0 failed** — unaffected |
+| `verify-smokecraft-rewards-achievements.mjs` | **43 passed, 0 failed** — unaffected |
+| `verify-smokecraft-venue-select-resume.mjs` | **47 passed, 0 failed** — unaffected |
+| `verify-smokecraft-welcome-experience.mjs` | **32 passed, 0 failed** — unaffected |
+| `verify-smokecraft-knowledge-check.mjs` | **35 passed, 0 failed** — unaffected |
+| `verify-interactions.mjs` | 20 passed, 2 failed — identical to the established baseline (same 2 pre-existing, unrelated failures) |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — identical to the established baseline |
+| `npm run build` | **green** |
+
+**Confirmed no unrelated files changed:** `git status --short` before commit showed only `src/pages/smokecraft/Leaderboard.jsx` (modified), `verify-smokecraft-leaderboard.mjs` (new), and this doc section — no numbered session, Entry-layer screen, AI Summary, Pairing Recommendations, Rewards, Achievements, Knowledge Check, Mini Tasting, SmokeCraft Challenge, Event Challenge, Recommended Next Journey, production image, database, deployment, or environment file touched; the preview server used for testing was stopped before finishing, and no background test/preview process remained running; regenerated `public/proof/final-live-acceptance/*.png` screenshots were discarded via `git checkout --` before commit.
+
+**Known limitations:** only one real leaderboard entry (the current guest) can ever be shown until a real multi-user backend exists — this is the documented integration seam, not a bug. The approved production Leaderboard image is reused as a non-blocking decorative header banner; all data underneath remains fully live React content, independent of that asset, per the package's instruction.
+
+**Recommended next package:** wire a real multi-user leaderboard backend (the documented integration seam in `smokeLeaderboardService.js`), and/or continue with the remaining static-stub supporting modules (Mini Tasting, SmokeCraft Challenge, Event Challenge, deeper Recommended Next Journey content).
 
 ---
 
