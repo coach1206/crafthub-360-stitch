@@ -88,7 +88,7 @@ export function SmokeCraftProgressProvider({ children }) {
       const nums = []
       for (const v of VISIT_STRUCTURE) {
         for (const s of v.sessions) {
-          if (s.id === 'entry' || effectiveCompleted.includes(s.id)) nums.push(s.session)
+          if (effectiveCompleted.includes(s.id)) nums.push(s.session)
         }
       }
       return nums
@@ -101,7 +101,7 @@ export function SmokeCraftProgressProvider({ children }) {
     () => {
       const nums = []
       for (const v of VISIT_STRUCTURE) {
-        if (v.sessions.every(s => s.id === 'entry' || effectiveCompleted.includes(s.id))) {
+        if (v.sessions.every(s => effectiveCompleted.includes(s.id))) {
           nums.push(v.visit)
         }
       }
@@ -115,7 +115,7 @@ export function SmokeCraftProgressProvider({ children }) {
     () => {
       const badges = []
       for (const v of VISIT_STRUCTURE) {
-        const allDone = v.sessions.every(s => s.id === 'entry' || effectiveCompleted.includes(s.id))
+        const allDone = v.sessions.every(s => effectiveCompleted.includes(s.id))
         if (allDone && v.badges) badges.push(...v.badges)
       }
       return badges

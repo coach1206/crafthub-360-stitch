@@ -36,13 +36,14 @@ function resolveCompletedSteps(progress) {
   return progress.completedSteps || []
 }
 
-// A session counts as satisfied for unlock purposes when it is the always-true
-// entry pseudo-step, or a session with no built screen yet (implemented:
-// false — see session.js). Evidence can never be recorded for a session that
-// does not exist, so it is skipped rather than fabricated as complete or left
-// to permanently block every later session (Package J deferred-session rule).
+// A session counts as satisfied for unlock purposes when it is a session
+// with no built screen yet (implemented: false — see session.js). Evidence
+// can never be recorded for a session that does not exist, so it is skipped
+// rather than fabricated as complete or left to permanently block every
+// later session (Package J deferred-session rule). S1 (id 'entry') is now a
+// real, implemented session (Package N) and requires genuine evidence like
+// any other — it is no longer auto-satisfied.
 function isStepComplete(completedSteps, session) {
-  if (session.id === 'entry') return true
   if (session.implemented === false) return true
   return completedSteps.includes(session.id)
 }

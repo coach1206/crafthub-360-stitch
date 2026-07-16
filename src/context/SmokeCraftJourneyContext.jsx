@@ -140,6 +140,13 @@ const DEFAULT_STATE = {
   // never a fabricated/backfilled record. See ResumeJourney.jsx.
   previousCompletedJourneys: [], // [{ journeyId, cigarName, completedAt }]
 
+  // ── S1 Welcome to Today's Experience (Package N) ───────────────────────
+  welcomeExperience: null, // { viewedAt, ... } — general container, extendable without new top-level fields
+  welcomeViewedAt: null,
+  learningObjectivesViewed: false,
+  s1CompletedAt: null,
+  currentScreenId: null,
+
   // Final Review
   finalReview: null, // { reviewNotes, editRequested }
 
@@ -401,6 +408,13 @@ export function SmokeCraftJourneyProvider({ children }) {
     updateJourney({ resumeRoute: route, resumeScreenId: screenId })
   }, [updateJourney])
 
+  /** Single action covering all S1 Welcome fields — pass any subset of
+   * { welcomeExperience, welcomeViewedAt, learningObjectivesViewed,
+   *   s1CompletedAt, currentScreenId }. */
+  const setWelcomeState = useCallback((patch) => {
+    updateJourney(patch)
+  }, [updateJourney])
+
   /**
    * Resets only active-journey content fields (this journey's cigar,
    * tasting/tab data, scorecard, AI summary, pairing recommendation, and
@@ -429,6 +443,11 @@ export function SmokeCraftJourneyProvider({ children }) {
         resumeRoute: null,
         resumeScreenId: null,
         // Reset: this journey's content.
+        welcomeExperience: null,
+        welcomeViewedAt: null,
+        learningObjectivesViewed: false,
+        s1CompletedAt: null,
+        currentScreenId: null,
         mentor: null,
         meetYourCigar: null,
         mentorCommentary: null,
@@ -504,6 +523,7 @@ export function SmokeCraftJourneyProvider({ children }) {
     setSelectedVenue,
     setLastEntryScreen,
     setResumeCache,
+    setWelcomeState,
     startNewJourney,
     setPassportStamp,
     setConnections,

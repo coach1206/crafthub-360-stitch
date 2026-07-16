@@ -26,18 +26,17 @@ const KNOWN_ROUTES = new Set([
   ...SUPPORTING_MODULES.map(s => s.route),
 ].filter(Boolean))
 
-// The documented, authoritative temporary starting destination for a brand
-// new journey until S1 Welcome to Today's Experience is built (Package J
-// evidence: "S1 Welcome (deferred, stand-in: reuses the existing Entry/Launch
-// screen at /smokecraft, always treated as satisfied like the pre-existing
-// 'entry' pseudo-step)"). This is the one legitimate, explicitly-documented
-// use of /smokecraft as a destination — distinct from Resume's own target,
-// which must never default to /smokecraft out of convenience.
-const NEW_JOURNEY_START_ROUTE = '/smokecraft'
+// S1 Welcome to Today's Experience is now real and implemented (Package N)
+// — it is the locked registry's authoritative starting destination for a
+// brand new journey. (Its Package J stand-in, /smokecraft, is superseded.)
+const NEW_JOURNEY_START_ROUTE = '/smokecraft/welcome'
 
-// completedSteps ids that represent Entry-layer/account state, not
+// completedSteps ids that represent permanent account/Entry-layer state, not
 // active-journey tasting progress — preserved when starting a new journey.
-const PRESERVED_COMPLETED_STEP_IDS = ['entry', 'enroll']
+// S1 ('entry'/Welcome) is intentionally NOT preserved: it now represents
+// having viewed *this* journey's introduction, so a new journey shows
+// Welcome again, same as every other active-journey session.
+const PRESERVED_COMPLETED_STEP_IDS = ['enroll']
 
 function resolveSafeResumeTarget(currentAllowed, persistedRoute) {
   if (persistedRoute && KNOWN_ROUTES.has(persistedRoute)) {

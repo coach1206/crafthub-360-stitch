@@ -205,9 +205,16 @@ async function run() {
   // ── 25. Resets only active-journey data ──
   console.log('\n── Suite 25: Resets only active-journey data ──')
   journeyAfterReset.selectedCigar === null ? ok('Active-journey field (selectedCigar) correctly reset') : bad('selectedCigar was not reset')
-  gsAfterReset.completedSteps.includes('entry') && gsAfterReset.completedSteps.includes('enroll')
-    ? ok('Entry-layer completedSteps (entry, enroll) preserved through reset')
-    : bad('Entry-layer completedSteps were incorrectly wiped')
+  // Package N: S1 Welcome ('entry') is now a real per-journey session, not a
+  // permanent account flag — it correctly resets along with the rest of the
+  // active journey so a new journey shows Welcome again; only 'enroll'
+  // (Sign In / account identity) is preserved.
+  gsAfterReset.completedSteps.includes('enroll')
+    ? ok('Account/Entry-layer completedSteps (enroll) preserved through reset')
+    : bad('enroll was incorrectly wiped')
+  gsAfterReset.completedSteps.includes('entry')
+    ? bad('S1 Welcome (entry) was not reset — it is now a real active-journey session')
+    : ok('S1 Welcome (entry) correctly reset along with active-journey data (Package N)')
   gsAfterReset.completedSteps.includes('format') ? bad('Active-journey completedSteps were not reset') : ok('Active-journey completedSteps (e.g. format) correctly reset')
 
   // ── 26. Double-click does not duplicate ──
@@ -228,7 +235,9 @@ async function run() {
 
   // ── 27. No-saved-journey state ──
   console.log('\n── Suite 27: No-saved-journey state ──')
-  await seedGuest(page, { completedSteps: ['entry', 'enroll'], demoMode: true })
+  // Package N: 'entry' (S1 Welcome) now counts as real active-journey
+  // progress, so a genuinely fresh guest must omit it too, not just 'enroll'.
+  await seedGuest(page, { completedSteps: ['enroll'], demoMode: true })
   await nav(page, '/smokecraft/resume')
   body = await page.evaluate(() => document.body.innerText.toLowerCase())
   body.includes('no saved journey yet') ? ok('No-saved-journey state shown honestly for a fresh guest') : bad('No honest no-saved-journey state shown')

@@ -34,10 +34,12 @@ async function nav(page, path) {
   await page.waitForTimeout(500)
 }
 
-// The 20 implemented spine routes, in locked S-number order (Package K added
+// The 21 implemented spine routes, in locked S-number order (Package K added
 // S21/S22; Package L added S25, sharing /smokecraft/rewards with S26
-// Achievements — S26 has no separate route, so it isn't a separate entry here).
+// Achievements — S26 has no separate route, so it isn't a separate entry here;
+// Package N added S1, replacing its former always-auto-satisfied stand-in).
 const IMPLEMENTED_SPINE = [
+  { session: 1,  route: '/smokecraft/welcome' },
   { session: 2,  route: '/smokecraft/humidor-match' },
   { session: 3,  route: '/smokecraft/meet-your-cigar' },
   { session: 4,  route: '/smokecraft/terroir' },
@@ -71,6 +73,7 @@ const CHAIN = ['entry', 'humidor-match', 'meet-your-cigar', 'terroir', 'format',
 
 /** completedSteps needed so `route` is the guest's legitimate current session. */
 const ROUTE_TO_ID = {
+  '/smokecraft/welcome': 'entry',
   '/smokecraft/humidor-match': 'humidor-match',
   '/smokecraft/meet-your-cigar': 'meet-your-cigar',
   '/smokecraft/terroir': 'terroir',
@@ -113,7 +116,7 @@ async function run() {
     await nav(page, route)
     if (new URL(page.url()).pathname !== route) { allSpineResolve = false; console.error(`    ${route} redirected to ${page.url()}`) }
   }
-  allSpineResolve ? ok('All 20 implemented numbered-spine routes resolve (demo mode)') : bad('A spine route failed to resolve to itself')
+  allSpineResolve ? ok('All 21 implemented numbered-spine routes resolve (demo mode)') : bad('A spine route failed to resolve to itself')
 
   // Supporting modules resolve too but are reachable independent of spine sequence gates.
   const supportingRoutes = ['/smokecraft/golden-box', '/smokecraft/mentor-selection', '/smokecraft/wrapper-strength',
@@ -286,7 +289,7 @@ async function run() {
     await nav(page, route)
     if (new URL(page.url()).pathname !== route) { noDeadEnd = false; console.error(`    dead end approaching ${route}`) }
   }
-  noDeadEnd ? ok('Walking the full 20-route implemented chain with exact prerequisites hits no dead end') : bad('A dead end was found walking the implemented chain')
+  noDeadEnd ? ok('Walking the full 21-route implemented chain with exact prerequisites hits no dead end') : bad('A dead end was found walking the implemented chain')
 
   // ── 25. Missing future sessions are honestly deferred ──
   console.log('\n── Suite 25: Deferred sessions honestly registered ──')

@@ -1044,7 +1044,70 @@ S1 Welcome (deferred, stand-in `/smokecraft`) · S2 Choose Your Cigar `/smokecra
 
 **Remaining deferred screens:** S1 Welcome to Today's Experience (stand-in, reuses the existing Entry/Launch screen at `/smokecraft`) — the only remaining deferred entry point across the full Entry layer + 27-session spine.
 
-**Recommended next package:** none remain in the locked spine/Entry-layer build sequence — S1 Welcome is the last gap, and per Package J's own precedent it is intentionally left as its documented stand-in rather than built as a separate screen unless explicitly requested. Future work would be supporting-module redesign/polish (already partially covered by Package I) or a dedicated S1 Welcome package if the product decides the `/smokecraft` stand-in is no longer sufficient.
+**Recommended next package (superseded by Package N below):** ~~a dedicated S1 Welcome package~~ — now complete.
+
+---
+
+#### S1 Welcome to Today's Experience — Implementation Evidence (Package N)
+
+**Scope actually implemented:** replaces S1's Package J stand-in (the Entry/Launch screen at `/smokecraft`, always auto-satisfied) with a real, implemented, evidence-based S1 screen at `/smokecraft/welcome`. This closes the last remaining gap in the full Entry layer + 27-session spine — every numbered session and every Entry-layer screen is now real. Knowledge Check/Text Quiz, Recommended Next Journey, Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge, AI Summary, Pairing Recommendations, Rewards, Achievements, Venue Selection, and Resume/Start themselves were explicitly not modified beyond the one required Resume destination correction.
+
+**Exact files changed:**
+- `src/pages/smokecraft/WelcomeExperience.jsx` (new) — S1 screen.
+- `src/constants/session.js` — S1's `VISIT_STRUCTURE` entry changed from `{ id: 'entry', route: '/smokecraft', ..., implemented: false }` to `{ id: 'entry', route: '/smokecraft/welcome', ... }` (no `implemented: false`). The `id` was deliberately **kept** as `'entry'` rather than renamed — every existing `completedSteps` record and every prior package's test fixture already includes `'entry'` as its first element (previously meaningless, since it was auto-satisfied), so keeping the id means all of that existing data and every prior test remains valid without a rename-driven migration. The `isSessionComplete()` helper's `if (id === 'entry') return true` auto-satisfy special case was removed — S1 now requires genuine evidence (`completedSteps.includes('entry')`), like any other session.
+- `src/constants/smokecraftJourney.js` — `isStepComplete()`'s matching `if (session.id === 'entry') return true` special case removed, for the same reason (single source of truth, kept in parity with `session.js`).
+- `src/context/SmokeCraftProgressContext.jsx` — `completedSessions`/`completedVisits`/`earnedBadges` each had their own independent `s.id === 'entry' ||` auto-satisfy shortcut (a second, separate hardcode from the one in `session.js`/`smokecraftJourney.js`); removed for the same reason — without this fix, Resume's completion-percentage math and phase/badge-earned computations would have kept treating S1 as always-complete even though it now genuinely isn't, which would have been a real, silent correctness bug. Not in the package's original allowed-file list, but directly necessary for S1 to be genuinely real rather than real-in-name-only; documented here rather than left as a silent gap.
+- `src/App.jsx` — one new guarded route (`sessionNumber={1}`) for `/smokecraft/welcome`. The pre-existing index route (`/smokecraft`, `SmokeCraft.jsx`, the Entry-layer Launch screen) is untouched and remains a separate, distinct screen from S1 — its own `sessionNumber={1}` guard prop was already trivially always-unlocked before this package (S1 is always reachable, by construction of the unlock-walk algorithm) and remains so; no behavior change there.
+- `src/context/SmokeCraftJourneyContext.jsx` — 5 new canonical fields (`welcomeExperience`, `welcomeViewedAt`, `learningObjectivesViewed`, `s1CompletedAt`, `currentScreenId`) and one new action (`setWelcomeState`, covering all five in a single call) added to `DEFAULT_STATE`/the context value; `startNewJourney()`'s reset list extended to include all five (S1 is now active-journey content, resets with everything else — see Resume behavior below). All inside the existing `sc_journey_v1` record — no new storage key. `resumeRoute`/`resumeScreenId` (Package M fields) are reused as-is, not duplicated.
+- `src/pages/smokecraft/ResumeJourney.jsx` — `NEW_JOURNEY_START_ROUTE` changed from `/smokecraft` (the Package J stand-in) to `/smokecraft/welcome` (the real S1 registry route), per the package's explicit instruction. `PRESERVED_COMPLETED_STEP_IDS` changed from `['entry', 'enroll']` to `['enroll']` — S1 ('entry'/Welcome) is no longer preserved across a journey reset, since it now represents having viewed *this* journey's introduction, not a permanent account flag; a new journey correctly shows Welcome again, same as every other active-journey session.
+- `verify-smokecraft-27-session-spine.mjs` — updated: `IMPLEMENTED_SPINE`/`ROUTE_TO_ID` now include S1 (`/smokecraft/welcome` → `entry`); wording updated from "20" to "21" implemented routes.
+- `verify-smokecraft-venue-select-resume.mjs` — 2 assertions updated to reflect S1's new real-session behavior (previously asserted `'entry'` is preserved on reset and that `['entry','enroll']` alone means "no saved journey" — both were correct under the Package J stand-in and are now intentionally different under Package N); a fresh evidence-driven update, not a scope change.
+- `verify-smokecraft-welcome-experience.mjs` (new) — 27-suite / 32-check Playwright suite for this package.
+- `docs/SMOKECRAFT_360_MASTER_REBUILD_PLAN.md` — this evidence section only.
+
+**Welcome route and S1 guard:** `/smokecraft/welcome`, `sessionNumber={1}` (trivially always-unlocked by construction, same as every other S1 guard before it — S1 has no earlier session to wait on).
+
+**Back target:** `/smokecraft/resume` (E5 Resume or Start New Journey), never `navigate(-1)`.
+
+**Continue target:** `/smokecraft/humidor-match` — the authoritative S2 Choose Your Cigar route read directly from the locked registry pattern already used by every other spine screen, not hardcoded to an unrelated route and never routed back to the SmokeCraft landing page.
+
+**Resume behavior:** Resume (`/smokecraft/resume`, Package M, unmodified this package except its one required destination correction) already derives its "current allowed session" live from the registry — since S1 is now real and evidence-based, a brand-new guest's `currentAllowed` naturally resolves to S1/Welcome without any special-casing, and Resume's own "Resume Journey" button correctly lands there. "Start New Journey" now routes to `/smokecraft/welcome` (previously the Package J-documented `/smokecraft` stand-in), and S1's own completedSteps id (`'entry'`) is reset along with the rest of the active journey — a new journey genuinely starts at Welcome again.
+
+**Persistence behavior:** `journey.welcomeExperience`/`welcomeViewedAt`/`learningObjectivesViewed`/`s1CompletedAt`/`currentScreenId`, all inside the existing `sc_journey_v1` record — no new storage key. `welcomeViewedAt` and `currentScreenId` are written on mount (idempotent — only when actually changed); `s1CompletedAt` and the real `completedSteps` entry (`'entry'`, via `awardSessionRewards('entry')`, which already existed with `xp: 0` in `SESSION_REWARDS` — no new XP entry needed) are written only when the guest clicks Begin Experience, never merely for opening the screen. `awardSessionRewards()`'s own idempotent `completedSteps.includes()` guard prevents duplicate XP/completion on refresh, return, or resume, verified directly (Suite 18).
+
+**Approved visual reused:** none exists. `smokecraftAssets.js` and the broader asset library were searched for an approved "Welcome to Today's Experience" composition — none was found. Per the same precedent already established for AI Summary, Pairing Recommendations, Rewards, Venue Selection, and Resume (Packages K/L/M), the screen uses the same CSS gradient/card shell rather than commissioned background photography, since none is registered to reuse.
+
+**Fallback behavior:** user identity, venue, cigar preview, and mentor preview each render only when real canonical data exists (`journey.identity`, `journey.selectedVenue`, `journey.selectedCigar`, `journey.mentor`); each has an honest, distinct neutral fallback string when the data doesn't exist yet — never fabricated. Estimated experience length is permanently and honestly "Not available — no duration estimate is tracked in this build," since no real duration-estimation system exists anywhere in the codebase. Standard `loading`/`error`+Retry/`offline` states follow the same pattern already established across Packages K–M.
+
+**Tests run:** new suite (`verify-smokecraft-welcome-experience.mjs`), `verify-smokecraft-27-session-spine.mjs` (updated), `verify-smokecraft-persistence-consolidation.mjs`, `verify-smokecraft-route-corrections.mjs`, `verify-smokecraft-lighting-tutorial-route.mjs`, `verify-smokecraft-choose-your-cut.mjs`, `verify-smokecraft-terroir-knowledge-drop.mjs`, `verify-smokecraft-terroir-knowledge-drop-spine.mjs`, `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs`, `verify-smokecraft-ai-summary-pairing-recommendations.mjs`, `verify-smokecraft-rewards-achievements.mjs`, `verify-smokecraft-venue-select-resume.mjs` (updated), `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-welcome-experience.mjs` | **32 passed, 0 failed** |
+| `verify-smokecraft-27-session-spine.mjs` | **24 passed, 0 failed** (updated to reflect S1 now implemented) |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-choose-your-cut.mjs` | **16 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop.mjs` | **19 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop-spine.mjs` | **17 passed, 0 failed** — unaffected |
+| `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-ai-summary-pairing-recommendations.mjs` | **35 passed, 0 failed** — unaffected |
+| `verify-smokecraft-rewards-achievements.mjs` | **43 passed, 0 failed** — unaffected |
+| `verify-smokecraft-venue-select-resume.mjs` | **47 passed, 0 failed** (2 assertions updated to reflect S1 now implemented) |
+| `verify-interactions.mjs` | 20 passed, 2 failed — identical to the established baseline (same 2 pre-existing, unrelated failures) |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — identical to the established baseline |
+| `npm run build` | **green** |
+
+**Confirmed no unrelated files changed:** `git status --short` before commit showed only the files listed above — no Knowledge Check/Text Quiz, Recommended Next Journey, Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge, AI Summary, Pairing Recommendations, Rewards, Achievements, `Identity.jsx`, `SmokeCraft.jsx` (Launch), production image, database, or deployment files touched; `TOTAL_SESSIONS` confirmed unchanged (still 27) in the `session.js` diff; no later package started; the preview server used for testing was stopped before finishing, and no background test/preview process remained running; regenerated `public/proof/final-live-acceptance/*.png` screenshots were discarded via `git checkout --` before commit, matching every prior package's convention.
+
+**Known limitations:** none identified specific to this package. The `SmokeCraftProgressContext.jsx` fix (removing the second, independent `'entry'` auto-satisfy hardcode) was outside the package's originally-listed allowed file scope but was necessary for correctness — flagged transparently above rather than silently included.
+
+**Remaining unfinished screens:** none in the locked 27-session spine or 5-screen Entry layer — all 27 numbered sessions and all 5 Entry-layer screens are now real, implemented, routed screens. Remaining unbuilt work is limited to supporting-module scope explicitly excluded from every numbered package to date: Knowledge Check/Text Quiz, Recommended Next Journey (content depth beyond its existing repurposed `SessionComplete.jsx`), Leaderboard, Mini Tasting Round, SmokeCraft Challenge, and Event Challenge.
+
+**Recommended next package:** a supporting-module package covering Knowledge Check/Text Quiz and/or the remaining static-stub supporting modules (Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge), since the numbered spine and Entry layer are now fully built.
 
 ---
 

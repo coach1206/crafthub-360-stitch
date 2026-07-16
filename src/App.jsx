@@ -94,6 +94,7 @@ import ModulePlaceholderReserved     from './pages/ModulePlaceholderReserved.jsx
 
 // ── SmokeCraft guest flow — eager (guest-accessible, core journey) ─
 import SmokeCraft       from './pages/SmokeCraft.jsx'
+import WelcomeExperience from './pages/smokecraft/WelcomeExperience.jsx'
 import SmokeCraftVisualProof from './pages/smokecraft/SmokeCraftVisualProof.jsx'
 import SmokeCraftImageDiagnostic from './pages/smokecraft/SmokeCraftImageDiagnostic.jsx'
 import SmokeCraftVenuePilotPackage from './pages/smokecraft/SmokeCraftVenuePilotPackage.jsx'
@@ -314,8 +315,11 @@ export default function App() {
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
               <Route path="smokecraft" element={<SmokeCraftJourneyProvider><SmokeCraftProgressProvider><SmokeCraftOrderProvider><Outlet /></SmokeCraftOrderProvider></SmokeCraftProgressProvider></SmokeCraftJourneyProvider>}>
-                {/* S1 — always unlocked, no guard */}
+                {/* Entry-layer Launch — always unlocked (SmokeCraft landing, distinct from S1 Welcome below) */}
                 <Route index element={<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraft /></SmokeCraftSessionGuard>} />
+
+                {/* S1 — welcome (Welcome to Today's Experience) — Package N */}
+                <Route path="welcome"          element={<SmokeCraftSessionGuard sessionNumber={1}><WelcomeExperience /></SmokeCraftSessionGuard>} />
 
                 {/* E2 — Sign In / Guest Mode (entry-layer, outside the 27-session spine) */}
                 <Route path="enroll"           element={<SmokeCraftSessionGuard requires="entry"><Enroll /></SmokeCraftSessionGuard>} />

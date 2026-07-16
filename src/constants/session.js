@@ -88,12 +88,12 @@ export function getLastSmokecraftRoute(currentStep) {
 // now means "phase" everywhere it is displayed.
 //
 // `id` values match the exact string each page passes to
-// awardSessionRewards(id)/completeStep(id) in GuestSessionContext, except
-// 'entry' (the index page has no discrete completion event — it is always
-// treated as satisfied) and sessions marked `implemented: false` (no screen
-// exists yet, so evidence can never be recorded — these are skipped for
-// unlock purposes rather than fabricated as complete; see isStepComplete
-// below and Package J's evidence for the full rationale).
+// awardSessionRewards(id)/completeStep(id) in GuestSessionContext. S1 (id
+// 'entry') is now a real, implemented session (Package N, Welcome to
+// Today's Experience) with a genuine completion event, same as any other
+// session — it is no longer auto-satisfied. Sessions marked
+// `implemented: false` (no screen exists yet) are still skipped for unlock
+// purposes rather than fabricated as complete; see isStepComplete below.
 //
 // Sessions sharing an `id` with another session in this list (e.g. S8/S9,
 // S12/S13, S16/S17/S18, S19/S20) are honest merges: one already-built screen
@@ -112,7 +112,7 @@ export const VISIT_STRUCTURE = [
     visit: 1,
     title: 'Session Preparation',
     sessions: [
-      { session: 1, id: 'entry',            route: '/smokecraft',                   label: 'Welcome to Today’s Experience', implemented: false },
+      { session: 1, id: 'entry',            route: '/smokecraft/welcome',           label: 'Welcome to Today’s Experience' },
       { session: 2, id: 'humidor-match',    route: '/smokecraft/humidor-match',     label: 'Choose Your Cigar' },
       { session: 3, id: 'meet-your-cigar',  route: '/smokecraft/meet-your-cigar',   label: 'Meet Your Cigar' },
       { session: 4, id: 'terroir',          route: '/smokecraft/terroir',           label: 'Terroir' },
@@ -210,14 +210,18 @@ export const ENTRY_LAYER_SCREENS = [
   { id: 'resume',            route: '/smokecraft/resume',       label: 'Resume or Start New Journey',    implemented: true },
 ]
 
-// A session is treated as satisfied for unlock purposes when it is either
-// the always-true entry pseudo-step, or a session with no built screen yet
-// (implemented: false) — evidence can never be recorded for a session that
-// does not exist, so it is skipped rather than fabricated as complete or
-// left to permanently block every session after it.
+// A session is treated as satisfied for unlock purposes when it is a
+// session with no built screen yet (implemented: false) — evidence can
+// never be recorded for a session that does not exist, so it is skipped
+// rather than fabricated as complete or left to permanently block every
+// session after it. S1 (id 'entry') was previously always auto-satisfied
+// as a stand-in for its not-yet-built screen (Package J); now that Welcome
+// to Today's Experience (Package N) is real and implemented, it requires
+// genuine evidence like any other session — the id 'entry' itself is kept
+// unchanged (rather than renamed) so every existing completedSteps record
+// and test fixture that already includes 'entry' remains valid.
 function isSessionComplete(completedSteps, session) {
   const id = typeof session === 'string' ? session : session.id
-  if (id === 'entry') return true
   if (typeof session === 'object' && session.implemented === false) return true
   return completedSteps.includes(id)
 }
