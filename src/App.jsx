@@ -121,6 +121,7 @@ import SessionComplete  from './pages/smokecraft/SessionComplete.jsx'
 import Terroir          from './pages/smokecraft/Terroir.jsx'
 import KnowledgeDrop    from './pages/smokecraft/KnowledgeDrop.jsx'
 import KnowledgeCheckDemo from './pages/smokecraft/KnowledgeCheckDemo.jsx'
+import MiniTasting from './pages/smokecraft/MiniTasting.jsx'
 import MeetYourCigar    from './pages/smokecraft/MeetYourCigar.jsx'
 import MentorCommentary from './pages/smokecraft/MentorCommentary.jsx'
 import PairingMastery   from './pages/smokecraft/PairingMastery.jsx'
@@ -408,6 +409,13 @@ export default function App() {
                     (Package O). Not part of the numbered spine or any educational
                     screen; exists only to render/test the reusable component. */}
                 <Route path="knowledge-check-demo" element={<SmokeCraftSessionGuard requires="entry"><KnowledgeCheckDemo /></SmokeCraftSessionGuard>} />
+
+                {/* Mini Tasting — live supporting module (Package Q). Separate from the
+                    numbered-spine "mini-tasting" completion step (MiniTastingRound.jsx,
+                    S19 unlock), which is left untouched. No route previously existed for
+                    this standalone module, so one permissive route is added here, per
+                    the same necessary-exception pattern used for Package O's QA harness. */}
+                <Route path="mini-tasting-module" element={<SmokeCraftSessionGuard requires="entry"><MiniTasting /></SmokeCraftSessionGuard>} />
 
                 {/* S16/S17/S18 — final-third (Flavor Finish / Strength Progression / Overall Experience Notes, merged — see session.js) */}
                 <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={16}><FinalThird /></SmokeCraftSessionGuard>} />

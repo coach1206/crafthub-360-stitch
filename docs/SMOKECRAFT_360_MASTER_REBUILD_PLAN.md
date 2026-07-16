@@ -1213,7 +1213,49 @@ No `App.jsx` change was needed (route already existed and required no cleanup) a
 
 **Known limitations:** only one real leaderboard entry (the current guest) can ever be shown until a real multi-user backend exists — this is the documented integration seam, not a bug. The approved production Leaderboard image is reused as a non-blocking decorative header banner; all data underneath remains fully live React content, independent of that asset, per the package's instruction.
 
-**Recommended next package:** wire a real multi-user leaderboard backend (the documented integration seam in `smokeLeaderboardService.js`), and/or continue with the remaining static-stub supporting modules (Mini Tasting, SmokeCraft Challenge, Event Challenge, deeper Recommended Next Journey content).
+**Recommended next package (superseded by Package Q below):** ~~wire a real multi-user leaderboard backend, and/or continue with the remaining static-stub supporting modules (Mini Tasting, SmokeCraft Challenge, Event Challenge, deeper Recommended Next Journey content)~~ — Mini Tasting now complete.
+
+---
+
+#### Mini Tasting Module — Implementation Evidence (Package Q)
+
+**Scope actually implemented:** built a new, live, data-driven Mini Tasting supporting-module screen (`MiniTasting.jsx`), route `/smokecraft/mini-tasting-module`. This is deliberately separate from the existing numbered-spine screen `MiniTastingRound.jsx` (route `/smokecraft/mini-tasting`, S19 unlock step, awards `SESSION_REWARDS['mini-tasting']` and advances the journey to `visit-complete`) — that screen, its route, and its journey-flow/XP behavior were **not** touched. No numbered journey session, session numbering, progress engine, XP engine, Rewards, Achievements, Leaderboard, Knowledge Check, SmokeCraft Challenge, Event Challenge, AI Summary, Pairing Recommendations, persistence schema, database, deployment, or production image was modified.
+
+**Exact files changed:**
+- `src/pages/smokecraft/MiniTasting.jsx` (new) — the live module: Today's Flight, three-cigar selection, comparison panel, pairing panel, Begin Mini Tasting, all required fallback states.
+- `src/App.jsx` — 2-line addition (one import, one `<Route>`) registering `/smokecraft/mini-tasting-module`, guarded permissively (`requires="entry"`), the same necessary-exception pattern used for Package O's QA-harness route (no existing route, guard, or screen was altered). No existing Mini Tasting route existed for this new module, so this was the minimal wiring required to make it reachable and testable per this repo's Playwright-only testing convention.
+- `verify-smokecraft-mini-tasting.mjs` (new) — 15-suite / 24-check Playwright suite for this package.
+- `docs/SMOKECRAFT_360_MASTER_REBUILD_PLAN.md` — this evidence section only.
+
+**Route:** `/smokecraft/mini-tasting-module`.
+
+**Data source used:** `src/data/venueInventoryData.js` (`getSampleInventory`, `VENUE_ID`) — the existing, real, structured venue inventory sample data (already documented in its own header as "LOCAL PREVIEW MODE... sample data"), containing real cigar fields (`cigar_origin`, `cigar_wrapper`, `cigar_strength`, `cigar_flavor_notes`, `recommended_drink_pairings`, `recommended_food_pairings`, `cigar_burn_time`) for 5 house/featured cigars. "Today's Flight" takes the first 3 (by `sort_order`) house/featured cigars from this real data — never fabricated. No separate "body," "finish," "construction," or "draw" field exists anywhere in the codebase, so those comparison attributes honestly render "Not available" rather than being invented.
+
+**Fallback behavior:** if the venue inventory query returns no cigar items, the flight honestly displays "No tasting flight available." Any missing per-cigar attribute (image, origin, wrapper, flavor notes, pairings) renders "Not available." Pairing categories (Coffee, Rum, Whiskey, Chocolate, Non-alcoholic) are matched against real pairing/flavor text via keyword matching; unmatched categories honestly show "Not available." Offline state is detected via `online`/`offline` browser events. Loading and error/retry states mirror the pattern established in Packages K–P. No fake network delay beyond a minimal UI-settle timeout is used, and "Begin Mini Tasting" applies its state change immediately (no fake loading spinner gating the action).
+
+**XP behavior:** reuses the existing XP engine only — `addXP()` from `GuestSessionContext`, never `awardSessionRewards()` (which would falsely mark spine session progress, per the same reasoning established in Package O). Looks up `SESSION_REWARDS['mini-tasting-module']`, which does not exist in `smokecraftRewards.js` (only the spine's `'mini-tasting'` key exists, deliberately left untouched and not reused here since it belongs to a different screen/step). Because no rule is configured for this module, the screen honestly displays "No XP configured" and awards no XP — verified directly in the test suite.
+
+**Persistence:** canonical only — `session.smokeCraft.miniTasting = { selectedCigarId, compareIds, startedAt, completedAt }`, written via the guest session's existing generic `update()` action, inside the existing `novee_guest_session` storage key. No new storage key was created. Selection and comparison state are restored after reload (resume works).
+
+**Tests run:** new suite (`verify-smokecraft-mini-tasting.mjs`), `verify-smokecraft-27-session-spine.mjs`, `verify-smokecraft-route-corrections.mjs`, `verify-smokecraft-lighting-tutorial-route.mjs`, `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-mini-tasting.mjs` | **24 passed, 0 failed** |
+| `verify-smokecraft-27-session-spine.mjs` | **24 passed, 0 failed** — unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-interactions.mjs` | 20 passed, 2 failed — identical to the established baseline |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — identical to the established baseline |
+| `npm run build` | **green** (1m 60s) |
+
+**Confirmed no unrelated files changed:** `git status --short` before commit showed only `src/App.jsx` (2-line diff), `src/pages/smokecraft/MiniTasting.jsx` (new), `verify-smokecraft-mini-tasting.mjs` (new), and this doc section — no numbered session, journey flow, session numbering, progress engine, XP engine, Rewards, Achievements, Leaderboard, Knowledge Check, SmokeCraft Challenge, Event Challenge, AI Summary, Pairing Recommendations, persistence schema, production image, database, or deployment file touched. The existing spine `mini-tasting` route and `MiniTastingRound.jsx` are byte-for-byte unmodified. The preview server used for testing was stopped before finishing, and no background test/preview process remained running; regenerated `public/proof/final-live-acceptance/*.png` screenshots were discarded via `git checkout --` before commit.
+
+**Known limitations:** only 3 of the 5 real cigars in the sample inventory are shown in "Today's Flight" (by design, per the "Three Cigars" requirement). Finish, Construction, and Draw comparison attributes always show "Not available" since no such data field exists anywhere in the codebase yet — this is the honest, documented integration seam for future real tasting-note data, not a bug.
+
+**Recommended next package:** SmokeCraft Challenge or Event Challenge (remaining static-stub supporting modules), and/or wiring real tasting-note fields (finish/construction/draw) into the inventory data source.
 
 ---
 
