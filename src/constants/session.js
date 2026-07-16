@@ -167,8 +167,8 @@ export const VISIT_STRUCTURE = [
     visit: 6,
     title: 'Results',
     sessions: [
-      { session: 21, id: 'ai-summary',              route: null,                            label: 'AI Summary',                          implemented: false },
-      { session: 22, id: 'pairing-recommendations', route: null,                            label: 'Personalized Pairing Recommendations', implemented: false },
+      { session: 21, id: 'ai-summary',              route: '/smokecraft/ai-summary',              label: 'AI Summary' },
+      { session: 22, id: 'pairing-recommendations', route: '/smokecraft/pairing-recommendations', label: 'Personalized Pairing Recommendations' },
       { session: 23, id: 'passport-stamp',          route: '/smokecraft/passport-stamp',    label: 'Passport Stamp Animation' },
       { session: 24, id: 'final-review',            route: '/smokecraft/final-review',      label: 'Completed Scorecard' },
       { session: 25, id: 'rewards',                 route: null,                            label: 'Rewards and XP',   implemented: false },

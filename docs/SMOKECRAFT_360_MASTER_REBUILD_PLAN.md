@@ -853,6 +853,71 @@ S1 Welcome (deferred, stand-in `/smokecraft`) · S2 Choose Your Cigar `/smokecra
 
 **Known limitations:** Mentor Selection has not been folded into Meet Your Cigar (S3) as an internal tab per the rebuild plan's longer-term note — that remains a screen redesign, explicitly out of scope for this package; it stays a supporting module. Seed & Soil has similarly not been merged into Terroir (S4) as a tab. Supporting-module screens' own internal "Continue" buttons were not individually audited/rewired to "return to the session that opened them" this package (their existing targets, unchanged from before Package J, still point to valid routes and do not dead-end, but a few may not point at the most contextually appropriate return screen) — flagged as a recommended follow-up rather than risking a wide, low-value diff across many files this package. `smokecraftRewards.js`'s separate `SESSION_REWARDS` badge registry remains an independent, unreconciled list (feeds the still-unbuilt Rewards screen only, out of scope). `VisitLockGuard.jsx`/`LockedVisit.jsx` remain confirmed-dead code, left untouched.
 
+#### S21 AI Summary + S22 Personalized Pairing Recommendations — Implementation Evidence (Package K)
+
+**Scope actually implemented:** builds and wires S21 AI Summary (`/smokecraft/ai-summary`) and S22 Personalized Pairing Recommendations (`/smokecraft/pairing-recommendations`) as real, routed, guarded spine screens, closing the last two deferred numbered-spine gaps below S25/S26 (Rewards/Achievements, still explicitly out of scope and left deferred). No Rewards, XP, Achievements, Recommended Next Journey, Leaderboard, Mini Tasting, SmokeCraft Challenge, or Event Challenge work was touched, per the package mandate.
+
+**Exact files changed:**
+- `src/utils/pairingEngine.js` (new) — the existing rule-based pairing logic (`buildRecommendation` and its scoring tables) extracted verbatim from `PairingLab.jsx` into a shared, reusable module, plus a new `rankAllCategories()` helper and 4 additional category entries (Wine, Tea, Water, Mocktail) needed to cover S22's required 10-category list. PairingLab's own 7-icon UI, zones, and behavior are unchanged — it now imports `buildRecommendation` from this module instead of defining it locally.
+- `src/pages/smokecraft/PairingLab.jsx` — local `buildRecommendation`/`STRENGTH_SCORE`/`TYPE_STRENGTH`/`HARMONY`/`GOAL_DESC`/`ADJUSTMENT_MAP` definitions removed, replaced with an import from `pairingEngine.js`. No behavior change (verified: `verify-smokecraft-choose-your-cut.mjs` Suite 13 and the full `verify-interactions.mjs`/`final-acceptance.mjs` baselines are unaffected).
+- `src/pages/smokecraft/AISummary.jsx` (new) — S21 screen.
+- `src/pages/smokecraft/PairingRecommendations.jsx` (new) — S22 screen.
+- `src/constants/session.js` — Session 21 (`ai-summary`) and Session 22 (`pairing-recommendations`) changed from `route: null, implemented: false` to real routes with `implemented` no longer set (defaults to implemented); no other session renumbered.
+- `src/App.jsx` — two new guarded routes added (`sessionNumber={21}` and `sessionNumber={22}`), replacing the prior "honestly deferred, no route registered" comment block.
+- `src/context/SmokeCraftJourneyContext.jsx` — two new canonical fields (`aiSummary`, `pairingRecommendations`) and their setters (`setAiSummary`, `setPairingRecommendations`) added to `DEFAULT_STATE` and the context value; no existing field renamed or removed, no new localStorage/sessionStorage key created (both persist inside the existing `sc_journey_v1` record).
+- `src/pages/smokecraft/Scorecard.jsx` — Continue target changed from `/smokecraft/passport-stamp` to `/smokecraft/ai-summary` (S20 → S21); button label updated to match.
+- `src/pages/smokecraft/PassportStamp.jsx` — Back target changed from `/smokecraft/scorecard` to `/smokecraft/pairing-recommendations` (S23 Back → S22).
+- `verify-smokecraft-27-session-spine.mjs` — updated (not re-scoped): `IMPLEMENTED_SPINE`, `CHAIN`, and `ROUTE_TO_ID` now include the two newly-implemented sessions so prerequisite-chain helpers reflect reality; Suite 25's assertion revised from "S21/S22 have no fabricated screen" (Package J's now-superseded claim) to "Rewards/Achievements have no fabricated screen" + a direct check that AI Summary now resolves as a real implemented screen — an intentional, evidence-driven update, not a scope change.
+- `verify-smokecraft-ai-summary-pairing-recommendations.mjs` (new) — 31-suite / 35-check Playwright suite for this package (see Tests below).
+- `docs/SMOKECRAFT_360_MASTER_REBUILD_PLAN.md` — this evidence section only.
+
+**S21 AI Summary — route and guard:** `/smokecraft/ai-summary`, `sessionNumber={21}` (unlocked once Session 20 / `scorecard` is complete, matching the locked spine).
+
+**S22 Personalized Pairing Recommendations — route and guard:** `/smokecraft/pairing-recommendations`, `sessionNumber={22}` (unlocked once Session 21 / `ai-summary` is complete).
+
+**Back and Continue targets:** S20 Personal Notes (Scorecard) Continue → `/smokecraft/ai-summary` (was `/smokecraft/passport-stamp`). S21 AI Summary Back → `/smokecraft/scorecard` (the authoritative S20 route, unchanged); Continue → `/smokecraft/pairing-recommendations`. S22 Pairing Recommendations Back → `/smokecraft/ai-summary`; Continue → `/smokecraft/passport-stamp`. S23 Passport Stamp Back → `/smokecraft/pairing-recommendations` (was `/smokecraft/scorecard`); its Continue target (`/smokecraft/final-review`) is unchanged. Full chain is now S20 → S21 → S22 → S23, exactly as specified.
+
+**Summary method used (S21):** deterministic, rule-based summary computed entirely from the canonical `sc_journey_v1` record (`buildDeterministicSummary()` in `AISummary.jsx`) — no fabricated data, honest `"Not recorded this session."` fallback per section when a given input was never captured. The screen is explicitly labeled **"Session Summary"** throughout (header, sub-label, and the completion line), never "AI-generated" or "AI Summary" in body copy.
+
+**Whether real AI is connected:** **No.** No AI/LLM API or service exists in this codebase (confirmed via the audit and re-confirmed this package) and none was added. A documented integration seam (`fetchAIGeneratedSummary()` in `AISummary.jsx`) exists for a future real AI connection — it currently always returns `null` (no call attempted, not a fake/simulated call), causing the deterministic path to run every time. If a real service is later connected, its response would be used only on success and would need its own distinct "AI-Generated Summary" label, never merged with the deterministic "Session Summary" label.
+
+**Pairing-engine logic used (S22):** the exact same `buildRecommendation()` scoring logic PairingLab (S11) already used (harmony/clash matching, strength-vs-type distance scoring, 30–100 compatibility range) — extracted to `pairingEngine.js` and reused, not re-derived. A new `rankAllCategories()` runs that same scoring function once per required category (Whiskey, Rum, Coffee, Espresso, Wine, Chocolate, Tea, Water, Mocktail, Nonalcoholic) against one shared cigar/flavor context, sorts by score, and the top result becomes Primary Recommendation with the next three as Alternates — explicitly labeled "Rule-based recommendation engine — not AI-generated" on the screen.
+
+**Persistence behavior:** `journey.aiSummary = { sourceSnapshot, result, completedAt, generatedAt }` and `journey.pairingRecommendations = { engineInput, engineInputSnapshot, primary, alternates, savedRecommendation, generatedAt }`, both inside the existing `sc_journey_v1` record — no new storage key. Both screens compare a JSON snapshot of their relevant journey inputs against the previously-stored snapshot on every mount; when unchanged, the cached result is reused verbatim (no regeneration) — verified by Suite 9 (AI Summary refresh restores an identical result) and the persistence/idempotency checks in Suites 8, 20, and 26 (XP not duplicated). `awardSessionRewards('ai-summary')` / `awardSessionRewards('pairing-recommendations')` reuse the existing idempotent `completedSteps.includes()` guard in `GuestSessionContext` — no new XP mechanism.
+
+**Images reused:** none. Per the rebuild plan's own §18 guidance ("primarily data/text-driven results screens... not necessarily new background photography at all"), both screens use the same CSS gradient/card treatment already established by Mentor Commentary (S14) rather than a static background image — consistent with the existing gold/dark theme, no new or existing production image files touched. Pairing category "imagery" is a live React neutral-avatar badge (category initial in a circle, same honest-fallback pattern as Mentor Commentary's portrait), explicitly labeled "No dedicated pairing photography available" — it always matches the category it's rendered next to because it's derived from that same category string at render time, not a static asset lookup.
+
+**Fallback behavior:** AI Summary — `loading` (real, brief compute-in-progress state, no fake typing/streaming) → `incomplete` (honest message when neither a selected cigar nor a scorecard exists) → `ready`/`offline` (offline banner shown via `navigator.onLine`, same locally-computed content since no network call is involved) → `error`/Retry (try/catch around generation, re-invokes the same generator). Pairing Recommendations — `loading` → `no-cigar` (honest message) → `ready` (with inline, non-blocking banners for "insufficient flavor data" and "no strong pairing match found" when applicable) → `error`/Retry. Venue Availability always renders the honest "Venue inventory data is not connected in this build" label — no fabricated inventory anywhere, since no venue inventory system exists to read from.
+
+**Tests run:** new suite (`verify-smokecraft-ai-summary-pairing-recommendations.mjs`), `verify-smokecraft-27-session-spine.mjs` (Package J, updated), `verify-smokecraft-persistence-consolidation.mjs` (Package A), `verify-smokecraft-route-corrections.mjs` (Package B), `verify-smokecraft-lighting-tutorial-route.mjs` (Package E), `verify-smokecraft-choose-your-cut.mjs` (Package F), `verify-smokecraft-terroir-knowledge-drop.mjs` (Package G), `verify-smokecraft-terroir-knowledge-drop-spine.mjs` (Package H), `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs` (Package I), `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-ai-summary-pairing-recommendations.mjs` | **35 passed, 0 failed** |
+| `verify-smokecraft-27-session-spine.mjs` | **24 passed, 0 failed** (updated to reflect S21/S22 now implemented) |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-choose-your-cut.mjs` | **16 passed, 0 failed** — unaffected (confirms PairingLab-adjacent extraction did not break Choose Your Cut) |
+| `verify-smokecraft-terroir-knowledge-drop.mjs` | **19 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop-spine.mjs` | **17 passed, 0 failed** — unaffected |
+| `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-interactions.mjs` | 20 passed, 2 failed — identical to the established baseline (same 2 pre-existing, unrelated failures) |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — identical to the established baseline |
+| `npm run build` | **green** |
+
+**Confirmed no unrelated files changed:** `git status --short` before commit showed only the files listed above — no Rewards, Achievements, Recommended Next Journey, Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge, production image, database, or deployment files touched; no later package started; regenerated `public/proof/final-live-acceptance/*.png` screenshots (produced incidentally by running `final-acceptance.mjs`) were discarded via `git checkout --` before commit, matching every prior package's convention.
+
+**Known limitations:** Neither screen calls a real AI/LLM service — this is documented, not hidden, per the package's explicit AI safety rules; the integration seam in `AISummary.jsx` is ready but unused. Pairing Recommendations' 4 categories beyond PairingLab's original 7 (Wine, Tea, Water, Mocktail) have engine data (`HARMONY`/`TYPE_STRENGTH` entries) but no dedicated PairingLab UI zone, since PairingLab's own 7-icon layout was explicitly not to be changed this package — they are only ever surfaced through the S22 ranking, never through PairingLab's own selector. Venue Availability is permanently in its honest "not connected" state, since no venue inventory system exists anywhere in the codebase to read from — this is an accepted, documented data-model gap, not a display bug, consistent with the same pattern already used for Meet Your Cigar's Binder/Filler/Factory/Master Blender fields (Package I). Rewards and Achievements (S25/S26) remain honestly deferred, unchanged from Package J.
+
+**Remaining deferred sessions:** S1 Welcome (stand-in), S25 Rewards and XP, S26 Achievements — unchanged from Package J.
+
+**Recommended next package:** Package for S25/S26 Rewards and Achievements (the last deferred numbered-spine gap), or the Entry-layer screens (E3 Venue Select, E5 Resume) per §3f/§12.
+
+---
+
 ### Package D — Merge Screens (Terroir+SeedSoil, Construction Inspection+CigarGaugeGuide, Knowledge Drop, Completed Scorecard, Next Journey)
 - **Objective:** implement all 6 merges from §9/§3d.
 - **Dependencies:** Packages 0, A, B.

@@ -125,6 +125,8 @@ import Vitola           from './pages/smokecraft/Vitola.jsx'
 import Identity         from './pages/smokecraft/Identity.jsx'
 import Leaderboard      from './pages/smokecraft/Leaderboard.jsx'
 import PassportStamp    from './pages/smokecraft/PassportStamp.jsx'
+import AISummary            from './pages/smokecraft/AISummary.jsx'
+import PairingRecommendations from './pages/smokecraft/PairingRecommendations.jsx'
 import SeedSoil         from './pages/smokecraft/SeedSoil.jsx'
 import HumidorMatch     from './pages/smokecraft/HumidorMatch.jsx'
 import RequestPurchase  from './pages/smokecraft/RequestPurchase.jsx'
@@ -409,11 +411,11 @@ export default function App() {
                 <Route path="mini-tasting"          element={<SmokeCraftSessionGuard requires="scorecard"><MiniTastingRound /></SmokeCraftSessionGuard>} />
                 <Route path="mini-tasting-round"    element={<Navigate to="/smokecraft/mini-tasting" replace />} />
 
-                {/* S21/S22 — AI Summary / Personalized Pairing Recommendations are
-                    honestly deferred (no screen exists, no route registered) per
-                    Package J's deferred-session rule — explicitly not built this
-                    package. isSessionUnlocked() skips them automatically so S23/S24
-                    remain reachable; see session.js `implemented: false`. */}
+                {/* S21 — ai-summary (AI Summary) */}
+                <Route path="ai-summary"       element={<SmokeCraftSessionGuard sessionNumber={21}><AISummary /></SmokeCraftSessionGuard>} />
+
+                {/* S22 — pairing-recommendations (Personalized Pairing Recommendations) */}
+                <Route path="pairing-recommendations" element={<SmokeCraftSessionGuard sessionNumber={22}><PairingRecommendations /></SmokeCraftSessionGuard>} />
 
                 {/* S23 — passport-stamp (Passport Stamp Animation) */}
                 <Route path="passport-stamp"   element={<SmokeCraftSessionGuard sessionNumber={23}><PassportStamp /></SmokeCraftSessionGuard>} />

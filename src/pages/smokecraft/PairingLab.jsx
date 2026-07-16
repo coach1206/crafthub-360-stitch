@@ -6,6 +6,7 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import { buildRecommendation } from '../../utils/pairingEngine.js'
 
 const NAT_W = 1672
 const NAT_H = 941
@@ -35,78 +36,9 @@ const PAIRING_ZONES = [
 ]
 
 // ── Pairing logic ────────────────────────────────────────────────
-const STRENGTH_SCORE = { Mild: 1, Medium: 2, 'Medium-Full': 3, Full: 4 }
-const TYPE_STRENGTH  = { Whiskey: 4, Rum: 3, Coffee: 2, Espresso: 3, Chocolate: 2, Nuts: 1, Nonalcoholic: 1 }
-const HARMONY = {
-  Whiskey:      { notes: ['Smoky', 'Rich', 'Bold'],    clashes: ['Sweet', 'Creamy'] },
-  Rum:          { notes: ['Sweet', 'Rich', 'Smooth'],  clashes: ['Smoky'] },
-  Coffee:       { notes: ['Bold', 'Balanced', 'Rich'], clashes: ['Sweet', 'Creamy'] },
-  Espresso:     { notes: ['Bold', 'Rich', 'Smoky'],    clashes: ['Creamy', 'Sweet'] },
-  Chocolate:    { notes: ['Sweet', 'Creamy', 'Smooth'],clashes: ['Smoky'] },
-  Nuts:         { notes: ['Balanced', 'Smooth', 'Rich'],clashes: [] },
-  Nonalcoholic: { notes: ['Smooth', 'Balanced', 'Sweet'], clashes: [] },
-}
-const GOAL_DESC = {
-  Complement:        "Chosen flavors align with and reinforce the cigar's natural profile.",
-  Contrast:          'The pairing provides a sharp counterpoint to sharpen perception.',
-  Soften:            'The pairing rounds and mellows any harsh edges in the smoke.',
-  Brighten:          'The pairing lifts and opens up lighter aromatic notes.',
-  'Deepen Finish':   'Extends and enriches the finish after each draw.',
-  'Explore New Notes':'Unlocks unexpected flavor dimensions through contrast.',
-}
-const ADJUSTMENT_MAP = {
-  Mild:        'Keep draws short — mild cigars benefit from slow, deliberate puffs to preserve the light body.',
-  Medium:      'Moderate pace — let the smoke sit briefly before exhaling for full expression.',
-  'Medium-Full':'Allow 30–60 seconds between draws to prevent heat buildup.',
-  Full:        'Extended rest between draws. Full-bodied cigars reward patience and cool smoke.',
-}
-
-function buildRecommendation(s) {
-  const { cigarShape, wrapper, origin, strength, pairingTypes, flavorNotes, pairingGoal } = s
-  if (pairingTypes.length === 0) return null
-
-  const primary = pairingTypes[0]
-  const harmony = HARMONY[primary] || { notes: [], clashes: [] }
-  const flavorHits = flavorNotes.filter(n => harmony.notes.includes(n))
-  const clashHits  = flavorNotes.filter(n => harmony.clashes.includes(n))
-
-  const strScore = STRENGTH_SCORE[strength] || 2
-  const typScore = TYPE_STRENGTH[primary] || 2
-  const matchDiff = Math.abs(strScore - typScore)
-  const baseScore = 100 - matchDiff * 12
-  const flavorBonus = flavorHits.length * 6
-  const clashPenalty = clashHits.length * 10
-  const rawScore = Math.max(30, Math.min(100, baseScore + flavorBonus - clashPenalty))
-  const compatScore = Math.round(rawScore)
-
-  const whyLines = [
-    flavorHits.length > 0
-      ? `${flavorHits.join(' and ')} notes create direct harmony with ${primary}'s profile.`
-      : `${primary} provides a clean complement to the selected strength.`,
-    strength && pairingGoal
-      ? `Goal: ${pairingGoal} — ${GOAL_DESC[pairingGoal] || ''}`
-      : null,
-    origin
-      ? `${origin} leaf character ${strScore >= 3 ? 'holds up well' : 'shines cleanly'} against this pairing.`
-      : null,
-  ].filter(Boolean)
-
-  const clashNote = clashHits.length > 0
-    ? `Watch for tension between ${clashHits.join(' and ')} notes and ${primary}'s base character.`
-    : null
-
-  return {
-    primary,
-    pairingTypes,
-    compatScore,
-    recommendation: pairingTypes.join(' + '),
-    whyItWorks: whyLines.join(' '),
-    possibleClashes: clashNote,
-    suggestedAdjustment: ADJUSTMENT_MAP[strength] || 'Take deliberate, unhurried draws.',
-    selectedFlavorNotes: flavorNotes,
-    flavorHarmony: flavorHits,
-  }
-}
+// buildRecommendation is imported from ../../utils/pairingEngine.js — this is
+// the same rule-based engine reused (not re-derived) by Personalized Pairing
+// Recommendations (S22, PairingRecommendations.jsx).
 
 const EMPTY = {
   cigarShape: null,

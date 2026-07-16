@@ -91,6 +91,15 @@ const DEFAULT_STATE = {
   // Scorecard
   scorecard: null, // { categories: {}, personalNotes, overall }
 
+  // AI Summary (S21) — deterministic, rule-based session summary (see AISummary.jsx).
+  // Not real AI unless a real AI layer is later connected via the documented
+  // integration seam; labeled "Session Summary" throughout, never "AI-generated".
+  aiSummary: null, // { sourceDataVersion, result: {...sections}, completedAt, generatedAt }
+
+  // Personalized Pairing Recommendations (S22) — reuses PairingLab's rule-based
+  // pairing engine (src/utils/pairingEngine.js), not a separate/AI system.
+  pairingRecommendations: null, // { engineInput, primary, alternates: [], savedRecommendation, completedAt, generatedAt }
+
   // Final Review
   finalReview: null, // { reviewNotes, editRequested }
 
@@ -310,6 +319,14 @@ export function SmokeCraftJourneyProvider({ children }) {
     updateJourney({ finalReview: data })
   }, [updateJourney])
 
+  const setAiSummary = useCallback((data) => {
+    updateJourney({ aiSummary: data })
+  }, [updateJourney])
+
+  const setPairingRecommendations = useCallback((data) => {
+    updateJourney({ pairingRecommendations: data })
+  }, [updateJourney])
+
   const setPassportStamp = useCallback((data) => {
     updateJourney({ passportStamp: data })
   }, [updateJourney])
@@ -349,6 +366,8 @@ export function SmokeCraftJourneyProvider({ children }) {
     setFinalThird,
     setScorecard,
     setFinalReview,
+    setAiSummary,
+    setPairingRecommendations,
     setPassportStamp,
     setConnections,
     setSessionCompletion,

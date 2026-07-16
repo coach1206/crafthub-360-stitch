@@ -151,7 +151,7 @@ export default function PassportStamp() {
         primary={done ? 'Continuing…' : 'Continue to Completed Scorecard →'}
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/scorecard')}
+        onSecondary={() => navigate('/smokecraft/pairing-recommendations')}
       />
     </>
   )
