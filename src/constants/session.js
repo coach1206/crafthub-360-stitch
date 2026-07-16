@@ -197,17 +197,17 @@ export const SUPPORTING_MODULES = [
 ]
 
 // ── Entry-layer screens — outside the 27-session numbered spine ────────────
-// Five entry-layer screens precede the numbered spine. Three are already
-// live under existing routes; two (Venue Selection, Resume or Start New
-// Journey) are honestly registered as not-yet-built per Package J's
-// deferred-session rule (Resume's underlying logic already exists in
-// SmokeCraftProgressContext; only the dedicated screen wrapper is missing).
+// Five entry-layer screens precede the numbered spine, all outside
+// TOTAL_SESSIONS (27) — they are never counted in spine completion, never
+// numbered-session-guarded, and never award numbered-session XP. All five
+// are now implemented (Package M added Venue Selection and Resume/Start New
+// Journey; the other three were already live).
 export const ENTRY_LAYER_SCREENS = [
-  { id: 'launch',            route: '/smokecraft',         label: 'Launch',                        implemented: true },
-  { id: 'sign-in',           route: '/smokecraft/enroll',  label: 'Sign In / Guest Mode',           implemented: true },
-  { id: 'venue-select',      route: null,                  label: 'Venue Selection',                implemented: false },
-  { id: 'personal-dashboard',route: '/smokecraft/identity',label: 'Personal Dashboard',             implemented: true },
-  { id: 'resume',            route: null,                  label: 'Resume or Start New Journey',    implemented: false },
+  { id: 'launch',            route: '/smokecraft',              label: 'Launch',                        implemented: true },
+  { id: 'sign-in',           route: '/smokecraft/enroll',       label: 'Sign In / Guest Mode',           implemented: true },
+  { id: 'venue-select',      route: '/smokecraft/venue-select', label: 'Venue Selection',                implemented: true },
+  { id: 'personal-dashboard',route: '/smokecraft/identity',     label: 'Personal Dashboard',             implemented: true },
+  { id: 'resume',            route: '/smokecraft/resume',       label: 'Resume or Start New Journey',    implemented: true },
 ]
 
 // A session is treated as satisfied for unlock purposes when it is either

@@ -16,7 +16,7 @@ export default function Enroll() {
   function handleContinue() {
     triggerHaptic('medium')
     awardSessionRewards('enroll')
-    navigate('/smokecraft/identity')
+    navigate('/smokecraft/venue-select')
   }
 
   return (

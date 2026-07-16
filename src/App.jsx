@@ -98,6 +98,7 @@ import SmokeCraftVisualProof from './pages/smokecraft/SmokeCraftVisualProof.jsx'
 import SmokeCraftImageDiagnostic from './pages/smokecraft/SmokeCraftImageDiagnostic.jsx'
 import SmokeCraftVenuePilotPackage from './pages/smokecraft/SmokeCraftVenuePilotPackage.jsx'
 import Enroll           from './pages/smokecraft/Enroll.jsx'
+import VenueSelect      from './pages/smokecraft/VenueSelect.jsx'
 import GoldenBox        from './pages/smokecraft/GoldenBox.jsx'
 import GoldenBoxStatus  from './pages/smokecraft/GoldenBoxStatus.jsx'
 import Art              from './pages/smokecraft/Art.jsx'
@@ -123,6 +124,7 @@ import MentorCommentary from './pages/smokecraft/MentorCommentary.jsx'
 import PairingMastery   from './pages/smokecraft/PairingMastery.jsx'
 import Vitola           from './pages/smokecraft/Vitola.jsx'
 import Identity         from './pages/smokecraft/Identity.jsx'
+import ResumeJourney    from './pages/smokecraft/ResumeJourney.jsx'
 import Leaderboard      from './pages/smokecraft/Leaderboard.jsx'
 import PassportStamp    from './pages/smokecraft/PassportStamp.jsx'
 import AISummary            from './pages/smokecraft/AISummary.jsx'
@@ -317,6 +319,9 @@ export default function App() {
 
                 {/* E2 — Sign In / Guest Mode (entry-layer, outside the 27-session spine) */}
                 <Route path="enroll"           element={<SmokeCraftSessionGuard requires="entry"><Enroll /></SmokeCraftSessionGuard>} />
+
+                {/* E3 — Select Venue or Lounge (entry-layer, outside the 27-session spine) */}
+                <Route path="venue-select"     element={<SmokeCraftSessionGuard requires="enroll"><VenueSelect /></SmokeCraftSessionGuard>} />
                 <Route path="intake"           element={<Navigate to="/smokecraft/enroll" replace />} />
                 <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
                 {/* profile → identity (alias per spec) */}
@@ -464,6 +469,10 @@ export default function App() {
                     Identity's own useEffect gate already requires 'enroll' complete
                     (Package B); requires="entry" here is a permissive outer guard. */}
                 <Route path="identity"       element={<SmokeCraftSessionGuard requires="entry"><Identity /></SmokeCraftSessionGuard>} />
+
+                {/* E5 — Resume or Start New Journey (entry-layer, outside the 27-session spine) */}
+                <Route path="resume"         element={<SmokeCraftSessionGuard requires="enroll"><ResumeJourney /></SmokeCraftSessionGuard>} />
+
                 <Route path="leaderboard"    element={<Leaderboard />} />
                 <Route path="event-challenge"  element={<EventChallenge />} />
                 <Route path="how-it-works"     element={<HowItWorks />} />

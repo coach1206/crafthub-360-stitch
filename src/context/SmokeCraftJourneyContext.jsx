@@ -15,6 +15,10 @@ import { createContext, useContext, useState, useCallback, useEffect } from 'rea
 const LS_KEY = 'sc_journey_v1'
 const STATE_VERSION = 3
 
+function generateJourneyId() {
+  return `journey-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+}
+
 // Package J — locked 27-session spine migration marker. No completedSteps
 // id was renamed except cut-toast-light/lighting-tutorial's split (see
 // LightingTutorial.jsx), so no data transform is required here: every other
@@ -108,6 +112,33 @@ const DEFAULT_STATE = {
 
   // Achievements (S26) — shares /smokecraft/rewards with Rewards and XP (S25).
   achievements: null, // { earned: { [id]: { earnedAt } }, claimed: [], completedAt, updatedAt }
+
+  // ── Entry-layer (Package M) — E3 Venue Selection + E5 Resume/Start New ────
+  // These fields are Entry-layer state, outside the numbered 27-session spine.
+  // They are explicitly NOT reset by "Start New Journey" (venue preference and
+  // entry-layer navigation history persist across journeys).
+  selectedVenue: null, // { id, name, city, state, tier, selectedAt } | { skipped: true, selectedAt }
+  venueSelectionCompleted: false,
+  lastEntryScreen: null, // most recent Entry-layer route visited, for context only
+
+  // Journey identity/lifecycle — activeJourneyId/journeyCreatedAt are stamped
+  // once (idempotently) on first load; journeyUpdatedAt is bumped on every
+  // canonical write (see updateJourney below) so Resume can show a real
+  // "last saved" timestamp without a dedicated per-field ledger.
+  activeJourneyId: null,
+  journeyCreatedAt: null,
+  journeyUpdatedAt: null,
+
+  // Cached "current allowed session" snapshot, refreshed by ResumeJourney on
+  // mount — used only as a validated candidate resume target; the live
+  // SmokeCraftProgressContext computation always remains the source of truth.
+  resumeRoute: null,
+  resumeScreenId: null,
+
+  // Light, honest archive of past fully-completed journeys (session-complete
+  // reached), written only from real fields already present at reset time —
+  // never a fabricated/backfilled record. See ResumeJourney.jsx.
+  previousCompletedJourneys: [], // [{ journeyId, cigarName, completedAt }]
 
   // Final Review
   finalReview: null, // { reviewNotes, editRequested }
@@ -219,6 +250,14 @@ function loadFromStorage() {
     state = { ...DEFAULT_STATE }
   }
 
+  // Idempotent journey-identity stamp (Package M) — every guest gets a real
+  // activeJourneyId/journeyCreatedAt the first time their record is ever
+  // loaded, so Resume can always show real journey identity, not a fabricated
+  // placeholder. Never overwrites an existing id.
+  if (!state.activeJourneyId) {
+    state = { ...state, activeJourneyId: generateJourneyId(), journeyCreatedAt: state.journeyCreatedAt || Date.now() }
+  }
+
   // Consolidate any remaining shadow-key data into the canonical record (idempotent).
   const migrated = migrateLegacyKeys(state)
   if (migrated !== state) {
@@ -245,7 +284,11 @@ export function SmokeCraftJourneyProvider({ children }) {
 
   const updateJourney = useCallback((patch) => {
     setJourney(prev => {
-      const next = { ...prev, ...patch }
+      // journeyUpdatedAt is bumped on every real canonical write, giving
+      // Resume a genuine "last saved" timestamp without needing a dedicated
+      // per-field ledger. `patch` can still override it explicitly (used by
+      // startNewJourney, which sets its own fresh timestamps atomically).
+      const next = { ...prev, journeyUpdatedAt: Date.now(), ...patch }
       return next
     })
   }, [])
@@ -344,6 +387,77 @@ export function SmokeCraftJourneyProvider({ children }) {
     updateJourney({ achievements: data })
   }, [updateJourney])
 
+  // ── Entry-layer setters (Package M) ─────────────────────────────────────
+
+  const setSelectedVenue = useCallback((data) => {
+    updateJourney({ selectedVenue: data, venueSelectionCompleted: true })
+  }, [updateJourney])
+
+  const setLastEntryScreen = useCallback((route) => {
+    updateJourney({ lastEntryScreen: route })
+  }, [updateJourney])
+
+  const setResumeCache = useCallback((route, screenId) => {
+    updateJourney({ resumeRoute: route, resumeScreenId: screenId })
+  }, [updateJourney])
+
+  /**
+   * Resets only active-journey content fields (this journey's cigar,
+   * tasting/tab data, scorecard, AI summary, pairing recommendation, and
+   * passport-stamp state) and mints a fresh activeJourneyId. Explicitly
+   * preserves identity, venue preference, Rewards/Achievements state
+   * (tied to cumulative XP, not this one journey), and the archive of past
+   * completed journeys — per the "Start New Journey" persistence rules.
+   * Does NOT touch GuestSessionContext (xp/rank/badges/completedSteps) —
+   * the caller (ResumeJourney.jsx) is responsible for resetting
+   * completedSteps there so the new journey's session gating starts fresh
+   * without touching the cumulative XP/badge ledger.
+   */
+  const startNewJourney = useCallback((archiveEntry) => {
+    setJourney(prev => {
+      const previousCompletedJourneys = archiveEntry
+        ? [...(prev.previousCompletedJourneys || []), archiveEntry]
+        : (prev.previousCompletedJourneys || [])
+      const next = {
+        ...prev,
+        // Preserved as-is: identity, selectedVenue, venueSelectionCompleted,
+        // lastEntryScreen, rewards, achievements, stateVersion, spineVersion.
+        previousCompletedJourneys,
+        activeJourneyId: generateJourneyId(),
+        journeyCreatedAt: Date.now(),
+        journeyUpdatedAt: Date.now(),
+        resumeRoute: null,
+        resumeScreenId: null,
+        // Reset: this journey's content.
+        mentor: null,
+        meetYourCigar: null,
+        mentorCommentary: null,
+        format: null,
+        seedSoil: null,
+        terroir: null,
+        knowledgeDrop: null,
+        pairing: null,
+        selectedCigar: null,
+        requestPurchase: null,
+        cutToastLight: null,
+        firstThird: null,
+        secondThird: null,
+        flavorMemory: null,
+        finalThird: null,
+        scorecard: null,
+        finalReview: null,
+        passportStamp: null,
+        connections: null,
+        sessionCompletion: null,
+        aiSummary: null,
+        pairingRecommendations: null,
+        goldenBox: null,
+      }
+      saveToStorage(next)
+      return next
+    })
+  }, [])
+
   const setPassportStamp = useCallback((data) => {
     updateJourney({ passportStamp: data })
   }, [updateJourney])
@@ -387,6 +501,10 @@ export function SmokeCraftJourneyProvider({ children }) {
     setPairingRecommendations,
     setRewards,
     setAchievements,
+    setSelectedVenue,
+    setLastEntryScreen,
+    setResumeCache,
+    startNewJourney,
     setPassportStamp,
     setConnections,
     setSessionCompletion,
