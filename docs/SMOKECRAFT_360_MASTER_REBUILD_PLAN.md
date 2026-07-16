@@ -1255,7 +1255,67 @@ No `App.jsx` change was needed (route already existed and required no cleanup) a
 
 **Known limitations:** only 3 of the 5 real cigars in the sample inventory are shown in "Today's Flight" (by design, per the "Three Cigars" requirement). Finish, Construction, and Draw comparison attributes always show "Not available" since no such data field exists anywhere in the codebase yet — this is the honest, documented integration seam for future real tasting-note data, not a bug.
 
-**Recommended next package:** SmokeCraft Challenge or Event Challenge (remaining static-stub supporting modules), and/or wiring real tasting-note fields (finish/construction/draw) into the inventory data source.
+**Recommended next package (superseded by Package R below):** ~~SmokeCraft Challenge or Event Challenge, and/or wiring real tasting-note fields (finish/construction/draw) into the inventory data source~~ — SmokeCraft Challenge and Event Challenge now complete.
+
+---
+
+#### SmokeCraft Challenge + Event Challenge — Implementation Evidence (Package R)
+
+**Scope actually implemented:** rebuilt both `SmokeCraftChallenge.jsx` (route `/smokecraft/smokecraft-challenge`) and `EventChallenge.jsx` (route `/smokecraft/event-challenge`) from static image-only stubs into live, data-driven screens. Both are supporting modules, outside the locked 27-session spine (`SmokeCraftChallenge` is a `SUPPORTING_MODULES` entry requiring `scorecard`; `EventChallenge` is an ungated standalone route). No numbered journey session, session numbering, Mini Tasting, Knowledge Check, Leaderboard, Recommended Next Journey, Entry Layer, AI Summary, Pairing Recommendations, Rewards, Achievements, persistence schema, XP engine, database, or deployment file was modified.
+
+**Exact files changed:**
+- `src/pages/smokecraft/SmokeCraftChallenge.jsx` (rewritten) — live challenge categories, featured challenge, join/view-progress/view-rewards, user progress/rank/XP summary, honest "no backend" live-events boundary. The pre-existing journey-flow behavior ("Start Challenge" → award the spine's `smokecraft-challenge` session reward → navigate to Second Humidor Match) is preserved unchanged, just relocated into a richer screen.
+- `src/pages/smokecraft/EventChallenge.jsx` (rewritten) — live event calendar, event details, real countdown, banner/sponsor local-reference upload controls, honest leaderboard-preview boundary, Join Event, Back to Challenges.
+- `verify-smokecraft-challenge-event.mjs` (new) — 28-suite / 40-check Playwright suite for this package.
+- `docs/SMOKECRAFT_360_MASTER_REBUILD_PLAN.md` — this evidence section only.
+
+No `App.jsx` change was needed — both required routes (`/smokecraft/smokecraft-challenge`, `/smokecraft/event-challenge`) already existed and needed no cleanup. No `smokecraftAssets.js` change was needed — the two literal new image filenames named in this package's brief ("SMOKECRAFT CHALLENG.png", "EVENT CHALLENGE 111(2).png") do not exist anywhere in this repository (confirmed via a full-filesystem search); per the same precedent established in Package P, the live implementation was kept independent of that not-yet-added asset and the current approved shells already registered in `smokecraftAssets.js` (`smokecraftChallenge` → `smokecraft-challenge.png`, `eventChallenge` → `smokecraft-event-challenge.png`) were reused as-is, unmodified.
+
+**SmokeCraft Challenge route:** `/smokecraft/smokecraft-challenge` (existing, unchanged, still guarded `requires="scorecard"`).
+
+**Event Challenge route:** `/smokecraft/event-challenge` (existing, unchanged, still ungated).
+
+**Data source used:** `src/services/smokecraft/smokeWinnerService.js` (`calculateWinnerEligibility`, `getTopEligibleCategory`, `getWinnerProgress`) for SmokeCraft Challenge — an existing, already-verified engine that evaluates 13 real winner categories against actual session data and explicitly documents that it "never fabricates a win." `src/data/passportEvents.js` (`PASSPORT_EVENTS`) for Event Challenge — the only real, existing event data source in the codebase (titles, venues, dates/times, descriptions, capacity/attendees, images). Rank and XP reuse `getRankFromXP`/session `xp` (unmodified). Event leaderboard preview reuses `smokeLeaderboardService.js` (same honest-boundary service used in Package P's Leaderboard).
+
+**Honest fallback behavior:** "Live events" on SmokeCraft Challenge honestly discloses "No backend connected" — no scheduled challenge-events service exists, and none was fabricated. Grand reward and participation rewards show "Not available" on both screens — no reward catalog exists anywhere in the codebase. Event Challenge sponsor logo shows "No sponsor configured" when none is set. Points rules show "Not available." Countdown is computed only from each event's real date/time; events whose real date has passed are honestly marked "Expired"/"This event has passed" rather than showing a fake countdown. Banner/sponsor "upload" controls store only local file reference metadata (`name`, `size`, `type`) — no fake upload backend was built, and the screen never claims the file was actually uploaded anywhere.
+
+**Persistence behavior:** canonical only — `session.smokeCraft.smokeCraftChallengeModule = { selectedCategoryId, joinedCategoryIds, lastViewedCategoryId, startedAt }` and `session.smokeCraft.eventChallengeModule = { lastViewedEventId, joinedEventIds, uploadedBannerRef, uploadedSponsorRef }`, both written via the guest session's existing generic `update()` action, inside the existing `novee_guest_session` key. No new storage key was created. Joined/selected/last-viewed state and uploaded-reference metadata all restore correctly after refresh.
+
+**XP behavior:** reuses the existing XP engine only. Joining a challenge category or an event never awards XP and is idempotent (re-clicking Join does not duplicate the joined-state entry) — verified directly in the test suite (XP unchanged before/after joining either). The one XP-bearing action retained is "Start Challenge" on SmokeCraft Challenge, which is the pre-existing spine-continuation `awardSessionRewards('smokecraft-challenge')` call, unchanged from before this package (not a new or invented rule).
+
+**Approved images connected:** `SC_ASSETS.smokecraftChallenge` and `SC_ASSETS.eventChallenge` (both pre-existing, already-approved production assets) are reused as decorative header banners on their respective screens — all rankings, names, XP, rank, countdown, progress, event dates, challenge counts, reward eligibility, user identity, and selected states are live React content, never baked into the image.
+
+**Tests run:** new suite (`verify-smokecraft-challenge-event.mjs`), `verify-smokecraft-27-session-spine.mjs`, `verify-smokecraft-persistence-consolidation.mjs`, `verify-smokecraft-route-corrections.mjs`, `verify-smokecraft-lighting-tutorial-route.mjs`, `verify-smokecraft-choose-your-cut.mjs`, `verify-smokecraft-terroir-knowledge-drop.mjs`, `verify-smokecraft-terroir-knowledge-drop-spine.mjs`, `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs`, `verify-smokecraft-ai-summary-pairing-recommendations.mjs`, `verify-smokecraft-rewards-achievements.mjs`, `verify-smokecraft-venue-select-resume.mjs`, `verify-smokecraft-welcome-experience.mjs`, `verify-smokecraft-knowledge-check.mjs`, `verify-smokecraft-leaderboard.mjs`, `verify-smokecraft-mini-tasting.mjs`, `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-challenge-event.mjs` | **40 passed, 0 failed** |
+| `verify-smokecraft-27-session-spine.mjs` | **24 passed, 0 failed** — unaffected |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-choose-your-cut.mjs` | **16 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop.mjs` | **19 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop-spine.mjs` | **17 passed, 0 failed** — unaffected |
+| `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-ai-summary-pairing-recommendations.mjs` | **35 passed, 0 failed** — unaffected |
+| `verify-smokecraft-rewards-achievements.mjs` | **43 passed, 0 failed** — unaffected |
+| `verify-smokecraft-venue-select-resume.mjs` | **47 passed, 0 failed** — unaffected |
+| `verify-smokecraft-welcome-experience.mjs` | **32 passed, 0 failed** — unaffected |
+| `verify-smokecraft-knowledge-check.mjs` | **35 passed, 0 failed** — unaffected |
+| `verify-smokecraft-leaderboard.mjs` | **36 passed, 0 failed** — unaffected |
+| `verify-smokecraft-mini-tasting.mjs` | **24 passed, 0 failed** — unaffected |
+| `verify-interactions.mjs` | 20 passed, 2 failed — identical to the established baseline |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — identical to the established baseline |
+| `npm run build` | **green** (1m 58s) |
+
+**Confirmed no unrelated files changed:** `git status --short` before commit showed only `src/pages/smokecraft/SmokeCraftChallenge.jsx`, `src/pages/smokecraft/EventChallenge.jsx`, `verify-smokecraft-challenge-event.mjs` (new), and this doc section — no numbered journey session, unrelated screen, unrelated route, production image (outside the two already-approved assets reused as-is), database, deployment, environment file, or Recommended Next Journey file touched. The preview server used for testing was stopped before finishing, and no background test/preview process remained running; regenerated `public/proof/final-live-acceptance/*.png` screenshots were discarded via `git checkout --` before commit.
+
+**Known limitations:** the two literal new approved image files named in this package's brief were not found anywhere in the repository, so the previously-approved SmokeCraft Challenge and Event Challenge images remain in use as the visual shell until the new assets are actually added — this is the documented, honest boundary, not a bug. No reward catalog, sponsor data, points-rules data, or challenge-events backend exists yet anywhere in the codebase; all such fields honestly render "Not available" / "No backend connected" rather than being invented.
+
+**Recommended next package:** register the two new approved images once added to the repository and swap them in via `smokecraftAssets.js`; and/or build a real reward catalog / sponsor / points-rules / challenge-events backend to replace the documented "Not available" / "No backend connected" integration seams.
 
 ---
 
