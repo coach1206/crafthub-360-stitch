@@ -120,6 +120,7 @@ import Assistant        from './pages/smokecraft/Assistant.jsx'
 import SessionComplete  from './pages/smokecraft/SessionComplete.jsx'
 import Terroir          from './pages/smokecraft/Terroir.jsx'
 import KnowledgeDrop    from './pages/smokecraft/KnowledgeDrop.jsx'
+import KnowledgeCheckDemo from './pages/smokecraft/KnowledgeCheckDemo.jsx'
 import MeetYourCigar    from './pages/smokecraft/MeetYourCigar.jsx'
 import MentorCommentary from './pages/smokecraft/MentorCommentary.jsx'
 import PairingMastery   from './pages/smokecraft/PairingMastery.jsx'
@@ -402,6 +403,11 @@ export default function App() {
 
                 {/* S15 — knowledge-drop (Knowledge Drop) */}
                 <Route path="knowledge-drop"   element={<SmokeCraftSessionGuard sessionNumber={15}><KnowledgeDrop /></SmokeCraftSessionGuard>} />
+
+                {/* Knowledge Check / Text Quiz — reusable supporting module QA harness
+                    (Package O). Not part of the numbered spine or any educational
+                    screen; exists only to render/test the reusable component. */}
+                <Route path="knowledge-check-demo" element={<SmokeCraftSessionGuard requires="entry"><KnowledgeCheckDemo /></SmokeCraftSessionGuard>} />
 
                 {/* S16/S17/S18 — final-third (Flavor Finish / Strength Progression / Overall Experience Notes, merged — see session.js) */}
                 <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={16}><FinalThird /></SmokeCraftSessionGuard>} />

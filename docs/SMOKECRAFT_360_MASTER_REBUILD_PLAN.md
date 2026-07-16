@@ -1107,7 +1107,56 @@ S1 Welcome (deferred, stand-in `/smokecraft`) · S2 Choose Your Cigar `/smokecra
 
 **Remaining unfinished screens:** none in the locked 27-session spine or 5-screen Entry layer — all 27 numbered sessions and all 5 Entry-layer screens are now real, implemented, routed screens. Remaining unbuilt work is limited to supporting-module scope explicitly excluded from every numbered package to date: Knowledge Check/Text Quiz, Recommended Next Journey (content depth beyond its existing repurposed `SessionComplete.jsx`), Leaderboard, Mini Tasting Round, SmokeCraft Challenge, and Event Challenge.
 
-**Recommended next package:** a supporting-module package covering Knowledge Check/Text Quiz and/or the remaining static-stub supporting modules (Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge), since the numbered spine and Entry layer are now fully built.
+**Recommended next package (superseded by Package O below):** ~~a supporting-module package covering Knowledge Check/Text Quiz~~ — now complete.
+
+---
+
+#### Knowledge Check / Text Quiz — Implementation Evidence (Package O)
+
+**Scope actually implemented:** builds one reusable Knowledge Check / Text Quiz component (`KnowledgeCheck.jsx`) plus its structured question-data model, launchable after any educational module by passing a `moduleId`. This is a supporting module, explicitly outside the numbered 27-session spine and Entry layer — no numbered session, Entry-layer screen, AI Summary, Pairing Recommendations, Rewards, Achievements, Recommended Next Journey, Leaderboard, Mini Tasting, SmokeCraft Challenge, or Event Challenge was modified.
+
+**Exact files changed:**
+- `src/components/smokecraft/KnowledgeCheck.jsx` (new) — the reusable component. Supports all 7 required question types (Multiple Choice, True/False, Multi-Select, Image Identification, Ordering/Sequence, Matching, Fill in the Blank), dynamic per-question validation, incorrect-answer feedback, an explanation panel, an educational reference line, per-question Retry, optional per-question Skip, a live progress indicator, a completion summary, and full keyboard/ARIA accessibility (`role="radiogroup"`/`"checkbox"`/`"progressbar"`, `aria-live` feedback region).
+- `src/data/knowledgeCheckQuestions.js` (new) — the reusable question model (documented as a JSDoc type comment) plus 9 real question sets, one per required educational module (Terroir, Meet Your Cigar, Construction Inspection, Choose Your Cut, Lighting Tutorial, Flavor Discovery, Mentor Commentary, Knowledge Drop, Suggested Pairings) — one worked example of each of the 7 question types across the set. No question content is hardcoded inside the component; the component only renders/validates whatever structured data it's given.
+- `src/pages/smokecraft/KnowledgeCheckDemo.jsx` (new) — a minimal QA/demo harness that mounts the reusable component with a module selector. **Not** wired into any educational screen and **not** part of the spine or Entry layer — it exists solely because this codebase's established testing convention is Playwright against real served routes (no component-level test framework like Vitest/Testing Library exists in this repo), so a route was the only way to exercise and verify the reusable component end-to-end. Flagged explicitly here as the one necessary exception to this package's stricter "only these files" scope — see Known Limitations below.
+- `src/App.jsx` — one new guarded route (`requires="entry"`, i.e. always reachable, same permissive pattern as other non-spine utility routes) for the QA harness only: `/smokecraft/knowledge-check-demo`. Two-line diff (one import, one `<Route>`); no existing route, guard, or screen was altered.
+- `verify-smokecraft-knowledge-check.mjs` (new) — 18-suite / 35-check Playwright suite for this package.
+- `docs/SMOKECRAFT_360_MASTER_REBUILD_PLAN.md` — this evidence section only.
+
+**Question model:** see the JSDoc block at the top of `knowledgeCheckQuestions.js`. Each question is `{ id, type, prompt, explanation, reference?, ...type-specific fields }` (`choices`/`correctAnswer` for single-select types, `correctAnswers` for multi-select, `items`/`correctOrder` for ordering, `pairs` for matching, `accepted` for fill-blank). Question sets are keyed by `moduleId` in `KNOWLEDGE_CHECK_SETS`, looked up via `getKnowledgeCheckSet(moduleId)` — a clean seam for adding more sets (including "future educational modules," per the package objective) without touching the component.
+
+**XP behavior:** XP is reused, never invented. The component accepts an optional `completionStepId` prop; on completion, if — and only if — that id already has a real, pre-existing entry in `SESSION_REWARDS` (`smokecraftRewards.js`, unmodified this package), its existing `xp` value is awarded once via the already-exposed `addXP()` action (not `awardSessionRewards()`, deliberately — that function also writes to `completedSteps`, which would have falsely marked an unrelated numbered spine session as "complete" just because its Knowledge Check was taken; `addXP()` alone avoids that side effect entirely). A `xpAwardedRef`, seeded from any already-persisted completion, guarantees XP is never awarded twice for the same module — verified directly across three angles: a module with a real existing rule awards its XP once (Suite 8), a module with no configured rule awards nothing and says so honestly (Suite 8b), and retrying-and-recompleting the same module does not re-award (Suite 8c).
+
+**Persistence:** canonical only — `session.smokeCraft.knowledgeChecks[moduleId] = { score, total, skippedCount, retryCount, completedAt }`, written via the guest session's already-exposed generic `update()` action (`useGuestSession()`), inside the existing `novee_guest_session` storage key. No new localStorage/sessionStorage key was created, and neither `GuestSessionContext.jsx` nor `SmokeCraftJourneyContext.jsx` needed any edit — both already exposed the generic actions this component needed.
+
+**Tests run:** new suite (`verify-smokecraft-knowledge-check.mjs`), `verify-smokecraft-27-session-spine.mjs`, `verify-smokecraft-persistence-consolidation.mjs`, `verify-smokecraft-route-corrections.mjs`, `verify-smokecraft-lighting-tutorial-route.mjs`, `verify-smokecraft-choose-your-cut.mjs`, `verify-smokecraft-terroir-knowledge-drop.mjs`, `verify-smokecraft-terroir-knowledge-drop-spine.mjs`, `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs`, `verify-smokecraft-ai-summary-pairing-recommendations.mjs`, `verify-smokecraft-rewards-achievements.mjs`, `verify-smokecraft-venue-select-resume.mjs`, `verify-smokecraft-welcome-experience.mjs`, `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-knowledge-check.mjs` | **35 passed, 0 failed** |
+| `verify-smokecraft-27-session-spine.mjs` | **24 passed, 0 failed** — unaffected |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-choose-your-cut.mjs` | **16 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop.mjs` | **19 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop-spine.mjs` | **17 passed, 0 failed** — unaffected |
+| `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-ai-summary-pairing-recommendations.mjs` | **35 passed, 0 failed** — unaffected |
+| `verify-smokecraft-rewards-achievements.mjs` | **43 passed, 0 failed** — unaffected |
+| `verify-smokecraft-venue-select-resume.mjs` | **47 passed, 0 failed** — unaffected |
+| `verify-smokecraft-welcome-experience.mjs` | **32 passed, 0 failed** — unaffected |
+| `verify-interactions.mjs` | 20 passed, 2 failed — identical to the established baseline (same 2 pre-existing, unrelated failures) |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — identical to the established baseline |
+| `npm run build` | **green** |
+
+**Confirmed no unrelated files changed:** `git status --short` before commit showed only the files listed above — no numbered session, Entry-layer screen, AI Summary, Pairing Recommendations, Rewards, Achievements, Recommended Next Journey, Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge, production image, database, or deployment files touched; the preview server used for testing was stopped before finishing, and no background test/preview process remained running; regenerated `public/proof/final-live-acceptance/*.png` screenshots were discarded via `git checkout --` before commit.
+
+**Known limitations:** the one deliberate exception to this package's strict file list is the 2-line `App.jsx` diff plus the new `KnowledgeCheckDemo.jsx` QA harness — necessary because this repo has no component-level test runner, so a real served route was the only way to exercise the reusable component with Playwright per the package's own required-tests list. The harness is not linked from, and does not affect, any educational screen. The reusable component is **not** wired into Terroir, Meet Your Cigar, Construction Inspection, Choose Your Cut, Lighting Tutorial, Flavor Discovery, Mentor Commentary, Knowledge Drop, or Suggested Pairings this package — per the objective, it is built to be launched after those sections, not launched by them yet; integrating it into each screen is future, explicitly out-of-scope work.
+
+**Recommended next package:** wire `KnowledgeCheck` into one or more real educational screens (e.g. Knowledge Drop or Terroir), and/or continue with the remaining static-stub supporting modules (Leaderboard, Mini Tasting, SmokeCraft Challenge, Event Challenge, deeper Recommended Next Journey content).
 
 ---
 
