@@ -118,6 +118,8 @@ import Assistant        from './pages/smokecraft/Assistant.jsx'
 import SessionComplete  from './pages/smokecraft/SessionComplete.jsx'
 import Terroir          from './pages/smokecraft/Terroir.jsx'
 import KnowledgeDrop    from './pages/smokecraft/KnowledgeDrop.jsx'
+import MeetYourCigar    from './pages/smokecraft/MeetYourCigar.jsx'
+import MentorCommentary from './pages/smokecraft/MentorCommentary.jsx'
 import PairingMastery   from './pages/smokecraft/PairingMastery.jsx'
 import Vitola           from './pages/smokecraft/Vitola.jsx'
 import Identity         from './pages/smokecraft/Identity.jsx'
@@ -359,8 +361,15 @@ export default function App() {
                 {/* S8 — pairing-lab */}
                 <Route path="pairing-lab"      element={<SmokeCraftSessionGuard sessionNumber={8}><PairingLab /></SmokeCraftSessionGuard>} />
 
-                {/* S9 — humidor-match */}
+                {/* S9 — humidor-match (Choose Your Cigar) */}
                 <Route path="humidor-match"    element={<SmokeCraftSessionGuard sessionNumber={9}><HumidorMatch /></SmokeCraftSessionGuard>} />
+
+                {/* Meet Your Cigar (locked S3) — placed immediately after humidor-match
+                    (Choose Your Cigar), its true authoritative predecessor per Package 0.
+                    Shares humidor-match's checkpoint number and additionally requires
+                    humidor-match to be complete (enforced in the screen itself, mirroring
+                    the cut-toast-light/lighting-tutorial interstitial pattern). */}
+                <Route path="meet-your-cigar"  element={<SmokeCraftSessionGuard sessionNumber={9}><MeetYourCigar /></SmokeCraftSessionGuard>} />
 
                 {/* S10 — request-purchase */}
                 <Route path="request-purchase" element={<SmokeCraftSessionGuard sessionNumber={10}><RequestPurchase /></SmokeCraftSessionGuard>} />
@@ -375,19 +384,26 @@ export default function App() {
                 {/* S12 — first-third */}
                 <Route path="first-third"      element={<SmokeCraftSessionGuard sessionNumber={12}><FirstThird /></SmokeCraftSessionGuard>} />
 
-                {/* S13 — second-third */}
+                {/* S13 — second-third (Construction Check / Flavor Evolution) */}
                 <Route path="second-third"     element={<SmokeCraftSessionGuard sessionNumber={13}><SecondThird /></SmokeCraftSessionGuard>} />
+
+                {/* Mentor Commentary (locked S14) — placed immediately after second-third
+                    (Construction Check / Flavor Evolution), its true authoritative
+                    predecessor per Package 0. Shares second-third's checkpoint number and
+                    additionally requires second-third to be complete (enforced in the
+                    screen itself, mirroring the cut-toast-light/lighting-tutorial pattern). */}
+                <Route path="mentor-commentary" element={<SmokeCraftSessionGuard sessionNumber={13}><MentorCommentary /></SmokeCraftSessionGuard>} />
+
+                {/* Knowledge Drop (locked S15) — now placed immediately after Mentor
+                    Commentary (locked S14), its true authoritative predecessor. Guard
+                    checkpoint moved from 15 to 13 (shared with second-third/Mentor
+                    Commentary) since Mentor Commentary — not flavor-memory — is now its
+                    real prerequisite; the screen's own internal gate (updated from
+                    'flavor-memory' to 'mentor-commentary') enforces the true order. */}
+                <Route path="knowledge-drop"   element={<SmokeCraftSessionGuard sessionNumber={13}><KnowledgeDrop /></SmokeCraftSessionGuard>} />
 
                 {/* S14 — flavor-memory */}
                 <Route path="flavor-memory"    element={<SmokeCraftSessionGuard sessionNumber={14}><FlavorMemory /></SmokeCraftSessionGuard>} />
-
-                {/* Knowledge Drop (locked S15) — placed immediately after flavor-memory,
-                    which currently stands in for the not-yet-built Mentor Commentary
-                    (locked S14), since Mentor Commentary is explicitly out of scope for
-                    this package. Shares final-third's checkpoint number and additionally
-                    requires flavor-memory to be complete (enforced in the screen itself,
-                    mirroring the cut-toast-light/lighting-tutorial interstitial pattern). */}
-                <Route path="knowledge-drop"   element={<SmokeCraftSessionGuard sessionNumber={15}><KnowledgeDrop /></SmokeCraftSessionGuard>} />
 
                 {/* S15 — final-third */}
                 <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={15}><FinalThird /></SmokeCraftSessionGuard>} />

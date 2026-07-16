@@ -278,7 +278,7 @@ export default function Terroir() {
         primary="Continue →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/mentor-selection')}
+        onSecondary={() => navigate('/smokecraft/meet-your-cigar')}
       />
     </div>
   )

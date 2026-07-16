@@ -69,12 +69,13 @@ export default function KnowledgeDrop() {
   const { journey, setKnowledgeDrop } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  // Flavor Memory (currently standing in for the not-yet-built Mentor
-  // Commentary) must be completed first — mirrors the Identity/Enroll and
+  // Mentor Commentary (now built — Package I) must be completed first,
+  // per the locked flow: Construction Check/Flavor Evolution -> Mentor
+  // Commentary -> Knowledge Drop. Mirrors the Identity/Enroll and
   // cut-toast-light/lighting-tutorial sequential-gate pattern.
   useEffect(() => {
-    if (!isDemoMode && !session.completedSteps.includes('flavor-memory')) {
-      navigate('/smokecraft/flavor-memory', { replace: true })
+    if (!isDemoMode && !session.completedSteps.includes('mentor-commentary')) {
+      navigate('/smokecraft/mentor-commentary', { replace: true })
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -364,7 +365,7 @@ export default function KnowledgeDrop() {
         primary="Continue →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/flavor-memory')}
+        onSecondary={() => navigate('/smokecraft/mentor-commentary')}
       />
     </div>
   )

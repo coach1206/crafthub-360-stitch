@@ -41,6 +41,12 @@ const DEFAULT_STATE = {
   // Mentor selection
   mentor: null, // { id, name, origin, country }
 
+  // Meet Your Cigar (Brand/Blend/Wrapper/Binder/Filler/Factory/Master Blender)
+  meetYourCigar: null, // { viewedSections: string[], completedAt }
+
+  // Mentor Commentary
+  mentorCommentary: null, // { viewedSections: string[], completedAt }
+
   // Format selection
   format: null, // { id, label, desc }
 
@@ -233,6 +239,14 @@ export function SmokeCraftJourneyProvider({ children }) {
     updateJourney({ seedSoil: data })
   }, [updateJourney])
 
+  const setMeetYourCigar = useCallback((data) => {
+    updateJourney({ meetYourCigar: data })
+  }, [updateJourney])
+
+  const setMentorCommentary = useCallback((data) => {
+    updateJourney({ mentorCommentary: data })
+  }, [updateJourney])
+
   const setTerroir = useCallback((data) => {
     updateJourney({ terroir: data })
   }, [updateJourney])
@@ -306,6 +320,8 @@ export function SmokeCraftJourneyProvider({ children }) {
     setMentor,
     setFormat,
     setSeedSoil,
+    setMeetYourCigar,
+    setMentorCommentary,
     setTerroir,
     setKnowledgeDrop,
     setPairing,

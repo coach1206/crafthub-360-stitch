@@ -35,6 +35,15 @@ export const SC_ASSETS = {
   // S4 — Mentor Selection
   mentorSelection:     `${RAW}/MENTOR%20SELECTION1.png`,
 
+  // Meet Your Cigar — reuses the approved Humidor Match (Choose Your Cigar) composition,
+  // since no dedicated Meet Your Cigar photography exists yet.
+  meetYourCigar:       `${RAW}/Humidor%20Match%201.png`,
+
+  // Mentor Commentary — reuses the approved Mentor Selection composition as a shared
+  // atmosphere background; no per-mentor portrait photography exists yet (honest
+  // fallback used for the portrait zone itself).
+  mentorCommentary:    `${RAW}/MENTOR%20SELECTION1.png`,
+
   // S5 — Format / Vitola
   format:              `${REF}/smokecraft-vitola.png`,
 

@@ -37,9 +37,11 @@ async function nav(page, path) {
 }
 
 const PREREQS_TO_MENTOR = ['entry', 'enroll', 'golden-box', 'mentor']
-const PREREQS_TO_FLAVOR_MEMORY = ['entry', 'enroll', 'golden-box', 'mentor', 'format', 'wrapper-strength',
+// Package I built Mentor Commentary and made it Knowledge Drop's real prerequisite
+// (superseding flavor-memory, which Package H used only as a stand-in).
+const PREREQS_TO_MENTOR_COMMENTARY = ['entry', 'enroll', 'golden-box', 'mentor', 'format', 'wrapper-strength',
   'seed-soil', 'pairing-lab', 'humidor-match', 'request-purchase', 'cut-toast-light', 'first-third',
-  'second-third', 'flavor-memory']
+  'second-third', 'mentor-commentary']
 
 async function run() {
   const browser = await chromium.launch({ executablePath: EXEC, args: ['--no-sandbox'] })
@@ -55,7 +57,7 @@ async function run() {
 
   // ── 2. Knowledge Drop route resolves ──
   console.log('\n── Suite 2: Knowledge Drop route resolves ──')
-  await seedGuest(page, { completedSteps: PREREQS_TO_FLAVOR_MEMORY, demoMode: true })
+  await seedGuest(page, { completedSteps: PREREQS_TO_MENTOR_COMMENTARY, demoMode: true })
   await nav(page, '/smokecraft/knowledge-drop')
   title = await page.textContent('h1')
   title.includes('Topic') || title.includes('Tobacco') ? ok('/smokecraft/knowledge-drop resolves') : bad(`Title: ${title}`)
@@ -78,28 +80,33 @@ async function run() {
 
   // ── 4. Knowledge Drop is guarded at the correct journey position ──
   console.log('\n── Suite 4: Knowledge Drop guard ──')
-  await seedGuest(page, { completedSteps: PREREQS_TO_FLAVOR_MEMORY.slice(0, -1), demoMode: false })
+  await seedGuest(page, { completedSteps: PREREQS_TO_MENTOR_COMMENTARY.slice(0, -1), demoMode: false })
   await nav(page, '/smokecraft/knowledge-drop')
   const kdBody = await page.evaluate(() => document.body.innerText.toLowerCase())
-  kdBody.includes('required:') || kdBody.includes('back to current session')
-    ? ok('Knowledge Drop blocked when flavor-memory is not yet complete (non-demo)')
-    : bad('Knowledge Drop was accessible without flavor-memory complete')
+  const kdBlocked = new URL(page.url()).pathname !== '/smokecraft/knowledge-drop'
+    || kdBody.includes('required:') || kdBody.includes('back to current session')
+  kdBlocked
+    ? ok('Knowledge Drop blocked when mentor-commentary is not yet complete (non-demo)')
+    : bad('Knowledge Drop was accessible without mentor-commentary complete')
 
-  await seedGuest(page, { completedSteps: PREREQS_TO_FLAVOR_MEMORY, demoMode: false })
+  await seedGuest(page, { completedSteps: PREREQS_TO_MENTOR_COMMENTARY, demoMode: false })
   await nav(page, '/smokecraft/knowledge-drop')
   const kdPath2 = new URL(page.url()).pathname
   kdPath2 === '/smokecraft/knowledge-drop'
-    ? ok('Knowledge Drop accessible once flavor-memory is complete (non-demo)')
+    ? ok('Knowledge Drop accessible once mentor-commentary is complete (non-demo)')
     : bad(`Landed on ${kdPath2} instead of staying on Knowledge Drop`)
 
   // ── 5. Terroir Back goes to correct previous screen ──
   console.log('\n── Suite 5: Terroir Back target ──')
+  // Package I built Meet Your Cigar and made it Terroir's authoritative Back
+  // target (superseding mentor-selection, which Package H used only as a
+  // stand-in).
   await seedGuest(page, { completedSteps: PREREQS_TO_MENTOR, demoMode: true })
   await nav(page, '/smokecraft/terroir')
   await page.click('div[role="navigation"] button:first-of-type')
   await page.waitForTimeout(400)
-  new URL(page.url()).pathname === '/smokecraft/mentor-selection'
-    ? ok('Terroir Back navigates to /smokecraft/mentor-selection')
+  new URL(page.url()).pathname === '/smokecraft/meet-your-cigar'
+    ? ok('Terroir Back navigates to /smokecraft/meet-your-cigar')
     : bad(`Terroir Back landed on ${page.url()}`)
 
   // ── 6. Terroir Continue goes to correct next screen ──
@@ -116,17 +123,17 @@ async function run() {
 
   // ── 7. Knowledge Drop Back goes to correct previous screen ──
   console.log('\n── Suite 7: Knowledge Drop Back target ──')
-  await seedGuest(page, { completedSteps: PREREQS_TO_FLAVOR_MEMORY, demoMode: true })
+  await seedGuest(page, { completedSteps: PREREQS_TO_MENTOR_COMMENTARY, demoMode: true })
   await nav(page, '/smokecraft/knowledge-drop')
   await page.click('div[role="navigation"] button:first-of-type')
   await page.waitForTimeout(400)
-  new URL(page.url()).pathname === '/smokecraft/flavor-memory'
-    ? ok('Knowledge Drop Back navigates to /smokecraft/flavor-memory')
+  new URL(page.url()).pathname === '/smokecraft/mentor-commentary'
+    ? ok('Knowledge Drop Back navigates to /smokecraft/mentor-commentary')
     : bad(`Knowledge Drop Back landed on ${page.url()}`)
 
   // ── 8. Knowledge Drop Continue goes to correct next screen ──
   console.log('\n── Suite 8: Knowledge Drop Continue target ──')
-  await seedGuest(page, { completedSteps: PREREQS_TO_FLAVOR_MEMORY, demoMode: true })
+  await seedGuest(page, { completedSteps: PREREQS_TO_MENTOR_COMMENTARY, demoMode: true })
   await nav(page, '/smokecraft/knowledge-drop')
   await page.click('[role="tab"][aria-label^="Tobacco"]')
   await page.waitForTimeout(150)
@@ -154,7 +161,7 @@ async function run() {
 
   // ── 10. Resume returns to Knowledge Drop when active ──
   console.log('\n── Suite 10: Resume returns to Knowledge Drop ──')
-  await seedGuest(page, { completedSteps: PREREQS_TO_FLAVOR_MEMORY, demoMode: false, activeScreen: '/smokecraft/knowledge-drop' })
+  await seedGuest(page, { completedSteps: PREREQS_TO_MENTOR_COMMENTARY, demoMode: false, activeScreen: '/smokecraft/knowledge-drop' })
   await page.goto(`${BASE}/smokecraft/scorecard`, { waitUntil: 'domcontentloaded' })
   await page.waitForTimeout(600)
   resumeBtn = await page.$('button:has-text("Back to Current Session")')
