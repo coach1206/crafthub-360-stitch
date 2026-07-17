@@ -35,9 +35,10 @@ export const SC_ASSETS = {
   // S4 — Mentor Selection
   mentorSelection:     `${RAW}/MENTOR%20SELECTION1.png`,
 
-  // Meet Your Cigar — reuses the approved Humidor Match (Choose Your Cigar) composition,
-  // since no dedicated Meet Your Cigar photography exists yet.
-  meetYourCigar:       `${RAW}/Humidor%20Match%201.png`,
+  // Meet Your Cigar — dedicated approved asset (root-cause production fix:
+  // this previously reused the Humidor Match image, causing Meet Your Cigar
+  // and Humidor Match to render the same photography).
+  meetYourCigar:       `${RAW}/DISOVER%20YOUR%20CIGAR%20PROFILE.png`,
 
   // Mentor Commentary — approved production asset (production image audit).
   mentorCommentary:    `${RAW}/MENTOR%20:COMMENTARY.png`,

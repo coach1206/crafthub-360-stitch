@@ -1778,3 +1778,39 @@ No dead imports, duplicate active asset keys, obsolete fallback references, dead
 **PRODUCTION-FREEZE DECLARATION:** the SmokeCraft 360 module's approved production image set is now the visual source of truth for every screen with an uploaded replacement asset. All 27 numbered spine sessions and all identified supporting modules render live, canonical-data-driven content beneath their approved visual shells, with honest fallback states wherever no real backend exists. This audit finds no fabricated data, no dead controls, no route loops, and no regressions against the established test baseline. The SmokeCraft 360 module is declared **frozen** at this commit pending any future explicit instruction to resume work on it.
 
 ---
+
+## ROOT-CAUSE PRODUCTION RECOVERY
+
+**Prior freeze commit:** `efd52637`. This entry re-opens the freeze to fix two confirmed, provable source-level root causes discovered via direct code inspection (not guessed from symptom descriptions) that explain the reported Railway production behavior.
+
+### Root cause #1 — Entry Layer bypass
+
+`src/pages/SmokeCraft.jsx` is the component rendered at the bare `/smokecraft` index route (the actual public entry URL — confirmed via `App.jsx`: `<Route index element={<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraft /></SmokeCraftSessionGuard>} />`). It contained its own **private, independent** `getResumeRoute()` function with a hardcoded `RESUME_SEQUENCE` using old route ids (`/smokecraft/identity`, `/smokecraft/golden-box`, `/smokecraft/seed-soil`) in an order that does not match the authoritative 27-session registry, and its "Start SmokeCraft" button called this function directly — silently jumping straight into whatever mid-journey route it computed from raw `sc_journey_v1` shape-sniffing, **entirely bypassing** the already-correctly-built Entry Layer chain (`ENTRY_LAYER_SCREENS` in `session.js`: Launch → Sign In/Guest → Venue Selection → Personal Dashboard → Resume-or-Start, and the deliberate-choice `ResumeJourney.jsx` built in Package M). This is the exact mechanism behind "bypasses the SmokeCraft entry experience" and "begins inside an existing journey" — the real Entry Layer was fully built and correct; this one legacy Launch-screen handler never called into it.
+
+**Fix:** replaced `getResumeRoute()`/`RESUME_SEQUENCE` with `getEntryRoute()`, which checks only real completion signals (`completedSteps.includes('enroll')`, `journey.selectedVenue`/`venueSelectionCompleted`) and hands off to `/smokecraft/enroll` → `/smokecraft/venue-select` → `/smokecraft/resume` in that order — the same chain a fresh visitor is meant to walk. `/smokecraft/resume` (`ResumeJourney.jsx`, unmodified) already requires the visitor to deliberately click Resume or Start New Journey; it was never auto-invoked before this fix because the old Launch screen never routed to it at all.
+
+### Root cause #2 — Meet Your Cigar / Humidor Match asset collision
+
+`src/constants/smokecraftAssets.js` had `meetYourCigar` pointing at the exact same file as `humidorMatch` (`Humidor Match 1.png`), with a comment acknowledging "no dedicated Meet Your Cigar photography exists yet." This directly matches the reported "displays the Humidor Match image on Meet Your Cigar." A distinct, real, previously-unwired image (`DISOVER YOUR CIGAR PROFILE.png`, verified as a valid, non-corrupt PNG) already existed in the repository and was wired in as `meetYourCigar` instead.
+
+### Investigated and found NOT to be a bug
+
+- **Humidor Match as "Session 2":** confirmed correct per the authoritative registry (`session.js`: `{ session: 2, id: 'humidor-match', ... label: 'Choose Your Cigar' }`). This is by design, not a defect.
+- **Terroir → Future Visit Locked:** `Terroir.jsx`'s route guard (`SmokeCraftSessionGuard sessionNumber={4}`) only shows the locked screen when real prerequisites (S1–S3) are genuinely incomplete — verified directly: with S1–S3 marked complete, Terroir renders normally. If production users see this incorrectly, the cause is stale/legacy-shaped `completedSteps` data (addressed by root cause #1's fix removing the code path that could produce inconsistent state), not a routing defect in Terroir itself.
+- **"LOCAL PREVIEW" label:** `SmokeCraftProgressHeader.jsx` shows a small mode-disclosure label whenever no real backend is connected — consistent with the "never claim a live backend when none exists" rule enforced across every prior package (Leaderboard, Event Challenge, SmokeCraft Challenge, Recommended Next Journey all carry the same honest disclosure pattern). This is an intentional, repo-wide honesty convention, not a stray dev-only artifact — left unchanged. If a different, more end-user-appropriate label is wanted, that is a design decision for a future explicit instruction, not a bug fix.
+
+### Files changed
+
+- `src/pages/SmokeCraft.jsx` — replaced the private stale resume logic with a handoff into the real Entry Layer chain.
+- `src/constants/smokecraftAssets.js` — `meetYourCigar` now points to a distinct, real asset.
+- `verify-smokecraft-entry-recovery.mjs` (new) — clean-browser entry sequence test: no auto-resume on a fresh visit, Start SmokeCraft routes to Sign In (not a stale mid-journey route), a legacy-shaped journey record safely routes to Venue Selection/Resume rather than loading a fabricated screen or leaking "Session 18 of 24" text, and Terroir renders correctly once real prerequisites are met.
+
+### Test results
+
+New suite `verify-smokecraft-entry-recovery.mjs`: **6 passed, 0 failed**. Full regression battery (all prior package suites, `verify-smokecraft-production-freeze.mjs`, `verify-all-smokecraft-assets.mjs`) green with 0 new failures. `verify-interactions.mjs` 20/2 and `final-acceptance.mjs` 65/18 — both identical to the established baseline. `npm run build` green.
+
+### Scope limitation — Railway platform verification
+
+This session has no Railway CLI, API token, or dashboard access, and no `railway.json`/`railway.toml` exists in this repository (only a generic `nixpacks.toml`). Phases 8–10 of the requested root-cause recovery (confirming Railway's connected branch/build/start command, and testing the live production URL end-to-end) require platform access this environment does not have. The fixes above were verified locally against the built production bundle (`npm run build` + `vite preview`), not against the actual Railway deployment. Whether Railway is currently serving `recovery/smokecraft-codex-final` at all, and whether it will pick up this commit automatically, could not be confirmed from inside this repository — see the Final Report for what was and was not verifiable.
+
+---

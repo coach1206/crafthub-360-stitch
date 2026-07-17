@@ -14,48 +14,26 @@ function guestStepDone(stepId) {
   } catch { return false }
 }
 
-// Ordered resume steps starting from identity (enroll is handled separately as
-// the no-key-in-storage default). Each entry: route to send the user to when
-// that step has NOT yet been completed.
-const RESUME_SEQUENCE = [
-  { route: '/smokecraft/identity',         done: j => !!(j.identity?.preferredName || j.identity?.fullName) },
-  { route: '/smokecraft/golden-box',       done: j => !!j.selectedCigar },
-  { route: '/smokecraft/mentor-selection', done: j => !!j.mentor },
-  { route: '/smokecraft/format',           done: j => !!j.format },
-  { route: '/smokecraft/seed-soil',        done: j => !!j.pairing },
-  { route: '/smokecraft/pairing-lab',      done: j => !!j.pairing?.primary },
-  { route: '/smokecraft/humidor-match',    done: j => !!j.selectedCigar?.name },
-  { route: '/smokecraft/request-purchase', done: j => !!j.requestPurchase },
-  { route: '/smokecraft/cut-toast-light',  done: j => !!j.cutToastLight },
-  { route: '/smokecraft/first-third',      done: j => !!j.flavorMemory },
-  { route: '/smokecraft/second-third',     done: j => Array.isArray(j.flavorMemory?.selectedFlavors) && j.flavorMemory.selectedFlavors.length >= 2 },
-  { route: '/smokecraft/flavor-memory',    done: j => Array.isArray(j.flavorMemory?.selectedFlavors) && j.flavorMemory.selectedFlavors.length >= 3 },
-  { route: '/smokecraft/final-third',      done: j => !!j.flavorMemory?.intensity },
-  { route: '/smokecraft/scorecard',        done: j => !!j.flavorMemory?.body },
-  { route: '/smokecraft/final-review',     done: j => !!j.flavorMemory?.strength },
-  { route: '/smokecraft/passport-stamp',   done: j => !!j.flavorMemory?.notes },
-  { route: '/smokecraft/connections',      done: () => { try { const c = JSON.parse(localStorage.getItem('sc_connections_v1') || '[]'); return Array.isArray(c) && c.length > 0 } catch { return false } } },
-  { route: '/smokecraft/management-sync',  done: () => guestStepDone('management-sync') },
-  { route: '/smokecraft/session-complete', done: () => guestStepDone('session-complete') },
-]
-
-function getResumeRoute() {
+// Root-cause fix: this Launch screen previously computed its own private,
+// stale resume sequence (old route ids, wrong order vs. the authoritative
+// 27-session registry) and jumped straight into a mid-journey route,
+// entirely bypassing the real Entry Layer (Sign In/Guest → Venue Selection →
+// Personal Dashboard → Resume-or-Start, ENTRY_LAYER_SCREENS in session.js).
+// The correct behavior is to hand off to that already-built chain and let
+// each screen's own guard/logic decide what's next — never to silently
+// resume mid-journey from the Launch screen itself.
+function getEntryRoute() {
+  if (!guestStepDone('enroll')) return '/smokecraft/enroll'
   try {
     const raw = localStorage.getItem('sc_journey_v1')
-    // No stored journey key → brand new session → enroll
-    if (!raw) return '/smokecraft/enroll'
-    const j = JSON.parse(raw)
-    // Missing or corrupt stateVersion → enroll
-    if (!j || !j.stateVersion) return '/smokecraft/enroll'
-    // Find the first step not yet completed
-    for (const step of RESUME_SEQUENCE) {
-      if (!step.done(j)) return step.route
-    }
-    // All 20 steps complete → fresh start
-    return '/smokecraft/enroll'
+    const j = raw ? JSON.parse(raw) : null
+    if (!j?.selectedVenue && !j?.venueSelectionCompleted) return '/smokecraft/venue-select'
   } catch {
-    return '/smokecraft/enroll'
+    return '/smokecraft/venue-select'
   }
+  // Identity + venue are set — hand off to Resume/Start New, which requires
+  // the visitor to deliberately choose (never auto-resumes on its own).
+  return '/smokecraft/resume'
 }
 
 // Screen-reader-only text — visible to Playwright hasText, invisible on screen
@@ -103,7 +81,7 @@ export default function SmokeCraft() {
 
   function handleStartSmokeCraft() {
     triggerHaptic('medium')
-    navigate(getResumeRoute())
+    navigate(getEntryRoute())
   }
 
   return (
