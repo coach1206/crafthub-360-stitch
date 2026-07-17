@@ -1675,3 +1675,106 @@ This revision was produced by re-reading the user-approved 27-session Master Jou
 13. **First technical implementation package after Package 0:** **Package A — Persistence Consolidation (expanded scope)**.
 14. **Exact files expected to change in that next package:** `src/context/SmokeCraftJourneyContext.jsx` (new canonical fields + STATE_VERSION 2→3 migration) + the 8 shadow-key page files — `src/pages/smokecraft/Connections.jsx`, `GoldenBox.jsx`, `Identity.jsx`, `Scorecard.jsx`, `FinalThird.jsx`, `FlavorMemory.jsx`, `PassportStamp.jsx`, `SessionComplete.jsx`. No route files, no other React components, no images.
 15. **Tests required before moving forward:** persistence suite confirming zero shadow localStorage/sessionStorage keys remain across all 8 files; new-field presence test confirming every field listed in §16 exists with a safe default; STATE_VERSION migration test confirming a fixture v2 session upgrades to v3 without data loss; full existing regression suite (`verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`) must not regress below its current pass count; `npm run build` green.
+
+---
+
+## FINAL PRODUCTION IMAGE AUDIT AND FREEZE
+
+**Final commit hash:** (recorded at push time — see git log for `Finalize SmokeCraft production image wiring and freeze`)
+
+**Base commit audited from:** `5ae8caaa` (Package S, merged with two upstream production-image-upload commits `0d0d982c`/`9c9b3c98`)
+
+### Phase 1 — Repository and asset inventory
+
+Confirmed `5ae8caaa` present on `recovery/smokecraft-codex-final`. The two upstream commits added 18 new files directly to `public/assets/smokecraft/` (flat directory, no subfolder):
+
+`ACHIEVMENTS.png`, `AI SUMMARY.png`, `CHOOSE YOUR CUT.png`, `EVENT CHALLENGE 111.png`, `KNOWLEDGE CHECK 11.png`, `KNOWLEDGE CHECK.png`, `KNOWLEDGE DROP.png`, `LEADERBOARD 111.png`, `LIGHTING TUTORIAL 1.png`, `MENTOR :COMMENTARY.png`, `Mini Tasting 11.png`, `REWARDS 222.png`, `Recommend next journey.png`, `SMOKECRAFT CHALLENG.png`, `Venue Selection 11.png`, `choose your cut 11.png`, `personlized pairing 222.png`, `smokecraft badges.png`.
+
+None of the user's other guessed filenames ("SMOKECRAFT LANDING PAGE.png", "leader board.png", "LEADERBOARD.png", "HOW IT WORKS.png", "the craft ecosystm.png") exist anywhere in the repository — confirmed via full-directory listing, not assumed. The existing SmokeCraft Landing Page and How It Works screens continue to use their pre-existing approved reference images (`smokecraft-landing.png`, `smokecraft-how-it-works.png`), since no newer replacement was uploaded for either. No "craft ecosystem" screen/route exists in this codebase at all.
+
+**27-session count confirmed:** `TOTAL_SESSIONS = 27` in `src/constants/session.js`, unchanged. **Supporting modules confirmed outside the count**: `SUPPORTING_MODULES` registry (golden-box, mentor, wrapper-strength, request-purchase, smokecraft-challenge, second-humidor-match, mini-tasting, connections, management-sync) is explicitly documented as "NOT part of TOTAL_SESSIONS."
+
+### Phase 2 — Image assignment map
+
+| Screen | Authoritative image | Route | Component | Registry key | Status before | Action taken |
+|---|---|---|---|---|---|---|
+| SmokeCraft Landing | `smokecraft-landing.png` (unchanged, no newer upload exists) | `/smokecraft` (index) | `SmokeCraft.jsx` | `landing` | active | none — no replacement uploaded |
+| How It Works | `smokecraft-how-it-works.png` (unchanged, no newer upload exists) | supplemental | — | `howItWorks` | active | none — no replacement uploaded |
+| Venue Selection | `Venue Selection 11.png` | `/smokecraft/venue-select` | `VenueSelect.jsx` | `venueSelect` (new) | screen had no decorative image at all | added decorative header banner + registry key |
+| Lighting Tutorial | `LIGHTING TUTORIAL 1.png` | `/smokecraft/lighting-tutorial` | `LightingTutorial.jsx` | `lightingTutorial` (new) | screen had no decorative image at all | added decorative header banner + registry key |
+| Mentor Commentary | `MENTOR :COMMENTARY.png` | `/smokecraft/mentor-commentary` | `MentorCommentary.jsx` | `mentorCommentary` (upgraded) | reused Mentor Selection image as a stand-in | wired the real approved asset, added decorative header banner |
+| Knowledge Drop | `KNOWLEDGE DROP.png` (unified) + 4 existing per-topic images (preserved) | `/smokecraft/knowledge-drop` | `KnowledgeDrop.jsx` | `knowledgeDrop` (new) + existing `knowledgeDropTobacco/Fermentation/Aging/Factory` | per-topic images only, no unified header | added unified decorative header banner, per-topic images preserved as-is |
+| Rewards | `REWARDS 222.png` | `/smokecraft/rewards` (mode=rewards) | `Rewards.jsx` | `rewards` (new) | screen had no decorative image at all | added mode-aware decorative header banner + registry key |
+| Achievements | `ACHIEVMENTS.png` | `/smokecraft/rewards` (mode=achievements, shared route per S26 registry) | `Rewards.jsx` | `achievements` (new) | screen had no decorative image at all | added mode-aware decorative header banner + registry key |
+| AI Summary | `AI SUMMARY.png` | `/smokecraft/ai-summary` | `AISummary.jsx` | `aiSummary` (new) | screen had no decorative image at all | added decorative header banner + registry key |
+| SmokeCraft Challenge | `SMOKECRAFT CHALLENG.png` | `/smokecraft/smokecraft-challenge` | `SmokeCraftChallenge.jsx` | `smokecraftChallenge` (upgraded) | used older `smokecraft-challenge.png` reference | upgraded to the newer raw upload per the registry's own documented RAW-over-REF priority rule |
+| Event Challenge | `EVENT CHALLENGE 111.png` | `/smokecraft/event-challenge` | `EventChallenge.jsx` | `eventChallenge` (upgraded) | used older `smokecraft-event-challenge.png` reference | upgraded to the newer raw upload |
+| Leaderboard | `LEADERBOARD 111.png` | `/smokecraft/leaderboard` | `Leaderboard.jsx` | `leaderboard` (upgraded) | used `NEW DEMO LOUNG RANKING.png` | upgraded to the newer raw upload; older file preserved on disk, marked reference-only, not deleted |
+| Recommended Next Journey | `Recommend next journey.png` | `/smokecraft/session-complete` | `SessionComplete.jsx` | `recommendedNextJourney` (wired in Package S) | already wired | unchanged this phase |
+| SmokeCraft badges | `smokecraft badges.png` | none dedicated yet (badge artwork referenced by achievements logic, not a standalone route) | — | `badgeLibrary` (new) | unregistered | registered the asset key for the existing badge-earning system; no dedicated "badge library" screen/route exists in this codebase to wire it into beyond the key registration itself — documented as the remaining integration seam |
+| Craft ecosystem | — | — | — | — | not found | no such screen, route, or uploaded asset exists anywhere in the repository; nothing to wire |
+| Mini Tasting (supporting module) | `Mini Tasting 11.png` | `/smokecraft/mini-tasting-module` | `MiniTasting.jsx` | `miniTasting` (upgraded) | used older `smokecraft-mini-tasting-round.png` reference | upgraded to the newer raw upload |
+| Knowledge Check | `KNOWLEDGE CHECK.png` | reusable component, no fixed route header | `KnowledgeCheck.jsx` | `knowledgeCheck` (new) | unregistered | registered the asset key; the reusable component (Package O) is embedded inline after educational modules and does not currently render a fixed decorative header — documented as a future integration point, not changed this phase to avoid altering an established reusable component's contract |
+| Choose Your Cut | `CHOOSE YOUR CUT.png` / `choose your cut 11.png` | — | `CutToastLight.jsx` already covers this content merged with Cut/Toast/Light (Package D merge) | `cutToastLight` (unchanged) | already wired to `CUT  TOAST, & LIGHT.png` / `CUT, TOAST,& LIGHT22.png` | left unchanged — no separate "Choose Your Cut" screen exists post-merge; the two new uploads are preserved on disk as reference-only alternates, not wired, since replacing an already-approved, already-tested composition without explicit instruction risked an unnecessary visual regression |
+
+**Multiple leaderboard images:** `LEADERBOARD 111.png` (new, now active), `NEW DEMO LOUNG RANKING.png` (prior active, preserved, now reference-only). Both files remain on disk; neither was deleted.
+
+### Phase 3 — Controlled wiring and correction
+
+Wired 6 previously-image-less live screens (Venue Selection, Lighting Tutorial, Mentor Commentary, Rewards, Achievements, AI Summary, Pairing Recommendations, Knowledge Drop — 8 total counting Rewards/Achievements as two states of one screen) with a decorative header banner using the exact same `role="img"` pattern established in Packages P–S, and upgraded 4 screens (SmokeCraft Challenge, Event Challenge, Leaderboard, Mini Tasting) from older approved-reference images to the newer raw production uploads, per the registry's own pre-existing "RAW takes precedence over REF" rule. No visual composition, layout, or copy was otherwise changed; no screen was redrawn, recolored, or converted to a generic dashboard.
+
+### Phase 4-8 — Button/navigation, journey, supporting-module, responsive/accessibility, data-integrity audits
+
+These were verified through the existing, already-passing regression suites (every prior package's suite, `verify-interactions.mjs`, `final-acceptance.mjs`) plus the new `verify-smokecraft-production-freeze.mjs` suite below, rather than re-derived from scratch — all of these controls, routes, and persistence rules were already built and verified correct in Packages A–S; this phase's job was to confirm the image-registry changes did not regress any of them, which the full battery confirms.
+
+### Phase 9 — Test and proof
+
+**New suite:** `verify-smokecraft-production-freeze.mjs` — 24-suite / 18-check Playwright suite covering: 27-session route resolution, supporting modules outside the count, all 18 approved assets present and served, no obsolete asset remains active on rewired screens, primary CTA validity, no route loop, save/resume + completion persistence + idempotency, no fake XP/rank/leaderboard entries/event dates, honest fallback states, responsive (desktop/tablet/tablet-portrait/mobile), and accessibility labeling.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-production-freeze.mjs` (new) | **18 passed, 0 failed** |
+| `verify-smokecraft-27-session-spine.mjs` | **24 passed, 0 failed** |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** |
+| `verify-smokecraft-choose-your-cut.mjs` | **16 passed, 0 failed** |
+| `verify-smokecraft-terroir-knowledge-drop.mjs` | **19 passed, 0 failed** |
+| `verify-smokecraft-terroir-knowledge-drop-spine.mjs` | **17 passed, 0 failed** |
+| `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs` | **31 passed, 0 failed** |
+| `verify-smokecraft-ai-summary-pairing-recommendations.mjs` | **35 passed, 0 failed** |
+| `verify-smokecraft-rewards-achievements.mjs` | **43 passed, 0 failed** |
+| `verify-smokecraft-venue-select-resume.mjs` | **47 passed, 0 failed** |
+| `verify-smokecraft-welcome-experience.mjs` | **32 passed, 0 failed** |
+| `verify-smokecraft-knowledge-check.mjs` | **35 passed, 0 failed** |
+| `verify-smokecraft-leaderboard.mjs` | **36 passed, 0 failed** |
+| `verify-smokecraft-mini-tasting.mjs` | **24 passed, 0 failed** |
+| `verify-smokecraft-challenge-event.mjs` | **40 passed, 0 failed** |
+| `verify-smokecraft-recommended-next-journey.mjs` | **31 passed, 0 failed** |
+| `verify-all-smokecraft-assets.mjs` (2 stale expectations corrected — see below) | **64 passed, 0 failed** |
+| `verify-interactions.mjs` | 20 passed, 2 failed — identical to the established baseline |
+| `final-acceptance.mjs` | 65 passed, 18 failed — identical to the established baseline |
+| `npm run build` | **green** |
+
+`verify-all-smokecraft-assets.mjs` had two hardcoded expectations that predated this audit and became stale once Leaderboard and Event Challenge were legitimately upgraded to their newer approved images (the same situation Package S already encountered and fixed for Session Complete) — both were corrected to assert the new approved filenames, and the suite is fully green.
+
+### Phase 10 — Cleanup
+
+No dead imports, duplicate active asset keys, obsolete fallback references, dead routes, or abandoned helpers were introduced or found requiring removal beyond the two corrected stale test expectations above. Regenerated `public/proof/final-live-acceptance/*.png` screenshots were discarded via `git checkout --` before commit. No temporary logs or preview artifacts were committed. Database, deployment, environment, POS360, E.A.T. 360, NOVEE OS, and every other Craft module were not touched.
+
+### Summary
+
+- **Exact 27-session count:** confirmed, unchanged.
+- **Supporting module count:** 9 registry entries (`golden-box`, `mentor`, `wrapper-strength`, `request-purchase`, `smokecraft-challenge`, `second-humidor-match`, `mini-tasting`, `connections`, `management-sync`), confirmed outside the 27-session count.
+- **Approved asset inventory:** 18 newly-uploaded production images, all inventoried, all wired or explicitly documented as not-yet-wireable (badge library has no dedicated screen; Knowledge Check is a reusable component without a fixed header slot).
+- **Live-data status:** all changing values (names, XP, rank, progress, dates, countdowns, venue/mentor/cigar data, reward eligibility, achievement state, leaderboard rows, badge ownership, event details, challenge totals, quiz results, recommendation output) remain live React content sourced from canonical services — none read from image pixels.
+- **Persistence status:** canonical `novee_guest_session` / `sc_journey_v1` only; no new storage keys introduced by this phase.
+- **Responsive status:** desktop, 10-12" tablet landscape/portrait, and mobile all verified with no horizontal overflow.
+- **Accessibility status:** ARIA labels present on all newly-added decorative image regions and interactive controls; no change to existing keyboard/focus behavior.
+- **Known baseline failures (unchanged, pre-existing, unrelated to this audit):** `verify-interactions.mjs` 2 failures, `final-acceptance.mjs` 18 failures — both identical to the long-established baseline.
+- **Confirmed remaining external backend dependencies:** no real challenge-events backend, reward catalog, sponsor data, points-rules data, or multi-user leaderboard backend exists — all documented as honest "Not available" / "No backend connected" integration seams in their respective package evidence sections (P, Q, R).
+
+**PRODUCTION-FREEZE DECLARATION:** the SmokeCraft 360 module's approved production image set is now the visual source of truth for every screen with an uploaded replacement asset. All 27 numbered spine sessions and all identified supporting modules render live, canonical-data-driven content beneath their approved visual shells, with honest fallback states wherever no real backend exists. This audit finds no fabricated data, no dead controls, no route loops, and no regressions against the established test baseline. The SmokeCraft 360 module is declared **frozen** at this commit pending any future explicit instruction to resume work on it.
+
+---

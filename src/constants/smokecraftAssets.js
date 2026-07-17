@@ -39,10 +39,8 @@ export const SC_ASSETS = {
   // since no dedicated Meet Your Cigar photography exists yet.
   meetYourCigar:       `${RAW}/Humidor%20Match%201.png`,
 
-  // Mentor Commentary — reuses the approved Mentor Selection composition as a shared
-  // atmosphere background; no per-mentor portrait photography exists yet (honest
-  // fallback used for the portrait zone itself).
-  mentorCommentary:    `${RAW}/MENTOR%20SELECTION1.png`,
+  // Mentor Commentary — approved production asset (production image audit).
+  mentorCommentary:    `${RAW}/MENTOR%20:COMMENTARY.png`,
 
   // S5 — Format / Vitola
   format:              `${REF}/smokecraft-vitola.png`,
@@ -82,14 +80,14 @@ export const SC_ASSETS = {
   // S16 — Scorecard — raw full composition takes precedence
   scorecard:           `${RAW}/Scorecard.png`,
 
-  // S17 — SmokeCraft Challenge — use approved reference
-  smokecraftChallenge: `${REF}/smokecraft-challenge.png`,
+  // S17 — SmokeCraft Challenge — raw full composition takes precedence (production image audit)
+  smokecraftChallenge: `${RAW}/SMOKECRAFT%20CHALLENG.png`,
 
   // S18 — Second Humidor Match — use approved reference
   secondHumidorMatch:  `${REF}/smokecraft-second-humidor-match.png`,
 
-  // S19 — Mini Tasting Round — use approved reference
-  miniTasting:         `${REF}/smokecraft-mini-tasting-round.png`,
+  // S19 — Mini Tasting Round — raw full composition takes precedence (production image audit)
+  miniTasting:         `${RAW}/Mini%20Tasting%2011.png`,
 
   // S20 — Final Review — raw full composition takes precedence
   finalReview:         `${RAW}/FINAL%20REVIEW.png`,
@@ -122,10 +120,41 @@ export const SC_ASSETS = {
   knowledgeDropFactory:      `${REF}/smokecraft-flavor-dna.png`,
 
   // Supplemental / unguarded
-  leaderboard:         `${RAW}/NEW%20DEMO%20LOUNG%20RANKING.png`,
-  eventChallenge:      `${REF}/smokecraft-event-challenge.png`,
+  // Leaderboard 111.png is the newest raw upload (production image audit) and
+  // now takes precedence; NEW DEMO LOUNG RANKING.png is preserved on disk as
+  // a reference-only alternate (not deleted), no longer the active reference.
+  leaderboard:         `${RAW}/LEADERBOARD%20111.png`,
+  eventChallenge:      `${RAW}/EVENT%20CHALLENGE%20111.png`,
   howItWorks:          `${REF}/smokecraft-how-it-works.png`,
   visitComplete:       '/smokecraft-visit-complete.png',
+
+  // Rewards / Achievements (shared S25/S26 screen) — approved production assets
+  rewards:             `${RAW}/REWARDS%20222.png`,
+  achievements:        `${RAW}/ACHIEVMENTS.png`,
+
+  // AI Summary (S21) — approved production asset
+  aiSummary:           `${RAW}/AI%20SUMMARY.png`,
+
+  // Pairing Recommendations (S22) — approved production asset
+  pairingRecommendations: `${RAW}/personlized%20pairing%20222.png`,
+
+  // Venue Selection (Entry layer) — approved production asset
+  venueSelect:         `${RAW}/Venue%20Selection%2011.png`,
+
+  // Lighting Tutorial (S8 area) — approved production asset
+  lightingTutorial:    `${RAW}/LIGHTING%20TUTORIAL%201.png`,
+
+  // Knowledge Drop — unified approved production asset, used as a decorative
+  // header alongside the existing per-topic images above (preserved as-is).
+  knowledgeDrop:       `${RAW}/KNOWLEDGE%20DROP.png`,
+
+  // Knowledge Check — reusable supporting-module component, approved asset
+  // registered for future header use; component currently has no fixed
+  // per-screen header (embedded inline after educational modules).
+  knowledgeCheck:      `${RAW}/KNOWLEDGE%20CHECK.png`,
+
+  // SmokeCraft badge library artwork — approved production asset
+  badgeLibrary:        `${RAW}/smokecraft%20badges.png`,
 
   // Legacy aliases — kept for backward compat
   managementSyncRaw:   `${RAW}/MANAGEMENT%20SYNC.png`,

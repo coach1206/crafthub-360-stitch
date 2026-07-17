@@ -142,14 +142,19 @@ const ROUTE_SPECS = [
   {
     route: '/smokecraft/leaderboard',
     label: 'Leaderboard',
-    required: '/assets/smokecraft/NEW%20DEMO%20LOUNG%20RANKING.png',
+    // Production image audit: LEADERBOARD 111.png is the newest raw upload
+    // and now takes precedence; NEW DEMO LOUNG RANKING.png is preserved on
+    // disk as a reference-only alternate.
+    required: '/assets/smokecraft/LEADERBOARD%20111.png',
     forbidden: ['/assets/smokecraft-reference/approved/smokecraft-leaderboard'],
   },
   {
     route: '/smokecraft/event-challenge',
     label: 'Event Challenge',
-    required: '/assets/smokecraft-reference/approved/smokecraft-event-challenge.png',
-    forbidden: [],
+    // Production image audit: EVENT CHALLENGE 111.png is the newest raw
+    // upload and now takes precedence over the prior approved reference.
+    required: '/assets/smokecraft/EVENT%20CHALLENGE%20111.png',
+    forbidden: ['/assets/smokecraft-reference/approved/smokecraft-event-challenge'],
   },
   {
     route: '/smokecraft/how-it-works',

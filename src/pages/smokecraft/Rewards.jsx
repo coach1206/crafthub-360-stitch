@@ -8,6 +8,7 @@ import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { ShieldPersonIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 import { RANKS, getRankFromXP } from '../../constants/session.js'
 import { getSessionRewards, getSmokeCraftXP, getEarnedBadges, SMOKECRAFT_BADGES } from '../../constants/smokecraftRewards.js'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -323,6 +324,19 @@ export default function Rewards() {
       `,
       fontFamily: 'Georgia, serif',
     }}>
+      {/* Approved production visual, reused as a decorative header band —
+          swaps between the Rewards and Achievements approved assets by tab. */}
+      <div
+        role="img"
+        aria-label={mode === 'achievements' ? 'SmokeCraft Achievements' : 'SmokeCraft Rewards'}
+        style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(90px,14vh,140px)',
+          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92)), url(${mode === 'achievements' ? SC_ASSETS.achievements : SC_ASSETS.rewards})`,
+          backgroundSize: 'cover', backgroundPosition: 'center 30%',
+          zIndex: 1,
+        }}
+      />
+
       <header style={{
         position: 'absolute', top: 0, left: 0, right: 0,
         padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0',

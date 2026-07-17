@@ -5,6 +5,7 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -107,6 +108,18 @@ export default function MentorCommentary() {
       `,
       fontFamily: 'Georgia, serif',
     }}>
+      {/* Approved production visual, reused as a decorative header band. */}
+      <div
+        role="img"
+        aria-label="SmokeCraft Mentor Commentary"
+        style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(90px,14vh,140px)',
+          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92)), url(${SC_ASSETS.mentorCommentary})`,
+          backgroundSize: 'cover', backgroundPosition: 'center 30%',
+          zIndex: 1,
+        }}
+      />
+
       <header style={{
         position: 'absolute', top: 0, left: 0, right: 0,
         padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0',

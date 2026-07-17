@@ -5,6 +5,7 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -163,6 +164,18 @@ export default function LightingTutorial() {
       `,
       fontFamily: 'Georgia, serif',
     }}>
+      {/* Approved production visual, reused as a decorative header band. */}
+      <div
+        role="img"
+        aria-label="SmokeCraft Lighting Tutorial"
+        style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(90px,14vh,140px)',
+          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92)), url(${SC_ASSETS.lightingTutorial})`,
+          backgroundSize: 'cover', backgroundPosition: 'center 30%',
+          zIndex: 1,
+        }}
+      />
+
       {/* Decorative static atmosphere — warm wood grain texture strip, cigar-lounge framing.
           No dynamic content lives in this layer; it is purely permanent decoration. */}
       <div aria-hidden="true" style={{
