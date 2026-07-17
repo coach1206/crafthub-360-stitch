@@ -1,133 +1,137 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftEntryHeaderBand from '../../components/smokecraft/SmokeCraftEntryHeaderBand.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import { useNavigate } from 'react-router-dom'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
-const GOLD = '#E9C176'
-const PANEL = 'rgba(5,3,1,0.88)'
-const BORDER = 'rgba(233,193,118,0.20)'
+const GOLD    = '#E9C176'
+const NAVY      = '#0b0f18'
+const NAVY_DEEP = '#060810'
+const WOOD_DIM  = 'rgba(122,79,49,0.28)'
+const CREAM   = '#e5e2e1'
+const BORDER  = 'rgba(233,193,118,0.22)'
+const GLASS   = 'rgba(8,10,16,0.86)'
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function Enroll() {
-  const { awardSessionRewards } = useGuestSession()
+  const { session, awardSessionRewards, updateProfile } = useGuestSession()
   const navigate = useNavigate()
+  const [mode, setMode] = useState(null) // null | 'signin' | 'guest'
+  const [email, setEmail] = useState(session?.profile?.email || '')
+  const [touched, setTouched] = useState(false)
+
+  const emailValid = EMAIL_RE.test(email.trim())
+  const isValid = mode === 'guest' || (mode === 'signin' && emailValid)
+
+  function selectMode(next) {
+    triggerHaptic('light')
+    setMode(next)
+  }
 
   function handleContinue() {
+    if (!isValid) return
     triggerHaptic('medium')
+    if (mode === 'signin') updateProfile({ email: email.trim() })
     awardSessionRewards('enroll')
     navigate('/smokecraft/venue-select')
   }
 
   return (
-    <>
-      <SmokeCraftAssetScreen
-        src={SC_ASSETS.enroll}
-        alt="SmokeCraft 360 — Begin Your Guided Cigar Experience"
-        classification="DECORATIVE_BACKGROUND"
-      >
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          pointerEvents: 'none',
-        }}>
-          <div style={{
-            pointerEvents: 'auto',
-            background: `linear-gradient(to top, ${PANEL} 70%, transparent)`,
-            padding: 'clamp(24px,4vw,40px) clamp(20px,5vw,40px) clamp(28px,5vh,48px)',
-            maxWidth: 560,
-            width: '100%',
-            margin: '0 auto',
-            boxSizing: 'border-box',
-          }}>
-            <div style={{
-              fontSize: 10,
-              fontWeight: 700,
-              color: GOLD,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              marginBottom: 10,
-              fontFamily: 'Georgia, serif',
-            }}>
-              SmokeCraft 360
-            </div>
-            <div style={{
-              fontSize: 'clamp(24px,4vw,32px)',
-              fontFamily: 'Georgia, serif',
-              fontWeight: 700,
-              color: '#e5e2e1',
-              letterSpacing: '0.03em',
-              marginBottom: 10,
-              lineHeight: 1.2,
-            }}>
-              Your Guided Cigar Experience
-            </div>
-            <div style={{
-              fontSize: 16,
-              fontFamily: 'Georgia, serif',
-              color: 'rgba(229,226,225,0.72)',
-              lineHeight: 1.6,
-              marginBottom: 24,
-              maxWidth: 420,
-            }}>
-              A premium 8-visit journey through identity, pairing, tasting, and certification — guided by a Master Mentor.
-            </div>
-            <div style={{
-              borderTop: `1px solid ${BORDER}`,
-              paddingTop: 18,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 10,
-            }}>
-              <button
-                type="button"
-                onClick={handleContinue}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  background: GOLD,
-                  color: '#0a0603',
-                  border: 'none',
-                  borderRadius: 28,
-                  padding: '16px 24px',
-                  fontSize: 16,
-                  fontWeight: 700,
-                  fontFamily: 'Georgia, serif',
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  minHeight: 52,
-                  boxShadow: '0 4px 24px rgba(233,193,118,0.4)',
-                  touchAction: 'manipulation',
-                  WebkitTapHighlightColor: 'transparent',
-                }}
-              >
-                Begin Your Journey →
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate(-1)}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'rgba(229,226,225,0.5)',
-                  fontSize: 14,
-                  fontFamily: 'Georgia, serif',
-                  cursor: 'pointer',
-                  padding: '10px 0',
-                  textAlign: 'center',
-                  touchAction: 'manipulation',
-                }}
-              >
-                ← Back
-              </button>
-            </div>
+    <div style={{
+      position: 'fixed', inset: 0, overflow: 'hidden',
+      display: 'flex', flexDirection: 'column',
+      background: `
+        radial-gradient(ellipse at 20% -10%, rgba(233,193,118,0.10), transparent 55%),
+        radial-gradient(ellipse at 100% 110%, ${WOOD_DIM}, transparent 60%),
+        linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)
+      `,
+      fontFamily: 'Georgia, serif',
+    }}>
+      <SmokeCraftEntryHeaderBand
+        eyebrow="SmokeCraft 360"
+        title="Your Guided Cigar Experience"
+        subtitle="A locked 27-session continuous journey through identity, pairing, tasting, and certification — guided by a Master Mentor."
+        image={SC_ASSETS.enroll}
+        imagePosition="center 30%"
+        overlayStrength={0.8}
+      />
+
+      <main style={{
+        flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch',
+        padding: '20px clamp(16px,4vw,40px) clamp(150px,20vh,190px)',
+      }}>
+        <div style={{ maxWidth: 560, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(233,193,118,0.55)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            How would you like to continue?
           </div>
+
+          <button
+            type="button"
+            aria-pressed={mode === 'guest'}
+            onClick={() => selectMode('guest')}
+            style={{
+              textAlign: 'left', background: GLASS, borderRadius: 14, padding: '18px 20px',
+              border: `1.5px solid ${mode === 'guest' ? GOLD : BORDER}`, cursor: 'pointer',
+              minHeight: 64, touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent',
+            }}
+          >
+            <div style={{ fontSize: 15, fontWeight: 700, color: CREAM, marginBottom: 4 }}>Continue as Guest</div>
+            <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.65)' }}>Start right away — your progress is saved on this device.</div>
+          </button>
+
+          <button
+            type="button"
+            aria-pressed={mode === 'signin'}
+            onClick={() => selectMode('signin')}
+            style={{
+              textAlign: 'left', background: GLASS, borderRadius: 14, padding: '18px 20px',
+              border: `1.5px solid ${mode === 'signin' ? GOLD : BORDER}`, cursor: 'pointer',
+              minHeight: 64, touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent',
+            }}
+          >
+            <div style={{ fontSize: 15, fontWeight: 700, color: CREAM, marginBottom: 4 }}>Sign In</div>
+            <div style={{ fontSize: 13, color: 'rgba(229,226,225,0.65)' }}>Link your email so we can recognize you on return visits.</div>
+          </button>
+
+          {mode === 'signin' && (
+            <div>
+              <label htmlFor="enroll-email" style={{ display: 'block', fontSize: 11, color: 'rgba(229,226,225,0.6)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>
+                Email Address
+              </label>
+              <input
+                id="enroll-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => setTouched(true)}
+                placeholder="you@example.com"
+                style={{
+                  width: '100%', boxSizing: 'border-box', background: 'rgba(0,0,0,0.4)',
+                  border: `1px solid ${touched && !emailValid ? 'rgba(229,170,100,0.7)' : BORDER}`,
+                  borderRadius: 10, padding: '12px 14px', fontSize: 14, color: CREAM,
+                  fontFamily: 'Georgia, serif', outline: 'none',
+                }}
+              />
+              {touched && !emailValid && (
+                <div role="alert" style={{ marginTop: 6, fontSize: 12, color: 'rgba(229,170,100,0.9)' }}>
+                  Please enter a valid email address.
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      </SmokeCraftAssetScreen>
-    </>
+      </main>
+
+      <SmokeCraftNavBar
+        primary="Continue →"
+        onPrimary={handleContinue}
+        primaryDisabled={!isValid}
+        secondary="← Back"
+        onSecondary={() => navigate(-1)}
+      />
+    </div>
   )
 }

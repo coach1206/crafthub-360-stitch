@@ -29,6 +29,10 @@ export const SC_ASSETS = {
   enroll:              `${CROPPED}/discover-profile-bg.jpg`,
   identity:            `${RAW}/IDENTY.png`,
 
+  // Entry layer — Resume/Start New Journey decorative header (visual-only
+  // enhancement; ResumeJourney.jsx has no image of its own to date).
+  resume:              `${CROPPED}/golden-box-hero-v2.jpg`,
+
   // S3 — Golden Box
   goldenBox:           `${RAW}/GOLDEN%20BOX%20RULES.png`,
 

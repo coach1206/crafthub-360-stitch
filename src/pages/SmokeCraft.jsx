@@ -1,10 +1,23 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftEntryHeaderBand from '../components/smokecraft/SmokeCraftEntryHeaderBand.jsx'
 import { SC_ASSETS } from '../constants/smokecraftAssets.js'
 
-const NAT_W = 1189
-const NAT_H = 667
+const GOLD      = '#E9C176'
+const NAVY      = '#0b0f18'
+const NAVY_DEEP = '#060810'
+const WOOD_DIM  = 'rgba(122,79,49,0.28)'
+const CREAM     = '#e5e2e1'
+const BORDER    = 'rgba(233,193,118,0.22)'
+const GLASS     = 'rgba(8,10,16,0.86)'
+
+// Landing photo (SC_ASSETS.landing) is a full composite screenshot with baked
+// marketing copy — the only genuinely clean sub-region (no baked text/UI) is
+// the Padrón cigar + glass close-up in the Recommended Pairing card.
+const LANDING_CROP = { x: 733, y: 392, w: 170, h: 140 }
+const landingBgSize = `${(1189 / LANDING_CROP.w) * 100}% ${(667 / LANDING_CROP.h) * 100}%`
+const landingBgPos = `${(LANDING_CROP.x / (1189 - LANDING_CROP.w)) * 100}% ${(LANDING_CROP.y / (667 - LANDING_CROP.h)) * 100}%`
 
 // Read a guest session step from novee_guest_session.completedSteps
 function guestStepDone(stepId) {
@@ -36,116 +49,100 @@ function getEntryRoute() {
   return '/smokecraft/resume'
 }
 
-// Screen-reader-only text — visible to Playwright hasText, invisible on screen
-const srOnly = {
-  position: 'absolute',
-  width: 1,
-  height: 1,
-  overflow: 'hidden',
-  clip: 'rect(0,0,0,0)',
-  whiteSpace: 'nowrap',
-}
-
-// Transparent hotspot overlay aligned to a printed image region
-function Hotspot({ label, onClick, style }) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      onClick={onClick}
-      style={{
-        position: 'absolute',
-        background: 'transparent',
-        border: '2px solid transparent',
-        borderRadius: 4,
-        padding: 0,
-        cursor: 'pointer',
-        touchAction: 'manipulation',
-        WebkitTapHighlightColor: 'transparent',
-        pointerEvents: 'auto',
-        ...style,
-      }}
-    >
-      <span style={srOnly}>{label}</span>
-    </button>
-  )
-}
+const DESTINATIONS = [
+  { label: 'How It Works',    route: '/smokecraft/how-it-works' },
+  { label: 'View Passport',   route: '/smokecraft/passport-stamp' },
+  { label: 'View Pairing',    route: '/smokecraft/pairing-lab' },
+  { label: 'Browse Humidor',  route: '/smokecraft/humidor-match' },
+  { label: 'Rankings',        route: '/smokecraft/leaderboard' },
+  { label: 'Enter Challenge', route: '/smokecraft/smokecraft-challenge' },
+]
 
 export default function SmokeCraft() {
   const navigate = useNavigate()
+  const [entryRoute] = useState(getEntryRoute)
+  const isReturning = entryRoute === '/smokecraft/resume'
 
   function go(to) {
     triggerHaptic('light')
     navigate(to)
   }
 
-  function handleStartSmokeCraft() {
+  function handleStart() {
     triggerHaptic('medium')
-    navigate(getEntryRoute())
+    navigate(entryRoute)
   }
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src={SC_ASSETS.landing}
-      naturalW={NAT_W}
-      naturalH={NAT_H}
-      alt="SmokeCraft 360 — The Guided Cigar Experience"
-    >
-      {/* Printed: START SMOKECRAFT button (gold bordered, left side) */}
-      <Hotspot
-        label="Start SmokeCraft"
-        onClick={handleStartSmokeCraft}
-        style={{ left: '2.9%', top: '54.3%', width: '27.4%', height: '9.9%' }}
+    <div style={{
+      position: 'fixed', inset: 0, overflow: 'hidden',
+      display: 'flex', flexDirection: 'column',
+      background: `
+        radial-gradient(ellipse at 20% -10%, rgba(233,193,118,0.10), transparent 55%),
+        radial-gradient(ellipse at 100% 110%, ${WOOD_DIM}, transparent 60%),
+        linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)
+      `,
+      fontFamily: 'Georgia, serif',
+    }}>
+      <SmokeCraftEntryHeaderBand
+        eyebrow="SmokeCraft 360"
+        title="The Guided Cigar Experience"
+        subtitle="Explore. Learn. Pair. Track every step of your journey."
+        image={SC_ASSETS.landing}
+        imagePosition={landingBgPos}
+        imageSize={landingBgSize}
+        overlayStrength={0.85}
       />
 
-      {/* Printed: HOW IT WORKS button (outlined, next to Start) */}
-      <Hotspot
-        label="How It Works"
-        onClick={() => go('/smokecraft/how-it-works')}
-        style={{ left: '30.7%', top: '54.3%', width: '21.5%', height: '9.9%' }}
-      />
+      <main style={{
+        flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch',
+        padding: '20px clamp(16px,4vw,40px) clamp(150px,20vh,190px)',
+      }}>
+        <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 20 }}>
+          <button
+            type="button"
+            onClick={handleStart}
+            style={{
+              display: 'block', width: '100%', background: GOLD, color: '#0a0603',
+              border: 'none', borderRadius: 28, padding: '18px 24px', fontSize: 16,
+              fontWeight: 700, fontFamily: 'Georgia, serif', letterSpacing: '0.06em',
+              textTransform: 'uppercase', cursor: 'pointer', minHeight: 56,
+              boxShadow: '0 4px 24px rgba(233,193,118,0.4)', touchAction: 'manipulation',
+              WebkitTapHighlightColor: 'transparent',
+            }}
+          >
+            {isReturning ? 'Resume Journey →' : 'Start Journey →'}
+          </button>
 
-      {/* Printed: VIEW PASSPORT link in the 360 Passport card (top-right) */}
-      <Hotspot
-        label="View Passport"
-        onClick={() => go('/smokecraft/passport-stamp')}
-        style={{ left: '58.2%', top: '39.6%', width: '39.8%', height: '6.9%' }}
-      />
-
-      {/* Printed: VIEW PAIRING link in the Recommended Pairing card (right) */}
-      <Hotspot
-        label="View Pairing"
-        onClick={() => go('/smokecraft/pairing-lab')}
-        style={{ left: '58.2%', top: '69%', width: '39.8%', height: '7.5%' }}
-      />
-
-      {/* Bottom bar: REWARDS → Browse Humidor */}
-      <Hotspot
-        label="Browse Humidor"
-        onClick={() => go('/smokecraft/humidor-match')}
-        style={{ left: '0%', top: '83.5%', width: '25%', height: '16.5%' }}
-      />
-
-      {/* Bottom bar: RANKINGS */}
-      <Hotspot
-        label="Rankings"
-        onClick={() => go('/smokecraft/leaderboard')}
-        style={{ left: '25%', top: '83.5%', width: '25%', height: '16.5%' }}
-      />
-
-      {/* Bottom bar: PASSPORT → My Passport */}
-      <Hotspot
-        label="My Passport"
-        onClick={() => go('/smokecraft/passport-stamp')}
-        style={{ left: '50%', top: '83.5%', width: '25%', height: '16.5%' }}
-      />
-
-      {/* Bottom bar: CRAFTHUB → Enter Challenge */}
-      <Hotspot
-        label="Enter Challenge"
-        onClick={() => go('/smokecraft/smokecraft-challenge')}
-        style={{ left: '75%', top: '83.5%', width: '25%', height: '16.5%' }}
-      />
-    </SmokeCraftImageBoundsOverlay>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(233,193,118,0.55)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
+              Explore SmokeCraft 360
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 10 }}>
+              {DESTINATIONS.map(d => (
+                <button
+                  key={d.route}
+                  type="button"
+                  onClick={() => go(d.route)}
+                  style={{
+                    background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 14,
+                    color: CREAM, fontFamily: 'Georgia, serif', fontSize: 14,
+                    padding: '16px 18px', textAlign: 'left', cursor: 'pointer',
+                    minHeight: 56, touchAction: 'manipulation',
+                    WebkitTapHighlightColor: 'transparent',
+                  }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = GOLD }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = BORDER }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = GOLD }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = BORDER }}
+                >
+                  {d.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   )
 }

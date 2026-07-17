@@ -5,6 +5,8 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftEntryHeaderBand from '../../components/smokecraft/SmokeCraftEntryHeaderBand.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { VISIT_STRUCTURE, ENTRY_LAYER_SCREENS, SUPPORTING_MODULES, TOTAL_SESSIONS } from '../../constants/session.js'
 import { getSessionByKey } from '../../constants/smokecraftJourney.js'
 
@@ -205,20 +207,19 @@ export default function ResumeJourney() {
       `,
       fontFamily: 'Georgia, serif',
     }}>
-      <header style={{
-        position: 'absolute', top: 0, left: 0, right: 0,
-        padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0',
-        zIndex: 3,
-      }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 6 }}>
-          SmokeCraft 360 — Entry
-        </div>
-        <h1 style={{ margin: 0, fontSize: 'clamp(22px,3.4vw,34px)', fontWeight: 700, color: CREAM, letterSpacing: '0.01em', lineHeight: 1.15 }}>
-          Resume or Start New Journey
-        </h1>
-        {isOffline && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 4 }}>Offline: showing your locally saved data.</div>}
-        {saveStatus === 'saving' && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 4 }}>Saving…</div>}
-      </header>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 3 }}>
+        <SmokeCraftEntryHeaderBand
+          eyebrow="SmokeCraft 360 — Entry"
+          title="Resume or Start New Journey"
+          image={SC_ASSETS.resume}
+          imagePosition="center 35%"
+          overlayStrength={0.85}
+          status={<>
+            {isOffline && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 4 }}>Offline: showing your locally saved data.</div>}
+            {saveStatus === 'saving' && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 4 }}>Saving…</div>}
+          </>}
+        />
+      </div>
 
       <main style={{
         position: 'absolute', top: 'clamp(120px,16vh,160px)', bottom: 'clamp(120px,16vh,160px)',
