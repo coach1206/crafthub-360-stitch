@@ -106,6 +106,13 @@ export const SC_ASSETS = {
   // S24 — Session Complete — raw full composition
   sessionComplete:     `${RAW}/SESSION%20COMPLETE.png`,
 
+  // S27 — Recommended Next Journey (Package S). The approved
+  // "Recommend next journey.png" asset has not yet been added to this
+  // repository (confirmed via full-filesystem search) — reusing the
+  // current approved Session Complete shell until the new asset is
+  // registered, per the same precedent established in Packages P and R.
+  recommendedNextJourney: `${RAW}/SESSION%20COMPLETE.png`,
+
   // Terroir (Country/Region/Soil/Climate/Growing Conditions/Why It Matters)
   terroir:             `${REF}/smokecraft-terroir.png`,
   terroirSoil:         `${REF}/smokecraft-seed-soil.png`,

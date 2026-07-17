@@ -1315,7 +1315,69 @@ No `App.jsx` change was needed — both required routes (`/smokecraft/smokecraft
 
 **Known limitations:** the two literal new approved image files named in this package's brief were not found anywhere in the repository, so the previously-approved SmokeCraft Challenge and Event Challenge images remain in use as the visual shell until the new assets are actually added — this is the documented, honest boundary, not a bug. No reward catalog, sponsor data, points-rules data, or challenge-events backend exists yet anywhere in the codebase; all such fields honestly render "Not available" / "No backend connected" rather than being invented.
 
-**Recommended next package:** register the two new approved images once added to the repository and swap them in via `smokecraftAssets.js`; and/or build a real reward catalog / sponsor / points-rules / challenge-events backend to replace the documented "Not available" / "No backend connected" integration seams.
+**Recommended next package (superseded by Package S below):** ~~register the two new approved images once added, and/or build a real reward catalog / sponsor / points-rules / challenge-events backend~~ — Recommended Next Journey (S27) now complete.
+
+---
+
+#### S27 — Recommended Next Journey — Implementation Evidence (Package S)
+
+**Scope actually implemented:** rebuilt S27 (`SessionComplete.jsx`, route `/smokecraft/session-complete`, the final numbered spine session) from a basic image-overlay summary into a live, personalized, deterministic recommendation screen. No SmokeCraft Challenge, Event Challenge, Mini Tasting, Knowledge Check, Leaderboard, other numbered journey session, Entry Layer, AI Summary, Pairing Recommendations, Rewards, Achievements, persistence schema, XP engine, database, or deployment file was modified. `TOTAL_SESSIONS` remains `27` and the S27 registry entry in `session.js` was not changed (its route and label were already correct).
+
+**Exact files changed:**
+- `src/pages/smokecraft/SessionComplete.jsx` (rewritten) — live journey summary (mentor, format, pairing, flavor notes — all real, restored after an initial regression was caught by `verify-interactions.mjs`), primary/alternate recommendations with "Why It Fits," suggested events/quiz, next-reward and journey-depth honest disclosures, Start Journey / Explore All Journeys / View Progress / Back controls. The pre-existing idempotent S27 completion mechanism (`awardSessionRewards('session-complete')` + `awardStamp('journey-complete', ...)`, gated on `completedSteps.includes('session-complete')`) is preserved unchanged.
+- `src/services/smokecraft/recommendedJourneyService.js` (new) — the reusable, pure recommendation helper: `calculateRecommendations(session, journey)` scores 5 categories (Humidor Expert, Pair and Impress, Flavor Explorer, Flavor Memory, Community Events) from real saved data only, plus `getTotalConfiguredXP`, `getSuggestedEvents`, `getSuggestedQuiz`, `getRelatedChallenges` helpers, all sourced from existing real data/services.
+- `src/constants/smokecraftAssets.js` — one new key, `recommendedNextJourney`, registering the approved visual shell.
+- `verify-smokecraft-recommended-next-journey.mjs` (new) — 33-suite / 31-check Playwright suite for this package.
+- `docs/SMOKECRAFT_360_MASTER_REBUILD_PLAN.md` — this evidence section only.
+
+No `session.js`, `SmokeCraftJourneyContext.jsx`, or `SmokeCraftProgressContext.jsx` change was needed — the S27 registry metadata was already correct, and the existing `sessionCompletion` field/`setSessionCompletion` setter (already present in `SmokeCraftJourneyContext.jsx` before this package) covered every persistence need.
+
+**S27 route:** `/smokecraft/session-complete` (existing, unchanged, still guarded `sessionNumber={27}`). No duplicate route was created.
+
+**Recommendation logic used:** a deterministic, explainable, pure rule engine (`calculateRecommendations`) — never an AI call, and the screen is explicitly labeled "Recommended Next Journey," never "AI-generated." Each of the 5 categories is scored only from real signals already present on `session`/`journey` (Knowledge Check scores, pairing recommendation/selections, flavor notes, personal notes, joined events/challenges from Package R's `eventChallengeModule`/`smokeCraftChallengeModule`). A category with zero real signal scores 0 and is excluded; if every category scores 0, the screen shows an honest neutral state ("Not enough saved activity yet...") rather than guessing a primary recommendation.
+
+**Data sources used:** `session`/`journey` canonical fields (selected cigar, pairing, flavor memory, scorecard, mentor, Knowledge Check results); `src/services/smokecraft/smokeWinnerService.js` (reused, unmodified) for related-challenge lookups; `src/data/passportEvents.js` (reused, unmodified) for suggested events, filtered to real non-expired dates only; `src/data/knowledgeCheckQuestions.js` `KNOWLEDGE_CHECK_SETS` (reused, unmodified) for the suggested-quiz module the guest hasn't yet completed; `src/constants/smokecraftRewards.js` `SESSION_REWARDS` (reused, unmodified) summed for the one real "available XP for a new journey" figure.
+
+**Persistence behavior:** canonical `sc_journey_v1` only, via the already-existing `journey.sessionCompletion` field and `setSessionCompletion()` setter — no new storage key. Persists `primaryRecommendationId`, `alternateRecommendationIds`, `viewedAt`, `selectedNextJourneyId`, and `completedAt`. Recommendation generation is a pure function of `session`/`journey`, so it is naturally stable across refresh when data is unchanged and updates immediately when data changes — verified directly (Suites 7–8).
+
+**Journey completion behavior:** S27 completion (`completedSteps.includes('session-complete')`) is idempotent and unchanged from before this package — revisiting the screen after completion awards no additional XP. `journey.sessionCompletion.completedAt` is set once. The full completed journey record (cigar, pairing, flavor memory, mentor, scorecard notes, XP, Passport, Rewards, Achievements) is preserved untouched by this screen. Starting a new journey via the existing, unmodified `startNewJourney()` (`SmokeCraftJourneyContext.jsx`) continues to archive the completed journey into `previousCompletedJourneys` without erasing it — verified directly (Suite 25).
+
+**Approved image connected:** the literal new asset "Recommend next journey.png" named in this package's brief was not found anywhere in the repository (confirmed via full-filesystem search) — the same situation as Packages P and R. `SC_ASSETS.recommendedNextJourney` was registered pointing at the current approved Session Complete shell (`SESSION COMPLETE.png`) as the visual reference layout, reused as a decorative header banner; every changing value (identity, XP, progress, recommendation titles, challenge counts, rewards, selected state, buttons, completion state) is live React content, never baked into the image.
+
+**Fallback behavior:** no recommendation is fabricated when no real signal exists — an honest neutral state is shown instead. Estimated journey depth, next reward, and any unconfigured field render "Not available" rather than a guessed value. Suggested events/quiz show honest empty states when no real data qualifies.
+
+**Tests run:** new suite (`verify-smokecraft-recommended-next-journey.mjs`), `verify-smokecraft-27-session-spine.mjs`, `verify-smokecraft-persistence-consolidation.mjs`, `verify-smokecraft-route-corrections.mjs`, `verify-smokecraft-lighting-tutorial-route.mjs`, `verify-smokecraft-choose-your-cut.mjs`, `verify-smokecraft-terroir-knowledge-drop.mjs`, `verify-smokecraft-terroir-knowledge-drop-spine.mjs`, `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs`, `verify-smokecraft-ai-summary-pairing-recommendations.mjs`, `verify-smokecraft-rewards-achievements.mjs`, `verify-smokecraft-venue-select-resume.mjs`, `verify-smokecraft-welcome-experience.mjs`, `verify-smokecraft-knowledge-check.mjs`, `verify-smokecraft-leaderboard.mjs`, `verify-smokecraft-mini-tasting.mjs`, `verify-smokecraft-challenge-event.mjs`, `verify-interactions.mjs`, `verify-all-smokecraft-assets.mjs`, `final-acceptance.mjs`, `npm run build`.
+
+**Test results:**
+| Suite | Result |
+|---|---|
+| `verify-smokecraft-recommended-next-journey.mjs` | **31 passed, 0 failed** |
+| `verify-smokecraft-27-session-spine.mjs` | **24 passed, 0 failed** — unaffected |
+| `verify-smokecraft-persistence-consolidation.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-route-corrections.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-lighting-tutorial-route.mjs` | **12 passed, 0 failed** — unaffected |
+| `verify-smokecraft-choose-your-cut.mjs` | **16 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop.mjs` | **19 passed, 0 failed** — unaffected |
+| `verify-smokecraft-terroir-knowledge-drop-spine.mjs` | **17 passed, 0 failed** — unaffected |
+| `verify-smokecraft-meet-your-cigar-mentor-commentary.mjs` | **31 passed, 0 failed** — unaffected |
+| `verify-smokecraft-ai-summary-pairing-recommendations.mjs` | **35 passed, 0 failed** — unaffected |
+| `verify-smokecraft-rewards-achievements.mjs` | **43 passed, 0 failed** — unaffected |
+| `verify-smokecraft-venue-select-resume.mjs` | **47 passed, 0 failed** — unaffected |
+| `verify-smokecraft-welcome-experience.mjs` | **32 passed, 0 failed** — unaffected |
+| `verify-smokecraft-knowledge-check.mjs` | **35 passed, 0 failed** — unaffected |
+| `verify-smokecraft-leaderboard.mjs` | **36 passed, 0 failed** — unaffected |
+| `verify-smokecraft-mini-tasting.mjs` | **24 passed, 0 failed** — unaffected |
+| `verify-smokecraft-challenge-event.mjs` | **40 passed, 0 failed** — unaffected |
+| `verify-interactions.mjs` | 20 passed, 2 failed — identical to the established baseline (after fixing a regression this package's first draft introduced — see Known Limitations) |
+| `verify-all-smokecraft-assets.mjs` | **63 passed, 0 failed** |
+| `final-acceptance.mjs` | 65 passed, 18 failed — identical to the established baseline |
+| `npm run build` | **green** |
+
+**Confirmed no unrelated files changed:** `git status --short` before commit showed only `src/pages/smokecraft/SessionComplete.jsx`, `src/constants/smokecraftAssets.js`, `src/services/smokecraft/recommendedJourneyService.js` (new), `verify-smokecraft-recommended-next-journey.mjs` (new), and this doc section — `TOTAL_SESSIONS` remains 27, no other numbered session, unrelated screen, unrelated route, production image (outside the one approved asset registration), database, deployment, or environment file touched. The preview server used for testing was stopped before finishing, and no background test/preview process remained running; regenerated `public/proof/final-live-acceptance/*.png` screenshots were discarded via `git checkout --` before commit.
+
+**Known limitations:** the initial rewrite of the journey-summary section omitted mentor name and format label, which the pre-existing `verify-interactions.mjs` suite directly asserts are visible on this screen — this was caught by running the full regression battery (not just the new suite), causing `verify-interactions.mjs` to temporarily regress to 19/3 and `final-acceptance.mjs` to 64/19. Both fields were restored as live content (sourced from the same real `journey.mentor`/`journey.format` data as before), and the full battery was re-run to confirm the baseline (20/2, 65/18) was restored exactly before committing. The literal new "Recommend next journey.png" asset was not found in the repository, so the current approved Session Complete shell remains in use as the visual reference until the new asset is actually added.
+
+**Recommended next package:** register the new approved S27 image once added to the repository; and/or build a real reward-catalog / journey-depth-estimation rule to replace the remaining honest "Not available" seams; and/or continue with any remaining static-stub content across the SmokeCraft 360 module.
 
 ---
 
