@@ -140,13 +140,10 @@ export default function SessionComplete() {
       background: `linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)`,
       fontFamily: 'Georgia, serif',
     }}>
-      {/* Approved production visual — the new "Recommend next journey.png"
-          asset has not yet been added to this repository (confirmed via
-          full-filesystem search); the current approved Session Complete
-          shell is reused here until the new asset is registered, per the
-          same precedent established in Packages P and R. Any sample names,
-          XP, progress, or badge values baked into this artwork are layout
-          reference only — every value shown below is live React content. */}
+      {/* Approved production visual (Recommend next journey.png). Any sample
+          names, XP, progress, or badge values baked into this artwork are
+          layout reference only — every value shown below is live React
+          content, never read from the image. */}
       <div
         role="img"
         aria-label="SmokeCraft 360 — Recommended Next Journey"

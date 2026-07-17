@@ -133,7 +133,10 @@ const ROUTE_SPECS = [
   {
     route: '/smokecraft/session-complete',
     label: 'Session Complete',
-    required: '/assets/smokecraft/SESSION%20COMPLETE.png',
+    // Package S rebuilt S27 as "Recommended Next Journey," wiring the
+    // approved Recommend next journey.png asset in place of the prior
+    // SESSION COMPLETE.png shell.
+    required: '/assets/smokecraft/Recommend%20next%20journey.png',
     forbidden: ['/assets/smokecraft-reference/approved/smokecraft-session-complete'],
   },
   {
