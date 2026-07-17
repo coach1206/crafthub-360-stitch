@@ -4,7 +4,15 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
-import { VENUES } from '../../data/venues.js'
+
+// No live venue directory/backend is connected. Previously this screen
+// listed sample venue records (src/data/venues.js) as if they were real
+// options — per explicit instruction this is now a strict empty state:
+// zero venues are ever shown until a real venue backend exists. The venues.js
+// sample data file itself is left untouched (still used by an unrelated
+// consumer, src/api/passportScanApi.js), only this screen's rendering
+// changed to never present it as live venue inventory.
+const VENUES = []
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -170,52 +178,54 @@ export default function VenueSelect() {
 
           {phase === 'ready' && (
             <>
-              {/* Honest data-source disclosure — no live availability/inventory/accessibility source exists */}
-              <div style={{ background: 'rgba(233,193,118,0.06)', border: `1px solid ${BORDER}`, borderRadius: 10, padding: '10px 14px', fontSize: 12, color: 'rgba(229,226,225,0.55)' }}>
-                Venue details shown come from the verified venue directory (name, location, type, capacity, description). Real-time distance, humidor/pairing availability, current SmokeCraft availability, accessibility details, and open/closed status are not connected in this build and are not shown.
+              {/* Honest empty-state disclosure — no live venue backend is connected */}
+              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(28px,5vw,44px)', textAlign: 'center' }}>
+                <p style={{ margin: '0 0 8px', fontSize: 16, fontWeight: 700, color: CREAM }}>
+                  No venues connected yet
+                </p>
+                <p style={{ margin: 0, fontSize: 13, color: 'rgba(229,226,225,0.55)', lineHeight: 1.6 }}>
+                  Venue selection requires a live venue directory, which is not yet connected in this build. You can continue without selecting a venue, or check back once venues are available.
+                </p>
               </div>
 
-              {/* Search + filters */}
-              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2.2vw,20px)' }}>
-                <label style={{ display: 'block', marginBottom: 10 }}>
-                  <span style={{ fontSize: 10, color: GOLD_DIM, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: 4 }}>Search</span>
-                  <input
-                    type="text"
-                    aria-label="Search venues"
-                    placeholder="Search by name or city…"
-                    value={query}
-                    onChange={e => setQuery(e.target.value)}
-                    style={{ width: '100%', boxSizing: 'border-box', background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}`, borderRadius: 8, color: CREAM, fontSize: 14, padding: '10px 12px', fontFamily: 'Georgia, serif', outline: 'none' }}
-                  />
-                </label>
-                <div role="group" aria-label="Filter by venue type" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  <button
-                    type="button" aria-pressed={!tierFilter}
-                    onClick={() => setTierFilter(null)}
-                    style={{ padding: '5px 12px', borderRadius: 14, border: `1.5px solid ${!tierFilter ? GOLD : 'rgba(229,226,225,0.25)'}`, background: !tierFilter ? 'rgba(233,193,118,0.15)' : 'transparent', color: !tierFilter ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
-                  >
-                    All Types
-                  </button>
-                  {tiers.map(t => (
+              {/* Search + filters — hidden while no live venues exist; the
+                  underlying search/filter state and UI are kept (unused
+                  while VENUES is empty) so they activate automatically the
+                  moment a real venue directory is connected. */}
+              {VENUES.length > 0 && (
+                <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2.2vw,20px)' }}>
+                  <label style={{ display: 'block', marginBottom: 10 }}>
+                    <span style={{ fontSize: 10, color: GOLD_DIM, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: 4 }}>Search</span>
+                    <input
+                      type="text"
+                      aria-label="Search venues"
+                      placeholder="Search by name or city…"
+                      value={query}
+                      onChange={e => setQuery(e.target.value)}
+                      style={{ width: '100%', boxSizing: 'border-box', background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}`, borderRadius: 8, color: CREAM, fontSize: 14, padding: '10px 12px', fontFamily: 'Georgia, serif', outline: 'none' }}
+                    />
+                  </label>
+                  <div role="group" aria-label="Filter by venue type" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     <button
-                      key={t} type="button" aria-pressed={tierFilter === t}
-                      onClick={() => setTierFilter(t)}
-                      style={{ padding: '5px 12px', borderRadius: 14, border: `1.5px solid ${tierFilter === t ? GOLD : 'rgba(229,226,225,0.25)'}`, background: tierFilter === t ? 'rgba(233,193,118,0.15)' : 'transparent', color: tierFilter === t ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
+                      type="button" aria-pressed={!tierFilter}
+                      onClick={() => setTierFilter(null)}
+                      style={{ padding: '5px 12px', borderRadius: 14, border: `1.5px solid ${!tierFilter ? GOLD : 'rgba(229,226,225,0.25)'}`, background: !tierFilter ? 'rgba(233,193,118,0.15)' : 'transparent', color: !tierFilter ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
                     >
-                      {t}
+                      All Types
                     </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Results */}
-              {filtered.length === 0 && (
-                <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(24px,4vw,40px)', textAlign: 'center' }}>
-                  <p style={{ margin: 0, fontSize: 14, color: 'rgba(229,226,225,0.6)' }}>
-                    {VENUES.length === 0 ? 'No venues are available yet.' : 'No venues match your search or filter.'}
-                  </p>
+                    {tiers.map(t => (
+                      <button
+                        key={t} type="button" aria-pressed={tierFilter === t}
+                        onClick={() => setTierFilter(t)}
+                        style={{ padding: '5px 12px', borderRadius: 14, border: `1.5px solid ${tierFilter === t ? GOLD : 'rgba(229,226,225,0.25)'}`, background: tierFilter === t ? 'rgba(233,193,118,0.15)' : 'transparent', color: tierFilter === t ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
+                      >
+                        {t}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
+
               {filtered.map(v => {
                 const isSelected = selectedId === v.id
                 return (

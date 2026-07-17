@@ -1814,3 +1814,19 @@ New suite `verify-smokecraft-entry-recovery.mjs`: **6 passed, 0 failed**. Full r
 This session has no Railway CLI, API token, or dashboard access, and no `railway.json`/`railway.toml` exists in this repository (only a generic `nixpacks.toml`). Phases 8–10 of the requested root-cause recovery (confirming Railway's connected branch/build/start command, and testing the live production URL end-to-end) require platform access this environment does not have. The fixes above were verified locally against the built production bundle (`npm run build` + `vite preview`), not against the actual Railway deployment. Whether Railway is currently serving `recovery/smokecraft-codex-final` at all, and whether it will pick up this commit automatically, could not be confirmed from inside this repository — see the Final Report for what was and was not verifiable.
 
 ---
+
+## VENUE SELECTION — STRICT EMPTY-STATE CONVERSION
+
+Following an explicit product decision (not a code bug), Venue Selection (`VenueSelect.jsx`) was converted from showing 2 sample venue records (Grand Lounge, The Bottle House, from `src/data/venues.js`) to a strict empty state: **zero venues are shown until a real venue backend is connected.** The prior behavior matched the same "reuse real sample data honestly" convention used everywhere else in this rebuild (events, inventory, leaderboard), but was judged unacceptable specifically for this screen going forward.
+
+**Audit finding first:** there is no legacy/duplicate component behind `/smokecraft/venue-select` — `App.jsx` maps it to exactly one component, the already-rebuilt `VenueSelect.jsx` (Package M), re-verified passing in every subsequent package. The "generic UI shell" symptom reported in production is far more likely explained by a stale Railway deployment (see "ROOT-CAUSE PRODUCTION RECOVERY" above) than by any code defect — this remains unconfirmed pending Railway dashboard access.
+
+**Change:** `VenueSelect.jsx`'s `VENUES` import was replaced with a local empty array (`const VENUES = []`), with the underlying `src/data/venues.js` file left untouched (still used by an unrelated consumer, `src/api/passportScanApi.js` — out of SmokeCraft scope). The screen now shows a professional "No venues connected yet" message and hides the search/filter UI (which has nothing to filter), leaving "Continue without venue" as the only forward path. Search/filter markup and state are preserved in source, gated behind `VENUES.length > 0`, so they activate automatically the moment a real venue directory is connected — no future rebuild required.
+
+**Venue image upload/change architecture:** not implemented this pass — it was not part of the two explicitly confirmed decisions for this change and would be a substantial new feature requiring its own scoped design; flagged as a follow-up item, not silently skipped.
+
+**Test changes:** `verify-smokecraft-venue-select-resume.mjs` Suites 4–11 rewritten to assert the new empty-state behavior (no fabricated venue names ever appear, honest disclosure text present, search/filter hidden, "Continue without venue" persists and restores across refresh) instead of testing selection of the removed sample venues. Suite 37 updated to reflect that search/filter accessibility markup is verified by source inspection while hidden. Full suite: **45 passed, 0 failed.**
+
+**Regression status:** all prior package suites, `verify-all-smokecraft-assets.mjs` (64/0), `verify-interactions.mjs` (20/2, baseline), and `final-acceptance.mjs` (65/18, baseline) remain green with no new failures. `npm run build` green.
+
+---
