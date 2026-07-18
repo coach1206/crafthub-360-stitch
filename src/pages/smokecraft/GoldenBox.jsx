@@ -5,21 +5,23 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftEntryHeaderBand from '../../components/smokecraft/SmokeCraftEntryHeaderBand.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
-const GOLD   = '#E9C176'
+const GOLD      = '#E9C176'
 const NAVY      = '#0b0f18'
 const NAVY_DEEP = '#060810'
 const WOOD_DIM  = 'rgba(122,79,49,0.28)'
-const BORDER = 'rgba(233,193,118,0.22)'
-const DIM    = 'rgba(229,226,225,0.62)'
-const CREAM  = '#e5e2e1'
-const GLASS  = 'rgba(8,10,16,0.86)'
+const BORDER    = 'rgba(233,193,118,0.22)'
+const DIM       = 'rgba(229,226,225,0.62)'
+const CREAM     = '#e5e2e1'
+const GLASS     = 'rgba(8,10,16,0.86)'
 
-// Approved copy from GOLDEN BOX RULES.png — "THE GOLDEN PRINCIPLES" panel.
-// Recreated as real, legible React text (the printed panel is small and
-// would be illegible if left as baked pixels at header-band scale) rather
-// than invented content.
+// Dedicated clean decorative hero — no baked interface content, unlike the
+// full GOLDEN BOX RULES.png composite (which the visual reference for this
+// screen, but is never rendered as the live background — see PR discussion).
+const HERO_IMAGE = '/assets/smokecraft/cropped/golden-box-hero.jpg'
+
+// Approved copy from GOLDEN BOX RULES.png — "THE GOLDEN PRINCIPLES" panel,
+// recreated as real, legible React text rather than left as baked pixels.
 const GOLDEN_PRINCIPLES = [
   { num: 1, title: 'Respect the Cigar',        body: 'Treat every cigar with care and appreciation.' },
   { num: 2, title: 'Respect the Environment',  body: 'Keep the lounge clean, calm, and comfortable.' },
@@ -28,16 +30,15 @@ const GOLDEN_PRINCIPLES = [
   { num: 5, title: 'Protect the Ritual',       body: 'Follow the steps, honor the process, and elevate.' },
 ]
 
-// The approved GOLDEN BOX RULES.png hero photo (cigar box + glass, top-right
-// of the composite) is the only genuinely clean decorative sub-region — the
-// rest of that composite bakes in an unrelated Identity form, a Venue
-// Settings form, and a staff-only guest table that belong to other already-
-// built routes and must not be duplicated here.
-const HERO_CROP = { x: 730, y: 95, w: 715, h: 315 }
-const NAT_W = 1456
-const NAT_H = 1080
-const heroBgSize = `${(NAT_W / HERO_CROP.w) * 100}% ${(NAT_H / HERO_CROP.h) * 100}%`
-const heroBgPos = `${(HERO_CROP.x / (NAT_W - HERO_CROP.w)) * 100}% ${(HERO_CROP.y / (NAT_H - HERO_CROP.h)) * 100}%`
+// Approved copy from GOLDEN BOX RULES.png — "QUICK RULE REMINDERS" strip.
+// Each thumbnail reuses existing clean, already-approved GitHub photography
+// (no generated substitutes) — see the Golden Box image-source report.
+const QUICK_REMINDERS = [
+  { title: 'Handle With Care', image: '/assets/smokecraft/cropped/cut-toast-light-hero.jpg', position: 'center 30%' },
+  { title: 'Respect Others',   image: '/assets/smokecraft/cropped/intake-whiskey-bg.jpg',     position: 'center bottom' },
+  { title: 'Keep It Clean',    image: '/assets/smokecraft/cropped/discover-profile-hero.jpg', position: 'center 30%' },
+  { title: 'Enjoy & Savor',    image: '/assets/smokecraft/cropped/intake-ashtray-bg.jpg',      position: 'center bottom' },
+]
 
 export default function GoldenBox() {
   const { awardSessionRewards } = useGuestSession()
@@ -76,59 +77,86 @@ export default function GoldenBox() {
         eyebrow="SmokeCraft Journey"
         title="Golden Box Rules"
         subtitle="Honor the Leaf. Respect the Craft. Elevate the Experience."
-        image={SC_ASSETS.goldenBox}
-        imagePosition={heroBgPos}
-        imageSize={heroBgSize}
-        overlayStrength={0.82}
+        image={HERO_IMAGE}
+        imagePosition="center 40%"
+        imageSize="cover"
+        overlayStrength={0.78}
       />
 
       <main style={{
         flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch',
-        padding: '20px clamp(16px,4vw,40px) clamp(150px,20vh,190px)',
+        padding: '14px clamp(16px,4vw,40px) clamp(140px,19vh,190px)',
       }}>
-        <div style={{ maxWidth: 640, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {guestName && (
-            <div style={{ fontSize: 15, color: CREAM }}>Welcome, {guestName}.</div>
-          )}
+        <div style={{
+          maxWidth: 1080, margin: '0 auto', display: 'grid',
+          gridTemplateColumns: 'minmax(0,1.3fr) minmax(0,1fr)', gap: 20,
+        }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {guestName && (
+              <div style={{ fontSize: 14, color: CREAM }}>Welcome, {guestName}.</div>
+            )}
 
-          <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 14, padding: 'clamp(16px,2.4vw,24px)' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 14 }}>
-              The Golden Principles
+            <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 14, padding: 'clamp(12px,2vw,18px)' }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>
+                The Golden Principles
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                {GOLDEN_PRINCIPLES.map(p => (
+                  <div key={p.num} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                    <div style={{
+                      flexShrink: 0, width: 26, height: 26, borderRadius: '50%',
+                      border: `1.5px solid ${GOLD}`, color: GOLD, fontSize: 12, fontWeight: 700,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>{p.num}</div>
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: CREAM }}>{p.title}</div>
+                      <div style={{ fontSize: 13, color: DIM, marginTop: 2 }}>{p.body}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              {GOLDEN_PRINCIPLES.map(p => (
-                <div key={p.num} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+
+            <div style={{ background: 'rgba(233,193,118,0.06)', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '12px 16px' }}>
+              <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, cursor: 'pointer', minHeight: 48 }}>
+                <input
+                  type="checkbox"
+                  checked={acknowledged}
+                  onChange={e => { triggerHaptic('light'); setAcknowledged(e.target.checked) }}
+                  style={{ width: 22, height: 22, accentColor: GOLD, cursor: 'pointer', flexShrink: 0, marginTop: 2 }}
+                />
+                <span style={{ fontSize: 14, color: acknowledged ? CREAM : DIM, lineHeight: 1.45 }}>
+                  I have read and acknowledge the Golden Box principles. I commit to upholding the SmokeCraft 360 standard of excellence.
+                </span>
+              </label>
+              {!acknowledged && (
+                <div style={{ fontSize: 11, color: DIM, marginTop: 6 }}>
+                  Acknowledge the principles above to continue.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 14, padding: 'clamp(12px,2vw,18px)', alignSelf: 'start' }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>
+              Quick Rule Reminders
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              {QUICK_REMINDERS.map(r => (
+                <div key={r.title} style={{ borderRadius: 10, overflow: 'hidden', border: `1px solid ${BORDER}` }}>
                   <div style={{
-                    flexShrink: 0, width: 26, height: 26, borderRadius: '50%',
-                    border: `1.5px solid ${GOLD}`, color: GOLD, fontSize: 12, fontWeight: 700,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>{p.num}</div>
-                  <div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: CREAM }}>{p.title}</div>
-                    <div style={{ fontSize: 13, color: DIM, marginTop: 2 }}>{p.body}</div>
+                    aspectRatio: '4 / 3',
+                    backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.15), rgba(6,8,16,0.75)), url(${r.image})`,
+                    backgroundSize: 'cover', backgroundPosition: r.position,
+                    display: 'flex', alignItems: 'flex-end', padding: 8,
+                  }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: CREAM }}>
+                      {r.title}
+                    </span>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-
-          <div style={{ background: 'rgba(233,193,118,0.06)', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '16px 18px' }}>
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, cursor: 'pointer', minHeight: 48 }}>
-              <input
-                type="checkbox"
-                checked={acknowledged}
-                onChange={e => { triggerHaptic('light'); setAcknowledged(e.target.checked) }}
-                style={{ width: 22, height: 22, accentColor: GOLD, cursor: 'pointer', flexShrink: 0, marginTop: 2 }}
-              />
-              <span style={{ fontSize: 15, color: acknowledged ? CREAM : DIM, lineHeight: 1.55 }}>
-                I have read and acknowledge the Golden Box principles. I commit to upholding the SmokeCraft 360 standard of excellence.
-              </span>
-            </label>
-            {!acknowledged && (
-              <div style={{ fontSize: 12, color: DIM, marginTop: 10 }}>
-                Acknowledge the principles above to continue.
-              </div>
-            )}
           </div>
         </div>
       </main>
