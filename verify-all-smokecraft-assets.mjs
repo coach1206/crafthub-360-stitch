@@ -41,10 +41,15 @@ const ROUTE_SPECS = [
     forbidden: ['/cropped/golden-box'],
   },
   {
+    // Package A rebuild: the single flattened MENTOR SELECTION1.png composite
+    // (which baked in unrelated NOVEE OS chrome) was replaced by the real,
+    // individual approved mentor portrait files + real bio/tag data from
+    // src/modules/smokecraft/smokeCraftMentors.js — see
+    // SMOKECRAFT_COMPLETE_REBUILD_MATRIX.md Package A.
     route: '/smokecraft/mentor-selection',
     label: 'Mentor Selection',
-    required: '/assets/smokecraft/MENTOR%20SELECTION1.png',
-    forbidden: ['/cropped/mentor'],
+    required: '/mentors/don-alejandro.jpg',
+    forbidden: [],
   },
   {
     route: '/smokecraft/format',

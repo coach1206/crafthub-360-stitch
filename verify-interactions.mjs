@@ -262,16 +262,19 @@ async function suiteBackNavigation() {
   try {
     await p2.goto(`${BASE}/smokecraft`, { waitUntil: 'domcontentloaded', timeout: 20000 })
     await p2.evaluate(() => { sessionStorage.setItem('novee_demo_mode', '1') })
-    // Set known mentor state directly
+    // Set known mentor state directly — 'dominican' is the real canonical id
+    // from src/modules/smokecraft/smokeCraftMentors.js (Package A rebuild
+    // adopted this as the project's real mentor data source of truth,
+    // replacing the screen's old ad-hoc inline id scheme).
     await p2.evaluate(() => {
-      const saved = { stateVersion: 2, mentor: [{ id: 'alejandro', name: 'Don Alejandro' }] }
+      const saved = { stateVersion: 2, mentor: [{ id: 'dominican', name: 'Don Alejandro' }] }
       localStorage.setItem('sc_journey_v1', JSON.stringify(saved))
     })
 
     // Navigate to format, then back to mentor
     await p2.goto(`${BASE}/smokecraft/format`, { waitUntil: 'domcontentloaded', timeout: 20000 })
     await p2.waitForTimeout(400)
-    await p2.goto(`${BASE}/smokecraft/mentor`, { waitUntil: 'domcontentloaded', timeout: 20000 })
+    await p2.goto(`${BASE}/smokecraft/mentor-selection`, { waitUntil: 'domcontentloaded', timeout: 20000 })
     await p2.waitForTimeout(500)
 
     const state = await p2.evaluate(() => {

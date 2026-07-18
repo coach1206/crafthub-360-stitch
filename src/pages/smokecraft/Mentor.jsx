@@ -3,27 +3,79 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import { MENTORS, MAX_MENTOR_SELECTIONS } from '../../modules/smokecraft/smokeCraftMentors.js'
 
-// Natural dimensions of MENTOR SELECTION1.png
-const NAT_W = 1672
-const NAT_H = 941
+const GOLD      = '#E9C176'
+const NAVY      = '#0b0f18'
+const NAVY_DEEP = '#060810'
+const WOOD_DIM  = 'rgba(122,79,49,0.28)'
+const BORDER    = 'rgba(233,193,118,0.22)'
+const GLASS     = 'rgba(8,10,16,0.86)'
+const CREAM     = '#e5e2e1'
+const DIM       = 'rgba(229,226,225,0.65)'
 
-const GOLD = '#E9C176'
-
-// Card zones as % of natural image dimensions (x, y, w, h)
-const MENTOR_ZONES = [
-  { id: 'alejandro',  name: 'Don Alejandro',         origin: 'Dominican Republic', expertise: 'Aged blends & terroir depth',        x:  7.77, y: 39.85, w: 19.62, h: 17.85 },
-  { id: 'javier',    name: 'Javier Estelí',          origin: 'Nicaragua',          expertise: 'Bold ligero & volcanic soil',          x: 27.45, y: 39.85, w: 19.50, h: 17.85 },
-  { id: 'jamastrán', name: 'Doña Jamastrán',         origin: 'Honduras',           expertise: 'Jamastrán valley leaf craft',           x: 47.07, y: 39.85, w: 19.62, h: 17.85 },
-  { id: 'mateo',     name: 'Mateo San Andrés',       origin: 'Mexico',             expertise: 'San Andrés maduro mastery',             x: 66.75, y: 39.85, w: 19.65, h: 17.85 },
-  { id: 'rafael',    name: 'Maestro Rafael',         origin: 'Cuba',               expertise: 'Classic Vuelta Abajo traditions',       x:  7.77, y: 58.24, w: 19.62, h: 18.17 },
-  { id: 'carlos',    name: 'Carlos Mendoza',         origin: 'Peru',               expertise: 'Emerging origin & binder work',         x: 27.45, y: 58.24, w: 19.50, h: 18.17 },
-  { id: 'blackwell', name: 'Thomas A. Blackwell',    origin: 'USA',                expertise: 'Boutique blending & education',         x: 47.07, y: 58.24, w: 19.62, h: 18.17 },
-  { id: 'paulo',     name: 'Paulo Oliveira',         origin: 'Brazil',             expertise: 'Arapiraca wrapper & fermentation',      x: 66.75, y: 58.24, w: 19.65, h: 18.17 },
-]
+function MentorCard({ mentor, active, maxed, onToggle }) {
+  const [hover, setHover] = useState(false)
+  return (
+    <button
+      type="button"
+      aria-label={`${mentor.name} — ${mentor.country} — ${mentor.bio}${active ? ' (selected)' : ''}`}
+      aria-pressed={active}
+      disabled={maxed}
+      onClick={onToggle}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onFocus={() => setHover(true)}
+      onBlur={() => setHover(false)}
+      style={{
+        position: 'relative', textAlign: 'left', background: GLASS,
+        border: `1.5px solid ${active ? GOLD : (hover ? 'rgba(233,193,118,0.5)' : BORDER)}`,
+        borderRadius: 14, padding: 0, overflow: 'hidden', cursor: maxed ? 'not-allowed' : 'pointer',
+        opacity: maxed ? 0.5 : 1, touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent',
+        boxShadow: active ? '0 0 0 3px rgba(233,193,118,0.18)' : 'none',
+        transition: 'border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease',
+      }}
+    >
+      <div style={{ position: 'relative', aspectRatio: '4 / 3', background: '#000' }}>
+        <img
+          src={mentor.image}
+          alt=""
+          draggable={false}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+        <div style={{
+          position: 'absolute', left: 8, top: 8, fontSize: 10, fontWeight: 700,
+          letterSpacing: '0.08em', textTransform: 'uppercase', color: GOLD,
+          background: 'rgba(6,8,16,0.75)', padding: '3px 8px', borderRadius: 999,
+        }}>
+          {mentor.country}
+        </div>
+        <div style={{
+          position: 'absolute', right: 8, top: 8, width: 26, height: 26, borderRadius: '50%',
+          background: active ? GOLD : 'rgba(6,8,16,0.75)', color: active ? '#0a0603' : GOLD,
+          border: `1px solid ${GOLD}`, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 14, fontWeight: 700,
+        }} aria-hidden="true">
+          {active ? '✓' : '+'}
+        </div>
+      </div>
+      <div style={{ padding: '12px 14px 14px' }}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: CREAM, marginBottom: 4 }}>{mentor.name}</div>
+        <div style={{ fontSize: 12, color: DIM, lineHeight: 1.5, marginBottom: 8, minHeight: 36 }}>{mentor.bio}</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {mentor.tags.map(tag => (
+            <span key={tag} style={{
+              fontSize: 10, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase',
+              color: 'rgba(233,193,118,0.85)', border: `1px solid ${BORDER}`, borderRadius: 999,
+              padding: '3px 8px',
+            }}>{tag}</span>
+          ))}
+        </div>
+      </div>
+    </button>
+  )
+}
 
 export default function Mentor() {
   const { awardSessionRewards, setSelectedMentor } = useGuestSession()
@@ -38,89 +90,85 @@ export default function Mentor() {
   })
 
   useEffect(() => {
-    const mentors = MENTOR_ZONES.filter(m => selected.includes(m.id))
+    const mentors = MENTORS.filter(m => selected.includes(m.id))
     setMentor(mentors.length ? mentors : null)
-    if (mentors.length) setSelectedMentor(mentors[0].id, mentors[0].origin)
-  }, [selected, setMentor, setSelectedMentor])
+    if (mentors.length) setSelectedMentor(mentors[0].id, mentors[0].country)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected])
 
   function toggle(id) {
     triggerHaptic('light')
     setSelected(prev =>
       prev.includes(id)
         ? prev.filter(x => x !== id)
-        : prev.length < 2 ? [...prev, id] : prev
+        : prev.length < MAX_MENTOR_SELECTIONS ? [...prev, id] : prev
     )
   }
 
   function handleContinue() {
+    if (selected.length === 0) return
+    triggerHaptic('medium')
     awardSessionRewards('mentor')
     navigate('/smokecraft/format')
   }
 
   return (
-    <>
-      <SmokeCraftImageBoundsOverlay
-        src={SC_ASSETS.mentorSelection}
-        naturalW={NAT_W}
-        naturalH={NAT_H}
-        alt="SmokeCraft Mentor Selection — Choose Your Guide"
-      >
-        {/* Nav mask */}
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '12%',
-          background: 'linear-gradient(to bottom, transparent, #050505 50%)', pointerEvents: 'none', zIndex: 2 }} />
+    <div style={{
+      position: 'fixed', inset: 0, overflow: 'hidden',
+      display: 'flex', flexDirection: 'column',
+      background: `
+        radial-gradient(ellipse at 20% -10%, rgba(233,193,118,0.10), transparent 55%),
+        radial-gradient(ellipse at 100% 110%, ${WOOD_DIM}, transparent 60%),
+        linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)
+      `,
+      fontFamily: 'Georgia, serif',
+    }}>
+      <header style={{ padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0', flexShrink: 0 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 6 }}>
+          SmokeCraft Journey
+        </div>
+        <h1 style={{ margin: 0, fontSize: 'clamp(22px,3.4vw,34px)', fontWeight: 700, color: CREAM, fontFamily: 'Georgia, serif' }}>
+          Mentor Selection
+        </h1>
+        <p style={{ margin: '6px 0 0', fontSize: 13, color: DIM, maxWidth: 560 }}>
+          Select up to {MAX_MENTOR_SELECTIONS} master mentors from the world's great tobacco traditions. Each brings a legacy, growing philosophy, and sensory perspective that will shape your SmokeCraft tasting map.
+        </p>
+        <div style={{ fontSize: 12, color: selected.length > 0 ? GOLD : DIM, marginTop: 8 }}>
+          {selected.length} of {MAX_MENTOR_SELECTIONS} selected
+        </div>
+      </header>
 
-        {MENTOR_ZONES.map(m => {
-          const active = selected.includes(m.id)
-          const maxed = selected.length >= 2 && !active
-          return (
-            <button
-              key={m.id}
-              type="button"
-              aria-label={`${m.name} — ${m.origin} — ${m.expertise}${active ? ' (selected)' : ''}`}
-              aria-pressed={active}
-              onClick={() => !maxed && toggle(m.id)}
-              style={{
-                position: 'absolute',
-                left: `${m.x}%`,
-                top: `${m.y}%`,
-                width: `${m.w}%`,
-                height: `${m.h}%`,
-                pointerEvents: 'auto',
-                background: 'transparent',
-                border: active ? `2.5px solid ${GOLD}` : '2.5px solid transparent',
-                borderRadius: 4,
-                cursor: maxed ? 'not-allowed' : 'pointer',
-                outline: 'none',
-                boxSizing: 'border-box',
-                padding: 0,
-              }}
-            >
-              {active && (
-                <>
-                  <span style={{
-                    position: 'absolute', top: 4, left: 6,
-                    fontSize: 'clamp(9px,1.1vw,13px)', fontWeight: 700,
-                    color: GOLD, lineHeight: 1, pointerEvents: 'none',
-                  }}>✓</span>
-                  <span style={{
-                    position: 'absolute', top: 3, right: 5,
-                    fontSize: 'clamp(9px,1.2vw,14px)', fontWeight: 700,
-                    color: 'rgba(233,193,118,0.6)', lineHeight: 1, pointerEvents: 'none',
-                  }}>×</span>
-                </>
-              )}
-            </button>
-          )
-        })}
-      </SmokeCraftImageBoundsOverlay>
+      <main style={{
+        flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch',
+        padding: '16px clamp(16px,4vw,40px) clamp(150px,20vh,190px)',
+      }}>
+        <div style={{
+          maxWidth: 1100, margin: '0 auto', display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14,
+        }}>
+          {MENTORS.map(mentor => {
+            const active = selected.includes(mentor.id)
+            const maxed = selected.length >= MAX_MENTOR_SELECTIONS && !active
+            return (
+              <MentorCard
+                key={mentor.id}
+                mentor={mentor}
+                active={active}
+                maxed={maxed}
+                onToggle={() => toggle(mentor.id)}
+              />
+            )
+          })}
+        </div>
+      </main>
 
       <SmokeCraftNavBar
-        primary="Continue to Shape, Size & Burn"
+        primary="Continue to Shape, Size & Burn →"
         onPrimary={handleContinue}
         primaryDisabled={selected.length === 0}
-        secondary="Back"
+        secondary="← Back"
         onSecondary={() => navigate(-1)}
       />
-    </>
+    </div>
   )
 }

@@ -10,7 +10,7 @@ Tracked, not permanently excused. Every failure below was confirmed present on t
 | 4 | `final-acceptance.mjs` | `/smokecraft/request-purchase` | Self-Order option not visible on screen | Confirmed on baseline `5b2d5ed3` | Open | B | `RequestPurchase.jsx` | Not yet root-caused | — | — |
 | 5 | `final-acceptance.mjs` | `/smokecraft/request-purchase` | Purchase Review does not show selected cigar | Confirmed on baseline `5b2d5ed3` | Open | B | `RequestPurchase.jsx` | Not yet root-caused | — | — |
 | 6 | `final-acceptance.mjs` | `/smokecraft/request-purchase` | Special notes not restored after reload | Confirmed on baseline `5b2d5ed3` | Open | B | `RequestPurchase.jsx` | Not yet root-caused | — | — |
-| 7 | `final-acceptance.mjs` | `/smokecraft/mentor-selection` | Live data "Don Alejandro" / "Dominican Republic" not visible | Confirmed on baseline `5b2d5ed3` | Open | A (Mentor Selection rebuild) | `Mentor.jsx` | Likely: mentor detail data is baked in the image, not read from a live mentor data source | — | — |
+| 7 | `final-acceptance.mjs` | `/smokecraft/mentor-selection` | Live data "Don Alejandro" / "Dominican Republic" not visible | Confirmed on baseline `5b2d5ed3` | **RESOLVED** | A (Mentor Selection rebuild) | `Mentor.jsx` | Confirmed: mentor detail data was baked into the composite image, not read from a live source | `<Package A commit — pending approval>` | Verified via `final-acceptance.mjs` — "Don Alejandro"/"Dominican Republic" now render live from `src/modules/smokecraft/smokeCraftMentors.js` |
 | 8 | `final-acceptance.mjs` | `/smokecraft/seed-soil` | Live data "Corojo" / "Volcanic" not visible | Confirmed on baseline `5b2d5ed3` | Open | C (Seed & Soil rebuild) | `SeedSoil.jsx` | Same pattern — baked, not React-rendered | — | — |
 | 9 | `final-acceptance.mjs` | `/smokecraft/humidor-match` | Live data "Oliva Serie V" / "Nicaragua" not visible | Confirmed on baseline `5b2d5ed3` | Open | B | `HumidorMatch.jsx` | Same pattern | — | — |
 | 10 | `final-acceptance.mjs` | `/smokecraft/cut-toast-light` | Live data "Gentle Toast" / "Cedar Spill" not visible | Confirmed on baseline `5b2d5ed3` | Open | C | `CutToastLight.jsx` | Same pattern | — | — |
@@ -27,4 +27,4 @@ Failures 1–6, 13, 14 are concentrated on `/smokecraft/humidor-match`, `/smokec
 
 ## Status
 
-All 14 known failures are assigned to their responsible package (A/B/C/D). None are closed. None are being excused as permanently out of scope. This register will be updated with root cause, fix commit, and verification result as each package is executed.
+13 of 14 known failures remain open, assigned to their responsible package (B/C/D). **Failure #7 is resolved** as a confirmed side effect of the Package A Mentor Selection rebuild — exactly the pattern predicted above. None of the remaining failures are being excused as permanently out of scope. This register will be updated with root cause, fix commit, and verification result as each package is executed.
