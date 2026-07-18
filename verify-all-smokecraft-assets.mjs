@@ -35,16 +35,16 @@ const ROUTE_SPECS = [
     forbidden: ['/cropped/discover-profile'],
   },
   {
-    // Package A live correction: the full GOLDEN BOX RULES.png composite
-    // (which baked in an unrelated Identity form, Venue Settings form, and
-    // staff Guest Agreements table) is now visual reference only — never
-    // rendered live. The dedicated clean crop golden-box-hero.jpg is the
-    // real decorative asset. See SMOKECRAFT_COMPLETE_REBUILD_MATRIX.md
-    // Package A and the Golden Box image-source report.
+    // Package A second live correction: GOLDEN BOX RULES.png is the
+    // git-documented approved full-screen composition (commit c4f2a03d /
+    // restored by 66531672) and is rendered live again, with only the baked
+    // Identity/Venue/Guest-Agreements/Back/Continue/XP zones neutralized and
+    // replaced by real React controls — not a substitute crop. See
+    // SMOKECRAFT_COMPLETE_REBUILD_MATRIX.md Package A.
     route: '/smokecraft/golden-box',
     label: 'Golden Box',
-    required: '/assets/smokecraft/cropped/golden-box-hero.jpg',
-    forbidden: ['GOLDEN%20BOX%20RULES.png'],
+    required: '/assets/smokecraft/GOLDEN%20BOX%20RULES.png',
+    forbidden: [],
   },
   {
     // Package A rebuild: the single flattened MENTOR SELECTION1.png composite

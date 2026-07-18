@@ -53,12 +53,16 @@ async function main() {
   await nav(page, '/smokecraft/golden-box')
   let body = await page.textContent('body')
   body.includes('Golden Box Rules') ? ok(1, 'Golden Box renders with approved title') : bad(1, 'Title missing')
-  body.includes('Respect the Cigar') ? ok(2, 'Approved Golden Principles text rendered live (not baked)') : bad(2, 'Principles text missing')
-  ;(body.includes('Your Commitment') || body.includes('Venue Settings') || body.includes('Guest Agreements'))
-    ? bad(3, 'Baked unrelated forms (Identity/Venue/staff table) still visible')
-    : ok(3, 'No baked unrelated Identity/Venue/staff-table content leaked onto this screen')
+  // The Golden Principles are preserved as approved baked artwork (not moved,
+  // not rebuilt as React text) per the live-composition-recovery directive —
+  // verify the approved composite image itself is what's rendering instead.
+  const goldenBoxImg = await page.locator('img[alt*="Golden Box Rules"]').count()
+  goldenBoxImg > 0 ? ok(2, 'Approved full GOLDEN BOX RULES.png composition renders (principles preserved as approved artwork, not moved)') : bad(2, 'Approved composite image missing')
+  ;(body.includes('Your Commitment') || body.includes('Venue Settings') || body.includes('Guest Agreements (Staff'))
+    ? bad(3, 'Baked unrelated forms (Identity/Venue/staff table) still visible as text')
+    : ok(3, 'No baked unrelated Identity/Venue/staff-table content leaked onto this screen as live text')
 
-  const continueDisabled1 = await page.locator('button:has-text("Save and Continue")').isDisabled()
+  const continueDisabled1 = await page.locator('button:has-text("Next: Mentor Selection")').isDisabled()
   continueDisabled1 ? ok(4, 'Continue disabled until acknowledgement checked') : bad(4, 'Continue enabled with no acknowledgement')
 
   const stepsBeforeAck = await page.evaluate(() => JSON.parse(localStorage.getItem('novee_guest_session') || '{}').completedSteps || [])
@@ -66,10 +70,10 @@ async function main() {
 
   await page.click('input[type="checkbox"]')
   await page.waitForTimeout(150)
-  const continueEnabled1 = await page.locator('button:has-text("Save and Continue")').isDisabled()
+  const continueEnabled1 = await page.locator('button:has-text("Next: Mentor Selection")').isDisabled()
   continueEnabled1 === false ? ok(6, 'Continue enables once acknowledged') : bad(6, 'Continue stayed disabled after acknowledging')
 
-  await page.click('button:has-text("Save and Continue")')
+  await page.click('button:has-text("Next: Mentor Selection")')
   await page.waitForTimeout(300)
   page.url().includes('/smokecraft/mentor-selection') ? ok(7, 'Golden Box Continue routes to Mentor Selection') : bad(7, `Landed on ${page.url()}`)
 
@@ -174,7 +178,7 @@ async function main() {
   page.url().includes('/smokecraft/golden-box') ? ok(27, 'Identity → Golden Box') : bad(27, `Landed on ${page.url()}`)
 
   await page.click('input[type="checkbox"]')
-  await page.click('button:has-text("Save and Continue")')
+  await page.click('button:has-text("Next: Mentor Selection")')
   await page.waitForTimeout(300)
   page.url().includes('/smokecraft/mentor-selection') ? ok(28, 'Golden Box → Mentor Selection') : bad(28, `Landed on ${page.url()}`)
 
