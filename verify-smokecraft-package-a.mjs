@@ -110,7 +110,7 @@ async function main() {
   }
   allNamesPresent ? ok(14, 'All real mentor names/bios from the project data module are present (no fabricated data)') : bad(14, 'One or more real mentor names missing')
 
-  const continueDisabled2 = await page.locator('button:has-text("Continue to Shape")').isDisabled()
+  const continueDisabled2 = await page.locator('button:has-text("Continue to Seed")').isDisabled()
   continueDisabled2 ? ok(15, 'Continue disabled with zero mentors selected') : bad(15, 'Continue enabled with no selection')
 
   const firstMentor = page.locator('button[aria-pressed]').first()
@@ -133,15 +133,15 @@ async function main() {
 
   await firstMentor.click()
   await page.waitForTimeout(150)
-  const continueEnabled2 = await page.locator('button:has-text("Continue to Shape")').isDisabled()
+  const continueEnabled2 = await page.locator('button:has-text("Continue to Seed")').isDisabled()
   continueEnabled2 === false ? ok(19, 'Continue enables once a mentor is selected') : bad(19, 'Continue stayed disabled with a valid selection')
 
   const stepsBeforeMentorContinue = await page.evaluate(() => JSON.parse(localStorage.getItem('novee_guest_session') || '{}').completedSteps || [])
   !stepsBeforeMentorContinue.includes('mentor') ? ok(20, 'No reward awarded merely for selecting (before Continue)') : bad(20, 'Reward awarded before Continue pressed')
 
-  await page.click('button:has-text("Continue to Shape")')
+  await page.click('button:has-text("Continue to Seed")')
   await page.waitForTimeout(300)
-  page.url().includes('/smokecraft/format') ? ok(21, 'Mentor Selection Continue routes to /smokecraft/format') : bad(21, `Landed on ${page.url()}`)
+  page.url().includes('/smokecraft/seed-soil') ? ok(21, 'Mentor Selection Continue routes to /smokecraft/seed-soil') : bad(21, `Landed on ${page.url()}`)
 
   await page.reload()
   await page.waitForTimeout(400)
@@ -184,9 +184,9 @@ async function main() {
 
   await page.locator('button[aria-pressed]').first().click()
   await page.waitForTimeout(150)
-  await page.click('button:has-text("Continue to Shape")')
+  await page.click('button:has-text("Continue to Seed")')
   await page.waitForTimeout(300)
-  page.url().includes('/smokecraft/format') ? ok(29, 'Mentor Selection → /smokecraft/format (first Package B route)') : bad(29, `Landed on ${page.url()}`)
+  page.url().includes('/smokecraft/seed-soil') ? ok(29, 'Mentor Selection → /smokecraft/seed-soil (first Package B route, corrected)') : bad(29, `Landed on ${page.url()}`)
 
   // Returning-guest resume behavior
   await seedGuest(page, { completedSteps: ['entry', 'enroll'], journeyPatch: { selectedVenue: { name: 'Test Venue' } } })

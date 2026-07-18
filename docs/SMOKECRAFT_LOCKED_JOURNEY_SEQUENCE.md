@@ -80,5 +80,6 @@ All 27 sessions explicitly mapped above, as required.
 3. **Orphaned educational stand-ins** (`Origins`, `Curation`, `Leaves`, `LeafChallenge*`, `Cultivation`, `Blend`, `FlavorDNA`, `Pairing`, `Available`, `Assistant`, `PairingMastery`, `Vitola`) — reachable by direct URL, not linked from any current journey screen, all static screenshots. Recommend "removal-after-verification" per the prior audit, not resolved here.
 4. **Resume/Venue Selection placement** — already correctly placed at E5/E3 per `ENTRY_LAYER_SCREENS`; router guards match. No conflict found.
 5. **Golden Box / Mentor Selection placement** — both correctly modeled as `SUPPORTING_MODULES` reachable from S1 (`requires: 'entry'`), not part of the numbered spine. No conflict found.
+6. **RESOLVED — Mentor Selection's hardcoded next-hop.** This document's original audit did not catch that `Mentor.jsx` hardcoded `navigate('/smokecraft/format')`, skipping S2–S4 and Seed & Soil entirely. Corrected in `docs/SMOKECRAFT_AUTHORITATIVE_ROUTE_GRAPH.md` — Mentor now routes to `/smokecraft/seed-soil` (newly registered in `SUPPORTING_MODULES`, `requires: 'mentor'`). Session numbers/`VISIT_STRUCTURE` were **not** renumbered — only the ordered route/prerequisite graph changed. See that document for the full trace.
 
 **Nothing was deleted during this phase.**

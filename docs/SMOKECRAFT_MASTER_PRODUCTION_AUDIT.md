@@ -115,4 +115,8 @@ Not independently re-verified per-route in this pass (would require opening and 
 
 ---
 
+## Addendum — Package A → B handoff correction
+
+A post-completion trace found Mentor Selection hardcoded a jump straight to `/smokecraft/format` (S5), skipping Seed & Soil, Humidor Match, Meet Your Cigar, and Terroir. This was **not** evidence of a second stale "8-visit/24-session" system in the live render path — every component in the actual render chain (`LockedSmokeCraftScreen.jsx`, `smokecraftJourney.js`) correctly reads `TOTAL_VISITS=6`/`TOTAL_SESSIONS=27`. The literal "8-visit/24-session" strings exist only in orphaned modules (`smokecraftJourneyContract.js`, `VisitLockGuard.jsx`) that are imported in `App.jsx` but never mounted on any route — confirmed dead code, not a live defect. Full trace and fix in `docs/SMOKECRAFT_AUTHORITATIVE_ROUTE_GRAPH.md`.
+
 **SMOKECRAFT MASTER RECOVERY AUDIT COMPLETE**

@@ -91,4 +91,4 @@ Legend — **Status**: `DONE` (verified, approved-image-preserving live rebuild)
 
 Package A is **partially complete** (5 of 7 routes done). Remaining Package A work (Golden Box, Mentor Selection) must finish and be verified before Package B begins, per the "do not start Package B until Package A is fully verified" rule.
 
-**No implementation work has started on Packages B–G. This document is planning only.**
+**No visual/UI implementation work has started on Packages B–G.** A navigation-only correction (Package A → B handoff) was applied post-Package-A-completion — see `docs/SMOKECRAFT_AUTHORITATIVE_ROUTE_GRAPH.md`. Mentor Selection's hardcoded `navigate('/smokecraft/format')` (which skipped Seed & Soil, Humidor Match, Meet Your Cigar, and Terroir entirely) was corrected to route through the real sequence. No screen in Packages B–G had its visual composition, approved image, or UI rebuilt — only 3 screens' forward-navigation targets and 1 back-navigation target changed.

@@ -266,7 +266,19 @@ function loadFromStorage() {
   }
 
   // Consolidate any remaining shadow-key data into the canonical record (idempotent).
-  const migrated = migrateLegacyKeys(state)
+  let migrated = migrateLegacyKeys(state)
+
+  // Authoritative journey graph correction: Mentor Selection used to route
+  // directly to /smokecraft/format, so guests who completed Mentor before
+  // this fix may have a stale resumeRoute pointing there. Format's own
+  // guard (sessionNumber=5) already protects against actually landing mid-
+  // journey, but self-heal the resume target proactively so returning
+  // guests land on the real next step (Seed & Soil) instead of a locked
+  // screen. Idempotent — only rewrites when the stale condition is met.
+  if (migrated.resumeRoute === '/smokecraft/format' && !migrated.format) {
+    migrated = { ...migrated, resumeRoute: '/smokecraft/seed-soil' }
+  }
+
   if (migrated !== state) {
     saveToStorage(migrated)
   }

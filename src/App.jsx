@@ -375,7 +375,7 @@ export default function App() {
                 {/* Seed & Soil — supporting module. Package 0 eventually merges this
                     content into Terroir (S4) as a tab; that merge is a screen redesign,
                     explicitly out of scope for Package J, so the route remains standalone. */}
-                <Route path="seed-soil"        element={<SmokeCraftSessionGuard requires="format"><SeedSoil /></SmokeCraftSessionGuard>} />
+                <Route path="seed-soil"        element={<SmokeCraftSessionGuard requires="mentor"><SeedSoil /></SmokeCraftSessionGuard>} />
 
                 {/* S6 — cut-toast-light (Choose Your Cut) */}
                 <Route path="cut-toast-light"  element={<SmokeCraftSessionGuard sessionNumber={6}><CutToastLight /></SmokeCraftSessionGuard>} />

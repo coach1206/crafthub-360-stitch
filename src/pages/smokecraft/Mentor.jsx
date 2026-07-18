@@ -109,7 +109,7 @@ export default function Mentor() {
     if (selected.length === 0) return
     triggerHaptic('medium')
     awardSessionRewards('mentor')
-    navigate('/smokecraft/format')
+    navigate('/smokecraft/seed-soil')
   }
 
   return (
@@ -163,7 +163,7 @@ export default function Mentor() {
       </main>
 
       <SmokeCraftNavBar
-        primary="Continue to Shape, Size & Burn →"
+        primary="Continue to Seed & Soil →"
         onPrimary={handleContinue}
         primaryDisabled={selected.length === 0}
         secondary="← Back"

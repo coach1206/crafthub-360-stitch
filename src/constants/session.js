@@ -187,6 +187,10 @@ export const VISIT_STRUCTURE = [
 export const SUPPORTING_MODULES = [
   { id: 'golden-box',            route: '/smokecraft/golden-box',            label: 'Gold Box Rules',            requires: 'entry' },
   { id: 'mentor',                route: '/smokecraft/mentor-selection',      label: 'Mentor Selection',          requires: 'entry' },
+  // Authoritative journey graph correction: Seed & Soil is the real next
+  // step after Mentor Selection (not immediately after Format). Registered
+  // here so KNOWN_ROUTES (Resume's self-heal validator) recognizes it.
+  { id: 'seed-soil',             route: '/smokecraft/seed-soil',             label: 'Seed & Soil',               requires: 'mentor' },
   { id: 'wrapper-strength',      route: '/smokecraft/wrapper-strength',      label: 'Wrapper / Strength Education', requires: 'format' },
   { id: 'request-purchase',      route: '/smokecraft/request-purchase',      label: 'Request / Purchase',        requires: 'humidor-match' },
   { id: 'smokecraft-challenge',  route: '/smokecraft/smokecraft-challenge',  label: 'SmokeCraft Challenge',      requires: 'scorecard' },

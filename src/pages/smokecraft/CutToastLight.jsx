@@ -181,7 +181,7 @@ export default function CutToastLight() {
         onPrimary={handleContinue}
         primaryDisabled={!cutMethod}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/format')}
+        onSecondary={() => navigate('/smokecraft/request-purchase')}
       />
     </>
   )

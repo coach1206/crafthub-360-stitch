@@ -54,7 +54,7 @@ export default function SeedSoil() {
 
   function handleContinue() {
     awardSessionRewards('seed-soil')
-    navigate('/smokecraft/pairing-lab')
+    navigate('/smokecraft/humidor-match')
   }
 
   return (
@@ -140,7 +140,7 @@ export default function SeedSoil() {
       </SmokeCraftImageBoundsOverlay>
 
       <SmokeCraftNavBar
-        primary="Continue to Pairing Lab →"
+        primary="Continue to Humidor Match →"
         onPrimary={handleContinue}
         secondary="← Back"
         onSecondary={() => navigate(-1)}

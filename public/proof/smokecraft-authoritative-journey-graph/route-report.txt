@@ -1,0 +1,75 @@
+SmokeCraft 360 — Authoritative Journey Graph Correction — Route Report
+
+01-identity.png
+  route: /smokecraft/identity
+  previous: /smokecraft/venue-select
+  next: /smokecraft/golden-box
+  approved asset: SC_ASSETS.identity (IDENTY.png, bounded crop)
+  state written: journey.identity, novee_guest_session.completedSteps += 'enroll'
+  reward action: awardSessionRewards('enroll') on Begin My Journey
+
+02-golden-box.png
+  route: /smokecraft/golden-box
+  previous: /smokecraft/identity
+  next: /smokecraft/mentor-selection
+  approved asset: SC_ASSETS.goldenBox (GOLDEN BOX RULES.png, full composite, live-neutralized zones)
+  state written: journey.goldenBox.acknowledged
+  reward action: awardSessionRewards('golden-box') on Continue
+
+03-mentor-selection.png
+  route: /smokecraft/mentor-selection
+  previous: /smokecraft/golden-box
+  next: /smokecraft/seed-soil  (CORRECTED — was /smokecraft/format)
+  approved asset: individual approved mentor portraits (public/mentors/*.jpg) + smokeCraftMentors.js data
+  state written: journey.mentor
+  reward action: awardSessionRewards('mentor') on Continue
+
+04-seed-soil.png
+  route: /smokecraft/seed-soil
+  previous: /smokecraft/mentor-selection  (CORRECTED — guard was requires="format", now requires="mentor")
+  next: /smokecraft/humidor-match  (CORRECTED — was /smokecraft/pairing-lab)
+  approved asset: SC_ASSETS.seedSoil (SEED & SOIL.png)
+  state written: journey.seedSoil
+  reward action: awardSessionRewards('seed-soil') on Continue
+
+05-humidor-match.png
+  route: /smokecraft/humidor-match (S2)
+  previous: /smokecraft/seed-soil
+  next: /smokecraft/meet-your-cigar (unchanged, already correct)
+  approved asset: SC_ASSETS.humidorMatch (Humidor Match 1.png)
+  state written: journey.selectedCigar
+  reward action: awardSessionRewards('humidor-match') on Continue
+
+06-meet-your-cigar.png
+  route: /smokecraft/meet-your-cigar (S3)
+  previous: /smokecraft/humidor-match
+  next: /smokecraft/terroir (unchanged, already correct)
+  approved asset: SC_ASSETS.meetYourCigar (DISOVER YOUR CIGAR PROFILE.png)
+
+07-terroir.png
+  route: /smokecraft/terroir (S4)
+  previous: /smokecraft/meet-your-cigar
+  next: /smokecraft/format (unchanged, already correct)
+  approved asset: SC_ASSETS.terroir (smokecraft-terroir.png)
+
+08-format.png
+  route: /smokecraft/format (S5)
+  previous: /smokecraft/terroir
+  next: /smokecraft/request-purchase  (CORRECTED — was /smokecraft/cut-toast-light)
+  approved asset: SC_ASSETS.format (smokecraft-vitola.png)
+  state written: journey.format
+  reward action: awardSessionRewards('format') + awardSessionRewards('wrapper-strength') on Continue
+
+09-request-purchase.png
+  route: /smokecraft/request-purchase
+  previous: /smokecraft/format
+  next: /smokecraft/cut-toast-light (unchanged, already correct)
+  approved asset: SC_ASSETS.requestPurchase (REQUEST PURCHASE.png)
+
+10-cut-toast-light.png
+  route: /smokecraft/cut-toast-light (S6)
+  previous: /smokecraft/request-purchase  (CORRECTED back-target — was /smokecraft/format directly)
+  next: /smokecraft/lighting-tutorial (unchanged, already correct)
+  approved asset: SC_ASSETS.cutToastLight (CUT  TOAST, & LIGHT.png)
+
+No image mappings changed on any route above — every screen keeps its pre-existing, already-verified approved GitHub asset. This was a navigation-only correction (forward/back targets + one guard prerequisite + one registry entry), confirmed by the asset-verification suite (62/62 passing, unchanged from before this correction).
