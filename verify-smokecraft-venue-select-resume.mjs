@@ -285,8 +285,7 @@ async function run() {
   console.log('\n── Suite 34: No dead end (full entry chain) ──')
   await seedGuest(page, { completedSteps: [], demoMode: true })
   await nav(page, '/smokecraft/enroll')
-  await page.click('button[aria-pressed]:has-text("Continue as Guest")')
-  await page.click('button:has-text("Continue →")')
+  await page.click('button[aria-label="Explore as Guest"]')
   await page.waitForTimeout(500)
   let chainOk = new URL(page.url()).pathname === '/smokecraft/venue-select'
   if (chainOk) {

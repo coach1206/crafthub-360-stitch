@@ -26,7 +26,9 @@ export const SC_ASSETS = {
   landing:             `${REF}/smokecraft-landing.png`,
 
   // S2 — Enroll / Identity
-  enroll:              `${CROPPED}/discover-profile-bg.jpg`,
+  // Enroll uses the approved full "Guest Pass" composition (Sign In / Guest
+  // Mode) rather than a plain background crop — see ENROLL DECISION.
+  enroll:              `${REF}/smokecraft-guest-pass.png`,
   identity:            `${RAW}/IDENTY.png`,
 
   // Entry layer — Resume/Start New Journey decorative header (visual-only

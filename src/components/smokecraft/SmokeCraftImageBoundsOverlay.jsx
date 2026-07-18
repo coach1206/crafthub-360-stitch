@@ -11,7 +11,7 @@ const NAV_BAR_HEIGHT = 80
  * Children receive a positioned <div> whose size exactly matches the rendered
  * image, so a child at `left:'10%', top:'20%'` maps to 10% / 20% of the image.
  */
-export default function SmokeCraftImageBoundsOverlay({ src, naturalW, naturalH, alt, children }) {
+export default function SmokeCraftImageBoundsOverlay({ src, naturalW, naturalH, alt, children, bottomOffset = NAV_BAR_HEIGHT }) {
   const containerRef = useRef(null)
   const [bounds, setBounds] = useState(null)
 
@@ -40,7 +40,7 @@ export default function SmokeCraftImageBoundsOverlay({ src, naturalW, naturalH, 
       style={{
         position: 'fixed',
         top: 0, left: 0, right: 0,
-        bottom: NAV_BAR_HEIGHT,
+        bottom: bottomOffset,
         background: '#050505',
         overflow: 'hidden',
       }}

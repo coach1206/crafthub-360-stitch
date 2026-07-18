@@ -54,8 +54,8 @@ async function main() {
   let body = await page.textContent('body')
   body.includes('Start Journey') ? ok(1, 'Fresh guest sees Start Journey (not Resume)') : bad(1, 'Start Journey label missing for fresh guest')
 
-  const heroCount = await page.locator('[role="img"][aria-label*="Guided Cigar Experience"]').count()
-  heroCount > 0 ? ok(2, 'Decorative header band renders as a bounded role=img element') : bad(2, 'Header band missing')
+  const heroCount = await page.locator('img[alt*="Guided Cigar Experience"]').count()
+  heroCount > 0 ? ok(2, 'Approved landing image renders as the full visual foundation') : bad(2, 'Approved landing image missing')
 
   const destButtons = ['How It Works', 'View Passport', 'View Pairing', 'Browse Humidor', 'Rankings', 'Enter Challenge']
   let allPresent = true
@@ -93,49 +93,49 @@ async function main() {
   overflow1 ? ok(10, 'No horizontal overflow on Launch (desktop)') : bad(10, 'Horizontal overflow on Launch')
 
   // ── ENROLL (/smokecraft/enroll) — Tests 11-20 ──────────────────────────
+  // Enroll now uses the approved Guest Pass composition (image) with live
+  // controls positioned over the baked CTA zones — see ENROLL DECISION.
   console.log('── Enroll (/smokecraft/enroll) ──')
   await seedGuest(page, { completedSteps: [] })
   await nav(page, '/smokecraft/enroll')
-  body = await page.textContent('body')
-  body.includes('27-session') ? ok(11, 'Stale "8-visit journey" copy replaced with 27-session language') : bad(11, '27-session copy not found')
-  !body.includes('8-visit') ? ok(12, 'No remaining "8-visit" copy') : bad(12, 'Stale 8-visit copy still present')
+  const guestPassImg = await page.locator('img[alt*="Guest Pass"]').count()
+  guestPassImg > 0 ? ok(11, 'Approved Guest Pass image renders as the full visual foundation') : bad(11, 'Approved Guest Pass image missing')
 
-  const guestPressed = await page.locator('button[aria-pressed]', { hasText: 'Continue as Guest' }).getAttribute('aria-pressed')
-  const signinPressed = await page.locator('button[aria-pressed]', { hasText: 'Sign In' }).getAttribute('aria-pressed')
-  if (guestPressed === 'false' && signinPressed === 'false') ok(13, 'No preselection between Guest/Sign In on fresh visit')
-  else bad(13, 'A choice was preselected')
+  const emailHiddenInitially = await page.locator('input[aria-label="Email address"]').count()
+  emailHiddenInitially === 0 ? ok(12, 'Email interface is not shown before activation is clicked') : bad(12, 'Email field shown before activation')
 
-  const continueDisabledInitially = await page.locator('button:has-text("Continue →")').isDisabled()
-  continueDisabledInitially ? ok(14, 'Continue disabled until a valid choice is made') : bad(14, 'Continue was enabled with no choice')
+  const activateBtn = page.locator('button[aria-label="Activate My Guest Pass"]')
+  const exploreBtn = page.locator('button[aria-label="Explore as Guest"]')
+  ;(await activateBtn.count()) > 0 && (await exploreBtn.count()) > 0
+    ? ok(13, 'Both approved CTA zones (Activate / Explore as Guest) are real buttons')
+    : bad(13, 'One or both approved CTA buttons missing')
 
-  await page.locator('button[aria-pressed]', { hasText: 'Continue as Guest' }).click()
+  const stepsBeforeView = await page.evaluate(() => JSON.parse(localStorage.getItem('novee_guest_session') || '{}').completedSteps || [])
+  !stepsBeforeView.includes('enroll') ? ok(14, 'No reward awarded merely for viewing Enroll') : bad(14, 'Reward awarded without a real action')
+
+  await activateBtn.click()
   await page.waitForTimeout(150)
-  const continueEnabledGuest = await page.locator('button:has-text("Continue →")').isDisabled()
-  continueEnabledGuest === false ? ok(15, 'Continue enables once Guest mode is selected') : bad(15, 'Continue still disabled after selecting Guest')
+  const emailInputVisible = await page.locator('input[aria-label="Email address"]').count()
+  emailInputVisible > 0 ? ok(15, 'Activating Guest Pass reveals the smallest inline email interface') : bad(15, 'Email field not shown after activation')
 
-  await nav(page, '/smokecraft/enroll')
-  await page.locator('button[aria-pressed]', { hasText: 'Sign In' }).click()
-  await page.waitForTimeout(150)
-  const emailInputVisible = await page.locator('#enroll-email').count()
-  emailInputVisible > 0 ? ok(16, 'Sign In reveals an email field reusing existing profile source') : bad(16, 'Email field not shown for Sign In')
+  const bakedCtaHiddenNow = await page.locator('button[aria-label="Activate My Guest Pass"]').count()
+  bakedCtaHiddenNow === 0 ? ok(16, 'Baked CTA zone is fully occluded once the email interface is shown (no duplicate text)') : bad(16, 'Baked CTA still present alongside email field')
 
-  const continueDisabledBadEmail = await page.locator('button:has-text("Continue →")').isDisabled()
-  continueDisabledBadEmail ? ok(17, 'Continue stays disabled with empty email under Sign In') : bad(17, 'Continue enabled with invalid Sign In state')
-
-  await page.fill('#enroll-email', 'not-an-email')
-  await page.locator('#enroll-email').blur()
+  const submitBtn = page.locator('button[aria-label="Confirm email and continue"]')
+  await page.fill('input[aria-label="Email address"]', 'not-an-email')
+  await page.locator('input[aria-label="Email address"]').blur()
+  await submitBtn.click()
   await page.waitForTimeout(150)
   const emailErr = await page.locator('[role="alert"]', { hasText: 'valid email' }).count()
-  emailErr > 0 ? ok(18, 'Invalid email is rejected with a validation message') : bad(18, 'Invalid email not rejected')
+  emailErr > 0 ? ok(17, 'Invalid email is rejected with a validation message') : bad(17, 'Invalid email not rejected')
+  page.url().includes('/smokecraft/enroll') ? ok(18, 'Invalid email does not advance the flow') : bad(18, `Advanced anyway to ${page.url()}`)
 
-  const stepsBefore = await page.evaluate(() => JSON.parse(localStorage.getItem('novee_guest_session') || '{}').completedSteps || [])
-  !stepsBefore.includes('enroll') ? ok(19, 'No reward awarded merely for viewing Enroll') : bad(19, 'Reward awarded without pressing Continue')
-
-  await page.fill('#enroll-email', 'guest@example.com')
-  await page.waitForTimeout(150)
-  await page.click('button:has-text("Continue →")')
+  await page.fill('input[aria-label="Email address"]', 'guest@example.com')
+  await submitBtn.click()
   await page.waitForTimeout(300)
-  page.url().includes('/smokecraft/venue-select') ? ok(20, 'Valid Sign In choice advances to Venue Select') : bad(20, `Landed on ${page.url()}`)
+  page.url().includes('/smokecraft/venue-select') ? ok(19, 'Valid email via Activate My Guest Pass advances to Venue Select') : bad(19, `Landed on ${page.url()}`)
+  const savedEmail = await page.evaluate(() => JSON.parse(localStorage.getItem('novee_guest_session') || '{}')?.profile?.email)
+  savedEmail === 'guest@example.com' ? ok(20, 'Email persisted via existing GuestSessionContext.updateProfile (no new auth system)') : bad(20, 'Email not persisted to guest profile')
 
   // ── RESUME (/smokecraft/resume) — Tests 21-27 (logic untouched, visual only) ─
   console.log('── Resume (/smokecraft/resume) ──')
@@ -180,8 +180,7 @@ async function main() {
   await page.waitForTimeout(300)
   page.url().includes('/smokecraft/enroll') ? ok(29, 'Full flow: Launch → Enroll') : bad(29, `Landed on ${page.url()}`)
 
-  await page.locator('button[aria-pressed]', { hasText: 'Continue as Guest' }).click()
-  await page.click('button:has-text("Continue →")')
+  await page.click('button[aria-label="Explore as Guest"]')
   await page.waitForTimeout(300)
   page.url().includes('/smokecraft/venue-select') ? ok(30, 'Full flow: Enroll → Venue Select') : bad(30, `Landed on ${page.url()}`)
 
