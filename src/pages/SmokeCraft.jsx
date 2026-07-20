@@ -4,6 +4,7 @@ import { triggerHaptic } from '../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../constants/smokecraftAssets.js'
 import { PRESERVED_COMPLETED_STEP_IDS } from './smokecraft/ResumeJourney.jsx'
+import { computeJourneyStatus } from '../constants/smokecraftJourneyStatus.js'
 
 const NAT_W = 1189
 const NAT_H = 667
@@ -31,6 +32,22 @@ function hasRealJourneyProgress() {
     const completedSteps = Array.isArray(s?.completedSteps) ? s.completedSteps : []
     return completedSteps.some(id => !PRESERVED_COMPLETED_STEP_IDS.includes(id))
   } catch { return false }
+}
+
+// Journey-visual-sequence-final pass — the landing CTA previously only knew
+// Start vs. Resume, so a guest whose journey was already 100% complete
+// still saw "Resume Journey →" (the exact reported "Landing page shows
+// RESUME JOURNEY when it should show START SMOKECRAFT 360" — for a
+// completed journey neither the old "Resume" nor a bare "Start" is
+// correct; it must offer to review the completed journey/start fresh).
+// Uses the same authoritative computeJourneyStatus() as ResumeJourney.jsx
+// so the two screens can never disagree.
+function getJourneyCompletionState() {
+  try {
+    const s = JSON.parse(localStorage.getItem('novee_guest_session') || 'null')
+    const completedSteps = Array.isArray(s?.completedSteps) ? s.completedSteps : []
+    return computeJourneyStatus(completedSteps)
+  } catch { return { isComplete: false, hasStarted: false } }
 }
 
 // Root-cause fix: this Launch screen previously computed its own private,
@@ -132,6 +149,8 @@ export default function SmokeCraft() {
   // "Resume Journey" must require real progress beyond Entry-layer state —
   // never shown merely because entryRoute happens to be the Resume screen.
   const [isReturning] = useState(() => entryRoute === '/smokecraft/resume' && hasRealJourneyProgress())
+  const [journeyState] = useState(getJourneyCompletionState)
+  const isCompleted = isReturning && journeyState.isComplete
 
   function go(to) {
     triggerHaptic('light')
@@ -140,6 +159,10 @@ export default function SmokeCraft() {
 
   function handleStart() {
     triggerHaptic('medium')
+    // A completed journey routes through Resume (same as in-progress) —
+    // ResumeJourney.jsx itself now shows the correct "Review Completed
+    // Journey" primary action once there, per the authoritative
+    // journeyComplete value it computes the same way this page does.
     navigate(entryRoute)
   }
 
@@ -153,7 +176,7 @@ export default function SmokeCraft() {
     >
       {/* Baked: START SMOKECRAFT button — dynamic label, must fully occlude baked text */}
       <PrimaryHotspot
-        label={isReturning ? 'Resume Journey →' : 'Start Journey →'}
+        label={isCompleted ? 'View Results →' : isReturning ? 'Resume Journey →' : 'Start Journey →'}
         onClick={handleStart}
         style={{ left: '3.4%', top: '56.4%', width: '21.5%', height: '6.4%' }}
       />

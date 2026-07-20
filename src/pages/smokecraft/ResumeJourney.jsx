@@ -8,8 +8,9 @@ import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftEntryHeaderBand from '../../components/smokecraft/SmokeCraftEntryHeaderBand.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
-import { VISIT_STRUCTURE, ENTRY_LAYER_SCREENS, SUPPORTING_MODULES, TOTAL_SESSIONS } from '../../constants/session.js'
+import { VISIT_STRUCTURE, ENTRY_LAYER_SCREENS, SUPPORTING_MODULES } from '../../constants/session.js'
 import { getSessionByKey } from '../../constants/smokecraftJourney.js'
+import { computeJourneyStatus } from '../../constants/smokecraftJourneyStatus.js'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -140,7 +141,13 @@ export default function ResumeJourney() {
 
   const completedSteps = session?.completedSteps || []
   const hasProgress = completedSteps.some(id => !PRESERVED_COMPLETED_STEP_IDS.includes(id))
-  const journeyComplete = completedSteps.includes('session-complete')
+  // Journey-visual-sequence-final pass — single authoritative source for
+  // completion + percentage, replacing two independently-computed values
+  // that could disagree (see smokecraftJourneyStatus.js for the full
+  // root-cause explanation).
+  const journeyStatus = useMemo(() => computeJourneyStatus(completedSteps), [completedSteps])
+  const journeyComplete = journeyStatus.isComplete
+  const completionPercent = journeyStatus.completionPercent
 
   const lastCompletedSession = useMemo(() => {
     let best = null
@@ -150,8 +157,6 @@ export default function ResumeJourney() {
     }
     return best
   }, [completedSteps])
-
-  const completionPercent = Math.round((completedSessions.length / TOTAL_SESSIONS) * 100)
   const lastSaved = formatTimestamp(journey.journeyUpdatedAt)
 
   function handleResume() {
@@ -350,9 +355,15 @@ export default function ResumeJourney() {
         </div>
       </main>
 
+      {/* Journey-visual-sequence-final pass — this bar previously always
+          showed "Resume Journey" as primary, even for a completed journey
+          (the exact "RESUME JOURNEY is also visible" alongside "Journey
+          Completed" contradiction reported live). Primary action now
+          follows the same authoritative journeyComplete value the page
+          body already uses. */}
       <SmokeCraftNavBar
-        primary="Resume Journey →"
-        onPrimary={handleResume}
+        primary={journeyComplete ? 'Review Completed Journey →' : 'Resume Journey →'}
+        onPrimary={journeyComplete ? handleReviewCompleted : handleResume}
         primaryDisabled={!hasProgress || confirmingReset}
         secondary="← Back"
         onSecondary={() => navigate('/smokecraft/identity')}
