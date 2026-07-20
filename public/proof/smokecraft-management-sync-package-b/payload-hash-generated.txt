@@ -1,0 +1,1 @@
+payload_hash computed server-side via SHA-256 of canonicalized JSON; identical resubmission returns duplicate:true with the SAME snapshotId rather than creating a new row. Verified: PASS.

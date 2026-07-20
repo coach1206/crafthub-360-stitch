@@ -1,0 +1,1 @@
+Sync event created once (COUNT=1 confirmed via direct DB query); page reload after sync does not create a second event. Verified: PASS.

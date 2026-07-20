@@ -1,0 +1,1 @@
+N/A -- no staff handoff destination exists, so no private-data-exclusion behavior to test; the honest NOT_CONFIGURED state itself never returns any guest data.

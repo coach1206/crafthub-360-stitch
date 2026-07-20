@@ -1,0 +1,35 @@
+SmokeCraft 360 — Full Approved Image Reconciliation — Route Report
+
+/crafthub — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:16 console-errors:0
+/smokecraft — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:8 console-errors:0
+/smokecraft/enroll — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:3 console-errors:0
+/smokecraft/venue-select — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:3 console-errors:0
+/smokecraft/identity — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:35 console-errors:0
+/smokecraft/golden-box — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:2 console-errors:0
+/smokecraft/mentor-selection — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:10 console-errors:0
+/smokecraft/seed-soil — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:10 console-errors:0
+/smokecraft/humidor-match — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/meet-your-cigar — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/terroir — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/format — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/request-purchase — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:9 console-errors:0
+/smokecraft/cut-toast-light — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/lighting-tutorial — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/first-third — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/flavor-memory — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/pairing-lab — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/second-third — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/mentor-commentary — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/knowledge-drop — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/final-third — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/scorecard — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/ai-summary — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/pairing-recommendations — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/passport-stamp — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/final-review — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/rewards — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/session-complete — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:1 console-errors:0
+/smokecraft/connections — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:9 console-errors:0
+/smokecraft/management-sync — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:2 console-errors:0
+/smokecraft/how-it-works — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:2 console-errors:0
+/smokecraft/leaderboard — stale-visit:false stale-session:false future-locked:false broken-img:0 overflow:false controls:13 console-errors:0

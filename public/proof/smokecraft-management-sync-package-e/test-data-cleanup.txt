@@ -1,0 +1,1 @@
+All Package E seeded rows (test venues, users, memberships) were deleted by the suite itself; confirmed 0 remaining rows for any pkg-e-* identifier via direct query.

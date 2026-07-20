@@ -1,0 +1,1 @@
+POST /journeys/:id/sync {destination:'pos_360'} -> 400 (not yet a supported integration). Verified: PASS.

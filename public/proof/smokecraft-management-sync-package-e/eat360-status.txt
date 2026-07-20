@@ -1,0 +1,1 @@
+eat_360.state = COMING_SOON. smokecraftEatSyncBridgeService.js re-confirmed this package (already established earlier this session) as a deliberate, self-documented non-functional preview stub (connected:false hardcoded).

@@ -1,0 +1,1 @@
+Manual review: Sync/Retry buttons are real <button> elements; Analytics page inputs use aria-label; no color-only status indicators (all states also carry distinct text). Full automated tooling audit not run (none installed in repo) -- disclosed limitation.

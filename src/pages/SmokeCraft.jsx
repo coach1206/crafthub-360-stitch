@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../constants/smokecraftAssets.js'
+import { PRESERVED_COMPLETED_STEP_IDS } from './smokecraft/ResumeJourney.jsx'
 
 const NAT_W = 1189
 const NAT_H = 667
@@ -13,6 +14,22 @@ function guestStepDone(stepId) {
   try {
     const s = JSON.parse(localStorage.getItem('novee_guest_session') || 'null')
     return Array.isArray(s?.completedSteps) && s.completedSteps.includes(stepId)
+  } catch { return false }
+}
+
+// Root-cause fix: the Landing CTA previously labeled itself "Resume Journey"
+// merely because the visitor had completed Entry-layer state (enroll +
+// venue selection) — i.e. whenever getEntryRoute() below would hand off to
+// /smokecraft/resume. That is not real resumable progress; it only means
+// the visitor is ready to see the Resume/Start-New decision screen. The one
+// canonical definition of "real journey progress" already exists on that
+// screen (ResumeJourney.jsx's hasProgress check) — reused here verbatim so
+// the two screens can never disagree about what counts as resumable.
+function hasRealJourneyProgress() {
+  try {
+    const s = JSON.parse(localStorage.getItem('novee_guest_session') || 'null')
+    const completedSteps = Array.isArray(s?.completedSteps) ? s.completedSteps : []
+    return completedSteps.some(id => !PRESERVED_COMPLETED_STEP_IDS.includes(id))
   } catch { return false }
 }
 
@@ -112,7 +129,9 @@ function StaticHotspot({ label, onClick, style, shape = 'rect' }) {
 export default function SmokeCraft() {
   const navigate = useNavigate()
   const [entryRoute] = useState(getEntryRoute)
-  const isReturning = entryRoute === '/smokecraft/resume'
+  // "Resume Journey" must require real progress beyond Entry-layer state —
+  // never shown merely because entryRoute happens to be the Resume screen.
+  const [isReturning] = useState(() => entryRoute === '/smokecraft/resume' && hasRealJourneyProgress())
 
   function go(to) {
     triggerHaptic('light')

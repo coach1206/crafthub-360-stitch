@@ -1,0 +1,24 @@
+SmokeCraft Ticket Tapper — Focused Integration Route Scope
+=============================================================
+
+SHOW (full mode, unchanged presentation):
+  - /smokecraft/venue-commerce (and aliases /smokecraft/order,
+    /smokecraft/ticket-tapper/staff-specials)
+
+SHOW COMPACT (new this package):
+  - /smokecraft/venue-select
+  - /smokecraft/session-complete
+
+HIDE (unchanged this package — no Ticket Tapper code added):
+  - All 30 remaining full-bleed SmokeCraft journey routes, including but
+    not limited to: golden-box, mentor-selection, seed-soil,
+    humidor-match, meet-your-cigar, terroir, format, request-purchase,
+    cut-toast-light, lighting-tutorial, first-third, flavor-memory,
+    pairing-lab, second-third, mentor-commentary, knowledge-drop,
+    final-third, scorecard, ai-summary, pairing-recommendations,
+    passport-stamp, final-review, rewards, achievements, connections,
+    management-sync (explicitly excluded per instruction).
+
+Verified by verify-smokecraft-ticket-tapper-focused-integration.mjs,
+check "Ticket Tapper absent from Pairing Lab (full-bleed journey route)"
+(sampled route, representative of the 30-route class).

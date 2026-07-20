@@ -11,8 +11,13 @@ const NAT_W = 1672
 const NAT_H = 941
 
 const GOLD = '#E9C176'
+// Root-cause fix: this panel sits over a baked "Live Control" panel already
+// drawn into the approved image. A non-opaque background (previously
+// rgba(5,5,5,0.92)) let ~8% of the baked pixels bleed through, producing a
+// ghosted double-text effect. Must be fully opaque — same class of bug
+// found and fixed on Golden Box's masks earlier this session.
 const PANEL = {
-  background: 'rgba(5,5,5,0.92)',
+  background: '#050505',
   border: '1px solid rgba(233,193,118,0.28)',
   borderRadius: 8,
   position: 'absolute',

@@ -1,0 +1,1 @@
+GET /journeys/:id by the owning guest returns the journey (resume path uses the same GET endpoint). Verified: PASS.

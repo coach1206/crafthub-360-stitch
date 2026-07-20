@@ -1,0 +1,1 @@
+All rows created by both the Package B proof-gap suite and the Package C browser suite (test venues, journeys, snapshots, events, actions, venue_memberships, system_users) were deleted by the suites themselves; confirmed 0 remaining rows for all pkg-c-* / pkg-b-* prefixed test identifiers.

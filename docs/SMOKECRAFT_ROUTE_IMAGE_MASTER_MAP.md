@@ -45,3 +45,13 @@ Every active SmokeCraft route, its current registered asset, correctness of that
 | `/smokecraft/menu` | SmokeCraftMenu.jsx | Commerce | (commerce asset) | N/A | Static image + overlay | Out of educational-journey scope | Out of scope |
 
 No route currently uses the **wrong** approved image or a **generic replacement layout** — the only two routes previously at risk of that (Launch, Enroll) were corrected this session and are now verified against their approved source assets.
+
+## Full reconciliation confirmation (later pass)
+
+A dedicated, evidence-based reconciliation pass re-verified this table
+against the specific failure modes named in a later package (stale
+visit/session text, wrong-route image reuse, Future Visit Locked
+mispositioning) — see `docs/SMOKECRAFT_FULL_APPROVED_IMAGE_RECONCILIATION.md`
+for the full per-route table and grep/registry-consistency evidence. Result:
+33/33 active routes confirmed KEEP, no new defects found, no source file
+modified as a result.

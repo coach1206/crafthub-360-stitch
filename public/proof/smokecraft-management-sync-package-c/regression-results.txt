@@ -1,0 +1,160 @@
+PASS — Migration 074 recorded exactly once
+PASS — Valid venue-scoped journey inserted
+PASS — Invalid venue_id rejected (FK violation)
+PASS — Valid snapshot inserted
+PASS — Duplicate snapshot version rejected (unique violation)
+PASS — Valid Management Sync event inserted
+PASS — Duplicate idempotency combination (venue_id, journey_id, destination, payload_version) rejected
+PASS — Valid management action inserted
+PASS — Invalid action_status rejected (check violation)
+PASS — Missing required venue_id rejected (not-null violation)
+PASS — Journey delete cascades to snapshots (ON DELETE CASCADE)
+PASS — Journey delete cascades to events (ON DELETE CASCADE)
+PASS — Journey delete sets action.journey_id to NULL (ON DELETE SET NULL)
+PASS — Invalid JSONB input rejected naturally by Postgres
+PASS — No test data left behind in journeys table
+PASS — Test venue removed
+
+16/16 passed
+=== Package B suite ===
+FAIL — Guest identity can be issued
+FAIL — Guest cookie is HTTP-only
+PASS — Invalid guest token rejected
+PASS — Expired guest token rejected
+Unexpected error: TypeError: Cannot read properties of null (reading 'value')
+    at file:///home/user/crafthub-360-stitch/verify-smokecraft-management-sync-package-b.mjs:65:69
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+
+2/5 passed
+PASS — Guest identity can be issued
+PASS — Guest cookie is HTTP-only
+PASS — Invalid guest token rejected
+PASS — Expired guest token rejected
+PASS — Valid venue accepted (journey created)
+PASS — Unknown venue rejected
+PASS — Inactive venue rejected
+PASS — Guest can retrieve their own journey
+PASS — Client-supplied guestReference rejected by validation
+PASS — Cross-guest access denied
+PASS — Valid snapshot creation succeeds
+PASS — Server controls snapshot version (starts at 1)
+PASS — Duplicate identical snapshot payload handled safely (no new version)
+PASS — Journey completion succeeds
+PASS — Repeated completion is idempotent
+PASS — Valid sync request creates one event
+PASS — Repeated identical sync returns existing event (idempotent)
+PASS — Simultaneous duplicate sync requests create exactly one event
+PASS — Unsupported destination (pos_360) rejected
+PASS — GET status does not create a sync (only pre-existing events returned)
+PASS — Invalid action type rejected
+PASS — Oversized payload rejected
+PASS — Prototype-pollution payload rejected
+PASS — Audit events created for Management Sync actions
+PASS — Package A idempotency constraint remains intact
+PASS — No test data left behind
+
+26/26 passed
+PASS — User A journey created (setup)
+PASS — Real cross-user HTTP denial: User B cannot GET User A journey
+PASS — Real cross-user HTTP denial: User B resume attempt denied
+PASS — Real cross-user HTTP denial: User B cannot snapshot User A journey
+PASS — Real cross-user HTTP denial: User B cannot complete User A journey
+PASS — Real cross-user HTTP denial: User B cannot sync User A journey
+PASS — Real cross-user HTTP denial: User B cannot list User A sync status
+PASS — Real cross-venue HTTP denial: Venue A manager cannot create Venue B action
+PASS — Real cross-venue HTTP denial: Venue A manager cannot list Venue B actions
+PASS — Valid same-venue access succeeds (Venue A manager on Venue A)
+PASS — Valid same-user access succeeds (User A reads own journey)
+PASS — Forced rollback test: real failure occurred (FK violation) before COMMIT
+PASS — Forced rollback: no partial journey record persisted
+PASS — Forced rollback: no partial snapshot record persisted
+PASS — Forced rollback: unrelated tables (venues) remain untouched
+PASS — All seeded test data removed
+
+16/16 passed
+PASS — Guest session initializes on Management Sync mount
+PASS — Guest session establishment is idempotent per browser session (server does not re-issue a new guest identity for an already-valid cookie)
+PASS — Guest token never appears in localStorage
+PASS — Guest token never appears in sessionStorage
+PASS — Guest cookie present and HttpOnly (not readable by document.cookie)
+PASS — Sync control visible for a real selected venue
+PASS — Explicit sync action creates exactly one server journey
+PASS — UI shows "Synced to venue" confirmation after real server round-trip
+PASS — No duplicate journey after sync completes (button hidden post-success)
+PASS — Exactly one snapshot created for the completed journey
+PASS — Journey completed exactly once on the server
+PASS — No sync event created merely by page load/reload
+PASS — Exactly one sync event exists for this journey (explicit action only)
+PASS — No sync control shown without a real selected venue (honest no-venue state)
+PASS — No venue-scoped API call made without a real venue
+PASS — Real local journey field (cigar name) renders
+PASS — Honest aggregate-unavailable disclosure still present (no fabricated venue analytics)
+PASS — Approved Management Sync background image still requested (composition intact)
+PASS — No horizontal overflow at 1280x800
+PASS — No horizontal overflow at 1366x1024
+PASS — No horizontal overflow at 1440x900
+PASS — No horizontal overflow at 1920x1080
+PASS — Test data fully removed
+
+23/23 passed
+=== verify-smokecraft-ticket-tapper-focused-integration.mjs ===
+PASS — Ticket Tapper absent from Pairing Lab (full-bleed journey route)
+PASS — Session Complete: compact Ticket Tapper section present
+PASS — Session Complete: no page-level horizontal overflow
+PASS — No TicketTicker.jsx import/usage in touched files
+
+8/8 passed
+=== verify-smokecraft-full-approved-image-reconciliation.mjs ===
+  ✓ /smokecraft/management-sync
+  ✓ /smokecraft/how-it-works
+  ✓ /smokecraft/leaderboard
+
+───────────────────────────────────────────────────
+Result: 33 passed, 0 failed
+=== verify-crafthub-approved-image.mjs ===
+  ✓ 19. Keyboard focus works (Tab moves focus to a real control)
+  ✓ 18. Nested refresh works (page still renders after reload)
+  ✓ 21. No console errors caused by this package
+
+───────────────────────────────────────────────────
+Result: 21 passed, 1 failed
+=== verify-smokecraft-start-journey-crafthub-mvp2.mjs ===
+  ✓ Passport Connections works from CraftHub
+  ✓ Back to NOVEE OS works
+  ✓ No broken images on /crafthub
+
+───────────────────────────────────────────────────
+Result: 18 passed, 0 failed
+=== verify-smokecraft-authoritative-sequence.mjs ===
+    at main (/home/user/crafthub-360-stitch/verify-smokecraft-authoritative-sequence.mjs:107:9) {
+  log: [
+    '  - navigating to "http://localhost:5000/smokecraft/mentor-selection", waiting until "load"'
+  ],
+  name: 'TimeoutError'
+}
+=== verify-all-smokecraft-assets.mjs ===
+=== re-run: verify-crafthub-approved-image.mjs (preview server) ===
+── Touch targets / focus / refresh ──
+  ✓ 20. Touch targets meet minimum size (module cards/banners ≥44px tall)
+  ✓ 19. Keyboard focus works (Tab moves focus to a real control)
+  ✓ 18. Nested refresh works (page still renders after reload)
+  ✓ 21. No console errors caused by this package
+
+───────────────────────────────────────────────────
+Result: 22 passed, 0 failed
+=== re-run: verify-smokecraft-authoritative-sequence.mjs (preview server) ===
+  ✓ [16-tablet10-1280x800] All 8 mentor cards present at tablet10-1280x800
+  ✓ [16-tablet12-1366x1024] All 8 mentor cards present at tablet12-1366x1024
+  ✓ [16-touch15-1920x1080] All 8 mentor cards present at touch15-1920x1080
+── Sequential proof ──
+  ✓ [proof] Sequential screenshots captured
+
+──────────────────────────────────────────────────
+Result: 20 passed, 0 failed
+=== re-run: verify-all-smokecraft-assets.mjs (preview server) ===
+✅ Event Challenge: image present in DOM
+✅ How It Works: required image requested — /assets/smokecraft-reference/approved/smokecraft-how-it-works.png
+✅ How It Works: image present in DOM
+
+62 checks: 62 passed, 0 failed
+PASS: All asset checks passed

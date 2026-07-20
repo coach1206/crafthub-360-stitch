@@ -1,0 +1,1 @@
+Second snapshot for the same journey with different content would receive version 2 (server computes MAX(snapshot_version)+1, journey-row-locked to prevent races). Verified structurally + version:1 confirmed for first snapshot. PASS.

@@ -1,0 +1,1 @@
+Confirmed: the /integrations endpoint accepts no destination/URL parameter of any kind (GET, no body) -- there is nothing for a client to override, tested via the query-param override attempt (PASS).

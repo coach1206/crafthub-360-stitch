@@ -1,0 +1,1 @@
+See regression-results.txt (Package B proof-gap suite section): Venue A manager receives 403 venue_membership_required attempting to create or list Venue B actions; same manager succeeds (201/200) on Venue A. All PASS.

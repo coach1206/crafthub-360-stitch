@@ -1,0 +1,1 @@
+See regression-results.txt: analytics response JSON scanned for the guest_reference pattern (guest-xxxxxx) used by the test's own seeded data -- zero matches. PASS.

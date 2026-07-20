@@ -126,7 +126,7 @@ export default function SecondThird() {
         {/* Notes panel */}
         <div style={{
           position: 'absolute', left: '3%', top: '80%', width: '94%', height: '16%',
-          background: 'rgba(5,5,5,0.88)', border: '1px solid rgba(233,193,118,0.22)',
+          background: '#050505', border: '1px solid rgba(233,193,118,0.22)', // was rgba(...,0.88), fixed
           borderRadius: 5, boxSizing: 'border-box',
           padding: 'clamp(4px,0.7vw,8px) clamp(6px,0.9vw,12px)',
           display: 'flex', flexDirection: 'column', gap: 3, pointerEvents: 'auto', zIndex: 3,

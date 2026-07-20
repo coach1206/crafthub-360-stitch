@@ -1,0 +1,7 @@
+No production-referenced asset was found outside the documented folder
+policy (public/assets/smokecraft/, /cropped/, /smokecraft-reference/approved/,
+or the flat public/assets/ root for CraftHub).
+One organizational recommendation (not required, not done): CraftHub's
+asset could move to public/assets/crafthub/ to match the per-module
+convention used by SmokeCraft -- see docs/CRAFT360_ASSET_DUPLICATE_ANALYSIS.md
+Part 6. Not moved this pass.

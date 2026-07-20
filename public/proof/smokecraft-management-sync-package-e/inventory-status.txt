@@ -1,0 +1,1 @@
+inventory.state = NOT_CONFIGURED, confirmed by code search: no cigar-humidor inventory table/API exists (ticket_tapper_inventory is a different domain -- specials/menu inventory, not cigar-humidor).

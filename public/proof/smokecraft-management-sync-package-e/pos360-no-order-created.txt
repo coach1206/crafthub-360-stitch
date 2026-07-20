@@ -1,0 +1,1 @@
+Confirmed by code review: zero POS360 order-creation calls exist anywhere in Management Sync's code (Packages A-E).

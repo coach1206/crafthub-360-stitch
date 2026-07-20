@@ -1,0 +1,1 @@
+GET /journeys/:id/sync/status does not INSERT (read-only query, confirmed by code review of getSyncStatus()); page.reload() after a completed sync produces zero new rows in smokecraft_management_sync_events (verified live in the Package C test suite).

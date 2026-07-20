@@ -1,0 +1,1 @@
+guest-session established via POST /api/smokecraft/management-sync/guest-session on Management Sync mount; HttpOnly cookie confirmed set (value redacted).

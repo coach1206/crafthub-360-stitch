@@ -1,0 +1,1 @@
+passport_360.state = INTERNAL_ONLY, verified by a real SELECT against passport_360_guest_profiles confirming the table exists and is reachable, while explicitly not claiming a write path exists (none was built, since SmokeCraft's guest_reference is not confirmed mapped to Passport's guest_id).

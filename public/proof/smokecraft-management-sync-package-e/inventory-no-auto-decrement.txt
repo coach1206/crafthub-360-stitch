@@ -1,0 +1,1 @@
+Confirmed by code review: no code path anywhere decrements any inventory table from a guest's SmokeCraft journey selection.

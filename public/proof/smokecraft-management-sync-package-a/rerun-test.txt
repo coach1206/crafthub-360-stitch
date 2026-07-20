@@ -1,0 +1,19 @@
+
+> crafthub-360-production@1.0.0 db:migrate
+> node server/db/runMigrations.js
+
+[NOVEE OS DB] PostgreSQL connected ✓
+[runMigrations] Done. Applied: 0, Skipped: 73
+[runMigrations] Already applied (skipped): 73
+1
+=== re-run migration after rollback to confirm recreation ===
+
+> crafthub-360-production@1.0.0 db:migrate
+> node server/db/runMigrations.js
+
+[NOVEE OS DB] PostgreSQL connected ✓
+[runMigrations] Applied: 074_smokecraft_management_sync.sql
+[runMigrations] Done. Applied: 1, Skipped: 72
+[runMigrations] Applied migrations: 074_smokecraft_management_sync.sql
+[runMigrations] Already applied (skipped): 72
+4

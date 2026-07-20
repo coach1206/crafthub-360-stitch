@@ -1,0 +1,1 @@
+STALE state has no live code path to trigger honestly this pass (no integration currently produces STALE -- it's a defined, allowed state in the engine for future use, e.g. a cached health check older than a threshold, not yet implemented). Not fabricated for a screenshot.

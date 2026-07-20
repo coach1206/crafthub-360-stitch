@@ -1,0 +1,1 @@
+Confirmed: no payment/charge code exists anywhere in Management Sync's code.

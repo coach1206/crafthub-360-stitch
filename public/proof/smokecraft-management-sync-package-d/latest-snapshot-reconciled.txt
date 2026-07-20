@@ -1,0 +1,1 @@
+startOrResumeJourney's resume branch now calls getLatestSnapshot after confirming ownership and updates managementSync.snapshotVersion from the real server response (see src/hooks/useSmokeCraftServerJourney.js). Verified by code read; not separately browser-tested with two divergent local/server snapshot versions this pass.

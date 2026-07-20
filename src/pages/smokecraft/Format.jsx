@@ -11,8 +11,10 @@ const NAT_W = 1586
 const NAT_H = 992
 
 const GOLD = '#E9C176'
+// Root-cause fix: non-opaque background let baked image content
+// (including the header brand/session zone) bleed through.
 const PANEL = {
-  background: 'rgba(5,5,5,0.92)',
+  background: '#050505',
   border: '1px solid rgba(233,193,118,0.28)',
   borderRadius: 8,
   position: 'absolute',

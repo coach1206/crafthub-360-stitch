@@ -166,4 +166,33 @@ export const SC_ASSETS = {
   // Legacy aliases — kept for backward compat
   managementSyncRaw:   `${RAW}/MANAGEMENT%20SYNC.png`,
   sessionCompleteRaw:  `${RAW}/SESSION%20COMPLETE.png`,
+
+  // ── Package 7A image-integration pass — Golden Box production folder ──
+  // (2026-07-20 batch upload, normalized into public/assets/smokecraft/golden-box/)
+  goldenBoxChallenge:              `${RAW}/golden-box/golden-box-challenge.png`,
+  goldenBoxJudgingCriteria:        `${RAW}/golden-box/golden-box-judging-criteria.png`,
+  goldenBoxPairingDefense:         `${RAW}/golden-box/golden-box-pairing-defense.png`,
+  goldenBoxBlendRevisionRound:     `${RAW}/golden-box/golden-box-blend-revision-round.png`,
+  goldenBoxPresentationRevision:   `${RAW}/golden-box/golden-box-presentation-revision-round.png`,
+  goldenBoxMasterBlendingEducation:`${RAW}/golden-box/golden-box-master-blending-education.png`,
+  goldenBoxFinalJudgingRubric:     `${RAW}/golden-box/golden-box-final-judging-rubric.png`,
+  goldenBoxScoringRounds:          `${RAW}/golden-box/golden-box-scoring-rounds.png`,
+
+  // ── Phase 2 image integration — rolling-process step thumbnails ──
+  // (public/assets/smokecraft/leaf-construction/), wired into
+  // WrapperStrength.jsx's existing RollingProcess step list, keyed by the
+  // same real backend step_key values already used there.
+  rollingStepPrepareLeaves:      `${RAW}/leaf-construction/leaf-comparison.png`,
+  rollingStepArrangeFiller:      `${RAW}/leaf-construction/arrange-filler.png`,
+  rollingStepSelectBunching:     `${RAW}/leaf-construction/select-bunching-method.png`,
+  rollingStepApplyBinder:        `${RAW}/leaf-construction/apply-binder.png`,
+  rollingStepMoldOrPress:        `${RAW}/leaf-construction/mold-or-press.png`,
+  rollingStepApplyWrapper:       `${RAW}/leaf-construction/apply-wrapper.png`,
+  rollingStepConstructCap:       `${RAW}/leaf-construction/construct-cap.png`,
+  rollingStepFinishFoot:         `${RAW}/leaf-construction/finish-foot.png`,
+  rollingStepInspectAndDrawTest: `${RAW}/leaf-construction/inspect-and-draw-test.png`,
+  rollingStepRestAndBoxAge:      `${RAW}/leaf-construction/rest-and-box-age.png`,
+
+  // ── Phase 2 — Ring Gauge / Vitola dedicated screen art ──
+  ringGaugeGuide:                `${RAW}/session-visuals/RING%20GAUGE%20GUIDE.png`,
 }

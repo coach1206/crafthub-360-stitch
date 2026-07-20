@@ -102,6 +102,13 @@ import Enroll           from './pages/smokecraft/Enroll.jsx'
 import VenueSelect      from './pages/smokecraft/VenueSelect.jsx'
 import GoldenBox        from './pages/smokecraft/GoldenBox.jsx'
 import GoldenBoxStatus  from './pages/smokecraft/GoldenBoxStatus.jsx'
+const GoldenBoxHub = lazy(() => import('./pages/smokecraft/goldenBox/GoldenBoxHub.jsx'))
+const GoldenBoxCompetitionDetail = lazy(() => import('./pages/smokecraft/goldenBox/CompetitionDetail.jsx'))
+const GoldenBoxEntryWorkspace = lazy(() => import('./pages/smokecraft/goldenBox/EntryWorkspace.jsx'))
+const GoldenBoxResultsExperience = lazy(() => import('./pages/smokecraft/goldenBox/ResultsExperience.jsx'))
+const GoldenBoxJudgeDashboard = lazy(() => import('./pages/smokecraft/goldenBox/JudgeDashboard.jsx'))
+const GoldenBoxJudgeEntryReview = lazy(() => import('./pages/smokecraft/goldenBox/JudgeEntryReview.jsx'))
+const GoldenBoxMentorReview = lazy(() => import('./pages/smokecraft/goldenBox/MentorReview.jsx'))
 import Art              from './pages/smokecraft/Art.jsx'
 import Mentor           from './pages/smokecraft/Mentor.jsx'
 import Format           from './pages/smokecraft/Format.jsx'
@@ -144,6 +151,7 @@ import Scorecard        from './pages/smokecraft/Scorecard.jsx'
 import EventChallenge   from './pages/smokecraft/EventChallenge.jsx'
 import Connections      from './pages/smokecraft/Connections.jsx'
 import ManagementSync   from './pages/smokecraft/ManagementSync.jsx'
+import ManagementSyncAnalytics from './pages/smokecraft/ManagementSyncAnalytics.jsx'
 import WrapperStrength     from './pages/smokecraft/WrapperStrength.jsx'
 import CigarGaugeGuide     from './pages/smokecraft/CigarGaugeGuide.jsx'
 import PairingLab          from './pages/smokecraft/PairingLab.jsx'
@@ -205,6 +213,7 @@ const DevLogin     = lazy(() => import('./pages/DevLogin.jsx'))
 
 // ── Protected heavy pages — lazy loaded ──────────────────────
 const Admin          = lazy(() => import('./pages/Admin.jsx'))
+const VenueManagementCommandHub = lazy(() => import('./pages/venueManagement/VenueManagementCommandHub.jsx'))
 const FounderControl = lazy(() => import('./pages/FounderControl.jsx'))
 const MentorConsole  = lazy(() => import('./pages/MentorConsole.jsx'))
 const DevDiagnostics = lazy(() => import('./pages/DevDiagnostics.jsx'))
@@ -342,6 +351,17 @@ export default function App() {
                 <Route path="golden-box">
                   <Route index             element={<SmokeCraftSessionGuard requires="entry"><GoldenBox /></SmokeCraftSessionGuard>} />
                   <Route path="status"     element={<GoldenBoxStatus />} />
+                  {/* Package 2 — live Golden Box competition flow (Package 1's
+                      real backend). No route-level session guard: the server
+                      itself enforces identity/eligibility/ownership on every
+                      call, matching the ManagementSyncAnalytics pattern. */}
+                  <Route path="competitions" element={<GoldenBoxHub />} />
+                  <Route path="competitions/:competitionId" element={<GoldenBoxCompetitionDetail />} />
+                  <Route path="entries/:entryId/blend" element={<GoldenBoxEntryWorkspace />} />
+                  <Route path="results/:competitionId" element={<GoldenBoxResultsExperience />} />
+                  <Route path="judge" element={<GoldenBoxJudgeDashboard />} />
+                  <Route path="judge/entries/:entryId" element={<GoldenBoxJudgeEntryReview />} />
+                  <Route path="mentor/entries/:entryId" element={<GoldenBoxMentorReview />} />
                 </Route>
                 {/* gold-box → golden-box alias per spec */}
                 <Route path="gold-box"       element={<Navigate to="/smokecraft/golden-box" replace />} />
@@ -449,6 +469,11 @@ export default function App() {
 
                 {/* Management Sync — supporting module (admin-facing), reachable from S23 */}
                 <Route path="management-sync"  element={<SmokeCraftSessionGuard requires="passport-stamp"><ManagementSync /></SmokeCraftSessionGuard>} />
+                {/* Venue-manager-only real analytics destination (Package D) —
+                    no guest session guard: the server itself enforces
+                    requireAuth + requireVenueMembership; a guest hitting
+                    this URL sees the page's own "Unauthorized" state. */}
+                <Route path="management-sync/analytics" element={<ManagementSyncAnalytics />} />
 
                 {/* S24 — final-review (Completed Scorecard) */}
                 <Route path="final-review"          element={<SmokeCraftSessionGuard sessionNumber={24}><FinalReview /></SmokeCraftSessionGuard>} />
@@ -778,6 +803,13 @@ export default function App() {
                 <Route path="settings"    element={<EATSettings />} />
                 <Route path="smokecraft-panel" element={<EATSmokeCraftPanel />} />
               </Route>
+
+              {/* Venue Management Command Hub (Package 6B) — no route-level
+                  guard: the server enforces requireAuth + requireVenueMembership
+                  on every endpoint; a guest/unauthorized user sees the page's
+                  own permission-denied state, same pattern as
+                  ManagementSyncAnalytics. */}
+              <Route path="venue-management" element={<VenueManagementCommandHub />} />
 
               {/* ── Protected: admin+ — BLOCKED in demo mode ──────── */}
               <Route path="admin" element={

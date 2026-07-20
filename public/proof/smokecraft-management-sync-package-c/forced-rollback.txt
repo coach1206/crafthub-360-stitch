@@ -1,0 +1,1 @@
+See regression-results.txt (Package B proof-gap suite section): a real Postgres FK violation (23503) forced mid-transaction was caught and ROLLBACK issued; zero partial journey/snapshot rows persisted; unrelated venues table untouched. All PASS.

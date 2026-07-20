@@ -1,0 +1,29 @@
+BEGIN
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP TABLE
+ remaining_sms_tables 
+----------------------
+                    0
+(1 row)
+
+ venues_still_exists 
+---------------------
+                   0
+(1 row)
+
+ROLLBACK
+--- verifying rollback via transaction left production schema untouched (since we ROLLBACK'd, not COMMIT'd) ---
+4
+before=982 after=982
+=== ACTUAL rollback (committed, isolated test DB only) ===
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DROP TABLE
+DELETE 1
+0
+0
+unrelated table sample check (ticket_tapper_promotions still exists):
+1

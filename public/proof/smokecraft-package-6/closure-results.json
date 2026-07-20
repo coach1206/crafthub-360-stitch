@@ -1,0 +1,162 @@
+[
+  {
+    "name": "DB: 6 smoking_technique records seeded",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: smoking-technique quiz question exists",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: no horizontal overflow on load",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Smoking Technique section renders with no-inhalation statement",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Smoking Technique real content chips render",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: cadence exercise starts",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: puff recording increments count",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: overheating warning appears after 5 rapid puffs (the component's pacing threshold)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: cadence session persisted server-side (not frontend-only)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: cadence completion message shown",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: smoking-technique completion XP awarded",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: duplicate cadence completion does not re-award XP",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: smoking-technique knowledge check renders",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: recommendations honestly show not-enough-data before any flavor notes recorded",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: personalized recommendation appears once flavor data exists",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: recommendation is explainable (why it may work, source, confidence)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: recommendation response includes data-used and source label",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Revise opens the draft in edit mode",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: revision save confirms with a revision number",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: revision updates the live draft row (pairing_item changed, current_revision incremented)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: prior revision preserved (2 immutable snapshots exist, not overwritten)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: revision history shows both the original and revised item",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: revising a draft does not award additional XP (only 1 first-save award)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: revised pairing persists after reload",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: another guest cannot revise a draft they do not own",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: another guest cannot read revision history for a draft they do not own",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Keyboard: Enter starts the cadence exercise",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport 390x844: no horizontal overflow with new closure sections",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport 390x844: Smoking Technique and Recommendations sections present",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport 1366x1024: no horizontal overflow with new closure sections",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport 1366x1024: Smoking Technique and Recommendations sections present",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Test data removed",
+    "pass": true,
+    "detail": ""
+  }
+]

@@ -1,0 +1,1 @@
+RESUME wired in ResumeJourney.jsx's handleResume: fires startOrResumeJourney (same hook, same reconciliation logic as START) before navigating -- verified by code path identity with the tested START flow; not separately re-clicked through the full Resume Journey screen in this pass's browser suite (time-scoped), but uses the exact same, already-tested reconciliation code.

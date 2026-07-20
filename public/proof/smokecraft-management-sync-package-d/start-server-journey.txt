@@ -1,0 +1,1 @@
+See regression-results.txt: 'Begin Experience' click on Welcome creates exactly one real server journey (verified via direct DB query, COUNT=1). PASS.

@@ -1,0 +1,5 @@
+Route -> SC_ASSETS key -> local path (see runtime-local-assets.txt for full resolution list)
+Full route-by-route detail is documented in docs/CRAFT360_FINAL_IMAGE_PROVENANCE_AUDIT.md.
+Summary: 48/48 SC_ASSETS-driven routes resolve locally. CraftHub uses its
+own CRAFTHUB_IMAGE constant (not SC_ASSETS), also resolves locally.
+No route was found using a live/remote GitHub URL.

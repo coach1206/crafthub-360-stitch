@@ -18,6 +18,7 @@
  *   children      — the page content
  *   hideHeader    — set true to suppress the progress header (e.g. for S1)
  */
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import LockedSmokeCraftScreen from './LockedSmokeCraftScreen.jsx'
 import SmokeCraftProgressHeader from './SmokeCraftProgressHeader.jsx'
@@ -29,16 +30,24 @@ export default function SmokeCraftSessionGuard({ sessionNumber, requires, childr
   const { session } = useGuestSession()
   const navigate = useNavigate()
 
+  const requiresUnlocked = requires
+    ? (isDemoMode || requires === 'entry' || session.completedSteps.includes(requires))
+    : true
+  const resumeRoute = currentAllowed?.route || '/smokecraft'
+
+  // Production-readiness pass — navigate() was previously called directly
+  // during render (inside the `if (requires)` branch below), which is the
+  // exact cause of React's real "Cannot update a component while rendering
+  // a different component" warning (confirmed by the route crawler on
+  // every single route). Navigation during render is deferred to an
+  // effect instead — same redirect behavior, no render-phase side effect,
+  // and the hook is called unconditionally per the Rules of Hooks.
+  useEffect(() => {
+    if (requires && !requiresUnlocked) navigate(resumeRoute, { replace: true })
+  }, [requires, requiresUnlocked, resumeRoute]) // eslint-disable-line react-hooks/exhaustive-deps
+
   if (requires) {
-    const unlocked = isDemoMode || requires === 'entry' || session.completedSteps.includes(requires)
-    if (!unlocked) {
-      const resumeRoute = currentAllowed?.route || '/smokecraft'
-      // Supporting modules/entry-layer screens are not numbered sessions —
-      // no locked-screen art exists for them, so redirect to the guest's
-      // actual current position rather than fabricating a lock screen.
-      navigate(resumeRoute, { replace: true })
-      return null
-    }
+    if (!requiresUnlocked) return null
     return <>{children}</>
   }
 

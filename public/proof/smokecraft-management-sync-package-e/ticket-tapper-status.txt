@@ -1,0 +1,1 @@
+ticket_tapper.state = CONNECTED, verified by a real SELECT against ticket_tapper_specials (the actual table the live TicketTapperSpecialsStrip component reads from). See regression-results.txt.

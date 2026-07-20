@@ -1,0 +1,1 @@
+See regression-results.txt: re-visiting Welcome and re-clicking Begin Experience does not create a second journey (existing journey resolved via resume path, COUNT remains 1). PASS.

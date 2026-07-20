@@ -1,0 +1,1 @@
+Confirmed: zero remote-control/remote-configuration code was added for NOVEE OS or any other system this package -- the /integrations endpoint is read-only status reporting only.

@@ -1,0 +1,2 @@
+REDACTED — guest identity issued via POST /api/smokecraft/management-sync/guest-session
+Response 200, cookie 'smokecraft_guest_session' set (value redacted). Verified: PASS.

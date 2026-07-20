@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getVisitProgress } from '../../constants/session.js'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 // Ring gauge = diameter in 64ths of an inch. This page is a sub-step of
 // Session 5 (Shape, Size & Burn Time) — it does NOT call completeStep() and
@@ -26,7 +27,7 @@ export default function CigarGaugeGuide() {
   return (
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 z-0 bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/smokecraft/cigars/robusto.jpg')", opacity: 0.35 }} />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${SC_ASSETS.ringGaugeGuide}')`, opacity: 0.35 }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(0deg,rgba(19,19,20,0.82) 0%,rgba(19,19,20,0.62) 45%,rgba(19,19,20,0.88) 100%)' }} />
       </div>
       <header className="fixed top-0 left-0 w-full z-50 flex items-center px-6 h-20 bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-md gap-4">

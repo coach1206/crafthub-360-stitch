@@ -1,0 +1,1 @@
+See regression-results.txt: platform-admin bypass and real Venue A manager membership both succeed against Venue A's real seeded data (6 completed journeys). PASS.

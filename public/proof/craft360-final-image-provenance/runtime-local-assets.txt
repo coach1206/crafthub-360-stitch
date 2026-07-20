@@ -1,0 +1,55 @@
+SC_ASSETS registry resolution check (this package)
+==================================================
+landing -> /assets/smokecraft-reference/approved/smokecraft-landing.png -> EXISTS
+enroll -> /assets/smokecraft-reference/approved/smokecraft-guest-pass.png -> EXISTS
+identity -> /assets/smokecraft/IDENTY.png -> EXISTS
+resume -> /assets/smokecraft/cropped/golden-box-hero-v2.jpg -> EXISTS
+goldenBox -> /assets/smokecraft/GOLDEN BOX RULES.png -> EXISTS
+mentorSelection -> /assets/smokecraft/MENTOR SELECTION1.png -> EXISTS
+meetYourCigar -> /assets/smokecraft/DISOVER YOUR CIGAR PROFILE.png -> EXISTS
+mentorCommentary -> /assets/smokecraft/MENTOR :COMMENTARY.png -> EXISTS
+format -> /assets/smokecraft-reference/approved/smokecraft-vitola.png -> EXISTS
+seedSoil -> /assets/smokecraft/SEED & SOIL.png -> EXISTS
+pairingLab -> /assets/smokecraft/PAIRING LAB1.png -> EXISTS
+humidorMatch -> /assets/smokecraft/Humidor Match 1.png -> EXISTS
+requestPurchase -> /assets/smokecraft/REQUEST PURCHASE.png -> EXISTS
+cutToastLight -> /assets/smokecraft/CUT  TOAST, & LIGHT.png -> EXISTS
+firstThird -> /assets/smokecraft/FIRST  THIRD1.png -> EXISTS
+secondThird -> /assets/smokecraft/SECOND THIRD.png -> EXISTS
+flavorMemory -> /assets/smokecraft/FLAVOR MEMORY.png -> EXISTS
+finalThird -> /assets/smokecraft/FINAL THIRD.png -> EXISTS
+scorecard -> /assets/smokecraft/Scorecard.png -> EXISTS
+smokecraftChallenge -> /assets/smokecraft/SMOKECRAFT CHALLENG.png -> EXISTS
+secondHumidorMatch -> /assets/smokecraft-reference/approved/smokecraft-second-humidor-match.png -> EXISTS
+miniTasting -> /assets/smokecraft/Mini Tasting 11.png -> EXISTS
+finalReview -> /assets/smokecraft/FINAL REVIEW.png -> EXISTS
+passportStamp -> /assets/smokecraft/PASSPORT STAMP.png -> EXISTS
+connections -> /assets/smokecraft/cropped/connections-hero.jpg -> EXISTS
+managementSync -> /assets/smokecraft/MANAGEMENT SYNC.png -> EXISTS
+sessionComplete -> /assets/smokecraft/SESSION COMPLETE.png -> EXISTS
+recommendedNextJourney -> /assets/smokecraft/Recommend next journey.png -> EXISTS
+terroir -> /assets/smokecraft-reference/approved/smokecraft-terroir.png -> EXISTS
+terroirSoil -> /assets/smokecraft-reference/approved/smokecraft-seed-soil.png -> EXISTS
+knowledgeDropTobacco -> /assets/smokecraft-reference/approved/smokecraft-origins.png -> EXISTS
+knowledgeDropFermentation -> /assets/smokecraft-reference/approved/smokecraft-vitola.png -> EXISTS
+knowledgeDropAging -> /assets/smokecraft-reference/approved/smokecraft-pairing-mastery.png -> EXISTS
+knowledgeDropFactory -> /assets/smokecraft-reference/approved/smokecraft-flavor-dna.png -> EXISTS
+leaderboard -> /assets/smokecraft/LEADERBOARD 111.png -> EXISTS
+eventChallenge -> /assets/smokecraft/EVENT CHALLENGE 111.png -> EXISTS
+howItWorks -> /assets/smokecraft-reference/approved/smokecraft-how-it-works.png -> EXISTS
+rewards -> /assets/smokecraft/REWARDS 222.png -> EXISTS
+achievements -> /assets/smokecraft/ACHIEVMENTS.png -> EXISTS
+aiSummary -> /assets/smokecraft/AI SUMMARY.png -> EXISTS
+pairingRecommendations -> /assets/smokecraft/personlized pairing 222.png -> EXISTS
+venueSelect -> /assets/smokecraft/Venue Selection 11.png -> EXISTS
+lightingTutorial -> /assets/smokecraft/LIGHTING TUTORIAL 1.png -> EXISTS
+knowledgeDrop -> /assets/smokecraft/KNOWLEDGE DROP.png -> EXISTS
+knowledgeCheck -> /assets/smokecraft/KNOWLEDGE CHECK.png -> EXISTS
+badgeLibrary -> /assets/smokecraft/smokecraft badges.png -> EXISTS
+managementSyncRaw -> /assets/smokecraft/MANAGEMENT SYNC.png -> EXISTS
+sessionCompleteRaw -> /assets/smokecraft/SESSION COMPLETE.png -> EXISTS
+
+Total: 48 refs, 0 missing.
+
+CraftHub (separate constant, not SC_ASSETS):
+CRAFTHUB_IMAGE -> /assets/CRAFTHUB 360. VENUE TABLE EXPERIENCE.png -> EXISTS

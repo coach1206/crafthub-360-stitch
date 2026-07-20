@@ -1,0 +1,1 @@
+Allowed states: CONNECTED, DISCONNECTED, NOT_CONFIGURED, CONNECTING, DEGRADED, STALE, ERROR, INTERNAL_ONLY, UNAVAILABLE, COMING_SOON. CONNECTED requires a real health check to succeed THIS request (see connectionStateService.js checkInternalManagementSync/checkTicketTapper -- both run a real SQL query against the live database, not a static flag).

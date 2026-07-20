@@ -1,0 +1,87 @@
+[
+  {
+    "name": "DB: criollo seed genetics record exists",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: seed/soil knowledge check question exists, tied to real component",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: GET /seed-soil/components returns real seed genetics rows",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Seed and Soil screen loads",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: no horizontal overflow on load",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Criollo zone selects",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: educational panel shows real Criollo content (not fabricated placeholder)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: viewing real content recorded server-side progress",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Learn More drawer opens",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Terroir factors expand with real catalog entries",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Plant Anatomy explorer expands",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: tasting note persisted to backend (not just local storage)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: note rehydrated from backend after reload",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: knowledge check widget renders with a real question",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: knowledge check gives real feedback",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Test data removed",
+    "pass": true,
+    "detail": ""
+  }
+]

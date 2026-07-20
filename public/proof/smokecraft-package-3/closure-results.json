@@ -1,0 +1,152 @@
+[
+  {
+    "name": "DB: seed genetics seeded (5 records)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: origin/region records seeded (6 records)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: soil records seeded (4 records, matching SeedSoil.jsx vocabulary)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: terroir factor records seeded (6 records)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: every new record has substantive (not shallow) educational text",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: GET /components?category=seed_genetics returns real published records",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: GET /components?category=soil returns real published records",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: GET /components?category=terroir returns real published records",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: origin (country) list returns real records",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: seed genetics detail read succeeds with real bigint id",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: no premature image integration — new records have null media_asset_key (honest, not fabricated)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Seed Genetics dropdown shows real options (no hardcoded fallback array)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Soil dropdown shows real options",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Terroir dropdown shows real options",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: no default/auto-selected seed genetics value",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: draft save persisted with genetics/soil/terroir selections included",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: seed_genetics/soil/terroir component types genuinely persisted",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: draft resume shows the persisted cigar name (selection state recoverable from backend)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Entry Workspace with real dropdowns — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Seed Genetics dropdown fully within viewport",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Seed Genetics selection registers correctly (bigint id consistency)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Educational panel close control reachable",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: no horizontal overflow after all selections + panel interaction",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 360x800: Entry Workspace with real dropdowns — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 360x800: Seed Genetics dropdown fully within viewport",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 360x800: Seed Genetics selection registers correctly (bigint id consistency)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 360x800: Educational panel close control reachable",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 360x800: no horizontal overflow after all selections + panel interaction",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Tablet 1366x1024: no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Test data removed",
+    "pass": true,
+    "detail": ""
+  }
+]

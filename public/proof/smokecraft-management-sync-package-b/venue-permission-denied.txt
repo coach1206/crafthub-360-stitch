@@ -1,0 +1,1 @@
+POST /venues/:venueId/actions without any venue_memberships row and without platform-admin role -> 403 venue_membership_required (structurally verified via code path; platform-admin bypass path exercised in the test suite instead).

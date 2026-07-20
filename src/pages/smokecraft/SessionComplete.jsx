@@ -2,8 +2,15 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { useDemoMode } from '../../context/DemoModeContext.jsx'
+import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
+import { mapJourneyToSnapshotPayload } from '../../services/smokecraft/managementSyncSnapshotMapper.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import TicketTapperSpecialsStrip from '../../components/smokecraft/TicketTapperSpecialsStrip.jsx'
+import { fetchTicketTapperSpecials } from '../../services/smokeCraftTicketTapperSpecialsApi.js'
+import { getActiveTicketTapperSpecials } from '../../utils/smokeCraftSpecialsEngine.js'
+import { smokeCraftTicketTapperSpecialsSeed } from '../../data/smokeCraftTicketTapperSpecials.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { TOTAL_SESSIONS } from '../../constants/session.js'
 import {
@@ -25,10 +32,52 @@ const GLASS     = 'rgba(8,10,16,0.86)'
 export default function SessionComplete() {
   const { session, update, awardSessionRewards, awardStamp } = useGuestSession()
   const { journey, setSessionCompletion } = useSmokeCraftJourney()
+  const { isDemoMode } = useDemoMode()
+  const { managementSync, saveSnapshot, completeOnServer } = useSmokeCraftServerJourney()
   const navigate = useNavigate()
 
   const [phase, setPhase] = useState('loading') // loading | error | ready
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
+
+  // Compact Ticket Tapper — real specials for the journey's selected venue.
+  // A click-through "Add" here does not award XP/rewards or auto-redeem;
+  // it only tracks a tap/add event, same as the commerce screen.
+  const [tapperSpecials, setTapperSpecials] = useState([])
+  const [tapperLocalPreview, setTapperLocalPreview] = useState(false)
+  const [tapperUnavailable, setTapperUnavailable] = useState(false)
+  const activeVenueId = (journey.selectedVenue && !journey.selectedVenue.skipped) ? journey.selectedVenue.id : null
+
+  useEffect(() => {
+    if (!activeVenueId) {
+      setTapperSpecials([])
+      setTapperLocalPreview(false)
+      setTapperUnavailable(false)
+      return
+    }
+    let cancelled = false
+    fetchTicketTapperSpecials(activeVenueId).then(res => {
+      if (cancelled || !res.ok) return
+      if (!res.localPreview) {
+        setTapperSpecials(res.specials || [])
+        setTapperLocalPreview(false)
+        setTapperUnavailable(false)
+      } else if (isDemoMode) {
+        setTapperSpecials(res.specials || smokeCraftTicketTapperSpecialsSeed.specials)
+        setTapperLocalPreview(true)
+        setTapperUnavailable(false)
+      } else {
+        setTapperSpecials([])
+        setTapperLocalPreview(false)
+        setTapperUnavailable(true)
+      }
+    })
+    return () => { cancelled = true }
+  }, [activeVenueId, isDemoMode])
+
+  const tapperActiveSpecials = useMemo(
+    () => getActiveTicketTapperSpecials({ specials: tapperSpecials, inventoryItems: [] }),
+    [tapperSpecials]
+  )
 
   useEffect(() => {
     const on = () => setIsOffline(false)
@@ -59,6 +108,16 @@ export default function SessionComplete() {
     }
     if (!journey.sessionCompletion?.completedAt) {
       setSessionCompletion({ ...(journey.sessionCompletion || {}), completedAt: Date.now() })
+    }
+    // Final completion checkpoint: only if a server journey already
+    // exists (established at START/RESUME) and only once, guarded the
+    // same way the existing local reward/stamp award above is guarded —
+    // never creates a journey here, never blocks navigation or the
+    // existing local completion UX.
+    if (managementSync.serverJourneyId && !session.completedSteps.includes('session-complete')) {
+      saveSnapshot({ ...mapJourneyToSnapshotPayload(journey), completionState: 'completed' })
+        .then(() => completeOnServer())
+        .catch(() => {})
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -331,6 +390,15 @@ export default function SessionComplete() {
                   View Progress
                 </button>
               </div>
+
+              <TicketTapperSpecialsStrip
+                compact
+                specials={tapperActiveSpecials}
+                venueId={activeVenueId}
+                localPreview={tapperLocalPreview}
+                noVenue={!activeVenueId}
+                unavailable={tapperUnavailable}
+              />
             </>
           )}
         </div>

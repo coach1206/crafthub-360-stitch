@@ -1,0 +1,1 @@
+GET /journeys/:id/sync/status never issues an INSERT — read-only query confirmed by code review of getSyncStatus() (SELECT only) and by the returned events matching only pre-existing rows. Verified: PASS.

@@ -1,0 +1,1 @@
+No Passport completion handoff was built this package -- classified INTERNAL_ONLY rather than fabricating a write path against an unverified identity mapping, per instruction ('If the existing system is local-only or incomplete: classify it PARTIALLY CONNECTED or INTERNAL_ONLY... document the missing server contract').

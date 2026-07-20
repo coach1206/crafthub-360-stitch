@@ -1,0 +1,260 @@
+[
+  {
+    "route": "/smokecraft/welcome",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 2,
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 1/27\nRESULTS\nDEMO PREVIEW\nSMOKECRAFT 360 — SESSION PREPARATION\nWelcome to Today’s Experience\nTODAY’S EXPERIENCE\nGuest: Guest\nVenue: Crawler Venue\nKnowledge level: Not shared yet\nEs"
+  },
+  {
+    "route": "/smokecraft/humidor-match",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 2/27\nRESULTS\nDEMO PREVIEW\n◦ MANUAL MODE — NO HARDWARE CONNECTED\nTemperature\n−\n70°F\n+\nHumidity\n−\n70%\n+\nSeal\nAirflow\nApply Settings\n← BACK\nCONTINUE TO MEET YOUR CIGAR →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/meet-your-cigar",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 3/27\nRESULTS\nDEMO PREVIEW\nSMOKECRAFT 360 — MEET YOUR CIGAR\nNo Cigar Selected\nBrand\nBlend\nWrapper\nBinder\nFiller\nFactory\nMaster Blender\n0 of 7 sections viewed\n\nNo cigar has been sele"
+  },
+  {
+    "route": "/smokecraft/terroir",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 4/27\nRESULTS\nDEMO PREVIEW\nSMOKECRAFT 360 — TERROIR\nExplore the Terroir\nCountry\nRegion\nSoil\nClimate\nGrowing Conditions\nWhy It Matters\n0 of 6 sections viewed\n\nSelect a section above "
+  },
+  {
+    "route": "/smokecraft/format",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 5/27\nRESULTS\nDEMO PREVIEW\n← BACK\nCONTINUE TO REQUEST / PURCHASE →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/cut-toast-light",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 6/27\nRESULTS\nDEMO PREVIEW\nLearn Why ▼\n← BACK\nCONTINUE TO LIGHTING TUTORIAL →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/lighting-tutorial",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 7/27\nRESULTS\nDEMO PREVIEW\nSMOKECRAFT 360 — LIGHTING TUTORIAL\nToasting the Foot\nStep 1 of 8 · 13% viewed\n🎞\nDEMONSTRATION VIDEO — TOASTING THE FOOT\nMedia pending production upload\n\n"
+  },
+  {
+    "route": "/smokecraft/first-third",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 8/27\nRESULTS\nDEMO PREVIEW\nFIRST THIRD OBSERVATIONS\nSave Draft\nCONTINUE TO SECOND THIRD →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/flavor-memory",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 10/27\nRESULTS\nDEMO PREVIEW\nEarth\nWood\nSpice\nCocoa\nCoffee\nSweet\nNuts\nFloral\nPERCEPTION\nSaving…\nIntensity\n3\nBody\n3\nStrength\n3\nPERSONAL NOTES\nCONTINUE TO SUGGESTED PAIRINGS →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/pairing-lab",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 11/27\nRESULTS\nDEMO PREVIEW\nCIGAR PROFILE\nSHAPE\nRobusto\nToro\nChurchill\nFigurado\nWRAPPER\nConnecticut\nHabano\nMaduro\nCorojo\nORIGIN\nDominican Republic\nNicaragua\nHonduras\nCuba\nMexico\nSTR"
+  },
+  {
+    "route": "/smokecraft/second-third",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 12/27\nRESULTS\nDEMO PREVIEW\nSECOND THIRD OBSERVATIONS\nSave Draft\nCONTINUE TO FLAVOR MEMORY →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/mentor-commentary",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 14/27\nRESULTS\nDEMO PREVIEW\nSMOKECRAFT 360 — MENTOR COMMENTARY\nDon Alejandro\nCommentary reviewed · Stage: Flavor Evolution (Second Third)\nD\nDon Alejandro\nNo individual portrait phot"
+  },
+  {
+    "route": "/smokecraft/knowledge-drop",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 15/27\nRESULTS\nDEMO PREVIEW\nSMOKECRAFT 360 — KNOWLEDGE DROP\nChoose a Topic\nTobacco\nFermentation\nAging\nFactory Story\n0 of 4 topics viewed\n\nSelect a topic above to begin learning what"
+  },
+  {
+    "route": "/smokecraft/final-third",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 16/27\nRESULTS\nDEMO PREVIEW\nCONTINUE TO SCORECARD →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/scorecard",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 19/27\nRESULTS\nDEMO PREVIEW\nRATING CATEGORIES\nAppearance\nColor, veins, oiliness, seam\n—/5\nConstruction\nFeel, weight, firmness\n—/5\nDraw\nAirflow resistance and ease\n—/5\nBurn\nEven line"
+  },
+  {
+    "route": "/smokecraft/ai-summary",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 21/27\nRESULTS\nDEMO PREVIEW\nSMOKECRAFT 360 — SESSION SUMMARY\nYour Session Summary\nRule-based summary generated from your saved journey data — not AI-generated.\n\nNot enough journey d"
+  },
+  {
+    "route": "/smokecraft/pairing-recommendations",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 22/27\nRESULTS\nDEMO PREVIEW\nSMOKECRAFT 360 — PERSONALIZED PAIRING RECOMMENDATIONS\nYour Pairing Recommendation\nRule-based recommendation engine — not AI-generated.\n\nNo cigar has been"
+  },
+  {
+    "route": "/smokecraft/passport-stamp",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 23/27\nRESULTS\nDEMO PREVIEW\n← BACK\nCONTINUE TO COMPLETED SCORECARD →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/final-review",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 24/27\nRESULTS\nDEMO PREVIEW\nCONTINUE TO REWARDS →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/rewards",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 25/27\nRESULTS\nDEMO PREVIEW\nSMOKECRAFT 360 — REWARDS\nRewards, XP & Achievements\nRewards & XP\nAchievements\nYOUR XP\n0\nTotal XP\nCurrent journey XP: 0 — this build tracks one continuous"
+  },
+  {
+    "route": "/smokecraft/session-complete",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 2,
+    "consoleErrors": [
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
+    ],
+    "bodyPreview": "PHASE 6/6\n·\nSESSION 27/27\nRESULTS\nDEMO PREVIEW\nSMOKECRAFT 360 — SESSION 27 OF 27\nRecommended Next Journey\nJOURNEY COMPLETE\nYour SmokeCraft 360 experience\nMentor: Don Alejandro\nPROGRESS\n1 / 27 (4%)\nXP "
+  },
+  {
+    "route": "/smokecraft/golden-box",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "← Back\nYOUR JOURNEY\n0 XP\nI have read, understood, and agree to follow the Golden Box Rules.\nNext: Mentor Selection →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/mentor-selection",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "SMOKECRAFT JOURNEY\nMentor Selection\n\nSelect up to 2 master mentors from the world's great tobacco traditions. Each brings a legacy, growing philosophy, and sensory perspective that will shape your Smo"
+  },
+  {
+    "route": "/smokecraft/seed-soil",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "i\ni\ni\ni\ni\ni\ni\ni\nTASTING NOTES\nTerroir, Anatomy & Quiz ▾\n← BACK\nCONTINUE TO HUMIDOR MATCH →\n●\nGuest"
+  },
+  {
+    "route": "/smokecraft/leaderboard",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "SMOKECRAFT 360 — SUPPORTING MODULE\nLeaderboard\nGlobal\nVenue\nWeekly\nMonthly\nAll Time\nAll Tiers\nNovice\nEnthusiast\nConnoisseur\nAficionado\nRefresh\nA shared venue leaderboard requires a backend or shared e"
+  },
+  {
+    "route": "/pos3",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "DEMO MODE ACTIVE\nclose\nLIVE VENUE TICKER\nLIVE FROM E.A.T. COMMAND CENTER\nLIVE VENUE TICKER\nTonight\n·\nMaduro + Bourbon Pairing\n◆\nE.A.T. COMMAND CENTER\nFeatured cocktail\n·\nWine Cellar Flight at 8 PM\n◆\nH"
+  },
+  {
+    "route": "/eat",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "DEMO MODE ACTIVE\nclose\nLIVE VENUE TICKER\nLIVE FROM E.A.T. COMMAND CENTER\nLIVE VENUE TICKER\nTonight\n·\nMaduro + Bourbon Pairing\n◆\nE.A.T. COMMAND CENTER\nFeatured cocktail\n·\nWine Cellar Flight at 8 PM\n◆\nH"
+  },
+  {
+    "route": "/venue-management",
+    "httpStatus": 200,
+    "error": null,
+    "overflow": false,
+    "consoleErrorCount": 0,
+    "consoleErrors": [],
+    "bodyPreview": "DEMO MODE ACTIVE\nclose\nLIVE VENUE TICKER\nLIVE FROM E.A.T. COMMAND CENTER\nLIVE VENUE TICKER\nTonight\n·\nMaduro + Bourbon Pairing\n◆\nE.A.T. COMMAND CENTER\nFeatured cocktail\n·\nWine Cellar Flight at 8 PM\n◆\nH"
+  }
+]

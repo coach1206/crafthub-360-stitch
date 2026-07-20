@@ -1,0 +1,1 @@
+POST /venues/:venueId/actions {actionType:'sync_requested', ...} via platform-admin bypass -> 201 actionId (redacted). Verified: PASS.

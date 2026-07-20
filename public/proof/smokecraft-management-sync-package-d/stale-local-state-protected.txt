@@ -1,0 +1,1 @@
+When the stored snapshotVersion differs from the server's latest on a successful resume, managementSync.stale is set true (see useSmokeCraftServerJourney.js) rather than silently overwritten. No dedicated stale-conflict UI banner was built this pass -- disclosed limitation, see Package D Implementation doc.

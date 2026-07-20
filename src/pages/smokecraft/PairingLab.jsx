@@ -12,7 +12,7 @@ const NAT_W = 1672
 const NAT_H = 941
 
 const GOLD = '#E9C176'
-const GLASS = 'rgba(5,5,5,0.88)'
+const GLASS = '#050505' // was rgba(5,5,5,0.88) — non-opaque bg let baked image content bleed through, fixed
 const BORDER = 'rgba(233,193,118,0.28)'
 
 // ── Selector definitions ─────────────────────────────────────────
@@ -121,12 +121,12 @@ export default function PairingLab() {
       aria-pressed={active}
       onClick={onClick}
       style={{
-        padding: '3px 8px',
-        borderRadius: 12,
+        padding: '2px 6px',
+        borderRadius: 10,
         border: `1.5px solid ${active ? GOLD : 'rgba(233,193,118,0.25)'}`,
         background: active ? 'rgba(233,193,118,0.15)' : 'transparent',
         color: active ? GOLD : 'rgba(229,226,225,0.75)',
-        fontSize: 'clamp(8px,0.75vw,10px)',
+        fontSize: 'clamp(7px,0.68vw,9px)',
         fontFamily: 'Georgia, serif',
         cursor: 'pointer',
         fontWeight: active ? 700 : 400,
@@ -142,11 +142,11 @@ export default function PairingLab() {
 
   function SelectorGroup({ title, options, field, multi }) {
     return (
-      <div style={{ marginBottom: 8 }}>
-        <div style={{ fontSize: 9, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 4 }}>
+      <div style={{ marginBottom: 3 }}>
+        <div style={{ fontSize: 8, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 2 }}>
           {title}
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
           {options.map(opt => {
             const active = multi ? sel[field].includes(opt) : sel[field] === opt
             return chipBtn(active, opt, () => multi ? toggleArr(field, opt) : setOne(field, opt))
@@ -171,38 +171,46 @@ export default function PairingLab() {
         {/* ── Selector panel (left) ── */}
         <div style={{
           position: 'absolute',
-          left: '1%', top: '4%',
-          width: '44%',
-          ...glassStyle({ padding: '10px 12px', pointerEvents: 'auto' }),
+          left: '7.66%', top: '35.92%', // exact-measured bounds of approved "Cigar Profile" box, source 1672x941 x:128-822 y:338-585
+          width: '41.51%', height: '26.25%', overflow: 'hidden', overflowY: 'auto',
+          ...glassStyle({ padding: '6px 10px', pointerEvents: 'auto' }),
         }}>
-          <div style={{ fontSize: 9, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 8 }}>
+          <div style={{ fontSize: 9, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 4 }}>
             Cigar Profile
           </div>
-          <SelectorGroup title="Shape"    options={CIGAR_SHAPES} field="cigarShape"  multi={false} />
-          <SelectorGroup title="Wrapper"  options={WRAPPERS}     field="wrapper"     multi={false} />
-          <SelectorGroup title="Origin"   options={ORIGINS}      field="origin"      multi={false} />
-          <SelectorGroup title="Strength" options={STRENGTHS}    field="strength"    multi={false} />
+          {/* Compact 2-column grid — the 4 selector groups don't fit in a
+              single column within the approved panel's measured height
+              (source box: 1672x941 x:128-822 y:338-585). Halves the
+              vertical footprint versus stacking all 4 full-width. */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 10 }}>
+            <SelectorGroup title="Shape"    options={CIGAR_SHAPES} field="cigarShape"  multi={false} />
+            <SelectorGroup title="Wrapper"  options={WRAPPERS}     field="wrapper"     multi={false} />
+            <SelectorGroup title="Origin"   options={ORIGINS}      field="origin"      multi={false} />
+            <SelectorGroup title="Strength" options={STRENGTHS}    field="strength"    multi={false} />
+          </div>
         </div>
 
         {/* ── Pairing options panel (center-right) ── */}
         <div style={{
           position: 'absolute',
-          left: '47%', top: '4%',
-          width: '38%',
-          ...glassStyle({ padding: '10px 12px', pointerEvents: 'auto' }),
+          left: '7.66%', top: '71.52%', // exact-measured bounds of approved "Flavor Notes & Pairing Goal" box (stacked below Cigar Profile in the approved left column, not beside it), source x:128-822 y:673-825
+          width: '41.51%', height: '16.15%', overflow: 'hidden', overflowY: 'auto',
+          ...glassStyle({ padding: '6px 10px', pointerEvents: 'auto' }),
         }}>
-          <div style={{ fontSize: 9, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 8 }}>
+          <div style={{ fontSize: 9, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'Georgia, serif', marginBottom: 3 }}>
             Pairing Choices
           </div>
-          <SelectorGroup title="Flavor Notes" options={FLAVOR_NOTES}  field="flavorNotes"  multi={true}  />
-          <SelectorGroup title="Pairing Goal" options={PAIRING_GOALS} field="pairingGoal"  multi={false} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 10 }}>
+            <SelectorGroup title="Flavor Notes" options={FLAVOR_NOTES}  field="flavorNotes"  multi={true}  />
+            <SelectorGroup title="Pairing Goal" options={PAIRING_GOALS} field="pairingGoal"  multi={false} />
+          </div>
         </div>
 
         {/* ── Recommendation panel (right) ── */}
         {rec && (
           <div style={{
             position: 'absolute',
-            left: '87%', top: '4%',
+            left: '87%', top: '4%', // decorative compact score badge — stays in the top-right corner, does not collide with the two repositioned panels above
             width: '12%',
             ...glassStyle({ padding: '8px 10px', pointerEvents: 'none' }),
           }}>

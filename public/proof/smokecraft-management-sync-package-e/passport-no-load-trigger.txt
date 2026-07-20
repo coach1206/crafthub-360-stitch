@@ -1,0 +1,1 @@
+N/A this package -- confirmed by code review: no Passport handoff call exists anywhere in Management Sync's frontend or backend code, so none can fire on page load.

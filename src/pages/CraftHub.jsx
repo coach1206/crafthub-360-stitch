@@ -1,239 +1,136 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDemoMode } from "../context/DemoModeContext.jsx";
-import StaffHandoffButton from "../components/staffhandoff/StaffHandoffButton.jsx";
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDemoMode } from '../context/DemoModeContext.jsx'
+import StaffHandoffButton from '../components/staffhandoff/StaffHandoffButton.jsx'
+import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 
-// ROW 1 — public guest-facing craft modules + Passport Connections.
-// POS 3 and E.A.T. System are intentionally excluded: they are staff/manager
-// systems reached only through the Staff Handoff PIN flow (see ROW 2).
-const ROW1_MODULES = [
-  { id: "smokecraft", title: "SmokeCraft 360", desc: "Cigar pairing, mentor-guided tasting, flavor notes, score flow.", icon: "chair", action: "route", route: "/smokecraft", image: "/smokecraft.jpg", status: "active" },
-  { id: "pourcraft", title: "PourCraft 360", desc: "Built on the SmokeCraft MVP2 engine. Unlocks after SmokeCraft, POS3, and E.A.T. are complete.", icon: "liquor", action: "route", route: "/pourcraft", image: "/pourcraft.jpg", status: "coming-soon" },
-  { id: "winecraft", title: "WineCraft 360", desc: "Built on the SmokeCraft MVP2 engine. Unlocks after SmokeCraft, POS3, and E.A.T. are complete.", icon: "wine_bar", action: "route", route: "/winecraft", image: "/winecraft.jpg", status: "coming-soon" },
-  { id: "beercraft", title: "BeerCraft 360", desc: "Built on the SmokeCraft MVP2 engine. Unlocks after SmokeCraft, POS3, and E.A.T. are complete.", icon: "sports_bar", action: "route", route: "/beercraft", image: "/beercraft.jpg", status: "coming-soon" },
-  { id: "passport-connections", title: "360 Passport Connections", desc: "Guest identity, stamps, networking, experience history.", icon: "menu_book", action: "route", route: "/passport/connections", image: "/passport.jpg", status: "active" },
-];
+// Approved MVP2 CraftHub visual — see docs/CRAFTHUB_MVP2_APPROVED_ASSET_IMPLEMENTATION.md
+const CRAFTHUB_IMAGE = '/assets/CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png'
+const NAT_W = 1672
+const NAT_H = 941
+const GOLD = '#d4af37'
 
-// ROW 2 — Staff Handoff is the only bridge to POS 3 / E.A.T. System, and
-// DayOne360 Travel opens the external site directly.
-const ROW2_MODULES = [
-  { id: "staff-handoff", title: "Staff Handoff", desc: "Staff PIN access into POS 3 or E.A.T. System.", icon: "badge", action: "staff-handoff", image: null },
-  { id: "dayone360", title: "DayOne360 Travel", desc: "Travel placement, venue offers, destination experiences.", icon: "flight_takeoff", action: "external", route: "https://dayone360.com", image: "/crafthub-gold.jpg" },
-];
-
-const SIGNALS = [
-  { label: "Active Tables", value: "12" },
-  { label: "Staff Handoffs", value: "3" },
-  { label: "POS / Inventory", value: "Nominal" },
-  { label: "E.A.T. Alerts", value: "1" },
-  { label: "Kitchen", value: "On Track" },
-  { label: "Bar", value: "Stocked" },
-  { label: "Humidor", value: "62°F / 70%" },
-  { label: "Events", value: "2 Tonight" },
-];
+// Transparent-at-rest control over a static baked button/card whose label
+// never changes — the approved artwork already renders it correctly, so we
+// preserve that pixel-perfect look at idle and add a real, visible
+// interactive affordance (gold focus/hover ring) rather than an invisible
+// hotspot with no discoverable state. Matches the pattern already
+// established and verified on the SmokeCraft Launch screen
+// (src/pages/SmokeCraft.jsx).
+function Hotspot({ label, onClick, style, shape = 'rect' }) {
+  const [active, setActive] = useState(false)
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      onMouseEnter={() => setActive(true)}
+      onMouseLeave={() => setActive(false)}
+      onFocus={() => setActive(true)}
+      onBlur={() => setActive(false)}
+      style={{
+        position: 'absolute',
+        background: active ? 'rgba(212,175,55,0.10)' : 'transparent',
+        border: active ? `1.5px solid ${GOLD}` : '1.5px solid transparent',
+        borderRadius: shape === 'pill' ? 999 : 12,
+        boxShadow: active ? '0 0 0 3px rgba(212,175,55,0.20)' : 'none',
+        padding: 0,
+        cursor: 'pointer',
+        pointerEvents: 'auto',
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent',
+        transition: 'background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease',
+        outline: 'none',
+        ...style,
+      }}
+    >
+      <span style={{
+        position: 'absolute', width: 1, height: 1, overflow: 'hidden',
+        clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap',
+      }}>{label}</span>
+    </button>
+  )
+}
 
 export default function CraftHub() {
-  const navigate = useNavigate();
-  const cardRefs = useRef([]);
-  const { enterDemoMode } = useDemoMode();
-  const [staffHandoffOpen, setStaffHandoffOpen] = useState(false);
-
-  useEffect(() => {
-    const onMove = (e) => {
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      const rx = (e.clientX - cx) / cx;
-      const ry = (e.clientY - cy) / cy;
-      cardRefs.current.forEach((card) => {
-        if (!card) return;
-        const img = card.querySelector(".parallax-bg");
-        if (img) img.style.transform = `scale(1.1) translate(${rx * 10}px, ${ry * 10}px)`;
-      });
-    };
-    document.addEventListener("mousemove", onMove);
-    return () => document.removeEventListener("mousemove", onMove);
-  }, []);
+  const navigate = useNavigate()
+  const { enterDemoMode } = useDemoMode()
+  const [staffHandoffOpen, setStaffHandoffOpen] = useState(false)
 
   function handleDemoMode() {
-    enterDemoMode();
-    navigate("/smokecraft");
-  }
-
-  function handleTileClick(mod) {
-    if (mod.action === "staff-handoff") { setStaffHandoffOpen(true); return; }
-    if (mod.action === "external") { window.open(mod.route, "_blank", "noopener,noreferrer"); return; }
-    navigate(mod.route);
-  }
-
-  function renderTile(mod, idx) {
-    return (
-      <div
-        key={mod.id}
-        ref={(el) => (cardRefs.current[idx] = el)}
-        onClick={() => handleTileClick(mod)}
-        className="group relative h-[300px] cursor-pointer overflow-hidden rounded-2xl border border-[#d4af37]/15 shadow-2xl transition-all duration-500 hover:border-[#d4af37]/50"
-      >
-        <div className="absolute inset-0 z-0">
-          {mod.image ? (
-            <img
-              src={mod.image}
-              alt={mod.title}
-              className={`parallax-bg h-full w-full scale-110 object-cover transition-transform duration-700 group-hover:scale-125 ${mod.status === "coming-soon" ? "grayscale-[0.5] brightness-[0.55]" : ""}`}
-            />
-          ) : (
-            <div className="h-full w-full bg-gradient-to-br from-[#1a1410] via-[#0a0805] to-black" />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-        </div>
-
-        {mod.status === "coming-soon" && (
-          <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 rounded-full border border-[#d4af37]/40 bg-black/70 px-3 py-1 backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37]" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#d4af37]">Coming Soon</span>
-          </div>
-        )}
-
-        <div className="absolute bottom-0 left-0 z-10 flex w-full items-end justify-between gap-4 p-6">
-          <div>
-            <h3 className="text-xl font-bold text-[#d4af37]">{mod.title}</h3>
-            <p className="mt-1 max-w-xs text-sm text-[#cbb98f]">{mod.desc}</p>
-          </div>
-          <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border border-[#d4af37]/30 bg-black/40 transition-colors group-hover:bg-[#d4af37] group-hover:text-black">
-            <span className="material-symbols-outlined text-[#d4af37] group-hover:text-black">{mod.icon}</span>
-          </div>
-        </div>
-      </div>
-    );
+    enterDemoMode()
+    navigate('/smokecraft')
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0805] text-[#f1e6c8]">
-      {/* ── Header ──────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 w-full border-b border-[#d4af37]/20 bg-[#0a0805]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/")}
-              className="rounded-full border border-[#5b8fc9]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#9cc2e8] transition hover:bg-[#5b8fc9]/10"
-            >
-              Back to NOVEE OS
-            </button>
-            <button
-              onClick={() => navigate("/home")}
-              className="rounded-full border border-[#5b8fc9]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#9cc2e8] transition hover:bg-[#5b8fc9]/10"
-            >
-              Home
-            </button>
-          </div>
-          <h1 className="text-2xl font-bold uppercase tracking-[0.25em] text-[#d4af37]">CraftHub 360</h1>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => window.open("https://dayone360.com", "_blank", "noopener,noreferrer")}
-              className="hidden rounded-full border border-[#d4af37]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#d4af37] transition hover:bg-[#d4af37]/10 sm:inline-block"
-            >
-              DayOne360 Travel
-            </button>
-            <button
-              onClick={handleDemoMode}
-              className="rounded-full border border-[#d4af37]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#d4af37] transition hover:bg-[#d4af37]/10"
-            >
-              Demo Mode
-            </button>
-            <button
-              onClick={() => navigate("/passport/connections")}
-              className="rounded-full border border-[#d4af37]/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#d4af37] transition hover:bg-[#d4af37]/10"
-            >
-              360 Passport Connections
-            </button>
-          </div>
-        </div>
-      </header>
+    <>
+      <SmokeCraftImageBoundsOverlay
+        src={CRAFTHUB_IMAGE}
+        naturalW={NAT_W}
+        naturalH={NAT_H}
+        alt="CraftHub 360 — Venue Table Experience"
+        bottomOffset={0}
+      >
+        {/* Header: Back to NOVEE OS */}
+        <Hotspot label="Back to NOVEE OS" onClick={() => navigate('/')} shape="pill"
+          style={{ left: '4.0%', top: '1.7%', width: '13.6%', height: '6.8%' }} />
+        {/* Header: Home */}
+        <Hotspot label="Home" onClick={() => navigate('/home')} shape="pill"
+          style={{ left: '19.7%', top: '1.7%', width: '6.7%', height: '6.8%' }} />
+        {/* Header: DayOne360 Travel */}
+        <Hotspot label="DayOne360 Travel" onClick={() => window.open('https://dayone360.com', '_blank', 'noopener,noreferrer')} shape="pill"
+          style={{ left: '61.9%', top: '1.7%', width: '10.4%', height: '6.8%' }} />
+        {/* Header: Demo Mode */}
+        <Hotspot label="Demo Mode" onClick={handleDemoMode} shape="pill"
+          style={{ left: '72.8%', top: '1.7%', width: '10.7%', height: '6.8%' }} />
+        {/* Header: 360 Passport Connections */}
+        <Hotspot label="360 Passport Connections" onClick={() => navigate('/passport/connections')} shape="pill"
+          style={{ left: '84.0%', top: '1.7%', width: '13.8%', height: '6.8%' }} />
 
-      {/* ── Hero ───────────────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-6 py-12 text-center">
-        <h2 className="text-4xl font-bold uppercase tracking-wide text-[#f1e6c8] sm:text-5xl">CraftHub 360</h2>
-        <p className="mt-2 text-sm uppercase tracking-[0.3em] text-[#d4af37]">Venue Table Experience</p>
-        <p className="mx-auto mt-6 max-w-2xl text-base text-[#cbb98f]">
-          Guest craft experiences, Passport networking, staff handoff, and venue service flow.
-        </p>
-      </section>
+        {/* Module card: SmokeCraft 360 (active) */}
+        <Hotspot label="Enter SmokeCraft 360" onClick={() => navigate('/smokecraft')}
+          style={{ left: '7.5%', top: '33.0%', width: '16.2%', height: '37.5%' }} />
+        {/* Module card: PourCraft 360 (coming soon) */}
+        <Hotspot label="PourCraft 360 — Coming Soon" onClick={() => navigate('/pourcraft')}
+          style={{ left: '24.3%', top: '33.0%', width: '16.1%', height: '37.5%' }} />
+        {/* Module card: WineCraft 360 (coming soon) */}
+        <Hotspot label="WineCraft 360 — Coming Soon" onClick={() => navigate('/winecraft')}
+          style={{ left: '41.1%', top: '33.0%', width: '16.2%', height: '37.5%' }} />
+        {/* Module card: BeerCraft 360 (coming soon) */}
+        <Hotspot label="BeerCraft 360 — Coming Soon" onClick={() => navigate('/beercraft')}
+          style={{ left: '58.6%', top: '33.0%', width: '16.2%', height: '37.5%' }} />
+        {/* Module card: 360 Passport Connections (active) */}
+        <Hotspot label="360 Passport Connections" onClick={() => navigate('/passport/connections')}
+          style={{ left: '76.1%', top: '33.0%', width: '15.6%', height: '37.5%' }} />
+
+        {/* Bottom nav: Enter CraftHub */}
+        <Hotspot label="Enter CraftHub" onClick={() => navigate('/crafthub')} shape="pill"
+          style={{ left: '8.8%', top: '72.0%', width: '21.6%', height: '7.8%' }} />
+        {/* Bottom nav: Staff Handoff */}
+        <Hotspot label="Staff Handoff" onClick={() => setStaffHandoffOpen(true)} shape="pill"
+          style={{ left: '30.3%', top: '72.0%', width: '19.7%', height: '7.8%' }} />
+        {/* Bottom nav: 360 Passport Connections */}
+        <Hotspot label="360 Passport Connections (bottom nav)" onClick={() => navigate('/passport/connections')} shape="pill"
+          style={{ left: '49.9%', top: '72.0%', width: '19.0%', height: '7.8%' }} />
+        {/* Bottom nav: DayOne360 Travel */}
+        <Hotspot label="DayOne360 Travel (bottom nav)" onClick={() => window.open('https://dayone360.com', '_blank', 'noopener,noreferrer')} shape="pill"
+          style={{ left: '69.0%', top: '72.0%', width: '21.8%', height: '7.8%' }} />
+
+        {/* Banner: Staff Handoff */}
+        <Hotspot label="Staff Handoff details" onClick={() => setStaffHandoffOpen(true)}
+          style={{ left: '3.2%', top: '81.5%', width: '46.0%', height: '16.7%' }} />
+        {/* Banner: DayOne360 Travel */}
+        <Hotspot label="DayOne360 Travel details" onClick={() => window.open('https://dayone360.com', '_blank', 'noopener,noreferrer')}
+          style={{ left: '50.5%', top: '81.5%', width: '46.3%', height: '16.7%' }} />
+      </SmokeCraftImageBoundsOverlay>
 
       {staffHandoffOpen && (
         <StaffHandoffButton
           startOpen
-          allowedDestinations={["pos", "eat"]}
+          allowedDestinations={['pos', 'eat']}
           onClose={() => setStaffHandoffOpen(false)}
         />
       )}
-
-      {/* ── Module cards ───────────────────────────────────── */}
-      <main className="mx-auto max-w-7xl px-6 pb-20">
-        {/* ROW 1 — guest-facing craft modules + Passport Connections */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
-          {ROW1_MODULES.map(renderTile)}
-        </div>
-
-        {/* ROW 2 — Staff Handoff bridge + DayOne360 Travel */}
-        <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-8 sm:grid-cols-2">
-          {ROW2_MODULES.map((mod, idx) => renderTile(mod, ROW1_MODULES.length + idx))}
-        </div>
-
-        {/* ── Operational signals ────────────────────────────── */}
-        <div className="mt-16">
-          <h3 className="mb-6 text-center text-sm font-semibold uppercase tracking-[0.3em] text-[#d4af37]">
-            Venue Signals
-          </h3>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {SIGNALS.map((s) => (
-              <div
-                key={s.label}
-                className="rounded-xl border border-[#d4af37]/15 bg-[#120f0a] p-4 text-center"
-              >
-                <p className="text-xs uppercase tracking-widest text-[#cbb98f]">{s.label}</p>
-                <p className="mt-2 text-lg font-bold text-[#d4af37]">{s.value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
-
-      {/* ── Bottom action nav ──────────────────────────────── */}
-      {/* Labels/routes match their actual destination — Staff Handoff opens
-          the PIN-gated handoff picker, never the Passport route, and vice versa. */}
-      <nav className="fixed bottom-0 z-50 w-full border-t border-[#d4af37]/20 bg-[#0a0805]/95 backdrop-blur-2xl">
-        <div className="mx-auto flex h-[88px] max-w-4xl items-center justify-around px-4">
-          <button
-            onClick={() => navigate("/crafthub")}
-            className="flex flex-col items-center gap-1 px-4 py-2 text-[#cbb98f] transition hover:text-[#d4af37]"
-          >
-            <span className="material-symbols-outlined">chair</span>
-            <span className="text-[10px] font-semibold uppercase tracking-widest">Enter CraftHub</span>
-          </button>
-          <button
-            onClick={() => setStaffHandoffOpen(true)}
-            className="flex flex-col items-center gap-1 px-4 py-2 text-[#cbb98f] transition hover:text-[#d4af37]"
-          >
-            <span className="material-symbols-outlined">badge</span>
-            <span className="text-[10px] font-semibold uppercase tracking-widest">Staff Handoff</span>
-          </button>
-          <button
-            onClick={() => navigate("/passport/connections")}
-            className="flex flex-col items-center gap-1 px-4 py-2 text-[#cbb98f] transition hover:text-[#d4af37]"
-          >
-            <span className="material-symbols-outlined">menu_book</span>
-            <span className="text-[10px] font-semibold uppercase tracking-widest">360 Passport Connections</span>
-          </button>
-          <button
-            onClick={() => window.open("https://dayone360.com", "_blank", "noopener,noreferrer")}
-            className="flex flex-col items-center gap-1 px-4 py-2 text-[#cbb98f] transition hover:text-[#d4af37]"
-          >
-            <span className="material-symbols-outlined">flight_takeoff</span>
-            <span className="text-[10px] font-semibold uppercase tracking-widest">DayOne360 Travel</span>
-          </button>
-        </div>
-      </nav>
-
-      <div className="h-[88px]" />
-    </div>
-  );
+    </>
+  )
 }

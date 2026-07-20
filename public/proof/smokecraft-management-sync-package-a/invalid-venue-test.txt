@@ -1,0 +1,18 @@
+PASS — Migration 074 recorded exactly once
+PASS — Valid venue-scoped journey inserted
+PASS — Invalid venue_id rejected (FK violation)
+PASS — Valid snapshot inserted
+PASS — Duplicate snapshot version rejected (unique violation)
+PASS — Valid Management Sync event inserted
+PASS — Duplicate idempotency combination (venue_id, journey_id, destination, payload_version) rejected
+PASS — Valid management action inserted
+PASS — Invalid action_status rejected (check violation)
+PASS — Missing required venue_id rejected (not-null violation)
+PASS — Journey delete cascades to snapshots (ON DELETE CASCADE)
+PASS — Journey delete cascades to events (ON DELETE CASCADE)
+PASS — Journey delete sets action.journey_id to NULL (ON DELETE SET NULL)
+PASS — Invalid JSONB input rejected naturally by Postgres
+PASS — No test data left behind in journeys table
+PASS — Test venue removed
+
+16/16 passed

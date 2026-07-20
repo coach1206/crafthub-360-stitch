@@ -1,0 +1,1 @@
+Health checks use a direct SQL query with the database driver's own connection-level timeout; a failed/slow query surfaces as ERROR or UNAVAILABLE, never CONNECTED -- confirmed by the try/catch structure in connectionStateService.js (a caught error always returns a non-CONNECTED state).

@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Setup: entry created",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: review step reached",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Presentation & Defense step renders",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: blend story persisted server-side",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: pairing selection persisted server-side",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: pairing defense persisted server-side",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: blend story rehydrates after reload",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: pairing item rehydrates after reload",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: pairing defense rehydrates after reload",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: owner sees presentation/defense fields via currentVersion",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: a stranger cannot see blend story/defense (currentVersion withheld)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Presentation step no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Test data removed",
+    "pass": true,
+    "detail": ""
+  }
+]

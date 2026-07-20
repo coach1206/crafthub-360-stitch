@@ -2,6 +2,8 @@ import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
+import { mapJourneyToSnapshotPayload } from '../../services/smokecraft/managementSyncSnapshotMapper.js'
 import { getRankFromXP } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
@@ -13,7 +15,7 @@ const NAT_H = 1086
 
 const GOLD = '#E9C176'
 const DARK = '#0a0603'
-const GLASS = 'rgba(5,5,5,0.88)'
+const GLASS = '#050505' // was rgba(5,5,5,0.88) — non-opaque bg let baked image content bleed through, fixed
 const BORDER = 'rgba(233,193,118,0.28)'
 
 const CATEGORIES = [
@@ -80,6 +82,7 @@ function RatingDots({ value, onChange, label }) {
 export default function Scorecard() {
   const { awardSessionRewards, session } = useGuestSession()
   const { journey, setScorecard } = useSmokeCraftJourney()
+  const { managementSync, saveSnapshot } = useSmokeCraftServerJourney()
   const navigate = useNavigate()
 
   const smokeCraft  = session?.smokeCraft || {}
@@ -174,6 +177,13 @@ export default function Scorecard() {
     setScorecard(snap)
     await submitScorecard(snap)
     awardSessionRewards('scorecard')
+    // Meaningful checkpoint: save a real server snapshot including the
+    // scorecard just submitted — only if a server journey already
+    // exists (established at START/RESUME). Never creates a journey
+    // here, and never blocks navigation on the result.
+    if (managementSync.serverJourneyId) {
+      saveSnapshot({ ...mapJourneyToSnapshotPayload({ ...journey, scorecard: snap }), completionState: 'in_progress' }).catch(() => {})
+    }
     navigate('/smokecraft/ai-summary')
   }
 

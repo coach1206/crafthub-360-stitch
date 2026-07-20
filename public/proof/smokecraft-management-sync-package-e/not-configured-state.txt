@@ -1,0 +1,1 @@
+NOT_CONFIGURED state is visible directly in manager-integration-view.png (Staff Handoff and Inventory rows both render NOT_CONFIGURED with their real messages) -- not captured as a separate cropped screenshot this pass.

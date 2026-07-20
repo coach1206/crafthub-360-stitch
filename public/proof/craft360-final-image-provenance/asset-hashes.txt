@@ -1,0 +1,12 @@
+CraftHub production asset:
+public/assets/CRAFTHUB 360. VENUE TABLE EXPERIENCE.png
+sha256: ceb58ced9306ee71933dc7b348918a2b822ba33714dcadbd7f60f257f210ea72
+1672x941 PNG
+
+Name-collision copies (NOT production-referenced):
+public/assets/smokecraft-reference/approved/CRAFTHUB 360. VENUE TABLE EXPERIENCE.png
+public/assets/smokecraft-reference/rejected/CRAFTHUB 360. VENUE TABLE EXPERIENCE.png
+public/assets/smokecraft/CRAFTHUB 360. VENUE TABLE EXPERIENCE.png
+sha256 (all three, identical to each other): 5d54123996272daf1aceab35bdb39ae93b4acb0b1dfd788a32d0ab5669694ad5
+NOTE: none of these three match the production hash above -- see
+docs/CRAFT360_FINAL_IMAGE_PROVENANCE_AUDIT.md "CraftHub - critical anomaly found".

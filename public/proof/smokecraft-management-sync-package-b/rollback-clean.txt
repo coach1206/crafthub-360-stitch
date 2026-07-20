@@ -1,0 +1,2 @@
+See regression-results.txt for the full Package A (16/16) and Package B (26/26) suite output, both run against the same disposable test database this package created and dropped.
+No rollback of migration 074 was performed in Package B -- schema is unchanged from Package A. See docs/SMOKECRAFT_MANAGEMENT_SYNC_PACKAGE_A_ROLLBACK.md for the tested rollback procedure (unchanged, not re-run here since Package B added no new tables).

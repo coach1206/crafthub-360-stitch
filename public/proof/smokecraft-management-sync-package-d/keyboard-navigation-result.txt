@@ -1,0 +1,1 @@
+Keyboard navigation: the Sync/Retry controls are real <button> elements (not styled divs), inheriting default Tab-focus and Enter/Space activation from the browser -- unchanged, correct semantics. Not separately re-verified with a dedicated keyboard-only Playwright script this pass (already covered structurally by using real button elements).

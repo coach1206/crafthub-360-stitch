@@ -1,0 +1,157 @@
+[
+  {
+    "name": "Seed idempotency: catalog count at least 67 after 2 runs (Package 5 floor, later packages add more)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Seed idempotency: quiz count at least 6 after 2 runs (Package 5 floor, later packages add more)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Seed idempotency: compatibility count stable at 3 after 2 runs",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Seed idempotency: flavor count stable at 16 after 2 runs",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: screen loads with new closure-pass sections",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: no horizontal overflow on load",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: filler arrangement section renders",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: no default arrangement (all 4 positions empty on load)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: tap-to-place works",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: reorder (move earlier) works",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: tap-to-remove works",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: filler arrangement persisted server-side",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: filler arrangement rehydrates after reload",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: arrangement gives explainable, non-absolute feedback",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: rolling process section renders with 10 steps",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: rolling step 1 is actionable, later steps locked",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: locked-step message visible",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: rolling step 1 completion persisted server-side",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: skipping ahead out of order is rejected (409 enforced server-side)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: rolling progress resumes after reload (step 1 shows completed)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: full rolling sequence completes",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: XP awarded on final step completion",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: duplicate completion of final step does not re-award XP",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: completed rolling sequence shows completion message",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: quality control checklist renders",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: draw test decision group renders with explanation",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: quality control decision persisted server-side",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: quality control decision rehydrates after reload",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Ownership: a different guest sees an empty arrangement, not guest A's data",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Ownership: a different guest sees no completed rolling steps",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "unexpected error",
+    "pass": false,
+    "detail": "locator.focus: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[aria-label=\"Place Ligero into the arrangement\"]')\u001b[22m\n"
+  }
+]

@@ -1,0 +1,27 @@
+              table_name              |                        conname                        | contype 
+--------------------------------------+-------------------------------------------------------+---------
+ smokecraft_management_sync_journeys  | chk_sms_journeys_status                               | c
+ smokecraft_management_sync_journeys  | chk_sms_journeys_session_number                       | c
+ smokecraft_management_sync_journeys  | smokecraft_management_sync_journeys_venue_id_fkey     | f
+ smokecraft_management_sync_journeys  | smokecraft_management_sync_journeys_pkey              | p
+ smokecraft_management_sync_snapshots | chk_sms_snapshots_return_intent                       | c
+ smokecraft_management_sync_snapshots | chk_sms_snapshots_rating                              | c
+ smokecraft_management_sync_snapshots | smokecraft_management_sync_snapshots_journey_id_fkey  | f
+ smokecraft_management_sync_snapshots | smokecraft_management_sync_snapshots_pkey             | p
+ smokecraft_management_sync_snapshots | uq_sms_snapshots_journey_version                      | u
+ smokecraft_management_sync_snapshots | uq_sms_snapshots_journey_hash                         | u
+ smokecraft_management_sync_events    | chk_sms_events_status                                 | c
+ smokecraft_management_sync_events    | chk_sms_events_destination                            | c
+ smokecraft_management_sync_events    | smokecraft_management_sync_events_journey_id_fkey     | f
+ smokecraft_management_sync_events    | smokecraft_management_sync_events_snapshot_id_fkey    | f
+ smokecraft_management_sync_events    | smokecraft_management_sync_events_venue_id_fkey       | f
+ smokecraft_management_sync_events    | smokecraft_management_sync_events_pkey                | p
+ smokecraft_management_sync_events    | uq_sms_events_idempotency                             | u
+ smokecraft_management_sync_actions   | chk_sms_actions_type                                  | c
+ smokecraft_management_sync_actions   | chk_sms_actions_status                                | c
+ smokecraft_management_sync_actions   | smokecraft_management_sync_actions_venue_id_fkey      | f
+ smokecraft_management_sync_actions   | smokecraft_management_sync_actions_journey_id_fkey    | f
+ smokecraft_management_sync_actions   | smokecraft_management_sync_actions_sync_event_id_fkey | f
+ smokecraft_management_sync_actions   | smokecraft_management_sync_actions_pkey               | p
+(23 rows)
+

@@ -1,0 +1,1 @@
+POST /venues/pkg-b-venue-active/journeys -> 201, journey created. Verified: PASS.

@@ -1,0 +1,29 @@
+# Package Execution Map (Packages 0-10)
+
+Retains the mandate's own dependency order. Every package: implement →
+test → capture proof → update registries → commit with a clear message
+→ stop for approval before the next package.
+
+| Package | Objective | Dependencies | Expected file changes | DB impact | API impact | Frontend impact | Tests required | Proof required | Rollback | Protected systems potentially affected | Exit criteria | Stop condition |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0 | Audit, registries, sequence map, gap reports | None | `docs/audits/smokecraft-final-completion/*` only | None | None | None | Documentation consistency check (§11 of this task) | This document set | Delete new docs only | None (read-only) | All 10 documents present, consistent, no production file touched | **This package — stop here, do not begin Package 1 without approval** |
+| 1 | Golden Box architecture approval + foundational backend | Package 0 approved + Decisions 1-6 resolved | New migration(s) for `golden_box_*` tables, `server/services/goldenBox/*`, `server/controllers/goldenBoxController.js`, `server/routes/goldenBoxRoutes.js` | New tables only, additive | New `/api/smokecraft/golden-box/*` endpoints | None yet (backend-first) | Backend test suite (`verify-golden-box-package-1.mjs`) | Migration proof, endpoint tests | Drop new tables only | None if scoped correctly | Schema + service layer live-tested against a real disposable DB | Stop for approval before Package 2 |
+| 2 | Seed, soil, terroir, plant, leaf education | Package 1 (component catalog tables) | New content within `SeedSoil.jsx`, `Terroir.jsx`, new catalog seed data | Seed-data inserts into Package 1's catalog tables | Possibly new read endpoints for catalogs | Extend existing screens with sub-panels, no replacement | Golden Box component-selection tests | Screenshots of new panels | Revert specific files | S4 Terroir, S2 Format-adjacent seed-soil supporting module | Catalogs populated, UI reads them live | Stop for approval |
+| 3 | Wrapper, binder, filler, curing, fermentation, aging, blending | Package 2 | New sub-panels in relevant existing screens, blend-builder groundwork | Seed-data inserts | Catalog read endpoints | Extend, no replacement | Same pattern | Same pattern | Same | S1 Format (Construction Inspection) | Same pattern | Stop |
+| 4 | Cigar anatomy, ring gauge, vitola, inspection, cold draw | Package 3 | Extend `Format.jsx` and related | Seed-data | Catalog endpoints | Extend | Same | Same | Same | S5 Format | Same | Stop |
+| 5 | Cutting, lighting, smoking technique, troubleshooting | Package 4 | Extend S6/S7 screens | Minimal | Minimal | Extend | Same | Same | Same | S6/S7 | Same | Stop |
+| 6 | Flavor, tasting progression, flavor memory, pairing | Package 5 | Extract `pairingEngine.js` into shared service (additive), extend Flavor Memory tagging | Optional flavor-taxonomy table | Shared pairing service exposed internally | Extend FlavorMemory/PairingLab, no replacement | Regression on Flavor Memory + Pairing Lab (must stay 100% passing) | Regression proof | Revert extraction if it breaks existing behavior | **Flavor Memory, Pairing Lab (VERIFIED_COMPLETE, high care)** | Existing systems unregressed + reusable service live | Stop |
+| 7 | Mentor profiles, country flags, commentary, challenges, affinity | Package 6 | New `mentors` DB table + migration, `mentorController` extension | New table | New mentor CRUD/read endpoints | `Mentor.jsx`/`MentorCommentary.jsx` read from DB instead of static array | Mentor data migration test | Proof of DB-backed mentor cards | Revert migration | Mentor Selection, Mentor Commentary (VERIFIED_COMPLETE) | Static array fully replaced by real DB-backed data, zero visual regression | Stop |
+| 8 | XP, skills, quests, challenges, collections, rewards, passport, leaderboard | Package 7 | New `xp_transactions` table, skill-tree/collections/quest/streak domain (new tables + UI) | Substantial new schema | New endpoints | New screens (skill tree, collections, challenge hub) | Full new-domain test suite | Proof per new screen | Revert new tables | Rewards.jsx, Leaderboard.jsx (extend only) | All Step 7 gamification mechanics real and persisted | Stop |
+| 9 | Golden Box Build Studio + explainable scoring | Package 8 (for XP/badge/collection integration) — but core build/scoring could start once Package 1's schema exists, per Decision 6 | `golden_box_*` full implementation, `server/services/goldenBox/scoringService.js` (server-only) | Full Golden Box schema live | Full Golden Box API | Golden Box Build Studio UI (new) | Full 26-action test suite | Screenshots + score-explanation proof | Revert new tables/routes | GoldenBox.jsx (extend the acceptance gate into a real entry point), Leaderboard (extend) | Complete blend-to-score-to-leaderboard loop works end-to-end, real data only | Stop |
+| 10 | Full sequence integration, regression, proof, production readiness | Packages 1-9 | Cross-cutting fixes only | None new | None new | None new | Full A-Z regression (all prior packages + all SmokeCraft + Venue Management suites) | Final proof set | N/A (verification package) | Everything | 100% regression pass, no known gaps undisclosed | Stop for final owner sign-off before any commit/push |
+
+## Note on Package 9 sequencing vs. Package 8
+
+The mandate lists Package 9 (Golden Box) after Package 8 (gamification).
+Decision 6 (`09-OWNER-DECISION-REGISTER.md`) asks whether gamification
+must fully precede Golden Box or can follow it — this map preserves the
+mandate's stated order as the default, with the dependency noted as
+partially soft (Golden Box's *core* build/scoring loop only strictly
+needs Package 1's schema, not all of Package 8's skill-tree/collection
+systems) so the owner can choose to reorder if desired.

@@ -1,0 +1,1 @@
+3 simultaneous POST /journeys/:id/sync requests (Promise.all) -> all 3 responses share exactly one eventId (DB unique constraint uq_sms_events_idempotency enforced the race). Verified: PASS.

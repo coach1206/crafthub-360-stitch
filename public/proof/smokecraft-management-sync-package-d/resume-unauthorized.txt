@@ -1,0 +1,1 @@
+Cross-user/cross-venue denial for journey access (GET/snapshot/complete/sync) was proven in the Package B proof-gap suite (16/16, re-run clean this package) -- RESUME reuses the identical requireJourneyOwnership check, so an unauthorized resume attempt is denied by the same, already-proven code path.

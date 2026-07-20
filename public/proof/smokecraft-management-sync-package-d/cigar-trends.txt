@@ -1,0 +1,1 @@
+See regression-results.txt: top cigar 'Robusto Reserve' (count=4) correctly outranks 'Torpedo Classic' (count=2) in the real seeded data. PASS.

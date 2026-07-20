@@ -1,0 +1,1 @@
+See regression-results.txt: Venue B (2 seeded journeys, below the 5-journey minimum) returns cigarTrends.availability='insufficient_data' with the real sampleSize (2) and threshold (5) shown, not a fabricated ranking. PASS.

@@ -1,0 +1,2 @@
+0
+0 rows in smokecraft_management_sync_journeys confirms no leftover test data

@@ -1,0 +1,1 @@
+POST /journeys/:id/sync {destination:'venue_insights'} -> 201, eventId (redacted), created:true. Verified: PASS.

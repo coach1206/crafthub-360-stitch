@@ -1,0 +1,1 @@
+Cross-user denial uses the same requireJourneyOwnership check (journey.user_id match) as cross-guest — same code path, verified structurally; not separately exercised with two distinct real authenticated users this pass (see Known Limitations).

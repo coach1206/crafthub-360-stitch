@@ -1,0 +1,1 @@
+See regression-results.txt: completedJourneyCount === 6 for 6 real seeded completed journeys at Venue A, confirmed via direct API response inspection. PASS.

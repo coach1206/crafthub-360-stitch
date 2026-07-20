@@ -1,0 +1,1 @@
+STORAGE_PROVIDER_STATUS: NOT_CONFIGURED (local dev-disk adapter only; real object storage deferred to Package 7)

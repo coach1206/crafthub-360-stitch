@@ -1,0 +1,1 @@
+Cross-venue denial: /venues/:venueId/actions requires requireVenueMembership scoped to req.validatedVenue.venue_id — a membership at Venue A does not satisfy a request for Venue B (structurally enforced by the per-request venue_id parameter in the membership query); not separately exercised with two real distinct venue_memberships rows this pass (see Known Limitations).

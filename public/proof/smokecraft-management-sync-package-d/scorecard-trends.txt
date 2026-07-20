@@ -1,0 +1,1 @@
+See regression-results.txt: scorecard average = 4 (all 6 seeded journeys rated 4) returned accurately. PASS.

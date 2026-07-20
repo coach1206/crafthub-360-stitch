@@ -1,0 +1,131 @@
+=== smokecraft_management_sync_journeys ===
+                   Table "public.smokecraft_management_sync_journeys"
+     Column      |           Type           | Collation | Nullable |       Default       
+-----------------+--------------------------+-----------+----------+---------------------
+ journey_id      | uuid                     |           | not null | gen_random_uuid()
+ tenant_id       | text                     |           | not null | 
+ venue_id        | text                     |           | not null | 
+ user_id         | text                     |           |          | 
+ guest_reference | text                     |           | not null | 
+ session_number  | smallint                 |           | not null | 
+ phase           | text                     |           | not null | 
+ status          | text                     |           | not null | 'in_progress'::text
+ started_at      | timestamp with time zone |           | not null | now()
+ completed_at    | timestamp with time zone |           |          | 
+ source_version  | text                     |           | not null | 
+ created_at      | timestamp with time zone |           | not null | now()
+ updated_at      | timestamp with time zone |           | not null | now()
+Indexes:
+    "smokecraft_management_sync_journeys_pkey" PRIMARY KEY, btree (journey_id)
+    "idx_sms_journeys_guest_ref" btree (guest_reference)
+    "idx_sms_journeys_user" btree (user_id)
+    "idx_sms_journeys_venue_status" btree (venue_id, status)
+Check constraints:
+    "chk_sms_journeys_session_number" CHECK (session_number >= 1 AND session_number <= 27)
+    "chk_sms_journeys_status" CHECK (status = ANY (ARRAY['in_progress'::text, 'completed'::text, 'abandoned'::text]))
+Foreign-key constraints:
+    "smokecraft_management_sync_journeys_venue_id_fkey" FOREIGN KEY (venue_id) REFERENCES venues(venue_id) ON DELETE RESTRICT
+Referenced by:
+    TABLE "smokecraft_management_sync_actions" CONSTRAINT "smokecraft_management_sync_actions_journey_id_fkey" FOREIGN KEY (journey_id) REFERENCES smokecraft_management_sync_journeys(journey_id) ON DELETE SET NULL
+    TABLE "smokecraft_management_sync_events" CONSTRAINT "smokecraft_management_sync_events_journey_id_fkey" FOREIGN KEY (journey_id) REFERENCES smokecraft_management_sync_journeys(journey_id) ON DELETE CASCADE
+    TABLE "smokecraft_management_sync_snapshots" CONSTRAINT "smokecraft_management_sync_snapshots_journey_id_fkey" FOREIGN KEY (journey_id) REFERENCES smokecraft_management_sync_journeys(journey_id) ON DELETE CASCADE
+
+
+=== smokecraft_management_sync_snapshots ===
+                      Table "public.smokecraft_management_sync_snapshots"
+         Column          |           Type           | Collation | Nullable |      Default      
+-------------------------+--------------------------+-----------+----------+-------------------
+ snapshot_id             | uuid                     |           | not null | gen_random_uuid()
+ journey_id              | uuid                     |           | not null | 
+ snapshot_version        | integer                  |           | not null | 1
+ cigar_selection         | jsonb                    |           |          | 
+ pairing_selection       | jsonb                    |           |          | 
+ flavor_notes            | jsonb                    |           |          | 
+ mentor_selections       | jsonb                    |           |          | 
+ scorecard               | jsonb                    |           |          | 
+ rating                  | smallint                 |           |          | 
+ preferences             | jsonb                    |           |          | 
+ feedback_text           | text                     |           |          | 
+ return_intent           | text                     |           |          | 
+ connections_saved       | smallint                 |           | not null | 0
+ completion_state        | text                     |           | not null | 
+ passport_state          | jsonb                    |           |          | 
+ staff_handoff_requested | boolean                  |           | not null | false
+ payload_hash            | text                     |           | not null | 
+ created_at              | timestamp with time zone |           | not null | now()
+Indexes:
+    "smokecraft_management_sync_snapshots_pkey" PRIMARY KEY, btree (snapshot_id)
+    "idx_sms_snapshots_journey_version" btree (journey_id, snapshot_version)
+    "uq_sms_snapshots_journey_hash" UNIQUE CONSTRAINT, btree (journey_id, payload_hash)
+    "uq_sms_snapshots_journey_version" UNIQUE CONSTRAINT, btree (journey_id, snapshot_version)
+Check constraints:
+    "chk_sms_snapshots_rating" CHECK (rating IS NULL OR rating >= 1 AND rating <= 5)
+    "chk_sms_snapshots_return_intent" CHECK (return_intent IS NULL OR (return_intent = ANY (ARRAY['yes'::text, 'no'::text, 'maybe'::text])))
+Foreign-key constraints:
+    "smokecraft_management_sync_snapshots_journey_id_fkey" FOREIGN KEY (journey_id) REFERENCES smokecraft_management_sync_journeys(journey_id) ON DELETE CASCADE
+Referenced by:
+    TABLE "smokecraft_management_sync_events" CONSTRAINT "smokecraft_management_sync_events_snapshot_id_fkey" FOREIGN KEY (snapshot_id) REFERENCES smokecraft_management_sync_snapshots(snapshot_id) ON DELETE RESTRICT
+
+
+=== smokecraft_management_sync_events ===
+                   Table "public.smokecraft_management_sync_events"
+     Column      |           Type           | Collation | Nullable |      Default      
+-----------------+--------------------------+-----------+----------+-------------------
+ event_id        | uuid                     |           | not null | gen_random_uuid()
+ journey_id      | uuid                     |           | not null | 
+ snapshot_id     | uuid                     |           | not null | 
+ venue_id        | text                     |           | not null | 
+ guest_reference | text                     |           | not null | 
+ destination     | text                     |           | not null | 
+ status          | text                     |           | not null | 'pending'::text
+ idempotency_key | text                     |           | not null | 
+ payload_version | integer                  |           | not null | 
+ created_at      | timestamp with time zone |           | not null | now()
+ started_at      | timestamp with time zone |           |          | 
+ completed_at    | timestamp with time zone |           |          | 
+ error_code      | text                     |           |          | 
+ error_message   | text                     |           |          | 
+ retry_count     | smallint                 |           | not null | 0
+ audit_metadata  | jsonb                    |           |          | 
+Indexes:
+    "smokecraft_management_sync_events_pkey" PRIMARY KEY, btree (event_id)
+    "idx_sms_events_journey" btree (journey_id)
+    "idx_sms_events_venue_status" btree (venue_id, status)
+    "uq_sms_events_idempotency" UNIQUE CONSTRAINT, btree (venue_id, journey_id, destination, payload_version)
+Check constraints:
+    "chk_sms_events_destination" CHECK (destination = ANY (ARRAY['venue_insights'::text, 'eat_360'::text, 'pos_360'::text, 'novee_os'::text, 'inventory'::text, 'staff_handoff'::text]))
+    "chk_sms_events_status" CHECK (status = ANY (ARRAY['pending'::text, 'completed'::text, 'failed'::text]))
+Foreign-key constraints:
+    "smokecraft_management_sync_events_journey_id_fkey" FOREIGN KEY (journey_id) REFERENCES smokecraft_management_sync_journeys(journey_id) ON DELETE CASCADE
+    "smokecraft_management_sync_events_snapshot_id_fkey" FOREIGN KEY (snapshot_id) REFERENCES smokecraft_management_sync_snapshots(snapshot_id) ON DELETE RESTRICT
+    "smokecraft_management_sync_events_venue_id_fkey" FOREIGN KEY (venue_id) REFERENCES venues(venue_id) ON DELETE RESTRICT
+Referenced by:
+    TABLE "smokecraft_management_sync_actions" CONSTRAINT "smokecraft_management_sync_actions_sync_event_id_fkey" FOREIGN KEY (sync_event_id) REFERENCES smokecraft_management_sync_events(event_id) ON DELETE SET NULL
+
+
+=== smokecraft_management_sync_actions ===
+                  Table "public.smokecraft_management_sync_actions"
+    Column     |           Type           | Collation | Nullable |      Default      
+---------------+--------------------------+-----------+----------+-------------------
+ action_id     | uuid                     |           | not null | gen_random_uuid()
+ venue_id      | text                     |           | not null | 
+ journey_id    | uuid                     |           |          | 
+ sync_event_id | uuid                     |           |          | 
+ actor_user_id | text                     |           | not null | 
+ action_type   | text                     |           | not null | 
+ action_status | text                     |           | not null | 'completed'::text
+ metadata      | jsonb                    |           |          | 
+ created_at    | timestamp with time zone |           | not null | now()
+Indexes:
+    "smokecraft_management_sync_actions_pkey" PRIMARY KEY, btree (action_id)
+    "idx_sms_actions_journey" btree (journey_id)
+    "idx_sms_actions_venue" btree (venue_id)
+Check constraints:
+    "chk_sms_actions_status" CHECK (action_status = ANY (ARRAY['completed'::text, 'failed'::text]))
+    "chk_sms_actions_type" CHECK (action_type = ANY (ARRAY['analytics_viewed'::text, 'staff_feedback_submitted'::text, 'inventory_handoff_requested'::text, 'sync_requested'::text, 'sync_completed'::text, 'sync_failed'::text]))
+Foreign-key constraints:
+    "smokecraft_management_sync_actions_journey_id_fkey" FOREIGN KEY (journey_id) REFERENCES smokecraft_management_sync_journeys(journey_id) ON DELETE SET NULL
+    "smokecraft_management_sync_actions_sync_event_id_fkey" FOREIGN KEY (sync_event_id) REFERENCES smokecraft_management_sync_events(event_id) ON DELETE SET NULL
+    "smokecraft_management_sync_actions_venue_id_fkey" FOREIGN KEY (venue_id) REFERENCES venues(venue_id) ON DELETE RESTRICT
+
+

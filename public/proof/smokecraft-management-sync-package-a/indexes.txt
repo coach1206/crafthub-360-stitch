@@ -1,0 +1,19 @@
+                 indexname                 |              tablename               
+-------------------------------------------+--------------------------------------
+ idx_sms_actions_journey                   | smokecraft_management_sync_actions
+ idx_sms_actions_venue                     | smokecraft_management_sync_actions
+ smokecraft_management_sync_actions_pkey   | smokecraft_management_sync_actions
+ idx_sms_events_journey                    | smokecraft_management_sync_events
+ idx_sms_events_venue_status               | smokecraft_management_sync_events
+ smokecraft_management_sync_events_pkey    | smokecraft_management_sync_events
+ uq_sms_events_idempotency                 | smokecraft_management_sync_events
+ idx_sms_journeys_guest_ref                | smokecraft_management_sync_journeys
+ idx_sms_journeys_user                     | smokecraft_management_sync_journeys
+ idx_sms_journeys_venue_status             | smokecraft_management_sync_journeys
+ smokecraft_management_sync_journeys_pkey  | smokecraft_management_sync_journeys
+ idx_sms_snapshots_journey_version         | smokecraft_management_sync_snapshots
+ smokecraft_management_sync_snapshots_pkey | smokecraft_management_sync_snapshots
+ uq_sms_snapshots_journey_hash             | smokecraft_management_sync_snapshots
+ uq_sms_snapshots_journey_version          | smokecraft_management_sync_snapshots
+(15 rows)
+

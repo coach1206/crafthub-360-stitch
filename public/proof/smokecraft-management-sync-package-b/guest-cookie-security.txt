@@ -1,0 +1,1 @@
+Cookie flags confirmed: HttpOnly present; Path=/api/smokecraft/management-sync; SameSite=lax (dev default); Secure=false in dev (AUTH_COOKIE_SECURE follows authConfig, true in production). Value redacted.

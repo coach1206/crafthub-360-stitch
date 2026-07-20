@@ -134,12 +134,9 @@ export default function FlavorMemory() {
     return saved ? { ...EMPTY_STATE, ...saved } : { ...EMPTY_STATE }
   })
   const [done, setDone] = useState(false)
+  const [saveState, setSaveState] = useState('idle') // idle | saving | saved | error
   const initialized = useRef(false)
-
-  useEffect(() => {
-    if (!initialized.current) { initialized.current = true; return }
-    setFlavorMemory(fm)
-  }, [fm]) // eslint-disable-line react-hooks/exhaustive-deps
+  const saveTimerRef = useRef(null)
 
   function toggleFlavor(id) {
     triggerHaptic('light')
@@ -152,50 +149,76 @@ export default function FlavorMemory() {
   }
 
   const saveToBackend = useCallback(async (data) => {
-    try {
-      await fetch('/api/modules/smokecraft/pairing/flavor-memory', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId: session?.sessionId || 'local-session',
-          userId: session?.guestId || 'guest',
-          flavorNotes: data.selectedFlavors,
-          aromaNotes: data.aromaNotes,
-          strengthPerception: data.strength,
-          bodyPerception: data.body,
-          finishLength: data.intensity,
-          memoryTags: data.selectedFlavors,
-        }),
-      })
-    } catch {}
+    const res = await fetch('/api/modules/smokecraft/pairing/flavor-memory', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: session?.sessionId || 'local-session',
+        userId: session?.guestId || 'guest',
+        flavorNotes: data.selectedFlavors,
+        aromaNotes: data.aromaNotes,
+        strengthPerception: data.strength,
+        bodyPerception: data.body,
+        finishLength: data.intensity,
+        memoryTags: data.selectedFlavors,
+      }),
+    })
+    if (!res.ok) throw new Error(`flavor-memory save failed: ${res.status}`)
   }, [session])
 
+  // Game-engine wiring pass — perception sliders and flavor-zone selections
+  // previously only reached the backend on final "Continue", with the fetch
+  // error silently swallowed. Debounced real-time save with honest
+  // saving/saved/error state, matching the tactile-interaction rule
+  // (backend persistence + error state required for every control).
+  useEffect(() => {
+    if (!initialized.current) { initialized.current = true; return }
+    setFlavorMemory(fm)
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
+    setSaveState('saving')
+    saveTimerRef.current = setTimeout(async () => {
+      try {
+        await saveToBackend(fm)
+        setSaveState('saved')
+      } catch {
+        setSaveState('error')
+      }
+    }, 600)
+    return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current) }
+  }, [fm, saveToBackend]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const saveToPassport = useCallback(async (data) => {
-    try {
-      await fetch('/api/passport-360/smokecraft/flavor-memory/save', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          guestId: session?.guestId || 'guest',
-          sourceSessionId: session?.sessionId || 'local-session',
-          tasteTags: data.selectedFlavors,
-          tastingNotes: data.personalNotes,
-          flavorProfileSource: 'guest_interactive',
-          dataQualityStatus: data.selectedFlavors.length > 0 ? 'valid' : 'empty',
-        }),
-      })
-    } catch {}
+    const res = await fetch('/api/passport-360/smokecraft/flavor-memory/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        guestId: session?.guestId || 'guest',
+        sourceSessionId: session?.sessionId || 'local-session',
+        tasteTags: data.selectedFlavors,
+        tastingNotes: data.personalNotes,
+        flavorProfileSource: 'guest_interactive',
+        dataQualityStatus: data.selectedFlavors.length > 0 ? 'valid' : 'empty',
+      }),
+    })
+    if (!res.ok) throw new Error(`passport save failed: ${res.status}`)
   }, [session])
 
   async function handleContinue() {
     if (done) return
-    setDone(true)
     triggerHaptic('medium')
 
     const snapshot = { ...fm, savedAt: Date.now() }
     setFm(prev => ({ ...prev, savedAt: snapshot.savedAt }))
 
-    await Promise.all([saveToBackend(snapshot), saveToPassport(snapshot)])
+    setSaveState('saving')
+    try {
+      await Promise.all([saveToBackend(snapshot), saveToPassport(snapshot)])
+    } catch {
+      setSaveState('error')
+      return
+    }
+    setSaveState('saved')
+    setDone(true)
     awardSessionRewards('flavor-memory')
     navigate('/smokecraft/pairing-lab')
   }
@@ -264,15 +287,25 @@ export default function FlavorMemory() {
         <div style={{
           position: 'absolute',
           left: '51%', top: '52%', width: '44%', height: '26%',
-          background: 'rgba(5,5,5,0.88)',
+          background: '#050505', // was rgba(5,5,5,0.88) — non-opaque, fixed
           border: '1px solid rgba(233,193,118,0.22)',
           borderRadius: 6, boxSizing: 'border-box',
           padding: 'clamp(5px,0.8vw,10px)',
           pointerEvents: 'auto',
           fontFamily: 'Georgia, serif',
         }}>
-          <div style={{ fontSize: 'clamp(7px,0.58vw,8px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
-            Perception
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+            <span style={{ fontSize: 'clamp(7px,0.58vw,8px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              Perception
+            </span>
+            <span role="status" aria-live="polite" style={{
+              fontSize: 'clamp(7px,0.58vw,8px)',
+              color: saveState === 'error' ? '#e2a6a6' : saveState === 'saved' ? '#7fd0a3' : 'rgba(229,226,225,0.4)',
+            }}>
+              {saveState === 'saving' && 'Saving…'}
+              {saveState === 'saved' && 'Saved'}
+              {saveState === 'error' && 'Save failed'}
+            </span>
           </div>
           {[
             { key: 'intensity', label: 'Intensity' },
@@ -303,7 +336,7 @@ export default function FlavorMemory() {
         <div style={{
           position: 'absolute',
           left: '51%', top: '81%', width: '44%', height: '13%',
-          background: 'rgba(5,5,5,0.88)',
+          background: '#050505', // was rgba(5,5,5,0.88) — non-opaque, fixed
           border: '1px solid rgba(233,193,118,0.22)',
           borderRadius: 6, boxSizing: 'border-box',
           padding: 'clamp(4px,0.6vw,7px)',

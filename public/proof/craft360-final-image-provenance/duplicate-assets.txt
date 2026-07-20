@@ -1,0 +1,4 @@
+See docs/CRAFT360_ASSET_DUPLICATE_ANALYSIS.md for full groups.
+Group 1 (CRAFTHUB 360. VENUE TABLE EXPERIENCE.png name collision): see asset-hashes.txt.
+Group 2 (crafthub-landing.png, 6 copies across public/): not hash-compared this pass, none production-referenced.
+Group 3 (crafthub-gauge-badge.png in pos3/eat/novi): plausibly intentional per-module copies.

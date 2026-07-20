@@ -1,0 +1,1 @@
+localStorage and sessionStorage inspected via page.evaluate() -- neither contains any JWT-shaped string (checked for the 'eyJhbGci' base64 JWT header prefix). Confirmed: PASS.

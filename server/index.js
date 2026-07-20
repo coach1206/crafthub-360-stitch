@@ -21,6 +21,13 @@ import passport360SmokeCraftRoutes from './routes/passport360SmokeCraftRoutes.js
 import eatSmokeCraftLiveSyncRoutes from './routes/eatSmokeCraftLiveSyncRoutes.js'
 import pos360SmokeCraftOrderBridgeRoutes from './routes/pos360SmokeCraftOrderBridgeRoutes.js'
 import ticketTapperPromotionRoutes from './routes/ticketTapperPromotionRoutes.js'
+import managementSyncRoutes from './routes/managementSyncRoutes.js'
+import venueManagementRoutes from './routes/venueManagementRoutes.js'
+import goldenBoxRoutes from './routes/goldenBoxRoutes.js'
+import seedSoilRoutes from './routes/seedSoilRoutes.js'
+import leafConstructionRoutes from './routes/leafConstructionRoutes.js'
+import flavorPairingRoutes from './routes/flavorPairingRoutes.js'
+import goldenBoxContentRoutes from './routes/goldenBoxContentRoutes.js'
 import dayone360SmokeCraftConnectionRoutes from './routes/dayone360SmokeCraftConnectionRoutes.js'
 import leaderboardRoutes     from './routes/leaderboardRoutes.js'
 import pos3Routes            from './routes/pos3Routes.js'
@@ -210,6 +217,13 @@ app.use('/api/passport-360/smokecraft', passport360SmokeCraftRoutes)
 app.use('/api/eat-360/smokecraft',     eatSmokeCraftLiveSyncRoutes)
 app.use('/api/pos360/smokecraft',      pos360SmokeCraftOrderBridgeRoutes)
 app.use('/api/ticket-tapper/promotions', ticketTapperPromotionRoutes)
+app.use('/api/smokecraft/management-sync', managementSyncRoutes)
+app.use('/api/venue-management', venueManagementRoutes)
+app.use('/api/smokecraft/golden-box', goldenBoxRoutes)
+app.use('/api/smokecraft/golden-box-content', goldenBoxContentRoutes)
+app.use('/api/smokecraft/seed-soil', seedSoilRoutes)
+app.use('/api/smokecraft/leaf-construction', leafConstructionRoutes)
+app.use('/api/smokecraft/flavor-pairing', flavorPairingRoutes)
 app.use('/api/dayone360/smokecraft',   dayone360SmokeCraftConnectionRoutes)
 app.use('/api/leaderboard',       leaderboardRoutes)
 app.use('/api/pos3',              pos3Routes)

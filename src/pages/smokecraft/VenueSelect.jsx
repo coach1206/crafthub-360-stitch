@@ -1,8 +1,13 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { useDemoMode } from '../../context/DemoModeContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import TicketTapperSpecialsStrip from '../../components/smokecraft/TicketTapperSpecialsStrip.jsx'
+import { fetchTicketTapperSpecials } from '../../services/smokeCraftTicketTapperSpecialsApi.js'
+import { getActiveTicketTapperSpecials } from '../../utils/smokeCraftSpecialsEngine.js'
+import { smokeCraftTicketTapperSpecialsSeed } from '../../data/smokeCraftTicketTapperSpecials.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 // No live venue directory/backend is connected. Previously this screen
@@ -42,7 +47,48 @@ function VenueCrest({ name, selected }) {
 
 export default function VenueSelect() {
   const { journey, setSelectedVenue, setLastEntryScreen } = useSmokeCraftJourney()
+  const { isDemoMode } = useDemoMode()
   const navigate = useNavigate()
+
+  // Compact Ticket Tapper — real specials for the just-selected venue only.
+  // No venue selected (or "skip" chosen) → honest "select a venue" state,
+  // never a fallback to a different/default venue's promotions.
+  const [tapperSpecials, setTapperSpecials] = useState([])
+  const [tapperLocalPreview, setTapperLocalPreview] = useState(false)
+  const [tapperUnavailable, setTapperUnavailable] = useState(false)
+  const activeVenueId = (journey.selectedVenue && !journey.selectedVenue.skipped) ? journey.selectedVenue.id : null
+
+  useEffect(() => {
+    if (!activeVenueId) {
+      setTapperSpecials([])
+      setTapperLocalPreview(false)
+      setTapperUnavailable(false)
+      return
+    }
+    let cancelled = false
+    fetchTicketTapperSpecials(activeVenueId).then(res => {
+      if (cancelled || !res.ok) return
+      if (!res.localPreview) {
+        setTapperSpecials(res.specials || [])
+        setTapperLocalPreview(false)
+        setTapperUnavailable(false)
+      } else if (isDemoMode) {
+        setTapperSpecials(res.specials || smokeCraftTicketTapperSpecialsSeed.specials)
+        setTapperLocalPreview(true)
+        setTapperUnavailable(false)
+      } else {
+        setTapperSpecials([])
+        setTapperLocalPreview(false)
+        setTapperUnavailable(true)
+      }
+    })
+    return () => { cancelled = true }
+  }, [activeVenueId, isDemoMode])
+
+  const tapperActiveSpecials = useMemo(
+    () => getActiveTicketTapperSpecials({ specials: tapperSpecials, inventoryItems: [] }),
+    [tapperSpecials]
+  )
 
   const [phase, setPhase] = useState('loading') // loading | error | ready
   const [query, setQuery] = useState('')
@@ -270,6 +316,15 @@ export default function VenueSelect() {
               </button>
 
               {saveStatus === 'saved' && <div style={{ fontSize: 12, color: GOLD, textAlign: 'center' }}>✓ Saved</div>}
+
+              <TicketTapperSpecialsStrip
+                compact
+                specials={tapperActiveSpecials}
+                venueId={activeVenueId}
+                localPreview={tapperLocalPreview}
+                noVenue={!activeVenueId}
+                unavailable={tapperUnavailable}
+              />
             </>
           )}
         </div>

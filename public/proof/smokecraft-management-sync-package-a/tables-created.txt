@@ -1,0 +1,8 @@
+              tablename               
+--------------------------------------
+ smokecraft_management_sync_actions
+ smokecraft_management_sync_events
+ smokecraft_management_sync_journeys
+ smokecraft_management_sync_snapshots
+(4 rows)
+

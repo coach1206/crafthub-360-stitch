@@ -1,0 +1,29 @@
+SmokeCraft Ticket Tapper — Venue Isolation Evidence
+======================================================
+
+Mechanism verified: venueId is derived exclusively from
+journey.selectedVenue.id (SmokeCraftJourneyContext), passed as a URL path
+segment to GET /api/smokecraft/ticket-tapper/specials/:venueId. Changing
+the selected venue changes the fetch URL and therefore the effect
+re-runs ([venueId, isDemoMode] dependency array) — no client-side
+caching or merging of a previous venue's specials into a new venue's
+result; setSpecialsRaw is called fresh on every venueId change, replacing
+(not appending to) the specials array.
+
+Honest limitation of this pass: /smokecraft/venue-select currently lists
+zero real venues (VENUES = [] in VenueSelect.jsx — no live venue
+directory backend is connected, per the existing, separate honest-empty-
+state implementation already in that file). This means there are not
+currently two distinct real venue IDs to select between in the running
+app to demonstrate an actual Venue A vs. Venue B UI comparison. The
+isolation guarantee above was verified at the code/request level
+(distinct venueId -> distinct API URL -> fresh state replacement) rather
+than via two live screenshots of different real venues, since no second
+real venue exists to select. venue-a-specials.png / venue-b-specials.png
+were not produced for this reason; this is disclosed rather than
+fabricated with placeholder venue names.
+
+Cross-venue leakage prevention is otherwise unchanged from the existing
+backend contract (server-side venue_id scoping in
+ticket_tapper_promotions / ticket_tapper_specials, established in the
+Ticket Tapper identification correction) — not modified this package.

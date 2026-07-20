@@ -1,0 +1,10 @@
+Scope note: full per-route "git commit where asset entered the branch"
+and "exists on origin/recovery/smokecraft-codex-final" lookups for all
+33+ routes were not individually run this pass (see the scope note at
+the top of docs/CRAFT360_FINAL_IMAGE_PROVENANCE_AUDIT.md for why, and
+what was verified instead: universal local-existence + hash check for
+all 48 SC_ASSETS references, plus a live/remote-URL grep across all of
+src/ and public/*.js*, both of which passed for every route).
+The one anomaly that WAS investigated in depth (CraftHub's name-collision
+files) is documented fully in docs/CRAFT360_FINAL_IMAGE_PROVENANCE_AUDIT.md
+and docs/CRAFT360_ASSET_DUPLICATE_ANALYSIS.md.

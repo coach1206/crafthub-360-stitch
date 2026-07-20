@@ -1,0 +1,7 @@
+public/assets/smokecraft-reference/approved/CRAFTHUB 360. VENUE TABLE EXPERIENCE.png
+Status: BLOCKED -- filename suggests this is the canonical approved
+reference, but its hash (5d541239...) does not match the actual
+production asset (ceb58ced...) used by CraftHub.jsx. Needs a human
+visual comparison to determine whether this file should be replaced,
+renamed, or removed. Not resolved in this pass. Production is unaffected
+(CraftHub.jsx reads from public/assets/, not from this reference folder).

@@ -1,0 +1,1 @@
+No new retry logic was added -- the health checks are synchronous, single-attempt, real queries; a failure is reported honestly rather than silently retried and reported as success.

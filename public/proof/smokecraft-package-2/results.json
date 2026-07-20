@@ -1,0 +1,117 @@
+[
+  {
+    "name": "Handheld 390x844: Hub — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Hub — real mentor name rendered (Don Alejandro, not hardcoded)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Competition Detail — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Eligibility result — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: \"Create My Entry\" button fully within viewport (no hidden control)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Entry Workspace / Blend Builder — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Educational modal close control accessible within viewport",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Educational modal — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Draft Review — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Submit control not hidden off-screen",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Submission Confirmation — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Entry Status (post-submit) — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Results Experience — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 360x800: Hub — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 360x800: Competition Detail — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "tablet10: Hub — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "tablet12: Hub — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "tablet15: Hub — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "desktop: Hub — no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Mentor portrait: real approved image path rendered (not a placeholder)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Mentor portrait: alt text present and matches mentor name",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Mentor portrait: honest unassigned state shown when no mentor selected",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Test data removed",
+    "pass": true,
+    "detail": ""
+  }
+]

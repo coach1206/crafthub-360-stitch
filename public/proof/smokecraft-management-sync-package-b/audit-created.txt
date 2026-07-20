@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM audit_logs WHERE action_category='VENUE' AND action IN ('journey_created','journey_completed','snapshot_created','sync_requested') > 0 -- confirmed real rows written via the existing auditAction() middleware. Verified: PASS.

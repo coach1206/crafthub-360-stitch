@@ -20,6 +20,8 @@ import TicketTapperSpecialsStrip from '../../components/smokecraft/TicketTapperS
 import StaffSpecialsControlPanel from '../../components/smokecraft/StaffSpecialsControlPanel.jsx'
 import { smokeCraftTicketTapperSpecialsSeed } from '../../data/smokeCraftTicketTapperSpecials.js'
 import { smokeCraftInventorySeed } from '../../data/smokeCraftInventorySeed.js'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { useDemoMode } from '../../context/DemoModeContext.jsx'
 
 const BG_IMAGE = '/cigar , drink & pairingfood 0rdering.png'
 const TABS = ['Smoke', 'Drink', 'Food', 'Partner Network']
@@ -230,7 +232,13 @@ function OrderSidebar({ cart, onRemove, bridge, localPreview, onOrderDirect, onC
 
 // ── Main Component ─────────────────────────────────────────────────────────────
 export default function SmokeCraftVenueCommerce({ tableNumber = '1', guestSessionId }) {
-  const venueId = 'smokecraft-360-main'
+  const { journey } = useSmokeCraftJourney()
+  const { isDemoMode } = useDemoMode()
+  // Real selected-venue source (SmokeCraftJourneyContext, populated by
+  // /smokecraft/venue-select). No fallback to a hardcoded venue ID —
+  // when no real venue is selected (or the guest chose "skip"), venueId
+  // stays null and venue-scoped API calls are not made.
+  const venueId = (journey.selectedVenue && !journey.selectedVenue.skipped) ? journey.selectedVenue.id : null
   const tableLabel = `Table ${tableNumber}`
   const [tab, setTab] = useState('Smoke')
   const [menu, setMenu] = useState(null)
@@ -242,19 +250,40 @@ export default function SmokeCraftVenueCommerce({ tableNumber = '1', guestSessio
   const [submitResult, setSubmitResult] = useState(null)
   const [imgErr, setImgErr] = useState(false)
 
-  // Ticket Tapper Specials state
-  const [specialsRaw, setSpecialsRaw] = useState(smokeCraftTicketTapperSpecialsSeed.specials)
-  const [inventoryItems, setInventoryItems] = useState(smokeCraftInventorySeed.items)
-  const [specialsLocalPreview, setSpecialsLocalPreview] = useState(true)
+  // Ticket Tapper Specials state. Seed data is only used as an initial
+  // value in explicit demo mode — in live mode the strip starts empty
+  // and only shows what the real API returns.
+  const [specialsRaw, setSpecialsRaw] = useState(isDemoMode ? smokeCraftTicketTapperSpecialsSeed.specials : [])
+  const [inventoryItems, setInventoryItems] = useState(isDemoMode ? smokeCraftInventorySeed.items : [])
+  const [specialsLocalPreview, setSpecialsLocalPreview] = useState(isDemoMode)
+  const [specialsUnavailable, setSpecialsUnavailable] = useState(false)
   const [showStaffControls, setShowStaffControls] = useState(false)
   const DEMO_STAFF = { staffId: 'staff-preview', name: 'Preview Staff', role: 'manager' }
 
   useEffect(() => {
-    // Fetch from legacy local-first API (seeds fallback)
+    if (!venueId) {
+      setSpecialsRaw(isDemoMode ? smokeCraftTicketTapperSpecialsSeed.specials : [])
+      setSpecialsLocalPreview(isDemoMode)
+      setSpecialsUnavailable(false)
+      return
+    }
+    // Fetch from legacy local-first API. In live mode, a backend-unavailable
+    // response is treated as an honest "unavailable" state, not a silent
+    // fallback to seed/demo specials.
     fetchTicketTapperSpecials(venueId).then(res => {
-      if (res.ok) {
+      if (!res.ok) return
+      if (!res.localPreview) {
+        setSpecialsRaw(res.specials || [])
+        setSpecialsLocalPreview(false)
+        setSpecialsUnavailable(false)
+      } else if (isDemoMode) {
         setSpecialsRaw(res.specials || smokeCraftTicketTapperSpecialsSeed.specials)
-        setSpecialsLocalPreview(!!res.localPreview)
+        setSpecialsLocalPreview(true)
+        setSpecialsUnavailable(false)
+      } else {
+        setSpecialsRaw([])
+        setSpecialsLocalPreview(false)
+        setSpecialsUnavailable(true)
       }
     })
     // Supplement with Ticket Tapper promotion backend (real DB when available)
@@ -289,9 +318,9 @@ export default function SmokeCraftVenueCommerce({ tableNumber = '1', guestSessio
       })
       .catch(() => {})
     fetchTicketTapperInventory(venueId).then(res => {
-      if (res.ok && res.items?.length) setInventoryItems(res.items)
+      if (res.ok && res.items?.length && (!res.localPreview || isDemoMode)) setInventoryItems(res.items)
     })
-  }, [venueId])
+  }, [venueId, isDemoMode])
 
   const activeSpecials = getActiveTicketTapperSpecials({ specials: specialsRaw, inventoryItems })
 

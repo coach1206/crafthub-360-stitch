@@ -1,0 +1,1 @@
+staff_handoff.state = NOT_CONFIGURED, confirmed by code search this package: no staff-feedback or staff-handoff table, route, or button exists anywhere in this codebase. No fake destination created.

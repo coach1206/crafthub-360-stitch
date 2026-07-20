@@ -1,0 +1,1 @@
+See regression-results.txt: Venue A manager (real venue_memberships row) receives 403 requesting Venue B's analytics; same manager succeeds on Venue A. PASS.

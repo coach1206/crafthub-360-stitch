@@ -272,7 +272,61 @@ function ensureTickerStyles() {
   document.head.appendChild(el)
 }
 
-export default function TicketTapperSpecialsStrip({ specials = [], inventoryItems = [], onAddSpecial, venueId, tableLabel, localPreview, venueFeatureSettings = null }) {
+function CompactSpecialChip({ special, onAdd, venueId, tableLabel }) {
+  const [adding, setAdding] = useState(false)
+  const { allowed, reason } = canOneTapOrderSpecial({ special, inventoryItems: [] })
+  const isSoldOut = !allowed && reason === 'sold_out'
+  const qty = special.inventory?.quantityAvailable ?? 99
+  const hasDiscount = special.pricing?.discountAmount > 0
+
+  async function handleTap() {
+    const tapEvent = buildSpecialTrackingEvent({ special, action: 'special_tap', venueId, tableLabel, orderMode: 'customer_self_order' })
+    trackTicketTapperSpecialTap(special.id, { venueId, tableLabel, specialData: special, event: tapEvent })
+    if (isSoldOut) return
+    setAdding(true)
+    const orderItems = buildOneTapSpecialOrderItems({ special })
+    const addEvent = buildSpecialTrackingEvent({ special, action: 'special_added', venueId, tableLabel })
+    await trackTicketTapperSpecialAdd(special.id, { venueId, tableLabel, specialData: special, event: addEvent })
+    onAdd?.({ special, orderItems, addEvent })
+    setAdding(false)
+  }
+
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0,
+      background: panel, border: `1px solid ${isSoldOut ? 'rgba(255,107,107,0.25)' : border}`,
+      borderRadius: 10, padding: '6px 10px', minWidth: 200, maxWidth: 260,
+    }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 12, fontWeight: 800, color: '#E5E2E1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {special.title}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+          <span style={{ color: gold, fontWeight: 900, fontSize: 13 }}>{fmt(special.pricing?.specialPrice)}</span>
+          {hasDiscount && <span style={{ color: '#666', fontSize: 10, textDecoration: 'line-through' }}>{fmt(special.pricing?.regularPrice)}</span>}
+        </div>
+        <InventoryBadge special={special} />
+      </div>
+      {!isSoldOut && qty > 0 && (
+        <button
+          type="button"
+          onClick={handleTap}
+          disabled={adding}
+          aria-label={`Add ${special.title}`}
+          style={{
+            flexShrink: 0, minWidth: 48, minHeight: 48, borderRadius: 8,
+            background: gold, color: dark, border: 'none', fontWeight: 800, fontSize: 12,
+            cursor: adding ? 'not-allowed' : 'pointer', opacity: adding ? 0.7 : 1,
+          }}
+        >
+          {adding ? '…' : 'Add'}
+        </button>
+      )}
+    </div>
+  )
+}
+
+export default function TicketTapperSpecialsStrip({ specials = [], inventoryItems = [], onAddSpecial, venueId, tableLabel, localPreview, venueFeatureSettings = null, compact = false, noVenue = false, unavailable = false }) {
   if (typeof window !== 'undefined') ensureTickerStyles()
 
   // Hard filter: customers only see status === 'active' AND approval cleared
@@ -285,6 +339,45 @@ export default function TicketTapperSpecialsStrip({ specials = [], inventoryItem
     if ((s.isPartnerSpecial || s.source === 'partner_network') && !partnerSpecialsAllowed) return false
     return true
   })
+
+  if (compact) {
+    const label = noVenue ? 'Select a venue to see specials'
+      : unavailable ? 'Specials unavailable right now'
+      : customerSpecials.length === 0 ? 'No venue specials available'
+      : null
+
+    return (
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+          <div style={{ color: gold, fontSize: 10, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            ⚡ Venue Specials
+          </div>
+          {localPreview && (
+            <span style={{ fontSize: 9, color: gold, background: 'rgba(233,193,118,0.07)', border: `1px solid rgba(233,193,118,0.2)`, borderRadius: 4, padding: '2px 6px' }}>
+              LOCAL PREVIEW
+            </span>
+          )}
+        </div>
+        {label ? (
+          <div style={{
+            height: 56, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            border: '1px dashed rgba(233,193,118,0.18)', background: 'rgba(233,193,118,0.03)',
+            color: 'rgba(233,193,118,0.4)', fontSize: 12, fontWeight: 600,
+          }}>
+            {label}
+          </div>
+        ) : (
+          <div className="sc-ticker-wrapper">
+            <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 4, WebkitOverflowScrolling: 'touch' }}>
+              {customerSpecials.map(special => (
+                <CompactSpecialChip key={special.id} special={special} onAdd={onAddSpecial} venueId={venueId} tableLabel={tableLabel} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div style={{ marginBottom: 22 }}>

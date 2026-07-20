@@ -1,0 +1,1 @@
+POST /journeys/:id/complete -> 200, status:completed. Verified: PASS.

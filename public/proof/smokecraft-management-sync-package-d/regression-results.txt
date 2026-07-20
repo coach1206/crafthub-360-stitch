@@ -1,0 +1,65 @@
+=== Package D suite (clean run) ===
+PASS — START (Begin Experience) creates a real server journey
+PASS — Remount/re-click does not create a duplicate journey (resume path reused)
+PASS — Expanded snapshot mapper includes mentor field (beyond the original 3-field payload)
+PASS — ARIA live region present for sync status announcements
+PASS — Guest cannot access venue analytics (401 in production, 403 via dev-mode proto-guest fallback here)
+PASS — Unauthorized staff (no membership, not admin) cannot access venue analytics (403)
+PASS — Authorized access succeeds for Venue A
+PASS — Completed journey count is accurate (6 seeded)
+PASS — Cigar trend meets sample-size threshold and shows real top cigar
+PASS — Pairing trend accurate
+PASS — Flavor trend accurate
+PASS — Scorecard average accurate (rating=4 for all)
+PASS — No guest identity in analytics response
+PASS — Small sample (2 journeys) suppressed with honest insufficient_data
+PASS — Venue A manager cannot access Venue B analytics (403)
+PASS — Venue A manager (real membership) can access Venue A analytics
+PASS — Invalid date range rejected (400)
+PASS — Excessive date range (>90 days) rejected (400)
+PASS — No POS360/EAT/NOVEE OS/inventory success claimed in response
+PASS — All Package D test data removed
+
+20/20 passed
+=== verify-smokecraft-ticket-tapper-focused-integration.mjs ===
+PASS — Ticket Tapper absent from Pairing Lab (full-bleed journey route)
+PASS — Session Complete: compact Ticket Tapper section present
+PASS — Session Complete: no page-level horizontal overflow
+PASS — No TicketTicker.jsx import/usage in touched files
+
+8/8 passed
+=== verify-smokecraft-full-approved-image-reconciliation.mjs ===
+  ✓ /smokecraft/management-sync
+  ✓ /smokecraft/how-it-works
+  ✓ /smokecraft/leaderboard
+
+───────────────────────────────────────────────────
+Result: 33 passed, 0 failed
+=== verify-crafthub-approved-image.mjs ===
+  ✓ 19. Keyboard focus works (Tab moves focus to a real control)
+  ✓ 18. Nested refresh works (page still renders after reload)
+  ✓ 21. No console errors caused by this package
+
+───────────────────────────────────────────────────
+Result: 22 passed, 0 failed
+=== verify-smokecraft-start-journey-crafthub-mvp2.mjs ===
+  ✓ Passport Connections works from CraftHub
+  ✓ Back to NOVEE OS works
+  ✓ No broken images on /crafthub
+
+───────────────────────────────────────────────────
+Result: 18 passed, 0 failed
+=== verify-smokecraft-authoritative-sequence.mjs ===
+  ✓ [16-touch15-1920x1080] All 8 mentor cards present at touch15-1920x1080
+── Sequential proof ──
+  ✓ [proof] Sequential screenshots captured
+
+──────────────────────────────────────────────────
+Result: 20 passed, 0 failed
+=== verify-all-smokecraft-assets.mjs ===
+✅ Event Challenge: image present in DOM
+✅ How It Works: required image requested — /assets/smokecraft-reference/approved/smokecraft-how-it-works.png
+✅ How It Works: image present in DOM
+
+62 checks: 62 passed, 0 failed
+PASS: All asset checks passed

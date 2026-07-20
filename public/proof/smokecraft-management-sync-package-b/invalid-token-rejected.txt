@@ -1,0 +1,1 @@
+POST with Cookie: smokecraft_guest_session=not.a.valid.jwt -> 401 identity_required / guest_session_invalid. Verified: PASS.

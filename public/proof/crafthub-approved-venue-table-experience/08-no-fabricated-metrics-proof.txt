@@ -1,0 +1,27 @@
+Full visible text content of /crafthub:
+
+PUBLIC DEMO MODE ACTIVE
+Back to NOVEE OS
+Home
+DayOne360 Travel
+Demo Mode
+360 Passport Connections
+Enter SmokeCraft 360
+PourCraft 360 — Coming Soon
+WineCraft 360 — Coming Soon
+BeerCraft 360 — Coming Soon
+360 Passport Connections
+Enter CraftHub
+Staff Handoff
+360 Passport Connections (bottom nav)
+DayOne360 Travel (bottom nav)
+Staff Handoff details
+DayOne360 Travel details
+
+--- Search for fabricated metric patterns ---
+Active Tables: not present (PASS)
+Staff Handoffs count: not present (PASS)
+POS / Inventory: not present (PASS)
+E.A.T. Alerts: not present (PASS)
+Humidor temp/humidity reading: not present (PASS)
+Events count: not present (PASS)

@@ -501,6 +501,13 @@ export function SmokeCraftJourneyProvider({ children }) {
     updateJourney({ sessionCompletion: data })
   }, [updateJourney])
 
+  // Controlled extension point for Package C's server-journey state layer
+  // (useSmokeCraftServerJourney). Stored under journey.managementSync —
+  // additive, does not touch any existing field.
+  const setManagementSyncState = useCallback((data) => {
+    updateJourney({ managementSync: data })
+  }, [updateJourney])
+
   const resetJourney = useCallback(() => {
     const fresh = { ...DEFAULT_STATE }
     setJourney(fresh)
@@ -540,6 +547,7 @@ export function SmokeCraftJourneyProvider({ children }) {
     setPassportStamp,
     setConnections,
     setSessionCompletion,
+    setManagementSyncState,
     resetJourney,
   }
 

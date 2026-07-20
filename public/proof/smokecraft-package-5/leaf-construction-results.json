@@ -1,0 +1,137 @@
+[
+  {
+    "name": "DB: 10 construction_step records seeded",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: processing_method now includes sorting/grading + final resting (2 new records)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: every construction_step record has substantive text",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: 3 new Package 5 quiz questions exist, tied to real components",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: wrapper-strength now renders a real screen (no longer a dead redirect)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: no horizontal overflow on load",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: mentor guidance shows the real selected mentor",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: leaf priming cards render with real catalog data",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: no default/preselected leaf or component",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: leaf priming selects only after user interaction",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: educational panel shows real, substantive Ligero content",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: viewing content recorded server-side progress (shared generic table)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: comparison tool renders with 2+ selected items",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: wrapper section renders real content",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: filler section includes long vs short filler",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: rolling process section shows real construction steps",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: processing section shows curing/fermentation/aging/grading",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: construction notes persisted to backend (shared generic table)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: note rehydrated from backend after reload",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: knowledge check widget renders with a real question",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: knowledge check gives real feedback",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: honest unassigned-mentor state shown when no mentor selected",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Keyboard: Enter activates a focused leaf priming card",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Tablet 1366x1024: no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: wrapper catalog rows remain selectable-ready for Golden Box (unaffected)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Test data removed",
+    "pass": true,
+    "detail": ""
+  }
+]

@@ -1,0 +1,1 @@
+SessionComplete.jsx's existing completion effect now also calls saveSnapshot + completeOnServer when a server journey exists, guarded by the same idempotency check already used for the local reward/stamp award (session.completedSteps.includes('session-complete')). Verified by code read.

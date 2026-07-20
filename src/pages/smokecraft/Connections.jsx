@@ -67,14 +67,26 @@ export default function Connections() {
                 left: `${opt.x}%`, top: `${opt.y}%`,
                 width: `${opt.w}%`, height: `${opt.h}%`,
                 pointerEvents: 'auto',
-                background: active ? 'rgba(233,193,118,0.18)' : 'transparent',
-                border: `2px solid ${active ? GOLD : 'transparent'}`,
-                borderRadius: 4,
+                background: active ? 'rgba(233,193,118,0.18)' : 'rgba(5,5,5,0.55)',
+                border: `2px solid ${active ? GOLD : 'rgba(233,193,118,0.35)'}`,
+                borderRadius: 8,
                 cursor: 'pointer',
                 boxSizing: 'border-box',
                 padding: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}
             >
+              {/* The approved asset for this route (connections-hero.jpg) is a
+                  decorative crop with no baked platform labels — a real,
+                  visible label is required here so these zones are not
+                  invisible hotspots. */}
+              <span style={{
+                fontFamily: 'Georgia, serif', fontSize: 'clamp(9px,1.0vw,13px)',
+                fontWeight: 700, color: active ? GOLD : 'rgba(229,226,225,0.85)',
+                letterSpacing: '0.02em', pointerEvents: 'none', textAlign: 'center',
+              }}>
+                {opt.label}
+              </span>
               {active && (
                 <span style={{
                   position: 'absolute', top: 4, right: 5,

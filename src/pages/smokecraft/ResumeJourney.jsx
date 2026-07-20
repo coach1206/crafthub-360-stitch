@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftEntryHeaderBand from '../../components/smokecraft/SmokeCraftEntryHeaderBand.jsx'
@@ -38,7 +39,7 @@ const NEW_JOURNEY_START_ROUTE = '/smokecraft/welcome'
 // S1 ('entry'/Welcome) is intentionally NOT preserved: it now represents
 // having viewed *this* journey's introduction, so a new journey shows
 // Welcome again, same as every other active-journey session.
-const PRESERVED_COMPLETED_STEP_IDS = ['enroll']
+export const PRESERVED_COMPLETED_STEP_IDS = ['enroll']
 
 function resolveSafeResumeTarget(currentAllowed, persistedRoute) {
   if (persistedRoute && KNOWN_ROUTES.has(persistedRoute)) {
@@ -69,6 +70,7 @@ export default function ResumeJourney() {
   const { session, update } = useGuestSession()
   const { isDemoMode, currentAllowed, completedSessions } = useSmokeCraftProgress()
   const { journey, setResumeCache, startNewJourney } = useSmokeCraftJourney()
+  const { startOrResumeJourney } = useSmokeCraftServerJourney()
   const navigate = useNavigate()
   const resetLock = useRef(false)
 
@@ -154,6 +156,19 @@ export default function ResumeJourney() {
 
   function handleResume() {
     triggerHaptic('medium')
+    // Fire-and-forget server reconciliation: verifies (or re-establishes)
+    // the authoritative server journey for the real selected venue.
+    // Never blocks the existing, unchanged local-progress navigation —
+    // reconciliation failures/timeouts are silently absorbed, matching
+    // this screen's approved visual behavior exactly.
+    if (journey.selectedVenue && !journey.selectedVenue.skipped) {
+      startOrResumeJourney({
+        venueId: journey.selectedVenue.id,
+        sessionNumber: Math.min(completedSessions.length + 1, 27) || 1,
+        phase: 'resume',
+        sourceVersion: 'package-d',
+      }).catch(() => {})
+    }
     navigate(resolved.route)
   }
 

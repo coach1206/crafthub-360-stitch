@@ -1,0 +1,10 @@
+          tablename          
+-----------------------------
+ eat_management_sync_events
+ passport_360_guest_profiles
+ ticket_tapper_promotions
+ venue_memberships
+ venue_permissions
+ venues
+(6 rows)
+

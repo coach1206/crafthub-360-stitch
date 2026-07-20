@@ -1,0 +1,1 @@
+pos360.state = COMING_SOON. POS360 is a real, production module (migrations 018/031-047, 070) for its OWN purpose (order-bridging) -- confirmed no route/service bridges it to SmokeCraft Management Sync specifically.

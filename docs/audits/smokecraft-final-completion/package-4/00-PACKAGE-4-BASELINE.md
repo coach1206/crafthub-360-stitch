@@ -1,0 +1,13 @@
+# Package 4 Baseline
+
+- Branch: `recovery/smokecraft-codex-final` (unchanged) · Commit: `aa0b9cf8` (unchanged) · Uncommitted paths: 181
+- **Current Seed and Soil route**: `/smokecraft/seed-soil` → `SeedSoil.jsx` (supporting module, `requires: 'mentor'`, per `session.js`'s `SUPPORTING_MODULES`). This is the one and only locked screen covering seed/soil — confirmed via Package 0's `03-ROUTE-COMPONENT-REGISTRY.md`.
+- **Current session IDs covering this territory** (from `session.js`): `seed-soil` (supporting module, real screen, image-hotspot based); no separate `germination`/`plant-anatomy`/`terroir`/`growing-region` session IDs exist in the locked 27-session spine or supporting-module list. Package 0's Golden Box contract explicitly deferred "plant anatomy screen" as future work, never as a numbered session.
+- **Current components/state**: `SEED_ZONES` (Criollo/Corojo/Habano/Connecticut, hotspot coords), `SOIL_ZONES` (Sandy Loam/Clay Loam/Volcanic/Limestone, hotspot coords) — both hardcoded label+coordinate arrays with zero descriptive content; selection persists to `journey.seedSoil` (`{seedType, soilType, notes}`) via `SmokeCraftJourneyContext`, session/local-storage only, no backend.
+- **Current progress/quiz/XP persistence**: session completion via `awardSessionRewards`/`completeStep` (local + Management Sync journey checkpoint); no quiz exists for this screen; no dedicated XP rule for seed-soil beyond the generic session-complete award.
+- **Current mentor-selection state**: `journey.mentor` (array of full roster records, fixed in Package 2's closure pass) — reused directly, no new mentor system needed.
+- **Current note-taking structures**: `journey.seedSoil.notes` (free-text, local/session-storage only, not backend-persisted, not user-scoped beyond the local guest session).
+- **Current educational-content APIs**: `/api/smokecraft/golden-box-content/components` and `/flavor-notes` (Package 3) — already contain real seed_genetics/soil/terroir/origin/region records matching `SeedSoil.jsx`'s exact hotspot vocabulary.
+- **Current media/hotspot records**: `smokecraft_content_media`/`smokecraft_hotspots` tables exist (migration 079) but have zero seeded rows — schema ready, no data yet.
+- **Current SC_ASSETS mappings**: `SeedSoil.jsx` uses `SC_ASSETS.seedSoil` (a single full-composition background image) — no per-hotspot image mapping exists.
+- **Current draft resume behavior**: confirmed broken (Package 3 closure disclosure) — `EntryWorkspace.jsx`'s `load()` fetches the entry record but never re-populates `components` state from the saved `golden_box_blend_components`. Fixed in Step 2 of this package, see `01-DRAFT-REHYDRATION-FIX.md`.

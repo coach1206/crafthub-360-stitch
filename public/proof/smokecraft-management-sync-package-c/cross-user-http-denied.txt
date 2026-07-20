@@ -1,0 +1,1 @@
+See regression-results.txt (Package B proof-gap suite section) for full evidence: User B receives 403 journey_access_denied on GET/snapshot/complete/sync/status for User A's journey (6 distinct endpoint checks, all PASS).

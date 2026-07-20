@@ -1,0 +1,1 @@
+See regression-results.txt: unauthenticated request to /venues/:id/insights denied (403 in this dev-mode sandbox via the documented proto-guest fallback; 401 in real production). PASS.

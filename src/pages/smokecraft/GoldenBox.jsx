@@ -21,20 +21,36 @@ const ACK_TEXT = 'I have read, understood, and agree to follow the Golden Box Ru
 // (navy fill, gold border, rounded corners) — used to neutralize baked zones
 // that don't correspond to a real feature on this route (Identity fields and
 // Venue Settings belong to their own already-built screens; Guest Agreements
-// has no staff-facing counterpart in this app).
+// has no staff-facing counterpart in this app). Given a subtle radial glow,
+// inset border, and corner accents (matching the approved composite's own
+// framing language) so the mask reads as an intentional shell panel rather
+// than a crude unfinished rectangle.
 function BlankPanel({ style }) {
   return (
     <div
       aria-hidden="true"
       style={{
         position: 'absolute',
-        background: NAVY_PANEL,
+        background: `radial-gradient(ellipse at 50% 30%, rgba(233,193,118,0.05), transparent 70%), ${NAVY_PANEL}`,
         border: `1px solid ${BORDER}`,
         borderRadius: 10,
+        boxShadow: `inset 0 0 0 1px rgba(0,0,0,0.4), inset 0 1px 12px rgba(233,193,118,0.06)`,
         pointerEvents: 'none',
         ...style,
       }}
-    />
+    >
+      {['0%', '100%'].map(left => ['0%', '100%'].map(top => (
+        <span key={`${left}-${top}`} style={{
+          position: 'absolute',
+          left, top, width: 10, height: 10,
+          transform: `translate(${left === '0%' ? '2px' : 'calc(-100% - 2px)'}, ${top === '0%' ? '2px' : 'calc(-100% - 2px)'})`,
+          borderTop: top === '0%' ? `1px solid ${BORDER}` : 'none',
+          borderBottom: top === '100%' ? `1px solid ${BORDER}` : 'none',
+          borderLeft: left === '0%' ? `1px solid ${BORDER}` : 'none',
+          borderRight: left === '100%' ? `1px solid ${BORDER}` : 'none',
+        }} />
+      )))}
+    </div>
   )
 }
 

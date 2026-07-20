@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Viewport 390x844: no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport 390x844: all major sections present and reachable",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport 360x800: no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport 360x800: all major sections present and reachable",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport tablet10-1280x800: no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport tablet10-1280x800: all major sections present and reachable",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport tablet12-1366x1024: no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport tablet12-1366x1024: all major sections present and reachable",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport tablet15-1920x1080: no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport tablet15-1920x1080: all major sections present and reachable",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Viewport desktop 1920x1080: no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  }
+]

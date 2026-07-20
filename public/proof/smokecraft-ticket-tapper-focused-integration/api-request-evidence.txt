@@ -1,0 +1,22 @@
+SmokeCraft Ticket Tapper — API Request Evidence
+=================================================
+
+Endpoint (existing, unchanged): GET /api/smokecraft/ticket-tapper/specials/:venueId
+Endpoint (existing, unchanged): GET /api/smokecraft/ticket-tapper/inventory/:venueId
+Endpoint (existing, unchanged): GET /api/ticket-tapper/promotions/smokecraft/active?venueId=...
+Endpoint (existing, unchanged): POST /api/smokecraft/ticket-tapper/specials/:id/tap
+Endpoint (existing, unchanged): POST /api/smokecraft/ticket-tapper/specials/:id/add
+
+No new backend endpoints were added or modified this package. This
+package only changed which venueId value the frontend passes to these
+existing endpoints, and added a client-side "no venue" guard.
+
+Verified via verify-smokecraft-ticket-tapper-focused-integration.mjs:
+  "Venue Select: no specials API call made without a venue" — PASS.
+  A page.on('request') listener confirmed zero requests to
+  /api/smokecraft/ticket-tapper/specials/ when journey.selectedVenue is
+  null (no fallback venue ID is substituted).
+
+Hardcoded venue ID removal confirmed by static source check:
+  grep "'smokecraft-360-main'" src/pages/smokecraft/SmokeCraftVenueCommerce.jsx
+  → zero matches (previously present at line 233).

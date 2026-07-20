@@ -51,9 +51,11 @@ const systemTickerItems = [
 
 export default function Layout() {
   const { pathname } = useLocation()
-  // The SmokeCraft game entrance is a cinematic first-viewport experience — the
-  // venue ticker competes with the hero for attention, so it is hidden on that route.
-  const hideTicker = pathname === '/smokecraft' || pathname.startsWith('/smokecraft/')
+  // The SmokeCraft game entrance and the CraftHub launcher are both
+  // cinematic full-bleed approved-image compositions with their own baked
+  // header row — the venue ticker would cover that approved content, so it
+  // is hidden on these routes (same rule already applied to /smokecraft).
+  const hideTicker = pathname === '/smokecraft' || pathname.startsWith('/smokecraft/') || pathname === '/crafthub'
 
   return (
     <>

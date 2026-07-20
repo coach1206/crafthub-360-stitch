@@ -1,0 +1,12 @@
+              table_name              |                    constraint_name                    | constraint_type |  column_name  |            foreign_table             | foreign_column 
+--------------------------------------+-------------------------------------------------------+-----------------+---------------+--------------------------------------+----------------
+ smokecraft_management_sync_actions   | smokecraft_management_sync_actions_sync_event_id_fkey | FOREIGN KEY     | sync_event_id | smokecraft_management_sync_events    | event_id
+ smokecraft_management_sync_actions   | smokecraft_management_sync_actions_journey_id_fkey    | FOREIGN KEY     | journey_id    | smokecraft_management_sync_journeys  | journey_id
+ smokecraft_management_sync_actions   | smokecraft_management_sync_actions_venue_id_fkey      | FOREIGN KEY     | venue_id      | venues                               | venue_id
+ smokecraft_management_sync_events    | smokecraft_management_sync_events_venue_id_fkey       | FOREIGN KEY     | venue_id      | venues                               | venue_id
+ smokecraft_management_sync_events    | smokecraft_management_sync_events_journey_id_fkey     | FOREIGN KEY     | journey_id    | smokecraft_management_sync_journeys  | journey_id
+ smokecraft_management_sync_events    | smokecraft_management_sync_events_snapshot_id_fkey    | FOREIGN KEY     | snapshot_id   | smokecraft_management_sync_snapshots | snapshot_id
+ smokecraft_management_sync_journeys  | smokecraft_management_sync_journeys_venue_id_fkey     | FOREIGN KEY     | venue_id      | venues                               | venue_id
+ smokecraft_management_sync_snapshots | smokecraft_management_sync_snapshots_journey_id_fkey  | FOREIGN KEY     | journey_id    | smokecraft_management_sync_journeys  | journey_id
+(8 rows)
+

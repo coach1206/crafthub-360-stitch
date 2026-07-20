@@ -1,0 +1,172 @@
+[
+  {
+    "name": "DB: 5 cigar_anatomy records seeded",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: 5 burn_troubleshooting records seeded",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: every new record has substantive text",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: 3 new Package 6 quiz questions exist, tied to real components",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: vitola route now renders a real screen (no longer ComingSoon)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: no horizontal overflow on load",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: mentor guidance shows the real selected mentor",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: cigar anatomy chips render with real catalog data",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: no default/preselected content chip or flavor note anywhere on load",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: anatomy chip selects only after interaction",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: educational panel shows real, substantive Cap content",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: viewing anatomy content recorded server-side progress (shared generic table)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: vitola section shows real shapes",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: ring gauge section shows real explainer content",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: strength vs body section shows real sensory categories",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: burn troubleshooting shows real issues",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Flavor Wheel renders with real taxonomy",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: no default flavor note selected",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: flavor note selection persisted server-side for the correct stage",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: switching stage shows a fresh (empty) note set, not carried over from another stage",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: returning to a stage rehydrates its own saved notes",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: pairing draft save gives XP feedback",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: pairing draft persisted server-side",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: second distinct draft save (same identity, no reload) does not re-claim first-save XP message",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: pairing-draft XP awarded exactly once (idempotent across multiple drafts, same identity)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: pairing drafts resume/list after reload",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: knowledge check widget renders with a real question",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: knowledge check gives real feedback",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: honest unassigned-mentor state shown when no mentor selected",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Ownership: a different guest sees no saved pairing drafts",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Ownership: a different guest sees no carried-over flavor notes",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Keyboard: Enter selects a focused cigar-anatomy chip",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: vitola catalog rows remain selectable-ready for Golden Box (unaffected)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Test data removed",
+    "pass": true,
+    "detail": ""
+  }
+]

@@ -1,0 +1,8 @@
+          tablename          
+-----------------------------
+ passport_360_guest_profiles
+ ticket_tapper_promotions
+ venue_memberships
+ venues
+(4 rows)
+

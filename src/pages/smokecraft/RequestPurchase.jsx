@@ -11,8 +11,11 @@ const NAT_W = 1672
 const NAT_H = 941
 
 const GOLD = '#E9C176'
+// Root-cause fix: non-opaque background let baked image panels bleed
+// through, producing a ghosted double-text effect (same class of bug
+// found and fixed on Golden Box / Humidor Match this session).
 const PANEL = {
-  background: 'rgba(5,5,5,0.92)',
+  background: '#050505',
   border: '1px solid rgba(233,193,118,0.28)',
   borderRadius: 8,
   position: 'absolute',
@@ -93,8 +96,8 @@ export default function RequestPurchase() {
         {/* Cigar & pairing recommendation panel — left side */}
         <div style={{
           ...PANEL,
-          left: '2%', top: '10%', width: '40%', height: '54%',
-          padding: 'clamp(6px,1vw,14px)',
+          left: '7.66%', top: '35.92%', width: '43.96%', height: '26.78%', // exact-measured bounds of approved panels A+B+C (Matched Cigar/Pairing/Why This Match Works), source 1672x941 y:338-590 x:128-822
+          padding: 'clamp(6px,1vw,14px)', overflowY: 'auto',
           pointerEvents: 'auto',
         }}>
           <div style={{ fontSize: 'clamp(7px,0.6vw,9px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
@@ -159,8 +162,8 @@ export default function RequestPurchase() {
         {/* Add-on options panel — right side */}
         <div style={{
           ...PANEL,
-          left: '44%', top: '10%', width: '40%', height: '54%',
-          padding: 'clamp(6px,1vw,14px)',
+          left: '52.81%', top: '35.92%', width: '43.96%', height: '26.78%', // exact-measured bounds, source x:850-1618 y:338-590, tiles flush against the left panel with a small gap, no leftover baked edge
+          padding: 'clamp(6px,1vw,14px)', overflowY: 'auto',
           pointerEvents: 'auto',
         }}>
           <div style={{ fontSize: 'clamp(7px,0.6vw,9px)', color: 'rgba(233,193,118,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>

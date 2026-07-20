@@ -1,0 +1,1 @@
+POST /venues/pkg-b-venue-inactive/journeys (status='suspended') -> 403 venue_inactive. Verified: PASS.

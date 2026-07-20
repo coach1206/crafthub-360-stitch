@@ -1,0 +1,1 @@
+novee_os.state = COMING_SOON. No SmokeCraft Management Sync feed into any NOVEE OS platform service exists (confirmed by code search).

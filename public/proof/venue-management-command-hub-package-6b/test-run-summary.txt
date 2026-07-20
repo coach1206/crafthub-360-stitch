@@ -1,0 +1,5 @@
+Package 6B verification — 33/33 checks passed.
+Regressions: Package A 16/16, Package B 26/26, Package B proof-gaps 16/16,
+Package E 23/23, Ticket Tapper 8/8, npm run build PASS.
+See docs/VENUE_MANAGEMENT_COMMAND_HUB_PACKAGE_6B_TEST_REPORT.md for full detail.
+Redacted: no tokens/cookies/secrets/DB URLs were captured in this file.

@@ -1,0 +1,89 @@
+PASS — Guest identity can be issued
+PASS — Guest cookie is HTTP-only
+PASS — Invalid guest token rejected
+PASS — Expired guest token rejected
+PASS — Valid venue accepted (journey created)
+PASS — Unknown venue rejected
+PASS — Inactive venue rejected
+PASS — Guest can retrieve their own journey
+PASS — Client-supplied guestReference rejected by validation
+PASS — Cross-guest access denied
+PASS — Valid snapshot creation succeeds
+PASS — Server controls snapshot version (starts at 1)
+PASS — Duplicate identical snapshot payload handled safely (no new version)
+PASS — Journey completion succeeds
+PASS — Repeated completion is idempotent
+PASS — Valid sync request creates one event
+PASS — Repeated identical sync returns existing event (idempotent)
+PASS — Simultaneous duplicate sync requests create exactly one event
+PASS — Unsupported destination (pos_360) rejected
+PASS — GET status does not create a sync (only pre-existing events returned)
+PASS — Invalid action type rejected
+PASS — Oversized payload rejected
+PASS — Prototype-pollution payload rejected
+PASS — Audit events created for Management Sync actions
+PASS — Package A idempotency constraint remains intact
+PASS — No test data left behind
+
+26/26 passed
+=== Package A regression (same DB, migration 074 tables) ===
+PASS — Migration 074 recorded exactly once
+PASS — Valid venue-scoped journey inserted
+PASS — Invalid venue_id rejected (FK violation)
+PASS — Valid snapshot inserted
+PASS — Duplicate snapshot version rejected (unique violation)
+PASS — Valid Management Sync event inserted
+PASS — Duplicate idempotency combination (venue_id, journey_id, destination, payload_version) rejected
+PASS — Valid management action inserted
+PASS — Invalid action_status rejected (check violation)
+PASS — Missing required venue_id rejected (not-null violation)
+PASS — Journey delete cascades to snapshots (ON DELETE CASCADE)
+PASS — Journey delete cascades to events (ON DELETE CASCADE)
+PASS — Journey delete sets action.journey_id to NULL (ON DELETE SET NULL)
+PASS — Invalid JSONB input rejected naturally by Postgres
+PASS — No test data left behind in journeys table
+PASS — Test venue removed
+
+16/16 passed
+=== verify-smokecraft-ticket-tapper-focused-integration.mjs ===
+PASS — Ticket Tapper absent from Pairing Lab (full-bleed journey route)
+PASS — Session Complete: compact Ticket Tapper section present
+PASS — Session Complete: no page-level horizontal overflow
+PASS — No TicketTicker.jsx import/usage in touched files
+
+8/8 passed
+=== verify-smokecraft-full-approved-image-reconciliation.mjs ===
+  ✓ /smokecraft/management-sync
+  ✓ /smokecraft/how-it-works
+  ✓ /smokecraft/leaderboard
+
+───────────────────────────────────────────────────
+Result: 33 passed, 0 failed
+=== verify-crafthub-approved-image.mjs ===
+  ✓ 19. Keyboard focus works (Tab moves focus to a real control)
+  ✓ 18. Nested refresh works (page still renders after reload)
+  ✓ 21. No console errors caused by this package
+
+───────────────────────────────────────────────────
+Result: 22 passed, 0 failed
+=== verify-smokecraft-start-journey-crafthub-mvp2.mjs ===
+  ✓ Passport Connections works from CraftHub
+  ✓ Back to NOVEE OS works
+  ✓ No broken images on /crafthub
+
+───────────────────────────────────────────────────
+Result: 18 passed, 0 failed
+=== verify-smokecraft-authoritative-sequence.mjs ===
+  ✓ [16-touch15-1920x1080] All 8 mentor cards present at touch15-1920x1080
+── Sequential proof ──
+  ✓ [proof] Sequential screenshots captured
+
+──────────────────────────────────────────────────
+Result: 20 passed, 0 failed
+=== verify-all-smokecraft-assets.mjs ===
+✅ Event Challenge: image present in DOM
+✅ How It Works: required image requested — /assets/smokecraft-reference/approved/smokecraft-how-it-works.png
+✅ How It Works: image present in DOM
+
+62 checks: 62 passed, 0 failed
+PASS: All asset checks passed

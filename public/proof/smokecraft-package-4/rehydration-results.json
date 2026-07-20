@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Setup: entry created",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: draft saved (version 2)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: cigar name rehydrated after reload",
+    "pass": true,
+    "detail": "got \"Rehydration Test Blend\""
+  },
+  {
+    "name": "UI: seed genetics selection rehydrated after reload",
+    "pass": true,
+    "detail": "expected 38, got 38"
+  },
+  {
+    "name": "UI: soil selection rehydrated after reload",
+    "pass": true,
+    "detail": "expected 47, got 47"
+  },
+  {
+    "name": "UI: all remaining saved component selections rehydrated",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: second draft save persisted (version 3)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: edited selection rehydrated correctly after second reload",
+    "pass": true,
+    "detail": "expected 39, got 39"
+  },
+  {
+    "name": "UI: cigar name still correct after second reload",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: owner (guest A) can view own recipe via API",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: owner response includes rehydration fields (currentVersion + components)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: another guest (guest B) cannot view recipe details",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: another guest response withholds components/currentVersion",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Test data removed",
+    "pass": true,
+    "detail": ""
+  }
+]

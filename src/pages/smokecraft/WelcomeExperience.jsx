@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 
@@ -38,6 +39,7 @@ export default function WelcomeExperience() {
   const { awardSessionRewards, session } = useGuestSession()
   const { isDemoMode, completedSessions } = useSmokeCraftProgress()
   const { journey, setWelcomeState, setResumeCache } = useSmokeCraftJourney()
+  const { startOrResumeJourney } = useSmokeCraftServerJourney()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -109,6 +111,19 @@ export default function WelcomeExperience() {
     if (!completed) {
       awardSessionRewards('entry')
       setWelcomeState({ s1CompletedAt: journey.s1CompletedAt || Date.now() })
+    }
+    // Fire-and-forget: creates (or resumes) the authoritative server
+    // journey when a real venue is selected. Never blocks navigation —
+    // this screen's existing local-progress UX is unchanged whether the
+    // server call succeeds, fails, or the guest has no real venue yet
+    // (VENUES=[] today, see SMOKECRAFT_MANAGEMENT_SYNC_VENUE_MODEL_AUDIT.md).
+    if (journey.selectedVenue && !journey.selectedVenue.skipped) {
+      startOrResumeJourney({
+        venueId: journey.selectedVenue.id,
+        sessionNumber: 1,
+        phase: 'entry',
+        sourceVersion: 'package-d',
+      }).catch(() => {})
     }
     navigate('/smokecraft/humidor-match')
   }

@@ -1,0 +1,1 @@
+Cross-venue denial for the /integrations endpoint (which includes Ticket Tapper's status) verified live: Venue A manager receives 403 for Venue B. See regression-results.txt.

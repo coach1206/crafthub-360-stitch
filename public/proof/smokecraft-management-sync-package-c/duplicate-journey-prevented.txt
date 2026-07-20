@@ -1,0 +1,1 @@
+Journey created via explicit 'Sync This Journey to Venue' click -> 201, one row in smokecraft_management_sync_journeys. Verified: PASS.

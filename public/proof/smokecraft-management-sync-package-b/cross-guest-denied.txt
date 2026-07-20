@@ -1,0 +1,1 @@
+A second guest session's cookie used against the first guest's journeyId -> 403 journey_access_denied. Verified: PASS.

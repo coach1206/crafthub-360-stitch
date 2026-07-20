@@ -1,0 +1,1 @@
+POST with a JWT signed with expiresIn:-10 (already expired) -> 401. Verified: PASS.

@@ -1,0 +1,1 @@
+All test rows (journeys/snapshots/events/actions/venues created by both test suites) were deleted by the suites themselves; audit_logs rows are append-only by DB trigger design and intentionally left in the disposable test database, which is dropped in its entirety at the end of this package.
