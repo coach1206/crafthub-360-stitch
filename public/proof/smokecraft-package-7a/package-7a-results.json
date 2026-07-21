@@ -1,7 +1,167 @@
 [
   {
-    "name": "unexpected error",
-    "pass": false,
-    "detail": "Cannot read properties of undefined (reading 'id')"
+    "name": "Setup: entry created",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Setup: draft with presentation/defense saved",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Setup: entry submitted",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: non-mentor denied mentor-review write (403)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: mentor can save a review draft",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: mentor can submit the review",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: entrant can see the submitted mentor review",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: assigned judge sees their assignment",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: unassigned judge does not see this entry",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: assigned judge can view entry components + presentation",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: unassigned judge denied entry view (403)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: judge submits real scorecard (DB status confirmed submitted)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: scorecard lock succeeds",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: amendment without a reason rejected",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: amendment with a reason succeeds, creates a NEW scorecard row",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: original scorecard preserved (not overwritten), now status=amended",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: original scores untouched (still 7, not overwritten to 8)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: void with a reason succeeds (from submitted state)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: a different judge cannot lock judge C's scorecard (ownership enforced)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "DB: lock/amend/void all produced real audit log rows",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "API: results computation runs without error after full lifecycle",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Judge Dashboard loads",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Judge Entry Review shows real submitted components",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Judge Entry Review shows the real blend defense text",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: judge A's inputs correctly show their REAL previously-amended scores (8, not fabricated)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: a fresh, never-scored judge sees no default/prefilled score",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Mentor Review screen loads for an authorized mentor",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: non-mentor sees an honest not-authorized message",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Results Experience shows entrant status",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Results Experience shows mentor feedback",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "UI: Results Experience has a real continue action to Leaderboard/Rewards",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Handheld 390x844: Judge Entry Review no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Test data removed",
+    "pass": true,
+    "detail": ""
   }
 ]
