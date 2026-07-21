@@ -18,6 +18,7 @@ import healthRoutes          from './routes/healthRoutes.js'
 import sessionRoutes         from './routes/sessionRoutes.js'
 import passportRoutes        from './routes/passportRoutes.js'
 import passport360SmokeCraftRoutes from './routes/passport360SmokeCraftRoutes.js'
+import passport360SyncRoutes from './routes/passport360SyncRoutes.js'
 import eatSmokeCraftLiveSyncRoutes from './routes/eatSmokeCraftLiveSyncRoutes.js'
 import pos360SmokeCraftOrderBridgeRoutes from './routes/pos360SmokeCraftOrderBridgeRoutes.js'
 import ticketTapperPromotionRoutes from './routes/ticketTapperPromotionRoutes.js'
@@ -219,6 +220,7 @@ app.use('/api/auth',              authRoutes)
 app.use('/api/sessions',          sessionRoutes)
 app.use('/api/passport',          passportRoutes)
 app.use('/api/passport-360/smokecraft', passport360SmokeCraftRoutes)
+app.use('/api/passport-360/sync', passport360SyncRoutes)
 app.use('/api/eat-360/smokecraft',     eatSmokeCraftLiveSyncRoutes)
 app.use('/api/pos360/smokecraft',      pos360SmokeCraftOrderBridgeRoutes)
 app.use('/api/ticket-tapper/promotions', ticketTapperPromotionRoutes)

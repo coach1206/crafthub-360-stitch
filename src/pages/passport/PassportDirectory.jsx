@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PassportBottomNav from '../../components/PassportBottomNav.jsx'
 import craftImages from '../../lib/craftImages.js'
+import * as passportApi from '../../services/passport360/passport360ApiClient.js'
 
 const FILL1 = { fontVariationSettings:"'FILL' 1" }
 
@@ -29,6 +30,23 @@ export default function PassportDirectory() {
   const [introRequested, setIntroRequested] = useState(() => new Set())
   const [connectedNames, setConnectedNames] = useState(() => new Set())
 
+  // No real backend-connected people directory exists — the member list
+  // below is local fixture data (src/pages/passport/PassportDirectory.jsx),
+  // not real learners. Building a real cross-learner directory requires an
+  // approved privacy model, which is explicitly out of scope for this
+  // pass (see docs/audits/passport-360-completion/01-ARCHITECTURE-AUDIT.md).
+  // This checks the real backend and shows an honest unavailable state
+  // instead of presenting fabricated people as if they were real.
+  const [directoryStatus, setDirectoryStatus] = useState('checking') // checking | unavailable
+  useEffect(() => {
+    let cancelled = false
+    passportApi.getDirectory().then(res => {
+      if (cancelled) return
+      setDirectoryStatus(res.ok && res.available ? 'available' : 'unavailable')
+    })
+    return () => { cancelled = true }
+  }, [])
+
   function toggleInSet(setter, name) {
     setter(prev => {
       const next = new Set(prev)
@@ -45,6 +63,35 @@ export default function PassportDirectory() {
       || m.role.toLowerCase().includes(filter.toLowerCase())
     return matchSearch && matchFilter
   })
+
+  if (directoryStatus !== 'available') {
+    return (
+      <div className="min-h-screen pb-28 overflow-x-hidden flex flex-col" style={{ background:'linear-gradient(160deg,#050e06,#081208,#040904)' }}>
+        <header className="sticky top-0 z-50 flex items-center gap-3 px-4 border-b backdrop-blur-2xl"
+          style={{ height:68, background:'rgba(4,10,5,0.96)', borderColor:'rgba(102,187,106,0.2)' }}>
+          <button onClick={() => navigate('/passport')}
+            className="w-10 h-10 flex items-center justify-center rounded-full active:scale-90 transition-transform flex-shrink-0"
+            style={{ background:'rgba(102,187,106,0.08)', border:'1px solid rgba(102,187,106,0.2)' }}>
+            <span className="material-symbols-outlined" style={{ fontSize:20, color:'#66bb6a' }}>arrow_back</span>
+          </button>
+          <div className="flex-1">
+            <p className="font-bold text-[16px] leading-none" style={{ color:'#a8e6ac', fontFamily:'"Playfair Display",serif' }}>Directory</p>
+          </div>
+        </header>
+        <main className="flex-1 flex items-center justify-center px-6">
+          <div role="status" aria-live="polite" className="max-w-sm text-center rounded-2xl px-6 py-8" style={{ background:'rgba(102,187,106,0.06)', border:'1px solid rgba(102,187,106,0.2)' }}>
+            <span className="material-symbols-outlined block mx-auto mb-3" style={{ fontSize:32, color:'#66bb6a' }}>group_off</span>
+            <p className="font-bold text-[15px] mb-2" style={{ color:'#a8e6ac', fontFamily:'"Playfair Display",serif' }}>Directory Not Yet Available</p>
+            <p className="text-[12px]" style={{ color:'rgba(168,230,172,0.6)' }}>
+              A real, privacy-approved member directory has not been built yet — this screen honestly shows that
+              rather than displaying placeholder people.
+            </p>
+          </div>
+        </main>
+        <PassportBottomNav active="directory" />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen pb-28 overflow-x-hidden"

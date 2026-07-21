@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getRankFromXP } from '../../constants/session.js'
 import PassportBottomNav from '../../components/PassportBottomNav.jsx'
+import * as passportApi from '../../services/passport360/passport360ApiClient.js'
 
 const FILL1 = { fontVariationSettings:"'FILL' 1" }
 const GOLD = {
@@ -30,7 +31,29 @@ const TIER_NEXT = { Novice:100, Bronze:300, Silver:600, Gold:1200, Diamond:9999 
 export default function PassportProfile() {
   const navigate = useNavigate()
   const { session } = useGuestSession()
-  const xp    = session.xp ?? 0
+
+  // Real, backend-authoritative Passport state — never fabricated.
+  // See docs/audits/passport-360-completion/01-ARCHITECTURE-AUDIT.md.
+  const [passportStatus, setPassportStatus] = useState('loading') // loading | ready | error | offline
+  const [passport, setPassport] = useState(null)
+  const [connections, setConnections] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    async function load() {
+      setPassportStatus('loading')
+      const [profileRes, connRes] = await Promise.all([passportApi.getProfile(), passportApi.getConnections()])
+      if (cancelled) return
+      if (!profileRes.ok) { setPassportStatus(profileRes.error === 'offline' ? 'offline' : 'error'); return }
+      setPassport(profileRes.profile)
+      if (connRes.ok) setConnections(connRes.connections)
+      setPassportStatus('ready')
+    }
+    load()
+    return () => { cancelled = true }
+  }, [])
+
+  const xp    = passport?.xpSummary?.totalXp ?? 0
   const rank  = getRankFromXP(xp)
   const fname = session.profile?.firstName || ''
   const lname = session.profile?.lastName  || ''
@@ -41,9 +64,11 @@ export default function PassportProfile() {
   const pct  = Math.min(100, Math.round((xp / nextXP) * 100))
 
   const [editing, setEditing] = useState(false)
-  const stamps  = session.smokecraftStamps?.length ?? 11
-  const conns   = 12
-  const events  = 5
+  // Real counts from the backend — 0 is an honest value, never
+  // fabricated as a nonzero placeholder.
+  const stamps = passport?.stampSummary?.count ?? 0
+  const conns  = connections?.craftConnections?.length ?? 0
+  const events = connections?.eventConnections?.length ?? 0
 
   const STATS = [
     { icon:'workspace_premium', val:stamps,  label:'Stamps Earned'      },
@@ -51,6 +76,10 @@ export default function PassportProfile() {
     { icon:'event',             val:events,  label:'Events Attended'    },
     { icon:'stars',             val:`${pct}%`, label:'Profile Complete'  },
   ]
+
+  const passportNumber = passport?.passportId ? `PP-${passport.passportId.slice(0, 8).toUpperCase()}` : '—'
+  const issuedDate = passport?.createdAt ? new Date(passport.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'
+  const profileStatusLabel = passport?.profileStatus ? passport.profileStatus.charAt(0).toUpperCase() + passport.profileStatus.slice(1) : '—'
 
   return (
     <div className="min-h-screen pb-28 overflow-x-hidden"
@@ -83,6 +112,17 @@ export default function PassportProfile() {
       </header>
 
       <main className="relative z-10 max-w-2xl mx-auto px-4 pt-5 space-y-5">
+
+        {passportStatus === 'loading' && (
+          <div role="status" aria-live="polite" className="rounded-xl px-4 py-3 text-[11px]" style={{ background:'rgba(100,150,255,0.08)', border:'1px solid rgba(100,150,255,0.2)', color:'#90caf9' }}>
+            Loading your real Passport state…
+          </div>
+        )}
+        {(passportStatus === 'error' || passportStatus === 'offline') && (
+          <div role="alert" className="rounded-xl px-4 py-3 text-[11px]" style={{ background:'rgba(229,170,100,0.08)', border:'1px solid rgba(229,170,100,0.3)', color:'#e9c176' }}>
+            {passportStatus === 'offline' ? "You're offline — Passport data can't be verified right now." : 'Could not load your real Passport state.'}
+          </div>
+        )}
 
         {/* ── Passport identity spread ── */}
         <section>
@@ -136,9 +176,9 @@ export default function PassportProfile() {
               {/* ── Passport number + issue date ── */}
               <div className="grid grid-cols-3 gap-2 mb-4">
                 {[
-                  { label:'Passport No.', val:'PC-2026-001' },
-                  { label:'Issued',       val:'Jun 1, 2026' },
-                  { label:'Status',       val:'Active'      },
+                  { label:'Passport No.', val: passportNumber },
+                  { label:'Issued',       val: issuedDate },
+                  { label:'Status',       val: profileStatusLabel },
                 ].map(f => (
                   <div key={f.label} className="rounded-lg px-2.5 py-2" style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(100,150,255,0.12)' }}>
                     <p className="text-[8.5px] uppercase tracking-wider" style={{ color:'rgba(144,202,249,0.3)' }}>{f.label}</p>

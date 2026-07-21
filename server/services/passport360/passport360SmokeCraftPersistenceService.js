@@ -79,7 +79,7 @@ export async function createOrResolveGuestProfile({ tenantId, venueId, guestRefe
   const ref = guestReference || `guest_${Date.now()}`
   try {
     const existing = await dbQuery(
-      `SELECT guest_id, guest_reference, profile_status FROM passport_360_guest_profiles
+      `SELECT guest_id, guest_reference, profile_status, created_at FROM passport_360_guest_profiles
        WHERE tenant_id = $1 AND venue_id = $2 AND guest_reference = $3`,
       [tId, vId, ref]
     )

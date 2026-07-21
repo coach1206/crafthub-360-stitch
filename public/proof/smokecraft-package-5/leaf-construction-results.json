@@ -56,7 +56,7 @@
   },
   {
     "name": "DB: viewing content recorded server-side progress (shared generic table)",
-    "pass": false,
+    "pass": true,
     "detail": ""
   },
   {
@@ -86,12 +86,12 @@
   },
   {
     "name": "DB: construction notes persisted to backend (shared generic table)",
-    "pass": false,
+    "pass": true,
     "detail": ""
   },
   {
     "name": "UI: note rehydrated from backend after reload",
-    "pass": false,
+    "pass": true,
     "detail": ""
   },
   {
@@ -101,7 +101,7 @@
   },
   {
     "name": "UI: knowledge check gives real feedback",
-    "pass": false,
+    "pass": true,
     "detail": ""
   },
   {
