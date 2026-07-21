@@ -161,6 +161,10 @@ import SecondHumidorMatch  from './pages/smokecraft/SecondHumidorMatch.jsx'
 import MiniTastingRound    from './pages/smokecraft/MiniTastingRound.jsx'
 import FinalReview         from './pages/smokecraft/FinalReview.jsx'
 import Rewards             from './pages/smokecraft/Rewards.jsx'
+import SkillTree           from './pages/smokecraft/SkillTree.jsx'
+import CollectionsCenter   from './pages/smokecraft/CollectionsCenter.jsx'
+import ChallengeHub        from './pages/smokecraft/ChallengeHub.jsx'
+import BlendFaultChallenge from './pages/smokecraft/BlendFaultChallenge.jsx'
 import VisitLockGuard      from './components/smokecraft/VisitLockGuard.jsx'
 import SmokeCraftSessionGuard from './components/smokecraft/SmokeCraftSessionGuard.jsx'
 import { SmokeCraftProgressProvider } from './context/SmokeCraftProgressContext.jsx'
@@ -482,6 +486,14 @@ export default function App() {
                     (see session.js `sharedComponent`); S26's own gate is enforced
                     inside Rewards.jsx (same route, can't have two <Route> entries). */}
                 <Route path="rewards"          element={<SmokeCraftSessionGuard sessionNumber={25}><Rewards /></SmokeCraftSessionGuard>} />
+
+                {/* Supporting gamification screens — outside the locked 27-session
+                    numbered sequence per the visual-closure-continuation pass;
+                    only requires enrollment, not a specific session number. */}
+                <Route path="skill-tree"     element={<SmokeCraftSessionGuard requires="entry"><SkillTree /></SmokeCraftSessionGuard>} />
+                <Route path="collections"    element={<SmokeCraftSessionGuard requires="entry"><CollectionsCenter /></SmokeCraftSessionGuard>} />
+                <Route path="challenge-hub"  element={<SmokeCraftSessionGuard requires="entry"><ChallengeHub /></SmokeCraftSessionGuard>} />
+                <Route path="challenges/blend-fault-identification" element={<SmokeCraftSessionGuard requires="entry"><BlendFaultChallenge /></SmokeCraftSessionGuard>} />
 
                 {/* S25/S26 — Rewards and XP / Achievements are honestly deferred (no
                     screen exists, no route registered) per Package J's deferred-session

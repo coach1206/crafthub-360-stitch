@@ -223,4 +223,20 @@ export const SC_ASSETS = {
   skillTreeBackground:         `${RAW}/session-visuals/skill%20tree%201.png`,
   collectionsCenterBackground: `${RAW}/session-visuals/collection%20center.png`,
   challengeHubBackground:      `${RAW}/session-visuals/Daily%20and%20weekly%20Challenge%20Hub.png`,
+
+  // ── Approved batch (commit a518a134), resolved by visual inspection ──
+  // "missing challenge Screen1/2/3" are the 3 real steps of one challenge —
+  // confirmed by reading each image: Screen 1 = "Identify the Issue",
+  // Screen 2 = "Choose the Best Solution", Screen 3 = "Prevent and Improve"
+  // — a real Blend Fault Identification challenge, not a guess.
+  blendFaultChallengeStep1: `${RAW}/session-visuals/missing%20challenge%20Screen1.png`,
+  blendFaultChallengeStep2: `${RAW}/session-visuals/Mising%20Challenge%20Screen2.png`,
+  blendFaultChallengeStep3: `${RAW}/session-visuals/Missing%20Challenge%20Screen3.png`,
+
+  // "filler arrangement.png" — confirmed by visual inspection to be a full
+  // standalone 6-step lesson screen (Select/Align/Balance/Shape/Check/
+  // Prepare), not a duplicate of the small rollingStepArrangeFiller
+  // thumbnail already wired into WrapperStrength.jsx's step list. Both are
+  // kept — different slots, different content.
+  fillerArrangementLesson: `${RAW}/session-visuals/filler%20arrangement.png`,
 }

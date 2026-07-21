@@ -391,6 +391,22 @@ export default function Rewards() {
       }}>
         <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
+          {/* Safe navigation to the new supporting gamification screens —
+              additive only, no change to the existing Rewards/Achievements
+              flow above or the primary nav bar below. */}
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {[
+              { label: 'Challenge Hub', to: '/smokecraft/challenge-hub' },
+              { label: 'Collections', to: '/smokecraft/collections' },
+              { label: 'Skill Tree', to: '/smokecraft/skill-tree' },
+            ].map(link => (
+              <button key={link.to} type="button" onClick={() => navigate(link.to)}
+                style={{ minHeight: 40, padding: '8px 16px', borderRadius: 18, border: `1px solid ${BORDER}`, background: 'transparent', color: GOLD, cursor: 'pointer', fontFamily: 'inherit', fontSize: 12 }}>
+                {link.label} →
+              </button>
+            ))}
+          </div>
+
           {phase === 'loading' && (
             <div role="status" aria-live="polite" style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(28px,5vw,44px)', textAlign: 'center' }}>
               <div aria-hidden="true" style={{ width: 28, height: 28, margin: '0 auto 14px', borderRadius: '50%', border: `3px solid ${BORDER}`, borderTopColor: GOLD, animation: 'sc-spin3 0.9s linear infinite' }} />
