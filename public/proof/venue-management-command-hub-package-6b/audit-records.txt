@@ -1,12 +1,12 @@
 VENUE actions recorded this run: [
-  "profile_created",
-  "profile_updated",
-  "profile_submitted",
-  "profile_published",
-  "profile_approved",
+  "media_metadata_updated",
   "media_uploaded",
-  "branding_assigned",
   "media_archived",
   "branding_removed",
-  "media_metadata_updated"
+  "branding_assigned",
+  "profile_created",
+  "profile_published",
+  "profile_approved",
+  "profile_submitted",
+  "profile_updated"
 ]
