@@ -8,5 +8,7 @@ VENUE actions recorded this run: [
   "profile_published",
   "profile_approved",
   "profile_submitted",
-  "profile_updated"
+  "profile_updated",
+  "profile_version_restored",
+  "integrations_viewed"
 ]

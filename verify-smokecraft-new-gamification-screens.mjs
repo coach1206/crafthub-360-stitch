@@ -3,6 +3,7 @@
 // Hub, and the Blend Fault Identification challenge.
 import { chromium } from 'playwright'
 
+const API_BASE = 'http://localhost:3001'
 const UI_BASE = 'http://localhost:5000'
 const results = []
 function check(name, pass, detail = '') {
@@ -10,7 +11,19 @@ function check(name, pass, detail = '') {
   console.log(`${pass ? 'PASS' : 'FAIL'} — ${name}${detail ? ' — ' + detail : ''}`)
 }
 
+async function guestCookie() {
+  const res = await fetch(`${API_BASE}/api/smokecraft/management-sync/guest-session`, { method: 'POST' })
+  const raw = res.headers.get('set-cookie') || ''
+  const idx = raw.indexOf('smokecraft_guest_session=')
+  return raw.slice(idx).split(';')[0].split('=')[1]
+}
+
+// Skill Tree Persistence pass — Skill Tree now makes a real, identity-gated
+// API call, so this seed also needs the real guest-session cookie (not
+// just localStorage) or the screen correctly shows its honest error state.
 async function seed(page) {
+  const cookieVal = await guestCookie()
+  await page.context().addCookies([{ name: 'smokecraft_guest_session', value: cookieVal, domain: 'localhost', path: '/' }])
   await page.addInitScript(() => {
     sessionStorage.setItem('novee_demo_mode', '1'); sessionStorage.setItem('demoMode', 'true'); sessionStorage.setItem('novee_booted', '1')
     localStorage.setItem('novee_guest_session', JSON.stringify({ completedSteps: ['entry'], xp: 0, badges: [] }))
@@ -32,8 +45,12 @@ try {
   await p1.waitForTimeout(1000)
   check('Skill Tree shows real approved artwork', await p1.locator('img[alt="SmokeCraft Skill Tree"]').count() === 1)
   check('Skill Tree shows dynamic mentor (Don Alejandro, not baked)', (await p1.textContent('body')).includes('Don Alejandro'))
-  check('Skill Tree shows all 7 real approved categories', (await p1.textContent('body')).includes('Mastery & Blending') && (await p1.textContent('body')).includes('Community & Legacy'))
-  check('Skill Tree discloses no fake progress', (await p1.textContent('body')).includes('not yet backend-connected'))
+  // Skill Tree Persistence pass — this is no longer a static shell; it now
+  // loads real node state from the backend (see
+  // verify-smokecraft-skill-tree.mjs for the dedicated, thorough suite).
+  // These two checks are updated to match the real live implementation.
+  check('Skill Tree shows all 7 real approved category nodes', (await p1.textContent('body')).includes('Mastery & Blending') && (await p1.textContent('body')).includes('Community & Legacy'))
+  check('Skill Tree loads real backend state, not a hardcoded shell', (await p1.textContent('body')).includes('nodes completed'))
   await p1.close()
 
   // ── Collections Center ──
