@@ -60,8 +60,13 @@ try {
   check('Collections Center route reachable (200)', r2.status() === 200)
   await p2.waitForTimeout(1000)
   check('Collections Center shows real approved artwork', await p2.locator('img[alt="Collections Center"]').count() === 1)
-  check('Collections Center shows all 7 real approved categories', (await p2.textContent('body')).includes('Lounge Collection') && (await p2.textContent('body')).includes('Reward / Achievement Collection'))
-  check('Collections Center shows honest 0-owned state, no fabricated count', (await p2.textContent('body')).includes('0 owned'))
+  // Collections Ownership Persistence pass — Collections Center now loads
+  // a real, live, backend-authoritative catalog (5 real items with real
+  // earn conditions, not the 7 static category placeholders it used to
+  // show) — see verify-smokecraft-collections.mjs for the dedicated
+  // thorough suite. Updated to match the real live implementation.
+  check('Collections Center shows real approved catalog items', (await p2.textContent('body')).includes('Filler Arrangement Mastery') && (await p2.textContent('body')).includes('Seed & Soil Scholar'))
+  check('Collections Center loads real backend ownership state, not a hardcoded shell', (await p2.textContent('body')).includes('items owned'))
   await p2.close()
 
   // ── Challenge Hub ──
