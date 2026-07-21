@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
@@ -96,6 +96,9 @@ function FillerArrangement({ primingRows, arrangement, onArrangementChange, onLe
         center outward). Use the arrows to reorder, or the × to remove.
         There is no single guaranteed-winning arrangement.
       </p>
+      <Link to="/smokecraft/filler-arrangement" style={{ fontSize: 11.5, color: GOLD, display: 'inline-block', marginBottom: 10 }}>
+        Learn the full Filler Arrangement lesson →
+      </Link>
 
       <div role="list" aria-label="Current filler arrangement" style={{ display: 'flex', gap: 8, marginBottom: 10, minHeight: 60, flexWrap: 'wrap' }}>
         {[0, 1, 2, 3].map(i => {

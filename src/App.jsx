@@ -165,6 +165,7 @@ import SkillTree           from './pages/smokecraft/SkillTree.jsx'
 import CollectionsCenter   from './pages/smokecraft/CollectionsCenter.jsx'
 import ChallengeHub        from './pages/smokecraft/ChallengeHub.jsx'
 import BlendFaultChallenge from './pages/smokecraft/BlendFaultChallenge.jsx'
+import FillerArrangement   from './pages/smokecraft/FillerArrangement.jsx'
 import VisitLockGuard      from './components/smokecraft/VisitLockGuard.jsx'
 import SmokeCraftSessionGuard from './components/smokecraft/SmokeCraftSessionGuard.jsx'
 import { SmokeCraftProgressProvider } from './context/SmokeCraftProgressContext.jsx'
@@ -494,6 +495,7 @@ export default function App() {
                 <Route path="collections"    element={<SmokeCraftSessionGuard requires="entry"><CollectionsCenter /></SmokeCraftSessionGuard>} />
                 <Route path="challenge-hub"  element={<SmokeCraftSessionGuard requires="entry"><ChallengeHub /></SmokeCraftSessionGuard>} />
                 <Route path="challenges/blend-fault-identification" element={<SmokeCraftSessionGuard requires="entry"><BlendFaultChallenge /></SmokeCraftSessionGuard>} />
+                <Route path="filler-arrangement" element={<SmokeCraftSessionGuard requires="entry"><FillerArrangement /></SmokeCraftSessionGuard>} />
 
                 {/* S25/S26 — Rewards and XP / Achievements are honestly deferred (no
                     screen exists, no route registered) per Package J's deferred-session

@@ -25,6 +25,7 @@ import managementSyncRoutes from './routes/managementSyncRoutes.js'
 import venueManagementRoutes from './routes/venueManagementRoutes.js'
 import goldenBoxRoutes from './routes/goldenBoxRoutes.js'
 import seedSoilRoutes from './routes/seedSoilRoutes.js'
+import fillerArrangementRoutes from './routes/fillerArrangementRoutes.js'
 import leafConstructionRoutes from './routes/leafConstructionRoutes.js'
 import flavorPairingRoutes from './routes/flavorPairingRoutes.js'
 import goldenBoxContentRoutes from './routes/goldenBoxContentRoutes.js'
@@ -222,6 +223,7 @@ app.use('/api/venue-management', venueManagementRoutes)
 app.use('/api/smokecraft/golden-box', goldenBoxRoutes)
 app.use('/api/smokecraft/golden-box-content', goldenBoxContentRoutes)
 app.use('/api/smokecraft/seed-soil', seedSoilRoutes)
+app.use('/api/smokecraft/filler-arrangement', fillerArrangementRoutes)
 app.use('/api/smokecraft/leaf-construction', leafConstructionRoutes)
 app.use('/api/smokecraft/flavor-pairing', flavorPairingRoutes)
 app.use('/api/dayone360/smokecraft',   dayone360SmokeCraftConnectionRoutes)
