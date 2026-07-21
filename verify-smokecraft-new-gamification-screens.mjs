@@ -89,28 +89,39 @@ try {
   check('Challenge Hub navigates to the real challenge route', p3.url().includes('/smokecraft/challenges/blend-fault-identification'))
   await p3.close()
 
-  // ── Blend Fault Identification challenge — full 3-step flow ──
+  // ── Blend Fault Identification — real backend-scored assessment flow ──
+  // Blend Fault Identification Backend Scoring pass — this is no longer a
+  // local-only multi-select shell; it now starts a real persisted attempt
+  // and is scored server-side (see verify-smokecraft-blend-fault.mjs for
+  // the dedicated thorough suite). The interaction changed from
+  // multi-select-with-no-answer-key to single-choice-per-question so it
+  // has real scorable semantics; the "Submit My Solutions" button became
+  // "Submit My Answers", and the completion label became "Assessment
+  // Passed"/"Assessment Not Passed" instead of a flat "Challenge
+  // Complete". Updated to match the real live implementation.
   const p4 = await browser.newPage({ viewport: { width: 1280, height: 900 } })
   await seed(p4)
   const r4 = await p4.goto(`${UI_BASE}/smokecraft/challenges/blend-fault-identification`, { waitUntil: 'domcontentloaded' })
   check('Blend Fault challenge route reachable (200)', r4.status() === 200)
-  await p4.waitForTimeout(800)
+  await p4.waitForTimeout(1000)
+  await p4.click('button:has-text("Start Assessment")')
+  await p4.waitForTimeout(600)
   check('Step 1 shows the real "Identify the Issue" title', (await p4.textContent('body')).includes('Identify the Issue'))
   check('Continue is disabled before any selection (no default selection)', await p4.locator('button:has-text("Continue")').isDisabled())
-  await p4.click('button:has-text("Wrapper Damage")')
+  await p4.click('button[role="radio"]:has-text("Wrapper Damage")')
   check('Continue enables only after a real user selection', !(await p4.locator('button:has-text("Continue")').isDisabled()))
   await p4.click('button:has-text("Continue")')
   await p4.waitForTimeout(400)
   check('Step 2 shows the real "Choose the Best Solution" title', (await p4.textContent('body')).includes('Choose the Best Solution'))
-  await p4.click('button:has-text("Re-moisten and rest the leaf")')
+  await p4.click('button[role="radio"]:has-text("Re-moisten and rest the leaf")')
   await p4.click('button:has-text("Continue")')
   await p4.waitForTimeout(400)
   check('Step 3 shows the real "Prevent and Improve" title', (await p4.textContent('body')).includes('Prevent and Improve'))
-  await p4.click('button:has-text("Re-moisten and rest the leaf")')
-  await p4.click('button:has-text("Submit My Solutions")')
-  await p4.waitForTimeout(400)
-  check('Challenge reaches a real completion state', (await p4.textContent('body')).includes('Challenge Complete'))
-  check('Challenge honestly discloses XP/badge are not yet backend-connected', (await p4.textContent('body')).includes('not yet backend-connected'))
+  await p4.click('button[role="radio"]:has-text("Re-moisten and rest the leaf")')
+  await p4.click('button:has-text("Submit My Answers")')
+  await p4.waitForTimeout(800)
+  check('Assessment reaches a real server-scored completion state', (await p4.textContent('body')).includes('Assessment Passed'))
+  check('Assessment honestly discloses XP is not yet approved', (await p4.textContent('body')).includes('XP is not yet approved'))
   const overflow = await p4.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 2)
   check('No horizontal overflow on the challenge screen', !overflow)
   await p4.close()
