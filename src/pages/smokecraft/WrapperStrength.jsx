@@ -480,6 +480,12 @@ export default function WrapperStrength() {
                 selected={selected.construction} onToggle={(row) => handleToggleSelect('construction', row)} onLearnMore={openDetail}
                 comparable={false} compareIds={compareIds} onToggleCompare={handleToggleCompare} />
 
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 10 }}>
+                <MediaSlot assetKey="processingCuring" alt="Curing" caption="Curing" style={{ height: 70, borderRadius: 6 }} />
+                <MediaSlot assetKey="processingFermentation" alt="Fermentation" caption="Fermentation" style={{ height: 70, borderRadius: 6 }} />
+                <MediaSlot assetKey="processingAging" alt="Final resting and aging" caption="Aging" style={{ height: 70, borderRadius: 6 }} />
+                <MediaSlot assetKey="processingGrading" alt="Sorting and grading" caption="Grading" style={{ height: 70, borderRadius: 6 }} />
+              </div>
               <Section title="Curing, Fermentation, Aging & Grading" rows={byCategory.processing_all || []}
                 selected={selected.processing} onToggle={(row) => handleToggleSelect('processing', row)} onLearnMore={openDetail}
                 comparable={false} compareIds={compareIds} onToggleCompare={handleToggleCompare} />

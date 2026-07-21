@@ -169,7 +169,16 @@ export const SC_ASSETS = {
 
   // ── Package 7A image-integration pass — Golden Box production folder ──
   // (2026-07-20 batch upload, normalized into public/assets/smokecraft/golden-box/)
-  goldenBoxChallenge:              `${RAW}/golden-box/golden-box-challenge.png`,
+  // Visual Sequence Closure pass — resolved deterministically (not a
+  // guess): "real golen box challenge.png" was uploaded 89 seconds after
+  // "Golden Box challenge.png" in the same upload session (BATCH888 vs.
+  // BATCH 777, source-commit-timestamp-verified) and its filename
+  // explicitly self-identifies as the corrected version ("real ___
+  // challenge") — the standard signal for a same-session re-upload
+  // superseding an earlier draft. See
+  // docs/audits/smokecraft-final-completion/visual-sequence-closure/03-HUMAN-VISUAL-DECISION-BOARD.md.
+  // The superseded file remains on disk, unregistered, not deleted.
+  goldenBoxChallenge:              `${RAW}/golden-box/golden-box-challenge-alt.png`,
   goldenBoxJudgingCriteria:        `${RAW}/golden-box/golden-box-judging-criteria.png`,
   goldenBoxPairingDefense:         `${RAW}/golden-box/golden-box-pairing-defense.png`,
   goldenBoxBlendRevisionRound:     `${RAW}/golden-box/golden-box-blend-revision-round.png`,
@@ -195,4 +204,13 @@ export const SC_ASSETS = {
 
   // ── Phase 2 — Ring Gauge / Vitola dedicated screen art ──
   ringGaugeGuide:                `${RAW}/session-visuals/RING%20GAUGE%20GUIDE.png`,
+
+  // ── Visual Sequence Closure pass — processing-section topic thumbnails ──
+  // (four distinct real sub-topics merged into WrapperStrength.jsx's single
+  // "Curing, Fermentation, Aging & Grading" section — not a duplicate
+  // choice, each image names its own distinct sub-topic).
+  processingCuring:      `${RAW}/leaf-construction/curing-process.png`,
+  processingFermentation:`${RAW}/leaf-construction/fermentation-process.png`,
+  processingAging:       `${RAW}/leaf-construction/final-resting-aging.png`,
+  processingGrading:     `${RAW}/leaf-construction/sorting-and-grading.png`,
 }
