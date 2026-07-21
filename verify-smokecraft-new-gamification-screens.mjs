@@ -76,7 +76,14 @@ try {
   check('Challenge Hub route reachable (200)', r3.status() === 200)
   await p3.waitForTimeout(1000)
   check('Challenge Hub shows real approved artwork', await p3.locator('img[alt="Daily and Weekly Challenge Hub"]').count() === 1)
-  check('Challenge Hub lists Blend Fault Identification as available', (await p3.textContent('body')).includes('Blend Fault Identification'))
+  // Challenge Hub Live State pass — Challenge Hub now loads real
+  // backend-tracked Daily/Weekly challenges (see
+  // verify-smokecraft-challenge-hub.mjs for the dedicated thorough suite);
+  // the static Blend Fault Identification practice card remains alongside
+  // them as its own unchanged flow. Updated to match the real live
+  // implementation.
+  check('Challenge Hub shows real live Daily Practice challenge', (await p3.textContent('body')).includes('Daily Practice'))
+  check('Challenge Hub still lists Blend Fault Identification as a practice activity', (await p3.textContent('body')).includes('Blend Fault Identification'))
   await p3.click('text=Blend Fault Identification')
   await p3.waitForTimeout(800)
   check('Challenge Hub navigates to the real challenge route', p3.url().includes('/smokecraft/challenges/blend-fault-identification'))

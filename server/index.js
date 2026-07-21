@@ -28,6 +28,7 @@ import seedSoilRoutes from './routes/seedSoilRoutes.js'
 import fillerArrangementRoutes from './routes/fillerArrangementRoutes.js'
 import skillTreeRoutes from './routes/skillTreeRoutes.js'
 import collectionsRoutes from './routes/collectionsRoutes.js'
+import challengeHubRoutes from './routes/challengeHubRoutes.js'
 import leafConstructionRoutes from './routes/leafConstructionRoutes.js'
 import flavorPairingRoutes from './routes/flavorPairingRoutes.js'
 import goldenBoxContentRoutes from './routes/goldenBoxContentRoutes.js'
@@ -228,6 +229,7 @@ app.use('/api/smokecraft/seed-soil', seedSoilRoutes)
 app.use('/api/smokecraft/filler-arrangement', fillerArrangementRoutes)
 app.use('/api/smokecraft/skill-tree', skillTreeRoutes)
 app.use('/api/smokecraft/collections', collectionsRoutes)
+app.use('/api/smokecraft/challenge-hub', challengeHubRoutes)
 app.use('/api/smokecraft/leaf-construction', leafConstructionRoutes)
 app.use('/api/smokecraft/flavor-pairing', flavorPairingRoutes)
 app.use('/api/dayone360/smokecraft',   dayone360SmokeCraftConnectionRoutes)
