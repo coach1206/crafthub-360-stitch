@@ -213,4 +213,14 @@ export const SC_ASSETS = {
   processingFermentation:`${RAW}/leaf-construction/fermentation-process.png`,
   processingAging:       `${RAW}/leaf-construction/final-resting-aging.png`,
   processingGrading:     `${RAW}/leaf-construction/sorting-and-grading.png`,
+
+  // ── Approved batch upload (commit a518a134) — registered, not yet wired ──
+  // to a screen. No /smokecraft/skill-tree, /smokecraft/collections, or
+  // Challenge Hub route exists yet (confirmed via grep of App.jsx) — these
+  // three keys are registered now per instruction (a missing route does not
+  // block registering approved art) so a future pass can wire them the
+  // moment each route is built, without a second image-discovery step.
+  skillTreeBackground:         `${RAW}/session-visuals/skill%20tree%201.png`,
+  collectionsCenterBackground: `${RAW}/session-visuals/collection%20center.png`,
+  challengeHubBackground:      `${RAW}/session-visuals/Daily%20and%20weekly%20Challenge%20Hub.png`,
 }
