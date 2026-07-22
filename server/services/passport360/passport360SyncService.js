@@ -18,6 +18,7 @@ import {
   createOrResolveGuestProfile,
   awardPassportStampLive,
   saveSmokeCraftSessionToPassport,
+  saveSmokeCraftFlavorMemory,
   getGuestPassportProgress,
   getGuestEarnedStamps,
   getGuestBadges,
@@ -174,6 +175,122 @@ export async function getConnections(guestReference) {
     venueConnections: [],
     eventConnections: [],
     platformConnections: [],
+  }
+}
+
+// Secure flavor-memory save — identity derived server-side, guestId
+// never accepted from the client. Replaces the direct call
+// FlavorMemory.jsx previously made to the insecure Phase F.5
+// /flavor-memory/save endpoint.
+export async function saveFlavorMemory(guestReference, { tasteTags, tastingNotes, sourceSessionId }) {
+  const guest = await resolveGuest(guestReference)
+  const result = await saveSmokeCraftFlavorMemory({
+    tenantId: TENANT_ID, venueId: VENUE_ID, guestId: guest.guest_id,
+    sourceSessionId: sourceSessionId || 'flavor-memory',
+    tasteTags, tastingNotes,
+    flavorProfileSource: 'guest_reported', dataQualityStatus: 'partial',
+  })
+  if (!result.ok) throw new PassportSyncError('passport_backend_unavailable')
+  return result.flavorMemory
+}
+
+// Secure SmokeCraft journey-completion stamp — identity-gated, real
+// database persistence (passport_360_earned_stamps, real dedupe_key
+// idempotency), replacing the old in-memory, client-trusted
+// /api/smokecraft/passport-stamp/claim route. The stamp itself is a
+// fixed, non-forgeable key (one per guest, not one per arbitrary
+// client-submitted sessionId) — the underlying eligibility signal
+// (completedSteps) remains client-reported, a pre-existing, disclosed
+// limitation of the broader 27-session client-tracked journey
+// architecture (see docs/audits/passport-360-completion/remediation/01-API-SECURITY-AUDIT.md),
+// not something this remediation invents a fake fix for. No XP is
+// awarded here — zero-XP-until-approved, consistent with every other
+// pass in this operation.
+export async function claimJourneyCompletionStamp(guestReference) {
+  const guest = await resolveGuest(guestReference)
+  const result = await awardPassportStampLive({
+    tenantId: TENANT_ID, venueId: VENUE_ID, guestId: guest.guest_id,
+    stampId: 'smokecraft-journey-complete', moduleKey: MODULE_KEY,
+    sourceSessionId: 'passport-stamp', sourceRoute: '/smokecraft/passport-stamp', xpAwarded: 0,
+  })
+  if (!result.ok) throw new PassportSyncError('passport_backend_unavailable')
+  return { stamp: result.stamp, duplicate: result.duplicate }
+}
+
+// Guest-to-authenticated-user linking. Only callable when BOTH a real
+// guest identity AND a real authenticated-user identity are present on
+// the SAME request (the caller must actually control the guest
+// session to link it — this is not a generic "transfer ownership by
+// ID" endpoint). Transactional, idempotent, never re-creates a
+// duplicate profile: the user's own canonical profile absorbs the
+// guest's real stamps/progress via the same idempotent primitives
+// used everywhere else (real dedupe_key, absolute-set XP mirroring).
+export async function linkGuestToUser(guestReference, userReference) {
+  if (!guestReference || !userReference) throw new PassportSyncError('invalid_link_request')
+  if (guestReference === userReference) throw new PassportSyncError('invalid_link_request')
+
+  const db = getDb()
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+
+    const guestProfile = await resolveGuest(guestReference)
+    const userProfile = await resolveGuest(userReference)
+
+    // Merge stamps: re-insert every guest stamp under the user's
+    // profile via the real dedupe_key constraint — never duplicates
+    // an already-owned stamp, never overwrites the guest's own record.
+    const { rows: guestStamps } = await client.query(
+      `SELECT stamp_id, module_key, source_session_id, source_route FROM passport_360_earned_stamps WHERE guest_id = $1`,
+      [guestProfile.guest_id]
+    )
+    let mergedStamps = 0
+    for (const s of guestStamps) {
+      const dedupeKey = `${userProfile.guest_id}:${s.stamp_id}:${s.module_key}`
+      const ins = await client.query(
+        `INSERT INTO passport_360_earned_stamps (tenant_id, venue_id, guest_id, stamp_id, module_key, source_session_id, source_route, xp_awarded, dedupe_key)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,0,$8)
+         ON CONFLICT (dedupe_key) DO NOTHING RETURNING earned_stamp_id`,
+        [TENANT_ID, VENUE_ID, userProfile.guest_id, s.stamp_id, s.module_key, s.source_session_id, s.source_route, dedupeKey]
+      )
+      if (ins.rows.length > 0) mergedStamps += 1
+    }
+
+    // Merge XP: the user's mirrored total_xp becomes the real max of
+    // the two real xp_accounts balances (never additive, never a
+    // client-submitted value) — both accounts remain independently
+    // real; this only affects the Passport's mirrored summary.
+    const { rows: balances } = await client.query(
+      `SELECT guest_reference, balance FROM xp_accounts WHERE guest_reference = ANY($1)`,
+      [[guestReference, userReference]]
+    )
+    const mergedXp = Math.max(0, ...balances.map(b => b.balance))
+    await client.query(
+      `INSERT INTO passport_360_guest_progress (tenant_id, venue_id, guest_id, module_key, total_xp)
+       VALUES ($1,$2,$3,$4,$5)
+       ON CONFLICT (guest_id, module_key) DO UPDATE SET total_xp = GREATEST(passport_360_guest_progress.total_xp, $5), updated_at = now()`,
+      [TENANT_ID, VENUE_ID, userProfile.guest_id, MODULE_KEY, mergedXp]
+    )
+
+    // Record merge provenance (idempotent — one audit row per real
+    // guest->user pair, never duplicated on repeated link calls).
+    await client.query(
+      `INSERT INTO passport_360_sync_audit_log (tenant_id, venue_id, guest_id, event_type, sync_status, backend_connected, summary, metadata_json)
+       SELECT $1,$2,$3,'guest_to_user_link','ok',true,$4,$5
+       WHERE NOT EXISTS (
+         SELECT 1 FROM passport_360_sync_audit_log
+         WHERE guest_id = $3 AND event_type = 'guest_to_user_link' AND metadata_json->>'guestReference' = $6
+       )`,
+      [TENANT_ID, VENUE_ID, userProfile.guest_id, `Linked guest ${guestReference} into user Passport ${userProfile.guest_id}`, JSON.stringify({ guestReference, userReference, mergedStamps }), guestReference]
+    )
+
+    await client.query('COMMIT')
+    return { userPassportId: userProfile.guest_id, guestPassportId: guestProfile.guest_id, mergedStamps, mergedXp }
+  } catch (err) {
+    await client.query('ROLLBACK')
+    throw err
+  } finally {
+    client.release()
   }
 }
 

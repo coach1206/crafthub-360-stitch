@@ -31,5 +31,8 @@ router.get('/connections', readLimiter, requireSmokeCraftIdentity, bridgeIdentit
 router.get('/activity', readLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleGetActivity)
 router.get('/directory', readLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleGetDirectory)
 router.post('/synchronize', writeLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleSynchronize)
+router.post('/flavor-memory', writeLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleSaveFlavorMemory)
+router.post('/journey-stamp/claim', writeLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleClaimJourneyStamp)
+router.post('/link-guest', writeLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleLinkGuestToUser)
 
 export default router

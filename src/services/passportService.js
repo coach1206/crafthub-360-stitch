@@ -6,7 +6,7 @@
 import { loadSession, saveSession } from './sessionStorageService.js'
 import { syncPassportToBackend } from './syncService.js'
 import { saveEvent } from './syncQueueService.js'
-import { awardStampToBackend, awardXPToBackend, getBackendEarnedStamps, getReturnVisitProgress, writeSyncAuditEvent } from './passportAdapter.js'
+import { awardStampToBackend, awardXPToBackend, getReturnVisitProgress, writeSyncAuditEvent } from './passportAdapter.js'
 
 function genPassportId() {
   return `PP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
@@ -106,16 +106,33 @@ export function awardStamp(stampData) {
 /**
  * Fetches earned stamps from backend when available, falls back to local.
  * Returns { stamps, backendConnected, persistenceMode }.
+ *
+ * Passport remediation (identity unification): this previously called
+ * the local, client-generated session.passport.passportId against the
+ * insecure Phase F.5 API (now disabled). It now calls the real,
+ * canonical /api/passport-360/sync/stamps endpoint directly — identity
+ * is resolved server-side from the same verified SmokeCraft guest
+ * cookie every other completed pass uses, not from any local ID. This
+ * is the fix for the previously-disclosed "SmokeCraft's verified
+ * identity and the general NOVEE OS local Passport identity remain
+ * fragmented" defect: this real caller (PassportStamps.jsx) now
+ * resolves to the exact same canonical Passport ID as every SmokeCraft
+ * screen, because it queries the same endpoint.
  */
 export async function getEarnedStampsWithBackend() {
-  const session = loadSession()
-  const passportId = session?.passport?.passportId
-  if (passportId) {
-    const result = await getBackendEarnedStamps({ guestId: passportId }).catch(() => null)
-    if (result?.backendConnected && Array.isArray(result.stamps)) {
-      return { stamps: result.stamps, backendConnected: true, persistenceMode: 'database' }
+  try {
+    const res = await fetch('/api/passport-360/sync/stamps', { credentials: 'include' })
+    if (res.ok) {
+      const json = await res.json()
+      if (json?.success && Array.isArray(json.stamps)) {
+        return {
+          stamps: json.stamps.map(s => ({ stampId: s.stamp_id, title: s.stamp_id, craft: 'SmokeCraft 360', earnedAt: s.earned_at, points: 0 })),
+          backendConnected: true,
+          persistenceMode: 'database',
+        }
+      }
     }
-  }
+  } catch { /* offline or backend unavailable */ }
   return { stamps: getEarnedStamps(), backendConnected: false, persistenceMode: 'local_fallback' }
 }
 

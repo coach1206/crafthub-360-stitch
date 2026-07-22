@@ -50,9 +50,14 @@ function setGuestCookie(res, token) {
     // Package 2: broadened from '/api/smokecraft/management-sync' to
     // '/api/smokecraft' so the same guest identity cookie is also sent
     // to Golden Box routes (/api/smokecraft/golden-box/...), which
-    // reuse this exact identity system by design (Package 1). Still
-    // scoped to SmokeCraft's API surface only, not the whole app.
-    path: '/api/smokecraft',
+    // reuse this exact identity system by design (Package 1).
+    // Passport remediation pass: broadened again to '/api' so the same
+    // real cookie is also sent to /api/passport-360/sync/* — without
+    // this, a real browser would never send the cookie there (path
+    // scoping is a request-routing convenience, not a security
+    // boundary; the JWT's own audience/scope check already prevents
+    // misuse regardless of which API path receives it).
+    path: '/api',
     maxAge: GUEST_JWT_EXPIRES_IN_MS,
   })
 }
@@ -69,6 +74,16 @@ function setGuestCookie(res, token) {
 export function attachSmokeCraftIdentity(req, res, next) {
   if (req.user && req.user.mode !== 'prototype' && req.user.role !== 'guest') {
     req.smokecraftIdentity = { type: 'user', id: req.user.id, role: req.user.role }
+    // Independently surface a verified guest cookie even when the
+    // primary identity resolves as an authenticated user — needed only
+    // for the guest-to-user linking endpoint, which must confirm the
+    // caller actually controls both identities on the same request
+    // (never a client-submitted guest reference).
+    const cookieToken = req.cookies?.[GUEST_COOKIE_NAME]
+    if (cookieToken) {
+      const payload = verifyGuestToken(cookieToken)
+      if (payload) req.smokecraftGuestCookieIdentity = payload.sub
+    }
     return next()
   }
 

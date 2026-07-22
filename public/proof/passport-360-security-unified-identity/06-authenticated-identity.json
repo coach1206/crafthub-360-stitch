@@ -1,0 +1,29 @@
+{
+  "passportId": "3998767f-f746-4aa0-bb04-9497c105d71f",
+  "profileStatus": "active",
+  "createdAt": "2026-07-22T00:19:30.551Z",
+  "xpSummary": {
+    "totalXp": 0
+  },
+  "stampSummary": {
+    "count": 0
+  },
+  "badgeSummary": {
+    "count": 0,
+    "supported": true
+  },
+  "smokecraftProgress": {
+    "skillTreeCompletedNodes": 0,
+    "collectionsOwnedItems": 0,
+    "challengesCompleted": 0,
+    "blendFaultPassed": false
+  },
+  "goldenBox": {
+    "connected": false,
+    "reason": "not_yet_approved_for_passport_sync"
+  },
+  "tasteProfile": {
+    "connected": false,
+    "reason": "no_confirmed_taste_data_source_for_this_guest"
+  }
+}

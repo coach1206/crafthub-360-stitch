@@ -1,0 +1,8 @@
+{
+  "status": 410,
+  "body": {
+    "success": false,
+    "error": "endpoint_disabled_insecure_legacy",
+    "message": "This Phase F.5 endpoint accepted unauthenticated, client-trusted identity and values and has been disabled. Use /api/passport-360/sync/* instead."
+  }
+}

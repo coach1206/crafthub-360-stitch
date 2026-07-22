@@ -187,17 +187,21 @@ export default function FlavorMemory() {
     return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current) }
   }, [fm, saveToBackend]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Passport remediation: the old /api/passport-360/smokecraft/flavor-memory/save
+  // endpoint accepted an arbitrary client-supplied guestId with no
+  // authentication and has been disabled. This now calls the secure,
+  // identity-gated canonical sync endpoint — guestId is derived
+  // server-side from the caller's own verified session, never sent
+  // from here.
   const saveToPassport = useCallback(async (data) => {
-    const res = await fetch('/api/passport-360/smokecraft/flavor-memory/save', {
+    const res = await fetch('/api/passport-360/sync/flavor-memory', {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        guestId: session?.guestId || 'guest',
         sourceSessionId: session?.sessionId || 'local-session',
         tasteTags: data.selectedFlavors,
         tastingNotes: data.personalNotes,
-        flavorProfileSource: 'guest_interactive',
-        dataQualityStatus: data.selectedFlavors.length > 0 ? 'valid' : 'empty',
       }),
     })
     if (!res.ok) throw new Error(`passport save failed: ${res.status}`)
