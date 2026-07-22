@@ -1,0 +1,54 @@
+[
+  {
+    "table_name": "golden_box_competitions",
+    "conname": "golden_box_competitions_competition_key_key"
+  },
+  {
+    "table_name": "golden_box_rounds",
+    "conname": "golden_box_rounds_competition_id_round_number_key"
+  },
+  {
+    "table_name": "golden_box_entries",
+    "conname": "golden_box_entries_entry_id_key"
+  },
+  {
+    "table_name": "golden_box_entries",
+    "conname": "golden_box_entries_competition_id_guest_reference_key"
+  },
+  {
+    "table_name": "golden_box_entry_versions",
+    "conname": "golden_box_entry_versions_entry_id_version_number_key"
+  },
+  {
+    "table_name": "golden_box_submissions",
+    "conname": "golden_box_submissions_entry_id_key"
+  },
+  {
+    "table_name": "golden_box_results",
+    "conname": "golden_box_results_competition_id_entry_id_key"
+  },
+  {
+    "table_name": "golden_box_component_catalog",
+    "conname": "golden_box_component_catalog_component_type_component_key_key"
+  },
+  {
+    "table_name": "golden_box_judges",
+    "conname": "golden_box_judges_user_id_key"
+  },
+  {
+    "table_name": "golden_box_judge_assignments",
+    "conname": "golden_box_judge_assignments_judge_id_entry_id_key"
+  },
+  {
+    "table_name": "golden_box_scorecards",
+    "conname": "golden_box_scorecards_entry_id_judge_id_amended_from_key"
+  },
+  {
+    "table_name": "golden_box_rewards",
+    "conname": "golden_box_rewards_entry_id_reward_type_key"
+  },
+  {
+    "table_name": "golden_box_visibility_rules",
+    "conname": "golden_box_visibility_rules_entry_id_viewer_role_key"
+  }
+]

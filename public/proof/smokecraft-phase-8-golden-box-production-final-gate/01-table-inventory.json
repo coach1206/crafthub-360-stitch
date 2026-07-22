@@ -1,0 +1,68 @@
+[
+  {
+    "table_name": "golden_box_activity_log"
+  },
+  {
+    "table_name": "golden_box_ai_analyses"
+  },
+  {
+    "table_name": "golden_box_blend_components"
+  },
+  {
+    "table_name": "golden_box_blends"
+  },
+  {
+    "table_name": "golden_box_competition_invitations"
+  },
+  {
+    "table_name": "golden_box_competitions"
+  },
+  {
+    "table_name": "golden_box_component_catalog"
+  },
+  {
+    "table_name": "golden_box_eligibility_results"
+  },
+  {
+    "table_name": "golden_box_eligibility_rules"
+  },
+  {
+    "table_name": "golden_box_entries"
+  },
+  {
+    "table_name": "golden_box_entry_versions"
+  },
+  {
+    "table_name": "golden_box_feedback"
+  },
+  {
+    "table_name": "golden_box_judge_assignments"
+  },
+  {
+    "table_name": "golden_box_judges"
+  },
+  {
+    "table_name": "golden_box_mentor_reviews"
+  },
+  {
+    "table_name": "golden_box_results"
+  },
+  {
+    "table_name": "golden_box_rewards"
+  },
+  {
+    "table_name": "golden_box_rounds"
+  },
+  {
+    "table_name": "golden_box_scorecards"
+  },
+  {
+    "table_name": "golden_box_scores"
+  },
+  {
+    "table_name": "golden_box_submissions"
+  },
+  {
+    "table_name": "golden_box_visibility_rules"
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "results": {
+    "xp": {
+      "skipped": false,
+      "transaction": {
+        "id": "103",
+        "xp_account_id": "92",
+        "amount": 10,
+        "source_type": "golden_box",
+        "source_id": "f3f7053b-3e26-423f-ad91-4f6795764bab",
+        "reason": "Phase 8 gate test",
+        "award_rule_key": null,
+        "idempotency_key": "golden_box_reward:f3f7053b-3e26-423f-ad91-4f6795764bab",
+        "venue_id": null,
+        "administrator_id": null,
+        "reversal_of": null,
+        "created_at": "2026-07-22T02:36:21.458Z"
+      }
+    }
+  }
+}

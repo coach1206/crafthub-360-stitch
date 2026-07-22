@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "result": {
+    "id": "48",
+    "competition_id": "34",
+    "entry_id": "f3f7053b-3e26-423f-ad91-4f6795764bab",
+    "aggregate_score": "8.00",
+    "placement": null,
+    "is_finalist": false,
+    "is_winner": false,
+    "tie_break_reason": null,
+    "disqualified": false,
+    "disqualification_reason": null,
+    "published_at": null,
+    "created_at": "2026-07-22T02:35:20.369Z"
+  }
+}

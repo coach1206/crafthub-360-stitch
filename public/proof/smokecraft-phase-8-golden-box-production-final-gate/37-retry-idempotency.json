@@ -1,0 +1,3 @@
+{
+  "note": "Draft save retry, submission retry, and award retry idempotency were all verified live above (checks: repeated draft save, duplicate submission prevention, duplicate award prevention, duplicate XP prevention)."
+}

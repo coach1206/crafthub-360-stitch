@@ -1,0 +1,4 @@
+{
+  "success": false,
+  "error": "validation_failed:presentation_missing,missing_component:wrapper,missing_component:binder,missing_component:filler,missing_component:vitola"
+}

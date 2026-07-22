@@ -1,0 +1,3 @@
+{
+  "note": "Real 429s were observed and recovered from during this session's heavy consecutive suite runs — see public/proof/smokecraft-phase-8-golden-box-production-final-gate/39-regression-battery-summary.md for the documented pattern. No corrupted fixture resulted; server restart clears the in-memory window as designed."
+}

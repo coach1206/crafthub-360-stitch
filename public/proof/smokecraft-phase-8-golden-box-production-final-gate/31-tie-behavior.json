@@ -1,0 +1,3 @@
+{
+  "note": "Tie behavior is deterministic: computeAggregateResult uses a plain AVG() over submitted/locked scorecards with no random tiebreak; two entries with identical aggregate_score receive identical scores and placement is assigned by the admin-triggered reward/leaderboard publish step in stable insertion order — documented, not modified (changing tie-break logic is a scoring-rule change, out of Phase 8 scope)."
+}

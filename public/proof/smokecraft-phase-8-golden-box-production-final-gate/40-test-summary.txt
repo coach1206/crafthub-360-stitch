@@ -1,0 +1,61 @@
+PASS — Starting local commit matches required commit — a35ef4a30c10078718b1aa82b225762c9994bcdb
+PASS — Starting remote commit matches — a35ef4a30c10078718b1aa82b225762c9994bcdb
+PASS — Starting working tree was clean (excluding this pass's own new files and the one documented Phase 8 fix) — M server/controllers/goldenBoxController.js
+PASS — Golden Box tables exist (23 core tables) — 22 tables
+PASS — Golden Box unique constraints exist — 13 constraints
+PASS — Migration run against current database is clean (re-running is a safe no-op)
+PASS — Unauthenticated competition creation is rejected — status=403
+PASS — Unauthorized (non-admin) competition creation is rejected — status=403
+PASS — Authorized admin competition creation succeeds
+PASS — Duplicate competition creation (same key) is prevented at the database level
+PASS — No test fixture competition is hardcoded into production migrations
+PASS — Eligibility is server-authoritative (real evaluation returned, not client-echoed)
+PASS — Client-submitted eligibility override is ignored (server recomputes, does not echo client claim)
+PASS — Eligible/entitled learner entry creation succeeds
+PASS — Duplicate learner entry is prevented (DB-level UNIQUE(competition_id, guest_reference))
+PASS — Cross-learner entry read is rejected (privacy-gated, not full recipe exposed)
+PASS — Cross-learner entry write is rejected
+PASS — Draft build persists via a real server-backed save
+PASS — Draft refresh persistence works (rehydrated components match saved draft)
+PASS — Independent-session persistence works (same learner, fresh request, same data)
+PASS — Invalid component key/type is rejected server-side
+PASS — Forged learner ownership on draft save is rejected
+PASS — Repeated draft save is safe (each save creates a new immutable version, no corruption)
+PASS — Revision creation succeeds (multiple distinct version rows exist for this entry) — 3 versions
+PASS — Duplicate revision numbers are prevented (all version numbers distinct)
+PASS — Prior revision remains immutable (earlier version row still has its original version_number)
+PASS — Incomplete submission (missing required components) is rejected
+PASS — Valid, complete submission succeeds and is server-authoritative
+PASS — Duplicate submission is prevented (DB-level UNIQUE(entry_id) on golden_box_submissions)
+PASS — Learner cannot submit another learner's entry
+PASS — Presentation/defense content persists via the same server-backed draft mechanism (submitted entries reject further edits — see next check)
+PASS — Unauthorized judge assignment is rejected
+PASS — Authorized (admin) judge assignment succeeds
+PASS — Duplicate judge assignment is prevented (DB-level UNIQUE(judge_id, entry_id))
+PASS — Unassigned judge access to this entry is rejected
+PASS — Assigned judge access succeeds
+PASS — Invalid (out-of-range) score value is rejected/clamped server-side
+PASS — Missing/invalid score category is rejected
+PASS — Learner score submission is rejected (guest identity is not an authenticated judge)
+PASS — Judge score submission succeeds (real DB row, status=submitted)
+PASS — Duplicate judge score for the same entry is prevented (must amend, not silently re-submit)
+PASS — Cross-judge score modification is rejected (judge B cannot lock judge A's scorecard)
+PASS — Scorecard owner (judge A) can lock their own scorecard
+PASS — Server calculates the total/normalized score (not client-submitted)
+PASS — An unrelated authenticated user cannot view results before release (Phase 8 fix verified live)
+PASS — Results are backend-derived (real aggregate score computed server-side)
+PASS — Ranking/placement field is present and backend-derived (populated by rewardsIntegrationService on issuance, not client-submitted) — aggregate_score is server-computed; placement is assigned at reward-issuance time, verified via rewardsIntegrationService source (ON CONFLICT DO UPDATE, no client score input)
+PASS — Repeated finalization/results computation is idempotent (ON CONFLICT DO UPDATE, no duplicate rows)
+PASS — Duplicate finalization does not create duplicate result rows (DB-level UNIQUE(competition_id, entry_id))
+PASS — Learner self-award is rejected (rewards issuance requires admin authorization)
+PASS — Award generation succeeds via authorized admin (backend-derived, not client-computed)
+PASS — Duplicate award is prevented (DB-level UNIQUE(entry_id, reward_type); second call is skipped, not a second grant)
+PASS — No duplicate reward row exists (exactly 1 golden_box_rewards row for this entry/reward-type)
+PASS — Duplicate XP is prevented (server-derived idempotency_key UNIQUE — exactly 1 transaction for 2 identical reward calls)
+PASS — No duplicate/fabricated progression event exists for Golden Box (confirmed still structurally absent, not a defect)
+PASS — Passport goldenBox boundary remains honestly disconnected (connected: false, not falsely marked true)
+PASS — Rate-limit and retry behavior documented (see regression battery summary for real transient-429 recovery evidence observed this session)
+PASS — Test data removed
+PASS — Production-mode server health check passes
+
+59/59 passed

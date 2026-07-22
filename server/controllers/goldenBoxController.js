@@ -100,8 +100,34 @@ export async function handleGetEntry(req, res) {
   } catch (err) { sendError(res, err, 500) }
 }
 
+// Phase 8 fix: saveDraft/submitEntry/withdrawEntry previously performed
+// no ownership check at all — any caller (including a different
+// learner, or any guest, since all guests share the same prototype-mode
+// req.user.id) could edit, submit, or withdraw another learner's entry.
+// Mirrors the same "ownsAsUser || ownsAsGuest" identity comparison
+// visibilityService.resolveViewerRole already uses for reads, applied
+// here to the three write paths that were missing it.
+function ownsEntry(entry, identity) {
+  const ownsAsUser = !!identity.userId && identity.userId === entry.user_id
+  const ownsAsGuest = !!identity.guestReference && identity.guestReference === entry.guest_reference
+  return ownsAsUser || ownsAsGuest
+}
+
+async function requireOwnedEntry(req, res) {
+  const entry = await entryService.getEntry(req.params.entryId)
+  if (!entry) { res.status(404).json({ success: false, error: 'entry_not_found' }); return null }
+  const identity = identityFrom(req)
+  if (!ownsEntry(entry, identity)) {
+    res.status(403).json({ success: false, error: 'entry_not_owned_by_caller' })
+    return null
+  }
+  return entry
+}
+
 export async function handleSaveDraft(req, res) {
   try {
+    const entry = await requireOwnedEntry(req, res)
+    if (!entry) return
     const version = await entryService.saveDraft(req.params.entryId, req.body, req.user.id)
     res.json({ success: true, version })
   } catch (err) { sendError(res, err, 500) }
@@ -109,8 +135,8 @@ export async function handleSaveDraft(req, res) {
 
 export async function handleSubmitEntry(req, res) {
   try {
-    const entry = await entryService.getEntry(req.params.entryId)
-    if (!entry) return res.status(404).json({ success: false, error: 'entry_not_found' })
+    const entry = await requireOwnedEntry(req, res)
+    if (!entry) return
     const competition = await competitionService.getCompetition(entry.competition_id)
     const submission = await entryService.submitEntry(req.params.entryId, req.user.id, competition)
     res.json({ success: true, submission })
@@ -119,6 +145,8 @@ export async function handleSubmitEntry(req, res) {
 
 export async function handleWithdrawEntry(req, res) {
   try {
+    const entry = await requireOwnedEntry(req, res)
+    if (!entry) return
     await entryService.withdrawEntry(req.params.entryId, req.user.id)
     res.json({ success: true })
   } catch (err) { sendError(res, err, 500) }
@@ -138,8 +166,24 @@ export async function handleSubmitScorecard(req, res) {
   } catch (err) { sendError(res, err, 500) }
 }
 
+// Phase 8 fix: this route previously computed and returned any entry's
+// real aggregate score to any authenticated caller, with no ownership
+// check and no competition-status gate — an arbitrary authenticated
+// user could read another learner's result before official release.
+// Reuse the same visibilityService.getVisibility policy already used by
+// handleGetEntry/requireEntryAnalysisAccess (canViewScores is
+// judging-closed-state-aware and role-aware) rather than inventing a
+// new check.
 export async function handleGetResults(req, res) {
   try {
+    const entry = await entryService.getEntry(req.params.entryId)
+    if (!entry) return res.status(404).json({ success: false, error: 'entry_not_found' })
+    const competition = await competitionService.getCompetition(entry.competition_id)
+    const identity = identityFrom(req)
+    const visibility = await visibilityService.getVisibility(entry, competition, identity)
+    if (!visibility.canViewScores) {
+      return res.status(403).json({ success: false, error: 'results_not_authorized' })
+    }
     const result = await judgingService.computeAggregateResult(Number(req.params.competitionId), req.params.entryId)
     res.json({ success: true, result })
   } catch (err) { sendError(res, err, 500) }
