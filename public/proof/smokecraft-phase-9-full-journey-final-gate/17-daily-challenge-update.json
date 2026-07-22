@@ -1,0 +1,50 @@
+{
+  "success": true,
+  "challenges": [
+    {
+      "challengeKey": "daily-lesson-practice",
+      "title": "Daily Practice",
+      "description": "Complete one real SmokeCraft lesson or activity today.",
+      "cadence": "daily",
+      "category": "Practice",
+      "challengeType": "single_event",
+      "targetValue": 1,
+      "xpReward": 0,
+      "goldenBoxRelevance": "Consistent daily practice builds the habits Golden Box competitors rely on.",
+      "instance": {
+        "instanceKey": "daily-lesson-practice-2026-07-22",
+        "effectiveStart": "2026-07-22T00:00:00.000Z",
+        "effectiveEnd": "2026-07-23T00:00:00.000Z"
+      },
+      "timeStatus": "active",
+      "participationState": "available",
+      "progress": 1,
+      "missingRequirements": [],
+      "serverNow": "2026-07-22T09:07:27.635Z"
+    },
+    {
+      "challengeKey": "weekly-multi-activity-builder",
+      "title": "Weekly Builder",
+      "description": "Engage with at least three different SmokeCraft learning activities this week.",
+      "cadence": "weekly",
+      "category": "Consistency",
+      "challengeType": "multi_event",
+      "targetValue": 3,
+      "xpReward": 0,
+      "goldenBoxRelevance": "Breadth across lessons, challenges, and construction practice best prepares a learner for Golden Box.",
+      "instance": {
+        "instanceKey": "weekly-multi-activity-builder-2026-07-20",
+        "effectiveStart": "2026-07-20T00:00:00.000Z",
+        "effectiveEnd": "2026-07-27T00:00:00.000Z"
+      },
+      "timeStatus": "active",
+      "participationState": "available",
+      "progress": 2,
+      "missingRequirements": [
+        "Need 3 distinct activities this period — currently 2"
+      ],
+      "serverNow": "2026-07-22T09:07:27.635Z"
+    }
+  ],
+  "serverNow": "2026-07-22T09:07:27.644Z"
+}

@@ -1,0 +1,3 @@
+# Phase 9 — Production Startup Result
+
+Express server started cleanly against the real PostgreSQL database throughout this pass, confirmed via direct `/api/health` polling after each restart. One infrastructure interruption was observed and resolved: the sandboxed PostgreSQL cluster itself went down mid-pass (`ECONNREFUSED` on `127.0.0.1:5432`, confirmed via `pg_isready`/`pg_lsclusters`) — resolved via `service postgresql start`, after which the Express server was restarted and all subsequent runs completed cleanly. This was an environment/infrastructure event, not an application startup defect (the Express server itself never failed to start once Postgres was available).

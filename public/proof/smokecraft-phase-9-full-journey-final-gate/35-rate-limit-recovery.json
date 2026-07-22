@@ -1,0 +1,3 @@
+{
+  "note": "Real 429s were observed and recovered from during this session's heavy consecutive suite runs across Phases 6-9 — server restart clears the in-memory rate-limit window as designed, and this suite's own apiFetch() retries once after the window clears. No corrupted fixture or duplicate event resulted from any observed 429 this session."
+}

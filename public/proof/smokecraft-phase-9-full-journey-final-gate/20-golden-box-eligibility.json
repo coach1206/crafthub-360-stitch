@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "eligible": true,
+  "ruleCount": 0,
+  "results": [],
+  "reason": "no_eligibility_rules_configured_open_entry"
+}

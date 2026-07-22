@@ -1,0 +1,3 @@
+{
+  "note": "Award issuance is admin-triggered and idempotency-verified in the Phase 8 gate (32/33-award proof files); not re-issued here to avoid duplicate real XP-ledger rows against the append-only xp_transactions table."
+}

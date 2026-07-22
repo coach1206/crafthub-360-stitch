@@ -1,0 +1,141 @@
+{
+  "success": true,
+  "nodes": [
+    {
+      "nodeKey": "foundation",
+      "title": "Foundation",
+      "description": "Seed genetics, soil types, and terroir — the ground every blend starts from.",
+      "category": "Foundation",
+      "phaseReference": "Arrival",
+      "prerequisites": [],
+      "xpReward": 10,
+      "goldenBoxRelevance": "Understanding origin informs Golden Box seed/soil selection.",
+      "displayOrder": 1,
+      "state": "available",
+      "reason": "0 Seed & Soil component(s) explored",
+      "missingRequirements": [
+        "seed_soil_engagement"
+      ],
+      "completedAt": null
+    },
+    {
+      "nodeKey": "leaf-process",
+      "title": "Leaf & Process",
+      "description": "How filler leaves are selected, arranged, and processed before rolling.",
+      "category": "Leaf & Process",
+      "phaseReference": "First Third",
+      "prerequisites": [
+        "foundation"
+      ],
+      "xpReward": 10,
+      "goldenBoxRelevance": "Filler arrangement directly affects Golden Box construction scoring.",
+      "displayOrder": 2,
+      "state": "locked",
+      "reason": "Locked — complete \"foundation\" first.",
+      "missingRequirements": [
+        "foundation"
+      ],
+      "completedAt": null
+    },
+    {
+      "nodeKey": "construction",
+      "title": "Construction",
+      "description": "The physical rolling process — bunching, wrapper application, cap, and foot.",
+      "category": "Construction",
+      "phaseReference": "First Third",
+      "prerequisites": [
+        "leaf-process"
+      ],
+      "xpReward": 15,
+      "goldenBoxRelevance": "Construction quality is a real Golden Box judging category.",
+      "displayOrder": 3,
+      "state": "locked",
+      "reason": "Locked — complete \"leaf-process\" first.",
+      "missingRequirements": [
+        "leaf-process"
+      ],
+      "completedAt": null
+    },
+    {
+      "nodeKey": "flavor-experience",
+      "title": "Flavor & Experience",
+      "description": "Cold aroma, cold draw, and flavor progression through the three thirds.",
+      "category": "Flavor & Experience",
+      "phaseReference": "Second Third",
+      "prerequisites": [
+        "construction"
+      ],
+      "xpReward": 15,
+      "goldenBoxRelevance": "Flavor tracking supports the Golden Box flavor review.",
+      "displayOrder": 4,
+      "state": "locked",
+      "reason": "Locked — complete \"construction\" first.",
+      "missingRequirements": [
+        "construction"
+      ],
+      "completedAt": null
+    },
+    {
+      "nodeKey": "pairing-pairings",
+      "title": "Pairing & Pairings",
+      "description": "Building and evaluating spirit and food pairings for a given blend.",
+      "category": "Pairing & Pairings",
+      "phaseReference": "Second Third",
+      "prerequisites": [
+        "flavor-experience"
+      ],
+      "xpReward": 15,
+      "goldenBoxRelevance": "Pairing defense is a real step in the Golden Box entry workflow.",
+      "displayOrder": 5,
+      "state": "locked",
+      "reason": "Locked — complete \"flavor-experience\" first.",
+      "missingRequirements": [
+        "flavor-experience"
+      ],
+      "completedAt": null
+    },
+    {
+      "nodeKey": "mastery-blending",
+      "title": "Mastery & Blending",
+      "description": "Submitting a real Golden Box entry — the practical application of everything above.",
+      "category": "Mastery & Blending",
+      "phaseReference": "Final Third",
+      "prerequisites": [
+        "pairing-pairings"
+      ],
+      "xpReward": 25,
+      "goldenBoxRelevance": "This node is Golden Box participation itself.",
+      "displayOrder": 6,
+      "state": "locked",
+      "reason": "Locked — complete \"pairing-pairings\" first.",
+      "missingRequirements": [
+        "pairing-pairings"
+      ],
+      "completedAt": null
+    },
+    {
+      "nodeKey": "community-legacy",
+      "title": "Community & Legacy",
+      "description": "Engaging broadly across SmokeCraft — lessons, challenges, and mentor guidance together.",
+      "category": "Community & Legacy",
+      "phaseReference": "Reflection",
+      "prerequisites": [
+        "mastery-blending"
+      ],
+      "xpReward": 20,
+      "goldenBoxRelevance": "A well-rounded learner is best prepared for competitive Golden Box rounds.",
+      "displayOrder": 7,
+      "state": "locked",
+      "reason": "Locked — complete \"mastery-blending\" first.",
+      "missingRequirements": [
+        "mastery-blending"
+      ],
+      "completedAt": null
+    }
+  ],
+  "summary": {
+    "totalNodes": 7,
+    "completedNodes": 0,
+    "completionPercent": 0
+  }
+}

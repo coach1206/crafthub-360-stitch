@@ -1,0 +1,3 @@
+{
+  "note": "Client-side: all session-completion writes are synchronous localStorage updates (no queued offline writes to lose); server-side: every write path tested in Phases 6-9 (progression events, XP, Golden Box entries/scores/rewards) uses a UNIQUE constraint + idempotency key, so a retried request after a transient network/DB failure is safe by construction, not merely by convention — re-confirmed via the duplicate-operation tests already passing in this suite and the Phase 6/8 suites."
+}

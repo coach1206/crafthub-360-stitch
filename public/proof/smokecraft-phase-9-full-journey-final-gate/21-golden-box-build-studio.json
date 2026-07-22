@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "version": {
+    "id": "76",
+    "entry_id": "dd9c05e5-b484-494c-b864-7cf98de42191",
+    "version_number": 2,
+    "presentation_payload": {
+      "title": "Phase 9 journey test"
+    },
+    "pairing_selection": null,
+    "pairing_defense": null,
+    "predicted_profile": null,
+    "created_by": "proto-guest",
+    "created_at": "2026-07-22T09:07:27.414Z"
+  }
+}
