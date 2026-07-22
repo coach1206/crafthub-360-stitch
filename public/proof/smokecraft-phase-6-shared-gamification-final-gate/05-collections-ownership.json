@@ -1,0 +1,118 @@
+{
+  "success": true,
+  "items": [
+    {
+      "itemKey": "filler-mastery-badge",
+      "title": "Filler Arrangement Mastery",
+      "description": "Awarded for completing the full Filler Arrangement standalone lesson — Ligero, Viso, Seco, and Volado placement, airflow, density, and combustion.",
+      "category": "Leaf Collection",
+      "itemType": "badge",
+      "rarity": null,
+      "assetReference": "session-visuals/filler%20arrangement.png",
+      "earnCondition": "Complete the Filler Arrangement lesson",
+      "xpValue": 0,
+      "goldenBoxRelevance": "Filler arrangement directly affects Golden Box construction scoring.",
+      "merchandiseEligible": false,
+      "displayOrder": 1,
+      "state": "earned",
+      "earnedAt": "2026-07-22T01:40:07.795Z"
+    },
+    {
+      "itemKey": "seed-soil-scholar-badge",
+      "title": "Seed & Soil Scholar",
+      "description": "Awarded for exploring seed genetics and soil types in the Seed & Soil experience.",
+      "category": "Knowledge Collection",
+      "itemType": "badge",
+      "rarity": null,
+      "assetReference": "SEED%20&%20SOIL.png",
+      "earnCondition": "Explore at least one Seed & Soil component",
+      "xpValue": 0,
+      "goldenBoxRelevance": "Understanding origin informs Golden Box seed/soil selection.",
+      "merchandiseEligible": false,
+      "displayOrder": 2,
+      "state": "earned",
+      "earnedAt": "2026-07-22T01:40:07.801Z"
+    },
+    {
+      "itemKey": "master-roller-badge",
+      "title": "Master Roller",
+      "description": "Awarded for completing at least one real step of the rolling process — bunching, wrapper application, cap, or foot.",
+      "category": "Cigar Collection",
+      "itemType": "badge",
+      "rarity": null,
+      "assetReference": "leaf-construction/construct-cap.png",
+      "earnCondition": "Complete at least one rolling-process step",
+      "xpValue": 0,
+      "goldenBoxRelevance": "Construction quality is a real Golden Box judging category.",
+      "merchandiseEligible": false,
+      "displayOrder": 3,
+      "state": "locked",
+      "reason": "0 rolling-process step(s) completed"
+    },
+    {
+      "itemKey": "skill-tree-starter-badge",
+      "title": "Skill Tree Starter",
+      "description": "Awarded for completing the Foundation node of the SmokeCraft Skill Tree.",
+      "category": "Badge Collection",
+      "itemType": "badge",
+      "rarity": null,
+      "assetReference": "session-visuals/skill%20tree%201.png",
+      "earnCondition": "Complete the Foundation Skill Tree node",
+      "xpValue": 0,
+      "goldenBoxRelevance": null,
+      "merchandiseEligible": false,
+      "displayOrder": 4,
+      "state": "earned",
+      "earnedAt": "2026-07-22T01:40:07.806Z"
+    },
+    {
+      "itemKey": "progression-pioneer-badge",
+      "title": "Progression Pioneer",
+      "description": "Awarded for engaging with at least two distinct SmokeCraft progression systems.",
+      "category": "Reward / Achievement Collection",
+      "itemType": "badge",
+      "rarity": null,
+      "assetReference": "session-visuals/collection%20center.png",
+      "earnCondition": "Generate at least 2 distinct progression event types",
+      "xpValue": 0,
+      "goldenBoxRelevance": null,
+      "merchandiseEligible": false,
+      "displayOrder": 5,
+      "state": "earned",
+      "earnedAt": "2026-07-22T01:40:07.810Z"
+    }
+  ],
+  "summary": {
+    "totalActiveItems": 5,
+    "ownedItems": 4,
+    "remainingLocked": 1,
+    "completionPercent": 80,
+    "categories": [
+      {
+        "category": "Leaf Collection",
+        "total": 1,
+        "owned": 1
+      },
+      {
+        "category": "Knowledge Collection",
+        "total": 1,
+        "owned": 1
+      },
+      {
+        "category": "Badge Collection",
+        "total": 1,
+        "owned": 1
+      },
+      {
+        "category": "Reward / Achievement Collection",
+        "total": 1,
+        "owned": 1
+      },
+      {
+        "category": "Cigar Collection",
+        "total": 1,
+        "owned": 0
+      }
+    ]
+  }
+}

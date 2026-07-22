@@ -1,0 +1,51 @@
+PASS — Starting local commit matches required commit — 22a49db9186310e02213e13425e169f5ce599c9f
+PASS — Starting remote commit matches — 22a49db9186310e02213e13425e169f5ce599c9f
+PASS — Starting working tree was clean (excluding this pass's own new files)
+PASS — smokecraft_progression_events is the primary shared table
+PASS — No competing shared progression-event table exists
+PASS — Event idempotency (idempotency_key) constraint exists
+PASS — Duplicate progression-event insert is blocked at the database level (real test)
+PASS — Challenge start succeeds
+PASS — challenge_started bookkeeping event does NOT satisfy the challenge's own completion condition (previously-fixed bug re-verified)
+PASS — challenge_started event is written but excluded from evidence-counting (verified via source: CHALLENGE_BOOKKEEPING_EVENT_TYPES)
+PASS — Blend Fault does not award XP (zero-XP-by-design, verified)
+PASS — Skill Tree xp_reward column exists as unawarded display metadata (inactive reference, not a defect)
+PASS — Skill Tree xp_reward is never actually granted as XP (no skill-tree-sourced xp_transactions)
+PASS — Collections items all have xp_value = 0 (zero-XP-by-design)
+PASS — Challenge Hub definitions all have xp_reward = 0 (zero-XP-by-design)
+PASS — Filler Arrangement quiz XP has a real, documented award rule
+PASS — Repeated Passport sync does not double XP (absolute-set mirroring verified)
+PASS — Passport reflects real Blend Fault completion
+PASS — Repeated Passport sync does not duplicate stamps
+PASS — Repeated Passport sync does not duplicate activity (real progression-event log unaffected by Passport-side reads)
+PASS — Skill Tree: 7 approved top-level nodes remain
+PASS — Skill Tree learner-state uniqueness constraint exists
+PASS — Collections: 5 approved items remain (Tool/Lounge still unseeded)
+PASS — Collections ownership uniqueness constraint exists
+PASS — Challenge Hub: 2 approved definitions remain (1 daily, 1 weekly)
+PASS — Challenge instance uniqueness constraint exists
+PASS — Challenge learner-state uniqueness constraint exists
+PASS — Blend Fault attempt uniqueness constraint exists
+PASS — Blend Fault answer uniqueness constraint exists
+PASS — Passport profile uniqueness constraint exists
+PASS — Passport stamp uniqueness constraint exists
+PASS — Filler Arrangement: repeated completion requests do not duplicate the completion row
+PASS — Skill Tree "foundation" reflects real Seed & Soil evidence (state=completed)
+PASS — Skill Tree "leaf-process" reads real Filler Arrangement evidence once unlocked (state=completed)
+PASS — Cross-learner Skill Tree access rejected (learner B does not see A's progress)
+PASS — Cross-learner Collections access rejected
+PASS — Cross-learner Challenge Hub access rejected
+PASS — Cross-learner Blend Fault access rejected
+PASS — Cross-learner Passport access rejected
+PASS — No Golden Box progression events conflict with shared progression this pass (structural, none exist yet)
+PASS — Golden Box remains honestly not-connected to Passport (no fake award data used)
+PASS — No fake streak/leaderboard VALUE (only honest disclosure text) in Challenge Hub source
+PASS — No hardcoded XP total remains in Passport Profile source
+PASS — No default-selected Skill Tree node (no aria-pressed=true before interaction)
+PASS — No default-selected Challenge card
+PASS — No fake streak or leaderboard rendered in Challenge Hub UI
+PASS — No default-selected Blend Fault answer
+PASS — Test data removed
+PASS — Production-mode server health check passes
+
+49/49 passed
