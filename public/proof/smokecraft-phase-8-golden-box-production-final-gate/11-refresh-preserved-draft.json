@@ -1,19 +1,19 @@
 {
   "success": true,
   "entry": {
-    "id": "31",
-    "entry_id": "c1ea5804-63f1-4815-9316-133c8af39d4b",
-    "competition_id": "41",
+    "id": "41",
+    "entry_id": "06dafba4-a131-4db7-a7c8-0e34b1d507a7",
+    "competition_id": "50",
     "round_id": null,
     "user_id": null,
-    "guest_reference": "575a3ea6-e324-4cb7-917b-7c66a8fca393",
+    "guest_reference": "3f91ca8b-6684-4acd-8ed6-d953cf1ec0f9",
     "cigar_name": "Phase 8 Test Blend",
     "status": "draft",
     "current_version": 2,
     "submitted_at": null,
     "locked_at": null,
-    "created_at": "2026-07-22T08:56:46.129Z",
-    "updated_at": "2026-07-22T08:56:46.174Z"
+    "created_at": "2026-07-22T09:35:02.066Z",
+    "updated_at": "2026-07-22T09:35:02.102Z"
   },
   "visibility": {
     "role": "entrant",
@@ -22,8 +22,8 @@
     "canViewPersonalInfo": true
   },
   "currentVersion": {
-    "id": "71",
-    "entry_id": "c1ea5804-63f1-4815-9316-133c8af39d4b",
+    "id": "86",
+    "entry_id": "06dafba4-a131-4db7-a7c8-0e34b1d507a7",
     "version_number": 2,
     "presentation_payload": {
       "title": "Phase 8 Test Blend"
@@ -32,36 +32,36 @@
     "pairing_defense": null,
     "predicted_profile": null,
     "created_by": "proto-guest",
-    "created_at": "2026-07-22T08:56:46.174Z"
+    "created_at": "2026-07-22T09:35:02.102Z"
   },
   "components": [
     {
-      "id": "118",
-      "entry_version_id": "71",
+      "id": "135",
+      "entry_version_id": "86",
       "component_type": "wrapper",
       "component_key": "connecticut-shade",
       "component_value": {},
       "display_order": 0
     },
     {
-      "id": "119",
-      "entry_version_id": "71",
+      "id": "136",
+      "entry_version_id": "86",
       "component_type": "binder",
       "component_key": "nicaraguan-habano",
       "component_value": {},
       "display_order": 1
     },
     {
-      "id": "120",
-      "entry_version_id": "71",
+      "id": "137",
+      "entry_version_id": "86",
       "component_type": "filler",
       "component_key": "dominican-piloto",
       "component_value": {},
       "display_order": 2
     },
     {
-      "id": "121",
-      "entry_version_id": "71",
+      "id": "138",
+      "entry_version_id": "86",
       "component_type": "vitola",
       "component_key": "robusto",
       "component_value": {},

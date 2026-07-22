@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "submission": {
+    "id": "9",
+    "entry_id": "741235ab-4f11-46ad-803a-0967f8450ae8",
+    "design_id": "1037e03c-2fc2-455e-9750-0e0148da7c26",
+    "version_number": 5,
+    "snapshot": {
+      "finish": "satin",
+      "boxName": "Amber Reserve",
+      "closure": null,
+      "fontKey": null,
+      "lidText": null,
+      "lidStyle": "hinged",
+      "sideText": null,
+      "subtitle": null,
+      "textSize": null,
+      "woodType": "walnut",
+      "blendName": null,
+      "frontText": null,
+      "textAlign": null,
+      "textColor": null,
+      "dedication": null,
+      "dimensions": null,
+      "designNotes": null,
+      "engravedText": null,
+      "cigarCapacity": null,
+      "exteriorColor": null,
+      "hardwareColor": null,
+      "interiorLining": null,
+      "interiorLidText": null,
+      "trayConfiguration": null,
+      "interiorAccentColor": null
+    },
+    "submitted_by_user_id": null,
+    "submitted_by_guest_reference": "f77a8328-18ba-47e4-9d0c-2aa8ce542c27",
+    "idempotency_key": "packaging_final:741235ab-4f11-46ad-803a-0967f8450ae8",
+    "submitted_at": "2026-07-22T09:47:36.514Z"
+  }
+}

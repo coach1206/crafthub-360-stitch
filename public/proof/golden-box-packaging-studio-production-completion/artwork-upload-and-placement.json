@@ -1,0 +1,20 @@
+{
+  "success": true,
+  "asset": {
+    "id": "6",
+    "asset_id": "50068da6-6651-4650-bf16-eb90cef693a0",
+    "design_id": "1037e03c-2fc2-455e-9750-0e0148da7c26",
+    "uploaded_by_user_id": null,
+    "uploaded_by_guest_reference": "f77a8328-18ba-47e4-9d0c-2aa8ce542c27",
+    "asset_type": "logo",
+    "original_filename": "logo.png",
+    "stored_filename": "1037e03c-2fc2-455e-9750-0e0148da7c26/323a163a-4d36-40a1-901f-1a1877eb156b.png",
+    "preview_filename": null,
+    "mime_type": "image/png",
+    "file_size_bytes": 78,
+    "width_px": 64,
+    "height_px": 64,
+    "removed_at": null,
+    "created_at": "2026-07-22T09:47:36.178Z"
+  }
+}

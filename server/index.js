@@ -25,6 +25,7 @@ import ticketTapperPromotionRoutes from './routes/ticketTapperPromotionRoutes.js
 import managementSyncRoutes from './routes/managementSyncRoutes.js'
 import venueManagementRoutes from './routes/venueManagementRoutes.js'
 import goldenBoxRoutes from './routes/goldenBoxRoutes.js'
+import packagingStudioRoutes from './routes/packagingStudioRoutes.js'
 import seedSoilRoutes from './routes/seedSoilRoutes.js'
 import fillerArrangementRoutes from './routes/fillerArrangementRoutes.js'
 import skillTreeRoutes from './routes/skillTreeRoutes.js'
@@ -227,6 +228,7 @@ app.use('/api/ticket-tapper/promotions', ticketTapperPromotionRoutes)
 app.use('/api/smokecraft/management-sync', managementSyncRoutes)
 app.use('/api/venue-management', venueManagementRoutes)
 app.use('/api/smokecraft/golden-box', goldenBoxRoutes)
+app.use('/api/smokecraft/golden-box/packaging-studio', packagingStudioRoutes)
 app.use('/api/smokecraft/golden-box-content', goldenBoxContentRoutes)
 app.use('/api/smokecraft/seed-soil', seedSoilRoutes)
 app.use('/api/smokecraft/filler-arrangement', fillerArrangementRoutes)

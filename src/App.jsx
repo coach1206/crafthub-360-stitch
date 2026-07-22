@@ -109,6 +109,11 @@ const GoldenBoxResultsExperience = lazy(() => import('./pages/smokecraft/goldenB
 const GoldenBoxJudgeDashboard = lazy(() => import('./pages/smokecraft/goldenBox/JudgeDashboard.jsx'))
 const GoldenBoxJudgeEntryReview = lazy(() => import('./pages/smokecraft/goldenBox/JudgeEntryReview.jsx'))
 const GoldenBoxMentorReview = lazy(() => import('./pages/smokecraft/goldenBox/MentorReview.jsx'))
+const PackagingStudioDashboard = lazy(() => import('./pages/smokecraft/goldenBox/PackagingStudioDashboard.jsx'))
+const PackagingStudioEditor = lazy(() => import('./pages/smokecraft/goldenBox/PackagingStudioEditor.jsx'))
+const PackagingStudioVersions = lazy(() => import('./pages/smokecraft/goldenBox/PackagingStudioVersions.jsx'))
+const PackagingStudioShare = lazy(() => import('./pages/smokecraft/goldenBox/PackagingStudioShare.jsx'))
+const PackagingReview = lazy(() => import('./pages/smokecraft/goldenBox/PackagingReview.jsx'))
 import Art              from './pages/smokecraft/Art.jsx'
 import Mentor           from './pages/smokecraft/Mentor.jsx'
 import Format           from './pages/smokecraft/Format.jsx'
@@ -367,6 +372,17 @@ export default function App() {
                   <Route path="judge" element={<GoldenBoxJudgeDashboard />} />
                   <Route path="judge/entries/:entryId" element={<GoldenBoxJudgeEntryReview />} />
                   <Route path="mentor/entries/:entryId" element={<GoldenBoxMentorReview />} />
+                  {/* Packaging Studio — Golden Box competition feature, not
+                      a new core learning session (27-session count
+                      unchanged). Positioned between blend/build and
+                      presentation/defense per the entry workflow. */}
+                  <Route path="packaging-studio" element={<PackagingStudioDashboard />} />
+                  <Route path="packaging-studio/new" element={<PackagingStudioDashboard />} />
+                  <Route path="packaging-studio/:designId" element={<PackagingStudioEditor />} />
+                  <Route path="packaging-studio/:designId/preview" element={<PackagingStudioEditor />} />
+                  <Route path="packaging-studio/:designId/versions" element={<PackagingStudioVersions />} />
+                  <Route path="packaging-studio/:designId/share" element={<PackagingStudioShare />} />
+                  <Route path="packaging-review/:shareToken" element={<PackagingReview />} />
                 </Route>
                 {/* gold-box → golden-box alias per spec */}
                 <Route path="gold-box"       element={<Navigate to="/smokecraft/golden-box" replace />} />

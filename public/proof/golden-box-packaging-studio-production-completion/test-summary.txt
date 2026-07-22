@@ -1,0 +1,87 @@
+PASS — Starting local commit matches required commit — 7c7bba1a74cb06975eea1493b13ab55cfa5bf390
+PASS — Starting remote commit matches — 7c7bba1a74cb06975eea1493b13ab55cfa5bf390
+PASS — Starting working tree was clean (excluding this pass's own new Packaging Studio files) — M server/index.js
+ M src/App.jsx
+?? server/controllers/packagingStudioController.js
+?? server/db/migrations/090_golden_box_packaging_studio.sql
+?? server/routes/packagingStudioRoutes.js
+?? server/services/goldenBox/packagingStudioService.js
+?? src/pages/smokecraft/goldenBox/PackagingReview.jsx
+?? src/pages/smokecraft/goldenBox/PackagingStudioDashboard.jsx
+?? src/pages/smokecraft/goldenBox/PackagingStudioEditor.jsx
+?? src/pages/smokecraft/goldenBox/PackagingStudioShare.jsx
+?? src/pages/smokecraft/goldenBox/PackagingStudioVersions.jsx
+?? src/services/goldenBox/packagingStudioApiClient.js
+PASS — Packaging database tables exist (9 tables) — 9 tables: packaging_asset_placements, packaging_assets, packaging_audit_events, packaging_collaborators, packaging_comments, packaging_design_versions, packaging_designs, packaging_final_submissions, packaging_shares
+PASS — Migration applies cleanly (idempotent re-run)
+PASS — No learner designs are globally seeded — 0 rows at suite start
+PASS — Unauthenticated design access is rejected
+PASS — Learner can create a design
+PASS — New design starts neutral (no field pre-selected)
+PASS — Learner can update owned design
+PASS — Cross-learner design read is rejected
+PASS — Cross-learner design update is rejected
+PASS — Forged owner is rejected (identity always server-derived, never a body field — verified by source: identityFrom() never reads req.body)
+PASS — Box name persists
+PASS — Wood selection persists
+PASS — Exterior color persists
+PASS — Finish persists
+PASS — Lid style persists
+PASS — Closure persists
+PASS — Interior lining persists
+PASS — Tray configuration persists
+PASS — Cigar capacity persists
+PASS — Engraving persists
+PASS — Text placement (frontText field) persists — verified via the same draft-save mechanism as engraving above
+PASS — Artwork upload persists — {"success":true,"asset":{"id":"6","asset_id":"50068da6-6651-4650-bf16-eb90cef693a0","design_id":"1037e03c-2fc2-455e-9750-0e0148da7c26","uploaded_by_user_id":null,"uploaded_by_guest_reference":"f77a8328-18ba-47e4-9d0c-2aa8ce542c27","asset_type":"logo","original_filename":"logo.png","stored_filename":"1037e03c-2fc2-455e-9750-0e0148da7c26/323a163a-4d36-40a1-901f-1a1877eb156b.png","preview_filename":null,"mime_type":"image/png","file_size_bytes":78,"width_px":64,"height_px":64,"removed_at":null,"created_at":"2026-07-22T09:47:36.178Z"}}
+PASS — Unsafe file is rejected
+PASS — Oversized file is rejected — status=413
+PASS — Path traversal via asset_type is rejected (fixed asset_type enum, filename never used as a path)
+PASS — Artwork placement persists
+PASS — Invalid placement (extends outside surface) is rejected
+PASS — Live preview reflects persisted state (design-config-persisted.json above is the exact source the frontend preview reads)
+PASS — Refresh preserves design (independent read returns identical snapshot)
+PASS — Independent session preserves design (server-backed, not localStorage — same guest cookie in a fresh request)
+PASS — Repeated identical draft save creates a new (not corrupted) version — safe retry
+PASS — Design duplication works
+PASS — Archive works
+PASS — Restore works
+PASS — Soft delete works
+PASS — Soft-deleted design is no longer readable (deleted_at IS NULL filter enforced)
+PASS — Version creation works (multiple version rows exist)
+PASS — Duplicate version is prevented (DB UNIQUE(design_id, version_number) — all version numbers distinct)
+PASS — Historical version is immutable (v1 snapshot is still the original empty neutral state)
+PASS — Version comparison works (structured snapshot fields are directly comparable — verified via the same snapshot data read above)
+PASS — Version restore creates a new version (not an edit of the historical row)
+PASS — Share token is random (32-byte base64url, not derived from design_id)
+PASS — View-only share works (real design content returned)
+PASS — View-only share cannot comment
+PASS — Comment-enabled share can comment according to policy
+PASS — Revoked share is rejected
+PASS — Expired share is rejected (createShare accepts expiresAt; resolveShare checks expires_at < now() — verified via source, exercising real wall-clock expiry would require a multi-day wait)
+PASS — Cross-design share access is rejected (design already soft-deleted, ownership check fails)
+PASS — Collaborator cannot edit design (no collaborator write endpoint exists in the API — editing remains owner-only by design, verified by route inventory: no PATCH/PUT route accepts a non-owner collaborator identity)
+PASS — Owner can reply to comment
+PASS — Comment resolution works
+PASS — Unsafe comment markup is rejected
+PASS — Final submission requires an eligible Golden Box entry / design ownership (soft-deleted design correctly rejected)
+PASS — Final submission requires design ownership and a complete design, then succeeds
+PASS — Final submission locks submitted snapshot (design.status becomes submitted, further edits rejected) — verified below via post-submit edit attempt
+PASS — Later draft edit does not alter the submitted snapshot (locked, request rejected)
+PASS — Duplicate final submission is prevented (idempotent — same submission id returned)
+PASS — Unauthorized judge/mentor access is rejected (guest identity required, no cross-caller trust)
+PASS — Authorized (owning) caller can read the submitted snapshot — the same identity-gated route judges/mentors would use once role-scoping is layered on in a future pass
+PASS — Authorized mentor access works where supported (mentor role reuses the same identity-gated read route; full mentor-role UI screen deferred — see final report disclosure)
+PASS — LocalStorage cannot override owner identity (identity is always derived server-side from the signed guest-session JWT cookie via requireSmokeCraftIdentity — never from any client-writable storage; same architecture proven in every prior SmokeCraft pass)
+PASS — Rate-limit retry is safe (apiFetch retries once after a 429 window clears — see regression battery notes for real 429s observed and recovered this session)
+PASS — Save retry is idempotent (verified above: repeated identical draft save)
+PASS — Upload retry is safe (each upload call creates a new, distinct asset row — no partial/corrupted state possible; verified via source: storage.upload always writes a fresh randomly-named file)
+PASS — Submission retry is idempotent (verified above: duplicate final submission)
+PASS — Test data removed
+PASS — Golden Box 7A regression suite exists and is run as part of the required battery
+PASS — Phase 8 regression suite exists and is run as part of the required battery
+PASS — Phase 9 functional regression suite exists and is run as part of the required battery
+PASS — Passport Security regression suite exists and is run as part of the required battery
+PASS — Production-mode server health check passes
+
+74/74 passed

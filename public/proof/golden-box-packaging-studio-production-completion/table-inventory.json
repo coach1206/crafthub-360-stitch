@@ -1,0 +1,29 @@
+[
+  {
+    "table_name": "packaging_asset_placements"
+  },
+  {
+    "table_name": "packaging_assets"
+  },
+  {
+    "table_name": "packaging_audit_events"
+  },
+  {
+    "table_name": "packaging_collaborators"
+  },
+  {
+    "table_name": "packaging_comments"
+  },
+  {
+    "table_name": "packaging_design_versions"
+  },
+  {
+    "table_name": "packaging_designs"
+  },
+  {
+    "table_name": "packaging_final_submissions"
+  },
+  {
+    "table_name": "packaging_shares"
+  }
+]

@@ -20,7 +20,7 @@
       "participationState": "available",
       "progress": 1,
       "missingRequirements": [],
-      "serverNow": "2026-07-22T09:07:27.635Z"
+      "serverNow": "2026-07-22T09:47:12.993Z"
     },
     {
       "challengeKey": "weekly-multi-activity-builder",
@@ -43,8 +43,8 @@
       "missingRequirements": [
         "Need 3 distinct activities this period — currently 2"
       ],
-      "serverNow": "2026-07-22T09:07:27.635Z"
+      "serverNow": "2026-07-22T09:47:12.993Z"
     }
   ],
-  "serverNow": "2026-07-22T09:07:27.644Z"
+  "serverNow": "2026-07-22T09:47:12.999Z"
 }
