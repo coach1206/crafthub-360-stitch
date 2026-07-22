@@ -1,0 +1,20 @@
+{
+  "assetExistence": {
+    "goldenBox": true,
+    "goldenBoxChallenge": true,
+    "goldenBoxJudgingCriteria": true,
+    "goldenBoxPairingDefense": true,
+    "goldenBoxBlendRevisionRound": true,
+    "goldenBoxPresentationRevision": true,
+    "goldenBoxMasterBlendingEducation": true,
+    "goldenBoxFinalJudgingRubric": true,
+    "goldenBoxScoringRounds": true
+  },
+  "wiringResults": {
+    "goldenBoxJudgingCriteria": true,
+    "goldenBoxPairingDefense": true,
+    "goldenBoxMasterBlendingEducation": true,
+    "goldenBoxFinalJudgingRubric": true,
+    "goldenBoxScoringRounds": true
+  }
+}

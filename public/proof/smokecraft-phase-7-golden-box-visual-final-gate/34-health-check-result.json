@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "status": "ok",
+  "service": "NOVEE OS Backend",
+  "version": "phase-7",
+  "db": "postgres",
+  "timestamp": "2026-07-22T02:01:05.451Z"
+}
