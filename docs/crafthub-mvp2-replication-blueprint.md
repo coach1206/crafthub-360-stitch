@@ -484,3 +484,48 @@ entries are appended.
     `29-shared-design-comment-enabled.json`, `30-comment-via-share.json`,
     `31-revoked-share-rejection.json`.
     **Checklist impact**: none (tooling fix).
+
+### 2026-07-23 — Phase Architecture Reconciliation (6-vs-7-phase discrepancy)
+
+**Prevention rules established by this pass** (apply to every future CraftHub vertical):
+
+1. Session count and phase count must be separate explicit architecture
+   contracts — never assume one implies the other, and never let a single
+   planning-doc paragraph stand in for both.
+2. Every new CraftHub must define one canonical phase map before feature
+   construction begins — not derived after the fact from whatever the UI
+   happens to render.
+3. Tests, UI, documentation, database state, and route maps must all read
+   from the same phase source (e.g. `TOTAL_VISITS`/`VISIT_STRUCTURE`) — never
+   a second, independently-maintained count.
+4. A planning statement must not override verified production architecture
+   without an explicit reconciliation pass; when a mandate's wording
+   conflicts with what is actually built and gate-verified, investigate
+   before assuming either the code or the mandate is wrong.
+5. Never fabricate an architecture element (a phase, a session, a boundary)
+   merely to satisfy a checklist number — an unresolved, disclosed
+   discrepancy is always safer than an invented "fix."
+6. Architecture discrepancies must be resolved before UI Designer handoff —
+   inconsistent phase/session counts would otherwise leak into design
+   handoff artifacts and downstream tooling.
+7. New feature integration (e.g. connecting a module into the visible
+   journey) must not silently alter session or phase counts as a side
+   effect — verified explicitly in this pass via source diff review.
+8. Historical architecture decisions must remain documented after
+   correction — the original discrepancy finding
+   (`PHASE-ARCHITECTURE-DISCREPANCY.md`) was annotated with a link to the
+   resolution, not deleted or rewritten.
+9. Existing learner progress must be preserved during any grouping change —
+   verified this pass by confirming no phase identifier is persisted
+   anywhere in the database (session/step ids are the only persisted keys).
+10. A phase-count verification check must be part of every future CraftHub
+    journey audit — this pass's dedicated suite
+    (`verify-smokecraft-phase-architecture-reconciliation.mjs`) is the
+    reusable template for that check.
+
+**Root-cause note for this specific case**: the "7 phases" language quoted by
+later mandates traced back to `docs/SMOKECRAFT_360_MASTER_REBUILD_PLAN.md`'s
+own early planning section (§3a) — a target design written before
+implementation, superseded by that same document's own later "Scope actually
+implemented" section (6 phases, matching code exactly). No structural change
+was needed; the correction was fully documentation-level.

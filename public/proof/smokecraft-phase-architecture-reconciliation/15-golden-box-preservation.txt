@@ -1,0 +1,2 @@
+Golden Box remains a SUPPORTING_MODULES entry (requires: 'entry'), outside the 27-session/6-phase spine, unaffected by this decision in either direction.
+Regression suite verify-golden-box-package-7a.mjs: 33/33 passed after this pass.

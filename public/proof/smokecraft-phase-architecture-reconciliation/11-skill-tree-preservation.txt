@@ -1,0 +1,2 @@
+Skill Tree source does not import TOTAL_VISITS/TOTAL_PHASES.
+Regression suite verify-smokecraft-skill-tree.mjs: 32/32 passed after this pass.

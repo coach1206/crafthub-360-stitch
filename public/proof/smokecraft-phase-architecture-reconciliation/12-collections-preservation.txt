@@ -1,0 +1,2 @@
+Collections source keys on collection_item_key/guest_reference, not phase count.
+Regression suite verify-smokecraft-collections.mjs: 34/34 passed after this pass.

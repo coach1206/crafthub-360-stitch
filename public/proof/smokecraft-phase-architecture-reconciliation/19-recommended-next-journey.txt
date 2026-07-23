@@ -1,0 +1,2 @@
+53:  { id: 'session-complete', route: '/smokecraft/session-complete', label: 'Session Closeout',          stitch: true  },
+176:      { session: 27, id: 'session-complete',        route: '/smokecraft/session-complete',  label: 'Recommended Next Journey' },

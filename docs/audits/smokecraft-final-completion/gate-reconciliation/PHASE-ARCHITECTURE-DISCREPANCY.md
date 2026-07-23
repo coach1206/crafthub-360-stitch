@@ -1,5 +1,7 @@
 # Phase Architecture Discrepancy — 6 Phases (Code) vs. 7 Phases (Prior Guidance)
 
+> **RESOLVED.** See `docs/audits/smokecraft-final-completion/phase-architecture-reconciliation/00-FINAL-REPORT.md` and `03-FINAL-ARCHITECTURE-DECISION.md` for the final decision (Option A: 6 phases confirmed correct, no structural change) and full evidence chain. This document's original finding below is preserved unchanged, as the discovery record it always was.
+
 ## Current 6-phase code structure
 
 `src/constants/session.js`:

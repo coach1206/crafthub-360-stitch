@@ -1,0 +1,2 @@
+Challenge Hub source keys on challenge_instance_key/guest_reference, not phase count.
+Regression suite verify-smokecraft-challenge-hub.mjs: 58/58 passed after this pass.

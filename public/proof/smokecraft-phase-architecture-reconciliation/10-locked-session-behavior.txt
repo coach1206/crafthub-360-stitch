@@ -1,0 +1,4 @@
+30:export default function LockedSmokeCraftScreen({ sessionNumber }) {
+35:  const visit      = getVisitBySession(sessionNumber)
+38:  const lockedReason = getLockedReason(sessionNumber, [])
+40:  const imgSrc = LOCKED_ASSETS[sessionNumber] || DEFAULT_LOCKED_ASSET

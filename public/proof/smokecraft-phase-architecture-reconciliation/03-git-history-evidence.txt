@@ -1,0 +1,17 @@
+320--// in GuestSessionContext, except 'entry' (the index page has no discrete
+321--// completion event — it is always treated as satisfied).
+322:-export const TOTAL_VISITS = 8
+323--export const TOTAL_SESSIONS = 24
+324-+// ── Locked 27-session, 6-phase spine (Package J) ────────────────────────────
+--
+347-+// completion without redesigning that screen — explicitly out of scope for
+348-+// Package J. See Package J evidence for the follow-up this implies.
+349:+export const TOTAL_VISITS = 6
+350-+export const TOTAL_PHASES = TOTAL_VISITS
+351-+export const TOTAL_SESSIONS = 27
+--
+662-+// in GuestSessionContext, except 'entry' (the index page has no discrete
+663-+// completion event — it is always treated as satisfied).
+664:+export const TOTAL_VISITS = 8
+665-+export const TOTAL_SESSIONS = 24
+666-+

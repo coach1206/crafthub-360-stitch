@@ -1,0 +1,15 @@
+5: * progress from GuestSessionContext (the authoritative progress store) and
+10: *   - Mirror:  localStorage key "smokecraft_progress" (written on every
+11: *              progress change for admin/analytics consumers)
+14: *              → message "Demo preview only, progression not saved."
+17: * Local preview mode: any non-demo session (progress is device-local only)
+18: *              → message "Local Preview Mode: progression is stored on this device only."
+26:  TOTAL_VISITS,
+27:  TOTAL_SESSIONS,
+142:    totalVisits:   TOTAL_VISITS,
+143:    totalSessions: TOTAL_SESSIONS,
+144:    // Helpers (pre-bound to current progress)
+156:      ? 'Demo preview only, progression not saved.'
+157:      : 'Local Preview Mode: progression is stored on this device only.',
+169:  // Mirror progress to localStorage for admin/analytics consumers
+172:      localStorage.setItem('smokecraft_progress', JSON.stringify({

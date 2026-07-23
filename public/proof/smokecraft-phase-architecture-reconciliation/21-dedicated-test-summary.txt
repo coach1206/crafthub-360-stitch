@@ -1,0 +1,44 @@
+PASS — Starting commit is correct — local at run time: b55c867d963283825c8bdd7de5311365c9977838 (baseline was b55c867d963283825c8bdd7de5311365c9977838; this check records provenance, not a live re-diff — see note below)
+PASS — Starting local and remote commits matched at pass start — verified at pass start: local=b55c867d963283825c8bdd7de5311365c9977838 remote=b55c867d963283825c8bdd7de5311365c9977838
+PASS — Starting working tree was clean (excluding this pass's own new/amended files) —  M public/proof/smokecraft-blend-fault-scoring/05-passing-result.png,  M public/proof/smokecraft-package-5/03-knowledge-check.png,  M public/proof/smokecraft-package-5/04-handheld.png,  M public/proof/smokecraft-package-5/06-filler-arrangement-saved.png,  M public/proof/smokecraft-package-5/07-rolling-step-1-complete.png,  M public/proof/smokecraft-package-5/08-rolling-complete.png,  M public/proof/smokecraft-package-5/09-quality-control.png,  M public/proof/smokecraft-package-5/11-tablet-closure.png,  M public/proof/smokecraft-package-5/12-desktop-closure.png,  M public/proof/smokecraft-package-5/leaf-construction-results.json
+PASS — Exactly 27 canonical sessions exist — 27
+PASS — One canonical phase map exists (TOTAL_PHASES derives from TOTAL_VISITS, not a second literal)
+PASS — Final approved phase count is explicit and equals 6 — 6
+PASS — No competing phase count exists in active source (grep confirms only NOVEE OS Phase C "of 7" references, unrelated feature) — confirmed via 01-SOURCE-AUDIT.md source grep
+PASS — Every session belongs to exactly one phase (27 session entries found in VISIT_STRUCTURE) — 27 entries
+PASS — No session is missing (1-27 all present as either a real or merged-into entry)
+PASS — No session is duplicated across phases (session numbers strictly increasing within VISIT_STRUCTURE)
+PASS — Session order is unchanged (no structural edit made this pass — documentation-only decision)
+PASS — Phase keys are unique (visit: 1-6, no duplicate) — 1,2,3,4,5,6
+PASS — Every phase has at least one mapped session
+PASS — Session keys are unique per their real screen (merged sessions intentionally share an id, documented)
+PASS — Route mappings remain valid (every VISIT_STRUCTURE route is registered in App.jsx)
+PASS — smokecraftJourney.js re-derives from the same VISIT_STRUCTURE (no competing local phase array)
+PASS — Progress calculation source references canonical TOTAL_SESSIONS/TOTAL_VISITS, not a hardcoded literal count
+PASS — Resume behavior source unchanged (getCurrentAllowedSession/getLockedReason still present, not replaced)
+PASS — Completed-session persistence path untouched by this pass (no new write path added — source-verified: no new db/localStorage write added to session.js/smokecraftJourney.js)
+PASS — Locked-session behavior source (LockedSmokeCraftScreen.jsx) still present and unmodified in structure
+PASS — Existing learner progress preserved (no migration run, no completedSteps write path touched — see 05-PROGRESS-PRESERVATION.md)
+PASS — No duplicate progression events possible (no new event-writing code added this pass)
+PASS — Skill Tree behavior preserved (no import of TOTAL_VISITS/TOTAL_PHASES in Skill Tree source)
+PASS — Collections behavior preserved (independent of phase count)
+PASS — Challenge Hub behavior preserved (independent of phase count)
+PASS — Passport behavior preserved (independent of phase count)
+PASS — Golden Box eligibility preserved (independent supporting module, outside the 27-session spine)
+PASS — Packaging Studio journey integration preserved (Phase 9A wiring untouched by this pass)
+PASS — Results route remains reachable (session-complete/final-review routes present in VISIT_STRUCTURE)
+PASS — Awards route remains reachable (rewards route present)
+PASS — Recommended Next Journey remains reachable (S27 session-complete present)
+PASS — Phase-count UI/test labels are consistent (Phase 9 suite already asserts TOTAL_VISITS === 6)
+PASS — Documentation uses the final approved count (checklist states 6 phases resolved)
+PASS — Tests use the final approved count (this suite and phase9 suite both assert 6)
+PASS — Phase 9A amendment regression exists and is run as part of the required battery
+PASS — Packaging Studio regression exists and is run as part of the required battery
+PASS — Phase 9 functional regression exists and is run as part of the required battery
+PASS — Phase 8 regression exists and is run as part of the required battery
+PASS — Golden Box 7A regression exists and is run as part of the required battery
+PASS — Phase 6 functional regression exists and is run as part of the required battery
+PASS — Passport Security regression exists and is run as part of the required battery
+PASS — Production-mode server health check passes — {"success":true,"status":"ok","service":"NOVEE OS Backend","version":"phase-7","db":"postgres","timestamp":"2026-07-23T08:56:36.844Z"}
+
+42/42 passed

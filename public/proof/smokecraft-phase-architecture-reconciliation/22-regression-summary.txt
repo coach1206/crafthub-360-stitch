@@ -1,0 +1,22 @@
+See docs/audits/smokecraft-final-completion/phase-architecture-reconciliation/06-REGRESSION-MATRIX.md for the full table.
+Dedicated suite: 42/42
+Phase 9A: 54/54
+Golden Box Packaging Studio: 71/74 (3 stale-commit-only)
+Phase 9 Full Journey: 36/39 (3 stale-commit-only)
+Phase 8: 56/59 (3 stale-commit-only)
+Golden Box 7A: 33/33
+Phase 7 Visual: 32/35 (3 stale-commit-only)
+Phase 6 Shared Gamification: 46/49 (3 stale-commit-only)
+Passport Security: 59/59
+Blend Fault: 61/61
+Challenge Hub: 58/58
+Collections: 34/34
+Skill Tree: 32/32
+Filler Arrangement: 17/17
+Journey State: 7/7
+Package 5 Closure: 30/30
+Package 5 Leaf/Construction: 23/27 (disclosed pre-existing flake, unrelated to this pass)
+Package 5 Responsive: 11/12 (disclosed pre-existing flake, unrelated to this pass)
+Gamification Screens: 24/24
+Venue Management: 33/33
+Route smoke test: 97/98 (1 unrelated pre-existing console-404 noise)

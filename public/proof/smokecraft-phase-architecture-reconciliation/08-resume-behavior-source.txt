@@ -1,0 +1,2 @@
+162:export function getCurrentAllowedSession(progress) {
+189:export function getLockedReason(sessionNumber, progress) {

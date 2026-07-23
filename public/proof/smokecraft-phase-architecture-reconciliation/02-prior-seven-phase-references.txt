@@ -1,0 +1,21 @@
+- Persistence shadow keys → Audit §8
+- Missing controls, education, AI, quizzes/XP/rewards, missing states → Audit §9–§14
+- Existing screen counts (19 reusable / 17 static-stub) → Audit §15
+- Full current-state screen table → Audit §16
+
+---
+
+## 3. Master Journey Decision
+
+### 3a. Locked Final Master Journey (27 sessions, 7 phases, + 5-screen Entry layer)
+
+| Phase | Session | Title |
+|---|---|---|
+| Entry/Auth (not counted in the 27) | E1 | Launch Screen |
+| Entry/Auth | E2 | Sign In / Guest Mode |
+| Entry/Auth | E3 | Select Venue or Lounge |
+| Entry/Auth | E4 | Personal Dashboard |
+| Entry/Auth | E5 | Resume or Start New Journey |
+| 2 — Session Preparation | S1 | Welcome to Today's Experience |
+| 2 | S2 | Choose Your Cigar |
+| 2 | S3 | Meet Your Cigar |
