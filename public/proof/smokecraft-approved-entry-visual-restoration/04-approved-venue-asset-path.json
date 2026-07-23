@@ -1,0 +1,8 @@
+{
+  "buttons": [
+    "Continue without venue",
+    "Continue to Identity →"
+  ],
+  "containsFakeVenueNames": false,
+  "containsWrongLabel": false
+}

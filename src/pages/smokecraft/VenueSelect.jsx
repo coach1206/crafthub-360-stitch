@@ -172,14 +172,20 @@ export default function VenueSelect() {
       `,
       fontFamily: 'Georgia, serif',
     }}>
-      {/* Approved production visual, reused as a decorative header band. */}
+      {/* Approved "Venue Selection 11.png" production visual, used as the
+          screen's visual shell. Only its top hero band (logo, title,
+          description, cigar/whiskey photography) is shown — the image's
+          lower portion bakes in fake demo venue cards (The Cigar Lounge,
+          Havana House, etc.), which must never be displayed as if they were
+          real venues, so live venue data always renders below the image,
+          never the image's own baked card grid. */}
       <div
         role="img"
         aria-label="SmokeCraft Venue Selection"
         style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(90px,14vh,140px)',
-          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92)), url(${SC_ASSETS.venueSelect})`,
-          backgroundSize: 'cover', backgroundPosition: 'center 30%',
+          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(160px,26vh,260px)',
+          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.15), rgba(6,8,16,0.96)), url(${SC_ASSETS.venueSelect})`,
+          backgroundSize: 'cover', backgroundPosition: 'center 8%',
           zIndex: 1,
         }}
       />
@@ -199,7 +205,7 @@ export default function VenueSelect() {
       </header>
 
       <main style={{
-        position: 'absolute', top: 'clamp(120px,16vh,160px)', bottom: 'clamp(120px,16vh,160px)',
+        position: 'absolute', top: 'clamp(180px,28vh,280px)', bottom: 'clamp(120px,16vh,160px)',
         left: 0, right: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch',
         padding: '0 clamp(16px,4vw,40px)', zIndex: 2,
       }}>
@@ -331,7 +337,7 @@ export default function VenueSelect() {
       </main>
 
       <SmokeCraftNavBar
-        primary="Continue to Personal Dashboard →"
+        primary="Continue to Identity →"
         onPrimary={handleContinue}
         primaryDisabled={!canContinue}
         secondary="← Back"

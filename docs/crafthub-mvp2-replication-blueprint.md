@@ -759,3 +759,30 @@ literal wording and the real, already-approved architecture conflict,
 disclose the conflict and fix what is actually verified broken; don't
 silently comply with wording that would require an unreviewed structural
 change.
+
+## Approved Entry Visual Restoration — permanent rules
+
+1. User-approved GitHub visuals are the source of truth.
+2. Claude-created replacement visuals are prohibited unless explicitly approved.
+3. Asset registration does not equal live rendering — verify the image actually
+   appears on screen, not just that a constant points at a file.
+4. Every route must prove the approved asset actually appears (source check
+   plus a real live-browser screenshot/attribute read, not source inspection
+   alone).
+5. Fallback layouts cannot replace approved screens.
+6. Existing artwork must be wired, not recreated.
+7. Exact filename case, spacing, punctuation, and extension must be verified
+   by opening the file, never guessed from a similar-sounding name.
+8. Route-to-asset maps must identify duplicate and deprecated routes.
+9. Live visual proof is required for every approved entry screen before a
+   visual-restoration gate can close.
+10. A route or state fix does not complete a screen if the wrong visual (or
+    no visual) remains — this is a distinct gate from routing/state
+    correctness.
+11. User screenshots showing unauthorized visuals reopen the visual gate
+    immediately.
+12. Approved imagery and live React interactivity must coexist — but an
+    approved image that itself bakes in fake/demo data (sample venues, a
+    fake XP panel, a test user's own PII) must never be shown wholesale;
+    only its data-free regions may be used as a visual shell, with real
+    live data rendered alongside, never the image's own baked fake content.
