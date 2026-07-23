@@ -13,3 +13,7 @@ No isolated production-verification learner record was created, because doing so
 ## 2026-07-23 update
 
 Re-attempted in the Phase 10 Closeout pass — the Start New Journey live verification steps (create → begin at first entry step → no inherited state → landing CTA flips to Resume → refresh persistence → independent session) could not be run against production for the same reason. Still blocked.
+
+## 2026-07-23 update (Phase 10 Live Closeout, second attempt)
+
+Re-attempted against `7f259e7a...`, including the legacy-shaped-state regression check specifically requested by this pass. Still blocked — no live journey of any kind has been exercised against production in this operation.

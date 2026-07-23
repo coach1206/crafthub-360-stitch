@@ -17,3 +17,7 @@ No substitute (localhost, the sandbox preview server, or generated screenshots) 
 ## 2026-07-23 update
 
 Re-attempted in the Phase 10 Closeout pass (deploy-and-verify the Start/Resume fix) — still blocked, same network policy denial. `/smokecraft`, `/smokecraft/resume`, `/smokecraft/enroll`, and `/smokecraft/identity` could not be checked live.
+
+## 2026-07-23 update (Phase 10 Live Closeout, second attempt)
+
+Re-attempted against `7f259e7a...`. Still blocked, same policy denial. No route in this matrix has ever been reached live in any pass of this operation.

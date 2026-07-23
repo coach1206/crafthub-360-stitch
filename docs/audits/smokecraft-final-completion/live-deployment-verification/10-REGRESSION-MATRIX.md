@@ -35,3 +35,7 @@ Local regressions were run against this pass's final commit to confirm the new `
 ## 2026-07-23 update
 
 The Phase 10 Closeout pass (deploy-and-verify the Start/Resume fix) could not add live production regression data — no network path to `https://crafthub360.up.railway.app` exists in this session, same as recorded above. No deployment was triggered, so there is no new deployed-commit regression run to report.
+
+## 2026-07-23 update (Phase 10 Live Closeout, second attempt)
+
+Local-only re-verification performed against commit `7f259e7a...` (confirmed unmodified ancestor of current HEAD): `verify-smokecraft-start-resume-state.mjs` 42/42 achievable checks pass, 0 fail, 6 blocked (live-only); production build passes; local health check passes. One stale-assertion finding disclosed: the earlier `verify-smokecraft-live-resume-state-reconciliation.mjs` script's 3 CTA-text checks now fail because they assert the pre-exact-wording strings (`'Start Journey →'` etc.), superseded by the later pass's exact-wording requirement — not a functional regression, since the current dedicated suite for this exact behavior passes cleanly. Live network access remains blocked; no live regression data could be added.

@@ -36,3 +36,14 @@ A later pass ("Phase 10 Closeout: Deploy and Live-Verify the Start/Resume Fix") 
 2. **This session still cannot deploy or verify anything against Railway.** No Railway CLI is installed, no Railway credentials/config are present in this environment (`which railway`, `env | grep -i railway`, and a filesystem search for `*.railway*` config all returned nothing), and direct network access to `crafthub360.up.railway.app` is still policy-blocked (confirmed again: `curl` returns `(56) CONNECT tunnel failed, response 403`, and the agent-proxy's own failure log records this as a policy denial, not a transient error). There is no "Railway service settings" this session can inspect, no deploy trigger this session can fire, and no live endpoint this session can query.
 
 **This pass cannot perform the deployment or live verification it was asked to perform.** No fabricated deployment ID, timestamp, or live response is recorded anywhere in this repository as a result of this pass.
+
+## 2026-07-23 update — Phase 10 Live Closeout pass (second deploy-and-verify attempt)
+
+Re-attempted with the corrected target commit `7f259e7a4f8a02ad466879d098d01a65fe811623` (the complete Start/Resume fix, per the prior update's correction). Confirmed:
+
+- `7f259e7a...` is an unmodified ancestor of the current `HEAD` (`d5c4b67a...` at the time of this update) — `git diff 7f259e7a..HEAD --stat -- src/ server/` is empty, confirming zero source changes since the fix landed.
+- Network access to `https://crafthub360.up.railway.app` re-checked and still confirmed policy-blocked (`curl: (56) CONNECT tunnel failed, response 403`).
+- `mcp__github__get_commit` for `7f259e7a...` returns no deployment status/check data — Railway's GitHub integration (if configured) is not surfacing deploy events through this tool, or none exist for this commit.
+- No Railway CLI, credentials, or dashboard access became available in this session.
+
+**Still cannot deploy or verify live.** All local-only checks (dedicated suites, build, local health check) were re-run and pass — see `05-REGRESSION-MATRIX.md` (live-resume-remediation) for the exact results, including one disclosed stale-assertion finding in the earlier `verify-smokecraft-live-resume-state-reconciliation.mjs` script (its CTA-text checks predate the later exact-wording change and now fail on outdated string literals — not a functional regression, since the current, correct dedicated suite `verify-smokecraft-start-resume-state.mjs` passes 42/42 achievable checks).
