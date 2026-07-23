@@ -34,6 +34,14 @@ export const XP_AWARDS = {
   PASSPORT_STAMP:          50,
 }
 
+// DEPRECATED — Session-Sequence-Reconciliation pass: this array pre-dates
+// the locked 27-session/6-phase VISIT_STRUCTURE below and does not match it
+// (different ids, different order, no phase grouping). Confirmed to have
+// zero real routing/order consumers (only re-exported, never read for
+// session order anywhere in the app) — kept only because
+// XP_AWARDS/RANKS/getRankFromXP in this same file are still real, in-use
+// exports and this array sits between them. Do not use this for session
+// order, routing, or progress — use VISIT_STRUCTURE.
 export const SMOKECRAFT_FLOW = [
   { id: 'enroll',           route: '/smokecraft/enroll',           label: 'Profile Enrollment',        stitch: true  },
   { id: 'format',           route: '/smokecraft/format',           label: 'Shape, Size & Burn Time',   stitch: false },

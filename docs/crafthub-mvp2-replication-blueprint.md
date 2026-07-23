@@ -786,3 +786,37 @@ change.
     fake XP panel, a test user's own PII) must never be shown wholesale;
     only its data-free regions may be used as a visual shell, with real
     live data rendered alongside, never the image's own baked fake content.
+
+## SmokeCraft 27-Session Sequence Reconciliation — permanent rules
+
+1. Session count, phase count, route order, visual order, and progress order
+   are separate completion gates — passing one does not imply another passes.
+2. Entry preparation must never be counted as curriculum sessions.
+3. One canonical registry must drive routes, labels, progress, resume, and
+   unlocks — trace every consumer, don't just check that the registry
+   itself looks correct.
+4. Duplicate session arrays are prohibited; where one is found and confirmed
+   dead (zero real runtime consumers), mark it clearly deprecated rather
+   than leaving it to mislead a future engineer, even if deleting it is
+   judged out of a given pass's safe scope.
+5. Every session requires a canonical previous and next relationship.
+6. Completion is based on contiguous completed sessions, not the highest
+   completed session number found in storage.
+7. A route existing does not prove it appears in the correct sequence —
+   verify the guard's session number against the canonical registry
+   directly, not just that the route renders something.
+8. Every phase boundary must be browser-tested, not just asserted from the
+   registry's own phase field.
+9. Golden Box and Packaging Studio placement must not alter the locked
+   session count.
+10. Session 27 must be the only curriculum event that completes the
+    27-session journey.
+11. Full route traversal (live browser, real navigation) is required before
+    a sequence-completion gate can close — registry-only testing is
+    insufficient on its own.
+12. Live screenshots showing wrong order immediately reopen the sequence
+    gate.
+13. An approved visual must be attached to the correct session, not merely
+    present somewhere in the repository.
+14. Entry flow, curriculum flow, challenge flow, and post-completion flow
+    must remain explicitly separated in both code and documentation.

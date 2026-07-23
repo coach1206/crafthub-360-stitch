@@ -1,0 +1,107 @@
+[
+  {
+    "session": 1,
+    "route": "/smokecraft/welcome",
+    "resolved": "/smokecraft/welcome"
+  },
+  {
+    "session": 2,
+    "route": "/smokecraft/humidor-match",
+    "resolved": "/smokecraft/humidor-match"
+  },
+  {
+    "session": 3,
+    "route": "/smokecraft/meet-your-cigar",
+    "resolved": "/smokecraft/meet-your-cigar"
+  },
+  {
+    "session": 4,
+    "route": "/smokecraft/terroir",
+    "resolved": "/smokecraft/terroir"
+  },
+  {
+    "session": 5,
+    "route": "/smokecraft/format",
+    "resolved": "/smokecraft/format"
+  },
+  {
+    "session": 6,
+    "route": "/smokecraft/cut-toast-light",
+    "resolved": "/smokecraft/cut-toast-light"
+  },
+  {
+    "session": 7,
+    "route": "/smokecraft/lighting-tutorial",
+    "resolved": "/smokecraft/lighting-tutorial"
+  },
+  {
+    "session": 8,
+    "route": "/smokecraft/first-third",
+    "resolved": "/smokecraft/first-third"
+  },
+  {
+    "session": 10,
+    "route": "/smokecraft/flavor-memory",
+    "resolved": "/smokecraft/flavor-memory"
+  },
+  {
+    "session": 11,
+    "route": "/smokecraft/pairing-lab",
+    "resolved": "/smokecraft/pairing-lab"
+  },
+  {
+    "session": 12,
+    "route": "/smokecraft/second-third",
+    "resolved": "/smokecraft/second-third"
+  },
+  {
+    "session": 14,
+    "route": "/smokecraft/mentor-commentary",
+    "resolved": "/smokecraft/mentor-commentary"
+  },
+  {
+    "session": 15,
+    "route": "/smokecraft/knowledge-drop",
+    "resolved": "/smokecraft/knowledge-drop"
+  },
+  {
+    "session": 16,
+    "route": "/smokecraft/final-third",
+    "resolved": "/smokecraft/final-third"
+  },
+  {
+    "session": 19,
+    "route": "/smokecraft/scorecard",
+    "resolved": "/smokecraft/scorecard"
+  },
+  {
+    "session": 21,
+    "route": "/smokecraft/ai-summary",
+    "resolved": "/smokecraft/ai-summary"
+  },
+  {
+    "session": 22,
+    "route": "/smokecraft/pairing-recommendations",
+    "resolved": "/smokecraft/pairing-recommendations"
+  },
+  {
+    "session": 23,
+    "route": "/smokecraft/passport-stamp",
+    "resolved": "/smokecraft/passport-stamp"
+  },
+  {
+    "session": 24,
+    "route": "/smokecraft/final-review",
+    "resolved": "/smokecraft/final-review"
+  },
+  {
+    "session": 25,
+    "route": "/smokecraft/rewards",
+    "resolved": "/smokecraft/rewards"
+  },
+  {
+    "session": 27,
+    "route": "/smokecraft/session-complete",
+    "resolved": "/smokecraft/session-complete"
+  }
+]

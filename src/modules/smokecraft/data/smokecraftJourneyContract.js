@@ -1,5 +1,18 @@
 /**
- * SmokeCraft Journey Contract — Canonical 24-Session Definition
+ * DEPRECATED — Session-Sequence-Reconciliation pass. Despite this file's own
+ * header claiming it is used by SmokeCraftSessionGuard/route logic, that is
+ * no longer true (and no evidence it ever was in the live app): the real
+ * SmokeCraftSessionGuard.jsx imports isSessionUnlocked from
+ * src/constants/smokecraftJourney.js, which is built entirely on the locked
+ * 27-session/6-phase VISIT_STRUCTURE in src/constants/session.js. This
+ * file's only real consumers (smokecraftProgressService.js,
+ * SmokeCraftModule.jsx, smokecraftMvp2MasterRegistry.js) are themselves
+ * unreferenced by App.jsx or any other live route — dead code, not a
+ * competing live registry. Kept on disk, not deleted, per this pass's
+ * smallest-safe-fix scope. Do not treat this 24-session/8-visit shape as
+ * authoritative for anything — use VISIT_STRUCTURE in session.js.
+ *
+ * SmokeCraft Journey Contract — Canonical 24-Session Definition (STALE, see above)
  *
  * Single authoritative source for the 8-visit / 24-session SmokeCraft journey.
  * Used by: SmokeCraftSessionGuard, next/prev route logic, session numbering,

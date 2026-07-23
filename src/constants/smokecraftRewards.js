@@ -1,16 +1,22 @@
 /**
- * SmokeCraft XP + Badge reward map — 8 visits, 24 sessions.
+ * SmokeCraft XP + Badge reward map.
  *
- * Single source of truth. Do NOT scatter XP values into individual page files.
- * Each session entry is keyed by the stepId passed to completeStep().
+ * Single source of truth for XP/badge amounts. Do NOT scatter XP values into
+ * individual page files. Each entry is keyed by the stepId passed to
+ * completeStep().
  *
  * Badge ids must be stable strings — they are stored in session.badges and
  * checked for duplicates before award. Use kebab-case.
  *
- * XP totals by visit:
- *   V1  250 XP   V2  150 XP   V3  150 XP   V4  275 XP
- *   V5  150 XP   V6  175 XP   V7  225 XP   V8  325 XP
- *   TOTAL: 1700 XP for a complete 24-session journey
+ * NOTE (Session-Sequence-Reconciliation pass): the `visit`/`sessionNumber`
+ * fields below use a legacy 8-visit/24-session numbering that predates and
+ * does not match the locked 27-session/6-phase VISIT_STRUCTURE in
+ * session.js. Confirmed no consumer of this file ever reads `.visit` or
+ * `.sessionNumber` for display or ordering (only `id`/`label`/`xp` are
+ * consumed) — this numbering is inert bookkeeping, not a competing live
+ * registry. Not renumbered in this pass to avoid an unreviewed rewrite of
+ * every badge/XP id; do not treat these fields as authoritative session
+ * order — use VISIT_STRUCTURE in session.js for that.
  */
 
 // ── Badge catalogue ───────────────────────────────────────────────────────────
