@@ -4,6 +4,7 @@ import { triggerHaptic } from '../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../constants/smokecraftAssets.js'
 import { computeJourneyStatus } from '../constants/smokecraftJourneyStatus.js'
+import { useStartNewSmokeCraftJourney } from '../hooks/useStartNewSmokeCraftJourney.js'
 
 const NAT_W = 1189
 const NAT_H = 667
@@ -111,6 +112,50 @@ function PrimaryHotspot({ label, onClick, style }) {
   )
 }
 
+// Landing-page journey controls pass — premium gold-outline secondary
+// button (visually distinct from the solid-gold PrimaryHotspot), used for
+// START NEW JOURNEY whenever an active journey exists alongside
+// RESUME SMOKECRAFT JOURNEY / VIEW COMPLETED JOURNEY. Minimum 72px touch
+// target, visible keyboard focus ring, pointer-down tactile feedback, large
+// legible type — no default browser highlight.
+function SecondaryHotspot({ label, onClick, style }) {
+  const [pressed, setPressed] = useState(false)
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      onPointerDown={() => setPressed(true)}
+      onPointerUp={() => setPressed(false)}
+      onPointerLeave={() => setPressed(false)}
+      style={{
+        position: 'absolute',
+        background: pressed ? 'rgba(233,193,118,0.16)' : 'rgba(8,10,16,0.55)',
+        color: GOLD,
+        border: `2px solid ${GOLD}`,
+        borderRadius: 999,
+        fontFamily: 'Georgia, serif',
+        fontWeight: 700,
+        fontSize: 'clamp(13px, 1.5vw, 17px)',
+        letterSpacing: '0.04em',
+        textTransform: 'uppercase',
+        cursor: 'pointer',
+        pointerEvents: 'auto',
+        touchAction: 'manipulation',
+        WebkitTapHighlightColor: 'transparent',
+        outline: 'none',
+        transition: 'background 0.12s ease, transform 0.08s ease',
+        transform: pressed ? 'scale(0.98)' : 'scale(1)',
+        minHeight: 72,
+        ...style,
+      }}
+      onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 3px rgba(233,193,118,0.5)` }}
+      onBlur={(e) => { e.currentTarget.style.boxShadow = 'none' }}
+    >
+      {label}
+    </button>
+  )
+}
+
 // Transparent-at-rest control over a static baked button/link whose label
 // never changes — the approved artwork already renders it correctly, so we
 // preserve that pixel-perfect look at idle and add a real, visible
@@ -158,10 +203,35 @@ export default function SmokeCraft() {
   const [isReturning] = useState(() => entryRoute === '/smokecraft/resume' && hasRealJourneyProgress())
   const [journeyState] = useState(getJourneyCompletionState)
   const isCompleted = isReturning && journeyState.isComplete
+  const { startNewSmokeCraftJourney } = useStartNewSmokeCraftJourney()
+  const [confirmingStartNew, setConfirmingStartNew] = useState(false)
 
   function go(to) {
     triggerHaptic('light')
     navigate(to)
+  }
+
+  function handleStartNewClick() {
+    triggerHaptic('light')
+    setConfirmingStartNew(true)
+  }
+
+  function handleCancelStartNew() {
+    triggerHaptic('light')
+    setConfirmingStartNew(false)
+  }
+
+  function handleConfirmStartNew() {
+    triggerHaptic('medium')
+    // Landing-page journey controls pass — reuses the one canonical
+    // useStartNewSmokeCraftJourney() start function (Clean Start remediation
+    // pass), never a second reset implementation. Explicitly routes to
+    // Enrollment (the earliest required clean entry step), not directly to
+    // Welcome, per this pass's requirement — enrollment itself remains
+    // preserved account-level state (PRESERVED_COMPLETED_STEP_IDS), so this
+    // route is always safely reachable.
+    const route = startNewSmokeCraftJourney({ firstRoute: '/smokecraft/enroll' })
+    navigate(route)
   }
 
   function handleStart() {
@@ -187,6 +257,21 @@ export default function SmokeCraft() {
         onClick={handleStart}
         style={{ left: '3.4%', top: '56.4%', width: '21.5%', height: '6.4%' }}
       />
+
+      {/* Landing-page journey controls pass — secondary START NEW JOURNEY
+          control, shown only when an active (incomplete or completed)
+          journey exists, so the user always has an explicit way to
+          intentionally discard/archive it and begin clean. Placed directly
+          below the primary CTA — same left/width, does not cover the
+          approved background or any other hotspot (How It Works sits at
+          the same vertical band but further right). */}
+      {isReturning && (
+        <SecondaryHotspot
+          label="Start New Journey"
+          onClick={handleStartNewClick}
+          style={{ left: '3.4%', top: '64.0%', width: '21.5%', height: '5.2%' }}
+        />
+      )}
 
       {/* Baked: HOW IT WORKS button */}
       <StaticHotspot
@@ -237,6 +322,54 @@ export default function SmokeCraft() {
         onClick={() => go('/smokecraft/smokecraft-challenge')}
         style={{ left: '74.3%', top: '82.2%', width: '24.3%', height: '17.7%' }}
       />
+
+      {confirmingStartNew && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Start a new SmokeCraft journey?"
+          style={{
+            position: 'fixed', inset: 0, zIndex: 50, pointerEvents: 'auto',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'rgba(6,8,16,0.78)', padding: 'clamp(16px,4vw,40px)',
+          }}
+        >
+          <div style={{
+            background: '#0b0f18', border: `1.5px solid ${GOLD}`, borderRadius: 14,
+            padding: 'clamp(20px,3vw,32px)', maxWidth: 440, width: '100%',
+            boxShadow: '0 12px 48px rgba(0,0,0,0.6)', fontFamily: 'Georgia, serif',
+          }}>
+            <p style={{ margin: '0 0 20px', fontSize: 'clamp(15px,1.8vw,18px)', lineHeight: 1.6, color: '#e5e2e1' }}>
+              Start a new SmokeCraft journey? Your current journey will be archived and a clean journey will begin.
+            </p>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <button
+                type="button" onClick={handleCancelStartNew}
+                style={{
+                  flex: '1 1 120px', minHeight: 52, background: 'transparent',
+                  border: '1.5px solid rgba(233,193,118,0.4)', borderRadius: 999,
+                  color: 'rgba(229,226,225,0.85)', fontFamily: 'Georgia, serif', fontWeight: 700,
+                  fontSize: 'clamp(13px,1.5vw,16px)', letterSpacing: '0.04em', textTransform: 'uppercase',
+                  cursor: 'pointer', outline: 'none',
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button" onClick={handleConfirmStartNew}
+                style={{
+                  flex: '1 1 160px', minHeight: 52, background: `linear-gradient(180deg, #F3D48E, ${GOLD})`,
+                  border: 'none', borderRadius: 999, color: '#241605', fontFamily: 'Georgia, serif', fontWeight: 700,
+                  fontSize: 'clamp(13px,1.5vw,16px)', letterSpacing: '0.04em', textTransform: 'uppercase',
+                  cursor: 'pointer', outline: 'none', boxShadow: '0 4px 18px rgba(233,193,118,0.45)',
+                }}
+              >
+                Start New Journey
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </SmokeCraftImageBoundsOverlay>
   )
 }
