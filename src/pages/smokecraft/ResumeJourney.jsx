@@ -9,7 +9,7 @@ import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftEntryHeaderBand from '../../components/smokecraft/SmokeCraftEntryHeaderBand.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { VISIT_STRUCTURE, ENTRY_LAYER_SCREENS, SUPPORTING_MODULES } from '../../constants/session.js'
-import { getSessionByKey } from '../../constants/smokecraftJourney.js'
+import { getSessionByNumber } from '../../constants/smokecraftJourney.js'
 import { computeJourneyStatus } from '../../constants/smokecraftJourneyStatus.js'
 
 const GOLD      = '#E9C176'
@@ -149,14 +149,19 @@ export default function ResumeJourney() {
   const journeyComplete = journeyStatus.isComplete
   const completionPercent = journeyStatus.completionPercent
 
-  const lastCompletedSession = useMemo(() => {
-    let best = null
-    for (const id of completedSteps) {
-      const s = getSessionByKey(id)
-      if (s && (!best || s.session > best.session)) best = s
-    }
-    return best
-  }, [completedSteps])
+  // Live remediation pass — derived from the same authoritative,
+  // contiguous-prefix journeyStatus used for currentAllowed/completionPercent
+  // above, never from an independent max-scan over completedSteps. A
+  // max-scan could report a high-numbered session (e.g. S27) as "last
+  // completed" purely because its id was present in a legacy record, even
+  // when an earlier required session (e.g. S1) was never actually
+  // completed and currentAllowed correctly still points at it — the exact
+  // "Current session: S1 / Last completed: S27 / 63%" contradiction this
+  // pass fixes. See smokecraftJourneyStatus.js for the full explanation.
+  const lastCompletedSession = useMemo(
+    () => journeyStatus.lastCompletedSessionNumber ? getSessionByNumber(journeyStatus.lastCompletedSessionNumber) : null,
+    [journeyStatus.lastCompletedSessionNumber]
+  )
   const lastSaved = formatTimestamp(journey.journeyUpdatedAt)
 
   function handleResume() {

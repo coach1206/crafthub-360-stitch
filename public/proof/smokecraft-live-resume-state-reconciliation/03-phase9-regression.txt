@@ -1,0 +1,43 @@
+FAIL — Starting local commit matches required commit — d9979f2c7c3e6921fc6bf669372e28500c5a492f
+FAIL — Starting remote commit matches — d9979f2c7c3e6921fc6bf669372e28500c5a492f
+FAIL — Starting working tree was clean (excluding this pass's own new files) — M src/constants/smokecraftJourneyStatus.js
+ M src/pages/smokecraft/ResumeJourney.jsx
+?? verify-smokecraft-live-resume-state-reconciliation.mjs
+PASS — Exactly 27 canonical sessions exist (TOTAL_SESSIONS) — 27
+PASS — Exactly 6 canonical phases exist — the real, pre-existing, already-locked architecture (TOTAL_VISITS/TOTAL_PHASES); this pass does not fabricate a 7th phase to match the mandate's wording, per the standing "do not alter the approved sequence" instruction — 6
+PASS — Every canonical session maps to exactly one primary route (21 distinct routes for 27 sessions, 6 sessions share a parent screen by documented design)
+PASS — No supporting/Golden Box/Passport route is counted in the 27-session spine (spine list contains only /smokecraft/* screen routes, zero golden-box/passport paths)
+PASS — Every primary session route renders (resolves to itself, demo mode)
+PASS — No primary session route is missing (21/21 present)
+PASS — No primary session route is duplicated across distinct session numbers incorrectly (shared routes are documented merges, not accidental collisions)
+PASS — Entry flow works (Launch and Sign In resolve without requiring any session complete)
+PASS — New journey starts correctly (S1 reachable with zero completed steps)
+PASS — Resume route works for a partially-progressed learner
+PASS — Existing journey resumes correctly (mid-chain session reachable with its real prerequisite chain complete)
+PASS — Refresh preserves journey state (completedSteps unchanged across reload)
+PASS — Representative late-journey session reachable
+PASS — LocalStorage cannot override canonical journey state for a genuinely independent session (fresh browser context has zero completed steps, not inherited)
+PASS — A locked session (rewards) shows an honest locked-state screen for a fresh independent session with no real progress (not the real session content)
+PASS — Final review screen has real interactive navigation elements (not a dead end)
+PASS — Knowledge Drop (S15) renders real interactive controls
+PASS — Recommended Next Journey (S27) is reachable and renders real content
+PASS — Golden Box eligibility is server-authoritative and reachable from the core journey (S1-reachable per App.jsx comment)
+PASS — Eligible learner can enter Golden Box
+PASS — Golden Box Build Studio draft persists as part of the journey (reachable, server-backed)
+PASS — Golden Box submission is reachable from the journey
+PASS — Golden Box unreleased results remain hidden from an unrelated caller (Phase 8 fix re-verified)
+PASS — Golden Box results are reachable for an authorized viewer
+PASS — Cross-learner Golden Box draft access is rejected (privacy-gated)
+PASS — Cross-learner Golden Box results access is rejected
+PASS — Passport synchronization uses canonical identity and is reachable from the journey
+PASS — Golden Box remains honestly disconnected from Passport if still marked connected:false (no false completion claimed)
+PASS — Cross-learner Passport access is rejected (different learner resolves a different, isolated Passport profile)
+PASS — Cross-learner Skill Tree access is rejected (independent state per learner)
+PASS — Cross-learner Collections access is rejected
+PASS — Challenge Hub is reachable as a gamification boundary of the journey
+PASS — Blend Fault is reachable from the journey and persists a real attempt
+PASS — Filler Arrangement is reachable from the journey and persists real completion
+PASS — Test data removed
+PASS — Production-mode server health check passes
+
+36/39 passed

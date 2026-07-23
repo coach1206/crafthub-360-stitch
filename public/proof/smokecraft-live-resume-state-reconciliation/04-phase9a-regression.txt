@@ -1,0 +1,58 @@
+FAIL — Starting local commit matches required commit — d9979f2c7c3e6921fc6bf669372e28500c5a492f
+FAIL — Starting remote commit matches — d9979f2c7c3e6921fc6bf669372e28500c5a492f
+FAIL — Starting working tree was clean (excluding this pass's own new/amended files) — M src/constants/smokecraftJourneyStatus.js
+ M src/pages/smokecraft/ResumeJourney.jsx
+?? verify-smokecraft-live-resume-state-reconciliation.mjs
+PASS — Packaging Studio route is in the active Golden Box route group
+PASS — Build Studio (review step) has a valid Packaging Studio transition
+PASS — Ineligible/unauthenticated caller cannot access Packaging Studio readiness for this entry
+PASS — Learner without a real Golden Box entry cannot get readiness for a nonexistent entry
+PASS — Learner with an eligible entry can access Packaging Studio readiness
+PASS — Cross-learner Packaging Studio readiness access is rejected
+PASS — Packaging status is backend-derived (computed live from real tables, not a stored duplicate field — verified by source inspection of getPackagingReadinessForEntry)
+PASS — New packaging state is not_started (no design linked yet)
+PASS — Saved (linked, empty) draft state is draft_in_progress
+PASS — Incomplete design (some fields, missing required) state is validation_required
+PASS — Complete draft state is ready_to_submit
+PASS — Browser cannot forge packaging readiness (unknown body fields like "status"/"readiness" are silently ignored by buildConfig(), never trusted)
+PASS — Browser cannot forge packaging submission association to an entry it does not own
+PASS — Final submission succeeds and locks the state to submitted
+PASS — Submitted-snapshot state is "submitted" (locked)
+PASS — Build Studio entry status is unaffected by packaging submission (entry.status remains the real, independent blend-entry status, not silently overwritten)
+PASS — Presentation route does not hard-block on missing packaging submission (deliberate scope decision, disclosed in 12-JOURNEY-INTEGRATION-AMENDMENT.md — entryService.submitEntry, a protected system, was not modified this pass)
+PASS — Valid packaging submission is visible in Presentation Preparation once it exists (EntryWorkspace.jsx presentation step reads the real submittedPackage via getFinalSubmission)
+PASS — Resume (reopening the entry) reaches the real entry workspace without error
+PASS — Resume targets Packaging Studio (not_started) when packaging is incomplete for a fresh entry
+PASS — Resume correctly reflects a completed submission (learner A's readiness is "submitted", confirmed above — no re-prompt to redo packaging)
+PASS — Back navigation returns safely to Build Studio (EntryWorkspace's own step buttons are local React state, not a route change — no navigation was altered this pass)
+PASS — No route loop exists (Packaging Studio routes are a strict tree: dashboard -> editor -> versions/share, no route navigates back into itself in a cycle)
+PASS — No Packaging Studio route is orphaned (dashboard, editor, versions, share, and shared-review all cross-link to each other or back to the dashboard)
+PASS — Direct deep link to a design enforces eligibility/ownership (cross-learner read rejected)
+PASS — Direct Presentation deep link cannot bypass packaging (no server-side packaging bypass exists — the presentation step reads real submission state via the same authorized route judges use, not a client flag)
+PASS — Submitted package snapshot appears in Presentation data (real, authorized read)
+PASS — Draft cannot be changed after submission (locked)
+PASS — Submitted snapshot appears in Defense data unchanged after the rejected draft-edit attempt
+PASS — Unauthorized judge is rejected
+PASS — Authorized judge can view the submitted package
+PASS — Unauthorized mentor is rejected (same visibilityService policy gates all non-owner, non-assigned-judge, non-admin callers)
+PASS — Authorized mentor access works where supported (mentor role reuses the same identity-gated, visibility-checked read route already proven for judges above — no separate mentor bypass exists)
+PASS — Cross-learner submitted package read is rejected
+PASS — Share-token creation on a locked/submitted design does not grant competition-review privileges (share access is design-scoped, judge access is entry+visibility-scoped — two structurally separate authorization paths, confirmed by source: resolveShare() never checks judge_assignments)
+PASS — Revoked/absent share does not break authorized judge access (judge read never depended on any share token)
+PASS — Optional sharing is not required for journey completion (submission already succeeded above with zero shares created for this design)
+PASS — Optional comments are not required for journey completion (submission already succeeded above with zero comments on this design)
+PASS — No new packaging score category is introduced (VALID_CATEGORIES in judgingService.js unchanged this pass)
+PASS — No progression event was created for packaging submission (none exists — this pass added no new event type, per its own "if no event is needed, document that" instruction)
+PASS — No duplicate XP is created (no xp_transactions row references packaging — no XP award path was added this pass)
+PASS — No duplicate Passport stamp is created (no Passport write path was added this pass — Passport goldenBox.connected remains honestly false, unchanged)
+PASS — Test data removed
+PASS — Golden Box Packaging Studio suite exists and is run as part of the required battery
+PASS — Phase 9 functional regression suite exists and is run as part of the required battery
+PASS — Phase 8 regression suite exists and is run as part of the required battery
+PASS — Phase 7 regression suite exists and is run as part of the required battery
+PASS — Golden Box 7A regression suite exists and is run as part of the required battery
+PASS — Phase 6 functional regression suite exists and is run as part of the required battery
+PASS — Passport Security regression suite exists and is run as part of the required battery
+PASS — Production-mode server health check passes
+
+51/54 passed

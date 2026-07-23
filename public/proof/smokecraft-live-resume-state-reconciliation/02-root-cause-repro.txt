@@ -1,0 +1,18 @@
+Reproduction of the reported live defect at the logic level:
+Input completedSteps (legacy-shaped, S2-S27 ids present, 'entry' missing):
+['humidor-match','meet-your-cigar','terroir','format','cut-toast-light',
+ 'lighting-tutorial','first-third','flavor-memory','pairing-lab','second-third',
+ 'mentor-commentary','knowledge-drop','final-third','scorecard','ai-summary',
+ 'pairing-recommendations','passport-stamp','final-review','rewards','session-complete']
+
+BEFORE FIX (old ResumeJourney.jsx max-scan + old computeCompletedSessionNumbers):
+  currentAllowed (getCurrentAllowedSession) = S1 (correct, already gated)
+  lastCompletedSession (old max-scan over completedSteps) = S27  <- BUG
+  completionPercent (old scan-anywhere count) = ~74%             <- BUG (inflated/wrong)
+  => "Current session: S1" + "Last completed session: S27" + "63-74%" contradiction
+
+AFTER FIX (computeJourneyStatus contiguous-prefix rule, reused by ResumeJourney.jsx):
+  currentAllowed = S1 (unchanged, already correct)
+  lastCompletedSessionNumber = null (no session correctly reached in order)
+  completionPercent = 0%
+  => internally consistent: nothing is credited as "completed" until S1 is genuinely done

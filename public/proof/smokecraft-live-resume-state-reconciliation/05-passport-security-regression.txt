@@ -1,0 +1,61 @@
+PASS — Starting commit context recorded (f5a8b065... baseline accepted)
+PASS — Legacy /health remains active (harmless, no identity/data)
+PASS — Legacy write endpoint disabled: POST /guest/resolve
+PASS — Legacy write endpoint disabled: POST /session/complete
+PASS — Legacy write endpoint disabled: POST /stamp/award
+PASS — Legacy write endpoint disabled: POST /xp/award
+PASS — Legacy write endpoint disabled: POST /flavor-memory/save
+PASS — Legacy write endpoint disabled: POST /audit/event
+PASS — Legacy read endpoint disabled: GET /guest/forged-id/progress
+PASS — Legacy read endpoint disabled: GET /guest/forged-id/stamps
+PASS — Legacy read endpoint disabled: GET /guest/forged-id/badges
+PASS — Legacy read endpoint disabled: GET /guest/forged-id/return-visits
+PASS — Legacy read endpoint disabled: GET /guest/forged-id/audit-log
+PASS — SmokeCraft Passport Stamp route now requires identity: POST /api/smokecraft/passport-stamp/claim
+PASS — SmokeCraft Passport Stamp route now requires identity: GET /api/smokecraft/passport-stamp/eligibility
+PASS — Every active Passport API requires valid identity (profile)
+PASS — flavor-memory requires valid identity
+PASS — link-guest requires valid identity
+PASS — Arbitrary Passport ID in query string is rejected (server resolves its own)
+PASS — Arbitrary guest reference is rejected
+PASS — Arbitrary learner ID is rejected
+PASS — Arbitrary user ID is rejected
+PASS — Arbitrary XP award is rejected
+PASS — Arbitrary stamp award is rejected
+PASS — Arbitrary badge award is rejected (no badge-award path accepts client input)
+PASS — Arbitrary completion claim is rejected
+PASS — Arbitrary connection creation is rejected
+PASS — Forged guestId in flavor-memory body is ignored (real identity used instead)
+PASS — Learner A claims journey stamp
+PASS — Cross-learner Profile read rejected (learner B does not see learner A's stamp)
+PASS — Cross-learner Stamps read rejected (learner B's stamps list is empty)
+PASS — Cross-learner Activity read rejected (learner B's activity is empty)
+PASS — Cross-learner Connections read rejected (isolated per learner)
+PASS — Cross-learner synchronization rejected (B syncing only ever affects B)
+PASS — SmokeCraft resolves to a canonical Passport identity
+PASS — General NOVEE OS path (passportService.js's real caller) resolves to the SAME canonical Passport identity
+PASS — Same learner receives the same Passport ID through both systems
+PASS — LocalStorage override attempt (fake local passportId) is ignored by the real backend
+PASS — Duplicate canonical identity creation is prevented (exactly 1 profile row)
+PASS — Guest identity is stable across repeated calls
+PASS — Authenticated identity is stable across repeated calls
+PASS — Pre-link: guest D has a real stamp before linking
+PASS — Guest-to-user linking rejects a request with no authenticated user
+PASS — Guest-to-user linking succeeds where an authenticated identity is present
+PASS — Identity merge preserves stamps
+PASS — Merged stamp appears on the user's own canonical profile
+PASS — Merge does not duplicate stamps (1 on user side, 1 preserved on guest side = 2 total, not 3+)
+PASS — Guest-to-user linking is idempotent (repeat merges 0 new stamps)
+PASS — Merge does not duplicate stamps on repeat (still exactly 2)
+PASS — Guest-to-user linking rejects another learner's guest record (no generic guestId parameter exists to target one)
+PASS — Identity merge preserves XP (real, non-negative mirrored value)
+PASS — Blend Fault completion still represented after remediation (unaffected)
+PASS — Skill Tree / Collections / Challenge sync paths structurally unchanged (same evidence-collector code, unaffected by identity remediation)
+PASS — Profile survives refresh
+PASS — Independent browser session reads the same server state
+PASS — /passport/profile (general NOVEE OS route) renders real canonical data
+PASS — Disabled legacy endpoint proof captured
+PASS — Existing canonical sync API (Passport completion pass) still functions after remediation
+PASS — Test data removed
+
+59/59 passed
