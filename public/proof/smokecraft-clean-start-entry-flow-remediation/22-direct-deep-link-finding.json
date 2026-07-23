@@ -1,0 +1,7 @@
+{
+  "url": "http://localhost:5050/smokecraft/welcome",
+  "finding": "A direct, fresh (no cookie, no localStorage) deep link to /smokecraft/welcome renders the real Welcome screen without first passing through Enrollment or Venue Selection. This is because SmokeCraftSessionGuard sessionNumber=1 only enforces 'session N requires session N-1', and S1 has no earlier session to require. Entry-layer (enroll/venue) prerequisites are enforced only by the landing page's getEntryRoute() chain, not by a guard on /smokecraft/welcome itself.",
+  "scopeDisclosure": "Pre-existing gap, not introduced by this pass, out of this pass's scope (state-reset fix, not entry-layer guard hardening).",
+  "mitigatingFactor": "Even via this deep-link path, the Welcome screen renders honest neutral state (Guest: Guest / Venue: Not selected yet), never stale inherited data from a prior journey — confirmed live in this pass's proof capture.",
+  "redirectedAwayFromWelcome": false
+}

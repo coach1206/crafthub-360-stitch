@@ -1,0 +1,14 @@
+{
+  "profile": {
+    "firstName": "",
+    "lastName": "",
+    "nickname": "",
+    "email": "",
+    "phone": "",
+    "city": "",
+    "state": "",
+    "zip": "",
+    "photo": null,
+    "ageConfirmed": false
+  }
+}

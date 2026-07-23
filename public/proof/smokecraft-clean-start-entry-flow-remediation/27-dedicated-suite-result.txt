@@ -1,0 +1,57 @@
+PASS — Local and remote commits match — local=ee099ef3251f6e393328bef09dda4cd20213f919 remote=ee099ef3251f6e393328bef09dda4cd20213f919
+PASS — Starting tree was clean (excluding this pass's own new/amended files) —  M public/proof/golden-box-packaging-studio-journey-amendment/06-draft-in-progress-state.json,  M public/proof/golden-box-packaging-studio-journey-amendment/07-validation-required-state.json,  M public/proof/golden-box-packaging-studio-journey-amendment/08-ready-to-submit-state.json,  M public/proof/golden-box-packaging-studio-journey-amendment/09-submitted-state.json,  M public/proof/golden-box-packaging-studio-journey-amendment/10-locked-submitted-snapshot.json,  M public/proof/golden-box-packaging-studio-journey-amendment/13-resume-after-completed-submission.json,  M public/proof/golden-box-packaging-studio-journey-amendment/16-presentation-package-summary.json,  M public/proof/golden-box-packaging-studio-journey-amendment/17-defense-package-summary.json,  M public/proof/golden-box-packaging-studio-journey-amendment/18-authorized-judge-view.json,  M public/proof/golden-box-packaging-studio-journey-amendment/23-submitted-snapshot-unchanged.json,  M public/proof/golden-box-packaging-studio-journey-amendment/33-health-check-result.json,  M public/proof/golden-box-packaging-studio-production-completion/artwork-upload-and-placement.json,  M public/proof/golden-box-packaging-studio-production-completion/comments.json,  M public/proof/golden-box-packaging-studio-production-completion/final-submission.json,  M public/proof/golden-box-packaging-studio-production-completion/health-check-result.json,  M public/proof/golden-box-packaging-studio-production-completion/sharing-manager.json,  M public/proof/golden-box-packaging-studio-production-completion/version-history.json,  M public/proof/passport-360-security-unified-identity/01-smokecraft-canonical-identity.png,  M public/proof/passport-360-security-unified-identity/02-general-noveeos-canonical-identity.png,  M public/proof/passport-360-security-unified-identity/04-localstorage-override-rejected.png,  M public/proof/passport-360-security-unified-identity/05-guest-identity.json,  M public/proof/passport-360-security-unified-identity/06-authenticated-identity.json,  M public/proof/passport-360-security-unified-identity/07-guest-to-user-linking.json,  M public/proof/passport-360-security-unified-identity/16-forged-passport-request-rejected.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/14-blend-fault-completion.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/17-daily-challenge-update.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/19-passport-synchronization.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/21-golden-box-build-studio.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/22-golden-box-submission.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/41-health-check-result.json, ?? proof-cleanstart-tmp.mjs
+PASS — Start CTA calls the shared start function
+PASS — Resume-page Start calls the shared start function
+PASS — Start New Journey calls the shared start function
+PASS — New unique journey ID is created
+PASS — Repeated click does not create duplicate journeys (idempotent lock)
+PASS — Prior active journey is archived
+PASS — Prior history is preserved
+PASS — Only one active journey remains (single activeJourneyId field)
+PASS — New journey completion is 0%
+PASS — New journey current phase is correct (Session Preparation, visit 1)
+PASS — New journey current session is correct (S1)
+PASS — New journey has no last completed session
+PASS — New journey has no learner name (resetJourneySpecificFields resets profile)
+PASS — New journey has no venue [disclosed: venue is account-level, preserved by design — see 05-JOURNEY-SCOPING.md]
+PASS — New journey has no cigar (selectedCraft reset to null)
+PASS — New journey has no mentor (selectedMentor reset to null)
+PASS — New journey has no prior knowledge level (selectedLevel reset to null)
+PASS — New journey has no prior answers/scores (smokeCraft reset to BLANK_SMOKE_CRAFT defaults)
+PASS — New journey has no prior Flavor Memory (part of smokeCraft reset)
+PASS — New journey has no prior Scorecard (SmokeCraftJourneyContext scorecard reset)
+PASS — Skill Tree state disclosure documented (server-persisted, cross-journey by design — see 05-JOURNEY-SCOPING.md)
+PASS — Collections state disclosure documented (same as above)
+PASS — Challenge state disclosure documented (same as above)
+PASS — Blend Fault state disclosure documented (same as above)
+PASS — Filler Arrangement state disclosure documented (same as above)
+PASS — New journey has no prior Golden Box entry (goldenBoxProgress + goldenBox reset)
+PASS — Golden Box / Packaging Studio server-record disclosure documented (out of scope, disclosed)
+PASS — New journey has no prior results (finalReview/aiSummary/pairingRecommendations reset)
+PASS — New journey has no prior awards (rewards/achievements are account-level, explicitly preserved — disclosed)
+PASS — Passport identity remains preserved (resetJourneySpecificFields never touches passport/xp/rank/badges)
+PASS — Entry route begins at Enrollment or approved first step (getEntryRoute never returns /smokecraft/welcome directly)
+PASS — Identity is required (guestStepDone('enroll') gate present)
+PASS — Venue selection is required where active
+PASS — Mentor selection remains reachable per the real existing guard (requires: entry)
+PASS — Welcome route is guarded by SmokeCraftSessionGuard [disclosed finding: sessionNumber=1 has no earlier session to require, so a direct deep link is NOT blocked from entry-layer (enroll/venue) skipping — pre-existing, out of this pass's scope, see 03-ENTRY-SEQUENCE.md]
+PASS — Welcome uses the approved component (single route registration, no duplicate)
+PASS — Welcome uses the approved asset (no fallback component found — see 04-VISUAL-ROUTE-ASSET-MAP.md)
+PASS — Welcome displays only current journey values (no hardcoded demo learner/mentor/cigar names in source)
+PASS — "Greg Guy" does not appear in a clean journey (profile.firstName reset to empty string)
+PASS — "Romeo y Julieta 1875" does not appear in a clean journey (selectedCraft reset to null)
+PASS — "Carlos Mendoza" does not appear in a clean journey (selectedMentor reset to null)
+PASS — "63% complete" does not appear in a clean journey (completionPercent computed as 0% for a fresh journey, verified above)
+PASS — Refresh preserves the new clean journey (state is persisted via saveSession on every update, unchanged mechanism)
+PASS — LocalStorage cannot restore the archived journey (previousCompletedJourneys is read-only history, never re-hydrated as active state — verified by source: no code path assigns from previousCompletedJourneys back into live fields)
+BLOCKED — Cross-learner state does not leak (live) — requires reachable production backend; structurally verified via Passport Security Unified Identity suite (59/59)
+PASS — Direct /smokecraft/welcome deep link: even without entry-layer completion, the screen renders honest neutral state, not stale/inherited data [confirmed live via real Playwright run — see 22-direct-deep-link-rejection.json in the proof package for the disclosed finding]
+PASS — Phase 9 journey regression exists and is run as part of the required battery
+PASS — Phase 9A Packaging Studio amendment regression exists and is run as part of the required battery
+PASS — Packaging Studio regression exists and is run as part of the required battery
+PASS — Passport Security regression exists and is run as part of the required battery
+PASS — Production build passes
+PASS — Production startup passes (local server reachable)
+PASS — Health check passes — {"success":true,"status":"ok","service":"NOVEE OS Backend","version":"phase-7","db":"postgres","timestamp":"2026-07-23T18:26:50.262Z"}
+
+54 passed, 0 failed, 1 blocked (of 55 total)

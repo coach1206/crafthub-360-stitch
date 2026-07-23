@@ -1,0 +1,3 @@
+{
+  "note": "No code path assigns from previousCompletedJourneys or any client-writable key back into live journey fields — verified by source inspection, see 01-ROOT-CAUSE.md"
+}

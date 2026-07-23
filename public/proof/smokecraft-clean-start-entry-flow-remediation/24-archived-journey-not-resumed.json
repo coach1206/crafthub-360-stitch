@@ -1,0 +1,5 @@
+{
+  "note": "previousCompletedJourneys is append-only, never read back into live fields",
+  "oldJourneyId": "journey-old-stale-000",
+  "currentActiveJourneyId": "journey-1784831099849-9i0qwk"
+}

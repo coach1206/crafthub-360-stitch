@@ -27,6 +27,8 @@ import {
   loadSession,
   saveSession,
   createNewSession,
+  BLANK_SMOKE_CRAFT_DEFAULTS,
+  BLANK_GOLDEN_BOX_DEFAULTS,
 } from '../services/sessionStorageService.js'
 import { calculateScore, getRankLabel } from '../services/leaderboardService.js'
 import { GOLD_BOX_RULE_VERSION } from '../utils/smokecraftGoldBoxRules.js'
@@ -914,6 +916,38 @@ export function GuestSessionProvider({ children }) {
     setSession(fresh)
   }, [])
 
+  // Emergency Live Remediation: Clean Start / State Reset pass — resets every
+  // journey-specific field a "Start SmokeCraft Journey" action must never
+  // inherit (learner name, cigar, mentor, knowledge level, the entire
+  // smokeCraft tasting/scoring object, and Golden Box entry state), while
+  // explicitly preserving account-level, cross-journey state: xp, rank,
+  // badges, smokecraftStamps, passport (canonical Passport identity/earned
+  // stamps), guestId, venueId, deviceId, preferences. This is the
+  // GuestSessionContext half of the fix — SmokeCraftJourneyContext's own
+  // startNewJourney() already resets its own fields; the root cause of the
+  // reported "Greg Guy / Romeo y Julieta 1875 / Carlos Mendoza / 63%"
+  // live defect was that no Start action called this reset at all, only the
+  // separate startNewJourney() (SmokeCraftJourneyContext), leaving this
+  // context's fields (profile.firstName, selectedMentor, selectedCraft,
+  // smokeCraft.*, goldenBoxProgress, currentSmokecraftStep) untouched.
+  const resetJourneySpecificFields = useCallback(() => {
+    update(prev => ({
+      ...prev,
+      profile: { firstName: '', lastName: '', nickname: '', email: '', phone: '', city: '', state: '', zip: '', photo: null, ageConfirmed: false },
+      selectedCraft:         null,
+      selectedMentor:        null,
+      selectedMentorCountry: null,
+      selectedLevel:         null,
+      currentSmokecraftStep: null,
+      latestStampId:         null,
+      goldenBoxProgress:     null,
+      smokeCraft:            BLANK_SMOKE_CRAFT_DEFAULTS(),
+      goldenBox:             BLANK_GOLDEN_BOX_DEFAULTS(),
+      // Explicitly untouched: xp, rank, badges, smokecraftStamps, passport,
+      // guestId, venueId, deviceId, sessionId, preferences, loyalty fields.
+    }))
+  }, [update])
+
   /** @deprecated Use resetGuestSession. */
   const resetSession = resetGuestSession
 
@@ -978,6 +1012,7 @@ export function GuestSessionProvider({ children }) {
       // Reset
       resetGuestSession,
       resetSession,
+      resetJourneySpecificFields,
     }}>
       {children}
     </GuestSessionContext.Provider>

@@ -1,0 +1,3 @@
+Reference only (not directly attached into this repo) — the reported live
+Welcome screen showed a plain fallback-style layout with stale prior data.
+See the user's prompt text for the exact description quoted.

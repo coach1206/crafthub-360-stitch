@@ -637,3 +637,73 @@ implementation is necessary but not sufficient — every sibling
 implementation must be found (grep for the same weak pattern, e.g.
 `completedSteps.some(...)`, across the whole codebase) and fixed in the same
 pass, not discovered one screenshot at a time across multiple passes.
+
+### 2026-07-23 — Emergency Live Remediation: Clean Start, State Reset, and Entry-Sequence Restoration
+
+**Prevention rules established by this pass** (apply to every future CraftHub vertical):
+
+1. A Start action must create a new journey, not merely change routes — a
+   route change with no accompanying state reset is not a "new journey,"
+   it's a new URL over old data.
+2. All journey-specific state must be scoped by journey ID — this pass
+   disclosed (in `05-JOURNEY-SCOPING.md`) that true per-journey-ID
+   namespacing does not exist in the current architecture; future verticals
+   should build this in from the start rather than retrofit it under
+   pressure.
+3. New Journey must clear every module-specific state source — this pass's
+   root cause was exactly one context (`GuestSessionContext`) never being
+   cleared by an otherwise-working reset function that only touched its
+   sibling context.
+4. Shared Passport identity and journey identity must remain separate —
+   confirmed still correctly separated in this pass; the fix never touches
+   `passport.*`.
+5. Clean-start testing must verify no prior learner, venue, cigar, mentor,
+   progress, Golden Box, or Packaging state survives — this pass's
+   dedicated suite and a real Playwright end-to-end run both did exactly
+   this, reproducing the precise reported values (`Greg Guy`, `Romeo y
+   Julieta 1875`, `Carlos Mendoza`, `63%`) and confirming their absence.
+6. Entry sequence must be verified from the live landing page through
+   Session 1 — done locally (blocked live, same as every Phase 10 attempt).
+7. An approved asset existing is not enough; the correct live route must
+   render it — confirmed via source: exactly one route registration for
+   `/smokecraft/welcome`, no duplicate/fallback.
+8. Fallback screens must not silently replace approved production visuals —
+   none found in this case; the "plain" appearance was traced to stale
+   *data* feeding a real component, not a substitute component.
+9. Direct deep links must enforce entry prerequisites — **a real gap was
+   found and disclosed, not fixed** (S1's guard has no earlier session to
+   require, so it doesn't block skipping enrollment/venue). Future
+   verticals should design entry-layer guards independently from
+   session-number guards from the start, since "session 1 requires session
+   0" is structurally impossible.
+10. Double-click and retry behavior must not create duplicate journeys —
+    implemented via a `useRef` lock in the new shared start hook.
+11. Live user screenshots override prior assumptions and reopen the
+    affected gate — this is the fourth consecutive pass in this operation
+    triggered by a live screenshot revealing a defect the automated suites
+    hadn't caught; each was a different facet of the same underlying
+    "multiple state sources, not all reset together" family of bugs.
+12. Every future CraftHub module must test brand-new user, returning user,
+    completed user, archived journey, and corrupt legacy state before
+    completion — the dedicated suite for this pass exercises all five at
+    the deterministic, pure-function level, matching the established
+    pattern from every prior remediation pass in this operation.
+13. Route rendering, asset wiring, state reset, and sequence correctness
+    are separate completion checks — this pass audited all four
+    independently rather than assuming a fix to one implied the others
+    were also fine (04-VISUAL-ROUTE-ASSET-MAP.md and 03-ENTRY-SEQUENCE.md
+    were investigated and found clean/found-a-gap respectively, not
+    assumed).
+14. A feature is not complete until the live user-visible flow matches the
+    approved sequence — still not verified live in this operation; every
+    pass since Phase 10 has honestly reported "engineering complete, live
+    unverified" rather than closing the gate on local evidence alone.
+
+**Root-cause note for this specific case**: this is the second pass in this
+operation whose root cause was "two independent state stores exist for
+overlapping concepts, and a reset function was only ever written against
+one of them." The general lesson: whenever a codebase has more than one
+context/store/table representing conceptually the same entity (here:
+"the current journey's content"), every reset/clear/archive operation on
+that entity must be audited against *every* store representing it, not just
+the one the original bug report happened to point at.

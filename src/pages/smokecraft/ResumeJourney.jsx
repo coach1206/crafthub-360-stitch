@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { useStartNewSmokeCraftJourney } from '../../hooks/useStartNewSmokeCraftJourney.js'
 import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
@@ -70,7 +71,8 @@ function formatTimestamp(ts) {
 export default function ResumeJourney() {
   const { session, update } = useGuestSession()
   const { isDemoMode, currentAllowed, completedSessions } = useSmokeCraftProgress()
-  const { journey, setResumeCache, startNewJourney } = useSmokeCraftJourney()
+  const { journey, setResumeCache } = useSmokeCraftJourney()
+  const { startNewSmokeCraftJourney } = useStartNewSmokeCraftJourney()
   const { startOrResumeJourney } = useSmokeCraftServerJourney()
   const navigate = useNavigate()
   const resetLock = useRef(false)
@@ -204,26 +206,14 @@ export default function ResumeJourney() {
     if (resetLock.current) return
     resetLock.current = true
     triggerHaptic('medium')
-
-    const archiveEntry = journeyComplete
-      ? {
-          journeyId: journey.activeJourneyId,
-          cigarName: journey.selectedCigar?.name || null,
-          completedAt: journey.sessionCompletion?.completedAt || Date.now(),
-        }
-      : null
-
-    startNewJourney(archiveEntry)
-
-    // Reset only active-journey session gating (completedSteps) — XP, rank,
-    // and badges (the cumulative reward ledger) are intentionally untouched.
-    update(prev => ({
-      ...prev,
-      completedSteps: prev.completedSteps.filter(id => PRESERVED_COMPLETED_STEP_IDS.includes(id)),
-      currentSmokecraftStep: null,
-    }))
-
-    navigate(NEW_JOURNEY_START_ROUTE)
+    // Emergency Live Remediation pass — one canonical start function, used
+    // by every Start entry point on this page (see
+    // useStartNewSmokeCraftJourney.js for the full root-cause explanation:
+    // this used to only reset SmokeCraftJourneyContext, never the sibling
+    // GuestSessionContext fields where the reported stale learner name,
+    // mentor, and cigar actually lived).
+    const route = startNewSmokeCraftJourney({ firstRoute: NEW_JOURNEY_START_ROUTE })
+    navigate(route)
   }
 
   function handleReviewCompleted() {
@@ -327,7 +317,7 @@ export default function ResumeJourney() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {!hasProgress && (
                   <button
-                    type="button" onClick={() => navigate(NEW_JOURNEY_START_ROUTE)}
+                    type="button" onClick={() => navigate(startNewSmokeCraftJourney({ firstRoute: NEW_JOURNEY_START_ROUTE }))}
                     style={{ background: GOLD, border: 'none', borderRadius: 24, color: '#0a0603', fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 14, padding: '14px 20px', cursor: 'pointer', outline: 'none', minHeight: 52 }}
                   >
                     START SMOKECRAFT JOURNEY
@@ -404,7 +394,7 @@ export default function ResumeJourney() {
           Resume, valid complete -> View Completed. */}
       <SmokeCraftNavBar
         primary={!hasProgress ? 'START SMOKECRAFT JOURNEY →' : journeyComplete ? 'VIEW COMPLETED JOURNEY →' : 'RESUME SMOKECRAFT JOURNEY →'}
-        onPrimary={!hasProgress ? () => navigate(NEW_JOURNEY_START_ROUTE) : journeyComplete ? handleReviewCompleted : handleResume}
+        onPrimary={!hasProgress ? () => navigate(startNewSmokeCraftJourney({ firstRoute: NEW_JOURNEY_START_ROUTE })) : journeyComplete ? handleReviewCompleted : handleResume}
         primaryDisabled={confirmingReset}
         secondary="← Back"
         onSecondary={() => navigate('/smokecraft/identity')}

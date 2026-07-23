@@ -41,6 +41,9 @@ function deepMerge(base, override) {
 
 // ── Blank nested objects ───────────────────────────────────────────────────────
 
+export const BLANK_SMOKE_CRAFT_DEFAULTS = () => ({ ...BLANK_SMOKE_CRAFT, networkingConsent: { ...BLANK_SMOKE_CRAFT.networkingConsent } })
+export const BLANK_GOLDEN_BOX_DEFAULTS = () => ({ ...BLANK_GOLDEN_BOX })
+
 const BLANK_SMOKE_CRAFT = {
   currentSession:     null,
   completedSessions:  [],

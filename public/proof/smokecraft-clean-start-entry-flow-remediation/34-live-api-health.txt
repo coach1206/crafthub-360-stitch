@@ -1,0 +1,1 @@
+BLOCKED — no Railway CLI/credentials/dashboard access; no network path to https://crafthub360.up.railway.app in this session (403 policy denial, confirmed non-transient). Not fabricated.

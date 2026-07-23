@@ -1,0 +1,70 @@
+
+> crafthub-360-production@1.0.0 build
+> vite build
+
+vite v4.5.14 building for production...
+transforming...
+[plugin:vite:esbuild] Duplicate key "border" in object literal
+113|          borderRadius: 9,
+114|          background: selected ? `linear-gradient(160deg, ${statusColor}55, ${statusColor}22)` : cardBg,
+115|          border: `2px solid ${selected ? GOLD : statusColor}`,
+   |          ^
+116|          boxShadow: selected
+117|            ? `0 0 0 3px rgba(201,149,44,0.35), 0 0 12px ${statusColor}88, 0 2px 8px rgba(0,0,0,0.6)`
+
+✓ 1971 modules transformed.
+rendering chunks...
+[plugin:vite:reporter] 
+(!) /home/user/crafthub-360-stitch/src/api/passportScanApi.js is dynamically imported by /home/user/crafthub-360-stitch/src/pages/passport/PassportHome.jsx but also statically imported by /home/user/crafthub-360-stitch/src/pages/passport/PassportHome.jsx, dynamic import will not move module into another chunk.
+
+computing gzip size...
+dist/index.html                                        0.80 kB │ gzip:   0.42 kB
+dist/assets/BootConsole-174cbfbc.css                   8.49 kB │ gzip:   2.16 kB
+dist/assets/index-74a1572f.css                       129.33 kB │ gzip:  22.23 kB
+dist/assets/testModeConfig-93ff0050.js                 1.22 kB │ gzip:   0.52 kB
+dist/assets/MentorGuidancePanel-118d42ad.js            1.32 kB │ gzip:   0.69 kB
+dist/assets/packagingStudioApiClient-dafcb5ef.js       1.56 kB │ gzip:   0.73 kB
+dist/assets/PinPad-f84a0edb.js                         2.44 kB │ gzip:   1.01 kB
+dist/assets/PackagingStudioDashboard-148c3831.js       2.51 kB │ gzip:   1.23 kB
+dist/assets/JudgeDashboard-ab981cb7.js                 2.68 kB │ gzip:   1.31 kB
+dist/assets/PackagingReview-621b9a74.js                2.70 kB │ gzip:   1.23 kB
+dist/assets/PackagingStudioShare-606af645.js           2.99 kB │ gzip:   1.30 kB
+dist/assets/PrototypeDisclosure-31421b86.js            3.57 kB │ gzip:   1.46 kB
+dist/assets/PackagingStudioVersions-0574da7f.js        3.63 kB │ gzip:   1.35 kB
+dist/assets/AdminLogin-26dcc9c5.js                     4.34 kB │ gzip:   1.74 kB
+dist/assets/OfflineMode-6eeb6acf.js                    4.52 kB │ gzip:   1.73 kB
+dist/assets/MentorReview-aac96425.js                   4.54 kB │ gzip:   1.98 kB
+dist/assets/FounderLogin-891534d0.js                   4.72 kB │ gzip:   1.75 kB
+dist/assets/StaffLogin-c93d59b9.js                     4.75 kB │ gzip:   1.87 kB
+dist/assets/GoldenBoxHub-aa4ae01f.js                   4.97 kB │ gzip:   1.73 kB
+dist/assets/MentorLogin-25b774f2.js                    5.15 kB │ gzip:   1.94 kB
+dist/assets/CompetitionDetail-6b862644.js              5.42 kB │ gzip:   1.91 kB
+dist/assets/PilotReadinessDashboard-a78f66df.js        5.43 kB │ gzip:   1.82 kB
+dist/assets/DevLogin-988a2bc5.js                       5.66 kB │ gzip:   2.08 kB
+dist/assets/ResultsExperience-ea5323c1.js              5.93 kB │ gzip:   2.17 kB
+dist/assets/InstallHelp-dd1cd213.js                    5.94 kB │ gzip:   2.33 kB
+dist/assets/KioskSetup-e5801beb.js                     6.08 kB │ gzip:   2.07 kB
+dist/assets/SystemOverview-07c57a0b.js                 7.77 kB │ gzip:   2.70 kB
+dist/assets/DevDiagnostics-7eec74bf.js                 8.81 kB │ gzip:   2.71 kB
+dist/assets/InvestorDemo-864a841a.js                   9.09 kB │ gzip:   3.32 kB
+dist/assets/MentorConsole-a9f7feb8.js                  9.14 kB │ gzip:   3.01 kB
+dist/assets/DeviceStatus-4aec3513.js                   9.88 kB │ gzip:   3.10 kB
+dist/assets/VenueOwnerDemo-8ceffefc.js                10.66 kB │ gzip:   3.93 kB
+dist/assets/FounderControl-b31a6c10.js                11.42 kB │ gzip:   3.73 kB
+dist/assets/JudgeEntryReview-bd4259b4.js              12.50 kB │ gzip:   4.22 kB
+dist/assets/PilotOnboarding-ee4adf33.js               12.85 kB │ gzip:   3.40 kB
+dist/assets/PackagingStudioEditor-5208ce22.js         12.97 kB │ gzip:   4.14 kB
+dist/assets/VenueManagementCommandHub-de0c6d66.js     15.36 kB │ gzip:   4.93 kB
+dist/assets/FounderDemo-e2daa069.js                   15.50 kB │ gzip:   5.00 kB
+dist/assets/BootConsole-637d2e97.js                   20.31 kB │ gzip:   6.01 kB
+dist/assets/EntryWorkspace-776fc756.js                20.54 kB │ gzip:   5.94 kB
+dist/assets/ModuleDeploymentCenter-d929c2c7.js        28.53 kB │ gzip:   8.17 kB
+dist/assets/VenueTestControl-f6cb5688.js              32.15 kB │ gzip:   7.80 kB
+dist/assets/Admin-ee4d6790.js                         56.32 kB │ gzip:  13.93 kB
+dist/assets/index-cfaee084.js                      2,931.12 kB │ gzip: 678.23 kB
+
+(!) Some chunks are larger than 500 kBs after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 13.53s
