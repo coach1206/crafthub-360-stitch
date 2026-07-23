@@ -2,7 +2,7 @@
   {
     "event_type": "blend_fault_assessment_passed",
     "payload": {
-      "attemptId": "b01aefaf-6c4f-400c-b0e4-984167418703",
+      "attemptId": "62802041-70b3-449b-8235-ee58f305fa42",
       "percentage": 100,
       "scoreEarned": 3,
       "assessmentKey": "blend-fault-identification",

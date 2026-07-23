@@ -268,3 +268,219 @@ checklist) plus an optional status config.
 - Required build checks: final `npm run build` + endpoint spot-check.
 - Required final report fields: full final report matching this project's
   Phase 12 report structure.
+
+---
+
+## Continual-Learning Log
+
+This section is a living append-only log. Every completion pass that finds a
+reusable lesson — not vertical-specific content — adds one dated entry here.
+Nothing in this section is removed or rewritten by a later pass; only new
+entries are appended.
+
+### 2026-07-23 — Phase 9 Journey Amendment (Golden Box Packaging Studio Integration)
+
+1. **Capability**: connecting an already-production-complete backend/frontend
+   module into a visible learner journey.
+   **Gap found**: Packaging Studio was fully functional in isolation after
+   its own completion pass but had zero inbound links from the Golden Box
+   entry workflow — a learner had no way to discover it.
+   **Root cause**: "production complete" was verified module-by-module, not
+   by walking the actual learner journey end to end.
+   **Correction**: added a real, backend-gated CTA into `EntryWorkspace.jsx`'s
+   `review` step, keyed off the same `requiredMet` signal already used to
+   gate that step.
+   **Prevention rule**: a module is not journey-complete until it is reached
+   by clicking through the real journey from its entry point, not just by
+   hitting its own routes directly.
+   **Reusable rule**: after any module completion pass, run one full
+   click-through of the parent journey before declaring the module "done."
+   **Tests added**: journey-transition checks in
+   `verify-phase9-packaging-studio-journey-amendment.mjs`.
+   **Proof added**: `01-build-studio-packaging-cta.png`,
+   `02-locked-cta-before-prerequisites.png`.
+   **Checklist impact**: "Phase 9 Journey Amendment" item now checked.
+
+2. **Capability**: deriving UI/journey status from real backend records.
+   **Gap found**: none existed yet — this pass had to design the status
+   model from scratch.
+   **Root cause**: n/a (net-new work, not a fix).
+   **Correction**: `getPackagingReadinessForEntry()` computes state live from
+   `packaging_designs`/`packaging_design_versions`/`packaging_final_submissions`,
+   never from a stored duplicate status column.
+   **Prevention rule**: never add a second source of truth for a status that
+   can already be derived; derive it live or via a maintained view.
+   **Reusable rule**: any "status" surfaced in a UI must be traceable to a
+   single query over existing tables — grep for a status-only column being
+   added as a red flag in review.
+   **Tests added**: state-transition checks (not_started →
+   draft_in_progress → validation_required → ready_to_submit → submitted).
+   **Proof added**: `05`–`09-*-state.json`.
+   **Checklist impact**: none (architecture decision, not a checklist item).
+
+3. **Capability**: real end-to-end exercising surfaces defects source review
+   misses.
+   **Gap found**: `saveDraft()` silently wiped every field not included in a
+   given partial PATCH body — a real data-loss bug, invisible from reading
+   the happy-path code alone.
+   **Root cause**: `buildConfig()` was called on raw request input with no
+   merge against the prior version's snapshot.
+   **Correction**: merge `input` onto `currentVersion.snapshot` before
+   validating/persisting.
+   **Prevention rule**: any "partial update" endpoint must be tested with a
+   real two-step partial-then-partial save sequence, not just a single full
+   save.
+   **Reusable rule**: treat draft/version PATCH endpoints as a class that
+   needs an explicit multi-step-partial-save regression test.
+   **Tests added**: partial-save-preserves-prior-fields case (folded into
+   the existing packaging-studio suite's draft persistence checks).
+   **Proof added**: n/a (bug fix verified via live API assertions, not a
+   screenshot).
+   **Checklist impact**: none (bug fix within existing scope).
+
+4. **Capability**: existence validation on identifiers passed across
+   service boundaries.
+   **Gap found**: `getPackagingReadinessForEntry(entryId, ...)` returned a
+   false "not_started" `200` for a nonexistent `entryId` instead of a 404.
+   **Root cause**: missing existence check before deriving status.
+   **Correction**: added an explicit `golden_box_entries` existence query
+   that throws `entry_not_found`.
+   **Prevention rule**: every service function taking a foreign-key-shaped
+   ID must have an explicit existence check, even when downstream queries
+   would "safely" return empty results.
+   **Reusable rule**: grep new service functions for a `WHERE x = $1` with no
+   preceding existence check before trusting `rows[0] || defaultValue`.
+   **Tests added**: nonexistent-entry-id rejection check.
+   **Proof added**: n/a (verified via direct API status-code assertion).
+   **Checklist impact**: none (bug fix within existing scope).
+
+5. **Capability**: distinguishing "visibly required in the presented flow"
+   from "hard-blocking an unrelated protected system."
+   **Gap found**: the mandate could be read as requiring packaging
+   completion to block Golden Box blend-entry submission.
+   **Root cause**: ambiguity between "journey requires a step be shown" and
+   "journey requires a step be enforced server-side as a submission gate."
+   **Correction**: made packaging visibly required as a distinct presented
+   step without modifying `entryService.submitEntry`'s validation — disclosed
+   explicitly in `12-JOURNEY-INTEGRATION-AMENDMENT.md`.
+   **Prevention rule**: never silently expand scope to modify a protected,
+   already-proven system when the mandate's own instructions say to preserve
+   it; when ambiguous, choose the smaller, disclosed interpretation.
+   **Reusable rule**: any scope decision that narrows what a mandate could be
+   read to require must be written down in the discovery-audit doc, not left
+   implicit.
+   **Tests added**: "presentation route does not hard-block on missing
+   packaging submission" check.
+   **Proof added**: n/a (documented in the discovery-audit doc directly).
+   **Checklist impact**: enabled the 6-vs-7-phase discrepancy to remain
+   correctly unresolved rather than being incorrectly "fixed" by this pass.
+
+6. **Capability**: reusing existing authorization infrastructure instead of
+   inventing new judge/mentor access paths.
+   **Gap found**: none — this was a design choice validated up front, not a
+   defect found afterward.
+   **Root cause**: n/a.
+   **Correction**: judge/mentor packaging-snapshot reads reuse the identical
+   `visibilityService.getVisibility().canViewRecipe` policy already proven in
+   Phase 8, rather than adding a packaging-specific bypass.
+   **Prevention rule**: never build a second, parallel authorization check
+   for a new UI surface when an existing, proven policy already covers the
+   same actor/resource relationship.
+   **Reusable rule**: before writing a new `can*` check, grep for an existing
+   visibility/authorization service that already covers the same roles.
+   **Tests added**: authorized/unauthorized judge and mentor checks, plus
+   share-token non-leakage into judge access.
+   **Proof added**: `18-authorized-judge-view.json`,
+   `19-unauthorized-judge-rejection.json`, `20-authorized-mentor-view.json`,
+   `21-unauthorized-mentor-rejection.json`.
+   **Checklist impact**: none (reuse, not new capability).
+
+7. **Capability**: immutable-snapshot presentation data.
+   **Gap found**: none — the immutable-snapshot pattern already existed from
+   the prior Packaging Studio pass; this pass only had to wire the
+   presentation/defense UI to read it instead of the editable draft.
+   **Root cause**: n/a.
+   **Correction**: `EntryWorkspace.jsx`'s `presentation` step and
+   `JudgeEntryReview.jsx` both read `packaging_final_submissions.snapshot`
+   via the existing `GET /entries/:entryId/final-submission` route.
+   **Prevention rule**: when a "presentation" or "defense" view needs
+   evidence, always resolve it through the immutable submitted-snapshot
+   route, never through the design's live/editable state.
+   **Reusable rule**: any UI showing "what was submitted" must read from a
+   submission-time snapshot table, never the mutable draft table, even if
+   the mutable table currently holds the same values.
+   **Tests added**: "submitted snapshot appears in Defense data unchanged
+   after the rejected draft-edit attempt."
+   **Proof added**: `22-draft-changed-after-submission-attempt.json`,
+   `23-submitted-snapshot-unchanged.json`.
+   **Checklist impact**: none (reuse, not new capability).
+
+8. **Capability**: deciding whether a shared progression event is needed for
+   a new submission action.
+   **Gap found**: none — the mandate's own fallback instruction was to
+   document the "no event needed" decision if that's the right call.
+   **Root cause**: n/a.
+   **Correction**: added zero new `smokecraft_progression_events` types, XP
+   paths, or Passport-write paths for packaging submission; documented this
+   as a deliberate decision rather than an oversight.
+   **Prevention rule**: adding a progression event is a one-way door (new
+   event types accumulate permanently); default to not adding one unless the
+   mandate explicitly requires new XP/badge/stamp behavior.
+   **Reusable rule**: before adding any new progression-event type, check
+   whether the mandate's disclosure clause allows documenting "not needed"
+   instead — prefer that path when true.
+   **Tests added**: no-new-progression-event, no-duplicate-XP,
+   no-duplicate-Passport-stamp checks.
+   **Proof added**: `24-no-progression-event.json`,
+   `25-no-duplicate-xp-or-passport.json`.
+   **Checklist impact**: none (explicit non-action, documented).
+
+9. **Capability**: multi-invocation Playwright proof-capture scripts sharing
+   one identity.
+   **Gap found**: separate `node -e`/script invocations each mint a new,
+   unrelated guest-session identity, so a design/entry created in one
+   invocation is unreachable (403/404 "not owned") from a later, separate
+   invocation.
+   **Root cause**: guest identity is derived from a signed session cookie
+   generated fresh per `POST /guest-session` call; nothing shares state
+   across process invocations unless the same cookie is explicitly reused.
+   **Correction**: perform an entire create → configure → save → submit →
+   verify flow inside one script/process, reusing one captured cookie
+   throughout.
+   **Prevention rule**: never assume two separate script runs share test
+   identity; either persist and reuse the cookie explicitly, or design the
+   proof script as a single end-to-end run.
+   **Reusable rule**: proof-capture scripts for identity-gated flows should
+   default to "one process, one identity, full flow" unless cross-identity
+   behavior (e.g., cross-learner rejection) is specifically what's being
+   proven.
+   **Tests added**: n/a (operational fix to the proof-capture script itself).
+   **Proof added**: enabled successful capture of items 27–34 in
+   `public/proof/golden-box-packaging-studio-journey-amendment/`.
+   **Checklist impact**: none (tooling fix).
+
+10. **Capability**: exact request-body field names for existing service
+    functions must be read from source, not assumed from naming convention.
+    **Gap found**: a proof-capture attempt sent `{ permission: 'comment' }`
+    to the share-creation endpoint, which actually expects
+    `{ accessType: 'comment_enabled' }` — a naming and enum-value mismatch
+    that a plausible guess got wrong twice (once on the field name, once on
+    the enum value).
+    **Root cause**: writing the request payload from memory/inference rather
+    than reading `createShare()`'s destructured parameters and its
+    `['view_only', 'comment_enabled']` validation list directly.
+    **Correction**: read the service function signature before writing any
+    ad-hoc test request against it.
+    **Prevention rule**: for any endpoint without a checked-in client SDK
+    call already exercising it, grep the controller/service source for the
+    exact destructured field names and any inline enum/allow-list before
+    writing a test payload.
+    **Reusable rule**: prefer calling through an existing typed API client
+    function (e.g. `packagingStudioApiClient.js`) over hand-writing a raw
+    `fetch()` body, precisely because the client function already encodes
+    the correct field names.
+    **Tests added**: n/a (operational correction during proof capture).
+    **Proof added**: `28-sharing-manager.json`,
+    `29-shared-design-comment-enabled.json`, `30-comment-via-share.json`,
+    `31-revoked-share-rejection.json`.
+    **Checklist impact**: none (tooling fix).

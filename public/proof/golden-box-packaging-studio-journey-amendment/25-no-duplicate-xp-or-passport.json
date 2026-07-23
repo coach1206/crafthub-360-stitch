@@ -1,0 +1,3 @@
+{
+  "note": "No XP-award or Passport-write code path exists in packagingStudioService.js — confirmed by source inspection, not merely absence of a test failure."
+}

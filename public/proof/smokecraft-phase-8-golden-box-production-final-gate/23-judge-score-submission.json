@@ -1,12 +1,12 @@
 {
   "success": true,
   "scorecard": {
-    "id": "51",
-    "entry_id": "06dafba4-a131-4db7-a7c8-0e34b1d507a7",
-    "judge_id": "59",
+    "id": "56",
+    "entry_id": "28f5bfc3-2df9-4041-af6b-cc17d48fc44d",
+    "judge_id": "71",
     "status": "draft",
     "submitted_at": null,
     "amended_from": null,
-    "created_at": "2026-07-22T09:36:03.460Z"
+    "created_at": "2026-07-23T01:51:17.429Z"
   }
 }

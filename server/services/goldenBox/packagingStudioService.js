@@ -151,7 +151,20 @@ export async function saveDraft(designId, identity, input) {
   const db = getDb()
   const design = await requireOwnedDesign(designId, identity)
   if (design.status === 'submitted') throw new PackagingStudioError('design_locked_cannot_edit')
-  const config = buildConfig(input)
+  // Merge onto the current version's snapshot rather than replacing it
+  // outright — a partial save (e.g. the learner fills in the box name in
+  // one save, then wood/finish/lid in a later save) must not silently
+  // wipe fields it didn't touch. Any field genuinely present in `input`
+  // still overrides/clears the prior value (buildConfig treats a
+  // present-but-empty field as null); only fields absent from `input`
+  // fall back to what was already saved.
+  const currentVersion = await getCurrentVersion(designId)
+  const merged = { ...(currentVersion?.snapshot || {}) }
+  for (const key of Object.keys(input)) {
+    if (key === 'changeNote') continue
+    merged[key] = input[key]
+  }
+  const config = buildConfig(merged)
   const client = await db.connect()
   try {
     await client.query('BEGIN')
@@ -413,6 +426,61 @@ export async function submitFinalDesign(designId, identity, entryId) {
   await db.query(`UPDATE packaging_designs SET status = 'submitted', updated_at = now() WHERE design_id = $1`, [designId])
   return rows[0]
 }
+const REQUIRED_CONFIG_FIELDS = ['woodType', 'finish', 'lidStyle']
+
+// Journey-amendment: server-derived packaging readiness for a Golden Box
+// entry — no new duplicate status column is added; every state is
+// computed live from packaging_designs/packaging_design_versions/
+// packaging_final_submissions, the same tables the rest of this service
+// already reads/writes. The browser cannot influence this in any way.
+export async function getPackagingReadinessForEntry(entryId, identity) {
+  const db = getDb()
+  const { rows: entryRows } = await db.query(`SELECT 1 FROM golden_box_entries WHERE entry_id = $1`, [entryId])
+  if (!entryRows[0]) throw new PackagingStudioError('entry_not_found')
+  const { rows: designRows } = await db.query(
+    `SELECT * FROM packaging_designs WHERE entry_id = $1 AND deleted_at IS NULL ORDER BY created_at DESC LIMIT 1`,
+    [entryId]
+  )
+  const design = designRows[0] || null
+  if (design && !ownsDesign(design, identity)) {
+    throw new PackagingStudioError('design_not_owned_by_caller')
+  }
+  const submission = await getFinalSubmission(entryId)
+  if (submission) {
+    return { status: 'submitted', designId: submission.design_id, versionNumber: submission.version_number, submittedAt: submission.submitted_at, validationIssues: [] }
+  }
+  if (!design) {
+    return { status: 'not_started', designId: null, versionNumber: null, submittedAt: null, validationIssues: [] }
+  }
+  const version = await getCurrentVersion(design.design_id)
+  const snapshot = version?.snapshot || {}
+  const hasAnyContent = Object.values(snapshot).some(v => v !== null && v !== undefined && v !== '')
+  const missing = REQUIRED_CONFIG_FIELDS.filter(f => !snapshot[f])
+  let status
+  if (!hasAnyContent) status = 'draft_in_progress'
+  else if (missing.length > 0) status = 'validation_required'
+  else status = 'ready_to_submit'
+  return { status, designId: design.design_id, versionNumber: version?.version_number || null, submittedAt: null, validationIssues: missing.map(f => `missing_${f}`) }
+}
+
+// Links an already-created design to a Golden Box entry (the entryId is
+// optional at design-creation time — a learner may start a design before
+// reaching the review step of a specific entry). Ownership of both the
+// design and the entry is verified server-side; the client never
+// supplies more than the two real record identifiers.
+export async function associateDesignWithEntry(designId, entryId, identity) {
+  const design = await requireOwnedDesign(designId, identity)
+  const db = getDb()
+  const { rows: entryRows } = await db.query(`SELECT * FROM golden_box_entries WHERE entry_id = $1`, [entryId])
+  const entry = entryRows[0]
+  if (!entry) throw new PackagingStudioError('entry_not_found')
+  const ownsEntry = (!!identity.userId && identity.userId === entry.user_id) || (!!identity.guestReference && identity.guestReference === entry.guest_reference)
+  if (!ownsEntry) throw new PackagingStudioError('entry_not_owned_by_caller')
+  if (design.entry_id && design.entry_id !== entryId) throw new PackagingStudioError('design_already_linked_to_different_entry')
+  const { rows } = await db.query(`UPDATE packaging_designs SET entry_id = $2, updated_at = now() WHERE design_id = $1 RETURNING *`, [designId, entryId])
+  return rows[0]
+}
+
 export async function getFinalSubmission(entryId) {
   const db = getDb()
   const { rows } = await db.query(`SELECT * FROM packaging_final_submissions WHERE entry_id = $1`, [entryId])

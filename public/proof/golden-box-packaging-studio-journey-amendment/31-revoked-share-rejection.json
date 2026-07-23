@@ -1,0 +1,10 @@
+{
+  "revoke": {
+    "success": true
+  },
+  "revokedViewStatus": 409,
+  "revokedJson": {
+    "success": false,
+    "error": "share_revoked"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "status": "draft_in_progress",
+  "designId": "3c312e48-9f67-46c9-bee6-52d220ce4b0a",
+  "versionNumber": 1,
+  "submittedAt": null,
+  "validationIssues": [
+    "missing_woodType",
+    "missing_finish",
+    "missing_lidStyle"
+  ]
+}

@@ -12,15 +12,15 @@
       "xpReward": 0,
       "goldenBoxRelevance": "Consistent daily practice builds the habits Golden Box competitors rely on.",
       "instance": {
-        "instanceKey": "daily-lesson-practice-2026-07-22",
-        "effectiveStart": "2026-07-22T00:00:00.000Z",
-        "effectiveEnd": "2026-07-23T00:00:00.000Z"
+        "instanceKey": "daily-lesson-practice-2026-07-23",
+        "effectiveStart": "2026-07-23T00:00:00.000Z",
+        "effectiveEnd": "2026-07-24T00:00:00.000Z"
       },
       "timeStatus": "active",
       "participationState": "available",
       "progress": 1,
       "missingRequirements": [],
-      "serverNow": "2026-07-22T09:47:12.993Z"
+      "serverNow": "2026-07-23T01:49:59.935Z"
     },
     {
       "challengeKey": "weekly-multi-activity-builder",
@@ -43,8 +43,8 @@
       "missingRequirements": [
         "Need 3 distinct activities this period — currently 2"
       ],
-      "serverNow": "2026-07-22T09:47:12.993Z"
+      "serverNow": "2026-07-23T01:49:59.935Z"
     }
   ],
-  "serverNow": "2026-07-22T09:47:12.999Z"
+  "serverNow": "2026-07-23T01:49:59.943Z"
 }

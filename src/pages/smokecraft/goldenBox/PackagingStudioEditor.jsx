@@ -54,15 +54,28 @@ export default function PackagingStudioEditor() {
   const [uploadState, setUploadState] = useState('idle')
   const [error, setError] = useState(null)
 
+  const [readiness, setReadiness] = useState(null)
+  const [submitState, setSubmitState] = useState('idle')
+
   const load = useCallback(() => {
     api.getDesign(designId).then(res => {
       if (!res.ok) { setState('error'); return }
       setDesign(res.design)
       setConfig(res.currentVersion?.snapshot || {})
       setState('ready')
+      if (res.design.entry_id) {
+        api.getPackagingReadiness(res.design.entry_id).then(r => { if (r.ok) setReadiness(r.readiness) })
+      }
     })
   }, [designId])
   useEffect(() => { load() }, [load])
+
+  async function handleSubmitFinal() {
+    if (!design?.entry_id) return
+    setSubmitState('submitting')
+    const res = await api.submitFinal(designId, design.entry_id)
+    if (res.ok) { setSubmitState('submitted'); load() } else { setSubmitState('error'); setError(res.error) }
+  }
 
   function set(field, value) { setConfig(c => ({ ...c, [field]: value })); setSaveState('unsaved') }
 
@@ -99,6 +112,12 @@ export default function PackagingStudioEditor() {
       <div style={{ padding: 24, color: CREAM, background: NAVY, minHeight: '100vh' }}>
         <h2 style={{ color: GOLD }}>This design has been submitted</h2>
         <p>The submitted packaging snapshot is locked and cannot be edited. It remains readable by authorized judges.</p>
+        {design.entry_id && (
+          <button onClick={() => navigate(`/smokecraft/golden-box/entries/${design.entry_id}/blend`)}
+            style={{ minHeight: 44, padding: '10px 20px', marginTop: 16, background: 'transparent', color: CREAM, border: '1px solid rgba(233,193,118,0.22)', borderRadius: 6, cursor: 'pointer' }}>
+            Return to Golden Box Entry
+          </button>
+        )}
       </div>
     )
   }
@@ -185,11 +204,32 @@ export default function PackagingStudioEditor() {
               {saveState === 'saved' ? 'Saved' : saveState === 'saving' ? 'Saving…' : 'Unsaved changes'}
             </strong>
           </div>
+          {design.entry_id ? (
+            <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)', marginBottom: 6 }}>Golden Box entry: <strong style={{ color: CREAM }}>linked</strong></div>
+          ) : (
+            <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginBottom: 6 }}>Not yet linked to a Golden Box entry</div>
+          )}
+          {readiness && (
+            <div style={{ fontSize: 13, marginBottom: 6 }} aria-live="polite">
+              Packaging readiness: <strong style={{ color: readiness.status === 'ready_to_submit' || readiness.status === 'submitted' ? OK : readiness.status === 'validation_required' ? GOLD : 'rgba(229,226,225,0.6)' }}>
+                {label(readiness.status)}
+              </strong>
+              {readiness.validationIssues?.length > 0 && (
+                <div style={{ fontSize: 11, color: DANGER, marginTop: 4 }}>{readiness.validationIssues.map(label).join(', ')}</div>
+              )}
+            </div>
+          )}
           {error && <div role="alert" style={{ fontSize: 12, color: DANGER, marginBottom: 8 }}>{error}</div>}
           <button onClick={handleSave} style={{ width: '100%', minHeight: 44, background: `linear-gradient(160deg, ${GOLD}, #b9873a)`, color: NAVY, border: 'none', borderRadius: 6, fontWeight: 700, marginBottom: 8, cursor: 'pointer' }}>Save</button>
           <button onClick={handleDuplicate} style={{ width: '100%', minHeight: 44, background: 'transparent', color: CREAM, border: `1px solid ${BORDER}`, borderRadius: 6, marginBottom: 8, cursor: 'pointer' }}>Duplicate</button>
           <button onClick={() => navigate(`/smokecraft/golden-box/packaging-studio/${designId}/versions`)} style={{ width: '100%', minHeight: 44, background: 'transparent', color: CREAM, border: `1px solid ${BORDER}`, borderRadius: 6, marginBottom: 8, cursor: 'pointer' }}>Version History</button>
           <button onClick={() => navigate(`/smokecraft/golden-box/packaging-studio/${designId}/share`)} style={{ width: '100%', minHeight: 44, background: 'transparent', color: CREAM, border: `1px solid ${BORDER}`, borderRadius: 6, marginBottom: 8, cursor: 'pointer' }}>Share</button>
+          {design.entry_id && (
+            <button onClick={handleSubmitFinal} disabled={readiness?.status !== 'ready_to_submit' || submitState === 'submitting'}
+              style={{ width: '100%', minHeight: 44, background: readiness?.status === 'ready_to_submit' ? OK : 'rgba(127,208,163,0.2)', color: NAVY, border: 'none', borderRadius: 6, fontWeight: 700, marginBottom: 8, cursor: readiness?.status === 'ready_to_submit' ? 'pointer' : 'not-allowed' }}>
+              {submitState === 'submitting' ? 'Submitting…' : 'Submit Final Design'}
+            </button>
+          )}
           <button onClick={() => navigate('/smokecraft/golden-box/packaging-studio')} style={{ width: '100%', minHeight: 44, background: 'transparent', color: CREAM, border: `1px solid ${BORDER}`, borderRadius: 6, cursor: 'pointer' }}>Back to Dashboard</button>
         </div>
       </div>

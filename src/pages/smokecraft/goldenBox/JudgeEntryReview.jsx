@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import * as api from '../../../services/goldenBox/goldenBoxApiClient.js'
+import * as packagingApi from '../../../services/goldenBox/packagingStudioApiClient.js'
 import MediaSlot from '../../../components/smokecraft/goldenBox/MediaSlot.jsx'
 
 const GOLD = '#E9C176'
@@ -78,6 +79,10 @@ export default function JudgeEntryReview() {
   const [voidReason, setVoidReason] = useState('')
   const [message, setMessage] = useState(null)
   const [error, setError] = useState(null)
+  // Journey-amendment: submitted packaging snapshot, shown as
+  // presentation evidence only — packaging is not an approved scoring
+  // category, so no new score input is added for it.
+  const [submittedPackage, setSubmittedPackage] = useState(null)
 
   async function load() {
     setState('loading')
@@ -93,6 +98,7 @@ export default function JudgeEntryReview() {
       setScores(next)
     }
     setState('ready')
+    packagingApi.getFinalSubmission(entryId).then(r => { if (r.ok) setSubmittedPackage(r.submission) })
   }
   useEffect(() => { load() }, [entryId]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -176,6 +182,18 @@ export default function JudgeEntryReview() {
             AI educational analysis, if configured, is displayed separately from official judging and never determines this score.
           </div>
         </div>
+
+        {submittedPackage && (
+          <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 16, marginBottom: 16 }}>
+            <h2 style={{ fontSize: 14, color: GOLD, margin: '0 0 8px' }}>Submitted Packaging Design</h2>
+            <p style={{ fontSize: 11, color: 'rgba(229,226,225,0.5)', margin: '0 0 8px' }}>
+              Presentation evidence only — packaging is not a scored judging category unless already approved elsewhere.
+            </p>
+            {['boxName', 'woodType', 'finish', 'lidStyle', 'interiorLining', 'trayConfiguration', 'engravedText'].map(f => (
+              submittedPackage.snapshot?.[f] ? <div key={f} style={{ fontSize: 12, padding: '2px 0' }}><strong>{f.replace(/([A-Z])/g, ' $1')}:</strong> {submittedPackage.snapshot[f]}</div> : null
+            ))}
+          </div>
+        )}
 
         <h2 style={{ fontSize: 15, color: GOLD }}>Golden Box Judging Scorecard</h2>
         {scorecard && <div style={{ fontSize: 12, marginBottom: 10 }}>Status: <b style={{ color: OK }}>{scorecard.status}</b></div>}

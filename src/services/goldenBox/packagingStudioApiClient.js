@@ -60,3 +60,5 @@ export const resolveComment = (commentId) => request(`/comments/${commentId}/res
 
 export const submitFinal = (designId, entryId) => request(`/designs/${designId}/submit`, { method: 'POST', body: { entryId } })
 export const getFinalSubmission = (entryId) => request(`/entries/${entryId}/final-submission`)
+export const getPackagingReadiness = (entryId) => request(`/entries/${entryId}/readiness`)
+export const associateEntry = (designId, entryId) => request(`/designs/${designId}/associate-entry`, { method: 'POST', body: { entryId } })

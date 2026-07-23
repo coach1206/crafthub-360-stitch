@@ -1,8 +1,8 @@
 {
   "success": true,
   "competition": {
-    "id": "50",
-    "competition_key": "p8-live-comp-1784712902017",
+    "id": "81",
+    "competition_key": "p8-live-comp-1784771416109",
     "title": "Phase 8 Production Gate Competition",
     "description": null,
     "scope": "global",
@@ -17,7 +17,7 @@
     "scoring_config": {},
     "blind_judging": true,
     "created_by": "p8-admin",
-    "created_at": "2026-07-22T09:35:02.019Z",
-    "updated_at": "2026-07-22T09:35:02.019Z"
+    "created_at": "2026-07-23T01:50:16.111Z",
+    "updated_at": "2026-07-23T01:50:16.111Z"
   }
 }

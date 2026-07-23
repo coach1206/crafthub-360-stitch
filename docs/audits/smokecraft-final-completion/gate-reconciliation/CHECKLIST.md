@@ -16,7 +16,7 @@
 - [x] **Phase 8: Golden Box Production Build Final Gate**
 - [x] **Phase 9: Full Journey Audit Final Gate**
 - [x] **Golden Box Packaging Studio Production Completion**
-- [ ] Phase 9 Journey Amendment — Packaging Studio Integration
+- [x] Phase 9 Journey Amendment — Packaging Studio Integration
 - [ ] UI/UX Polish and UI Designer Handoff
 - [ ] Live deployment verification (SmokeCraft, general)
 - [ ] POS360
@@ -24,4 +24,6 @@
 - [ ] Final NOVEE OS Modular Audit
 - [ ] **UNRESOLVED: 6-vs-7-phase architecture discrepancy** — see `docs/audits/smokecraft-final-completion/gate-reconciliation/PHASE-ARCHITECTURE-DISCREPANCY.md`. Not changed unilaterally; requires explicit owner decision.
 
-**Update made this pass:** Golden Box Packaging Studio Production Completion added and checked, immediately after Phase 9. "Phase 9 Journey Amendment — Packaging Studio Integration" added and left unchecked (a separate future pass, not performed here). The 6-vs-7-phase discrepancy item added and left unresolved. No other line was changed.
+**Update made this pass (Golden Box Packaging Studio Production Completion):** added and checked, immediately after Phase 9. "Phase 9 Journey Amendment — Packaging Studio Integration" added and left unchecked (a separate future pass, not performed here). The 6-vs-7-phase discrepancy item added and left unresolved. No other line was changed.
+
+**Update made this pass (Phase 9 Journey Amendment — Packaging Studio Integration):** "Phase 9 Journey Amendment — Packaging Studio Integration" checked — see `09A-PACKAGING-STUDIO-JOURNEY-AMENDMENT.md`. The original `09-FULL-JOURNEY-FINAL-GATE.md` result and its 6-vs-7-phase discrepancy finding were not changed or re-run. All later/unrelated items (UI/UX Polish, live deployment, POS360, E.A.T. 360, Final NOVEE OS Modular Audit) remain unchecked. No other line was changed.

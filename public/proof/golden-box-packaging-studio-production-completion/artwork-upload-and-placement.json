@@ -1,20 +1,20 @@
 {
   "success": true,
   "asset": {
-    "id": "6",
-    "asset_id": "50068da6-6651-4650-bf16-eb90cef693a0",
-    "design_id": "1037e03c-2fc2-455e-9750-0e0148da7c26",
+    "id": "1",
+    "asset_id": "11f6dfe8-7886-4758-a0c4-ebb330c64a33",
+    "design_id": "64765c50-be7c-4ed2-8d6d-437299a21fb3",
     "uploaded_by_user_id": null,
-    "uploaded_by_guest_reference": "f77a8328-18ba-47e4-9d0c-2aa8ce542c27",
+    "uploaded_by_guest_reference": "4d3f2bbe-a93f-433d-917f-9b936cd325ee",
     "asset_type": "logo",
     "original_filename": "logo.png",
-    "stored_filename": "1037e03c-2fc2-455e-9750-0e0148da7c26/323a163a-4d36-40a1-901f-1a1877eb156b.png",
+    "stored_filename": "64765c50-be7c-4ed2-8d6d-437299a21fb3/bb15aa34-9c02-4424-8d07-747fcad6f37d.png",
     "preview_filename": null,
     "mime_type": "image/png",
     "file_size_bytes": 78,
     "width_px": 64,
     "height_px": 64,
     "removed_at": null,
-    "created_at": "2026-07-22T09:47:36.178Z"
+    "created_at": "2026-07-23T01:49:23.902Z"
   }
 }

@@ -7,6 +7,7 @@ import MentorGuidancePanel from '../../../components/smokecraft/goldenBox/Mentor
 import { notYetConfigured, fromCatalogRow } from '../../../components/smokecraft/goldenBox/educationalContentContract.js'
 import * as contentApi from '../../../services/goldenBox/goldenBoxContentApiClient.js'
 import MediaSlot from '../../../components/smokecraft/goldenBox/MediaSlot.jsx'
+import * as packagingApi from '../../../services/goldenBox/packagingStudioApiClient.js'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -114,13 +115,26 @@ export default function EntryWorkspace() {
   const [pairingItem, setPairingItem] = useState('')
   const [pairingDefense, setPairingDefense] = useState('')
   const [mentorReviews, setMentorReviews] = useState([])
+  // Journey-amendment: real, server-derived Packaging Studio readiness for
+  // this entry — never inferred client-side. See docs/audits/
+  // smokecraft-final-completion/gate-reconciliation/
+  // 09A-PACKAGING-STUDIO-JOURNEY-AMENDMENT.md for the full integration
+  // rationale and scope disclosure.
+  const [packagingReadiness, setPackagingReadiness] = useState(null)
+  const [submittedPackage, setSubmittedPackage] = useState(null)
 
   useEffect(() => { load() }, [load])
 
   useEffect(() => {
     if (!entryId) return
     api.getMentorReviewsForEntry(entryId).then(result => { if (result.ok) setMentorReviews(result.reviews || []) })
+    packagingApi.getPackagingReadiness(entryId).then(result => { if (result.ok) setPackagingReadiness(result.readiness) })
   }, [entryId])
+
+  useEffect(() => {
+    if (!entryId || packagingReadiness?.status !== 'submitted') return
+    packagingApi.getFinalSubmission(entryId).then(result => { if (result.ok) setSubmittedPackage(result.submission) })
+  }, [entryId, packagingReadiness])
 
   // Package 4 fix: rehydrate saved component selections + cigar name once
   // both the entry (with its saved components) and the real catalog are
@@ -288,6 +302,24 @@ export default function EntryWorkspace() {
                   </div>
                 )}
 
+                {requiredMet && (
+                  <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 16 }}>
+                    <h3 style={{ fontSize: 13, color: GOLD, margin: '0 0 8px' }}>Packaging Design</h3>
+                    <p style={{ fontSize: 12, color: 'rgba(229,226,225,0.7)', margin: '0 0 10px' }}>
+                      Design the physical presentation box for this entry — optional, but part of your full Golden Box presentation.
+                    </p>
+                    <div style={{ fontSize: 12, marginBottom: 10 }}>
+                      Status: <strong style={{ color: packagingReadiness?.status === 'submitted' || packagingReadiness?.status === 'ready_to_submit' ? OK : 'rgba(229,226,225,0.6)' }}>
+                        {packagingReadiness ? packagingReadiness.status.replace(/_/g, ' ') : 'checking…'}
+                      </strong>
+                    </div>
+                    <button type="button" onClick={() => navigate(`/smokecraft/golden-box/packaging-studio${packagingReadiness?.designId ? `/${packagingReadiness.designId}` : `?entryId=${entryId}`}`)}
+                      style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1px solid ${BORDER}`, background: 'transparent', color: CREAM, cursor: 'pointer', fontFamily: 'inherit' }}>
+                      {packagingReadiness?.status === 'submitted' ? 'View Submitted Packaging Design' : packagingReadiness?.designId ? 'Continue Packaging Design' : 'Start Packaging Design'}
+                    </button>
+                  </div>
+                )}
+
                 <div style={{ display: 'flex', gap: 10 }}>
                   <button type="button" onClick={() => setStep('blend')} style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1px solid ${BORDER}`, background: 'transparent', color: CREAM, cursor: 'pointer', fontFamily: 'inherit' }}>Return to Edit</button>
                   <button type="button" onClick={() => setStep('presentation')} style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: 'pointer', fontFamily: 'inherit' }}>Continue to Presentation &amp; Defense</button>
@@ -298,6 +330,24 @@ export default function EntryWorkspace() {
             {step === 'presentation' && (
               <div style={{ display: 'grid', gap: 14, marginTop: 16 }}>
                 <MediaSlot assetKey="goldenBoxPairingDefense" alt="Golden Box pairing defense" caption="Presentation & Defense" style={{ height: 140, borderRadius: 10 }} />
+
+                {submittedPackage && (
+                  <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 10, padding: 16 }}>
+                    <h3 style={{ fontSize: 13, color: GOLD, margin: '0 0 8px' }}>Submitted Packaging Design</h3>
+                    <p style={{ fontSize: 11, color: 'rgba(229,226,225,0.5)', margin: '0 0 8px' }}>
+                      This is the locked, submitted snapshot (version {submittedPackage.version_number}) — not your latest draft.
+                    </p>
+                    {['boxName', 'woodType', 'finish', 'lidStyle', 'interiorLining', 'trayConfiguration'].map(f => (
+                      submittedPackage.snapshot?.[f] ? <div key={f} style={{ fontSize: 12, padding: '2px 0' }}><strong>{f.replace(/([A-Z])/g, ' $1')}:</strong> {submittedPackage.snapshot[f]}</div> : null
+                    ))}
+                  </div>
+                )}
+                {!submittedPackage && packagingReadiness && packagingReadiness.status !== 'submitted' && packagingReadiness.status !== 'not_started' && (
+                  <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)' }}>
+                    Packaging design in progress — not yet submitted. It will not appear here until you submit it from the Packaging Studio.
+                  </div>
+                )}
+
                 <h2 style={{ fontSize: 15, color: GOLD }}>Blend Story, Presentation &amp; Defense</h2>
                 <p style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)' }}>
                   Explain your choices in your own words. This is what a

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import * as api from '../../../services/goldenBox/packagingStudioApiClient.js'
 
 const GOLD = '#E9C176'
@@ -11,6 +11,8 @@ const WALNUT = '#3b2a1e'
 
 export default function PackagingStudioDashboard() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const entryId = searchParams.get('entryId')
   const [designs, setDesigns] = useState(null)
   const [state, setState] = useState('loading')
 
@@ -24,7 +26,9 @@ export default function PackagingStudioDashboard() {
 
   async function handleCreate() {
     const res = await api.createDesign()
-    if (res.ok) navigate(`/smokecraft/golden-box/packaging-studio/${res.design.design_id}`)
+    if (!res.ok) return
+    if (entryId) await api.associateEntry(res.design.design_id, entryId)
+    navigate(`/smokecraft/golden-box/packaging-studio/${res.design.design_id}${entryId ? `?entryId=${entryId}` : ''}`)
   }
 
   return (

@@ -1,22 +1,22 @@
 [
   {
-    "id": "36",
-    "design_id": "1037e03c-2fc2-455e-9750-0e0148da7c26",
+    "id": "3",
+    "design_id": "64765c50-be7c-4ed2-8d6d-437299a21fb3",
     "version_number": 3,
     "parent_version_number": 2,
     "change_note": null,
-    "created_by": "f77a8328-18ba-47e4-9d0c-2aa8ce542c27",
+    "created_by": "4d3f2bbe-a93f-433d-917f-9b936cd325ee",
     "snapshot": {
-      "finish": null,
+      "finish": "satin",
       "boxName": "Amber Reserve",
-      "closure": null,
+      "closure": "brass_latch",
       "fontKey": null,
       "lidText": null,
-      "lidStyle": null,
+      "lidStyle": "hinged",
       "sideText": null,
       "subtitle": null,
       "textSize": null,
-      "woodType": null,
+      "woodType": "walnut",
       "blendName": null,
       "frontText": null,
       "textAlign": null,
@@ -24,25 +24,25 @@
       "dedication": null,
       "dimensions": null,
       "designNotes": null,
-      "engravedText": null,
-      "cigarCapacity": null,
-      "exteriorColor": null,
+      "engravedText": "Est. 2026",
+      "cigarCapacity": 10,
+      "exteriorColor": "#2b1d14",
       "hardwareColor": null,
-      "interiorLining": null,
+      "interiorLining": "suede",
       "interiorLidText": null,
-      "trayConfiguration": null,
+      "trayConfiguration": "double_layer",
       "interiorAccentColor": null
     },
     "is_current": true,
-    "created_at": "2026-07-22T09:47:36.379Z"
+    "created_at": "2026-07-23T01:49:24.182Z"
   },
   {
-    "id": "35",
-    "design_id": "1037e03c-2fc2-455e-9750-0e0148da7c26",
+    "id": "2",
+    "design_id": "64765c50-be7c-4ed2-8d6d-437299a21fb3",
     "version_number": 2,
     "parent_version_number": 1,
     "change_note": null,
-    "created_by": "f77a8328-18ba-47e4-9d0c-2aa8ce542c27",
+    "created_by": "4d3f2bbe-a93f-433d-917f-9b936cd325ee",
     "snapshot": {
       "finish": "satin",
       "boxName": "Amber Reserve",
@@ -71,17 +71,17 @@
       "interiorAccentColor": null
     },
     "is_current": false,
-    "created_at": "2026-07-22T09:47:36.152Z"
+    "created_at": "2026-07-23T01:49:23.870Z"
   },
   {
-    "id": "34",
-    "design_id": "1037e03c-2fc2-455e-9750-0e0148da7c26",
+    "id": "1",
+    "design_id": "64765c50-be7c-4ed2-8d6d-437299a21fb3",
     "version_number": 1,
     "parent_version_number": null,
     "change_note": "Initial neutral design",
-    "created_by": "f77a8328-18ba-47e4-9d0c-2aa8ce542c27",
+    "created_by": "4d3f2bbe-a93f-433d-917f-9b936cd325ee",
     "snapshot": {},
     "is_current": false,
-    "created_at": "2026-07-22T09:47:36.130Z"
+    "created_at": "2026-07-23T01:49:23.838Z"
   }
 ]

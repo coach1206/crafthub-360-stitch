@@ -1,0 +1,7 @@
+{
+  "status": 400,
+  "badUploadJson": {
+    "success": false,
+    "error": "file_too_large"
+  }
+}

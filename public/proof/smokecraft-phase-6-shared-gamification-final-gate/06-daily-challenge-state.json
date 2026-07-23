@@ -11,9 +11,9 @@
     "xpReward": 0,
     "goldenBoxRelevance": "Consistent daily practice builds the habits Golden Box competitors rely on.",
     "instance": {
-      "instanceKey": "daily-lesson-practice-2026-07-22",
-      "effectiveStart": "2026-07-22T00:00:00.000Z",
-      "effectiveEnd": "2026-07-23T00:00:00.000Z"
+      "instanceKey": "daily-lesson-practice-2026-07-23",
+      "effectiveStart": "2026-07-23T00:00:00.000Z",
+      "effectiveEnd": "2026-07-24T00:00:00.000Z"
     },
     "timeStatus": "active",
     "participationState": "in_progress",
@@ -21,6 +21,6 @@
     "missingRequirements": [
       "Need 1 distinct activities this period — currently 0"
     ],
-    "serverNow": "2026-07-22T09:37:17.266Z"
+    "serverNow": "2026-07-23T01:53:33.271Z"
   }
 }

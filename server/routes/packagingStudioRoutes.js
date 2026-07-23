@@ -51,6 +51,8 @@ router.post('/comments/:commentId/resolve', writeLimiter, requireSmokeCraftIdent
 
 router.post('/designs/:designId/submit', writeLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleSubmitFinal)
 router.get('/entries/:entryId/final-submission', readLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleGetFinalSubmission)
+router.get('/entries/:entryId/readiness', readLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleGetPackagingReadiness)
+router.post('/designs/:designId/associate-entry', writeLimiter, requireSmokeCraftIdentity, bridgeIdentity, ctrl.handleAssociateEntry)
 
 // Shared-review — token-scoped, not identity-scoped (view-only/comment-enabled).
 router.get('/shares/token/:shareToken', readLimiter, ctrl.handleReadShared)

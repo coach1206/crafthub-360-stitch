@@ -162,3 +162,21 @@ export async function handleGetFinalSubmission(req, res) {
     res.json({ success: true, submission })
   } catch (err) { sendError(res, err) }
 }
+
+// Journey-amendment: server-derived readiness for the entrant's own
+// entry (not the judge/mentor-facing snapshot read above — this is the
+// owner-only "where am I in packaging" status used to drive the Build
+// Studio -> Packaging Studio -> Presentation Preparation flow).
+export async function handleGetPackagingReadiness(req, res) {
+  try {
+    const identity = identityFrom(req)
+    const readiness = await svc.getPackagingReadinessForEntry(req.params.entryId, identity)
+    res.json({ success: true, readiness })
+  } catch (err) { sendError(res, err) }
+}
+export async function handleAssociateEntry(req, res) {
+  try {
+    const design = await svc.associateDesignWithEntry(req.params.designId, req.body.entryId, identityFrom(req))
+    res.json({ success: true, design })
+  } catch (err) { sendError(res, err) }
+}

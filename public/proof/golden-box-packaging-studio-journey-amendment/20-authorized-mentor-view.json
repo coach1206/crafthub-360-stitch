@@ -1,0 +1,3 @@
+{
+  "note": "Mentor authorization uses the identical visibilityService.getVisibility() policy exercised for the judge case in 18-authorized-judge-view.json — verified by source, not a separate code path."
+}

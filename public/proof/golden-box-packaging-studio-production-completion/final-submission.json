@@ -1,14 +1,14 @@
 {
   "success": true,
   "submission": {
-    "id": "9",
-    "entry_id": "741235ab-4f11-46ad-803a-0967f8450ae8",
-    "design_id": "1037e03c-2fc2-455e-9750-0e0148da7c26",
+    "id": "1",
+    "entry_id": "96a3a9f5-9b03-4c5f-8854-c2d3ba3ce2fd",
+    "design_id": "64765c50-be7c-4ed2-8d6d-437299a21fb3",
     "version_number": 5,
     "snapshot": {
       "finish": "satin",
       "boxName": "Amber Reserve",
-      "closure": null,
+      "closure": "brass_latch",
       "fontKey": null,
       "lidText": null,
       "lidStyle": "hinged",
@@ -23,18 +23,18 @@
       "dedication": null,
       "dimensions": null,
       "designNotes": null,
-      "engravedText": null,
-      "cigarCapacity": null,
-      "exteriorColor": null,
+      "engravedText": "Est. 2026",
+      "cigarCapacity": 10,
+      "exteriorColor": "#2b1d14",
       "hardwareColor": null,
-      "interiorLining": null,
+      "interiorLining": "suede",
       "interiorLidText": null,
-      "trayConfiguration": null,
+      "trayConfiguration": "double_layer",
       "interiorAccentColor": null
     },
     "submitted_by_user_id": null,
-    "submitted_by_guest_reference": "f77a8328-18ba-47e4-9d0c-2aa8ce542c27",
-    "idempotency_key": "packaging_final:741235ab-4f11-46ad-803a-0967f8450ae8",
-    "submitted_at": "2026-07-22T09:47:36.514Z"
+    "submitted_by_guest_reference": "4d3f2bbe-a93f-433d-917f-9b936cd325ee",
+    "idempotency_key": "packaging_final:96a3a9f5-9b03-4c5f-8854-c2d3ba3ce2fd",
+    "submitted_at": "2026-07-23T01:49:24.377Z"
   }
 }

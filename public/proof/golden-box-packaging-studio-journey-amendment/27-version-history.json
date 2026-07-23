@@ -1,0 +1,53 @@
+{
+  "success": true,
+  "versions": [
+    {
+      "id": "19",
+      "design_id": "b4b29eb6-9ba9-4bb9-9fa1-dd22714d25a2",
+      "version_number": 2,
+      "parent_version_number": 1,
+      "change_note": "v2 add lining",
+      "created_by": "c4f88dcb-69c7-4afa-a7c0-537241cf233b",
+      "snapshot": {
+        "finish": null,
+        "boxName": null,
+        "closure": null,
+        "fontKey": null,
+        "lidText": null,
+        "lidStyle": null,
+        "sideText": null,
+        "subtitle": null,
+        "textSize": null,
+        "woodType": null,
+        "blendName": null,
+        "frontText": null,
+        "textAlign": null,
+        "textColor": null,
+        "dedication": null,
+        "dimensions": null,
+        "designNotes": null,
+        "engravedText": null,
+        "cigarCapacity": null,
+        "exteriorColor": null,
+        "hardwareColor": null,
+        "interiorLining": "velvet",
+        "interiorLidText": null,
+        "trayConfiguration": null,
+        "interiorAccentColor": null
+      },
+      "is_current": true,
+      "created_at": "2026-07-23T01:56:27.828Z"
+    },
+    {
+      "id": "18",
+      "design_id": "b4b29eb6-9ba9-4bb9-9fa1-dd22714d25a2",
+      "version_number": 1,
+      "parent_version_number": null,
+      "change_note": "Initial neutral design",
+      "created_by": "c4f88dcb-69c7-4afa-a7c0-537241cf233b",
+      "snapshot": {},
+      "is_current": false,
+      "created_at": "2026-07-23T01:56:27.813Z"
+    }
+  ]
+}
