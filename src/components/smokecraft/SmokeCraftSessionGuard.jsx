@@ -24,16 +24,35 @@ import LockedSmokeCraftScreen from './LockedSmokeCraftScreen.jsx'
 import SmokeCraftProgressHeader from './SmokeCraftProgressHeader.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
+import { getSmokeCraftEntryReadiness } from '../../constants/smokecraftEntryReadiness.js'
 
-export default function SmokeCraftSessionGuard({ sessionNumber, requires, children, hideHeader = false }) {
+export default function SmokeCraftSessionGuard({ sessionNumber, requires, children, hideHeader = false, enforceEntryReadiness = true }) {
   const { isSessionUnlocked, isDemoMode, currentAllowed } = useSmokeCraftProgress()
   const { session } = useGuestSession()
+  const { journey } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
   const requiresUnlocked = requires
     ? (isDemoMode || requires === 'entry' || session.completedSteps.includes(requires))
     : true
   const resumeRoute = currentAllowed?.route || '/smokecraft'
+
+  // Emergency Remediation Continuation: Entry-Prerequisite Guard pass — the
+  // canonical numbered spine's own guard (sessionNumber, below) enforces
+  // "session N requires session N-1 complete," which is trivially satisfied
+  // for session 1 (nothing earlier to require). This meant a fresh, direct
+  // deep link to a sessionNumber=1 route (Welcome) could render without
+  // ever passing through Enrollment/Venue Selection. Every sessionNumber
+  // guard now also checks the shared entry-readiness contract — real
+  // account-level prerequisites (enrollment, venue) that sit entirely
+  // outside the numbered spine's own "prior session" logic, so they were
+  // never covered by isSessionUnlocked() at all. See
+  // src/constants/smokecraftEntryReadiness.js for the full contract and
+  // docs/audits/smokecraft-final-completion/entry-prerequisite-remediation/
+  // for the disclosed scope decisions.
+  const entryReadiness = getSmokeCraftEntryReadiness(session, journey)
+  const entryBlocked = !!sessionNumber && enforceEntryReadiness && !isDemoMode && !entryReadiness.readyForWelcome
 
   // Production-readiness pass — navigate() was previously called directly
   // during render (inside the `if (requires)` branch below), which is the
@@ -46,10 +65,18 @@ export default function SmokeCraftSessionGuard({ sessionNumber, requires, childr
     if (requires && !requiresUnlocked) navigate(resumeRoute, { replace: true })
   }, [requires, requiresUnlocked, resumeRoute]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (entryBlocked && entryReadiness.redirectRoute) navigate(entryReadiness.redirectRoute, { replace: true })
+  }, [entryBlocked, entryReadiness.redirectRoute]) // eslint-disable-line react-hooks/exhaustive-deps
+
   if (requires) {
     if (!requiresUnlocked) return null
     return <>{children}</>
   }
+
+  // Render nothing (never a flash of protected content) while the
+  // entry-prerequisite redirect above is in flight.
+  if (entryBlocked) return null
 
   const unlocked = isDemoMode || isSessionUnlocked(sessionNumber)
 

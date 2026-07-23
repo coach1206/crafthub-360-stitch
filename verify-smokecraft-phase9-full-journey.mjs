@@ -105,17 +105,30 @@ try {
   const page = await context.newPage()
 
   async function seedGuest(opts = {}) {
-    const { completedSteps = [], demoMode = false, xp } = opts
+    // Entry-Prerequisite Guard pass — a session-guarded route now also
+    // requires real entry-layer prerequisites (enrollment + venue), not
+    // just its own prior-session chain. `entryReady` (default true) stamps
+    // both so existing mid/late-chain checks keep testing what they always
+    // meant to test: a genuinely progressed guest reaching a later session,
+    // not the raw entry-flow-bypass case (which is now covered by the
+    // dedicated verify-smokecraft-entry-prerequisite-guard.mjs suite).
+    const { completedSteps = [], demoMode = false, xp, entryReady = true } = opts
     await page.goto(UI_BASE, { waitUntil: 'domcontentloaded' })
-    await page.evaluate(({ completedSteps, demoMode, xp }) => {
+    await page.evaluate(({ completedSteps, demoMode, xp, entryReady }) => {
       if (demoMode) sessionStorage.setItem('novee_demo_mode', '1')
       else sessionStorage.removeItem('novee_demo_mode')
       sessionStorage.removeItem('sc_active_screen')
+      const steps = entryReady && !completedSteps.includes('enroll') ? ['enroll', ...completedSteps] : completedSteps
       localStorage.setItem('novee_guest_session', JSON.stringify({
         sessionId: 'phase9-test-' + Date.now(), guestId: 'phase9-test-guest',
-        completedSteps, xp: xp ?? completedSteps.length * 25, rank: 'Novice', badges: [], __version: 4,
+        completedSteps: steps, xp: xp ?? steps.length * 25, rank: 'Novice', badges: [], __version: 4,
       }))
-    }, { completedSteps, demoMode, xp })
+      if (entryReady) {
+        localStorage.setItem('sc_journey_v1', JSON.stringify({ stateVersion: 3, selectedVenue: { id: 'phase9-test-venue', name: 'Phase 9 Test Venue' } }))
+      } else {
+        localStorage.removeItem('sc_journey_v1')
+      }
+    }, { completedSteps, demoMode, xp, entryReady })
   }
   async function nav(path) { await page.goto(`${UI_BASE}${path}`, { waitUntil: 'domcontentloaded', timeout: 45000 }); await page.waitForTimeout(400) }
 
@@ -137,7 +150,7 @@ try {
   await page.screenshot({ path: `${PROOF_DIR}/09-representative-early-session.png` })
 
   // ── 14-19. Entry flow, new journey, resume, current-session persistence ──
-  await seedGuest({ completedSteps: [] })
+  await seedGuest({ completedSteps: [], entryReady: false })
   await nav('/smokecraft')
   const launchOk = new URL(page.url()).pathname === '/smokecraft'
   await nav('/smokecraft/enroll')
@@ -147,9 +160,17 @@ try {
   await nav('/smokecraft/enroll')
   await page.screenshot({ path: `${PROOF_DIR}/05-enrollment.png` })
 
+  // Entry-Prerequisite Guard pass — a genuinely fresh guest (zero
+  // completedSteps, no enrollment/venue) is now correctly redirected away
+  // from Welcome, not granted direct access — see
+  // verify-smokecraft-entry-prerequisite-guard.mjs for the dedicated suite.
+  await seedGuest({ completedSteps: [], entryReady: false })
+  await nav('/smokecraft/welcome')
+  check('A genuinely fresh journey (zero completed steps, no entry prerequisites) is redirected away from Welcome, not granted direct access', new URL(page.url()).pathname !== '/smokecraft/welcome')
+
   await seedGuest({ completedSteps: [] })
   await nav('/smokecraft/welcome')
-  check('New journey starts correctly (S1 reachable with zero completed steps)', new URL(page.url()).pathname === '/smokecraft/welcome')
+  check('New journey starts correctly (S1 reachable once entry prerequisites — enrollment and venue — are met)', new URL(page.url()).pathname === '/smokecraft/welcome')
 
   const midChain = chainUpTo('/smokecraft/mentor-commentary')
   await seedGuest({ completedSteps: midChain })
@@ -185,9 +206,15 @@ try {
   // behavior: locked content is shown, not the real session content.
   await pageB.goto(`${UI_BASE}/smokecraft/rewards`, { waitUntil: 'domcontentloaded' })
   await pageB.waitForTimeout(400)
+  const lockedUrl = new URL(pageB.url()).pathname
   const lockedBody = await pageB.textContent('body').catch(() => '')
-  const independentBlocked = /locked/i.test(lockedBody)
-  check('A locked session (rewards) shows an honest locked-state screen for a fresh independent session with no real progress (not the real session content)', independentBlocked)
+  // Entry-Prerequisite Guard pass — a fresh independent session with no
+  // entry prerequisites is now redirected to Enrollment (also an honest,
+  // non-content-leaking response) rather than rendering the locked-state
+  // screen in place — both are correct, neither ever shows real session
+  // content, so either is accepted here.
+  const independentBlocked = /locked/i.test(lockedBody) || lockedUrl === '/smokecraft/enroll'
+  check('A locked session (rewards) shows an honest locked-state screen or entry-prerequisite redirect for a fresh independent session with no real progress (not the real session content)', independentBlocked)
   await pageB.screenshot({ path: `${PROOF_DIR}/33-locked-route-rejection.png` })
   await contextB.close()
 

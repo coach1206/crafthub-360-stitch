@@ -707,3 +707,55 @@ context/store/table representing conceptually the same entity (here:
 "the current journey's content"), every reset/clear/archive operation on
 that entity must be audited against *every* store representing it, not just
 the one the original bug report happened to point at.
+
+### 2026-07-23 — Emergency Remediation Continuation: Entry-Prerequisite Guard
+
+**Prevention rules established by this pass** (apply to every future CraftHub vertical):
+
+1. Canonical session guards do not replace pre-session entry guards — a
+   "session N requires session N-1" guard is structurally satisfied for
+   session 1 by definition, so it enforces nothing at the true entry point.
+2. Entry preparation must have its own explicit readiness contract —
+   `getSmokeCraftEntryReadiness()` is the reusable template.
+3. Every post-entry route must enforce entry readiness — achieved here
+   transitively (protecting S1 alone closes the bypass for S2–S27 via the
+   existing prior-session chain), not by duplicating the check everywhere.
+4. Direct deep links must be tested before a journey is declared complete —
+   this defect existed through four prior remediation passes in this
+   operation before a live screenshot-driven report caught it.
+5. A first canonical session can still require pre-session prerequisites —
+   don't assume "first in the numbered spine" means "first reachable."
+6. Route guards must resolve before rendering protected content — verified
+   via a `return null` render path plus a live browser check that the
+   redirected target's content, never the protected content, appears.
+7. Browser Back, Forward, refresh, second-tab, and bookmarks must be tested
+   — all five were exercised live in this pass's dedicated suite, not just
+   asserted from source.
+8. Preserved account-level state must not silently satisfy journey-level
+   prerequisites — verified explicitly: venue preservation is disclosed and
+   traced to the real, canonical venue context, not a stale or forgeable
+   field (`03-VENUE-PRESERVATION-DECISION.md`).
+9. Every future CraftHub module must separate onboarding prerequisites from
+   curriculum progression as two distinct guard concerns from the start —
+   retrofitting this (as this pass had to) risks exactly the kind of
+   architecture-vs-mandate mismatch this pass had to disclose (Mentor
+   Selection's real position vs. the requested generic sequence).
+10. Disclosed out-of-scope defects that violate an explicit completion
+    requirement must be fixed before the gate can pass — this is precisely
+    why this pass exists: the immediately-prior pass's own honest
+    disclosure of the deep-link gap is what correctly reopened the gate,
+    exactly as intended by the pattern established across this operation.
+
+**Root-cause note for this specific case**: this is the fifth consecutive
+pass in this operation triggered by a live-observed defect the automated
+suites hadn't caught (or, in this case, by this operation's own honest
+disclosure of a known gap from the prior pass). Unlike the earlier four,
+the fix here required carefully distinguishing "the real, verified defect"
+(entry-layer bypass) from "the mandate's generically-worded but
+architecturally-inconsistent requested sequence" (Mentor Selection before
+Welcome) — and choosing to fix the former precisely while disclosing,
+rather than silently forcing, a mismatch with the latter. When a mandate's
+literal wording and the real, already-approved architecture conflict,
+disclose the conflict and fix what is actually verified broken; don't
+silently comply with wording that would require an unreviewed structural
+change.

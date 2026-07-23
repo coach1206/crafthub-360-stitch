@@ -336,8 +336,12 @@ export default function App() {
 
               {/* SmokeCraft 360 — guest-accessible + demo-allowed */}
               <Route path="smokecraft" element={<SmokeCraftJourneyProvider><SmokeCraftProgressProvider><SmokeCraftOrderProvider><Outlet /></SmokeCraftOrderProvider></SmokeCraftProgressProvider></SmokeCraftJourneyProvider>}>
-                {/* Entry-layer Launch — always unlocked (SmokeCraft landing, distinct from S1 Welcome below) */}
-                <Route index element={<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraft /></SmokeCraftSessionGuard>} />
+                {/* Entry-layer Launch — always unlocked (SmokeCraft landing, distinct from S1 Welcome below).
+                    enforceEntryReadiness=false: this is the intentionally-public
+                    informational landing page a guest sees BEFORE enrollment —
+                    it must remain reachable to show the Start CTA, unlike
+                    Welcome below which is the real first protected session. */}
+                <Route index element={<SmokeCraftSessionGuard sessionNumber={1} enforceEntryReadiness={false}><SmokeCraft /></SmokeCraftSessionGuard>} />
 
                 {/* S1 — welcome (Welcome to Today's Experience) — Package N */}
                 <Route path="welcome"          element={<SmokeCraftSessionGuard sessionNumber={1}><WelcomeExperience /></SmokeCraftSessionGuard>} />

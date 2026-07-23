@@ -2,39 +2,39 @@
   "ownerCommentRes": {
     "success": true,
     "comment": {
-      "id": "11",
-      "design_id": "86e47b43-f2ab-4c01-8ae4-42e31ff2de20",
+      "id": "2",
+      "design_id": "6c2ed1ec-375f-47b9-8d38-414863315ab0",
       "version_number": null,
       "target_type": "design",
       "target_ref": null,
-      "parent_comment_id": "10",
+      "parent_comment_id": "1",
       "author_user_id": null,
-      "author_guest_reference": "119b4243-b4a6-4942-8782-114225aac735",
+      "author_guest_reference": "a46af2b2-c215-4c00-9d2e-48021b42a066",
       "author_share_id": null,
       "body": "Thank you!",
       "status": "open",
       "resolved_at": null,
       "resolved_by_user_id": null,
-      "created_at": "2026-07-23T18:21:21.091Z"
+      "created_at": "2026-07-23T19:28:54.340Z"
     }
   },
   "resolveRes": {
     "success": true,
     "comment": {
-      "id": "10",
-      "design_id": "86e47b43-f2ab-4c01-8ae4-42e31ff2de20",
+      "id": "1",
+      "design_id": "6c2ed1ec-375f-47b9-8d38-414863315ab0",
       "version_number": null,
       "target_type": "design",
       "target_ref": null,
       "parent_comment_id": null,
       "author_user_id": null,
       "author_guest_reference": null,
-      "author_share_id": "15",
+      "author_share_id": "2",
       "body": "Beautiful walnut finish",
       "status": "resolved",
-      "resolved_at": "2026-07-23T18:21:21.096Z",
-      "resolved_by_user_id": "119b4243-b4a6-4942-8782-114225aac735",
-      "created_at": "2026-07-23T18:21:21.076Z"
+      "resolved_at": "2026-07-23T19:28:54.348Z",
+      "resolved_by_user_id": "a46af2b2-c215-4c00-9d2e-48021b42a066",
+      "created_at": "2026-07-23T19:28:54.323Z"
     }
   }
 }

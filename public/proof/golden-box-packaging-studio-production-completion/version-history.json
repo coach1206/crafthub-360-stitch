@@ -1,11 +1,11 @@
 [
   {
-    "id": "51",
-    "design_id": "86e47b43-f2ab-4c01-8ae4-42e31ff2de20",
+    "id": "3",
+    "design_id": "6c2ed1ec-375f-47b9-8d38-414863315ab0",
     "version_number": 3,
     "parent_version_number": 2,
     "change_note": null,
-    "created_by": "119b4243-b4a6-4942-8782-114225aac735",
+    "created_by": "a46af2b2-c215-4c00-9d2e-48021b42a066",
     "snapshot": {
       "finish": "satin",
       "boxName": "Amber Reserve",
@@ -34,15 +34,15 @@
       "interiorAccentColor": null
     },
     "is_current": true,
-    "created_at": "2026-07-23T18:21:20.983Z"
+    "created_at": "2026-07-23T19:28:54.257Z"
   },
   {
-    "id": "50",
-    "design_id": "86e47b43-f2ab-4c01-8ae4-42e31ff2de20",
+    "id": "2",
+    "design_id": "6c2ed1ec-375f-47b9-8d38-414863315ab0",
     "version_number": 2,
     "parent_version_number": 1,
     "change_note": null,
-    "created_by": "119b4243-b4a6-4942-8782-114225aac735",
+    "created_by": "a46af2b2-c215-4c00-9d2e-48021b42a066",
     "snapshot": {
       "finish": "satin",
       "boxName": "Amber Reserve",
@@ -71,17 +71,17 @@
       "interiorAccentColor": null
     },
     "is_current": false,
-    "created_at": "2026-07-23T18:21:20.789Z"
+    "created_at": "2026-07-23T19:27:53.067Z"
   },
   {
-    "id": "49",
-    "design_id": "86e47b43-f2ab-4c01-8ae4-42e31ff2de20",
+    "id": "1",
+    "design_id": "6c2ed1ec-375f-47b9-8d38-414863315ab0",
     "version_number": 1,
     "parent_version_number": null,
     "change_note": "Initial neutral design",
-    "created_by": "119b4243-b4a6-4942-8782-114225aac735",
+    "created_by": "a46af2b2-c215-4c00-9d2e-48021b42a066",
     "snapshot": {},
     "is_current": false,
-    "created_at": "2026-07-23T18:21:20.775Z"
+    "created_at": "2026-07-23T19:27:53.054Z"
   }
 ]

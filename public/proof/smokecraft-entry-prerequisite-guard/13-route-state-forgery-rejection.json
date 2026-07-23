@@ -1,0 +1,3 @@
+{
+  "note": "Contract reads only session.completedSteps and journey.selectedVenue/mentor — no location.state usage exists"
+}
