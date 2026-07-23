@@ -13,3 +13,7 @@ No substitute (localhost, the sandbox preview server, or generated screenshots) 
 ## Conclusion
 
 **No live route verification could be performed.** This entire section is blocked pending real network access or user-supplied evidence.
+
+## 2026-07-23 update
+
+Re-attempted in the Phase 10 Closeout pass (deploy-and-verify the Start/Resume fix) — still blocked, same network policy denial. `/smokecraft`, `/smokecraft/resume`, `/smokecraft/enroll`, and `/smokecraft/identity` could not be checked live.

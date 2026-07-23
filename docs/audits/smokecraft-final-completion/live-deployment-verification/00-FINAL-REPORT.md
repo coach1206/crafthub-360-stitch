@@ -65,3 +65,7 @@ Any one of:
 - Confirmation of whether `crafthub360.up.railway.app` remains the authoritative production URL.
 
 **Status: ENGINEERING COMPLETE — SMOKECRAFT LIVE DEPLOYMENT VERIFICATION BLOCKED**
+
+## 2026-07-23 update — re-checked in the Phase 10 Closeout pass
+
+Re-confirmed: still no Railway CLI, credentials, dashboard access, or network path to `https://crafthub360.up.railway.app` in this session (403 policy denial reproduced again). See `02-DEPLOYED-COMMIT.md` for the full re-check, including a correction that the specific commit requested for deployment in that later pass (`cbd1e7ae...`) predates the actual Start/Resume CTA fix — the complete fix is in `7f259e7a4f8a02ad466879d098d01a65fe811623`. No deployment was triggered; this status remains unchanged.

@@ -9,3 +9,7 @@ No isolated production-verification learner record was created, because doing so
 ## Conclusion
 
 **No live journey verification could be performed.** Blocked pending real network access or user-supplied evidence.
+
+## 2026-07-23 update
+
+Re-attempted in the Phase 10 Closeout pass — the Start New Journey live verification steps (create → begin at first entry step → no inherited state → landing CTA flips to Resume → refresh persistence → independent session) could not be run against production for the same reason. Still blocked.

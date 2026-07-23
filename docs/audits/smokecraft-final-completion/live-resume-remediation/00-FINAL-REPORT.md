@@ -76,3 +76,7 @@ All pass (see proof directory).
 Identical to Phase 10: no network path to the production URL, no provider dashboard/CLI credentials, no CI/CD deployment workflow to inspect. What would close the gap: a Railway dashboard screenshot/log, authenticated Railway CLI output, or a direct user-supplied response from `/api/version`/`/api/health`/`/smokecraft`/`/smokecraft/resume` at the real production origin.
 
 **Status: ENGINEERING COMPLETE — SMOKECRAFT START/RESUME FIX NOT YET LIVE VERIFIED**
+
+## 2026-07-23 update — Phase 10 Closeout pass (deploy-and-verify attempt)
+
+A subsequent pass ("Phase 10 Closeout: Deploy and Live-Verify the Start/Resume Fix") requested deploying `cbd1e7ae50685383246a5665a5b9d71fdfe5867c` to Railway and live-verifying the corrected CTA behavior. This could not be performed: this session has no Railway CLI, no Railway credentials, no dashboard access, and no network path to `https://crafthub360.up.railway.app` (still a confirmed policy denial, re-checked). See `docs/audits/smokecraft-final-completion/live-deployment-verification/02-DEPLOYED-COMMIT.md` for the full re-check and an important correction: `cbd1e7ae...` predates the actual CTA-label fix (it only contains the `lastCompletedSession` fix from the prior pass) — the commit that contains the complete fix is `7f259e7a4f8a02ad466879d098d01a65fe811623`. No deployment was triggered and no live verification was performed; nothing in this repository claims otherwise.

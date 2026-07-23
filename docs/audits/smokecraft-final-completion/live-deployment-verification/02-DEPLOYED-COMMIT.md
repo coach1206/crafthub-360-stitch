@@ -27,3 +27,12 @@ Any one of the following, supplied by the user/operator, would allow this determ
 ## Conclusion
 
 **The deployed commit cannot be verified in this session.** Per this phase's own explicit instruction ("If the live service is on an earlier commit, this phase fails until deployment is updated" / "If external access is still blocked... Do not mark Phase 10 complete... Keep the checklist unchecked"), this finding alone is sufficient to keep Phase 10 unresolved regardless of any other verification performed.
+
+## 2026-07-23 update — Phase 10 Closeout pass (deploy-and-verify attempt)
+
+A later pass ("Phase 10 Closeout: Deploy and Live-Verify the Start/Resume Fix") requested deploying commit `cbd1e7ae50685383246a5665a5b9d71fdfe5867c` and live-verifying it. Two things are recorded here:
+
+1. **The requested commit is now stale.** `cbd1e7ae...` was the repository HEAD at the *start* of the subsequent "Start vs. Resume Journey State Correction" pass — it contains only the `lastCompletedSession`/`completionPercent` fix, not the `hasProgress`/CTA-text fix (the actual defect the live screenshots showed: the wrong `RESUME JOURNEY` label). The commit that actually contains the full fix is `7f259e7a4f8a02ad466879d098d01a65fe811623` (current `HEAD` at the time of this update, verified local=remote, clean tree). Deploying `cbd1e7ae...` alone would not resolve the reported CTA-label defect.
+2. **This session still cannot deploy or verify anything against Railway.** No Railway CLI is installed, no Railway credentials/config are present in this environment (`which railway`, `env | grep -i railway`, and a filesystem search for `*.railway*` config all returned nothing), and direct network access to `crafthub360.up.railway.app` is still policy-blocked (confirmed again: `curl` returns `(56) CONNECT tunnel failed, response 403`, and the agent-proxy's own failure log records this as a policy denial, not a transient error). There is no "Railway service settings" this session can inspect, no deploy trigger this session can fire, and no live endpoint this session can query.
+
+**This pass cannot perform the deployment or live verification it was asked to perform.** No fabricated deployment ID, timestamp, or live response is recorded anywhere in this repository as a result of this pass.

@@ -31,3 +31,7 @@ Local regressions were run against this pass's final commit to confirm the new `
 ## Package 5 timing result (explicit answer to the mandate's question)
 
 **Reproducible timing flakiness, confirmed again in this pass.** Rechecked from a freshly restarted Vite preview/dev server (port 5000) three separate times in this pass; the same Playwright element-wait timeout reproduced each time on the `wrapper-strength`/`seed-soil` pages. This is not caused by any change made in this pass (this pass's only production-code change is the new `GET /api/version` endpoint in `server/controllers/healthController.js`/`server/routes/healthRoutes.js`, unrelated to these pages) or by any prior pass — it is an environment characteristic of this sandbox's Vite dev server under rapid sequential Playwright navigation, first documented in the Phase 9 pass and reconfirmed in every pass since.
+
+## 2026-07-23 update
+
+The Phase 10 Closeout pass (deploy-and-verify the Start/Resume fix) could not add live production regression data — no network path to `https://crafthub360.up.railway.app` exists in this session, same as recorded above. No deployment was triggered, so there is no new deployed-commit regression run to report.
