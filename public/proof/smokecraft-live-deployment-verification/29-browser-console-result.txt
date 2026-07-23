@@ -1,0 +1,1 @@
+BLOCKED — requires reachable production frontend with browser console access.

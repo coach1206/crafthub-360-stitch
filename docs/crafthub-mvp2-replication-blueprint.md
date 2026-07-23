@@ -529,3 +529,57 @@ own early planning section (§3a) — a target design written before
 implementation, superseded by that same document's own later "Scope actually
 implemented" section (6 phases, matching code exactly). No structural change
 was needed; the correction was fully documentation-level.
+
+### 2026-07-23 — Live Deployment Verification (Phase 10, blocked)
+
+**Prevention rules established by this pass** (apply to every future CraftHub vertical):
+
+1. Local production build success is not live deployment success — a clean
+   `npm run build` and a healthy localhost server prove nothing about what
+   is actually running in production.
+2. Every CraftHub module must expose safe deployment-version evidence (a
+   `GET /api/version`-style endpoint returning commit/build metadata only,
+   never secrets) — this pass added the reusable pattern to
+   `server/controllers/healthController.js`.
+3. Deployed commit verification is mandatory before live UI testing —
+   testing routes/flows against an unverified commit risks validating the
+   wrong code entirely.
+4. Database migration verification must occur against the real production
+   database — local sandbox migration success is necessary but not
+   sufficient evidence.
+5. Localhost screenshots cannot close a live deployment gate — this pass
+   deliberately produced zero localhost-sourced screenshots as "live" proof,
+   even under significant pressure to complete the checklist.
+6. Deployment-provider evidence and application evidence must agree — a
+   `/api/version` response and a Railway dashboard's reported commit should
+   match; a mismatch is itself a finding.
+7. A later deployed commit requires an intervening-commit audit — never
+   assume a newer deployed commit is safe without reviewing every commit
+   between the expected and actual deployed SHA.
+8. Production verification must use controlled non-customer test identities
+   — never real learner accounts, even when verification is otherwise
+   unblocked.
+9. Production testing must remain non-destructive and low-load — no
+   aggressive penetration testing or load testing against a live service.
+10. Live storage configuration must be reported honestly — "not configured"
+    is a valid, expected finding, not a defect to paper over.
+11. A blocked external verification gate must remain unchecked — this pass's
+    own outcome is the template: `ENGINEERING COMPLETE` (the code is ready)
+    is a distinct, honest status from `PASS` (verified live), and the
+    checklist item stays unchecked until real evidence closes the gap.
+12. Every future module must define its live deployment verification
+    strategy *before* development completion — deciding how a module's live
+    state will be checked (version endpoint, health check shape, deploy
+    branch) at design time avoids exactly the blocked-gate scenario this
+    pass encountered after the fact.
+
+**Root-cause note for this specific case**: this session's outbound network
+access is governed by an organization egress policy that denies (403,
+non-transient) the only known production host. No deployment-provider
+dashboard or CLI credential was available as a fallback, and no CI/CD
+workflow exists in-repo to inspect for deployment records. A significant
+additional finding, unrelated to network access: this repository's default
+branch (`main`) does not contain any of this multi-phase operation's
+completed work, which is itself a deployment-configuration risk worth
+flagging to the project owner independent of this specific verification
+attempt.

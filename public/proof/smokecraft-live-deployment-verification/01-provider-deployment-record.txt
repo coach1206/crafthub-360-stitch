@@ -1,0 +1,5 @@
+No provider deployment record accessible in this session.
+No Railway CLI/dashboard credentials available. No GitHub Actions deployment
+workflow exists (only .github/workflows/smokecraft-visual-proof.yml, a
+visual-regression check, not a deploy pipeline). See
+docs/audits/smokecraft-final-completion/live-deployment-verification/01-ENVIRONMENT-DISCOVERY.md

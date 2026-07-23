@@ -14,7 +14,7 @@
       "state": "completed",
       "reason": "1 Seed & Soil component(s) explored",
       "missingRequirements": [],
-      "completedAt": "2026-07-23T01:53:33.441Z"
+      "completedAt": "2026-07-23T09:17:02.711Z"
     },
     {
       "nodeKey": "leaf-process",
@@ -29,9 +29,9 @@
       "goldenBoxRelevance": "Filler arrangement directly affects Golden Box construction scoring.",
       "displayOrder": 2,
       "state": "completed",
-      "reason": "Filler Arrangement completed 2026-07-23T01:53:33.407Z",
+      "reason": "Filler Arrangement completed 2026-07-23T09:17:02.686Z",
       "missingRequirements": [],
-      "completedAt": "2026-07-23T01:53:33.445Z"
+      "completedAt": "2026-07-23T09:17:02.713Z"
     },
     {
       "nodeKey": "construction",

@@ -1,0 +1,4 @@
+UNDETERMINED. No reachable evidence source. See 02-DEPLOYED-COMMIT.md.
+Indirect finding: `main` (repository default branch, confirmed via
+`git remote show origin` -> "HEAD branch: main") does NOT contain
+b55c867d (Phase 9A) or any later commit of this operation.

@@ -1,0 +1,1 @@
+BLOCKED — cannot audit production asset registry without reachable production. The 3 previously-flagged concurrent image commits (0bc6ae58, ece0948a, c40feaa9) plus the newer 0985bd90 are confirmed present in this branch's git history (see 01-ENVIRONMENT-DISCOVERY.md) — their live-deployment wiring/serving cannot be confirmed without production access.

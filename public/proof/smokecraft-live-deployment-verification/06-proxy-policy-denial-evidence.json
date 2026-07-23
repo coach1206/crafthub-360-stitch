@@ -1,0 +1,136 @@
+{
+  "enabled": true,
+  "port": 34401,
+  "caBundlePath": "/root/.ccr/ca-bundle.crt",
+  "hasSystemCa": true,
+  "noProxy": "localhost,127.0.0.1,::1,127.0.0.0/8,0.0.0.0/8,::,169.254.0.0/16,anthropic.com,.anthropic.com,*.anthropic.com,registry.npmjs.org,jsr.io,npm.jsr.io,pypi.org,files.pythonhosted.org,index.crates.io,proxy.golang.org,host.docker.internal,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.svc.cluster.local,*.svc.cluster.local",
+  "selective": false,
+  "standalone": false,
+  "toolScoped": false,
+  "javaTrustStorePath": "/root/.ccr/java-truststore.p12",
+  "readmePath": "/root/.ccr/README.md",
+  "gitConfigInjection": true,
+  "gitSshRewrite": true,
+  "recentRelayFailures": [
+    {
+      "ts": "2026-07-23T09:27:44.098Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:27:45.651Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:27:47.484Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:27:49.272Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:27:51.070Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:27:53.010Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:27:54.901Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:27:56.752Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:27:58.528Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:28:00.439Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:28:02.205Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:28:03.824Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:28:05.879Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:28:08.244Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:28:10.345Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:28:12.347Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:28:14.325Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:28:16.897Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "www.google.com:443"
+    },
+    {
+      "ts": "2026-07-23T09:30:22.252Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "crafthub360.up.railway.app:443"
+    },
+    {
+      "ts": "2026-07-23T09:30:22.605Z",
+      "kind": "connect_rejected",
+      "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+      "host": "crafthub360.up.railway.app:443"
+    }
+  ]
+}

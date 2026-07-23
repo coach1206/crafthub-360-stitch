@@ -1,0 +1,4 @@
+BLOCKED — no production database access. Local sandbox migration 090
+(server/db/migrations/090_golden_box_packaging_studio.sql) confirmed present
+and applies cleanly locally (re-verified in this and prior passes) — this is
+NOT production evidence and is disclosed as such.

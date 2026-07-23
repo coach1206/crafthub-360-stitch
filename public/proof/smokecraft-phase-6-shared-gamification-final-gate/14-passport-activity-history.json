@@ -2,21 +2,21 @@
   {
     "event_type": "blend_fault_assessment_passed",
     "source_route": "/smokecraft/challenges/blend-fault-identification",
-    "created_at": "2026-07-23T01:53:33.327Z"
+    "created_at": "2026-07-23T09:17:02.629Z"
   },
   {
     "event_type": "blend_fault_attempt_submitted",
     "source_route": "/smokecraft/challenges/blend-fault-identification",
-    "created_at": "2026-07-23T01:53:33.323Z"
+    "created_at": "2026-07-23T09:17:02.619Z"
   },
   {
     "event_type": "blend_fault_attempt_started",
     "source_route": "/smokecraft/challenges/blend-fault-identification",
-    "created_at": "2026-07-23T01:53:33.290Z"
+    "created_at": "2026-07-23T09:17:02.608Z"
   },
   {
     "event_type": "challenge_started",
     "source_route": "/smokecraft/challenge-hub",
-    "created_at": "2026-07-23T01:53:33.265Z"
+    "created_at": "2026-07-23T09:17:02.577Z"
   }
 ]

@@ -1,0 +1,1 @@
+BLOCKED — no reachable production frontend. Local equivalent already verified in prior passes' regression suites (see 10-REGRESSION-MATRIX.md); this is NOT live production evidence.
