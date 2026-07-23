@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../constants/smokecraftAssets.js'
-import { PRESERVED_COMPLETED_STEP_IDS } from './smokecraft/ResumeJourney.jsx'
 import { computeJourneyStatus } from '../constants/smokecraftJourneyStatus.js'
 
 const NAT_W = 1189
@@ -26,11 +25,19 @@ function guestStepDone(stepId) {
 // canonical definition of "real journey progress" already exists on that
 // screen (ResumeJourney.jsx's hasProgress check) — reused here verbatim so
 // the two screens can never disagree about what counts as resumable.
+//
+// Start-vs-Resume remediation pass — this previously scanned completedSteps
+// for ANY non-preserved id present, the same bug class fixed in
+// ResumeJourney.jsx: a legacy record with a later session's id present but
+// no earlier required session genuinely complete (in contiguous-prefix
+// order) still counted as "real progress" here, showing "Resume Journey"
+// instead of "Start SmokeCraft Journey". Now delegates to the same
+// authoritative computeJourneyStatus().hasStarted used everywhere else.
 function hasRealJourneyProgress() {
   try {
     const s = JSON.parse(localStorage.getItem('novee_guest_session') || 'null')
     const completedSteps = Array.isArray(s?.completedSteps) ? s.completedSteps : []
-    return completedSteps.some(id => !PRESERVED_COMPLETED_STEP_IDS.includes(id))
+    return computeJourneyStatus(completedSteps).hasStarted
   } catch { return false }
 }
 
@@ -176,7 +183,7 @@ export default function SmokeCraft() {
     >
       {/* Baked: START SMOKECRAFT button — dynamic label, must fully occlude baked text */}
       <PrimaryHotspot
-        label={isCompleted ? 'View Results →' : isReturning ? 'Resume Journey →' : 'Start Journey →'}
+        label={isCompleted ? 'VIEW COMPLETED JOURNEY →' : isReturning ? 'RESUME SMOKECRAFT JOURNEY →' : 'START SMOKECRAFT JOURNEY →'}
         onClick={handleStart}
         style={{ left: '3.4%', top: '56.4%', width: '21.5%', height: '6.4%' }}
       />

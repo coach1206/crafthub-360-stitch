@@ -1,0 +1,50 @@
+PASS — Starting local and remote commits match — local=cbd1e7ae50685383246a5665a5b9d71fdfe5867c remote=cbd1e7ae50685383246a5665a5b9d71fdfe5867c
+PASS — Starting tree was clean (excluding this pass's own new/amended files) —  M public/proof/golden-box-packaging-studio-journey-amendment/06-draft-in-progress-state.json,  M public/proof/golden-box-packaging-studio-journey-amendment/07-validation-required-state.json,  M public/proof/golden-box-packaging-studio-journey-amendment/08-ready-to-submit-state.json,  M public/proof/golden-box-packaging-studio-journey-amendment/09-submitted-state.json,  M public/proof/golden-box-packaging-studio-journey-amendment/10-locked-submitted-snapshot.json,  M public/proof/golden-box-packaging-studio-journey-amendment/13-resume-after-completed-submission.json,  M public/proof/golden-box-packaging-studio-journey-amendment/16-presentation-package-summary.json,  M public/proof/golden-box-packaging-studio-journey-amendment/17-defense-package-summary.json,  M public/proof/golden-box-packaging-studio-journey-amendment/18-authorized-judge-view.json,  M public/proof/golden-box-packaging-studio-journey-amendment/23-submitted-snapshot-unchanged.json,  M public/proof/golden-box-packaging-studio-journey-amendment/33-health-check-result.json,  M public/proof/golden-box-packaging-studio-production-completion/artwork-upload-and-placement.json,  M public/proof/golden-box-packaging-studio-production-completion/comments.json,  M public/proof/golden-box-packaging-studio-production-completion/final-submission.json,  M public/proof/golden-box-packaging-studio-production-completion/health-check-result.json,  M public/proof/golden-box-packaging-studio-production-completion/sharing-manager.json,  M public/proof/golden-box-packaging-studio-production-completion/version-history.json,  M public/proof/passport-360-security-unified-identity/01-smokecraft-canonical-identity.png,  M public/proof/passport-360-security-unified-identity/02-general-noveeos-canonical-identity.png,  M public/proof/passport-360-security-unified-identity/03-same-passport-id-both-paths.png,  M public/proof/passport-360-security-unified-identity/04-localstorage-override-rejected.png,  M public/proof/passport-360-security-unified-identity/05-guest-identity.json,  M public/proof/passport-360-security-unified-identity/06-authenticated-identity.json,  M public/proof/passport-360-security-unified-identity/07-guest-to-user-linking.json,  M public/proof/passport-360-security-unified-identity/16-forged-passport-request-rejected.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/14-blend-fault-completion.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/17-daily-challenge-update.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/19-passport-synchronization.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/21-golden-box-build-studio.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/22-golden-box-submission.json,  M public/proof/smokecraft-phase-9-full-journey-final-gate/41-health-check-result.json
+PASS — No journey state can report Session 1 current and Session 27 completed at 63% — current=S1 lastCompleted=null percent=0%
+PASS — Completion percentage derives from canonical session evidence — 33%
+PASS — Last completed session derives from canonical evidence
+PASS — Current session derives from the next incomplete required session — S10
+PASS — No valid active journey returns "start"
+PASS — Invalid stale journey returns "start" — start
+PASS — No journey (undefined completedSteps) returns "start"
+PASS — Valid incomplete journey returns "resume"
+PASS — Completed journey returns "completed"
+PASS — Landing CTA for start state is exactly "START SMOKECRAFT JOURNEY"
+PASS — Landing CTA for incomplete state is exactly "RESUME SMOKECRAFT JOURNEY"
+PASS — Landing CTA for complete state is exactly "VIEW COMPLETED JOURNEY"
+PASS — Generic "RESUME JOURNEY" (old wording) no longer appears as the primary SmokeCraft landing CTA
+PASS — /smokecraft/resume shows no stale Saved Journey card when no valid active journey exists (hasProgress derives from journeyStatus.hasStarted, not a raw completedSteps scan)
+PASS — Resume page primary CTA follows the exact 3-state contract
+PASS — Resume page secondary action is "START NEW SMOKECRAFT JOURNEY"
+PASS — Generic "Resume Journey →"/"Review Completed Journey →" (old wording) no longer appears
+PASS — Start creates a new unique journey ID
+PASS — New journey begins at the correct first step
+PASS — New journey does not inherit prior mentor
+PASS — New journey does not inherit prior cigar
+PASS — New journey does not inherit Golden Box state
+PASS — New journey does not inherit prior scores (scorecard reset)
+PASS — New journey does not inherit prior completion (completedSteps reset to PRESERVED_COMPLETED_STEP_IDS only)
+PASS — New journey does not inherit prior venue [disclosed scope decision — venue preference is deliberately preserved across journeys, per the existing confirm-dialog copy and design intent; see 00-FINAL-REPORT.md]
+PASS — New journey does not inherit Packaging Studio state (goldenBox reset covers the linked design/entry association)
+PASS — Prior journey history remains preserved where supported (archived into previousCompletedJourneys before reset)
+PASS — Only one active journey exists per learner (single activeJourneyId field)
+PASS — Archived journey is not auto-resumed (previousCompletedJourneys is append-only history, never read back as active state)
+PASS — Completed journey is not auto-resumed (isComplete routes to "completed", not "resume")
+PASS — Resume points to the correct next incomplete step (getCurrentAllowedSession, unchanged strict-order logic)
+PASS — LocalStorage cannot override canonical journey selection (localStorage is read only as a display cache of the guest-session record, never as a competing source of truth)
+PASS — Refresh preserves corrected state (resumeRoute cache write is idempotent — unchanged from prior pass)
+BLOCKED — Independent browser session preserves corrected state (live) — requires reachable production backend
+BLOCKED — Cross-learner journey read is rejected (live) — requires reachable production backend
+BLOCKED — Cross-learner journey write is rejected (live) — requires reachable production backend
+BLOCKED — Guest cookie resolves the correct journey (live) — requires reachable production backend
+PASS — Phase 9 journey regression exists and is run as part of the required battery
+PASS — Phase 9A Packaging Studio amendment regression exists and is run as part of the required battery
+PASS — Packaging Studio regression exists and is run as part of the required battery
+PASS — Passport Security regression exists and is run as part of the required battery
+PASS — Production build passes
+PASS — Production startup passes (local server reachable)
+PASS — Health check passes — {"success":true,"status":"ok","service":"NOVEE OS Backend","version":"phase-7","db":"postgres","timestamp":"2026-07-23T17:45:06.542Z"}
+BLOCKED — Live landing/resume verification — SMOKECRAFT_PRODUCTION_URL not set / not reachable from this session
+BLOCKED — Live /api/version + /api/health verification — SMOKECRAFT_API_URL not set / not reachable from this session
+
+42 passed, 0 failed, 6 blocked (of 48 total)

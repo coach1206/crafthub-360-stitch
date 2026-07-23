@@ -1,0 +1,12 @@
+{
+  "cta": "resume",
+  "completedSessionNumbers": [
+    1,
+    2
+  ],
+  "completedSessionCount": 2,
+  "completionPercent": 7,
+  "isComplete": false,
+  "hasStarted": true,
+  "lastCompletedSessionNumber": 2
+}

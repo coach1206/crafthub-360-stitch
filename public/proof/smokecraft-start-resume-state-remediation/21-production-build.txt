@@ -1,0 +1,15 @@
+
+> crafthub-360-production@1.0.0 build
+> vite build
+
+vite v4.5.14 building for production...
+transforming...
+[plugin:vite:esbuild] Duplicate key "border" in object literal
+113|          borderRadius: 9,
+114|          background: selected ? `linear-gradient(160deg, ${statusColor}55, ${statusColor}22)` : cardBg,
+115|          border: `2px solid ${selected ? GOLD : statusColor}`,
+   |          ^
+116|          boxShadow: selected
+117|            ? `0 0 0 3px rgba(201,149,44,0.35), 0 0 12px ${statusColor}88, 0 2px 8px rgba(0,0,0,0.6)`
+
+✓ 1970 modules transformed.

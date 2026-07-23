@@ -140,7 +140,6 @@ export default function ResumeJourney() {
   }, [phase, resolved.route, currentAllowed?.id])
 
   const completedSteps = session?.completedSteps || []
-  const hasProgress = completedSteps.some(id => !PRESERVED_COMPLETED_STEP_IDS.includes(id))
   // Journey-visual-sequence-final pass — single authoritative source for
   // completion + percentage, replacing two independently-computed values
   // that could disagree (see smokecraftJourneyStatus.js for the full
@@ -148,6 +147,16 @@ export default function ResumeJourney() {
   const journeyStatus = useMemo(() => computeJourneyStatus(completedSteps), [completedSteps])
   const journeyComplete = journeyStatus.isComplete
   const completionPercent = journeyStatus.completionPercent
+  // Start-vs-Resume remediation pass — hasProgress previously scanned raw
+  // completedSteps for ANY non-preserved id, so a legacy record with a
+  // later session's id present but no earlier required session genuinely
+  // complete (journeyStatus.hasStarted === false, completionPercent === 0)
+  // still showed the Saved Journey card and enabled "Resume Journey" —
+  // exactly the reported defect for a user with no real active progress.
+  // hasProgress is now the same single authoritative signal used for
+  // current/last-completed/percent, so a "no valid active journey" state
+  // can never coexist with a rendered Saved Journey card.
+  const hasProgress = journeyStatus.hasStarted
 
   // Live remediation pass — derived from the same authoritative,
   // contiguous-prefix journeyStatus used for currentAllowed/completionPercent
@@ -274,6 +283,7 @@ export default function ResumeJourney() {
             <>
               {!hasProgress && (
                 <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(24px,4vw,40px)', textAlign: 'center' }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>No Active SmokeCraft Journey</div>
                   <p style={{ margin: 0, fontSize: 14, color: 'rgba(229,226,225,0.7)' }}>No saved journey yet — start your first SmokeCraft 360 session.</p>
                 </div>
               )}
@@ -307,19 +317,44 @@ export default function ResumeJourney() {
                 </div>
               )}
 
+              {/* Start-vs-Resume remediation pass — the primary action here now
+                  follows the exact 3-state CTA contract (no valid active
+                  journey / valid incomplete journey / valid completed
+                  journey), matching the bottom nav bar exactly. When no valid
+                  active journey exists, "Start" needs no confirmation (there
+                  is nothing recoverable to lose) — the confirm dialog only
+                  appears when starting over would discard real progress. */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <button
-                  type="button" onClick={handleStartNewClick}
-                  style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 24, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 14, padding: '14px 20px', cursor: 'pointer', outline: 'none', minHeight: 52 }}
-                >
-                  Start New Journey
-                </button>
+                {!hasProgress && (
+                  <button
+                    type="button" onClick={() => navigate(NEW_JOURNEY_START_ROUTE)}
+                    style={{ background: GOLD, border: 'none', borderRadius: 24, color: '#0a0603', fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 14, padding: '14px 20px', cursor: 'pointer', outline: 'none', minHeight: 52 }}
+                  >
+                    START SMOKECRAFT JOURNEY
+                  </button>
+                )}
+                {hasProgress && !journeyComplete && (
+                  <button
+                    type="button" onClick={handleResume}
+                    style={{ background: GOLD, border: 'none', borderRadius: 24, color: '#0a0603', fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 14, padding: '14px 20px', cursor: 'pointer', outline: 'none', minHeight: 52 }}
+                  >
+                    RESUME SMOKECRAFT JOURNEY
+                  </button>
+                )}
                 {journeyComplete && (
                   <button
                     type="button" onClick={handleReviewCompleted}
-                    style={{ background: 'transparent', border: `1px solid ${BORDER}`, borderRadius: 24, color: 'rgba(229,226,225,0.75)', fontFamily: 'Georgia, serif', fontSize: 13, padding: '12px 20px', cursor: 'pointer', outline: 'none', minHeight: 48 }}
+                    style={{ background: GOLD, border: 'none', borderRadius: 24, color: '#0a0603', fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 14, padding: '14px 20px', cursor: 'pointer', outline: 'none', minHeight: 52 }}
                   >
-                    Review Completed Journey
+                    VIEW COMPLETED JOURNEY
+                  </button>
+                )}
+                {hasProgress && (
+                  <button
+                    type="button" onClick={handleStartNewClick}
+                    style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 24, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 14, padding: '14px 20px', cursor: 'pointer', outline: 'none', minHeight: 52 }}
+                  >
+                    START NEW SMOKECRAFT JOURNEY
                   </button>
                 )}
               </div>
@@ -360,16 +395,17 @@ export default function ResumeJourney() {
         </div>
       </main>
 
-      {/* Journey-visual-sequence-final pass — this bar previously always
-          showed "Resume Journey" as primary, even for a completed journey
-          (the exact "RESUME JOURNEY is also visible" alongside "Journey
-          Completed" contradiction reported live). Primary action now
-          follows the same authoritative journeyComplete value the page
-          body already uses. */}
+      {/* Journey-visual-sequence-final / Start-vs-Resume remediation passes —
+          this bar previously always showed "Resume Journey" as primary, even
+          for a completed journey, AND even for no valid active journey at
+          all (disabled but still labeled "Resume Journey"). Primary action
+          and label now follow the exact same 3-state CTA contract as the
+          page body: no valid active journey -> Start, valid incomplete ->
+          Resume, valid complete -> View Completed. */}
       <SmokeCraftNavBar
-        primary={journeyComplete ? 'Review Completed Journey →' : 'Resume Journey →'}
-        onPrimary={journeyComplete ? handleReviewCompleted : handleResume}
-        primaryDisabled={!hasProgress || confirmingReset}
+        primary={!hasProgress ? 'START SMOKECRAFT JOURNEY →' : journeyComplete ? 'VIEW COMPLETED JOURNEY →' : 'RESUME SMOKECRAFT JOURNEY →'}
+        onPrimary={!hasProgress ? () => navigate(NEW_JOURNEY_START_ROUTE) : journeyComplete ? handleReviewCompleted : handleResume}
+        primaryDisabled={confirmingReset}
         secondary="← Back"
         onSecondary={() => navigate('/smokecraft/identity')}
       />

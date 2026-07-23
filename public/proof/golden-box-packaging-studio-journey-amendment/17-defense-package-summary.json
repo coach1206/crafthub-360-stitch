@@ -1,7 +1,7 @@
 {
-  "id": "6",
-  "entry_id": "77257f2e-38f6-4279-aea4-eb8e37284bb1",
-  "design_id": "c163ce7e-463e-4bc0-ac37-23a264358df4",
+  "id": "7",
+  "entry_id": "c48ffb94-491c-4600-a2d1-a68925acf05c",
+  "design_id": "0c1048e7-db18-4673-8d05-03bd16d21a3d",
   "version_number": 4,
   "snapshot": {
     "finish": "satin",
@@ -31,7 +31,7 @@
     "interiorAccentColor": null
   },
   "submitted_by_user_id": null,
-  "submitted_by_guest_reference": "eee98f1f-d95b-4362-98be-bf7c60075260",
-  "idempotency_key": "packaging_final:77257f2e-38f6-4279-aea4-eb8e37284bb1",
-  "submitted_at": "2026-07-23T13:37:23.660Z"
+  "submitted_by_guest_reference": "1dc610aa-d882-41b0-868a-c025f2244a58",
+  "idempotency_key": "packaging_final:c48ffb94-491c-4600-a2d1-a68925acf05c",
+  "submitted_at": "2026-07-23T17:36:46.636Z"
 }

@@ -583,3 +583,57 @@ branch (`main`) does not contain any of this multi-phase operation's
 completed work, which is itself a deployment-configuration risk worth
 flagging to the project owner independent of this specific verification
 attempt.
+
+### 2026-07-23 — Live Remediation: Start vs. Resume Journey State Correction
+
+**Prevention rules established by this pass** (apply to every future CraftHub vertical):
+
+1. A landing CTA must be derived from canonical server state — never from a
+   client-side heuristic re-implemented per screen.
+2. Start, resume, and completed journey states must be separate explicit
+   states, each with its own exact label and route — never a binary
+   Start/Resume toggle that a completed journey has to awkwardly share.
+3. A journey record (or any completedStep evidence) existing does not
+   automatically mean Resume — presence of evidence must be validated for
+   real, in-order progress before it is trusted.
+4. Contradictory state must be reconciled before display — never patch the
+   displayed values independently without fixing the shared source they
+   should both derive from.
+5. Completion percentage, current step, and last completed step must derive
+   from the same evidence source — this pass's own defect was two *different*
+   functions computing "has real progress" with different rules.
+6. LocalStorage must never select the canonical active journey — it may
+   cache a display value, but the check for "does progress exist" must use
+   the same authoritative derivation the rest of the app uses, not its own
+   raw scan.
+7. New Journey must create a new identity and not inherit prior module
+   state — audited and confirmed already compliant in this pass (see
+   `06-ROLLBACK-PLAN.md`), except an explicitly disclosed, pre-existing,
+   intentional scope decision (venue/XP preservation).
+8. Completed journeys must not be treated as incomplete resumable journeys —
+   the 3-state contract (start/resume/completed) prevents this by
+   construction once all consuming screens share one source.
+9. Resume pages require honest empty, incomplete, and completed states —
+   never a single "Saved Journey" card rendered unconditionally.
+10. Every CraftHub module must test fresh user, returning user, completed
+    user, archived journey, and corrupt legacy state — this pass's dedicated
+    suite exercises exactly these five shapes at the pure-function level.
+11. Live screenshots revealing contradictory state must reopen the affected
+    completion gate — this pass and its immediate predecessor both exist
+    because production screenshots surfaced a real defect neither prior
+    pass's automated suites had caught (both suites tested the already-fixed
+    `lastCompletedSession` path but not the still-buggy `hasProgress` path).
+12. A label-only fix is prohibited when the underlying state is wrong — this
+    pass fixed the derivation function first, then updated labels to match;
+    changing only the button text while leaving `hasProgress`'s weak check
+    in place would have been a cosmetic non-fix.
+
+**Root-cause note for this specific case**: two independently-implemented
+functions checked for "does real progress exist" with different, both-wrong
+rules, even after a prior pass fixed the *adjacent* `lastCompletedSession`
+calculation. This is the general lesson: when a defect's root cause is "N
+independent implementations of what should be one function," fixing one
+implementation is necessary but not sufficient — every sibling
+implementation must be found (grep for the same weak pattern, e.g.
+`completedSteps.some(...)`, across the whole codebase) and fixed in the same
+pass, not discovered one screenshot at a time across multiple passes.

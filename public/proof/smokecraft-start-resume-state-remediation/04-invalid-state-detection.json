@@ -1,0 +1,38 @@
+{
+  "input": [
+    "humidor-match",
+    "meet-your-cigar",
+    "terroir",
+    "format",
+    "cut-toast-light",
+    "lighting-tutorial",
+    "first-third",
+    "flavor-memory",
+    "pairing-lab",
+    "second-third",
+    "mentor-commentary",
+    "knowledge-drop",
+    "final-third",
+    "scorecard",
+    "ai-summary",
+    "pairing-recommendations",
+    "passport-stamp",
+    "final-review",
+    "rewards",
+    "session-complete"
+  ],
+  "computedStatus": {
+    "completedSessionNumbers": [],
+    "completedSessionCount": 0,
+    "completionPercent": 0,
+    "isComplete": false,
+    "hasStarted": false,
+    "lastCompletedSessionNumber": null
+  },
+  "currentAllowedSession": {
+    "session": 1,
+    "label": "Welcome to Today’s Experience"
+  },
+  "invalidStateDetected": true,
+  "note": "BEFORE the hasProgress fix this input would still have shown a Saved Journey card / Resume CTA because hasProgress trusted any non-preserved id; the CTA-level fix in this pass corrects that final gap."
+}

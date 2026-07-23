@@ -1,0 +1,9 @@
+{
+  "cta": "start",
+  "completedSessionNumbers": [],
+  "completedSessionCount": 0,
+  "completionPercent": 0,
+  "isComplete": false,
+  "hasStarted": false,
+  "lastCompletedSessionNumber": null
+}

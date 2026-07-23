@@ -1,0 +1,4 @@
+Reference only — the reported live resume screenshot showed:
+Current session: S1 / Last completed session: S27 / Completion: 63%
+See docs/audits/smokecraft-final-completion/live-resume-remediation/01-ROOT-CAUSE.md
+for the full root-cause reproduction at the logic level.

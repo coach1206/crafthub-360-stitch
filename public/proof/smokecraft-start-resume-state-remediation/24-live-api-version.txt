@@ -1,0 +1,1 @@
+BLOCKED — no network path to https://crafthub360.up.railway.app (403 policy denial, confirmed non-transient — see docs/audits/smokecraft-final-completion/live-deployment-verification/01-ENVIRONMENT-DISCOVERY.md). Not fabricated.

@@ -1,0 +1,4 @@
+Reference only (screenshots not directly attached by the operator into this
+repo) — the reported live landing screenshot showed the primary CTA as
+"RESUME JOURNEY" routing to /smokecraft/resume. See the user's prompt text
+for the exact wording quoted. No fabricated screenshot is substituted here.
