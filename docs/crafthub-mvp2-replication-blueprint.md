@@ -820,3 +820,34 @@ change.
     present somewhere in the repository.
 14. Entry flow, curriculum flow, challenge flow, and post-completion flow
     must remain explicitly separated in both code and documentation.
+
+## SmokeCraft Full Root-Cause Audit — permanent rules
+
+1. Repeated user-visible failures require a cross-layer root-cause audit
+   before another page-level patch.
+2. Asset existence, asset registration, asset rendering, visual visibility,
+   and live deployment are separate gates.
+3. Route correctness, sequence correctness, state correctness, and
+   deployment correctness are separate gates.
+4. Source-text verification cannot substitute for browser-visible
+   verification.
+5. Tests must explain how a production defect could still occur despite
+   passing — a test that only proves local correctness must say so.
+6. Every production route must prove the intended component and approved
+   asset render together, not just that each exists independently.
+7. Multiple state contexts require an explicit authority and
+   hydration-order map.
+8. Deployment commit proof is mandatory before blaming application code or
+   cache for a live discrepancy.
+9. Fallback and demo content must be searchable and production-reachability
+   tested, not just assumed absent.
+10. The production bundle must be inspected for required assets and route
+    components after every visual/routing-affecting change.
+11. A local development pass does not prove production-build behavior, and
+    a local production-build pass does not prove live-deployment behavior —
+    these are three distinct levels of proof.
+12. Audit findings must precede remediation when the root cause is
+    uncertain.
+13. Completion reports must separate verified fact, inference, blocked
+    evidence, and untested assumption.
+14. Repeated isolated fixes without a system map are prohibited.

@@ -1,0 +1,19 @@
+# 04 — Component Rendering Audit
+
+## Method
+
+For the 5 entry screens (already fully re-verified pixel-shell-correct in the prior "Approved Entry Visual Restoration" pass) plus a spot audit of the shared rendering primitives every session screen depends on (`SmokeCraftImageBoundsOverlay.jsx`, `SmokeCraftHotspotLayer.jsx`, `SmokeCraftNavBar.jsx`, `SmokeCraftProgressHeader.jsx`, `LockedSmokeCraftScreen.jsx`).
+
+## Findings
+
+- **`object-fit` usage:** 19 files across `src/pages/smokecraft/` and `src/components/smokecraft/` explicitly set `objectFit` (predominantly `contain`, consistent with the approved-image-shell requirement established in the entry-visual pass — no `cover`-induced cropping found in the screens audited this pass).
+- **`pointer-events: none` usage:** confirmed intentional and consistent with the already-documented pattern (from the "Start New Journey" pass's own bug-fix): every wrapper that sets `pointerEvents: 'none'` (`SmokeCraftHotspotLayer.jsx`, `SmokeCraftNavBar.jsx`, `SmokeCraftProgressHeader.jsx`, `LockedSmokeCraftScreen.jsx`) does so on a **decorative/background** layer, with every actual interactive child explicitly re-enabling `pointerEvents: 'auto'` on itself — the same pattern previously confirmed correct, and the same pattern whose omission on a *new* element (the Start New Journey confirmation dialog) was the one real pointer-events bug found and fixed in that earlier pass. No new omission of this kind was found in this pass's audit of the shared primitives.
+- **`z-index` usage in `VenueSelect.jsx`:** header image at `zIndex: 1`, `<header>` text at `zIndex: 3`, `<main>` content at `zIndex: 2` — correctly layered (image lowest, then live content, then the header text on top of both) — re-confirmed still correct after the prior pass's header-enlargement fix.
+- **No React Suspense/lazy-import boundary was found gating any SmokeCraft entry or session component** — all are direct static imports in `App.jsx`, meaning there is no lazy-loading race that could show a fallback/loading state in place of the real screen.
+- **No route-level error boundary was found wrapping SmokeCraft routes specifically** — a runtime error in a session component would surface as React's default error UI (or a blank screen), not a silently-substituted fallback screen. This means "wrong screen" reports are very unlikely to be an error-boundary-triggered fallback; they are more consistent with a stale build/deploy (see `01-DEPLOYMENT-AUDIT.md`) than a code-level substitution.
+- **No `isDemoMode`/environment flag was found that swaps an approved asset for a different one** — demo mode (audited in the prior Session-Sequence pass) only bypasses *locks*, it never substitutes imagery.
+- **No tablet-specific vs. desktop-specific component split was found** for any of the 5 entry screens or 27 session screens — all use the same component with responsive CSS (`clamp()`, percentage-based hotspot coordinates), meaning a tablet/desktop rendering disagreement is architecturally unlikely (there is only one code path per screen, not two).
+
+## Conclusion
+
+No live-hidden, cropped, covered, or pointer-blocked approved image was found in this pass's audit of the shared rendering primitives and the previously-flagged screens. Combined with the two prior dedicated visual-restoration passes (which found and fixed the one real defect — Venue Selection's under-sized header — and confirmed every other screen already correct), **this audit found no additional component-rendering defect.** This raises the likelihood that any continued live report of "wrong image" is either (a) a stale Railway deployment predating these fixes, or (b) browser/CDN caching of an old build — both squarely in the deployment-layer category this session cannot observe (`01-DEPLOYMENT-AUDIT.md`), not a rendering-layer defect still present in source.
