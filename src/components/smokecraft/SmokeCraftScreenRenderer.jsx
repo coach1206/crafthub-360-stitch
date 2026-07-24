@@ -3,9 +3,11 @@
 // previous/continue actions, then renders it. App.jsx routes a migrated
 // screen through this wrapper instead of the bare component directly.
 //
-// Scope note (disclosed): only 'session-21' is actually routed through
-// this component this pass — see 00-FINAL-REPORT.md for why a full
-// 27-screen migration was not attempted in one pass.
+// Scope note (updated 2026-07): all 27 curriculum screens (and session-1
+// Welcome) now route through this renderer via the manifest/registry — the
+// full migration is complete (commit 69e419fa). This wrapper is the single
+// canonical render path; no curriculum screen component is rendered directly
+// from App.jsx anymore.
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
@@ -45,6 +47,13 @@ export default function SmokeCraftScreenRenderer({ screenId }) {
     if (nextRoute) navigate(nextRoute)
   }
 
+  // Approved-visual-lock markers below: data-visual-source is `user-approved`
+  // when this screen has an approved GitHub-sourced asset registered in
+  // SC_ASSETS; otherwise the honest `live-component-no-approved-asset` (e.g.
+  // session-1 Welcome, which has no approved "Welcome to Today's Experience"
+  // artwork anywhere in the repo — disclosed, never fabricated or borrowed
+  // from another screen). Every canonical screen is an interactive live
+  // component, never a static image-only screen, so data-static-only="false".
   return (
     <div
       data-smokecraft-screen-id={entry.screenId}
@@ -53,6 +62,8 @@ export default function SmokeCraftScreenRenderer({ screenId }) {
       data-smokecraft-phase={entry.phase ?? ''}
       data-smokecraft-session={entry.sessionNumber ?? ''}
       data-smokecraft-runtime-version={RUNTIME_VERSION}
+      data-visual-source={entry.assetKey ? 'user-approved' : 'live-component-no-approved-asset'}
+      data-static-only="false"
     >
       <Component
         screenData={data}

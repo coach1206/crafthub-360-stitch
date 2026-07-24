@@ -1,0 +1,348 @@
+[
+  {
+    "name": "entry-landing",
+    "requestedRoute": "/smokecraft",
+    "finalUrl": "http://localhost:5050/smokecraft",
+    "markers": null,
+    "firstImg": "/assets/smokecraft-reference/approved/smokecraft-landing.png?v=69e419f",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ]
+  },
+  {
+    "name": "entry-enroll",
+    "requestedRoute": "/smokecraft/enroll",
+    "finalUrl": "http://localhost:5050/smokecraft/enroll",
+    "markers": null,
+    "firstImg": "/assets/smokecraft-reference/approved/smokecraft-guest-pass.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "entry-venue",
+    "requestedRoute": "/smokecraft/venue-select",
+    "finalUrl": "http://localhost:5050/smokecraft/venue-select",
+    "markers": null,
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "entry-identity",
+    "requestedRoute": "/smokecraft/identity",
+    "finalUrl": "http://localhost:5050/smokecraft/identity",
+    "markers": null,
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "mentor-selection",
+    "requestedRoute": "/smokecraft/mentor-selection",
+    "finalUrl": "http://localhost:5050/smokecraft/mentor-selection",
+    "markers": null,
+    "firstImg": "/mentors/don-alejandro.jpg",
+    "consoleErrors": []
+  },
+  {
+    "name": "golden-box",
+    "requestedRoute": "/smokecraft/golden-box",
+    "finalUrl": "http://localhost:5050/smokecraft/golden-box",
+    "markers": null,
+    "firstImg": "/assets/smokecraft/GOLDEN%20BOX%20RULES.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-1-welcome",
+    "requestedRoute": "/smokecraft/welcome",
+    "finalUrl": "http://localhost:5050/smokecraft/welcome",
+    "markers": {
+      "screenId": "session-1",
+      "component": "session-1",
+      "assetKey": "",
+      "visualSource": "live-component-no-approved-asset",
+      "staticOnly": "false"
+    },
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "session-2-humidor",
+    "requestedRoute": "/smokecraft/humidor-match",
+    "finalUrl": "http://localhost:5050/smokecraft/humidor-match",
+    "markers": {
+      "screenId": "session-2",
+      "component": "session-2",
+      "assetKey": "humidorMatch",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft/Humidor%20Match%201.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-3-meet-cigar",
+    "requestedRoute": "/smokecraft/meet-your-cigar",
+    "finalUrl": "http://localhost:5050/smokecraft/meet-your-cigar",
+    "markers": {
+      "screenId": "session-3",
+      "component": "session-3",
+      "assetKey": "meetYourCigar",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "session-4-terroir",
+    "requestedRoute": "/smokecraft/terroir",
+    "finalUrl": "http://localhost:5050/smokecraft/terroir",
+    "markers": {
+      "screenId": "session-4",
+      "component": "session-4",
+      "assetKey": "terroir",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "session-5-format",
+    "requestedRoute": "/smokecraft/format",
+    "finalUrl": "http://localhost:5050/smokecraft/format",
+    "markers": {
+      "screenId": "session-5",
+      "component": "session-5",
+      "assetKey": "format",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft-reference/approved/smokecraft-vitola.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-6-cut-toast",
+    "requestedRoute": "/smokecraft/cut-toast-light",
+    "finalUrl": "http://localhost:5050/smokecraft/cut-toast-light",
+    "markers": {
+      "screenId": "session-6",
+      "component": "session-6",
+      "assetKey": "cutToastLight",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft/CUT%20%20TOAST,%20&%20LIGHT.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-7-lighting",
+    "requestedRoute": "/smokecraft/lighting-tutorial",
+    "finalUrl": "http://localhost:5050/smokecraft/lighting-tutorial",
+    "markers": {
+      "screenId": "session-7",
+      "component": "session-7",
+      "assetKey": "lightingTutorial",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "session-8-first-third",
+    "requestedRoute": "/smokecraft/first-third",
+    "finalUrl": "http://localhost:5050/smokecraft/first-third",
+    "markers": {
+      "screenId": "session-8",
+      "component": "session-8",
+      "assetKey": "firstThird",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft/FIRST%20%20THIRD1.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-10-flavor-mem",
+    "requestedRoute": "/smokecraft/flavor-memory",
+    "finalUrl": "http://localhost:5050/smokecraft/flavor-memory",
+    "markers": {
+      "screenId": "session-10",
+      "component": "session-10",
+      "assetKey": "flavorMemory",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft/FLAVOR%20MEMORY.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-11-pairing-lab",
+    "requestedRoute": "/smokecraft/pairing-lab",
+    "finalUrl": "http://localhost:5050/smokecraft/pairing-lab",
+    "markers": {
+      "screenId": "session-11",
+      "component": "session-11",
+      "assetKey": "pairingLab",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft/PAIRING%20LAB1.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-12-second-third",
+    "requestedRoute": "/smokecraft/second-third",
+    "finalUrl": "http://localhost:5050/smokecraft/second-third",
+    "markers": {
+      "screenId": "session-12",
+      "component": "session-12",
+      "assetKey": "secondThird",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft/SECOND%20THIRD.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-14-mentor-comm",
+    "requestedRoute": "/smokecraft/mentor-commentary",
+    "finalUrl": "http://localhost:5050/smokecraft/mentor-commentary",
+    "markers": {
+      "screenId": "session-14",
+      "component": "session-14",
+      "assetKey": "mentorCommentary",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "session-15-knowledge",
+    "requestedRoute": "/smokecraft/knowledge-drop",
+    "finalUrl": "http://localhost:5050/smokecraft/knowledge-drop",
+    "markers": {
+      "screenId": "session-15",
+      "component": "session-15",
+      "assetKey": "knowledgeDrop",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "session-16-final-third",
+    "requestedRoute": "/smokecraft/final-third",
+    "finalUrl": "http://localhost:5050/smokecraft/final-third",
+    "markers": {
+      "screenId": "session-16",
+      "component": "session-16",
+      "assetKey": "finalThird",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft/FINAL%20THIRD.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-19-scorecard",
+    "requestedRoute": "/smokecraft/scorecard",
+    "finalUrl": "http://localhost:5050/smokecraft/scorecard",
+    "markers": {
+      "screenId": "session-19",
+      "component": "session-19",
+      "assetKey": "scorecard",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft/Scorecard.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-21-ai-summary",
+    "requestedRoute": "/smokecraft/ai-summary",
+    "finalUrl": "http://localhost:5050/smokecraft/ai-summary",
+    "markers": {
+      "screenId": "session-21",
+      "component": "session-21",
+      "assetKey": "aiSummary",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "session-22-pairing-rec",
+    "requestedRoute": "/smokecraft/pairing-recommendations",
+    "finalUrl": "http://localhost:5050/smokecraft/pairing-recommendations",
+    "markers": {
+      "screenId": "session-22",
+      "component": "session-22",
+      "assetKey": "pairingRecommendations",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "session-23-passport",
+    "requestedRoute": "/smokecraft/passport-stamp",
+    "finalUrl": "http://localhost:5050/smokecraft/passport-stamp",
+    "markers": {
+      "screenId": "session-23",
+      "component": "session-23",
+      "assetKey": "passportStamp",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft/PASSPORT%20STAMP.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-24-final-rev",
+    "requestedRoute": "/smokecraft/final-review",
+    "finalUrl": "http://localhost:5050/smokecraft/final-review",
+    "markers": {
+      "screenId": "session-24",
+      "component": "session-24",
+      "assetKey": "finalReview",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": "/assets/smokecraft/FINAL%20REVIEW.png?v=69e419f",
+    "consoleErrors": []
+  },
+  {
+    "name": "session-25-rewards",
+    "requestedRoute": "/smokecraft/rewards",
+    "finalUrl": "http://localhost:5050/smokecraft/rewards",
+    "markers": {
+      "screenId": "session-25",
+      "component": "session-25",
+      "assetKey": "rewards",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": null,
+    "consoleErrors": []
+  },
+  {
+    "name": "session-27-complete",
+    "requestedRoute": "/smokecraft/session-complete",
+    "finalUrl": "http://localhost:5050/smokecraft/session-complete",
+    "markers": {
+      "screenId": "session-27",
+      "component": "session-27",
+      "assetKey": "recommendedNextJourney",
+      "visualSource": "user-approved",
+      "staticOnly": "false"
+    },
+    "firstImg": null,
+    "consoleErrors": [
+      "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
+    ]
+  }
+]
