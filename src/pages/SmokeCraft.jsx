@@ -3,82 +3,19 @@ import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../constants/smokecraftAssets.js'
-import { computeJourneyStatus } from '../constants/smokecraftJourneyStatus.js'
+// Single Build & Live Runtime pass — these four helpers moved verbatim to
+// src/constants/smokecraftLandingCta.js so /smokecraft/how-it-works can
+// reuse the SAME three-state CTA decision instead of defining a second one.
+import {
+  hasRealJourneyProgress,
+  getJourneyCompletionState,
+  getEntryRoute,
+} from '../constants/smokecraftLandingCta.js'
 import { useStartNewSmokeCraftJourney } from '../hooks/useStartNewSmokeCraftJourney.js'
 
 const NAT_W = 1189
 const NAT_H = 667
 const GOLD = '#E9C176'
-
-// Read a guest session step from novee_guest_session.completedSteps
-function guestStepDone(stepId) {
-  try {
-    const s = JSON.parse(localStorage.getItem('novee_guest_session') || 'null')
-    return Array.isArray(s?.completedSteps) && s.completedSteps.includes(stepId)
-  } catch { return false }
-}
-
-// Root-cause fix: the Landing CTA previously labeled itself "Resume Journey"
-// merely because the visitor had completed Entry-layer state (enroll +
-// venue selection) — i.e. whenever getEntryRoute() below would hand off to
-// /smokecraft/resume. That is not real resumable progress; it only means
-// the visitor is ready to see the Resume/Start-New decision screen. The one
-// canonical definition of "real journey progress" already exists on that
-// screen (ResumeJourney.jsx's hasProgress check) — reused here verbatim so
-// the two screens can never disagree about what counts as resumable.
-//
-// Start-vs-Resume remediation pass — this previously scanned completedSteps
-// for ANY non-preserved id present, the same bug class fixed in
-// ResumeJourney.jsx: a legacy record with a later session's id present but
-// no earlier required session genuinely complete (in contiguous-prefix
-// order) still counted as "real progress" here, showing "Resume Journey"
-// instead of "Start SmokeCraft Journey". Now delegates to the same
-// authoritative computeJourneyStatus().hasStarted used everywhere else.
-function hasRealJourneyProgress() {
-  try {
-    const s = JSON.parse(localStorage.getItem('novee_guest_session') || 'null')
-    const completedSteps = Array.isArray(s?.completedSteps) ? s.completedSteps : []
-    return computeJourneyStatus(completedSteps).hasStarted
-  } catch { return false }
-}
-
-// Journey-visual-sequence-final pass — the landing CTA previously only knew
-// Start vs. Resume, so a guest whose journey was already 100% complete
-// still saw "Resume Journey →" (the exact reported "Landing page shows
-// RESUME JOURNEY when it should show START SMOKECRAFT 360" — for a
-// completed journey neither the old "Resume" nor a bare "Start" is
-// correct; it must offer to review the completed journey/start fresh).
-// Uses the same authoritative computeJourneyStatus() as ResumeJourney.jsx
-// so the two screens can never disagree.
-function getJourneyCompletionState() {
-  try {
-    const s = JSON.parse(localStorage.getItem('novee_guest_session') || 'null')
-    const completedSteps = Array.isArray(s?.completedSteps) ? s.completedSteps : []
-    return computeJourneyStatus(completedSteps)
-  } catch { return { isComplete: false, hasStarted: false } }
-}
-
-// Root-cause fix: this Launch screen previously computed its own private,
-// stale resume sequence (old route ids, wrong order vs. the authoritative
-// 27-session registry) and jumped straight into a mid-journey route,
-// entirely bypassing the real Entry Layer (Sign In/Guest → Venue Selection →
-// Personal Dashboard → Resume-or-Start, ENTRY_LAYER_SCREENS in session.js).
-// The correct behavior is to hand off to that already-built chain and let
-// each screen's own guard/logic decide what's next — never to silently
-// resume mid-journey from the Launch screen itself.
-function getEntryRoute() {
-  if (!guestStepDone('enroll')) return '/smokecraft/enroll'
-  try {
-    const raw = localStorage.getItem('sc_journey_v1')
-    const j = raw ? JSON.parse(raw) : null
-    if (!j?.selectedVenue && !j?.venueSelectionCompleted) return '/smokecraft/venue-select'
-  } catch {
-    return '/smokecraft/venue-select'
-  }
-  // Identity + venue are set — hand off to Resume/Start New, which requires
-  // the visitor to deliberately choose (never auto-resumes on its own).
-  return '/smokecraft/resume'
-}
 
 // Real, visible button rendered opaque over the baked "START SMOKECRAFT"
 // zone — its label is dynamic (Start vs Resume), so the baked pixel text

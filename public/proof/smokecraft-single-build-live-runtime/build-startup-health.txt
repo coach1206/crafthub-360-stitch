@@ -1,0 +1,9 @@
+### npm run build
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 15.44s
+exit=0
+
+### production startup + health
+{"success":true,"status":"ok","service":"NOVEE OS Backend","version":"phase-7","db":"postgres","timestamp":"2026-07-24T20:03:45.785Z"}
+{"success":true,"service":"crafthub-360","environment":"development","commit":"cbea8aadd735793ce1fcd45ffbb22442e2034213","backendCommit":"cbea8aadd735793ce1fcd45ffbb22442e2034213","frontendCommit":"cbea8aadd735793ce1fcd45ffbb22442e2034213","branch":"recovery/smokecraft-codex-final","buildTimestamp":"2026-07-24T20:03:29.758Z","assetVersion":"cbea8aa","applicationVersion":"0.0.0","manifestFound":true}

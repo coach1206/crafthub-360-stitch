@@ -85,22 +85,28 @@ export default function SmokeCraftNavBar({
             {secondary}
           </button>
         )}
-        <button
-          type="button"
-          disabled={!!primaryDisabled}
-          onClick={() => { if (!primaryDisabled) { triggerHaptic('medium'); onPrimary() } }}
-          style={{
-            ...baseBtn,
-            flexBasis: secondary ? '65%' : '100%',
-            pointerEvents: 'auto',
-            background: primaryDisabled ? 'rgba(233,193,118,0.2)' : GOLD,
-            color: primaryDisabled ? 'rgba(10,6,3,0.35)' : DARK,
-            boxShadow: primaryDisabled ? 'none' : '0 4px 24px rgba(233,193,118,0.45)',
-            cursor: primaryDisabled ? 'not-allowed' : 'pointer',
-          }}
-        >
-          {primary}
-        </button>
+        {/* Single Build & Live Runtime pass — the primary button was
+            previously rendered unconditionally, so a caller that legitimately
+            needs only a Back control (Rewards Center) got an empty, clickable
+            gold pill that called an undefined onPrimary. */}
+        {primary && onPrimary && (
+          <button
+            type="button"
+            disabled={!!primaryDisabled}
+            onClick={() => { if (!primaryDisabled) { triggerHaptic('medium'); onPrimary() } }}
+            style={{
+              ...baseBtn,
+              flexBasis: secondary ? '65%' : '100%',
+              pointerEvents: 'auto',
+              background: primaryDisabled ? 'rgba(233,193,118,0.2)' : GOLD,
+              color: primaryDisabled ? 'rgba(10,6,3,0.35)' : DARK,
+              boxShadow: primaryDisabled ? 'none' : '0 4px 24px rgba(233,193,118,0.45)',
+              cursor: primaryDisabled ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {primary}
+          </button>
+        )}
       </div>
     </div>
   )

@@ -8,6 +8,61 @@ import { BUILD_INFO } from '../../generated/buildInfo.js'
 
 const GOLD = '#E9C176'
 
+// Single Build & Live Runtime pass — the mismatch banner alone was passive:
+// it told the user a newer build existed but left the stale bundle running
+// until they clicked. The reported live symptom (one domain serving two
+// different build IDs across routes) is exactly the case where a stale tab
+// must heal itself. This performs ONE automatic recovery attempt per
+// detected backend build, then never again.
+//
+// Loop prevention is essential: if the reload does not resolve the mismatch
+// (e.g. the server itself is serving inconsistent builds, which no client
+// fix can repair), a naive reload-on-mismatch would spin forever. The
+// sessionStorage marker is keyed to the backend commit we are reloading
+// FOR, so a genuine later deploy can still trigger one fresh attempt, but
+// the same unresolved mismatch never reloads twice. The banner remains as
+// the manual fallback when the automatic attempt has already been spent.
+const RECOVERY_KEY = 'sc_build_recovery_attempt'
+
+function attemptOneShotRecovery(backendCommit) {
+  let alreadyTried = false
+  try { alreadyTried = sessionStorage.getItem(RECOVERY_KEY) === backendCommit } catch { alreadyTried = true }
+  if (alreadyTried) return
+
+  try { sessionStorage.setItem(RECOVERY_KEY, backendCommit) } catch { return }
+
+  const cleanup = []
+
+  // Unregister any stale service worker that could be pinning old chunks.
+  if ('serviceWorker' in navigator) {
+    cleanup.push(
+      navigator.serviceWorker.getRegistrations()
+        .then(regs => Promise.all(regs.map(r => r.unregister())))
+        .catch(() => {})
+    )
+  }
+
+  // Delete only caches this application owns — never all browser storage.
+  // localStorage/IndexedDB (novee_guest_session, sc_journey_v1, Passport
+  // identity, archived journeys) are deliberately untouched, so recovery
+  // can never cost the user their journey.
+  if (typeof caches !== 'undefined' && caches?.keys) {
+    cleanup.push(
+      caches.keys()
+        .then(keys => Promise.all(
+          keys
+            .filter(k => ['novee-os', 'smokecraft', 'workbox', 'crafthub'].some(p => k.toLowerCase().startsWith(p)))
+            .map(k => caches.delete(k))
+        ))
+        .catch(() => {})
+    )
+  }
+
+  Promise.all(cleanup).finally(() => {
+    window.location.reload()
+  })
+}
+
 export default function BuildDiagnosticFooter() {
   const [expanded, setExpanded] = useState(() => {
     try { return new URLSearchParams(window.location.search).get('diagnostics') === '1' } catch { return false }
@@ -29,6 +84,7 @@ export default function BuildDiagnosticFooter() {
         // last load), not a frontend/backend split-deploy scenario.
         if (data.backendCommit && BUILD_INFO.commit !== 'local' && data.backendCommit !== BUILD_INFO.commit) {
           setMismatch(true)
+          attemptOneShotRecovery(data.backendCommit)
         }
       })
       .catch(() => { /* diagnostics must never break the real user journey */ })

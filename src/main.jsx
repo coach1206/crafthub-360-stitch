@@ -35,6 +35,25 @@ if ('serviceWorker' in navigator) {
   })
 }
 
+// Single Build & Live Runtime pass — unregistering a service worker does NOT
+// delete the Cache Storage buckets it created. `public/sw.js` (the retired
+// NOVEE OS Phase 11 worker, now a self-destructing kill switch) used a
+// stale-while-revalidate strategy under the cache name `novee-os-v2`, which
+// could return a previous build's hashed JS chunk ahead of the network. Any
+// browser that ever registered it can still be holding that bucket. This
+// deletes only caches this app owns by name prefix — it never touches
+// localStorage/IndexedDB, so novee_guest_session, sc_journey_v1, Passport
+// identity and archived journey history are all untouched. Strictly
+// protective: it can only remove staleness, never create it.
+const RETIRED_CACHE_PREFIXES = ['novee-os', 'smokecraft', 'workbox', 'crafthub']
+if (typeof caches !== 'undefined' && caches?.keys) {
+  caches.keys().then((keys) => {
+    keys
+      .filter((k) => RETIRED_CACHE_PREFIXES.some((p) => k.toLowerCase().startsWith(p)))
+      .forEach((k) => caches.delete(k))
+  }).catch(() => { /* never break the real user journey */ })
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>

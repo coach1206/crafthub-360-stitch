@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { RANKS, getRankFromXP } from '../../constants/session.js'
 
 const GOLD  = '#E9C176'
@@ -51,28 +52,52 @@ export default function RewardsCenter() {
   )
 
   return (
-    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: '#060810', fontFamily: 'Georgia, serif' }}>
-      {/* Approved Reward Center visual — rendered as the destination shell. */}
+    <div
+      data-testid="smokecraft-rewards-center"
+      style={{ position: 'fixed', inset: 0, overflowX: 'hidden', overflowY: 'auto', background: '#060810', fontFamily: 'Georgia, serif' }}
+    >
+      {/*
+        Layout root-cause fix (Single Build & Live Runtime pass). Previously
+        this approved visual was cropped into a fixed band
+        (height: clamp(150px,26vh,260px), backgroundSize: cover,
+        backgroundPosition: center 35%) while <main> was absolutely
+        positioned starting at clamp(140px,24vh,240px) with a HIGHER z-index.
+        Three real defects followed, all reproduced in a real browser and all
+        matching the reported live symptoms:
+          1. `main` started ~10-20px ABOVE the band's bottom edge and painted
+             over it — live content literally covered the approved artwork.
+          2. `cover` + `center 35%` sliced the approved reward cards through
+             their middles and pushed the image's own top navigation off
+             screen, so the approved layout read as broken/inaccessible.
+          3. The rgba(6,8,16,0.92) gradient stop plus the fixed-height band
+             left a large black region below the image before content began.
+        Now: one normal-flow scrolling document. The visual keeps its real
+        1672x941 aspect ratio with backgroundSize `contain`, so it is never
+        cropped and no approved card is ever sliced; content flows BELOW it
+        rather than over it, making overlap structurally impossible; and the
+        duplicate live "Reward Center" title is dropped (the approved image
+        already titles the screen) in favour of a screen-reader-only h1.
+        Bottom navigation is the standard SmokeCraftNavBar, which the screen
+        previously lacked entirely.
+      */}
       <div
         role="img"
         aria-label="SmokeCraft 360 Reward Center"
         data-visual-source="reward-center"
         style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(150px,26vh,260px)',
-          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.15), rgba(6,8,16,0.92)), url(${SC_ASSETS.rewardCenter})`,
-          backgroundSize: 'cover', backgroundPosition: 'center 35%', zIndex: 1,
+          width: '100%', aspectRatio: '1672 / 941', maxHeight: '62vh',
+          backgroundImage: `url(${SC_ASSETS.rewardCenter})`,
+          backgroundSize: 'contain', backgroundPosition: 'center top',
+          backgroundRepeat: 'no-repeat', backgroundColor: '#060810',
         }}
       />
 
-      <main style={{
-        position: 'absolute', top: 'clamp(140px,24vh,240px)', bottom: 0, left: 0, right: 0,
-        overflowY: 'auto', WebkitOverflowScrolling: 'touch', padding: '0 clamp(16px,4vw,40px) 40px', zIndex: 2,
-      }}>
-        <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16, paddingTop: 20 }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(233,193,118,0.6)', letterSpacing: '0.24em', textTransform: 'uppercase' }}>SmokeCraft 360</div>
-            <h1 style={{ margin: '4px 0 0', fontSize: 'clamp(24px,3.6vw,36px)', color: CREAM }}>Reward Center</h1>
-          </div>
+      <main style={{ padding: '0 clamp(16px,4vw,40px) 140px' }}>
+        <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16, paddingTop: 24 }}>
+          <h1 style={{
+            position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
+            overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
+          }}>SmokeCraft 360 Reward Center</h1>
 
           {/* Real XP + rank */}
           <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,2.4vw,24px)' }}>
@@ -119,19 +144,16 @@ export default function RewardsCenter() {
             </div>
           </div>
 
-          <button
-            type="button" onClick={back}
-            style={{
-              alignSelf: 'flex-start', minHeight: 48, padding: '10px 24px', borderRadius: 999,
-              background: 'transparent', border: `1.5px solid ${GOLD}`, color: GOLD,
-              fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 14, letterSpacing: '0.04em',
-              textTransform: 'uppercase', cursor: 'pointer', outline: 'none',
-            }}
-          >
-            ← Back to Landing
-          </button>
         </div>
       </main>
+
+      {/* Bottom navigation — the standard approved bar this screen previously
+          lacked (the only way back was an inline button buried at the end of
+          the scroll, which is why the live report noted a missing bottom nav). */}
+      <SmokeCraftNavBar
+        secondary="← Back to Landing"
+        onSecondary={back}
+      />
     </div>
   )
 }

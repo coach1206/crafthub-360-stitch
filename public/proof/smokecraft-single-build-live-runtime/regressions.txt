@@ -1,0 +1,56 @@
+# Regression battery — Single Build & Live Runtime pass
+
+Run against the local production build (server/index.js :3001, vite preview :5050, vite dev :5000).
+
+=== verify-smokecraft-railway-proxy-and-destinations
+PASS  (15) health reports ok status
+
+32/32 passed
+
+=== verify-smokecraft-live-landing-and-destinations
+PASS  Destination[Enter Challenge]: active journey preserved
+
+28/28 checks passed
+
+=== verify-smokecraft-canonical-runtime
+PASS — Production build passes
+
+19 passed, 0 failed (of 19 total)
+
+=== verify-smokecraft-canonical-journey-authority
+PASS — Full per-journeyId GuestSessionContext field scoping — NOT implemented this pass (disclosed)
+
+25 passed, 0 failed (of 25 total)
+
+=== verify-smokecraft-zero-legacy-runtime
+PASS — No fallback component silently replaces AISummary at the ai-summary route
+
+9 passed, 0 failed (of 9 total)
+
+=== verify-smokecraft-zero-old-visuals
+20 passed, 0 failed
+
+ZERO-OLD-VISUALS GATE: PASS — no old/duplicate/fallback/static-only/unapproved SmokeCraft visual is production-reachable.
+
+=== verify-smokecraft-entry-prerequisite-guard
+PASS — Health check passes — {"success":true,"status":"ok","service":"NOVEE OS Backend","version":"phase-7","db":"postgres","timestamp":"2026-07-24T19:59:39.135Z"}
+
+43 passed, 0 failed, 0 blocked (of 43 total)
+
+=== verify-smokecraft-27-session-sequence
+PASS — Production build passes
+
+39 passed, 0 failed (of 39 total)
+(NOTE: an earlier run of this suite reported 36/36 because one live browser sweep
+was BLOCKED by a stale `vite preview` process timing out on :5050 — the known
+recurring environment issue, not a code regression. Re-run after restarting
+preview: 39/39, the documented baseline.)
+
+=== verify-smokecraft-approved-entry-visuals
+PASS — Production build passes
+
+24 passed, 0 failed (of 24 total)
+
+=== verify-passport-security-unified-identity
+
+59/59 passed

@@ -1084,3 +1084,67 @@ change.
    rate-limit body is the limiter correctly enforcing its limit under load; a
    `500`/thrown `ERR_ERL_UNEXPECTED_X_FORWARDED_FOR` is the trust-proxy
    misconfiguration. Do not conflate them when triaging.
+
+## Mixed-Build Diagnosis and the Limits of Local-Only Verification — permanent rules
+
+Learned during the Single Build & Live Runtime pass, investigating a credible live report
+that one domain served two different build IDs across routes.
+
+1. **Before theorising about caches, check whether the routes even *can* disagree.** If the
+   affected routes all ship in the same main chunk (verify against the real `dist/` manifest —
+   lazy chunks are often only admin/rarely-used screens), then a per-route build divergence
+   cannot happen within one page load. It necessarily means different route URLs received
+   *different HTML documents pointing at different bundles*. That single observation eliminates
+   most component-level hypotheses immediately and reframes the problem as a delivery problem.
+2. **Date the fix, not just the bug.** `git log -S "<marker>" -- <file>` tells you whether a
+   cache-hygiene fix landed *before or after* the stale build being served. If correct
+   `no-store` HTML headers already predate the stale build, browser HTML caching is largely
+   excluded and suspicion should shift to the platform: an incomplete rollout or overlapping
+   replicas serving two builds concurrently. This is a cheap check that redirects an entire
+   investigation.
+3. **Unregistering a service worker does NOT delete its Cache Storage.** These are independent
+   APIs. A "we unregister any stray worker on load" safety net is only half a fix — the buckets
+   it created survive and, if a worker is ever registered again, a stale-while-revalidate
+   strategy will serve a previous build's hashed chunk ahead of the network. Always pair
+   `getRegistrations().unregister()` with a prefix-scoped `caches.delete()`. Scope it by cache
+   name prefix and never touch localStorage/IndexedDB, so recovery can never destroy user data.
+4. **Keep a retired service worker file as a kill switch; delete the registrar instead.** The
+   instinct is to delete `sw.js`. That is backwards: a 404 on `/sw.js` leaves browsers that
+   still hold an old registration stuck with their old worker. Replace its body with a
+   self-destructing worker (delete all caches on install/activate, then `unregister()`), and
+   delete the *registration* code so nothing new ever registers. Dead registrar code that
+   nothing imports is still a landmine worth removing.
+5. **A directory in `public/` that shares a name with an SPA route makes `express.static` emit
+   a 301.** `public/smokecraft/` + route `/smokecraft` produced a **301 Moved Permanently** —
+   the most persistently cached response a browser stores — on a module's primary entry route.
+   Use `express.static(dist, { index: false, redirect: false })` so such routes fall through to
+   the no-store SPA fallback. Worth checking on every SPA whose asset folders mirror route names.
+6. **A version-mismatch banner that waits for a click does not fix a stale tab.** If the
+   frontend's embedded build ID disagrees with `/api/version`, recover automatically **once**,
+   guarded by a `sessionStorage` marker **keyed to the backend commit you are recovering for**.
+   Keying to the commit (not a bare boolean) means a genuine later deploy still gets one fresh
+   attempt, while a mismatch no client can fix — such as a server genuinely serving inconsistent
+   builds — never reloads twice.
+7. **"Approved" is a directory name, not a verdict — open the asset.** A file sitting in an
+   `approved/` folder was an internal design storyboard, complete with planning labels, wired
+   into a live production route. Conversely, a genuinely user-facing candidate elsewhere baked
+   fabricated learner stats into its pixels. Both were disqualified on inspection. Never wire an
+   image into a production route without viewing it, and prefer a component built from existing
+   UI patterns over any image containing baked data — baked numbers are stale data by
+   construction and cannot be verified by any test that reads the DOM.
+8. **Derive on-screen architecture facts from the authoritative registry.** The replacement
+   How-It-Works screen renders its phase names and session counts from `VISIT_STRUCTURE` rather
+   than hardcoded copy, so it cannot silently drift from the real journey the way both candidate
+   images had (one described 4 stages, the other "6 of 16" sessions, against a real 6/27).
+9. **When a live-shaped report arrives, sort every claim into three buckets and keep them
+   separate in the write-up:** *genuinely broken in source* (reproduce it, fix it),
+   *already correct in source* (re-verify fresh, then explain the divergence — usually a stale
+   deploy), and *unverifiable from here*. Blurring these is the single most misleading thing a
+   report can do. The credibility of "these three were already fine" rests entirely on having
+   found and fixed real defects in the same investigation — follow the evidence in both
+   directions, and say so.
+10. **Local verification cannot close a live-deployment-shaped defect, and no amount of test
+    quality changes that.** When the acceptance bar is "live screenshots show one build" and the
+    environment cannot reach the deployment, the honest outcome is failure against that bar with
+    an explicit statement of what *was* proven locally. Record the real blocked-access error
+    verbatim. Never fabricate a live screenshot or a deployed-commit reading.

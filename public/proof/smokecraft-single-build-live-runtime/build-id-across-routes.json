@@ -1,0 +1,86 @@
+{
+  "/smokecraft": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/smokecraft",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/smokecraft/how-it-works": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/smokecraft/how-it-works",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/smokecraft/enroll": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/smokecraft/enroll",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/smokecraft/identity": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/smokecraft/enroll",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/smokecraft/welcome": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/smokecraft/welcome",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/smokecraft/humidor-match": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/smokecraft/humidor-match",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/smokecraft/rewards-center": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/smokecraft/rewards-center",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/smokecraft/leaderboard": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/smokecraft/leaderboard",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/smokecraft/passport-stamp": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/smokecraft/passport-stamp",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/smokecraft/session/1": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/smokecraft/resume": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/smokecraft/resume",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  },
+  "/system/build-info": {
+    "build": "cbea8aadd735793ce1fcd45ffbb22442e2034213",
+    "path": "/system/build-info",
+    "sw": false,
+    "swRegs": 0,
+    "caches": []
+  }
+}

@@ -1,0 +1,127 @@
+### GET /smokecraft
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+Pragma: no-cache
+Expires: 0
+Accept-Ranges: bytes
+Content-Type: text/html; charset=UTF-8
+Content-Length: 797
+Date: Fri, 24 Jul 2026 19:56:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+
+### GET /smokecraft/how-it-works
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+Pragma: no-cache
+Expires: 0
+Accept-Ranges: bytes
+Content-Type: text/html; charset=UTF-8
+Content-Length: 797
+Date: Fri, 24 Jul 2026 19:56:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+
+### GET /smokecraft/welcome
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+Pragma: no-cache
+Expires: 0
+Accept-Ranges: bytes
+Content-Type: text/html; charset=UTF-8
+Content-Length: 797
+Date: Fri, 24 Jul 2026 19:56:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+
+### GET /smokecraft/leaderboard
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+Pragma: no-cache
+Expires: 0
+Accept-Ranges: bytes
+Content-Type: text/html; charset=UTF-8
+Content-Length: 797
+Date: Fri, 24 Jul 2026 19:56:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+
+### GET /smokecraft/rewards-center
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+Pragma: no-cache
+Expires: 0
+Accept-Ranges: bytes
+Content-Type: text/html; charset=UTF-8
+Content-Length: 797
+Date: Fri, 24 Jul 2026 19:56:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+
+### GET /api/version
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Cache-Control: no-store
+Content-Type: application/json; charset=utf-8
+Content-Length: 402
+ETag: W/"192-M7UtfUyLrsAoWgPzAkdvI2rFJWU"
+Date: Fri, 24 Jul 2026 19:56:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+
+### GET /sw.js
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+Pragma: no-cache
+Expires: 0
+Accept-Ranges: bytes
+Last-Modified: Fri, 24 Jul 2026 19:53:59 GMT
+ETag: W/"af4-19f95b11810"
+Content-Type: application/javascript; charset=UTF-8
+Content-Length: 2804
+Date: Fri, 24 Jul 2026 19:56:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+
+### GET /assets/index-c40c4837.js (hashed immutable asset)
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Cache-Control: public, max-age=31536000, immutable
+Accept-Ranges: bytes
+Last-Modified: Fri, 24 Jul 2026 19:54:00 GMT
+ETag: W/"2d6247-19f95b11d52"
+Content-Type: application/javascript; charset=UTF-8
+Content-Length: 2974279
+Date: Fri, 24 Jul 2026 19:56:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+

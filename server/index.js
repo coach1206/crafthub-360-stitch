@@ -461,7 +461,15 @@ app.use((req, res, next) => {
 // index: false — never let express.static auto-serve index.html with its
 // own ETag/Last-Modified, since a conditional 304 against a stale browser
 // cache would re-serve old HTML even with the no-cache headers above.
-app.use(express.static(CLIENT_DIST, { index: false }))
+// redirect: false — Single Build & Live Runtime pass. `public/smokecraft/`
+// (images) is copied into dist, so a request for the SPA route
+// `/smokecraft` matched a real directory and express.static answered with a
+// 301 Moved Permanently to `/smokecraft/`. A 301 is the most aggressively
+// and persistently cached response a browser stores, and it was being
+// emitted for the module's primary entry route. Disabling the directory
+// redirect lets `/smokecraft` fall through to the SPA fallback below and be
+// served fresh, no-store, like every other route.
+app.use(express.static(CLIENT_DIST, { index: false, redirect: false }))
 
 const sendFreshIndexHtml = (_req, res) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')

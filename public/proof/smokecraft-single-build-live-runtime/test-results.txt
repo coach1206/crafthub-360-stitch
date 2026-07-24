@@ -1,0 +1,50 @@
+PASS  (1) every tested route reports exactly one build ID
+PASS  (2) /api/version backendCommit matches the frontend build
+PASS  (3) /system/build-info reports the same build as the frontend
+PASS  (4) every referenced JS chunk exists in the current dist manifest
+PASS  (4b) at least one chunk was actually referenced (probe is meaningful)
+PASS  (5) no service worker controls any tested route
+PASS  (5b) no service worker registration survives page load
+PASS  (6) Cache Storage holds no retired SmokeCraft/NOVEE cache
+PASS  (7) How It Works shows no storyboard / internal design labels
+PASS  (7b) How It Works uses no design-reference artwork asset
+PASS  (7c) How It Works describes the real 6-phase / 27-session journey
+PASS  (8) Welcome shows no "Greg Guy"
+PASS  (9) Welcome shows no stale "beginner" default
+PASS  (9b) Welcome without prerequisites redirects to the earliest entry screen
+PASS  (10) Humidor Match shows no "FUTURE VISIT LOCKED"
+PASS  (10b) Humidor Match shows no "MANAGEMENT SYNC LOCKED"
+PASS  (10c) Humidor Match gates via a live redirect, not a baked lock screen
+PASS  (11) Leaderboard shows no "James Carter"
+PASS  (12) Leaderboard shows no "18,750 XP"
+PASS  (12b) Leaderboard shows no stale "4435 XP"
+PASS  (12c) Leaderboard is honest about unavailable shared rankings
+PASS  (13) Rewards Center renders the approved Reward Center.png
+PASS  (13b) approved visual is not cropped (backgroundSize contain)
+PASS  (13c) live content does not overlap the approved visual
+PASS  (13d) Rewards Center does not overflow the viewport horizontally
+PASS  (13e) Rewards Center has a bottom navigation bar
+PASS  (13f) Rewards Center renders no empty/dead buttons
+PASS  (14a) Landing shows the START control for a clean visitor
+PASS  (14) Start reaches Enrollment
+PASS  (15a) Enrollment offers the Guest Pass control
+PASS  (15b) Guest Pass reaches Venue Selection
+PASS  (15c) Venue step reaches Identity
+PASS  (15) Entry reaches Welcome
+PASS  (16a) Welcome shows no "Greg Guy"
+PASS  (16b) Welcome shows no stale "beginner" default
+PASS  (16c) Welcome shows the identity just entered by this user
+PASS  (16d) Welcome offers the Begin Experience control
+PASS  (16) Welcome reaches Session 1 via a real click
+PASS  (16e) Session 1 did not redirect to an old lock screen
+PASS  (16f) Session 1 advances toward Session 2 without a lock screen
+PASS  (17a) Landing offers RESUME for a visitor with real progress
+PASS  (17) Resume click leaves the landing screen
+PASS  (18) build stays identical across navigation and refresh
+PASS  (H1) HTML routes are served no-store
+PASS  (H2) SPA entry route /smokecraft is 200, not a cacheable 301
+PASS  (H3) /smokecraft does not emit a permanent redirect
+PASS  (H4) /api/version is served no-store
+
+PASS 47 / 47
+NOTE: local production build only — live Railway verification is network-blocked in this sandbox.
