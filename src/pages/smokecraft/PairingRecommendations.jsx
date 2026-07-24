@@ -5,6 +5,7 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftTactileCard from '../../components/smokecraft/SmokeCraftTactileCard.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { rankAllCategories } from '../../utils/pairingEngine.js'
 
@@ -74,6 +75,12 @@ export default function PairingRecommendations() {
   const [ranked, setRanked] = useState(null)
   const [saveStatus, setSaveStatus] = useState('idle') // idle | saved
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
+  // Tactile/Haptic Completion pass — alternates are now real selectable
+  // cards (promote to primary, or reject) rather than plain display rows.
+  // No alternate is selected by default. Journey-persisted, not a second
+  // interaction-state store.
+  const [manualPrimary, setManualPrimary] = useState(() => journey.pairingRecommendations?.manualPrimaryCategory || null)
+  const [rejected, setRejected] = useState(() => new Set(journey.pairingRecommendations?.rejectedCategories || []))
 
   useEffect(() => {
     const on = () => setIsOffline(false)
@@ -126,9 +133,34 @@ export default function PairingRecommendations() {
   }, [phase, ranked, engineContext])
 
   const insufficientFlavorData = engineContext.flavorNotes.length === 0 && !engineContext.strength
-  const primary = ranked?.[0] || null
-  const alternates = ranked?.slice(1, 4) || []
+  const visibleRanked = (ranked || []).filter(r => !rejected.has(r.primary))
+  const primary = (manualPrimary && visibleRanked.find(r => r.primary === manualPrimary)) || visibleRanked[0] || null
+  const alternates = visibleRanked.filter(r => r.primary !== primary?.primary).slice(0, 3)
   const noStrongMatch = primary && primary.compatScore < 50
+
+  function chooseAsPrimary(category) {
+    triggerHaptic('success')
+    const next = manualPrimary === category ? null : category
+    setManualPrimary(next)
+    setPairingRecommendations({
+      ...(journey.pairingRecommendations || {}),
+      manualPrimaryCategory: next,
+    })
+  }
+
+  function rejectCategory(category) {
+    triggerHaptic('warning')
+    setRejected(prev => {
+      const next = new Set(prev)
+      if (next.has(category)) next.delete(category); else next.add(category)
+      const arr = Array.from(next)
+      setPairingRecommendations({
+        ...(journey.pairingRecommendations || {}),
+        rejectedCategories: arr,
+      })
+      return next
+    })
+  }
 
   function handleSave() {
     if (!primary) return
@@ -329,13 +361,31 @@ export default function PairingRecommendations() {
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {alternates.map(alt => (
-                      <div key={alt.primary} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', background: 'rgba(255,255,255,0.03)', borderRadius: 8 }}>
+                      <div key={alt.primary} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, flexWrap: 'wrap' }}>
                         <PairingIcon category={alt.primary} />
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, minWidth: 140 }}>
                           <div style={{ fontSize: 14, fontWeight: 700, color: CREAM }}>{alt.primary}</div>
                           <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.55)' }}>{alt.whyItWorks}</div>
                         </div>
                         <div style={{ fontSize: 15, fontWeight: 700, color: GOLD_DIM }}>{alt.compatScore}</div>
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          <SmokeCraftTactileCard
+                            label={`Choose ${alt.primary} for the Golden Box Challenge`}
+                            onActivate={() => chooseAsPrimary(alt.primary)}
+                            haptic="success"
+                            style={{ minWidth: 0, minHeight: 36, padding: '5px 12px', flexDirection: 'row', borderRadius: 999, fontSize: 11 }}
+                          >
+                            Choose
+                          </SmokeCraftTactileCard>
+                          <SmokeCraftTactileCard
+                            label={`Reject ${alt.primary} pairing`}
+                            onActivate={() => rejectCategory(alt.primary)}
+                            haptic="warning"
+                            style={{ minWidth: 0, minHeight: 36, padding: '5px 12px', flexDirection: 'row', borderRadius: 999, fontSize: 11 }}
+                          >
+                            Reject
+                          </SmokeCraftTactileCard>
+                        </div>
                       </div>
                     ))}
                   </div>

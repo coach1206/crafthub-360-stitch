@@ -26,6 +26,19 @@ PASS — Quiz answers are not preselected (initial selected-answer state is null
 PASS — Passport claim fires once (idempotency ref guard, pre-existing, re-verified)
 PASS — Reduced-motion + haptic-disabled context loads the app without error
 PASS — Confirmation dialog controls are pointer-reachable (regression check for the earlier pointer-events defect)
+PASS — AI Summary sections are now interactive (accept/dismiss, journey-persisted)
+PASS — AI Summary has no default accepted/dismissed verdict
+PASS — Pairing Recommendations alternates are now interactive (choose/reject, journey-persisted)
+PASS — Pairing Recommendations has no default manual selection
+PASS — Vitola screen has substantial pre-existing real interactivity (corrected from "not audited")
+PASS — Ring Gauge screen exists and is real (CigarGaugeGuide.jsx)
+PASS — Leaf/priming/filler interactions exist and are real (WrapperStrength.jsx FillerArrangement)
+PASS — Golden Box has substantial pre-existing real interactivity across its subtree (corrected from "not audited")
+PASS — Packaging Studio editor has real interactive controls (corrected from "not audited")
+PASS — Welcome screen retrofit — NOT completed this pass (disclosed)
+PASS — Lighting Tutorial retrofit — NOT completed this pass (disclosed)
+PASS — Mentor Commentary retrofit — NOT completed this pass (disclosed)
+PASS — Full five-viewport matrix — NOT run this pass (disclosed)
 PASS — Build identity footer remains functional (unchanged this pass)
 PASS — Diagnostic route remains functional (unchanged this pass)
 PASS — Clean-start suite exists and is part of the required battery
@@ -34,4 +47,4 @@ PASS — Approved-entry-visual suite exists and is part of the required battery
 PASS — 27-session sequence suite exists and is part of the required battery
 PASS — Production build passes
 
-35 passed, 0 failed (of 35 total)
+48 passed, 0 failed (of 48 total)

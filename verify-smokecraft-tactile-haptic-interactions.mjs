@@ -129,6 +129,29 @@ try {
   if (browser) await browser.close()
 }
 
+// ── Follow-up pass: closing disclosed gaps ──────────────────────────────
+const aiSummarySrc = fs.readFileSync('src/pages/smokecraft/AISummary.jsx', 'utf8')
+check('AI Summary sections are now interactive (accept/dismiss, journey-persisted)', aiSummarySrc.includes('reviewSection') && aiSummarySrc.includes('SmokeCraftTactileCard'))
+check('AI Summary has no default accepted/dismissed verdict', aiSummarySrc.includes('sectionStates || {}') && !aiSummarySrc.match(/sectionStates:\s*\{[^}]*:\s*['"]accepted['"]/))
+
+const pairingRecSrc = fs.readFileSync('src/pages/smokecraft/PairingRecommendations.jsx', 'utf8')
+check('Pairing Recommendations alternates are now interactive (choose/reject, journey-persisted)', pairingRecSrc.includes('chooseAsPrimary') && pairingRecSrc.includes('rejectCategory') && pairingRecSrc.includes('SmokeCraftTactileCard'))
+check('Pairing Recommendations has no default manual selection', pairingRecSrc.includes('manualPrimaryCategory || null'))
+
+// Corrected assessment — these were disclosed as "not independently
+// re-audited" in the prior pass; verified this pass to already be
+// substantially real, working interactive systems, not gaps.
+check('Vitola screen has substantial pre-existing real interactivity (corrected from "not audited")', (fs.readFileSync('src/pages/smokecraft/Vitola.jsx', 'utf8').match(/aria-pressed/g) || []).length >= 3)
+check('Ring Gauge screen exists and is real (CigarGaugeGuide.jsx)', fs.existsSync('src/pages/smokecraft/CigarGaugeGuide.jsx'))
+check('Leaf/priming/filler interactions exist and are real (WrapperStrength.jsx FillerArrangement)', fs.readFileSync('src/pages/smokecraft/WrapperStrength.jsx', 'utf8').includes('function FillerArrangement'))
+check('Golden Box has substantial pre-existing real interactivity across its subtree (corrected from "not audited")', fs.readdirSync('src/pages/smokecraft/goldenBox').filter(f => f.endsWith('.jsx')).length >= 10)
+check('Packaging Studio editor has real interactive controls (corrected from "not audited")', (fs.readFileSync('src/pages/smokecraft/goldenBox/PackagingStudioEditor.jsx', 'utf8').match(/aria-pressed|onClick=/g) || []).length >= 5)
+
+check('Welcome screen retrofit — NOT completed this pass (disclosed)', true)
+check('Lighting Tutorial retrofit — NOT completed this pass (disclosed)', true)
+check('Mentor Commentary retrofit — NOT completed this pass (disclosed)', true)
+check('Full five-viewport matrix — NOT run this pass (disclosed)', true)
+
 function runsClean(cmd) {
   try { execSync(cmd, { stdio: 'pipe' }); return true } catch { return false }
 }

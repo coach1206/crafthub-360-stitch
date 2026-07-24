@@ -5,6 +5,7 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftTactileCard from '../../components/smokecraft/SmokeCraftTactileCard.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD      = '#E9C176'
@@ -183,6 +184,22 @@ export default function AISummary() {
   const [result, setResult] = useState(null)
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
 
+  // Tactile/Haptic Completion pass — each summary section is now a real
+  // interactive review control (accept / dismiss / open explanation), not
+  // passive text. State is journey-persisted (novee-canonical
+  // SmokeCraftJourneyContext, same store, no second interaction-state
+  // store) and starts empty — no section is pre-accepted or pre-dismissed.
+  const [sectionStates, setSectionStates] = useState(() => journey.aiSummary?.sectionStates || {})
+  const [openSection, setOpenSection] = useState(null)
+
+  function reviewSection(key, verdict) {
+    setSectionStates(prev => {
+      const next = { ...prev, [key]: verdict }
+      setAiSummary({ ...(journey.aiSummary || {}), sectionStates: next })
+      return next
+    })
+  }
+
   useEffect(() => {
     const on = () => setIsOffline(false)
     const off = () => setIsOffline(true)
@@ -352,19 +369,63 @@ export default function AISummary() {
 
           {(phase === 'ready' || phase === 'offline') && result && (
             <>
-              {SECTION_ORDER.map(([key, label]) => (
-                <div key={key} style={{
-                  background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
-                  padding: 'clamp(14px,2.2vw,20px)',
-                }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>
-                    {label}
+              {SECTION_ORDER.map(([key, label]) => {
+                const verdict = sectionStates[key] || null // 'accepted' | 'dismissed' | null
+                const isOpen = openSection === key
+                return (
+                  <div key={key} style={{
+                    background: GLASS, border: `1px solid ${verdict === 'accepted' ? GOLD : BORDER}`, borderRadius: 12,
+                    padding: 'clamp(14px,2.2vw,20px)',
+                  }}>
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-label={`${isOpen ? 'Collapse' : 'Open'} explanation for ${label}`}
+                      onClick={() => { triggerHaptic('light'); setOpenSection(isOpen ? null : key) }}
+                      style={{
+                        display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between',
+                        background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left',
+                        minHeight: 44,
+                      }}
+                    >
+                      <span style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                        {label}
+                      </span>
+                      <span aria-hidden="true" style={{ color: GOLD_DIM, fontSize: 12 }}>{isOpen ? '▲' : '▼'}</span>
+                    </button>
+                    <p style={{ margin: '6px 0 0', fontSize: 14, lineHeight: 1.6, color: result[key] === NA ? 'rgba(229,226,225,0.4)' : CREAM, fontStyle: result[key] === NA ? 'italic' : 'normal' }}>
+                      {result[key]}
+                    </p>
+                    {isOpen && (
+                      <p style={{ margin: '8px 0 0', fontSize: 12.5, lineHeight: 1.55, color: 'rgba(229,226,225,0.6)' }}>
+                        This insight is derived entirely from the choices and notes you saved during this session (never a fabricated conclusion) — accept it to keep it as part of your record, or dismiss it if it doesn't reflect your experience.
+                      </p>
+                    )}
+                    {result[key] !== NA && (
+                      <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                        <SmokeCraftTactileCard
+                          label={`Accept insight: ${label}`}
+                          selected={verdict === 'accepted'}
+                          onActivate={() => reviewSection(key, verdict === 'accepted' ? null : 'accepted')}
+                          haptic="success"
+                          style={{ minWidth: 0, minHeight: 40, flex: '0 0 auto', padding: '6px 14px', flexDirection: 'row', gap: 6, borderRadius: 999, fontSize: 12 }}
+                        >
+                          ✓ Accept
+                        </SmokeCraftTactileCard>
+                        <SmokeCraftTactileCard
+                          label={`Dismiss insight: ${label}`}
+                          selected={verdict === 'dismissed'}
+                          onActivate={() => reviewSection(key, verdict === 'dismissed' ? null : 'dismissed')}
+                          haptic="warning"
+                          style={{ minWidth: 0, minHeight: 40, flex: '0 0 auto', padding: '6px 14px', flexDirection: 'row', gap: 6, borderRadius: 999, fontSize: 12 }}
+                        >
+                          ✕ Dismiss
+                        </SmokeCraftTactileCard>
+                      </div>
+                    )}
                   </div>
-                  <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: result[key] === NA ? 'rgba(229,226,225,0.4)' : CREAM, fontStyle: result[key] === NA ? 'italic' : 'normal' }}>
-                    {result[key]}
-                  </p>
-                </div>
-              ))}
+                )
+              })}
 
               <div style={{
                 display: 'flex', alignItems: 'center', gap: 8,
