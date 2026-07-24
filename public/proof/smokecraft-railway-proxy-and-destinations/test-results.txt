@@ -1,0 +1,34 @@
+PASS  (1) app.set(trust proxy) present in server/index.js
+PASS  (1) trust proxy set BEFORE any rateLimit() is created
+PASS  (1) trust proxy set BEFORE the limiter is registered on /api
+PASS  (1) production uses a bounded hop count (1), not trust proxy = true
+PASS  (1) local dev leaves trust proxy DISABLED (no spoofable trust)
+PASS  (2) /api/health with X-Forwarded-For returns 200 (validator did not throw)
+PASS  (2) response body is not an ERR_ERL validation error
+PASS  (3) no 5xx from rate-limited API under forwarded-header load
+PASS  (6) no 429 during a normal (distinct-IP) request burst
+PASS  (4) visible START control present
+PASS  (4) real click opens /smokecraft/enroll
+PASS  (5) activeJourneyId exists after click
+PASS  (5) activeJourneyId persists after refresh
+PASS  (4) no redirect back to Landing after refresh
+PASS  (7) Rewards opens /smokecraft/rewards-center
+PASS  (7) approved Reward Center visual shell rendered
+PASS  (7) rendered asset URL is Reward Center.png
+PASS  (7) rendered Reward Center hash == disk hash
+PASS  (7) venue-reward categories shown as honest empty state
+PASS  (8) Rankings opens /smokecraft/leaderboard
+PASS  (11) no baked "James Carter" competitor
+PASS  (11) no baked "18,750" / "18750" XP value
+PASS  (11) no stale "4435" XP value
+PASS  (9a) fresh Passport click resolves to a live route (passport screen or gated enroll), not a dead lock screen
+PASS  (9) approved Passport screen reachable for eligible user (session-23 renderer)
+PASS  (10) no "FUTURE VISIT LOCKED" baked lock text
+PASS  (10) no "MANAGEMENT SYNC LOCKED" baked lock text
+PASS  (10) no old baked lock PNG element rendered
+PASS  (12) active journey survives destination navigation
+PASS  (13) production build present (dist/index.html exists)
+PASS  (14) backend startup ok (health reachable)
+PASS  (15) health reports ok status
+
+32/32 passed

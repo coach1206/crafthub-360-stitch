@@ -92,6 +92,7 @@ export default function RewardsCenter() {
             <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>Reward Points</div>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               {pointField('Available', available)}
+              {pointField('Journey', current)}
               {pointField('Redeemed', Math.max(0, lifetime - available))}
               {pointField('Lifetime', lifetime)}
             </div>
@@ -103,11 +104,19 @@ export default function RewardsCenter() {
           {/* Honest empty state — no real venue-rewards backend exists. */}
           <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,2.4vw,24px)' }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>Venue Rewards</div>
-            <p style={{ margin: 0, fontSize: 13, color: 'rgba(229,226,225,0.6)', lineHeight: 1.6 }}>
+            <p style={{ margin: '0 0 12px', fontSize: 13, color: 'rgba(229,226,225,0.6)', lineHeight: 1.6 }}>
               Venue-specific rewards are not yet available. When your venue connects its reward
-              catalog, redeemable offers will appear here. No sample or placeholder offers are
-              shown — only real rewards will ever be listed.
+              catalog, redeemable offers will appear in each category below. No sample or
+              placeholder offers are shown — only real rewards will ever be listed.
             </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {['Drink specials', 'Cigar & smoke specials', 'Food specials', 'Pairing specials', 'Venue perks'].map(cat => (
+                <div key={cat} data-reward-category={cat} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}`, borderRadius: 8, padding: '10px 14px' }}>
+                  <span style={{ fontSize: 13, color: CREAM }}>{cat}</span>
+                  <span style={{ fontSize: 11, color: 'rgba(229,226,225,0.4)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>None configured</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <button

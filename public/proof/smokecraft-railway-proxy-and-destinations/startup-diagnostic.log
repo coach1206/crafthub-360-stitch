@@ -1,0 +1,9 @@
+🥃 NOVEE OS Backend — port 3001
+--
+   Mode:        production
+--
+[proxy-diagnostic] environment          : production
+[proxy-diagnostic] trust proxy setting   : 1 (1 hop = Railway edge)
+[proxy-diagnostic] req.ip resolves from   : X-Forwarded-For (rightmost trusted hop)
+[proxy-diagnostic] rate limiter enabled   : yes (300/15m general, 20/15m auth)
+[proxy-diagnostic] X-Forwarded-For safe   : yes — express-rate-limit validator will not throw ERR_ERL_UNEXPECTED_X_FORWARDED_FOR

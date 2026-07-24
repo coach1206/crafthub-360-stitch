@@ -1052,3 +1052,35 @@ change.
    source or collapsed into one path.
 8. Landing destination routes (Rewards, Rankings, Passport, CraftHub) must be
    included in full-game acceptance testing, not just the linear session spine.
+
+## Reverse-Proxy Header Trust and Local-vs-Production Testing Gaps — permanent rules
+1. Any app deployed behind a PaaS edge (Railway, Render, Fly, Heroku, most
+   load balancers) receives the real client IP in `X-Forwarded-For`. If
+   `express-rate-limit` (or any IP-dependent middleware) runs with Express's
+   default `trust proxy = false`, its validator throws
+   `ERR_ERL_UNEXPECTED_X_FORWARDED_FOR` on every proxied request — which can
+   silently break unrelated-looking flows (e.g. journey creation) in production
+   only.
+2. Set `app.set('trust proxy', <hop count>)` immediately after
+   `const app = express()`, before any rate-limit / auth / session / IP-logging
+   middleware and before route registration.
+3. Use a **bounded hop count** equal to the number of trusted proxy hops (Railway
+   = `1`), never `trust proxy = true`. `true` trusts an unbounded XFF chain and
+   lets a direct attacker spoof `req.ip` to evade per-IP rate limiting and poison
+   IP-based logging/auth.
+4. Gate the setting on environment: production behind the proxy trusts its hop(s);
+   local dev (direct connections, no proxy) stays `false` — trusting a phantom
+   hop locally is itself spoofable.
+5. Local-vs-production testing gap: a defect rooted in forwarded-header handling
+   is INVISIBLE to `vite preview` / direct-connection local servers because no
+   proxy inserts the header. Reproduce it honestly by sending a real request with
+   an `X-Forwarded-For` header to a local production-mode backend and asserting it
+   returns 200 with no validation throw — do not conclude "unreproducible" from a
+   no-proxy local run alone.
+6. Emit a boot diagnostic (no PII) showing environment, resolved `trust proxy`
+   value, `req.ip` source, and limiter status, so a future proxy misconfiguration
+   is visible at deploy time rather than only under production load.
+7. Distinguish a working limiter from the bug: a plain `429` with the normal
+   rate-limit body is the limiter correctly enforcing its limit under load; a
+   `500`/thrown `ERR_ERL_UNEXPECTED_X_FORWARDED_FOR` is the trust-proxy
+   misconfiguration. Do not conflate them when triaging.

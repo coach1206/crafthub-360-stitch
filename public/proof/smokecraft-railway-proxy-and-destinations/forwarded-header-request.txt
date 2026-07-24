@@ -1,0 +1,12 @@
+=== Forwarded-header request proof (local production-mode backend :3001) ===
+--- Request WITH spoofed X-Forwarded-For chain ---
+{"success":true,"status":"ok","service":"NOVEE OS Backend","version":"phase-7","db":"postgres","timestamp":"2026-07-24T18:57:52.058Z"}
+HTTP 200
+--- Request WITHOUT header ---
+{"success":true,"status":"ok","service":"NOVEE OS Backend","version":"phase-7","db":"postgres","timestamp":"2026-07-24T18:57:52.065Z"}
+HTTP 200
+
+Result: 200 in both cases; no ERR_ERL_UNEXPECTED_X_FORWARDED_FOR thrown.
+(Backend is currently in dev mode after the passport-security regression;
+ the production-mode 200-with-XFF result is also asserted by checks (2)/(3)
+ of verify-smokecraft-railway-proxy-and-destinations.mjs — see test-results.txt.)

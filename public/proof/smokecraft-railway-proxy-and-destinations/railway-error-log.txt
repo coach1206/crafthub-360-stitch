@@ -1,0 +1,15 @@
+=== USER-PROVIDED PRODUCTION EVIDENCE (Railway) ===
+This excerpt was supplied by the repo owner from the live Railway deployment
+logs. It is NOT captured by this pass — it is the confirmed root-cause evidence
+that motivated the fix. Reproduced verbatim as provided:
+
+  ERR_ERL_UNEXPECTED_X_FORWARDED_FOR
+
+Context (per user report): Railway operates behind a reverse proxy and sends the
+`X-Forwarded-For` header, but Express `trust proxy` was not configured, so
+express-rate-limit could not correctly identify the client and threw a validation
+error on every request behind that proxy. This is why real production users could
+not start a SmokeCraft journey (Start stayed on the Landing page, activeJourneyId
+was never created/persisted, protected routes stayed locked) even though local
+`vite preview` testing — which has NO reverse proxy in front of it — never
+surfaced the failure.

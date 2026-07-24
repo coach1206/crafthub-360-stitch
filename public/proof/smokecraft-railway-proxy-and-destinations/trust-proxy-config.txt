@@ -1,0 +1,13 @@
+=== Local trust-proxy configuration (server/index.js) ===
+const TRUST_PROXY = IS_PROD ? 1 : false
+app.set('trust proxy', TRUST_PROXY)
+
+- Set immediately after `const app = express()`, and textually BEFORE:
+  * the generalLimiter / authLimiter rateLimit({...}) creation
+  * app.use('/api/auth', authLimiter) / app.use('/api', generalLimiter)
+  * all route registration (including SmokeCraft journey/session routes)
+- Production (Railway): trust exactly 1 proxy hop (Railway's edge).
+- Local development: trust proxy DISABLED (false) — direct connections, so
+  trusting any hop would itself be spoofable.
+- NOT `trust proxy = true` (which would trust an unbounded X-Forwarded-For chain
+  and let a direct attacker spoof their client IP to evade per-IP rate limiting).

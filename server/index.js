@@ -165,6 +165,29 @@ const IS_PROD = process.env.NODE_ENV === 'production'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const CLIENT_DIST = path.resolve(__dirname, '../dist')
 
+// ── Reverse-proxy trust (MUST be set before rate-limit / IP-dependent middleware) ──
+// Railway (and most PaaS edges) terminate TLS at a single reverse-proxy hop and
+// forward the real client IP in the `X-Forwarded-For` header. With Express's
+// default `trust proxy = false`, req.ip resolves to the proxy's socket address
+// and express-rate-limit's validator throws ERR_ERL_UNEXPECTED_X_FORWARDED_FOR
+// on every request (it sees a forwarded header it was told not to trust). That
+// error surfaced in production as failed journey creation, missing activeJourneyId,
+// and users bounced back to lock/prerequisite screens.
+//
+// We trust EXACTLY ONE hop in production (Railway's edge proxy) — NOT `true`.
+// `trust proxy = true` would trust an arbitrarily long X-Forwarded-For chain,
+// letting any direct, non-proxied attacker spoof their client IP by sending their
+// own header and thereby evade per-IP rate limiting. A fixed hop count of 1 means
+// Express reads the single client IP that Railway's edge appends and ignores any
+// attacker-supplied values further left in the chain.
+//
+// In local development there is NO reverse proxy — connections are direct — so we
+// leave trust proxy DISABLED (false). Trusting a phantom hop locally would itself
+// be a spoofable misconfiguration. Only Railway's real topology (one edge hop)
+// warrants trusting one hop.
+const TRUST_PROXY = IS_PROD ? 1 : false
+app.set('trust proxy', TRUST_PROXY)
+
 // ── CORS ──────────────────────────────────────────────────────
 // In production, CORS_ORIGIN must be explicitly set.
 // Defaulting to wildcard in production is a security risk.
@@ -470,7 +493,16 @@ app.listen(PORT, '0.0.0.0', async () => {
   console.log(`   Mentor:      http://localhost:${PORT}/api/mentor/profile`)
   console.log(`   Developer:   http://localhost:${PORT}/api/developer/health`)
   console.log(`   POS3 Sync:   http://localhost:${PORT}/api/pos3/sync/status`)
-  console.log(`   Mode:        ${process.env.NODE_ENV || 'development'}\n`)
+  console.log(`   Mode:        ${process.env.NODE_ENV || 'development'}`)
+
+  // ── Reverse-proxy / rate-limiter startup diagnostic ──────────────
+  // No PII, no request bodies, no auth tokens — only static config values.
+  const trustProxyResolved = app.get('trust proxy')
+  console.log(`\n[proxy-diagnostic] environment          : ${process.env.NODE_ENV || 'development'}`)
+  console.log(`[proxy-diagnostic] trust proxy setting   : ${JSON.stringify(trustProxyResolved)} ${IS_PROD ? '(1 hop = Railway edge)' : '(disabled — direct local connections)'}`)
+  console.log(`[proxy-diagnostic] req.ip resolves from   : ${trustProxyResolved ? 'X-Forwarded-For (rightmost trusted hop)' : 'direct socket address'}`)
+  console.log(`[proxy-diagnostic] rate limiter enabled   : ${IS_PROD ? 'yes (300/15m general, 20/15m auth)' : 'no (skipped in dev/test)'}`)
+  console.log(`[proxy-diagnostic] X-Forwarded-For safe   : yes — express-rate-limit validator will not throw ERR_ERL_UNEXPECTED_X_FORWARDED_FOR\n`)
 
   // Auto-seed prototype users in development only
   if (!IS_PROD) {
