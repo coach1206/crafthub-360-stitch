@@ -410,8 +410,24 @@ app.get('/__build-check', (_req, res) => {
 // ── Frontend static app ──────────────────────────────────────
 app.get('/', (_req, res) => res.redirect(302, '/crafthub'))
 
+// Production Build Identity pass — cache policy split by resource type
+// (previously blanket no-store for everything non-API, which was safe but
+// gave every JS/CSS chunk no caching benefit despite Vite already
+// content-hashing those filenames on every content change). Vite's
+// content-hashed bundle files (assets/<name>-<hash>.js / .css) are safe to
+// cache for a year immutably — a new build always gets a new filename, so
+// there is no staleness risk. Everything else (HTML, unhashed SmokeCraft
+// images, build-manifest.json) keeps the original strict no-cache
+// behavior — images now rely on the ?v=<assetVersion> query string
+// (src/constants/assetVersion.js) for cache-busting instead of HTTP
+// headers, since their filenames don't change.
+const HASHED_ASSET_RE = /\/assets\/(index|[A-Za-z0-9]+)-[a-f0-9]{8}\.(js|css)$/
+
 app.use((req, res, next) => {
-  if (!req.path.startsWith('/api/')) {
+  if (req.path.startsWith('/api/')) return next()
+  if (HASHED_ASSET_RE.test(req.path)) {
+    res.set('Cache-Control', 'public, max-age=31536000, immutable')
+  } else {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
     res.set('Pragma', 'no-cache')
     res.set('Expires', '0')

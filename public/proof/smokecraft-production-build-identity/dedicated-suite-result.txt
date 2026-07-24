@@ -1,0 +1,55 @@
+PASS — Starting commit is exact (recorded at pass start)
+PASS — Local and remote commits match
+PASS — Starting tree was clean before edits
+PASS — Build identity is generated automatically (not hardcoded)
+PASS — Full commit SHA field present
+PASS — Short commit SHA field present
+PASS — Branch field present
+PASS — Build timestamp field present
+PASS — Asset version field present
+PASS — Production build fails if identity is unavailable
+PASS — Frontend build marker component exists and reads BUILD_INFO
+PASS — Diagnostic query param (?diagnostics=1) supported
+PASS — No secrets exposed in the diagnostic footer (no token/password/secret keys rendered)
+PASS — Hard-refresh control exists
+PASS — Version mismatch banner is non-destructive (does not touch novee_guest_session or sc_journey_v1)
+PASS — /api/version returns backendCommit and frontendCommit
+PASS — /api/version returns branch, buildTimestamp, assetVersion, environment, applicationVersion
+PASS — /api/version and /api/health are not cached (no-store)
+PASS — build-manifest.json generator script exists
+PASS — build-manifest.json exists after generation
+PASS — Manifest contains the exact current commit
+PASS — Manifest contains critical route assets
+PASS — Manifest critical asset paths exist on disk (assetStatus ok, excluding disclosed Welcome gap)
+PASS — Missing Welcome asset is disclosed, not fabricated
+PASS — Asset registry uses one canonical versioning helper (no per-component ad hoc versioning)
+PASS — Build-time asset validation script exists
+PASS — All registered SmokeCraft assets validate (exist + exact case)
+PASS — prebuild script wires asset validation + manifest generation into every build
+PASS — landing asset is versioned (?v=)
+PASS — enroll asset is versioned (?v=)
+PASS — identity asset is versioned (?v=)
+PASS — venueSelect asset is versioned (?v=)
+PASS — mentorSelection asset is versioned (?v=)
+PASS — humidorMatch asset is versioned (?v=)
+PASS — finalReview asset is versioned (?v=)
+PASS — HTML is not indefinitely cached
+PASS — Hashed JavaScript/CSS remain long-cacheable (immutable)
+PASS — Service worker behavior documented (proactive unregister on every load)
+PASS — /system/build-info route registered
+PASS — /system/build-info shows 27-session and 6-phase counts
+PASS — /system/build-info shows critical asset results
+PASS — Frontend build marker displays live
+PASS — Diagnostic query displays expanded data
+PASS — build-manifest.json reachable at /build-manifest.json
+PASS — /system/build-info renders
+PASS — Build-info page shows 27 sessions
+PASS — Build-info page shows 6 phases
+PASS — Clean-start suite passes
+PASS — Entry-prerequisite suite passes
+PASS — Approved-entry-visual suite passes
+PASS — 27-session sequence suite passes
+PASS — Passport Security passes
+PASS — Production build passes
+
+53 passed, 0 failed (of 53 total)

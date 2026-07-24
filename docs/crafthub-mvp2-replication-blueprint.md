@@ -851,3 +851,40 @@ change.
 13. Completion reports must separate verified fact, inference, blocked
     evidence, and untested assumption.
 14. Repeated isolated fixes without a system map are prohibited.
+
+## Production Build Identity and Cache Invalidation — permanent rules
+
+1. Every production frontend must expose its exact build commit, sourced
+   from the actual host's real environment variable (verify the variable
+   name against the actual deployment platform — a wrong-platform variable
+   name fails silently, exactly as `VERCEL_GIT_COMMIT_SHA` did on Railway).
+2. Frontend and backend build identity must be comparable from a single
+   source of truth (e.g. one manifest file read by both), not two
+   independently-set values that can silently drift apart.
+3. Static approved assets require versioned URLs or content hashes — a
+   filename that never changes gives a cache no signal that its bytes did.
+4. HTML must not remain indefinitely cached across deployments; hashed
+   JS/CSS may be cached aggressively since a content change always
+   produces a new filename.
+5. Deployment success is not proven without commit identity — a green
+   build log is not proof of what is currently being served.
+6. A current GitHub branch does not prove a current production build.
+7. Every deployment must publish a non-sensitive build manifest reachable
+   without dashboard/CLI access.
+8. Critical visual assets must be listed and hashed in the build manifest
+   so their presence and content can be verified from outside the build
+   process.
+9. Browser cache updates must preserve legitimate user state — a
+   version-mismatch or hard-refresh mechanism must never clear active
+   journey data, Passport identity, or archived history.
+10. Service workers (if present) must remove obsolete application caches
+    on activation; if none is registered, document that fact rather than
+    adding one solely to satisfy this rule.
+11. Production diagnostics must show route registry version, session
+    count, phase count, and asset availability from one page reachable
+    without infrastructure access.
+12. Missing approved assets must be disclosed in the build manifest rather
+    than fabricated or silently omitted.
+13. Repeated differences between local and live behavior require build-
+    identity and caching verification before another round of UI patches —
+    a page-level fix cannot solve a deployment-identity problem.

@@ -11,6 +11,7 @@
  * Priority rule (2026-07-11): RAW full-composition uploads take precedence
  * over CROPPED atmosphere backgrounds when they exist and match the route.
  */
+import { versionedAssetUrl } from './assetVersion.js'
 
 // ── Cropped clean photography backgrounds ──────────────────────────────────
 const CROPPED = '/assets/smokecraft/cropped'
@@ -239,4 +240,13 @@ export const SC_ASSETS = {
   // thumbnail already wired into WrapperStrength.jsx's step list. Both are
   // kept — different slots, different content.
   fillerArrangementLesson: `${RAW}/session-visuals/filler%20arrangement.png`,
+}
+
+// Production Build Identity pass — every SC_ASSETS value is versioned in
+// place here, once, so every existing consumer across the app (30+ screens)
+// automatically gets a cache-busted URL with zero per-component changes.
+// null values (e.g. wrapperStrength, a redirect-only entry with no visual)
+// are left untouched — versioning a non-existent asset path is meaningless.
+for (const key of Object.keys(SC_ASSETS)) {
+  if (typeof SC_ASSETS[key] === 'string') SC_ASSETS[key] = versionedAssetUrl(SC_ASSETS[key])
 }

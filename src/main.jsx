@@ -24,8 +24,11 @@ flushOfflineQueue().catch(() => {})
 // Phase 6C: flush the durable IndexedDB sync-queue outbox on load + reconnect
 initSyncQueueRetryTriggers()
 
-// TEMP: unregister any existing service workers so stale cached frontend
-// assets are dropped while we verify the latest build is actually serving live.
+// Permanent safety net (Production Build Identity pass) — no service worker
+// is registered or maintained by this app (PWA scaffold files exist on disk
+// but nothing in src/ registers one); this proactively removes any stray
+// registration from an earlier build so it can never pin a stale frontend
+// bundle. Strictly protective — can only remove staleness, never create it.
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
     registrations.forEach((registration) => registration.unregister())

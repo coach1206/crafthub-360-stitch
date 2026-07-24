@@ -6,6 +6,8 @@ import Layout from './components/Layout.jsx'
 import DemoBanner from './components/demo/DemoBanner.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import PublicSessionNotice from './components/PublicSessionNotice.jsx'
+import BuildDiagnosticFooter from './components/system/BuildDiagnosticFooter.jsx'
+import BuildInfo from './pages/system/BuildInfo.jsx'
 
 // ── Critical boot-path pages — eager loaded ───────────────────
 import Home             from './pages/Home.jsx'
@@ -300,6 +302,7 @@ export default function App() {
         {/* Persistent Demo Mode banner — renders on top of all routes */}
         <DemoBanner />
         <PublicSessionNotice />
+        <BuildDiagnosticFooter />
         <KioskShell>
         <ErrorBoundary>
         <Suspense fallback={<NOVEELoader />}>
@@ -308,6 +311,8 @@ export default function App() {
             <Route path="/" element={<Boot />} />
             <Route path="boot" element={<Boot />} />
             <Route path="boot/console" element={<BootConsole />} />
+            {/* Production Build Identity pass — non-sensitive deployment diagnostics, public (no dashboard/CLI needed to prove what Railway is serving) */}
+            <Route path="system/build-info" element={<BuildInfo />} />
 
             {/* ── Login screens — lazy, accessible without boot ─── */}
             <Route path="staff-login"   element={<StaffLogin />} />
