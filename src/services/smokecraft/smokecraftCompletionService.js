@@ -34,7 +34,19 @@ export function completeSmokeCraftScreen(screenId, { awardSessionRewards, sessio
     awardSessionRewards(entry.completionKey)
   }
 
-  const nextEntry = entry.nextScreenId ? getManifestEntry(entry.nextScreenId) : null
+  // Resolve the canonical next route. Merged sessions (S8/S9, S12/S13,
+  // S16/S17/S18, S19/S20, S25/S26 — see `mergedInto`/`sharedComponent` in
+  // session.js) are separate manifest entries that share ONE real
+  // route/component. Following nextScreenId naively from the primary entry
+  // would land on a merged sibling that points back at the same route — a
+  // self-loop. So we walk forward past any entry whose route matches the
+  // completed screen's route, landing on the next genuinely-different screen.
+  let nextEntry = entry.nextScreenId ? getManifestEntry(entry.nextScreenId) : null
+  const guard = new Set([screenId])
+  while (nextEntry && nextEntry.route && nextEntry.route === entry.route && !guard.has(nextEntry.screenId)) {
+    guard.add(nextEntry.screenId)
+    nextEntry = nextEntry.nextScreenId ? getManifestEntry(nextEntry.nextScreenId) : null
+  }
   return {
     nextRoute: nextEntry?.route || null,
     completionKey: entry.completionKey,

@@ -29,7 +29,14 @@ const CREAM     = '#e5e2e1'
 const BORDER    = 'rgba(233,193,118,0.22)'
 const GLASS     = 'rgba(8,10,16,0.86)'
 
-export default function SessionComplete() {
+// Canonical Runtime pass — routed through SmokeCraftScreenRenderer as
+// screenId="session-27". This is the terminal screen: it has no
+// "continue to next session" action (there is no next session), and its
+// S27 completion is an idempotent on-mount award (journey-complete), the
+// established, correct mechanism. There is therefore no forward
+// award+navigate step to defer to onComplete; onBack is accepted for the
+// back button.
+export default function SessionComplete({ onBack, onComplete } = {}) {
   const { session, update, awardSessionRewards, awardStamp } = useGuestSession()
   const { journey, setSessionCompletion } = useSmokeCraftJourney()
   const { isDemoMode } = useDemoMode()
@@ -406,7 +413,7 @@ export default function SessionComplete() {
 
       <SmokeCraftNavBar
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/rewards')}
+        onSecondary={onBack || (() => navigate('/smokecraft/rewards'))}
       />
     </div>
   )

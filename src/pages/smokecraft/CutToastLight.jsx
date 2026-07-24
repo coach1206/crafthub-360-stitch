@@ -31,7 +31,7 @@ const BTN_H = 9.0
 const BTN_GAP = 1.2
 const CUT_ROW_Y = 42.0
 
-export default function CutToastLight() {
+export default function CutToastLight({ onBack, onComplete } = {}) {
   const { awardSessionRewards } = useGuestSession()
   const { journey, setCutToastLight } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -58,6 +58,10 @@ export default function CutToastLight() {
   function handleContinue() {
     if (!cutMethod) return
     setCutToastLight({ ...(journey.cutToastLight || {}), cut: cutMethod })
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('cut-toast-light')
     navigate('/smokecraft/lighting-tutorial')
   }

@@ -39,7 +39,7 @@ const DEFAULT_COMMENTARY = {
 
 const SECTIONS = ['portrait', 'commentary', 'construction', 'flavor', 'action']
 
-export default function MentorCommentary() {
+export default function MentorCommentary({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { isDemoMode } = useSmokeCraftProgress()
   const { journey, setMentorCommentary } = useSmokeCraftJourney()
@@ -139,6 +139,10 @@ export default function MentorCommentary() {
       viewedSections: Array.from(viewedSections),
       completedAt: journey.mentorCommentary?.completedAt || Date.now(),
     })
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('mentor-commentary')
     navigate('/smokecraft/knowledge-drop')
   }
@@ -363,7 +367,7 @@ export default function MentorCommentary() {
         primary="Continue →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/second-third')}
+        onSecondary={onBack || (() => navigate('/smokecraft/second-third'))}
       />
     </div>
   )

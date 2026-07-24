@@ -124,7 +124,7 @@ function RadarChart({ flavors }) {
   )
 }
 
-export default function FlavorMemory() {
+export default function FlavorMemory({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { journey, setFlavorMemory } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -223,6 +223,10 @@ export default function FlavorMemory() {
     }
     setSaveState('saved')
     setDone(true)
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('flavor-memory')
     navigate('/smokecraft/pairing-lab')
   }

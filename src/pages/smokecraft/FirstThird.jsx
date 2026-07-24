@@ -21,7 +21,7 @@ const EXPLORE_ZONES = [
   { id: 'Ash Quality',   x: 83.0, y: 25.1, w: 14.5, h: 11.0 },
 ]
 
-export default function FirstThird() {
+export default function FirstThird({ onBack, onComplete } = {}) {
   const { awardSessionRewards, setFirstThirdTasting } = useGuestSession()
   const { journey, setFirstThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -83,6 +83,10 @@ export default function FirstThird() {
     }
     setFirstThirdTasting(payload)
     setFirstThird(payload)
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('first-third')
     navigate('/smokecraft/flavor-memory')
   }

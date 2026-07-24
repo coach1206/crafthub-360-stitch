@@ -36,7 +36,7 @@ const FLAVOR_ZONES = [
 
 const EMPTY = { selectedFlavors: [], focusSelected: [], savedAt: null }
 
-export default function FinalThird() {
+export default function FinalThird({ onBack, onComplete } = {}) {
   const { awardSessionRewards, setFinalThirdTasting } = useGuestSession()
   const { journey, setFinalThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -101,6 +101,10 @@ export default function FinalThird() {
     setFinalThirdTasting(payload)
     setFinalThird(payload)
 
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('final-third')
     navigate('/smokecraft/scorecard')
   }

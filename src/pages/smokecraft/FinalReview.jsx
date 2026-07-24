@@ -22,7 +22,7 @@ const READINESS_ZONES = [
   { id: 'r6', label: 'Ready to receive passport stamp',    x: 10.3, y: 91.5, w: 79.7, h: 3.4 },
 ]
 
-export default function FinalReview() {
+export default function FinalReview({ onBack, onComplete } = {}) {
   const { awardSessionRewards } = useGuestSession()
   const { journey, setFinalReview } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -42,6 +42,10 @@ export default function FinalReview() {
   }
 
   function handleContinue() {
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('final-review')
     navigate('/smokecraft/rewards')
   }

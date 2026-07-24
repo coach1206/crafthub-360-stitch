@@ -350,7 +350,7 @@ export default function App() {
                 <Route index element={<SmokeCraftSessionGuard sessionNumber={1} enforceEntryReadiness={false}><SmokeCraft /></SmokeCraftSessionGuard>} />
 
                 {/* S1 — welcome (Welcome to Today's Experience) — Package N */}
-                <Route path="welcome"          element={<SmokeCraftSessionGuard sessionNumber={1}><WelcomeExperience /></SmokeCraftSessionGuard>} />
+                <Route path="welcome"          element={<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraftScreenRenderer screenId="session-1" /></SmokeCraftSessionGuard>} />
 
                 {/* E2 — Sign In / Guest Mode (entry-layer, outside the 27-session spine) */}
                 <Route path="enroll"           element={<SmokeCraftSessionGuard requires="entry"><Enroll /></SmokeCraftSessionGuard>} />
@@ -406,13 +406,13 @@ export default function App() {
                 <Route path="mentor"         element={<Navigate to="/smokecraft/mentor-selection" replace />} />
 
                 {/* S2 — humidor-match (Choose Your Cigar) */}
-                <Route path="humidor-match"    element={<SmokeCraftSessionGuard sessionNumber={2}><HumidorMatch /></SmokeCraftSessionGuard>} />
+                <Route path="humidor-match"    element={<SmokeCraftSessionGuard sessionNumber={2}><SmokeCraftScreenRenderer screenId="session-2" /></SmokeCraftSessionGuard>} />
 
                 {/* S3 — meet-your-cigar (Meet Your Cigar) */}
-                <Route path="meet-your-cigar"  element={<SmokeCraftSessionGuard sessionNumber={3}><MeetYourCigar /></SmokeCraftSessionGuard>} />
+                <Route path="meet-your-cigar"  element={<SmokeCraftSessionGuard sessionNumber={3}><SmokeCraftScreenRenderer screenId="session-3" /></SmokeCraftSessionGuard>} />
 
                 {/* S4 — terroir (Terroir) */}
-                <Route path="terroir"        element={<SmokeCraftSessionGuard sessionNumber={4}><Terroir /></SmokeCraftSessionGuard>} />
+                <Route path="terroir"        element={<SmokeCraftSessionGuard sessionNumber={4}><SmokeCraftScreenRenderer screenId="session-4" /></SmokeCraftSessionGuard>} />
 
                 {/* S5 — format (Construction Inspection) */}
                 <Route path="format"         element={<SmokeCraftSessionGuard sessionNumber={5}><Format /></SmokeCraftSessionGuard>} />
@@ -429,18 +429,18 @@ export default function App() {
                 <Route path="seed-soil"        element={<SmokeCraftSessionGuard requires="mentor"><SeedSoil /></SmokeCraftSessionGuard>} />
 
                 {/* S6 — cut-toast-light (Choose Your Cut) */}
-                <Route path="cut-toast-light"  element={<SmokeCraftSessionGuard sessionNumber={6}><CutToastLight /></SmokeCraftSessionGuard>} />
+                <Route path="cut-toast-light"  element={<SmokeCraftSessionGuard sessionNumber={6}><SmokeCraftScreenRenderer screenId="session-6" /></SmokeCraftSessionGuard>} />
                 {/* S7 — lighting-tutorial (Lighting Tutorial) */}
-                <Route path="lighting-tutorial" element={<SmokeCraftSessionGuard sessionNumber={7}><LightingTutorial /></SmokeCraftSessionGuard>} />
+                <Route path="lighting-tutorial" element={<SmokeCraftSessionGuard sessionNumber={7}><SmokeCraftScreenRenderer screenId="session-7" /></SmokeCraftSessionGuard>} />
 
                 {/* S8/S9 — first-third (First Draw / Flavor Discovery, merged — see session.js) */}
-                <Route path="first-third"      element={<SmokeCraftSessionGuard sessionNumber={8}><FirstThird /></SmokeCraftSessionGuard>} />
+                <Route path="first-third"      element={<SmokeCraftSessionGuard sessionNumber={8}><SmokeCraftScreenRenderer screenId="session-8" /></SmokeCraftSessionGuard>} />
 
                 {/* S10 — flavor-memory (Flavor Memory Exercise) */}
-                <Route path="flavor-memory"    element={<SmokeCraftSessionGuard sessionNumber={10}><FlavorMemory /></SmokeCraftSessionGuard>} />
+                <Route path="flavor-memory"    element={<SmokeCraftSessionGuard sessionNumber={10}><SmokeCraftScreenRenderer screenId="session-10" /></SmokeCraftSessionGuard>} />
 
                 {/* S11 — pairing-lab (Suggested Pairings) */}
-                <Route path="pairing-lab"      element={<SmokeCraftSessionGuard sessionNumber={11}><PairingLab /></SmokeCraftSessionGuard>} />
+                <Route path="pairing-lab"      element={<SmokeCraftSessionGuard sessionNumber={11}><SmokeCraftScreenRenderer screenId="session-11" /></SmokeCraftSessionGuard>} />
 
                 {/* Request/Purchase — supporting module (an embedded drawer per the
                     locked plan; kept as a standalone route since folding it into S2 as
@@ -448,13 +448,13 @@ export default function App() {
                 <Route path="request-purchase" element={<SmokeCraftSessionGuard requires="humidor-match"><RequestPurchase /></SmokeCraftSessionGuard>} />
 
                 {/* S12/S13 — second-third (Flavor Evolution / Construction Check, merged — see session.js) */}
-                <Route path="second-third"     element={<SmokeCraftSessionGuard sessionNumber={12}><SecondThird /></SmokeCraftSessionGuard>} />
+                <Route path="second-third"     element={<SmokeCraftSessionGuard sessionNumber={12}><SmokeCraftScreenRenderer screenId="session-12" /></SmokeCraftSessionGuard>} />
 
                 {/* S14 — mentor-commentary (Mentor Commentary) */}
-                <Route path="mentor-commentary" element={<SmokeCraftSessionGuard sessionNumber={14}><MentorCommentary /></SmokeCraftSessionGuard>} />
+                <Route path="mentor-commentary" element={<SmokeCraftSessionGuard sessionNumber={14}><SmokeCraftScreenRenderer screenId="session-14" /></SmokeCraftSessionGuard>} />
 
                 {/* S15 — knowledge-drop (Knowledge Drop) */}
-                <Route path="knowledge-drop"   element={<SmokeCraftSessionGuard sessionNumber={15}><KnowledgeDrop /></SmokeCraftSessionGuard>} />
+                <Route path="knowledge-drop"   element={<SmokeCraftSessionGuard sessionNumber={15}><SmokeCraftScreenRenderer screenId="session-15" /></SmokeCraftSessionGuard>} />
 
                 {/* Knowledge Check / Text Quiz — reusable supporting module QA harness
                     (Package O). Not part of the numbered spine or any educational
@@ -469,10 +469,10 @@ export default function App() {
                 <Route path="mini-tasting-module" element={<SmokeCraftSessionGuard requires="entry"><MiniTasting /></SmokeCraftSessionGuard>} />
 
                 {/* S16/S17/S18 — final-third (Flavor Finish / Strength Progression / Overall Experience Notes, merged — see session.js) */}
-                <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={16}><FinalThird /></SmokeCraftSessionGuard>} />
+                <Route path="final-third"      element={<SmokeCraftSessionGuard sessionNumber={16}><SmokeCraftScreenRenderer screenId="session-16" /></SmokeCraftSessionGuard>} />
 
                 {/* S19/S20 — scorecard (Rate Every Category / Personal Notes, merged — see session.js) */}
-                <Route path="scorecard"        element={<SmokeCraftSessionGuard sessionNumber={19}><Scorecard /></SmokeCraftSessionGuard>} />
+                <Route path="scorecard"        element={<SmokeCraftSessionGuard sessionNumber={19}><SmokeCraftScreenRenderer screenId="session-19" /></SmokeCraftSessionGuard>} />
 
                 {/* SmokeCraft Challenge — supporting module, reachable from S19/S20 */}
                 <Route path="smokecraft-challenge"  element={<SmokeCraftSessionGuard requires="scorecard"><SmokeCraftChallenge /></SmokeCraftSessionGuard>} />
@@ -491,10 +491,10 @@ export default function App() {
                 <Route path="ai-summary"       element={<SmokeCraftSessionGuard sessionNumber={21}><SmokeCraftScreenRenderer screenId="session-21" /></SmokeCraftSessionGuard>} />
 
                 {/* S22 — pairing-recommendations (Personalized Pairing Recommendations) */}
-                <Route path="pairing-recommendations" element={<SmokeCraftSessionGuard sessionNumber={22}><PairingRecommendations /></SmokeCraftSessionGuard>} />
+                <Route path="pairing-recommendations" element={<SmokeCraftSessionGuard sessionNumber={22}><SmokeCraftScreenRenderer screenId="session-22" /></SmokeCraftSessionGuard>} />
 
                 {/* S23 — passport-stamp (Passport Stamp Animation) */}
-                <Route path="passport-stamp"   element={<SmokeCraftSessionGuard sessionNumber={23}><PassportStamp /></SmokeCraftSessionGuard>} />
+                <Route path="passport-stamp"   element={<SmokeCraftSessionGuard sessionNumber={23}><SmokeCraftScreenRenderer screenId="session-23" /></SmokeCraftSessionGuard>} />
 
                 {/* Connections — supporting module, reachable from S23 */}
                 <Route path="connections"      element={<SmokeCraftSessionGuard requires="passport-stamp"><Connections /></SmokeCraftSessionGuard>} />
@@ -508,12 +508,12 @@ export default function App() {
                 <Route path="management-sync/analytics" element={<ManagementSyncAnalytics />} />
 
                 {/* S24 — final-review (Completed Scorecard) */}
-                <Route path="final-review"          element={<SmokeCraftSessionGuard sessionNumber={24}><FinalReview /></SmokeCraftSessionGuard>} />
+                <Route path="final-review"          element={<SmokeCraftSessionGuard sessionNumber={24}><SmokeCraftScreenRenderer screenId="session-24" /></SmokeCraftSessionGuard>} />
 
                 {/* S25 Rewards and XP / S26 Achievements — one shared route/component
                     (see session.js `sharedComponent`); S26's own gate is enforced
                     inside Rewards.jsx (same route, can't have two <Route> entries). */}
-                <Route path="rewards"          element={<SmokeCraftSessionGuard sessionNumber={25}><Rewards /></SmokeCraftSessionGuard>} />
+                <Route path="rewards"          element={<SmokeCraftSessionGuard sessionNumber={25}><SmokeCraftScreenRenderer screenId="session-25" /></SmokeCraftSessionGuard>} />
 
                 {/* Supporting gamification screens — outside the locked 27-session
                     numbered sequence per the visual-closure-continuation pass;
@@ -529,7 +529,7 @@ export default function App() {
                     rule — explicitly not built this package. */}
 
                 {/* S27 — session-complete (Recommended Next Journey) */}
-                <Route path="session-complete" element={<SmokeCraftSessionGuard sessionNumber={27}><SessionComplete /></SmokeCraftSessionGuard>} />
+                <Route path="session-complete" element={<SmokeCraftSessionGuard sessionNumber={27}><SmokeCraftScreenRenderer screenId="session-27" /></SmokeCraftSessionGuard>} />
 
                 {/* Visit complete interstitial */}
                 <Route path="visit-complete"   element={<VisitComplete />} />

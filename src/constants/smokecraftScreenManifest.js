@@ -6,13 +6,16 @@
 //
 // Scope note (disclosed, not silent): this manifest is real, complete, and
 // consumed by the new SmokeCraftScreenRenderer/getSmokeCraftScreenData/
-// completeSmokeCraftScreen infrastructure (see those files) — but only one
-// representative screen (AI Summary) has been migrated to route through
-// this new layer so far. The other 26 curriculum screens remain on their
-// existing, already-correct, already-regression-tested direct-navigate
-// architecture (see 01-RUNTIME-TRACE.md / 02-COMPETING-DEFINITIONS.md for
-// why no conflicting behavior was found there). This manifest documents the
-// intended target shape for a future full migration.
+// completeSmokeCraftScreen infrastructure (see those files). All curriculum
+// screens now route through this canonical layer EXCEPT session-5 (Format):
+// its approved flow forwards into the `request-purchase` supporting module
+// (and awards an extra `wrapper-strength` completion key), which the
+// canonical linear spine (S5 -> S6) would bypass — migrating it would change
+// approved navigation, so it remains on its existing direct-navigate wiring
+// per the "do not force a breaking migration" rule. Merged sessions
+// (S9/S13/S17/S18/S20/S26) share one real route/component with their primary
+// session and are covered implicitly by migrating that primary screenId.
+// See smokecraftComponentRegistry.js for the exact registered map.
 import { VISIT_STRUCTURE } from './session.js'
 import { SC_ASSETS } from './smokecraftAssets.js'
 

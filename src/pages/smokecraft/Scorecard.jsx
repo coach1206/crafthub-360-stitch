@@ -79,7 +79,7 @@ function RatingDots({ value, onChange, label }) {
   )
 }
 
-export default function Scorecard() {
+export default function Scorecard({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { journey, setScorecard } = useSmokeCraftJourney()
   const { managementSync, saveSnapshot } = useSmokeCraftServerJourney()
@@ -176,13 +176,17 @@ export default function Scorecard() {
     const snap = { ...sc, savedAt: Date.now(), overall: calcOverall(sc.categories) }
     setScorecard(snap)
     await submitScorecard(snap)
-    awardSessionRewards('scorecard')
+    if (!onComplete) awardSessionRewards('scorecard')
     // Meaningful checkpoint: save a real server snapshot including the
     // scorecard just submitted — only if a server journey already
     // exists (established at START/RESUME). Never creates a journey
     // here, and never blocks navigation on the result.
     if (managementSync.serverJourneyId) {
       saveSnapshot({ ...mapJourneyToSnapshotPayload({ ...journey, scorecard: snap }), completionState: 'in_progress' }).catch(() => {})
+    }
+    if (onComplete) {
+      onComplete()
+      return
     }
     navigate('/smokecraft/ai-summary')
   }
@@ -399,7 +403,7 @@ export default function Scorecard() {
         primary={done ? 'Continuing…' : 'Continue to AI Summary →'}
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/final-third')}
+        onSecondary={onBack || (() => navigate('/smokecraft/final-third'))}
       />
     </>
   )

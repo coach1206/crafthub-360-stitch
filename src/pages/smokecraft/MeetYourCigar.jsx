@@ -44,7 +44,7 @@ function buildSections(cigar) {
   ]
 }
 
-export default function MeetYourCigar() {
+export default function MeetYourCigar({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { isDemoMode } = useSmokeCraftProgress()
   const { journey, setMeetYourCigar } = useSmokeCraftJourney()
@@ -108,6 +108,10 @@ export default function MeetYourCigar() {
       viewedSections: Array.from(viewedSections),
       completedAt: journey.meetYourCigar?.completedAt || Date.now(),
     })
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('meet-your-cigar')
     navigate('/smokecraft/terroir')
   }
@@ -272,7 +276,7 @@ export default function MeetYourCigar() {
         primary="Continue →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/humidor-match')}
+        onSecondary={onBack || (() => navigate('/smokecraft/humidor-match'))}
       />
     </div>
   )

@@ -115,7 +115,7 @@ function Toggle({ label, value, onChange }) {
   )
 }
 
-export default function HumidorMatch() {
+export default function HumidorMatch({ onBack, onComplete } = {}) {
   const { awardSessionRewards, setHumidorMatchSelection, setSelectedHumidorRecommendation } = useGuestSession()
   const { journey, setSelectedCigar } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -184,6 +184,10 @@ export default function HumidorMatch() {
         selectedCigarName: selectedCigar?.name || null,
         settings: { temp, humidity, sealOn, airflowOn },
       })
+    }
+    if (onComplete) {
+      onComplete()
+      return
     }
     awardSessionRewards('humidor-match')
     navigate('/smokecraft/meet-your-cigar')

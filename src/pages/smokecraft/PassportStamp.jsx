@@ -31,7 +31,7 @@ function readMentorNames(smokeCraft) {
   if (!m) return []
   return [m.name || m.id].filter(Boolean)
 }
-export default function PassportStamp() {
+export default function PassportStamp({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { journey, setPassportStamp } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -127,6 +127,10 @@ export default function PassportStamp() {
     if (done) return
     setDone(true)
     const isClaimed = claimStatus === 'claimed' || claimStatus === 'duplicate'
+    if (onComplete) {
+      onComplete()
+      return
+    }
     if (!isClaimed) awardSessionRewards('passport-stamp')
     navigate('/smokecraft/final-review')
   }
@@ -151,7 +155,7 @@ export default function PassportStamp() {
         primary={done ? 'Continuing…' : 'Continue to Completed Scorecard →'}
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/pairing-recommendations')}
+        onSecondary={onBack || (() => navigate('/smokecraft/pairing-recommendations'))}
       />
     </>
   )

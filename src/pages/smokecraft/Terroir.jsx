@@ -55,7 +55,7 @@ const SECTIONS = [
   },
 ]
 
-export default function Terroir() {
+export default function Terroir({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { isDemoMode } = useSmokeCraftProgress()
   const { journey, setTerroir } = useSmokeCraftJourney()
@@ -113,6 +113,10 @@ export default function Terroir() {
 
   function handleContinue() {
     setTerroir({ viewedSections: Array.from(viewedSections), completedAt: journey.terroir?.completedAt || Date.now() })
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('terroir')
     navigate('/smokecraft/format')
   }
@@ -278,7 +282,7 @@ export default function Terroir() {
         primary="Continue →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/meet-your-cigar')}
+        onSecondary={onBack || (() => navigate('/smokecraft/meet-your-cigar'))}
       />
     </div>
   )

@@ -50,7 +50,7 @@ const EMPTY = {
   pairingGoal: null,
 }
 
-export default function PairingLab() {
+export default function PairingLab({ onBack, onComplete } = {}) {
   const { awardSessionRewards } = useGuestSession()
   const { journey, setPairing } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -102,6 +102,10 @@ export default function PairingLab() {
   }
 
   function handleContinue() {
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('pairing-lab')
     navigate('/smokecraft/second-third')
   }
@@ -329,7 +333,7 @@ export default function PairingLab() {
         primary="Continue to Flavor Evolution →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/flavor-memory')}
+        onSecondary={onBack || (() => navigate('/smokecraft/flavor-memory'))}
       />
     </>
   )

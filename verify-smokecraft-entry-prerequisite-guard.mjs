@@ -48,7 +48,13 @@ check('Identity prerequisite is represented', contractSrc.includes('identityComp
 check('Venue prerequisite is represented where active', contractSrc.includes('venueComplete'))
 check('Mentor prerequisite is represented (reported for contract completeness — disclosed as not gating readyForWelcome, see 01-ENTRY-READINESS-CONTRACT.md)', contractSrc.includes('mentorComplete'))
 check('Welcome uses the shared guard', guardSrc.includes('getSmokeCraftEntryReadiness') && appSrc.includes('path="welcome"          element={<SmokeCraftSessionGuard sessionNumber={1}>'))
-check('Session 1 uses the shared guard (same route as Welcome)', appSrc.includes('sessionNumber={1}><WelcomeExperience'))
+// Canonical Runtime migration: the welcome route now renders Session 1
+// through SmokeCraftScreenRenderer (screenId="session-1") instead of the
+// bare <WelcomeExperience/> component, but it is still wrapped by the same
+// shared SmokeCraftSessionGuard sessionNumber={1} — which is what this
+// check actually cares about. Assertion updated to check the new (correct)
+// wiring rather than the pre-migration inline component.
+check('Session 1 uses the shared guard (same route as Welcome)', appSrc.includes('sessionNumber={1}><SmokeCraftScreenRenderer screenId="session-1"'))
 
 // Live browser checks against the local preview server
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--no-sandbox'] })

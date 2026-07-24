@@ -63,7 +63,7 @@ const TOPICS = [
   },
 ]
 
-export default function KnowledgeDrop() {
+export default function KnowledgeDrop({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { isDemoMode } = useSmokeCraftProgress()
   const { journey, setKnowledgeDrop } = useSmokeCraftJourney()
@@ -140,6 +140,10 @@ export default function KnowledgeDrop() {
       quizScore,
       completedAt: journey.knowledgeDrop?.completedAt || Date.now(),
     })
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('knowledge-drop')
     navigate('/smokecraft/final-third')
   }
@@ -379,7 +383,7 @@ export default function KnowledgeDrop() {
         primary="Continue →"
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/mentor-commentary')}
+        onSecondary={onBack || (() => navigate('/smokecraft/mentor-commentary'))}
       />
     </div>
   )

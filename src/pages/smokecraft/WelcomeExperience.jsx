@@ -73,7 +73,7 @@ function formatTimestamp(ts) {
   try { return new Date(ts).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) } catch { return null }
 }
 
-export default function WelcomeExperience() {
+export default function WelcomeExperience({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { isDemoMode, completedSessions } = useSmokeCraftProgress()
   const { journey, setWelcomeState, setResumeCache } = useSmokeCraftJourney()
@@ -161,7 +161,6 @@ export default function WelcomeExperience() {
   function handleBegin() {
     triggerHaptic('medium')
     if (!completed) {
-      awardSessionRewards('entry')
       setWelcomeState({ s1CompletedAt: journey.s1CompletedAt || Date.now() })
     }
     // Fire-and-forget: creates (or resumes) the authoritative server
@@ -177,6 +176,11 @@ export default function WelcomeExperience() {
         sourceVersion: 'package-d',
       }).catch(() => {})
     }
+    if (onComplete) {
+      onComplete()
+      return
+    }
+    if (!completed) awardSessionRewards('entry')
     navigate('/smokecraft/humidor-match')
   }
 

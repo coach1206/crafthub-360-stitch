@@ -175,7 +175,17 @@ function BadgeCrest({ label, earned, size = 56 }) {
   )
 }
 
-export default function Rewards() {
+// Canonical Runtime pass — routed through SmokeCraftScreenRenderer as
+// screenId="session-25". This one component uniquely hosts TWO merged
+// sessions (S25 Rewards + S26 Achievements) behind an internal `mode`
+// toggle: the S25 "continue" does NOT navigate (it switches to the
+// achievements view in-place), and the S26 "continue" awards a different
+// completion key ('achievements') before navigating. That two-phase,
+// two-completion-key, single-route flow cannot be expressed by the
+// renderer's single award+navigate onComplete without changing approved
+// behavior, so both completions stay internal here (idempotent awards,
+// unchanged navigation). onBack is accepted for the S25-mode back button.
+export default function Rewards({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { isDemoMode, currentSession } = useSmokeCraftProgress()
   const { journey, setRewards, setAchievements } = useSmokeCraftJourney()
@@ -577,7 +587,7 @@ export default function Rewards() {
           primary="Continue to Achievements →"
           onPrimary={handleRewardsContinue}
           secondary="← Back"
-          onSecondary={() => navigate('/smokecraft/final-review')}
+          onSecondary={onBack || (() => navigate('/smokecraft/final-review'))}
         />
       ) : (
         <SmokeCraftNavBar

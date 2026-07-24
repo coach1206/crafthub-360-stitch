@@ -21,7 +21,7 @@ const EXPLORE_ZONES = [
   { id: 'Complexity Shift',   x: 83.0, y: 25.1, w: 14.5, h: 11.0 },
 ]
 
-export default function SecondThird() {
+export default function SecondThird({ onBack, onComplete } = {}) {
   const { awardSessionRewards, setSecondThirdTasting } = useGuestSession()
   const { journey, setSecondThird } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -82,6 +82,10 @@ export default function SecondThird() {
     }
     setSecondThirdTasting(payload)
     setSecondThird(payload)
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('second-third')
     navigate('/smokecraft/mentor-commentary')
   }

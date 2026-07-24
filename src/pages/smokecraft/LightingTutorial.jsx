@@ -76,7 +76,7 @@ const STEPS = [
   },
 ]
 
-export default function LightingTutorial() {
+export default function LightingTutorial({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { isDemoMode } = useSmokeCraftProgress()
   const { setCutToastLight, journey } = useSmokeCraftJourney()
@@ -161,6 +161,10 @@ export default function LightingTutorial() {
       lightingTutorialCompleted: true,
       lightingTutorialCompletedAt: Date.now(),
     })
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('lighting-tutorial')
     navigate('/smokecraft/first-third')
   }

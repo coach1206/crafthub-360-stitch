@@ -58,7 +58,7 @@ function PairingIcon({ category }) {
   )
 }
 
-export default function PairingRecommendations() {
+export default function PairingRecommendations({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { isDemoMode } = useSmokeCraftProgress()
   const { journey, setPairingRecommendations } = useSmokeCraftJourney()
@@ -174,6 +174,10 @@ export default function PairingRecommendations() {
   }
 
   function handleContinue() {
+    if (onComplete) {
+      onComplete()
+      return
+    }
     awardSessionRewards('pairing-recommendations')
     navigate('/smokecraft/passport-stamp')
   }
@@ -429,7 +433,7 @@ export default function PairingRecommendations() {
         primaryDisabled={!canContinue}
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/ai-summary')}
+        onSecondary={onBack || (() => navigate('/smokecraft/ai-summary'))}
       />
     </div>
   )
