@@ -446,14 +446,25 @@ export function SmokeCraftJourneyProvider({ children }) {
         : (prev.previousCompletedJourneys || [])
       const next = {
         ...prev,
-        // Preserved as-is: identity, selectedVenue, venueSelectionCompleted,
-        // lastEntryScreen, rewards, achievements, stateVersion, spineVersion.
+        // Preserved as-is: selectedVenue, venueSelectionCompleted,
+        // lastEntryScreen, rewards, achievements, stateVersion, spineVersion
+        // (venue preservation is a deliberate, already-approved decision —
+        // reuse the canonical venue context, see
+        // 03-VENUE-PRESERVATION-DECISION.md from the entry-prerequisite pass).
         previousCompletedJourneys,
         activeJourneyId: generateJourneyId(),
         journeyCreatedAt: Date.now(),
         journeyUpdatedAt: Date.now(),
         resumeRoute: null,
         resumeScreenId: null,
+        // Root-cause fix (Canonical Journey Authority pass): `identity`
+        // (fullName/preferredName/experienceLevel — the exact field
+        // Welcome's greeting reads) was previously left in the "preserved
+        // as-is" group alongside venue, meaning a guest's display name from
+        // an archived journey silently carried over onto a brand-new one's
+        // Welcome screen. Identity is guest-specific, not venue-specific —
+        // it must reset with the rest of this journey's content.
+        identity: null,
         // Reset: this journey's content.
         welcomeExperience: null,
         welcomeViewedAt: null,

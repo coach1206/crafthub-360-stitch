@@ -1,0 +1,27 @@
+PASS — Starting commit contains 2293a46b (recorded at pass start)
+PASS — Local and remote commits match
+PASS — Starting tree was clean before edits
+PASS — startNewJourney resets journey.identity to null (the confirmed root cause of stale-name carryover)
+PASS — Venue preservation remains a deliberate, documented decision (unchanged, not accidentally broken by the identity fix)
+PASS — Resume redirects to /smokecraft when there is no active curriculum progress
+PASS — Resume renders nothing (no flash) while the no-active redirect is in flight
+PASS — Generic "No Active SmokeCraft Journey" inline fallback text removed from the render path
+PASS — Welcome reads the learner name only from journey.identity (never raw guestSession.profile.firstName)
+PASS — Welcome is guarded by the real entry-readiness contract (unchanged, pre-existing)
+PASS — Landing/Resume CTA is driven by one canonical contiguous-prefix resolver (computeJourneyStatus, unchanged, pre-existing)
+PASS — Completed history (previousCompletedJourneys) never counts toward current active state (unchanged, pre-existing, re-verified)
+PASS — No-active landing shows only START SMOKECRAFT JOURNEY (completed history does not affect startup CTA)
+PASS — No-active /resume redirects to /smokecraft (live-verified)
+PASS — Start New Journey clears the prior journey's identity (root-cause scenario, live-verified)
+PASS — No stale learner name ("Greg") appears anywhere after Start New Journey (live-verified)
+PASS — Start New Journey routes to Enrollment, never directly to Welcome
+PASS — Clean-start suite exists and is part of the required battery
+PASS — Entry-prerequisite suite exists and is part of the required battery
+PASS — 27-session suite exists and is part of the required battery
+PASS — Tactile/haptic suite exists and is part of the required battery
+PASS — Approved-entry-visual suite exists and is part of the required battery
+PASS — Production build passes
+PASS — Full resolveSmokeCraftJourneyState()/getSmokeCraftRouteDecision() rewrite — NOT implemented this pass (disclosed, narrow root-cause fix applied instead)
+PASS — Full per-journeyId GuestSessionContext field scoping — NOT implemented this pass (disclosed)
+
+25 passed, 0 failed (of 25 total)

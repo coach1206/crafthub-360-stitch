@@ -1,0 +1,10 @@
+{
+  "rootCauseScenario": {
+    "urlAfterStartNew": "http://localhost:5050/smokecraft/enroll",
+    "identityAfterStartNew": null,
+    "containsStaleGreg": false
+  },
+  "noActiveResumeRedirect": {
+    "finalUrl": "/smokecraft"
+  }
+}

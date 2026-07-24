@@ -950,3 +950,25 @@ change.
    common responsive-layout failure mode, but is not a substitute for an
    exhaustive per-screen matrix when one is explicitly required — label
    which one was actually performed.
+
+## Canonical Journey Authority Root-Cause Fix — permanent rules
+
+1. A "preserved as-is" grouping in a reset function is a place to re-verify
+   at every pass, not a permanent decision — a field grouped with a
+   deliberately-preserved value (e.g. venue) for convenience is not
+   automatically correct to preserve for the same reason (identity is not
+   venue).
+2. Live production screenshots cited in a mandate must be investigated as
+   a credible bug report when they cannot be independently verified — not
+   accepted as fact, and not dismissed either.
+3. Finding and fixing the actual narrow root cause is preferable to
+   building a large parallel architecture "just in case" — verify the
+   existing canonical authority (if one already exists and is correct)
+   before assuming a new one is needed.
+4. A "no active journey" state rendering inline vs. redirecting is a real,
+   fixable presentation choice, distinct from whether the underlying
+   state computation itself is correct — don't conflate the two when
+   diagnosing a "competing authority" report.
+5. Not every defect requires a migration/reconciliation step for existing
+   browsers — evaluate whether the defect self-heals on the next natural
+   user action (e.g., the next Start New Journey) before building one.

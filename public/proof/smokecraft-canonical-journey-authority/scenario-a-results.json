@@ -1,0 +1,16 @@
+{
+  "landingCTA": [
+    "START SMOKECRAFT JOURNEY →"
+  ],
+  "resume": {
+    "finalUrl": "/smokecraft",
+    "redirected": true,
+    "containsNoActiveFallbackText": false
+  },
+  "welcome": {
+    "finalUrl": "/smokecraft/welcome",
+    "reachable": true,
+    "containsGuestName": false,
+    "note": "Welcome is reachable here because entry (enroll+venue) is genuinely complete for THIS session — this is the real, approved, non-buggy \"enrolled but S1 not started\" state, not stale data leaking from a different journey."
+  }
+}

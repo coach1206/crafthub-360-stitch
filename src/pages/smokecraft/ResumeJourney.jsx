@@ -160,6 +160,19 @@ export default function ResumeJourney() {
   // can never coexist with a rendered Saved Journey card.
   const hasProgress = journeyStatus.hasStarted
 
+  // Emergency Root-Cause pass — a guest with no real curriculum progress
+  // (hasProgress === false) no longer gets an inline "No Active SmokeCraft
+  // Journey" card on this page; Resume now redirects immediately to the
+  // landing page, which already owns the single canonical Start CTA. This
+  // removes a second, competing "no active journey" rendering path — the
+  // landing page's own computeJourneyStatus-driven CTA logic (unchanged,
+  // already correct) is the only place that state is ever displayed.
+  useEffect(() => {
+    if (phase === 'ready' && !hasProgress) {
+      navigate('/smokecraft', { replace: true })
+    }
+  }, [phase, hasProgress, navigate])
+
   // Live remediation pass — derived from the same authoritative,
   // contiguous-prefix journeyStatus used for currentAllowed/completionPercent
   // above, never from an independent max-scan over completedSteps. A
@@ -221,6 +234,11 @@ export default function ResumeJourney() {
     navigate('/smokecraft/final-review')
   }
 
+  // No-flash guard — render nothing while the no-active-journey redirect
+  // effect above is in flight, matching SmokeCraftSessionGuard's own
+  // established no-flash-of-protected-content pattern.
+  if (phase === 'ready' && !hasProgress) return null
+
   return (
     <div style={{
       position: 'fixed', inset: 0, overflow: 'hidden',
@@ -269,15 +287,9 @@ export default function ResumeJourney() {
             </div>
           )}
 
-          {phase === 'ready' && !confirmingReset && (
+          {/* !hasProgress case now redirects before this point is ever reached (see the no-flash guard above) — the inline "No Active SmokeCraft Journey" card was removed as a second, competing render path for that state. */}
+          {phase === 'ready' && !confirmingReset && hasProgress && (
             <>
-              {!hasProgress && (
-                <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(24px,4vw,40px)', textAlign: 'center' }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>No Active SmokeCraft Journey</div>
-                  <p style={{ margin: 0, fontSize: 14, color: 'rgba(229,226,225,0.7)' }}>No saved journey yet — start your first SmokeCraft 360 session.</p>
-                </div>
-              )}
-
               {hasProgress && (
                 <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,2.4vw,24px)' }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
