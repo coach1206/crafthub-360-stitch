@@ -295,10 +295,13 @@ export default function SmokeCraft() {
         style={{ left: '78.6%', top: '73.2%', width: '17.7%', height: '6.3%' }}
       />
 
-      {/* Bottom bar: REWARDS → Browse Humidor */}
+      {/* Bottom bar: REWARDS → Reward Center (approved Reward Center.png).
+          Root-cause fix: previously routed to /smokecraft/humidor-match, a
+          session-2-guarded screen that bounced every real user to enroll and
+          never showed the approved Reward Center visual. */}
       <StaticHotspot
-        label="Browse Humidor"
-        onClick={() => go('/smokecraft/humidor-match')}
+        label="Rewards"
+        onClick={() => go('/smokecraft/rewards-center')}
         style={{ left: '1.35%', top: '82.2%', width: '24.3%', height: '17.7%' }}
       />
 

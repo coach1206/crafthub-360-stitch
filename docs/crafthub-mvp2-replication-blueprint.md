@@ -1025,3 +1025,30 @@ change.
    are actually a testing-harness artifact — check for a stale/duplicate
    server process and a fresh backend restart (which clears in-memory
    counters) before concluding the underlying feature is broken.
+
+## Live Landing, Journey Entry, and Destination-Card Root-Cause Fix — permanent rules
+
+1. Landing actions (Start / Resume / Start New / destination cards) must be
+   tested through the visible controls a real user clicks — located by
+   role/text, against the production build (`vite preview`) — never by calling
+   the journey service directly, navigating programmatically, or seeding an
+   active journey before the click.
+2. Destination cards must preserve the active journey state — never reset it,
+   never create a new journey, and never route in a way that discards progress.
+3. Approved-asset status requires actual rendered-hash verification: hash the
+   asset the browser really rendered (served URL / computed background-image)
+   against the approved file on disk — a registry/manifest label is not proof.
+4. Registry labels (`SC_ASSETS` keys, manifest entries, `data-visual-source`
+   markers) cannot substitute for browser proof that the correct approved
+   pixels actually rendered on the live route.
+5. Static lock-screen images cannot replace a live prerequisite state: a
+   not-yet-unlocked screen may only be gated by a live panel (real prerequisite
+   + current progress + correct return route), never baked lock artwork.
+6. Tests may not bypass the visible UI by directly invoking services to reach
+   the assertion — set-up seeding to reach a starting condition is allowed, but
+   the control under test must always be activated by a real click/keypress.
+7. Start, Resume, and Start New are three distinct real-user states and must be
+   validated separately as such, each with a real click, not assumed from
+   source or collapsed into one path.
+8. Landing destination routes (Rewards, Rankings, Passport, CraftHub) must be
+   included in full-game acceptance testing, not just the linear session spine.

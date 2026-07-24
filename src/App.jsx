@@ -136,6 +136,7 @@ import Vitola           from './pages/smokecraft/Vitola.jsx'
 import Identity         from './pages/smokecraft/Identity.jsx'
 import ResumeJourney    from './pages/smokecraft/ResumeJourney.jsx'
 import Leaderboard      from './pages/smokecraft/Leaderboard.jsx'
+import RewardsCenter    from './pages/smokecraft/RewardsCenter.jsx'
 import SmokeCraftScreenRenderer from './components/smokecraft/SmokeCraftScreenRenderer.jsx'
 import SeedSoil         from './pages/smokecraft/SeedSoil.jsx'
 import RequestPurchase  from './pages/smokecraft/RequestPurchase.jsx'
@@ -537,6 +538,11 @@ export default function App() {
                 <Route path="resume"         element={<SmokeCraftSessionGuard requires="enroll"><ResumeJourney /></SmokeCraftSessionGuard>} />
 
                 <Route path="leaderboard"    element={<Leaderboard />} />
+                {/* Landing "Rewards" destination card — landing-accessible Reward
+                    Center (approved Reward Center.png), distinct from the in-
+                    journey S25 Rewards flow at /smokecraft/rewards. Unguarded so
+                    the approved visual is actually reachable from Landing. */}
+                <Route path="rewards-center"   element={<RewardsCenter />} />
                 <Route path="event-challenge"  element={<EventChallenge />} />
                 <Route path="how-it-works"     element={<HowItWorks />} />
                 <Route path="demo-reset"       element={<SmokeCraftDemoReset />} />

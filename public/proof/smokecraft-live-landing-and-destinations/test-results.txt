@@ -1,0 +1,30 @@
+PASS  Clean start: visible START control present
+PASS  Clean start: real click navigates to /smokecraft/enroll
+PASS  Clean start: activeJourneyId exists after real click
+PASS  Clean start: journey persists across refresh (stays on enroll)
+PASS  Active journey: RESUME control appears (not Start)
+PASS  Active journey: Resume click leaves /smokecraft (no bounce back to Start)
+PASS  Active journey: Resume does NOT create a new journey
+PASS  Destination[Rewards]: visible control present
+PASS  Destination[Rewards]: routes to /smokecraft/rewards-center
+PASS  Destination[Rewards]: active journey preserved
+PASS  Rewards: Reward Center.png is the rendered visual shell
+PASS  Rewards: shows real Total XP field
+PASS  Rewards: honest venue-rewards empty state (no fake offers)
+PASS  Destination[Rankings]: visible control present
+PASS  Destination[Rankings]: routes to /smokecraft/leaderboard
+PASS  Destination[Rankings]: active journey preserved
+PASS  Rankings: approved LEADERBOARD 111.png rendered
+PASS  Rankings: no stale "James Carter"
+PASS  Rankings: no stale "18,750"
+PASS  Rankings: no stale "4435 XP"
+PASS  Destination[View Passport (bottom bar)]: visible control present
+PASS  Destination[View Passport (bottom bar)]: routes to /smokecraft/
+PASS  Destination[View Passport (bottom bar)]: active journey preserved
+PASS  Passport: no FUTURE VISIT LOCKED text
+PASS  Passport: no old lock PNG rendered
+PASS  Destination[Enter Challenge]: visible control present
+PASS  Destination[Enter Challenge]: routes to /smokecraft/
+PASS  Destination[Enter Challenge]: active journey preserved
+
+28/28 checks passed

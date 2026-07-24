@@ -138,6 +138,12 @@ export const SC_ASSETS = {
 
   // Rewards / Achievements (shared S25/S26 screen) — approved production assets
   rewards:             `${RAW}/REWARDS%20222.png`,
+  // Landing "Rewards" destination card — approved Reward Center visual the
+  // repo owner uploaded directly to GitHub (commit 4881d21b). Spaces encoded
+  // per this file's rules. This is the shell for the landing-accessible
+  // Rewards Center destination (RewardsCenter.jsx), distinct from the in-
+  // journey S25 rewards screen above.
+  rewardCenter:        `${RAW}/rewards/Reward%20Center.png`,
   achievements:        `${RAW}/ACHIEVMENTS.png`,
 
   // AI Summary (S21) — approved production asset
