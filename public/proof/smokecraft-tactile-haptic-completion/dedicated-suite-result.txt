@@ -1,0 +1,37 @@
+PASS — Starting commit is exact (recorded at pass start)
+PASS — Local and remote commits match
+PASS — Starting tree was clean before edits
+PASS — Shared tactile component exists (SmokeCraftTactileCard)
+PASS — Shared hotspot component exists (SmokeCraftHotspotLayer, pre-existing)
+PASS — Shared haptic helper exists (triggerHaptic)
+PASS — Reduced-motion is respected
+PASS — Haptic preference is respected
+PASS — Unsupported vibration does not break interaction (guarded, no throw)
+PASS — Haptic never fires unconditionally on passive load — spot-verified: every useEffect-based call found is gated behind a real one-time completion/reveal condition
+PASS — Pressed state appears on pointer-down
+PASS — Pressed state clears on pointer-up
+PASS — Pointer-cancel clears pressed state
+PASS — Selected state is a distinct prop, never defaulted true
+PASS — Keyboard Enter activates controls
+PASS — Keyboard Space activates controls
+PASS — Focus is visible (onFocus sets a distinct box-shadow)
+PASS — Touch targets meet the 72x72 preferred minimum
+PASS — Accessible label is required, not generic (no default "Button"/"Hotspot" value)
+PASS — Disabled state prevents activation
+PASS — All 21 unique session screens have an interaction manifest entry
+PASS — At least 15 of 21 session screens have real selectable interaction (re-verified, not assumed)
+PASS — Decorative-only exceptions documented (Welcome, Lighting Tutorial, Mentor Commentary, AI Summary, Pairing Recommendations, Passport Stamp)
+PASS — Score sliders begin neutral (no non-zero default score literal found for user-controlled fields)
+PASS — Quiz answers are not preselected (initial selected-answer state is null/none)
+PASS — Passport claim fires once (idempotency ref guard, pre-existing, re-verified)
+PASS — Reduced-motion + haptic-disabled context loads the app without error
+PASS — Confirmation dialog controls are pointer-reachable (regression check for the earlier pointer-events defect)
+PASS — Build identity footer remains functional (unchanged this pass)
+PASS — Diagnostic route remains functional (unchanged this pass)
+PASS — Clean-start suite exists and is part of the required battery
+PASS — Entry-prerequisite suite exists and is part of the required battery
+PASS — Approved-entry-visual suite exists and is part of the required battery
+PASS — 27-session sequence suite exists and is part of the required battery
+PASS — Production build passes
+
+35 passed, 0 failed (of 35 total)

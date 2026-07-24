@@ -1,0 +1,86 @@
+{
+  "WelcomeExperience": {
+    "selectable": 0,
+    "hasInteraction": false
+  },
+  "HumidorMatch": {
+    "selectable": 2,
+    "hasInteraction": true
+  },
+  "MeetYourCigar": {
+    "selectable": 2,
+    "hasInteraction": true
+  },
+  "Terroir": {
+    "selectable": 2,
+    "hasInteraction": true
+  },
+  "Format": {
+    "selectable": 1,
+    "hasInteraction": true
+  },
+  "CutToastLight": {
+    "selectable": 2,
+    "hasInteraction": true
+  },
+  "LightingTutorial": {
+    "selectable": 0,
+    "hasInteraction": false
+  },
+  "FirstThird": {
+    "selectable": 1,
+    "hasInteraction": true
+  },
+  "FlavorMemory": {
+    "selectable": 1,
+    "hasInteraction": true
+  },
+  "PairingLab": {
+    "selectable": 2,
+    "hasInteraction": true
+  },
+  "SecondThird": {
+    "selectable": 1,
+    "hasInteraction": true
+  },
+  "MentorCommentary": {
+    "selectable": 0,
+    "hasInteraction": false
+  },
+  "KnowledgeDrop": {
+    "selectable": 3,
+    "hasInteraction": true
+  },
+  "FinalThird": {
+    "selectable": 2,
+    "hasInteraction": true
+  },
+  "Scorecard": {
+    "selectable": 1,
+    "hasInteraction": true
+  },
+  "AISummary": {
+    "selectable": 0,
+    "hasInteraction": false
+  },
+  "PairingRecommendations": {
+    "selectable": 0,
+    "hasInteraction": false
+  },
+  "PassportStamp": {
+    "selectable": 0,
+    "hasInteraction": false
+  },
+  "FinalReview": {
+    "selectable": 1,
+    "hasInteraction": true
+  },
+  "Rewards": {
+    "selectable": 4,
+    "hasInteraction": true
+  },
+  "SessionComplete": {
+    "selectable": 2,
+    "hasInteraction": true
+  }
+}

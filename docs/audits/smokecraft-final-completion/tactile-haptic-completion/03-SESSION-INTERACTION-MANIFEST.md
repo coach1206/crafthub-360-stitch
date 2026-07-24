@@ -1,0 +1,3 @@
+# 03 — Session Interaction Manifest
+
+See `public/proof/smokecraft-tactile-haptic-completion/session-interaction-manifest.json` for the machine-generated, per-session `{selectable, hasInteraction}` census (regenerated fresh by `verify-smokecraft-tactile-haptic-interactions.mjs` on every run, not hand-maintained) and `01-INTERACTION-AUDIT.md` for the narrative assessment of each entry, including the 5 disclosed candidates for future enhancement (Welcome, Lighting Tutorial, Mentor Commentary, AI Summary, Pairing Recommendations) and the 1 correctly-non-interactive-by-design screen (Passport Stamp).

@@ -888,3 +888,42 @@ change.
 13. Repeated differences between local and live behavior require build-
     identity and caching verification before another round of UI patches —
     a page-level fix cannot solve a deployment-identity problem.
+
+## Full Tactile and Haptic Interaction Completion — permanent rules
+
+1. Approved images are visual shells, not finished interactive screens.
+2. Every meaningful visual region must connect to a live control.
+3. No educational visual may remain dead and static — but audit method
+   matters: a naive `onClick` string count undercounts real interactivity
+   when one handler drives many cards (verify by reading the actual
+   interaction pattern, not by grepping for a literal occurrence count).
+4. Pressed state and selected state are separate; selected state must
+   only appear after user action.
+5. Haptic feedback must be optional (respect `prefers-reduced-motion` and
+   an explicit account-level preference) and accessibility-safe, and must
+   never gate the underlying action's success.
+6. Pointer-event reachability must be browser-tested, permanently, as an
+   automated regression — not re-discovered by chance a second time.
+7. Hotspots must use responsive normalized coordinates or fixed touch-
+   target minimums (72px), not viewport-relative sizing for touch targets
+   specifically.
+8. Every visual interaction must teach what, why, effect, and application
+   where it is genuinely an educational choice — not every screen needs a
+   selectable-card grid; narrative/results/ceremony screens are a
+   legitimate exception, but must be explicitly disclosed as such, not
+   silently assumed compliant.
+9. Touch targets must be designed for tablet users aged 45–75.
+10. Static decorative exceptions must be documented, not silently left
+    unlabeled.
+11. Journey-specific interaction state must reset on Start New Journey —
+    verify by checking the new state lives inside the same object the
+    existing reset already clears, not by re-implementing a second reset
+    path.
+12. Interaction state must not leak between learners.
+13. XP, Passport updates, and rewards must remain idempotent.
+14. A screen is not complete because its image displays; its required
+    visual regions must function — but retrofitting a shared component
+    onto already-working, already-regression-tested screens is a real
+    blast-radius decision, not automatically the smallest safe fix; new
+    shared infrastructure may be introduced as adoptable without forcing
+    immediate migration of working code.
