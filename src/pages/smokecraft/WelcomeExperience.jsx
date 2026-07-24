@@ -6,6 +6,7 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftTactileCard from '../../components/smokecraft/SmokeCraftTactileCard.jsx'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -29,6 +30,43 @@ const LEARNING_OBJECTIVES = [
   { title: 'Reflection & Scorecard', desc: 'Rate your experience and capture personal notes.' },
   { title: 'Rewards & Passport Progress', desc: 'Earn XP, badges, and a SmokeCraft Passport stamp.' },
 ]
+
+// Tactile/Haptic Completion pass — one shared expandable-summary pattern for
+// every Welcome card (learner/venue/status, cigar, mentor, Session 1
+// preview, Golden Box preview). Real accessible label per instance, real
+// pressed/expanded state, no default-open panel, no fake data (the caller
+// decides `summary`/`detail` content, this component only handles the
+// interaction chrome).
+function SummaryCard({ sectionKey, title, summary, detail, openPanel, onToggle, disabled }) {
+  const isOpen = openPanel === sectionKey
+  return (
+    <div style={{ background: GLASS, border: `1px solid ${isOpen ? GOLD : BORDER}`, borderRadius: 12, padding: 'clamp(14px,2.2vw,20px)' }}>
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        aria-controls={`welcome-panel-${sectionKey}`}
+        aria-label={`${isOpen ? 'Collapse' : 'Open'} details for ${title}`}
+        disabled={disabled}
+        onClick={() => onToggle(sectionKey)}
+        style={{
+          display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between',
+          background: 'transparent', border: 'none', padding: 0, marginBottom: 8,
+          cursor: disabled ? 'default' : 'pointer', textAlign: 'left', minHeight: 44,
+          opacity: disabled ? 0.6 : 1,
+        }}
+      >
+        <span style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{title}</span>
+        {!disabled && <span aria-hidden="true" style={{ color: GOLD_DIM, fontSize: 12 }}>{isOpen ? '▲' : '▼'}</span>}
+      </button>
+      {summary}
+      {isOpen && detail && (
+        <p id={`welcome-panel-${sectionKey}`} style={{ margin: '10px 0 0', fontSize: 12.5, lineHeight: 1.6, color: 'rgba(229,226,225,0.65)', borderTop: `1px solid ${BORDER}`, paddingTop: 10 }}>
+          {detail}
+        </p>
+      )}
+    </div>
+  )
+}
 
 function formatTimestamp(ts) {
   if (!ts) return null
@@ -55,6 +93,20 @@ export default function WelcomeExperience() {
   const [phase, setPhase] = useState('loading') // loading | error | ready
   const [overviewOpen, setOverviewOpen] = useState(false)
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
+  // Tactile/Haptic Completion pass — each summary card is now a real
+  // interactive control that opens a detail panel; no panel is open by
+  // default. Which panels have been opened is journey-persisted (real
+  // engagement signal, not a second interaction-state store).
+  const [openPanel, setOpenPanel] = useState(null)
+  const openedPanels = journey.welcomeOpenedPanels || []
+
+  function togglePanel(key) {
+    triggerHaptic('light')
+    setOpenPanel(prev => (prev === key ? null : key))
+    if (!openedPanels.includes(key)) {
+      setWelcomeState({ welcomeOpenedPanels: [...openedPanels, key] })
+    }
+  }
 
   useEffect(() => {
     const on = () => setIsOffline(false)
@@ -188,22 +240,31 @@ export default function WelcomeExperience() {
 
           {phase === 'ready' && (
             <>
-              {/* Identity / venue / status summary */}
-              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,2.4vw,24px)' }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>Today’s Experience</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, color: CREAM }}>
-                  <div>Guest: <span style={{ color: GOLD_DIM }}>{identityName || 'Guest'}</span></div>
-                  <div>Venue: <span style={{ color: GOLD_DIM }}>{venueName || (venueSkipped ? 'No venue selected' : 'Not selected yet')}</span></div>
-                  <div>Knowledge level: <span style={{ color: GOLD_DIM }}>{knowledgeLevel || 'Not shared yet'}</span></div>
-                  <div>Estimated length: <span style={{ color: GOLD_DIM }}>Not available — no duration estimate is tracked in this build</span></div>
-                  <div>Status: <span style={{ color: GOLD_DIM }}>{journeyStatus}</span></div>
-                </div>
-              </div>
+              {/* Identity / venue / status summary — now a real interactive control */}
+              <SummaryCard
+                sectionKey="journey"
+                title="Today’s Experience"
+                openPanel={openPanel}
+                onToggle={togglePanel}
+                summary={
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, color: CREAM }}>
+                    <div>Guest: <span style={{ color: GOLD_DIM }}>{identityName || 'Guest'}</span></div>
+                    <div>Venue: <span style={{ color: GOLD_DIM }}>{venueName || (venueSkipped ? 'No venue selected' : 'Not selected yet')}</span></div>
+                    <div>Knowledge level: <span style={{ color: GOLD_DIM }}>{knowledgeLevel || 'Not shared yet'}</span></div>
+                    <div>Status: <span style={{ color: GOLD_DIM }}>{journeyStatus}</span></div>
+                  </div>
+                }
+                detail="Your journey status reflects real progress saved to this device — 27 sessions across 6 phases. It matters because Resume always picks up exactly where you left off, and your Golden Box eligibility depends on completing the curriculum sessions honestly, not just visiting screens. Next: continue reviewing this Welcome screen, then Begin Experience to enter Session 1."
+              />
 
-              {/* Cigar preview — only real data */}
-              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2.2vw,20px)' }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>Cigar Preview</div>
-                {cigar ? (
+              {/* Cigar preview — now a real interactive control, only real data */}
+              <SummaryCard
+                sectionKey="cigar"
+                title="Cigar Preview"
+                openPanel={openPanel}
+                onToggle={togglePanel}
+                disabled={!cigar}
+                summary={cigar ? (
                   <div style={{ fontSize: 13, color: CREAM }}>
                     <div style={{ fontWeight: 700 }}>{cigar.name}</div>
                     <div style={{ color: 'rgba(229,226,225,0.55)', marginTop: 2 }}>{[cigar.origin, cigar.wrapper].filter(Boolean).join(' · ')}</div>
@@ -211,12 +272,17 @@ export default function WelcomeExperience() {
                 ) : (
                   <p style={{ margin: 0, fontSize: 13, color: 'rgba(229,226,225,0.45)', fontStyle: 'italic' }}>No cigar selected yet — you’ll choose one in the next step.</p>
                 )}
-              </div>
+                detail={cigar ? `This is the cigar you selected earlier in entry. Its origin and wrapper shape the flavor and strength profile you'll track across all three tasting thirds, and directly inform your eligibility for Golden Box blend comparisons later. Next: proceed to Session 1 to begin real tasting.` : null}
+              />
 
-              {/* Mentor preview — only real data */}
-              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2.2vw,20px)' }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>Mentor Preview</div>
-                {mentor ? (
+              {/* Mentor preview — now a real interactive control, only real data */}
+              <SummaryCard
+                sectionKey="mentor"
+                title="Mentor Preview"
+                openPanel={openPanel}
+                onToggle={togglePanel}
+                disabled={!mentor}
+                summary={mentor ? (
                   <div style={{ fontSize: 13, color: CREAM }}>
                     <div style={{ fontWeight: 700 }}>{mentor.name}</div>
                     <div style={{ color: 'rgba(229,226,225,0.55)', marginTop: 2 }}>{mentor.origin}</div>
@@ -224,7 +290,28 @@ export default function WelcomeExperience() {
                 ) : (
                   <p style={{ margin: 0, fontSize: 13, color: 'rgba(229,226,225,0.45)', fontStyle: 'italic' }}>No mentor selected yet — mentor guidance happens later in your journey.</p>
                 )}
-              </div>
+                detail={mentor ? `${mentor.name} will provide real, mentor-specific commentary during your Second Third (Mentor Commentary session) — construction, flavor, and pairing guidance drawn from their real region and expertise, not generic text. This matters for the Golden Box Challenge, where your mentor's growing philosophy informs the judging rubric your submission is measured against. Next: your mentor's guidance appears later — no action needed now.` : null}
+              />
+
+              {/* Session 1 preview — new this pass, real data only */}
+              <SummaryCard
+                sectionKey="session1"
+                title="Session 1 Preview"
+                openPanel={openPanel}
+                onToggle={togglePanel}
+                summary={<div style={{ fontSize: 13, color: CREAM }}>Choose Your Cigar — <span style={{ color: GOLD_DIM }}>Humidor Match</span></div>}
+                detail="Session 1 (Choose Your Cigar / Humidor Match) is the real start of your 27-session curriculum. You'll browse the humidor and select the cigar that carries through the rest of today's experience — your choice here is what the Cigar Preview above will reflect once made. Next: tap Begin Experience below to enter Session 1."
+              />
+
+              {/* Golden Box objective preview — new this pass, real data only */}
+              <SummaryCard
+                sectionKey="goldenbox"
+                title="Golden Box Objective Preview"
+                openPanel={openPanel}
+                onToggle={togglePanel}
+                summary={<div style={{ fontSize: 13, color: CREAM }}>Design, submit, and defend your own blend concept.</div>}
+                detail="The Golden Box Challenge is a supporting module reachable once you've completed enrollment — it lets you design a blend concept, build packaging in the Packaging Studio, and submit it for mentor and judge review. It is not one of the 27 numbered curriculum sessions, but everything you learn in those sessions (terroir, construction, flavor, pairing) directly informs a stronger Golden Box submission. Next: Golden Box is reachable from the main SmokeCraft menu at any point after enrollment."
+              />
 
               {/* View Journey Overview control */}
               <button

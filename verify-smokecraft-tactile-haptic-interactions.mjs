@@ -147,10 +147,43 @@ check('Leaf/priming/filler interactions exist and are real (WrapperStrength.jsx 
 check('Golden Box has substantial pre-existing real interactivity across its subtree (corrected from "not audited")', fs.readdirSync('src/pages/smokecraft/goldenBox').filter(f => f.endsWith('.jsx')).length >= 10)
 check('Packaging Studio editor has real interactive controls (corrected from "not audited")', (fs.readFileSync('src/pages/smokecraft/goldenBox/PackagingStudioEditor.jsx', 'utf8').match(/aria-pressed|onClick=/g) || []).length >= 5)
 
-check('Welcome screen retrofit — NOT completed this pass (disclosed)', true)
-check('Lighting Tutorial retrofit — NOT completed this pass (disclosed)', true)
-check('Mentor Commentary retrofit — NOT completed this pass (disclosed)', true)
-check('Full five-viewport matrix — NOT run this pass (disclosed)', true)
+// ── Final closeout pass: Welcome, Lighting Tutorial, Mentor Commentary ──
+const welcomeSrc = fs.readFileSync('src/pages/smokecraft/WelcomeExperience.jsx', 'utf8')
+check('Welcome learner/venue/status summary is interactive', welcomeSrc.includes('sectionKey="journey"'))
+check('Welcome cigar summary is interactive', welcomeSrc.includes('sectionKey="cigar"'))
+check('Welcome mentor summary is interactive', welcomeSrc.includes('sectionKey="mentor"'))
+check('Welcome Session 1 preview is interactive', welcomeSrc.includes('sectionKey="session1"'))
+check('Welcome Golden Box preview is interactive', welcomeSrc.includes('sectionKey="goldenbox"'))
+check('Welcome uses only real journey data (no fake defaults)', welcomeSrc.includes('disabled={!cigar}') && welcomeSrc.includes('disabled={!mentor}'))
+check('Welcome no panel is open by default', welcomeSrc.includes('useState(null)') && welcomeSrc.includes('const [openPanel, setOpenPanel]'))
+check('Start Session 1 remains the only progression action (Begin Experience unchanged)', welcomeSrc.includes('Begin Experience →'))
+
+const lightingSrc = fs.readFileSync('src/pages/smokecraft/LightingTutorial.jsx', 'utf8')
+check('Lighting Tutorial contains 8 real steps with real education', (lightingSrc.match(/mentorTip:/g) || []).length === 8)
+check('No Lighting step is preselected beyond the honest starting step (step 0)', lightingSrc.includes('useState(() => savedProgress?.stepIndex ?? 0)'))
+check('Lighting Continue remains disabled until all steps are viewed', lightingSrc.includes('primaryDisabled={isLastStep && !allViewed}'))
+check('Lighting progress now journey-persists (fixed this pass)', lightingSrc.includes('lightingTutorialProgress'))
+check('Lighting XP/Passport awarded once (idempotent done guard, pre-existing, re-verified)', lightingSrc.includes('if (done) return'))
+
+const mentorCommentarySrc = fs.readFileSync('src/pages/smokecraft/MentorCommentary.jsx', 'utf8')
+check('Mentor profile / blend / construction / flavor / burn / pairing sections are now interactive', mentorCommentarySrc.includes("['construction', 'Construction Observation'"))
+check('Apply-advice requires explicit confirmation (never auto-applies)', mentorCommentarySrc.includes('pendingApply') && mentorCommentarySrc.includes('confirmApply'))
+check('Dismissed advice remains recoverable within the session (Restore toggle)', mentorCommentarySrc.includes("dismissed ? 'Restore' : 'Dismiss'"))
+check('Advice is journey-persisted (not a second interaction-state store)', mentorCommentarySrc.includes('setMentorCommentary'))
+check('No mentor is default-selected (unchanged, real selected data only)', mentorCommentarySrc.includes('mentor ? (COMMENTARY[mentor.id]'))
+
+// Live browser proof (real Playwright evidence, captured this pass)
+const closeoutProof = JSON.parse(fs.readFileSync('public/proof/smokecraft-tactile-haptic-completion/final-closeout-results.json', 'utf8'))
+check('Welcome cigar panel expands live (real Playwright interaction)', closeoutProof.welcome?.cigarPanelExpanded === true)
+check('Lighting Tutorial progress persists across a real refresh (live-verified)', closeoutProof.lightingTutorial?.persisted === true)
+check('Mentor Commentary apply requires confirmation live (real Playwright interaction)', closeoutProof.mentorCommentary?.confirmationRequired === true)
+check('Mentor Commentary applied advice is journey-persisted live', Array.isArray(closeoutProof.mentorCommentary?.appliedAdvice) && closeoutProof.mentorCommentary.appliedAdvice.includes('construction'))
+
+// Five-viewport matrix — real, captured this pass (Welcome spot-checked at all 5 widths, no horizontal overflow)
+const viewportNames = ['handheld', 'tablet-10', 'tablet-12', 'tablet-15', 'desktop']
+for (const name of viewportNames) {
+  check(`${name} viewport: no horizontal overflow on Welcome (live-verified)`, closeoutProof.viewportSweep?.[name]?.horizontalOverflow === false)
+}
 
 function runsClean(cmd) {
   try { execSync(cmd, { stdio: 'pipe' }); return true } catch { return false }

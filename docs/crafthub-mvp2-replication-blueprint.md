@@ -927,3 +927,26 @@ change.
     blast-radius decision, not automatically the smallest safe fix; new
     shared infrastructure may be introduced as adoptable without forcing
     immediate migration of working code.
+
+## Final Tactile Closeout — permanent rules
+
+1. "0 selectable-controls" from a grep-based audit heuristic is a hint to
+   read the source, not a verdict — accessible selection patterns vary
+   (`aria-pressed`, `aria-selected`+`role="tab"`, `aria-current="step"`
+   progress indicators) and a narrow string search will miss real,
+   working interactivity built with a different valid pattern.
+2. A confirmation step before an "apply advice to my journey" action is
+   not optional polish — it is the difference between a real choice and
+   a silent mutation; require it explicitly and verify it live.
+3. Dismissed/rejected content should stay recoverable within the session
+   unless there's a specific reason it shouldn't — a toggle costs little
+   and avoids a frustrating dead end.
+4. Journey-persisted state added to an existing per-session object (e.g.
+   `journey.cutToastLight.newField`) inherits that object's existing
+   Start New Journey reset for free — verify this by reading the reset
+   function's field list, not by re-implementing a second reset path.
+5. A representative single-screen viewport sweep (checking for horizontal
+   overflow at all required widths) is real, valid evidence for the most
+   common responsive-layout failure mode, but is not a substitute for an
+   exhaustive per-screen matrix when one is explicitly required — label
+   which one was actually performed.

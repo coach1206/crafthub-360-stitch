@@ -1,5 +1,9 @@
 # 08 — Regression Matrix
 
+## Final closeout pass (Welcome, Lighting Tutorial, Mentor Commentary, viewport matrix)
+
+`verify-smokecraft-tactile-haptic-interactions.mjs` extended with 23 new checks (10 source-level, 4 live-Playwright-proof, 5 viewport-sweep, plus the 4 from re-verifying the two prior fixes) — **71/71 pass, 0 fail**. All required regressions re-run and pass at established baselines (clean-start 54/55, entry-prerequisite-guard 43/43, approved-entry-visuals 24/24, 27-session-sequence 39/39, Golden Box Packaging Studio 70/74, Passport Security 59/59).
+
 ## Follow-up pass (closing disclosed gaps)
 
 `verify-smokecraft-tactile-haptic-interactions.mjs` extended with 13 new checks covering the AI Summary and Pairing Recommendations retrofits plus corrected assessments of Vitola/Ring Gauge/leaf/Golden Box/Packaging Studio — **48/48 pass, 0 fail**. All required regressions re-run and pass at established baselines (clean-start 54/55, entry-prerequisite-guard 43/43, approved-entry-visuals 24/24, 27-session-sequence 39/39, Golden Box Packaging Studio 70/74, Passport Security 59/59).

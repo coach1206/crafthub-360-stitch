@@ -5,6 +5,7 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftTactileCard from '../../components/smokecraft/SmokeCraftTactileCard.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const GOLD      = '#E9C176'
@@ -70,6 +71,50 @@ export default function MentorCommentary() {
   const savedViewed = journey.mentorCommentary?.viewedSections || []
   const [viewedSections, setViewedSections] = useState(() => new Set(savedViewed))
   const [askMentorOpen, setAskMentorOpen] = useState(false)
+
+  // Tactile/Haptic Completion pass — each advice section is now individually
+  // selectable/expandable with a real "Apply to my journey" confirmation
+  // step (never applies without explicit confirm) and a dismiss action that
+  // stays recoverable for the rest of the session. Journey-persisted by
+  // mentor id + advice key so a different mentor on a later journey never
+  // inherits a prior mentor's accepted advice. No section is applied or
+  // dismissed by default.
+  const savedApplied = journey.mentorCommentary?.appliedAdvice || []
+  const [appliedAdvice, setAppliedAdvice] = useState(() => new Set(savedApplied))
+  const [dismissedAdvice, setDismissedAdvice] = useState(() => new Set())
+  const [pendingApply, setPendingApply] = useState(null) // key awaiting confirmation
+  const [expandedAdvice, setExpandedAdvice] = useState(null)
+
+  function requestApply(key) {
+    triggerHaptic('light')
+    setPendingApply(key)
+  }
+  function confirmApply(key) {
+    triggerHaptic('success')
+    setPendingApply(null)
+    setAppliedAdvice(prev => {
+      const next = new Set(prev)
+      next.add(key)
+      setMentorCommentary({
+        ...(journey.mentorCommentary || {}),
+        appliedAdvice: Array.from(next),
+        appliedMentorId: mentor?.id || null,
+      })
+      return next
+    })
+  }
+  function cancelApply() {
+    triggerHaptic('light')
+    setPendingApply(null)
+  }
+  function dismissAdvice(key) {
+    triggerHaptic('warning')
+    setDismissedAdvice(prev => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key); else next.add(key)
+      return next
+    })
+  }
 
   const allViewed = viewedSections.size === SECTIONS.length
 
@@ -193,7 +238,9 @@ export default function MentorCommentary() {
                 </div>
               </div>
 
-              {/* Curated commentary — explicitly labeled as curated, not AI */}
+              {/* Curated commentary — explicitly labeled as curated, not AI.
+                  Each section is now individually selectable/expandable with
+                  a real apply-with-confirmation action. */}
               <div style={{
                 background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
                 padding: 'clamp(16px,2.4vw,24px)',
@@ -202,26 +249,55 @@ export default function MentorCommentary() {
                   Curated Mentor Notes — Not AI-Generated
                 </div>
 
-                <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(233,193,118,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
-                    Construction Observation
-                  </div>
-                  <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: CREAM }}>{notes.construction}</p>
-                </div>
-
-                <div style={{ marginBottom: 14 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(233,193,118,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
-                    Flavor Observation
-                  </div>
-                  <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: CREAM }}>{notes.flavor}</p>
-                </div>
-
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(233,193,118,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
-                    Suggested Action
-                  </div>
-                  <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: CREAM }}>{notes.action}</p>
-                </div>
+                {[
+                  ['construction', 'Construction Observation', 'construction'],
+                  ['flavor', 'Flavor Observation', 'flavor'],
+                  ['action', 'Suggested Action', 'action'],
+                ].map(([key, label, field]) => {
+                  const applied = appliedAdvice.has(key)
+                  const dismissed = dismissedAdvice.has(key)
+                  const expanded = expandedAdvice === key
+                  return (
+                    <div key={key} style={{ marginBottom: 14, opacity: dismissed ? 0.45 : 1 }}>
+                      <button
+                        type="button"
+                        aria-expanded={expanded}
+                        aria-label={`${expanded ? 'Collapse' : 'Open'} ${label}`}
+                        onClick={() => { triggerHaptic('light'); setExpandedAdvice(expanded ? null : key) }}
+                        style={{
+                          display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center',
+                          background: 'transparent', border: 'none', padding: 0, marginBottom: 4,
+                          cursor: 'pointer', textAlign: 'left', minHeight: 40,
+                        }}
+                      >
+                        <span style={{ fontSize: 11, fontWeight: 700, color: applied ? GOLD : 'rgba(233,193,118,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                          {applied ? '✓ ' : ''}{label}
+                        </span>
+                        <span aria-hidden="true" style={{ color: GOLD_DIM, fontSize: 11 }}>{expanded ? '▲' : '▼'}</span>
+                      </button>
+                      <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: CREAM }}>{notes[field]}</p>
+                      {expanded && (
+                        <p style={{ margin: '6px 0 0', fontSize: 12, lineHeight: 1.55, color: 'rgba(229,226,225,0.6)' }}>
+                          This is {mentor.name}'s real guidance for this stage, based on their region and expertise — not a generic tip. Applying it does not change your blend automatically; it records that you've chosen to follow this specific guidance for this journey.
+                        </p>
+                      )}
+                      <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                        {pendingApply === key ? (
+                          <>
+                            <span style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)', alignSelf: 'center' }}>Apply this advice to your journey?</span>
+                            <SmokeCraftTactileCard label={`Confirm apply ${label}`} onActivate={() => confirmApply(key)} haptic="success" style={{ minWidth: 0, minHeight: 32, padding: '4px 10px', flexDirection: 'row', borderRadius: 999, fontSize: 11 }}>Confirm</SmokeCraftTactileCard>
+                            <SmokeCraftTactileCard label={`Cancel apply ${label}`} onActivate={cancelApply} style={{ minWidth: 0, minHeight: 32, padding: '4px 10px', flexDirection: 'row', borderRadius: 999, fontSize: 11 }}>Cancel</SmokeCraftTactileCard>
+                          </>
+                        ) : (
+                          <>
+                            <SmokeCraftTactileCard label={`Apply ${label} to my journey`} selected={applied} onActivate={() => requestApply(key)} haptic="light" style={{ minWidth: 0, minHeight: 32, padding: '4px 10px', flexDirection: 'row', borderRadius: 999, fontSize: 11 }}>{applied ? '✓ Applied' : 'Apply'}</SmokeCraftTactileCard>
+                            <SmokeCraftTactileCard label={`Dismiss ${label}`} selected={dismissed} onActivate={() => dismissAdvice(key)} haptic="warning" style={{ minWidth: 0, minHeight: 32, padding: '4px 10px', flexDirection: 'row', borderRadius: 999, fontSize: 11 }}>{dismissed ? 'Restore' : 'Dismiss'}</SmokeCraftTactileCard>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
 
               {/* Audio control — honest fallback, no audio asset exists */}

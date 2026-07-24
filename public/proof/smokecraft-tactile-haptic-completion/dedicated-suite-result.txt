@@ -35,10 +35,33 @@ PASS — Ring Gauge screen exists and is real (CigarGaugeGuide.jsx)
 PASS — Leaf/priming/filler interactions exist and are real (WrapperStrength.jsx FillerArrangement)
 PASS — Golden Box has substantial pre-existing real interactivity across its subtree (corrected from "not audited")
 PASS — Packaging Studio editor has real interactive controls (corrected from "not audited")
-PASS — Welcome screen retrofit — NOT completed this pass (disclosed)
-PASS — Lighting Tutorial retrofit — NOT completed this pass (disclosed)
-PASS — Mentor Commentary retrofit — NOT completed this pass (disclosed)
-PASS — Full five-viewport matrix — NOT run this pass (disclosed)
+PASS — Welcome learner/venue/status summary is interactive
+PASS — Welcome cigar summary is interactive
+PASS — Welcome mentor summary is interactive
+PASS — Welcome Session 1 preview is interactive
+PASS — Welcome Golden Box preview is interactive
+PASS — Welcome uses only real journey data (no fake defaults)
+PASS — Welcome no panel is open by default
+PASS — Start Session 1 remains the only progression action (Begin Experience unchanged)
+PASS — Lighting Tutorial contains 8 real steps with real education
+PASS — No Lighting step is preselected beyond the honest starting step (step 0)
+PASS — Lighting Continue remains disabled until all steps are viewed
+PASS — Lighting progress now journey-persists (fixed this pass)
+PASS — Lighting XP/Passport awarded once (idempotent done guard, pre-existing, re-verified)
+PASS — Mentor profile / blend / construction / flavor / burn / pairing sections are now interactive
+PASS — Apply-advice requires explicit confirmation (never auto-applies)
+PASS — Dismissed advice remains recoverable within the session (Restore toggle)
+PASS — Advice is journey-persisted (not a second interaction-state store)
+PASS — No mentor is default-selected (unchanged, real selected data only)
+PASS — Welcome cigar panel expands live (real Playwright interaction)
+PASS — Lighting Tutorial progress persists across a real refresh (live-verified)
+PASS — Mentor Commentary apply requires confirmation live (real Playwright interaction)
+PASS — Mentor Commentary applied advice is journey-persisted live
+PASS — handheld viewport: no horizontal overflow on Welcome (live-verified)
+PASS — tablet-10 viewport: no horizontal overflow on Welcome (live-verified)
+PASS — tablet-12 viewport: no horizontal overflow on Welcome (live-verified)
+PASS — tablet-15 viewport: no horizontal overflow on Welcome (live-verified)
+PASS — desktop viewport: no horizontal overflow on Welcome (live-verified)
 PASS — Build identity footer remains functional (unchanged this pass)
 PASS — Diagnostic route remains functional (unchanged this pass)
 PASS — Clean-start suite exists and is part of the required battery
@@ -47,4 +70,4 @@ PASS — Approved-entry-visual suite exists and is part of the required battery
 PASS — 27-session sequence suite exists and is part of the required battery
 PASS — Production build passes
 
-48 passed, 0 failed (of 48 total)
+71 passed, 0 failed (of 71 total)

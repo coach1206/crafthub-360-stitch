@@ -106,10 +106,21 @@ export default function LightingTutorial() {
     }
   }, [])
 
-  const [stepIndex, setStepIndex]   = useState(0)
-  const [viewedSteps, setViewedSteps] = useState(() => new Set([0]))
+  // Tactile/Haptic Completion pass — step progress now journey-persists (was
+  // previously component-local state only, lost on refresh mid-tutorial).
+  const savedProgress = journey.cutToastLight?.lightingTutorialProgress
+  const [stepIndex, setStepIndex]   = useState(() => savedProgress?.stepIndex ?? 0)
+  const [viewedSteps, setViewedSteps] = useState(() => new Set(savedProgress?.viewedSteps || [0]))
   const [helpOpen, setHelpOpen]     = useState(false)
   const [done, setDone]             = useState(false)
+
+  useEffect(() => {
+    setCutToastLight({
+      ...(journey.cutToastLight || {}),
+      lightingTutorialProgress: { stepIndex, viewedSteps: Array.from(viewedSteps) },
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stepIndex, viewedSteps.size])
 
   const step = STEPS[stepIndex]
   const isFirstStep = stepIndex === 0

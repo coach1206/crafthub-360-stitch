@@ -1,0 +1,54 @@
+{
+  "welcome": {
+    "cigarPanelExpanded": true
+  },
+  "lightingTutorial": {
+    "progressBefore": {
+      "stepIndex": 3,
+      "viewedSteps": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "progressAfterRefresh": {
+      "stepIndex": 3,
+      "viewedSteps": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "persisted": true
+  },
+  "mentorCommentary": {
+    "confirmationRequired": true,
+    "appliedAdvice": [
+      "construction"
+    ]
+  },
+  "viewportSweep": {
+    "handheld": {
+      "width": 390,
+      "horizontalOverflow": false
+    },
+    "tablet-10": {
+      "width": 810,
+      "horizontalOverflow": false
+    },
+    "tablet-12": {
+      "width": 1024,
+      "horizontalOverflow": false
+    },
+    "tablet-15": {
+      "width": 1280,
+      "horizontalOverflow": false
+    },
+    "desktop": {
+      "width": 1440,
+      "horizontalOverflow": false
+    }
+  }
+}
