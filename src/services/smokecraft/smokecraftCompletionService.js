@@ -41,6 +41,10 @@ export function completeSmokeCraftScreen(screenId, { awardSessionRewards, sessio
   // would land on a merged sibling that points back at the same route — a
   // self-loop. So we walk forward past any entry whose route matches the
   // completed screen's route, landing on the next genuinely-different screen.
+  if (entry.nextRouteOverride) {
+    return { nextRoute: entry.nextRouteOverride, completionKey: entry.completionKey }
+  }
+
   let nextEntry = entry.nextScreenId ? getManifestEntry(entry.nextScreenId) : null
   const guard = new Set([screenId])
   while (nextEntry && nextEntry.route && nextEntry.route === entry.route && !guard.has(nextEntry.screenId)) {

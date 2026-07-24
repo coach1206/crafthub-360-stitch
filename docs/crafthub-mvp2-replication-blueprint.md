@@ -997,3 +997,18 @@ change.
    sometimes pre-existing and unrelated defects (e.g. a reward map
    missing an entry) — disclose these plainly as found, distinct from
    whatever the migration itself did or didn't cause.
+6. When the user overrides a scoped-down decision and requires the full
+   migration, don't force every unit into the same generic shape — one
+   screen (SmokeCraft Format/S5) had a real, approved non-linear branch
+   (a supporting-module detour, not a defect). The fix was to let the
+   manifest express that one exception (a `nextRouteOverride` field)
+   rather than either breaking the approved navigation to fit the
+   default chain, or leaving that one unit unmigrated and short of a
+   genuine 100%. Prefer widening the canonical model's expressiveness
+   over bending real product behavior to match it.
+7. Per-screen migration goes faster and safer file-by-file with live
+   verification after each small batch, not as one giant blind edit —
+   this also makes it easy to correctly special-case the few screens
+   whose completion has more than one side effect (e.g. two merged
+   sessions behind one mode toggle, a terminal on-mount completion)
+   without weakening the shared completion service to accommodate them.

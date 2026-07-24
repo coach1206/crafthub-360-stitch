@@ -41,7 +41,7 @@ const ZONE_POS = [
 ]
 const ZONES_FULL = FORMAT_ZONES.map((f, i) => ({ ...f, ...ZONE_POS[i] }))
 
-export default function Format() {
+export default function Format({ onBack, onComplete } = {}) {
   const { awardSessionRewards, setSmokeCraftFormat } = useGuestSession()
   const { journey, setFormat } = useSmokeCraftJourney()
   const navigate = useNavigate()
@@ -72,8 +72,16 @@ export default function Format() {
     if (done) return
     setDone(true)
     triggerHaptic('medium')
-    awardSessionRewards('format')
+    // Secondary award kept as an internal side effect — the shared
+    // completion service only knows about this screen's one primary
+    // completionKey ('format'), same pattern as other screens with
+    // extra XP/state effects beyond plain award+navigate.
     awardSessionRewards('wrapper-strength')
+    if (onComplete) {
+      onComplete()
+      return
+    }
+    awardSessionRewards('format')
     navigate('/smokecraft/request-purchase')
   }
 
@@ -157,7 +165,7 @@ export default function Format() {
         primary={done ? 'Continuing…' : 'Continue to Request / Purchase →'}
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/terroir')}
+        onSecondary={onBack || (() => navigate('/smokecraft/terroir'))}
       />
     </>
   )

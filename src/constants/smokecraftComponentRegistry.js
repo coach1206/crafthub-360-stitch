@@ -6,17 +6,17 @@
 // primary session and are never rendered under their own screenId, so only
 // the primary componentKey is registered (e.g. `session-8`, not `session-9`).
 //
-// session-5 (Format) is intentionally NOT registered/migrated: its approved
-// flow forwards into the `request-purchase` supporting module (and awards an
-// extra `wrapper-strength` completion key), which the canonical linear
-// manifest (S5 -> S6) would bypass — migrating it would change approved
-// navigation, so it stays on its existing direct-navigate wiring per the
-// "do not force a migration that breaks something" rule.
+// session-5 (Format) forwards into the `request-purchase` supporting module
+// (and awards an extra `wrapper-strength` completion key) instead of
+// straight to S6. It is migrated like every other screen; the manifest's
+// `nextRouteOverride` field (not the linear nextScreenId chain) carries
+// this one real, approved branch so completion routing stays correct.
 import AISummary from '../pages/smokecraft/AISummary.jsx'
 import WelcomeExperience from '../pages/smokecraft/WelcomeExperience.jsx'
 import HumidorMatch from '../pages/smokecraft/HumidorMatch.jsx'
 import MeetYourCigar from '../pages/smokecraft/MeetYourCigar.jsx'
 import Terroir from '../pages/smokecraft/Terroir.jsx'
+import Format from '../pages/smokecraft/Format.jsx'
 import CutToastLight from '../pages/smokecraft/CutToastLight.jsx'
 import LightingTutorial from '../pages/smokecraft/LightingTutorial.jsx'
 import FirstThird from '../pages/smokecraft/FirstThird.jsx'
@@ -38,7 +38,7 @@ export const SMOKECRAFT_COMPONENT_REGISTRY = {
   'session-2': HumidorMatch,
   'session-3': MeetYourCigar,
   'session-4': Terroir,
-  // 'session-5' (Format) intentionally unregistered — see header note.
+  'session-5': Format,
   'session-6': CutToastLight,
   'session-7': LightingTutorial,
   'session-8': FirstThird,   // also serves S9 (merged)

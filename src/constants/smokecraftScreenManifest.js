@@ -5,14 +5,14 @@
 // view of the same data, not a second competing source of truth.
 //
 // Scope note (disclosed, not silent): this manifest is real, complete, and
-// consumed by the new SmokeCraftScreenRenderer/getSmokeCraftScreenData/
-// completeSmokeCraftScreen infrastructure (see those files). All curriculum
-// screens now route through this canonical layer EXCEPT session-5 (Format):
-// its approved flow forwards into the `request-purchase` supporting module
-// (and awards an extra `wrapper-strength` completion key), which the
-// canonical linear spine (S5 -> S6) would bypass — migrating it would change
-// approved navigation, so it remains on its existing direct-navigate wiring
-// per the "do not force a breaking migration" rule. Merged sessions
+// consumed by the SmokeCraftScreenRenderer/getSmokeCraftScreenData/
+// completeSmokeCraftScreen infrastructure (see those files). All 27
+// curriculum sessions now route through this canonical layer, including
+// session-5 (Format): its approved flow forwards into the `request-purchase`
+// supporting module (and awards an extra `wrapper-strength` completion key)
+// instead of the linear S5->S6 spine — carried via this entry's
+// `nextRouteOverride` field so the real, approved navigation is preserved
+// exactly rather than bent to fit the default chain. Merged sessions
 // (S9/S13/S17/S18/S20/S26) share one real route/component with their primary
 // session and are covered implicitly by migrating that primary screenId.
 // See smokecraftComponentRegistry.js for the exact registered map.
@@ -84,6 +84,13 @@ export const SMOKECRAFT_SCREEN_MANIFEST = [
       passportEvent: s.id === 'passport-stamp' ? 'passport-stamp-claimed' : null,
       mergedInto: s.mergedInto || null,
       sharedComponent: s.sharedComponent || null,
+      // Format (S5) approved flow forwards into the Request/Purchase
+      // supporting module (SUPPORTING_MODULES, session.js) rather than
+      // straight to S6 — a real, approved branch outside the linear spine.
+      // Overriding the completion route here (rather than bending the
+      // linear nextScreenId chain used for guard/back-nav purposes)
+      // preserves that approved navigation exactly.
+      nextRouteOverride: s.session === 5 ? '/smokecraft/request-purchase' : null,
       directAccessAllowed: false,
       reviewAllowed: true,
     }

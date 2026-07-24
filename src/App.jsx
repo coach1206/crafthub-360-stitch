@@ -118,7 +118,6 @@ const PackagingStudioShare = lazy(() => import('./pages/smokecraft/goldenBox/Pac
 const PackagingReview = lazy(() => import('./pages/smokecraft/goldenBox/PackagingReview.jsx'))
 import Art              from './pages/smokecraft/Art.jsx'
 import Mentor           from './pages/smokecraft/Mentor.jsx'
-import Format           from './pages/smokecraft/Format.jsx'
 import Origins          from './pages/smokecraft/Origins.jsx'
 import Curation         from './pages/smokecraft/Curation.jsx'
 import Leaves           from './pages/smokecraft/Leaves.jsx'
@@ -415,7 +414,7 @@ export default function App() {
                 <Route path="terroir"        element={<SmokeCraftSessionGuard sessionNumber={4}><SmokeCraftScreenRenderer screenId="session-4" /></SmokeCraftSessionGuard>} />
 
                 {/* S5 — format (Construction Inspection) */}
-                <Route path="format"         element={<SmokeCraftSessionGuard sessionNumber={5}><Format /></SmokeCraftSessionGuard>} />
+                <Route path="format"         element={<SmokeCraftSessionGuard sessionNumber={5}><SmokeCraftScreenRenderer screenId="session-5" /></SmokeCraftSessionGuard>} />
                 {/* shape-size-burn is a backward-compatible alias for format, not an independent route */}
                 <Route path="shape-size-burn" element={<Navigate to="/smokecraft/format" replace />} />
                 <Route path="cigar-gauge-guide" element={<SmokeCraftSessionGuard sessionNumber={5}><CigarGaugeGuide /></SmokeCraftSessionGuard>} />
