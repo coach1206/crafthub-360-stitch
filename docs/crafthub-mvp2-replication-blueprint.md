@@ -972,3 +972,28 @@ change.
 5. Not every defect requires a migration/reconciliation step for existing
    browsers — evaluate whether the defect self-heals on the next natural
    user action (e.g., the next Start New Journey) before building one.
+
+## Canonical Runtime (Prompt 1 of 2) — permanent rules
+
+1. Route, component, asset, data, interaction, navigation, and completion
+   should ultimately come from one canonical runtime — but migrating an
+   entire working, regression-tested application to a new generic
+   renderer in one pass is a real, large-blast-radius decision requiring
+   explicit user sign-off on scope, not an assumption.
+2. Before building new "canonical" infrastructure, trace what already
+   exists — this codebase already had single-source-of-truth patterns
+   per concern (one session registry, one guard, one journey-status
+   function); the real gap was duplicated logic across 27 screens, not
+   competing authorities.
+3. When a full rewrite isn't authorized, build the new infrastructure for
+   real and prove it against one representative unit end-to-end (with
+   live verification) rather than either skipping the infrastructure
+   entirely or claiming a full migration that didn't happen.
+4. A canonical manifest must be generated from (or otherwise provably
+   locked to) the existing canonical registry it's meant to describe —
+   never hand-duplicated, which reintroduces the exact drift risk it
+   exists to prevent.
+5. Testing a migration against a live browser will surface real,
+   sometimes pre-existing and unrelated defects (e.g. a reward map
+   missing an entry) — disclose these plainly as found, distinct from
+   whatever the migration itself did or didn't cause.

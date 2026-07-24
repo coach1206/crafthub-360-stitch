@@ -166,7 +166,12 @@ const SECTION_ORDER = [
   ['suggestedFocus', 'Suggested Focus for the Next Journey'],
 ]
 
-export default function AISummary() {
+// Canonical Runtime pass — accepts optional onBack/onComplete from
+// SmokeCraftScreenRenderer (the migrated route). Falls back to its
+// original, unchanged internal navigate()/awardSessionRewards() behavior
+// when rendered without them, so this component keeps working exactly as
+// before for any other consumer that isn't going through the renderer.
+export default function AISummary({ onBack, onComplete } = {}) {
   const { awardSessionRewards, session } = useGuestSession()
   const { isDemoMode } = useSmokeCraftProgress()
   const { journey, setAiSummary } = useSmokeCraftJourney()
@@ -263,6 +268,10 @@ export default function AISummary() {
         ...(journey.aiSummary || {}),
         completedAt: journey.aiSummary?.completedAt || Date.now(),
       })
+    }
+    if (onComplete) {
+      onComplete()
+      return
     }
     awardSessionRewards('ai-summary')
     navigate('/smokecraft/pairing-recommendations')
@@ -444,7 +453,7 @@ export default function AISummary() {
         primaryDisabled={!canContinue}
         onPrimary={handleContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/scorecard')}
+        onSecondary={onBack || (() => navigate('/smokecraft/scorecard'))}
       />
     </div>
   )

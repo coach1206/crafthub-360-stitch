@@ -145,6 +145,7 @@ import ResumeJourney    from './pages/smokecraft/ResumeJourney.jsx'
 import Leaderboard      from './pages/smokecraft/Leaderboard.jsx'
 import PassportStamp    from './pages/smokecraft/PassportStamp.jsx'
 import AISummary            from './pages/smokecraft/AISummary.jsx'
+import SmokeCraftScreenRenderer from './components/smokecraft/SmokeCraftScreenRenderer.jsx'
 import PairingRecommendations from './pages/smokecraft/PairingRecommendations.jsx'
 import SeedSoil         from './pages/smokecraft/SeedSoil.jsx'
 import HumidorMatch     from './pages/smokecraft/HumidorMatch.jsx'
@@ -486,7 +487,8 @@ export default function App() {
                 <Route path="mini-tasting-round"    element={<Navigate to="/smokecraft/mini-tasting" replace />} />
 
                 {/* S21 — ai-summary (AI Summary) */}
-                <Route path="ai-summary"       element={<SmokeCraftSessionGuard sessionNumber={21}><AISummary /></SmokeCraftSessionGuard>} />
+                {/* Canonical Runtime pass — migrated through SmokeCraftScreenRenderer (screenId="session-21"), the one representative screen proving the new manifest/registry/data-selector/completion-service layer. See docs/audits/smokecraft-final-completion/canonical-runtime/ for scope. */}
+                <Route path="ai-summary"       element={<SmokeCraftSessionGuard sessionNumber={21}><SmokeCraftScreenRenderer screenId="session-21" /></SmokeCraftSessionGuard>} />
 
                 {/* S22 — pairing-recommendations (Personalized Pairing Recommendations) */}
                 <Route path="pairing-recommendations" element={<SmokeCraftSessionGuard sessionNumber={22}><PairingRecommendations /></SmokeCraftSessionGuard>} />
