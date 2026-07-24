@@ -1,159 +1,216 @@
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
-import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import { RANKS, getRankFromXP } from '../../constants/session.js'
+import {
+  resolveSmokeCraftLandingAction,
+  SMOKECRAFT_LANDING_ACTIONS,
+} from '../../constants/smokecraftLandingActions.js'
+import { getRankFromXP } from '../../constants/session.js'
 
-const GOLD  = '#E9C176'
+const NAT_W = 1672
+const NAT_H = 941
+const GOLD = '#E9C176'
 const CREAM = '#e5e2e1'
-const GLASS = 'rgba(8,10,16,0.86)'
-const BORDER = 'rgba(233,193,118,0.22)'
 
 /**
- * RewardsCenter — the landing "Rewards" destination card target.
+ * RewardsCenter — /smokecraft/rewards-center
  *
- * Root-cause fix (Live Landing & Destinations pass): the landing Rewards
- * card previously routed to /smokecraft/humidor-match, which for any real
- * (fresh or partially-progressed) user bounced straight to /smokecraft/enroll
- * via the session-2 entry guard — the approved Reward Center visual the repo
- * owner uploaded was never shown at all. This screen is landing-accessible
- * (no session guard), renders the approved Reward Center.png as its visual
- * shell, and shows ONLY real, saved data:
- *   - Real XP balance and rank (guest session xp / getRankFromXP).
- *   - Real loyalty-point fields already tracked on the guest session
- *     (available / lifetime / redeemable) — never fabricated.
- * There is no real venue-specific rewards backend in this build, so the
- * venue-rewards section is an honest empty state, never invented offers,
- * codes, or balances. When a real venue-rewards source exists, populate it
- * here — do not bake fake rewards to fill the gap.
+ * APPROVED-ASSET CONTROL PLANE PASS.
+ *
+ * What changed and why
+ * --------------------
+ * The prior pass rendered the approved Reward Center.png as a capped band
+ * (maxHeight 62vh) and then stacked a hand-built column of dark glass cards
+ * BELOW it — the "giant black content block" the mandate calls out. That is
+ * a Claude-composed layout standing beside an approved image rather than
+ * live controls placed into it.
+ *
+ * The approved asset is, in fact, an explicit OVERLAY TEMPLATE. Its four
+ * point tiles contain empty dashed circles where values belong, its "MY
+ * REWARDS" panel is dotted blank lines, its tier ring is empty, and it
+ * carries its own bottom navigation bar (JOURNEY / REWARDS / RANKINGS /
+ * PASSPORT / CRAFTHUB). The image was drawn to be filled in, so this screen
+ * now renders it at its true 1672x941 aspect ratio and places live values
+ * into those designated blank zones — nothing above it, nothing below it,
+ * no duplicate title (the image titles itself), no second dashboard.
+ *
+ * HONEST POINT REPORTING (mandate Step 7)
+ * ---------------------------------------
+ * The image asks for four point values: AVAILABLE POINTS, POINTS EARNED THIS
+ * JOURNEY, LIFETIME POINTS, POINTS REDEEMED. The loyalty engine
+ * (src/utils/smokecraftLoyaltyEngine.js) increments `loyaltyPoints`,
+ * `lifetimeLoyaltyPoints` and `redeemablePoints` by the SAME amount on every
+ * award and never decrements any of them. There is no redemption path in
+ * this build at all.
+ *
+ * So there is exactly ONE real number here, not four. The prior pass printed
+ * four tiles anyway — including a "Redeemed" figure computed as
+ * `lifetime - available`, which is identically 0 by construction and merely
+ * looks like an independently derived value.
+ *
+ * This screen therefore shows the one real balance in AVAILABLE, the real
+ * ledger-derived total in EARNED THIS JOURNEY, and marks LIFETIME and
+ * REDEEMED as not separately tracked ("—") rather than restating the same
+ * number under three headings. When a real redemption/venue backend exists,
+ * these become genuinely distinct; until then the screen says so plainly.
+ *
+ * Account XP is NOT shown as reward points — the two are separate state
+ * (mandate Step 7). Rank is shown only in the image's own tier zone.
  */
+
+// Opaque value chip dropped into one of the image's blank circles/zones.
+const VALUE = {
+  position: 'absolute',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontFamily: 'Georgia, serif',
+  fontWeight: 700,
+  color: GOLD,
+  pointerEvents: 'none',
+}
+
+// Percentage coordinates of the approved image's own blank value circles.
+const ZONES = {
+  availableCircle: { left: '20.4%', top: '12.4%', width: '4.6%', height: '8.2%' },
+  earnedCircle:    { left: '44.6%', top: '12.4%', width: '4.6%', height: '8.2%' },
+  lifetimeCircle:  { left: '68.6%', top: '12.4%', width: '4.6%', height: '8.2%' },
+  redeemedCircle:  { left: '93.0%', top: '12.4%', width: '4.6%', height: '8.2%' },
+  tierRing:        { left: '65.4%', top: '2.0%',  width: '4.4%', height: '7.8%' },
+}
+
+// The image's own bottom navigation bar, made live. Each tile resolves its
+// destination through the ONE canonical landing resolver — no inline routes.
+const NAV_TILES = [
+  { action: SMOKECRAFT_LANDING_ACTIONS.RESUME,   label: 'Journey',  left: '3.3%'  },
+  { action: null,                                 label: 'Rewards',  left: '22.2%' }, // current screen
+  { action: SMOKECRAFT_LANDING_ACTIONS.RANKINGS, label: 'Rankings', left: '41.4%' },
+  { action: SMOKECRAFT_LANDING_ACTIONS.PASSPORT, label: 'Passport', left: '60.2%' },
+  { action: SMOKECRAFT_LANDING_ACTIONS.CRAFTHUB, label: 'CraftHub', left: '79.0%' },
+]
+
+function PointValue({ zone, value, testid }) {
+  return (
+    <div style={{ ...VALUE, ...zone }}>
+      <span data-testid={testid} style={{ fontSize: 'clamp(11px,1.5vw,24px)' }}>{value}</span>
+    </div>
+  )
+}
+
 export default function RewardsCenter() {
   const navigate = useNavigate()
   const { session } = useGuestSession()
 
   const xp = session?.xp || 0
   const rank = getRankFromXP(xp)
-  const nextTier = RANKS.find(r => r.minXP > xp) || null
-  const available = session?.redeemablePoints ?? 0
-  const lifetime = session?.lifetimeLoyaltyPoints ?? 0
-  const current = session?.loyaltyPoints ?? 0
 
-  function back() {
+  // Real balance and real ledger — the only two honest numbers available.
+  const available = session?.loyaltyPoints ?? 0
+  const ledger = Array.isArray(session?.loyaltyLedger) ? session.loyaltyLedger : []
+  const earnedThisJourney = ledger.reduce((sum, e) => sum + (e?.pointsAwarded || 0), 0)
+
+  function goAction(actionId) {
+    if (!actionId) return
+    triggerHaptic('light')
+    navigate(resolveSmokeCraftLandingAction(actionId).route)
+  }
+
+  function backToJourney() {
     triggerHaptic('light')
     navigate('/smokecraft')
   }
 
-  const pointField = (label, value) => (
-    <div style={{ flex: '1 1 130px', background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}`, borderRadius: 10, padding: '14px 16px' }}>
-      <div style={{ fontSize: 'clamp(22px,3vw,30px)', fontWeight: 700, color: GOLD }}>{value}</div>
-      <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.55)', letterSpacing: '0.06em', textTransform: 'uppercase', marginTop: 4 }}>{label}</div>
-    </div>
-  )
-
   return (
-    <div
-      data-testid="smokecraft-rewards-center"
-      style={{ position: 'fixed', inset: 0, overflowX: 'hidden', overflowY: 'auto', background: '#060810', fontFamily: 'Georgia, serif' }}
+    <SmokeCraftImageBoundsOverlay
+      src={SC_ASSETS.rewardCenter}
+      naturalW={NAT_W}
+      naturalH={NAT_H}
+      alt="SmokeCraft 360 Reward Center"
+      bottomOffset={0}
     >
-      {/*
-        Layout root-cause fix (Single Build & Live Runtime pass). Previously
-        this approved visual was cropped into a fixed band
-        (height: clamp(150px,26vh,260px), backgroundSize: cover,
-        backgroundPosition: center 35%) while <main> was absolutely
-        positioned starting at clamp(140px,24vh,240px) with a HIGHER z-index.
-        Three real defects followed, all reproduced in a real browser and all
-        matching the reported live symptoms:
-          1. `main` started ~10-20px ABOVE the band's bottom edge and painted
-             over it — live content literally covered the approved artwork.
-          2. `cover` + `center 35%` sliced the approved reward cards through
-             their middles and pushed the image's own top navigation off
-             screen, so the approved layout read as broken/inaccessible.
-          3. The rgba(6,8,16,0.92) gradient stop plus the fixed-height band
-             left a large black region below the image before content began.
-        Now: one normal-flow scrolling document. The visual keeps its real
-        1672x941 aspect ratio with backgroundSize `contain`, so it is never
-        cropped and no approved card is ever sliced; content flows BELOW it
-        rather than over it, making overlap structurally impossible; and the
-        duplicate live "Reward Center" title is dropped (the approved image
-        already titles the screen) in favour of a screen-reader-only h1.
-        Bottom navigation is the standard SmokeCraftNavBar, which the screen
-        previously lacked entirely.
-      */}
-      <div
-        role="img"
-        aria-label="SmokeCraft 360 Reward Center"
-        data-visual-source="reward-center"
+      <h1 style={{
+        position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
+        overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
+      }}>SmokeCraft 360 Reward Center</h1>
+
+      {/* ── The four blank point circles, filled honestly ── */}
+      <PointValue testid="rc-available" zone={ZONES.availableCircle} value={available} />
+      <PointValue testid="rc-earned"    zone={ZONES.earnedCircle}    value={earnedThisJourney} />
+      {/* Not separately tracked — see the header note. Never a restated number. */}
+      <PointValue testid="rc-lifetime"  zone={ZONES.lifetimeCircle}  value="—" />
+      <PointValue testid="rc-redeemed"  zone={ZONES.redeemedCircle}  value="—" />
+
+      {/* ── The image's empty tier ring ── */}
+      <div style={{ ...ZONES.tierRing, ...VALUE, flexDirection: 'column' }}>
+        <span data-testid="rc-tier" style={{ fontSize: 'clamp(7px,0.8vw,12px)', color: CREAM, textAlign: 'center' }}>
+          {rank.name}
+        </span>
+      </div>
+
+      {/* ── Live control over the baked "Back to Journey" button ── */}
+      <button
+        type="button"
+        data-testid="rc-back"
+        aria-label="Back to Journey"
+        onClick={backToJourney}
         style={{
-          width: '100%', aspectRatio: '1672 / 941', maxHeight: '62vh',
-          backgroundImage: `url(${SC_ASSETS.rewardCenter})`,
-          backgroundSize: 'contain', backgroundPosition: 'center top',
-          backgroundRepeat: 'no-repeat', backgroundColor: '#060810',
+          position: 'absolute', left: '82.9%', top: '2.6%', width: '15.4%', height: '6.4%',
+          background: 'transparent', border: '1.5px solid transparent', borderRadius: 8,
+          cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation',
+          WebkitTapHighlightColor: 'transparent',
         }}
+        onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent' }}
+        onFocus={e => { e.currentTarget.style.borderColor = GOLD }}
+        onBlur={e => { e.currentTarget.style.borderColor = 'transparent' }}
       />
 
-      <main style={{ padding: '0 clamp(16px,4vw,40px) 140px' }}>
-        <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16, paddingTop: 24 }}>
-          <h1 style={{
-            position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
-            overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
-          }}>SmokeCraft 360 Reward Center</h1>
+      {/* ── The image's own bottom nav bar, made live ── */}
+      {NAV_TILES.map(tile => (
+        <button
+          key={tile.label}
+          type="button"
+          aria-label={tile.label}
+          data-testid={`rc-nav-${tile.label.toLowerCase()}`}
+          aria-current={tile.action === null ? 'page' : undefined}
+          disabled={tile.action === null}
+          onClick={() => goAction(tile.action)}
+          style={{
+            position: 'absolute', left: tile.left, top: '89.4%', width: '17.6%', height: '8.4%',
+            background: 'transparent', border: '1.5px solid transparent', borderRadius: 10,
+            cursor: tile.action === null ? 'default' : 'pointer',
+            pointerEvents: 'auto', touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+          onMouseEnter={e => { if (tile.action) e.currentTarget.style.borderColor = GOLD }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent' }}
+          onFocus={e => { if (tile.action) e.currentTarget.style.borderColor = GOLD }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'transparent' }}
+        />
+      ))}
 
-          {/* Real XP + rank */}
-          <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,2.4vw,24px)' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>Your Standing</div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
-              <span style={{ fontSize: 'clamp(30px,4vw,42px)', fontWeight: 700, color: GOLD }}>{xp}</span>
-              <span style={{ fontSize: 13, color: 'rgba(229,226,225,0.55)' }}>Total XP</span>
-            </div>
-            <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.55)', marginTop: 4 }}>
-              Rank: <span style={{ color: GOLD }}>{rank.name}</span>
-              {nextTier ? ` — ${nextTier.minXP - xp} XP to ${nextTier.name}` : ' — highest rank reached'}
-            </div>
-          </div>
-
-          {/* Real loyalty points */}
-          <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,2.4vw,24px)' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>Reward Points</div>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              {pointField('Available', available)}
-              {pointField('Journey', current)}
-              {pointField('Redeemed', Math.max(0, lifetime - available))}
-              {pointField('Lifetime', lifetime)}
-            </div>
-            <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.45)', marginTop: 10, fontStyle: 'italic' }}>
-              Points are earned as you complete your SmokeCraft journey. This build tracks one continuous local journey.
-            </div>
-          </div>
-
-          {/* Honest empty state — no real venue-rewards backend exists. */}
-          <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,2.4vw,24px)' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>Venue Rewards</div>
-            <p style={{ margin: '0 0 12px', fontSize: 13, color: 'rgba(229,226,225,0.6)', lineHeight: 1.6 }}>
-              Venue-specific rewards are not yet available. When your venue connects its reward
-              catalog, redeemable offers will appear in each category below. No sample or
-              placeholder offers are shown — only real rewards will ever be listed.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {['Drink specials', 'Cigar & smoke specials', 'Food specials', 'Pairing specials', 'Venue perks'].map(cat => (
-                <div key={cat} data-reward-category={cat} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}`, borderRadius: 8, padding: '10px 14px' }}>
-                  <span style={{ fontSize: 13, color: CREAM }}>{cat}</span>
-                  <span style={{ fontSize: 11, color: 'rgba(229,226,225,0.4)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>None configured</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </main>
-
-      {/* Bottom navigation — the standard approved bar this screen previously
-          lacked (the only way back was an inline button buried at the end of
-          the scroll, which is why the live report noted a missing bottom nav). */}
-      <SmokeCraftNavBar
-        secondary="← Back to Landing"
-        onSecondary={back}
-      />
-    </div>
+      {/* Honest status line placed in the image's own empty "MY REWARDS" detail
+          zone (the dotted placeholder lines the artwork leaves blank to be
+          filled in). Rendered OPAQUE so it occupies that zone cleanly instead
+          of overlapping the dotted rules underneath. No invented offers, codes
+          or balances are ever shown. The approved artwork already states "No
+          venue rewards are currently available", so this adds only the reason,
+          never a duplicate claim. */}
+      <div
+        data-testid="rc-venue-status"
+        style={{
+          position: 'absolute', left: '70.6%', top: '44.4%', width: '26.4%', height: '12.2%',
+          background: '#0A1020', borderRadius: 6,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '0 1%', textAlign: 'center',
+          fontFamily: 'Georgia, serif', fontSize: 'clamp(7px,0.78vw,12px)',
+          color: 'rgba(229,226,225,0.68)', lineHeight: 1.45, pointerEvents: 'none',
+        }}
+      >
+        No venue reward catalog is connected to this build yet, so no offers can be listed.
+      </div>
+    </SmokeCraftImageBoundsOverlay>
   )
 }

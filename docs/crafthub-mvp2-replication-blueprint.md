@@ -1148,3 +1148,78 @@ that one domain served two different build IDs across routes.
     environment cannot reach the deployment, the honest outcome is failure against that bar with
     an explicit statement of what *was* proven locally. Record the real blocked-access error
     verbatim. Never fabricate a live screenshot or a deployed-commit reading.
+
+## Approved Asset Control Plane — permanent rules
+
+1. **The approved image is always the visual foundation. React never
+   substitutes its own layout for one — even a well-designed one.** A screen's
+   shell is an actual approved image file from the repo, rendered as-is at its
+   true aspect ratio (never cropped or reinterpreted), with React adding only
+   live text, data, controls, hotspots, states and navigation positioned over
+   it in percentage coordinates. A hand-built CSS/React composition standing in
+   for an approved image is a defect regardless of how good it looks — design
+   authority belongs to the owner, not to the implementer. When unsure, copy the
+   pattern an existing correct screen already uses rather than inventing one.
+
+2. **"The approved image has fake data baked in" is rarely a reason to abandon
+   it.** Baked placeholder values almost always sit inside bounded *value
+   zones* — which is precisely what React overlays are for. Cover each one with
+   an **opaque** overlay carrying the real value. This satisfies "use only
+   approved images" and "never show fake data" simultaneously. Treating the two
+   as mutually exclusive, and drawing a replacement screen, gets the visual
+   authority question exactly backwards. Overlays must be opaque: a translucent
+   panel lets baked pixels bleed through and produces two numbers at once.
+   Disclose the residual risk honestly (the file still contains the fake data)
+   and recommend the owner re-export with blank value zones.
+
+3. **Some approved images are explicitly overlay templates — read them before
+   judging them.** Empty dashed circles, dotted blank lines and unfilled rings
+   are the artwork telling you where live values belong. An image like this
+   rendered with a hand-built data stack *below* it is a double failure: the
+   template's own zones stay empty while a redundant panel duplicates them.
+
+4. **Never let a destination control carry its own route string.** Route
+   destinations for a hub/landing screen belong in ONE resolver that maps an
+   action id to a destination. Scattered inline `navigate('/...')` calls are not
+   just untidy — they hide bugs that are invisible per-control and obvious in
+   aggregate. Consolidating them here immediately exposed two controls pointing
+   at session-guarded curriculum routes that bounced every real user to
+   enrollment, so the destination each advertised was never reachable. Patching
+   such controls one at a time guarantees the next one recurs.
+
+5. **A resolver should decide, not mutate — and should throw, not fall back.**
+   Return the route plus flags (e.g. `startsNewJourney`) and let the caller run
+   the one canonical state-changing hook. Throwing on an unknown action beats a
+   default route: a silent fallback lands users on the wrong screen with no
+   signal, which is indistinguishable from working.
+
+6. **Guard-free by construction beats guard-checked by inspection.** Every route
+   reachable from a public landing screen must be verified to sit behind no
+   session guard. Keeping them in one map makes that property auditable in one
+   place instead of requiring a per-control review that will be skipped.
+
+7. **Three fields incremented by the same amount are one field with three
+   names.** Before rendering "available / earned / lifetime / redeemed"-style
+   breakdowns, check whether the engine actually derives them independently. If
+   it does not, show the one real number and mark the rest unavailable. A value
+   computed as `lifetime - available` when both always move together is
+   identically zero by construction while *looking* like a derived figure —
+   which is worse than an empty state, because it is quietly false.
+
+8. **When a test asserts the shape of a rejected design, retarget it — don't
+   delete it, and don't leave it.** An assertion whose target legitimately
+   changed should be re-pointed at the equivalent correct property, with a
+   comment recording what it used to check and why that changed. Two signals
+   that you are retargeting honestly rather than weakening: the replacement is
+   often *stricter* (e.g. "no empty buttons" → "every control exposes an
+   accessible name", which is the correct requirement for image hotspots that
+   are intentionally text-free), and any assertion that turns out to have
+   mandated a defect (e.g. requiring account XP on a rewards screen) should be
+   **inverted**, not relaxed.
+
+9. **Verify assets by bytes, not by label.** Never accept an asset because a
+   registry key says "approved". Confirm the file exists on disk at that exact
+   path and case, and have the suite hash what the browser actually received and
+   compare it to the file in the repo. Filenames with spaces (and especially
+   double spaces) make percent-encoding mistakes easy and silent; hashing turns
+   them into loud failures.

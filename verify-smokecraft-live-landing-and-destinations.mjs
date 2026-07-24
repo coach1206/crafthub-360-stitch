@@ -103,15 +103,30 @@ async function destination(cardLabel, expectPathIncludes, assertFn) {
 }
 
 // Rewards → Reward Center (approved Reward Center.png actually rendered)
+// Approved-Asset Control Plane pass — RETARGETED, not weakened.
+// The three Rewards checks below were written against the prior pass's
+// layout (a CSS-background div plus a hand-built glass-card stack). Two of
+// them asserted things that are now known defects:
+//   * "shows real Total XP field" asserted ACCOUNT XP being displayed on the
+//     reward screen — exactly the account-state/reward-state bleed the
+//     mandate's state-separation rule forbids. It is replaced by a check that
+//     the reward point values come from the real loyalty balance/ledger.
+//   * the empty-state check keyed off prose in a card that no longer exists;
+//     it now keys off the honest status text placed in the approved image's
+//     own empty MY REWARDS zone.
 await destination('Rewards', '/smokecraft/rewards-center', async (page) => {
-  const bg = await page.evaluate(() => {
-    const el = document.querySelector('[data-visual-source="reward-center"]')
-    return el ? getComputedStyle(el).backgroundImage : ''
+  const src = await page.evaluate(() => {
+    const img = document.querySelector('img[src*="Reward"]')
+    return img ? img.getAttribute('src') : ''
   })
-  check('Rewards: Reward Center.png is the rendered visual shell', /Reward%20Center\.png/.test(bg), bg.slice(0, 120))
+  check('Rewards: Reward Center.png is the rendered visual shell',
+    /Reward%20Center\.png|Reward Center\.png/.test(src), src.slice(0, 120))
   const txt = await page.evaluate(() => document.body.innerText)
-  check('Rewards: shows real Total XP field', /Total XP/i.test(txt))
-  check('Rewards: honest venue-rewards empty state (no fake offers)', /not yet available/i.test(txt))
+  check('Rewards: account XP is not presented as reward points', !/Total XP/i.test(txt))
+  check('Rewards: untracked point fields honestly marked unavailable',
+    (await page.locator('[data-testid="rc-lifetime"]').innerText()).includes('\u2014'))
+  check('Rewards: honest venue-rewards empty state (no fake offers)',
+    /no venue reward catalog is connected/i.test(txt))
 })
 
 // Rankings → Leaderboard (approved LEADERBOARD 111.png, no stale baked data)
@@ -133,7 +148,21 @@ await destination('View Passport (bottom bar)', '/smokecraft/', async (page) => 
 })
 
 // CraftHub → smokecraft-challenge (guarded) — journey preserved, no old image
-await destination('Enter Challenge', '/smokecraft/', null)
+// Approved-Asset Control Plane pass — RETARGETED. This tile is labelled
+// CRAFTHUB in the approved landing artwork, but its handler navigated to the
+// scorecard-guarded smokecraft-challenge screen, so the accessible name was
+// "Enter Challenge" and no CraftHub visual was ever shown. It now opens the
+// approved CraftHub 360 destination, so the control is asserted by its real
+// label and its real destination.
+await destination('CraftHub', '/smokecraft/crafthub', async (page) => {
+  const src = await page.evaluate(() => {
+    const img = document.querySelector('img[src*="CRAFTHUB"]')
+    return img ? img.getAttribute('src') : ''
+  })
+  check('CraftHub: approved CraftHub 360 visual rendered', /CRAFTHUB/.test(src), src.slice(0, 120))
+  const txt = await page.evaluate(() => document.body.innerText)
+  check('CraftHub: no "Greg Guy" identity bleed', !/Greg Guy/.test(txt))
+})
 
 await browser.close()
 

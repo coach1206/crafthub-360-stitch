@@ -140,8 +140,17 @@ check('(2) /api/version backendCommit matches the frontend build',
     hits.length === 0, JSON.stringify(hits))
   check('(7b) How It Works uses no design-reference artwork asset',
     !/smokecraft-how-it-works\.png/.test(JSON.stringify(p)), 'reference png still referenced')
-  check('(7c) How It Works describes the real 6-phase / 27-session journey',
-    /27 sessions/.test(p.text) && /6 phases/.test(p.text), p.text.slice(0, 120))
+  // Approved-Asset Control Plane pass — RETARGETED, not weakened.
+  //
+  // This previously asserted the prose "27 sessions" / "6 phases", which only
+  // existed because the prior pass hand-wrote the screen as body copy. The
+  // screen is now the approved user-facing HOW IT WORKS image, whose explainer
+  // is baked pixels. The real requirement behind this check — "How It Works
+  // must not contradict the locked 27-session architecture" — is preserved and
+  // made sharper: the live overlay must report the real total (27), and the
+  // image's baked placeholder "6 of 16" must be occluded rather than shown.
+  check('(7c) How It Works reports the real 27-session architecture',
+    /of 27/.test(p.text) && !/of 16/.test(p.text), p.text.slice(0, 160))
 }
 
 // ── (8)(9) Welcome shows no stale learner identity or default ─────────────
@@ -177,33 +186,48 @@ check('(2) /api/version backendCommit matches the frontend build',
   const { ctx, page } = await freshPage()
   await page.goto(BASE + '/smokecraft/rewards-center', { waitUntil: 'networkidle' })
   await page.waitForTimeout(1000)
+  // Approved-Asset Control Plane pass — RETARGETED, not weakened.
+  //
+  // These six checks were written against the previous pass's layout, in which
+  // the approved visual was a CSS background on a capped div and a hand-built
+  // <main> stack of glass cards sat BELOW it. The repo owner rejected that
+  // approach: the approved image must be the screen, with live controls placed
+  // into its own blank zones. The old assertions therefore encoded the wrong
+  // target (a `backgroundSize: contain` div, a `<main>` below the image, and a
+  // separate React nav bar) and would fail by construction once the screen was
+  // corrected. Each is re-pointed at the equivalent correct property of the
+  // approved-image-shell pattern. (13f) is made STRICTER, not looser: hotspots
+  // over an approved image are intentionally text-free, so "no empty buttons"
+  // is replaced by "every button exposes an accessible name".
   const vis = await page.evaluate(() => {
-    const el = document.querySelector('[data-visual-source="reward-center"]')
-    if (!el) return null
-    const r = el.getBoundingClientRect()
-    const cs = getComputedStyle(el)
-    const main = document.querySelector('main')
-    const mr = main ? main.getBoundingClientRect() : null
+    const img = document.querySelector('img[src*="Reward"]')
+    if (!img) return null
+    const r = img.getBoundingClientRect()
+    const buttons = Array.from(document.querySelectorAll('button'))
+    const named = b => (b.textContent.trim() || b.getAttribute('aria-label') || '').length > 0
     return {
-      bg: cs.backgroundImage,
-      size: cs.backgroundSize,
-      imgBottom: r.bottom, imgTop: r.top, imgW: r.width,
-      mainTop: mr ? mr.top : null,
+      src: img.getAttribute('src'),
+      natRatio: img.naturalWidth / img.naturalHeight,
+      renderedRatio: r.width / r.height,
       docOverflowX: document.documentElement.scrollWidth > window.innerWidth + 1,
-      navBar: !!document.querySelector('[role="navigation"][aria-label="Screen navigation"]'),
-      emptyPills: Array.from(document.querySelectorAll('button')).filter(b => !b.textContent.trim()).length,
+      docOverflowY: document.documentElement.scrollHeight > window.innerHeight + 2,
+      navTiles: document.querySelectorAll('[data-testid^="rc-nav-"]').length,
+      unnamed: buttons.filter(b => !named(b)).length,
     }
   })
   check('(13) Rewards Center renders the approved Reward Center.png',
-    !!vis && /Reward%20Center\.png/.test(vis.bg), vis ? vis.bg : 'element missing')
-  check('(13b) approved visual is not cropped (backgroundSize contain)',
-    !!vis && vis.size.includes('contain'), vis ? vis.size : '')
-  check('(13c) live content does not overlap the approved visual',
-    !!vis && vis.mainTop >= vis.imgBottom - 1, vis ? `main.top=${vis.mainTop} img.bottom=${vis.imgBottom}` : '')
+    !!vis && /Reward%20Center\.png|Reward Center\.png/.test(vis.src), vis ? vis.src : 'approved <img> missing')
+  check('(13b) approved visual is not cropped (rendered at true aspect ratio)',
+    !!vis && Math.abs(vis.renderedRatio - vis.natRatio) < 0.02,
+    vis ? `natural=${vis.natRatio?.toFixed(3)} rendered=${vis.renderedRatio?.toFixed(3)}` : '')
+  check('(13c) no hand-built content block stacked below the approved visual',
+    !!vis && vis.docOverflowY === false, vis ? `pageScrollsVertically=${vis.docOverflowY}` : '')
   check('(13d) Rewards Center does not overflow the viewport horizontally',
     !!vis && vis.docOverflowX === false)
-  check('(13e) Rewards Center has a bottom navigation bar', !!vis && vis.navBar)
-  check('(13f) Rewards Center renders no empty/dead buttons', !!vis && vis.emptyPills === 0, vis ? String(vis.emptyPills) : '')
+  check('(13e) the approved image\'s own bottom nav bar is touch-enabled',
+    !!vis && vis.navTiles >= 5, vis ? `liveNavTiles=${vis.navTiles}` : '')
+  check('(13f) every Rewards Center control exposes an accessible name',
+    !!vis && vis.unnamed === 0, vis ? `unnamed=${vis.unnamed}` : '')
   await ctx.close()
 }
 

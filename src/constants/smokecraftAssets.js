@@ -133,8 +133,28 @@ export const SC_ASSETS = {
   // a reference-only alternate (not deleted), no longer the active reference.
   leaderboard:         `${RAW}/LEADERBOARD%20111.png`,
   eventChallenge:      `${RAW}/EVENT%20CHALLENGE%20111.png`,
-  howItWorks:          `${REF}/smokecraft-how-it-works.png`,
+  // Approved-Asset Control Plane pass: the former `howItWorks` key pointed at
+  // ${REF}/smokecraft-how-it-works.png, which is an INTERNAL DESIGN STORYBOARD
+  // ("SMOKECRAFT 360 | STORYBOARD S1 -> S4", covered in S1.1/S2.1/"S1 GOAL"
+  // planning labels), not a user-facing screen. It had no consumer left and is
+  // removed so it cannot be wired into a production route again. The file stays
+  // on disk as internal reference material.
+  //
+  // The approved USER-FACING How It Works visual is this one. HowItWorks.jsx
+  // renders it as its shell and occludes its baked placeholder stats with real
+  // saved values (see that file's header for the full rationale).
+  howItWorksUser:      `${RAW}/session-visuals/HOW%20IT%20WORKS.png`,
   visitComplete:       '/smokecraft-visit-complete.png',
+
+  // Landing "Passport" destination — approved 360 Passport hub visual. The
+  // landing Passport control previously pointed at the session-23-guarded
+  // passport-stamp curriculum screen, which bounced guests to enroll.
+  passportHub:         `${RAW}/360%20PASSPORT%20%202.png`,
+
+  // Landing "CraftHub" destination — approved CraftHub 360 venue table visual.
+  // The landing CraftHub tile previously pointed at the scorecard-guarded
+  // smokecraft-challenge screen, which never showed a CraftHub visual at all.
+  craftHubVenueTable:  `${RAW}/CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png`,
 
   // Rewards / Achievements (shared S25/S26 screen) — approved production assets
   rewards:             `${RAW}/REWARDS%20222.png`,

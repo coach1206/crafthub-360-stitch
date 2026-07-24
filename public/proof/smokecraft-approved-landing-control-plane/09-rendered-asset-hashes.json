@@ -1,0 +1,54 @@
+{
+  "capturedAt": "2026-07-24T21:46:04.258Z",
+  "note": "renderedSha256 is the bytes the browser actually received; diskSha256 is the approved file in the repo. match:true proves the approved image itself was served, unmodified.",
+  "assets": [
+    {
+      "asset": "/assets/smokecraft-reference/approved/smokecraft-guest-pass.png",
+      "renderedSha256": "5c798061277c78b3e5192f2d58c670f0a1e124066986c957e9a2922cb6e04705",
+      "diskSha256": "5c798061277c78b3e5192f2d58c670f0a1e124066986c957e9a2922cb6e04705",
+      "match": true
+    },
+    {
+      "asset": "/assets/smokecraft-reference/approved/smokecraft-landing.png",
+      "renderedSha256": "f817ab40ad138135513ad70b395725c967cc15736086d127e7fddef107fc8d7c",
+      "diskSha256": "f817ab40ad138135513ad70b395725c967cc15736086d127e7fddef107fc8d7c",
+      "match": true
+    },
+    {
+      "asset": "/assets/smokecraft-reference/approved/smokecraft-pairing.png",
+      "renderedSha256": "4c37a5dadba900df171caf5e859ca716e9573d4db6b58c1c8608818622aeef49",
+      "diskSha256": "4c37a5dadba900df171caf5e859ca716e9573d4db6b58c1c8608818622aeef49",
+      "match": true
+    },
+    {
+      "asset": "/assets/smokecraft/360 PASSPORT  2.png",
+      "renderedSha256": "82d0a8b82bf5978fab0235e17ce0f5fc8a97578863650f0c53c4da5682e94521",
+      "diskSha256": "82d0a8b82bf5978fab0235e17ce0f5fc8a97578863650f0c53c4da5682e94521",
+      "match": true
+    },
+    {
+      "asset": "/assets/smokecraft/CRAFTHUB 360. VENUE TABLE EXPERIENCE.png",
+      "renderedSha256": "5d54123996272daf1aceab35bdb39ae93b4acb0b1dfd788a32d0ab5669694ad5",
+      "diskSha256": "5d54123996272daf1aceab35bdb39ae93b4acb0b1dfd788a32d0ab5669694ad5",
+      "match": true
+    },
+    {
+      "asset": "/assets/smokecraft/LEADERBOARD 111.png",
+      "renderedSha256": "7120ab3ba5fd9a0b0c6a1f16946d1b8a4a90a398994f7422495cb47291ee13d0",
+      "diskSha256": "7120ab3ba5fd9a0b0c6a1f16946d1b8a4a90a398994f7422495cb47291ee13d0",
+      "match": true
+    },
+    {
+      "asset": "/assets/smokecraft/rewards/Reward Center.png",
+      "renderedSha256": "489ad9ca433454358545e762d1f7718295cfed4fc0c4230791d096fd114ffc30",
+      "diskSha256": "489ad9ca433454358545e762d1f7718295cfed4fc0c4230791d096fd114ffc30",
+      "match": true
+    },
+    {
+      "asset": "/assets/smokecraft/session-visuals/HOW IT WORKS.png",
+      "renderedSha256": "5c473e68e23210e45357e15d7d2089798593a471783cfe803dfdef67a5fb28ec",
+      "diskSha256": "5c473e68e23210e45357e15d7d2089798593a471783cfe803dfdef67a5fb28ec",
+      "match": true
+    }
+  ]
+}

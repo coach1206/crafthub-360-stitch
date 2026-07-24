@@ -3,14 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../constants/smokecraftAssets.js'
-// Single Build & Live Runtime pass — these four helpers moved verbatim to
-// src/constants/smokecraftLandingCta.js so /smokecraft/how-it-works can
-// reuse the SAME three-state CTA decision instead of defining a second one.
+// Approved-Asset Control Plane pass: this screen no longer re-derives journey
+// state or carries destination strings. It reads state once via
+// getSmokeCraftLandingJourneyState() and resolves EVERY control through the one
+// canonical resolveSmokeCraftLandingAction(). No handler below contains a route
+// string, a fallback route, or its own CTA-label logic.
 import {
-  hasRealJourneyProgress,
-  getJourneyCompletionState,
-  getEntryRoute,
-} from '../constants/smokecraftLandingCta.js'
+  resolveSmokeCraftLandingAction,
+  getSmokeCraftLandingJourneyState,
+  getPrimaryActionId,
+  SMOKECRAFT_LANDING_ACTIONS as ACTIONS,
+} from '../constants/smokecraftLandingActions.js'
 import { useStartNewSmokeCraftJourney } from '../hooks/useStartNewSmokeCraftJourney.js'
 
 const NAT_W = 1189
@@ -134,19 +137,31 @@ function StaticHotspot({ label, onClick, style, shape = 'rect' }) {
 
 export default function SmokeCraft() {
   const navigate = useNavigate()
-  const [entryRoute] = useState(getEntryRoute)
-  // "Resume Journey" must require real progress beyond Entry-layer state —
-  // never shown merely because entryRoute happens to be the Resume screen.
-  const [isReturning] = useState(() => entryRoute === '/smokecraft/resume' && hasRealJourneyProgress())
-  const [journeyState] = useState(getJourneyCompletionState)
-  const isCompleted = isReturning && journeyState.isComplete
+  // ONE journey-state read for the whole render. Every control below resolves
+  // against this same snapshot, so a single render can never mix two readings.
+  const [journeyState] = useState(getSmokeCraftLandingJourneyState)
+  const isReturning = journeyState.isReturning
   const { startNewSmokeCraftJourney } = useStartNewSmokeCraftJourney()
   const [confirmingStartNew, setConfirmingStartNew] = useState(false)
 
-  function go(to) {
-    triggerHaptic('light')
-    navigate(to)
+  // The single navigation entry point for every Landing control. A control
+  // names an ACTION; the resolver decides the route and whether a clean
+  // journey must be created first. Controls never navigate directly.
+  function runAction(actionId) {
+    const action = resolveSmokeCraftLandingAction(actionId, journeyState)
+    triggerHaptic(action.startsNewJourney ? 'medium' : 'light')
+    if (action.startsNewJourney) {
+      // The one canonical journey reset (Clean Start remediation pass).
+      // Its return value is authoritative for where a clean journey begins.
+      navigate(startNewSmokeCraftJourney({ firstRoute: action.route }))
+      return
+    }
+    navigate(action.route)
   }
+
+  // Primary CTA: label and destination both come from the resolver, so they
+  // can never drift apart the way two separate implementations did before.
+  const primary = resolveSmokeCraftLandingAction(getPrimaryActionId(journeyState), journeyState)
 
   function handleStartNewClick() {
     triggerHaptic('light')
@@ -159,25 +174,16 @@ export default function SmokeCraft() {
   }
 
   function handleConfirmStartNew() {
-    triggerHaptic('medium')
-    // Landing-page journey controls pass — reuses the one canonical
-    // useStartNewSmokeCraftJourney() start function (Clean Start remediation
-    // pass), never a second reset implementation. Explicitly routes to
-    // Enrollment (the earliest required clean entry step), not directly to
-    // Welcome, per this pass's requirement — enrollment itself remains
-    // preserved account-level state (PRESERVED_COMPLETED_STEP_IDS), so this
-    // route is always safely reachable.
-    const route = startNewSmokeCraftJourney({ firstRoute: '/smokecraft/enroll' })
-    navigate(route)
+    setConfirmingStartNew(false)
+    // Resolver decides the clean-start destination (Enrollment) and flags
+    // startsNewJourney, so runAction performs the one canonical reset. No
+    // route string and no second reset implementation live here.
+    runAction(ACTIONS.START_NEW)
   }
 
   function handleStart() {
-    triggerHaptic('medium')
-    // A completed journey routes through Resume (same as in-progress) —
-    // ResumeJourney.jsx itself now shows the correct "Review Completed
-    // Journey" primary action once there, per the authoritative
-    // journeyComplete value it computes the same way this page does.
-    navigate(entryRoute)
+    // START vs RESUME is the resolver's decision, not this component's.
+    runAction(getPrimaryActionId(journeyState))
   }
 
   return (
@@ -190,7 +196,7 @@ export default function SmokeCraft() {
     >
       {/* Baked: START SMOKECRAFT button — dynamic label, must fully occlude baked text */}
       <PrimaryHotspot
-        label={isCompleted ? 'VIEW COMPLETED JOURNEY →' : isReturning ? 'RESUME SMOKECRAFT JOURNEY →' : 'START SMOKECRAFT JOURNEY →'}
+        label={primary.label}
         onClick={handleStart}
         style={{ left: '3.4%', top: '56.4%', width: '21.5%', height: '6.4%' }}
       />
@@ -213,7 +219,7 @@ export default function SmokeCraft() {
       {/* Baked: HOW IT WORKS button */}
       <StaticHotspot
         label="How It Works"
-        onClick={() => go('/smokecraft/how-it-works')}
+        onClick={() => runAction(ACTIONS.HOW_IT_WORKS)}
         style={{ left: '26.7%', top: '56.4%', width: '17.7%', height: '6.4%' }}
         shape="pill"
       />
@@ -221,14 +227,14 @@ export default function SmokeCraft() {
       {/* Baked: VIEW PASSPORT link in the 360 Passport card */}
       <StaticHotspot
         label="View Passport"
-        onClick={() => go('/smokecraft/passport-stamp')}
+        onClick={() => runAction(ACTIONS.PASSPORT)}
         style={{ left: '80.7%', top: '40.5%', width: '16.0%', height: '6.0%' }}
       />
 
       {/* Baked: VIEW PAIRING link in the Recommended Pairing card */}
       <StaticHotspot
         label="View Pairing"
-        onClick={() => go('/smokecraft/pairing-lab')}
+        onClick={() => runAction(ACTIONS.PAIRING)}
         style={{ left: '78.6%', top: '73.2%', width: '17.7%', height: '6.3%' }}
       />
 
@@ -238,28 +244,28 @@ export default function SmokeCraft() {
           never showed the approved Reward Center visual. */}
       <StaticHotspot
         label="Rewards"
-        onClick={() => go('/smokecraft/rewards-center')}
+        onClick={() => runAction(ACTIONS.REWARDS)}
         style={{ left: '1.35%', top: '82.2%', width: '24.3%', height: '17.7%' }}
       />
 
       {/* Bottom bar: RANKINGS */}
       <StaticHotspot
         label="Rankings"
-        onClick={() => go('/smokecraft/leaderboard')}
+        onClick={() => runAction(ACTIONS.RANKINGS)}
         style={{ left: '25.65%', top: '82.2%', width: '24.3%', height: '17.7%' }}
       />
 
       {/* Bottom bar: PASSPORT → View Passport */}
       <StaticHotspot
         label="View Passport (bottom bar)"
-        onClick={() => go('/smokecraft/passport-stamp')}
+        onClick={() => runAction(ACTIONS.PASSPORT)}
         style={{ left: '49.96%', top: '82.2%', width: '24.3%', height: '17.7%' }}
       />
 
       {/* Bottom bar: CRAFTHUB → Enter Challenge */}
       <StaticHotspot
-        label="Enter Challenge"
-        onClick={() => go('/smokecraft/smokecraft-challenge')}
+        label="CraftHub"
+        onClick={() => runAction(ACTIONS.CRAFTHUB)}
         style={{ left: '74.3%', top: '82.2%', width: '24.3%', height: '17.7%' }}
       />
 

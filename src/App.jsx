@@ -137,6 +137,8 @@ import Identity         from './pages/smokecraft/Identity.jsx'
 import ResumeJourney    from './pages/smokecraft/ResumeJourney.jsx'
 import Leaderboard      from './pages/smokecraft/Leaderboard.jsx'
 import RewardsCenter    from './pages/smokecraft/RewardsCenter.jsx'
+import SmokeCraftPassport from './pages/smokecraft/SmokeCraftPassport.jsx'
+import SmokeCraftCraftHub from './pages/smokecraft/SmokeCraftCraftHub.jsx'
 import SmokeCraftScreenRenderer from './components/smokecraft/SmokeCraftScreenRenderer.jsx'
 import SeedSoil         from './pages/smokecraft/SeedSoil.jsx'
 import RequestPurchase  from './pages/smokecraft/RequestPurchase.jsx'
@@ -550,7 +552,21 @@ export default function App() {
                 <Route path="guest-pass"       element={<GuestPass />} />
                 <Route path="demo"             element={<Demo />} />
                 <Route path="scan"             element={<Scan />} />
-                <Route path="passport"         element={<Navigate to="/passport" replace />} />
+                {/* Approved-Asset Control Plane pass: this was a <Navigate>
+                    alias out to the unrelated top-level /passport module, so
+                    the SmokeCraft Landing had no approved Passport destination
+                    at all and its Passport control pointed at the session-23
+                    guarded passport-stamp screen (which bounced guests to
+                    enroll). It is now the real landing-accessible approved
+                    Passport visual. No session guard: this is a destination
+                    screen, not a curriculum session. */}
+                <Route path="passport"         element={<SmokeCraftPassport />} />
+
+                {/* Approved-Asset Control Plane pass: new landing-accessible
+                    CraftHub destination. The Landing's CRAFTHUB tile previously
+                    navigated to the scorecard-guarded smokecraft-challenge
+                    screen and never showed a CraftHub visual. */}
+                <Route path="crafthub"         element={<SmokeCraftCraftHub />} />
                 {/* Venue commerce flow */}
                 <Route path="menu"             element={<SmokeCraftMenu />} />
                 <Route path="venue-commerce"                    element={<SmokeCraftVenueCommerce />} />
