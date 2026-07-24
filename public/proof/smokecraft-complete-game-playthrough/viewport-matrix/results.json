@@ -1,0 +1,773 @@
+{
+  "pass": 1,
+  "fail": 0,
+  "total": 85,
+  "overflowFails": [],
+  "results": [
+    {
+      "viewport": "handheld",
+      "screen": "landing",
+      "route": "/smokecraft",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-landing.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "enrollment",
+      "route": "/smokecraft/enroll",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-enrollment.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "identity",
+      "route": "/smokecraft/identity",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-identity.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "venue",
+      "route": "/smokecraft/venue-select",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-venue.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "welcome",
+      "route": "/smokecraft/welcome",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-welcome.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "session-1",
+      "route": "/smokecraft/welcome",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-session-1.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "humidor-match",
+      "route": "/smokecraft/humidor-match",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-humidor-match.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "mentor-selection",
+      "route": "/smokecraft/mentor-selection",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-mentor-selection.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "lighting-tutorial",
+      "route": "/smokecraft/lighting-tutorial",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-lighting-tutorial.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "ring-gauge",
+      "route": "/smokecraft/vitola",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-ring-gauge.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "flavor-wheel",
+      "route": "/smokecraft/vitola",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-flavor-wheel.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "golden-box",
+      "route": "/smokecraft/golden-box",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-golden-box.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "packaging-studio",
+      "route": "/smokecraft/packaging-studio",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-packaging-studio.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "scorecard",
+      "route": "/smokecraft/scorecard",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-scorecard.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "session-27",
+      "route": "/smokecraft/session-complete",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-session-27.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "results",
+      "route": "/smokecraft/session-complete",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-results.png"
+    },
+    {
+      "viewport": "handheld",
+      "screen": "awards",
+      "route": "/smokecraft/rewards",
+      "width": 390,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/handheld-awards.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "landing",
+      "route": "/smokecraft",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-landing.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "enrollment",
+      "route": "/smokecraft/enroll",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-enrollment.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "identity",
+      "route": "/smokecraft/identity",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-identity.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "venue",
+      "route": "/smokecraft/venue-select",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-venue.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "welcome",
+      "route": "/smokecraft/welcome",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-welcome.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "session-1",
+      "route": "/smokecraft/welcome",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-session-1.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "humidor-match",
+      "route": "/smokecraft/humidor-match",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-humidor-match.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "mentor-selection",
+      "route": "/smokecraft/mentor-selection",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-mentor-selection.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "lighting-tutorial",
+      "route": "/smokecraft/lighting-tutorial",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-lighting-tutorial.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "ring-gauge",
+      "route": "/smokecraft/vitola",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-ring-gauge.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "flavor-wheel",
+      "route": "/smokecraft/vitola",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-flavor-wheel.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "golden-box",
+      "route": "/smokecraft/golden-box",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-golden-box.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "packaging-studio",
+      "route": "/smokecraft/packaging-studio",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-packaging-studio.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "scorecard",
+      "route": "/smokecraft/scorecard",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-scorecard.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "session-27",
+      "route": "/smokecraft/session-complete",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-session-27.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "results",
+      "route": "/smokecraft/session-complete",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-results.png"
+    },
+    {
+      "viewport": "tablet-10in",
+      "screen": "awards",
+      "route": "/smokecraft/rewards",
+      "width": 810,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-10in-awards.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "landing",
+      "route": "/smokecraft",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-landing.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "enrollment",
+      "route": "/smokecraft/enroll",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-enrollment.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "identity",
+      "route": "/smokecraft/identity",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-identity.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "venue",
+      "route": "/smokecraft/venue-select",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-venue.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "welcome",
+      "route": "/smokecraft/welcome",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-welcome.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "session-1",
+      "route": "/smokecraft/welcome",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-session-1.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "humidor-match",
+      "route": "/smokecraft/humidor-match",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-humidor-match.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "mentor-selection",
+      "route": "/smokecraft/mentor-selection",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-mentor-selection.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "lighting-tutorial",
+      "route": "/smokecraft/lighting-tutorial",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-lighting-tutorial.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "ring-gauge",
+      "route": "/smokecraft/vitola",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-ring-gauge.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "flavor-wheel",
+      "route": "/smokecraft/vitola",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-flavor-wheel.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "golden-box",
+      "route": "/smokecraft/golden-box",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-golden-box.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "packaging-studio",
+      "route": "/smokecraft/packaging-studio",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-packaging-studio.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "scorecard",
+      "route": "/smokecraft/scorecard",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-scorecard.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "session-27",
+      "route": "/smokecraft/session-complete",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-session-27.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "results",
+      "route": "/smokecraft/session-complete",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-results.png"
+    },
+    {
+      "viewport": "tablet-12in",
+      "screen": "awards",
+      "route": "/smokecraft/rewards",
+      "width": 1024,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-12in-awards.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "landing",
+      "route": "/smokecraft",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-landing.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "enrollment",
+      "route": "/smokecraft/enroll",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-enrollment.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "identity",
+      "route": "/smokecraft/identity",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-identity.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "venue",
+      "route": "/smokecraft/venue-select",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-venue.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "welcome",
+      "route": "/smokecraft/welcome",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-welcome.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "session-1",
+      "route": "/smokecraft/welcome",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-session-1.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "humidor-match",
+      "route": "/smokecraft/humidor-match",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-humidor-match.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "mentor-selection",
+      "route": "/smokecraft/mentor-selection",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-mentor-selection.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "lighting-tutorial",
+      "route": "/smokecraft/lighting-tutorial",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-lighting-tutorial.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "ring-gauge",
+      "route": "/smokecraft/vitola",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-ring-gauge.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "flavor-wheel",
+      "route": "/smokecraft/vitola",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-flavor-wheel.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "golden-box",
+      "route": "/smokecraft/golden-box",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-golden-box.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "packaging-studio",
+      "route": "/smokecraft/packaging-studio",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-packaging-studio.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "scorecard",
+      "route": "/smokecraft/scorecard",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-scorecard.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "session-27",
+      "route": "/smokecraft/session-complete",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-session-27.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "results",
+      "route": "/smokecraft/session-complete",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-results.png"
+    },
+    {
+      "viewport": "tablet-15in",
+      "screen": "awards",
+      "route": "/smokecraft/rewards",
+      "width": 1194,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/tablet-15in-awards.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "landing",
+      "route": "/smokecraft",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-landing.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "enrollment",
+      "route": "/smokecraft/enroll",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-enrollment.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "identity",
+      "route": "/smokecraft/identity",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-identity.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "venue",
+      "route": "/smokecraft/venue-select",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-venue.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "welcome",
+      "route": "/smokecraft/welcome",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-welcome.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "session-1",
+      "route": "/smokecraft/welcome",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-session-1.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "humidor-match",
+      "route": "/smokecraft/humidor-match",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-humidor-match.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "mentor-selection",
+      "route": "/smokecraft/mentor-selection",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-mentor-selection.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "lighting-tutorial",
+      "route": "/smokecraft/lighting-tutorial",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-lighting-tutorial.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "ring-gauge",
+      "route": "/smokecraft/vitola",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-ring-gauge.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "flavor-wheel",
+      "route": "/smokecraft/vitola",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-flavor-wheel.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "golden-box",
+      "route": "/smokecraft/golden-box",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-golden-box.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "packaging-studio",
+      "route": "/smokecraft/packaging-studio",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-packaging-studio.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "scorecard",
+      "route": "/smokecraft/scorecard",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-scorecard.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "session-27",
+      "route": "/smokecraft/session-complete",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-session-27.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "results",
+      "route": "/smokecraft/session-complete",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-results.png"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "awards",
+      "route": "/smokecraft/rewards",
+      "width": 1440,
+      "overflowPx": 0,
+      "noOverflow": true,
+      "screenshot": "/proof/smokecraft-complete-game-playthrough/viewport-matrix/desktop-awards.png"
+    }
+  ]
+}

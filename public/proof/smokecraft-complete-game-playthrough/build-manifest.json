@@ -1,0 +1,180 @@
+{
+  "commit": "f803e48142d7d5aa666930eeac398a9df61009e2",
+  "commitShort": "f803e48",
+  "branch": "recovery/smokecraft-codex-final",
+  "buildTimestamp": "2026-07-24T16:49:54.913Z",
+  "environment": "development",
+  "applicationVersion": "0.0.0",
+  "assetVersion": "f803e48",
+  "schemaVersion": 4,
+  "totalSessions": 27,
+  "totalPhases": 6,
+  "criticalRouteAssets": [
+    {
+      "key": "landing",
+      "path": "/assets/smokecraft-reference/approved/smokecraft-landing.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "f817ab40ad138135513ad70b395725c967cc15736086d127e7fddef107fc8d7c"
+    },
+    {
+      "key": "enroll",
+      "path": "/assets/smokecraft-reference/approved/smokecraft-guest-pass.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "5c798061277c78b3e5192f2d58c670f0a1e124066986c957e9a2922cb6e04705"
+    },
+    {
+      "key": "identity",
+      "path": "/assets/smokecraft/IDENTY.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "006685040277d1cf4f1d00e9ed68d6d0d740e41900c12be0386298968dc0b5d4"
+    },
+    {
+      "key": "venueSelect",
+      "path": "/assets/smokecraft/Venue%20Selection%2011.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "b17463c6be5f9fa68837c73a20670a3a71f9075cabd9435a4af67888c7aa5b9e"
+    },
+    {
+      "key": "mentorSelection",
+      "path": "/assets/smokecraft/MENTOR%20SELECTION1.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "e585d1c6e86c55a78906154526183c246878414f1a07aa21b510fd408fd9409d"
+    },
+    {
+      "key": "humidorMatch",
+      "path": "/assets/smokecraft/Humidor%20Match%201.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "63c6510b549a89cafb7e2b293afce68dcf2895830f9a0a52e2883be62a380c28"
+    },
+    {
+      "key": "meetYourCigar",
+      "path": "/assets/smokecraft/DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "6fc13ac032af8e5f7c04e7e138a7aa0df31579dde1ab6cea2ca0be22418db6a4"
+    },
+    {
+      "key": "terroir",
+      "path": "/assets/smokecraft-reference/approved/smokecraft-terroir.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "e671a9a296f1162ca086e343b04d0e171aa1b24d236d93c96d187d8465bd4908"
+    },
+    {
+      "key": "format",
+      "path": "/assets/smokecraft-reference/approved/smokecraft-vitola.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "a7c1147e1b9b6bb33432de7f33fb3f622adaa4fc1782511ceccb52ad44d14136"
+    },
+    {
+      "key": "cutToastLight",
+      "path": "/assets/smokecraft/CUT%20%20TOAST,%20&%20LIGHT.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "09a4257a15bf400150f4e89df3ff91e7e3a7b057b17bbc8c7c3334eefddd4b43"
+    },
+    {
+      "key": "lightingTutorial",
+      "path": "/assets/smokecraft/LIGHTING%20TUTORIAL%201.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "0b9e31a4821a686d547810cf8051b4d34f1c446ed97bf3a2fb79d5f9fa36000b"
+    },
+    {
+      "key": "firstThird",
+      "path": "/assets/smokecraft/FIRST%20%20THIRD1.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "18a997c3d1de12ce21627b903280f57ea2eaee4ed96f31d0051c8dac2c8f295b"
+    },
+    {
+      "key": "flavorMemory",
+      "path": "/assets/smokecraft/FLAVOR%20MEMORY.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "297eb2b15d96a58dbda1ffa3878a962a33a0f242199a0595b655f2aeca71310d"
+    },
+    {
+      "key": "pairingLab",
+      "path": "/assets/smokecraft/PAIRING%20LAB1.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "274fc143e8d5f525b64f853402d83ba1843a11e38e86e7f1138e57ea325bad93"
+    },
+    {
+      "key": "secondThird",
+      "path": "/assets/smokecraft/SECOND%20THIRD.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "0a8ec771f6bf71d21fc5533096a4a4efb44b10453b7105067d0e3c8123768a88"
+    },
+    {
+      "key": "mentorCommentary",
+      "path": "/assets/smokecraft/MENTOR%20:COMMENTARY.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "3959f46c029b02968c26666ae68a6f03c1a0341917abe75207a891f917933e56"
+    },
+    {
+      "key": "knowledgeDrop",
+      "path": "/assets/smokecraft/KNOWLEDGE%20DROP.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "27b3c600ed0be03eb1f8fdb4ad62e2ec274c3e3f24581f151ccca820529eff5f"
+    },
+    {
+      "key": "finalThird",
+      "path": "/assets/smokecraft/FINAL%20THIRD.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0"
+    },
+    {
+      "key": "scorecard",
+      "path": "/assets/smokecraft/Scorecard.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "a577973797590d326a1f14f645262bcc886ee61e9cca4c3fc723ef3b410e9580"
+    },
+    {
+      "key": "aiSummary",
+      "path": "/assets/smokecraft/AI%20SUMMARY.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "1d05f50d0eb713605ccdab57acc5bb0004b114bc79f3b224772465d6e08c01e2"
+    },
+    {
+      "key": "pairingRecommendations",
+      "path": "/assets/smokecraft/personlized%20pairing%20222.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "f060831b151cbefc6d265b962793498eea116faa8ec80cdae81788279201e075"
+    },
+    {
+      "key": "passportStamp",
+      "path": "/assets/smokecraft/PASSPORT%20STAMP.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "4d9fb28ac0108a8d36f291abf53987125e3e8388f648a091cfacf9246f6f483a"
+    },
+    {
+      "key": "finalReview",
+      "path": "/assets/smokecraft/FINAL%20REVIEW.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "df16f309ce138aa0cd9a2f6f950124e65dc705ed23134b3d2a4551979a7d607c"
+    },
+    {
+      "key": "rewards",
+      "path": "/assets/smokecraft/REWARDS%20222.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "986196149e83c89562bf317763c5ba8eb7332546090189f441fec9fd01a99895"
+    },
+    {
+      "key": "achievements",
+      "path": "/assets/smokecraft/ACHIEVMENTS.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "32e64aadd40d56102de3a4fb8667fe4c030d84c0377ff2f4b8b48a2d6191d24f"
+    },
+    {
+      "key": "recommendedNextJourney",
+      "path": "/assets/smokecraft/Recommend%20next%20journey.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "2c5a402c0063a7dc87bc740f8242234e8c6d20f759dfd29b6b1e471386a221a6"
+    },
+    {
+      "key": "goldenBox",
+      "path": "/assets/smokecraft/GOLDEN%20BOX%20RULES.png?v=local",
+      "assetStatus": "ok",
+      "contentHash": "b6528da8ea98c615760dbb26899de184442834c1aabf431c34f43e623f78956b"
+    },
+    {
+      "key": "welcome",
+      "assetStatus": "missing-approved-asset"
+    }
+  ]
+}

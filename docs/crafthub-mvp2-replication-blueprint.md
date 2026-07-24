@@ -1012,3 +1012,16 @@ change.
    whose completion has more than one side effect (e.g. two merged
    sessions behind one mode toggle, a terminal on-mount completion)
    without weakening the shared completion service to accommodate them.
+8. A final "play the whole thing live" proof pass, run after the
+   architecture and visual-lock work is already done and locked, will
+   sometimes find genuinely nothing wrong — that is a valid, honest
+   outcome, not evidence the pass wasn't thorough enough. Don't invent
+   busywork fixes to justify the pass; report the clean result plainly
+   with real live evidence (every route/marker/asset cross-checked
+   against the single source of truth, not just "it looked fine").
+9. When a long-running interactive browser test suite runs back-to-back
+   against a local dev backend, an in-memory rate limiter can exhaust
+   and produce errors that look like a product/environment defect but
+   are actually a testing-harness artifact — check for a stale/duplicate
+   server process and a fresh backend restart (which clears in-memory
+   counters) before concluding the underlying feature is broken.
