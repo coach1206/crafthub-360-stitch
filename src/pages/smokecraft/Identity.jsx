@@ -251,8 +251,8 @@ export default function Identity() {
     if (submitting) return
     setSubmitting(true)
     triggerHaptic('medium')
-    try { awardSessionRewards('enroll') } catch (_) {}
-    navigate('/smokecraft/golden-box')
+    try { awardSessionRewards('identity') } catch (_) {}
+    navigate('/smokecraft/venue-select')
   }
 
   const firstError = touched.fullName && liveErrors.fullName ? liveErrors.fullName
@@ -371,7 +371,7 @@ export default function Identity() {
         type="button"
         data-testid="identity-back"
         aria-label="Go back"
-        onClick={() => { triggerHaptic('light'); navigate(-1) }}
+        onClick={() => { triggerHaptic('light'); navigate('/smokecraft/enroll') }}
         style={{ ...HOTSPOT, ...BACK_BTN }}
         onMouseEnter={e => hotspotRing(e, true)} onMouseLeave={e => hotspotRing(e, false)}
         onFocus={e => hotspotRing(e, true)} onBlur={e => hotspotRing(e, false)}
@@ -381,7 +381,7 @@ export default function Identity() {
       <button
         type="button"
         data-testid="identity-next"
-        aria-label="Next: Golden Box Rules"
+        aria-label="Continue to Venue Selection"
         onClick={handleBegin}
         style={{ ...HOTSPOT, ...NEXT_BTN }}
         onMouseEnter={e => hotspotRing(e, true)} onMouseLeave={e => hotspotRing(e, false)}

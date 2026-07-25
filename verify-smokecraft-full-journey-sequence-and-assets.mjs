@@ -73,7 +73,7 @@ function effectiveSession(s) {
   return s.session
 }
 // completedSteps a real player holds on arriving at spine index i.
-const priorSteps = i => [...new Set(['enroll', ...spine.slice(0, i).map(x => x.id)])]
+const priorSteps = i => [...new Set(['enroll', 'identity', ...spine.slice(0, i).map(x => x.id)])]
 
 const report = {
   startedAt: new Date().toISOString(),
@@ -252,26 +252,38 @@ try {
   await page.screenshot({ path: `${SHOTS}/entry-02-guest-pass.png` })
   report.entry.push({ step: 'start-new-user', route: pathOf() })
 
-  // B2. Enrolled user: Guest Pass must NOT reappear; Venue is next.
+  // B2. Enrolled user: Guest Pass must NOT reappear; Identity is next.
+  // (Navigation Authority pass: canonical order is Enroll -> Identity ->
+  // Venue -> Welcome. Identity is a required entry step, not the optional
+  // dashboard it used to be, so an enrolled user with no 'identity' step yet
+  // resolves to Identity here, never to Venue Selection.)
   await seed(['enroll'])
   await go('/smokecraft')
   const enrolledText = (await page.textContent('body')) || ''
   assert('Enrolled user sees RESUME on the Landing', /RESUME SMOKECRAFT JOURNEY/i.test(enrolledText))
   assert('Landing Resume control clicked', await clickControl(/RESUME SMOKECRAFT JOURNEY/i))
-  assert('Enrolled user: Resume routes to Venue Selection, never back to Guest Pass',
-    pathOf() === '/smokecraft/venue-select', pathOf())
-  await assertApprovedRendered('Venue Selection', SC_ASSETS.venueSelect)
-  await page.screenshot({ path: `${SHOTS}/entry-03-venue-select.png` })
+  assert('Enrolled user: Resume routes to Identity, never back to Guest Pass',
+    pathOf() === '/smokecraft/identity', pathOf())
+  await page.screenshot({ path: `${SHOTS}/entry-03-identity.png` })
   report.entry.push({ step: 'resume-enrolled', route: pathOf() })
 
   // B3. Guest Pass appears exactly once — a second Start click does not loop.
   await go('/smokecraft')
   await clickControl(/RESUME SMOKECRAFT JOURNEY/i)
-  assert('Guest Pass appears once only — a second click still lands on Venue',
+  assert('Guest Pass appears once only — a second click still lands on Identity',
+    pathOf() === '/smokecraft/identity', pathOf())
+
+  // B3b. Enrolled + Identity complete: Venue is next; Venue Selection renders.
+  await seed(['enroll', 'identity'])
+  await go('/smokecraft')
+  assert('Landing Resume clicked with identity complete', await clickControl(/RESUME SMOKECRAFT JOURNEY/i))
+  assert('Enrolled + identity complete: Resume routes to Venue Selection',
     pathOf() === '/smokecraft/venue-select', pathOf())
+  await assertApprovedRendered('Venue Selection', SC_ASSETS.venueSelect)
+  await page.screenshot({ path: `${SHOTS}/entry-03b-venue-select.png` })
 
   // B4. Entry complete: destination is Welcome (S1), never an earlier step.
-  await seed(['enroll'], JOURNEY)
+  await seed(['enroll', 'identity'], JOURNEY)
   await go('/smokecraft')
   assert('Landing Resume clicked with entry complete', await clickControl(/RESUME SMOKECRAFT JOURNEY/i))
   assert('Entry complete: destination is Welcome / Session 1',
@@ -501,7 +513,7 @@ try {
   assert('S25 Rewards leaks none of REWARDS 222.png\'s baked fake figures into the DOM',
     !/2,750\s*XP|12\s*badges/i.test(rewardsText))
   // ResumeJourney — decorative unrelated photo, disclosed; must not fake data.
-  await seed(['enroll'], JOURNEY)
+  await seed(['enroll', 'identity'], JOURNEY)
   await go('/smokecraft/resume')
   const resumeText = (await page.textContent('body')) || ''
   await page.screenshot({ path: `${SHOTS}/blocked-asset-resume-journey.png` })
@@ -547,7 +559,7 @@ try {
   const ctaIssues = []
   for (const [w, h] of VIEWPORTS) {
     await page.setViewportSize({ width: w, height: h })
-    await seed(['enroll'], JOURNEY)          // returning user -> both CTAs render
+    await seed(['enroll', 'identity'], JOURNEY)          // returning user -> both CTAs render
     await go('/smokecraft')
     const boxes = await page.evaluate(() => {
       const find = re => [...document.querySelectorAll('button')]

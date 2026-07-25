@@ -72,7 +72,17 @@ export const SESSION_REWARDS = {
   enroll: {
     sessionNumber: 2, visit: 1, xp: 75,
     sessionBadges: [SMOKECRAFT_BADGES.PROFILE_STARTED],
-    unlockSignal: 'golden-box',
+    unlockSignal: 'identity',
+  },
+  // Navigation Authority pass — Identity is a real, required entry-layer
+  // step between Guest Pass and Venue Selection (see
+  // smokecraftEntryReadiness.js). Its own completion badge/XP entry so
+  // awardSessionRewards('identity') from Identity.jsx's Begin control is a
+  // genuine, distinct step rather than re-using 'enroll'.
+  identity: {
+    sessionNumber: null, visit: 1, xp: 50,
+    sessionBadges: [],
+    unlockSignal: 'venue-select',
   },
   'golden-box': {
     sessionNumber: 3, visit: 1, xp: 75,

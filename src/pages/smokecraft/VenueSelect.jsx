@@ -157,7 +157,7 @@ export default function VenueSelect() {
 
   function handleContinue() {
     if (!selectedId && !skipped) return
-    navigate('/smokecraft/identity')
+    navigate('/smokecraft/welcome')
   }
 
   const canContinue = !!selectedId || skipped
@@ -337,11 +337,11 @@ export default function VenueSelect() {
       </main>
 
       <SmokeCraftNavBar
-        primary="Continue to Identity →"
+        primary="Continue to Welcome →"
         onPrimary={handleContinue}
         primaryDisabled={!canContinue}
         secondary="← Back"
-        onSecondary={() => navigate('/smokecraft/enroll')}
+        onSecondary={() => navigate('/smokecraft/identity')}
       />
     </div>
   )

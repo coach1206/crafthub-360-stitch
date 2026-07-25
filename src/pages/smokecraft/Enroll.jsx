@@ -59,7 +59,7 @@ export default function Enroll() {
   function handleExploreAsGuest() {
     triggerHaptic('medium')
     awardSessionRewards('enroll')
-    navigate('/smokecraft/venue-select')
+    navigate('/smokecraft/identity')
   }
 
   function handleActivateGuestPass() {
@@ -72,7 +72,7 @@ export default function Enroll() {
     triggerHaptic('medium')
     updateProfile({ email: email.trim() })
     awardSessionRewards('enroll')
-    navigate('/smokecraft/venue-select')
+    navigate('/smokecraft/identity')
   }
 
   return (
@@ -86,7 +86,7 @@ export default function Enroll() {
       {/* Baked: BACK pill, top-left */}
       <StaticHotspot
         label="Back"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/smokecraft')}
         style={{ left: '1.84%', top: '2.9%', width: '12.2%', height: '3.2%' }}
       />
 

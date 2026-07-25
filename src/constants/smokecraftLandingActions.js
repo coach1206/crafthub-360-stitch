@@ -252,16 +252,18 @@ export function resolveSmokeCraftLandingAction(actionId, journeyState = getSmoke
     // the Landing screen.
     case A.START_NEW:
       // The canonical reset (useStartNewSmokeCraftJourney) preserves ONLY the
-      // account-level 'enroll' step and clears every journey-specific field
-      // including the venue. So the first genuinely incomplete entry
-      // requirement AFTER the reset is Venue Selection for an already-enrolled
+      // account-level 'enroll' step (PRESERVED_COMPLETED_STEP_IDS) and clears
+      // every other journey-specific field/step, including 'identity' and the
+      // venue. So the first genuinely incomplete entry requirement AFTER the
+      // reset is Identity (not Venue Selection) for an already-enrolled
       // account, and Guest Pass/Enrollment only for one that never enrolled.
-      // Sending an enrolled user back through Guest Pass here would be the
-      // same "loop back to Guest Pass" defect in a second place.
+      // Sending an enrolled user back through Guest Pass — or skipping
+      // straight past Identity to Venue — here would be the same
+      // "wrong-entry-step" defect in a second place.
       return {
         actionId,
         route: journeyState?.readiness?.enrollmentComplete
-          ? '/smokecraft/venue-select'
+          ? '/smokecraft/identity'
           : SMOKECRAFT_ENROLLMENT_ROUTE,
         label: 'Start New Journey',
         startsNewJourney: true,

@@ -337,8 +337,11 @@ export default function App() {
                 {/* E2 — Sign In / Guest Mode (entry-layer, outside the 27-session spine) */}
                 <Route path="enroll"           element={<SmokeCraftSessionGuard requires="entry"><Enroll /></SmokeCraftSessionGuard>} />
 
-                {/* E3 — Select Venue or Lounge (entry-layer, outside the 27-session spine) */}
-                <Route path="venue-select"     element={<SmokeCraftSessionGuard requires="enroll"><VenueSelect /></SmokeCraftSessionGuard>} />
+                {/* E4 — Select Venue or Lounge (entry-layer, outside the 27-session spine).
+                    Canonical order: Enroll -> Identity -> Venue -> Welcome, so this now
+                    requires "identity" (not "enroll") — Identity is a real, required
+                    entry step between Guest Pass and Venue Selection. */}
+                <Route path="venue-select"     element={<SmokeCraftSessionGuard requires="identity"><VenueSelect /></SmokeCraftSessionGuard>} />
                 <Route path="intake"           element={<Navigate to="/smokecraft/enroll" replace />} />
                 <Route path="entry"            element={<Navigate to="/smokecraft" replace />} />
                 {/* profile → identity (alias per spec) */}
@@ -534,7 +537,9 @@ export default function App() {
                 {/* E4 — Personal Dashboard (entry-layer, outside the 27-session spine).
                     Identity's own useEffect gate already requires 'enroll' complete
                     (Package B); requires="entry" here is a permissive outer guard. */}
-                <Route path="identity"       element={<SmokeCraftSessionGuard requires="entry"><Identity /></SmokeCraftSessionGuard>} />
+                {/* E3 — Personal Identity (entry-layer, outside the 27-session spine).
+                    Canonical order: Enroll -> Identity -> Venue -> Welcome. */}
+                <Route path="identity"       element={<SmokeCraftSessionGuard requires="enroll"><Identity /></SmokeCraftSessionGuard>} />
 
                 {/* E5 — Resume or Start New Journey (entry-layer, outside the 27-session spine) */}
                 <Route path="resume"         element={<SmokeCraftSessionGuard requires="enroll"><ResumeJourney /></SmokeCraftSessionGuard>} />
