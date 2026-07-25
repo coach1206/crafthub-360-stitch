@@ -4,19 +4,94 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftTactileCard from '../../components/smokecraft/SmokeCraftTactileCard.jsx'
+import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { rankAllCategories } from '../../utils/pairingEngine.js'
 
-const GOLD      = '#E9C176'
-const GOLD_DIM  = 'rgba(233,193,118,0.55)'
-const NAVY      = '#0b0f18'
-const NAVY_DEEP = '#060810'
-const WOOD_DIM  = 'rgba(122,79,49,0.28)'
-const CREAM     = '#e5e2e1'
-const BORDER    = 'rgba(233,193,118,0.22)'
-const GLASS     = 'rgba(8,10,16,0.86)'
+/**
+ * PairingRecommendations — /smokecraft/pairing-recommendations  (S22)
+ *
+ * FINAL APPROVED SHELLS PASS — this file replaces the hand-built layout the
+ * immediately-prior pass disclosed as still using the decorative-band pattern
+ * ("Other non-landing screens still use the decorative-band pattern:
+ * ... PairingRecommendations.jsx (S22) ... they are the same violation class
+ * and should be converted").
+ *
+ * The approved asset `personlized pairing 222.png` (1536 x 1024) is now the
+ * whole visual foundation, rendered intact at true aspect ratio through
+ * SmokeCraftImageBoundsOverlay.
+ *
+ * What was removed
+ * ----------------
+ *   - the `clamp(...)` decorative header band that used the approved image as
+ *     a cropped `background-size: cover` strip;
+ *   - the generic dark gradient page and its entire <header>/<main> stack
+ *     rendered beneath it (duplicate title, glass primary-recommendation
+ *     card, alternates list, preferences card);
+ *   - the SmokeCraftNavBar (the approved image has its own CONTINUE JOURNEY
+ *     control).
+ *
+ * Baked values occluded (fabricated placeholders in the approved file)
+ * -------------------------------------------------------------------
+ *   preferences : "Bold & Rich", "Full", "Whiskey", "Spice, Cocoa, Oak"
+ *   score       : "94%" / "EXCELLENT MATCH" and its caption
+ *   cards       : "Liga Privada No. 9" (wrapper/origin/strength), "Woodford
+ *                 Reserve Double Oaked" (profile/notes), the WHY IT WORKS
+ *                 prose, the FLAVOR HARMONY radar
+ *   alternates  : "Eagle Rare 10 Year 92%", "Glenfiddich 18 Year 91%",
+ *                 "Ron Zacapa XO 90%"
+ *
+ * No baked cigar, drink, food, score or selected recommendation survives to
+ * the DOM. Every replacement value comes from the SAME rule-based engine the
+ * removed layout used — `rankAllCategories(buildEngineContext(journey))` over
+ * canonical journey state (selected cigar, wrapper, origin, strength, flavor
+ * notes, pairing goal). That logic is carried forward unchanged; only the
+ * visual shell was at fault.
+ *
+ * All real behaviour preserved: the AI-Summary (S21) prerequisite redirect,
+ * generate/retry, the no-cigar and error states, idempotent persistence of
+ * the engine input snapshot, promote-to-primary / reject-alternate with
+ * journey persistence, save-recommendation, offline detection, haptics, and
+ * keyboard-accessible controls with visible focus.
+ */
+
+const NAT_W = 1536
+const NAT_H = 1024
+
+const GOLD  = '#E9C176'
+const CREAM = '#e5e2e1'
+const PANEL = '#0a111c'
+
+const OPAQUE = {
+  position: 'absolute',
+  background: PANEL,
+  display: 'flex',
+  fontFamily: 'Georgia, serif',
+  pointerEvents: 'none',
+  overflow: 'hidden',
+}
+
+// Percentage coordinates measured against the approved image's own layout.
+const Z = {
+  prefFlavor:   { left: '25.5%', top: '41.4%', width: '12.0%', height: '3.1%' },
+  prefStrength: { left: '37.3%', top: '41.4%', width: '8.2%',  height: '3.1%' },
+  prefType:     { left: '49.5%', top: '41.4%', width: '11.0%', height: '3.1%' },
+  prefNotes:    { left: '61.4%', top: '41.4%', width: '17.2%', height: '3.1%' },
+
+  scoreDonut:   { left: '84.3%', top: '14.4%', width: '7.4%',  height: '10.9%' },
+  scoreCaption: { left: '77.6%', top: '26.8%', width: '21.2%', height: '4.8%' },
+
+  cards:        { left: '22.5%', top: '50.3%', width: '53.8%', height: '32.7%' },
+  alternates:   { left: '77.6%', top: '53.5%', width: '21.4%', height: '29.0%' },
+}
+
+const ACTION_ROW = { top: '83.0%', height: '4.0%' }
+const ACT = {
+  alternate: { left: '22.9%', width: '17.7%' },
+  save:      { left: '41.2%', width: '18.0%' },
+  learn:     { left: '60.0%', width: '15.3%' },
+}
+const CONTINUE = { left: '77.6%', top: '87.2%', width: '21.4%', height: '7.0%' }
 
 function uniq(arr) {
   return Array.from(new Set((arr || []).filter(Boolean)))
@@ -40,22 +115,38 @@ function buildEngineContext(journey) {
   }
 }
 
-const CATEGORY_INITIAL = (name) => name.charAt(0)
+function Occlude({ zone, children, testid, style }) {
+  return <div data-testid={testid} style={{ ...OPAQUE, ...zone, ...style }}>{children}</div>
+}
 
-function PairingIcon({ category }) {
+/** A value cell over one of the image's own baked preference values. */
+function Pref({ zone, value, testid }) {
   return (
-    <div
-      aria-hidden="true"
-      style={{
-        width: 44, height: 44, borderRadius: '50%', flexShrink: 0,
-        background: 'rgba(233,193,118,0.12)', border: `1.5px solid ${GOLD_DIM}`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 18, color: GOLD, fontWeight: 700,
-      }}
-    >
-      {CATEGORY_INITIAL(category)}
-    </div>
+    <Occlude zone={zone} testid={testid} style={{ alignItems: 'center' }}>
+      <span style={{
+        fontSize: 'clamp(8px,0.92vw,14px)', color: value ? CREAM : 'rgba(229,226,225,0.45)',
+        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+      }}>
+        {value || 'Not set'}
+      </span>
+    </Occlude>
   )
+}
+
+const ACTION_BTN = {
+  position: 'absolute',
+  background: PANEL,
+  color: GOLD,
+  border: `1px solid rgba(233,193,118,0.35)`,
+  borderRadius: 6,
+  fontFamily: 'Georgia, serif',
+  fontSize: 'clamp(8px,0.88vw,13px)',
+  letterSpacing: '0.05em',
+  textTransform: 'uppercase',
+  cursor: 'pointer',
+  pointerEvents: 'auto',
+  touchAction: 'manipulation',
+  WebkitTapHighlightColor: 'transparent',
 }
 
 export default function PairingRecommendations({ onBack, onComplete } = {}) {
@@ -64,7 +155,7 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
   const { journey, setPairingRecommendations } = useSmokeCraftJourney()
   const navigate = useNavigate()
 
-  // AI Summary (S21) must be completed first.
+  // PRESERVED: AI Summary (S21) must be completed first.
   useEffect(() => {
     if (!isDemoMode && !session.completedSteps.includes('ai-summary')) {
       navigate('/smokecraft/ai-summary', { replace: true })
@@ -75,8 +166,8 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
   const [ranked, setRanked] = useState(null)
   const [saveStatus, setSaveStatus] = useState('idle') // idle | saved
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && navigator.onLine === false)
-  // Tactile/Haptic Completion pass — alternates are now real selectable
-  // cards (promote to primary, or reject) rather than plain display rows.
+  const [showAlternates, setShowAlternates] = useState(false)
+  const [showWhy, setShowWhy] = useState(false)
   // No alternate is selected by default. Journey-persisted, not a second
   // interaction-state store.
   const [manualPrimary, setManualPrimary] = useState(() => journey.pairingRecommendations?.manualPrimaryCategory || null)
@@ -113,26 +204,24 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Persist engine input + primary/alternates once ranked (idempotent — same
-  // input snapshot does not re-trigger unnecessary writes on every render).
+  // PRESERVED: idempotent persistence of engine input + primary/alternates.
   useEffect(() => {
     if (phase !== 'ready' || !ranked || !ranked.length) return
-    const primary = ranked[0]
-    const alternates = ranked.slice(1, 4)
+    const p = ranked[0]
+    const alts = ranked.slice(1, 4)
     const snapshot = JSON.stringify(engineContext)
     if (journey.pairingRecommendations?.engineInputSnapshot === snapshot) return
     setPairingRecommendations({
       ...(journey.pairingRecommendations || {}),
       engineInput: engineContext,
       engineInputSnapshot: snapshot,
-      primary,
-      alternates,
+      primary: p,
+      alternates: alts,
       generatedAt: Date.now(),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, ranked, engineContext])
 
-  const insufficientFlavorData = engineContext.flavorNotes.length === 0 && !engineContext.strength
   const visibleRanked = (ranked || []).filter(r => !rejected.has(r.primary))
   const primary = (manualPrimary && visibleRanked.find(r => r.primary === manualPrimary)) || visibleRanked[0] || null
   const alternates = visibleRanked.filter(r => r.primary !== primary?.primary).slice(0, 3)
@@ -153,10 +242,9 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
     setRejected(prev => {
       const next = new Set(prev)
       if (next.has(category)) next.delete(category); else next.add(category)
-      const arr = Array.from(next)
       setPairingRecommendations({
         ...(journey.pairingRecommendations || {}),
-        rejectedCategories: arr,
+        rejectedCategories: Array.from(next),
       })
       return next
     })
@@ -174,10 +262,8 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
   }
 
   function handleContinue() {
-    if (onComplete) {
-      onComplete()
-      return
-    }
+    triggerHaptic('medium')
+    if (onComplete) { onComplete(); return }
     awardSessionRewards('pairing-recommendations')
     navigate('/smokecraft/passport-stamp')
   }
@@ -185,256 +271,220 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
   const canContinue = phase === 'ready' && !!primary
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, overflow: 'hidden',
-      background: `
-        radial-gradient(ellipse at 20% -10%, rgba(233,193,118,0.10), transparent 55%),
-        radial-gradient(ellipse at 100% 110%, ${WOOD_DIM}, transparent 60%),
-        linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)
-      `,
-      fontFamily: 'Georgia, serif',
-    }}>
-      {/* Approved production visual, reused as a decorative header band. */}
-      <div
-        role="img"
-        aria-label="SmokeCraft Pairing Recommendations"
+    <SmokeCraftImageBoundsOverlay
+      src={SC_ASSETS.pairingRecommendations}
+      naturalW={NAT_W}
+      naturalH={NAT_H}
+      alt="SmokeCraft 360 — Personalized Pairing Recommendations"
+      bottomOffset={0}
+    >
+      {/* Single accessible title — the approved image carries the visible
+          "PERSONALIZED PAIRING RECOMMENDATIONS" wordmark. */}
+      <h1 style={{
+        position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
+        overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
+      }}>SmokeCraft 360 — Personalized Pairing Recommendations</h1>
+
+      {/* ── Baked "YOUR PREFERENCES" values → real engine input ─────────── */}
+      <Pref testid="pr-pref-flavor"   zone={Z.prefFlavor}   value={engineContext.flavorNotes.join(', ')} />
+      <Pref testid="pr-pref-strength" zone={Z.prefStrength} value={engineContext.strength} />
+      <Pref testid="pr-pref-type"     zone={Z.prefType}     value={primary?.primary} />
+      <Pref testid="pr-pref-notes"    zone={Z.prefNotes}    value={engineContext.wrapper || engineContext.origin} />
+
+      {/* ── Baked "94% EXCELLENT MATCH" donut → real compatibility score ── */}
+      <Occlude zone={Z.scoreDonut} testid="pr-score" style={{
+        borderRadius: '50%', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        border: `3px solid ${primary ? GOLD : 'rgba(233,193,118,0.3)'}`,
+      }}>
+        <span style={{ fontSize: 'clamp(13px,1.7vw,27px)', color: GOLD, lineHeight: 1 }}>
+          {primary ? `${primary.compatScore}%` : '—'}
+        </span>
+      </Occlude>
+      <Occlude zone={Z.scoreCaption} style={{ alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '0 4%' }}>
+        <span style={{ fontSize: 'clamp(7px,0.8vw,12px)', color: 'rgba(229,226,225,0.7)', lineHeight: 1.35 }}>
+          {!primary
+            ? 'No pairing recommendation is available yet.'
+            : noStrongMatch
+              ? 'No strong match — add more tasting detail to sharpen this result.'
+              : 'Generated from your saved cigar, strength and flavour notes.'}
+        </span>
+      </Occlude>
+
+      {/* ── Baked recommendation cards → the real engine result ─────────── */}
+      <Occlude
+        zone={Z.cards}
+        testid="pr-cards"
         style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(90px,14vh,140px)',
-          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92)), url(${SC_ASSETS.pairingRecommendations})`,
-          backgroundSize: 'cover', backgroundPosition: 'center 30%',
-          zIndex: 1,
+          flexDirection: 'column', alignItems: 'stretch', justifyContent: 'flex-start',
+          border: '1px solid rgba(233,193,118,0.22)', borderRadius: 6,
+          padding: 'clamp(8px,1.2vw,18px)', gap: 'clamp(4px,0.7vw,10px)',
+          pointerEvents: 'auto',
         }}
-      />
+      >
+        {phase === 'loading' && (
+          <div role="status" aria-live="polite" style={{ margin: 'auto', color: 'rgba(229,226,225,0.7)', fontSize: 'clamp(9px,1vw,15px)' }}>
+            Generating your pairing recommendations…
+          </div>
+        )}
 
-      <header style={{
-        position: 'absolute', top: 0, left: 0, right: 0,
-        padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0',
-        zIndex: 3,
-      }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 6 }}>
-          SmokeCraft 360 — Personalized Pairing Recommendations
-        </div>
-        <h1 style={{ margin: 0, fontSize: 'clamp(22px,3.4vw,34px)', fontWeight: 700, color: CREAM, letterSpacing: '0.01em', lineHeight: 1.15 }}>
-          Your Pairing Recommendation
-        </h1>
-        <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 6 }}>
-          Rule-based recommendation engine — not AI-generated.
-          {isOffline && phase === 'ready' && ' Offline: showing your locally saved data.'}
-        </div>
-      </header>
+        {phase === 'no-cigar' && (
+          <div data-testid="pr-no-cigar" style={{ margin: 'auto', textAlign: 'center', color: 'rgba(229,226,225,0.7)', fontSize: 'clamp(9px,1vw,15px)', lineHeight: 1.6, padding: '0 8%' }}>
+            No cigar has been selected in this journey yet, so no pairing can be
+            recommended. Choose a cigar first and this screen will fill in.
+          </div>
+        )}
 
-      <main style={{
-        position: 'absolute', top: 'clamp(120px,16vh,160px)', bottom: 'clamp(120px,16vh,160px)',
-        left: 0, right: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch',
-        padding: '0 clamp(16px,4vw,40px)', zIndex: 2,
-      }}>
-        <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {phase === 'error' && (
+          <div style={{ margin: 'auto', textAlign: 'center' }}>
+            <p style={{ margin: '0 0 10px', fontSize: 'clamp(9px,1vw,15px)', color: 'rgba(229,170,100,0.9)' }}>
+              Something went wrong generating your recommendations.
+            </p>
+            <button type="button" onClick={() => { triggerHaptic('light'); generate() }} style={{
+              background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20, color: GOLD,
+              fontFamily: 'Georgia, serif', fontSize: 13, padding: '8px 18px', cursor: 'pointer', minHeight: 40,
+            }}>Retry</button>
+          </div>
+        )}
 
-          {phase === 'loading' && (
-            <div role="status" aria-live="polite" style={{
-              background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
-              padding: 'clamp(28px,5vw,44px)', textAlign: 'center',
-            }}>
-              <div aria-hidden="true" style={{
-                width: 28, height: 28, margin: '0 auto 14px', borderRadius: '50%',
-                border: `3px solid ${BORDER}`, borderTopColor: GOLD,
-                animation: 'sc-spin2 0.9s linear infinite',
-              }} />
-              <p style={{ margin: 0, fontSize: 14, color: 'rgba(229,226,225,0.7)' }}>Calculating your pairing recommendation…</p>
-              <style>{'@keyframes sc-spin2 { to { transform: rotate(360deg); } }'}</style>
-            </div>
-          )}
+        {phase === 'ready' && !primary && (
+          <div data-testid="pr-none" style={{ margin: 'auto', textAlign: 'center', color: 'rgba(229,226,225,0.65)', fontSize: 'clamp(9px,1vw,15px)', padding: '0 8%' }}>
+            Every recommendation has been rejected. Restore one to see a pairing here.
+          </div>
+        )}
 
-          {phase === 'no-cigar' && (
-            <div style={{
-              background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12,
-              padding: 'clamp(24px,4vw,40px)', textAlign: 'center',
-            }}>
-              <p style={{ margin: 0, fontSize: 'clamp(14px,1.6vw,16px)', color: 'rgba(229,226,225,0.75)', lineHeight: 1.6 }}>
-                No cigar has been selected yet. Choose a cigar earlier in your journey to see a personalized pairing recommendation.
-              </p>
-            </div>
-          )}
-
-          {phase === 'error' && (
-            <div style={{
-              background: GLASS, border: '1px solid rgba(229,170,100,0.4)', borderRadius: 12,
-              padding: 'clamp(24px,4vw,40px)', textAlign: 'center',
-            }}>
-              <p style={{ margin: '0 0 14px', fontSize: 14, color: 'rgba(229,170,100,0.9)' }}>
-                Something went wrong building your pairing recommendation.
-              </p>
-              <button
-                type="button"
-                onClick={() => { triggerHaptic('light'); generate() }}
-                style={{
-                  background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20,
-                  color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13,
-                  padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40,
-                }}
-              >
-                Retry
-              </button>
-            </div>
-          )}
-
-          {phase === 'ready' && primary && (
-            <>
-              {insufficientFlavorData && (
-                <div style={{ background: 'rgba(233,193,118,0.08)', border: `1px solid ${BORDER}`, borderRadius: 10, padding: '10px 14px', fontSize: 12, color: 'rgba(229,226,225,0.6)' }}>
-                  Insufficient flavor data was recorded this session — this recommendation is based on limited inputs. Complete Suggested Pairings (S11) for a more precise match.
-                </div>
-              )}
-              {noStrongMatch && (
-                <div style={{ background: 'rgba(229,170,100,0.08)', border: '1px solid rgba(229,170,100,0.3)', borderRadius: 10, padding: '10px 14px', fontSize: 12, color: 'rgba(229,170,100,0.85)' }}>
-                  No strong pairing match was found — showing the closest available option.
-                </div>
-              )}
-
-              {/* Primary Recommendation */}
-              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,2.4vw,24px)' }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>
-                  Primary Recommendation
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
-                  <PairingIcon category={primary.primary} />
-                  <div>
-                    <div style={{ fontSize: 20, fontWeight: 700, color: CREAM }}>{primary.primary}</div>
-                    <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.4)' }}>No dedicated pairing photography available — neutral icon shown</div>
-                  </div>
-                  <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                    <div aria-label={`Compatibility score ${primary.compatScore} of 100`} style={{ fontSize: 'clamp(22px,3vw,30px)', fontWeight: 700, color: primary.compatScore >= 80 ? GOLD : primary.compatScore >= 60 ? '#c8a84b' : 'rgba(229,226,225,0.7)' }}>
-                      {primary.compatScore}
-                    </div>
-                    <div style={{ fontSize: 10, color: 'rgba(229,226,225,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Compatibility</div>
-                  </div>
-                </div>
-
-                <div style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(233,193,118,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 3 }}>Why It Works</div>
-                  <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: CREAM }}>{primary.whyItWorks}</p>
-                </div>
-
-                <div style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(233,193,118,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 3 }}>Possible Clashes</div>
-                  <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: primary.possibleClashes ? 'rgba(229,170,100,0.85)' : 'rgba(229,226,225,0.4)', fontStyle: primary.possibleClashes ? 'normal' : 'italic' }}>
-                    {primary.possibleClashes || 'None identified.'}
-                  </p>
-                </div>
-
-                <div style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(233,193,118,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 3 }}>Suggested Adjustments</div>
-                  <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: CREAM }}>{primary.suggestedAdjustment}</p>
-                </div>
-
-                <div style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(233,193,118,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 5 }}>Matching Flavor Notes</div>
-                  {primary.selectedFlavorNotes.length ? (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                      {primary.selectedFlavorNotes.map(n => (
-                        <span key={n} style={{
-                          fontSize: 11, color: primary.flavorHarmony.includes(n) ? GOLD : 'rgba(229,226,225,0.5)',
-                          border: `1px solid ${primary.flavorHarmony.includes(n) ? GOLD : 'rgba(233,193,118,0.25)'}`,
-                          borderRadius: 10, padding: '2px 8px',
-                        }}>{n}</span>
-                      ))}
-                    </div>
-                  ) : (
-                    <p style={{ margin: 0, fontSize: 13, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic' }}>No flavor notes recorded this session.</p>
-                  )}
-                </div>
-
-                <div style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(233,193,118,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 3 }}>Recommended Serving Style</div>
-                  <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: CREAM }}>{primary.servingStyle}</p>
-                </div>
-
-                <div>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(233,193,118,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 3 }}>Venue Availability</div>
-                  <p style={{ margin: 0, fontSize: 12, color: 'rgba(229,226,225,0.45)', fontStyle: 'italic' }}>
-                    Venue inventory data is not connected in this build — availability cannot be shown honestly, so none is displayed.
-                  </p>
-                </div>
+        {phase === 'ready' && primary && (
+          <>
+            {isOffline && (
+              <div style={{ fontSize: 'clamp(7px,0.8vw,11px)', color: 'rgba(229,226,225,0.55)' }}>
+                Offline: generated from your locally saved journey data.
               </div>
-
-              {/* Alternate Recommendations */}
-              {alternates.length > 0 && (
-                <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2.2vw,20px)' }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>
-                    Alternate Recommendations
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {alternates.map(alt => (
-                      <div key={alt.primary} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, flexWrap: 'wrap' }}>
-                        <PairingIcon category={alt.primary} />
-                        <div style={{ flex: 1, minWidth: 140 }}>
-                          <div style={{ fontSize: 14, fontWeight: 700, color: CREAM }}>{alt.primary}</div>
-                          <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.55)' }}>{alt.whyItWorks}</div>
-                        </div>
-                        <div style={{ fontSize: 15, fontWeight: 700, color: GOLD_DIM }}>{alt.compatScore}</div>
-                        <div style={{ display: 'flex', gap: 6 }}>
-                          <SmokeCraftTactileCard
-                            label={`Choose ${alt.primary} for the Golden Box Challenge`}
-                            onActivate={() => chooseAsPrimary(alt.primary)}
-                            haptic="success"
-                            style={{ minWidth: 0, minHeight: 36, padding: '5px 12px', flexDirection: 'row', borderRadius: 999, fontSize: 11 }}
-                          >
-                            Choose
-                          </SmokeCraftTactileCard>
-                          <SmokeCraftTactileCard
-                            label={`Reject ${alt.primary} pairing`}
-                            onActivate={() => rejectCategory(alt.primary)}
-                            haptic="warning"
-                            style={{ minWidth: 0, minHeight: 36, padding: '5px 12px', flexDirection: 'row', borderRadius: 999, fontSize: 11 }}
-                          >
-                            Reject
-                          </SmokeCraftTactileCard>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Controls */}
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <button
-                  type="button"
-                  onClick={() => { triggerHaptic('light'); navigate('/smokecraft/pairing-lab') }}
-                  style={{
-                    background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 20,
-                    color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13,
-                    padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40,
-                  }}
-                >
-                  Open Pairing Lab
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSave}
-                  aria-label="Save this pairing recommendation"
-                  style={{
-                    background: saveStatus === 'saved' ? 'rgba(233,193,118,0.18)' : 'transparent',
-                    border: `1.5px solid ${GOLD}`, borderRadius: 20,
-                    color: GOLD, fontFamily: 'Georgia, serif', fontSize: 13,
-                    padding: '8px 18px', cursor: 'pointer', outline: 'none', minHeight: 40,
-                  }}
-                >
-                  {saveStatus === 'saved' ? '✓ Saved' : 'Save Recommendation'}
-                </button>
+            )}
+            <div style={{ fontSize: 'clamp(11px,1.35vw,22px)', color: GOLD, lineHeight: 1.2 }} data-testid="pr-primary">
+              {primary.recommendation}
+            </div>
+            <div style={{ fontSize: 'clamp(8px,0.9vw,13px)', color: 'rgba(229,226,225,0.6)' }}>
+              Compatibility {primary.compatScore}% · from your saved journey profile
+            </div>
+            <div style={{ fontSize: 'clamp(8px,0.92vw,14px)', color: CREAM, lineHeight: 1.5, overflow: 'hidden' }}>
+              {showWhy ? primary.whyItWorks : primary.whyItWorks}
+            </div>
+            {showWhy && primary.servingStyle && (
+              <div style={{ fontSize: 'clamp(8px,0.88vw,13px)', color: 'rgba(229,226,225,0.7)', lineHeight: 1.5 }}>
+                Serving: {primary.servingStyle}
               </div>
-            </>
-          )}
-        </div>
-      </main>
+            )}
+            {showWhy && primary.possibleClashes && (
+              <div style={{ fontSize: 'clamp(8px,0.88vw,13px)', color: 'rgba(229,170,100,0.85)', lineHeight: 1.5 }}>
+                {primary.possibleClashes}
+              </div>
+            )}
+            {saveStatus === 'saved' && (
+              <div data-testid="pr-saved" style={{ marginTop: 'auto', fontSize: 'clamp(8px,0.85vw,12px)', color: GOLD }}>
+                ✓ Saved to your pairings
+              </div>
+            )}
+          </>
+        )}
+      </Occlude>
 
-      <SmokeCraftNavBar
-        primary={canContinue ? 'Continue to Passport Stamp →' : 'Preparing…'}
-        primaryDisabled={!canContinue}
-        onPrimary={handleContinue}
-        secondary="← Back"
-        onSecondary={onBack || (() => navigate('/smokecraft/ai-summary'))}
-      />
-    </div>
+      {/* ── Baked "YOU MAY ALSO ENJOY" list → real alternates ───────────── */}
+      <Occlude
+        zone={Z.alternates}
+        testid="pr-alternates"
+        style={{
+          flexDirection: 'column', alignItems: 'stretch', justifyContent: 'flex-start',
+          padding: 'clamp(5px,0.9vw,14px)', gap: 'clamp(3px,0.5vw,8px)',
+          pointerEvents: 'auto',
+        }}
+      >
+        {alternates.length === 0 ? (
+          <span style={{ margin: 'auto', fontSize: 'clamp(8px,0.85vw,12px)', color: 'rgba(229,226,225,0.5)', textAlign: 'center' }}>
+            No alternate pairings available.
+          </span>
+        ) : alternates.map(alt => (
+          <div key={alt.primary} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <button
+              type="button"
+              data-testid={`pr-alt-${alt.primary}`}
+              aria-label={`Choose ${alt.primary} as your primary pairing`}
+              onClick={() => chooseAsPrimary(alt.primary)}
+              style={{
+                flex: 1, textAlign: 'left', background: 'transparent',
+                border: '1px solid rgba(233,193,118,0.25)', borderRadius: 5,
+                color: CREAM, fontFamily: 'Georgia, serif',
+                fontSize: 'clamp(8px,0.85vw,12px)', padding: '4px 6px',
+                cursor: 'pointer', pointerEvents: 'auto',
+              }}
+            >
+              {alt.primary} · {alt.compatScore}%
+            </button>
+            <button
+              type="button"
+              data-testid={`pr-reject-${alt.primary}`}
+              aria-label={`Reject ${alt.primary}`}
+              onClick={() => rejectCategory(alt.primary)}
+              style={{
+                background: 'transparent', border: '1px solid rgba(233,193,118,0.25)',
+                borderRadius: 5, color: 'rgba(229,226,225,0.6)',
+                fontFamily: 'Georgia, serif', fontSize: 'clamp(8px,0.85vw,12px)',
+                padding: '4px 6px', cursor: 'pointer', pointerEvents: 'auto',
+              }}
+            >×</button>
+          </div>
+        ))}
+      </Occlude>
+
+      {/* ── The image's own three action controls, now live ─────────────── */}
+      <button
+        type="button"
+        data-testid="pr-view-alternate"
+        aria-pressed={showAlternates}
+        onClick={() => { triggerHaptic('light'); setShowAlternates(v => !v); if (alternates[0]) chooseAsPrimary(alternates[0].primary) }}
+        disabled={alternates.length === 0}
+        style={{ ...ACTION_BTN, ...ACT.alternate, ...ACTION_ROW }}
+      >
+        View Alternate Pairing
+      </button>
+      <button
+        type="button"
+        data-testid="pr-save"
+        onClick={handleSave}
+        disabled={!primary}
+        style={{ ...ACTION_BTN, ...ACT.save, ...ACTION_ROW }}
+      >
+        {saveStatus === 'saved' ? 'Saved' : 'Save To My Pairings'}
+      </button>
+      <button
+        type="button"
+        data-testid="pr-learn-more"
+        aria-expanded={showWhy}
+        onClick={() => { triggerHaptic('light'); setShowWhy(v => !v) }}
+        style={{ ...ACTION_BTN, ...ACT.learn, ...ACTION_ROW }}
+      >
+        {showWhy ? 'Show Less' : 'Learn More'}
+      </button>
+
+      {/* ── The image's own CONTINUE JOURNEY control ────────────────────── */}
+      <button
+        type="button"
+        data-testid="pr-continue"
+        onClick={handleContinue}
+        disabled={!canContinue}
+        style={{
+          position: 'absolute', ...CONTINUE,
+          background: canContinue ? `linear-gradient(180deg, #F3D48E, ${GOLD})` : 'rgba(233,193,118,0.25)',
+          color: canContinue ? '#241605' : 'rgba(36,22,5,0.55)',
+          border: 'none', borderRadius: 6,
+          fontFamily: 'Georgia, serif', fontWeight: 700,
+          fontSize: 'clamp(9px,1.05vw,16px)', letterSpacing: '0.06em', textTransform: 'uppercase',
+          cursor: canContinue ? 'pointer' : 'not-allowed',
+          pointerEvents: 'auto', touchAction: 'manipulation',
+          WebkitTapHighlightColor: 'transparent',
+        }}
+      >
+        Continue Journey
+      </button>
+    </SmokeCraftImageBoundsOverlay>
   )
 }

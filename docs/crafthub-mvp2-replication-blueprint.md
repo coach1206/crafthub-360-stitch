@@ -1223,3 +1223,15 @@ that one domain served two different build IDs across routes.
    compare it to the file in the repo. Filenames with spaces (and especially
    double spaces) make percent-encoding mistakes easy and silent; hashing turns
    them into loud failures.
+
+10. **Not every approved image is a blank-zone template — check each one
+    individually before converting.** Two visually-similar sibling assets can
+    differ completely: one may be a genuine overlay template (every value shown
+    as `--`/blank), the other a fully-baked mock with specific fake numbers
+    printed into its own pixels (e.g. one sibling image showing `-- / --` next
+    to another showing `2,750 XP` as real-looking pixel content). A fully-baked
+    asset cannot be safely converted into a live shell without either exposing
+    its fake numbers or covering the entire composition — that is an asset
+    problem for the owner to re-export, not a code problem to engineer around.
+    Open and visually inspect every approved image before deciding it's
+    convertible; don't assume based on a sibling or a filename.

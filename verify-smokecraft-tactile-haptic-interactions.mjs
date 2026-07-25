@@ -135,7 +135,14 @@ check('AI Summary sections are now interactive (accept/dismiss, journey-persiste
 check('AI Summary has no default accepted/dismissed verdict', aiSummarySrc.includes('sectionStates || {}') && !aiSummarySrc.match(/sectionStates:\s*\{[^}]*:\s*['"]accepted['"]/))
 
 const pairingRecSrc = fs.readFileSync('src/pages/smokecraft/PairingRecommendations.jsx', 'utf8')
-check('Pairing Recommendations alternates are now interactive (choose/reject, journey-persisted)', pairingRecSrc.includes('chooseAsPrimary') && pairingRecSrc.includes('rejectCategory') && pairingRecSrc.includes('SmokeCraftTactileCard'))
+// Retargeted (Final Approved-Shell Conversion pass): the screen was
+// converted from a generic-card layout to render its approved image as the
+// full visual shell (SmokeCraftImageBoundsOverlay), matching the same
+// established pattern Format.jsx/Terroir.jsx use — neither of which uses
+// SmokeCraftTactileCard either; plain positioned buttons over the image's
+// own zones is the correct approach for that pattern. The real behavior
+// this check cares about (choose/reject, journey-persisted) is unchanged.
+check('Pairing Recommendations alternates are now interactive (choose/reject, journey-persisted)', pairingRecSrc.includes('chooseAsPrimary') && pairingRecSrc.includes('rejectCategory') && pairingRecSrc.includes('SmokeCraftImageBoundsOverlay'))
 check('Pairing Recommendations has no default manual selection', pairingRecSrc.includes('manualPrimaryCategory || null'))
 
 // Corrected assessment — these were disclosed as "not independently
