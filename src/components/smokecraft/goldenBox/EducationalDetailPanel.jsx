@@ -64,8 +64,11 @@ export default function EducationalDetailPanel({ content, onClose }) {
         {ROW('Why it matters', content.whyItMatters)}
         {ROW('Quality impact', content.qualityImpact)}
         {ROW('Flavor impact', content.flavorImpact)}
+        {ROW('Aroma', content.aromaImpact)}
+        {ROW('Strength & body', content.strengthImpact)}
         {ROW('Construction impact', content.constructionImpact)}
-        {ROW('Performance impact', content.performanceImpact)}
+        {ROW('Burn behavior', content.burnImpact)}
+        {ROW('Draw & burn performance', content.performanceImpact)}
         {ROW('Decision guidance', content.decisionGuidance)}
         {ROW('Compatibility considerations', content.compatibilityNotes)}
         {ROW('Mentor guidance', content.mentorGuidance)}

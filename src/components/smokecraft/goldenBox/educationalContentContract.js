@@ -13,13 +13,15 @@
  */
 export function makeEducationalContent({
   id, title, category, definition, whyItMatters, qualityImpact, flavorImpact,
-  constructionImpact, performanceImpact, decisionGuidance, compatibilityNotes,
+  aromaImpact, strengthImpact, constructionImpact, burnImpact, performanceImpact,
+  decisionGuidance, compatibilityNotes,
   mentorGuidance, relatedSession, relatedQuiz, relatedXpOpportunity,
   mediaAssetKey, sourceStatus = 'curated_platform_content',
 }) {
   return {
     id, title, category, definition,
-    whyItMatters, qualityImpact, flavorImpact, constructionImpact, performanceImpact,
+    whyItMatters, qualityImpact, flavorImpact, aromaImpact, strengthImpact,
+    constructionImpact, burnImpact, performanceImpact,
     decisionGuidance, compatibilityNotes, mentorGuidance,
     relatedSession: relatedSession || null,
     relatedQuiz: relatedQuiz || null,
@@ -44,7 +46,15 @@ export function fromCatalogRow(row) {
     whyItMatters: row.why_it_matters,
     qualityImpact: row.quality_impact,
     flavorImpact: row.flavor_impact,
+    // Touch/Haptic/Tactile pass — these three real, already-authored
+    // catalog columns were selected by contentService but silently dropped
+    // here, so their content (e.g. the Volado/Seco/Viso/Ligero strength
+    // ladder) never reached any learner. "Strength/body" is a required
+    // educational axis, so it must have a mapping and a rendered row.
+    aromaImpact: row.aroma_impact,
+    strengthImpact: row.strength_impact,
     constructionImpact: row.construction_impact,
+    burnImpact: row.burn_impact,
     performanceImpact: row.performance_impact,
     decisionGuidance: row.decision_guidance,
     compatibilityNotes: row.compatibility_notes,
