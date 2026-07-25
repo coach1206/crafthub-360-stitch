@@ -1,0 +1,38 @@
+
+=== SmokeCraft final three approved assets — verification ===
+
+--- Section A: asset-existence truth (the Phase-6 decision) ---
+  PASS  A1 no approved asset named for Welcome / "Today's Experience" has ever existed
+  PASS  A2 no approved asset named for Resume / Start-Resume Journey has ever existed
+  PASS  A3 the only approved rewards-space images remain REWARDS 222 and Reward Center
+  PASS  A4 "Badge Collection.png" is a 1-byte placeholder, not a real image
+  PASS  A5 the owner's smokecraft/passport/ upload folder is still empty (no new asset)
+
+--- Section B: rejected-candidate integrity ---
+  PASS  B1 REWARDS 222.png is unmodified (the rejected, fully-baked S25 candidate)
+  PASS  B2 Rewards.jsx uses REWARDS 222 only as a decorative CSS background, not a bounds overlay
+  PASS  B3 Reward Center.png (RewardsCenter.jsx, a DIFFERENT screen) is untouched
+  PASS  B4 SC_ASSETS.rewards and SC_ASSETS.rewardCenter remain distinct screens
+  PASS  B5 SC_ASSETS.resume remains the honestly-disclosed decorative placeholder
+
+--- Section C: the three screens remain live, un-degraded components ---
+  PASS  C1 WelcomeExperience.jsx has NO image wiring at all (no false visual claim)
+  PASS  C2 WelcomeExperience.jsx keeps its real tactile/expandable preview controls
+  PASS  C3 Welcome renders no baked identity — no hardcoded "Guest" standing in for a real learner
+  PASS  C4 ResumeJourney.jsx delegates to the shared journey-status authority (no duplicated logic)
+  PASS  C5 Rewards.jsx keeps its S25/S26 completion + mode-toggle logic intact
+
+--- Section D: architecture and locked-file safety gate ---
+  PASS  D1 the 6-phase / 27-session spine is unchanged
+  PASS  D2 no application source file was modified relative to the base commit
+  PASS  D3 locked file unchanged since base commit: src/pages/smokecraft/RewardsCenter.jsx
+  PASS  D3 locked file unchanged since base commit: src/pages/smokecraft/Leaderboard.jsx
+  PASS  D3 locked file unchanged since base commit: src/constants/session.js
+  PASS  D3 locked file unchanged since base commit: src/pages/smokecraft/WelcomeExperience.jsx
+  PASS  D3 locked file unchanged since base commit: src/pages/smokecraft/Rewards.jsx
+  PASS  D3 locked file unchanged since base commit: src/pages/smokecraft/ResumeJourney.jsx
+  PASS  D3 locked file unchanged since base commit: src/constants/smokecraftAssets.js
+  PASS  D4 no approved asset was deleted, renamed or overwritten
+  PASS  D5 no new artwork was created by this pass
+
+=== RESULT: 26 passed, 0 failed (26 total) ===

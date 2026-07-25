@@ -1,0 +1,43 @@
+=== Git evidence: every image ever added, filtered to Welcome/Resume/Reward/Badge keywords ===
+public/GOLDEN BOX JOURNEY.png
+public/GOLDEN BOX JOURNEY11.png
+public/assets/eat/crafthub-gauge-badge.png
+public/assets/novi/crafthub-gauge-badge.png
+public/assets/passport/network-badge.png
+public/assets/pos3/crafthub-gauge-badge.png
+public/assets/smokecraft/Badge Collection.png
+public/assets/smokecraft/REWARDS 222.png
+public/assets/smokecraft/Recommend next journey.png
+public/assets/smokecraft/rewards/Reward Center.png
+public/assets/smokecraft/session-visuals/REWARDS 222.png
+public/assets/smokecraft/session-visuals/Recommend next journey.png
+public/assets/smokecraft/session-visuals/smokecraft badges.png
+public/assets/smokecraft/smokecraft badges.png
+public/smokecraft/images/GOLDEN BOX JOURNEY.png
+stitch_export/stitch_remix_of_crafthub_360_ecosystem_design/admin_reward_configuration/screen.png
+stitch_export/stitch_remix_of_crafthub_360_ecosystem_design/craft_journeys_ai_help_coach_overlay/screen.png
+stitch_export/stitch_remix_of_crafthub_360_ecosystem_design/guest_journey_review/screen.png
+stitch_export/stitch_remix_of_crafthub_360_ecosystem_design/guided_tour_welcome_to_crafthub_360/screen.png
+stitch_export/stitch_remix_of_crafthub_360_ecosystem_design/reward_stamp_verification_training/screen.png
+stitch_export/stitch_remix_of_crafthub_360_ecosystem_design/smokecraft_refined_airy_start/screen.png
+stitch_export/stitch_remix_of_crafthub_360_ecosystem_design/smokecraft_start/screen.png
+
+=== Newest COACH1206 (repo owner) commits and the files they added ===
+--- 1381c4a0  2026-07-25  passport/.gitkeep
+      public/assets/smokecraft/passport/.gitkeep
+--- e6550659  2026-07-25  Add files via upload
+--- 3e7abe54  2026-07-25  Badge Collection.png
+      public/assets/smokecraft/Badge Collection.png
+--- cee57e12  2026-07-24  PAIRING
+      public/assets/smokecraft/pairing/Pairing Center1.png
+--- 292d4363  2026-07-24  pairing .gitkeep
+      public/assets/smokecraft/pairing/.gitkeep
+--- 4881d21b  2026-07-24  Reward Center
+      public/assets/smokecraft/rewards/Reward Center.png
+--- d9a12d2c  2026-07-24  Create .gitkeep
+      public/assets/smokecraft/rewards/.gitkeep
+--- 42adf027  2026-07-24  Create Reward Centr
+      public/assets/Reward Centr
+
+=== Owner passport/ upload folder contents (empty apart from .gitkeep) ===
+.gitkeep

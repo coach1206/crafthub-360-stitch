@@ -1,0 +1,25 @@
+  PASS  Pairing Recommendations is the canonical S22 screen
+  PASS  Landing Pairing destination is NOT a guarded curriculum route
+  PASS  Pairing Lab is locked before its canonical point (S11)
+  PASS  Pairing Lab opens at its canonical point (S11)
+  PASS  Pairing Recommendations is locked before its canonical point (S22)
+  PASS  Pairing Recommendations opens at its canonical point (S22)
+
+── F. Missing-approved-asset screens are honest, not fabricated
+  PASS  S25 Rewards renders the canonical screen
+  PASS  S25 Rewards leaks none of REWARDS 222.png's baked fake figures into the DOM
+  PASS  ResumeJourney renders without placeholder/fabricated values
+  PASS  SC_ASSETS.resume has no dedicated approved image (disclosed blocker)
+
+── G. Four-viewport sweep across all 31 canonical screens
+  PASS  No horizontal overflow on any of 31 screens at any of the 4 required viewports
+  PASS  Returning-user Landing CTAs never overlap each other or the baked paragraph, and the primary label is neither wrapped nor clipped
+  PASS  Four-viewport sweep covered all 31 canonical screens x 4 viewports
+
+── H. Runtime health
+  PASS  No blocking console error across the whole journey
+  PASS  No broken approved-image request across the whole journey
+  PASS  Backend health check returns 200
+  PASS  Production preview serves /smokecraft (200)
+
+105 passed, 0 failed (of 105 total)
