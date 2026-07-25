@@ -54,6 +54,42 @@ function calculateMoneyBridge(items) {
   }
 }
 
+// GET /api/smokecraft/venue-commerce/venues
+// Real, guest-facing venue directory for SmokeCraft's Venue Selection screen
+// (Venue Data Source pass). Lists active venues from the real `venues` table
+// (server/db/migrations/010_new_roles_and_tables.sql) — never sample/mock
+// data. No DB configured -> localPreview:true with an empty list (an honest
+// "no venues connected" state), never fabricated venue records.
+export async function listVenues(req, res) {
+  if (isDbAvailable()) {
+    try {
+      const { rows } = await query(
+        `SELECT venue_id, name, venue_type, city, state, address, capacity
+           FROM venues
+          WHERE status = 'active'
+          ORDER BY name ASC`
+      )
+      return res.json({
+        ok: true,
+        storageMode: 'postgres',
+        venues: rows.map(r => ({
+          id: r.venue_id,
+          name: r.name,
+          type: r.venue_type,
+          city: r.city,
+          state: r.state,
+          address: r.address,
+          capacity: r.capacity,
+        })),
+      })
+    } catch (err) {
+      console.error('[smokecraftVenueCommerce] listVenues DB error:', err.message)
+      return res.status(500).json({ ok: false, error: 'venue_query_failed' })
+    }
+  }
+  res.json({ ok: true, localPreview: true, storageMode: 'memory_fallback', venues: [] })
+}
+
 // GET /api/smokecraft/venue-commerce/profile/:venueId
 export async function getVenueProfile(req, res) {
   const { venueId } = req.params

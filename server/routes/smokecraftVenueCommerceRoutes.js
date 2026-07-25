@@ -6,6 +6,9 @@ import * as ctrl from '../controllers/smokecraftVenueCommerceController.js'
 
 const router = Router()
 
+// GET  /api/smokecraft/venue-commerce/venues
+router.get('/venues', ctrl.listVenues)
+
 // GET  /api/smokecraft/venue-commerce/profile/:venueId
 router.get('/profile/:venueId', ctrl.getVenueProfile)
 

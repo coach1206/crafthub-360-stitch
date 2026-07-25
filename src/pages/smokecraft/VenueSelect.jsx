@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { useDemoMode } from '../../context/DemoModeContext.jsx'
@@ -9,15 +9,7 @@ import { fetchTicketTapperSpecials } from '../../services/smokeCraftTicketTapper
 import { getActiveTicketTapperSpecials } from '../../utils/smokeCraftSpecialsEngine.js'
 import { smokeCraftTicketTapperSpecialsSeed } from '../../data/smokeCraftTicketTapperSpecials.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
-
-// No live venue directory/backend is connected. Previously this screen
-// listed sample venue records (src/data/venues.js) as if they were real
-// options — per explicit instruction this is now a strict empty state:
-// zero venues are ever shown until a real venue backend exists. The venues.js
-// sample data file itself is left untouched (still used by an unrelated
-// consumer, src/api/passportScanApi.js), only this screen's rendering
-// changed to never present it as live venue inventory.
-const VENUES = []
+import { fetchSmokeCraftVenues } from '../../services/smokecraftVenueDirectoryApi.js'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -91,8 +83,9 @@ export default function VenueSelect() {
   )
 
   const [phase, setPhase] = useState('loading') // loading | error | ready
+  const [venues, setVenues] = useState([])
   const [query, setQuery] = useState('')
-  const [tierFilter, setTierFilter] = useState(null)
+  const [typeFilter, setTypeFilter] = useState(null)
   const [selectedId, setSelectedId] = useState(() =>
     journey.selectedVenue && !journey.selectedVenue.skipped ? journey.selectedVenue.id : null
   )
@@ -112,36 +105,40 @@ export default function VenueSelect() {
     return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off) }
   }, [])
 
-  useEffect(() => {
-    try {
-      const t = setTimeout(() => setPhase('ready'), 200)
-      return () => clearTimeout(t)
-    } catch {
-      setPhase('error')
-    }
+  // Load the real, active venue directory from the backend. An honest
+  // empty-state ("no venues connected yet") is only shown once this
+  // completes and genuinely returns zero rows — never a hardcoded/sample
+  // fallback list.
+  const loadVenues = useCallback(async () => {
+    setPhase('loading')
+    const res = await fetchSmokeCraftVenues()
+    if (!res.ok) { setPhase('error'); return }
+    setVenues(res.venues)
+    setPhase('ready')
   }, [])
 
+  useEffect(() => { loadVenues() }, [loadVenues])
+
   function handleRetry() {
-    setPhase('loading')
-    setTimeout(() => setPhase('ready'), 200)
+    loadVenues()
   }
 
-  const tiers = useMemo(() => Array.from(new Set(VENUES.map(v => v.tier))).filter(Boolean), [])
+  const types = useMemo(() => Array.from(new Set(venues.map(v => v.type))).filter(Boolean), [venues])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return VENUES.filter(v => {
+    return venues.filter(v => {
       const matchesQuery = !q || [v.name, v.city, v.state].some(f => (f || '').toLowerCase().includes(q))
-      const matchesTier = !tierFilter || v.tier === tierFilter
-      return matchesQuery && matchesTier
+      const matchesType = !typeFilter || v.type === typeFilter
+      return matchesQuery && matchesType
     })
-  }, [query, tierFilter])
+  }, [venues, query, typeFilter])
 
   function handleSelect(venue) {
     triggerHaptic('light')
     setSkipped(false)
     setSelectedId(venue.id)
-    setSelectedVenue({ id: venue.id, name: venue.name, city: venue.city, state: venue.state, tier: venue.tier, selectedAt: Date.now() })
+    setSelectedVenue({ id: venue.id, name: venue.name, city: venue.city, state: venue.state, type: venue.type, selectedAt: Date.now() })
     setSaveStatus('saved')
     setTimeout(() => setSaveStatus('idle'), 2000)
   }
@@ -230,21 +227,22 @@ export default function VenueSelect() {
 
           {phase === 'ready' && (
             <>
-              {/* Honest empty-state disclosure — no live venue backend is connected */}
-              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(28px,5vw,44px)', textAlign: 'center' }}>
-                <p style={{ margin: '0 0 8px', fontSize: 16, fontWeight: 700, color: CREAM }}>
-                  No venues connected yet
-                </p>
-                <p style={{ margin: 0, fontSize: 13, color: 'rgba(229,226,225,0.55)', lineHeight: 1.6 }}>
-                  Venue selection requires a live venue directory, which is not yet connected in this build. You can continue without selecting a venue, or check back once venues are available.
-                </p>
-              </div>
+              {/* Honest empty-state disclosure — only shown once the real
+                  venue directory fetch completes and genuinely returns zero
+                  active venues, never a hardcoded/sample fallback. */}
+              {venues.length === 0 && (
+                <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(28px,5vw,44px)', textAlign: 'center' }}>
+                  <p style={{ margin: '0 0 8px', fontSize: 16, fontWeight: 700, color: CREAM }}>
+                    No venues connected yet
+                  </p>
+                  <p style={{ margin: 0, fontSize: 13, color: 'rgba(229,226,225,0.55)', lineHeight: 1.6 }}>
+                    No active venues are configured in the venue directory yet. You can continue without selecting a venue, or check back once venues are added.
+                  </p>
+                </div>
+              )}
 
-              {/* Search + filters — hidden while no live venues exist; the
-                  underlying search/filter state and UI are kept (unused
-                  while VENUES is empty) so they activate automatically the
-                  moment a real venue directory is connected. */}
-              {VENUES.length > 0 && (
+              {/* Search + filters — only shown once real venues exist. */}
+              {venues.length > 0 && (
                 <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2.2vw,20px)' }}>
                   <label style={{ display: 'block', marginBottom: 10 }}>
                     <span style={{ fontSize: 10, color: GOLD_DIM, letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: 4 }}>Search</span>
@@ -259,17 +257,17 @@ export default function VenueSelect() {
                   </label>
                   <div role="group" aria-label="Filter by venue type" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     <button
-                      type="button" aria-pressed={!tierFilter}
-                      onClick={() => setTierFilter(null)}
-                      style={{ padding: '5px 12px', borderRadius: 14, border: `1.5px solid ${!tierFilter ? GOLD : 'rgba(229,226,225,0.25)'}`, background: !tierFilter ? 'rgba(233,193,118,0.15)' : 'transparent', color: !tierFilter ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
+                      type="button" aria-pressed={!typeFilter}
+                      onClick={() => setTypeFilter(null)}
+                      style={{ padding: '5px 12px', borderRadius: 14, border: `1.5px solid ${!typeFilter ? GOLD : 'rgba(229,226,225,0.25)'}`, background: !typeFilter ? 'rgba(233,193,118,0.15)' : 'transparent', color: !typeFilter ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
                     >
                       All Types
                     </button>
-                    {tiers.map(t => (
+                    {types.map(t => (
                       <button
-                        key={t} type="button" aria-pressed={tierFilter === t}
-                        onClick={() => setTierFilter(t)}
-                        style={{ padding: '5px 12px', borderRadius: 14, border: `1.5px solid ${tierFilter === t ? GOLD : 'rgba(229,226,225,0.25)'}`, background: tierFilter === t ? 'rgba(233,193,118,0.15)' : 'transparent', color: tierFilter === t ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
+                        key={t} type="button" aria-pressed={typeFilter === t}
+                        onClick={() => setTypeFilter(t)}
+                        style={{ padding: '5px 12px', borderRadius: 14, border: `1.5px solid ${typeFilter === t ? GOLD : 'rgba(229,226,225,0.25)'}`, background: typeFilter === t ? 'rgba(233,193,118,0.15)' : 'transparent', color: typeFilter === t ? GOLD : 'rgba(229,226,225,0.7)', fontSize: 11, fontFamily: 'Georgia, serif', cursor: 'pointer', outline: 'none' }}
                       >
                         {t}
                       </button>
@@ -297,9 +295,12 @@ export default function VenueSelect() {
                     <VenueCrest name={v.name} selected={isSelected} />
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 16, fontWeight: 700, color: CREAM }}>{v.name}</div>
-                      <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.55)', marginTop: 2 }}>{v.address}, {v.city}, {v.state}</div>
-                      <div style={{ fontSize: 11, color: GOLD_DIM, marginTop: 4 }}>{v.tier} · Capacity {v.capacity}</div>
-                      <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.6)', marginTop: 6 }}>{v.description}</div>
+                      <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.55)', marginTop: 2 }}>
+                        {[v.address, v.city, v.state].filter(Boolean).join(', ')}
+                      </div>
+                      <div style={{ fontSize: 11, color: GOLD_DIM, marginTop: 4 }}>
+                        {[v.type, v.capacity ? `Capacity ${v.capacity}` : null].filter(Boolean).join(' · ')}
+                      </div>
                     </div>
                     {isSelected && <span style={{ fontSize: 12, color: GOLD, flexShrink: 0 }}>✓ Selected</span>}
                   </button>
