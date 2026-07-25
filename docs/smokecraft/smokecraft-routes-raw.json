@@ -1,0 +1,547 @@
+[
+  {
+    "fullPath": "(smokecraft index)",
+    "isIndex": true,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={1} enforceEntryReadiness={false}><SmokeCraft /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "welcome",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={1}><SmokeCraftScreenRenderer screenId=\"session-1\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "enroll",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><Enroll /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "venue-select",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"identity\"><VenueSelect /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "intake",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/enroll\" replace />"
+  },
+  {
+    "fullPath": "entry",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft\" replace />"
+  },
+  {
+    "fullPath": "profile",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/identity\" replace />"
+  },
+  {
+    "fullPath": "education",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/format\" replace />"
+  },
+  {
+    "fullPath": "mentors",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/mentor-selection\" replace />"
+  },
+  {
+    "fullPath": "humidor",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/humidor-match\" replace />"
+  },
+  {
+    "fullPath": "light",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/cut-toast-light\" replace />"
+  },
+  {
+    "fullPath": "complete",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/session-complete\" replace />"
+  },
+  {
+    "fullPath": "golden-box",
+    "isIndex": false,
+    "elementRaw": "(no element on this line — check source)"
+  },
+  {
+    "fullPath": "golden-box",
+    "isIndex": true,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><GoldenBox /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "golden-box/status",
+    "isIndex": false,
+    "elementRaw": "<GoldenBoxStatus />"
+  },
+  {
+    "fullPath": "golden-box/competitions",
+    "isIndex": false,
+    "elementRaw": "<GoldenBoxHub />"
+  },
+  {
+    "fullPath": "golden-box/competitions/:competitionId",
+    "isIndex": false,
+    "elementRaw": "<GoldenBoxCompetitionDetail />"
+  },
+  {
+    "fullPath": "golden-box/entries/:entryId/blend",
+    "isIndex": false,
+    "elementRaw": "<GoldenBoxEntryWorkspace />"
+  },
+  {
+    "fullPath": "golden-box/results/:competitionId",
+    "isIndex": false,
+    "elementRaw": "<GoldenBoxResultsExperience />"
+  },
+  {
+    "fullPath": "golden-box/judge",
+    "isIndex": false,
+    "elementRaw": "<GoldenBoxJudgeDashboard />"
+  },
+  {
+    "fullPath": "golden-box/judge/entries/:entryId",
+    "isIndex": false,
+    "elementRaw": "<GoldenBoxJudgeEntryReview />"
+  },
+  {
+    "fullPath": "golden-box/mentor/entries/:entryId",
+    "isIndex": false,
+    "elementRaw": "<GoldenBoxMentorReview />"
+  },
+  {
+    "fullPath": "golden-box/packaging-studio",
+    "isIndex": false,
+    "elementRaw": "<PackagingStudioDashboard />"
+  },
+  {
+    "fullPath": "golden-box/packaging-studio/new",
+    "isIndex": false,
+    "elementRaw": "<PackagingStudioDashboard />"
+  },
+  {
+    "fullPath": "golden-box/packaging-studio/:designId",
+    "isIndex": false,
+    "elementRaw": "<PackagingStudioEditor />"
+  },
+  {
+    "fullPath": "golden-box/packaging-studio/:designId/preview",
+    "isIndex": false,
+    "elementRaw": "<PackagingStudioEditor />"
+  },
+  {
+    "fullPath": "golden-box/packaging-studio/:designId/versions",
+    "isIndex": false,
+    "elementRaw": "<PackagingStudioVersions />"
+  },
+  {
+    "fullPath": "golden-box/packaging-studio/:designId/share",
+    "isIndex": false,
+    "elementRaw": "<PackagingStudioShare />"
+  },
+  {
+    "fullPath": "golden-box/packaging-review/:shareToken",
+    "isIndex": false,
+    "elementRaw": "<PackagingReview />"
+  },
+  {
+    "fullPath": "gold-box",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/golden-box\" replace />"
+  },
+  {
+    "fullPath": "art",
+    "isIndex": false,
+    "elementRaw": "<Art />"
+  },
+  {
+    "fullPath": "mentor-selection",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><Mentor /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "mentor",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/mentor-selection\" replace />"
+  },
+  {
+    "fullPath": "humidor-match",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={2}><SmokeCraftScreenRenderer screenId=\"session-2\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "meet-your-cigar",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={3}><SmokeCraftScreenRenderer screenId=\"session-3\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "terroir",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={4}><SmokeCraftScreenRenderer screenId=\"session-4\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "format",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={5}><SmokeCraftScreenRenderer screenId=\"session-5\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "shape-size-burn",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/format\" replace />"
+  },
+  {
+    "fullPath": "cigar-gauge-guide",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={5}><CigarGaugeGuide /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "wrapper-strength",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"format\"><WrapperStrength /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "seed-soil",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"mentor\"><SeedSoil /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "cut-toast-light",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={6}><SmokeCraftScreenRenderer screenId=\"session-6\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "lighting-tutorial",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={7}><SmokeCraftScreenRenderer screenId=\"session-7\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "first-third",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={8}><SmokeCraftScreenRenderer screenId=\"session-8\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "flavor-memory",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={10}><SmokeCraftScreenRenderer screenId=\"session-10\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "pairing-lab",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={11}><SmokeCraftScreenRenderer screenId=\"session-11\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "request-purchase",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"humidor-match\"><RequestPurchase /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "second-third",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={12}><SmokeCraftScreenRenderer screenId=\"session-12\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "mentor-commentary",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={14}><SmokeCraftScreenRenderer screenId=\"session-14\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "knowledge-drop",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={15}><SmokeCraftScreenRenderer screenId=\"session-15\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "knowledge-check-demo",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><KnowledgeCheckDemo /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "mini-tasting-module",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><MiniTasting /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "final-third",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={16}><SmokeCraftScreenRenderer screenId=\"session-16\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "scorecard",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={19}><SmokeCraftScreenRenderer screenId=\"session-19\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "smokecraft-challenge",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"scorecard\"><SmokeCraftChallenge /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "challenge",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/smokecraft-challenge\" replace />"
+  },
+  {
+    "fullPath": "second-humidor-match",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"scorecard\"><SecondHumidorMatch /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "mini-tasting",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"scorecard\"><MiniTastingRound /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "mini-tasting-round",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/mini-tasting\" replace />"
+  },
+  {
+    "fullPath": "ai-summary",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={21}><SmokeCraftScreenRenderer screenId=\"session-21\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "pairing-recommendations",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={22}><SmokeCraftScreenRenderer screenId=\"session-22\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "passport-stamp",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={23}><SmokeCraftScreenRenderer screenId=\"session-23\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "connections",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"passport-stamp\"><Connections /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "management-sync",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"passport-stamp\"><ManagementSync /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "management-sync/analytics",
+    "isIndex": false,
+    "elementRaw": "<ManagementSyncAnalytics />"
+  },
+  {
+    "fullPath": "final-review",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={24}><SmokeCraftScreenRenderer screenId=\"session-24\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "rewards",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={25}><SmokeCraftScreenRenderer screenId=\"session-25\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "skill-tree",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><SkillTree /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "collections",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><CollectionsCenter /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "challenge-hub",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><ChallengeHub /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "challenges/blend-fault-identification",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><BlendFaultChallenge /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "filler-arrangement",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><FillerArrangement /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "session-complete",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard sessionNumber={27}><SmokeCraftScreenRenderer screenId=\"session-27\" /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "visit-complete",
+    "isIndex": false,
+    "elementRaw": "<VisitComplete />"
+  },
+  {
+    "fullPath": "origins",
+    "isIndex": false,
+    "elementRaw": "<Origins />"
+  },
+  {
+    "fullPath": "curation",
+    "isIndex": false,
+    "elementRaw": "<Curation />"
+  },
+  {
+    "fullPath": "leaves",
+    "isIndex": false,
+    "elementRaw": "<Leaves />"
+  },
+  {
+    "fullPath": "leaf-challenge",
+    "isIndex": false,
+    "elementRaw": "<LeafChallenge />"
+  },
+  {
+    "fullPath": "leaf-challenge-calculating",
+    "isIndex": false,
+    "elementRaw": "<LeafChallengeCalculating />"
+  },
+  {
+    "fullPath": "leaf-challenge-result",
+    "isIndex": false,
+    "elementRaw": "<LeafChallengeResult />"
+  },
+  {
+    "fullPath": "cultivation",
+    "isIndex": false,
+    "elementRaw": "<Cultivation />"
+  },
+  {
+    "fullPath": "blend",
+    "isIndex": false,
+    "elementRaw": "<Blend />"
+  },
+  {
+    "fullPath": "flavor-dna",
+    "isIndex": false,
+    "elementRaw": "<FlavorDNA />"
+  },
+  {
+    "fullPath": "pairing",
+    "isIndex": false,
+    "elementRaw": "<Pairing />"
+  },
+  {
+    "fullPath": "available",
+    "isIndex": false,
+    "elementRaw": "<Available />"
+  },
+  {
+    "fullPath": "assistant",
+    "isIndex": false,
+    "elementRaw": "<Assistant />"
+  },
+  {
+    "fullPath": "pairing-mastery",
+    "isIndex": false,
+    "elementRaw": "<PairingMastery />"
+  },
+  {
+    "fullPath": "vitola",
+    "isIndex": false,
+    "elementRaw": "<Vitola />"
+  },
+  {
+    "fullPath": "identity",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"enroll\"><Identity /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "resume",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftSessionGuard requires=\"enroll\"><ResumeJourney /></SmokeCraftSessionGuard>"
+  },
+  {
+    "fullPath": "leaderboard",
+    "isIndex": false,
+    "elementRaw": "<Leaderboard />"
+  },
+  {
+    "fullPath": "rewards-center",
+    "isIndex": false,
+    "elementRaw": "<RewardsCenter />"
+  },
+  {
+    "fullPath": "event-challenge",
+    "isIndex": false,
+    "elementRaw": "<EventChallenge />"
+  },
+  {
+    "fullPath": "how-it-works",
+    "isIndex": false,
+    "elementRaw": "<HowItWorks />"
+  },
+  {
+    "fullPath": "demo-reset",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftDemoReset />"
+  },
+  {
+    "fullPath": "session/start",
+    "isIndex": false,
+    "elementRaw": "<Navigate to=\"/smokecraft/enroll\" replace />"
+  },
+  {
+    "fullPath": "guest-pass",
+    "isIndex": false,
+    "elementRaw": "<GuestPass />"
+  },
+  {
+    "fullPath": "demo",
+    "isIndex": false,
+    "elementRaw": "<Demo />"
+  },
+  {
+    "fullPath": "scan",
+    "isIndex": false,
+    "elementRaw": "<Scan />"
+  },
+  {
+    "fullPath": "passport",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftPassport />"
+  },
+  {
+    "fullPath": "crafthub",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftCraftHub />"
+  },
+  {
+    "fullPath": "menu",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftMenu />"
+  },
+  {
+    "fullPath": "venue-commerce",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftVenueCommerce />"
+  },
+  {
+    "fullPath": "order",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftVenueCommerce />"
+  },
+  {
+    "fullPath": "ticket-tapper/staff-specials",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftVenueCommerce />"
+  },
+  {
+    "fullPath": "cart",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftCart />"
+  },
+  {
+    "fullPath": "checkout",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftCheckout />"
+  },
+  {
+    "fullPath": "payment-success",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftPaymentSuccess />"
+  },
+  {
+    "fullPath": "order-status",
+    "isIndex": false,
+    "elementRaw": "<SmokeCraftOrderStatus />"
+  }
+]

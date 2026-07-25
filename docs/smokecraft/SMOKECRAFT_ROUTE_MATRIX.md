@@ -74,10 +74,24 @@ CONTROL — REPAIR REQUIRED (Prompt 3)`** — see the defect register.
   screenshot in the CraftHub/Leaderboard/Welcome investigation from the
   immediately preceding pass.
 
-## Scope note
+## Prompt 2 update: all 109 routes browser-tested
 
-A full click-through verification of all 109 routes (with per-route title,
-asset, and live-vs-baked classification) was not performed in this pass —
-see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` for what is deferred to Prompt 2,
-and the Part 11 screenshot set for the routes that WERE actually opened and
-captured this pass.
+`verify-smokecraft-all-routes-browser-test.mjs` opened every one of the 109
+routes in a real browser (seeded with a fully-progressed guest session so
+guards render real content, not lock screens). Result:
+
+- **95 PASS** — resolved directly, non-blank body, no console errors of note.
+- **14 REDIRECT PASS** — the known `Navigate` alias routes (e.g. `/intake` →
+  `/enroll`, `/entry` → `/smokecraft`, `/profile` → `/identity`), confirmed
+  to redirect to their intended destination.
+- **0 REPAIR REQUIRED, 0 DEAD ROUTE, 0 DUPLICATE ROUTE, 0 BLOCKED.**
+
+Full per-route JSON results and 109 individual screenshots:
+`public/proof/smokecraft-system-audit-prompt-2/all-routes/`
+(`00-all-routes-results.json` is the index).
+
+Routes with dynamic segments (`:competitionId`, `:entryId`, etc.) were
+tested with a placeholder ID substituted — these correctly render their
+real "not found"/empty-state component rather than crashing, which is
+expected behavior for a placeholder ID with no matching backend record,
+not a routing defect.
