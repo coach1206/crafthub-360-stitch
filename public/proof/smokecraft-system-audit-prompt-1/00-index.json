@@ -1,0 +1,422 @@
+[
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft",
+    "label": "landing",
+    "file": "desktop-1440x900__landing.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/how-it-works",
+    "label": "how-it-works",
+    "file": "desktop-1440x900__how-it-works.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/rewards-center",
+    "label": "rewards-center",
+    "file": "desktop-1440x900__rewards-center.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/leaderboard",
+    "label": "leaderboard",
+    "file": "desktop-1440x900__leaderboard.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/passport",
+    "label": "passport",
+    "file": "desktop-1440x900__passport.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/pairing",
+    "label": "pairing",
+    "file": "desktop-1440x900__pairing.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/crafthub",
+    "label": "crafthub",
+    "file": "desktop-1440x900__crafthub.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/welcome",
+    "label": "welcome",
+    "file": "desktop-1440x900__welcome.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/venue-select",
+    "label": "venue-select",
+    "file": "desktop-1440x900__venue-select.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/format",
+    "label": "session-5-format",
+    "file": "desktop-1440x900__session-5-format.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/mentor-commentary",
+    "label": "session-14-mentor-commentary",
+    "file": "desktop-1440x900__session-14-mentor-commentary.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/recommended-next-journey",
+    "label": "session-27-recommended-next-journey",
+    "file": "desktop-1440x900__session-27-recommended-next-journey.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/challenge-hub",
+    "label": "challenge-hub",
+    "file": "desktop-1440x900__challenge-hub.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/golden-box",
+    "label": "golden-box",
+    "file": "desktop-1440x900__golden-box.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "desktop-1440x900",
+    "route": "/smokecraft/collections",
+    "label": "collections",
+    "file": "desktop-1440x900__collections.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft",
+    "label": "landing",
+    "file": "tablet-10in-1024x768__landing.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/how-it-works",
+    "label": "how-it-works",
+    "file": "tablet-10in-1024x768__how-it-works.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/rewards-center",
+    "label": "rewards-center",
+    "file": "tablet-10in-1024x768__rewards-center.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/leaderboard",
+    "label": "leaderboard",
+    "file": "tablet-10in-1024x768__leaderboard.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/passport",
+    "label": "passport",
+    "file": "tablet-10in-1024x768__passport.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/pairing",
+    "label": "pairing",
+    "file": "tablet-10in-1024x768__pairing.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/crafthub",
+    "label": "crafthub",
+    "file": "tablet-10in-1024x768__crafthub.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/welcome",
+    "label": "welcome",
+    "file": "tablet-10in-1024x768__welcome.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/venue-select",
+    "label": "venue-select",
+    "file": "tablet-10in-1024x768__venue-select.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/format",
+    "label": "session-5-format",
+    "file": "tablet-10in-1024x768__session-5-format.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/mentor-commentary",
+    "label": "session-14-mentor-commentary",
+    "file": "tablet-10in-1024x768__session-14-mentor-commentary.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/recommended-next-journey",
+    "label": "session-27-recommended-next-journey",
+    "file": "tablet-10in-1024x768__session-27-recommended-next-journey.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/challenge-hub",
+    "label": "challenge-hub",
+    "file": "tablet-10in-1024x768__challenge-hub.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/golden-box",
+    "label": "golden-box",
+    "file": "tablet-10in-1024x768__golden-box.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-10in-1024x768",
+    "route": "/smokecraft/collections",
+    "label": "collections",
+    "file": "tablet-10in-1024x768__collections.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft",
+    "label": "landing",
+    "file": "tablet-12in-1194x834__landing.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/how-it-works",
+    "label": "how-it-works",
+    "file": "tablet-12in-1194x834__how-it-works.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/rewards-center",
+    "label": "rewards-center",
+    "file": "tablet-12in-1194x834__rewards-center.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/leaderboard",
+    "label": "leaderboard",
+    "file": "tablet-12in-1194x834__leaderboard.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/passport",
+    "label": "passport",
+    "file": "tablet-12in-1194x834__passport.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/pairing",
+    "label": "pairing",
+    "file": "tablet-12in-1194x834__pairing.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/crafthub",
+    "label": "crafthub",
+    "file": "tablet-12in-1194x834__crafthub.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/welcome",
+    "label": "welcome",
+    "file": "tablet-12in-1194x834__welcome.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/venue-select",
+    "label": "venue-select",
+    "file": "tablet-12in-1194x834__venue-select.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/format",
+    "label": "session-5-format",
+    "file": "tablet-12in-1194x834__session-5-format.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/mentor-commentary",
+    "label": "session-14-mentor-commentary",
+    "file": "tablet-12in-1194x834__session-14-mentor-commentary.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/recommended-next-journey",
+    "label": "session-27-recommended-next-journey",
+    "file": "tablet-12in-1194x834__session-27-recommended-next-journey.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/challenge-hub",
+    "label": "challenge-hub",
+    "file": "tablet-12in-1194x834__challenge-hub.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/golden-box",
+    "label": "golden-box",
+    "file": "tablet-12in-1194x834__golden-box.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "tablet-12in-1194x834",
+    "route": "/smokecraft/collections",
+    "label": "collections",
+    "file": "tablet-12in-1194x834__collections.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft",
+    "label": "landing",
+    "file": "mobile-390x844__landing.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/how-it-works",
+    "label": "how-it-works",
+    "file": "mobile-390x844__how-it-works.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/rewards-center",
+    "label": "rewards-center",
+    "file": "mobile-390x844__rewards-center.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/leaderboard",
+    "label": "leaderboard",
+    "file": "mobile-390x844__leaderboard.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/passport",
+    "label": "passport",
+    "file": "mobile-390x844__passport.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/pairing",
+    "label": "pairing",
+    "file": "mobile-390x844__pairing.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/crafthub",
+    "label": "crafthub",
+    "file": "mobile-390x844__crafthub.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/welcome",
+    "label": "welcome",
+    "file": "mobile-390x844__welcome.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/venue-select",
+    "label": "venue-select",
+    "file": "mobile-390x844__venue-select.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/format",
+    "label": "session-5-format",
+    "file": "mobile-390x844__session-5-format.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/mentor-commentary",
+    "label": "session-14-mentor-commentary",
+    "file": "mobile-390x844__session-14-mentor-commentary.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/recommended-next-journey",
+    "label": "session-27-recommended-next-journey",
+    "file": "mobile-390x844__session-27-recommended-next-journey.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/challenge-hub",
+    "label": "challenge-hub",
+    "file": "mobile-390x844__challenge-hub.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/golden-box",
+    "label": "golden-box",
+    "file": "mobile-390x844__golden-box.png",
+    "status": "captured"
+  },
+  {
+    "viewport": "mobile-390x844",
+    "route": "/smokecraft/collections",
+    "label": "collections",
+    "file": "mobile-390x844__collections.png",
+    "status": "captured"
+  }
+]

@@ -1,0 +1,49 @@
+# SmokeCraft Locked Baseline — Prompt 1
+
+Baseline commit: `d6469504a2a83ab4acfb27e89a25064d505d4d55` (tag: `smokecraft-audit-baseline-d646950`)
+
+Items below are proven correct via passing automated test + real rendered
+screenshot (not source-reading alone), at this exact commit. **Later prompts
+must not change these unless a failing requirement or test proves the change
+necessary.**
+
+## Locked: Entry flow (Landing → Guest Pass → Identity → Venue → Welcome)
+
+- Route: `/smokecraft` (Landing) — asset `smokecraft-landing.png`, hash
+  verified equal on-disk vs rendered in `verify-smokecraft-full-journey-sequence-and-assets.mjs`.
+- Route: `/smokecraft/enroll` (Guest Pass) — asset `smokecraft-guest-pass.png`, hash verified.
+- Route: `/smokecraft/identity` — required gate, sequence fixed and verified (commit `b5f6fa6b`).
+- Route: `/smokecraft/venue-select` — asset `Venue Selection 11.png` (cropped-shell fix, commit `d6469504`), hash verified unchanged (crop is CSS-only, file untouched).
+- Route: `/smokecraft/welcome` — asset `session 1.png`, hash verified.
+- Test: `verify-smokecraft-full-journey-sequence-and-assets.mjs` — 99-100/101-102 passing across the last several runs (one pre-existing, disclosed asset-status assertion excluded, see defect register).
+- Test: `verify-smokecraft-final-three-approved-assets.mjs` — 17/17 passing.
+
+## Locked: 27-session curriculum spine
+
+- `VISIT_STRUCTURE` (src/constants/session.js): exactly 27 sessions across 6 phases — **do not merge, split, renumber, or reorder**.
+- All 27 sessions confirmed to resolve to their canonical route/component, correct phase marker, and an on-disk approved asset (`scripts/smokecraft27SessionAudit.mjs`, this pass — see `SMOKECRAFT_27_SESSION_AUDIT.md`).
+- Merged/shared sessions S9, S13, S17, S18, S20, S26 intentionally have no dedicated component registry entry (they render via their primary session's shared component) — this is expected, not a defect.
+
+## Locked: previously-investigated screens (screenshot-verified, commit `692e7ccf` and `d6469504`)
+
+- `/smokecraft/crafthub` — renders its own distinct "CRAFTHUB 360 — Venue Table Experience" screen. Proof: `public/proof/smokecraft-full-route-image-audit/02-crafthub.png`.
+- `/smokecraft/leaderboard` — renders live sidebar-nav leaderboard, honest "0 XP / Guest (You)" state, no baked scores. Proof: `public/proof/smokecraft-full-route-image-audit/03-leaderboard.png`.
+- `/smokecraft/welcome` — correctly uses `session 1.png`. Proof: `public/proof/smokecraft-full-route-image-audit/04-welcome.png`.
+- `/smokecraft/venue-select` — clean crop, no bleed-through. Proof: `public/proof/smokecraft-full-route-image-audit/05-venue-select-fixed.png`, `06-venue-select-fixed-tablet.png`.
+
+## Regression protections already in place
+
+- `SC_ASSETS` is the single asset registry (`src/constants/smokecraftAssets.js`) — no page independently guesses an asset path.
+- `SMOKECRAFT_SCREEN_MANIFEST` is the single screen registry, derived from `VISIT_STRUCTURE` — cannot silently drift.
+- `getSmokeCraftEntryReadiness` is the single entry-gate authority.
+- `resolveSmokeCraftLandingAction`/`resolveSmokeCraftEntryDestination` is the single Landing-navigation authority.
+- Asset-hash equality assertions already exist in `verify-smokecraft-full-journey-sequence-and-assets.mjs` for every session with a registered asset, and in `verify-smokecraft-final-three-approved-assets.mjs` for the 3 most-recently-wired assets.
+
+## Not yet locked / explicitly out of scope for this baseline
+
+Everything not listed above (the remaining ~100 routes, all 27 sessions'
+interaction/quiz/scoring internals, full four-viewport sweep beyond Venue
+Selection, full static-vs-live classification beyond what's already
+disclosed in existing code comments) is **not yet verified** and must not be
+assumed correct — see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` for what is
+deferred to Prompts 2–6.
