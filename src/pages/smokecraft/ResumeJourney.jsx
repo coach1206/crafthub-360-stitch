@@ -7,9 +7,9 @@ import { useStartNewSmokeCraftJourney } from '../../hooks/useStartNewSmokeCraftJ
 import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftEntryHeaderBand from '../../components/smokecraft/SmokeCraftEntryHeaderBand.jsx'
+import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
-import { VISIT_STRUCTURE, ENTRY_LAYER_SCREENS, SUPPORTING_MODULES } from '../../constants/session.js'
+import { VISIT_STRUCTURE, ENTRY_LAYER_SCREENS, SUPPORTING_MODULES, getRankFromXP } from '../../constants/session.js'
 import { getSessionByNumber } from '../../constants/smokecraftJourney.js'
 import { computeJourneyStatus } from '../../constants/smokecraftJourneyStatus.js'
 
@@ -71,7 +71,15 @@ function formatTimestamp(ts) {
 export default function ResumeJourney() {
   const { session, update } = useGuestSession()
   const { isDemoMode, currentAllowed, completedSessions } = useSmokeCraftProgress()
-  const { journey, setResumeCache } = useSmokeCraftJourney()
+  const { journey, setResumeCache, setWelcomeState: updateJourneyPatch } = useSmokeCraftJourney()
+  const [notesDraft, setNotesDraft] = useState(journey.resumeNotes || '')
+  const notesTimer = useRef(null)
+  function handleNotesChange(e) {
+    const val = e.target.value
+    setNotesDraft(val)
+    if (notesTimer.current) clearTimeout(notesTimer.current)
+    notesTimer.current = setTimeout(() => updateJourneyPatch({ resumeNotes: val }), 500)
+  }
   const { startNewSmokeCraftJourney } = useStartNewSmokeCraftJourney()
   const { startOrResumeJourney } = useSmokeCraftServerJourney()
   const navigate = useNavigate()
@@ -240,33 +248,76 @@ export default function ResumeJourney() {
   if (phase === 'ready' && !hasProgress) return null
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, overflow: 'hidden',
-      background: `
-        radial-gradient(ellipse at 20% -10%, rgba(233,193,118,0.10), transparent 55%),
-        radial-gradient(ellipse at 100% 110%, ${WOOD_DIM}, transparent 60%),
-        linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)
-      `,
-      fontFamily: 'Georgia, serif',
-    }}>
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 3 }}>
-        <SmokeCraftEntryHeaderBand
-          eyebrow="SmokeCraft 360 — Entry"
-          title="Resume or Start New Journey"
-          image={SC_ASSETS.resume}
-          imagePosition="center 35%"
-          overlayStrength={0.85}
-          status={<>
-            {isOffline && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 4 }}>Offline: showing your locally saved data.</div>}
-            {saveStatus === 'saving' && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 4 }}>Saving…</div>}
-          </>}
-        />
+    <SmokeCraftImageBoundsOverlay
+      src={SC_ASSETS.resume}
+      naturalW={1448}
+      naturalH={1086}
+      alt="SmokeCraft 360 — Resume Your Journey"
+    >
+      <h1 style={{
+        position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
+        overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
+      }}>SmokeCraft 360 — Resume Your Journey</h1>
+
+      {(isOffline || saveStatus === 'saving') && (
+        <div style={{
+          position: 'absolute', left: '16.6%', top: '14.8%', width: '46%', height: '2.8%',
+          display: 'flex', alignItems: 'center', fontSize: 'clamp(8px,0.85vw,12px)', color: 'rgba(229,226,225,0.6)', pointerEvents: 'none',
+        }}>
+          {isOffline ? 'Offline: showing your locally saved data.' : 'Saving…'}
+        </div>
+      )}
+
+      {/* Sidebar profile chip — occludes the baked "Aficionado / Level 5
+          Artisan / 12,450 pts", replaced with the real account rank/XP. */}
+      <div style={{
+        position: 'absolute', left: '1.3%', top: '69%', width: '13.4%', height: '12%',
+        background: NAVY_DEEP, borderRadius: 8, border: `1px solid ${BORDER}`,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        fontFamily: 'Georgia, serif', textAlign: 'center', gap: 2,
+      }}>
+        <span style={{ fontSize: 'clamp(7px,0.8vw,11px)', color: CREAM }}>{getRankFromXP(session?.xp || 0).name}</span>
+        <span style={{ fontSize: 'clamp(9px,1vw,13px)', fontWeight: 700, color: GOLD }}>{session?.xp || 0} pts</span>
       </div>
 
+      {/* Quick Actions — the image's own panel made live. */}
+      {[
+        { label: 'Review Last Session', left: '65.3%', to: currentAllowed?.route || '/smokecraft' },
+        { label: 'View Passport', left: '73.5%', to: '/smokecraft/passport' },
+        { label: 'See Rewards', left: '81.7%', to: '/smokecraft/rewards-center' },
+        { label: 'Go to Leaderboard', left: '89.9%', to: '/smokecraft/leaderboard' },
+      ].map(qa => (
+        <button
+          key={qa.label}
+          type="button"
+          aria-label={qa.label}
+          onClick={() => { triggerHaptic('light'); navigate(qa.to) }}
+          style={{
+            position: 'absolute', left: qa.left, top: '17.8%', width: '8.1%', height: '9.5%',
+            background: 'transparent', border: '1.5px solid transparent', borderRadius: 8,
+            cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent', outline: 'none',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent' }}
+          onFocus={e => { e.currentTarget.style.borderColor = GOLD }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'transparent' }}
+        />
+      ))}
+
+      {/* Opaque panel over the image's own entire left card column — covers
+          the "LAST SESSION" stats AND the "YOUR NOTES" / "YOUR SAVED WORK"
+          zones below it, all of which are baked with fake data (Session 25:
+          Rewards, 68%, Jul 25 2025, 34m, Golden Box Judging, and three
+          sample-photo upload cards with fake dates). Real data replaces the
+          stats; a real, journey-persisted notes field replaces the baked
+          notes box; an honest empty state replaces the baked upload cards,
+          since no real upload feature exists in this build yet. */}
       <main style={{
-        position: 'absolute', top: 'clamp(120px,16vh,160px)', bottom: 'clamp(120px,16vh,160px)',
-        left: 0, right: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch',
-        padding: '0 clamp(16px,4vw,40px)', zIndex: 2,
+        position: 'absolute', left: '17%', top: '23.5%', width: '47%', height: '69%',
+        overflowY: 'auto', WebkitOverflowScrolling: 'touch',
+        background: NAVY_DEEP, borderRadius: 10, padding: 'clamp(10px,1.4vw,20px)',
+        fontFamily: 'Georgia, serif',
       }}>
         <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
@@ -318,6 +369,35 @@ export default function ResumeJourney() {
                   )}
                 </div>
               )}
+
+              {/* Real, journey-persisted notes — replaces the image's baked
+                  notes box. Autosaves 500ms after the user stops typing. */}
+              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2vw,20px)' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>Your Notes</div>
+                <textarea
+                  aria-label="Private journey notes"
+                  value={notesDraft}
+                  onChange={handleNotesChange}
+                  placeholder="Add or continue your private notes…"
+                  rows={2}
+                  style={{
+                    width: '100%', resize: 'vertical', background: 'rgba(255,255,255,0.03)',
+                    border: `1px solid ${BORDER}`, borderRadius: 8, color: CREAM,
+                    fontFamily: 'Georgia, serif', fontSize: 13, padding: 10, minHeight: 44, outline: 'none',
+                  }}
+                />
+                <div style={{ marginTop: 6, fontSize: 10, color: 'rgba(229,226,225,0.4)' }}>Notes are private and saved to your journey.</div>
+              </div>
+
+              {/* Honest empty state — no real upload/saved-work feature
+                  exists in this build yet, so the image's baked sample
+                  photo/notes/draft cards are not shown as if real. */}
+              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2vw,20px)' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>Your Saved Work</div>
+                <p style={{ margin: 0, fontSize: 12.5, color: 'rgba(229,226,225,0.45)', fontStyle: 'italic' }}>
+                  Uploading cigar photos, tasting notes, and Golden Box drafts is not available in this build yet.
+                </p>
+              </div>
 
               {/* Start-vs-Resume remediation pass — the primary action here now
                   follows the exact 3-state CTA contract (no valid active
@@ -411,6 +491,6 @@ export default function ResumeJourney() {
         secondary="← Back"
         onSecondary={() => navigate('/smokecraft/identity')}
       />
-    </div>
+    </SmokeCraftImageBoundsOverlay>
   )
 }

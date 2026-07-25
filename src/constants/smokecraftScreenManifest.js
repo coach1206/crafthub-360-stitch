@@ -20,7 +20,7 @@ import { VISIT_STRUCTURE } from './session.js'
 import { SC_ASSETS } from './smokecraftAssets.js'
 
 const ASSET_KEY_BY_SESSION = {
-  1: null, 2: 'humidorMatch', 3: 'meetYourCigar', 4: 'terroir', 5: 'format',
+  1: 'session1', 2: 'humidorMatch', 3: 'meetYourCigar', 4: 'terroir', 5: 'format',
   6: 'cutToastLight', 7: 'lightingTutorial', 8: 'firstThird', 9: 'firstThird',
   10: 'flavorMemory', 11: 'pairingLab', 12: 'secondThird', 13: 'secondThird',
   14: 'mentorCommentary', 15: 'knowledgeDrop', 16: 'finalThird', 17: 'finalThird',

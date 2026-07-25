@@ -32,9 +32,15 @@ export const SC_ASSETS = {
   enroll:              `${REF}/smokecraft-guest-pass.png`,
   identity:            `${RAW}/IDENTY.png`,
 
-  // Entry layer — Resume/Start New Journey decorative header (visual-only
-  // enhancement; ResumeJourney.jsx has no image of its own to date).
-  resume:              `${CROPPED}/golden-box-hero-v2.jpg`,
+  // Entry layer — Resume/Start New Journey. Dedicated approved asset
+  // (repo owner upload, main branch) — replaces the prior decorative-only
+  // Golden Box photo placeholder now that a real Resume Journey visual
+  // exists.
+  resume:              `${RAW}/Resume%20Your%20Journey.png`,
+
+  // Welcome / Session 1 — dedicated approved asset (repo owner upload,
+  // main branch). WelcomeExperience.jsx previously had no image of its own.
+  session1:            `${RAW}/session%201.png`,
 
   // S3 — Golden Box
   goldenBox:           `${RAW}/GOLDEN%20BOX%20RULES.png`,
@@ -156,8 +162,14 @@ export const SC_ASSETS = {
   // smokecraft-challenge screen, which never showed a CraftHub visual at all.
   craftHubVenueTable:  `${RAW}/CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png`,
 
-  // Rewards / Achievements (shared S25/S26 screen) — approved production assets
-  rewards:             `${RAW}/REWARDS%20222.png`,
+  // Rewards / Achievements (shared S25/S26 screen) — approved production assets.
+  // `REWARDS 222.png` is fully-baked mock data with no blank overlay zones
+  // (confirmed across two prior passes — fake "Guest"/2,750 XP/12 badges and
+  // a "9 of 11" progress rail contradicting the 27-session spine) and was
+  // never usable as a live shell. `session 25 rewards.png` (repo owner
+  // upload, main branch) is a genuine blank-value template for this exact
+  // screen — replaces it as the S25 shell.
+  rewards:             `${RAW}/session%2025%20rewards.png`,
   // Landing "Rewards" destination card — approved Reward Center visual the
   // repo owner uploaded directly to GitHub (commit 4881d21b). Spaces encoded
   // per this file's rules. This is the shell for the landing-accessible

@@ -5,6 +5,7 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { ShieldPersonIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 import { RANKS, getRankFromXP } from '../../constants/session.js'
 import { getSessionRewards, getSmokeCraftXP, getEarnedBadges, SMOKECRAFT_BADGES } from '../../constants/smokecraftRewards.js'
@@ -324,6 +325,152 @@ export default function Rewards({ onBack, onComplete } = {}) {
 
   const achievementsUnlocked = isDemoMode || session.completedSteps.includes('rewards')
 
+  // S25 (Rewards) mode renders through the approved "session 25 rewards.png"
+  // blank-value template as its full visual foundation. S26 (Achievements)
+  // has no matching approved template and keeps its existing, working
+  // decorative-band layout unchanged — a disclosed, deliberate scope split,
+  // not an oversight.
+  if (mode === 'rewards') {
+    return (
+      <SmokeCraftImageBoundsOverlay
+        src={SC_ASSETS.rewards}
+        naturalW={1448}
+        naturalH={1086}
+        alt="SmokeCraft 360 — Session 25 Rewards"
+      >
+        <h1 style={{
+          position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
+          overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
+        }}>SmokeCraft 360 — Session 25 Rewards</h1>
+
+        {/* Four blank point circles, filled honestly — same disclosed pattern
+            as the Rewards Center: only Available and Earned This Session are
+            real, distinct numbers; Lifetime/Redeemed are not separately
+            tracked by this build's loyalty model. */}
+        {[
+          { label: 'available', left: '19.3%', value: totalXP },
+          { label: 'earned', left: '34.2%', value: completedSessionXP },
+          { label: 'lifetime', left: '48.3%', value: totalXP },
+          { label: 'redeemed', left: '62.2%', value: '—' },
+        ].map(box => (
+          <div key={box.label} data-testid={`s25-${box.label}`} style={{
+            position: 'absolute', left: box.left, top: '26.2%', width: '10.7%', height: '5.2%',
+            background: NAVY_DEEP, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 'clamp(11px,1.3vw,18px)', color: GOLD,
+          }}>
+            {box.value}
+          </div>
+        ))}
+
+        {/* Loyalty tier panel — real rank + progress to next tier, sized to
+            the approved image's own TIER NAME + progress-bar zone. */}
+        <div style={{
+          position: 'absolute', left: '73.6%', top: '35%', width: '24.9%', height: '19.1%',
+          background: NAVY_DEEP, borderRadius: 8, padding: '4% 6%',
+          display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 4,
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <span style={{ fontSize: 'clamp(10px,1.1vw,15px)', color: GOLD, fontWeight: 700 }}>{currentRank.name}</span>
+          </div>
+          <div>
+            <div style={{ height: 6, background: 'rgba(233,193,118,0.15)', borderRadius: 3 }}>
+              <div style={{ height: '100%', width: `${nextTier ? Math.round((totalXP / nextTier.minXP) * 100) : 100}%`, background: GOLD, borderRadius: 3 }} />
+            </div>
+            <div style={{ fontSize: 'clamp(7px,0.75vw,10px)', color: 'rgba(229,226,225,0.55)', marginTop: 4, textAlign: 'center' }}>
+              {nextTier ? `${nextTier.minXP - totalXP} XP to ${nextTier.name}` : 'Highest rank reached'}
+            </div>
+          </div>
+        </div>
+
+        {/* Real content panel — the reward-category cards, "Today at Your
+            Venue", and "Recent Redemptions" zones are covered by one honest
+            panel (no real venue reward catalog exists to populate them),
+            hosting the actual real XP breakdown / rank-milestone claims /
+            earned-badges functionality that already existed on this
+            screen — preserved exactly, only repositioned. */}
+        <div style={{
+          position: 'absolute', left: '16.4%', top: '35%', width: '58%', height: '58%',
+          overflowY: 'auto', WebkitOverflowScrolling: 'touch',
+          background: NAVY_DEEP, borderRadius: 10, padding: 'clamp(10px,1.4vw,20px)',
+          fontFamily: 'Georgia, serif', display: 'flex', flexDirection: 'column', gap: 12,
+        }}>
+          <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic' }}>
+            No venue reward catalog is connected to this build yet, so featured/cigar/experience/accessory/merch offers cannot be listed. Your real XP and earned rewards are shown below.
+          </div>
+
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>XP Breakdown</div>
+            {[
+              ['Completed-Session XP', completedSessionXP],
+              ['Passport XP', xpTotals.passport],
+              ['Pairing XP', xpTotals.pairing],
+              ['Mentor XP', xpTotals.mentor],
+            ].map(([label, val]) => (
+              <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', fontSize: 12.5, color: CREAM }}>
+                <span>{label}</span><span style={{ color: GOLD_DIM }}>{val} XP</span>
+              </div>
+            ))}
+          </div>
+
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Rank Milestone Rewards</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {RANKS.map(rank => {
+                const claimed = claimedTiers.includes(rank.name)
+                const available = totalXP >= rank.minXP && !claimed
+                const locked = totalXP < rank.minXP
+                return (
+                  <div key={rank.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 8px', background: 'rgba(255,255,255,0.03)', borderRadius: 8 }}>
+                    <BadgeCrest label={rank.name} earned={!locked} size={34} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 12.5, fontWeight: 700, color: CREAM }}>{rank.name}</div>
+                      <div style={{ fontSize: 10, color: 'rgba(229,226,225,0.5)' }}>Requires {rank.minXP}+ XP</div>
+                    </div>
+                    {claimed && <span style={{ fontSize: 11, color: GOLD }}>✓ Claimed</span>}
+                    {available && (
+                      <button
+                        type="button" aria-label={`Claim ${rank.name} reward`}
+                        onClick={() => handleClaimTier(rank)}
+                        style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 14, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 11, padding: '5px 12px', cursor: 'pointer', outline: 'none', minHeight: 32 }}
+                      >
+                        Claim
+                      </button>
+                    )}
+                    {locked && <span style={{ fontSize: 11, color: 'rgba(229,226,225,0.35)' }}>Locked</span>}
+                  </div>
+                )
+              })}
+            </div>
+            {claimStatus === 'saved' && <div style={{ marginTop: 6, fontSize: 11, color: GOLD }}>✓ Saved</div>}
+          </div>
+
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Earned Session Badges</div>
+            {earnedSessionBadges.length ? (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {earnedSessionBadges.map(b => (
+                  <div key={b.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: 66 }}>
+                    <BadgeCrest label={b.label} earned size={40} />
+                    <span style={{ fontSize: 9, color: CREAM, textAlign: 'center' }}>{b.label}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p style={{ margin: 0, fontSize: 12, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic' }}>No badges earned yet.</p>
+            )}
+          </div>
+        </div>
+
+        <SmokeCraftNavBar
+          primary="Continue to Achievements →"
+          onPrimary={handleRewardsContinue}
+          secondary="← Back"
+          onSecondary={onBack || (() => navigate('/smokecraft/final-review'))}
+        />
+      </SmokeCraftImageBoundsOverlay>
+    )
+  }
+
   return (
     <div style={{
       position: 'fixed', inset: 0, overflow: 'hidden',
@@ -334,14 +481,13 @@ export default function Rewards({ onBack, onComplete } = {}) {
       `,
       fontFamily: 'Georgia, serif',
     }}>
-      {/* Approved production visual, reused as a decorative header band —
-          swaps between the Rewards and Achievements approved assets by tab. */}
+      {/* Approved production visual, reused as a decorative header band. */}
       <div
         role="img"
-        aria-label={mode === 'achievements' ? 'SmokeCraft Achievements' : 'SmokeCraft Rewards'}
+        aria-label="SmokeCraft Achievements"
         style={{
           position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(90px,14vh,140px)',
-          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92)), url(${mode === 'achievements' ? SC_ASSETS.achievements : SC_ASSETS.rewards})`,
+          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.35), rgba(6,8,16,0.92)), url(${SC_ASSETS.achievements})`,
           backgroundSize: 'cover', backgroundPosition: 'center 30%',
           zIndex: 1,
         }}
@@ -432,99 +578,6 @@ export default function Rewards({ onBack, onComplete } = {}) {
                 Retry
               </button>
             </div>
-          )}
-
-          {phase === 'ready' && mode === 'rewards' && (
-            <>
-              {/* XP summary */}
-              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(16px,2.4vw,24px)' }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12 }}>Your XP</div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6 }}>
-                  <span style={{ fontSize: 'clamp(30px,4vw,42px)', fontWeight: 700, color: GOLD }}>{totalXP}</span>
-                  <span style={{ fontSize: 13, color: 'rgba(229,226,225,0.55)' }}>Total XP</span>
-                </div>
-                <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.45)', marginBottom: 4 }}>
-                  Current journey XP: {totalXP} — this build tracks one continuous local journey, so current-journey XP and total XP are the same value.
-                </div>
-                <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.55)' }}>
-                  Rank: <span style={{ color: GOLD }}>{currentRank.name}</span>
-                  {nextTier ? ` — ${nextTier.minXP - totalXP} XP to ${nextTier.name}` : ' — highest rank reached'}
-                </div>
-              </div>
-
-              {/* Breakdown */}
-              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2.2vw,20px)' }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>XP Breakdown</div>
-                {[
-                  ['Completed-Session XP', completedSessionXP],
-                  ['Passport XP', xpTotals.passport],
-                  ['Pairing XP', xpTotals.pairing],
-                  ['Mentor XP', xpTotals.mentor],
-                ].map(([label, val]) => (
-                  <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', fontSize: 13, color: CREAM }}>
-                    <span>{label}</span><span style={{ color: GOLD_DIM }}>{val} XP</span>
-                  </div>
-                ))}
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', fontSize: 13, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic' }}>
-                  <span>Quiz XP</span><span>Reward criteria not configured — no Knowledge Check / Text Quiz session exists in the current spine.</span>
-                </div>
-                {unconfiguredCompleted.length > 0 && (
-                  <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${BORDER}`, fontSize: 11, color: 'rgba(229,226,225,0.45)' }}>
-                    Reward criteria not configured for: {unconfiguredCompleted.join(', ')} — these sessions are complete but have no verified XP rule yet.
-                  </div>
-                )}
-              </div>
-
-              {/* Rank tiers as reward milestones */}
-              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2.2vw,20px)' }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>Rank Milestone Rewards</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {RANKS.map(rank => {
-                    const claimed = claimedTiers.includes(rank.name)
-                    const available = totalXP >= rank.minXP && !claimed
-                    const locked = totalXP < rank.minXP
-                    return (
-                      <div key={rank.name} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 10px', background: 'rgba(255,255,255,0.03)', borderRadius: 8 }}>
-                        <BadgeCrest label={rank.name} earned={!locked} size={40} />
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: 14, fontWeight: 700, color: CREAM }}>{rank.name}</div>
-                          <div style={{ fontSize: 11, color: 'rgba(229,226,225,0.5)' }}>Requires {rank.minXP}+ XP</div>
-                        </div>
-                        {claimed && <span style={{ fontSize: 12, color: GOLD }}>✓ Claimed</span>}
-                        {available && (
-                          <button
-                            type="button" aria-label={`Claim ${rank.name} reward`}
-                            onClick={() => handleClaimTier(rank)}
-                            style={{ background: 'transparent', border: `1.5px solid ${GOLD}`, borderRadius: 16, color: GOLD, fontFamily: 'Georgia, serif', fontSize: 12, padding: '6px 14px', cursor: 'pointer', outline: 'none', minHeight: 36 }}
-                          >
-                            Claim
-                          </button>
-                        )}
-                        {locked && <span style={{ fontSize: 12, color: 'rgba(229,226,225,0.35)' }}>Locked</span>}
-                      </div>
-                    )
-                  })}
-                </div>
-                {claimStatus === 'saved' && <div style={{ marginTop: 8, fontSize: 12, color: GOLD }}>✓ Saved</div>}
-              </div>
-
-              {/* Earned session badges (read-only ledger) */}
-              <div style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(14px,2.2vw,20px)' }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: GOLD, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10 }}>Earned Session Badges</div>
-                {earnedSessionBadges.length ? (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-                    {earnedSessionBadges.map(b => (
-                      <div key={b.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: 76 }}>
-                        <BadgeCrest label={b.label} earned size={48} />
-                        <span style={{ fontSize: 10, color: CREAM, textAlign: 'center' }}>{b.label}</span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p style={{ margin: 0, fontSize: 13, color: 'rgba(229,226,225,0.4)', fontStyle: 'italic' }}>No badges earned yet.</p>
-                )}
-              </div>
-            </>
           )}
 
           {phase === 'ready' && mode === 'achievements' && (

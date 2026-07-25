@@ -6,7 +6,9 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftTactileCard from '../../components/smokecraft/SmokeCraftTactileCard.jsx'
+import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import { getRankFromXP } from '../../constants/session.js'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -195,33 +197,42 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
   const journeyStatus = completionPercent > 0 ? `Journey in progress — ${completionPercent}% complete` : 'New journey — nothing completed yet'
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, overflow: 'hidden',
-      background: `
-        radial-gradient(ellipse at 20% -10%, rgba(233,193,118,0.10), transparent 55%),
-        radial-gradient(ellipse at 100% 110%, ${WOOD_DIM}, transparent 60%),
-        linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)
-      `,
-      fontFamily: 'Georgia, serif',
-    }}>
-      <header style={{
-        position: 'absolute', top: 0, left: 0, right: 0,
-        padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0',
-        zIndex: 3,
-      }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 6 }}>
-          SmokeCraft 360 — Session Preparation
+    <SmokeCraftImageBoundsOverlay src={SC_ASSETS.session1} naturalW={1448} naturalH={1086} alt="SmokeCraft 360 — Welcome to Today’s Experience, Session 1">
+      <h1 style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }}>
+        SmokeCraft 360 — Welcome to Today’s Experience{identityName ? `, ${identityName}` : ''}
+      </h1>
+      {isOffline && (
+        <div style={{ position: 'absolute', left: '17.1%', top: '9.5%', fontSize: 12, color: 'rgba(229,226,225,0.7)', background: NAVY_DEEP, padding: '2px 8px', borderRadius: 6 }}>
+          Offline: showing your locally saved data.
         </div>
-        <h1 style={{ margin: 0, fontSize: 'clamp(22px,3.4vw,34px)', fontWeight: 700, color: CREAM, letterSpacing: '0.01em', lineHeight: 1.15 }}>
-          Welcome to Today’s Experience{identityName ? `, ${identityName}` : ''}
-        </h1>
-        {isOffline && <div style={{ fontSize: 12, color: 'rgba(229,226,225,0.5)', marginTop: 4 }}>Offline: showing your locally saved data.</div>}
-      </header>
+      )}
+
+      {/* SESSION PROGRESS box occlusion — real completion state, not baked "1 of 27 / 0%" */}
+      <div style={{
+        position: 'absolute', left: '81.2%', top: '10.1%', width: '18.9%', height: '13.8%',
+        background: NAVY_DEEP, borderRadius: 8, display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', gap: 2, textAlign: 'center', padding: 4,
+      }}>
+        <span style={{ fontSize: 10, fontWeight: 700, color: GOLD_DIM, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Session Progress</span>
+        <span style={{ fontSize: 13, fontWeight: 700, color: CREAM }}>{completedSessions?.length || 0} of 27</span>
+        <span style={{ fontSize: 11, color: GOLD_DIM }}>{completionPercent}% Complete</span>
+      </div>
+
+      {/* Sidebar profile chip occlusion — real rank/XP, same technique as ResumeJourney/Rewards */}
+      <div style={{
+        position: 'absolute', left: '1%', top: '70.4%', width: '13.1%', height: '13.8%',
+        background: NAVY_DEEP, borderRadius: 8, display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', gap: 2, textAlign: 'center', padding: 4,
+      }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: CREAM }}>{identityName || 'Guest'}</span>
+        <span style={{ fontSize: 11, color: GOLD }}>{getRankFromXP(session?.xp || 0).name}</span>
+        <span style={{ fontSize: 10, color: GOLD_DIM }}>{session?.xp || 0} pts</span>
+      </div>
 
       <main style={{
-        position: 'absolute', top: 'clamp(120px,16vh,160px)', bottom: 'clamp(120px,16vh,160px)',
-        left: 0, right: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch',
-        padding: '0 clamp(16px,4vw,40px)', zIndex: 2,
+        position: 'absolute', left: '17.1%', top: '65.4%', width: '52.6%', height: '24.7%',
+        overflowY: 'auto', WebkitOverflowScrolling: 'touch', background: NAVY_DEEP,
+        borderRadius: 10, padding: 'clamp(10px,1.4vw,20px)', pointerEvents: 'auto',
       }}>
         <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
@@ -376,6 +387,18 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
         </div>
       </main>
 
+      {phase === 'ready' && (
+        <button
+          type="button"
+          aria-label="Start Session 1 — Begin Experience"
+          onClick={handleBegin}
+          style={{
+            position: 'absolute', left: '73.2%', top: '84.3%', width: '22.8%', height: '4.6%',
+            background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, pointerEvents: 'auto',
+          }}
+        />
+      )}
+
       <SmokeCraftNavBar
         primary="Begin Experience →"
         onPrimary={handleBegin}
@@ -383,6 +406,6 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
         secondary="← Back"
         onSecondary={() => navigate('/smokecraft/resume')}
       />
-    </div>
+    </SmokeCraftImageBoundsOverlay>
   )
 }
