@@ -169,24 +169,24 @@ export default function VenueSelect() {
       `,
       fontFamily: 'Georgia, serif',
     }}>
-      {/* Approved "Venue Selection 11.png" production visual, used as the
-          screen's visual shell. Only its top hero band (logo, title,
-          description, cigar/whiskey photography) is shown — the image's
-          lower portion bakes in fake demo venue cards (The Cigar Lounge,
-          Havana House, etc.), which must never be displayed as if they were
-          real venues, so live venue data always renders below the image,
-          never the image's own baked card grid. */}
-      <div
-        role="img"
-        aria-label="SmokeCraft Venue Selection"
-        style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 'clamp(160px,26vh,260px)',
-          backgroundImage: `linear-gradient(180deg, rgba(6,8,16,0.15), rgba(6,8,16,0.96)), url(${SC_ASSETS.venueSelect})`,
-          backgroundSize: 'cover', backgroundPosition: 'center 8%',
-          zIndex: 1,
-        }}
-      />
-
+      {/* Full-Route Image Audit pass — root-cause fix: "Venue Selection 11.png"
+          is NOT a simple hero band. Reproduced live: it is a complete baked
+          mockup screen (its own sidebar nav, journey stepper, a
+          "2,750 XP / 12 badges / 5 stamps" session-status panel, and 4
+          fully-baked pre-selected venue cards). The previous implementation
+          rendered it edge-to-edge with `background-size: cover`, which at
+          wide viewports scales the image to fill the full width and pulls
+          the baked sidebar and stats columns into view at the left/right
+          edges underneath the live content — exactly the "duplicated
+          title" / "baked XP and badges bleeding through" defect reported in
+          production. Fixed by cropping, via CSS background-position/size
+          math (never modifying the approved file itself), to ONLY the one
+          genuinely clean, baked-content-free region of the image — the
+          whiskey glass and cigar photograph — displayed as a small,
+          aspect-ratio-locked decorative banner inside the live content
+          column instead of a full-bleed background. This guarantees the
+          same safe pixel rectangle is shown at every viewport width; it can
+          never expose the sidebar or stats regardless of screen size. */}
       <header style={{
         position: 'absolute', top: 0, left: 0, right: 0,
         padding: 'clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0',
@@ -202,11 +202,22 @@ export default function VenueSelect() {
       </header>
 
       <main style={{
-        position: 'absolute', top: 'clamp(180px,28vh,280px)', bottom: 'clamp(120px,16vh,160px)',
+        position: 'absolute', top: 'clamp(84px,13vh,120px)', bottom: 'clamp(120px,16vh,160px)',
         left: 0, right: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch',
         padding: '0 clamp(16px,4vw,40px)', zIndex: 2,
       }}>
         <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+          <div
+            role="img"
+            aria-label="Cigar and whiskey — SmokeCraft Venue Selection"
+            style={{
+              width: '100%', maxWidth: 480, aspectRatio: '355 / 190', margin: '0 auto',
+              borderRadius: 12, boxShadow: '0 8px 24px rgba(0,0,0,0.5)', overflow: 'hidden',
+              backgroundImage: `url(${SC_ASSETS.venueSelect})`,
+              backgroundSize: '432.68% 538.95%', backgroundPosition: '67.32% 9.59%',
+            }}
+          />
 
           {phase === 'loading' && (
             <div role="status" aria-live="polite" style={{ background: GLASS, border: `1px solid ${BORDER}`, borderRadius: 12, padding: 'clamp(28px,5vw,44px)', textAlign: 'center' }}>
