@@ -51,9 +51,16 @@ export default function SmokeCraftPassport() {
   const stamps = session?.passportStampCount ?? 0
   const stampEarned = completedSteps.includes('passport-stamp')
 
+  // ENTRY-SEQUENCE & CRAFTHUB PASS — the one Back control on this screen.
+  // Returns to the EXACT prior route when one exists (the established
+  // `window.history.length > 1 ? navigate(-1) : fallback` pattern already used
+  // by VenueOwnerDemo/EATCommand/KioskSetup), otherwise the SmokeCraft
+  // landing. It mutates no journey or Passport state at all, so it cannot
+  // reset progress, and it never targets Guest Pass.
   function back() {
     triggerHaptic('light')
-    navigate('/smokecraft')
+    if (window.history.length > 1) navigate(-1)
+    else navigate('/smokecraft')
   }
 
   return (
@@ -107,23 +114,39 @@ export default function SmokeCraftPassport() {
         </div>
       )}
 
-      {/* Live control over the artwork's own "FULL GUIDE →" affordance. */}
+      {/* THE one Back control. Visible premium gold-outline pill in the
+          artwork's empty top-left margin — the approved image and layout are
+          otherwise untouched by this pass. A real <button> so Enter and Space
+          activate it natively; focus draws an explicit gold ring. */}
       <button
         type="button"
         data-testid="passport-back"
-        aria-label="Back to SmokeCraft landing"
+        aria-label="Back"
         onClick={back}
         style={{
-          position: 'absolute', left: '74.6%', top: '33.6%', width: '9.4%', height: '3.6%',
-          background: 'transparent', border: '1.5px solid transparent', borderRadius: 6,
+          position: 'absolute', left: '2.4%', top: '2.6%',
+          minWidth: '9.5%', minHeight: '5.0%',
+          padding: '0.6% 1.6%',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4em',
+          background: 'linear-gradient(180deg, rgba(12,16,26,0.92), rgba(8,10,16,0.92))',
+          border: `1.5px solid ${GOLD}`, borderRadius: 999,
+          color: GOLD, fontFamily: 'Georgia, serif', fontWeight: 700,
+          fontSize: 'clamp(10px,1.05vw,15px)', letterSpacing: '0.06em',
+          textTransform: 'uppercase', whiteSpace: 'nowrap',
+          boxShadow: '0 3px 14px rgba(0,0,0,0.45)',
           cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation',
-          WebkitTapHighlightColor: 'transparent',
+          WebkitTapHighlightColor: 'transparent', outline: 'none',
+          transition: 'background 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease',
         }}
-        onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD }}
-        onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent' }}
-        onFocus={e => { e.currentTarget.style.borderColor = GOLD }}
-        onBlur={e => { e.currentTarget.style.borderColor = 'transparent' }}
-      />
+        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(233,193,118,0.16)' }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(180deg, rgba(12,16,26,0.92), rgba(8,10,16,0.92))' }}
+        onFocus={e => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(233,193,118,0.55)' }}
+        onBlur={e => { e.currentTarget.style.boxShadow = '0 3px 14px rgba(0,0,0,0.45)' }}
+        onPointerDown={e => { e.currentTarget.style.transform = 'scale(0.97)' }}
+        onPointerUp={e => { e.currentTarget.style.transform = 'scale(1)' }}
+      >
+        ← Back
+      </button>
     </SmokeCraftImageBoundsOverlay>
   )
 }

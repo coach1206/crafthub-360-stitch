@@ -37,6 +37,9 @@ import {
   hasRealJourneyProgress,
   getJourneyCompletionState,
 } from './smokecraftLandingCta.js'
+import { getSmokeCraftEntryReadiness } from './smokecraftEntryReadiness.js'
+import { computeJourneyStatus } from './smokecraftJourneyStatus.js'
+import { getSessionByNumber } from './smokecraftJourney.js'
 
 /** Every action a Landing control may request. */
 export const SMOKECRAFT_LANDING_ACTIONS = Object.freeze({
@@ -72,16 +75,98 @@ export const SMOKECRAFT_ENROLLMENT_ROUTE = '/smokecraft/enroll'
  * Landing renders from this snapshot and passes it back into the resolver, so
  * a single render can never mix two different readings of journey state.
  */
+function readStore(key) {
+  try { return JSON.parse(localStorage.getItem(key) || 'null') } catch { return null }
+}
+
 export function getSmokeCraftLandingJourneyState() {
   const entryRoute = getEntryRoute()
   const status = getJourneyCompletionState()
-  const isReturning = entryRoute === '/smokecraft/resume' && hasRealJourneyProgress()
+  const session = readStore('novee_guest_session')
+  const journey = readStore('sc_journey_v1')
+  const readiness = getSmokeCraftEntryReadiness(session, journey)
+  // "Active journey" for CTA purposes is now broader than
+  // hasRealJourneyProgress() (>=1 completed SESSION). A user who has
+  // completed Guest Pass but no session at all still has a real, resumable
+  // journey — treating them as a brand-new user is exactly what caused the
+  // Start-always-reopens-Guest-Pass defect this pass fixes.
+  const hasActiveJourney = Boolean(status.hasStarted) || readiness.enrollmentComplete
+  const isReturning = hasActiveJourney && !status.isComplete
   return {
     entryRoute,
+    session,
+    journey,
+    readiness,
+    completedSessionCount: status.completedSessionCount,
     hasStarted: Boolean(status.hasStarted),
+    hasActiveJourney,
     isComplete: Boolean(status.isComplete),
     isReturning,
-    isCompleted: isReturning && Boolean(status.isComplete),
+    isCompleted: Boolean(status.isComplete) && hasActiveJourney,
+  }
+}
+
+/**
+ * resolveSmokeCraftEntryDestination(journeyState)
+ *
+ * THE canonical answer to "what is the very next SmokeCraft screen for this
+ * user". It ORCHESTRATES the existing canonical authorities — it does not
+ * reimplement them:
+ *
+ *   - getSmokeCraftEntryReadiness(session, journey) decides whether the
+ *     ENTRY requirements (enrollment / venue) are satisfied and, if not,
+ *     which one is the first incomplete one and its route.
+ *   - computeJourneyStatus(completedSteps) decides how far into the
+ *     27-session spine the user actually is, using its contiguous-prefix
+ *     rule, so the earliest INCOMPLETE session is simply the next number
+ *     after the completed prefix.
+ *   - getSessionByNumber() maps that number back to its real route.
+ *
+ * Root cause it replaces
+ * ----------------------
+ * `case A.START` previously returned the hardcoded SMOKECRAFT_ENROLLMENT_ROUTE
+ * ('/smokecraft/enroll' — the Guest Pass screen) for EVERY user, because
+ * getPrimaryActionId() only ever chose RESUME when hasRealJourneyProgress()
+ * was true (>= 1 completed session) AND getEntryRoute() had already fallen
+ * through to '/smokecraft/resume'. Every user in the entry layer — including
+ * one who had just completed Guest Pass — therefore resolved to START, and
+ * START unconditionally reopened Guest Pass AND (via startsNewJourney: true)
+ * wiped their journey. That is the live "START SMOKECRAFT JOURNEY opens Guest
+ * Pass regardless of state" defect.
+ *
+ * @returns {{ route: string, step: string, reason: string }}
+ */
+export function resolveSmokeCraftEntryDestination(journeyState = getSmokeCraftLandingJourneyState()) {
+  const readiness = journeyState?.readiness
+    || getSmokeCraftEntryReadiness(journeyState?.session, journeyState?.journey)
+
+  // 1. An unmet ENTRY requirement always wins. Guest Pass/Enrollment appears
+  //    here ONLY when enrollment is genuinely not complete — once it is, this
+  //    branch can never return to it again, on Start or on refresh.
+  if (!readiness.readyForWelcome) {
+    return {
+      route: readiness.redirectRoute,
+      step: readiness.firstIncompleteRequirement,
+      reason: `entry_requirement_incomplete:${readiness.firstIncompleteRequirement}`,
+    }
+  }
+
+  // 2. Entry requirements met — open the earliest INCOMPLETE session in the
+  //    spine. computeJourneyStatus's contiguous prefix means "count + 1" is
+  //    the first genuinely incomplete session (S1 = Welcome for a user who
+  //    has completed the entry layer but no session yet).
+  const completedSteps = Array.isArray(journeyState?.session?.completedSteps)
+    ? journeyState.session.completedSteps
+    : []
+  const status = computeJourneyStatus(completedSteps)
+  if (status.isComplete) {
+    return { route: '/smokecraft/resume', step: 'completed', reason: 'journey_complete' }
+  }
+  const next = getSessionByNumber(status.completedSessionCount + 1)
+  return {
+    route: next?.route || '/smokecraft/welcome',
+    step: next?.id || 'entry',
+    reason: `earliest_incomplete_session:${status.completedSessionCount + 1}`,
   }
 }
 
@@ -91,9 +176,13 @@ export function getSmokeCraftLandingJourneyState() {
  * are decided by the same function and cannot drift apart.
  */
 export function getPrimaryActionId(journeyState) {
-  return journeyState?.isReturning
-    ? SMOKECRAFT_LANDING_ACTIONS.RESUME
-    : SMOKECRAFT_LANDING_ACTIONS.START
+  // Completed journey -> START NEW JOURNEY (confirmed, archives history).
+  if (journeyState?.isCompleted) return SMOKECRAFT_LANDING_ACTIONS.START_NEW
+  // Active journey -> RESUME. "Active" now includes an enrolled user with
+  // zero completed sessions, who previously fell through to START and was
+  // sent back to Guest Pass.
+  if (journeyState?.isReturning) return SMOKECRAFT_LANDING_ACTIONS.RESUME
+  return SMOKECRAFT_LANDING_ACTIONS.START
 }
 
 /**
@@ -121,36 +210,59 @@ export function resolveSmokeCraftLandingAction(actionId, journeyState = getSmoke
     // No active journey: begin one clean journey at Enrollment. Never stays on
     // Landing, never reuses a prior identity — the clean-journey creation is
     // performed by the caller's canonical start hook.
-    case A.START:
+    case A.START: {
+      // ROOT-CAUSE FIX: no hardcoded '/smokecraft/enroll'. The destination is
+      // the earliest genuinely incomplete step for THIS user. A clean-journey
+      // reset now only runs when there is genuinely no journey to preserve —
+      // it previously ran on every Start click and destroyed real progress.
+      const entry = resolveSmokeCraftEntryDestination(journeyState)
       return {
         actionId,
-        route: SMOKECRAFT_ENROLLMENT_ROUTE,
+        route: entry.route,
         label: 'START SMOKECRAFT JOURNEY →',
-        startsNewJourney: true,
+        startsNewJourney: !journeyState.hasActiveJourney,
         requiresConfirmation: false,
+        entryStep: entry.step,
+        entryReason: entry.reason,
       }
+    }
 
     // Active journey: hand off to the Entry Layer chain, which resolves to the
     // earliest valid incomplete step via computeJourneyStatus. Progress is
     // preserved; no second journey is created.
-    case A.RESUME:
+    case A.RESUME: {
+      // Resume must open the earliest valid INCOMPLETE screen — never Landing,
+      // never Guest Pass once enrollment is complete, never a completed screen.
+      const entry = resolveSmokeCraftEntryDestination(journeyState)
       return {
         actionId,
-        route: journeyState.entryRoute,
+        route: entry.route,
+        entryStep: entry.step,
+        entryReason: entry.reason,
         label: journeyState.isCompleted
           ? 'VIEW COMPLETED JOURNEY →'
           : 'RESUME SMOKECRAFT JOURNEY →',
         startsNewJourney: false,
         requiresConfirmation: false,
       }
+    }
 
     // Completed (or simply unwanted) journey: archive it and start clean.
     // Confirmation is required because this is the only destructive control on
     // the Landing screen.
     case A.START_NEW:
+      // The canonical reset (useStartNewSmokeCraftJourney) preserves ONLY the
+      // account-level 'enroll' step and clears every journey-specific field
+      // including the venue. So the first genuinely incomplete entry
+      // requirement AFTER the reset is Venue Selection for an already-enrolled
+      // account, and Guest Pass/Enrollment only for one that never enrolled.
+      // Sending an enrolled user back through Guest Pass here would be the
+      // same "loop back to Guest Pass" defect in a second place.
       return {
         actionId,
-        route: SMOKECRAFT_ENROLLMENT_ROUTE,
+        route: journeyState?.readiness?.enrollmentComplete
+          ? '/smokecraft/venue-select'
+          : SMOKECRAFT_ENROLLMENT_ROUTE,
         label: 'Start New Journey',
         startsNewJourney: true,
         requiresConfirmation: true,

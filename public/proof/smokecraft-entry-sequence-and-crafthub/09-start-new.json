@@ -1,0 +1,59 @@
+{
+  "route": "/smokecraft/venue-select",
+  "steps": [
+    "enroll"
+  ],
+  "journey": {
+    "stateVersion": 3,
+    "spineVersion": 1,
+    "identity": null,
+    "goldenBox": null,
+    "mentor": null,
+    "meetYourCigar": null,
+    "mentorCommentary": null,
+    "format": null,
+    "seedSoil": null,
+    "terroir": null,
+    "knowledgeDrop": null,
+    "pairing": null,
+    "selectedCigar": null,
+    "requestPurchase": null,
+    "cutToastLight": null,
+    "firstThird": null,
+    "secondThird": null,
+    "flavorMemory": null,
+    "finalThird": null,
+    "scorecard": null,
+    "aiSummary": null,
+    "pairingRecommendations": null,
+    "rewards": null,
+    "achievements": null,
+    "selectedVenue": {
+      "id": "esc-venue",
+      "name": "ESC Test Venue"
+    },
+    "venueSelectionCompleted": false,
+    "lastEntryScreen": "/smokecraft/venue-select",
+    "activeJourneyId": "journey-1784948279743-aci164",
+    "journeyCreatedAt": 1784948279743,
+    "journeyUpdatedAt": 1784948279757,
+    "resumeRoute": null,
+    "resumeScreenId": null,
+    "previousCompletedJourneys": [
+      {
+        "journeyId": "journey-1784948277837-phx5yc",
+        "cigarName": null,
+        "completedAt": 1784948279743
+      }
+    ],
+    "welcomeExperience": null,
+    "welcomeViewedAt": null,
+    "learningObjectivesViewed": false,
+    "s1CompletedAt": null,
+    "currentScreenId": null,
+    "finalReview": null,
+    "passportStamp": null,
+    "connections": null,
+    "sessionCompletion": null
+  }
+}

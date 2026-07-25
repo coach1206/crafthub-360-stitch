@@ -182,8 +182,19 @@ export default function SmokeCraft() {
   }
 
   function handleStart() {
-    // START vs RESUME is the resolver's decision, not this component's.
-    runAction(getPrimaryActionId(journeyState))
+    // START vs RESUME vs START_NEW is the resolver's decision, not this
+    // component's. A resolved action that requiresConfirmation (the completed
+    // journey's START NEW JOURNEY) opens the confirm dialog instead of
+    // navigating straight through — the resolver, not the component, decides
+    // that a control is destructive.
+    const actionId = getPrimaryActionId(journeyState)
+    const action = resolveSmokeCraftLandingAction(actionId, journeyState)
+    if (action.requiresConfirmation) {
+      triggerHaptic('light')
+      setConfirmingStartNew(true)
+      return
+    }
+    runAction(actionId)
   }
 
   return (

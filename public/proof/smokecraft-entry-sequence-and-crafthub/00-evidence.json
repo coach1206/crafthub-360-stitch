@@ -1,0 +1,37 @@
+{
+  "newUser": {
+    "primaryLabel": "START SMOKECRAFT JOURNEY →",
+    "route": "/smokecraft/enroll"
+  },
+  "afterGuestPass": {
+    "primaryLabel": "RESUME SMOKECRAFT JOURNEY →",
+    "route": "/smokecraft/venue-select"
+  },
+  "venueStep": "/smokecraft/venue-select",
+  "welcomeStep": "/smokecraft/welcome",
+  "resume": {
+    "label": "RESUME SMOKECRAFT JOURNEY →",
+    "route": "/smokecraft/humidor-match"
+  },
+  "startNew": {
+    "route": "/smokecraft/venue-select",
+    "steps": [
+      "enroll"
+    ]
+  },
+  "craftHub": {
+    "route": "/smokecraft/crafthub",
+    "image": "/assets/smokecraft/CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=3efbba9"
+  },
+  "craftHubBack": "/smokecraft",
+  "passportBack": {
+    "from": "/smokecraft/passport",
+    "to": "/smokecraft",
+    "box": {
+      "x": 34.546875,
+      "y": 65.84375,
+      "width": 136.796875,
+      "height": 43.25
+    }
+  }
+}

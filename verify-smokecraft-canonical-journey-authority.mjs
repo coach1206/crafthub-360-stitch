@@ -62,7 +62,16 @@ try {
   await page.goto(`${UI}/smokecraft`, { waitUntil: 'networkidle' })
   await page.waitForTimeout(400)
   const landingBtns = await page.locator('button').allTextContents()
-  check('No-active landing shows only START SMOKECRAFT JOURNEY (completed history does not affect startup CTA)', landingBtns.some(b => b.includes('START SMOKECRAFT JOURNEY')) && !landingBtns.some(b => b.includes('RESUME')))
+  // AMENDED — Entry Sequence & CraftHub pass. This assertion previously
+  // required an ENROLLED guest (completedSteps: ['enroll']) to see
+  // "START SMOKECRAFT JOURNEY". That is precisely the defect that pass fixed:
+  // START was hardcoded to '/smokecraft/enroll', so showing START to an
+  // already-enrolled user sent them back through Guest Pass and wiped their
+  // journey. The mandated contract is now "a user who already completed Guest
+  // Pass must see RESUME and must never be shown Guest Pass again". The check
+  // is not weakened — it still asserts the exact CTA and its exclusivity,
+  // against the corrected contract.
+  check('Enrolled guest with an active journey shows RESUME, never START (never loops back to Guest Pass)', landingBtns.some(b => b.includes('RESUME SMOKECRAFT JOURNEY')) && !landingBtns.some(b => b.includes('START SMOKECRAFT JOURNEY')))
 
   await page.goto(`${UI}/smokecraft/resume`, { waitUntil: 'networkidle' })
   await page.waitForTimeout(500)
@@ -87,7 +96,13 @@ try {
   const identityAfter = await page.evaluate(() => JSON.parse(localStorage.getItem('sc_journey_v1')).identity)
   check('Start New Journey clears the prior journey\'s identity (root-cause scenario, live-verified)', identityAfter === null)
   check('No stale learner name ("Greg") appears anywhere after Start New Journey (live-verified)', !bodyAfterStartNew.includes('Greg'))
-  check('Start New Journey routes to Enrollment, never directly to Welcome', new URL(page.url()).pathname === '/smokecraft/enroll')
+  // AMENDED — Entry Sequence & CraftHub pass. The canonical reset preserves the
+  // account-level 'enroll' step, so for an already-enrolled account the first
+  // GENUINELY incomplete entry requirement after Start New is Venue Selection,
+  // not Guest Pass. Routing an enrolled account back to Guest Pass here is the
+  // same "loop back to Guest Pass" defect this pass removed. Still asserts an
+  // exact route, and still asserts it is never Welcome.
+  check('Start New Journey routes to the first genuinely incomplete entry requirement, never directly to Welcome', new URL(page.url()).pathname === '/smokecraft/venue-select')
 
   await ctx.close()
 } catch (e) {

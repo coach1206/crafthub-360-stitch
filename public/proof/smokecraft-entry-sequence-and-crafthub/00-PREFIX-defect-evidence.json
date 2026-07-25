@@ -1,0 +1,51 @@
+{
+  "note": "Captured against a production build of commit 3efbba9 (pre-fix source, src/ stashed). Shows START/RESUME behavior BEFORE this pass.",
+  "results": [
+    {
+      "scenario": "new user (nothing seeded)",
+      "seededSteps": null,
+      "seededVenue": false,
+      "ctaLabel": "START SMOKECRAFT JOURNEY →",
+      "routeAfterClick": "/smokecraft/enroll",
+      "completedStepsAfterClick": []
+    },
+    {
+      "scenario": "enrolled, no venue",
+      "seededSteps": [
+        "enroll"
+      ],
+      "seededVenue": false,
+      "ctaLabel": "START SMOKECRAFT JOURNEY →",
+      "routeAfterClick": "/smokecraft/enroll",
+      "completedStepsAfterClick": [
+        "enroll"
+      ]
+    },
+    {
+      "scenario": "enrolled + venue, no sessions",
+      "seededSteps": [
+        "enroll"
+      ],
+      "seededVenue": true,
+      "ctaLabel": "START SMOKECRAFT JOURNEY →",
+      "routeAfterClick": "/smokecraft/enroll",
+      "completedStepsAfterClick": [
+        "enroll"
+      ]
+    },
+    {
+      "scenario": "enrolled + venue + S1 complete",
+      "seededSteps": [
+        "enroll",
+        "entry"
+      ],
+      "seededVenue": true,
+      "ctaLabel": "RESUME SMOKECRAFT JOURNEY →",
+      "routeAfterClick": "/smokecraft/resume",
+      "completedStepsAfterClick": [
+        "enroll",
+        "entry"
+      ]
+    }
+  ]
+}

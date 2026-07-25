@@ -59,6 +59,17 @@ export default function SmokeCraftCraftHub() {
     navigate(resolveSmokeCraftLandingAction(actionId).route)
   }
 
+  // Back returns to the EXACT prior screen the user came from — the same
+  // established pattern used elsewhere in this app (VenueOwnerDemo,
+  // EATCommand, KioskSetup) — falling back to the SmokeCraft landing only
+  // when there is no history entry to return to. It mutates no journey state,
+  // so leaving CraftHub can never reset or restart the active journey.
+  function goBack() {
+    triggerHaptic('light')
+    if (window.history.length > 1) navigate(-1)
+    else navigate('/smokecraft')
+  }
+
   function handleTile(tile) {
     if (!tile.available) return
     if (tile.id === 'smokecraft') return goAction(SMOKECRAFT_LANDING_ACTIONS.RESUME)
@@ -138,7 +149,7 @@ export default function SmokeCraftCraftHub() {
         type="button"
         data-testid="crafthub-back"
         aria-label="Back to SmokeCraft landing"
-        onClick={() => { triggerHaptic('light'); navigate('/smokecraft') }}
+        onClick={goBack}
         style={{ ...hotspot, left: '7.6%', top: '3.4%', width: '13.5%', height: '5.4%', cursor: 'pointer' }}
         {...hoverable(true)}
       />

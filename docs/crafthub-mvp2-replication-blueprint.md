@@ -1235,3 +1235,25 @@ that one domain served two different build IDs across routes.
     problem for the owner to re-export, not a code problem to engineer around.
     Open and visually inspect every approved image before deciding it's
     convertible; don't assume based on a sibling or a filename.
+
+## Entry-Sequence Resolution — permanent rules
+
+Learned from the SmokeCraft Entry-Sequence / CraftHub / Passport-Back pass, where the primary CTA of the flagship module sent every user still in the entry layer back to the first screen and destroyed their progress on the way.
+
+1. **A "Start" action must never return a literal first route.** `case START: return '/module/first-screen'` reads as obviously correct and is the single most common way an entry sequence breaks. The destination of Start is a *question about the user's state*, not a constant. Any module with a multi-step entry layer needs one function that answers "what is the very next screen for this user" and every entry control must call it.
+
+2. **That function must orchestrate the existing state authorities, never re-derive them.** In this codebase the answer is composed from a readiness contract (which prerequisite is first incomplete), a journey-status function (how far into the numbered spine, under its own contiguous-prefix rule), and a number→route registry lookup. Writing a fresh state derivation beside them creates a second source of truth that will silently disagree — which is the exact failure mode the canonical-resolver passes exist to prevent.
+
+3. **"Has the user started?" and "does the user have a journey?" are different questions.** The defect here was that `hasStarted` meant "completed at least one numbered session", and the CTA used it to mean "has a journey at all". Every user mid-entry-layer — enrolled, venue selected, but zero sessions — was therefore classified as brand-new. When a predicate is reused for a second purpose, check that its definition actually answers the new question; give the new question its own named predicate if it does not.
+
+4. **Never couple a navigation decision to a destructive reset by default.** The Start action carried `startsNewJourney: true` unconditionally, so the wrong-destination bug was also silent data loss. A reset flag must be conditional on there being genuinely nothing to preserve, and that condition belongs in the resolver where it is auditable, not in the component.
+
+5. **A completed prerequisite must persist and never be re-offered.** Once an entry step is done, no subsequent Start click, refresh, or re-entry may route back to it. Assert this explicitly — the click, then the refresh, then a *second* click — because a resolver can be correct on first render and wrong after a reset repopulates state.
+
+6. **Reproduce the reported defect against a build of the pre-fix source before fixing it.** Stash the source, build, drive the real control with a browser across several seeded starting states, and record the table. This pass's report was confirmed *and found to be worse than described* (silent venue loss) only because the pre-fix behaviour was actually measured. Source reading alone would have found the hardcoded route but not the data loss.
+
+7. **When an existing suite fails after a mandated behaviour change, check whether the assertion encoded the defect.** Two assertions here required an enrolled user to be shown "START" and routed to enrollment — the precise behaviour being removed. Amend such assertions to the corrected contract at equal strictness, mark them `AMENDED —` inline with the reason, and report the change explicitly. Equally, before claiming a fix caused a failure, verify against the starting commit: two other failures here were stale greps pointing at a file whose logic an earlier pass had already moved, and had been failing at baseline.
+
+8. **"Back" means the prior screen, not a constant.** A hardcoded `navigate('/module/home')` is correct only when the screen has exactly one entry path. Use the codebase's established previous-route pattern with a fallback, and verify Back by *arriving from somewhere* and then pressing it — never by inspecting the handler.
+
+9. **An invisible hotspot is not a control.** Transparent hotspots over approved artwork are the right pattern for affordances the artwork already draws; they are the wrong pattern for a control the artwork does not draw. If the approved image has no Back affordance, the Back button must be genuinely visible, focusable, keyboard-operable, and placed in empty margin so the approved composition is still untouched.

@@ -1,0 +1,167 @@
+[
+  {
+    "name": "Canonical resolveSmokeCraftEntryDestination exists",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Entry resolver orchestrates the existing canonical authorities (does not reimplement them)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "START no longer hardcodes the Guest Pass / Enrollment route",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "RESUME no longer hands off a precomputed entryRoute",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "There is exactly one SmokeCraft CraftHub route in App.jsx",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Rewards Center source is unchanged from before this pass",
+    "pass": true,
+    "detail": "3efbba9=9e1ae9846cf1 now=9e1ae9846cf1"
+  },
+  {
+    "name": "Leaderboard source is unchanged from before this pass",
+    "pass": true,
+    "detail": "3efbba9=3fa116286526 now=3fa116286526"
+  },
+  {
+    "name": "No approved asset under public/assets/smokecraft was changed or removed",
+    "pass": true,
+    "detail": "no diff"
+  },
+  {
+    "name": "No new artwork was created under public/assets/smokecraft",
+    "pass": true,
+    "detail": "no untracked files"
+  },
+  {
+    "name": "VISIT_STRUCTURE 6-phase / 27-session structure unchanged",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(1) A completely new user sees Guest Pass / Enrollment once",
+    "pass": true,
+    "detail": "label=\"START SMOKECRAFT JOURNEY →\" -> /smokecraft/enroll"
+  },
+  {
+    "name": "(2) After completing Guest Pass the entry sequence advances past it (never back to Guest Pass)",
+    "pass": true,
+    "detail": "label=\"RESUME SMOKECRAFT JOURNEY →\" -> /smokecraft/venue-select"
+  },
+  {
+    "name": "(3) Refresh does not return the user to Guest Pass",
+    "pass": true,
+    "detail": "/smokecraft/venue-select"
+  },
+  {
+    "name": "(3b) A second Start click after enrollment still does not reopen Guest Pass",
+    "pass": true,
+    "detail": "/smokecraft/venue-select"
+  },
+  {
+    "name": "(4) With identity satisfied and no venue, entry advances to Venue Selection",
+    "pass": true,
+    "detail": "/smokecraft/venue-select"
+  },
+  {
+    "name": "(5) Completing Venue advances to Welcome",
+    "pass": true,
+    "detail": "/smokecraft/welcome"
+  },
+  {
+    "name": "(6) Begin Experience lands on Session 1 (Welcome route renders session-1)",
+    "pass": true,
+    "detail": "/smokecraft/welcome renders session-1=true"
+  },
+  {
+    "name": "(7a) An active journey shows RESUME SMOKECRAFT JOURNEY",
+    "pass": true,
+    "detail": "RESUME SMOKECRAFT JOURNEY →"
+  },
+  {
+    "name": "(7b) Resume opens the earliest incomplete screen (S2), not a completed one",
+    "pass": true,
+    "detail": "/smokecraft/humidor-match"
+  },
+  {
+    "name": "(8) Resume does not restart enrollment or reset progress",
+    "pass": true,
+    "detail": "[\"enroll\",\"entry\"]"
+  },
+  {
+    "name": "(9a) Start New begins at the first genuinely incomplete entry requirement, not Guest Pass",
+    "pass": true,
+    "detail": "/smokecraft/venue-select"
+  },
+  {
+    "name": "(9b) Start New preserves account-level enrollment history and clears journey progress",
+    "pass": true,
+    "detail": "[\"enroll\"]"
+  },
+  {
+    "name": "(9c) Start New preserves completed-journey history (previousCompletedJourneys retained)",
+    "pass": true,
+    "detail": "[{\"journeyId\":\"journey-1784948277837-phx5yc\",\"cigarName\":null,\"completedAt\":1784948279743}]"
+  },
+  {
+    "name": "(10a) The Landing CraftHub control opens /smokecraft/crafthub",
+    "pass": true,
+    "detail": "/smokecraft/crafthub"
+  },
+  {
+    "name": "(10b) CraftHub renders the approved CraftHub artwork",
+    "pass": true,
+    "detail": "/assets/smokecraft/CRAFTHUB%20360.%20VENUE%20TABLE%20EXPERIENCE.png?v=3efbba9"
+  },
+  {
+    "name": "(10c) CraftHub does not route to Identity, Welcome, or Guest Pass",
+    "pass": true,
+    "detail": "/smokecraft/crafthub"
+  },
+  {
+    "name": "(11) CraftHub does not show \"Greg Guy\" or stale SmokeCraft learner data",
+    "pass": true,
+    "detail": "Build: 3efbba9 · production CraftHub 360 — Venue Table Experience"
+  },
+  {
+    "name": "(12) CraftHub does not reset or restart the active journey",
+    "pass": true,
+    "detail": "{\"steps\":[\"enroll\",\"entry\"],\"venue\":\"esc-venue\"}"
+  },
+  {
+    "name": "(13) CraftHub Back returns to the exact prior screen (Landing)",
+    "pass": true,
+    "detail": "/smokecraft"
+  },
+  {
+    "name": "(14a) Passport opens the approved Passport destination",
+    "pass": true,
+    "detail": "/smokecraft/passport"
+  },
+  {
+    "name": "(14b) Passport Back button is visible",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(14c) Passport Back button is a real, sized, clickable target",
+    "pass": true,
+    "detail": "{\"x\":34.546875,\"y\":65.84375,\"width\":136.796875,\"height\":43.25}"
+  },
+  {
+    "name": "(14d) Passport Back returns to the exact prior screen via keyboard Enter",
+    "pass": true,
+    "detail": "/smokecraft"
+  }
+]
