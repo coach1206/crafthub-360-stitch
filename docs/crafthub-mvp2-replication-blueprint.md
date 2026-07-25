@@ -1257,3 +1257,45 @@ Learned from the SmokeCraft Entry-Sequence / CraftHub / Passport-Back pass, wher
 8. **"Back" means the prior screen, not a constant.** A hardcoded `navigate('/module/home')` is correct only when the screen has exactly one entry path. Use the codebase's established previous-route pattern with a fallback, and verify Back by *arriving from somewhere* and then pressing it — never by inspecting the handler.
 
 9. **An invisible hotspot is not a control.** Transparent hotspots over approved artwork are the right pattern for affordances the artwork already draws; they are the wrong pattern for a control the artwork does not draw. If the approved image has no Back affordance, the Back button must be genuinely visible, focusable, keyboard-operable, and placed in empty margin so the approved composition is still untouched.
+
+## Approved-Image Overlay Geometry — permanent rules
+
+When live React controls are positioned over an approved image as percentage
+bands (the `SmokeCraftImageBoundsOverlay` pattern), the band **is** the
+contract that keeps the overlay aligned to the artwork underneath it.
+
+1. **Never mix a fixed-px `minHeight`/`minWidth` with a percentage band on an
+   image-aligned hotspot.** The fixed value silently wins at smaller viewports
+   and the control grows outside its approved zone, covering baked artwork.
+   A `minHeight: 72` over a `height: 5.2%` band rendered ~2.4x too tall at
+   1024x768 and buried a paragraph baked into the approved image. The bug is
+   invisible at the design viewport and guaranteed below a computable
+   threshold — here, any rendered image height under `72 / 0.076 ≈ 947px`.
+   Compute that threshold rather than eyeballing one viewport.
+
+2. **A horizontal-overflow check is not an overlap check.** `scrollWidth -
+   clientWidth` was zero on every one of 124 screen x viewport combinations
+   while two CTAs visibly overlapped each other and the artwork. Overlapping
+   absolutely-positioned elements never produce overflow. Assert real geometry
+   — compare `getBoundingClientRect()` pairs, and express "must stay clear of
+   this baked zone" as a percentage of the rendered image box.
+
+3. **`whiteSpace: nowrap` converts a wrap bug into a clip bug.** Assert both:
+   `scrollHeight > clientHeight` (wrapped out of band) *and* `scrollWidth >
+   clientWidth` (clipped). Fixing only the first hides the second.
+
+4. **Dynamic labels resize the problem.** A control whose label changes with
+   journey state ("START…" vs "RESUME…" vs "VIEW COMPLETED…") must be
+   verified in *every* label state. A state-routing fix that makes a longer
+   label the common path will surface latent layout faults that were
+   previously rare — re-run visual checks after any such fix.
+
+5. **Before deleting a constraint that looks like an accessibility rule,
+   find the assertion that demanded it.** The `minHeight: 72` here read as a
+   touch-target rule, but the suite's 72x72 assertion targeted a different
+   component entirely. Grep for the assertion; do not infer intent from a
+   comment.
+
+6. **Screenshots must be looked at, not just collected.** Every programmatic
+   check passed on the run that produced the overlapping screenshots. The
+   defect was found only by actually reading the captured image.

@@ -1,0 +1,1561 @@
+{
+  "startedAt": "2026-07-25T13:25:52.993Z",
+  "commit": "a548ff0cd797d59d906316e81556f3681579e630",
+  "branch": "recovery/smokecraft-codex-final",
+  "entry": [
+    {
+      "step": "start-new-user",
+      "route": "/smokecraft/enroll"
+    },
+    {
+      "step": "resume-enrolled",
+      "route": "/smokecraft/venue-select"
+    },
+    {
+      "step": "begin-experience",
+      "route": "/smokecraft/humidor-match"
+    }
+  ],
+  "sessions": [
+    {
+      "session": 1,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "label": "Welcome to Today’s Experience",
+      "route": "/smokecraft/welcome",
+      "resolved": "/smokecraft/welcome",
+      "screenId": "session-1",
+      "component": "session-1",
+      "assetKey": null,
+      "approvedAsset": null,
+      "renderedSha256": null,
+      "diskSha256": null,
+      "hashMatch": null,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/venue-select",
+      "nextRoute": "/smokecraft/humidor-match",
+      "visualSource": "live-component-no-approved-asset",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-01.png"
+    },
+    {
+      "session": 2,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "label": "Choose Your Cigar",
+      "route": "/smokecraft/humidor-match",
+      "resolved": "/smokecraft/humidor-match",
+      "screenId": "session-2",
+      "component": "session-2",
+      "assetKey": "humidorMatch",
+      "approvedAsset": "/assets/smokecraft/Humidor Match 1.png",
+      "renderedSha256": "63c6510b549a89cafb7e2b293afce68dcf2895830f9a0a52e2883be62a380c28",
+      "diskSha256": "63c6510b549a89cafb7e2b293afce68dcf2895830f9a0a52e2883be62a380c28",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/welcome",
+      "nextRoute": "/smokecraft/meet-your-cigar",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-02.png"
+    },
+    {
+      "session": 3,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "label": "Meet Your Cigar",
+      "route": "/smokecraft/meet-your-cigar",
+      "resolved": "/smokecraft/meet-your-cigar",
+      "screenId": "session-3",
+      "component": "session-3",
+      "assetKey": "meetYourCigar",
+      "approvedAsset": "/assets/smokecraft/DISOVER YOUR CIGAR PROFILE.png",
+      "renderedSha256": "6fc13ac032af8e5f7c04e7e138a7aa0df31579dde1ab6cea2ca0be22418db6a4",
+      "diskSha256": "6fc13ac032af8e5f7c04e7e138a7aa0df31579dde1ab6cea2ca0be22418db6a4",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/humidor-match",
+      "nextRoute": "/smokecraft/terroir",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-03.png"
+    },
+    {
+      "session": 4,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "label": "Terroir",
+      "route": "/smokecraft/terroir",
+      "resolved": "/smokecraft/terroir",
+      "screenId": "session-4",
+      "component": "session-4",
+      "assetKey": "terroir",
+      "approvedAsset": "/assets/smokecraft-reference/approved/smokecraft-terroir.png",
+      "renderedSha256": "e671a9a296f1162ca086e343b04d0e171aa1b24d236d93c96d187d8465bd4908",
+      "diskSha256": "e671a9a296f1162ca086e343b04d0e171aa1b24d236d93c96d187d8465bd4908",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/meet-your-cigar",
+      "nextRoute": "/smokecraft/format",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-04.png"
+    },
+    {
+      "session": 5,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "label": "Construction Inspection",
+      "route": "/smokecraft/format",
+      "resolved": "/smokecraft/format",
+      "screenId": "session-5",
+      "component": "session-5",
+      "assetKey": "format",
+      "approvedAsset": "/assets/smokecraft-reference/approved/smokecraft-vitola.png",
+      "renderedSha256": "a7c1147e1b9b6bb33432de7f33fb3f622adaa4fc1782511ceccb52ad44d14136",
+      "diskSha256": "a7c1147e1b9b6bb33432de7f33fb3f622adaa4fc1782511ceccb52ad44d14136",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/terroir",
+      "nextRoute": "/smokecraft/request-purchase",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-05.png"
+    },
+    {
+      "session": 6,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "label": "Choose Your Cut",
+      "route": "/smokecraft/cut-toast-light",
+      "resolved": "/smokecraft/cut-toast-light",
+      "screenId": "session-6",
+      "component": "session-6",
+      "assetKey": "cutToastLight",
+      "approvedAsset": "/assets/smokecraft/CUT  TOAST, & LIGHT.png",
+      "renderedSha256": "09a4257a15bf400150f4e89df3ff91e7e3a7b057b17bbc8c7c3334eefddd4b43",
+      "diskSha256": "09a4257a15bf400150f4e89df3ff91e7e3a7b057b17bbc8c7c3334eefddd4b43",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/format",
+      "nextRoute": "/smokecraft/lighting-tutorial",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-06.png"
+    },
+    {
+      "session": 7,
+      "phase": 1,
+      "phaseTitle": "Session Preparation",
+      "label": "Lighting Tutorial",
+      "route": "/smokecraft/lighting-tutorial",
+      "resolved": "/smokecraft/lighting-tutorial",
+      "screenId": "session-7",
+      "component": "session-7",
+      "assetKey": "lightingTutorial",
+      "approvedAsset": "/assets/smokecraft/LIGHTING TUTORIAL 1.png",
+      "renderedSha256": "0b9e31a4821a686d547810cf8051b4d34f1c446ed97bf3a2fb79d5f9fa36000b",
+      "diskSha256": "0b9e31a4821a686d547810cf8051b4d34f1c446ed97bf3a2fb79d5f9fa36000b",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/cut-toast-light",
+      "nextRoute": "/smokecraft/first-third",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-07.png"
+    },
+    {
+      "session": 8,
+      "phase": 2,
+      "phaseTitle": "First Third",
+      "label": "First Draw",
+      "route": "/smokecraft/first-third",
+      "resolved": "/smokecraft/first-third",
+      "screenId": "session-8",
+      "component": "session-8",
+      "assetKey": "firstThird",
+      "approvedAsset": "/assets/smokecraft/FIRST  THIRD1.png",
+      "renderedSha256": "18a997c3d1de12ce21627b903280f57ea2eaee4ed96f31d0051c8dac2c8f295b",
+      "diskSha256": "18a997c3d1de12ce21627b903280f57ea2eaee4ed96f31d0051c8dac2c8f295b",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/lighting-tutorial",
+      "nextRoute": "/smokecraft/first-third",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-08.png"
+    },
+    {
+      "session": 9,
+      "phase": 2,
+      "phaseTitle": "First Third",
+      "label": "Flavor Discovery",
+      "route": "/smokecraft/first-third",
+      "resolved": "/smokecraft/first-third",
+      "screenId": "session-8",
+      "component": "session-8",
+      "assetKey": "firstThird",
+      "approvedAsset": "/assets/smokecraft/FIRST  THIRD1.png",
+      "renderedSha256": "18a997c3d1de12ce21627b903280f57ea2eaee4ed96f31d0051c8dac2c8f295b",
+      "diskSha256": "18a997c3d1de12ce21627b903280f57ea2eaee4ed96f31d0051c8dac2c8f295b",
+      "hashMatch": true,
+      "mergedInto": 8,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/first-third",
+      "nextRoute": "/smokecraft/flavor-memory",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-09.png"
+    },
+    {
+      "session": 10,
+      "phase": 2,
+      "phaseTitle": "First Third",
+      "label": "Flavor Memory Exercise",
+      "route": "/smokecraft/flavor-memory",
+      "resolved": "/smokecraft/flavor-memory",
+      "screenId": "session-10",
+      "component": "session-10",
+      "assetKey": "flavorMemory",
+      "approvedAsset": "/assets/smokecraft/FLAVOR MEMORY.png",
+      "renderedSha256": "297eb2b15d96a58dbda1ffa3878a962a33a0f242199a0595b655f2aeca71310d",
+      "diskSha256": "297eb2b15d96a58dbda1ffa3878a962a33a0f242199a0595b655f2aeca71310d",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/first-third",
+      "nextRoute": "/smokecraft/pairing-lab",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-10.png"
+    },
+    {
+      "session": 11,
+      "phase": 2,
+      "phaseTitle": "First Third",
+      "label": "Suggested Pairings",
+      "route": "/smokecraft/pairing-lab",
+      "resolved": "/smokecraft/pairing-lab",
+      "screenId": "session-11",
+      "component": "session-11",
+      "assetKey": "pairingLab",
+      "approvedAsset": "/assets/smokecraft/PAIRING LAB1.png",
+      "renderedSha256": "274fc143e8d5f525b64f853402d83ba1843a11e38e86e7f1138e57ea325bad93",
+      "diskSha256": "274fc143e8d5f525b64f853402d83ba1843a11e38e86e7f1138e57ea325bad93",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/flavor-memory",
+      "nextRoute": "/smokecraft/second-third",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-11.png"
+    },
+    {
+      "session": 12,
+      "phase": 3,
+      "phaseTitle": "Second Third",
+      "label": "Flavor Evolution",
+      "route": "/smokecraft/second-third",
+      "resolved": "/smokecraft/second-third",
+      "screenId": "session-12",
+      "component": "session-12",
+      "assetKey": "secondThird",
+      "approvedAsset": "/assets/smokecraft/SECOND THIRD.png",
+      "renderedSha256": "0a8ec771f6bf71d21fc5533096a4a4efb44b10453b7105067d0e3c8123768a88",
+      "diskSha256": "0a8ec771f6bf71d21fc5533096a4a4efb44b10453b7105067d0e3c8123768a88",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/pairing-lab",
+      "nextRoute": "/smokecraft/second-third",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-12.png"
+    },
+    {
+      "session": 13,
+      "phase": 3,
+      "phaseTitle": "Second Third",
+      "label": "Construction Check",
+      "route": "/smokecraft/second-third",
+      "resolved": "/smokecraft/second-third",
+      "screenId": "session-12",
+      "component": "session-12",
+      "assetKey": "secondThird",
+      "approvedAsset": "/assets/smokecraft/SECOND THIRD.png",
+      "renderedSha256": "0a8ec771f6bf71d21fc5533096a4a4efb44b10453b7105067d0e3c8123768a88",
+      "diskSha256": "0a8ec771f6bf71d21fc5533096a4a4efb44b10453b7105067d0e3c8123768a88",
+      "hashMatch": true,
+      "mergedInto": 12,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/second-third",
+      "nextRoute": "/smokecraft/mentor-commentary",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-13.png"
+    },
+    {
+      "session": 14,
+      "phase": 3,
+      "phaseTitle": "Second Third",
+      "label": "Mentor Commentary",
+      "route": "/smokecraft/mentor-commentary",
+      "resolved": "/smokecraft/mentor-commentary",
+      "screenId": "session-14",
+      "component": "session-14",
+      "assetKey": "mentorCommentary",
+      "approvedAsset": "/assets/smokecraft/MENTOR :COMMENTARY.png",
+      "renderedSha256": "3959f46c029b02968c26666ae68a6f03c1a0341917abe75207a891f917933e56",
+      "diskSha256": "3959f46c029b02968c26666ae68a6f03c1a0341917abe75207a891f917933e56",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/second-third",
+      "nextRoute": "/smokecraft/knowledge-drop",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-14.png"
+    },
+    {
+      "session": 15,
+      "phase": 3,
+      "phaseTitle": "Second Third",
+      "label": "Knowledge Drop",
+      "route": "/smokecraft/knowledge-drop",
+      "resolved": "/smokecraft/knowledge-drop",
+      "screenId": "session-15",
+      "component": "session-15",
+      "assetKey": "knowledgeDrop",
+      "approvedAsset": "/assets/smokecraft/KNOWLEDGE DROP.png",
+      "renderedSha256": "27b3c600ed0be03eb1f8fdb4ad62e2ec274c3e3f24581f151ccca820529eff5f",
+      "diskSha256": "27b3c600ed0be03eb1f8fdb4ad62e2ec274c3e3f24581f151ccca820529eff5f",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/mentor-commentary",
+      "nextRoute": "/smokecraft/final-third",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-15.png"
+    },
+    {
+      "session": 16,
+      "phase": 4,
+      "phaseTitle": "Final Third",
+      "label": "Flavor Finish",
+      "route": "/smokecraft/final-third",
+      "resolved": "/smokecraft/final-third",
+      "screenId": "session-16",
+      "component": "session-16",
+      "assetKey": "finalThird",
+      "approvedAsset": "/assets/smokecraft/FINAL THIRD.png",
+      "renderedSha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0",
+      "diskSha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/knowledge-drop",
+      "nextRoute": "/smokecraft/final-third",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-16.png"
+    },
+    {
+      "session": 17,
+      "phase": 4,
+      "phaseTitle": "Final Third",
+      "label": "Strength Progression",
+      "route": "/smokecraft/final-third",
+      "resolved": "/smokecraft/final-third",
+      "screenId": "session-16",
+      "component": "session-16",
+      "assetKey": "finalThird",
+      "approvedAsset": "/assets/smokecraft/FINAL THIRD.png",
+      "renderedSha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0",
+      "diskSha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0",
+      "hashMatch": true,
+      "mergedInto": 16,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/final-third",
+      "nextRoute": "/smokecraft/final-third",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-17.png"
+    },
+    {
+      "session": 18,
+      "phase": 4,
+      "phaseTitle": "Final Third",
+      "label": "Overall Experience Notes",
+      "route": "/smokecraft/final-third",
+      "resolved": "/smokecraft/final-third",
+      "screenId": "session-16",
+      "component": "session-16",
+      "assetKey": "finalThird",
+      "approvedAsset": "/assets/smokecraft/FINAL THIRD.png",
+      "renderedSha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0",
+      "diskSha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0",
+      "hashMatch": true,
+      "mergedInto": 16,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/final-third",
+      "nextRoute": "/smokecraft/scorecard",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-18.png"
+    },
+    {
+      "session": 19,
+      "phase": 5,
+      "phaseTitle": "Reflection",
+      "label": "Rate Every Category",
+      "route": "/smokecraft/scorecard",
+      "resolved": "/smokecraft/scorecard",
+      "screenId": "session-19",
+      "component": "session-19",
+      "assetKey": "scorecard",
+      "approvedAsset": "/assets/smokecraft/Scorecard.png",
+      "renderedSha256": "a577973797590d326a1f14f645262bcc886ee61e9cca4c3fc723ef3b410e9580",
+      "diskSha256": "a577973797590d326a1f14f645262bcc886ee61e9cca4c3fc723ef3b410e9580",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/final-third",
+      "nextRoute": "/smokecraft/scorecard",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-19.png"
+    },
+    {
+      "session": 20,
+      "phase": 5,
+      "phaseTitle": "Reflection",
+      "label": "Personal Notes",
+      "route": "/smokecraft/scorecard",
+      "resolved": "/smokecraft/scorecard",
+      "screenId": "session-19",
+      "component": "session-19",
+      "assetKey": "scorecard",
+      "approvedAsset": "/assets/smokecraft/Scorecard.png",
+      "renderedSha256": "a577973797590d326a1f14f645262bcc886ee61e9cca4c3fc723ef3b410e9580",
+      "diskSha256": "a577973797590d326a1f14f645262bcc886ee61e9cca4c3fc723ef3b410e9580",
+      "hashMatch": true,
+      "mergedInto": 19,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/scorecard",
+      "nextRoute": "/smokecraft/ai-summary",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-20.png"
+    },
+    {
+      "session": 21,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "label": "AI Summary",
+      "route": "/smokecraft/ai-summary",
+      "resolved": "/smokecraft/ai-summary",
+      "screenId": "session-21",
+      "component": "session-21",
+      "assetKey": "aiSummary",
+      "approvedAsset": "/assets/smokecraft/AI SUMMARY.png",
+      "renderedSha256": "1d05f50d0eb713605ccdab57acc5bb0004b114bc79f3b224772465d6e08c01e2",
+      "diskSha256": "1d05f50d0eb713605ccdab57acc5bb0004b114bc79f3b224772465d6e08c01e2",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/scorecard",
+      "nextRoute": "/smokecraft/pairing-recommendations",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-21.png"
+    },
+    {
+      "session": 22,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "label": "Personalized Pairing Recommendations",
+      "route": "/smokecraft/pairing-recommendations",
+      "resolved": "/smokecraft/pairing-recommendations",
+      "screenId": "session-22",
+      "component": "session-22",
+      "assetKey": "pairingRecommendations",
+      "approvedAsset": "/assets/smokecraft/personlized pairing 222.png",
+      "renderedSha256": "f060831b151cbefc6d265b962793498eea116faa8ec80cdae81788279201e075",
+      "diskSha256": "f060831b151cbefc6d265b962793498eea116faa8ec80cdae81788279201e075",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/ai-summary",
+      "nextRoute": "/smokecraft/passport-stamp",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-22.png"
+    },
+    {
+      "session": 23,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "label": "Passport Stamp Animation",
+      "route": "/smokecraft/passport-stamp",
+      "resolved": "/smokecraft/passport-stamp",
+      "screenId": "session-23",
+      "component": "session-23",
+      "assetKey": "passportStamp",
+      "approvedAsset": "/assets/smokecraft/PASSPORT STAMP.png",
+      "renderedSha256": "4d9fb28ac0108a8d36f291abf53987125e3e8388f648a091cfacf9246f6f483a",
+      "diskSha256": "4d9fb28ac0108a8d36f291abf53987125e3e8388f648a091cfacf9246f6f483a",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/pairing-recommendations",
+      "nextRoute": "/smokecraft/final-review",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-23.png"
+    },
+    {
+      "session": 24,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "label": "Completed Scorecard",
+      "route": "/smokecraft/final-review",
+      "resolved": "/smokecraft/final-review",
+      "screenId": "session-24",
+      "component": "session-24",
+      "assetKey": "finalReview",
+      "approvedAsset": "/assets/smokecraft/FINAL REVIEW.png",
+      "renderedSha256": "df16f309ce138aa0cd9a2f6f950124e65dc705ed23134b3d2a4551979a7d607c",
+      "diskSha256": "df16f309ce138aa0cd9a2f6f950124e65dc705ed23134b3d2a4551979a7d607c",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/passport-stamp",
+      "nextRoute": "/smokecraft/rewards",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-24.png"
+    },
+    {
+      "session": 25,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "label": "Rewards and XP",
+      "route": "/smokecraft/rewards",
+      "resolved": "/smokecraft/rewards",
+      "screenId": "session-25",
+      "component": "session-25",
+      "assetKey": "rewards",
+      "approvedAsset": "/assets/smokecraft/REWARDS 222.png",
+      "renderedSha256": "986196149e83c89562bf317763c5ba8eb7332546090189f441fec9fd01a99895",
+      "diskSha256": "986196149e83c89562bf317763c5ba8eb7332546090189f441fec9fd01a99895",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/final-review",
+      "nextRoute": "/smokecraft/rewards",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-25.png"
+    },
+    {
+      "session": 26,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "label": "Achievements",
+      "route": "/smokecraft/rewards",
+      "resolved": "/smokecraft/rewards",
+      "screenId": "session-25",
+      "component": "session-25",
+      "assetKey": "achievements",
+      "approvedAsset": "/assets/smokecraft/ACHIEVMENTS.png",
+      "renderedSha256": "32e64aadd40d56102de3a4fb8667fe4c030d84c0377ff2f4b8b48a2d6191d24f",
+      "diskSha256": "32e64aadd40d56102de3a4fb8667fe4c030d84c0377ff2f4b8b48a2d6191d24f",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": "/smokecraft/rewards",
+      "previousRoute": "/smokecraft/rewards",
+      "nextRoute": "/smokecraft/session-complete",
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-26.png"
+    },
+    {
+      "session": 27,
+      "phase": 6,
+      "phaseTitle": "Results",
+      "label": "Recommended Next Journey",
+      "route": "/smokecraft/session-complete",
+      "resolved": "/smokecraft/session-complete",
+      "screenId": "session-27",
+      "component": "session-27",
+      "assetKey": "recommendedNextJourney",
+      "approvedAsset": "/assets/smokecraft/Recommend next journey.png",
+      "renderedSha256": "2c5a402c0063a7dc87bc740f8242234e8c6d20f759dfd29b6b1e471386a221a6",
+      "diskSha256": "2c5a402c0063a7dc87bc740f8242234e8c6d20f759dfd29b6b1e471386a221a6",
+      "hashMatch": true,
+      "mergedInto": null,
+      "sharedComponent": null,
+      "previousRoute": "/smokecraft/rewards",
+      "nextRoute": null,
+      "visualSource": "user-approved",
+      "staticOnly": "false",
+      "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-27.png"
+    }
+  ],
+  "supporting": [
+    {
+      "label": "Pairing (landing destination)",
+      "route": "/smokecraft/pairing",
+      "resolved": "/smokecraft/pairing",
+      "steps": 11,
+      "venue": "Test Lounge"
+    },
+    {
+      "label": "Passport",
+      "route": "/smokecraft/passport",
+      "resolved": "/smokecraft/passport",
+      "steps": 11,
+      "venue": "Test Lounge"
+    },
+    {
+      "label": "Rewards Center",
+      "route": "/smokecraft/rewards-center",
+      "resolved": "/smokecraft/rewards-center",
+      "steps": 11,
+      "venue": "Test Lounge"
+    },
+    {
+      "label": "Rankings / Leaderboard",
+      "route": "/smokecraft/leaderboard",
+      "resolved": "/smokecraft/leaderboard",
+      "steps": 11,
+      "venue": "Test Lounge"
+    },
+    {
+      "label": "CraftHub",
+      "route": "/smokecraft/crafthub",
+      "resolved": "/smokecraft/crafthub",
+      "steps": 11,
+      "venue": "Test Lounge"
+    },
+    {
+      "label": "Challenge Hub",
+      "route": "/smokecraft/challenge-hub",
+      "resolved": "/smokecraft/challenge-hub",
+      "steps": 11,
+      "venue": "Test Lounge"
+    }
+  ],
+  "viewports": [
+    {
+      "screenId": "entry-landing",
+      "route": "/smokecraft",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-enroll",
+      "route": "/smokecraft/enroll",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-identity",
+      "route": "/smokecraft/identity",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-venue",
+      "route": "/smokecraft/venue-select",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-1",
+      "route": "/smokecraft/welcome",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-2",
+      "route": "/smokecraft/humidor-match",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-3",
+      "route": "/smokecraft/meet-your-cigar",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-4",
+      "route": "/smokecraft/terroir",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-5",
+      "route": "/smokecraft/format",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-6",
+      "route": "/smokecraft/cut-toast-light",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-7",
+      "route": "/smokecraft/lighting-tutorial",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-8",
+      "route": "/smokecraft/first-third",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-9",
+      "route": "/smokecraft/first-third",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-10",
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-11",
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-12",
+      "route": "/smokecraft/second-third",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-13",
+      "route": "/smokecraft/second-third",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-14",
+      "route": "/smokecraft/mentor-commentary",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-15",
+      "route": "/smokecraft/knowledge-drop",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-16",
+      "route": "/smokecraft/final-third",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-17",
+      "route": "/smokecraft/final-third",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-18",
+      "route": "/smokecraft/final-third",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-19",
+      "route": "/smokecraft/scorecard",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-20",
+      "route": "/smokecraft/scorecard",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-21",
+      "route": "/smokecraft/ai-summary",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-22",
+      "route": "/smokecraft/pairing-recommendations",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-23",
+      "route": "/smokecraft/passport-stamp",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-24",
+      "route": "/smokecraft/final-review",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-25",
+      "route": "/smokecraft/rewards",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-26",
+      "route": "/smokecraft/rewards",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-27",
+      "route": "/smokecraft/session-complete",
+      "viewport": "1024x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-landing",
+      "route": "/smokecraft",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-enroll",
+      "route": "/smokecraft/enroll",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-identity",
+      "route": "/smokecraft/identity",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-venue",
+      "route": "/smokecraft/venue-select",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-1",
+      "route": "/smokecraft/welcome",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-2",
+      "route": "/smokecraft/humidor-match",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-3",
+      "route": "/smokecraft/meet-your-cigar",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-4",
+      "route": "/smokecraft/terroir",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-5",
+      "route": "/smokecraft/format",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-6",
+      "route": "/smokecraft/cut-toast-light",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-7",
+      "route": "/smokecraft/lighting-tutorial",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-8",
+      "route": "/smokecraft/first-third",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-9",
+      "route": "/smokecraft/first-third",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-10",
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-11",
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-12",
+      "route": "/smokecraft/second-third",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-13",
+      "route": "/smokecraft/second-third",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-14",
+      "route": "/smokecraft/mentor-commentary",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-15",
+      "route": "/smokecraft/knowledge-drop",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-16",
+      "route": "/smokecraft/final-third",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-17",
+      "route": "/smokecraft/final-third",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-18",
+      "route": "/smokecraft/final-third",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-19",
+      "route": "/smokecraft/scorecard",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-20",
+      "route": "/smokecraft/scorecard",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-21",
+      "route": "/smokecraft/ai-summary",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-22",
+      "route": "/smokecraft/pairing-recommendations",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-23",
+      "route": "/smokecraft/passport-stamp",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-24",
+      "route": "/smokecraft/final-review",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-25",
+      "route": "/smokecraft/rewards",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-26",
+      "route": "/smokecraft/rewards",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-27",
+      "route": "/smokecraft/session-complete",
+      "viewport": "1280x800",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-landing",
+      "route": "/smokecraft",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-enroll",
+      "route": "/smokecraft/enroll",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-identity",
+      "route": "/smokecraft/identity",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-venue",
+      "route": "/smokecraft/venue-select",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-1",
+      "route": "/smokecraft/welcome",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-2",
+      "route": "/smokecraft/humidor-match",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-3",
+      "route": "/smokecraft/meet-your-cigar",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-4",
+      "route": "/smokecraft/terroir",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-5",
+      "route": "/smokecraft/format",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-6",
+      "route": "/smokecraft/cut-toast-light",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-7",
+      "route": "/smokecraft/lighting-tutorial",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-8",
+      "route": "/smokecraft/first-third",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-9",
+      "route": "/smokecraft/first-third",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-10",
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-11",
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-12",
+      "route": "/smokecraft/second-third",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-13",
+      "route": "/smokecraft/second-third",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-14",
+      "route": "/smokecraft/mentor-commentary",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-15",
+      "route": "/smokecraft/knowledge-drop",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-16",
+      "route": "/smokecraft/final-third",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-17",
+      "route": "/smokecraft/final-third",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-18",
+      "route": "/smokecraft/final-third",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-19",
+      "route": "/smokecraft/scorecard",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-20",
+      "route": "/smokecraft/scorecard",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-21",
+      "route": "/smokecraft/ai-summary",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-22",
+      "route": "/smokecraft/pairing-recommendations",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-23",
+      "route": "/smokecraft/passport-stamp",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-24",
+      "route": "/smokecraft/final-review",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-25",
+      "route": "/smokecraft/rewards",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-26",
+      "route": "/smokecraft/rewards",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-27",
+      "route": "/smokecraft/session-complete",
+      "viewport": "1366x768",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-landing",
+      "route": "/smokecraft",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-enroll",
+      "route": "/smokecraft/enroll",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-identity",
+      "route": "/smokecraft/identity",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "entry-venue",
+      "route": "/smokecraft/venue-select",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-1",
+      "route": "/smokecraft/welcome",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-2",
+      "route": "/smokecraft/humidor-match",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-3",
+      "route": "/smokecraft/meet-your-cigar",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-4",
+      "route": "/smokecraft/terroir",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-5",
+      "route": "/smokecraft/format",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-6",
+      "route": "/smokecraft/cut-toast-light",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-7",
+      "route": "/smokecraft/lighting-tutorial",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-8",
+      "route": "/smokecraft/first-third",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-9",
+      "route": "/smokecraft/first-third",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-10",
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-11",
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-12",
+      "route": "/smokecraft/second-third",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-13",
+      "route": "/smokecraft/second-third",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-14",
+      "route": "/smokecraft/mentor-commentary",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-15",
+      "route": "/smokecraft/knowledge-drop",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-16",
+      "route": "/smokecraft/final-third",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-17",
+      "route": "/smokecraft/final-third",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-18",
+      "route": "/smokecraft/final-third",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-19",
+      "route": "/smokecraft/scorecard",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-20",
+      "route": "/smokecraft/scorecard",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-21",
+      "route": "/smokecraft/ai-summary",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-22",
+      "route": "/smokecraft/pairing-recommendations",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-23",
+      "route": "/smokecraft/passport-stamp",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-24",
+      "route": "/smokecraft/final-review",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-25",
+      "route": "/smokecraft/rewards",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-26",
+      "route": "/smokecraft/rewards",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    },
+    {
+      "screenId": "session-27",
+      "route": "/smokecraft/session-complete",
+      "viewport": "1440x900",
+      "horizontalOverflowPx": 0
+    }
+  ],
+  "assets": {
+    "entry-landing": {
+      "assetKey": "landing",
+      "path": "/assets/smokecraft-reference/approved/smokecraft-landing.png",
+      "sha256": "f817ab40ad138135513ad70b395725c967cc15736086d127e7fddef107fc8d7c"
+    },
+    "entry-enroll": {
+      "assetKey": "enroll",
+      "path": "/assets/smokecraft-reference/approved/smokecraft-guest-pass.png",
+      "sha256": "5c798061277c78b3e5192f2d58c670f0a1e124066986c957e9a2922cb6e04705"
+    },
+    "entry-identity": {
+      "assetKey": "identity",
+      "path": "/assets/smokecraft/IDENTY.png",
+      "sha256": "006685040277d1cf4f1d00e9ed68d6d0d740e41900c12be0386298968dc0b5d4"
+    },
+    "entry-venue": {
+      "assetKey": "venueSelect",
+      "path": "/assets/smokecraft/Venue Selection 11.png",
+      "sha256": "b17463c6be5f9fa68837c73a20670a3a71f9075cabd9435a4af67888c7aa5b9e"
+    },
+    "session-2": {
+      "assetKey": "humidorMatch",
+      "path": "/assets/smokecraft/Humidor Match 1.png",
+      "sha256": "63c6510b549a89cafb7e2b293afce68dcf2895830f9a0a52e2883be62a380c28"
+    },
+    "session-3": {
+      "assetKey": "meetYourCigar",
+      "path": "/assets/smokecraft/DISOVER YOUR CIGAR PROFILE.png",
+      "sha256": "6fc13ac032af8e5f7c04e7e138a7aa0df31579dde1ab6cea2ca0be22418db6a4"
+    },
+    "session-4": {
+      "assetKey": "terroir",
+      "path": "/assets/smokecraft-reference/approved/smokecraft-terroir.png",
+      "sha256": "e671a9a296f1162ca086e343b04d0e171aa1b24d236d93c96d187d8465bd4908"
+    },
+    "session-5": {
+      "assetKey": "format",
+      "path": "/assets/smokecraft-reference/approved/smokecraft-vitola.png",
+      "sha256": "a7c1147e1b9b6bb33432de7f33fb3f622adaa4fc1782511ceccb52ad44d14136"
+    },
+    "session-6": {
+      "assetKey": "cutToastLight",
+      "path": "/assets/smokecraft/CUT  TOAST, & LIGHT.png",
+      "sha256": "09a4257a15bf400150f4e89df3ff91e7e3a7b057b17bbc8c7c3334eefddd4b43"
+    },
+    "session-7": {
+      "assetKey": "lightingTutorial",
+      "path": "/assets/smokecraft/LIGHTING TUTORIAL 1.png",
+      "sha256": "0b9e31a4821a686d547810cf8051b4d34f1c446ed97bf3a2fb79d5f9fa36000b"
+    },
+    "session-8": {
+      "assetKey": "firstThird",
+      "path": "/assets/smokecraft/FIRST  THIRD1.png",
+      "sha256": "18a997c3d1de12ce21627b903280f57ea2eaee4ed96f31d0051c8dac2c8f295b"
+    },
+    "session-9": {
+      "assetKey": "firstThird",
+      "path": "/assets/smokecraft/FIRST  THIRD1.png",
+      "sha256": "18a997c3d1de12ce21627b903280f57ea2eaee4ed96f31d0051c8dac2c8f295b"
+    },
+    "session-10": {
+      "assetKey": "flavorMemory",
+      "path": "/assets/smokecraft/FLAVOR MEMORY.png",
+      "sha256": "297eb2b15d96a58dbda1ffa3878a962a33a0f242199a0595b655f2aeca71310d"
+    },
+    "session-11": {
+      "assetKey": "pairingLab",
+      "path": "/assets/smokecraft/PAIRING LAB1.png",
+      "sha256": "274fc143e8d5f525b64f853402d83ba1843a11e38e86e7f1138e57ea325bad93"
+    },
+    "session-12": {
+      "assetKey": "secondThird",
+      "path": "/assets/smokecraft/SECOND THIRD.png",
+      "sha256": "0a8ec771f6bf71d21fc5533096a4a4efb44b10453b7105067d0e3c8123768a88"
+    },
+    "session-13": {
+      "assetKey": "secondThird",
+      "path": "/assets/smokecraft/SECOND THIRD.png",
+      "sha256": "0a8ec771f6bf71d21fc5533096a4a4efb44b10453b7105067d0e3c8123768a88"
+    },
+    "session-14": {
+      "assetKey": "mentorCommentary",
+      "path": "/assets/smokecraft/MENTOR :COMMENTARY.png",
+      "sha256": "3959f46c029b02968c26666ae68a6f03c1a0341917abe75207a891f917933e56"
+    },
+    "session-15": {
+      "assetKey": "knowledgeDrop",
+      "path": "/assets/smokecraft/KNOWLEDGE DROP.png",
+      "sha256": "27b3c600ed0be03eb1f8fdb4ad62e2ec274c3e3f24581f151ccca820529eff5f"
+    },
+    "session-16": {
+      "assetKey": "finalThird",
+      "path": "/assets/smokecraft/FINAL THIRD.png",
+      "sha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0"
+    },
+    "session-17": {
+      "assetKey": "finalThird",
+      "path": "/assets/smokecraft/FINAL THIRD.png",
+      "sha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0"
+    },
+    "session-18": {
+      "assetKey": "finalThird",
+      "path": "/assets/smokecraft/FINAL THIRD.png",
+      "sha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0"
+    },
+    "session-19": {
+      "assetKey": "scorecard",
+      "path": "/assets/smokecraft/Scorecard.png",
+      "sha256": "a577973797590d326a1f14f645262bcc886ee61e9cca4c3fc723ef3b410e9580"
+    },
+    "session-20": {
+      "assetKey": "scorecard",
+      "path": "/assets/smokecraft/Scorecard.png",
+      "sha256": "a577973797590d326a1f14f645262bcc886ee61e9cca4c3fc723ef3b410e9580"
+    },
+    "session-21": {
+      "assetKey": "aiSummary",
+      "path": "/assets/smokecraft/AI SUMMARY.png",
+      "sha256": "1d05f50d0eb713605ccdab57acc5bb0004b114bc79f3b224772465d6e08c01e2"
+    },
+    "session-22": {
+      "assetKey": "pairingRecommendations",
+      "path": "/assets/smokecraft/personlized pairing 222.png",
+      "sha256": "f060831b151cbefc6d265b962793498eea116faa8ec80cdae81788279201e075"
+    },
+    "session-23": {
+      "assetKey": "passportStamp",
+      "path": "/assets/smokecraft/PASSPORT STAMP.png",
+      "sha256": "4d9fb28ac0108a8d36f291abf53987125e3e8388f648a091cfacf9246f6f483a"
+    },
+    "session-24": {
+      "assetKey": "finalReview",
+      "path": "/assets/smokecraft/FINAL REVIEW.png",
+      "sha256": "df16f309ce138aa0cd9a2f6f950124e65dc705ed23134b3d2a4551979a7d607c"
+    },
+    "session-25": {
+      "assetKey": "rewards",
+      "path": "/assets/smokecraft/REWARDS 222.png",
+      "sha256": "986196149e83c89562bf317763c5ba8eb7332546090189f441fec9fd01a99895"
+    },
+    "session-26": {
+      "assetKey": "achievements",
+      "path": "/assets/smokecraft/ACHIEVMENTS.png",
+      "sha256": "32e64aadd40d56102de3a4fb8667fe4c030d84c0377ff2f4b8b48a2d6191d24f"
+    },
+    "session-27": {
+      "assetKey": "recommendedNextJourney",
+      "path": "/assets/smokecraft/Recommend next journey.png",
+      "sha256": "2c5a402c0063a7dc87bc740f8242234e8c6d20f759dfd29b6b1e471386a221a6"
+    }
+  },
+  "finishedAt": "2026-07-25T13:28:45.130Z",
+  "pass": 105,
+  "fail": 0,
+  "failures": []
+}

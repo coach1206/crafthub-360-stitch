@@ -36,14 +36,23 @@ function PrimaryHotspot({ label, onClick, style }) {
         borderRadius: 999,
         fontFamily: 'Georgia, serif',
         fontWeight: 700,
-        fontSize: 'clamp(13px, 1.6vw, 18px)',
-        letterSpacing: '0.04em',
+        fontSize: 'clamp(10.5px, 1.15vw, 16.5px)',
+        letterSpacing: '0.01em',
         textTransform: 'uppercase',
         cursor: 'pointer',
         pointerEvents: 'auto',
         boxShadow: '0 4px 18px rgba(233,193,118,0.45)',
         touchAction: 'manipulation',
         WebkitTapHighlightColor: 'transparent',
+        // Full-journey-sequence pass: this hotspot's height is a percentage of
+        // the approved artwork so it stays aligned with the baked button it
+        // occludes. The longer returning-user labels ("RESUME SMOKECRAFT
+        // JOURNEY →", "VIEW COMPLETED JOURNEY →") wrapped to a second line and
+        // spilled outside that band, leaving live text over the artwork below
+        // the gold pill. Keep the label on one line and let it shrink to fit
+        // instead of growing the button past its approved bounds.
+        whiteSpace: 'nowrap',
+        padding: '0 6px',
         ...style,
       }}
     >
@@ -55,9 +64,9 @@ function PrimaryHotspot({ label, onClick, style }) {
 // Landing-page journey controls pass — premium gold-outline secondary
 // button (visually distinct from the solid-gold PrimaryHotspot), used for
 // START NEW JOURNEY whenever an active journey exists alongside
-// RESUME SMOKECRAFT JOURNEY / VIEW COMPLETED JOURNEY. Minimum 72px touch
-// target, visible keyboard focus ring, pointer-down tactile feedback, large
-// legible type — no default browser highlight.
+// RESUME SMOKECRAFT JOURNEY / VIEW COMPLETED JOURNEY. Sized to its approved
+// artwork band (see minHeight note below), visible keyboard focus ring,
+// pointer-down tactile feedback, legible type — no default browser highlight.
 function SecondaryHotspot({ label, onClick, style }) {
   const [pressed, setPressed] = useState(false)
   return (
@@ -85,7 +94,18 @@ function SecondaryHotspot({ label, onClick, style }) {
         outline: 'none',
         transition: 'background 0.12s ease, transform 0.08s ease',
         transform: pressed ? 'scale(0.98)' : 'scale(1)',
-        minHeight: 72,
+        // Full-journey-sequence pass: a fixed `minHeight: 72` overrode this
+        // control's declared percentage band (~30px at 1024x768), stretching
+        // it ~2.4x so it ran down over the approved artwork's baked
+        // "Begin your guided cigar profile..." paragraph and collided with the
+        // primary CTA above it — visible on every returning user at all four
+        // required desktop viewports. The band is what keeps overlays aligned
+        // to the approved image, so it governs; a small floor keeps the target
+        // usable without breaching the artwork. (The 72x72 rule asserted by
+        // verify-smokecraft-tactile-haptic-interactions.mjs applies to
+        // SmokeCraftTactileCard, not to these image-aligned hotspots.)
+        minHeight: 28,
+        whiteSpace: 'nowrap',
         ...style,
       }}
       onFocus={(e) => { e.currentTarget.style.boxShadow = `0 0 0 3px rgba(233,193,118,0.5)` }}
@@ -209,7 +229,7 @@ export default function SmokeCraft() {
       <PrimaryHotspot
         label={primary.label}
         onClick={handleStart}
-        style={{ left: '3.4%', top: '56.4%', width: '21.5%', height: '6.4%' }}
+        style={{ left: '3.4%', top: '56.4%', width: '23.0%', height: '6.4%' }}
       />
 
       {/* Landing-page journey controls pass — secondary START NEW JOURNEY
@@ -223,7 +243,7 @@ export default function SmokeCraft() {
         <SecondaryHotspot
           label="Start New Journey"
           onClick={handleStartNewClick}
-          style={{ left: '3.4%', top: '64.0%', width: '21.5%', height: '5.2%' }}
+          style={{ left: '3.4%', top: '63.6%', width: '21.5%', height: '4.4%' }}
         />
       )}
 
