@@ -1,0 +1,222 @@
+[
+  {
+    "name": "(R1) Landing PAIRING destination is /smokecraft/pairing in the one canonical map",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(R2) Landing PAIRING destination is NOT /smokecraft/pairing-lab",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(R3) Landing source contains no inline pairing-lab navigation",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(R4) Landing pairing hotspot goes through the resolver (runAction(ACTIONS.PAIRING))",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(R5) Landing source contains no inline route literals for the pairing control",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(R6) /smokecraft/pairing is unguarded and renders Pairing.jsx",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(R7) /smokecraft/pairing-lab is guarded at sessionNumber={11} (session-11)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(R8) /smokecraft/pairing-recommendations is guarded at sessionNumber={22} (session-22)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(R9) The three pairing routes are three distinct paths",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(R10) session-11 and session-22 map to distinct components (PairingLab vs PairingRecommendations)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(A-pairing) Approved asset exists on disk: public/assets/smokecraft-reference/approved/smokecraft-pairing.png",
+    "pass": true,
+    "detail": "sha256=4c37a5dadba900df bytes=2016964"
+  },
+  {
+    "name": "(A-pairingLab) Approved asset exists on disk: public/assets/smokecraft/PAIRING LAB1.png",
+    "pass": true,
+    "detail": "sha256=274fc143e8d5f525 bytes=1903844"
+  },
+  {
+    "name": "(A-pairingRecommendations) Approved asset exists on disk: public/assets/smokecraft/personlized pairing 222.png",
+    "pass": true,
+    "detail": "sha256=f060831b151cbefc bytes=1759021"
+  },
+  {
+    "name": "(A-distinct) The three pairing screens use three DIFFERENT approved assets",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Rewards Center source is byte-identical to the pre-pass baseline",
+    "pass": true,
+    "detail": "ea4c784=9e1ae9846cf1 now=9e1ae9846cf1"
+  },
+  {
+    "name": "Leaderboard source is byte-identical to the pre-pass baseline",
+    "pass": true,
+    "detail": "ea4c784=3fa116286526 now=3fa116286526"
+  },
+  {
+    "name": "Passport source is byte-identical to the pre-pass baseline",
+    "pass": true,
+    "detail": "ea4c784=c43871ebe58a now=c43871ebe58a"
+  },
+  {
+    "name": "(17a) No approved asset under public/assets/smokecraft was changed or removed",
+    "pass": true,
+    "detail": "no diff"
+  },
+  {
+    "name": "(17b) No new artwork was created under public/assets/smokecraft",
+    "pass": true,
+    "detail": "no untracked files"
+  },
+  {
+    "name": "(17c) 6-phase / 27-session structure (src/constants/session.js) unchanged",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(15/16a) Entry-sequence resolver core logic unchanged from the prior pass",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(16b) CraftHub routing unchanged from the prior pass",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(1/2a) Exactly one visible Recommended Pairing control exists on Landing",
+    "pass": true,
+    "detail": "count=1"
+  },
+  {
+    "name": "(2b) The Recommended Pairing control is a real, sized, clickable target",
+    "pass": true,
+    "detail": "{\"x\":1131.828125,\"y\":637.390625,\"width\":254.875,\"height\":50.890625}"
+  },
+  {
+    "name": "(3) Landing pairing click does NOT open /smokecraft/pairing-lab",
+    "pass": true,
+    "detail": "/smokecraft/pairing"
+  },
+  {
+    "name": "(4) Landing pairing click opens the approved Pairing route /smokecraft/pairing",
+    "pass": true,
+    "detail": "/smokecraft/pairing"
+  },
+  {
+    "name": "(5a) The approved Pairing image is the rendered composition",
+    "pass": true,
+    "detail": "[\"/assets/smokecraft-reference/approved/smokecraft-pairing.png\"]"
+  },
+  {
+    "name": "(5b) Rendered Pairing asset sha256 === file-on-disk sha256",
+    "pass": true,
+    "detail": "rendered=4c37a5dadba900df disk=4c37a5dadba900df"
+  },
+  {
+    "name": "(5c) Approved Pairing image decodes at its approved dimensions 1086x1448",
+    "pass": true,
+    "detail": "{\"w\":1086,\"h\":1448}"
+  },
+  {
+    "name": "(6) No \"Not Unlocked Yet\" / locked-state screen appears on the Pairing destination",
+    "pass": true,
+    "detail": "Build: ea4c784 · productionSmokeCraft 360 — Your Blend Pairing Guide"
+  },
+  {
+    "name": "(7a) Guest session progress (completedSteps/xp/rank/badges/ids) identical before/after the pairing click",
+    "pass": true,
+    "detail": "{\"completedSteps\":[\"enroll\",\"entry\"],\"xp\":0,\"rank\":\"Novice\",\"badges\":[],\"sessionId\":\"lpr-test-1784949883992\",\"guestId\":\"lpr-test-guest\"}"
+  },
+  {
+    "name": "(7a2) The pairing click did not add, remove or reorder any completed step",
+    "pass": true,
+    "detail": "[\"enroll\",\"entry\"]"
+  },
+  {
+    "name": "(7b) Journey data (sc_journey_v1) identical before/after the pairing click",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(7c) Pairing offers a live journey action (continue) for incomplete personalization data",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(8) Back from the approved Pairing screen returns to Landing",
+    "pass": true,
+    "detail": "/smokecraft"
+  },
+  {
+    "name": "(9) A fresh (session-1) user hitting /smokecraft/pairing-lab directly is still guarded",
+    "pass": true,
+    "detail": "path=/smokecraft/pairing-lab text=Build: ea4c784 · productionPhase 2 of 6 — First Third🔒Not Unlocked YetPhase 2 of 6 is locked. Compl"
+  },
+  {
+    "name": "(10) With sessions 1–10 complete, Pairing Lab opens at its canonical session-11 position",
+    "pass": true,
+    "detail": "path=/smokecraft/pairing-lab text=Build: ea4c784 · productionPhase 2/6·Session 11/27First ThirdLocal PreviewCigar ProfileShapeRobustoT"
+  },
+  {
+    "name": "(11a) /smokecraft/pairing-recommendations is a distinct route from /smokecraft/pairing and /smokecraft/pairing-lab",
+    "pass": true,
+    "detail": "path=/smokecraft/pairing-recommendations"
+  },
+  {
+    "name": "(11b) Personalized Pairing Recommendations remains guarded at its own session-22 position for a fresh user",
+    "pass": true,
+    "detail": "path=/smokecraft/pairing-recommendations"
+  },
+  {
+    "name": "(15) Entry sequence still resolves an enrolled user past Guest Pass (not back to /smokecraft/enroll)",
+    "pass": true,
+    "detail": "/smokecraft/venue-select"
+  },
+  {
+    "name": "(16) Landing CraftHub control still opens the approved CraftHub destination",
+    "pass": true,
+    "detail": "/smokecraft/crafthub"
+  },
+  {
+    "name": "(14a) Passport still opens from Landing at /smokecraft/passport",
+    "pass": true,
+    "detail": "/smokecraft/passport"
+  },
+  {
+    "name": "(14b) Passport still has its already-committed visible Back button",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "(14c) Passport Back still returns to Landing",
+    "pass": true,
+    "detail": "/smokecraft"
+  }
+]

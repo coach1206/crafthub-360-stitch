@@ -1,0 +1,64 @@
+{
+  "approvedAssets": {
+    "pairing": {
+      "path": "public/assets/smokecraft-reference/approved/smokecraft-pairing.png",
+      "sha256": "4c37a5dadba900df171caf5e859ca716e9573d4db6b58c1c8608818622aeef49",
+      "bytes": 2016964
+    },
+    "pairingLab": {
+      "path": "public/assets/smokecraft/PAIRING LAB1.png",
+      "sha256": "274fc143e8d5f525b64f853402d83ba1843a11e38e86e7f1138e57ea325bad93",
+      "bytes": 1903844
+    },
+    "pairingRecommendations": {
+      "path": "public/assets/smokecraft/personlized pairing 222.png",
+      "sha256": "f060831b151cbefc6d265b962793498eea116faa8ec80cdae81788279201e075",
+      "bytes": 1759021
+    }
+  },
+  "renderedPairing": {
+    "route": "/smokecraft/pairing",
+    "src": "/assets/smokecraft-reference/approved/smokecraft-pairing.png",
+    "renderedHash": "4c37a5dadba900df171caf5e859ca716e9573d4db6b58c1c8608818622aeef49",
+    "dims": {
+      "w": 1086,
+      "h": 1448
+    }
+  },
+  "journeyPreservation": {
+    "before": {
+      "session": "{\"skillScore\":0,\"challengeScore\":0,\"loyaltyPoints\":0,\"lifetimeLoyaltyPoints\":0,\"redeemablePoints\":0,\"passportStampCount\":0,\"purchaseCount\":0,\"houseCigarPurchases\":0,\"pairingPurchases\":0,\"eventParticipationCount\":0,\"referralCount\":0,\"loyaltyLedger\":[],\"usedTransactionIds\":[],\"sessionId\":\"lpr-test-1784949883992\",\"guestId\":\"lpr-test-guest\",\"completedSteps\":[\"enroll\",\"entry\"],\"xp\":0,\"rank\":\"Novice\",\"badges\":[],\"__version\":4,\"smokeCraft\":{\"passportConnections\":[],\"networkingStatus\":\"not_started\",\"networkingConsent\":{\"allowShareStamp\":false,\"allowShareName\":false,\"allowShareContact\":false,\"allowShareBusinessLinks\":false,\"allowShareSmokeCraftLevel\":false,\"allowShareFavoriteCigarStyle\":false,\"allowShareEventStamp\":false,\"allowVenueFollowUp\":false}},\"lastVisitedRoute\":\"/smokecraft\",\"system\":{\"lastVisitedRoute\":\"/smokecraft\"},\"updatedAt\":1784949884166}",
+      "journey": "{\"stateVersion\":3,\"spineVersion\":1,\"identity\":null,\"goldenBox\":null,\"mentor\":null,\"meetYourCigar\":null,\"mentorCommentary\":null,\"format\":null,\"seedSoil\":null,\"terroir\":null,\"knowledgeDrop\":null,\"pairing\":null,\"selectedCigar\":null,\"requestPurchase\":null,\"cutToastLight\":null,\"firstThird\":null,\"secondThird\":null,\"flavorMemory\":null,\"finalThird\":null,\"scorecard\":null,\"aiSummary\":null,\"pairingRecommendations\":null,\"rewards\":null,\"achievements\":null,\"selectedVenue\":{\"id\":\"lpr-venue\",\"name\":\"LPR Test Venue\"},\"venueSelectionCompleted\":false,\"lastEntryScreen\":null,\"activeJourneyId\":\"journey-1784949884137-qusmq3\",\"journeyCreatedAt\":1784949884137,\"journeyUpdatedAt\":null,\"resumeRoute\":null,\"resumeScreenId\":null,\"previousCompletedJourneys\":[],\"welcomeExperience\":null,\"welcomeViewedAt\":null,\"learningObjectivesViewed\":false,\"s1CompletedAt\":null,\"currentScreenId\":null,\"finalReview\":null,\"passportStamp\":null,\"connections\":null,\"sessionCompletion\":null}"
+    },
+    "after": {
+      "session": "{\"skillScore\":0,\"challengeScore\":0,\"loyaltyPoints\":0,\"lifetimeLoyaltyPoints\":0,\"redeemablePoints\":0,\"passportStampCount\":0,\"purchaseCount\":0,\"houseCigarPurchases\":0,\"pairingPurchases\":0,\"eventParticipationCount\":0,\"referralCount\":0,\"loyaltyLedger\":[],\"usedTransactionIds\":[],\"sessionId\":\"lpr-test-1784949883992\",\"guestId\":\"lpr-test-guest\",\"completedSteps\":[\"enroll\",\"entry\"],\"xp\":0,\"rank\":\"Novice\",\"badges\":[],\"__version\":4,\"smokeCraft\":{\"passportConnections\":[],\"networkingStatus\":\"not_started\",\"networkingConsent\":{\"allowShareStamp\":false,\"allowShareName\":false,\"allowShareContact\":false,\"allowShareBusinessLinks\":false,\"allowShareSmokeCraftLevel\":false,\"allowShareFavoriteCigarStyle\":false,\"allowShareEventStamp\":false,\"allowVenueFollowUp\":false}},\"lastVisitedRoute\":\"/smokecraft/pairing\",\"system\":{\"lastVisitedRoute\":\"/smokecraft/pairing\"},\"updatedAt\":1784949886113}",
+      "journey": "{\"stateVersion\":3,\"spineVersion\":1,\"identity\":null,\"goldenBox\":null,\"mentor\":null,\"meetYourCigar\":null,\"mentorCommentary\":null,\"format\":null,\"seedSoil\":null,\"terroir\":null,\"knowledgeDrop\":null,\"pairing\":null,\"selectedCigar\":null,\"requestPurchase\":null,\"cutToastLight\":null,\"firstThird\":null,\"secondThird\":null,\"flavorMemory\":null,\"finalThird\":null,\"scorecard\":null,\"aiSummary\":null,\"pairingRecommendations\":null,\"rewards\":null,\"achievements\":null,\"selectedVenue\":{\"id\":\"lpr-venue\",\"name\":\"LPR Test Venue\"},\"venueSelectionCompleted\":false,\"lastEntryScreen\":null,\"activeJourneyId\":\"journey-1784949884137-qusmq3\",\"journeyCreatedAt\":1784949884137,\"journeyUpdatedAt\":null,\"resumeRoute\":null,\"resumeScreenId\":null,\"previousCompletedJourneys\":[],\"welcomeExperience\":null,\"welcomeViewedAt\":null,\"learningObjectivesViewed\":false,\"s1CompletedAt\":null,\"currentScreenId\":null,\"finalReview\":null,\"passportStamp\":null,\"connections\":null,\"sessionCompletion\":null}"
+    }
+  },
+  "back": {
+    "from": "/smokecraft/pairing",
+    "to": "/smokecraft"
+  },
+  "pairingLabFresh": {
+    "path": "/smokecraft/pairing-lab",
+    "text": "Build: ea4c784 · productionPhase 2 of 6 — First Third🔒Not Unlocked YetPhase 2 of 6 is locked. Complete all sessions in Phase 1 (Session Preparation) first.Your Current ProgressNext up: Choose Your Ci",
+    "guarded": true
+  },
+  "pairingLabUnlocked": {
+    "path": "/smokecraft/pairing-lab",
+    "text": "Build: ea4c784 · productionPhase 2/6·Session 11/27First ThirdLocal PreviewCigar ProfileShapeRobustoToroChurchillFiguradoWrapperConnecticutHabanoMaduroCorojoOriginDominican RepublicNicaraguaHondurasCub"
+  },
+  "pairingRecommendations": {
+    "path": "/smokecraft/pairing-recommendations",
+    "guarded": true
+  },
+  "entrySequence": {
+    "path": "/smokecraft/venue-select"
+  },
+  "craftHub": {
+    "path": "/smokecraft/crafthub"
+  },
+  "passport": {
+    "path": "/smokecraft/passport"
+  }
+}
