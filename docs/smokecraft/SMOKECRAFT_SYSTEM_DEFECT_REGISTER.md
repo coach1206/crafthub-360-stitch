@@ -2,6 +2,106 @@
 
 Baseline commit: `d6469504a2a83ab4acfb27e89a25064d505d4d55` (Prompt 1), updated at `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7` (Prompt 2), updated at `3da3532ee414ab3b0b8bd9ad6e061a79a6de530d` (Prompt 3 start)
 
+## Prompt 3E-3 update — Challenge Hub, Daily/Weekly Challenge, Event Challenge, SmokeCraft Challenge
+
+Starting commit: `c3674eecbfccf3ae1b9799c854582c665868355b` (Prompt 3E-2 close).
+
+Scope per mandate: audit and fix all challenge interactions across
+`ChallengeHub.jsx` (Daily/Weekly challenges are cards within this same
+screen — no separate route exists), `EventChallenge.jsx`, and
+`SmokeCraftChallenge.jsx`. Golden Box, Mentor, Pairing, responsive layout,
+POS360, and E.A.T. 360 were explicitly out of scope.
+
+**Result: NO new defects found.** All screens in scope were already
+correctly built as real, live, backend-integrated flows (a "Challenge Hub
+Live State" pass, migration 088, predates this recovery operation) — but a
+real **testing-environment limitation was discovered and resolved this
+pass**, described below, that was necessary to get a true PASS rather than
+a false BLOCKED.
+
+- **Environment finding (resolved, not a code defect):** this session's
+  Node server had been running with no `DATABASE_URL` (in-memory
+  prototype mode). Under that mode, `ChallengeHub.jsx` correctly rendered
+  its own honest error state ("Something went wrong loading challenges" +
+  Retry) rather than a fabricated challenge list — proving the
+  no-fabrication requirement is already respected — but the Daily/Weekly
+  challenge cards could not be interaction-tested in that state. Local
+  Postgres (`crafthub_smokecraft_final`, same DB used in an earlier phase
+  of this operation) was already running the `smokecraft_challenge_*`
+  tables from migration 088 with 2 seeded active definitions
+  (`daily-lesson-practice`, `weekly-multi-activity-builder`). Restarting
+  the server with `DATABASE_URL` pointed at that database allowed full
+  live verification of the real Daily/Weekly cards rather than only their
+  honest-failure fallback state.
+- **Challenge Hub** (`src/pages/smokecraft/ChallengeHub.jsx`): live
+  browser test against the real backend found 3 real cards — "Daily
+  Practice" (daily), "Weekly Builder" (weekly), and the standalone
+  practice activity "Blend Fault Identification". Clicked the Daily card:
+  opened a real detail region (`role="region"`) with live progress,
+  status, and a real "Start Challenge" control. Keyboard test: `Tab`-focus
+  landed on the card's real `aria-label`, `Enter` activated it identically
+  to a click (opened the same detail region) — confirms native `<button>`
+  semantics, not a div-with-onClick anti-pattern. "Back to Rewards"
+  confirmed present and real. Practice card confirmed to navigate to
+  `/smokecraft/challenges/blend-fault-identification`, a real, separate,
+  working 3-step quiz flow (2 real buttons found on load, question/answer/
+  submit flow present in source). No dead controls found.
+- **Event Challenge** (`src/pages/smokecraft/EventChallenge.jsx`): 5 real
+  calendar events sourced from `PASSPORT_EVENTS` (never fabricated, per
+  the file's own docstring). "Event Details" opens real per-event detail
+  with banner/sponsor upload inputs (local file reference only, honestly
+  labelled "no upload backend connected"), a real "Join Event" toggle
+  (`aria-pressed`, disabled once joined or expired), an honest "Not
+  available" placeholder for point/reward values (no reward catalog
+  configured — correctly not fabricated), and an honest leaderboard
+  preview panel (`getLeaderboardSnapshot`, no fabricated rankings). "←
+  Event Calendar" and "Back to Challenges" both confirmed to navigate
+  correctly; the shared `SmokeCraftNavBar` "← Back" control also present
+  and real. No dead controls found.
+- **SmokeCraft Challenge** (`src/pages/smokecraft/SmokeCraftChallenge.jsx`):
+  13 real challenge categories computed live from
+  `calculateWinnerEligibility(session)` (the pre-existing, already-verified
+  winner-category engine) — never a fabricated list. Clicked "View" on a
+  category: opened a real detail panel with working "View Progress"/"View
+  Rewards" toggle buttons (`aria-pressed`), both showing honest content
+  (rewards panel explicitly states "Not available — no reward catalog is
+  configured for this challenge yet" rather than inventing a reward).
+  "Join Challenge" confirmed to flip to a real "Joined" disabled state.
+  "Start Challenge →" nav-bar primary confirmed present (awards the
+  existing `smokecraft-challenge` session reward and advances to Second
+  Humidor Match — unchanged pre-existing journey-flow behavior). No dead
+  controls found.
+
+Proof: `public/proof/smokecraft-prompt-3e-3/` — `challenge-hub-list.png`,
+`challenge-hub-detail.png`, `blend-fault-challenge.png`,
+`event-challenge-calendar.png`, `event-challenge-detail.png`,
+`smokecraft-challenge-categories.png`, `smokecraft-challenge-detail.png`.
+
+Regressions re-run and passing: `verify-smokecraft-final-three-approved-assets.mjs`
+(17/17), `verify-smokecraft-phase-session-lock.mjs` (9/9),
+`scripts/smokecraftAssetExclusivityCheck.mjs` (7/7),
+`verify-smokecraft-full-journey-sequence-and-assets.mjs` (92-94/94, only the
+known pre-existing SC-D008 stale-assertion failure).
+
+**Prompt 5 engine handoff (recorded per mandate, not built this pass):**
+- Streaks are explicitly disclosed by `ChallengeHub.jsx` as not yet
+  backend-connected ("Streaks and leaderboards are not yet
+  backend-connected for this hub").
+- Challenge Hub has no leaderboard integration of its own (separate from
+  the existing standalone Leaderboard screen).
+- Event Challenge has no reward catalog (grand reward / participation
+  reward / points rules all render "Not available" honestly) and no
+  banner/sponsor upload backend (local file reference only).
+- SmokeCraft Challenge categories have no reward catalog either (same
+  "Not available" honesty pattern) and its "Live events" section
+  explicitly discloses no scheduled-events backend exists yet.
+- Blend Fault Identification (practice activity, `BlendFaultChallenge.jsx`)
+  has a working 3-step scoring flow but no server-side persistence beyond
+  its own existing scope — disclosed in `ChallengeHub.jsx`'s own comment
+  as a pre-existing limitation, out of scope for this pass.
+- None of the above are code defects in this pass — they are genuine,
+  already-disclosed backend/catalog gaps for a future phase.
+
 ## Prompt 3E-2 update — Rewards, Badge Collection, Passport Stamp, Connections
 
 Starting commit: `854495f042888c4507367935d435b6dc55fc90e9` (Prompt 3E-1 close).

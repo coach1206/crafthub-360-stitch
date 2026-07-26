@@ -133,6 +133,29 @@ was confirmed to render its real backend-integrated claim flow without
 crashing. Rewards was confirmed to render real point/rank values with
 non-interactive badge crests (not a false-clickable control).
 
+## Batch 3E-3 — Challenge Hub, Daily/Weekly Challenge, Event Challenge, SmokeCraft Challenge (live browser verified)
+
+Prompt 3E-3 closed out the remaining Batch 3 challenge screens. See
+`SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`'s Prompt 3E-3 section for full
+detail and proof screenshots. **No dead/baked controls found; no fix
+required.** Notably, this pass required restarting the local Node server
+against a real Postgres database (the migration-088 `smokecraft_challenge_*`
+tables, already present from an earlier phase of this operation) to fully
+interaction-test the Daily/Weekly challenge cards — under the
+no-`DATABASE_URL` in-memory mode used by prior passes, Challenge Hub
+correctly rendered its own honest error+Retry state instead of a
+fabricated challenge list, which is itself further confirming evidence of
+this module's no-fabrication discipline, but is not full interaction
+coverage. With the database connected: Challenge Hub's 3 real cards
+(Daily Practice, Weekly Builder, Blend Fault Identification practice)
+were mouse-clicked and keyboard-activated (`Tab` + `Enter`) with identical
+results, confirming real `<button>` semantics rather than div/onClick
+hotspots. Event Challenge's 5 real calendar events, join/detail/upload
+controls, and honest "Not available" reward placeholders were verified.
+SmokeCraft Challenge's 13 real categories, View/Join toggles, and
+Progress/Rewards detail toggles were verified, including the "Start
+Challenge →" nav-bar primary.
+
 ## Not yet done (Batch 3 remainder, Batch 4)
 
 - Forward (S1→S27) and backward (S27→S1) click-through of the actual
