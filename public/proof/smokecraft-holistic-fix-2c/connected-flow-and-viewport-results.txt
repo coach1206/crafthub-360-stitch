@@ -1,0 +1,422 @@
+[
+  {
+    "screen": "origins",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/origins",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 1,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/origins-handheld-portrait.png"
+  },
+  {
+    "screen": "curation",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/curation",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/curation-handheld-portrait.png"
+  },
+  {
+    "screen": "leaves",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/leaves",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaves-handheld-portrait.png"
+  },
+  {
+    "screen": "leaf-challenge",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/leaf-challenge",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-handheld-portrait.png"
+  },
+  {
+    "screen": "leaf-challenge-calculating",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/leaf-challenge-calculating",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 1,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-calculating-handheld-portrait.png"
+  },
+  {
+    "screen": "leaf-challenge-result",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/leaf-challenge-result",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-result-handheld-portrait.png"
+  },
+  {
+    "screen": "cultivation",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/cultivation",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/cultivation-handheld-portrait.png"
+  },
+  {
+    "screen": "blend",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/blend",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/blend-handheld-portrait.png"
+  },
+  {
+    "screen": "flavor-dna",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/flavor-dna",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/flavor-dna-handheld-portrait.png"
+  },
+  {
+    "screen": "origins",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/origins",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/origins-tablet-10in.png"
+  },
+  {
+    "screen": "curation",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/curation",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/curation-tablet-10in.png"
+  },
+  {
+    "screen": "leaves",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/leaves",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaves-tablet-10in.png"
+  },
+  {
+    "screen": "leaf-challenge",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/leaf-challenge",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-tablet-10in.png"
+  },
+  {
+    "screen": "leaf-challenge-calculating",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/leaf-challenge-calculating",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 1,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-calculating-tablet-10in.png"
+  },
+  {
+    "screen": "leaf-challenge-result",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/leaf-challenge-result",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-result-tablet-10in.png"
+  },
+  {
+    "screen": "cultivation",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/cultivation",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/cultivation-tablet-10in.png"
+  },
+  {
+    "screen": "blend",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/blend",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/blend-tablet-10in.png"
+  },
+  {
+    "screen": "flavor-dna",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/flavor-dna",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/flavor-dna-tablet-10in.png"
+  },
+  {
+    "screen": "origins",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/origins",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/origins-tablet-12in.png"
+  },
+  {
+    "screen": "curation",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/curation",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/curation-tablet-12in.png"
+  },
+  {
+    "screen": "leaves",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/leaves",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaves-tablet-12in.png"
+  },
+  {
+    "screen": "leaf-challenge",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/leaf-challenge",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-tablet-12in.png"
+  },
+  {
+    "screen": "leaf-challenge-calculating",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/leaf-challenge-calculating",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 1,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-calculating-tablet-12in.png"
+  },
+  {
+    "screen": "leaf-challenge-result",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/leaf-challenge-result",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-result-tablet-12in.png"
+  },
+  {
+    "screen": "cultivation",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/cultivation",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/cultivation-tablet-12in.png"
+  },
+  {
+    "screen": "blend",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/blend",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/blend-tablet-12in.png"
+  },
+  {
+    "screen": "flavor-dna",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/flavor-dna",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/flavor-dna-tablet-12in.png"
+  },
+  {
+    "screen": "origins",
+    "viewport": "display-15in",
+    "route": "/smokecraft/origins",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/origins-display-15in.png"
+  },
+  {
+    "screen": "curation",
+    "viewport": "display-15in",
+    "route": "/smokecraft/curation",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/curation-display-15in.png"
+  },
+  {
+    "screen": "leaves",
+    "viewport": "display-15in",
+    "route": "/smokecraft/leaves",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaves-display-15in.png"
+  },
+  {
+    "screen": "leaf-challenge",
+    "viewport": "display-15in",
+    "route": "/smokecraft/leaf-challenge",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-display-15in.png"
+  },
+  {
+    "screen": "leaf-challenge-calculating",
+    "viewport": "display-15in",
+    "route": "/smokecraft/leaf-challenge-calculating",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 1,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-calculating-display-15in.png"
+  },
+  {
+    "screen": "leaf-challenge-result",
+    "viewport": "display-15in",
+    "route": "/smokecraft/leaf-challenge-result",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-result-display-15in.png"
+  },
+  {
+    "screen": "cultivation",
+    "viewport": "display-15in",
+    "route": "/smokecraft/cultivation",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/cultivation-display-15in.png"
+  },
+  {
+    "screen": "blend",
+    "viewport": "display-15in",
+    "route": "/smokecraft/blend",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/blend-display-15in.png"
+  },
+  {
+    "screen": "flavor-dna",
+    "viewport": "display-15in",
+    "route": "/smokecraft/flavor-dna",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/flavor-dna-display-15in.png"
+  },
+  {
+    "screen": "origins",
+    "viewport": "desktop",
+    "route": "/smokecraft/origins",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/origins-desktop.png"
+  },
+  {
+    "screen": "curation",
+    "viewport": "desktop",
+    "route": "/smokecraft/curation",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/curation-desktop.png"
+  },
+  {
+    "screen": "leaves",
+    "viewport": "desktop",
+    "route": "/smokecraft/leaves",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaves-desktop.png"
+  },
+  {
+    "screen": "leaf-challenge",
+    "viewport": "desktop",
+    "route": "/smokecraft/leaf-challenge",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-desktop.png"
+  },
+  {
+    "screen": "leaf-challenge-calculating",
+    "viewport": "desktop",
+    "route": "/smokecraft/leaf-challenge-calculating",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 1,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-calculating-desktop.png"
+  },
+  {
+    "screen": "leaf-challenge-result",
+    "viewport": "desktop",
+    "route": "/smokecraft/leaf-challenge-result",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/leaf-challenge-result-desktop.png"
+  },
+  {
+    "screen": "cultivation",
+    "viewport": "desktop",
+    "route": "/smokecraft/cultivation",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/cultivation-desktop.png"
+  },
+  {
+    "screen": "blend",
+    "viewport": "desktop",
+    "route": "/smokecraft/blend",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/blend-desktop.png"
+  },
+  {
+    "screen": "flavor-dna",
+    "viewport": "desktop",
+    "route": "/smokecraft/flavor-dna",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2c/screenshots/flavor-dna-desktop.png"
+  }
+]
+
+--- Connected flow ---
+Origins rendered: image-only instructional screen, no crash
+Curation rendered: Build: 9ece704 · production arrow_back shield_person CRAFTHUB 360 GRAND LOUNGE SMOKECRAFT CURATION Your Curation Map  Se
+Curation Next -> http://localhost:5050/smokecraft/leaves
+Leaves rendered: Build: 9ece704 · production arrow_back eco CraftHub 360 Grand Lounge THE STUDY SESSION Know Your Leaves  Master blenders
+Leaves: 6 study cards found
+Leaf Challenge rendered directly: Build: 9ece704 · production arrow_back CraftHub 360 ROUND 1 OF 5 SCORE 0 eco eco LEAF 1 help_outline  Which tobacco leaf
+Leaf Challenge Calculating -> auto-advanced to: http://localhost:5050/smokecraft/leaf-challenge-result
+Cultivation rendered: Build: 9ece704 · production IMAGE PENDING arrow_back shield_person CRAFTHUB 360 GRAND LOUNGE eco FROM SEED TO SMOKE The 
+Blend rendered: Build: 9ece704 · production IMAGE PENDING arrow_back CRAFTHUB 360 CHALLENGES VAULT CONNOISSEUR IMAGE PENDING token  CRAF
+Flavor DNA rendered: image-only instructional screen, no crash
+
+39/45 viewport x screen checks passed (no h-overflow, no console error)
+Keyboard-focus reached a real control in 30/45 checks

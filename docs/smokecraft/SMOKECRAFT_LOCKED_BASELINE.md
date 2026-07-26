@@ -98,6 +98,23 @@ necessary.**
   back to expecting the no-asset state — that state has not been true
   since an earlier pass wired the real asset.
 
+## Locked: Holistic Fix 2C — Origins/Curation/Leaf-Challenge/Cultivation module (9 routes)
+
+- All 9 components now import and render `SmokeCraftScreenShell`.
+  `scripts/validateSmokecraftShellAdoption.mjs` covers all 9 (extended to
+  29 files total, 124 checks).
+- **This module is confirmed orphaned/unreachable from the shipped app**
+  (no `SmokeCraftSessionGuard`, no manifest entry, no entry-point link
+  anywhere) and predates the 27-session spine. Do not assume it is
+  reachable or tested by any spine-focused regression suite — it isn't,
+  by design of those suites' own scope.
+- `smokecraftNavigationRegistry.js` gained
+  `SMOKECRAFT_PASSPORT_MODULE_DESTINATIONS.HOME` (`/passport`) and
+  `SMOKECRAFT_EXTERNAL_DESTINATIONS.GRAND_LOUNGE_RANKING`
+  (`/grand-lounge-ranking`, confirmed via source read to render the
+  identical `Leaderboard` component as `/smokecraft/leaderboard`) — real,
+  pre-existing destinations this module uses, not new inventions.
+
 ## Not yet locked / explicitly out of scope for this baseline
 
 Everything not listed above (the remaining ~100 routes, all 27 sessions'

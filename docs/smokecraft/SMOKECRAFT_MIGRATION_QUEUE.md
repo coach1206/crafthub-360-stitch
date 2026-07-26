@@ -35,16 +35,25 @@ presentation, final scoring/ranking automation) recorded in the proof
 index for the future gameplay-engine package — not built this pass, per
 the mandate's own scope boundary.
 
-## Group 2 — Origins/Curation/Leaf-Challenge/Cultivation module (9 routes) — STILL OPEN
+## Group 2 — Origins/Curation/Leaf-Challenge/Cultivation module (9 routes) — RESOLVED this pass (Holistic Fix 2C)
 
-`origins` (instructional-image), `curation`, `leaves`, `leaf-challenge`,
-`leaf-challenge-calculating` (instructional-image — real auto-advancing
-transition screen, confirmed via source read this pass, no user control),
-`leaf-challenge-result`, `cultivation`, `blend`, `flavor-dna`
-(instructional-image). Relationship to the 27-session spine and to Golden
-Box still not documented anywhere canonical — first task for Holistic Fix 3
-remains determining whether this is a supporting module, a legacy/
-superseded flow, or dead code.
+`origins`, `curation`, `leaves`, `leaf-challenge`,
+`leaf-challenge-calculating` (real auto-advancing transition screen, no
+user control), `leaf-challenge-result`, `cultivation`, `blend`,
+`flavor-dna` — all 9 now import and render `SmokeCraftScreenShell`.
+**Relationship to the rest of the app, investigated and documented this
+pass** (see `public/proof/smokecraft-holistic-fix-2c/index.md` for full
+detail): this module is a real, substantial, fully-built but currently
+**orphaned/unreachable** standalone educational flow — confirmed via grep
+across `src/` that no `SmokeCraftSessionGuard`, no manifest entry, and no
+entry-point link anywhere in the app (Landing, Welcome, CraftHub,
+sidebars) leads into `/smokecraft/origins`. It predates the current
+27-session/6-phase architecture per git history. It does NOT touch Golden
+Box (separate namespace, no `golden_box_*` calls). It DOES write real
+`completeStep('cultivation'/'blend')` entries (unrecognized by
+`VISIT_STRUCTURE`, so harmless) and `Blend.jsx` awards real shared XP
+(`XP_AWARDS.BLEND_CREATED`, 150). No education prerequisites gate any of
+the 9 routes.
 
 ## Group 3 — Pairing-adjacent standalone screens (5 routes) — STILL OPEN
 
@@ -113,13 +122,13 @@ investigated flaky non-regression). See
 per-screen detail and `public/proof/smokecraft-holistic-fix-2a/` for
 screenshots and raw results.
 
-**Screen-shell adoption: 23 of 108 routes** (7 from Holistic Fix 2A + 16
-Golden Box routes from Holistic Fix 2B, across 20 unique component
-files). The remaining ~54 supporting routes (Origins/Curation module,
-Pairing-adjacent, remaining standalone screens) are the next unit of work
-for Holistic Fix 2C/3 — same migration pattern (shell + registry +
-5-viewport verification + regression lock), applied to the next
-migration group.
+**Screen-shell adoption: 32 of 108 routes** (7 Holistic Fix 2A + 16 Golden
+Box Holistic Fix 2B + 9 Origins/Curation module Holistic Fix 2C, across
+29 unique component files). The remaining ~45 supporting routes
+(Pairing-adjacent 5, commerce-consolidation cleanup, remaining standalone
+screens ~40) are the next unit of work for Holistic Fix 2D — same
+migration pattern (shell + registry + 5-viewport verification +
+regression lock).
 
 The 33 routes already deep-audited in Prompts 3B–3E-3 (Welcome,
 Leaderboard, Passport, CraftHub, Venue Selection, Connections, Passport

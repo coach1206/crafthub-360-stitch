@@ -2,6 +2,111 @@
 
 Baseline commit: `d6469504a2a83ab4acfb27e89a25064d505d4d55` (Prompt 1), updated at `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7` (Prompt 2), updated at `3da3532ee414ab3b0b8bd9ad6e061a79a6de530d` (Prompt 3 start)
 
+## Holistic Fix 2C update — Migrate Origins, Curation, Leaf Challenge, and Cultivation
+
+Starting commit: `9ece7041` (Holistic Fix 2B close).
+
+**Exact route count:** 9 real routes (`origins`, `curation`, `leaves`,
+`leaf-challenge`, `leaf-challenge-calculating`, `leaf-challenge-result`,
+`cultivation`, `blend`, `flavor-dna`), no aliases.
+
+**Relationship to the rest of the app — investigated and documented for
+the first time this pass** (per the mandate's explicit requirement, before
+any migration):
+- **27-session spine**: NOT part of it. No `SmokeCraftSessionGuard`, no
+  `SMOKECRAFT_SCREEN_MANIFEST` entry, and — confirmed via grep across the
+  entire `src/` tree — no entry-point link from Landing, Welcome,
+  CraftHub, or any sidebar leads into `/smokecraft/origins`. This is a
+  real, substantial, fully-built but currently **orphaned/unreachable**
+  standalone educational flow. Git history shows it predates the current
+  27-session/6-phase architecture.
+- **Golden Box**: no relationship — separate route namespace, no
+  `golden_box_*` backend calls anywhere in these 9 files.
+- **Journey progress**: `Cultivation.jsx` and `Blend.jsx` call real
+  `completeStep('cultivation'/'blend')` on the shared guest-session
+  record, but neither id is recognized by `VISIT_STRUCTURE`, so they
+  accumulate as harmless unused entries rather than affecting spine
+  progression — confirmed not a duplicate-progression risk.
+- **Scoring/XP**: `Blend.jsx` calls `addXP(XP_AWARDS.BLEND_CREATED)` (a
+  real 150-XP constant in `session.js`) — this genuinely adds to the same
+  shared XP pool shown on Leaderboard/Rewards. `LeafChallenge.jsx`
+  computes its own round-based score locally, no shared-XP call.
+- **Challenges/Rewards**: no relationship.
+- **Education prerequisites**: none — every route is fully open
+  (`guardType: 'ungated'`), reachable by direct URL.
+
+**No merging, duplication, renumbering, or reordering of the 27-session
+spine occurred** — re-confirmed by the unchanged
+`verify-smokecraft-phase-session-lock.mjs` (9/9) and
+`scripts/validateSmokecraftManifest.mjs`'s spine-lock check.
+
+**All 9 components migrated onto `SmokeCraftScreenShell`:**
+`Origins.jsx`/`FlavorDNA.jsx` (instructional-image, wrap their existing
+`SmokeCraftAssetScreen`), `Curation.jsx`/`Leaves.jsx`/`LeafChallenge.jsx`/
+`LeafChallengeCalculating.jsx`/`LeafChallengeResult.jsx`/`Cultivation.jsx`/
+`Blend.jsx` (`mode="live"`, wrapping their existing Tailwind/inline-style
+content unchanged). 2 new navigation-registry entries added after
+confirming both are real, pre-existing destinations these files already
+used (not invented): `SMOKECRAFT_PASSPORT_MODULE_DESTINATIONS.HOME`
+(`/passport`, the top-level Passport module's own home, distinct from
+`/smokecraft/passport`) and `SMOKECRAFT_EXTERNAL_DESTINATIONS.GRAND_LOUNGE_RANKING`
+(`/grand-lounge-ranking`, confirmed via `App.jsx` source read to render
+the identical `Leaderboard` component as `/smokecraft/leaderboard`).
+`Curation.jsx`/`Leaves.jsx`/`LeafChallengeResult.jsx` migrated their
+literal `/grand-lounge-ranking`/`/passport` navigation onto these new
+registry constants. Internal module navigation (Curation→Leaves→Leaf
+Challenge, etc.) correctly stayed as direct route literals — not
+cross-cutting named destinations.
+
+**Build-blocking validation extended:** `scripts/validateSmokecraftShellAdoption.mjs`
+grew from 20 to 29 target files (93 → 124 checks). `scripts/validateSmokecraftManifest.mjs`'s
+fullyMigratedScreens cross-check now verifies all 32 claimed routes (7 +
+16 + 9).
+
+**Educational interaction confirmed:** `Leaves.jsx`'s 6 flip-card study
+components each explain what the leaf/component is, why it matters, and
+its tasting/quality notes (source-confirmed: each card's back face
+carries `notes`/`tasting` copy); `Cultivation.jsx`/`Blend.jsx` carry real
+construction/flavor-effect copy tied to each selectable option. None of
+this content references Golden Box directly (consistent with the module's
+confirmed disconnection from it) — recorded as a real content gap for
+Holistic Fix 2D+ if this module is ever wired into the shipped journey.
+
+**Dead controls found and repaired:** 0.
+
+**5-viewport result:** 39/45 clean after a backend restart (the first
+run's failures were `/api/version`/`/api/auth/me` 500s from a genuinely-
+down backend — investigated via direct `curl`, confirmed environmental,
+not a migration regression). Remaining 6 investigated and confirmed
+non-regressions: 5 are `leaf-challenge-calculating` at every viewport,
+which is Chrome's `navigator.vibrate` permission console warning from
+pre-existing, untouched haptic code (`triggerHapticPulse()`) — a known
+headless-browser-testing artifact (vibrate requires a prior real user
+tap; this doesn't warn on an actual device after real tap-driven
+navigation), not a code defect. The 6th (`origins` at handheld-portrait)
+is the same non-reproducing first-navigation flake already documented
+multiple times in this operation (Holistic Fix 2A/2B).
+
+**Keyboard/focus:** reached a real control in 30/45 checks; the 15
+non-matches are `origins`/`flavor-dna` (genuinely zero-control
+instructional-image screens by design) across all 5 viewports each —
+confirmed correct, not defects.
+
+Regressions re-run and passing: `npm run build`,
+`verify-smokecraft-phase-session-lock.mjs` (9/9),
+`scripts/smokecraftAssetExclusivityCheck.mjs` (7/7),
+`verify-smokecraft-final-three-approved-assets.mjs` (17/17),
+`verify-smokecraft-all-routes-browser-test.mjs` (94 PASS + 14 REDIRECT
+PASS / 108, 0 issues), `verify-smokecraft-full-journey-sequence-and-assets.mjs`
+(**107/107**, unchanged), `scripts/validateSmokecraftManifest.mjs`
+(19/19), `scripts/validateSmokecraftShellAdoption.mjs` (124/124, extended
+this pass), 5-viewport module sweep (39/45 clean, 6 investigated
+non-regressions).
+
+**Architecture bypasses remaining:** ~45 supporting routes (Pairing-
+adjacent's 5, remaining standalone screens ~40) are classified but not
+migrated.
+
 ## Holistic Fix 2B update — Migrate the complete Golden Box system
 
 Starting commit: `9a0da0bb` (Holistic Fix 2A close).
