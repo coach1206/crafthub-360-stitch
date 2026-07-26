@@ -19,6 +19,32 @@ const CREAM     = '#e5e2e1'
 const BORDER    = 'rgba(233,193,118,0.22)'
 const GLASS     = 'rgba(8,10,16,0.86)'
 
+// System Audit Prompt 3B (SC-D001) — pixel-calibrated positions for the
+// approved image's baked left sidebar and bottom icon strip (1448x1086
+// session 1.png). Settings has no real SmokeCraft settings screen (only
+// unrelated POS3/E.A.T. settings exist) — wired as a real, focusable,
+// disabled button with an honest accessible name rather than a fabricated
+// route or a silent dead hotspot.
+const SIDEBAR_ITEMS = [
+  { key: 'dashboard',   label: 'Dashboard',   route: '/smokecraft',                 top: '20.4%' },
+  { key: 'sessions',    label: 'Sessions',    route: '/smokecraft/resume',          top: '26.0%' },
+  { key: 'rewards',     label: 'Rewards',     route: '/smokecraft/rewards-center',  top: '31.5%' },
+  { key: 'passport',    label: 'Passport',    route: '/smokecraft/passport',        top: '37.0%' },
+  { key: 'leaderboard', label: 'Leaderboard', route: '/smokecraft/leaderboard',     top: '42.5%' },
+  { key: 'events',      label: 'Events',      route: '/smokecraft/event-challenge', top: '48.1%' },
+  { key: 'collections', label: 'Collections', route: '/smokecraft/collections',     top: '53.6%' },
+  { key: 'mentor',      label: 'Mentor',      route: '/smokecraft/mentor-selection',top: '59.1%' },
+  { key: 'settings',    label: 'Settings (not yet available)', route: null, top: '64.6%', disabled: true },
+]
+const BOTTOM_STRIP_ITEMS = [
+  { key: 'home',    label: 'Home',    route: '/smokecraft',                 left: '2.8%' },
+  { key: 'journey', label: 'Journey', route: '/smokecraft/resume',          left: '17.9%' },
+  { key: 'learn',   label: 'Learn',   route: '/smokecraft/knowledge-drop',  left: '32.9%' },
+  { key: 'create',  label: 'Create',  route: '/smokecraft/golden-box',      left: '57.0%' },
+  { key: 'pairing', label: 'Pairing', route: '/smokecraft/pairing',         left: '71.1%' },
+  { key: 'mentor2', label: 'Mentor',  route: '/smokecraft/mentor-selection',left: '85.0%' },
+]
+
 // Static description of what the locked 27-session journey may cover — not
 // per-guest data, so it's safe as fixed copy (no fabrication risk).
 const LEARNING_OBJECTIVES = [
@@ -228,6 +254,58 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
         <span style={{ fontSize: 11, color: GOLD }}>{getRankFromXP(session?.xp || 0).name}</span>
         <span style={{ fontSize: 10, color: GOLD_DIM }}>{session?.xp || 0} pts</span>
       </div>
+
+      {/* System Audit Prompt 3B (SC-D001) — the approved image's left sidebar,
+          top bar, and bottom icon strip were entirely baked/dead: only the
+          content panel and Begin Experience button had live controls. Pixel
+          positions calibrated via PIL crop of the 1448x1086 approved image. */}
+      <button
+        type="button" aria-label="Back to Journey" data-testid="s1-back-to-journey"
+        onClick={() => { triggerHaptic('light'); navigate('/smokecraft/resume') }}
+        style={{ position: 'absolute', left: '15.9%', top: '0.9%', width: '11.0%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
+      />
+      <button
+        type="button" aria-label="Notifications" data-testid="s1-notifications" disabled
+        style={{ position: 'absolute', left: '84.3%', top: '0.9%', width: '2.8%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'default', pointerEvents: 'auto' }}
+      />
+      <button
+        type="button" aria-label="Help" data-testid="s1-help" disabled
+        style={{ position: 'absolute', left: '88.1%', top: '0.9%', width: '2.8%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'default', pointerEvents: 'auto' }}
+      />
+      <button
+        type="button" aria-label="Account" data-testid="s1-account"
+        onClick={() => { triggerHaptic('light'); navigate('/smokecraft/identity') }}
+        style={{ position: 'absolute', left: '91.9%', top: '0.9%', width: '3.1%', height: '4.4%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
+      />
+
+      {SIDEBAR_ITEMS.map(item => (
+        <button
+          key={item.key} type="button" aria-label={item.label} data-testid={`s1-sidebar-${item.key}`}
+          disabled={item.disabled}
+          onClick={item.disabled ? undefined : () => { triggerHaptic('light'); navigate(item.route) }}
+          style={{
+            position: 'absolute', left: '1%', top: item.top, width: '13.1%', height: '4.4%',
+            background: 'transparent', border: 'none', cursor: item.disabled ? 'default' : 'pointer',
+            pointerEvents: 'auto', touchAction: 'manipulation',
+          }}
+        />
+      ))}
+      <button
+        type="button" aria-label="Sign out — return to SmokeCraft landing" data-testid="s1-sign-out"
+        onClick={() => { triggerHaptic('medium'); navigate('/smokecraft') }}
+        style={{ position: 'absolute', left: '1%', top: '86.6%', width: '13.1%', height: '3.7%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
+      />
+
+      {BOTTOM_STRIP_ITEMS.map(item => (
+        <button
+          key={item.key} type="button" aria-label={item.label} data-testid={`s1-bottom-${item.key}`}
+          onClick={() => { triggerHaptic('light'); navigate(item.route) }}
+          style={{
+            position: 'absolute', left: item.left, top: '93.0%', width: '12%', height: '7.0%',
+            background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation',
+          }}
+        />
+      ))}
 
       <main style={{
         position: 'absolute', left: '17.1%', top: '65.4%', width: '52.6%', height: '24.7%',
