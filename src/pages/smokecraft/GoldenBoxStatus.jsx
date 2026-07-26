@@ -1,10 +1,13 @@
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 export default function GoldenBoxStatus() {
   return (
-    <SmokeCraftAssetScreen
-      src="/assets/smokecraft-reference/approved/smokecraft-golden-box-status.png"
-      alt="Golden Box Status"
-    />
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <SmokeCraftAssetScreen
+        src="/assets/smokecraft-reference/approved/smokecraft-golden-box-status.png"
+        alt="Golden Box Status"
+      />
+    </SmokeCraftScreenShell>
   )
 }

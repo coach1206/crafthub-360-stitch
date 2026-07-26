@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as api from '../../../services/goldenBox/goldenBoxApiClient.js'
 import MediaSlot from '../../../components/smokecraft/goldenBox/MediaSlot.jsx'
+import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -38,6 +39,7 @@ export default function JudgeDashboard() {
   }, [])
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ position: 'fixed', inset: 0, overflow: 'auto', background: NAVY, fontFamily: 'Georgia, serif', color: CREAM }}>
       <div style={{ padding: 'clamp(16px,3vw,32px)', maxWidth: 900, margin: '0 auto' }}>
         <MediaSlot assetKey="goldenBoxJudgingCriteria" alt="Golden Box judging criteria" caption="Judging Criteria" style={{ height: 140, borderRadius: 10, marginBottom: 14 }} />
@@ -82,5 +84,6 @@ export default function JudgeDashboard() {
         </div>
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

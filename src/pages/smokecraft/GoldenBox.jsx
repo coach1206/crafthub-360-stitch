@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
 
 const NAT_W = 1456
 const NAT_H = 1080
@@ -71,16 +72,14 @@ export default function GoldenBox() {
     if (!acknowledged) return
     triggerHaptic('medium')
     try { awardSessionRewards('golden-box') } catch (_) {}
-    navigate('/smokecraft/mentor-selection')
+    navigate(NAV.MENTOR)
   }
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src={SC_ASSETS.goldenBox}
-      naturalW={NAT_W}
-      naturalH={NAT_H}
-      alt="SmokeCraft Golden Box Rules — The Five Principles"
-      bottomOffset={0}
+    <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: SC_ASSETS.goldenBox, naturalW: NAT_W, naturalH: NAT_H, alt: 'SmokeCraft Golden Box Rules — The Five Principles', bottomOffset: 0 }}
     >
       {/* Baked: BACK button — neutralized, real control */}
       <button
@@ -159,6 +158,6 @@ export default function GoldenBox() {
       >
         Next: Mentor Selection →
       </button>
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

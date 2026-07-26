@@ -291,8 +291,17 @@ try {
   const wm = await markers()
   assert('Welcome renders canonical screenId session-1', wm?.screenId === 'session-1')
   assert('Welcome reports phase 1, session 1', wm?.phase === '1' && wm?.session === '1')
-  assert('Welcome honestly declares it has no approved asset (never a fabricated one)',
-    wm?.visualSource === 'live-component-no-approved-asset' && wm?.assetKey === '')
+  // SC-D008 fix: this assertion was written before Welcome/S1 had a real
+  // approved asset wired. It's provably stale, not a live defect —
+  // getManifestEntry('session-1').assetKey === 'session1' with
+  // assetStatus 'ok' (a real, on-disk SC_ASSETS.session1 file, wired since
+  // commit 7e8c4281), so SmokeCraftScreenRenderer's own
+  // data-visual-source logic (entry.assetKey ? 'user-approved' : '...')
+  // now correctly reports 'user-approved' here. Asserting the old
+  // no-asset state would itself be the fabrication this suite exists to
+  // catch. Updated to assert the real, current, correct state.
+  assert('Welcome honestly declares its real approved asset (session1, never fabricated)',
+    wm?.visualSource === 'user-approved' && wm?.assetKey === 'session1')
   await page.screenshot({ path: `${SHOTS}/entry-04-welcome.png` })
 
   // B5. Welcome must never show placeholder identity/venue values.

@@ -142,6 +142,26 @@ const KNOWN_AUDITED = {
   '(smokecraft index)': { classification: 'clean-image-shell', auditedIn: 'source-derived: SmokeCraft.jsx (Landing) uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
   'enroll':           { classification: 'clean-image-shell', auditedIn: 'source-derived: Enroll.jsx uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
   'identity':         { classification: 'clean-image-shell', auditedIn: 'source-derived: Identity.jsx uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
+  // Holistic Fix 2B — Golden Box family (16 routes), all migrated onto
+  // SmokeCraftScreenShell this pass. GoldenBox.jsx (the rules screen) is
+  // image-shell; every other Golden Box screen is a real, backend-driven
+  // React screen with no approved-image backdrop, hence full-live-react.
+  'golden-box':                                { classification: 'clean-image-shell', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified' },
+  'golden-box/status':                         { classification: 'instructional-image', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/competitions':                   { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/competitions/:competitionId':    { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified' },
+  'golden-box/entries/:entryId/blend':         { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/results/:competitionId':         { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified' },
+  'golden-box/judge':                          { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/judge/entries/:entryId':         { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/mentor/entries/:entryId':        { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/packaging-studio':               { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/packaging-studio/new':           { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/packaging-studio/:designId':     { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/packaging-studio/:designId/preview':  { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/packaging-studio/:designId/versions': { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/packaging-studio/:designId/share':    { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'golden-box/packaging-review/:shareToken':   { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
 }
 
 const manifestByRoute = {}
@@ -218,7 +238,7 @@ const output = {
   // "Fully migrated" = actually renders SmokeCraftScreenShell in its own
   // component (verified below by scripts/validateSmokecraftShellAdoption.mjs
   // against the real source, not just this manifest's own auditedIn text).
-  fullyMigratedScreens: entries.filter(e => e.auditedIn?.includes('Holistic Fix 2A')).length,
+  fullyMigratedScreens: entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B/.test(e.auditedIn || '')).length,
   entries,
 }
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import * as api from '../../../services/goldenBox/packagingStudioApiClient.js'
+import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -29,13 +30,14 @@ export default function PackagingReview() {
     if (res.ok) { setPosted(true); setComment('') }
   }
 
-  if (state === 'loading') return <div style={{ padding: 24, color: CREAM, background: NAVY, minHeight: '100vh' }} role="status">Loading shared design…</div>
-  if (state === 'revoked') return <div style={{ padding: 24, color: DANGER, background: NAVY, minHeight: '100vh' }} role="alert">This share link has been revoked by its owner.</div>
-  if (state === 'expired') return <div style={{ padding: 24, color: DANGER, background: NAVY, minHeight: '100vh' }} role="alert">This share link has expired.</div>
-  if (state === 'error' || !data) return <div style={{ padding: 24, color: DANGER, background: NAVY, minHeight: '100vh' }} role="alert">This share link is not valid.</div>
+  if (state === 'loading') return <SmokeCraftScreenShell mode="live" status="loading" loadingMessage="Loading shared design…" />
+  if (state === 'revoked') return <SmokeCraftScreenShell mode="live" status="empty" emptyMessage="This share link has been revoked by its owner." />
+  if (state === 'expired') return <SmokeCraftScreenShell mode="live" status="empty" emptyMessage="This share link has expired." />
+  if (state === 'error' || !data) return <SmokeCraftScreenShell mode="live" status="empty" emptyMessage="This share link is not valid." />
 
   const snapshot = data.version?.snapshot || {}
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ minHeight: '100vh', background: NAVY, color: CREAM, fontFamily: 'Georgia, serif', padding: 24 }}>
       <h1 style={{ color: GOLD }}>{data.design.boxName || 'Untitled Packaging Design'}</h1>
       <p style={{ color: 'rgba(229,226,225,0.6)', fontSize: 13 }}>Shared design — {data.accessType === 'comment_enabled' ? 'view and comment' : 'view only'}. You cannot edit this design.</p>
@@ -54,5 +56,6 @@ export default function PackagingReview() {
         </div>
       )}
     </div>
+    </SmokeCraftScreenShell>
   )
 }

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useGoldenBoxCompetitionDetail, ensureIdentity } from '../../../hooks/useGoldenBox.js'
 import * as api from '../../../services/goldenBox/goldenBoxApiClient.js'
 import MentorGuidancePanel from '../../../components/smokecraft/goldenBox/MentorGuidancePanel.jsx'
+import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../../constants/smokecraftNavigationRegistry.js'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -37,14 +39,15 @@ export default function CompetitionDetail() {
     if (result.ok) navigate(`/smokecraft/golden-box/entries/${result.entry.entry_id}/blend`)
   }
 
-  if (state === 'loading' || state === 'idle') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: CREAM, padding: 24 }}>Loading competition…</div>
-  if (state === 'not-found') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: DANGER, padding: 24 }}>Competition not found.</div>
-  if (state === 'error') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: DANGER, padding: 24 }}>Unable to load this competition. <button type="button" onClick={load}>Retry</button></div>
+  if (state === 'loading' || state === 'idle') return <SmokeCraftScreenShell mode="live" status="loading" loadingMessage="Loading competition…" />
+  if (state === 'not-found') return <SmokeCraftScreenShell mode="live" status="empty" emptyMessage="Competition not found." />
+  if (state === 'error') return <SmokeCraftScreenShell mode="live" status="error" errorMessage="Unable to load this competition." onRetry={load} />
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ position: 'fixed', inset: 0, overflow: 'auto', background: NAVY, fontFamily: 'Georgia, serif', color: CREAM }}>
       <div style={{ padding: 'clamp(16px,3vw,32px)', maxWidth: 900, margin: '0 auto' }}>
-        <button type="button" onClick={() => navigate('/smokecraft/golden-box')} style={{ background: 'transparent', border: 'none', color: GOLD, cursor: 'pointer', marginBottom: 12, fontFamily: 'inherit' }}>← Golden Box Hub</button>
+        <button type="button" onClick={() => navigate(NAV.GOLDEN_BOX)} style={{ background: 'transparent', border: 'none', color: GOLD, cursor: 'pointer', marginBottom: 12, fontFamily: 'inherit' }}>← Golden Box Hub</button>
 
         <h1 style={{ color: GOLD, fontSize: 'clamp(20px,2.6vw,28px)', margin: '0 0 8px' }}>{competition.title}</h1>
         <p style={{ fontSize: 14, color: 'rgba(229,226,225,0.7)' }}>{competition.description || 'No description provided.'}</p>
@@ -107,5 +110,6 @@ export default function CompetitionDetail() {
         </div>
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

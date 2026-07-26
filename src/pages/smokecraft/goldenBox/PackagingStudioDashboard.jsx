@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import * as api from '../../../services/goldenBox/packagingStudioApiClient.js'
+import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -32,6 +33,7 @@ export default function PackagingStudioDashboard() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ minHeight: '100vh', background: `linear-gradient(160deg, ${NAVY}, #05070c)`, color: CREAM, fontFamily: 'Georgia, serif', padding: 24 }}>
       <div style={{ maxWidth: 960, margin: '0 auto' }}>
         <h1 style={{ color: GOLD, fontSize: 28, marginBottom: 4 }}>Golden Box Packaging Studio</h1>
@@ -65,5 +67,6 @@ export default function PackagingStudioDashboard() {
         )}
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

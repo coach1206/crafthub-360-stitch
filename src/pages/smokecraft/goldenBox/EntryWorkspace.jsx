@@ -8,6 +8,7 @@ import { notYetConfigured, fromCatalogRow } from '../../../components/smokecraft
 import * as contentApi from '../../../services/goldenBox/goldenBoxContentApiClient.js'
 import MediaSlot from '../../../components/smokecraft/goldenBox/MediaSlot.jsx'
 import * as packagingApi from '../../../services/goldenBox/packagingStudioApiClient.js'
+import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -209,15 +210,16 @@ export default function EntryWorkspace() {
     if (result.ok) setStep('status')
   }
 
-  if (state === 'loading' || state === 'idle') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: CREAM, padding: 24 }}>Loading entry…</div>
-  if (state === 'not-found') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: DANGER, padding: 24 }}>Entry not found.</div>
-  if (state === 'error') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: DANGER, padding: 24 }}>Unable to load this entry. <button type="button" onClick={load}>Retry</button></div>
+  if (state === 'loading' || state === 'idle') return <SmokeCraftScreenShell mode="live" status="loading" loadingMessage="Loading entry…" />
+  if (state === 'not-found') return <SmokeCraftScreenShell mode="live" status="empty" emptyMessage="Entry not found." />
+  if (state === 'error') return <SmokeCraftScreenShell mode="live" status="error" errorMessage="Unable to load this entry." onRetry={load} />
 
   const locked = ['submitted', 'locked', 'under_review', 'finalist', 'winner', 'not_selected', 'disqualified'].includes(entry.status)
   const requiredMet = REQUIRED_COMPONENTS.every(c => components[c.type])
   const statusCopy = ENTRY_STATUS_COPY[entry.status] || { label: entry.status, explanation: '' }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ position: 'fixed', inset: 0, overflow: 'auto', background: NAVY, fontFamily: 'Georgia, serif', color: CREAM }}>
       <div style={{ padding: 'clamp(16px,3vw,32px)', maxWidth: 900, margin: '0 auto' }}>
         <button type="button" onClick={() => navigate(`/smokecraft/golden-box/competitions/${entry.competition_id}`)} style={{ background: 'transparent', border: 'none', color: GOLD, cursor: 'pointer', marginBottom: 12, fontFamily: 'inherit' }}>← Back to Competition</button>
@@ -419,5 +421,6 @@ export default function EntryWorkspace() {
         <EducationalDetailPanel content={buildEducationContent(educating, components, catalogByType, REQUIRED_COMPONENTS, OPTIONAL_COMPONENTS)} onClose={() => setEducating(null)} />
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

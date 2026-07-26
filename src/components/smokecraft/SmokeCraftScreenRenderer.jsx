@@ -49,11 +49,14 @@ export default function SmokeCraftScreenRenderer({ screenId }) {
 
   // Approved-visual-lock markers below: data-visual-source is `user-approved`
   // when this screen has an approved GitHub-sourced asset registered in
-  // SC_ASSETS; otherwise the honest `live-component-no-approved-asset` (e.g.
-  // session-1 Welcome, which has no approved "Welcome to Today's Experience"
-  // artwork anywhere in the repo — disclosed, never fabricated or borrowed
-  // from another screen). Every canonical screen is an interactive live
-  // component, never a static image-only screen, so data-static-only="false".
+  // SC_ASSETS; otherwise the honest `live-component-no-approved-asset` for
+  // any screen manifest entry with no assetKey. (This branch was written
+  // before session-1 Welcome had a real approved asset wired — it now
+  // resolves `user-approved` for Welcome via SC_ASSETS.session1, fixed in
+  // an earlier pass; SC-D008 in the defect register documents the stale
+  // test assertion this comment used to justify, since corrected.) Every
+  // canonical screen is an interactive live component, never a static
+  // image-only screen, so data-static-only="false".
   return (
     <div
       data-smokecraft-screen-id={entry.screenId}

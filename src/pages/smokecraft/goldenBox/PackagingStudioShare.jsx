@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import * as api from '../../../services/goldenBox/packagingStudioApiClient.js'
+import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -29,6 +30,7 @@ export default function PackagingStudioShare() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ minHeight: '100vh', background: NAVY, color: CREAM, fontFamily: 'Georgia, serif', padding: 24 }}>
       <h1 style={{ color: GOLD }}>Sharing Manager</h1>
 
@@ -65,5 +67,6 @@ export default function PackagingStudioShare() {
       ))}
       <button onClick={() => navigate(`/smokecraft/golden-box/packaging-studio/${designId}`)} style={{ marginTop: 20, minHeight: 44, padding: '8px 16px', background: 'transparent', color: CREAM, border: `1px solid ${BORDER}`, borderRadius: 6, cursor: 'pointer' }}>Back to Editor</button>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

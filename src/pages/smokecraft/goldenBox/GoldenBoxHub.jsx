@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGoldenBoxCompetitions } from '../../../hooks/useGoldenBox.js'
 import MentorGuidancePanel from '../../../components/smokecraft/goldenBox/MentorGuidancePanel.jsx'
+import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -45,6 +46,7 @@ export default function GoldenBoxHub() {
   const completed = competitions.filter(c => c.status === 'completed')
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ position: 'fixed', inset: 0, overflow: 'auto', background: NAVY, fontFamily: 'Georgia, serif', color: CREAM }}>
       <div style={{ padding: 'clamp(16px,3vw,32px)', maxWidth: 1100, margin: '0 auto' }}>
         <h1 style={{ color: GOLD, fontSize: 'clamp(20px,2.6vw,28px)', margin: '0 0 6px' }}>Golden Box Challenge</h1>
@@ -104,5 +106,6 @@ export default function GoldenBoxHub() {
         )}
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

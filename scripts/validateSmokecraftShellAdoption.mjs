@@ -23,6 +23,21 @@ const TARGETS = [
   { file: 'src/pages/smokecraft/SmokeCraftCraftHub.jsx', name: 'CraftHub', navLiterals: [] },
   { file: 'src/pages/smokecraft/ChallengeHub.jsx', name: 'Challenge Hub', navLiterals: [] },
   { file: 'src/pages/smokecraft/Rewards.jsx', name: 'Rewards', navLiterals: ['/smokecraft/challenge-hub', '/smokecraft/collections'] },
+  // Holistic Fix 2B — Golden Box family (16 routes across 13 components).
+  { file: 'src/pages/smokecraft/GoldenBox.jsx', name: 'Golden Box Rules', navLiterals: ['/smokecraft/mentor-selection'] },
+  { file: 'src/pages/smokecraft/GoldenBoxStatus.jsx', name: 'Golden Box Status', navLiterals: [] },
+  { file: 'src/pages/smokecraft/goldenBox/GoldenBoxHub.jsx', name: 'Golden Box Hub', navLiterals: [] },
+  { file: 'src/pages/smokecraft/goldenBox/CompetitionDetail.jsx', name: 'Golden Box Competition Detail', navLiterals: ['/smokecraft/golden-box'] },
+  { file: 'src/pages/smokecraft/goldenBox/EntryWorkspace.jsx', name: 'Golden Box Entry Workspace', navLiterals: [] },
+  { file: 'src/pages/smokecraft/goldenBox/ResultsExperience.jsx', name: 'Golden Box Results', navLiterals: ['/smokecraft/golden-box', '/smokecraft/leaderboard'] },
+  { file: 'src/pages/smokecraft/goldenBox/JudgeDashboard.jsx', name: 'Golden Box Judge Dashboard', navLiterals: [] },
+  { file: 'src/pages/smokecraft/goldenBox/JudgeEntryReview.jsx', name: 'Golden Box Judge Entry Review', navLiterals: [] },
+  { file: 'src/pages/smokecraft/goldenBox/MentorReview.jsx', name: 'Golden Box Mentor Review', navLiterals: [] },
+  { file: 'src/pages/smokecraft/goldenBox/PackagingStudioDashboard.jsx', name: 'Packaging Studio Dashboard', navLiterals: [] },
+  { file: 'src/pages/smokecraft/goldenBox/PackagingStudioEditor.jsx', name: 'Packaging Studio Editor', navLiterals: [] },
+  { file: 'src/pages/smokecraft/goldenBox/PackagingStudioVersions.jsx', name: 'Packaging Studio Versions', navLiterals: [] },
+  { file: 'src/pages/smokecraft/goldenBox/PackagingStudioShare.jsx', name: 'Packaging Studio Share', navLiterals: [] },
+  { file: 'src/pages/smokecraft/goldenBox/PackagingReview.jsx', name: 'Packaging Review (public share link)', navLiterals: [] },
 ]
 
 for (const t of TARGETS) {
@@ -50,6 +65,7 @@ const ASSET_LOCKS = [
   { file: 'src/pages/smokecraft/SmokeCraftPassport.jsx', key: 'SC_ASSETS.passportHub' },
   { file: 'src/pages/smokecraft/SmokeCraftCraftHub.jsx', key: 'SC_ASSETS.craftHubVenueTable' },
   { file: 'src/pages/smokecraft/Rewards.jsx', key: 'SC_ASSETS.rewards' },
+  { file: 'src/pages/smokecraft/GoldenBox.jsx', key: 'SC_ASSETS.goldenBox' },
 ]
 for (const a of ASSET_LOCKS) {
   const src = readFileSync(a.file, 'utf8')

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import * as api from '../../../services/goldenBox/goldenBoxApiClient.js'
 import MediaSlot from '../../../components/smokecraft/goldenBox/MediaSlot.jsx'
+import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -69,10 +70,11 @@ export default function MentorReview() {
     setMessage('Mentor review submitted — now visible to the learner.')
   }
 
-  if (state === 'loading') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: CREAM, padding: 24 }}>Loading…</div>
-  if (state === 'forbidden') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: DANGER, padding: 24 }}>You are not authorized to submit a mentor review (mentor role required).</div>
+  if (state === 'loading') return <SmokeCraftScreenShell mode="live" status="loading" loadingMessage="Loading…" />
+  if (state === 'forbidden') return <SmokeCraftScreenShell mode="live" status="empty" emptyMessage="You are not authorized to submit a mentor review (mentor role required)." />
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ position: 'fixed', inset: 0, overflow: 'auto', background: NAVY, fontFamily: 'Georgia, serif', color: CREAM }}>
       <div style={{ padding: 'clamp(16px,3vw,32px)', maxWidth: 800, margin: '0 auto' }}>
         <button type="button" onClick={() => navigate(-1)} style={{ background: 'transparent', border: 'none', color: GOLD, cursor: 'pointer', marginBottom: 12, fontFamily: 'inherit' }}>← Back</button>
@@ -108,5 +110,6 @@ export default function MentorReview() {
         </div>
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

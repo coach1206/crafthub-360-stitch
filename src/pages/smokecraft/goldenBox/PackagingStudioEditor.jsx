@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import * as api from '../../../services/goldenBox/packagingStudioApiClient.js'
+import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -105,10 +106,11 @@ export default function PackagingStudioEditor() {
     reader.readAsDataURL(file)
   }
 
-  if (state === 'loading') return <div style={{ padding: 24, color: CREAM, background: NAVY, minHeight: '100vh' }} role="status">Loading design…</div>
-  if (state === 'error' || !design) return <div style={{ padding: 24, color: DANGER, background: NAVY, minHeight: '100vh' }} role="alert">Design not found or not accessible.</div>
+  if (state === 'loading') return <SmokeCraftScreenShell mode="live" status="loading" loadingMessage="Loading design…" />
+  if (state === 'error' || !design) return <SmokeCraftScreenShell mode="live" status="empty" emptyMessage="Design not found or not accessible." />
   if (design.status === 'submitted') {
     return (
+      <SmokeCraftScreenShell mode="live" status="ready">
       <div style={{ padding: 24, color: CREAM, background: NAVY, minHeight: '100vh' }}>
         <h2 style={{ color: GOLD }}>This design has been submitted</h2>
         <p>The submitted packaging snapshot is locked and cannot be edited. It remains readable by authorized judges.</p>
@@ -119,12 +121,14 @@ export default function PackagingStudioEditor() {
           </button>
         )}
       </div>
+      </SmokeCraftScreenShell>
     )
   }
 
   const woodColor = WOOD_COLOR[config.woodType] || '#1a1410'
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ minHeight: '100vh', background: `linear-gradient(160deg, ${NAVY}, #05070c)`, color: CREAM, fontFamily: 'Georgia, serif' }}>
       <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr 280px', gap: 0, minHeight: '100vh' }}>
         {/* Left: Configuration */}
@@ -234,5 +238,6 @@ export default function PackagingStudioEditor() {
         </div>
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

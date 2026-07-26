@@ -117,24 +117,46 @@ const commerceAliasLines = [
 check('venue-commerce / order / ticket-tapper/staff-specials remain a documented, enforced alias group (identical component)',
   commerceAliasLines.every(Boolean) && new Set(commerceAliasLines).size === 1)
 
-// 10. Holistic Fix 2A — the manifest's own fullyMigratedScreens count must
-// match real source evidence, not just a text label. Cross-checked against
-// the same 7-screen target list validateSmokecraftShellAdoption.mjs
-// enforces.
+// 10. Holistic Fix 2A/2B — every manifest entry claiming a
+// "Holistic Fix 2A"/"Holistic Fix 2B" auditedIn citation must be backed by
+// a real component file that actually renders <SmokeCraftScreenShell — not
+// just a text label. Route -> file map covers both passes; Golden Box
+// routes that share one component (packaging-studio/packaging-studio/new,
+// etc.) are expected and intentional.
 if (existsSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')) {
   const manifest = JSON.parse(readFileSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json', 'utf8'))
-  const shellFiles = [
-    'src/pages/smokecraft/WelcomeExperience.jsx',
-    'src/pages/smokecraft/Leaderboard.jsx',
-    'src/pages/smokecraft/SmokeCraftPassport.jsx',
-    'src/pages/smokecraft/VenueSelect.jsx',
-    'src/pages/smokecraft/SmokeCraftCraftHub.jsx',
-    'src/pages/smokecraft/ChallengeHub.jsx',
-    'src/pages/smokecraft/Rewards.jsx',
-  ]
-  const realShellAdopters = shellFiles.filter(f => existsSync(f) && readFileSync(f, 'utf8').includes('<SmokeCraftScreenShell')).length
-  check(`Manifest fullyMigratedScreens (${manifest.fullyMigratedScreens}) matches real shell-adoption count (${realShellAdopters})`,
-    manifest.fullyMigratedScreens === realShellAdopters && realShellAdopters >= 7)
+  const ROUTE_TO_FILE = {
+    '/smokecraft/welcome': 'src/pages/smokecraft/WelcomeExperience.jsx',
+    '/smokecraft/leaderboard': 'src/pages/smokecraft/Leaderboard.jsx',
+    '/smokecraft/passport': 'src/pages/smokecraft/SmokeCraftPassport.jsx',
+    '/smokecraft/venue-select': 'src/pages/smokecraft/VenueSelect.jsx',
+    '/smokecraft/crafthub': 'src/pages/smokecraft/SmokeCraftCraftHub.jsx',
+    '/smokecraft/challenge-hub': 'src/pages/smokecraft/ChallengeHub.jsx',
+    '/smokecraft/rewards': 'src/pages/smokecraft/Rewards.jsx',
+    '/smokecraft/golden-box': 'src/pages/smokecraft/GoldenBox.jsx',
+    '/smokecraft/golden-box/status': 'src/pages/smokecraft/GoldenBoxStatus.jsx',
+    '/smokecraft/golden-box/competitions': 'src/pages/smokecraft/goldenBox/GoldenBoxHub.jsx',
+    '/smokecraft/golden-box/competitions/:competitionId': 'src/pages/smokecraft/goldenBox/CompetitionDetail.jsx',
+    '/smokecraft/golden-box/entries/:entryId/blend': 'src/pages/smokecraft/goldenBox/EntryWorkspace.jsx',
+    '/smokecraft/golden-box/results/:competitionId': 'src/pages/smokecraft/goldenBox/ResultsExperience.jsx',
+    '/smokecraft/golden-box/judge': 'src/pages/smokecraft/goldenBox/JudgeDashboard.jsx',
+    '/smokecraft/golden-box/judge/entries/:entryId': 'src/pages/smokecraft/goldenBox/JudgeEntryReview.jsx',
+    '/smokecraft/golden-box/mentor/entries/:entryId': 'src/pages/smokecraft/goldenBox/MentorReview.jsx',
+    '/smokecraft/golden-box/packaging-studio': 'src/pages/smokecraft/goldenBox/PackagingStudioDashboard.jsx',
+    '/smokecraft/golden-box/packaging-studio/new': 'src/pages/smokecraft/goldenBox/PackagingStudioDashboard.jsx',
+    '/smokecraft/golden-box/packaging-studio/:designId': 'src/pages/smokecraft/goldenBox/PackagingStudioEditor.jsx',
+    '/smokecraft/golden-box/packaging-studio/:designId/preview': 'src/pages/smokecraft/goldenBox/PackagingStudioEditor.jsx',
+    '/smokecraft/golden-box/packaging-studio/:designId/versions': 'src/pages/smokecraft/goldenBox/PackagingStudioVersions.jsx',
+    '/smokecraft/golden-box/packaging-studio/:designId/share': 'src/pages/smokecraft/goldenBox/PackagingStudioShare.jsx',
+    '/smokecraft/golden-box/packaging-review/:shareToken': 'src/pages/smokecraft/goldenBox/PackagingReview.jsx',
+  }
+  const claimedMigrated = manifest.entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B/.test(e.auditedIn || ''))
+  const verifiedCount = claimedMigrated.filter(e => {
+    const file = ROUTE_TO_FILE[e.route]
+    return file && existsSync(file) && readFileSync(file, 'utf8').includes('<SmokeCraftScreenShell')
+  }).length
+  check(`Manifest fullyMigratedScreens (${manifest.fullyMigratedScreens}) — every claimed route (${claimedMigrated.length}) is backed by a real <SmokeCraftScreenShell> render (${verifiedCount} verified)`,
+    manifest.fullyMigratedScreens === claimedMigrated.length && verifiedCount === claimedMigrated.length && verifiedCount >= 23)
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)

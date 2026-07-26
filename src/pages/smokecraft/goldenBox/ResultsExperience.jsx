@@ -4,6 +4,8 @@ import * as api from '../../../services/goldenBox/goldenBoxApiClient.js'
 import { useGoldenBoxCompetitionDetail } from '../../../hooks/useGoldenBox.js'
 import MentorGuidancePanel from '../../../components/smokecraft/goldenBox/MentorGuidancePanel.jsx'
 import MediaSlot from '../../../components/smokecraft/goldenBox/MediaSlot.jsx'
+import SmokeCraftScreenShell from '../../../components/smokecraft/SmokeCraftScreenShell.jsx'
+import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../../constants/smokecraftNavigationRegistry.js'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -53,16 +55,17 @@ export default function ResultsExperience() {
     api.getMentorReviewsForEntry(entryId).then(result => { if (result.ok) setMentorReviews(result.reviews || []) })
   }, [entryId, competitionId])
 
-  if (state === 'loading' || state === 'idle') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: CREAM, padding: 24 }}>Loading results…</div>
-  if (state === 'error' || state === 'not-found') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: DANGER, padding: 24 }}>Results unavailable.</div>
+  if (state === 'loading' || state === 'idle') return <SmokeCraftScreenShell mode="live" status="loading" loadingMessage="Loading results…" />
+  if (state === 'error' || state === 'not-found') return <SmokeCraftScreenShell mode="live" status="empty" emptyMessage="Results unavailable." />
 
   const resultsReleased = ['results_pending', 'completed'].includes(competition.status)
   const resultState = entryDetail ? RESULT_STATE_COPY[entryDetail.status] : null
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ position: 'fixed', inset: 0, overflow: 'auto', background: NAVY, fontFamily: 'Georgia, serif', color: CREAM }}>
       <div style={{ padding: 'clamp(16px,3vw,32px)', maxWidth: 900, margin: '0 auto' }}>
-        <button type="button" onClick={() => navigate('/smokecraft/golden-box')} style={{ background: 'transparent', border: 'none', color: GOLD, cursor: 'pointer', marginBottom: 12, fontFamily: 'inherit' }}>← Golden Box Hub</button>
+        <button type="button" onClick={() => navigate(NAV.GOLDEN_BOX)} style={{ background: 'transparent', border: 'none', color: GOLD, cursor: 'pointer', marginBottom: 12, fontFamily: 'inherit' }}>← Golden Box Hub</button>
 
         <MediaSlot assetKey="goldenBoxScoringRounds" alt="Golden Box scoring rounds" caption="Results" style={{ height: 150, borderRadius: 10, marginBottom: 14 }} />
         <h1 style={{ color: GOLD, fontSize: 'clamp(18px,2.4vw,24px)', margin: '0 0 12px' }}>{competition.title} — Results</h1>
@@ -130,11 +133,15 @@ export default function ResultsExperience() {
             Leaderboard and Rewards/Badges screens, never a fabricated
             destination. */}
         <div style={{ display: 'flex', gap: 10, marginTop: 20, flexWrap: 'wrap' }}>
-          <button type="button" onClick={() => navigate('/smokecraft/leaderboard')} style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: 'pointer', fontFamily: 'inherit' }}>View Leaderboard</button>
+          <button type="button" onClick={() => navigate(NAV.LEADERBOARD)} style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: 'pointer', fontFamily: 'inherit' }}>View Leaderboard</button>
+          {/* Not NAV.REWARDS (that's /smokecraft/rewards-center, a different
+              screen) — this genuinely targets the S25 curriculum Rewards
+              screen, confirmed via source read. */}
           <button type="button" onClick={() => navigate('/smokecraft/rewards')} style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1.5px solid ${GOLD}`, background: 'transparent', color: GOLD, cursor: 'pointer', fontFamily: 'inherit' }}>View Rewards & Badges</button>
           <button type="button" onClick={() => navigate('/smokecraft/golden-box/competitions')} style={{ minHeight: 44, padding: '10px 20px', borderRadius: 20, border: `1px solid ${BORDER}`, background: 'transparent', color: CREAM, cursor: 'pointer', fontFamily: 'inherit' }}>Back to Competitions</button>
         </div>
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }
