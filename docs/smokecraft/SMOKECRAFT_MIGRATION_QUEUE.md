@@ -55,16 +55,23 @@ Box (separate namespace, no `golden_box_*` calls). It DOES write real
 (`XP_AWARDS.BLEND_CREATED`, 150). No education prerequisites gate any of
 the 9 routes.
 
-## Group 3 — Pairing-adjacent standalone screens (5 routes) — STILL OPEN
+## Group 3 — Pairing-adjacent standalone screens (5 routes) — RESOLVED this pass (Holistic Fix 2D)
 
-`pairing` (full-live-react), `available`, `assistant` (full-live-react via
-`ComingSoon`), `pairing-mastery` (full-live-react via `ComingSoon`),
-`vitola`. Confirmed this pass: `/smokecraft/pairing` is genuinely distinct
-from `/smokecraft/pairing-lab` (S11) — WelcomeExperience.jsx's bottom-strip
-"Pairing" control correctly targets `/smokecraft/pairing`, not
-`pairing-lab`, and this distinction is now protected in the navigation
-registry via two separate keys (`PAIRING` vs `PAIRING_STANDALONE`) so a
-future edit can't silently collapse them.
+`pairing`, `available`, `assistant`, `pairing-mastery`, `vitola` — all 5
+now import and render `SmokeCraftScreenShell`. Confirmed this pass:
+`/smokecraft/pairing` is genuinely distinct from `/smokecraft/pairing-lab`
+(S11), `/smokecraft/pairing-recommendations` (S22), and
+`/smokecraft/humidor-match` (S2) — 4 distinct components confirmed via a
+new build-blocking collision guard in
+`scripts/validateSmokecraftShellAdoption.mjs` that resolves each route's
+registered component from `App.jsx` and fails if any two collide.
+`/smokecraft/pairing` is the only one of the 5 that is live-reachable
+(Landing/Welcome/CommandHub); `available`/`assistant`/`pairing-mastery`/
+`vitola` are confirmed orphaned — referenced only in the legacy
+`SMOKECRAFT_FLOW` config consumed by the admin-only NOVEE OS module
+registry, never live guest navigation. See
+`public/proof/smokecraft-holistic-fix-2d/index.md` for full detail and
+the pairing-engine gaps recorded for the gameplay-engine package.
 
 ## Group 4 — SmokeCraft commerce module (8 routes) — RESOLVED this pass (item 10)
 
@@ -122,13 +129,13 @@ investigated flaky non-regression). See
 per-screen detail and `public/proof/smokecraft-holistic-fix-2a/` for
 screenshots and raw results.
 
-**Screen-shell adoption: 32 of 108 routes** (7 Holistic Fix 2A + 16 Golden
-Box Holistic Fix 2B + 9 Origins/Curation module Holistic Fix 2C, across
-29 unique component files). The remaining ~45 supporting routes
-(Pairing-adjacent 5, commerce-consolidation cleanup, remaining standalone
-screens ~40) are the next unit of work for Holistic Fix 2D — same
-migration pattern (shell + registry + 5-viewport verification +
-regression lock).
+**Screen-shell adoption: 37 of 108 routes** (7 Holistic Fix 2A + 16 Golden
+Box Holistic Fix 2B + 9 Origins/Curation module Holistic Fix 2C + 5
+Pairing-adjacent Holistic Fix 2D, across 34 unique component files). The
+remaining ~40 supporting routes (commerce-consolidation cleanup, legacy
+alias-table consolidation, remaining standalone screens) are the next
+unit of work for Holistic Fix 2E — same migration pattern (shell +
+registry + 5-viewport verification + regression lock).
 
 The 33 routes already deep-audited in Prompts 3B–3E-3 (Welcome,
 Leaderboard, Passport, CraftHub, Venue Selection, Connections, Passport

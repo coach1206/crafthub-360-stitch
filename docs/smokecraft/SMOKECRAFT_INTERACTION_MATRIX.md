@@ -133,6 +133,38 @@ was confirmed to render its real backend-integrated claim flow without
 crashing. Rewards was confirmed to render real point/rank values with
 non-interactive badge crests (not a false-clickable control).
 
+## Holistic Fix 2D — Pairing-adjacent family (5 routes)
+
+Migrated Pairing, Available, Assistant, Pairing Mastery, and Vitola onto
+`SmokeCraftScreenShell`. Traced and documented each route's real purpose
+and reachability (see `public/proof/smokecraft-holistic-fix-2d/index.md`):
+`/smokecraft/pairing` is genuinely live-reachable (Landing PAIRING
+action, Welcome bottom-strip, CommandHub ticker); the other 4 are
+confirmed orphaned, referenced only in the legacy `SMOKECRAFT_FLOW`
+config consumed by the admin-only NOVEE OS module registry.
+
+**No merge or redirect performed** between `/smokecraft/pairing`,
+Pairing Lab (S11), Personalized Pairing Recommendations (S22), and
+Humidor Match (S2) — confirmed via a new build-blocking collision guard
+(`scripts/validateSmokecraftShellAdoption.mjs`) that these 5 pairing-
+family routes resolve to 5 distinct components, and that the
+navigation registry's `PAIRING`/`PAIRING_STANDALONE` keys remain
+separate values.
+
+Connected-flow test: Pairing (real Back/Continue hotspots) → Available
+(4 real cigar cards with real Select buttons, confirmed via direct DOM
+inspection with `$$eval`, plus 4 honestly-disabled drink-pairing buttons
+with real accessible titles) → Assistant/Pairing Mastery (honest
+`ComingSoon` placeholders) → Vitola (real 84-interactive-element cigar
+anatomy/sensory reference tool, backend-integrated). 5-viewport sweep:
+25/25 clean, keyboard focus reached a real control in 25/25.
+
+No dead controls found. Pairing-engine gaps (cigar/liquor attribute
+scoring, complement/contrast rules, palate history, explainable
+recommendations, alternatives) confirmed absent and recorded for the
+gameplay-engine package — `Available.jsx`'s drink-pairing button is
+already honestly disabled for exactly this reason.
+
 ## Holistic Fix 2C — Origins/Curation/Leaf-Challenge/Cultivation module (9 routes)
 
 Migrated Origins, Curation, Leaves, Leaf Challenge, Leaf Challenge

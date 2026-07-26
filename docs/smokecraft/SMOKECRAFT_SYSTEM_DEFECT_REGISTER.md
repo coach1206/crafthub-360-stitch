@@ -2,6 +2,117 @@
 
 Baseline commit: `d6469504a2a83ab4acfb27e89a25064d505d4d55` (Prompt 1), updated at `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7` (Prompt 2), updated at `3da3532ee414ab3b0b8bd9ad6e061a79a6de530d` (Prompt 3 start)
 
+## Holistic Fix 2D update — Migrate Pairing-adjacent screens
+
+Starting commit: `79ee6cb4` (Holistic Fix 2C close).
+
+**Exact routes migrated:** 5 — `/smokecraft/pairing`, `/smokecraft/available`,
+`/smokecraft/assistant`, `/smokecraft/pairing-mastery`, `/smokecraft/vitola`.
+
+**Route purposes and reachability, traced this pass:**
+- `/smokecraft/pairing` (`Pairing.jsx`) — "Your Blend Pairing Guide", an
+  approved-image reference screen with real Back/Continue hotspots
+  resolving via `resolveSmokeCraftLandingAction`. **Genuinely
+  live-reachable**: Landing's PAIRING action, `WelcomeExperience.jsx`'s
+  bottom-strip "Pairing" link, `CommandHub.jsx`'s ticker, and
+  `venueHomeContent.js` all link here.
+- `/smokecraft/available` (`Available.jsx`) — a "Curated Selection"
+  cigar-recommendation catalog (own header reads "Step 10"). **Orphaned**
+  — zero live navigation references anywhere.
+- `/smokecraft/assistant` (`Assistant.jsx`) — honest `ComingSoon`
+  placeholder. **Orphaned.**
+- `/smokecraft/pairing-mastery` (`PairingMastery.jsx`) — honest
+  `ComingSoon` placeholder. **Orphaned.**
+- `/smokecraft/vitola` (`Vitola.jsx`) — a real, substantial "Cigar
+  Anatomy, Vitola & Sensory Practice" reference tool, backend-integrated
+  (`seedSoilApiClient`, `flavorPairingApiClient`, Golden Box's
+  `EducationalDetailPanel`). **Orphaned.**
+
+Confirmed via grep across `src/pages/` and `src/components/`: the 4
+orphaned routes have zero live `navigate()`/`to=`/`href=` references. All
+5 route names appear in `src/constants/session.js`'s `SMOKECRAFT_FLOW`
+array, explicitly commented `// Legacy / supplemental steps (not in main
+flow order)` in the source itself — this array is consumed only by
+`src/modules/smokecraft/smokeCraftModule.config.js` →
+`src/modules/moduleRegistry.js` → `NoveeOSModuleRegistry.jsx`, an
+**admin-only platform module listing page**, never live guest navigation.
+
+**Route-collision findings: none.** Per the mandate's explicit
+requirement not to merge/redirect `/smokecraft/pairing`, Pairing Lab,
+Personalized Pairing Recommendations, or Humidor Match unless proven the
+same feature — investigated and confirmed they are 4 distinct routes,
+distinct components, distinct guard status:
+- Pairing Lab = `/smokecraft/pairing-lab`, S11,
+  `SmokeCraftSessionGuard sessionNumber={11}` (guarded curriculum screen).
+- Personalized Pairing Recommendations = `/smokecraft/pairing-recommendations`,
+  S22, `SmokeCraftSessionGuard sessionNumber={22}` (guarded curriculum screen).
+- Humidor Match = `/smokecraft/humidor-match`, S2,
+  `SmokeCraftSessionGuard sessionNumber={2}` (guarded curriculum screen).
+- `/smokecraft/pairing` = ungated, standalone, `Pairing.jsx`.
+No merge or redirect performed. A new build-blocking collision guard was
+added to `scripts/validateSmokecraftShellAdoption.mjs` that resolves each
+of these 5 routes' registered component from `App.jsx` and fails if any
+two ever collide, plus a check that the navigation registry's `PAIRING`/
+`PAIRING_STANDALONE` keys stay distinct values.
+
+**All 5 components migrated onto `SmokeCraftScreenShell`:** `Pairing.jsx`
+(`mode="image-shell"`, replacing its direct `SmokeCraftImageBoundsOverlay`
+import); `Available.jsx`/`Assistant.jsx`/`PairingMastery.jsx`/`Vitola.jsx`
+(`mode="live"`, wrapping existing content unchanged). No registered
+navigation-registry destinations were present as literals in any of the
+5 files (all internal navigation is either already resolved via the
+landing-action resolver, orphaned-module internal routing, or history
+back) — confirmed via source read, not assumed.
+
+**Build-blocking validation extended:** `scripts/validateSmokecraftShellAdoption.mjs`
+grew from 29 to 34 target files (124 → 141 checks, including the 2 new
+collision-guard checks). `scripts/validateSmokecraftManifest.mjs`'s
+fullyMigratedScreens cross-check now verifies all 37 claimed routes (7 +
+16 + 9 + 5).
+
+**Dead controls found and repaired:** 0.
+
+**Honest unavailable states confirmed (not defects):** `Available.jsx`'s
+"drink pairing suggestions" button on all 4 cigar cards is a real,
+focusable, `disabled` `<button>` with the exact accessible title "Drink
+pairing suggestions are not yet available — ask staff for a
+recommendation" — confirmed via direct DOM inspection
+(`page.$$eval('button', ...)`), not a fabricated feature.
+`Assistant.jsx`/`PairingMastery.jsx` render the existing honest
+`ComingSoon` placeholder.
+
+**Pairing-engine gaps confirmed absent and recorded for the
+gameplay-engine package (not built this pass):** cigar
+strength/body/wrapper/vitola scoring beyond `Available.jsx`'s static
+display catalog; liquor proof/sweetness/oak/spice/finish attributes (no
+liquor catalog exists anywhere in this module); complement/contrast
+pairing rules (no rules engine exists — `Available.jsx`'s drink-pairing
+button is honestly disabled for exactly this reason); palate history;
+mentor guidance specific to pairing (Vitola's `EducationalDetailPanel`
+covers general cigar-anatomy education, not pairing-specific mentor
+guidance); explainable recommendations; alternatives. Persistence is
+partial: `Available.jsx` does write real `addFavorite`/`addXP`/
+`completeStep` on cigar selection (shared guest-session writes), but no
+pairing recommendation itself is computed or persisted.
+
+**5-viewport result:** 25/25 clean (no horizontal overflow, no console
+error) across all 5 routes × 5 viewports. Keyboard focus reached a real
+control in 25/25.
+
+Regressions re-run and passing: `npm run build`,
+`verify-smokecraft-phase-session-lock.mjs` (9/9),
+`scripts/smokecraftAssetExclusivityCheck.mjs` (7/7),
+`verify-smokecraft-final-three-approved-assets.mjs` (17/17),
+`verify-smokecraft-all-routes-browser-test.mjs` (94 PASS + 14 REDIRECT
+PASS / 108, 0 issues), `verify-smokecraft-full-journey-sequence-and-assets.mjs`
+(107/107, unchanged), `scripts/validateSmokecraftManifest.mjs` (19/19),
+`scripts/validateSmokecraftShellAdoption.mjs` (141/141, extended this
+pass with the collision guard), 5-viewport module sweep (25/25 clean).
+
+**Architecture bypasses remaining:** ~40 supporting routes (commerce
+consolidation cleanup, legacy alias-table consolidation, remaining
+standalone screens) are classified but not migrated onto the shared shell.
+
 ## Holistic Fix 2C update — Migrate Origins, Curation, Leaf Challenge, and Cultivation
 
 Starting commit: `9ece7041` (Holistic Fix 2B close).

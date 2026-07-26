@@ -1,0 +1,242 @@
+[
+  {
+    "screen": "pairing",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/pairing",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/pairing-handheld-portrait.png"
+  },
+  {
+    "screen": "available",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/available",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/available-handheld-portrait.png"
+  },
+  {
+    "screen": "assistant",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/assistant",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/assistant-handheld-portrait.png"
+  },
+  {
+    "screen": "pairing-mastery",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/pairing-mastery",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/pairing-mastery-handheld-portrait.png"
+  },
+  {
+    "screen": "vitola",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/vitola",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/vitola-handheld-portrait.png"
+  },
+  {
+    "screen": "pairing",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/pairing",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/pairing-tablet-10in.png"
+  },
+  {
+    "screen": "available",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/available",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/available-tablet-10in.png"
+  },
+  {
+    "screen": "assistant",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/assistant",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/assistant-tablet-10in.png"
+  },
+  {
+    "screen": "pairing-mastery",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/pairing-mastery",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/pairing-mastery-tablet-10in.png"
+  },
+  {
+    "screen": "vitola",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/vitola",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/vitola-tablet-10in.png"
+  },
+  {
+    "screen": "pairing",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/pairing",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/pairing-tablet-12in.png"
+  },
+  {
+    "screen": "available",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/available",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/available-tablet-12in.png"
+  },
+  {
+    "screen": "assistant",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/assistant",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/assistant-tablet-12in.png"
+  },
+  {
+    "screen": "pairing-mastery",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/pairing-mastery",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/pairing-mastery-tablet-12in.png"
+  },
+  {
+    "screen": "vitola",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/vitola",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/vitola-tablet-12in.png"
+  },
+  {
+    "screen": "pairing",
+    "viewport": "display-15in",
+    "route": "/smokecraft/pairing",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/pairing-display-15in.png"
+  },
+  {
+    "screen": "available",
+    "viewport": "display-15in",
+    "route": "/smokecraft/available",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/available-display-15in.png"
+  },
+  {
+    "screen": "assistant",
+    "viewport": "display-15in",
+    "route": "/smokecraft/assistant",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/assistant-display-15in.png"
+  },
+  {
+    "screen": "pairing-mastery",
+    "viewport": "display-15in",
+    "route": "/smokecraft/pairing-mastery",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/pairing-mastery-display-15in.png"
+  },
+  {
+    "screen": "vitola",
+    "viewport": "display-15in",
+    "route": "/smokecraft/vitola",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/vitola-display-15in.png"
+  },
+  {
+    "screen": "pairing",
+    "viewport": "desktop",
+    "route": "/smokecraft/pairing",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/pairing-desktop.png"
+  },
+  {
+    "screen": "available",
+    "viewport": "desktop",
+    "route": "/smokecraft/available",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/available-desktop.png"
+  },
+  {
+    "screen": "assistant",
+    "viewport": "desktop",
+    "route": "/smokecraft/assistant",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/assistant-desktop.png"
+  },
+  {
+    "screen": "pairing-mastery",
+    "viewport": "desktop",
+    "route": "/smokecraft/pairing-mastery",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/pairing-mastery-desktop.png"
+  },
+  {
+    "screen": "vitola",
+    "viewport": "desktop",
+    "route": "/smokecraft/vitola",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2d/screenshots/vitola-desktop.png"
+  }
+]
+
+--- Connected flow ---
+Pairing: back control present: true, continue control present: true
+Available: 4 cigar cards found
+Available: after selecting first cigar, button text: n/a
+Available: honestly-disabled drink-pairing button present: false, disabled: n/a
+Available: Continue button present after selection: false
+Assistant: rendered: Build: 79ee6cb · production arrow_back shield_person CRAFTHUB 360 STEP 3 OF 4 GRAND LOUNGE smoking_rooms SMOKECRAFT 360 pending NEW SCREEN — NO STITCH
+Pairing Mastery: rendered: Build: 79ee6cb · production
+Vitola: rendered: Build: 79ee6cb · production SMOKECRAFT Cigar Anatomy, Vitola & Sensory Practice  Explore the parts of a finished cigar, compare shapes and ring gauges
+Vitola: 84 interactive elements found
+Vitola: Continue control present
+
+25/25 viewport x screen checks passed (no h-overflow, no console error)
+Keyboard-focus reached a real control in 25/25 checks

@@ -115,6 +115,23 @@ necessary.**
   identical `Leaderboard` component as `/smokecraft/leaderboard`) — real,
   pre-existing destinations this module uses, not new inventions.
 
+## Locked: Holistic Fix 2D — Pairing-adjacent family (5 routes)
+
+- Pairing, Available, Assistant, Pairing Mastery, and Vitola all import
+  and render `SmokeCraftScreenShell`.
+  `scripts/validateSmokecraftShellAdoption.mjs` covers all 5 (extended to
+  34 files, 141 checks) and now includes a **pairing-route collision
+  guard**: fails the build if `/smokecraft/pairing`,
+  `/smokecraft/pairing-lab` (S11), `/smokecraft/pairing-recommendations`
+  (S22), `/smokecraft/humidor-match` (S2), or `/smokecraft/pairing-mastery`
+  ever resolve to the same component, or if the navigation registry's
+  `PAIRING`/`PAIRING_STANDALONE` keys are ever collapsed into one value.
+  **Do not remove this guard** — it is the mandate's explicit
+  anti-collision requirement made enforceable.
+- `available`/`assistant`/`pairing-mastery`/`vitola` are confirmed
+  orphaned (no live entry point) — do not assume they are reachable or
+  tested by any spine-focused regression suite.
+
 ## Not yet locked / explicitly out of scope for this baseline
 
 Everything not listed above (the remaining ~100 routes, all 27 sessions'
