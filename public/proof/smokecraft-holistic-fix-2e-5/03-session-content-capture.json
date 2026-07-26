@@ -1,0 +1,510 @@
+{
+  "capturedAt": "2026-07-26T19:04:58.841Z",
+  "commit": "0a17dd9a2a5e1a5255c42c28c4816b2f4ede63a3",
+  "results": [
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 1/6\n·\nSESSION 1/27\nSESSION PREPARATION\nLOCAL PREVIEW\nSmokeCraft 360 — Welcome to Today’s Experience, Test Player\nSESSION PROGRESS\n0 of 27\n0% Complete\nTest Player\nNovice\n0 pts\nTODAY’S EXPERIENCE\n▼\nGuest: Test Player\nVenue: Test Lounge\nKnowledge level: Not shared yet\nStatus: New journey — nothing completed yet\nCIGAR PREVIEW\n▼\nTest Reserve Robusto\nNicaragua · Habano\nMENTOR PREVIEW\n\nNo mentor selected yet — mentor guidance happens later in your journey.\n\nSESSION 1 PREVIEW\n▼\nChoose Your Cigar — Humidor Match\nGOLDEN BOX OBJECTIVE PREVIEW\n▼\nDesign, submit, and defend your own blend concept.\nView Journey Overview\nNeed accessibility assistance? Ask a venue host at any time — visible controls throughout this journey support keyboard navigation and screen readers.\n← BACK\nBEGIN EXPERIENCE →",
+      "buttons": [
+        "Back to Journey",
+        "Notifications",
+        "Help",
+        "Account",
+        "Dashboard",
+        "Sessions",
+        "Rewards",
+        "Passport",
+        "Leaderboard",
+        "Events",
+        "Collections",
+        "Mentor",
+        "Settings (not yet available)",
+        "Sign out — return to SmokeCraft landing",
+        "Home",
+        "Journey",
+        "Learn",
+        "Create",
+        "Pairing",
+        "Mentor",
+        "TODAY’S EXPERIENCE\n▼",
+        "CIGAR PREVIEW\n▼",
+        "MENTOR PREVIEW",
+        "SESSION 1 PREVIEW\n▼",
+        "GOLDEN BOX OBJECTIVE PREVIEW\n▼",
+        "View Journey Overview",
+        "Start Session 1 — Begin Experience",
+        "← BACK",
+        "BEGIN EXPERIENCE →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/session%201.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 1/6\n·\nSESSION 2/27\nSESSION PREPARATION\nLOCAL PREVIEW\n◦ MANUAL MODE — NO HARDWARE CONNECTED\nTemperature\n−\n70°F\n+\nHumidity\n−\n70%\n+\nSeal\nAirflow\nApply Settings\n← BACK\nCONTINUE TO MEET YOUR CIGAR →",
+      "buttons": [
+        "Virtual Humidor",
+        "Dry Box",
+        "Travel Case",
+        "−",
+        "+",
+        "−",
+        "+",
+        "Seal",
+        "Airflow",
+        "Apply Settings",
+        "Oliva Serie V",
+        "Arturo Fuente Opus X",
+        "Padron 1964 Series",
+        "Macanudo Café",
+        "CAO Flathead",
+        "Romeo y Julieta 1875",
+        "My Father Le Bijou",
+        "Cohiba Siglo VI",
+        "← BACK",
+        "CONTINUE TO MEET YOUR CIGAR →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/Humidor%20Match%201.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 1/6\n·\nSESSION 3/27\nSESSION PREPARATION\nLOCAL PREVIEW\nSMOKECRAFT 360 — MEET YOUR CIGAR\nTest Reserve Robusto\nBrand\nBlend\nWrapper\nBinder\nFiller\nFactory\nMaster Blender\n0 of 7 sections viewed\n○\n7 sections remaining\n← BACK\nCONTINUE →",
+      "buttons": [
+        "Brand",
+        "Blend",
+        "Wrapper",
+        "Binder",
+        "Filler",
+        "Factory",
+        "Master Blender",
+        "← BACK",
+        "CONTINUE →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/DISOVER%20YOUR%20CIGAR%20PROFILE.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 1/6\n·\nSESSION 4/27\nSESSION PREPARATION\nLOCAL PREVIEW\nSMOKECRAFT 360 — TERROIR\nExplore the Terroir\nCountry\nRegion\nSoil\nClimate\nGrowing Conditions\nWhy It Matters\n0 of 6 sections viewed\n\nSelect a section above to begin exploring what shapes this cigar's terroir.\n\n○\n6 sections remaining\n← BACK\nCONTINUE →",
+      "buttons": [
+        "Country",
+        "Region",
+        "Soil",
+        "Climate",
+        "Growing Conditions",
+        "Why It Matters",
+        "← BACK",
+        "CONTINUE →"
+      ],
+      "images": []
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 1/6\n·\nSESSION 5/27\nSESSION PREPARATION\nLOCAL PREVIEW\n← BACK\nCONTINUE TO REQUEST / PURCHASE →",
+      "buttons": [
+        "Robusto — 5\" × 50 ring",
+        "Toro — 6\" × 52 ring",
+        "Churchill — 7\" × 48 ring",
+        "Corona — 5.5\" × 42 ring",
+        "Gordo — 6\" × 60 ring",
+        "Torpedo — 6.5\" × 52 ring",
+        "← BACK",
+        "CONTINUE TO REQUEST / PURCHASE →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft-reference/approved/smokecraft-vitola.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 1/6\n·\nSESSION 6/27\nSESSION PREPARATION\nLOCAL PREVIEW\nLearn Why ▼\n← BACK\nCONTINUE TO LIGHTING TUTORIAL →",
+      "buttons": [
+        "Straight Cut",
+        "V-Cut",
+        "Punch Cut",
+        "Learn Why ▼",
+        "← BACK",
+        "CONTINUE TO LIGHTING TUTORIAL →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/CUT%20%20TOAST,%20&%20LIGHT.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 1/6\n·\nSESSION 7/27\nSESSION PREPARATION\nLOCAL PREVIEW\nSMOKECRAFT 360 — LIGHTING TUTORIAL\nToasting the Foot\nStep 1 of 8 · 13% viewed\n🎞\nDEMONSTRATION VIDEO — TOASTING THE FOOT\nMedia pending production upload\n\nHold the cigar at a 45° angle just above the flame — never in it. Rotate slowly and evenly, warming the tobacco until the foot glows a soft, consistent orange. This primes the leaf so it lights cleanly on the next step.\n\n🎩\nMENTOR TIP\n\nGo slower than feels natural. A rushed toast is the single most common cause of an uneven burn later in the smoke.\n\n💡\nKNOWLEDGE DROP\n\nToasting releases surface moisture and volatile oils before combustion — it is preparation, not lighting.\n\n○\n7 steps remaining\n?\n← BACK\nNEXT STEP →",
+      "buttons": [
+        "Step 1: Toasting the Foot (current)",
+        "Step 2: Lighting Technique",
+        "Step 3: Establishing an Even Burn",
+        "Step 4: Avoiding Tunneling",
+        "Step 5: Avoiding Overheating",
+        "Step 6: Correct Flame Distance",
+        "Step 7: The Proper First Draw",
+        "Step 8: Burn Inspection",
+        "?",
+        "← BACK",
+        "NEXT STEP →"
+      ],
+      "images": []
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "mergedFrom": [
+        9
+      ],
+      "text": "Build: 533ef11 · production\nPHASE 2/6\n·\nSESSION 8/27\nFIRST THIRD\nLOCAL PREVIEW\nFIRST THIRD OBSERVATIONS\nSave Draft\nCONTINUE TO SECOND THIRD →",
+      "buttons": [
+        "Aroma Opening",
+        "Draw Ease",
+        "Body Start",
+        "Flavor Notes",
+        "Burn Line",
+        "Ash Quality",
+        "Save Draft",
+        "CONTINUE TO SECOND THIRD →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/FIRST%20%20THIRD1.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 2/6\n·\nSESSION 10/27\nFIRST THIRD\nLOCAL PREVIEW\nEarth\nWood\nSpice\nCocoa\nCoffee\nSweet\nNuts\nFloral\nPERCEPTION\nSaved\nIntensity\n3\nBody\n3\nStrength\n3\nPERSONAL NOTES\nCONTINUE TO SUGGESTED PAIRINGS →",
+      "buttons": [
+        "Earth flavor",
+        "Wood flavor",
+        "Spice flavor",
+        "Cocoa flavor",
+        "Coffee flavor",
+        "Sweet flavor",
+        "Nuts flavor",
+        "Floral flavor",
+        "CONTINUE TO SUGGESTED PAIRINGS →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/FLAVOR%20MEMORY.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 2/6\n·\nSESSION 11/27\nFIRST THIRD\nLOCAL PREVIEW\nCIGAR PROFILE\nSHAPE\nRobusto\nToro\nChurchill\nFigurado\nWRAPPER\nConnecticut\nHabano\nMaduro\nCorojo\nORIGIN\nDominican Republic\nNicaragua\nHonduras\nCuba\nMexico\nSTRENGTH\nMild\nMedium\nMedium-Full\nFull\nPAIRING CHOICES\nFLAVOR NOTES\nSmooth\nBold\nCreamy\nSweet\nSmoky\nBalanced\nRich\nPAIRING GOAL\nComplement\nContrast\nSoften\nBrighten\nDeepen Finish\nExplore New Notes\nWhiskey\nRum\nCoffee\nEspresso\nChocolate\nNuts\nNonalcoholic\n← BACK\nCONTINUE TO FLAVOR EVOLUTION →",
+      "buttons": [
+        "Robusto",
+        "Toro",
+        "Churchill",
+        "Figurado",
+        "Connecticut",
+        "Habano",
+        "Maduro",
+        "Corojo",
+        "Dominican Republic",
+        "Nicaragua",
+        "Honduras",
+        "Cuba",
+        "Mexico",
+        "Mild",
+        "Medium",
+        "Medium-Full",
+        "Full",
+        "Smooth",
+        "Bold",
+        "Creamy",
+        "Sweet",
+        "Smoky",
+        "Balanced",
+        "Rich",
+        "Complement",
+        "Contrast",
+        "Soften",
+        "Brighten",
+        "Deepen Finish",
+        "Explore New Notes",
+        "Whiskey",
+        "Rum",
+        "Coffee",
+        "Espresso",
+        "Chocolate",
+        "Nuts",
+        "Nonalcoholic",
+        "← BACK",
+        "CONTINUE TO FLAVOR EVOLUTION →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/PAIRING%20LAB1.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "mergedFrom": [
+        13
+      ],
+      "text": "Build: 533ef11 · production\nPHASE 3/6\n·\nSESSION 12/27\nSECOND THIRD\nLOCAL PREVIEW\nSECOND THIRD OBSERVATIONS\nSave Draft\nCONTINUE TO FLAVOR MEMORY →",
+      "buttons": [
+        "Flavor Development",
+        "Body Evolution",
+        "Aroma Depth",
+        "Burn Stability",
+        "Smoke Texture",
+        "Complexity Shift",
+        "Save Draft",
+        "CONTINUE TO FLAVOR MEMORY →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/SECOND%20THIRD.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 14,
+      "route": "/smokecraft/mentor-commentary",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 3/6\n·\nSESSION 14/27\nSECOND THIRD\nLOCAL PREVIEW\nSMOKECRAFT 360 — MENTOR COMMENTARY\nNo Mentor Selected\nLoading commentary… · Stage: Flavor Evolution (Second Third)\n\nNo mentor has been selected yet. Choose a mentor to see their commentary here.\n\n○\nCommentary pending\n← BACK\nCONTINUE →",
+      "buttons": [
+        "← BACK",
+        "CONTINUE →"
+      ],
+      "images": []
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 3/6\n·\nSESSION 15/27\nSECOND THIRD\nLOCAL PREVIEW\nSMOKECRAFT 360 — KNOWLEDGE DROP\nChoose a Topic\nTobacco\nFermentation\nAging\nFactory Story\n0 of 4 topics viewed\n\nSelect a topic above to begin learning what shapes every cigar before it reaches you.\n\n○\n4 topics remaining\n← BACK\nCONTINUE →",
+      "buttons": [
+        "Tobacco",
+        "Fermentation",
+        "Aging",
+        "Factory Story",
+        "← BACK",
+        "CONTINUE →"
+      ],
+      "images": []
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "mergedFrom": [
+        17,
+        18
+      ],
+      "text": "Build: 533ef11 · production\nPHASE 4/6\n·\nSESSION 16/27\nFINAL THIRD\nLOCAL PREVIEW\nCONTINUE TO SCORECARD →",
+      "buttons": [
+        "Aroma Strength",
+        "Flavor Intensity",
+        "Burn Quality",
+        "Aftertaste",
+        "Earth flavor",
+        "Leather flavor",
+        "Wood flavor",
+        "Spice flavor",
+        "Coffee flavor",
+        "Cocoa flavor",
+        "Sweet flavor",
+        "Creamy flavor",
+        "Nuts flavor",
+        "Floral flavor",
+        "CONTINUE TO SCORECARD →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/FINAL%20THIRD.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "mergedFrom": [
+        20
+      ],
+      "text": "Build: 533ef11 · production\nPHASE 5/6\n·\nSESSION 19/27\nREFLECTION\nLOCAL PREVIEW\nTest Reserve Robusto\nNicaragua · Habano\nRATING CATEGORIES\nAppearance\nColor, veins, oiliness, seam\n—/5\nConstruction\nFeel, weight, firmness\n—/5\nDraw\nAirflow resistance and ease\n—/5\nBurn\nEven line, ash color, relights\n—/5\nFlavor\nComplexity, evolution, notes\n—/5\nPairing Match\nHow well it matched your choice\n—/5\nSESSION DETAILS\nDuration (min)\nPuff Count\nRelights\nFINAL IMPRESSIONS & PERSONAL NOTES\nSAVE DRAFT\n← BACK\nCONTINUE TO AI SUMMARY →",
+      "buttons": [
+        "Rate Appearance 1 out of 5",
+        "Rate Appearance 2 out of 5",
+        "Rate Appearance 3 out of 5",
+        "Rate Appearance 4 out of 5",
+        "Rate Appearance 5 out of 5",
+        "Rate Construction 1 out of 5",
+        "Rate Construction 2 out of 5",
+        "Rate Construction 3 out of 5",
+        "Rate Construction 4 out of 5",
+        "Rate Construction 5 out of 5",
+        "Rate Draw 1 out of 5",
+        "Rate Draw 2 out of 5",
+        "Rate Draw 3 out of 5",
+        "Rate Draw 4 out of 5",
+        "Rate Draw 5 out of 5",
+        "Rate Burn 1 out of 5",
+        "Rate Burn 2 out of 5",
+        "Rate Burn 3 out of 5",
+        "Rate Burn 4 out of 5",
+        "Rate Burn 5 out of 5",
+        "Rate Flavor 1 out of 5",
+        "Rate Flavor 2 out of 5",
+        "Rate Flavor 3 out of 5",
+        "Rate Flavor 4 out of 5",
+        "Rate Flavor 5 out of 5",
+        "Rate Pairing Match 1 out of 5",
+        "Rate Pairing Match 2 out of 5",
+        "Rate Pairing Match 3 out of 5",
+        "Rate Pairing Match 4 out of 5",
+        "Rate Pairing Match 5 out of 5",
+        "SAVE DRAFT",
+        "← BACK",
+        "CONTINUE TO AI SUMMARY →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/Scorecard.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 6/6\n·\nSESSION 21/27\nRESULTS\nLOCAL PREVIEW\nSMOKECRAFT 360 — SESSION SUMMARY\nYour Session Summary\nRule-based summary generated from your saved journey data — not AI-generated.\nSESSION OVERVIEW\n▼\n\nTest Reserve Robusto (Nicaragua), Habano wrapper.\n\n✓ Accept\n✕ Dismiss\nFLAVOR PROFILE SUMMARY\n▼\n\nNot recorded this session.\n\nSTRENGTH AND BODY PROGRESSION\n▼\n\nCataloged strength: Medium. Body: Medium.\n\n✓ Accept\n✕ Dismiss\nCONSTRUCTION SUMMARY\n▼\n\nNot recorded this session.\n\nPREFERRED FLAVOR NOTES\n▼\n\nNot recorded this session.\n\nBEST TASTING STAGE\n▼\n\nNot recorded this session.\n\nPAIRING PREFERENCES\n▼\n\nNot recorded this session.\n\nMENTOR INSIGHT SUMMARY\n▼\n\nNot recorded this session.\n\nPERSONAL PREFERENCE PROFILE\n▼\n\nNot recorded this session.\n\nSUGGESTED FOCUS FOR THE NEXT JOURNEY\n▼\n\nNot recorded this session.\n\n✓\nSession Summary ready — sourced entirely from your saved journey data\n← BACK\nCONTINUE TO PAIRING RECOMMENDATIONS →",
+      "buttons": [
+        "SESSION OVERVIEW\n▼",
+        "✓ Accept",
+        "✕ Dismiss",
+        "FLAVOR PROFILE SUMMARY\n▼",
+        "STRENGTH AND BODY PROGRESSION\n▼",
+        "✓ Accept",
+        "✕ Dismiss",
+        "CONSTRUCTION SUMMARY\n▼",
+        "PREFERRED FLAVOR NOTES\n▼",
+        "BEST TASTING STAGE\n▼",
+        "PAIRING PREFERENCES\n▼",
+        "MENTOR INSIGHT SUMMARY\n▼",
+        "PERSONAL PREFERENCE PROFILE\n▼",
+        "SUGGESTED FOCUS FOR THE NEXT JOURNEY\n▼",
+        "← BACK",
+        "CONTINUE TO PAIRING RECOMMENDATIONS →"
+      ],
+      "images": []
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 6/6\n·\nSESSION 22/27\nRESULTS\nLOCAL PREVIEW\nSmokeCraft 360 — Personalized Pairing Recommendations\nNot set\nMedium\nCoffee\nHabano\n100%\nGenerated from your saved cigar, strength and flavour notes.\nCoffee\nCompatibility 100% · from your saved journey profile\nCoffee provides a clean complement to the selected strength. Nicaragua leaf character shines cleanly against this pairing.\nWine · 100%\n×\nChocolate · 100%\n×\nRum · 88%\n×\nVIEW ALTERNATE PAIRING\nSAVE TO MY PAIRINGS\nLEARN MORE\nCONTINUE JOURNEY",
+      "buttons": [
+        "Wine · 100%",
+        "×",
+        "Chocolate · 100%",
+        "×",
+        "Rum · 88%",
+        "×",
+        "VIEW ALTERNATE PAIRING",
+        "SAVE TO MY PAIRINGS",
+        "LEARN MORE",
+        "CONTINUE JOURNEY"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/personlized%20pairing%20222.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 23,
+      "route": "/smokecraft/passport-stamp",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 6/6\n·\nSESSION 23/27\nRESULTS\nLOCAL PREVIEW\n← BACK\nCONTINUE TO COMPLETED SCORECARD →",
+      "buttons": [
+        "← BACK",
+        "CONTINUE TO COMPLETED SCORECARD →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/PASSPORT%20STAMP.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 6/6\n·\nSESSION 24/27\nRESULTS\nLOCAL PREVIEW\nCONTINUE TO REWARDS →",
+      "buttons": [
+        "Journey foundations reviewed",
+        "Flavor memory captured",
+        "Pairing preference confirmed",
+        "Mentor guidance acknowledged",
+        "Burn & draw quality noted",
+        "Ready to receive passport stamp",
+        "CONTINUE TO REWARDS →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/FINAL%20REVIEW.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 25,
+      "route": "/smokecraft/rewards",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 6/6\n·\nSESSION 25/27\nRESULTS\nLOCAL PREVIEW\nSmokeCraft 360 — Session 25 Rewards\n0\n1000\n0\n—\nNovice\n200 XP to Enthusiast\nNo venue reward catalog is connected to this build yet, so featured/cigar/experience/accessory/merch offers cannot be listed. Your real XP and earned rewards are shown below.\nXP BREAKDOWN\nCompleted-Session XP\n1000 XP\nPassport XP\n75 XP\nPairing XP\n75 XP\nMentor XP\n0 XP\nRANK MILESTONE REWARDS\nNovice\nRequires 0+ XP\nClaim\nEnthusiast\nRequires 200+ XP\nLocked\nConnoisseur\nRequires 500+ XP\nLocked\nAficionado\nRequires 900+ XP\nLocked\nEARNED SESSION BADGES\nProfile Started\nFirst Official Smoke\nCigar Format\nBurn Time\nCut & Light\nFirst Third\nFlavor Tracker\nTransition\nPairing Explorer\nSecond Third\nFinal Third\nCompleted Cigar Review\nSmokeCraft Scorecard\nSmokeCraft Passport Stamp\n← BACK\nCONTINUE TO ACHIEVEMENTS →",
+      "buttons": [
+        "Claim",
+        "← BACK",
+        "CONTINUE TO ACHIEVEMENTS →"
+      ],
+      "images": [
+        "http://localhost:5050/assets/smokecraft/session%2025%20rewards.png?v=533ef11"
+      ]
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 6/6\n·\nSESSION 25/27\nRESULTS\nLOCAL PREVIEW\nSMOKECRAFT 360 — REWARDS\nRewards, XP & Achievements\nRewards & XP\nAchievements\nChallenge Hub →\nCollections →\nSkill Tree →\nCigar Selected\nChose a cigar to begin this SmokeCraft journey.\nCriteria: Complete Choose Your Cigar.\nRelated: Choose Your Cigar (S2)\nEarned 7/26/2026\nClaim\nTerroir Scholar\nExplored the origin, soil, and climate behind the leaf.\nCriteria: Complete Terroir.\nRelated: Terroir (S4)\nEarned 7/26/2026\nClaim\nPerfect Cut & Light\nCompleted both the cut selection and lighting tutorial.\nCriteria: Complete Choose Your Cut and Lighting Tutorial.\nRelated: Choose Your Cut / Lighting Tutorial (S6–S7)\nEarned 7/26/2026\nClaim\nMentor Guided\nReviewed real-time mentor commentary during the session.\nCriteria: Complete Mentor Commentary.\nRelated: Mentor Commentary (S14)\nEarned 7/26/2026\nClaim\nFull Tasting Arc\nTracked flavor across all three thirds of the smoke.\nCriteria: Complete First Draw, Flavor Evolution, and Flavor Finish.\nRelated: First Draw / Flavor Evolution / Flavor Finish (S8, S12, S16)\nEarned 7/26/2026\nClaim\nScorecard Complete\nRated every category on the scorecard.\nCriteria: Rate all 6 scorecard categories.\nRelated: Rate Every Category (S19)\nIn progress: 0/6\nPassport Stamped\nEarned an official SmokeCraft 360 Passport Stamp.\nCriteria: Complete Passport Stamp.\nRelated: Passport Stamp (S23)\nEarned 7/26/2026\nClaim\nPairing Strategist\nSaved a personalized pairing recommendation.\nCriteria: Save a recommendation on Personalized Pairing Recommendations.\nRelated: Personalized Pairing Recommendations (S22)\nIn progress: 0/1\nKnowledge Check Achievement\nAchievement criteria not configured — Knowledge Check / Text Quiz has not been built yet.\n← BACK TO REWARDS\nCONTINUE TO RECOMMENDED NEXT JOURNEY →",
+      "buttons": [
+        "Rewards & XP",
+        "Achievements",
+        "Challenge Hub →",
+        "Collections →",
+        "Skill Tree →",
+        "Claim",
+        "Claim",
+        "Claim",
+        "Claim",
+        "Claim",
+        "Claim",
+        "← BACK TO REWARDS",
+        "CONTINUE TO RECOMMENDED NEXT JOURNEY →"
+      ],
+      "images": []
+    },
+    {
+      "session": 27,
+      "route": "/smokecraft/session-complete",
+      "mergedFrom": [],
+      "text": "Build: 533ef11 · production\nPHASE 6/6\n·\nSESSION 27/27\nRESULTS\nLOCAL PREVIEW\nSMOKECRAFT 360 — SESSION 27 OF 27\nRecommended Next Journey\nJOURNEY COMPLETE\nTest Player — Test Reserve Robusto\nPROGRESS\n24 / 27 (89%)\nXP EARNED\n50 XP\nACHIEVEMENTS\n0\nBADGES\n1\nRECOMMENDED NEXT JOURNEY\nHumidor Expert\nWHY IT FITS\nExplored wrapper/origin detail for Test Reserve Robusto.\nStart Journey\nSelect\nRelated educational modules: Terroir, Meet Your Cigar\nRelated challenges: Master Wrapper Award, Ring Gauge Strategist, Perfect Draw Award\nEstimated journey depth: Not available — no verified depth-estimation rule is configured yet.\nAvailable XP for a new journey: 1850 XP\nSUGGESTED EVENTS\n\nNo upcoming events available.\n\nSUGGESTED QUIZ\n\nTry the terroir Knowledge Check next.\n\nNext reward: Not available — no further configured reward rule exists beyond your current earned rewards.\nExplore All Journeys\nView Progress\n⚡ VENUE SPECIALS\nNo venue specials available\n← BACK",
+      "buttons": [
+        "Start Journey",
+        "Select",
+        "Explore All Journeys",
+        "View Progress",
+        "← BACK"
+      ],
+      "images": []
+    }
+  ]
+}

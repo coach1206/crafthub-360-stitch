@@ -185,6 +185,16 @@ for (const a of ASSET_LOCKS) {
   ]
   const bypassed = curriculumComponentNames.filter(name => new RegExp(`<Route[^>]*element=\\{<[^>]*<${name}\\b`).test(appJsx))
   check('No curriculum session component is rendered directly from App.jsx (all must route through SmokeCraftScreenRenderer)', bypassed.length === 0)
+
+  // Holistic Fix 2E-5 — interaction-manifest regression lock. Only
+  // session-21 has a populated SMOKECRAFT_INTERACTION_MANIFEST entry today
+  // (a disclosed, pre-existing gap — see SMOKECRAFT_EDUCATIONAL_COMPLETENESS_AUDIT.md);
+  // this does not fabricate coverage for the other 20 slots, it only fails
+  // the build if a required interaction is silently removed from what
+  // already exists.
+  const interactionSrc = readFileSync('src/constants/smokecraftInteractionManifest.js', 'utf8')
+  check("session-21's required interactive region ('section-review') is still registered in the interaction manifest",
+    /session-21[\s\S]*?section-review/.test(interactionSrc))
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)

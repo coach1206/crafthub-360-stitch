@@ -1,0 +1,1108 @@
+{
+  "commit": "0a17dd9a2a5e1a5255c42c28c4816b2f4ede63a3",
+  "pass": 115,
+  "fail": 0,
+  "failures": [],
+  "results": [
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 14,
+      "route": "/smokecraft/mentor-commentary",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 23,
+      "route": "/smokecraft/passport-stamp",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 25,
+      "route": "/smokecraft/rewards",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 27,
+      "route": "/smokecraft/session-complete",
+      "viewport": "handheld-portrait",
+      "hOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 844,
+      "clientHeight": 844
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 14,
+      "route": "/smokecraft/mentor-commentary",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 23,
+      "route": "/smokecraft/passport-stamp",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 25,
+      "route": "/smokecraft/rewards",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 27,
+      "route": "/smokecraft/session-complete",
+      "viewport": "10in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 810,
+      "clientWidth": 810,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 14,
+      "route": "/smokecraft/mentor-commentary",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 23,
+      "route": "/smokecraft/passport-stamp",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 25,
+      "route": "/smokecraft/rewards",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 27,
+      "route": "/smokecraft/session-complete",
+      "viewport": "12in-tablet",
+      "hOverflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "scrollHeight": 1366,
+      "clientHeight": 1366
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 14,
+      "route": "/smokecraft/mentor-commentary",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 23,
+      "route": "/smokecraft/passport-stamp",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 25,
+      "route": "/smokecraft/rewards",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 27,
+      "route": "/smokecraft/session-complete",
+      "viewport": "15in-display",
+      "hOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "scrollHeight": 900,
+      "clientHeight": 900
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 14,
+      "route": "/smokecraft/mentor-commentary",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 23,
+      "route": "/smokecraft/passport-stamp",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 25,
+      "route": "/smokecraft/rewards",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    },
+    {
+      "session": 27,
+      "route": "/smokecraft/session-complete",
+      "viewport": "desktop",
+      "hOverflow": false,
+      "scrollWidth": 1920,
+      "clientWidth": 1920,
+      "scrollHeight": 1080,
+      "clientHeight": 1080
+    }
+  ]
+}

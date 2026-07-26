@@ -129,16 +129,32 @@ investigated flaky non-regression). See
 per-screen detail and `public/proof/smokecraft-holistic-fix-2a/` for
 screenshots and raw results.
 
-**Screen-shell adoption: 37 of 108 routes** (7 Holistic Fix 2A + 16 Golden
+**Screen-shell adoption: 82 of 108 routes** (7 Holistic Fix 2A + 16 Golden
 Box Holistic Fix 2B + 9 Origins/Curation module Holistic Fix 2C + 5
-Pairing-adjacent Holistic Fix 2D, across 34 unique component files). The
-remaining ~40 supporting routes (commerce-consolidation cleanup, legacy
-alias-table consolidation, remaining standalone screens) are the next
-unit of work for Holistic Fix 2E — same migration pattern (shell +
-registry + 5-viewport verification + regression lock).
+Pairing-adjacent Holistic Fix 2D + 20 standalone-screen Holistic Fix 2E +
+all 21 curriculum-spine session slots via the shell-wrapped
+`SmokeCraftScreenRenderer` + `WrapperStrength.jsx` Holistic Fix 2E-2 + 5
+commerce-flow screens Holistic Fix 2E-4, across 61+ unique component
+files/render paths — see `validateSmokecraftShellAdoption.mjs`'s `TARGETS`
+array for the exact list). Verified count cross-checked by
+`validateSmokecraftManifest.mjs` (floor currently 82, both build-blocking
+validators pass 0 failures).
 
-The 33 routes already deep-audited in Prompts 3B–3E-3 (Welcome,
-Leaderboard, Passport, CraftHub, Venue Selection, Connections, Passport
-Stamp, Rewards, Challenge Hub, Event Challenge, SmokeCraft Challenge, Blend
-Fault Identification, + the 21 curriculum-spine routes) remain excluded
-from "needs classification" — they already have real evidence.
+**Remaining unmigrated (26 of 108 routes)**: the 14 legacy `<Navigate>`
+aliases (intentionally not shell-wrapped — they redirect, never render),
+and a residual set of already-audited standalone routes not yet ported
+onto the shell (see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`'s Holistic Fix
+2E-4 section and `public/proof/smokecraft-holistic-fix-2e-4/02-route-classifications.md`
+for the full 108-route classification). No route remains unclassified.
+
+**Holistic Fix 2E status (as of Holistic Fix 2E-5)**: shell/registry
+migration for curriculum + commerce is complete and regression-locked.
+Remaining open work before Holistic Fix 2E can close: manual educational
+content fixes for the gaps documented in
+`SMOKECRAFT_EDUCATIONAL_COMPLETENESS_AUDIT.md` (Golden Box relevance not
+surfaced in-session-content for sessions 2-27; missing on-screen titles
+for 11 of 21 session slots; "why it matters" prose absent or unconfirmed
+for most sessions), a dedicated five-viewport curriculum sweep, and
+updates to `SMOKECRAFT_SCREEN_CLASSIFICATION.md` / `SMOKECRAFT_INTERACTION_MATRIX.md`
+/ `SMOKECRAFT_LOCKED_BASELINE.md` reflecting the current 82-route adoption
+count.

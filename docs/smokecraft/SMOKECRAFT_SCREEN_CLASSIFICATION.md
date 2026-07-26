@@ -94,3 +94,17 @@ JSX-attribute-only regex — fixed by adding both patterns explicitly.
 
 See `SMOKECRAFT_MIGRATION_QUEUE.md` for the exact remaining work, updated
 this pass to reflect what's now classified vs. what's still unverified.
+
+## Holistic Fix 2E-5 update
+
+All 108 routes now carry a final classification (see
+`public/proof/smokecraft-holistic-fix-2e-4/02-route-classifications.md`
+for the full table: 75 active player routes, 14 intentional aliases, 17
+direct-access routes, 1 admin-only, 1 demo-only — 0 unclassified). 82 of
+108 routes are shell-migrated (`SmokeCraftScreenShell`), including all 21
+curriculum componentKeys (via the shell-wrapped `SmokeCraftScreenRenderer`)
+and the 5 commerce-flow screens. Educational-content classification (as
+distinct from shell/route classification) is tracked separately in
+`SMOKECRAFT_EDUCATIONAL_COMPLETENESS_AUDIT.md` — real gaps found there
+(Golden Box relevance, on-screen titles, why-it-matters prose) are not yet
+fixed and remain open work.

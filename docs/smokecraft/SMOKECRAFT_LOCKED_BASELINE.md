@@ -132,11 +132,31 @@ necessary.**
   orphaned (no live entry point) — do not assume they are reachable or
   tested by any spine-focused regression suite.
 
+## Holistic Fix 2E-5 additions (locked)
+
+- All 21 curriculum componentKeys (session-1..session-27 with merges) route
+  through the shell-wrapped `SmokeCraftScreenRenderer.jsx` — a build-blocking
+  check in `validateSmokecraftShellAdoption.mjs` fails if any curriculum
+  session is ever rendered directly from `App.jsx` again, or if the registry
+  loses any of the 21 componentKeys.
+- 82 of 108 routes are verified fully-migrated onto `SmokeCraftScreenShell`
+  (`validateSmokecraftManifest.mjs`'s `verifiedCount` floor, currently 82).
+- The 5 commerce-flow screens (menu/cart/checkout/payment-success/
+  order-status) are locked as a distinct, orphaned-but-real workflow — do
+  not merge them into the venue-commerce alias group, and do not assume
+  they are live-reachable from any current navigation.
+- The manifest's 14 `alias-redirect` entries are the canonical alias table;
+  a build-blocking drift guard fails if a literal `<Navigate>` inside the
+  SmokeCraft route tree is not represented there.
+
 ## Not yet locked / explicitly out of scope for this baseline
 
-Everything not listed above (the remaining ~100 routes, all 27 sessions'
-interaction/quiz/scoring internals, full four-viewport sweep beyond Venue
-Selection, full static-vs-live classification beyond what's already
-disclosed in existing code comments) is **not yet verified** and must not be
-assumed correct — see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` for what is
-deferred to Prompts 2–6.
+Everything not listed above — full manual educational-content correctness
+for all 27 sessions (see `SMOKECRAFT_EDUCATIONAL_COMPLETENESS_AUDIT.md` for
+the real gaps found: Golden Box relevance not surfaced in most sessions'
+content, missing on-screen titles for 11 of 21 slots, "why it matters"
+prose absent or unconfirmed for most sessions), a dedicated five-viewport
+curriculum sweep, and the remaining 26 non-shell-migrated routes (14
+intentional aliases + a residual set of already-audited standalone
+screens) — is **not yet verified** and must not be assumed correct. See
+`SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md` for the full, current defect list.

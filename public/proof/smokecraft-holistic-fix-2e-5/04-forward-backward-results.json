@@ -1,0 +1,143 @@
+{
+  "commit": "0a17dd9a2a5e1a5255c42c28c4816b2f4ede63a3",
+  "pass": 7,
+  "fail": 0,
+  "failures": [],
+  "forwardOrder": [
+    {
+      "expectedSession": 1,
+      "effectiveSession": 1,
+      "route": "/smokecraft/welcome"
+    },
+    {
+      "expectedSession": 2,
+      "effectiveSession": 2,
+      "route": "/smokecraft/humidor-match"
+    },
+    {
+      "expectedSession": 3,
+      "effectiveSession": 3,
+      "route": "/smokecraft/meet-your-cigar"
+    },
+    {
+      "expectedSession": 4,
+      "effectiveSession": 4,
+      "route": "/smokecraft/terroir"
+    },
+    {
+      "expectedSession": 5,
+      "effectiveSession": 5,
+      "route": "/smokecraft/format"
+    },
+    {
+      "expectedSession": 6,
+      "effectiveSession": 6,
+      "route": "/smokecraft/cut-toast-light"
+    },
+    {
+      "expectedSession": 7,
+      "effectiveSession": 7,
+      "route": "/smokecraft/lighting-tutorial"
+    },
+    {
+      "expectedSession": 8,
+      "effectiveSession": 8,
+      "route": "/smokecraft/first-third"
+    },
+    {
+      "expectedSession": 9,
+      "effectiveSession": 8,
+      "route": "/smokecraft/first-third"
+    },
+    {
+      "expectedSession": 10,
+      "effectiveSession": 10,
+      "route": "/smokecraft/flavor-memory"
+    },
+    {
+      "expectedSession": 11,
+      "effectiveSession": 11,
+      "route": "/smokecraft/pairing-lab"
+    },
+    {
+      "expectedSession": 12,
+      "effectiveSession": 12,
+      "route": "/smokecraft/second-third"
+    },
+    {
+      "expectedSession": 13,
+      "effectiveSession": 12,
+      "route": "/smokecraft/second-third"
+    },
+    {
+      "expectedSession": 14,
+      "effectiveSession": 14,
+      "route": "/smokecraft/mentor-commentary"
+    },
+    {
+      "expectedSession": 15,
+      "effectiveSession": 15,
+      "route": "/smokecraft/knowledge-drop"
+    },
+    {
+      "expectedSession": 16,
+      "effectiveSession": 16,
+      "route": "/smokecraft/final-third"
+    },
+    {
+      "expectedSession": 17,
+      "effectiveSession": 16,
+      "route": "/smokecraft/final-third"
+    },
+    {
+      "expectedSession": 18,
+      "effectiveSession": 16,
+      "route": "/smokecraft/final-third"
+    },
+    {
+      "expectedSession": 19,
+      "effectiveSession": 19,
+      "route": "/smokecraft/scorecard"
+    },
+    {
+      "expectedSession": 20,
+      "effectiveSession": 19,
+      "route": "/smokecraft/scorecard"
+    },
+    {
+      "expectedSession": 21,
+      "effectiveSession": 21,
+      "route": "/smokecraft/ai-summary"
+    },
+    {
+      "expectedSession": 22,
+      "effectiveSession": 22,
+      "route": "/smokecraft/pairing-recommendations"
+    },
+    {
+      "expectedSession": 23,
+      "effectiveSession": 23,
+      "route": "/smokecraft/passport-stamp"
+    },
+    {
+      "expectedSession": 24,
+      "effectiveSession": 24,
+      "route": "/smokecraft/final-review"
+    },
+    {
+      "expectedSession": 25,
+      "effectiveSession": 25,
+      "route": "/smokecraft/rewards"
+    },
+    {
+      "expectedSession": 26,
+      "effectiveSession": 25,
+      "route": "/smokecraft/rewards"
+    },
+    {
+      "expectedSession": 27,
+      "effectiveSession": 27,
+      "route": "/smokecraft/session-complete"
+    }
+  ]
+}

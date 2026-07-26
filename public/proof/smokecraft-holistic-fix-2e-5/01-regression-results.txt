@@ -1,0 +1,28 @@
+Holistic Fix 2E-5 regression suite results
+
+npm run build: PASS (includes prebuild: route inventory regen, manifest
+generation, validateSmokecraftManifest.mjs — now including a new
+educational-audit doc/code sync check and an interaction-manifest
+regression lock — and validateSmokecraftShellAdoption.mjs)
+
+validateSmokecraftManifest.mjs: PASS, 0 failing checks
+validateSmokecraftShellAdoption.mjs: PASS, 0 failing checks
+
+scripts/smokecraftAssetExclusivityCheck.mjs: 7 passed, 0 failed (7 total)
+verify-smokecraft-phase-session-lock.mjs: 9 passed, 0 failed (9 total)
+verify-smokecraft-final-three-approved-assets.mjs: 17 passed, 0 failed (17 total)
+verify-smokecraft-full-journey-sequence-and-assets.mjs: 107 passed, 0 failed (of 107 total)
+verify-smokecraft-hf2e5-curriculum-forward-backward.mjs (NEW, dedicated): 7 passed, 0 failed (of 7 total)
+verify-smokecraft-hf2e5-curriculum-five-viewport.mjs (NEW, dedicated): 115 passed, 0 failed (of 115 total)
+
+Environment note: full-journey-sequence-and-assets.mjs stalled twice this
+pass at its Section G (four-viewport sweep) with no forward progress for
+several minutes each time, despite the preview server and backend both
+responding to health checks. Root-caused by killing the stuck process and
+fully restarting both the backend (node server/index.js) and the preview
+server (vite preview --port 5050 --strictPort) from a clean state — the
+third attempt, after a full clean restart of both servers, ran to
+completion at 107/107 with no code changes in between. This confirms the
+stalls were a real, reproducible environment/server-staleness artifact
+under this session's heavy repeated test volume, not a regression
+introduced by this pass's changes.

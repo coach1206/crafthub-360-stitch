@@ -233,5 +233,17 @@ if (existsSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')) {
     manifest.fullyMigratedScreens === claimedMigrated.length && verifiedCount === claimedMigrated.length && verifiedCount >= 82)
 }
 
+// Holistic Fix 2E-5 — educational-audit doc/code sync guard. Fails if the
+// audit doc's grading table ever loses coverage for one of the 21 primary
+// curriculum session slots (does not require the grading to be complete,
+// only that no session silently drops out of the document).
+if (existsSync('docs/smokecraft/SMOKECRAFT_EDUCATIONAL_COMPLETENESS_AUDIT.md')) {
+  const auditDoc = readFileSync('docs/smokecraft/SMOKECRAFT_EDUCATIONAL_COMPLETENESS_AUDIT.md', 'utf8')
+  const PRIMARY_SESSIONS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 14, 15, 16, 19, 21, 22, 23, 24, 25, 27]
+  const missingFromAudit = PRIMARY_SESSIONS.filter(n => !new RegExp(`\\|\\s*${n}\\b`).test(auditDoc))
+  check(`Educational completeness audit doc still covers all ${PRIMARY_SESSIONS.length} primary session slots (${missingFromAudit.length} missing)`,
+    missingFromAudit.length === 0, missingFromAudit.join(','))
+}
+
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)
 if (failures > 0) process.exit(1)

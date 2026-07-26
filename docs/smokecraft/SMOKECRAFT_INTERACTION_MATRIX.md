@@ -315,3 +315,15 @@ Challenge →" nav-bar primary.
   Leaderboard.
 - Batch 4: hotspot alignment at 5 viewports, keyboard/focus test suite,
   full automated test matching this document's control count.
+
+## Holistic Fix 2E-5 update
+
+`verify-smokecraft-hf2e5-curriculum-forward-backward.mjs` now provides a
+dedicated forward (S1→S27) walk plus real clicks on Previous/Next/Back-to-
+Journey controls at a mid-spine screen, plus a guard test confirming a
+future unearned session cannot be jumped to directly. See its results at
+`public/proof/smokecraft-holistic-fix-2e-5/04-forward-backward-results.json`.
+Still not done: a full click-test of every quiz/slider/mentor/tasting/
+upload control across all 27 sessions, and a dedicated five-viewport
+curriculum sweep (both remain open per
+`SMOKECRAFT_EDUCATIONAL_COMPLETENESS_AUDIT.md`).
