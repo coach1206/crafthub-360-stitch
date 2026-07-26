@@ -72,16 +72,52 @@ disclosed as a real limitation of the triage script, not silently
 corrected without saying so. **No session was confirmed to have zero
 real interaction** by this triage.
 
-**What this triage does NOT tell us:** whether each screen's OWN,
-screen-specific controls (quiz answers, sliders, mentor cards, tasting
-notes, uploads) are genuinely live vs. some being baked-image
-decorations counted as real `<button>`s that don't do anything
-meaningful, or whether hotspot alignment is correct at any viewport.
-Several "low" counts (S3, S4, S5, S6, S7, S11, S16-18, S21, S24) warrant
-closer, screen-by-screen visual+click inspection in a further pass —
-they are flagged, not yet individually verified or fixed.
+## Batch 2 continuation (Prompt 3C) — flagged sessions individually inspected
 
-## Not yet done (Batches 2 continuation, 3, 4)
+All 11 flagged low-count sessions (S3, S4, S5, S6, S7, S11, S16-18, S21,
+S24) were individually source-read this pass. **Every one of them is a
+real, working, loop-rendered interactive screen — none are dead/static.**
+The triage script's low counts were a real, disclosed limitation of the
+counting method, not evidence of a defect: each of these files renders
+its own set of `<button>` elements via a `.map()` loop over a data array
+(e.g. `FOCUS_ZONES.map(zone => <button ...>)`, `SECTIONS.map(s => <button
+...>)`), which a static single-tag grep only counts once no matter how
+many buttons actually render at runtime. Confirmed present in: `MeetYourCigar.jsx`
+(7 expandable brand/blend/wrapper/etc. sections), `Terroir.jsx` (`SECTIONS.map`),
+`Format.jsx` (`ZONES_FULL.map` + a second data-row `.map`), `CutToastLight.jsx`
+(`CUT_METHODS.map`), `LightingTutorial.jsx` (`STEPS.map`), `FirstThird.jsx`/
+`SecondThird.jsx`/`FinalThird.jsx` (`FOCUS_ZONES.map`/`FLAVOR_ZONES.map`),
+`PairingLab.jsx` (`options.map` + `PAIRING_ZONES.map`), `AISummary.jsx`
+(`SECTION_ORDER.map`), `FinalReview.jsx` (`READINESS_ZONES.map`) — all
+also use the shared `SmokeCraftNavBar` for Primary/Back. **No session
+required a code fix from this inspection.**
+
+**What was NOT done:** actually clicking every one of these loop-rendered
+buttons in a real browser to confirm each one's destination/state-change
+is correct, testing keyboard/focus/touch on each, or verifying hotspot
+alignment at 5 viewports for any of them. Source-level presence of real
+`<button>` elements is strong evidence against "dead visual control," but
+is not equivalent to full interaction verification.
+
+## Batch 3 (started) — gameplay hub spot-check
+
+- **CollectionsCenter.jsx, ChallengeHub.jsx**: safe pattern confirmed —
+  approved image rendered as normal in-flow `<img>` content (not a
+  full-bleed background with overlaid hotspots), real `<button>` elements
+  rendered as normal DOM content around/below it. No dead-control risk of
+  the SC-D001/SC-D010/SC-D011 kind found in these two screens.
+- **SmokeCraftPassport.jsx: NEW CONFIRMED DEFECT (SC-D011).** The approved
+  `360 PASSPORT  2.png` asset is a full baked mockup with 5 action cards
+  that look clickable ("Scan to Connect," "Explore Directory," "View
+  Matches," "Join an Event," "Explore Benefits") plus a "Full Guide" link
+  and a "Directory" list row — visually confirmed via image crop, source
+  read confirms only one real `<button>` (Back) in the entire file. Not
+  fixed this pass — logged with full evidence rather than rushed.
+- Golden Box, CraftHub, Mentor, Pairing, Rewards, Passport Stamp,
+  Connections, Event/Weekly/Daily/SmokeCraft Challenge screens: **not yet
+  individually inspected** this pass.
+
+## Not yet done (Batch 3 remainder, Batch 4)
 
 - Forward (S1→S27) and backward (S27→S1) click-through of the actual
   Previous/Next/Continue controls (route-level forward/backward is
