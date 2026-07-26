@@ -133,6 +133,36 @@ was confirmed to render its real backend-integrated claim flow without
 crashing. Rewards was confirmed to render real point/rank values with
 non-interactive badge crests (not a false-clickable control).
 
+## Holistic Fix 2B — Golden Box family shell migration (16 routes, 13 components)
+
+Migrated the entire Golden Box family (rules screen, competitions hub,
+competition detail, entry workspace, results, judge dashboard, judge/
+mentor entry review, and all 5 Packaging Studio screens) onto
+`SmokeCraftScreenShell`. Full detail in
+`SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`'s Holistic Fix 2B section and
+`public/proof/smokecraft-holistic-fix-2b/`.
+
+Connected-flow test (entry → competitions hub → competition detail →
+entry workspace → results → judge dashboard → packaging studio → return
+to journey): all screens render real, backend-driven content; unknown/
+placeholder IDs honestly show "not found"/"unavailable" via the shell's
+generic empty/error panel rather than fabricated data. 5-viewport sweep
+(30 checks across 6 static routes): 30/30 clean after a rate-limiter
+reset (repeated test runs against the shared guest-session endpoint had
+exhausted its window — an environment artifact, not a code regression,
+confirmed by restarting the backend and re-running clean). Keyboard focus
+reached a real control in 20/30 checks; the other 10 are two genuinely
+zero-control screens (`golden-box/status`, an instructional image with no
+interactive content by design, and `golden-box/judge`'s honest empty
+state when no entries are assigned) — confirmed correct, not defects.
+
+No dead controls found anywhere in the Golden Box family. SC-D008 (the
+stale "Welcome has no approved asset" test assertion) was investigated,
+found genuinely stale and provable (Welcome's manifest entry has had a
+real `session1` asset with `assetStatus: 'ok'` since an earlier pass), and
+fixed — `verify-smokecraft-full-journey-sequence-and-assets.mjs` now
+passes 107/107, not 106/107.
+
 ## Holistic Fix 2A — full shell + navigation-registry migration (7 screens)
 
 Migrated Welcome, Leaderboard, Passport, Venue Selection, CraftHub,

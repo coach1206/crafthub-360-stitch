@@ -43,7 +43,7 @@ Classification taxonomy (five real values, all in active use):
 | instructional-image | 4 |
 | unsafe-full-mockup | 0 |
 | **unclassified** | **0** |
-| **fully migrated (SmokeCraftScreenShell + nav registry, this pass)** | **7** |
+| **fully migrated (SmokeCraftScreenShell + nav registry)** | **23** (7 Holistic Fix 2A + 16 Golden Box, Holistic Fix 2B) |
 
 ## How the 78 previously-unclassified routes got classified this pass
 

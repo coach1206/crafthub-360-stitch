@@ -1,0 +1,286 @@
+[
+  {
+    "screen": "golden-box",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/golden-box",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-handheld-portrait.png"
+  },
+  {
+    "screen": "golden-box-status",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/golden-box/status",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-status-handheld-portrait.png"
+  },
+  {
+    "screen": "golden-box-competitions",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/golden-box/competitions",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-competitions-handheld-portrait.png"
+  },
+  {
+    "screen": "golden-box-judge",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/golden-box/judge",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-judge-handheld-portrait.png"
+  },
+  {
+    "screen": "golden-box-packaging-studio",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/golden-box/packaging-studio",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-packaging-studio-handheld-portrait.png"
+  },
+  {
+    "screen": "gold-box-alias",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/gold-box",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/gold-box-alias-handheld-portrait.png"
+  },
+  {
+    "screen": "golden-box",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/golden-box",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-tablet-10in.png"
+  },
+  {
+    "screen": "golden-box-status",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/golden-box/status",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-status-tablet-10in.png"
+  },
+  {
+    "screen": "golden-box-competitions",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/golden-box/competitions",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-competitions-tablet-10in.png"
+  },
+  {
+    "screen": "golden-box-judge",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/golden-box/judge",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-judge-tablet-10in.png"
+  },
+  {
+    "screen": "golden-box-packaging-studio",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/golden-box/packaging-studio",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-packaging-studio-tablet-10in.png"
+  },
+  {
+    "screen": "gold-box-alias",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/gold-box",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/gold-box-alias-tablet-10in.png"
+  },
+  {
+    "screen": "golden-box",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/golden-box",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-tablet-12in.png"
+  },
+  {
+    "screen": "golden-box-status",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/golden-box/status",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-status-tablet-12in.png"
+  },
+  {
+    "screen": "golden-box-competitions",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/golden-box/competitions",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-competitions-tablet-12in.png"
+  },
+  {
+    "screen": "golden-box-judge",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/golden-box/judge",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-judge-tablet-12in.png"
+  },
+  {
+    "screen": "golden-box-packaging-studio",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/golden-box/packaging-studio",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-packaging-studio-tablet-12in.png"
+  },
+  {
+    "screen": "gold-box-alias",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/gold-box",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/gold-box-alias-tablet-12in.png"
+  },
+  {
+    "screen": "golden-box",
+    "viewport": "display-15in",
+    "route": "/smokecraft/golden-box",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-display-15in.png"
+  },
+  {
+    "screen": "golden-box-status",
+    "viewport": "display-15in",
+    "route": "/smokecraft/golden-box/status",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-status-display-15in.png"
+  },
+  {
+    "screen": "golden-box-competitions",
+    "viewport": "display-15in",
+    "route": "/smokecraft/golden-box/competitions",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-competitions-display-15in.png"
+  },
+  {
+    "screen": "golden-box-judge",
+    "viewport": "display-15in",
+    "route": "/smokecraft/golden-box/judge",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-judge-display-15in.png"
+  },
+  {
+    "screen": "golden-box-packaging-studio",
+    "viewport": "display-15in",
+    "route": "/smokecraft/golden-box/packaging-studio",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-packaging-studio-display-15in.png"
+  },
+  {
+    "screen": "gold-box-alias",
+    "viewport": "display-15in",
+    "route": "/smokecraft/gold-box",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/gold-box-alias-display-15in.png"
+  },
+  {
+    "screen": "golden-box",
+    "viewport": "desktop",
+    "route": "/smokecraft/golden-box",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-desktop.png"
+  },
+  {
+    "screen": "golden-box-status",
+    "viewport": "desktop",
+    "route": "/smokecraft/golden-box/status",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-status-desktop.png"
+  },
+  {
+    "screen": "golden-box-competitions",
+    "viewport": "desktop",
+    "route": "/smokecraft/golden-box/competitions",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-competitions-desktop.png"
+  },
+  {
+    "screen": "golden-box-judge",
+    "viewport": "desktop",
+    "route": "/smokecraft/golden-box/judge",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": false,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-judge-desktop.png"
+  },
+  {
+    "screen": "golden-box-packaging-studio",
+    "viewport": "desktop",
+    "route": "/smokecraft/golden-box/packaging-studio",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/golden-box-packaging-studio-desktop.png"
+  },
+  {
+    "screen": "gold-box-alias",
+    "viewport": "desktop",
+    "route": "/smokecraft/gold-box",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2b/screenshots/gold-box-alias-desktop.png"
+  }
+]
+
+--- Connected flow ---
+Guest identity bootstrap: {"status":200,"body":{"success":true,"identity":{"type":"guest","freshlyIssued":true}}}
+Golden Box entry rendered: n/a
+Competitions Hub rendered: Build: 9a0da0b · production Golden Box Challenge  Build, refine, and defend an original cigar blend using everything you've learned.  No mentor select
+Opened competition detail: http://localhost:5050/smokecraft/golden-box/competitions/117
+Entry Workspace (unknown id) rendered: Build: 9a0da0b · production  Unable to load this entry.  Retry
+Results (unknown id) rendered: Build: 9a0da0b · production  Results unavailable.
+Judge Dashboard rendered: Build: 9a0da0b · production Judging Criteria Judge Dashboard  Entries assigned to you for judging. Blind judging: only entry and competition identifie
+Packaging Studio Dashboard rendered: Build: 9a0da0b · production Golden Box Packaging Studio  Design the physical presentation box for your Golden Box entry.  + New Packaging Design No pa
+Continue control found but not enabled without full acknowledgement flow — not forcing a fabricated completion.
+
+30/30 viewport x screen checks passed (no h-overflow, no console error)
+Keyboard-focus reached a real control in 20/30 checks

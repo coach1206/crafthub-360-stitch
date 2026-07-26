@@ -81,6 +81,23 @@ necessary.**
   requiring the direct import only, since the shell's indirection is now
   the locked, intended pattern for these screens.
 
+## Locked: Holistic Fix 2B — Golden Box family (16 routes) fully migrated
+
+- All 13 Golden Box components (`GoldenBox.jsx`, `GoldenBoxStatus.jsx`,
+  and 11 files under `src/pages/smokecraft/goldenBox/`) now import and
+  render `SmokeCraftScreenShell` — none imports `SmokeCraftImageBoundsOverlay`
+  directly. `scripts/validateSmokecraftShellAdoption.mjs` covers all 13
+  (44 checks extended to include them).
+- `GoldenBox.jsx`'s locked approved asset is `SC_ASSETS.goldenBox` — do
+  not change it without a failing test requiring it.
+- SC-D008 (the "Welcome has no approved asset" stale test assertion) is
+  **fixed, not just suppressed** — `getManifestEntry('session-1').assetKey`
+  is genuinely `'session1'` with `assetStatus: 'ok'`, so
+  `verify-smokecraft-full-journey-sequence-and-assets.mjs` now correctly
+  asserts `visualSource === 'user-approved'`. Do not revert this assertion
+  back to expecting the no-asset state — that state has not been true
+  since an earlier pass wired the real asset.
+
 ## Not yet locked / explicitly out of scope for this baseline
 
 Everything not listed above (the remaining ~100 routes, all 27 sessions'

@@ -1,6 +1,6 @@
 {
-  "startedAt": "2026-07-25T13:25:52.993Z",
-  "commit": "a548ff0cd797d59d906316e81556f3681579e630",
+  "startedAt": "2026-07-26T14:29:28.874Z",
+  "commit": "9a0da0bb6b9804cc48334af8fecac3d320549867",
   "branch": "recovery/smokecraft-codex-final",
   "entry": [
     {
@@ -9,7 +9,7 @@
     },
     {
       "step": "resume-enrolled",
-      "route": "/smokecraft/venue-select"
+      "route": "/smokecraft/identity"
     },
     {
       "step": "begin-experience",
@@ -26,16 +26,16 @@
       "resolved": "/smokecraft/welcome",
       "screenId": "session-1",
       "component": "session-1",
-      "assetKey": null,
-      "approvedAsset": null,
-      "renderedSha256": null,
-      "diskSha256": null,
-      "hashMatch": null,
+      "assetKey": "session1",
+      "approvedAsset": "/assets/smokecraft/session 1.png",
+      "renderedSha256": "8394f96f915020c6630d2407518a3db1eea7e2c5d07dbdcbee1ffe4d6f2fd4e5",
+      "diskSha256": "8394f96f915020c6630d2407518a3db1eea7e2c5d07dbdcbee1ffe4d6f2fd4e5",
+      "hashMatch": true,
       "mergedInto": null,
       "sharedComponent": null,
       "previousRoute": "/smokecraft/venue-select",
       "nextRoute": "/smokecraft/humidor-match",
-      "visualSource": "live-component-no-approved-asset",
+      "visualSource": "user-approved",
       "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-01.png"
     },
@@ -555,9 +555,9 @@
       "screenId": "session-25",
       "component": "session-25",
       "assetKey": "rewards",
-      "approvedAsset": "/assets/smokecraft/REWARDS 222.png",
-      "renderedSha256": "986196149e83c89562bf317763c5ba8eb7332546090189f441fec9fd01a99895",
-      "diskSha256": "986196149e83c89562bf317763c5ba8eb7332546090189f441fec9fd01a99895",
+      "approvedAsset": "/assets/smokecraft/session 25 rewards.png",
+      "renderedSha256": "683892e9df2ca8193de4d469ccffc23570f9735d00a629244331471c9d1f88e8",
+      "diskSha256": "683892e9df2ca8193de4d469ccffc23570f9735d00a629244331471c9d1f88e8",
       "hashMatch": true,
       "mergedInto": null,
       "sharedComponent": null,
@@ -617,42 +617,42 @@
       "label": "Pairing (landing destination)",
       "route": "/smokecraft/pairing",
       "resolved": "/smokecraft/pairing",
-      "steps": 11,
+      "steps": 12,
       "venue": "Test Lounge"
     },
     {
       "label": "Passport",
       "route": "/smokecraft/passport",
       "resolved": "/smokecraft/passport",
-      "steps": 11,
+      "steps": 12,
       "venue": "Test Lounge"
     },
     {
       "label": "Rewards Center",
       "route": "/smokecraft/rewards-center",
       "resolved": "/smokecraft/rewards-center",
-      "steps": 11,
+      "steps": 12,
       "venue": "Test Lounge"
     },
     {
       "label": "Rankings / Leaderboard",
       "route": "/smokecraft/leaderboard",
       "resolved": "/smokecraft/leaderboard",
-      "steps": 11,
+      "steps": 12,
       "venue": "Test Lounge"
     },
     {
       "label": "CraftHub",
       "route": "/smokecraft/crafthub",
       "resolved": "/smokecraft/crafthub",
-      "steps": 11,
+      "steps": 12,
       "venue": "Test Lounge"
     },
     {
       "label": "Challenge Hub",
       "route": "/smokecraft/challenge-hub",
       "resolved": "/smokecraft/challenge-hub",
-      "steps": 11,
+      "steps": 12,
       "venue": "Test Lounge"
     }
   ],
@@ -1423,6 +1423,11 @@
       "path": "/assets/smokecraft/Venue Selection 11.png",
       "sha256": "b17463c6be5f9fa68837c73a20670a3a71f9075cabd9435a4af67888c7aa5b9e"
     },
+    "session-1": {
+      "assetKey": "session1",
+      "path": "/assets/smokecraft/session 1.png",
+      "sha256": "8394f96f915020c6630d2407518a3db1eea7e2c5d07dbdcbee1ffe4d6f2fd4e5"
+    },
     "session-2": {
       "assetKey": "humidorMatch",
       "path": "/assets/smokecraft/Humidor Match 1.png",
@@ -1540,8 +1545,8 @@
     },
     "session-25": {
       "assetKey": "rewards",
-      "path": "/assets/smokecraft/REWARDS 222.png",
-      "sha256": "986196149e83c89562bf317763c5ba8eb7332546090189f441fec9fd01a99895"
+      "path": "/assets/smokecraft/session 25 rewards.png",
+      "sha256": "683892e9df2ca8193de4d469ccffc23570f9735d00a629244331471c9d1f88e8"
     },
     "session-26": {
       "assetKey": "achievements",
@@ -1554,8 +1559,8 @@
       "sha256": "2c5a402c0063a7dc87bc740f8242234e8c6d20f759dfd29b6b1e471386a221a6"
     }
   },
-  "finishedAt": "2026-07-25T13:28:45.130Z",
-  "pass": 105,
+  "finishedAt": "2026-07-26T14:33:07.813Z",
+  "pass": 107,
   "fail": 0,
   "failures": []
 }

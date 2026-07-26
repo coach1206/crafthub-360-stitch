@@ -594,8 +594,8 @@
     "title": "NOVEE OS | CraftHub 360",
     "bodyEmpty": false,
     "crashed": false,
-    "consoleErrorCount": 0,
-    "firstConsoleError": null,
+    "consoleErrorCount": 1,
+    "firstConsoleError": "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
     "screenshot": "040-seed-soil.png",
     "isRedirectElement": false
   },
@@ -789,8 +789,8 @@
     "title": "NOVEE OS | CraftHub 360",
     "bodyEmpty": false,
     "crashed": false,
-    "consoleErrorCount": 0,
-    "firstConsoleError": null,
+    "consoleErrorCount": 1,
+    "firstConsoleError": "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
     "screenshot": "053-scorecard.png",
     "isRedirectElement": false
   },

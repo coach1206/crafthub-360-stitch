@@ -2,6 +2,126 @@
 
 Baseline commit: `d6469504a2a83ab4acfb27e89a25064d505d4d55` (Prompt 1), updated at `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7` (Prompt 2), updated at `3da3532ee414ab3b0b8bd9ad6e061a79a6de530d` (Prompt 3 start)
 
+## Holistic Fix 2B update — Migrate the complete Golden Box system
+
+Starting commit: `9a0da0bb` (Holistic Fix 2A close).
+
+**Golden Box route count:** 17 (16 real routes + 1 `gold-box` alias),
+across 13 unique components (`GoldenBox.jsx`, `GoldenBoxStatus.jsx`, and
+11 files under `src/pages/smokecraft/goldenBox/`: `GoldenBoxHub`,
+`CompetitionDetail`, `EntryWorkspace`, `ResultsExperience`,
+`JudgeDashboard`, `JudgeEntryReview`, `MentorReview`,
+`PackagingStudioDashboard`, `PackagingStudioEditor`,
+`PackagingStudioVersions`, `PackagingStudioShare`, `PackagingReview`).
+
+**All 13 components migrated onto `SmokeCraftScreenShell`:**
+- `GoldenBox.jsx` (rules screen): `mode="image-shell"`, same locked
+  `SC_ASSETS.goldenBox`; Continue's fallback literal now resolves via
+  `NAV.MENTOR`.
+- `GoldenBoxStatus.jsx`: `mode="live"` wrapping its existing
+  `SmokeCraftAssetScreen` (instructional-image, genuinely zero controls).
+- The 11 backend-driven screens: `mode="live"`. Screens with multiple
+  early-return states (loading/error/not-found/forbidden — 5 of the 11:
+  `CompetitionDetail`, `EntryWorkspace`, `ResultsExperience`,
+  `JudgeEntryReview`, `MentorReview`, `PackagingStudioEditor`) had each
+  return point converted to render `SmokeCraftScreenShell` with the
+  matching `status` (`loading`/`error`/`empty`) and their exact original
+  message text carried over via `loadingMessage`/`errorMessage`/
+  `emptyMessage` — this is a real migration onto the shell's status
+  contract, not a cosmetic wrap, since these screens' generic loading/
+  error/not-found copy was a perfect fit for the shell's built-in panel
+  (unlike Venue Selection/Challenge Hub in Holistic Fix 2A, which had
+  rich custom styling worth preserving as-is).
+- `CompetitionDetail.jsx` and `ResultsExperience.jsx`'s "Golden Box Hub"/
+  "Leaderboard" back-links now resolve via `NAV.GOLDEN_BOX`/`NAV.LEADERBOARD`.
+  `ResultsExperience.jsx`'s "View Rewards & Badges" link deliberately
+  stays a bare `/smokecraft/rewards` literal — confirmed via source read
+  this is the S25 curriculum Rewards screen, NOT `NAV.REWARDS`
+  (`/smokecraft/rewards-center`, a different screen) — swapping it would
+  have been a real regression, the same trap already found once in
+  ChallengeHub.jsx during Prompt 3E-3.
+- Most Golden Box internal navigation (`/golden-box/competitions/${id}`,
+  `/golden-box/entries/${id}/blend`, etc.) is correctly left as
+  competition/entry-specific deep-linking, not swapped to the registry —
+  these are not cross-cutting named destinations.
+
+**Build-blocking validation extended:**
+`scripts/validateSmokecraftShellAdoption.mjs` grew from 7 to 20 target
+files (44 → 93 checks: shell imported + rendered, no direct
+`SmokeCraftImageBoundsOverlay` import, no registered destination
+reintroduced as a bare literal, per file; plus the `SC_ASSETS.goldenBox`
+asset lock). `scripts/validateSmokecraftManifest.mjs`'s
+fullyMigratedScreens cross-check now verifies all 23 claimed routes (7 +
+16) against a real route→file→shell-render check, not just a flat file
+list — correctly handles the Packaging Studio routes that share one
+component across 2 URLs each.
+
+**Connected flow tested (real browser, backend-connected):** entry
+(Golden Box rules) → competitions hub → competition detail → entry
+workspace → results → judge dashboard → packaging studio → return to
+journey (via the acknowledgement-gated Continue → `NAV.MENTOR`). Every
+step rendered real, backend-driven content; unknown/placeholder IDs
+honestly rendered "not found"/"unavailable" via the shell's generic
+empty/error panel — never fabricated competition/entry/result data. See
+`public/proof/smokecraft-holistic-fix-2b/index.md` for the full
+per-screen walkthrough and screenshots.
+
+**Dead controls found and repaired:** 0. **Honest unavailable states
+confirmed (not defects):** `golden-box/status` has zero interactive
+controls by design (a pure instructional image); `golden-box/judge`
+correctly shows "No entries are currently assigned to you" rather than a
+fabricated judging queue in this environment's current data state.
+
+**Missing gameplay-engine requirements recorded (not built this pass, per
+the mandate's explicit scope boundary):** no "defense" phase/screen exists
+anywhere in Golden Box (judging goes straight from submission to Judge/
+Mentor review); no dedicated awards-ceremony presentation exists
+(`ResultsExperience.jsx` shows results inline); final scoring/ranking
+computation and any automated competition-state-transition engine (e.g.
+auto-advancing `submission_closed` → `judging`) are out of scope and not
+built.
+
+**SC-D008 — investigated, found genuinely stale, and fixed (not
+suppressed):** the mandate asked whether this pre-existing failure was
+provably stale. Confirmed via direct inspection:
+`getManifestEntry('session-1').assetKey === 'session1'` with
+`assetStatus: 'ok'` (a real, on-disk `SC_ASSETS.session1` file, wired
+since an earlier commit `7e8c4281`). `SmokeCraftScreenRenderer.jsx`'s own
+`data-visual-source` logic (`entry.assetKey ? 'user-approved' : '...'`)
+therefore genuinely reports `'user-approved'` for Welcome, not the
+no-asset state the old test assertion expected. Fixed the assertion in
+`verify-smokecraft-full-journey-sequence-and-assets.mjs` to check the
+real, current, correct state (`visualSource === 'user-approved' &&
+assetKey === 'session1'`) and updated the stale justifying comment in
+`SmokeCraftScreenRenderer.jsx`. Result: **107/107 passing**, up from
+106/107 — this was the operation's last remaining known pre-existing
+failure; there are now 0 disclosed pre-existing test failures.
+
+**A rate-limiter false alarm was investigated, not dismissed as a
+regression:** the first 5-viewport sweep run showed 11/30 checks failing
+with console errors (429 Too Many Requests on the guest-session
+endpoint). Investigated by direct reproduction (`curl`/Playwright with
+response logging) and traced to the cumulative volume of repeated guest-
+session bootstrap calls across this session's testing, not a code defect
+— confirmed by restarting the backend (clearing the in-memory rate
+limiter's window) and re-running: 30/30 clean.
+
+Regressions re-run and passing: `npm run build` (prebuild now includes
+Golden Box in the shell-adoption check), `verify-smokecraft-phase-session-lock.mjs`
+(9/9), `scripts/smokecraftAssetExclusivityCheck.mjs` (7/7),
+`verify-smokecraft-final-three-approved-assets.mjs` (17/17),
+`verify-smokecraft-all-routes-browser-test.mjs` (94 PASS + 14 REDIRECT
+PASS / 108, 0 issues), `verify-smokecraft-full-journey-sequence-and-assets.mjs`
+(**107/107**, SC-D008 fixed), `scripts/validateSmokecraftManifest.mjs`
+(19/19), `scripts/validateSmokecraftShellAdoption.mjs` (93/93, extended
+this pass), 5-viewport Golden Box sweep (30/30 clean).
+
+**Architecture bypasses remaining:** ~54 supporting routes (Origins/
+Curation/Leaf-Challenge module's 9, Pairing-adjacent's 5, remaining
+standalone screens ~40) are classified but not migrated — unchanged
+disclosure from Holistic Fix 2A/2, now scoped down by the 16 Golden Box
+routes this pass resolved.
+
 ## Holistic Fix 2A update — Enforce real shared-architecture adoption (7-screen batch)
 
 Starting commit: `d4fe6314` (Holistic Fix 2 close).
@@ -459,7 +579,7 @@ data gathered this pass), not speculative filler. Items whose evidence is
 | SC-D005 | ~~~100 of 109 registered routes~~~ **CLOSED Prompt 2** | various | All 109 routes browser-tested: 95 PASS, 14 REDIRECT PASS, 0 requiring repair | N/A (resolved) | `public/proof/smokecraft-system-audit-prompt-2/all-routes/00-all-routes-results.json` | Closed |
 | SC-D006 | All 27 sessions | various | Per-session quiz/scorecard/slider/upload interaction audit (Part 6 classification) not performed this pass beyond asset+route+component verification already covered by existing test suites | Unknown (unverified) | `SMOKECRAFT_27_SESSION_AUDIT.md` covers route/asset/component only | Prompt 3 |
 | SC-D007 | All routes except Venue Selection | various | Four-viewport responsive/scrolling audit (Part 7) not performed this pass beyond the existing full-journey suite's Section G (which sweeps all 31 canonical screens at 4 viewports for horizontal-overflow only, not the full checklist in this mandate — scroll behavior, touch target sizing, hero undersizing, etc.) | Unknown (unverified) | `verify-smokecraft-full-journey-sequence-and-assets.mjs` Section G already exists and passes for horizontal-overflow specifically | Prompt 4 |
-| SC-D008 | `verify-smokecraft-full-journey-sequence-and-assets.mjs` — "Welcome honestly declares it has no approved asset" assertion | `verify-smokecraft-full-journey-sequence-and-assets.mjs` | Known pre-existing FAILING assertion — this is a stale, self-invalidating test assertion from before Welcome/S1 had a real approved asset wired (fixed in commit `7e8c4281`, prior session). The assertion itself was designed to flip-and-fail once a real asset was found, which it now correctly does. | N/A (expected, not a live defect) | Reproduced consistently across every full-journey run this session and the prior one | Prompt 6 (test file itself should be updated to stop asserting the stale pre-fix state) |
+| SC-D008 | `verify-smokecraft-full-journey-sequence-and-assets.mjs` — ~~"Welcome honestly declares it has no approved asset" assertion~~ **CLOSED Holistic Fix 2B** | `verify-smokecraft-full-journey-sequence-and-assets.mjs` | Fixed: confirmed `getManifestEntry('session-1').assetKey === 'session1'` with `assetStatus: 'ok'` (real asset wired since commit `7e8c4281`), so the assertion now correctly checks `visualSource === 'user-approved' && assetKey === 'session1'` instead of the stale no-asset expectation. Full suite now passes 107/107. | N/A (resolved) | `public/proof/smokecraft-holistic-fix-2b/` (full-journey re-run) | Closed |
 | SC-D009 | Live Railway production deployment | N/A | Cannot verify what commit/branch Railway is actually serving | Blocking (external) | Org egress 403 to `crafthub360.up.railway.app`, no Railway CLI/credentials — reproduced and confirmed every time it has been attempted this operation | Prompt 6 |
 | SC-D011 | `/smokecraft/passport` | `src/pages/smokecraft/SmokeCraftPassport.jsx`, asset `360 PASSPORT  2.png` | ~~5 action cards baked/dead~~ **CLOSED Prompt 3D, corrected 3E-1** | N/A (resolved) | Fixed: `PASSPORT_ACTION_CARDS` array + live overlay for all 5 cards. **Correction made in 3E-1**: the original fix routed "Scan to Connect"/"Join an Event"/"Explore Benefits" to generic screens (Connections/Event Challenge/Rewards Center) and incorrectly disabled "Explore Directory" as unsupported — a real, existing, substantial top-level `/passport/*` module (`src/pages/passport/*.jsx`, 265-775 lines each) was missed. Corrected to route to the real dedicated pages: Scan -> `/passport/scan`, Directory -> `/passport/directory`, Event -> `/passport/events`, Benefits -> `/passport/benefits`. "View Matches" remains honestly disabled — confirmed no "matches" route exists anywhere. All destinations re-verified via real browser test after correction. Screenshot: `public/proof/smokecraft-system-audit-prompt-3d/passport-cards-repaired.png`. | Closed |
 | SC-D012 | `/smokecraft/passport` | same as SC-D011 | ~~"FULL GUIDE" link and "Directory" list row not investigated~~ **CLOSED Prompt 3E-1** | N/A (resolved) | Fixed: both now route to the real `/passport/how-it-works` and `/passport/directory` pages (same top-level module discovered while fixing SC-D011). Verified via real browser test: both destinations confirmed correct. Screenshot: `public/proof/smokecraft-prompt-3e-1/passport-guide-directory-repaired.png`. | Closed |

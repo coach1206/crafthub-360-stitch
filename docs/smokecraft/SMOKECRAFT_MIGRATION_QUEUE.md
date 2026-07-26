@@ -6,18 +6,34 @@ Every one of the 108 routes now has a real classification (see
 not yet migrated onto the shared navigation registry or screen shell".
 That is the real remaining work for Holistic Fix 3.
 
-## Group 1 — Golden Box family (16 routes) — STILL OPEN
+## Group 1 — Golden Box family (16 routes) — RESOLVED this pass (Holistic Fix 2B)
 
-`golden-box` (full-live-react), `golden-box/status` (instructional-image —
-`SmokeCraftAssetScreen` only, no controls found), `golden-box/competitions`,
+`golden-box`, `golden-box/status`, `golden-box/competitions`,
 `golden-box/competitions/:competitionId`, `golden-box/entries/:entryId/blend`,
 `golden-box/results/:competitionId`, `golden-box/judge`,
 `golden-box/judge/entries/:entryId`, `golden-box/mentor/entries/:entryId`,
 `golden-box/packaging-studio` (+`new`, `:designId`, `:designId/preview`,
 `:designId/versions`, `:designId/share`), `golden-box/packaging-review/:shareToken`
-— all source-classified `full-live-react` this pass (real components with
-real controls), none individually browser-interaction-tested yet, none
-migrated onto `smokecraftNavigationRegistry` or `SmokeCraftScreenShell`.
+— all 13 components now import and render `SmokeCraftScreenShell`,
+verified via a real connected-flow browser test + 5-viewport sweep
+(30/30 clean). Navigation-registry adoption applied where a
+cross-cutting registered destination genuinely existed (CraftHub's
+Golden Box entry point via `NAV.MENTOR`, `CompetitionDetail`/
+`ResultsExperience`'s `NAV.GOLDEN_BOX`/`NAV.LEADERBOARD` back-links); most
+Golden Box internal navigation is competition/entry-specific deep linking
+(`/golden-box/competitions/${id}`, etc.), which is correctly NOT a
+registry-covered cross-cutting destination. See
+`SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`'s Holistic Fix 2B section and
+`public/proof/smokecraft-holistic-fix-2b/` for full detail.
+
+No dead controls found. Two real, correctly-honest empty states
+confirmed (not defects): `golden-box/status` has zero controls by design
+(instructional image), and `golden-box/judge` honestly shows "No entries
+are currently assigned to you" rather than a fabricated queue. Missing
+gameplay-engine pieces (a "defense" phase/screen, a dedicated awards
+presentation, final scoring/ranking automation) recorded in the proof
+index for the future gameplay-engine package — not built this pass, per
+the mandate's own scope boundary.
 
 ## Group 2 — Origins/Curation/Leaf-Challenge/Cultivation module (9 routes) — STILL OPEN
 
@@ -97,11 +113,13 @@ investigated flaky non-regression). See
 per-screen detail and `public/proof/smokecraft-holistic-fix-2a/` for
 screenshots and raw results.
 
-**Screen-shell adoption: 7 of 108 screens** (up from 0). The remaining ~70
-supporting routes (Golden Box, Origins/Curation module, Pairing-adjacent,
-remaining standalone screens) are the next unit of work for Holistic Fix
-3 — same migration pattern (shell + registry + 5-viewport verification +
-regression lock), applied to the next migration group.
+**Screen-shell adoption: 23 of 108 routes** (7 from Holistic Fix 2A + 16
+Golden Box routes from Holistic Fix 2B, across 20 unique component
+files). The remaining ~54 supporting routes (Origins/Curation module,
+Pairing-adjacent, remaining standalone screens) are the next unit of work
+for Holistic Fix 2C/3 — same migration pattern (shell + registry +
+5-viewport verification + regression lock), applied to the next
+migration group.
 
 The 33 routes already deep-audited in Prompts 3B–3E-3 (Welcome,
 Leaderboard, Passport, CraftHub, Venue Selection, Connections, Passport
