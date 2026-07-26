@@ -1,6 +1,12 @@
-# SmokeCraft System Defect Register — Prompt 1 (updated Prompt 2)
+# SmokeCraft System Defect Register — Prompt 1 (updated Prompt 2, Prompt 3)
 
-Baseline commit: `d6469504a2a83ab4acfb27e89a25064d505d4d55` (Prompt 1), updated at `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7` (Prompt 2 start)
+Baseline commit: `d6469504a2a83ab4acfb27e89a25064d505d4d55` (Prompt 1), updated at `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7` (Prompt 2), updated at `3da3532ee414ab3b0b8bd9ad6e061a79a6de530d` (Prompt 3 start)
+
+## Prompt 3 update
+
+- **SC-D010 CLOSED with browser evidence** — see table row below for full detail.
+- **SC-D001 (Session 1's baked bottom-icon strip) remains OPEN** — not addressed this pass. Scoped to a further pass.
+- **Full system-wide interaction audit (all 27 sessions' internal controls, every sidebar on every screen, all bottom navs beyond `SmokeCraftNavBar`, all landing/dashboard cards, hotspot alignment at 5 viewports) was NOT attempted this pass.** This turn fixed the one concretely-evidenced defect from the Prompt 2 register (SC-D010) with full verification, rather than claiming broader coverage that wasn't actually performed.
 
 ## Prompt 2 updates (closed and new)
 
@@ -28,7 +34,7 @@ data gathered this pass), not speculative filler. Items whose evidence is
 | SC-D007 | All routes except Venue Selection | various | Four-viewport responsive/scrolling audit (Part 7) not performed this pass beyond the existing full-journey suite's Section G (which sweeps all 31 canonical screens at 4 viewports for horizontal-overflow only, not the full checklist in this mandate — scroll behavior, touch target sizing, hero undersizing, etc.) | Unknown (unverified) | `verify-smokecraft-full-journey-sequence-and-assets.mjs` Section G already exists and passes for horizontal-overflow specifically | Prompt 4 |
 | SC-D008 | `verify-smokecraft-full-journey-sequence-and-assets.mjs` — "Welcome honestly declares it has no approved asset" assertion | `verify-smokecraft-full-journey-sequence-and-assets.mjs` | Known pre-existing FAILING assertion — this is a stale, self-invalidating test assertion from before Welcome/S1 had a real approved asset wired (fixed in commit `7e8c4281`, prior session). The assertion itself was designed to flip-and-fail once a real asset was found, which it now correctly does. | N/A (expected, not a live defect) | Reproduced consistently across every full-journey run this session and the prior one | Prompt 6 (test file itself should be updated to stop asserting the stale pre-fix state) |
 | SC-D009 | Live Railway production deployment | N/A | Cannot verify what commit/branch Railway is actually serving | Blocking (external) | Org egress 403 to `crafthub360.up.railway.app`, no Railway CLI/credentials — reproduced and confirmed every time it has been attempted this operation | Prompt 6 |
-| SC-D010 | `/smokecraft/leaderboard` sidebar | `src/pages/smokecraft/Leaderboard.jsx` | 8 of 9 baked sidebar labels (JOURNEY, CIGARS, CHALLENGES, EVENTS, LEADERBOARD, REWARDS, PASSPORT, CONNECTIONS, SETTINGS) have no live click handler — only "LOUNGE" does | Medium | Source read confirms exactly one overlaid `<button>` (line ~510) over a 9-label baked sidebar image | Prompt 3 |
+| SC-D010 | `/smokecraft/leaderboard` sidebar | `src/pages/smokecraft/Leaderboard.jsx` | ~~8 of 9 baked sidebar labels had no live click handler~~ **CLOSED Prompt 3** | N/A (resolved) | Fixed: added a `SIDEBAR_ITEMS` array + live overlay `<button>` for each row (JOURNEY→`/smokecraft/resume`, CIGARS→`/smokecraft/humidor-match`, CHALLENGES→`/smokecraft/challenge-hub`, EVENTS→`/smokecraft/event-challenge`, REWARDS→`/smokecraft/rewards-center`, PASSPORT→`/smokecraft/passport`; LEADERBOARD itself gets no separate control since it's the current page and its highlight is real, not a false default; SETTINGS wired as a real, focusable, `disabled` button with accessible name "Settings (not yet available)" since no SmokeCraft settings screen exists — honest, not silently dead). Pixel positions calibrated via PIL crop of the 1538×1022 approved image. Verified via real browser test: all 7 buttons present, Rewards→`/smokecraft/rewards-center` and Passport→`/smokecraft/passport` confirmed navigating correctly; Cigars correctly triggered the existing S2 session guard (test session wasn't progressed far enough to unlock S2 — expected guard behavior, not a new defect). Screenshot confirms zero visual regression (overlays invisible, image unchanged). Proof: `public/proof/smokecraft-system-audit-prompt-3/leaderboard-sidebar-repaired.png`. | Closed |
 
 ## Not classified as defects (explicit non-issues, per this mandate's own rules)
 

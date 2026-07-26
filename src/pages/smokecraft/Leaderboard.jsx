@@ -62,6 +62,21 @@ const GOLD   = '#E9C176'
 const CREAM  = '#e5e2e1'
 const PANEL  = '#080c14'
 
+// System Audit Prompt 3 (SC-D010) — pixel-calibrated positions for the
+// approved image's baked sidebar rows (from 1538x1022 LEADERBOARD 111.png).
+// LEADERBOARD itself is the current page and is intentionally excluded
+// (its baked highlight reflects real navigation state, not a false default).
+const SIDEBAR_ITEMS = [
+  { key: 'lounge',     label: 'Back to SmokeCraft landing', route: '/smokecraft',              top: '33.8%' },
+  { key: 'journey',    label: 'Journey',                     route: '/smokecraft/resume',        top: '38.4%' },
+  { key: 'cigars',     label: 'Cigars',                      route: '/smokecraft/humidor-match',  top: '43.0%' },
+  { key: 'challenges', label: 'Challenges',                  route: '/smokecraft/challenge-hub',  top: '47.6%' },
+  { key: 'events',     label: 'Events',                      route: '/smokecraft/event-challenge',top: '52.2%' },
+  { key: 'rewards',    label: 'Rewards',                     route: '/smokecraft/rewards-center', top: '61.3%' },
+  { key: 'passport',   label: 'Passport',                    route: '/smokecraft/passport',       top: '65.9%' },
+  { key: 'settings',   label: 'Settings (not yet available)', route: null, top: '70.6%', disabled: true },
+]
+
 // Opaque — must fully occlude the baked pixels underneath, never sit
 // translucently on top of them (see Format.jsx's PANEL rationale).
 const OPAQUE = {
@@ -507,23 +522,37 @@ export default function Leaderboard() {
         {refreshing ? 'Refreshing…' : 'Refresh Rankings'}
       </button>
 
-      {/* ── Live control over the approved sidebar's own "LOUNGE" item ──── */}
-      <button
-        type="button"
-        aria-label="Back to SmokeCraft landing"
-        data-testid="lb-back"
-        onClick={() => { triggerHaptic('light'); navigate('/smokecraft') }}
-        style={{
-          position: 'absolute', left: '2.0%', top: '33.8%', width: '11.6%', height: '4.6%',
-          background: 'transparent', border: '1.5px solid transparent', borderRadius: 6,
-          cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation',
-          WebkitTapHighlightColor: 'transparent',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD }}
-        onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent' }}
-        onFocus={e => { e.currentTarget.style.borderColor = GOLD }}
-        onBlur={e => { e.currentTarget.style.borderColor = 'transparent' }}
-      />
+      {/* ── Live controls over the approved sidebar's baked items ──────────
+          System Audit Prompt 3 (SC-D010): previously only "LOUNGE" had a
+          live control — the other 8 baked labels (JOURNEY, CIGARS,
+          CHALLENGES, EVENTS, LEADERBOARD, REWARDS, PASSPORT, SETTINGS) were
+          DEAD VISUAL CONTROLS. LEADERBOARD itself is the current page (its
+          baked highlight is honest, not a false default) so it gets no
+          separate control. SETTINGS has no real SmokeCraft settings screen
+          to route to (only unrelated POS3/E.A.T. settings exist) — it is
+          wired as a real, focusable button with an honest "not yet
+          available" accessible name rather than either a silent dead
+          hotspot or a route that doesn't actually exist. */}
+      {SIDEBAR_ITEMS.map(item => (
+        <button
+          key={item.key}
+          type="button"
+          aria-label={item.label}
+          data-testid={`lb-sidebar-${item.key}`}
+          disabled={item.disabled}
+          onClick={item.disabled ? undefined : () => { triggerHaptic('light'); navigate(item.route) }}
+          style={{
+            position: 'absolute', left: '2.0%', top: item.top, width: '11.6%', height: '4.6%',
+            background: 'transparent', border: '1.5px solid transparent', borderRadius: 6,
+            cursor: item.disabled ? 'default' : 'pointer', pointerEvents: 'auto', touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+          onMouseEnter={e => { if (!item.disabled) e.currentTarget.style.borderColor = GOLD }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent' }}
+          onFocus={e => { if (!item.disabled) e.currentTarget.style.borderColor = GOLD }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'transparent' }}
+        />
+      ))}
     </SmokeCraftImageBoundsOverlay>
   )
 }
