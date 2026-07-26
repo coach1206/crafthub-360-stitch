@@ -829,3 +829,12 @@ Originally found while building `verify-smokecraft-hf2e5-curriculum-forward-back
 **Verified via real browser test**: visited `/smokecraft/welcome` first (confirmed via `context.cookies()` that `smokecraft_guest_session` is set), then navigated to Flavor Memory, clicked a real flavor selection and the Continue button — advanced correctly to `/smokecraft/pairing-lab` (Session 11). This is now a permanent regression test in `verify-smokecraft-hf2e5-curriculum-forward-backward.mjs` (section "SC-D014 regression"), so this exact test-harness gap (and any real regression in the underlying cookie-issuance flow) will be caught immediately if it recurs.
 
 No product code was changed to close this — the underlying behavior was already correct; only the test's understanding of it was wrong.
+
+## Holistic Fix 2E-9 — all-27-session interaction sweep findings (both non-defects)
+
+`verify-smokecraft-hf2e9-all-session-interactions.mjs` discovered 276 visible interactive controls across the 21 primary curriculum routes and hit-tested a sample of up to 15 per session (blocked-overlay check + console-error check), plus a keyboard-focus check per session. 86 of 88 checks passed. The 2 failures are both confirmed non-defects:
+
+- **Session 1 (Welcome): one 404 console error.** Matches the already-documented recurring non-reproducing first-navigation flake (see the note near line 198 of this file) — re-confirmed non-reproducing this pass, not a new regression.
+- **Session 27 (Session Complete): one "Blocked call to navigator.vibrate" console warning.** Traced to `triggerHaptic()` (`src/utils/haptics.js`), called from several handlers in `SessionComplete.jsx`. Chrome blocks `navigator.vibrate()` unless it's called from within a real, trusted user-gesture event handler — a Playwright-driven Tab keypress and hit-test evaluation in headless automation do not count as a trusted gesture, but a real user's touch/click on a physical device does. Confirmed via source read this is standard browser security policy, not a product defect — no real guest playing on a real device would ever see this.
+
+Both findings are disclosed here rather than silently dismissed, and neither required a code fix.

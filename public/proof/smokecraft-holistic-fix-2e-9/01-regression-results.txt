@@ -1,0 +1,34 @@
+Holistic Fix 2E-9 regression suite results
+
+npm run build: PASS (4m 27s — includes prebuild: manifest generation,
+validateSmokecraftManifest.mjs, validateSmokecraftShellAdoption.mjs — now
+178 total shell-adoption checks, up from 177, with 1 new clip-prevention
+regression lock)
+
+validateSmokecraftManifest.mjs: PASS, 0 failing checks
+validateSmokecraftShellAdoption.mjs: PASS, 0 failing checks
+
+scripts/smokecraftAssetExclusivityCheck.mjs: 7 passed, 0 failed (7 total)
+verify-smokecraft-phase-session-lock.mjs: 9 passed, 0 failed (9 total)
+verify-smokecraft-final-three-approved-assets.mjs: 17 passed, 0 failed (17 total)
+verify-smokecraft-full-journey-sequence-and-assets.mjs: 107 passed, 0 failed (of 107 total)
+verify-smokecraft-hf2e5-curriculum-five-viewport.mjs: 115 passed, 0 failed (of 115 total)
+verify-smokecraft-hf2e9-all-session-interactions.mjs (NEW): 88 passed, 0 failed (of 88 total; 276 controls discovered across 21 sessions)
+
+Environment note: the full-journey suite stalled once at its Section G
+(four-viewport sweep) with no log/memory progress for ~2 minutes despite
+both servers responding to direct health checks — the same recurring
+environment artifact documented multiple times across this operation
+under heavy repeated test volume. Root-caused by killing the stuck process
+and both servers, then restarting cleanly from scratch (fresh backend +
+fresh preview server); the retry ran to completion at 107/107 with no
+code changes in between, confirming this was environmental, not a
+regression.
+
+Dedicated forward/backward + SC-D014 regression test: see companion result.
+
+verify-smokecraft-hf2e5-curriculum-forward-backward.mjs: 10 passed, 0
+failed (of 10 total). First attempt hit the same guest-session rate-
+limiter 429 artifact seen repeatedly across this operation's later passes
+(this session's cumulative test volume against that endpoint) — resolved
+by restarting the backend, re-ran clean with no code changes in between.

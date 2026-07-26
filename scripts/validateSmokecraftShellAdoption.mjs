@@ -231,6 +231,15 @@ for (const a of ASSET_LOCKS) {
     check(`smokecraftEducationalEnrichment.js: session ${t.session} entry still has both whyItMatters and goldenBox`,
       new RegExp(`\\b${t.session}:\\s*\\{[\\s\\S]{0,20}whyItMatters[\\s\\S]*?goldenBox`).test(enrichmentSrc))
   }
+
+  // Holistic Fix 2E-9 — clip-prevention regression lock. SmokeCraftLessonInfoButton
+  // must keep using position:'fixed' (real viewport coordinates), not
+  // position:'absolute' — the Holistic Fix 2E-7 investigation found that
+  // position:'absolute' inside SmokeCraftImageBoundsOverlay's bounds-relative
+  // coordinate space silently clips the popover panel invisible.
+  const buttonSrc = readFileSync('src/components/smokecraft/SmokeCraftLessonInfoButton.jsx', 'utf8')
+  check("SmokeCraftLessonInfoButton: button uses position:'fixed' (not 'absolute', which clips inside SmokeCraftImageBoundsOverlay)",
+    (buttonSrc.match(/position:\s*'fixed'/g) || []).length >= 2 && !/position:\s*'absolute'/.test(buttonSrc))
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)
