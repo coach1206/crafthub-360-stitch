@@ -48,6 +48,12 @@ const TARGETS = [
   { file: 'src/pages/smokecraft/Cultivation.jsx', name: 'Cultivation', navLiterals: [] },
   { file: 'src/pages/smokecraft/Blend.jsx', name: 'Blend', navLiterals: [] },
   { file: 'src/pages/smokecraft/FlavorDNA.jsx', name: 'Flavor DNA', navLiterals: [] },
+  // Holistic Fix 2D — Pairing-adjacent family (5 routes).
+  { file: 'src/pages/smokecraft/Pairing.jsx', name: 'Pairing', navLiterals: [] },
+  { file: 'src/pages/smokecraft/Available.jsx', name: 'Available', navLiterals: [] },
+  { file: 'src/pages/smokecraft/Assistant.jsx', name: 'Assistant', navLiterals: [] },
+  { file: 'src/pages/smokecraft/PairingMastery.jsx', name: 'Pairing Mastery', navLiterals: [] },
+  { file: 'src/pages/smokecraft/Vitola.jsx', name: 'Vitola', navLiterals: [] },
 ]
 
 for (const t of TARGETS) {
@@ -80,6 +86,42 @@ const ASSET_LOCKS = [
 for (const a of ASSET_LOCKS) {
   const src = readFileSync(a.file, 'utf8')
   check(`${a.file}: still references its locked approved asset (${a.key})`, src.includes(a.key))
+}
+
+// Holistic Fix 2D — pairing-route collision guard. Five distinct pairing
+// concepts exist in this codebase (/smokecraft/pairing, Pairing Lab [S11],
+// Personalized Pairing Recommendations [S22], Humidor Match [S2], and
+// /smokecraft/pairing-mastery) and must never be silently collapsed into
+// one route or component. Fails the build if any two of these routes ever
+// resolve to the same component, or if the registry's PAIRING/
+// PAIRING_STANDALONE keys are ever collapsed into one value.
+{
+  const appJsx = readFileSync('src/App.jsx', 'utf8')
+  function componentFor(routePath) {
+    const re = new RegExp(`<Route path="${routePath.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}"\\s+element=\\{<[^>]*?<?(\\w+)\\s*/?>`)
+    return appJsx.match(re)?.[1] || null
+  }
+  const pairingRoutes = {
+    'pairing': componentFor('pairing'),
+    'pairing-lab': componentFor('pairing-lab'),
+    'pairing-recommendations': componentFor('pairing-recommendations'),
+    'humidor-match': componentFor('humidor-match'),
+    'pairing-mastery': componentFor('pairing-mastery'),
+  }
+  const resolvedPairs = Object.entries(pairingRoutes).filter(([, c]) => c)
+  const seen = new Map()
+  let collision = false
+  for (const [route, comp] of resolvedPairs) {
+    if (seen.has(comp)) { collision = true; console.error(`  FAIL  Route collision: "${route}" and "${seen.get(comp)}" both resolve to component "${comp}"`); failures++ }
+    else seen.set(comp, route)
+  }
+  check('No collision among the 5 distinct pairing-family routes (pairing/pairing-lab/pairing-recommendations/humidor-match/pairing-mastery)', !collision)
+
+  const navSrc = readFileSync('src/constants/smokecraftNavigationRegistry.js', 'utf8')
+  const pairingKey = navSrc.match(/PAIRING:\s*'([^']+)'/)?.[1]
+  const pairingStandaloneKey = navSrc.match(/PAIRING_STANDALONE:\s*'([^']+)'/)?.[1]
+  check('smokecraftNavigationRegistry keeps PAIRING and PAIRING_STANDALONE as distinct, non-collapsed values',
+    !!pairingKey && !!pairingStandaloneKey && pairingKey !== pairingStandaloneKey)
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)

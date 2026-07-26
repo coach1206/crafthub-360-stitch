@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import {
   resolveSmokeCraftLandingAction,
@@ -71,12 +71,10 @@ export default function Pairing() {
   }
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src="/assets/smokecraft-reference/approved/smokecraft-pairing.png"
-      naturalW={NAT_W}
-      naturalH={NAT_H}
-      alt="SmokeCraft 360 — Your Blend Pairing Guide"
-      bottomOffset={0}
+    <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: '/assets/smokecraft-reference/approved/smokecraft-pairing.png', naturalW: NAT_W, naturalH: NAT_H, alt: 'SmokeCraft 360 — Your Blend Pairing Guide', bottomOffset: 0 }}
     >
       <h1 style={{
         position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
@@ -115,6 +113,6 @@ export default function Pairing() {
         onMouseEnter={e => focusRing(e, true)} onMouseLeave={e => focusRing(e, false)}
         onFocus={e => focusRing(e, true)} onBlur={e => focusRing(e, false)}
       />
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

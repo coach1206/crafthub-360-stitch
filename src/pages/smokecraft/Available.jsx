@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { XP_AWARDS } from '../../constants/session.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 // APPROVED SMOKECRAFT VISUAL RULE: no stock-photo fallback URLs. If a real image is missing, render the appropriate pending placeholder only.
 function AvailableImage({ src, alt, className, style, person = false }) {
@@ -99,6 +100,7 @@ export default function Available() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div className="font-body-md text-body-md select-none bg-background text-on-surface min-h-screen">
       {/* Atmospheric Background */}
       <div className="fixed inset-0 -z-10 bg-background overflow-hidden">
@@ -278,5 +280,6 @@ export default function Available() {
         ))}
       </nav>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

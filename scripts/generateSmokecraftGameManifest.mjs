@@ -178,6 +178,21 @@ const KNOWN_AUDITED = {
   'cultivation':                { classification: 'full-live-react', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
   'blend':                      { classification: 'full-live-react', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
   'flavor-dna':                 { classification: 'instructional-image', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  // Holistic Fix 2D — Pairing-adjacent family (5 routes). Confirmed via
+  // source read this pass: /smokecraft/pairing IS live-reachable (Landing
+  // PAIRING action, Welcome bottom-strip, CommandHub ticker,
+  // venueHomeContent — all real). available/assistant/pairing-mastery/
+  // vitola are orphaned/unreachable (only referenced in the legacy
+  // SMOKECRAFT_FLOW config consumed by the admin-only NOVEE OS module
+  // registry display, never by live guest navigation). None of the 5 is
+  // the same feature as Pairing Lab (S11), Personalized Pairing
+  // Recommendations (S22), or Humidor Match (S2) — confirmed distinct
+  // routes/components/guards; no merge or redirect performed.
+  'pairing':          { classification: 'clean-image-shell', auditedIn: 'Holistic Fix 2D: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'available':        { classification: 'full-live-react', auditedIn: 'Holistic Fix 2D: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'assistant':         { classification: 'full-live-react', auditedIn: 'Holistic Fix 2D: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'pairing-mastery':  { classification: 'full-live-react', auditedIn: 'Holistic Fix 2D: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'vitola':           { classification: 'full-live-react', auditedIn: 'Holistic Fix 2D: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
 }
 
 const manifestByRoute = {}
@@ -254,7 +269,7 @@ const output = {
   // "Fully migrated" = actually renders SmokeCraftScreenShell in its own
   // component (verified below by scripts/validateSmokecraftShellAdoption.mjs
   // against the real source, not just this manifest's own auditedIn text).
-  fullyMigratedScreens: entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C/.test(e.auditedIn || '')).length,
+  fullyMigratedScreens: entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C|Holistic Fix 2D/.test(e.auditedIn || '')).length,
   entries,
 }
 

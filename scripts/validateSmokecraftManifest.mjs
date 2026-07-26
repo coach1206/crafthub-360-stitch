@@ -158,14 +158,19 @@ if (existsSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')) {
     '/smokecraft/cultivation': 'src/pages/smokecraft/Cultivation.jsx',
     '/smokecraft/blend': 'src/pages/smokecraft/Blend.jsx',
     '/smokecraft/flavor-dna': 'src/pages/smokecraft/FlavorDNA.jsx',
+    '/smokecraft/pairing': 'src/pages/smokecraft/Pairing.jsx',
+    '/smokecraft/available': 'src/pages/smokecraft/Available.jsx',
+    '/smokecraft/assistant': 'src/pages/smokecraft/Assistant.jsx',
+    '/smokecraft/pairing-mastery': 'src/pages/smokecraft/PairingMastery.jsx',
+    '/smokecraft/vitola': 'src/pages/smokecraft/Vitola.jsx',
   }
-  const claimedMigrated = manifest.entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C/.test(e.auditedIn || ''))
+  const claimedMigrated = manifest.entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C|Holistic Fix 2D/.test(e.auditedIn || ''))
   const verifiedCount = claimedMigrated.filter(e => {
     const file = ROUTE_TO_FILE[e.route]
     return file && existsSync(file) && readFileSync(file, 'utf8').includes('<SmokeCraftScreenShell')
   }).length
   check(`Manifest fullyMigratedScreens (${manifest.fullyMigratedScreens}) — every claimed route (${claimedMigrated.length}) is backed by a real <SmokeCraftScreenShell> render (${verifiedCount} verified)`,
-    manifest.fullyMigratedScreens === claimedMigrated.length && verifiedCount === claimedMigrated.length && verifiedCount >= 32)
+    manifest.fullyMigratedScreens === claimedMigrated.length && verifiedCount === claimedMigrated.length && verifiedCount >= 37)
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)

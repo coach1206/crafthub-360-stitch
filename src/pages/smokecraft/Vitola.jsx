@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import EducationalDetailPanel from '../../components/smokecraft/goldenBox/EducationalDetailPanel.jsx'
 import { fromCatalogRow } from '../../components/smokecraft/goldenBox/educationalContentContract.js'
@@ -486,7 +487,7 @@ export default function Vitola() {
   }
 
   return (
-    <>
+    <SmokeCraftScreenShell mode="live" status="ready">
       <div style={{ minHeight: '100vh', paddingBottom: 100, background: NAVY, color: CREAM, fontFamily: 'Georgia, serif' }}>
         <div style={{ padding: '20px 16px 8px' }}>
           <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(233,193,118,0.7)' }}>SmokeCraft</div>
@@ -619,6 +620,6 @@ export default function Vitola() {
         secondary="← Back"
         onSecondary={() => navigate(-1)}
       />
-    </>
+    </SmokeCraftScreenShell>
   )
 }
