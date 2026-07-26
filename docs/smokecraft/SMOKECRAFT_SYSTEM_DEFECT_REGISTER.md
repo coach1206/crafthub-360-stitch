@@ -2,6 +2,100 @@
 
 Baseline commit: `d6469504a2a83ab4acfb27e89a25064d505d4d55` (Prompt 1), updated at `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7` (Prompt 2), updated at `3da3532ee414ab3b0b8bd9ad6e061a79a6de530d` (Prompt 3 start)
 
+## Holistic Fix 1 update — Shared Game Architecture
+
+Starting commit: `37cad9aa` (Prompt 3E-3 close).
+
+This pass built the enforceable shared architecture the mandate required,
+rather than another single-screen fix:
+
+- `docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json` +
+  `scripts/generateSmokecraftGameManifest.mjs` — the one canonical game
+  manifest, covering all 108 active `/smokecraft` routes (21 curriculum
+  route slots covering all 27 sessions via the existing merged-session
+  design, 4 entry screens, 83 supporting routes), each with component,
+  asset key/status, guard type, classification, and an `auditedIn`
+  evidence citation (never a bare "complete" claim).
+- `src/constants/smokecraftNavigationRegistry.js` — the one shared
+  navigation-destination registry (Journey/CraftHub/Leaderboard/Rewards/
+  Passport/Collections/Challenges/Golden Box/Mentor/Pairing/Events/Cigars/
+  Lounge/Knowledge/Home), plus the separate real `/passport/*` module
+  destinations, plus an explicit honest-disabled-destinations list. Not
+  yet retrofitted into existing screens' local `SIDEBAR_ITEMS` arrays
+  (that is screen migration, out of scope here) — it is the enforceable
+  target for Holistic Fix 2.
+- `src/components/smokecraft/SmokeCraftScreenShell.jsx` — the one shared
+  screen-shell contract (loading/empty/error/offline presentation,
+  horizontal-tablet-safe layout, bottom-safe-area, image-shell vs. live
+  modes). Not yet applied to any existing screen — same reasoning as above.
+- `scripts/validateSmokecraftManifest.mjs` — build-blocking validation,
+  wired into `npm run build`'s existing `prebuild` script. Fails the build
+  if: a route is missing from the manifest, a screenId is duplicated, a
+  screen classified live/clean-shell lacks real audit evidence, the
+  27-session/6-phase spine drifts, a curriculum entry references a
+  non-existent asset, or a navigation-registry destination doesn't resolve
+  to a real currently-registered route.
+- `docs/smokecraft/SMOKECRAFT_SCREEN_CLASSIFICATION.md` — full
+  classification counts (25 full-live-react, 5 clean-image-shell, 0
+  instructional-image, **0 unsafe-full-mockup found remaining**, 78
+  unclassified/not-yet-audited).
+- `docs/smokecraft/SMOKECRAFT_MIGRATION_QUEUE.md` — the 78 unclassified
+  routes grouped into 6 shared-defect-class migration groups for Holistic
+  Fix 2 (Golden Box family, Origins/Curation/Leaf-Challenge module,
+  Pairing-adjacent screens, commerce module, legacy route aliases,
+  remaining standalone screens).
+
+**Real tooling bug found and fixed:** `scripts/smokecraftRouteInventory.mjs`
+was emitting a phantom duplicate route entry for any `<Route path="X">`
+line that only opens a nested route group (no `element=` of its own — e.g.
+`<Route path="golden-box">`, whose real page is the nested `index` route
+under it). This inflated every prior route count in this operation by
+exactly 1 (109 reported in Prompts 2/3E-3, 108 real). Fixed to only record
+a route when the line actually carries an `element=`. Prior documents that
+recorded "109" are left as an accurate record of that script's real output
+at the time; this pass's manifest and classification doc are the corrected
+count going forward. This is a tooling correction, not a live regression —
+`verify-smokecraft-all-routes-browser-test.mjs`'s 95 PASS / 14 REDIRECT
+PASS / 0 issues result is unaffected in substance (one phantom entry
+removed from a 109-count, not a real route that stopped working).
+
+**Architecture gaps recorded for Holistic Fix 2 (not built this pass, per
+the mandate's explicit "do not begin screen migration automatically"):**
+- Screen-shell contract exists but is not yet adopted by any screen —
+  every existing screen still hand-rolls its own loading/error/empty
+  presentation and responsive layout math.
+- Navigation registry exists but is not yet adopted — every existing
+  sidebar/bottom-nav array (Welcome, Leaderboard, Passport, CraftHub) still
+  hardcodes its own route literals rather than importing from the registry.
+- Golden Box (16 routes), the Origins/Curation/Leaf-Challenge module (9
+  routes), the Pairing-adjacent screens (5 routes), and the commerce module
+  (8 routes, 3 of which share one component under different URLs) remain
+  entirely unclassified/unaudited by this operation.
+- 13 legacy `<Navigate>` route aliases in `App.jsx` are not yet covered by
+  an automated "does this alias still resolve" check (the navigation
+  registry validator only covers its own registered destinations, not raw
+  `<Navigate>` lines).
+- Responsive-layout classification per screen is not yet enumerated beyond
+  the existing 31-screen horizontal-overflow sweep
+  (`verify-smokecraft-full-journey-sequence-and-assets.mjs` Section G) and
+  the single dedicated Venue Selection 4-viewport audit — the manifest
+  marks this "unclassified" honestly rather than assuming pass.
+- Backend/persistence/scoring/reward gaps already recorded per-screen in
+  the Prompt 3E-2/3E-3 sections above (badge duplicate protection, event/
+  challenge reward catalogs, streak/leaderboard backend connections) remain
+  open; this pass did not re-investigate them, only cross-referenced them
+  into the one canonical manifest.
+- Mentor/ElevenLabs voice integration, Pairing (both the S11/S22 canonical
+  screens and the standalone Group 3 screens), and Golden Box interaction
+  auditing are explicitly deferred to Holistic Fix 2+ — not touched this
+  pass per the mandate's own scope boundary.
+
+Regressions re-run and passing: `npm run build` (prebuild validation now
+included), `verify-smokecraft-final-three-approved-assets.mjs` (17/17),
+`verify-smokecraft-phase-session-lock.mjs` (9/9),
+`scripts/smokecraftAssetExclusivityCheck.mjs` (7/7),
+`scripts/validateSmokecraftManifest.mjs` (15/15, new this pass).
+
 ## Prompt 3E-3 update — Challenge Hub, Daily/Weekly Challenge, Event Challenge, SmokeCraft Challenge
 
 Starting commit: `c3674eecbfccf3ae1b9799c854582c665868355b` (Prompt 3E-2 close).

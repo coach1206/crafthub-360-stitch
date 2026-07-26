@@ -58,9 +58,18 @@ for (const line of block) {
     : [parentPath, segment].filter(Boolean).join('/')
 
   const elMatch = line.match(/element=\{(.*)/)
-  const elementRaw = elMatch ? elMatch[1].replace(/\/>\s*$/, '').replace(/\}\s*$/, '') : '(no element on this line — check source)'
 
-  routes.push({ fullPath, isIndex, elementRaw: elementRaw.slice(0, 200) })
+  // A line like `<Route path="golden-box">` with no `element=` on it at all
+  // is a pure group container — it opens a nested path prefix for the
+  // routes indented under it, but registers no page of its own at that URL.
+  // (Bug found during Holistic Fix 1: this previously emitted a phantom
+  // duplicate route with no real element, inflating the route count and
+  // colliding with the group's own real `index` route.) Only push a route
+  // entry when this line actually carries an `element=`.
+  if (elMatch) {
+    const elementRaw = elMatch[1].replace(/\/>\s*$/, '').replace(/\}\s*$/, '')
+    routes.push({ fullPath, isIndex, elementRaw: elementRaw.slice(0, 200) })
+  }
 
   if (!isSelfClosing) {
     // This Route opens a nested group (e.g. <Route path="golden-box">).

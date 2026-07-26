@@ -61,11 +61,6 @@
   },
   {
     "fullPath": "golden-box",
-    "isIndex": false,
-    "elementRaw": "(no element on this line — check source)"
-  },
-  {
-    "fullPath": "golden-box",
     "isIndex": true,
     "elementRaw": "<SmokeCraftSessionGuard requires=\"entry\"><GoldenBox /></SmokeCraftSessionGuard>"
   },
