@@ -11,19 +11,25 @@ const NAT_H = 941
 const GOLD = '#E9C176'
 const CREAM = '#e5e2e1'
 
-// System Audit Prompt 3D (SC-D011) — "Scan to Connect" and "Join an Event"
-// have real, existing destinations (Connections, Event Challenge). "Explore
-// Directory," "View Matches," and "Explore Benefits" have no backing
-// feature anywhere in this codebase (no member directory or matching
-// system exists) — honestly disabled rather than routed to a fabricated
-// destination. "Explore Benefits" maps reasonably to Rewards, the one real
-// existing benefits-adjacent screen.
+// System Audit Prompt 3D (SC-D011), corrected Prompt 3E-1 — the real,
+// existing top-level `/passport/*` module (src/pages/passport/*.jsx, a
+// separate, substantial app — Scan 265 lines, Directory 336, Events 775,
+// Benefits 275, HowItWorks 479 — the same module this file's own docstring
+// already identifies as "the unrelated top-level /passport module") was
+// missed in the original SC-D011 pass, which incorrectly routed some cards
+// generically and disabled "Explore Directory" as unsupported. It IS
+// supported — corrected here to route to the real pages (NOT nested under
+// /smokecraft — confirmed via browser test that /smokecraft/passport/* does
+// not resolve, since App.jsx registers `path="passport"` as a sibling of
+// the /smokecraft route group, not a child of it). "View Matches" still has
+// no real destination anywhere in this codebase (confirmed: no "matches"
+// route exists) — remains honestly disabled.
 const PASSPORT_ACTION_CARDS = [
-  { key: 'scan',      label: 'Scan to Connect',  route: '/smokecraft/connections',   left: '17.0%' },
-  { key: 'directory', label: 'Explore Directory (not yet available)', route: null, left: '30.5%', disabled: true },
-  { key: 'matches',   label: 'View Matches (not yet available)',     route: null, left: '44.0%', disabled: true },
-  { key: 'event',     label: 'Join an Event',    route: '/smokecraft/event-challenge', left: '57.4%' },
-  { key: 'benefits',  label: 'Explore Benefits', route: '/smokecraft/rewards-center', left: '70.9%' },
+  { key: 'scan',      label: 'Scan to Connect',  route: '/passport/scan',      left: '17.0%' },
+  { key: 'directory', label: 'Explore Directory', route: '/passport/directory', left: '30.5%' },
+  { key: 'matches',   label: 'View Matches (not yet available)', route: null, left: '44.0%', disabled: true },
+  { key: 'event',     label: 'Join an Event',    route: '/passport/events',    left: '57.4%' },
+  { key: 'benefits',  label: 'Explore Benefits', route: '/passport/benefits',  left: '70.9%' },
 ]
 
 /**
@@ -137,6 +143,23 @@ export default function SmokeCraftPassport() {
           feature anywhere in this codebase (a member directory, a
           matching system) are honestly disabled rather than fabricated.
           Pixel positions calibrated via PIL crop of the 1672x941 image. */}
+      {/* SC-D012, corrected — a real, existing top-level `/passport/*`
+          module exists (src/pages/passport/*.jsx: PassportHowItWorks 479
+          lines, PassportDirectory 336 lines — both substantial, real
+          implementations, not stubs) and was missed in the original
+          audit. "FULL GUIDE" and the "Directory" row now route to their
+          real destinations. */}
+      <button
+        type="button" aria-label="Full Guide" data-testid="passport-full-guide"
+        onClick={() => { triggerHaptic('light'); navigate('/passport/how-it-works') }}
+        style={{ position: 'absolute', left: '74%', top: '30%', width: '9%', height: '4%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
+      />
+      <button
+        type="button" aria-label="Directory — Verified members, brands and more" data-testid="passport-directory-row"
+        onClick={() => { triggerHaptic('light'); navigate('/passport/directory') }}
+        style={{ position: 'absolute', left: '4.8%', top: '88.7%', width: '89.7%', height: '10.6%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
+      />
+
       {PASSPORT_ACTION_CARDS.map(card => (
         <button
           key={card.key} type="button" aria-label={card.label} data-testid={`passport-action-${card.key}`}

@@ -125,8 +125,13 @@ export default function SmokeCraftCraftHub() {
       ))}
 
       {/* The artwork's bottom action row: ENTER CRAFTHUB / STAFF HANDOFF /
-          360 PASSPORT CONNECTIONS / DAYONE360 TRAVEL. Only the two with real
-          destinations in this build are wired. */}
+          360 PASSPORT CONNECTIONS / DAYONE360 TRAVEL.
+          System Audit Prompt 3E-1 (SC-D013): DAYONE360 TRAVEL has a real
+          destination (/dayone360-travel — a top-level route, sibling to
+          /smokecraft, not nested under it) and is now wired. STAFF
+          HANDOFF has no real feature anywhere in this codebase (confirmed:
+          no staff-handoff route exists) — honestly disabled rather than
+          fabricated. */}
       <button
         type="button"
         data-testid="crafthub-enter"
@@ -137,10 +142,25 @@ export default function SmokeCraftCraftHub() {
       />
       <button
         type="button"
+        data-testid="crafthub-staff-handoff"
+        aria-label="Staff Handoff (not yet available)"
+        disabled
+        style={{ ...hotspot, left: '33.25%', top: '86.4%', width: '18.0%', height: '7.6%', cursor: 'default' }}
+      />
+      <button
+        type="button"
         data-testid="crafthub-passport"
         aria-label="360 Passport Connections"
         onClick={() => goAction(SMOKECRAFT_LANDING_ACTIONS.PASSPORT)}
         style={{ ...hotspot, left: '52.8%', top: '86.4%', width: '18.0%', height: '7.6%', cursor: 'pointer' }}
+        {...hoverable(true)}
+      />
+      <button
+        type="button"
+        data-testid="crafthub-dayone360"
+        aria-label="DayOne360 Travel"
+        onClick={() => { triggerHaptic('light'); navigate('/dayone360-travel') }}
+        style={{ ...hotspot, left: '72.4%', top: '86.4%', width: '18.0%', height: '7.6%', cursor: 'pointer' }}
         {...hoverable(true)}
       />
 
