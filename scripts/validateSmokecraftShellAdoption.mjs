@@ -195,6 +195,33 @@ for (const a of ASSET_LOCKS) {
   const interactionSrc = readFileSync('src/constants/smokecraftInteractionManifest.js', 'utf8')
   check("session-21's required interactive region ('section-review') is still registered in the interaction manifest",
     /session-21[\s\S]*?section-review/.test(interactionSrc))
+
+  // Holistic Fix 2E-7 — lesson-info (title/Golden Box/Why It Matters)
+  // regression lock for the 11 sessions that had no on-screen title before
+  // this pass. Fails the build if the SmokeCraftLessonInfoButton is removed
+  // from any of these files, or if the per-session enrichment content it
+  // depends on is removed from smokecraftEducationalEnrichment.js.
+  const LESSON_INFO_TARGETS = [
+    { file: 'src/pages/smokecraft/HumidorMatch.jsx', session: 2 },
+    { file: 'src/pages/smokecraft/Format.jsx', session: 5 },
+    { file: 'src/pages/smokecraft/CutToastLight.jsx', session: 6 },
+    { file: 'src/pages/smokecraft/FirstThird.jsx', session: 8 },
+    { file: 'src/pages/smokecraft/FlavorMemory.jsx', session: 10 },
+    { file: 'src/pages/smokecraft/PairingLab.jsx', session: 11 },
+    { file: 'src/pages/smokecraft/SecondThird.jsx', session: 12 },
+    { file: 'src/pages/smokecraft/FinalThird.jsx', session: 16 },
+    { file: 'src/pages/smokecraft/Scorecard.jsx', session: 19 },
+    { file: 'src/pages/smokecraft/PassportStamp.jsx', session: 23 },
+    { file: 'src/pages/smokecraft/FinalReview.jsx', session: 24 },
+  ]
+  const enrichmentSrc = readFileSync('src/constants/smokecraftEducationalEnrichment.js', 'utf8')
+  for (const t of LESSON_INFO_TARGETS) {
+    const src = readFileSync(t.file, 'utf8')
+    check(`${t.file}: still renders SmokeCraftLessonInfoButton (Session ${t.session} lesson title/Golden Box/Why It Matters)`,
+      /import SmokeCraftLessonInfoButton from/.test(src) && /<SmokeCraftLessonInfoButton\b/.test(src))
+    check(`smokecraftEducationalEnrichment.js: session ${t.session} entry still has both whyItMatters and goldenBox`,
+      new RegExp(`\\b${t.session}:\\s*\\{[\\s\\S]{0,20}whyItMatters[\\s\\S]*?goldenBox`).test(enrichmentSrc))
+  }
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)

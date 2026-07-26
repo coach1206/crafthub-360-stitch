@@ -6,7 +6,12 @@ import { getRankFromXP } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
+import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+
+const ENRICHMENT_23 = getEducationalEnrichment(23)
 
 const NAT_W = 1448
 const NAT_H = 1086
@@ -149,6 +154,11 @@ export default function PassportStamp({ onBack, onComplete } = {}) {
         naturalW={NAT_W}
         naturalH={NAT_H}
         alt="SmokeCraft Passport Stamp — Journey Certification"
+      />
+
+      <SmokeCraftLessonInfoButton
+        sessionNumber={23} totalSessions={TOTAL_SESSIONS} phase={6} totalPhases={TOTAL_VISITS}
+        title="Passport Stamp Animation" whyItMatters={ENRICHMENT_23?.whyItMatters} goldenBox={ENRICHMENT_23?.goldenBox}
       />
 
       <SmokeCraftNavBar

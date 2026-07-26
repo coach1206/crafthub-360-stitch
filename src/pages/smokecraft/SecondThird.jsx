@@ -5,7 +5,12 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
+import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+
+const ENRICHMENT_12 = getEducationalEnrichment(12)
 
 const NAT_W = 1672
 const NAT_H = 941
@@ -169,6 +174,11 @@ export default function SecondThird({ onBack, onComplete } = {}) {
           />
         </div>
       </SmokeCraftImageBoundsOverlay>
+
+      <SmokeCraftLessonInfoButton
+        sessionNumber={12} totalSessions={TOTAL_SESSIONS} phase={3} totalPhases={TOTAL_VISITS}
+        title="Flavor Evolution" whyItMatters={ENRICHMENT_12?.whyItMatters} goldenBox={ENRICHMENT_12?.goldenBox}
+      />
 
       <SmokeCraftNavBar
         primary="Continue to Flavor Memory →"

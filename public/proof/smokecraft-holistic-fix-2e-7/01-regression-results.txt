@@ -1,0 +1,33 @@
+Holistic Fix 2E-7 regression suite results
+
+npm run build: PASS (includes prebuild: manifest generation,
+validateSmokecraftManifest.mjs, validateSmokecraftShellAdoption.mjs with
+22 new lesson-info regression-lock checks — all exit 0)
+
+validateSmokecraftManifest.mjs: PASS, 0 failing checks
+validateSmokecraftShellAdoption.mjs: PASS, 0 failing checks (163 total
+checks, up from 141 — 22 new: 2 per session x 11 sessions, verifying
+SmokeCraftLessonInfoButton is still imported+rendered and the
+corresponding smokecraftEducationalEnrichment.js entry still has both
+whyItMatters and goldenBox)
+
+scripts/smokecraftAssetExclusivityCheck.mjs: 7 passed, 0 failed (7 total)
+verify-smokecraft-phase-session-lock.mjs: 9 passed, 0 failed (9 total)
+verify-smokecraft-final-three-approved-assets.mjs: 17 passed, 0 failed (17 total)
+verify-smokecraft-full-journey-sequence-and-assets.mjs: 107 passed, 0 failed (of 107 total)
+verify-smokecraft-hf2e5-curriculum-forward-backward.mjs (includes SC-D014
+regression test): 10 passed, 0 failed (of 10 total)
+
+Environment note: the first run of the forward/backward test after this
+pass's changes hit a real 429 (Too Many Requests) from the guest-session
+rate limiter — a known, previously-documented recurring artifact of this
+session's heavy repeated test volume against that endpoint. Confirmed via
+direct investigation (a standalone script showed the guest-session POST
+returning 429, cookies: []) that this was the rate limiter, not a code
+regression. Restarted the backend (node server/index.js) to clear it;
+re-ran clean at 10/10 with no code changes in between.
+
+Full five-viewport curriculum sweep (all 21 sessions, including the 11
+changed this pass) was run earlier in this session at 115/115 passing
+(Holistic Fix 2E-6) and was not re-run as a separate deliverable this pass
+— see the proof index for this disclosed gap.

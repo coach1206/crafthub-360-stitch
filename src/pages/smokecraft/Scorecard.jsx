@@ -8,7 +8,12 @@ import { getRankFromXP } from '../../constants/session.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
+import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+
+const ENRICHMENT_19 = getEducationalEnrichment(19)
 
 const NAT_W = 1448
 const NAT_H = 1086
@@ -398,6 +403,11 @@ export default function Scorecard({ onBack, onComplete } = {}) {
           </div>
         )}
       </SmokeCraftImageBoundsOverlay>
+
+      <SmokeCraftLessonInfoButton
+        sessionNumber={19} totalSessions={TOTAL_SESSIONS} phase={5} totalPhases={TOTAL_VISITS}
+        title="Rate Every Category" whyItMatters={ENRICHMENT_19?.whyItMatters} goldenBox={ENRICHMENT_19?.goldenBox}
+      />
 
       <SmokeCraftNavBar
         primary={done ? 'Continuing…' : 'Continue to AI Summary →'}

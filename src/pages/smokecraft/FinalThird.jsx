@@ -5,7 +5,12 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
+import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+
+const ENRICHMENT_16 = getEducationalEnrichment(16)
 
 const NAT_W = 1448
 const NAT_H = 1086
@@ -190,6 +195,11 @@ export default function FinalThird({ onBack, onComplete } = {}) {
           )
         })}
       </SmokeCraftImageBoundsOverlay>
+
+      <SmokeCraftLessonInfoButton
+        sessionNumber={16} totalSessions={TOTAL_SESSIONS} phase={4} totalPhases={TOTAL_VISITS}
+        title="Flavor Finish" whyItMatters={ENRICHMENT_16?.whyItMatters} goldenBox={ENRICHMENT_16?.goldenBox}
+      />
 
       <SmokeCraftNavBar
         primary={done ? 'Saving…' : 'Continue to Scorecard →'}

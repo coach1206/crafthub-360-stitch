@@ -5,7 +5,12 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
+import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+
+const ENRICHMENT_2 = getEducationalEnrichment(2)
 
 const NAT_W = 1672
 const NAT_H = 941
@@ -291,6 +296,11 @@ export default function HumidorMatch({ onBack, onComplete } = {}) {
           )
         })}
       </SmokeCraftImageBoundsOverlay>
+
+      <SmokeCraftLessonInfoButton
+        sessionNumber={2} totalSessions={TOTAL_SESSIONS} phase={1} totalPhases={TOTAL_VISITS}
+        title="Choose Your Cigar" whyItMatters={ENRICHMENT_2?.whyItMatters} goldenBox={ENRICHMENT_2?.goldenBox}
+      />
 
       <SmokeCraftNavBar
         primary="Continue to Meet Your Cigar →"
