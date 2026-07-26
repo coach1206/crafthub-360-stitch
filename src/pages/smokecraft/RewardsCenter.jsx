@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import {
   resolveSmokeCraftLandingAction,
@@ -123,12 +123,10 @@ export default function RewardsCenter() {
   }
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src={SC_ASSETS.rewardCenter}
-      naturalW={NAT_W}
-      naturalH={NAT_H}
-      alt="SmokeCraft 360 Reward Center"
-      bottomOffset={0}
+        <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: SC_ASSETS.rewardCenter, naturalW: NAT_W, naturalH: NAT_H, alt: "SmokeCraft 360 Reward Center", bottomOffset: 0 }}
     >
       <h1 style={{
         position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
@@ -211,6 +209,6 @@ export default function RewardsCenter() {
       >
         No venue reward catalog is connected to this build yet, so no offers can be listed.
       </div>
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

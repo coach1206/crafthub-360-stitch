@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import EducationalDetailPanel from '../../components/smokecraft/goldenBox/EducationalDetailPanel.jsx'
@@ -133,11 +133,10 @@ export default function SeedSoil() {
 
   return (
     <>
-      <SmokeCraftImageBoundsOverlay
-        src={SC_ASSETS.seedSoil}
-        naturalW={NAT_W}
-        naturalH={NAT_H}
-        alt="SmokeCraft Seed & Soil — The Origin of Your Cigar"
+            <SmokeCraftScreenShell
+        mode="image-shell"
+        status="ready"
+        imageProps={{ src: SC_ASSETS.seedSoil, naturalW: NAT_W, naturalH: NAT_H, alt: "SmokeCraft Seed & Soil — The Origin of Your Cigar" }}
       >
         <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '4%',
           background: 'linear-gradient(to bottom, transparent, #050505 60%)', pointerEvents: 'none', zIndex: 2 }} />
@@ -209,7 +208,7 @@ export default function SeedSoil() {
         >
           {showLearnMore ? 'Close Learn More ▴' : 'Terroir, Anatomy & Quiz ▾'}
         </button>
-      </SmokeCraftImageBoundsOverlay>
+      </SmokeCraftScreenShell>
 
       {/* Terroir, plant anatomy, and knowledge check — real database-backed
           content without new hotspot images (honest, future-ready per

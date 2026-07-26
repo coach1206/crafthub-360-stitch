@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import SmokeCraftHandoffTrigger from '../../components/smokecraft/SmokeCraftHandoffTrigger.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 export default function VisitComplete() {
   const navigate = useNavigate()
@@ -11,6 +12,7 @@ export default function VisitComplete() {
   const isJourneyComplete = justCompleted >= totalVisits
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <section
       aria-label={isJourneyComplete ? 'SmokeCraft Journey Complete' : `Visit ${justCompleted} Complete`}
       style={{
@@ -124,5 +126,6 @@ export default function VisitComplete() {
       </div>
       <SmokeCraftHandoffTrigger allowEAT allowPOS360 />
     </section>
+    </SmokeCraftScreenShell>
   )
 }

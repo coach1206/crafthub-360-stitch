@@ -5,7 +5,7 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { mapJourneyToSnapshotPayload } from '../../services/smokecraft/managementSyncSnapshotMapper.js'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
@@ -70,11 +70,10 @@ export default function ManagementSync() {
 
   return (
     <>
-      <SmokeCraftImageBoundsOverlay
-        src={SC_ASSETS.managementSync}
-        naturalW={NAT_W}
-        naturalH={NAT_H}
-        alt="SmokeCraft Management Sync — Session Summary"
+            <SmokeCraftScreenShell
+        mode="image-shell"
+        status="ready"
+        imageProps={{ src: SC_ASSETS.managementSync, naturalW: NAT_W, naturalH: NAT_H, alt: "SmokeCraft Management Sync — Session Summary" }}
       >
         {/* Journey data in the summary zone — left was 5%, inside the
             baked sidebar icon column (0-9.2%), causing the XP badge to
@@ -175,7 +174,7 @@ export default function ManagementSync() {
             )}
           </div>
         )}
-      </SmokeCraftImageBoundsOverlay>
+      </SmokeCraftScreenShell>
 
       <SmokeCraftNavBar
         primary={done ? 'Continuing…' : 'Complete SmokeCraft Journey →'}

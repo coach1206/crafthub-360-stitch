@@ -4,6 +4,7 @@ import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import DynamicMentorPanel from '../../components/smokecraft/DynamicMentorPanel.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import * as api from '../../services/smokecraft/fillerArrangementApiClient.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -90,10 +91,15 @@ export default function FillerArrangement() {
   const viewedCount = Object.keys(progress).length
   const allViewed = viewedCount === ZONES.length
 
-  if (status === 'loading') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: CREAM, padding: 24 }}>Loading…</div>
-  if (status === 'error') return <div style={{ position: 'fixed', inset: 0, background: NAVY, color: '#e2a6a6', padding: 24 }}>Something went wrong loading this lesson. <button onClick={() => window.location.reload()}>Retry</button></div>
+  if (status === 'loading') {
+    return <SmokeCraftScreenShell mode="live" status="loading" loadingMessage="Loading lesson…" />
+  }
+  if (status === 'error') {
+    return <SmokeCraftScreenShell mode="live" status="error" errorMessage="Something went wrong loading this lesson." onRetry={() => window.location.reload()} />
+  }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ position: 'fixed', inset: 0, overflow: 'auto', background: NAVY, fontFamily: 'Georgia, serif', color: CREAM }}>
       <div style={{ padding: 'clamp(16px,3vw,32px)', maxWidth: 1100, margin: '0 auto' }}>
         <button type="button" onClick={() => { triggerHaptic('light'); navigate('/smokecraft/wrapper-strength') }}
@@ -203,5 +209,6 @@ export default function FillerArrangement() {
         </div>
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

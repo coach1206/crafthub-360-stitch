@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useDemoMode } from '../../context/DemoModeContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 export default function Demo() {
   const navigate = useNavigate()
@@ -13,6 +14,7 @@ export default function Demo() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ minHeight: '100dvh', background: '#050302', color: '#F4ECDA', fontFamily: '"Hanken Grotesk",sans-serif', display: 'flex', flexDirection: 'column' }}>
       <header style={{ height: 72, display: 'flex', alignItems: 'center', gap: 14, padding: '0 24px', borderBottom: '1px solid rgba(212,175,55,0.18)', background: 'rgba(10,7,5,0.75)' }}>
         <button
@@ -48,5 +50,6 @@ export default function Demo() {
         </div>
       </main>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

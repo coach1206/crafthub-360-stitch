@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
@@ -87,11 +87,10 @@ export default function RequestPurchase() {
 
   return (
     <>
-      <SmokeCraftImageBoundsOverlay
-        src={SC_ASSETS.requestPurchase}
-        naturalW={NAT_W}
-        naturalH={NAT_H}
-        alt="SmokeCraft Request Purchase — Choose Your Ordering Path"
+            <SmokeCraftScreenShell
+        mode="image-shell"
+        status="ready"
+        imageProps={{ src: SC_ASSETS.requestPurchase, naturalW: NAT_W, naturalH: NAT_H, alt: "SmokeCraft Request Purchase — Choose Your Ordering Path" }}
       >
         {/* Cigar & pairing recommendation panel — left side */}
         <div style={{
@@ -280,7 +279,7 @@ export default function RequestPurchase() {
             </button>
           )
         })}
-      </SmokeCraftImageBoundsOverlay>
+      </SmokeCraftScreenShell>
 
       <SmokeCraftNavBar
         primary="Continue to Cut, Toast & Light →"

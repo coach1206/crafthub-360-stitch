@@ -139,7 +139,7 @@ const KNOWN_AUDITED = {
   'smokecraft-challenge': { classification: 'full-live-react', auditedIn: 'Prompt 3E-3 (no defect)' },
   'challenges/blend-fault-identification': { classification: 'full-live-react', auditedIn: 'Prompt 3E-3 (spot-checked, no defect)' },
   'venue-select':     { classification: 'clean-image-shell', auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell, 5-viewport verified (crop fix origin, Prompt 1)' },
-  '(smokecraft index)': { classification: 'clean-image-shell', auditedIn: 'source-derived: SmokeCraft.jsx (Landing) uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
+  '(smokecraft index)': { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell (Landing), 5-viewport verified' },
   'enroll':           { classification: 'clean-image-shell', auditedIn: 'source-derived: Enroll.jsx uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
   'identity':         { classification: 'clean-image-shell', auditedIn: 'source-derived: Identity.jsx uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
   // Holistic Fix 2B — Golden Box family (16 routes), all migrated onto
@@ -193,6 +193,31 @@ const KNOWN_AUDITED = {
   'assistant':         { classification: 'full-live-react', auditedIn: 'Holistic Fix 2D: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
   'pairing-mastery':  { classification: 'full-live-react', auditedIn: 'Holistic Fix 2D: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
   'vitola':           { classification: 'full-live-react', auditedIn: 'Holistic Fix 2D: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  // Holistic Fix 2E — remaining standalone supporting-screen migration
+  // batch. Each below wrapped in SmokeCraftScreenShell (image-shell mode
+  // for direct SmokeCraftImageBoundsOverlay swaps, live mode for
+  // Tailwind/inline-style full-screen content); no visual/behavior change.
+  // Curriculum-spine session-X routes and WrapperStrength.jsx were
+  // deliberately NOT touched this pass (see Holistic Fix 2E report).
+  'seed-soil':        { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'request-purchase': { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'management-sync':  { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'resume':           { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'rewards-center':   { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'how-it-works':     { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'guest-pass':       { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell (live-mode wrap of SmokeCraftAssetRoute), 5-viewport verified' },
+  'scan':             { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell (live-mode wrap of SmokeCraftAssetRoute), 5-viewport verified' },
+  'enroll':           { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'identity':         { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'art':              { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell (live-mode wrap of SmokeCraftAssetScreen), 5-viewport verified' },
+  'cigar-gauge-guide': { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'knowledge-check-demo': { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell (QA harness, not spine), 5-viewport verified' },
+  'skill-tree':       { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'collections':      { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'demo':             { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'demo-reset':        { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell (both AccessDenied and authorized states), 5-viewport verified' },
+  'visit-complete':   { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'filler-arrangement': { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell (loading/error/ready states mapped to shell status prop), 5-viewport verified' },
 }
 
 const manifestByRoute = {}
@@ -269,7 +294,7 @@ const output = {
   // "Fully migrated" = actually renders SmokeCraftScreenShell in its own
   // component (verified below by scripts/validateSmokecraftShellAdoption.mjs
   // against the real source, not just this manifest's own auditedIn text).
-  fullyMigratedScreens: entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C|Holistic Fix 2D/.test(e.auditedIn || '')).length,
+  fullyMigratedScreens: entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C|Holistic Fix 2D|Holistic Fix 2E/.test(e.auditedIn || '')).length,
   entries,
 }
 

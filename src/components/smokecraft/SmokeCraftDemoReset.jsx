@@ -27,6 +27,7 @@ import { useDemoMode } from '../../context/DemoModeContext.jsx'
 import { useSecurity } from '../../context/SecurityContext.jsx'
 import { meetsMinRole } from '../../config/roleMap.js'
 import { clearSession } from '../../services/sessionStorageService.js'
+import SmokeCraftScreenShell from './SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const DARK = '#0a0603'
@@ -46,6 +47,7 @@ function purgeLocalSessionState() {
 
 function AccessDenied({ onBack }) {
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{
       minHeight: '100dvh', display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
@@ -74,6 +76,7 @@ function AccessDenied({ onBack }) {
         ← Go Back
       </button>
     </div>
+    </SmokeCraftScreenShell>
   )
 }
 
@@ -107,6 +110,7 @@ export default function SmokeCraftDemoReset() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{
       minHeight: '100dvh', display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
@@ -150,5 +154,6 @@ export default function SmokeCraftDemoReset() {
         Authorized: {isDemoMode ? 'investor demo mode active' : `role: ${role}`}
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

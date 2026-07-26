@@ -4,7 +4,7 @@ import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { VISIT_STRUCTURE } from '../../constants/session.js'
 
@@ -314,12 +314,10 @@ export default function Identity() {
   }
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src={SC_ASSETS.identity}
-      naturalW={NAT_W}
-      naturalH={NAT_H}
-      alt="SmokeCraft 360 — Identity"
-      bottomOffset={0}
+        <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: SC_ASSETS.identity, naturalW: NAT_W, naturalH: NAT_H, alt: "SmokeCraft 360 — Identity", bottomOffset: 0 }}
     >
       {/* Single accessible title — the approved image carries the visible
           "IDENTITY" wordmark, so no duplicate heading is drawn. */}
@@ -415,6 +413,6 @@ export default function Identity() {
           exactly as exported — blank. See this file's header: no XP, rank,
           badge count, analytics or prior-journey history belongs on the
           entry-layer identity form. */}
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

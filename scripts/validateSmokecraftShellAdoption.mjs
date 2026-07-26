@@ -54,6 +54,27 @@ const TARGETS = [
   { file: 'src/pages/smokecraft/Assistant.jsx', name: 'Assistant', navLiterals: [] },
   { file: 'src/pages/smokecraft/PairingMastery.jsx', name: 'Pairing Mastery', navLiterals: [] },
   { file: 'src/pages/smokecraft/Vitola.jsx', name: 'Vitola', navLiterals: [] },
+  // Holistic Fix 2E — remaining standalone supporting-screen migration batch.
+  { file: 'src/pages/SmokeCraft.jsx', name: 'Landing', navLiterals: [] },
+  { file: 'src/pages/smokecraft/SeedSoil.jsx', name: 'Seed & Soil', navLiterals: [] },
+  { file: 'src/pages/smokecraft/RequestPurchase.jsx', name: 'Request Purchase', navLiterals: [] },
+  { file: 'src/pages/smokecraft/ManagementSync.jsx', name: 'Management Sync', navLiterals: [] },
+  { file: 'src/pages/smokecraft/ResumeJourney.jsx', name: 'Resume Journey', navLiterals: [] },
+  { file: 'src/pages/smokecraft/RewardsCenter.jsx', name: 'Rewards Center', navLiterals: [] },
+  { file: 'src/pages/smokecraft/HowItWorks.jsx', name: 'How It Works', navLiterals: [] },
+  { file: 'src/pages/smokecraft/GuestPass.jsx', name: 'Guest Pass', navLiterals: [] },
+  { file: 'src/pages/smokecraft/Scan.jsx', name: 'Scan', navLiterals: [] },
+  { file: 'src/pages/smokecraft/Enroll.jsx', name: 'Enroll', navLiterals: [] },
+  { file: 'src/pages/smokecraft/Identity.jsx', name: 'Identity', navLiterals: [] },
+  { file: 'src/pages/smokecraft/Art.jsx', name: 'Art', navLiterals: [] },
+  { file: 'src/pages/smokecraft/CigarGaugeGuide.jsx', name: 'Cigar Gauge Guide', navLiterals: [] },
+  { file: 'src/pages/smokecraft/KnowledgeCheckDemo.jsx', name: 'Knowledge Check Demo', navLiterals: [] },
+  { file: 'src/pages/smokecraft/SkillTree.jsx', name: 'Skill Tree', navLiterals: [] },
+  { file: 'src/pages/smokecraft/CollectionsCenter.jsx', name: 'Collections Center', navLiterals: [] },
+  { file: 'src/pages/smokecraft/Demo.jsx', name: 'Demo', navLiterals: [] },
+  { file: 'src/components/smokecraft/SmokeCraftDemoReset.jsx', name: 'Demo Reset', navLiterals: [] },
+  { file: 'src/pages/smokecraft/VisitComplete.jsx', name: 'Visit Complete', navLiterals: [] },
+  { file: 'src/pages/smokecraft/FillerArrangement.jsx', name: 'Filler Arrangement', navLiterals: [] },
 ]
 
 for (const t of TARGETS) {

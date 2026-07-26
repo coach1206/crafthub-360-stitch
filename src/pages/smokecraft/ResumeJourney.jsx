@@ -7,7 +7,7 @@ import { useStartNewSmokeCraftJourney } from '../../hooks/useStartNewSmokeCraftJ
 import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { VISIT_STRUCTURE, ENTRY_LAYER_SCREENS, SUPPORTING_MODULES, getRankFromXP } from '../../constants/session.js'
 import { getSessionByNumber } from '../../constants/smokecraftJourney.js'
@@ -248,11 +248,10 @@ export default function ResumeJourney() {
   if (phase === 'ready' && !hasProgress) return null
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src={SC_ASSETS.resume}
-      naturalW={1448}
-      naturalH={1086}
-      alt="SmokeCraft 360 — Resume Your Journey"
+        <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: SC_ASSETS.resume, naturalW: 1448, naturalH: 1086, alt: "SmokeCraft 360 — Resume Your Journey" }}
     >
       <h1 style={{
         position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
@@ -491,6 +490,6 @@ export default function ResumeJourney() {
         secondary="← Back"
         onSecondary={() => navigate('/smokecraft/identity')}
       />
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

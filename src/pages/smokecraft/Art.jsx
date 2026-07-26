@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import SmokeCraftAssetScreen from '../../components/smokecraft/SmokeCraftAssetScreen.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 export default function Art() {
   const navigate = useNavigate()
@@ -18,11 +19,13 @@ export default function Art() {
   }
 
   return (
-    <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
-      <SmokeCraftAssetScreen
-        src="/assets/smokecraft-reference/approved/smokecraft-art.png"
-        alt="The Art of SmokeCraft"
-      />
-    </div>
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div onClick={handleContinue} role="button" tabIndex={0} style={{ cursor: 'pointer' }}>
+        <SmokeCraftAssetScreen
+          src="/assets/smokecraft-reference/approved/smokecraft-art.png"
+          alt="The Art of SmokeCraft"
+        />
+      </div>
+    </SmokeCraftScreenShell>
   )
 }

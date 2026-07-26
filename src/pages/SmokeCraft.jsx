@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { SC_ASSETS } from '../constants/smokecraftAssets.js'
 // Approved-Asset Control Plane pass: this screen no longer re-derives journey
 // state or carries destination strings. It reads state once via
@@ -218,12 +218,10 @@ export default function SmokeCraft() {
   }
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src={SC_ASSETS.landing}
-      naturalW={NAT_W}
-      naturalH={NAT_H}
-      alt="SmokeCraft 360 — The Guided Cigar Experience"
-      bottomOffset={0}
+        <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: SC_ASSETS.landing, naturalW: NAT_W, naturalH: NAT_H, alt: "SmokeCraft 360 — The Guided Cigar Experience", bottomOffset: 0 }}
     >
       {/* Baked: START SMOKECRAFT button — dynamic label, must fully occlude baked text */}
       <PrimaryHotspot
@@ -347,6 +345,6 @@ export default function SmokeCraft() {
           </div>
         </div>
       )}
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

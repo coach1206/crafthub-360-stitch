@@ -163,14 +163,34 @@ if (existsSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')) {
     '/smokecraft/assistant': 'src/pages/smokecraft/Assistant.jsx',
     '/smokecraft/pairing-mastery': 'src/pages/smokecraft/PairingMastery.jsx',
     '/smokecraft/vitola': 'src/pages/smokecraft/Vitola.jsx',
+    '/smokecraft': 'src/pages/SmokeCraft.jsx',
+    '/smokecraft/seed-soil': 'src/pages/smokecraft/SeedSoil.jsx',
+    '/smokecraft/request-purchase': 'src/pages/smokecraft/RequestPurchase.jsx',
+    '/smokecraft/management-sync': 'src/pages/smokecraft/ManagementSync.jsx',
+    '/smokecraft/resume': 'src/pages/smokecraft/ResumeJourney.jsx',
+    '/smokecraft/rewards-center': 'src/pages/smokecraft/RewardsCenter.jsx',
+    '/smokecraft/how-it-works': 'src/pages/smokecraft/HowItWorks.jsx',
+    '/smokecraft/guest-pass': 'src/pages/smokecraft/GuestPass.jsx',
+    '/smokecraft/scan': 'src/pages/smokecraft/Scan.jsx',
+    '/smokecraft/enroll': 'src/pages/smokecraft/Enroll.jsx',
+    '/smokecraft/identity': 'src/pages/smokecraft/Identity.jsx',
+    '/smokecraft/art': 'src/pages/smokecraft/Art.jsx',
+    '/smokecraft/cigar-gauge-guide': 'src/pages/smokecraft/CigarGaugeGuide.jsx',
+    '/smokecraft/knowledge-check-demo': 'src/pages/smokecraft/KnowledgeCheckDemo.jsx',
+    '/smokecraft/skill-tree': 'src/pages/smokecraft/SkillTree.jsx',
+    '/smokecraft/collections': 'src/pages/smokecraft/CollectionsCenter.jsx',
+    '/smokecraft/demo': 'src/pages/smokecraft/Demo.jsx',
+    '/smokecraft/demo-reset': 'src/components/smokecraft/SmokeCraftDemoReset.jsx',
+    '/smokecraft/visit-complete': 'src/pages/smokecraft/VisitComplete.jsx',
+    '/smokecraft/filler-arrangement': 'src/pages/smokecraft/FillerArrangement.jsx',
   }
-  const claimedMigrated = manifest.entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C|Holistic Fix 2D/.test(e.auditedIn || ''))
+  const claimedMigrated = manifest.entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C|Holistic Fix 2D|Holistic Fix 2E/.test(e.auditedIn || ''))
   const verifiedCount = claimedMigrated.filter(e => {
     const file = ROUTE_TO_FILE[e.route]
     return file && existsSync(file) && readFileSync(file, 'utf8').includes('<SmokeCraftScreenShell')
   }).length
   check(`Manifest fullyMigratedScreens (${manifest.fullyMigratedScreens}) — every claimed route (${claimedMigrated.length}) is backed by a real <SmokeCraftScreenShell> render (${verifiedCount} verified)`,
-    manifest.fullyMigratedScreens === claimedMigrated.length && verifiedCount === claimedMigrated.length && verifiedCount >= 37)
+    manifest.fullyMigratedScreens === claimedMigrated.length && verifiedCount === claimedMigrated.length && verifiedCount >= 57)
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)

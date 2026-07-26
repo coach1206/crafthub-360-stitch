@@ -4,6 +4,7 @@ import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import DynamicMentorPanel from '../../components/smokecraft/DynamicMentorPanel.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import * as api from '../../services/smokecraft/skillTreeApiClient.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -58,6 +59,7 @@ export default function SkillTree() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ position: 'fixed', inset: 0, overflow: 'auto', background: NAVY, fontFamily: 'Georgia, serif', color: CREAM }}>
       <div style={{ padding: 'clamp(16px,3vw,32px)', maxWidth: 1100, margin: '0 auto' }}>
         <button type="button" onClick={() => { triggerHaptic('light'); navigate('/smokecraft/rewards') }}
@@ -159,5 +161,6 @@ export default function SkillTree() {
         <DynamicMentorPanel guidance="Every category above traces back to a real lesson — start with Foundation if you're new." />
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

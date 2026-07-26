@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
 const NAT_W = 1086
@@ -76,12 +76,10 @@ export default function Enroll() {
   }
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src={SC_ASSETS.enroll}
-      naturalW={NAT_W}
-      naturalH={NAT_H}
-      alt="SmokeCraft 360 — Guest Pass"
-      bottomOffset={0}
+        <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: SC_ASSETS.enroll, naturalW: NAT_W, naturalH: NAT_H, alt: "SmokeCraft 360 — Guest Pass", bottomOffset: 0 }}
     >
       {/* Baked: BACK pill, top-left */}
       <StaticHotspot
@@ -175,6 +173,6 @@ export default function Enroll() {
           </button>
         </div>
       )}
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

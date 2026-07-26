@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { getVisitProgress } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 // Ring gauge = diameter in 64ths of an inch. This page is a sub-step of
 // Session 5 (Shape, Size & Burn Time) — it does NOT call completeStep() and
@@ -25,6 +26,7 @@ export default function CigarGaugeGuide() {
   const stepProgress = getVisitProgress(session.completedSteps)
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div className="bg-background text-on-surface font-body-md overflow-x-hidden min-h-screen">
       <div className="fixed inset-0 z-0 bg-background overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${SC_ASSETS.ringGaugeGuide}')`, opacity: 0.35 }} />
@@ -81,5 +83,6 @@ export default function CigarGaugeGuide() {
         </div>
       </main>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

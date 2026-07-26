@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import KnowledgeCheck from '../../components/smokecraft/KnowledgeCheck.jsx'
 import { KNOWLEDGE_CHECK_SETS } from '../../data/knowledgeCheckQuestions.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const GOLD_DIM = 'rgba(233,193,118,0.55)'
@@ -27,6 +28,7 @@ export default function KnowledgeCheckDemo() {
   const [key, setKey] = useState(0)
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{
       position: 'fixed', inset: 0, overflow: 'auto',
       background: `linear-gradient(180deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)`,
@@ -62,5 +64,6 @@ export default function KnowledgeCheckDemo() {
         <KnowledgeCheck key={key} moduleId={moduleId} allowSkip completionStepId={moduleId} />
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }
