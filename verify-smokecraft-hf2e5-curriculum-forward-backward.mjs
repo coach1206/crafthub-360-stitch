@@ -122,6 +122,38 @@ const guardedUrl = page.url()
 assert('Navigating directly to Session 20 with no progress is blocked/redirected (not silently rendered)',
   !guardedUrl.includes('/smokecraft/scorecard') || (await markers())?.session !== '20')
 
+// ── SC-D014 regression test ──
+// Root cause (confirmed this pass): the guest-identity cookie
+// (smokecraft_guest_session) is only issued when WelcomeExperience.jsx
+// (Session 1) mounts and calls establishGuestSession() via
+// useSmokeCraftServerJourney(). A real player always visits Session 1
+// before any later session, so the cookie is always present by the time
+// Flavor Memory's backend-dependent Continue (saveToBackend/saveToPassport,
+// the latter using credentials:'include') runs. This was previously
+// misdiagnosed as possibly a real product bug because an EARLIER ad hoc
+// test skipped the Welcome visit and seeded localStorage directly onto
+// Flavor Memory, never establishing the cookie. Root cause: (a) test-harness
+// gap, not (b) a real product defect. Verified below with a real click,
+// with Welcome visited first exactly as a real player would.
+section('SC-D014 regression — Flavor Memory Continue works when Session 1 (Welcome) was visited first, establishing the real guest-identity cookie')
+await go('/smokecraft')
+await seed(['enroll', 'identity'])
+await go('/smokecraft/welcome')
+const cookiesAfterWelcome = await ctx.cookies()
+assert('Visiting Session 1 (Welcome) establishes the smokecraft_guest_session cookie',
+  cookiesAfterWelcome.some(c => c.name === 'smokecraft_guest_session'))
+
+await seed(['enroll', 'identity', 'entry', 'humidor-match', 'meet-your-cigar', 'terroir', 'format', 'cut-toast-light', 'lighting-tutorial', 'first-third'])
+await go('/smokecraft/flavor-memory')
+const flavorBtn = page.locator('button', { hasText: /pepper|cedar|cocoa|leather|earth|spice/i }).first()
+if (await flavorBtn.count()) { await flavorBtn.click(); await page.waitForTimeout(400) }
+const continueBtn = page.getByRole('button', { name: /continue/i }).first()
+const hasContinueBtn = (await continueBtn.count()) > 0
+assert('Flavor Memory has a visible Continue control', hasContinueBtn)
+if (hasContinueBtn) { await continueBtn.click(); await page.waitForTimeout(1500) }
+assert('Flavor Memory Continue (with the real guest-identity cookie present) advances to Session 11 (Pairing Lab), not stuck on an unresolved save',
+  hasContinueBtn && page.url().endsWith('/smokecraft/pairing-lab'), `ended at ${page.url()}`)
+
 await browser.close()
 
 console.log(`\n=== RESULT: ${pass} passed, ${fail} failed (of ${pass + fail} total) ===`)

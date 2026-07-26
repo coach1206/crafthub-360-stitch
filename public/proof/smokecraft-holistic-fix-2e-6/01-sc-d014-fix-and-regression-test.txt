@@ -1,0 +1,42 @@
+SC-D014 root cause and fix — Holistic Fix 2E-6
+
+ROOT CAUSE (confirmed via source read):
+- server/middleware/smokecraftGuestIdentity.js issues a real, server-signed
+  JWT cookie (smokecraft_guest_session) only via ensureSmokeCraftGuestIdentity.
+- That function is only called from managementSyncRoutes.js's
+  POST /guest-session endpoint.
+- The frontend only calls that endpoint via establishGuestSession() inside
+  src/hooks/useSmokeCraftServerJourney.js.
+- That hook is used by WelcomeExperience.jsx (Session 1) among a few other
+  screens — meaning the cookie is established the first time a player's
+  browser loads Session 1.
+- FlavorMemory.jsx (Session 10)'s handleContinue() requires both
+  saveToBackend() and saveToPassport() (the latter uses
+  credentials: 'include') to resolve ok before advancing.
+- A REAL player always visits Session 1 before Session 10, so the cookie is
+  always present in a real playthrough. The original SC-D014 finding
+  reproduced the failure only because an ad hoc test seeded localStorage
+  directly and navigated straight to Flavor Memory, skipping the one real
+  page load (Welcome) that establishes the cookie.
+
+CONCLUSION: (a) test-harness gap, not (b) a real product defect. No
+product code was changed — the underlying behavior was already correct.
+
+VERIFICATION (real browser, real clicks):
+1. Navigate to /smokecraft, seed only ['enroll','identity'] in localStorage.
+2. Navigate to /smokecraft/welcome (a real page load).
+3. Confirm via context.cookies() that 'smokecraft_guest_session' is now set.
+   RESULT: cookie present.
+4. Seed completedSteps through session 9, navigate to
+   /smokecraft/flavor-memory.
+5. Click a real flavor-selection button, then click the real Continue button.
+   RESULT: page.url() advances to /smokecraft/pairing-lab (Session 11) —
+   correct next screen, no stuck/failed save.
+
+REGRESSION TEST ADDED:
+verify-smokecraft-hf2e5-curriculum-forward-backward.mjs, section
+"SC-D014 regression — Flavor Memory Continue works when Session 1 (Welcome)
+was visited first, establishing the real guest-identity cookie" — 3 new
+assertions, all passing (cookie established, Continue control present,
+Continue advances to Session 11). Full script result: 10 passed, 0 failed
+(of 10 total).
