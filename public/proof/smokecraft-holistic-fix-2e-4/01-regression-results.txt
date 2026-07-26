@@ -1,0 +1,31 @@
+Holistic Fix 2E-4 regression suite results
+
+npm run build: PASS (includes prebuild: route inventory regen, manifest
+generation, validateSmokecraftManifest.mjs, validateSmokecraftShellAdoption.mjs
+— all exit 0)
+
+validateSmokecraftManifest.mjs: PASS, 0 failing checks (manifest
+fullyMigratedScreens 82, all 82 backed by a real <SmokeCraftScreenShell>
+render, verifiedCount floor raised 77 -> 82)
+
+validateSmokecraftShellAdoption.mjs: PASS, 0 failing checks (5 new commerce
+TARGETS entries added: Commerce Menu/Cart/Checkout/Payment Success/Order
+Status, all confirmed importing + rendering SmokeCraftScreenShell)
+
+scripts/smokecraftAssetExclusivityCheck.mjs: 7 passed, 0 failed (7 total)
+verify-smokecraft-phase-session-lock.mjs: 9 passed, 0 failed (9 total)
+verify-smokecraft-final-three-approved-assets.mjs: 17 passed, 0 failed (17 total)
+verify-smokecraft-full-journey-sequence-and-assets.mjs: 107 passed, 0 failed (of 107 total)
+
+Environment note: the first run of full-journey-sequence-and-assets this
+pass failed 1/14 sub-checks with net::ERR_CONNECTION_REFUSED against
+localhost:5050 — traced to the vite preview server and backend not running
+(a recurring environment artifact documented throughout this operation, not
+a code regression). Restarted Postgres, the backend
+(node server/index.js), and vite preview --port 5050 --strictPort;
+re-ran clean at 107/107.
+
+Dedicated curriculum forward/backward test, dedicated five-viewport
+curriculum sweep, commerce connected-flow tests, and orphan-route
+validation were NOT built as separate test artifacts this pass — see
+00-proof-index.md for the full list of what remains.

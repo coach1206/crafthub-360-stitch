@@ -5,6 +5,7 @@
  */
 import { useNavigate } from 'react-router-dom'
 import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const STATUS_LABELS = {
   queued:     'Order Received',
@@ -26,16 +27,19 @@ export default function SmokeCraftPaymentSuccess() {
 
   if (!receipt) {
     return (
-      <div style={styles.wrap}>
-        <div style={styles.noReceipt}>
-          <p>No receipt found.</p>
-          <button onClick={handleReturn} style={styles.returnBtn}>Return to SmokeCraft</button>
+      <SmokeCraftScreenShell mode="live" status="ready">
+        <div style={styles.wrap}>
+          <div style={styles.noReceipt}>
+            <p>No receipt found.</p>
+            <button onClick={handleReturn} style={styles.returnBtn}>Return to SmokeCraft</button>
+          </div>
         </div>
-      </div>
+      </SmokeCraftScreenShell>
     )
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={styles.wrap}>
       {/* Success header */}
       <div style={styles.successHeader}>
@@ -111,6 +115,7 @@ export default function SmokeCraftPaymentSuccess() {
         Thank you for your order. Enjoy the experience.
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }
 

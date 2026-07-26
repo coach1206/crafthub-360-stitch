@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const AGE_RESTRICTED = new Set(['house_cigar','featured_cigar','humidor_match','cigar','liquor','cocktail','wine','beer','pairing_bundle','full_pairing_bundle'])
 
@@ -51,9 +52,12 @@ export default function SmokeCraftCart() {
     navigate('/smokecraft/checkout', { state: { tip, ageVerified: ageConfirmed } })
   }
 
-  if (cartLoading) return <div style={styles.loading}>Loading cart…</div>
+  if (cartLoading) {
+    return <SmokeCraftScreenShell mode="live" status="loading" loadingMessage="Loading cart…" />
+  }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={styles.wrap}>
       <div style={styles.header}>
         <button onClick={() => navigate('/smokecraft/menu')} style={styles.backBtn}>← Menu</button>
@@ -141,6 +145,7 @@ export default function SmokeCraftCart() {
         </>
       )}
     </div>
+    </SmokeCraftScreenShell>
   )
 }
 

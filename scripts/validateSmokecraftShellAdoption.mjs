@@ -83,6 +83,13 @@ const TARGETS = [
   // migration point rather than 21 separate per-file edits.
   { file: 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx', name: 'SmokeCraft Curriculum Screen Renderer (all 21 session slots)', navLiterals: [] },
   { file: 'src/pages/smokecraft/WrapperStrength.jsx', name: 'Wrapper Strength (Leaf to Cigar construction module)', navLiterals: [] },
+  // Holistic Fix 2E-4 — commerce flow (orphaned distinct workflow, retained
+  // as documented direct-access — see SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md).
+  { file: 'src/pages/smokecraft/SmokeCraftMenu.jsx', name: 'Commerce Menu', navLiterals: [] },
+  { file: 'src/pages/smokecraft/SmokeCraftCart.jsx', name: 'Commerce Cart', navLiterals: [] },
+  { file: 'src/pages/smokecraft/SmokeCraftCheckout.jsx', name: 'Commerce Checkout', navLiterals: [] },
+  { file: 'src/pages/smokecraft/SmokeCraftPaymentSuccess.jsx', name: 'Commerce Payment Success', navLiterals: [] },
+  { file: 'src/pages/smokecraft/SmokeCraftOrderStatus.jsx', name: 'Commerce Order Status', navLiterals: [] },
 ]
 
 for (const t of TARGETS) {

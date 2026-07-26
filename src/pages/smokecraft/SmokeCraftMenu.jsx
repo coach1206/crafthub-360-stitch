@@ -13,6 +13,7 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const DARK = 'rgba(5,2,1,0.97)'
@@ -128,6 +129,7 @@ export default function SmokeCraftMenu() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div className="smokecraft-menu-asset-screen" style={{ position: 'relative', minHeight: '100vh', overflowX: 'hidden' }}>
 
       {/* ── Visual shell — approved image ── */}
@@ -272,6 +274,7 @@ export default function SmokeCraftMenu() {
         <NavBtn icon="👤" label="Account" onClick={() => navigate('/passport')} />
       </nav>
     </div>
+    </SmokeCraftScreenShell>
   )
 }
 

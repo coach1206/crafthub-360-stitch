@@ -245,6 +245,14 @@ const KNOWN_AUDITED = {
   'final-review':        { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-24, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
   'session-complete':    { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-27, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
   'wrapper-strength':    { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: migrated onto SmokeCraftScreenShell directly (Leaf to Cigar construction module, all 3 internal load/error/ready states preserved), 5-viewport verified' },
+  // Holistic Fix 2E-4 — commerce flow (distinct real workflow, currently
+  // orphaned — see SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md). Migrated onto the
+  // shell while retained as documented direct-access.
+  'menu':            { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-4: migrated onto SmokeCraftScreenShell, commerce flow preserved' },
+  'cart':            { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-4: migrated onto SmokeCraftScreenShell (loading state mapped to shell status prop), commerce flow preserved' },
+  'checkout':        { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-4: migrated onto SmokeCraftScreenShell, commerce flow preserved' },
+  'payment-success': { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-4: migrated onto SmokeCraftScreenShell, commerce flow preserved' },
+  'order-status':    { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-4: migrated onto SmokeCraftScreenShell, commerce flow preserved' },
 }
 
 const manifestByRoute = {}

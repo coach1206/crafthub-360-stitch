@@ -4,6 +4,7 @@
  */
 import { useNavigate } from 'react-router-dom'
 import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GUEST_STATUSES = ['Order Received', 'Preparing', 'Ready', 'Delivered']
 
@@ -18,6 +19,7 @@ export default function SmokeCraftOrderStatus() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={styles.wrap}>
       <div style={styles.header}>
         <h1 style={styles.title}>Order Status</h1>
@@ -66,6 +68,7 @@ export default function SmokeCraftOrderStatus() {
         </>
       )}
     </div>
+    </SmokeCraftScreenShell>
   )
 }
 

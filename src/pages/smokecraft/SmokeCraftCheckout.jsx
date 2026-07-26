@@ -9,6 +9,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useSmokeCraftOrder } from '../../context/SmokeCraftOrderContext.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const TENDER_OPTIONS = [
   { id: 'card',   label: 'Pay Now (Simulated)', desc: 'Simulated card payment — no real charge.' },
@@ -53,6 +54,7 @@ export default function SmokeCraftCheckout() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={styles.wrap}>
       <div style={styles.header}>
         <button onClick={() => navigate('/smokecraft/cart')} style={styles.backBtn}>← Cart</button>
@@ -106,6 +108,7 @@ export default function SmokeCraftCheckout() {
         <div style={styles.errorMsg}>Payment failed. Please try again or choose a different method.</div>
       )}
     </div>
+    </SmokeCraftScreenShell>
   )
 }
 
