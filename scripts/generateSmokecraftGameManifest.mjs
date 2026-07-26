@@ -127,18 +127,18 @@ function extractGuard(elementRaw) {
 // this recovery operation, with real evidence in SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md.
 // classification: 'full-live-react' | 'clean-image-shell' | 'instructional-image' | 'unsafe-full-mockup'
 const KNOWN_AUDITED = {
-  'welcome':          { classification: 'clean-image-shell', auditedIn: 'Prompt 3B (SC-D001, closed)' },
-  'leaderboard':      { classification: 'clean-image-shell', auditedIn: 'Prompt 3 (SC-D010, closed)' },
-  'passport':         { classification: 'clean-image-shell', auditedIn: 'Prompt 3D/3E-1 (SC-D011/SC-D012, closed)' },
-  'crafthub':         { classification: 'clean-image-shell', auditedIn: 'Prompt 3E-1 (SC-D013, closed)' },
+  'welcome':          { classification: 'clean-image-shell', auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified (SC-D001 origin, Prompt 3B)' },
+  'leaderboard':      { classification: 'clean-image-shell', auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified (SC-D010 origin, Prompt 3)' },
+  'passport':         { classification: 'clean-image-shell', auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified (SC-D011/SC-D012 origin, Prompt 3D/3E-1)' },
+  'crafthub':         { classification: 'clean-image-shell', auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell, 5-viewport verified (SC-D013 origin, Prompt 3E-1)' },
   'connections':      { classification: 'full-live-react',   auditedIn: 'Prompt 3E-2 (no defect)' },
   'passport-stamp':   { classification: 'full-live-react',   auditedIn: 'Prompt 3E-2 (no defect)' },
-  'rewards':          { classification: 'full-live-react',   auditedIn: 'Prompt 3E-2 (no defect)' },
-  'challenge-hub':    { classification: 'full-live-react',   auditedIn: 'Prompt 3E-3 (no defect)' },
+  'rewards':          { classification: 'full-live-react',   auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified (Prompt 3E-2 origin)' },
+  'challenge-hub':    { classification: 'full-live-react',   auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell, 5-viewport verified (Prompt 3E-3 origin)' },
   'event-challenge':  { classification: 'full-live-react',   auditedIn: 'Prompt 3E-3 (no defect)' },
   'smokecraft-challenge': { classification: 'full-live-react', auditedIn: 'Prompt 3E-3 (no defect)' },
   'challenges/blend-fault-identification': { classification: 'full-live-react', auditedIn: 'Prompt 3E-3 (spot-checked, no defect)' },
-  'venue-select':     { classification: 'clean-image-shell', auditedIn: 'Prompt 1 (crop fix, closed)' },
+  'venue-select':     { classification: 'clean-image-shell', auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell, 5-viewport verified (crop fix origin, Prompt 1)' },
   '(smokecraft index)': { classification: 'clean-image-shell', auditedIn: 'source-derived: SmokeCraft.jsx (Landing) uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
   'enroll':           { classification: 'clean-image-shell', auditedIn: 'source-derived: Enroll.jsx uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
   'identity':         { classification: 'clean-image-shell', auditedIn: 'source-derived: Identity.jsx uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
@@ -215,6 +215,10 @@ const output = {
   totalEntryScreens: entries.filter(e => e.type === 'entry').length,
   totalSupportingRoutes: entries.filter(e => e.type === 'supporting').length,
   classificationCounts: entries.reduce((acc, e) => { acc[e.classification] = (acc[e.classification] || 0) + 1; return acc }, {}),
+  // "Fully migrated" = actually renders SmokeCraftScreenShell in its own
+  // component (verified below by scripts/validateSmokecraftShellAdoption.mjs
+  // against the real source, not just this manifest's own auditedIn text).
+  fullyMigratedScreens: entries.filter(e => e.auditedIn?.includes('Holistic Fix 2A')).length,
   entries,
 }
 

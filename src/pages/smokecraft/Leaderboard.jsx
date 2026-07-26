@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { RANKS, getRankFromXP } from '../../constants/session.js'
 import { getLeaderboardSnapshot } from '../../services/smokecraft/smokeLeaderboardService.js'
@@ -307,12 +307,10 @@ export default function Leaderboard() {
   const nextTier = RANKS.find(r => r.minXP > currentEntry.xp) || null
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src={SC_ASSETS.leaderboard}
-      naturalW={NAT_W}
-      naturalH={NAT_H}
-      alt="SmokeCraft 360 — Leaderboard"
-      bottomOffset={0}
+    <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: SC_ASSETS.leaderboard, naturalW: NAT_W, naturalH: NAT_H, alt: 'SmokeCraft 360 — Leaderboard', bottomOffset: 0 }}
     >
       {/* Single accessible page title. The approved image carries the visible
           "LEADERBOARD" wordmark, so this is visually hidden — no duplicate. */}
@@ -557,6 +555,6 @@ export default function Leaderboard() {
           onBlur={e => { e.currentTarget.style.borderColor = 'transparent' }}
         />
       ))}
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { computeJourneyStatus } from '../../constants/smokecraftJourneyStatus.js'
 import { TOTAL_SESSIONS } from '../../constants/session.js'
@@ -90,12 +90,10 @@ export default function SmokeCraftPassport() {
   }
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src={SC_ASSETS.passportHub}
-      naturalW={NAT_W}
-      naturalH={NAT_H}
-      alt="SmokeCraft 360 Passport"
-      bottomOffset={0}
+    <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: SC_ASSETS.passportHub, naturalW: NAT_W, naturalH: NAT_H, alt: 'SmokeCraft 360 Passport', bottomOffset: 0 }}
     >
       <h1 style={{
         position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
@@ -211,6 +209,6 @@ export default function SmokeCraftPassport() {
       >
         ← Back
       </button>
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

@@ -4,6 +4,7 @@ import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import DynamicMentorPanel from '../../components/smokecraft/DynamicMentorPanel.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import * as api from '../../services/smokecraft/challengeHubApiClient.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = '#E9C176'
 const NAVY = '#0b0f18'
@@ -84,9 +85,20 @@ export default function ChallengeHub() {
     }
   }
 
+  // Holistic Fix 2A — adopts SmokeCraftScreenShell's live mode as the outer
+  // contract. status stays "ready" here (not wired to this screen's own
+  // `status` state) for the same reason as VenueSelect: this screen already
+  // implements its own real, server-driven loading/error/offline copy and
+  // Retry behavior inline (verified via real browser test in Prompt 3E-3) —
+  // delegating to the shell's generic panel would silently change that
+  // proven behavior rather than just relocate where it renders from.
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{ position: 'fixed', inset: 0, overflow: 'auto', background: NAVY, fontFamily: 'Georgia, serif', color: CREAM }}>
       <div style={{ padding: 'clamp(16px,3vw,32px)', maxWidth: 1100, margin: '0 auto' }}>
+        {/* Not NAV.REWARDS (that's /smokecraft/rewards-center, a different
+            screen) — this Back control genuinely targets the S25 curriculum
+            Rewards screen it was opened from, confirmed via source read. */}
         <button type="button" onClick={() => { triggerHaptic('light'); navigate('/smokecraft/rewards') }}
           style={{ background: 'transparent', border: 'none', color: GOLD, cursor: 'pointer', marginBottom: 12, fontFamily: 'inherit' }}>
           ← Back to Rewards
@@ -203,5 +215,6 @@ export default function ChallengeHub() {
         </p>
       </div>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

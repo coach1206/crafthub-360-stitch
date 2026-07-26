@@ -117,5 +117,25 @@ const commerceAliasLines = [
 check('venue-commerce / order / ticket-tapper/staff-specials remain a documented, enforced alias group (identical component)',
   commerceAliasLines.every(Boolean) && new Set(commerceAliasLines).size === 1)
 
+// 10. Holistic Fix 2A — the manifest's own fullyMigratedScreens count must
+// match real source evidence, not just a text label. Cross-checked against
+// the same 7-screen target list validateSmokecraftShellAdoption.mjs
+// enforces.
+if (existsSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')) {
+  const manifest = JSON.parse(readFileSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json', 'utf8'))
+  const shellFiles = [
+    'src/pages/smokecraft/WelcomeExperience.jsx',
+    'src/pages/smokecraft/Leaderboard.jsx',
+    'src/pages/smokecraft/SmokeCraftPassport.jsx',
+    'src/pages/smokecraft/VenueSelect.jsx',
+    'src/pages/smokecraft/SmokeCraftCraftHub.jsx',
+    'src/pages/smokecraft/ChallengeHub.jsx',
+    'src/pages/smokecraft/Rewards.jsx',
+  ]
+  const realShellAdopters = shellFiles.filter(f => existsSync(f) && readFileSync(f, 'utf8').includes('<SmokeCraftScreenShell')).length
+  check(`Manifest fullyMigratedScreens (${manifest.fullyMigratedScreens}) matches real shell-adoption count (${realShellAdopters})`,
+    manifest.fullyMigratedScreens === realShellAdopters && realShellAdopters >= 7)
+}
+
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)
 if (failures > 0) process.exit(1)

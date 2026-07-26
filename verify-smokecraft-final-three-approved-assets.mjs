@@ -94,21 +94,33 @@ check('B3 SC_ASSETS.rewards points to session 25 rewards.png', () => {
 
 console.log('\n--- Section C: each screen wired via the canonical bounds-overlay pattern ---')
 
-check('C1 WelcomeExperience.jsx uses SmokeCraftImageBoundsOverlay + SC_ASSETS.session1', () => {
+// Holistic Fix 2A: WelcomeExperience.jsx and Rewards.jsx no longer import
+// SmokeCraftImageBoundsOverlay directly — they now go through
+// SmokeCraftScreenShell (mode="image-shell"), which wraps
+// SmokeCraftImageBoundsOverlay itself. This is a legitimate architectural
+// migration (see SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md's Holistic Fix 2A
+// section), not a regression: the approved image still renders through the
+// exact same canonical overlay component, just one composition layer
+// deeper. Accept either the direct import or the shell's indirection.
+const usesCanonicalOverlayPattern = (src) =>
+  src.includes('SmokeCraftImageBoundsOverlay') ||
+  (src.includes('SmokeCraftScreenShell') && /mode=["']image-shell["']/.test(src))
+
+check('C1 WelcomeExperience.jsx uses the canonical overlay pattern (direct or via SmokeCraftScreenShell) + SC_ASSETS.session1', () => {
   const src = read('src/pages/smokecraft/WelcomeExperience.jsx')
-  return (src.includes('SmokeCraftImageBoundsOverlay') && src.includes('SC_ASSETS.session1'))
+  return (usesCanonicalOverlayPattern(src) && src.includes('SC_ASSETS.session1'))
     || 'not wired via the canonical overlay pattern'
 })
 
-check('C2 ResumeJourney.jsx uses SmokeCraftImageBoundsOverlay + SC_ASSETS.resume', () => {
+check('C2 ResumeJourney.jsx uses the canonical overlay pattern (direct or via SmokeCraftScreenShell) + SC_ASSETS.resume', () => {
   const src = read('src/pages/smokecraft/ResumeJourney.jsx')
-  return (src.includes('SmokeCraftImageBoundsOverlay') && src.includes('SC_ASSETS.resume'))
+  return (usesCanonicalOverlayPattern(src) && src.includes('SC_ASSETS.resume'))
     || 'not wired via the canonical overlay pattern'
 })
 
-check('C3 Rewards.jsx uses SmokeCraftImageBoundsOverlay + SC_ASSETS.rewards for S25', () => {
+check('C3 Rewards.jsx uses the canonical overlay pattern (direct or via SmokeCraftScreenShell) + SC_ASSETS.rewards for S25', () => {
   const src = read('src/pages/smokecraft/Rewards.jsx')
-  return (src.includes('SmokeCraftImageBoundsOverlay') && src.includes('SC_ASSETS.rewards'))
+  return (usesCanonicalOverlayPattern(src) && src.includes('SC_ASSETS.rewards'))
     || 'not wired via the canonical overlay pattern'
 })
 

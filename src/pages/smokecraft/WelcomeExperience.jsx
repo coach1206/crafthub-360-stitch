@@ -6,7 +6,7 @@ import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx
 import { useSmokeCraftServerJourney } from '../../hooks/useSmokeCraftServerJourney.js'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { getRankFromXP } from '../../constants/session.js'
 import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
@@ -228,7 +228,7 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
   const journeyStatus = completionPercent > 0 ? `Journey in progress — ${completionPercent}% complete` : 'New journey — nothing completed yet'
 
   return (
-    <SmokeCraftImageBoundsOverlay src={SC_ASSETS.session1} naturalW={1448} naturalH={1086} alt="SmokeCraft 360 — Welcome to Today’s Experience, Session 1">
+    <SmokeCraftScreenShell mode="image-shell" status="ready" imageProps={{ src: SC_ASSETS.session1, naturalW: 1448, naturalH: 1086, alt: 'SmokeCraft 360 — Welcome to Today’s Experience, Session 1' }}>
       <h1 style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }}>
         SmokeCraft 360 — Welcome to Today’s Experience{identityName ? `, ${identityName}` : ''}
       </h1>
@@ -489,6 +489,6 @@ export default function WelcomeExperience({ onBack, onComplete } = {}) {
         secondary="← Back"
         onSecondary={() => navigate('/smokecraft/resume')}
       />
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

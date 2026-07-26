@@ -5,11 +5,12 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { ShieldPersonIcon } from '../../components/smokecraft/PremiumIcons.jsx'
 import { RANKS, getRankFromXP } from '../../constants/session.js'
 import { getSessionRewards, getSmokeCraftXP, getEarnedBadges, SMOKECRAFT_BADGES } from '../../constants/smokecraftRewards.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -332,11 +333,10 @@ export default function Rewards({ onBack, onComplete } = {}) {
   // not an oversight.
   if (mode === 'rewards') {
     return (
-      <SmokeCraftImageBoundsOverlay
-        src={SC_ASSETS.rewards}
-        naturalW={1448}
-        naturalH={1086}
-        alt="SmokeCraft 360 — Session 25 Rewards"
+      <SmokeCraftScreenShell
+        mode="image-shell"
+        status="ready"
+        imageProps={{ src: SC_ASSETS.rewards, naturalW: 1448, naturalH: 1086, alt: 'SmokeCraft 360 — Session 25 Rewards' }}
       >
         <h1 style={{
           position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
@@ -467,7 +467,7 @@ export default function Rewards({ onBack, onComplete } = {}) {
           secondary="← Back"
           onSecondary={onBack || (() => navigate('/smokecraft/final-review'))}
         />
-      </SmokeCraftImageBoundsOverlay>
+      </SmokeCraftScreenShell>
     )
   }
 
@@ -552,8 +552,8 @@ export default function Rewards({ onBack, onComplete } = {}) {
               flow above or the primary nav bar below. */}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {[
-              { label: 'Challenge Hub', to: '/smokecraft/challenge-hub' },
-              { label: 'Collections', to: '/smokecraft/collections' },
+              { label: 'Challenge Hub', to: NAV.CHALLENGES },
+              { label: 'Collections', to: NAV.COLLECTIONS },
               { label: 'Skill Tree', to: '/smokecraft/skill-tree' },
             ].map(link => (
               <button key={link.to} type="button" onClick={() => navigate(link.to)}

@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { triggerHaptic } from '../../utils/haptics.js'
-import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import {
   resolveSmokeCraftLandingAction,
   SMOKECRAFT_LANDING_ACTIONS,
 } from '../../constants/smokecraftLandingActions.js'
+import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
 
 const NAT_W = 1672
 const NAT_H = 941
@@ -67,7 +68,7 @@ export default function SmokeCraftCraftHub() {
   function goBack() {
     triggerHaptic('light')
     if (window.history.length > 1) navigate(-1)
-    else navigate('/smokecraft')
+    else navigate(NAV.HOME)
   }
 
   function handleTile(tile) {
@@ -94,12 +95,10 @@ export default function SmokeCraftCraftHub() {
   })
 
   return (
-    <SmokeCraftImageBoundsOverlay
-      src={SC_ASSETS.craftHubVenueTable}
-      naturalW={NAT_W}
-      naturalH={NAT_H}
-      alt="CraftHub 360 — Venue Table Experience"
-      bottomOffset={0}
+    <SmokeCraftScreenShell
+      mode="image-shell"
+      status="ready"
+      imageProps={{ src: SC_ASSETS.craftHubVenueTable, naturalW: NAT_W, naturalH: NAT_H, alt: 'CraftHub 360 — Venue Table Experience', bottomOffset: 0 }}
     >
       <h1 style={{
         position: 'absolute', width: 1, height: 1, padding: 0, margin: -1,
@@ -173,6 +172,6 @@ export default function SmokeCraftCraftHub() {
         style={{ ...hotspot, left: '7.6%', top: '3.4%', width: '13.5%', height: '5.4%', cursor: 'pointer' }}
         {...hoverable(true)}
       />
-    </SmokeCraftImageBoundsOverlay>
+    </SmokeCraftScreenShell>
   )
 }

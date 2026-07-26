@@ -10,6 +10,7 @@ import { getActiveTicketTapperSpecials } from '../../utils/smokeCraftSpecialsEng
 import { smokeCraftTicketTapperSpecialsSeed } from '../../data/smokeCraftTicketTapperSpecials.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { fetchSmokeCraftVenues } from '../../services/smokecraftVenueDirectoryApi.js'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -159,7 +160,15 @@ export default function VenueSelect() {
 
   const canContinue = !!selectedId || skipped
 
+  // Holistic Fix 2A — adopts SmokeCraftScreenShell's live mode as the outer
+  // contract. status stays "ready" here (not wired to `phase`) because this
+  // screen already implements its own faithful, evidence-tested loading/
+  // error copy and layout inline (see the phase===… blocks in `main` below)
+  // — delegating to the shell's generic panel would silently change their
+  // wording/behavior, which the locked-baseline crop fix on this exact
+  // screen (commit d6469504) specifically forbids without a failing test.
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div style={{
       position: 'fixed', inset: 0, overflow: 'hidden',
       background: `
@@ -356,5 +365,6 @@ export default function VenueSelect() {
         onSecondary={() => navigate('/smokecraft/identity')}
       />
     </div>
+    </SmokeCraftScreenShell>
   )
 }
