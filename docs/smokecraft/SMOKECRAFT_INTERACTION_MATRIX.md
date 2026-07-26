@@ -117,6 +117,22 @@ is not equivalent to full interaction verification.
   Connections, Event/Weekly/Daily/SmokeCraft Challenge screens: **not yet
   individually inspected** this pass.
 
+## Batch 3E-2 — Rewards/Badges, Passport Stamp, Connections (live browser verified)
+
+Following the Prompt 3E-1 corrections, Prompt 3E-2 audited the remaining
+Batch 3 items called out by name in the mandate: `Connections.jsx`,
+`PassportStamp.jsx`, and `Rewards.jsx` badge display. Unlike the Batch 2/3
+work above, this pass went beyond source read to real Playwright browser
+verification (seeded guest session against a local vite preview server) —
+see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`'s Prompt 3E-2 section for full
+detail and proof screenshots. **No dead/baked controls found; no fix
+required.** Connections' 7 toggle buttons were live-clicked (3 of 7) and
+confirmed to change `aria-pressed` state; its Continue control was clicked
+and confirmed to navigate to `/smokecraft/management-sync`. Passport Stamp
+was confirmed to render its real backend-integrated claim flow without
+crashing. Rewards was confirmed to render real point/rank values with
+non-interactive badge crests (not a false-clickable control).
+
 ## Not yet done (Batch 3 remainder, Batch 4)
 
 - Forward (S1→S27) and backward (S27→S1) click-through of the actual

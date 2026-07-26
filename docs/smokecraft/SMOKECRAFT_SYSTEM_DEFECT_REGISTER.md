@@ -2,6 +2,63 @@
 
 Baseline commit: `d6469504a2a83ab4acfb27e89a25064d505d4d55` (Prompt 1), updated at `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7` (Prompt 2), updated at `3da3532ee414ab3b0b8bd9ad6e061a79a6de530d` (Prompt 3 start)
 
+## Prompt 3E-2 update — Rewards, Badge Collection, Passport Stamp, Connections
+
+Starting commit: `854495f042888c4507367935d435b6dc55fc90e9` (Prompt 3E-1 close).
+
+Scope per mandate: audit `Connections.jsx`, `PassportStamp.jsx`, `Rewards.jsx`
+(badge display), for dead/baked controls of the SC-D001/SC-D010/SC-D011/SC-D012/
+SC-D013 class. Golden Box, Mentor, Pairing, Challenges, responsive layout,
+POS360, and E.A.T. 360 were explicitly out of scope for this pass.
+
+**Result: NO new defects found.** All three screens were already correctly
+built before this pass. Source-level investigation was followed by real
+browser verification (seeded guest session, Playwright, `localhost:5050`)
+rather than relying on source read alone, since prior passes in this
+operation twice caught real mistakes (route-nesting) that source read alone
+missed.
+
+- **Connections** (`src/pages/smokecraft/Connections.jsx`): 7 real toggle
+  buttons (`CONNECTION_OPTIONS.map`). Live-clicked 3 of the 7 in a real
+  browser: all 3 changed `aria-pressed` state correctly (`false -> true`).
+  Continue button confirmed real, navigated to `/smokecraft/management-sync`
+  as expected. Back control present. No fix needed.
+- **Passport Stamp** (`src/pages/smokecraft/PassportStamp.jsx`): confirmed
+  real backend-integrated claim flow (`POST /api/smokecraft/passport-stamp/claim`,
+  real 409-duplicate detection, honest `idle`/`claiming`/`claimed`/`duplicate`/
+  `error`/`offline` states). Live browser test: renders without crashing,
+  Back/Continue controls present and real. No fix needed. Note: Prompt 5's
+  "duplicate protection" requirement is already satisfied server-side here —
+  not an open gap for that phase.
+- **Rewards / Badge Collection** (`src/pages/smokecraft/Rewards.jsx`, S25
+  mode): confirmed `BadgeCrest` is a non-interactive decorative component
+  (no `onClick`, no misleading pointer cursor) rendered via
+  `aria-label="... badge (earned)"` / `"(locked)"` — not a clickable-looking
+  dead control. Confirmed via `src/App.jsx` there is exactly one `rewards`
+  route (Session 25), so there is no separate "Badge Collection" screen to
+  audit — badges are inline within Rewards. Live browser test: page renders
+  real XP/rank/point values, 6 real buttons present, badge elements confirmed
+  present and non-interactive by inspection. No fix needed.
+
+Proof: `public/proof/smokecraft-prompt-3e-2/connections-toggled.png`,
+`passport-stamp.png`, `rewards-badges.png`.
+
+Regressions re-run and passing: `verify-smokecraft-final-three-approved-assets.mjs`
+(17/17), `verify-smokecraft-phase-session-lock.mjs` (9/9),
+`scripts/smokecraftAssetExclusivityCheck.mjs` (7/7).
+
+**Prompt 5 engine handoff (recorded per mandate, not built this pass):**
+automatic badge/stamp unlock triggers keyed to rule-based session-completion
+events; duplicate protection for badges specifically (Passport Stamp already
+has real server-side duplicate protection via the claim API — this is not a
+gap, but badge awarding has no equivalent server endpoint yet — confirmed by
+grep, `Rewards.jsx` computes badge `earned` state purely from local
+`completedSteps`, no server round-trip); unlock reason/timestamp capture;
+cross-device/cross-screen persistence (current state is `localStorage`-only,
+disclosed elsewhere in this operation as "LOCAL PREVIEW MODE"); and an
+admin correction/audit history surface (does not exist anywhere in this
+codebase).
+
 ## Prompt 3 update
 
 - **SC-D010 CLOSED with browser evidence** — see table row below for full detail.
