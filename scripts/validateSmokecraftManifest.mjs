@@ -101,6 +101,21 @@ if (existsSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')) {
     return !target || !liveRoutes.has(target)
   })
   check(`Every legacy <Navigate> alias resolves to a currently-registered route (${aliases.length} aliases checked, ${brokenAliases.length} broken)`, brokenAliases.length === 0)
+
+  // Holistic Fix 2E-3 — canonical alias table drift guard. Every literal
+  // <Navigate to="/smokecraft/..."> inside App.jsx's SmokeCraft route tree
+  // must be represented as an alias-redirect manifest entry with a matching
+  // target — this is the "one canonical alias table" (the manifest itself
+  // is that table). Fails the build if a new scattered alias is added to
+  // App.jsx without also being classified in the manifest.
+  const appJsxSrc = readFileSync('src/App.jsx', 'utf8')
+  const smokecraftBlockMatch = appJsxSrc.match(/ {14}<Route path="smokecraft" element=\{<SmokeCraftJourneyProvider>[\s\S]*?\n {14}<\/Route>/)
+  const smokecraftBlock = smokecraftBlockMatch ? smokecraftBlockMatch[0] : ''
+  const literalAliasTargets = [...smokecraftBlock.matchAll(/<Navigate to="(\/smokecraft\/[^"]+)"/g)].map(m => m[1])
+  const manifestAliasTargets = new Set(aliases.map(a => a.auditedIn.match(/<Navigate> to (\/[^\s(]+)/)?.[1]).filter(Boolean))
+  const undocumentedAliases = literalAliasTargets.filter(t => !manifestAliasTargets.has(t))
+  check(`Every <Navigate> alias target inside the SmokeCraft route tree is documented in the canonical alias table (manifest alias-redirect entries) (${literalAliasTargets.length} literal targets checked, ${undocumentedAliases.length} undocumented)`,
+    undocumentedAliases.length === 0)
 }
 
 // 9. Commerce alias enforcement (Holistic Fix 2, item 10) — `venue-commerce`,

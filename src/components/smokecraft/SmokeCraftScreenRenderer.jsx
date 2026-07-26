@@ -18,6 +18,20 @@ import { completeSmokeCraftScreen } from '../../services/smokecraft/smokecraftCo
 import { getInteractionManifest } from '../../constants/smokecraftInteractionManifest.js'
 import SmokeCraftScreenShell from './SmokeCraftScreenShell.jsx'
 
+// Holistic Fix 2E-3 — intentional double-shell decision (not a defect).
+// Session 1 (WelcomeExperience.jsx) and session-25/26 (Rewards.jsx) already
+// self-wrap in `<SmokeCraftScreenShell mode="image-shell">` from their
+// independent Holistic Fix 2A migration. This renderer's own
+// `mode="live"` wrap therefore nests around an inner `mode="image-shell"`
+// for those two screens. Removing the outer wrap would require a
+// screenId-conditional branch in this single canonical render path (an
+// extra special case exactly where "one render path, no exceptions" is
+// the point of this file), for a purely cosmetic DOM-nesting cleanup with
+// no visual or behavioral difference — confirmed by the full regression
+// suite (full-journey-sequence-and-assets 107/107, including the 4-viewport
+// sweep) passing identically before and after this renderer was wrapped.
+// Kept as-is and documented here rather than risking a second edit to the
+// highest-blast-radius file in this operation for a non-functional gain.
 const RUNTIME_VERSION = '1.0.0-partial'
 
 export default function SmokeCraftScreenRenderer({ screenId }) {

@@ -1,0 +1,20 @@
+Holistic Fix 2E-3 regression suite results
+
+npm run build: PASS (includes prebuild: route inventory regen, manifest
+generation, validateSmokecraftManifest.mjs, validateSmokecraftShellAdoption.mjs
+— all exit 0)
+
+scripts/smokecraftAssetExclusivityCheck.mjs: 7 passed, 0 failed (7 total)
+verify-smokecraft-phase-session-lock.mjs: 9 passed, 0 failed (9 total)
+verify-smokecraft-final-three-approved-assets.mjs: 17 passed, 0 failed (17 total)
+verify-smokecraft-full-journey-sequence-and-assets.mjs: 107 passed, 0 failed (of 107 total)
+
+New checks added this pass (both already included in the totals above):
+- validateSmokecraftManifest.mjs: canonical alias-table drift guard
+  ("Every <Navigate> alias target inside the SmokeCraft route tree is
+  documented in the canonical alias table") - PASS, 13 literal targets
+  checked, 0 undocumented.
+- validateSmokecraftShellAdoption.mjs curriculum-spine lock (added in
+  Holistic Fix 2E-2, re-confirmed unchanged this pass): 21/21 session
+  componentKeys registered, 0 direct App.jsx bypasses of
+  SmokeCraftScreenRenderer.
