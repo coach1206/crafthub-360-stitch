@@ -1,0 +1,32 @@
+Holistic Fix 2E-8 regression suite results
+
+npm run build: PASS (includes prebuild: manifest generation,
+validateSmokecraftManifest.mjs, validateSmokecraftShellAdoption.mjs — now
+177 total shell-adoption checks, up from 163, with 14 new checks for the
+7 sessions fixed this pass)
+
+validateSmokecraftManifest.mjs: PASS, 0 failing checks (includes
+"Educational completeness audit doc still covers all 21 primary session
+slots" check)
+validateSmokecraftShellAdoption.mjs: PASS, 0 failing checks
+
+scripts/smokecraftAssetExclusivityCheck.mjs: 7 passed, 0 failed (7 total)
+verify-smokecraft-phase-session-lock.mjs: 9 passed, 0 failed (9 total)
+verify-smokecraft-final-three-approved-assets.mjs: 17 passed, 0 failed (17 total)
+verify-smokecraft-full-journey-sequence-and-assets.mjs: 107 passed, 0 failed (of 107 total)
+verify-smokecraft-hf2e5-curriculum-forward-backward.mjs (includes SC-D014
+regression test): see companion result
+
+All 7 newly-integrated sessions (3, 4, 7, 14, 15, 21, 22) were
+screenshot-verified live: info button renders, opens a readable popover
+with real per-lesson content, closes cleanly, no overlap with existing
+controls or approved artwork, Back/Continue remain fully clickable.
+Session 4 (Terroir) — the exact screen that broke the Holistic Fix 2E-6
+centralized-injection attempt — was specifically re-verified clean with
+this per-file sibling+popover pattern.
+
+verify-smokecraft-hf2e5-curriculum-forward-backward.mjs: 10 passed, 0 failed
+(of 10 total). First attempt hit the same known guest-session rate-limiter
+429 artifact seen in Holistic Fix 2E-7 (this session's heavy repeated test
+volume) — confirmed via the failure pattern matching exactly, resolved by
+restarting the backend, re-ran clean with no code changes in between.

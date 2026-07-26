@@ -5,8 +5,13 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
+import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
+import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { rankAllCategories } from '../../utils/pairingEngine.js'
+
+const ENRICHMENT_22 = getEducationalEnrichment(22)
 
 /**
  * PairingRecommendations — /smokecraft/pairing-recommendations  (S22)
@@ -271,6 +276,7 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
   const canContinue = phase === 'ready' && !!primary
 
   return (
+    <>
     <SmokeCraftImageBoundsOverlay
       src={SC_ASSETS.pairingRecommendations}
       naturalW={NAT_W}
@@ -486,5 +492,11 @@ export default function PairingRecommendations({ onBack, onComplete } = {}) {
         Continue Journey
       </button>
     </SmokeCraftImageBoundsOverlay>
+
+    <SmokeCraftLessonInfoButton
+      sessionNumber={22} totalSessions={TOTAL_SESSIONS} phase={5} totalPhases={TOTAL_VISITS}
+      title="Personalized Pairing Recommendations" whyItMatters={ENRICHMENT_22?.whyItMatters} goldenBox={ENRICHMENT_22?.goldenBox}
+    />
+    </>
   )
 }

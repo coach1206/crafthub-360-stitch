@@ -5,7 +5,12 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
+import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+
+const ENRICHMENT_15 = getEducationalEnrichment(15)
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -378,6 +383,11 @@ export default function KnowledgeDrop({ onBack, onComplete } = {}) {
           </div>
         </div>
       </main>
+
+      <SmokeCraftLessonInfoButton
+        sessionNumber={15} totalSessions={TOTAL_SESSIONS} phase={3} totalPhases={TOTAL_VISITS}
+        title="Knowledge Drop" whyItMatters={ENRICHMENT_15?.whyItMatters} goldenBox={ENRICHMENT_15?.goldenBox}
+      />
 
       <SmokeCraftNavBar
         primary="Continue →"

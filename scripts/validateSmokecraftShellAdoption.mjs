@@ -213,6 +213,15 @@ for (const a of ASSET_LOCKS) {
     { file: 'src/pages/smokecraft/Scorecard.jsx', session: 19 },
     { file: 'src/pages/smokecraft/PassportStamp.jsx', session: 23 },
     { file: 'src/pages/smokecraft/FinalReview.jsx', session: 24 },
+    // Holistic Fix 2E-8 — the 7 sessions that already had a title but were
+    // missing Golden Box relevance / Why It Matters coverage.
+    { file: 'src/pages/smokecraft/MeetYourCigar.jsx', session: 3 },
+    { file: 'src/pages/smokecraft/Terroir.jsx', session: 4 },
+    { file: 'src/pages/smokecraft/LightingTutorial.jsx', session: 7 },
+    { file: 'src/pages/smokecraft/MentorCommentary.jsx', session: 14 },
+    { file: 'src/pages/smokecraft/KnowledgeDrop.jsx', session: 15 },
+    { file: 'src/pages/smokecraft/AISummary.jsx', session: 21 },
+    { file: 'src/pages/smokecraft/PairingRecommendations.jsx', session: 22 },
   ]
   const enrichmentSrc = readFileSync('src/constants/smokecraftEducationalEnrichment.js', 'utf8')
   for (const t of LESSON_INFO_TARGETS) {

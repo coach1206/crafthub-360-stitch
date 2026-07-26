@@ -5,7 +5,12 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
+import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+
+const ENRICHMENT_7 = getEducationalEnrichment(7)
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -377,6 +382,11 @@ export default function LightingTutorial({ onBack, onComplete } = {}) {
           </p>
         </div>
       )}
+
+      <SmokeCraftLessonInfoButton
+        sessionNumber={7} totalSessions={TOTAL_SESSIONS} phase={1} totalPhases={TOTAL_VISITS}
+        title="Lighting Tutorial" whyItMatters={ENRICHMENT_7?.whyItMatters} goldenBox={ENRICHMENT_7?.goldenBox}
+      />
 
       <SmokeCraftNavBar
         primary={isLastStep ? (done ? 'Continuing…' : 'Continue to First Draw →') : 'Next Step →'}

@@ -5,7 +5,12 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
+import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+
+const ENRICHMENT_4 = getEducationalEnrichment(4)
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -277,6 +282,11 @@ export default function Terroir({ onBack, onComplete } = {}) {
           </div>
         </div>
       </main>
+
+      <SmokeCraftLessonInfoButton
+        sessionNumber={4} totalSessions={TOTAL_SESSIONS} phase={1} totalPhases={TOTAL_VISITS}
+        title="Terroir" whyItMatters={ENRICHMENT_4?.whyItMatters} goldenBox={ENRICHMENT_4?.goldenBox}
+      />
 
       <SmokeCraftNavBar
         primary="Continue →"

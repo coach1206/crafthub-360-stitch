@@ -5,8 +5,13 @@ import { useSmokeCraftProgress } from '../../context/SmokeCraftProgressContext.j
 import { useSmokeCraftJourney } from '../../context/SmokeCraftJourneyContext.jsx'
 import { triggerHaptic } from '../../utils/haptics.js'
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
+import SmokeCraftLessonInfoButton from '../../components/smokecraft/SmokeCraftLessonInfoButton.jsx'
+import { getEducationalEnrichment } from '../../constants/smokecraftEducationalEnrichment.js'
+import { TOTAL_SESSIONS, TOTAL_VISITS } from '../../constants/session.js'
 import SmokeCraftTactileCard from '../../components/smokecraft/SmokeCraftTactileCard.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
+
+const ENRICHMENT_14 = getEducationalEnrichment(14)
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -362,6 +367,11 @@ export default function MentorCommentary({ onBack, onComplete } = {}) {
           </div>
         </div>
       </main>
+
+      <SmokeCraftLessonInfoButton
+        sessionNumber={14} totalSessions={TOTAL_SESSIONS} phase={3} totalPhases={TOTAL_VISITS}
+        title="Mentor Commentary" whyItMatters={ENRICHMENT_14?.whyItMatters} goldenBox={ENRICHMENT_14?.goldenBox}
+      />
 
       <SmokeCraftNavBar
         primary="Continue →"
