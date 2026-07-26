@@ -6,6 +6,7 @@ import {
   SmokeCraftAtmosphericBackground,
   SmokeCraftBottomNav,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 // APPROVED SMOKECRAFT VISUAL RULE:
 // No stock-photo fallback URLs, no CSS-drawn graphics, no cartoon/placeholder art.
@@ -99,6 +100,7 @@ export default function Blend() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div className="smokecraft-premium-page relative text-on-background font-body-md overflow-x-hidden selection:bg-primary/30">
       <SmokeCraftAtmosphericBackground variant="education" />
       {/* Atmospheric Background */}
@@ -447,5 +449,6 @@ export default function Blend() {
       </footer>
       <SmokeCraftBottomNav active="smokecraft" />
     </div>
+    </SmokeCraftScreenShell>
   )
 }

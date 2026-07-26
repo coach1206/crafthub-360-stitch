@@ -6,6 +6,7 @@ import {
   SmokeCraftBottomNav,
   SmokeCraftPremiumHeader,
 } from '../../components/smokecraft/SmokeCraftPremium.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 const GOLD = 'linear-gradient(135deg,#8b6914,#e9c176,#f5d98a,#c5a059,#8b6914)'
 
@@ -133,6 +134,7 @@ export default function Cultivation() {
   }
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div className="smokecraft-premium-page" style={{ color: '#E5E2E1', fontFamily: '"Hanken Grotesk",sans-serif' }}>
       <SmokeCraftAtmosphericBackground variant="education" />
 
@@ -317,5 +319,6 @@ export default function Cultivation() {
       {/* ── Bottom Nav (mobile) ──────────────────────────── */}
       <SmokeCraftBottomNav active="smokecraft" />
     </div>
+    </SmokeCraftScreenShell>
   )
 }

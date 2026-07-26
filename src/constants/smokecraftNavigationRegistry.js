@@ -62,6 +62,25 @@ export const SMOKECRAFT_PASSPORT_MODULE_DESTINATIONS = Object.freeze({
   EVENTS:    '/passport/events',
   BENEFITS:  '/passport/benefits',
   HOW_IT_WORKS: '/passport/how-it-works',
+  // The top-level /passport/* module's own home/index route — distinct
+  // from both /smokecraft/passport (SMOKECRAFT_NAV_DESTINATIONS.PASSPORT)
+  // and the above /passport/* sub-pages. Used by the Origins/Curation/
+  // Leaf-Challenge/Cultivation module's own passport-avatar shortcuts.
+  HOME: '/passport',
+})
+
+// Real destinations that exist OUTSIDE the /smokecraft route namespace but
+// that SmokeCraft screens legitimately navigate to (confirmed via source
+// read of App.jsx's top-level route registrations, not guessed). Kept
+// separate from SMOKECRAFT_NAV_DESTINATIONS since
+// scripts/validateSmokecraftManifest.mjs's route-resolution check is
+// scoped to the /smokecraft route inventory only.
+export const SMOKECRAFT_EXTERNAL_DESTINATIONS = Object.freeze({
+  // `/grand-lounge-ranking` renders the exact same <Leaderboard /> component
+  // as /smokecraft/leaderboard — a real, pre-existing top-level alias
+  // (App.jsx: `<Route path="grand-lounge-ranking" element={<Leaderboard />} />`),
+  // used by the Origins/Curation/Leaf-Challenge/Cultivation module.
+  GRAND_LOUNGE_RANKING: '/grand-lounge-ranking',
 })
 
 // Destinations that are advertised somewhere in an approved visual but have

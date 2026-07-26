@@ -149,14 +149,23 @@ if (existsSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')) {
     '/smokecraft/golden-box/packaging-studio/:designId/versions': 'src/pages/smokecraft/goldenBox/PackagingStudioVersions.jsx',
     '/smokecraft/golden-box/packaging-studio/:designId/share': 'src/pages/smokecraft/goldenBox/PackagingStudioShare.jsx',
     '/smokecraft/golden-box/packaging-review/:shareToken': 'src/pages/smokecraft/goldenBox/PackagingReview.jsx',
+    '/smokecraft/origins': 'src/pages/smokecraft/Origins.jsx',
+    '/smokecraft/curation': 'src/pages/smokecraft/Curation.jsx',
+    '/smokecraft/leaves': 'src/pages/smokecraft/Leaves.jsx',
+    '/smokecraft/leaf-challenge': 'src/pages/smokecraft/LeafChallenge.jsx',
+    '/smokecraft/leaf-challenge-calculating': 'src/pages/smokecraft/LeafChallengeCalculating.jsx',
+    '/smokecraft/leaf-challenge-result': 'src/pages/smokecraft/LeafChallengeResult.jsx',
+    '/smokecraft/cultivation': 'src/pages/smokecraft/Cultivation.jsx',
+    '/smokecraft/blend': 'src/pages/smokecraft/Blend.jsx',
+    '/smokecraft/flavor-dna': 'src/pages/smokecraft/FlavorDNA.jsx',
   }
-  const claimedMigrated = manifest.entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B/.test(e.auditedIn || ''))
+  const claimedMigrated = manifest.entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C/.test(e.auditedIn || ''))
   const verifiedCount = claimedMigrated.filter(e => {
     const file = ROUTE_TO_FILE[e.route]
     return file && existsSync(file) && readFileSync(file, 'utf8').includes('<SmokeCraftScreenShell')
   }).length
   check(`Manifest fullyMigratedScreens (${manifest.fullyMigratedScreens}) — every claimed route (${claimedMigrated.length}) is backed by a real <SmokeCraftScreenShell> render (${verifiedCount} verified)`,
-    manifest.fullyMigratedScreens === claimedMigrated.length && verifiedCount === claimedMigrated.length && verifiedCount >= 23)
+    manifest.fullyMigratedScreens === claimedMigrated.length && verifiedCount === claimedMigrated.length && verifiedCount >= 32)
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)

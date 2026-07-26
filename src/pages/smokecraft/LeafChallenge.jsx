@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 // Same approved gradient/texture treatment used on the Leaf Education screen
 // (Leaves.jsx) — a composited CSS texture over an already-approved background
@@ -141,6 +142,7 @@ export default function LeafChallenge() {
   const correctId        = currentRound.correct
 
   return (
+    <SmokeCraftScreenShell mode="live" status="ready">
     <div
       className="min-h-screen bg-background text-on-surface font-body-md flex flex-col relative overflow-hidden bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "linear-gradient(180deg, rgba(5,3,2,0.86), rgba(5,3,2,0.93)), url('/assets/smokecraft/cropped/flavor-dna-bg.jpg')" }}
@@ -347,5 +349,6 @@ export default function LeafChallenge() {
         </div>
       </main>
     </div>
+    </SmokeCraftScreenShell>
   )
 }

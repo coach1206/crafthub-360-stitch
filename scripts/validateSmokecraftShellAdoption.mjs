@@ -38,6 +38,16 @@ const TARGETS = [
   { file: 'src/pages/smokecraft/goldenBox/PackagingStudioVersions.jsx', name: 'Packaging Studio Versions', navLiterals: [] },
   { file: 'src/pages/smokecraft/goldenBox/PackagingStudioShare.jsx', name: 'Packaging Studio Share', navLiterals: [] },
   { file: 'src/pages/smokecraft/goldenBox/PackagingReview.jsx', name: 'Packaging Review (public share link)', navLiterals: [] },
+  // Holistic Fix 2C — Origins/Curation/Leaf-Challenge/Cultivation module (9 routes).
+  { file: 'src/pages/smokecraft/Origins.jsx', name: 'Origins', navLiterals: [] },
+  { file: 'src/pages/smokecraft/Curation.jsx', name: 'Curation', navLiterals: ['/grand-lounge-ranking'] },
+  { file: 'src/pages/smokecraft/Leaves.jsx', name: 'Leaves', navLiterals: ['/grand-lounge-ranking', '/passport'] },
+  { file: 'src/pages/smokecraft/LeafChallenge.jsx', name: 'Leaf Challenge', navLiterals: [] },
+  { file: 'src/pages/smokecraft/LeafChallengeCalculating.jsx', name: 'Leaf Challenge Calculating', navLiterals: [] },
+  { file: 'src/pages/smokecraft/LeafChallengeResult.jsx', name: 'Leaf Challenge Result', navLiterals: ['/passport'] },
+  { file: 'src/pages/smokecraft/Cultivation.jsx', name: 'Cultivation', navLiterals: [] },
+  { file: 'src/pages/smokecraft/Blend.jsx', name: 'Blend', navLiterals: [] },
+  { file: 'src/pages/smokecraft/FlavorDNA.jsx', name: 'Flavor DNA', navLiterals: [] },
 ]
 
 for (const t of TARGETS) {

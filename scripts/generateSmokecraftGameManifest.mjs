@@ -162,6 +162,22 @@ const KNOWN_AUDITED = {
   'golden-box/packaging-studio/:designId/versions': { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
   'golden-box/packaging-studio/:designId/share':    { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
   'golden-box/packaging-review/:shareToken':   { classification: 'full-live-react', auditedIn: 'Holistic Fix 2B: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  // Holistic Fix 2C — Origins/Curation/Leaf-Challenge/Cultivation module
+  // (9 routes). Confirmed via source read this pass: NOT part of the
+  // 27-session spine (no SmokeCraftSessionGuard, no manifest entry, no
+  // entry-point link anywhere in the app — an orphaned standalone
+  // educational flow), NOT part of Golden Box (separate route namespace,
+  // no golden_box backend calls). Does affect the shared XP pool via
+  // useGuestSession().addXP (XP_AWARDS.BLEND_CREATED in Blend.jsx).
+  'origins':                    { classification: 'instructional-image', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'curation':                   { classification: 'full-live-react', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified' },
+  'leaves':                     { classification: 'full-live-react', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified' },
+  'leaf-challenge':             { classification: 'full-live-react', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'leaf-challenge-calculating': { classification: 'instructional-image', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'leaf-challenge-result':      { classification: 'full-live-react', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified' },
+  'cultivation':                { classification: 'full-live-react', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'blend':                      { classification: 'full-live-react', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
+  'flavor-dna':                 { classification: 'instructional-image', auditedIn: 'Holistic Fix 2C: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
 }
 
 const manifestByRoute = {}
@@ -238,7 +254,7 @@ const output = {
   // "Fully migrated" = actually renders SmokeCraftScreenShell in its own
   // component (verified below by scripts/validateSmokecraftShellAdoption.mjs
   // against the real source, not just this manifest's own auditedIn text).
-  fullyMigratedScreens: entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B/.test(e.auditedIn || '')).length,
+  fullyMigratedScreens: entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C/.test(e.auditedIn || '')).length,
   entries,
 }
 
