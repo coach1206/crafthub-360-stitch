@@ -16,6 +16,7 @@ import { getRegisteredComponent } from '../../constants/smokecraftComponentRegis
 import { getSmokeCraftScreenData } from '../../services/smokecraft/smokecraftScreenDataSelector.js'
 import { completeSmokeCraftScreen } from '../../services/smokecraft/smokecraftCompletionService.js'
 import { getInteractionManifest } from '../../constants/smokecraftInteractionManifest.js'
+import SmokeCraftScreenShell from './SmokeCraftScreenShell.jsx'
 
 const RUNTIME_VERSION = '1.0.0-partial'
 
@@ -58,22 +59,24 @@ export default function SmokeCraftScreenRenderer({ screenId }) {
   // canonical screen is an interactive live component, never a static
   // image-only screen, so data-static-only="false".
   return (
-    <div
-      data-smokecraft-screen-id={entry.screenId}
-      data-smokecraft-component={entry.componentKey}
-      data-smokecraft-asset-key={entry.assetKey || ''}
-      data-smokecraft-phase={entry.phase ?? ''}
-      data-smokecraft-session={entry.sessionNumber ?? ''}
-      data-smokecraft-runtime-version={RUNTIME_VERSION}
-      data-visual-source={entry.assetKey ? 'user-approved' : 'live-component-no-approved-asset'}
-      data-static-only="false"
-    >
-      <Component
-        screenData={data}
-        interactionManifest={interactionManifest}
-        onBack={handleBack}
-        onComplete={handleComplete}
-      />
-    </div>
+    <SmokeCraftScreenShell mode="live" status="ready">
+      <div
+        data-smokecraft-screen-id={entry.screenId}
+        data-smokecraft-component={entry.componentKey}
+        data-smokecraft-asset-key={entry.assetKey || ''}
+        data-smokecraft-phase={entry.phase ?? ''}
+        data-smokecraft-session={entry.sessionNumber ?? ''}
+        data-smokecraft-runtime-version={RUNTIME_VERSION}
+        data-visual-source={entry.assetKey ? 'user-approved' : 'live-component-no-approved-asset'}
+        data-static-only="false"
+      >
+        <Component
+          screenData={data}
+          interactionManifest={interactionManifest}
+          onBack={handleBack}
+          onComplete={handleComplete}
+        />
+      </div>
+    </SmokeCraftScreenShell>
   )
 }

@@ -132,8 +132,8 @@ const KNOWN_AUDITED = {
   'passport':         { classification: 'clean-image-shell', auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified (SC-D011/SC-D012 origin, Prompt 3D/3E-1)' },
   'crafthub':         { classification: 'clean-image-shell', auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell, 5-viewport verified (SC-D013 origin, Prompt 3E-1)' },
   'connections':      { classification: 'full-live-react',   auditedIn: 'Prompt 3E-2 (no defect)' },
-  'passport-stamp':   { classification: 'full-live-react',   auditedIn: 'Prompt 3E-2 (no defect)' },
-  'rewards':          { classification: 'full-live-react',   auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified (Prompt 3E-2 origin)' },
+  'passport-stamp':   { classification: 'full-live-react',   auditedIn: 'Holistic Fix 2E-2: session-23, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, 5-viewport verified' },
+  'rewards':          { classification: 'full-live-react',   auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell + smokecraftNavigationRegistry, 5-viewport verified (Prompt 3E-2 origin); session-25/26 also confirmed routed through the Holistic Fix 2E-2 shell-wrapped SmokeCraftScreenRenderer' },
   'challenge-hub':    { classification: 'full-live-react',   auditedIn: 'Holistic Fix 2A: fully migrated onto SmokeCraftScreenShell, 5-viewport verified (Prompt 3E-3 origin)' },
   'event-challenge':  { classification: 'full-live-react',   auditedIn: 'Prompt 3E-3 (no defect)' },
   'smokecraft-challenge': { classification: 'full-live-react', auditedIn: 'Prompt 3E-3 (no defect)' },
@@ -218,6 +218,33 @@ const KNOWN_AUDITED = {
   'demo-reset':        { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell (both AccessDenied and authorized states), 5-viewport verified' },
   'visit-complete':   { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell, 5-viewport verified' },
   'filler-arrangement': { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E: migrated onto SmokeCraftScreenShell (loading/error/ready states mapped to shell status prop), 5-viewport verified' },
+  // Holistic Fix 2E-2 — 27-session curriculum spine migration. Sessions
+  // 2-24, 27 (excluding merged sessions, which share their primary
+  // session's component/route) all render through the one central
+  // SmokeCraftScreenRenderer, now wrapped in SmokeCraftScreenShell
+  // mode="live" — a single migration point covering all 21 registered
+  // componentKeys. Session 1 (Welcome) and session-25/26 (Rewards) were
+  // already independently migrated in Holistic Fix 2A (see above) and are
+  // additionally confirmed routed through the same shell-wrapped renderer.
+  'humidor-match':       { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-2, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'meet-your-cigar':     { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-3, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'terroir':             { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-4, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'format':              { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-5, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'cut-toast-light':     { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-6, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'lighting-tutorial':   { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-7, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'first-third':         { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-8 (also serves merged session-9), migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'flavor-memory':       { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-10, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'pairing-lab':         { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-11, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'second-third':        { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-12 (also serves merged session-13), migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'mentor-commentary':   { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-14, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'knowledge-drop':      { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-15, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'final-third':         { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-16 (also serves merged session-17, session-18), migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'scorecard':           { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-19 (also serves merged session-20), migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'ai-summary':          { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-21, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'pairing-recommendations': { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-22, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'final-review':        { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-24, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'session-complete':    { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: session-27, migrated onto SmokeCraftScreenShell via the shell-wrapped SmokeCraftScreenRenderer, forward/backward journey verified' },
+  'wrapper-strength':    { classification: 'full-live-react', auditedIn: 'Holistic Fix 2E-2: migrated onto SmokeCraftScreenShell directly (Leaf to Cigar construction module, all 3 internal load/error/ready states preserved), 5-viewport verified' },
 }
 
 const manifestByRoute = {}
@@ -294,7 +321,7 @@ const output = {
   // "Fully migrated" = actually renders SmokeCraftScreenShell in its own
   // component (verified below by scripts/validateSmokecraftShellAdoption.mjs
   // against the real source, not just this manifest's own auditedIn text).
-  fullyMigratedScreens: entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C|Holistic Fix 2D|Holistic Fix 2E/.test(e.auditedIn || '')).length,
+  fullyMigratedScreens: entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C|Holistic Fix 2D|Holistic Fix 2E|Holistic Fix 2E-2/.test(e.auditedIn || '')).length,
   entries,
 }
 

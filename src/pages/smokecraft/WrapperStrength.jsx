@@ -10,6 +10,7 @@ import { ensureIdentity } from '../../hooks/useGoldenBox.js'
 import * as ssApi from '../../services/smokecraft/seedSoilApiClient.js'
 import * as lcApi from '../../services/smokecraft/leafConstructionApiClient.js'
 import MediaSlot from '../../components/smokecraft/goldenBox/MediaSlot.jsx'
+import SmokeCraftScreenShell from '../../components/smokecraft/SmokeCraftScreenShell.jsx'
 
 // Phase 2 image integration — real uploaded step thumbnails, keyed by the
 // same backend step_key values RollingProcess already renders. Purely
@@ -432,7 +433,7 @@ export default function WrapperStrength() {
   const compareRows = allRows.filter(r => compareIds.includes(r.id))
 
   return (
-    <>
+    <SmokeCraftScreenShell mode="live" status="ready">
       <div style={{ minHeight: '100vh', paddingBottom: 100, background: NAVY, color: CREAM, fontFamily: 'Georgia, serif' }}>
         <div style={{ padding: '20px 16px 8px' }}>
           <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(233,193,118,0.7)' }}>Leaf to Cigar</div>
@@ -581,6 +582,6 @@ export default function WrapperStrength() {
         secondary="← Back"
         onSecondary={() => navigate(-1)}
       />
-    </>
+    </SmokeCraftScreenShell>
   )
 }

@@ -183,14 +183,34 @@ if (existsSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')) {
     '/smokecraft/demo-reset': 'src/components/smokecraft/SmokeCraftDemoReset.jsx',
     '/smokecraft/visit-complete': 'src/pages/smokecraft/VisitComplete.jsx',
     '/smokecraft/filler-arrangement': 'src/pages/smokecraft/FillerArrangement.jsx',
+    '/smokecraft/humidor-match': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/meet-your-cigar': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/terroir': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/format': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/cut-toast-light': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/lighting-tutorial': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/first-third': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/flavor-memory': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/pairing-lab': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/second-third': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/mentor-commentary': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/knowledge-drop': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/final-third': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/scorecard': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/ai-summary': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/pairing-recommendations': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/passport-stamp': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/final-review': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/session-complete': 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx',
+    '/smokecraft/wrapper-strength': 'src/pages/smokecraft/WrapperStrength.jsx',
   }
-  const claimedMigrated = manifest.entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C|Holistic Fix 2D|Holistic Fix 2E/.test(e.auditedIn || ''))
+  const claimedMigrated = manifest.entries.filter(e => /Holistic Fix 2A|Holistic Fix 2B|Holistic Fix 2C|Holistic Fix 2D|Holistic Fix 2E|Holistic Fix 2E-2/.test(e.auditedIn || ''))
   const verifiedCount = claimedMigrated.filter(e => {
     const file = ROUTE_TO_FILE[e.route]
     return file && existsSync(file) && readFileSync(file, 'utf8').includes('<SmokeCraftScreenShell')
   }).length
   check(`Manifest fullyMigratedScreens (${manifest.fullyMigratedScreens}) — every claimed route (${claimedMigrated.length}) is backed by a real <SmokeCraftScreenShell> render (${verifiedCount} verified)`,
-    manifest.fullyMigratedScreens === claimedMigrated.length && verifiedCount === claimedMigrated.length && verifiedCount >= 57)
+    manifest.fullyMigratedScreens === claimedMigrated.length && verifiedCount === claimedMigrated.length && verifiedCount >= 77)
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)

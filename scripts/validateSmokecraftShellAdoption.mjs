@@ -75,6 +75,14 @@ const TARGETS = [
   { file: 'src/components/smokecraft/SmokeCraftDemoReset.jsx', name: 'Demo Reset', navLiterals: [] },
   { file: 'src/pages/smokecraft/VisitComplete.jsx', name: 'Visit Complete', navLiterals: [] },
   { file: 'src/pages/smokecraft/FillerArrangement.jsx', name: 'Filler Arrangement', navLiterals: [] },
+  // Holistic Fix 2E-2 — 27-session curriculum spine migration. All 21
+  // registered curriculum componentKeys (session-1..session-27, with
+  // merged sessions sharing their primary component) render through this
+  // one central SmokeCraftScreenRenderer, so wrapping it puts every
+  // curriculum session on the shared shell in a single, build-locked
+  // migration point rather than 21 separate per-file edits.
+  { file: 'src/components/smokecraft/SmokeCraftScreenRenderer.jsx', name: 'SmokeCraft Curriculum Screen Renderer (all 21 session slots)', navLiterals: [] },
+  { file: 'src/pages/smokecraft/WrapperStrength.jsx', name: 'Wrapper Strength (Leaf to Cigar construction module)', navLiterals: [] },
 ]
 
 for (const t of TARGETS) {
@@ -143,6 +151,33 @@ for (const a of ASSET_LOCKS) {
   const pairingStandaloneKey = navSrc.match(/PAIRING_STANDALONE:\s*'([^']+)'/)?.[1]
   check('smokecraftNavigationRegistry keeps PAIRING and PAIRING_STANDALONE as distinct, non-collapsed values',
     !!pairingKey && !!pairingStandaloneKey && pairingKey !== pairingStandaloneKey)
+}
+
+// Holistic Fix 2E-2 — 27-session curriculum spine lock. Every one of the 21
+// registered componentKeys must still exist, still be registered, and must
+// only ever be rendered through SmokeCraftScreenRenderer (which itself must
+// stay on SmokeCraftScreenShell — checked above). Fails the build if a
+// session slot is removed, renamed, or if App.jsx starts importing/
+// rendering a curriculum component directly (bypassing the renderer/shell).
+{
+  const registrySrc = readFileSync('src/constants/smokecraftComponentRegistry.js', 'utf8')
+  const EXPECTED_SESSION_KEYS = [
+    'session-1', 'session-2', 'session-3', 'session-4', 'session-5', 'session-6', 'session-7',
+    'session-8', 'session-10', 'session-11', 'session-12', 'session-14', 'session-15', 'session-16',
+    'session-19', 'session-21', 'session-22', 'session-23', 'session-24', 'session-25', 'session-27',
+  ]
+  check(`Curriculum component registry still registers all ${EXPECTED_SESSION_KEYS.length} session slots (session-1..session-27 with merges)`,
+    EXPECTED_SESSION_KEYS.every(k => new RegExp(`'${k}':`).test(registrySrc)))
+
+  const appJsx = readFileSync('src/App.jsx', 'utf8')
+  const curriculumComponentNames = [
+    'WelcomeExperience', 'HumidorMatch', 'MeetYourCigar', 'Terroir', 'Format', 'CutToastLight',
+    'LightingTutorial', 'FirstThird', 'FlavorMemory', 'PairingLab', 'SecondThird', 'MentorCommentary',
+    'KnowledgeDrop', 'FinalThird', 'Scorecard', 'AISummary', 'PairingRecommendations', 'PassportStamp',
+    'FinalReview', 'SessionComplete',
+  ]
+  const bypassed = curriculumComponentNames.filter(name => new RegExp(`<Route[^>]*element=\\{<[^>]*<${name}\\b`).test(appJsx))
+  check('No curriculum session component is rendered directly from App.jsx (all must route through SmokeCraftScreenRenderer)', bypassed.length === 0)
 }
 
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)
