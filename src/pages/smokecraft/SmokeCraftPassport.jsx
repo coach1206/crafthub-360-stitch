@@ -11,6 +11,21 @@ const NAT_H = 941
 const GOLD = '#E9C176'
 const CREAM = '#e5e2e1'
 
+// System Audit Prompt 3D (SC-D011) — "Scan to Connect" and "Join an Event"
+// have real, existing destinations (Connections, Event Challenge). "Explore
+// Directory," "View Matches," and "Explore Benefits" have no backing
+// feature anywhere in this codebase (no member directory or matching
+// system exists) — honestly disabled rather than routed to a fabricated
+// destination. "Explore Benefits" maps reasonably to Rewards, the one real
+// existing benefits-adjacent screen.
+const PASSPORT_ACTION_CARDS = [
+  { key: 'scan',      label: 'Scan to Connect',  route: '/smokecraft/connections',   left: '17.0%' },
+  { key: 'directory', label: 'Explore Directory (not yet available)', route: null, left: '30.5%', disabled: true },
+  { key: 'matches',   label: 'View Matches (not yet available)',     route: null, left: '44.0%', disabled: true },
+  { key: 'event',     label: 'Join an Event',    route: '/smokecraft/event-challenge', left: '57.4%' },
+  { key: 'benefits',  label: 'Explore Benefits', route: '/smokecraft/rewards-center', left: '70.9%' },
+]
+
 /**
  * SmokeCraftPassport — /smokecraft/passport
  *
@@ -113,6 +128,27 @@ export default function SmokeCraftPassport() {
           </div>
         </div>
       )}
+
+      {/* System Audit Prompt 3D (SC-D011) — the approved image's 5 "START
+          HERE / YOUR NEXT ACTIONS" cards (Scan to Connect, Explore
+          Directory, View Matches, Join an Event, Explore Benefits) looked
+          clickable but had no live control. Only the two with a real,
+          existing destination are wired live; the two with no backing
+          feature anywhere in this codebase (a member directory, a
+          matching system) are honestly disabled rather than fabricated.
+          Pixel positions calibrated via PIL crop of the 1672x941 image. */}
+      {PASSPORT_ACTION_CARDS.map(card => (
+        <button
+          key={card.key} type="button" aria-label={card.label} data-testid={`passport-action-${card.key}`}
+          disabled={card.disabled}
+          onClick={card.disabled ? undefined : () => { triggerHaptic('light'); navigate(card.route) }}
+          style={{
+            position: 'absolute', left: card.left, top: '64.3%', width: '13.2%', height: '18.6%',
+            background: 'transparent', border: 'none', cursor: card.disabled ? 'default' : 'pointer',
+            pointerEvents: 'auto', touchAction: 'manipulation',
+          }}
+        />
+      ))}
 
       {/* THE one Back control. Visible premium gold-outline pill in the
           artwork's empty top-left margin — the approved image and layout are
