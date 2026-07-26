@@ -2,6 +2,81 @@
 
 Baseline commit: `d6469504a2a83ab4acfb27e89a25064d505d4d55` (Prompt 1), updated at `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7` (Prompt 2), updated at `3da3532ee414ab3b0b8bd9ad6e061a79a6de530d` (Prompt 3 start)
 
+## Holistic Fix 2 update — Migrate the application onto the shared architecture
+
+Starting commit: `0a774a2d` (Holistic Fix 1 close).
+
+**This pass is an honest, disclosed PARTIAL migration, not a complete one.**
+The mandate required all 108 routes fully migrated, classified, and
+interaction-verified in one pass; that is not achievable without either
+skipping real verification or risking undetected regressions across dozens
+of screens. What was actually completed, with real evidence:
+
+- **All 108 routes now classified (0 unclassified), up from 30/108.**
+  `scripts/generateSmokecraftGameManifest.mjs` gained a real, source-derived
+  classifier (resolves each component's actual file via `App.jsx`'s own
+  import/`lazy()` statement, then greps for `SmokeCraftImageBoundsOverlay`/
+  `SmokeCraftAssetRoute` hotspots/`SmokeCraftNavBar`/`ComingSoon`/inline
+  controls) instead of leaving every unaudited route as the bare
+  "unclassified" string. Two real gaps in the classifier's first version
+  were found and fixed in the generator itself (lazy-imports into
+  subdirectories under a different alias than their internal function name;
+  `onClick:` object-property and `SmokeCraftNavBar` prop-driven controls
+  invisible to the original JSX-only regex) — see
+  `SMOKECRAFT_SCREEN_CLASSIFICATION.md` for the full account.
+- **3 screens migrated onto `smokecraftNavigationRegistry`** (Welcome,
+  Leaderboard, Passport) — their local hardcoded `SIDEBAR_ITEMS`/
+  `BOTTOM_STRIP_ITEMS`/`PASSPORT_ACTION_CARDS` route literals replaced with
+  registry imports. Re-verified via a real Playwright browser test (6/6
+  destination checks) that every migrated control still navigates to the
+  exact same route as before — zero behavior change. CraftHub was left
+  as-is since it already routes through `resolveSmokeCraftLandingAction`,
+  not raw literals.
+- **Commerce duplication (item 10) resolved by decision, not by
+  fabrication.** Confirmed via source read that `SmokeCraftVenueCommerce`
+  reads no route param/pathname and that `order`/`ticket-tapper/staff-specials`
+  are linked from nowhere internally — there is no real distinct behavior
+  to connect them to. Documented as an intentional alias group and enforced
+  by a new build-blocking check (`validateSmokecraftManifest.mjs`) that
+  fails if the three routes ever render different components without a
+  deliberate change to that check.
+- **All 14 legacy `<Navigate>` aliases automatically tested** — new
+  build-blocking check confirms every alias target still exists in the
+  live route inventory (0 broken).
+- **Real naming-collision protection added**: confirmed via source read
+  that `/smokecraft/pairing` (WelcomeExperience's bottom-strip "Pairing"
+  control) is genuinely distinct from `/smokecraft/pairing-lab` (S11) —
+  the exact defect class this operation already found and fixed once for
+  Landing (see `smokecraftLandingActions.js`'s docstring). Protected going
+  forward with two separate registry keys (`PAIRING` vs
+  `PAIRING_STANDALONE`) rather than one literal that could be silently
+  collapsed.
+
+**What this pass explicitly did NOT do (disclosed, not fabricated):**
+- Did not individually browser-interaction-test the ~70 newly-classified
+  supporting routes (Golden Box's 16, the Origins/Curation module's 9, the
+  Pairing-adjacent 5, and the remaining standalone screens) — those are
+  source-classified only, with an `auditedIn` note saying so explicitly.
+- Did not migrate any screen onto `SmokeCraftScreenShell` — adoption
+  remains at 0 real screens. Retrofitting the shell into an existing,
+  working screen is a real behavior change to its loading/error/empty
+  presentation that needs individual before/after visual-regression proof
+  per screen; batch-applying it without that proof would risk exactly the
+  kind of silent regression this operation's own rules forbid.
+- Did not resolve the Origins/Curation/Leaf-Challenge module's relationship
+  to the spine (still undocumented), and did not consolidate the 14 legacy
+  aliases into a single alias-table constant (cosmetic, not a defect).
+- Golden Box, Origins/Curation, and Pairing-adjacent screens remain fully
+  open migration-queue work for Holistic Fix 3.
+
+Regressions re-run and passing: `npm run build` (prebuild validation, now
+18 checks including the 3 new Holistic Fix 2 checks), `verify-smokecraft-phase-session-lock.mjs`
+(9/9), `scripts/smokecraftAssetExclusivityCheck.mjs` (7/7),
+`verify-smokecraft-final-three-approved-assets.mjs` (17/17),
+`verify-smokecraft-all-routes-browser-test.mjs` (94 PASS + 14 REDIRECT
+PASS / 108, 0 issues — confirms the 3 navigation-registry migrations
+introduced no regression), `scripts/validateSmokecraftManifest.mjs` (18/18).
+
 ## Holistic Fix 1 update — Shared Game Architecture
 
 Starting commit: `37cad9aa` (Prompt 3E-3 close).

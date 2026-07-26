@@ -1,0 +1,128 @@
+
+── A. Canonical structure (single source of truth: VISIT_STRUCTURE)
+  PASS  Exactly 6 phases
+  PASS  Exactly 27 sessions
+  PASS  Phases numbered 1..6 contiguously
+  PASS  Session numbers are exactly 1..27, no gap, no duplicate, no extra
+  PASS  No hidden 28th session anywhere in the manifest
+  PASS  Manifest holds exactly 27 curriculum entries
+  PASS  Manifest holds exactly 4 entry entries
+  PASS  Manifest holds exactly 31 screens total
+  PASS  Every Previous/Next link is derived from the registry and correct
+  PASS  Session 5 (Format) carries its approved request-purchase branch
+  PASS  Merged/shared sessions are exactly S9,13,17,18,20,26
+  PASS  Every registered approved asset exists on disk
+  PASS  No approved asset is reused outside its declared merged-session group
+
+── B. Entry flow — real clicks on the Landing CTA only
+  PASS  Landing opens at /smokecraft on a clean start
+  PASS  Landing: approved image fetched (smokecraft-landing.png)
+  PASS  Landing: rendered asset sha256 == approved file on disk
+  PASS  Clean landing shows START (not RESUME)
+  PASS  No stale archived-journey identity leaks onto a clean landing
+  PASS  Landing Start control clicked
+  PASS  New user: Start routes to Guest Pass (earliest incomplete entry step)
+  PASS  Guest Pass: approved image fetched (smokecraft-guest-pass.png)
+  PASS  Guest Pass: rendered asset sha256 == approved file on disk
+  PASS  Enrolled user sees RESUME on the Landing
+  PASS  Landing Resume control clicked
+  PASS  Enrolled user: Resume routes to Identity, never back to Guest Pass
+  PASS  Guest Pass appears once only — a second click still lands on Identity
+  PASS  Landing Resume clicked with identity complete
+  PASS  Enrolled + identity complete: Resume routes to Venue Selection
+  PASS  Venue Selection: approved image fetched (Venue Selection 11.png)
+  PASS  Venue Selection: rendered asset sha256 == approved file on disk
+  PASS  Landing Resume clicked with entry complete
+  PASS  Entry complete: destination is Welcome / Session 1
+  PASS  Welcome renders canonical screenId session-1
+  PASS  Welcome reports phase 1, session 1
+  FAIL  Welcome honestly declares it has no approved asset (never a fabricated one)
+  PASS  Welcome shows no placeholder values (Guest/User/Unknown/No venue selected/undefined/null)
+  PASS  Welcome reflects the real selected venue
+  PASS  Begin Experience control clicked
+  PASS  Begin Experience opens Session 2 (Humidor Match), the next canonical screen
+
+── C. All 27 sessions in canonical order — route, markers, approved asset
+  PASS  All 27 sessions resolve at their exact canonical route
+  PASS  All 27 sessions render their canonical screenId/component
+  PASS  All 27 sessions report their correct phase (1..6)
+  PASS  All 27 sessions report their canonical approved asset key
+  PASS  No Claude-composed replacement / static-only visual on any of the 27 sessions
+  PASS  Every session with an approved asset actually fetched it
+  PASS  Every rendered session asset hash matches the approved file on disk
+  PASS  No approved screen was skipped — 27 of 27 recorded
+  PASS  No screen repeated unexpectedly — 27 distinct session numbers
+  PASS  Exactly 6 distinct phases appeared across the playthrough
+
+── D. Previous / Next / refresh / Resume / guards
+  PASS  Previous on S4 returns to the immediate prior canonical screen (S3)
+  PASS  Continue from S2 advances to a different canonical route
+  PASS  Refresh preserves the current screen (S6 stays S6)
+  PASS  Refresh preserves the canonical markers
+  PASS  Deep link to an unlocked screen (S8) loads at its own route
+  PASS  Mid-journey Landing Resume clicked
+  PASS  Resume opens the earliest incomplete session (S10 flavor-memory)
+  PASS  Direct access to a future session (S19) is blocked — canonical screen never renders
+  PASS  Blocked future session shows a real lock state, not the protected content
+  PASS  Lock action returns to the actual current session (S3 meet-your-cigar)
+  PASS  Unenrolled deep link to Welcome is redirected to Guest Pass, never rendered
+
+── E. Supporting routes — distinct, correct, journey-preserving
+  PASS  Pairing (landing destination): opens at its own route
+  PASS  Pairing (landing destination): approved image fetched (smokecraft-pairing.png)
+  PASS  Pairing (landing destination): rendered asset sha256 == approved file on disk
+  PASS  Pairing (landing destination): preserves journey progress (completedSteps unchanged)
+  PASS  Pairing (landing destination): preserves the selected venue
+  PASS  Pairing (landing destination): Back returns inside the SmokeCraft namespace
+  PASS  Passport: opens at its own route
+  PASS  Passport: preserves journey progress (completedSteps unchanged)
+  PASS  Passport: preserves the selected venue
+  PASS  Passport: Back returns inside the SmokeCraft namespace
+  PASS  Rewards Center: opens at its own route
+  PASS  Rewards Center: approved image fetched (Reward Center.png)
+  PASS  Rewards Center: rendered asset sha256 == approved file on disk
+  PASS  Rewards Center: preserves journey progress (completedSteps unchanged)
+  PASS  Rewards Center: preserves the selected venue
+  PASS  Rewards Center: Back returns inside the SmokeCraft namespace
+  PASS  Rankings / Leaderboard: opens at its own route
+  PASS  Rankings / Leaderboard: preserves journey progress (completedSteps unchanged)
+  PASS  Rankings / Leaderboard: preserves the selected venue
+  PASS  Rankings / Leaderboard: Back returns inside the SmokeCraft namespace
+  PASS  CraftHub: opens at its own route
+  PASS  CraftHub: preserves journey progress (completedSteps unchanged)
+  PASS  CraftHub: preserves the selected venue
+  PASS  CraftHub: Back returns inside the SmokeCraft namespace
+  PASS  Challenge Hub: opens at its own route
+  PASS  Challenge Hub: preserves journey progress (completedSteps unchanged)
+  PASS  Challenge Hub: preserves the selected venue
+  PASS  Challenge Hub: Back returns inside the SmokeCraft namespace
+  PASS  Pairing, Pairing Lab and Pairing Recommendations are three distinct routes
+  PASS  Pairing Lab is the canonical S11 screen
+  PASS  Pairing Recommendations is the canonical S22 screen
+  PASS  Landing Pairing destination is NOT a guarded curriculum route
+  PASS  Pairing Lab is locked before its canonical point (S11)
+  PASS  Pairing Lab opens at its canonical point (S11)
+  PASS  Pairing Recommendations is locked before its canonical point (S22)
+  PASS  Pairing Recommendations opens at its canonical point (S22)
+
+── F. Missing-approved-asset screens are honest, not fabricated
+  PASS  S25 Rewards renders the canonical screen
+  PASS  S25 Rewards leaks none of REWARDS 222.png's baked fake figures into the DOM
+  PASS  ResumeJourney renders without placeholder/fabricated values
+  PASS  SC_ASSETS.resume has no dedicated approved image (disclosed blocker)
+
+── G. Four-viewport sweep across all 31 canonical screens
+  PASS  No horizontal overflow on any of 31 screens at any of the 4 required viewports
+  PASS  Returning-user Landing CTAs never overlap each other or the baked paragraph, and the primary label is neither wrapped nor clipped
+  PASS  Four-viewport sweep covered all 31 canonical screens x 4 viewports
+
+── H. Runtime health
+  PASS  No blocking console error across the whole journey
+  PASS  No broken approved-image request across the whole journey
+  PASS  Backend health check returns 200
+  PASS  Production preview serves /smokecraft (200)
+
+106 passed, 1 failed (of 107 total)
+
+Failures:
+  - Welcome honestly declares it has no approved asset (never a fabricated one)

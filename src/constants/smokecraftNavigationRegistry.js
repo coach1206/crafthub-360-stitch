@@ -43,6 +43,13 @@ export const SMOKECRAFT_NAV_DESTINATIONS = Object.freeze({
   LOUNGE:       '/smokecraft',
   KNOWLEDGE:    '/smokecraft/knowledge-drop',
   HOME:         '/smokecraft',
+  // Deliberately distinct from PAIRING (`/smokecraft/pairing-lab`, the S11
+  // curriculum screen) — `/smokecraft/pairing` is a separate standalone
+  // screen (Migration Queue Group 3). Kept as its own key specifically so
+  // a future edit can never collapse these two back into one literal and
+  // reintroduce the exact naming-collision defect class this operation
+  // already found and fixed once (see smokecraftLandingActions.js).
+  PAIRING_STANDALONE: '/smokecraft/pairing',
 })
 
 // Real, existing top-level `/passport/*` module (a separate app from

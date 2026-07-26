@@ -5,6 +5,7 @@ import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraft
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { computeJourneyStatus } from '../../constants/smokecraftJourneyStatus.js'
 import { TOTAL_SESSIONS } from '../../constants/session.js'
+import { SMOKECRAFT_PASSPORT_MODULE_DESTINATIONS as PASSPORT_MODULE } from '../../constants/smokecraftNavigationRegistry.js'
 
 const NAT_W = 1672
 const NAT_H = 941
@@ -24,12 +25,16 @@ const CREAM = '#e5e2e1'
 // the /smokecraft route group, not a child of it). "View Matches" still has
 // no real destination anywhere in this codebase (confirmed: no "matches"
 // route exists) — remains honestly disabled.
+// Holistic Fix 2 — migrated off local hardcoded route literals onto the
+// one shared smokecraftNavigationRegistry's real /passport/* module
+// destinations. Routes unchanged from the SC-D011/SC-D012 fix; only the
+// source of truth moved.
 const PASSPORT_ACTION_CARDS = [
-  { key: 'scan',      label: 'Scan to Connect',  route: '/passport/scan',      left: '17.0%' },
-  { key: 'directory', label: 'Explore Directory', route: '/passport/directory', left: '30.5%' },
+  { key: 'scan',      label: 'Scan to Connect',  route: PASSPORT_MODULE.SCAN,      left: '17.0%' },
+  { key: 'directory', label: 'Explore Directory', route: PASSPORT_MODULE.DIRECTORY, left: '30.5%' },
   { key: 'matches',   label: 'View Matches (not yet available)', route: null, left: '44.0%', disabled: true },
-  { key: 'event',     label: 'Join an Event',    route: '/passport/events',    left: '57.4%' },
-  { key: 'benefits',  label: 'Explore Benefits', route: '/passport/benefits',  left: '70.9%' },
+  { key: 'event',     label: 'Join an Event',    route: PASSPORT_MODULE.EVENTS,    left: '57.4%' },
+  { key: 'benefits',  label: 'Explore Benefits', route: PASSPORT_MODULE.BENEFITS,  left: '70.9%' },
 ]
 
 /**
@@ -151,12 +156,12 @@ export default function SmokeCraftPassport() {
           real destinations. */}
       <button
         type="button" aria-label="Full Guide" data-testid="passport-full-guide"
-        onClick={() => { triggerHaptic('light'); navigate('/passport/how-it-works') }}
+        onClick={() => { triggerHaptic('light'); navigate(PASSPORT_MODULE.HOW_IT_WORKS) }}
         style={{ position: 'absolute', left: '74%', top: '30%', width: '9%', height: '4%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
       />
       <button
         type="button" aria-label="Directory — Verified members, brands and more" data-testid="passport-directory-row"
-        onClick={() => { triggerHaptic('light'); navigate('/passport/directory') }}
+        onClick={() => { triggerHaptic('light'); navigate(PASSPORT_MODULE.DIRECTORY) }}
         style={{ position: 'absolute', left: '4.8%', top: '88.7%', width: '89.7%', height: '10.6%', background: 'transparent', border: 'none', cursor: 'pointer', pointerEvents: 'auto', touchAction: 'manipulation' }}
       />
 

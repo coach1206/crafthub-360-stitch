@@ -39,6 +39,28 @@ necessary.**
 - `resolveSmokeCraftLandingAction`/`resolveSmokeCraftEntryDestination` is the single Landing-navigation authority.
 - Asset-hash equality assertions already exist in `verify-smokecraft-full-journey-sequence-and-assets.mjs` for every session with a registered asset, and in `verify-smokecraft-final-three-approved-assets.mjs` for the 3 most-recently-wired assets.
 
+## Locked: shared game architecture (Holistic Fix 1 + 2)
+
+- `docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json` is the one canonical
+  manifest for all 108 active `/smokecraft` routes — regenerate via
+  `node scripts/generateSmokecraftGameManifest.mjs`, never hand-edit.
+- `scripts/validateSmokecraftManifest.mjs` is wired into `npm run build`'s
+  `prebuild` step and fails the build on: a route missing from the
+  manifest, a duplicate screenId, an unevidenced live/clean-shell claim, a
+  27/6 spine drift, a dangling curriculum asset reference, a
+  navigation-registry destination that doesn't resolve, **any route left
+  unclassified**, a broken legacy `<Navigate>` alias, or the commerce-alias
+  group (`venue-commerce`/`order`/`ticket-tapper/staff-specials`) silently
+  diverging to different components.
+- `src/constants/smokecraftNavigationRegistry.js` is the one shared
+  destination registry. `WelcomeExperience.jsx`, `Leaderboard.jsx`, and
+  `SmokeCraftPassport.jsx` now consume it instead of local route literals
+  (re-verified via real browser test, zero destination change) — do not
+  reintroduce a local hardcoded route literal in these 3 files.
+- `PAIRING` (`/smokecraft/pairing-lab`, S11) and `PAIRING_STANDALONE`
+  (`/smokecraft/pairing`) are deliberately separate registry keys — do not
+  collapse them into one.
+
 ## Not yet locked / explicitly out of scope for this baseline
 
 Everything not listed above (the remaining ~100 routes, all 27 sessions'

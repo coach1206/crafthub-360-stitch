@@ -1,0 +1,8 @@
+
+=== All-routes browser test: 108 routes ===
+{
+  "PASS": 94,
+  "REDIRECT PASS": 14
+}
+
+Routes requiring attention (not PASS/ALIAS PASS/REDIRECT PASS):

@@ -9,6 +9,7 @@ import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraftImageBoundsOverlay.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { getRankFromXP } from '../../constants/session.js'
+import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
 
 const GOLD      = '#E9C176'
 const GOLD_DIM  = 'rgba(233,193,118,0.55)'
@@ -25,24 +26,28 @@ const GLASS     = 'rgba(8,10,16,0.86)'
 // unrelated POS3/E.A.T. settings exist) — wired as a real, focusable,
 // disabled button with an honest accessible name rather than a fabricated
 // route or a silent dead hotspot.
+// Holistic Fix 2 — migrated off local hardcoded route literals onto the
+// one shared smokecraftNavigationRegistry (see that file's docstring for
+// why this replaces the old per-screen pattern). Destinations are
+// unchanged from the SC-D001 fix — only the source of truth moved.
 const SIDEBAR_ITEMS = [
-  { key: 'dashboard',   label: 'Dashboard',   route: '/smokecraft',                 top: '20.4%' },
-  { key: 'sessions',    label: 'Sessions',    route: '/smokecraft/resume',          top: '26.0%' },
-  { key: 'rewards',     label: 'Rewards',     route: '/smokecraft/rewards-center',  top: '31.5%' },
-  { key: 'passport',    label: 'Passport',    route: '/smokecraft/passport',        top: '37.0%' },
-  { key: 'leaderboard', label: 'Leaderboard', route: '/smokecraft/leaderboard',     top: '42.5%' },
-  { key: 'events',      label: 'Events',      route: '/smokecraft/event-challenge', top: '48.1%' },
-  { key: 'collections', label: 'Collections', route: '/smokecraft/collections',     top: '53.6%' },
-  { key: 'mentor',      label: 'Mentor',      route: '/smokecraft/mentor-selection',top: '59.1%' },
+  { key: 'dashboard',   label: 'Dashboard',   route: NAV.HOME,        top: '20.4%' },
+  { key: 'sessions',    label: 'Sessions',    route: NAV.JOURNEY,     top: '26.0%' },
+  { key: 'rewards',     label: 'Rewards',     route: NAV.REWARDS,     top: '31.5%' },
+  { key: 'passport',    label: 'Passport',    route: NAV.PASSPORT,    top: '37.0%' },
+  { key: 'leaderboard', label: 'Leaderboard', route: NAV.LEADERBOARD, top: '42.5%' },
+  { key: 'events',      label: 'Events',      route: NAV.EVENTS,      top: '48.1%' },
+  { key: 'collections', label: 'Collections', route: NAV.COLLECTIONS, top: '53.6%' },
+  { key: 'mentor',      label: 'Mentor',      route: NAV.MENTOR,      top: '59.1%' },
   { key: 'settings',    label: 'Settings (not yet available)', route: null, top: '64.6%', disabled: true },
 ]
 const BOTTOM_STRIP_ITEMS = [
-  { key: 'home',    label: 'Home',    route: '/smokecraft',                 left: '2.8%' },
-  { key: 'journey', label: 'Journey', route: '/smokecraft/resume',          left: '17.9%' },
-  { key: 'learn',   label: 'Learn',   route: '/smokecraft/knowledge-drop',  left: '32.9%' },
-  { key: 'create',  label: 'Create',  route: '/smokecraft/golden-box',      left: '57.0%' },
-  { key: 'pairing', label: 'Pairing', route: '/smokecraft/pairing',         left: '71.1%' },
-  { key: 'mentor2', label: 'Mentor',  route: '/smokecraft/mentor-selection',left: '85.0%' },
+  { key: 'home',    label: 'Home',    route: NAV.HOME,               left: '2.8%' },
+  { key: 'journey', label: 'Journey', route: NAV.JOURNEY,            left: '17.9%' },
+  { key: 'learn',   label: 'Learn',   route: NAV.KNOWLEDGE,          left: '32.9%' },
+  { key: 'create',  label: 'Create',  route: NAV.GOLDEN_BOX,         left: '57.0%' },
+  { key: 'pairing', label: 'Pairing', route: NAV.PAIRING_STANDALONE, left: '71.1%' },
+  { key: 'mentor2', label: 'Mentor',  route: NAV.MENTOR,             left: '85.0%' },
 ]
 
 // Static description of what the locked 27-session journey may cover — not

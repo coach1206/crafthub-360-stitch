@@ -133,6 +133,20 @@ was confirmed to render its real backend-integrated claim flow without
 crashing. Rewards was confirmed to render real point/rank values with
 non-interactive badge crests (not a false-clickable control).
 
+## Holistic Fix 2 — navigation-registry migration (3 screens re-verified)
+
+Welcome, Leaderboard, and Passport had their local hardcoded sidebar/
+bottom-nav/action-card route literals replaced with imports from the new
+`smokecraftNavigationRegistry.js` (see `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`'s
+Holistic Fix 2 section). Re-verified via a real browser test (6/6 checks):
+Welcome's Rewards and Leaderboard sidebar links, Leaderboard's Rewards and
+Passport sidebar links, and Passport's Directory action card and Full Guide
+link all still navigate to the exact same destination as before the
+migration — zero behavior change. This is a source-of-truth change, not a
+new interaction surface, so it does not add new rows to this matrix; it
+removes 3 more instances of the scattered-literal pattern this document's
+earlier batches flagged as still open.
+
 ## Batch 3E-3 — Challenge Hub, Daily/Weekly Challenge, Event Challenge, SmokeCraft Challenge (live browser verified)
 
 Prompt 3E-3 closed out the remaining Batch 3 challenge screens. See

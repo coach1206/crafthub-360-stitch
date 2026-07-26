@@ -7,6 +7,7 @@ import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraft
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 import { RANKS, getRankFromXP } from '../../constants/session.js'
 import { getLeaderboardSnapshot } from '../../services/smokecraft/smokeLeaderboardService.js'
+import { SMOKECRAFT_NAV_DESTINATIONS as NAV } from '../../constants/smokecraftNavigationRegistry.js'
 
 /**
  * Leaderboard — /smokecraft/leaderboard (also /grand-lounge-ranking, /leaderboard)
@@ -66,14 +67,17 @@ const PANEL  = '#080c14'
 // approved image's baked sidebar rows (from 1538x1022 LEADERBOARD 111.png).
 // LEADERBOARD itself is the current page and is intentionally excluded
 // (its baked highlight reflects real navigation state, not a false default).
+// Holistic Fix 2 — migrated off local hardcoded route literals onto the
+// one shared smokecraftNavigationRegistry. Destinations unchanged from the
+// SC-D010 fix; only the source of truth moved.
 const SIDEBAR_ITEMS = [
-  { key: 'lounge',     label: 'Back to SmokeCraft landing', route: '/smokecraft',              top: '33.8%' },
-  { key: 'journey',    label: 'Journey',                     route: '/smokecraft/resume',        top: '38.4%' },
-  { key: 'cigars',     label: 'Cigars',                      route: '/smokecraft/humidor-match',  top: '43.0%' },
-  { key: 'challenges', label: 'Challenges',                  route: '/smokecraft/challenge-hub',  top: '47.6%' },
-  { key: 'events',     label: 'Events',                      route: '/smokecraft/event-challenge',top: '52.2%' },
-  { key: 'rewards',    label: 'Rewards',                     route: '/smokecraft/rewards-center', top: '61.3%' },
-  { key: 'passport',   label: 'Passport',                    route: '/smokecraft/passport',       top: '65.9%' },
+  { key: 'lounge',     label: 'Back to SmokeCraft landing', route: NAV.LOUNGE,     top: '33.8%' },
+  { key: 'journey',    label: 'Journey',                     route: NAV.JOURNEY,    top: '38.4%' },
+  { key: 'cigars',     label: 'Cigars',                      route: NAV.CIGARS,     top: '43.0%' },
+  { key: 'challenges', label: 'Challenges',                  route: NAV.CHALLENGES, top: '47.6%' },
+  { key: 'events',     label: 'Events',                      route: NAV.EVENTS,     top: '52.2%' },
+  { key: 'rewards',    label: 'Rewards',                     route: NAV.REWARDS,    top: '61.3%' },
+  { key: 'passport',   label: 'Passport',                    route: NAV.PASSPORT,   top: '65.9%' },
   { key: 'settings',   label: 'Settings (not yet available)', route: null, top: '70.6%', disabled: true },
 ]
 

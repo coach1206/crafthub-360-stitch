@@ -1,0 +1,24 @@
+
+=== SmokeCraft game-manifest / navigation / shell validation (Holistic Fix 1) ===
+
+  PASS  Route inventory regenerates without error
+  PASS  SMOKECRAFT_GAME_MANIFEST.json exists
+  PASS  Manifest totalRoutes matches live /smokecraft route count (no route missing from the manifest)
+  PASS  No duplicate screenId in the manifest
+  PASS  Every manifest entry has a route string
+  PASS  Every screen classified as live/clean-shell cites real audit evidence (auditedIn is not empty/unclassified)
+  PASS  Exactly 27 sessions in the spine
+  PASS  TOTAL_SESSIONS constant equals 27
+  PASS  Exactly 6 phases
+  PASS  TOTAL_VISITS constant equals 6
+  PASS  Session numbers are exactly 1..27, no gap, no duplicate
+  PASS  Every curriculum manifest entry has an assetStatus field
+  PASS  No curriculum manifest entry silently references a non-existent SC_ASSETS key
+  PASS  Every SmokeCraft-namespace navigation-registry destination resolves to a real, currently-registered route
+  PASS  Locked phase groupings unchanged (Package J decision)
+  PASS  No route remains unclassified (0 unclassified)
+  PASS  Every legacy <Navigate> alias resolves to a currently-registered route (14 aliases checked, 0 broken)
+  PASS  venue-commerce / order / ticket-tapper/staff-specials remain a documented, enforced alias group (identical component)
+
+=== RESULT: PASS — 0 failing check(s) ===
+
