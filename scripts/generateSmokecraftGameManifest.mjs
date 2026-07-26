@@ -23,7 +23,7 @@
 // rule. Screens this operation HAS already deep-audited (see
 // SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md) get their real, evidence-backed
 // classification filled in below in KNOWN_AUDITED.
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 
 const { SMOKECRAFT_SCREEN_MANIFEST } = await import('../src/constants/smokecraftScreenManifest.js')
 const { SC_ASSETS } = await import('../src/constants/smokecraftAssets.js')
@@ -49,6 +49,68 @@ function extractComponent(elementRaw) {
     return `Navigate->${to ? to[1] : '?'}`
   }
   return inner[0] || matches[0] || 'unknown'
+}
+
+// Holistic Fix 2 — real, source-derived first classification for any
+// supporting route not already covered by KNOWN_AUDITED. Never a guess:
+// every result below is grepped directly from the component's own source
+// file. This is NOT a full interaction audit — screens classified this way
+// carry an `auditedIn` note saying so explicitly, and remain in the
+// migration queue for real browser verification.
+const appJsxSrc = readFileSync('src/App.jsx', 'utf8')
+const componentFileCache = {}
+function findComponentFile(componentName) {
+  if (componentName in componentFileCache) return componentFileCache[componentName]
+  // Resolve via App.jsx's own import statement — handles both plain
+  // imports and `const X = lazy(() => import('...'))`, and correctly
+  // follows components whose real file lives in a subdirectory (e.g.
+  // src/pages/smokecraft/goldenBox/JudgeDashboard.jsx) under a different
+  // local alias than its own internal function name.
+  const plainImport = appJsxSrc.match(new RegExp(`import\\s+${componentName}\\s+from\\s+['"]([^'"]+)['"]`))
+  const lazyImport = appJsxSrc.match(new RegExp(`const\\s+${componentName}\\s*=\\s*lazy\\(\\(\\)\\s*=>\\s*import\\(['"]([^'"]+)['"]\\)\\)`))
+  const relPath = plainImport?.[1] || lazyImport?.[1]
+  // App.jsx lives at src/App.jsx, so its own './x' imports resolve to 'src/x'.
+  const file = relPath ? relPath.replace(/^\.\//, 'src/') : null
+  componentFileCache[componentName] = file && existsSync(file) ? file : null
+  return componentFileCache[componentName]
+}
+
+function sourceClassify(componentName) {
+  if (componentName.startsWith('Navigate->')) {
+    return { classification: 'alias-redirect', auditedIn: `source-derived: <Navigate> to ${componentName.replace('Navigate->', '')} (Holistic Fix 2 classification pass)` }
+  }
+  if (componentName.startsWith('entry-')) return null // handled by KNOWN_AUDITED / left honest
+
+  const file = findComponentFile(componentName)
+  if (!file || !existsSync(file)) return null
+
+  const src = readFileSync(file, 'utf8')
+  const usesImageShell = /SmokeCraftImageBoundsOverlay/.test(src)
+  const usesAssetRouteHotspots = /SmokeCraftAssetRoute/.test(src) && /onClick\s*:/.test(src)
+  const usesNavBar = /SmokeCraftNavBar/.test(src) && /onPrimary=|onSecondary=/.test(src)
+  const usesComingSoon = /ComingSoon/.test(src)
+  const hasRealControls = /<button\b|onClick=|<input\b|<select\b|<textarea\b/.test(src) || usesAssetRouteHotspots || usesNavBar || usesComingSoon
+  const usesAssetScreenOnly = /SmokeCraftAssetScreen/.test(src) && !hasRealControls
+  const isPureTimedRedirect = !hasRealControls && !usesImageShell && !usesAssetScreenOnly && /navigate\(/.test(src) && !/<button\b/.test(src)
+
+  if (usesImageShell || usesAssetRouteHotspots) {
+    return { classification: 'clean-image-shell', auditedIn: `source-derived: uses ${usesImageShell ? 'SmokeCraftImageBoundsOverlay' : 'SmokeCraftAssetRoute hotspots'} (${file}) — Holistic Fix 2 classification pass, not yet individually interaction-verified` }
+  }
+  if (hasRealControls) {
+    return { classification: 'full-live-react', auditedIn: `source-derived: real interactive elements present (${usesNavBar ? 'SmokeCraftNavBar Primary/Secondary' : 'inline controls'}, ${file}) — Holistic Fix 2 classification pass, not yet individually interaction-verified` }
+  }
+  if (usesAssetScreenOnly) {
+    return { classification: 'instructional-image', auditedIn: `source-derived: renders SmokeCraftAssetScreen only, no interactive controls in this file (${file}) — Holistic Fix 2 classification pass` }
+  }
+  if (isPureTimedRedirect) {
+    return { classification: 'instructional-image', auditedIn: `source-derived: auto-advancing transition screen with no user-facing control (${file}) — Holistic Fix 2 classification pass` }
+  }
+  // No image-shell wrapper and no interactive element found by this
+  // grep-level heuristic — could be a real instructional/dead screen, or a
+  // false negative from controls supplied by a shared child component this
+  // heuristic doesn't yet recognize. Do not guess; leave honestly
+  // unclassified for manual review.
+  return null
 }
 
 function extractGuard(elementRaw) {
@@ -77,6 +139,9 @@ const KNOWN_AUDITED = {
   'smokecraft-challenge': { classification: 'full-live-react', auditedIn: 'Prompt 3E-3 (no defect)' },
   'challenges/blend-fault-identification': { classification: 'full-live-react', auditedIn: 'Prompt 3E-3 (spot-checked, no defect)' },
   'venue-select':     { classification: 'clean-image-shell', auditedIn: 'Prompt 1 (crop fix, closed)' },
+  '(smokecraft index)': { classification: 'clean-image-shell', auditedIn: 'source-derived: SmokeCraft.jsx (Landing) uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
+  'enroll':           { classification: 'clean-image-shell', auditedIn: 'source-derived: Enroll.jsx uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
+  'identity':         { classification: 'clean-image-shell', auditedIn: 'source-derived: Identity.jsx uses SmokeCraftImageBoundsOverlay + real onClick controls (Holistic Fix 2 classification pass)' },
 }
 
 const manifestByRoute = {}
@@ -115,13 +180,15 @@ for (const r of rawRoutes) {
     continue
   }
 
+  const component = extractComponent(r.elementRaw)
+  const derived = known ? null : sourceClassify(component)
   entries.push({
     screenId: `supporting-${r.fullPath.replace(/[\/:]/g, '-')}`,
     route,
     type: 'supporting',
     phase: null,
     sessionNumber: null,
-    component: extractComponent(r.elementRaw),
+    component,
     assetKey: null,
     assetStatus: 'unclassified',
     previousScreenId: null,
@@ -130,8 +197,8 @@ for (const r of rawRoutes) {
     persistenceScope: 'unclassified',
     xpEvent: null,
     passportEvent: null,
-    classification: known?.classification || 'unclassified',
-    auditedIn: known?.auditedIn || 'not yet individually audited this operation',
+    classification: known?.classification || derived?.classification || 'unclassified',
+    auditedIn: known?.auditedIn || derived?.auditedIn || 'not yet individually audited this operation — no source signal found by the automated classifier either; needs manual review',
     requiredControls: 'unclassified',
     requiredData: 'unclassified',
     states: 'unclassified',

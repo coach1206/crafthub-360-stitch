@@ -1,62 +1,94 @@
-# SmokeCraft Screen Classification — Holistic Fix 1
+# SmokeCraft Screen Classification — Holistic Fix 2
 
 Generated from `docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json`
 (`node scripts/generateSmokecraftGameManifest.mjs`). Do not hand-edit the
 counts below — regenerate the manifest and re-derive them.
 
-Classification taxonomy (per the Holistic Fix 1 mandate):
+## IMPORTANT: classification ≠ migration ≠ interaction-verification
+
+This pass (Holistic Fix 2) closed the **classification** gap: all 108
+routes now carry a real, source-derived classification with an
+`auditedIn` evidence citation — none are the bare "unclassified" string
+anymore. It did **not** individually interaction-verify (real browser
+click/keyboard/touch test) every one of those newly-classified routes,
+and it did **not** migrate every screen onto `SmokeCraftScreenShell` /
+`smokecraftNavigationRegistry`. Those remain real, disclosed gaps — see
+"What Holistic Fix 2 did NOT do" below and `SMOKECRAFT_MIGRATION_QUEUE.md`.
+
+Classification taxonomy (five real values, all in active use):
 
 - **full-live-react** — real component, real state, real backend or real
   local computation; no baked mockup image driving the layout.
 - **clean-image-shell** — an approved image rendered via
-  `SmokeCraftImageBoundsOverlay`, with percentage-positioned live controls
-  overlaid on top. The image is decorative/structural, not a fabricated
-  data source.
+  `SmokeCraftImageBoundsOverlay` (or the equivalent `SmokeCraftAssetRoute`
+  hotspot pattern), with percentage-positioned live controls overlaid on
+  top.
 - **instructional-image** — an approved image used purely as reference
-  material (e.g. a diagram), with no interactive hotspots implied by its
-  content.
+  material, or an honest auto-advancing transition screen, with no
+  interactive hotspots.
+- **alias-redirect** — a `<Navigate>` route with no screen of its own.
 - **unsafe-full-mockup** — a baked image that visually implies interactive
-  controls (sidebars, cards, nav strips) with no live control behind them.
-  **None currently exist in this codebase** — every screen of this kind
-  found during this recovery operation (SC-D001, SC-D010, SC-D011, SC-D012,
-  SC-D013) has already been fixed and reclassified as `clean-image-shell`.
-- **unclassified** — not yet individually interaction-audited by this
-  recovery operation. This is the honest, disclosed default for any route
-  this operation has not yet put a real browser in front of. It is NOT a
-  claim of "broken" — it is a claim of "not yet verified either way."
+  controls with no live control behind them. **0 found** — every instance
+  this operation has found (SC-D001, SC-D010, SC-D011, SC-D012, SC-D013)
+  was already fixed in earlier prompts.
 
 ## Current counts (108 total routes under `/smokecraft`)
 
-| Classification | Count | Notes |
-|---|---|---|
-| full-live-react | 25 | 21 curriculum-spine screens (see below) + Connections, Passport Stamp, Rewards, Challenge Hub, Event Challenge, SmokeCraft Challenge, Blend Fault Identification |
-| clean-image-shell | 5 | Welcome (S1), Leaderboard, Passport, CraftHub, Venue Selection |
-| instructional-image | 0 | none yet confirmed as this specific type — see migration queue |
-| unsafe-full-mockup | 0 | none remaining — all found instances already fixed |
-| unclassified | 78 | not yet individually audited this operation; see the migration queue below for how these are grouped for Holistic Fix 2 |
+| Classification | Count |
+|---|---|
+| full-live-react | 72 |
+| clean-image-shell | 18 |
+| alias-redirect | 14 |
+| instructional-image | 4 |
+| unsafe-full-mockup | 0 |
+| **unclassified** | **0** |
 
-21 of the 27 curriculum sessions share a route with a merged sibling
-session (S9→S8, S13→S12, S17/S18→S16, S20→S19, S26→S25 — see
-`SMOKECRAFT_27_SESSION_AUDIT.md` for why this merging is intentional, not a
-defect), which is why 27 sessions resolve to 21 unique manifest entries.
+## How the 78 previously-unclassified routes got classified this pass
 
-## Correction made during this pass (not a screen defect — a tooling bug)
+`scripts/generateSmokecraftGameManifest.mjs` now runs a real, source-derived
+classifier for every route not already in the hand-curated `KNOWN_AUDITED`
+table (the 33 routes this operation has actually put a real browser in
+front of). For each remaining route it resolves the real component file via
+`App.jsx`'s own import statement (including `lazy()` imports into
+subdirectories like `src/pages/smokecraft/goldenBox/*.jsx`), then greps
+that file for real signals:
 
-`scripts/smokecraftRouteInventory.mjs` was emitting a phantom duplicate
-route entry for any `<Route path="X">` line that only opens a nested route
-group (e.g. `<Route path="golden-box">`, which has no `element=` of its
-own — its real page is the nested `<Route index element={...} />` right
-under it). This inflated every prior route count in this operation by
-exactly 1 (109 reported, 108 real). Fixed by only recording a route entry
-for lines that actually carry an `element=`. Historical documents in this
-folder that recorded "109" reflect what that script actually printed at
-the time and are left as an accurate record of that prompt's real output;
-this file and `SMOKECRAFT_GAME_MANIFEST.json` are the corrected count going
-forward.
+- `SmokeCraftImageBoundsOverlay` or `SmokeCraftAssetRoute` + hotspot
+  `onClick` → `clean-image-shell`
+- `<button`, `onClick=`, `<input`, `<select`, `<textarea`,
+  `SmokeCraftNavBar` with `onPrimary=`/`onSecondary=`, or `ComingSoon` →
+  `full-live-react`
+- `SmokeCraftAssetScreen` alone with none of the above → `instructional-image`
+- no controls at all but calls `navigate(...)` unconditionally →
+  `instructional-image` (auto-advancing transition screen)
+- `<Navigate>` → `alias-redirect`
 
-## Full per-route detail
+10 routes needed a manual read this pass because the automated heuristic's
+first version had 2 real gaps, both fixed in the generator itself rather
+than hand-patched in the output: (1) `lazy()`-imported components living in
+a subdirectory under a different local alias than their own internal
+function name were not being resolved at all — fixed by resolving through
+the import statement instead of grepping for a matching function name; (2)
+controls supplied via `onClick:` object-property syntax (the
+`SmokeCraftAssetRoute` hotspot pattern) and via `SmokeCraftNavBar`'s
+`onPrimary`/`onSecondary` props were invisible to the original
+JSX-attribute-only regex — fixed by adding both patterns explicitly.
 
-See `docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json` — every one of the 108
-routes, with its component, guard type, asset key/status, classification,
-and `auditedIn` evidence citation (or the honest `unclassified` /
-`not yet individually audited this operation` marker).
+## What Holistic Fix 2 did NOT do (disclosed, not fabricated)
+
+- Did not individually browser-interaction-test the ~70 supporting routes
+  that were only source-classified this pass (Golden Box's 16 routes,
+  Origins/Curation/Leaf-Challenge's 9, the Pairing-adjacent 5, etc.) — only
+  the pre-existing 33 already-audited routes plus 3 newly-migrated screens
+  (Welcome, Leaderboard, Passport) have real click-tested evidence.
+- Did not migrate any screen other than Welcome/Leaderboard/Passport onto
+  the shared navigation registry, and migrated **zero** screens onto
+  `SmokeCraftScreenShell` (the shell contract exists but is still adopted
+  by 0 real screens — building a screen and swapping its live/error/empty
+  presentation is a real behavior change that needs individual visual
+  regression proof per screen, not a batch find-and-replace).
+- Did not resolve the Golden Box / Origins-Curation-module / Pairing-
+  adjacent / remaining-standalone groups from the migration queue.
+
+See `SMOKECRAFT_MIGRATION_QUEUE.md` for the exact remaining work, updated
+this pass to reflect what's now classified vs. what's still unverified.

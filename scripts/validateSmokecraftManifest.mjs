@@ -80,5 +80,42 @@ check('Locked phase groupings unchanged (Package J decision)',
   VISIT_STRUCTURE.map(v => v.sessions.map(s => s.session).join(',')).join('|') ===
   '1,2,3,4,5,6,7|8,9,10,11|12,13,14,15|16,17,18|19,20|21,22,23,24,25,26,27')
 
+// 7. Holistic Fix 2 — no route may remain unclassified. Every one of the
+// 108 active routes must carry a real classification (full-live-react,
+// clean-image-shell, instructional-image, alias-redirect, or the honest
+// unsafe-full-mockup flag if one is ever found) with real evidence, not
+// the bare placeholder string.
+if (existsSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')) {
+  const manifest = JSON.parse(readFileSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json', 'utf8'))
+  const unclassified = manifest.entries.filter(e => e.classification === 'unclassified')
+  check(`No route remains unclassified (${unclassified.length} unclassified)`, unclassified.length === 0)
+}
+
+// 8. Legacy <Navigate> route aliases must resolve to a route that still
+// exists in the live route inventory — never a dangling alias.
+if (existsSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json')) {
+  const manifest = JSON.parse(readFileSync('docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json', 'utf8'))
+  const aliases = manifest.entries.filter(e => e.classification === 'alias-redirect')
+  const brokenAliases = aliases.filter(a => {
+    const target = a.auditedIn.match(/<Navigate> to (\/[^\s(]+)/)?.[1]
+    return !target || !liveRoutes.has(target)
+  })
+  check(`Every legacy <Navigate> alias resolves to a currently-registered route (${aliases.length} aliases checked, ${brokenAliases.length} broken)`, brokenAliases.length === 0)
+}
+
+// 9. Commerce alias enforcement (Holistic Fix 2, item 10) — `venue-commerce`,
+// `order`, and `ticket-tapper/staff-specials` are a documented, intentional
+// alias group (see SMOKECRAFT_MIGRATION_QUEUE.md Group 4). This must stay
+// enforced: if they ever silently diverge to different components, that is
+// exactly the "three misleading routes" state the mandate forbids.
+const appJsxForCommerce = readFileSync('src/App.jsx', 'utf8')
+const commerceAliasLines = [
+  appJsxForCommerce.match(/<Route path="venue-commerce"\s+element=\{<(\w+)/)?.[1],
+  appJsxForCommerce.match(/<Route path="order"\s+element=\{<(\w+)/)?.[1],
+  appJsxForCommerce.match(/<Route path="ticket-tapper\/staff-specials"\s+element=\{<(\w+)/)?.[1],
+]
+check('venue-commerce / order / ticket-tapper/staff-specials remain a documented, enforced alias group (identical component)',
+  commerceAliasLines.every(Boolean) && new Set(commerceAliasLines).size === 1)
+
 console.log(`\n=== RESULT: ${failures === 0 ? 'PASS' : 'FAIL'} — ${failures} failing check(s) ===\n`)
 if (failures > 0) process.exit(1)

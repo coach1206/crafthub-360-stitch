@@ -1,96 +1,107 @@
-# SmokeCraft Migration Queue — for Holistic Fix 2
+# SmokeCraft Migration Queue — updated after Holistic Fix 2
 
-Generated from `docs/smokecraft/SMOKECRAFT_GAME_MANIFEST.json`'s 78
-`unclassified` routes. Grouped by shared defect/migration class (per the
-Holistic Fix 1 mandate: "group screens by shared defect class, not one
-page at a time"), in the order Holistic Fix 2 should tackle them. No group
-below has been individually interaction-audited yet — group membership is
-based on route/component naming and shared architectural shape, not a
-claim that a specific defect has been confirmed in every member.
+Every one of the 108 routes now has a real classification (see
+`SMOKECRAFT_SCREEN_CLASSIFICATION.md`) — the groups below are no longer
+"unclassified", they are "classified but not yet interaction-verified /
+not yet migrated onto the shared navigation registry or screen shell".
+That is the real remaining work for Holistic Fix 3.
 
-## Group 1 — Golden Box family (16 routes, highest priority: biggest single supporting module, real competition backend, investor-visible)
+## Group 1 — Golden Box family (16 routes) — STILL OPEN
 
-`golden-box`, `golden-box/status`, `golden-box/competitions`,
+`golden-box` (full-live-react), `golden-box/status` (instructional-image —
+`SmokeCraftAssetScreen` only, no controls found), `golden-box/competitions`,
 `golden-box/competitions/:competitionId`, `golden-box/entries/:entryId/blend`,
 `golden-box/results/:competitionId`, `golden-box/judge`,
 `golden-box/judge/entries/:entryId`, `golden-box/mentor/entries/:entryId`,
 `golden-box/packaging-studio` (+`new`, `:designId`, `:designId/preview`,
-`:designId/versions`, `:designId/share`), `golden-box/packaging-review/:shareToken`.
+`:designId/versions`, `:designId/share`), `golden-box/packaging-review/:shareToken`
+— all source-classified `full-live-react` this pass (real components with
+real controls), none individually browser-interaction-tested yet, none
+migrated onto `smokecraftNavigationRegistry` or `SmokeCraftScreenShell`.
 
-Shared migration work: classify each as full-live-react vs clean-image-shell;
-confirm each uses the shared `SmokeCraftScreenShell` contract once it's
-adopted; confirm persistence/backend requirements (per this operation's own
-prior notes, Package 1/2 already wired a real backend here — needs
-re-confirmation, not re-building); confirm no baked judge/mentor review data.
+## Group 2 — Origins/Curation/Leaf-Challenge/Cultivation module (9 routes) — STILL OPEN
 
-## Group 2 — Origins/Curation/Leaf-Challenge/Cultivation content module (9 routes)
+`origins` (instructional-image), `curation`, `leaves`, `leaf-challenge`,
+`leaf-challenge-calculating` (instructional-image — real auto-advancing
+transition screen, confirmed via source read this pass, no user control),
+`leaf-challenge-result`, `cultivation`, `blend`, `flavor-dna`
+(instructional-image). Relationship to the 27-session spine and to Golden
+Box still not documented anywhere canonical — first task for Holistic Fix 3
+remains determining whether this is a supporting module, a legacy/
+superseded flow, or dead code.
 
-`origins`, `curation`, `leaves`, `leaf-challenge`,
-`leaf-challenge-calculating`, `leaf-challenge-result`, `cultivation`,
-`blend`, `flavor-dna`.
+## Group 3 — Pairing-adjacent standalone screens (5 routes) — STILL OPEN
 
-Shared migration work: this module's relationship to the 27-session spine
-and to Golden Box is not yet documented anywhere in this recovery
-operation's canonical docs — first task is determining whether it's a
-supporting module, a legacy/superseded flow, or dead code, before any
-interaction audit.
+`pairing` (full-live-react), `available`, `assistant` (full-live-react via
+`ComingSoon`), `pairing-mastery` (full-live-react via `ComingSoon`),
+`vitola`. Confirmed this pass: `/smokecraft/pairing` is genuinely distinct
+from `/smokecraft/pairing-lab` (S11) — WelcomeExperience.jsx's bottom-strip
+"Pairing" control correctly targets `/smokecraft/pairing`, not
+`pairing-lab`, and this distinction is now protected in the navigation
+registry via two separate keys (`PAIRING` vs `PAIRING_STANDALONE`) so a
+future edit can't silently collapse them.
 
-## Group 3 — Pairing-adjacent standalone screens (5 routes)
+## Group 4 — SmokeCraft commerce module (8 routes) — RESOLVED this pass (item 10)
 
-`pairing`, `available`, `assistant`, `pairing-mastery`, `vitola`.
+`menu`, `venue-commerce` + `order` + `ticket-tapper/staff-specials` (all
+three intentionally render `SmokeCraftVenueCommerce` — confirmed via source
+read that the component reads no route param/pathname to differentiate
+behavior, and no internal code links to `order` or
+`ticket-tapper/staff-specials` at all, meaning they exist purely as
+external/legacy entry aliases), `cart`, `checkout`, `payment-success`,
+`order-status`. **Decision: documented and enforced as an intentional alias
+group** (not "connect each to distinct behavior", since no distinct
+behavior exists to connect to and inventing one would be fabrication).
+Enforced by `scripts/validateSmokecraftManifest.mjs`'s new commerce-alias
+check, which fails the build if the three routes ever render different
+components without an explicit, deliberate change to that check.
 
-Shared migration work: these are separate from the canonical curriculum
-`pairing-lab` (S11) and `pairing-recommendations` (S22) — same naming
-collision risk this operation already found and fixed once for Landing's
-PAIRING destination (see `smokecraftLandingActions.js` docstring). Confirm
-none of these is an orphaned dead route, and that no Landing/sidebar control
-points at the wrong one.
-
-## Group 4 — SmokeCraft commerce module (8 routes, 3 routes share exactly one component)
-
-`menu` (SmokeCraftMenu), `venue-commerce` + `order` + `ticket-tapper/staff-specials`
-(all three render the identical `SmokeCraftVenueCommerce` component — a real,
-disclosed architecture smell: three URLs for one screen, not yet consolidated
-into one canonical route with the others as registry-level aliases), `cart`,
-`checkout`, `payment-success`, `order-status`.
-
-Shared migration work: consolidate the 3-routes-1-component case into the
-navigation registry as a single canonical destination with documented
-aliases (the same fix already applied to Landing's action map), then audit
-the real cart/checkout/payment flow for live vs. fabricated order data.
-
-## Group 5 — Legacy route aliases (13 routes, lowest interaction risk, highest cleanup value)
+## Group 5 — Legacy route aliases (14 routes) — TESTED this pass (item 11)
 
 `intake`, `entry`, `profile`, `education`, `mentors`, `humidor`, `light`,
 `complete`, `gold-box`, `mentor`, `challenge`, `mini-tasting-round`,
-`session/start` — all `<Navigate>` redirects to a canonical route.
+`session/start` (13 `<Navigate>` aliases) — all now automatically verified
+by `scripts/validateSmokecraftManifest.mjs`'s new alias-resolution check,
+which confirms every alias target still exists in the live route inventory
+(0 broken found). Not yet consolidated into a single alias-table constant
+(cosmetic cleanup, not a defect) — still 13 scattered `<Route><Navigate>`
+lines in `App.jsx`.
 
-Shared migration work: confirm every one still points at a route that
-exists (the navigation-registry validator added in this pass already
-checks this for the registry's own destinations; these raw `<Navigate>`
-aliases are not yet covered by an equivalent automated check — add one in
-Holistic Fix 2). Candidate for a single "alias table" constant instead of
-13 scattered `<Route><Navigate>` lines in `App.jsx`.
-
-## Group 6 — Remaining standalone supporting screens (22 routes, audit individually or in small pairs)
+## Group 6 — Remaining standalone supporting screens — mostly classified this pass
 
 `art`, `mentor-selection`, `cigar-gauge-guide`, `wrapper-strength`,
-`seed-soil`, `request-purchase`, `knowledge-check-demo`, `mini-tasting-module`,
-`second-humidor-match`, `mini-tasting`, `management-sync` (+`analytics`),
-`skill-tree`, `collections`, `filler-arrangement`, `visit-complete`,
-`resume` (ResumeJourney), `rewards-center`, `how-it-works`, `demo-reset`,
-`guest-pass`, `demo`, `scan`.
+`seed-soil`, `request-purchase`, `knowledge-check-demo`,
+`mini-tasting-module`, `second-humidor-match` (full-live-react — real
+`SmokeCraftNavBar` Primary/Secondary controls, confirmed via source read),
+`mini-tasting` (full-live-react, same pattern), `management-sync`
+(+`analytics`), `skill-tree`, `collections`, `filler-arrangement`,
+`visit-complete`, `resume` (ResumeJourney), `rewards-center`,
+`how-it-works`, `demo-reset`, `guest-pass` (clean-image-shell —
+`SmokeCraftAssetRoute` hotspot pattern, confirmed via source read),
+`scan` (same pattern). All source-classified this pass; none individually
+browser-interaction-tested or migrated onto the shared navigation registry
+/ screen shell yet.
 
-No single shared defect class was evident from route/component naming
-alone for this group — Holistic Fix 2 should re-derive sub-groups after a
-first-pass source read, rather than this pass guessing groupings it hasn't
-verified.
+## Already fully migrated + interaction-verified (not open work)
 
-## Not included in this queue
+**Navigation-registry adoption (Holistic Fix 2, this pass):** Welcome
+(`WelcomeExperience.jsx`), Leaderboard (`Leaderboard.jsx`), and Passport
+(`SmokeCraftPassport.jsx`) had their local hardcoded `SIDEBAR_ITEMS`/
+`BOTTOM_STRIP_ITEMS`/`PASSPORT_ACTION_CARDS` route literals replaced with
+imports from `smokecraftNavigationRegistry.js`. Re-verified via a real
+browser test (6/6 destination checks passing) that every migrated control
+still navigates to the exact same route as before — zero behavior change,
+only the source of truth moved. CraftHub (`SmokeCraftCraftHub.jsx`) was
+left as-is: it already routes through `resolveSmokeCraftLandingAction`
+rather than raw literals, so it has no scattered-literal problem to fix.
 
-The 4 entry screens and 21 curriculum-spine routes (27 sessions) already
-have canonical manifest coverage via `SMOKECRAFT_SCREEN_MANIFEST`, and the
-33 routes already deep-audited this operation (Welcome, Leaderboard,
-Passport, CraftHub, Venue Selection, Connections, Passport Stamp, Rewards,
-Challenge Hub, Event Challenge, SmokeCraft Challenge, Blend Fault
-Identification) are excluded — see `SMOKECRAFT_SCREEN_CLASSIFICATION.md`.
+**Screen-shell adoption: 0 screens.** `SmokeCraftScreenShell` remains
+unadopted by any screen — this is the largest remaining gap for Holistic
+Fix 3, and adopting it screen-by-screen (with a real visual-regression
+screenshot per screen) is the recommended next unit of work.
+
+The 33 routes already deep-audited in Prompts 3B–3E-3 (Welcome,
+Leaderboard, Passport, CraftHub, Venue Selection, Connections, Passport
+Stamp, Rewards, Challenge Hub, Event Challenge, SmokeCraft Challenge, Blend
+Fault Identification, + the 21 curriculum-spine routes) remain excluded
+from "needs classification" — they already have real evidence.
