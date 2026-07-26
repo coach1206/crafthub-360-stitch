@@ -6,14 +6,15 @@ counts below — regenerate the manifest and re-derive them.
 
 ## IMPORTANT: classification ≠ migration ≠ interaction-verification
 
-This pass (Holistic Fix 2) closed the **classification** gap: all 108
-routes now carry a real, source-derived classification with an
-`auditedIn` evidence citation — none are the bare "unclassified" string
-anymore. It did **not** individually interaction-verify (real browser
-click/keyboard/touch test) every one of those newly-classified routes,
-and it did **not** migrate every screen onto `SmokeCraftScreenShell` /
-`smokecraftNavigationRegistry`. Those remain real, disclosed gaps — see
-"What Holistic Fix 2 did NOT do" below and `SMOKECRAFT_MIGRATION_QUEUE.md`.
+Holistic Fix 2 closed the **classification** gap: all 108 routes carry a
+real, source-derived classification with an `auditedIn` evidence citation.
+Holistic Fix 2A closed a first **migration** batch: 7 screens (Welcome,
+Leaderboard, Passport, Venue Selection, CraftHub, Challenge Hub, Rewards)
+now actually import and render `SmokeCraftScreenShell` and use
+`smokecraftNavigationRegistry` for every registered destination they
+expose, verified via real browser interaction tests and a 5-viewport
+sweep. **101 of 108 routes remain classified-but-not-migrated** — see
+`SMOKECRAFT_MIGRATION_QUEUE.md` for the exact remaining groups.
 
 Classification taxonomy (five real values, all in active use):
 
@@ -42,6 +43,7 @@ Classification taxonomy (five real values, all in active use):
 | instructional-image | 4 |
 | unsafe-full-mockup | 0 |
 | **unclassified** | **0** |
+| **fully migrated (SmokeCraftScreenShell + nav registry, this pass)** | **7** |
 
 ## How the 78 previously-unclassified routes got classified this pass
 

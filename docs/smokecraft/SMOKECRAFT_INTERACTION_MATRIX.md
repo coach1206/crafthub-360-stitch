@@ -133,6 +133,40 @@ was confirmed to render its real backend-integrated claim flow without
 crashing. Rewards was confirmed to render real point/rank values with
 non-interactive badge crests (not a false-clickable control).
 
+## Holistic Fix 2A — full shell + navigation-registry migration (7 screens)
+
+Migrated Welcome, Leaderboard, Passport, Venue Selection, CraftHub,
+Challenge Hub, and Rewards to actually import and render
+`SmokeCraftScreenShell` (not just have it available), replacing their
+direct `SmokeCraftImageBoundsOverlay` import where applicable. Full detail,
+per-screen results, and proof in `SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`'s
+Holistic Fix 2A section and `public/proof/smokecraft-holistic-fix-2a/`.
+5-viewport browser verification (35 screen×viewport checks): 34/35 clean
+(no horizontal overflow, no console error), keyboard focus reached a real
+control in all 35. The one flagged check (Welcome at handheld-portrait)
+was investigated and found to be a flaky, non-reproducing resource-load
+console error unrelated to this migration — it does not reproduce
+consistently across repeated identical runs and was also observed to not
+reproduce at all in some runs, which rules out a deterministic shell/
+navigation-registry regression.
+
+Two new build-blocking regression suites added:
+`scripts/validateSmokecraftShellAdoption.mjs` (39 checks: shell imported +
+rendered, no direct `SmokeCraftImageBoundsOverlay` import, no registered
+destination reintroduced as a bare literal, per-screen) and its asset-lock
+extension (5 checks: each screen still references its exact locked
+`SC_ASSETS` key). Both wired into `npm run build`'s `prebuild` step.
+
+A real, caused-by-this-batch regression was found and fixed (not
+dismissed): the pre-existing `verify-smokecraft-final-three-approved-assets.mjs`
+grepped for the literal string `SmokeCraftImageBoundsOverlay` in
+`WelcomeExperience.jsx`/`Rewards.jsx`, which no longer appears there since
+those files now go through `SmokeCraftScreenShell`. Fixed by updating that
+test to accept the shell's `mode="image-shell"` indirection as an
+equally-valid instance of "the canonical overlay pattern" (the underlying
+component still renders — just one composition layer deeper) — this is a
+legitimate architecture evolution, not a weakened assertion.
+
 ## Holistic Fix 2 — navigation-registry migration (3 screens re-verified)
 
 Welcome, Leaderboard, and Passport had their local hardcoded sidebar/

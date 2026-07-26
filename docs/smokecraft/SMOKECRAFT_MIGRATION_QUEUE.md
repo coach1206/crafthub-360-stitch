@@ -84,21 +84,24 @@ browser-interaction-tested or migrated onto the shared navigation registry
 
 ## Already fully migrated + interaction-verified (not open work)
 
-**Navigation-registry adoption (Holistic Fix 2, this pass):** Welcome
-(`WelcomeExperience.jsx`), Leaderboard (`Leaderboard.jsx`), and Passport
-(`SmokeCraftPassport.jsx`) had their local hardcoded `SIDEBAR_ITEMS`/
-`BOTTOM_STRIP_ITEMS`/`PASSPORT_ACTION_CARDS` route literals replaced with
-imports from `smokecraftNavigationRegistry.js`. Re-verified via a real
-browser test (6/6 destination checks passing) that every migrated control
-still navigates to the exact same route as before — zero behavior change,
-only the source of truth moved. CraftHub (`SmokeCraftCraftHub.jsx`) was
-left as-is: it already routes through `resolveSmokeCraftLandingAction`
-rather than raw literals, so it has no scattered-literal problem to fix.
+**Holistic Fix 2A — full shell + navigation-registry migration (7
+screens):** Welcome, Leaderboard, Passport, Venue Selection, CraftHub,
+Challenge Hub, and Rewards all now import and render
+`SmokeCraftScreenShell`, no longer import `SmokeCraftImageBoundsOverlay`
+directly, use `smokecraftNavigationRegistry` for every registered
+destination they expose, and are protected by 2 new build-blocking
+regression suites (`validateSmokecraftShellAdoption.mjs`, 44 checks) plus
+a 5-viewport real-browser verification (35 checks, 34 clean + 1
+investigated flaky non-regression). See
+`SMOKECRAFT_SYSTEM_DEFECT_REGISTER.md`'s Holistic Fix 2A section for full
+per-screen detail and `public/proof/smokecraft-holistic-fix-2a/` for
+screenshots and raw results.
 
-**Screen-shell adoption: 0 screens.** `SmokeCraftScreenShell` remains
-unadopted by any screen — this is the largest remaining gap for Holistic
-Fix 3, and adopting it screen-by-screen (with a real visual-regression
-screenshot per screen) is the recommended next unit of work.
+**Screen-shell adoption: 7 of 108 screens** (up from 0). The remaining ~70
+supporting routes (Golden Box, Origins/Curation module, Pairing-adjacent,
+remaining standalone screens) are the next unit of work for Holistic Fix
+3 — same migration pattern (shell + registry + 5-viewport verification +
+regression lock), applied to the next migration group.
 
 The 33 routes already deep-audited in Prompts 3B–3E-3 (Welcome,
 Leaderboard, Passport, CraftHub, Venue Selection, Connections, Passport

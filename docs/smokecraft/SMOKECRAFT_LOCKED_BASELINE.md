@@ -61,6 +61,26 @@ necessary.**
   (`/smokecraft/pairing`) are deliberately separate registry keys — do not
   collapse them into one.
 
+## Locked: Holistic Fix 2A — 7 screens fully migrated onto the shared shell
+
+- Welcome, Leaderboard, Passport, Venue Selection, CraftHub, Challenge Hub,
+  and Rewards now import and render `SmokeCraftScreenShell` — none of them
+  imports `SmokeCraftImageBoundsOverlay` directly anymore.
+  `scripts/validateSmokecraftShellAdoption.mjs` (44 checks, wired into
+  `npm run build`) fails if any of the 7 regresses to a direct import, if a
+  registered navigation destination is reintroduced as a bare local
+  literal, or if any of the 5 locked approved-asset references changes.
+- Re-verified via a real 5-viewport browser test (35 checks): no
+  horizontal overflow, keyboard focus reaches a real control, at handheld
+  portrait / 10" tablet / 12" tablet / 15" display / desktop. Proof:
+  `public/proof/smokecraft-holistic-fix-2a/`.
+- `verify-smokecraft-final-three-approved-assets.mjs`'s Section C now
+  accepts `SmokeCraftScreenShell mode="image-shell"` as an equally-valid
+  instance of "the canonical overlay pattern" alongside a direct
+  `SmokeCraftImageBoundsOverlay` import — do not revert that test to
+  requiring the direct import only, since the shell's indirection is now
+  the locked, intended pattern for these screens.
+
 ## Not yet locked / explicitly out of scope for this baseline
 
 Everything not listed above (the remaining ~100 routes, all 27 sessions'

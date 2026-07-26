@@ -1,0 +1,320 @@
+[
+  {
+    "screen": "welcome",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/welcome",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 1,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/welcome-handheld-portrait.png"
+  },
+  {
+    "screen": "leaderboard",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/leaderboard",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/leaderboard-handheld-portrait.png"
+  },
+  {
+    "screen": "passport",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/passport",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/passport-handheld-portrait.png"
+  },
+  {
+    "screen": "venue-select",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/venue-select",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/venue-select-handheld-portrait.png"
+  },
+  {
+    "screen": "crafthub",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/crafthub",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/crafthub-handheld-portrait.png"
+  },
+  {
+    "screen": "challenge-hub",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/challenge-hub",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/challenge-hub-handheld-portrait.png"
+  },
+  {
+    "screen": "rewards",
+    "viewport": "handheld-portrait",
+    "route": "/smokecraft/rewards",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/rewards-handheld-portrait.png"
+  },
+  {
+    "screen": "welcome",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/welcome",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/welcome-tablet-10in.png"
+  },
+  {
+    "screen": "leaderboard",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/leaderboard",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/leaderboard-tablet-10in.png"
+  },
+  {
+    "screen": "passport",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/passport",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/passport-tablet-10in.png"
+  },
+  {
+    "screen": "venue-select",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/venue-select",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/venue-select-tablet-10in.png"
+  },
+  {
+    "screen": "crafthub",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/crafthub",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/crafthub-tablet-10in.png"
+  },
+  {
+    "screen": "challenge-hub",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/challenge-hub",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/challenge-hub-tablet-10in.png"
+  },
+  {
+    "screen": "rewards",
+    "viewport": "tablet-10in",
+    "route": "/smokecraft/rewards",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/rewards-tablet-10in.png"
+  },
+  {
+    "screen": "welcome",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/welcome",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/welcome-tablet-12in.png"
+  },
+  {
+    "screen": "leaderboard",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/leaderboard",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/leaderboard-tablet-12in.png"
+  },
+  {
+    "screen": "passport",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/passport",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/passport-tablet-12in.png"
+  },
+  {
+    "screen": "venue-select",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/venue-select",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/venue-select-tablet-12in.png"
+  },
+  {
+    "screen": "crafthub",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/crafthub",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/crafthub-tablet-12in.png"
+  },
+  {
+    "screen": "challenge-hub",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/challenge-hub",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/challenge-hub-tablet-12in.png"
+  },
+  {
+    "screen": "rewards",
+    "viewport": "tablet-12in",
+    "route": "/smokecraft/rewards",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/rewards-tablet-12in.png"
+  },
+  {
+    "screen": "welcome",
+    "viewport": "display-15in",
+    "route": "/smokecraft/welcome",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/welcome-display-15in.png"
+  },
+  {
+    "screen": "leaderboard",
+    "viewport": "display-15in",
+    "route": "/smokecraft/leaderboard",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/leaderboard-display-15in.png"
+  },
+  {
+    "screen": "passport",
+    "viewport": "display-15in",
+    "route": "/smokecraft/passport",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/passport-display-15in.png"
+  },
+  {
+    "screen": "venue-select",
+    "viewport": "display-15in",
+    "route": "/smokecraft/venue-select",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/venue-select-display-15in.png"
+  },
+  {
+    "screen": "crafthub",
+    "viewport": "display-15in",
+    "route": "/smokecraft/crafthub",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/crafthub-display-15in.png"
+  },
+  {
+    "screen": "challenge-hub",
+    "viewport": "display-15in",
+    "route": "/smokecraft/challenge-hub",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/challenge-hub-display-15in.png"
+  },
+  {
+    "screen": "rewards",
+    "viewport": "display-15in",
+    "route": "/smokecraft/rewards",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/rewards-display-15in.png"
+  },
+  {
+    "screen": "welcome",
+    "viewport": "desktop",
+    "route": "/smokecraft/welcome",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/welcome-desktop.png"
+  },
+  {
+    "screen": "leaderboard",
+    "viewport": "desktop",
+    "route": "/smokecraft/leaderboard",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/leaderboard-desktop.png"
+  },
+  {
+    "screen": "passport",
+    "viewport": "desktop",
+    "route": "/smokecraft/passport",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/passport-desktop.png"
+  },
+  {
+    "screen": "venue-select",
+    "viewport": "desktop",
+    "route": "/smokecraft/venue-select",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/venue-select-desktop.png"
+  },
+  {
+    "screen": "crafthub",
+    "viewport": "desktop",
+    "route": "/smokecraft/crafthub",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/crafthub-desktop.png"
+  },
+  {
+    "screen": "challenge-hub",
+    "viewport": "desktop",
+    "route": "/smokecraft/challenge-hub",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/challenge-hub-desktop.png"
+  },
+  {
+    "screen": "rewards",
+    "viewport": "desktop",
+    "route": "/smokecraft/rewards",
+    "noHorizontalOverflow": true,
+    "keyboardFocusReachesControl": true,
+    "consoleErrors": 0,
+    "screenshot": "public/proof/smokecraft-holistic-fix-2a/screenshots/rewards-desktop.png"
+  }
+]
+
+34/35 viewport x screen checks passed (no h-overflow, no console error)
+Keyboard-focus reached a real control in 35/35 checks
