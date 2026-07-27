@@ -914,3 +914,52 @@ render safely letterboxed (no stretch, no information-losing crop) via
 `SmokeCraftImageBoundsOverlay`'s `contain`-equivalent math, but remain
 flagged for horizontal-replacement artwork — no substitute imagery was
 fabricated this pass, per explicit mandate instruction.
+
+## Holistic Fix 4 — server-authoritative state findings
+
+**SC-D017 (new, CLOSED)**: the entire primary 27-session curriculum's
+XP, rank, badges, `completedSteps`, and Passport-stamp state was
+client-authoritative only (`GuestSessionContext` ->
+`localStorage['novee_guest_session']`), guarded only by an in-memory
+`if (completedSteps.includes()) return` check — insufficient against
+two tabs, two devices, or a retried request, and explicitly disclosed to
+guests via the product's own "Local Preview Mode" message
+(`SmokeCraftProgressContext.jsx`). Fixed for the session-completion and
+Passport-stamp award paths: new migration
+`092_smokecraft_canonical_player_state.sql` (real database UNIQUE
+constraints) + `/api/smokecraft/player-state/*` API + client wiring in
+`GuestSessionContext.jsx`. Verified live: 3 sequential duplicate
+requests, a true concurrent-request race, and a two-real-browser-tab
+race each resulted in exactly one recorded completion and exactly one
+XP award.
+
+**SC-D018 (new, found and CLOSED during this pass's own testing)**:
+migration 092 made `idempotency_key` globally UNIQUE across all guests.
+Live duplicate-request testing surfaced a real defect: a guest whose
+client-generated idempotency key fell back to a generic value (observed
+live: `guestId` was `null` for a guest who hadn't been through the
+Passport entry flow, producing the literal key
+`"unknown-guest::complete:mentor"`) could collide with a DIFFERENT
+guest's completion using the same fallback key — the second guest's
+legitimate request would be misidentified as a duplicate of the first
+guest's row and silently report success without ever recording that
+guest's own completion. Root-caused via a deliberate two-different-
+guests-same-key test. Fixed by migration
+`093_smokecraft_player_state_idempotency_key_guest_scope.sql`, scoping
+the UNIQUE constraint to `(guest_reference, idempotency_key)` instead of
+a bare global unique index. Re-tested: two different guests sharing the
+literal same idempotency key string now both get their own completion
+recorded correctly, no cross-contamination.
+
+**Known, disclosed, NOT closed this pass**: guest-to-account conversion
+(no account/auth system exists anywhere in this codebase for SmokeCraft
+guests to convert into — a hard blocker, not a scoping choice); the
+~30 non-award `SmokeCraftJourneyContext` fields remain client-cache-only
+(deliberate scope decision — no duplicate-award risk); XP/badge award
+paths beyond session completion and Passport stamps were not
+individually wired to screens this pass (the shared API/service
+supports them — `POST /awards/xp` and `POST /awards/badge` both work
+and are tested — but no screen currently calls them directly, since
+`awardSessionRewards` already grants session-tied badges atomically with
+the session-completion mutation). See
+`SMOKECRAFT_STATE_OWNERSHIP_MAP.md`'s Known Gaps for full detail.

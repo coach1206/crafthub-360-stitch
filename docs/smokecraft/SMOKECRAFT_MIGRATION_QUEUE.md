@@ -181,3 +181,16 @@ across all 108 routes × 5 viewports, locked by the new
 `validateSmokecraftResponsive.mjs`) and did not migrate additional
 routes. 5 pre-existing portrait assets remain flagged for
 horizontal-replacement artwork (`SC-D002`), out of scope for this pass.
+
+## Holistic Fix 4 status note
+
+Two new database migrations added and applied this pass (092, 093) —
+see `SMOKECRAFT_STATE_OWNERSHIP_MAP.md` and the Holistic Fix 4 defect-
+register section for full detail. Screen/route migration-to-shell-
+adoption count is unchanged (this pass is a backend/state-authority
+change, not a shell migration). Server-authoritative persistence is now
+live for session completion and Passport-stamp awards across 34+
+screens that call the shared `awardSessionRewards`/`awardStamp`
+functions; XP/badge award paths beyond that remain queued for a future
+pass to wire per-screen where a real award-granting UI action exists
+independent of session completion.

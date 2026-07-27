@@ -6,6 +6,7 @@
  * convention (managementSyncController.js).
  */
 import { getPlayerState, completeSession, grantAward } from '../services/smokecraft/playerStateService.js'
+import { getDb } from '../db/connection.js'
 
 function ownerGuestReference(identity) {
   return identity.type === 'user' ? `user:${identity.id}` : identity.id
@@ -23,6 +24,25 @@ function requireIdempotencyKey(req, res) {
     return null
   }
   return key
+}
+
+/**
+ * Observability endpoint (mandate Task 12): database connectivity + the
+ * two migrations this feature depends on. Never exposes secrets or
+ * connection strings — only booleans and migration filenames.
+ */
+export async function handleHealth(req, res) {
+  const db = getDb()
+  if (!db) return res.json({ success: true, dbConnected: false, migrationsApplied: [] })
+  try {
+    const result = await db.query(
+      `SELECT filename FROM schema_migrations WHERE filename IN ($1, $2) ORDER BY filename`,
+      ['092_smokecraft_canonical_player_state.sql', '093_smokecraft_player_state_idempotency_key_guest_scope.sql']
+    )
+    res.json({ success: true, dbConnected: true, migrationsApplied: result.rows.map(r => r.filename) })
+  } catch (err) {
+    res.status(503).json({ success: false, dbConnected: false, error: 'health_check_failed' })
+  }
 }
 
 export async function handleGetPlayerState(req, res) {

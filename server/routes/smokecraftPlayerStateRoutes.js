@@ -19,10 +19,13 @@ import * as ctrl from '../controllers/playerStateController.js'
 
 const router = Router()
 
-router.use(optionalAuth, attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity)
-
 const readLimiter = rateLimit({ windowMs: 60 * 1000, max: 60 })
 const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 })
+
+// Health check does not require/issue an identity — pure infra observability.
+router.get('/health', readLimiter, ctrl.handleHealth)
+
+router.use(optionalAuth, attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity)
 
 router.get('/', readLimiter, requireSmokeCraftIdentity, ctrl.handleGetPlayerState)
 router.post('/sessions/:sessionId/complete', writeLimiter, requireSmokeCraftIdentity, ctrl.handleCompleteSession)

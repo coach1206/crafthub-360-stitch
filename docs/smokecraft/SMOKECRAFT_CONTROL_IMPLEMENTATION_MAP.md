@@ -307,3 +307,15 @@ family that uses it, rather than 276 redundant end-to-end tests.
 | 27 | /smokecraft/session-complete | BUTTON[button] | Start Journey | navigation |
 | 27 | /smokecraft/session-complete | BUTTON[button] | Select | completion |
 | 27 | /smokecraft/session-complete | BUTTON[button] | ← BACK | navigation |
+## Holistic Fix 4 update — completion group behavior extended
+
+The `completion` group's behavior contract (row above) is unchanged in
+its client-side guard behavior but is now backed by a real server-side
+idempotent mutation for session-completion and Passport-stamp instances
+(`POST /api/smokecraft/player-state/sessions/:id/complete`, `POST
+/api/smokecraft/player-state/awards/passport-stamp`), verified via
+`verify-smokecraft-hf4-player-state-idempotency.mjs`. No control's
+visible behavior, label, or rendered markup changed — this is a backend
+authority change behind the existing `if (done) return` guard, not a
+new control or a redesign. See `SMOKECRAFT_STATE_OWNERSHIP_MAP.md` for
+full detail.

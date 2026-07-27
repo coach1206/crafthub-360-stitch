@@ -212,3 +212,17 @@ constant) rather than per-screen patches. 5 pre-existing portrait assets
 remain disclosed (not silently fixed) as flagged for horizontal
 replacement artwork — out of this pass's scope, consistent with
 `SC-D002`.
+
+## Holistic Fix 4 additions
+
+Server-authoritative session completion and award idempotency is now
+locked for the session-completion and Passport-stamp paths: migrations
+092/093 (real UNIQUE constraints, guest-scoped), the
+`/api/smokecraft/player-state/*` API (reusing the existing, proven
+`ensureSmokeCraftGuestIdentity` cookie system), and
+`scripts/validateSmokecraftPlayerStateIntegrity.mjs` (26/26 checks,
+build-blocking) enforcing the idempotency/security contract stays intact
+in source. Not yet locked: XP/badge award paths beyond session
+completion, and the ~30 non-award `SmokeCraftJourneyContext` fields
+(tasting notes, selections) remain client-cache-only by deliberate scope
+decision — see `SMOKECRAFT_STATE_OWNERSHIP_MAP.md`'s Known Gaps section.

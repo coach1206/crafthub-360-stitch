@@ -477,3 +477,21 @@ Result: 0 horizontal overflow, 0 blocked scrolling, 0 obscured controls,
 build-blocking validator, `scripts/validateSmokecraftResponsive.mjs`,
 locks this against regression. Full detail:
 `public/proof/smokecraft-holistic-fix-3/00-proof-index.md`.
+
+## Holistic Fix 4 — server-authoritative session completion & awards
+
+The `completion` control-implementation group's behavior contract is
+extended: real click still triggers the `if (done) return` client-side
+guard (unchanged, still prevents same-page-load double-fire), but the
+resulting session-completion and Passport-stamp award now ALSO fire a
+real, idempotent server mutation (`POST
+/api/smokecraft/player-state/sessions/:id/complete`, `POST
+/api/smokecraft/player-state/awards/passport-stamp`), verified live via
+`verify-smokecraft-hf4-player-state-idempotency.mjs` (30/30 passing,
+including a real two-tab race and a real cross-guest idempotency-key
+collision regression test). localStorage remains the fast, offline-safe
+UI cache; the server's `(guest_reference, session_id)` /
+`(guest_reference, award_type, award_key)` UNIQUE constraints are now
+the actual duplicate-award guard, not the client-side `if (done) return`
+alone. See `SMOKECRAFT_STATE_OWNERSHIP_MAP.md` for the full state audit
+and `public/proof/smokecraft-holistic-fix-4/` for proof.
