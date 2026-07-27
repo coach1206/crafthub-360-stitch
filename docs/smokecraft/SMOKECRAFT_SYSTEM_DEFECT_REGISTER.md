@@ -869,3 +869,48 @@ Stage 2 control-architecture closure (Holistic Fix 2E-11): all 276
 controls mapped to 7 tested implementation groups, 0 unmapped, coverage
 validator passing. See `SMOKECRAFT_CONTROL_IMPLEMENTATION_MAP.md` and
 `SMOKECRAFT_INTERACTION_MATRIX.md`'s 2E-11 section for full detail.
+
+## Holistic Fix 3 — responsive closure findings
+
+**Two real defects found and fixed:**
+
+- **SC-D015 (new, CLOSED)**: `SmokeCraftVenueCommerce.jsx`'s two-column
+  layout (`gridTemplateColumns: '1fr 280px'`) caused genuine horizontal
+  overflow (116px measured at 390px viewport width) on the three routes
+  rendering it (`/venue-commerce`, `/order`,
+  `/ticket-tapper/staff-specials`). Fixed with a shared responsive CSS
+  class (`.sc-commerce-two-col` in `src/styles.css`) collapsing to a
+  single column below 820px. Verified live post-fix: 0px overflow.
+- **SC-D016 (new, CLOSED)**: `Connections.jsx` declared `NAT_W=1672,
+  NAT_H=941` for `SC_ASSETS.connections`, whose real file
+  (`cropped/connections-hero.jpg`) is 492×781 — confirmed via direct PIL
+  read. The wrong constants fed `SmokeCraftImageBoundsOverlay`'s scale
+  math incorrectly, genuinely stretching the rendered image (computed
+  `object-fit: fill` with a mismatched box) on every viewport. Fixed by
+  correcting the constants to the asset's real dimensions. Cross-checked
+  all 27 other image-shell screens' declared dimensions against actual
+  file bytes; no other mismatches found.
+
+**Investigated and confirmed as sweep-script measurement bugs, not
+product defects** (three rounds of live re-verification before trusting
+the sweep's output): scroll-blocked false positives from not checking
+native document/body scroll; obscured-control false positives from (a)
+counting a nav's own buttons as obscured by itself, (b) flagging
+controls merely below the fold on unscrolled initial load that were
+fully reachable once scrolled (confirmed live on `/smokecraft/mentors`),
+and (c) matching incidental small fixed elements unrelated to real
+navigation (confirmed via source read of `src/pages/SmokeCraft.jsx` that
+the flagged Rewards/Rankings/Passport/CraftHub buttons are baked-image
+hotspots, not covered by anything); and hero-image "stretch" false
+positives from not distinguishing legitimate `object-fit:cover` crops
+from actual `fill` distortion. All corrected in
+`verify-smokecraft-hf3-responsive-inventory.mjs` before the final
+validator pass.
+
+**SC-D002 (portrait assets) remains open, not silently resolved**: 5
+disclosed portrait assets (`enroll`, `connections`, `pairing`, plus the
+mentor-selection avatar thumbnail and venue-commerce menu backdrop)
+render safely letterboxed (no stretch, no information-losing crop) via
+`SmokeCraftImageBoundsOverlay`'s `contain`-equivalent math, but remain
+flagged for horizontal-replacement artwork — no substitute imagery was
+fabricated this pass, per explicit mandate instruction.

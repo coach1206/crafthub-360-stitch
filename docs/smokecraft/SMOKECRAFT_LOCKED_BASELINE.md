@@ -197,3 +197,18 @@ groups browser-tested (6 directly via
 navigation — via the existing forward/backward and full-journey suites),
 22 primary curriculum sessions with confirmed control coverage, 0
 outstanding unmapped or untested controls.
+
+## Holistic Fix 3 additions
+
+System-wide responsive closure is now locked: 0 confirmed horizontal
+overflow, 0 confirmed blocked scrolling, 0 confirmed bottom-nav-obscured
+controls, and 0 stretched/distorted hero images across all 108 routes at
+5 viewports (handheld portrait, 10"/12" tablet landscape, 15" display,
+desktop), enforced by the new build-blocking
+`scripts/validateSmokecraftResponsive.mjs`. Two real defects (the
+commerce two-column grid overflow and the Connections image-stretch
+bug) were fixed via shared primitives (a CSS class, a corrected
+constant) rather than per-screen patches. 5 pre-existing portrait assets
+remain disclosed (not silently fixed) as flagged for horizontal
+replacement artwork — out of this pass's scope, consistent with
+`SC-D002`.

@@ -453,3 +453,27 @@ using non-simultaneous `Promise.all([...])` clicks from the Node side)
 were both root-caused to test-harness mistakes, not product bugs, and
 fixed as such — the underlying product behavior was already correct in
 both cases.
+
+## Holistic Fix 3 — system-wide responsive closure
+
+A new 5-viewport (handheld portrait, 10" tablet landscape, 12" tablet
+landscape, 15" display, desktop) responsive sweep of all 108 routes
+(`verify-smokecraft-hf3-responsive-inventory.mjs`) found and fixed two
+real defects:
+
+1. `SmokeCraftVenueCommerce.jsx`'s fixed `'1fr 280px'` two-column grid
+   caused real horizontal overflow at handheld-portrait width on
+   `/venue-commerce`, `/order`, and `/ticket-tapper/staff-specials`
+   (all three render this one component). Fixed with a shared
+   `.sc-commerce-two-col` CSS class that collapses to a single column
+   below 820px.
+2. `Connections.jsx` declared the wrong natural image dimensions
+   (1672×941 landscape instead of the real 492×781 portrait), causing
+   `SmokeCraftImageBoundsOverlay`'s scale math to genuinely stretch the
+   rendered image. Fixed by correcting the declared dimensions.
+
+Result: 0 horizontal overflow, 0 blocked scrolling, 0 obscured controls,
+0 stretched images across all 108 routes × 5 viewports. A new
+build-blocking validator, `scripts/validateSmokecraftResponsive.mjs`,
+locks this against regression. Full detail:
+`public/proof/smokecraft-holistic-fix-3/00-proof-index.md`.

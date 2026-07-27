@@ -170,3 +170,14 @@ Server-side idempotency for XP/badges/Passport stamps remains an
 explicitly out-of-scope gameplay-engine requirement, handed off to
 Holistic Fix 4 / the gameplay-engine package rather than blocking Stage 2
 closure.
+
+## Holistic Fix 3 status note
+
+Shell/registry migration count is unchanged this pass (still the
+pre-existing floor enforced by `validateSmokecraftManifest.mjs`) — this
+pass closed system-wide responsive architecture (0 confirmed horizontal
+overflow, scroll-blocking, nav-obscuring, or image-stretch defects
+across all 108 routes × 5 viewports, locked by the new
+`validateSmokecraftResponsive.mjs`) and did not migrate additional
+routes. 5 pre-existing portrait assets remain flagged for
+horizontal-replacement artwork (`SC-D002`), out of scope for this pass.
