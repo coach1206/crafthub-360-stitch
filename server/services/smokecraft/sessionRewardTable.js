@@ -10,6 +10,7 @@
  * client-controlled XP or awards" requirement.
  */
 import { SESSION_REWARDS, SC_RANKS } from '../../../src/constants/smokecraftRewards.js'
+import { XP_AWARDS } from '../../../src/constants/session.js'
 
 /** XP for completing a given curriculum session id, or 0 if unknown. */
 export function getSessionRewardXp(sessionId) {
@@ -48,11 +49,20 @@ export function getRankLadder() {
   return SC_RANKS.map(r => ({ name: r.name, minXP: r.minXP }))
 }
 
-// Named, server-approved XP grants not tied to a session completion
-// (e.g. a one-off bonus). Empty today — no such flow exists yet in the
-// product; any future one must be added here explicitly rather than
-// letting a client dictate an arbitrary amount.
-const NAMED_XP_SOURCES = {}
+// Named, server-approved XP grants not tied to a curriculum session
+// completion — the Origins-module one-time activities (Holistic Fix
+// 5A-2). Values are copied verbatim from the exact constants the client
+// already used for its own (now-removed) local XP grant, so no reward
+// amount changes as a side effect of moving authority to the server.
+const NAMED_XP_SOURCES = {
+  'art-observation':          50,                                   // Art.jsx addXP(50)
+  'available-cigar-selected': XP_AWARDS.CIGAR_SELECTED,              // Available.jsx
+  'cultivation-seed':         50,                                    // Cultivation.jsx addXP(50) — seed step
+  'cultivation-water':        50,                                    // Cultivation.jsx addXP(50) — water step
+  'leaves-observation':       75,                                    // Leaves.jsx addXP(75)
+  'mini-tasting-begin':       SESSION_REWARDS['mini-tasting-module']?.xp ?? 75, // MiniTasting.jsx
+  'blend-created':            XP_AWARDS.BLEND_CREATED,                // Blend.jsx
+}
 
 /** Returns the server-approved XP amount for a named source, or null if unrecognized (caller must reject). */
 export function getNamedXpAmount(awardKey) {

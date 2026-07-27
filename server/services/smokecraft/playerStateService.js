@@ -30,6 +30,9 @@
  */
 import { getDb } from '../../db/connection.js'
 import { getSessionBadgeIds, getRankForXp } from './sessionRewardTable.js'
+import { KNOWLEDGE_CHECK_SETS } from '../../../src/data/knowledgeCheckQuestions.js'
+import { scoreQuestionSet } from '../../../src/utils/smokecraftQuizScoring.js'
+import { scoreLeafChallenge } from '../../../src/data/leafChallengeRounds.js'
 
 const UNIQUE_VIOLATION = '23505'
 const STALE_VERSION = 'stale_version'
@@ -284,6 +287,220 @@ export async function grantAward({ guestReference, venueId, awardType, awardKey,
     await recordAudit(client, { guestReference, mutationType, idempotencyKey, outcome: 'applied', requestId, deviceId })
     await client.query('COMMIT')
     return { ok: true, alreadyAwarded: false, award }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+/**
+ * Holistic Fix 5A-2: server-authoritative Knowledge Check quiz scoring.
+ * The client submits raw per-question responses only (never a score or
+ * correctness flag) — this function independently re-derives the score
+ * from the same real question data the client rendered, and is the sole
+ * authority for the XP grant. Idempotent per (guest_reference, moduleId):
+ * a module can be scored/rewarded at most once ever.
+ */
+export async function submitKnowledgeCheck({ guestReference, venueId, moduleId, responses, completionStepId, idempotencyKey, sourceRoute, requestId, deviceId }) {
+  const set = KNOWLEDGE_CHECK_SETS[moduleId]
+  if (!set) return { ok: false, error: 'unknown_quiz_module' }
+  const { getSessionRewardXp } = await import('./sessionRewardTable.js')
+  const xpAmount = completionStepId ? getSessionRewardXp(completionStepId) : 0
+  const { score, total } = scoreQuestionSet(set.questions, responses || {})
+
+  const db = dbOrThrow()
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    await ensurePlayerStateRow(client, guestReference, venueId)
+
+    const existing = await client.query(
+      `SELECT * FROM smokecraft_activity_attempts WHERE guest_reference = $1 AND activity_type = 'quiz' AND activity_key = $2`,
+      [guestReference, moduleId]
+    )
+    if (existing.rows.length > 0) {
+      await recordAudit(client, { guestReference, mutationType: 'quiz_submit', idempotencyKey, outcome: 'duplicate_replay', requestId, deviceId })
+      await client.query('COMMIT')
+      return { ok: true, alreadyScored: true, attempt: existing.rows[0], score: existing.rows[0].score, total: existing.rows[0].total }
+    }
+
+    let attempt
+    try {
+      const inserted = await client.query(
+        `INSERT INTO smokecraft_activity_attempts
+           (guest_reference, activity_type, activity_key, evidence, score, total, xp_awarded, idempotency_key, source_route, request_id, device_id)
+         VALUES ($1, 'quiz', $2, $3, $4, $5, $6, $7, $8, $9, $10)
+         RETURNING *`,
+        [guestReference, moduleId, JSON.stringify(responses || {}), score, total, xpAmount, idempotencyKey, sourceRoute || null, requestId || null, deviceId || null]
+      )
+      attempt = inserted.rows[0]
+    } catch (err) {
+      if (err.code === UNIQUE_VIOLATION) {
+        await client.query('ROLLBACK').catch(() => {})
+        const dup = await db.query(`SELECT * FROM smokecraft_activity_attempts WHERE guest_reference = $1 AND activity_type = 'quiz' AND activity_key = $2`, [guestReference, moduleId])
+        await db.query(
+          `INSERT INTO smokecraft_award_audit (guest_reference, mutation_type, idempotency_key, outcome, request_id, device_id) VALUES ($1, 'quiz_submit', $2, 'duplicate_replay', $3, $4)`,
+          [guestReference, idempotencyKey, requestId || null, deviceId || null]
+        )
+        return { ok: true, alreadyScored: true, attempt: dup.rows[0], score: dup.rows[0].score, total: dup.rows[0].total }
+      }
+      throw err
+    }
+
+    if (xpAmount > 0) {
+      await client.query(
+        `UPDATE smokecraft_player_state SET xp_total = xp_total + $2, last_synced_at = now(), updated_at = now() WHERE guest_reference = $1`,
+        [guestReference, xpAmount]
+      )
+    }
+    const rankPromotion = await recomputeRankInTx(client, guestReference)
+    await recordAudit(client, { guestReference, mutationType: 'quiz_submit', idempotencyKey, outcome: 'applied', requestId, deviceId })
+    await client.query('COMMIT')
+    return { ok: true, alreadyScored: false, attempt, score, total, xpAwarded: xpAmount, rankPromotion }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+/**
+ * Holistic Fix 5A-2: server-authoritative Leaf Challenge (Origins module)
+ * scoring. The client submits the 5 raw leaf-id answers only — this
+ * function scores them against the real answer key
+ * (src/data/leafChallengeRounds.js), computes the tiered XP, and grants
+ * the botanist badge (+ leaf-scholar on a perfect score) and the
+ * leaf-recognition Passport stamp, all in the same atomic transaction.
+ * Idempotent: at most one scored attempt per guest, ever.
+ */
+export async function submitLeafChallenge({ guestReference, venueId, answers, idempotencyKey, sourceRoute, requestId, deviceId }) {
+  const { score, total, xp: xpAmount, perfect } = scoreLeafChallenge(answers)
+
+  const db = dbOrThrow()
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    await ensurePlayerStateRow(client, guestReference, venueId)
+
+    const existing = await client.query(
+      `SELECT * FROM smokecraft_activity_attempts WHERE guest_reference = $1 AND activity_type = 'leaf_challenge' AND activity_key = 'leaf-challenge'`,
+      [guestReference]
+    )
+    if (existing.rows.length > 0) {
+      await recordAudit(client, { guestReference, mutationType: 'leaf_challenge_submit', idempotencyKey, outcome: 'duplicate_replay', requestId, deviceId })
+      await client.query('COMMIT')
+      return { ok: true, alreadyScored: true, attempt: existing.rows[0], score: existing.rows[0].score, total: existing.rows[0].total }
+    }
+
+    let attempt
+    try {
+      const inserted = await client.query(
+        `INSERT INTO smokecraft_activity_attempts
+           (guest_reference, activity_type, activity_key, evidence, score, total, xp_awarded, idempotency_key, source_route, request_id, device_id)
+         VALUES ($1, 'leaf_challenge', 'leaf-challenge', $2, $3, $4, $5, $6, $7, $8, $9)
+         RETURNING *`,
+        [guestReference, JSON.stringify(answers || []), score, total, xpAmount, idempotencyKey, sourceRoute || null, requestId || null, deviceId || null]
+      )
+      attempt = inserted.rows[0]
+    } catch (err) {
+      if (err.code === UNIQUE_VIOLATION) {
+        await client.query('ROLLBACK').catch(() => {})
+        const dup = await db.query(`SELECT * FROM smokecraft_activity_attempts WHERE guest_reference = $1 AND activity_type = 'leaf_challenge' AND activity_key = 'leaf-challenge'`, [guestReference])
+        await db.query(
+          `INSERT INTO smokecraft_award_audit (guest_reference, mutation_type, idempotency_key, outcome, request_id, device_id) VALUES ($1, 'leaf_challenge_submit', $2, 'duplicate_replay', $3, $4)`,
+          [guestReference, idempotencyKey, requestId || null, deviceId || null]
+        )
+        return { ok: true, alreadyScored: true, attempt: dup.rows[0], score: dup.rows[0].score, total: dup.rows[0].total }
+      }
+      throw err
+    }
+
+    if (xpAmount > 0) {
+      await client.query(
+        `UPDATE smokecraft_player_state SET xp_total = xp_total + $2, last_synced_at = now(), updated_at = now() WHERE guest_reference = $1`,
+        [guestReference, xpAmount]
+      )
+    }
+
+    const badgesGranted = []
+    const botanist = await client.query(
+      `INSERT INTO smokecraft_awards (guest_reference, award_type, award_key, amount, idempotency_key, source_route, request_id, device_id)
+       VALUES ($1, 'badge', 'botanist', 0, $2, $3, $4, $5) ON CONFLICT (guest_reference, award_type, award_key) DO NOTHING RETURNING *`,
+      [guestReference, `${idempotencyKey}:badge:botanist`, sourceRoute || null, requestId || null, deviceId || null]
+    )
+    if (botanist.rows.length > 0) badgesGranted.push(botanist.rows[0])
+    if (perfect) {
+      const scholar = await client.query(
+        `INSERT INTO smokecraft_awards (guest_reference, award_type, award_key, amount, idempotency_key, source_route, request_id, device_id)
+         VALUES ($1, 'badge', 'leaf-scholar', 0, $2, $3, $4, $5) ON CONFLICT (guest_reference, award_type, award_key) DO NOTHING RETURNING *`,
+        [guestReference, `${idempotencyKey}:badge:leaf-scholar`, sourceRoute || null, requestId || null, deviceId || null]
+      )
+      if (scholar.rows.length > 0) badgesGranted.push(scholar.rows[0])
+    }
+    const stampResult = await client.query(
+      `INSERT INTO smokecraft_awards (guest_reference, award_type, award_key, amount, idempotency_key, source_route, request_id, device_id)
+       VALUES ($1, 'passport_stamp', 'leaf-recognition', 0, $2, $3, $4, $5) ON CONFLICT (guest_reference, award_type, award_key) DO NOTHING RETURNING *`,
+      [guestReference, `${idempotencyKey}:stamp:leaf-recognition`, sourceRoute || null, requestId || null, deviceId || null]
+    )
+    const passportStampGranted = stampResult.rows[0] || null
+
+    const rankPromotion = await recomputeRankInTx(client, guestReference)
+    await recordAudit(client, { guestReference, mutationType: 'leaf_challenge_submit', idempotencyKey, outcome: 'applied', requestId, deviceId })
+    await client.query('COMMIT')
+    return { ok: true, alreadyScored: false, attempt, score, total, xpAwarded: xpAmount, badgesGranted, passportStampGranted, rankPromotion }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+/**
+ * Holistic Fix 5A-2: protected, staff/admin-only correction/reversal.
+ * Never deletes or edits the original award/attempt row — records a new,
+ * separately traceable correction event, then recalculates the affected
+ * player-state totals transactionally from the full history (the
+ * original row + this correction), so nothing is silently rewritten.
+ */
+export async function correctReward({ guestReference, correctionType, targetTable, targetId, targetAwardKey, deltaXp = 0, reason, authorizedBy, idempotencyKey }) {
+  if (!reason || !authorizedBy) return { ok: false, error: 'reason_and_authorizedBy_required' }
+  const db = dbOrThrow()
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    let correction
+    try {
+      const inserted = await client.query(
+        `INSERT INTO smokecraft_reward_corrections
+           (guest_reference, correction_type, target_table, target_id, target_award_key, delta_xp, reason, authorized_by, idempotency_key)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+         RETURNING *`,
+        [guestReference, correctionType, targetTable, targetId || null, targetAwardKey || null, deltaXp, reason, authorizedBy, idempotencyKey]
+      )
+      correction = inserted.rows[0]
+    } catch (err) {
+      if (err.code === UNIQUE_VIOLATION) {
+        await client.query('ROLLBACK').catch(() => {})
+        const dup = await db.query(`SELECT * FROM smokecraft_reward_corrections WHERE idempotency_key = $1`, [idempotencyKey])
+        return { ok: true, alreadyApplied: true, correction: dup.rows[0] }
+      }
+      throw err
+    }
+
+    if (deltaXp !== 0) {
+      await client.query(
+        `UPDATE smokecraft_player_state SET xp_total = GREATEST(0, xp_total + $2), last_synced_at = now(), updated_at = now() WHERE guest_reference = $1`,
+        [guestReference, deltaXp]
+      )
+    }
+    const rankPromotion = await recomputeRankInTx(client, guestReference)
+    await recordAudit(client, { guestReference, mutationType: `correction_${correctionType}`, idempotencyKey, outcome: 'applied' })
+    await client.query('COMMIT')
+    return { ok: true, alreadyApplied: false, correction, rankPromotion }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     throw err

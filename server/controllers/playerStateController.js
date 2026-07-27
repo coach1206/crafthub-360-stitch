@@ -5,7 +5,7 @@
  * trusted from the request body — matches the existing Management Sync
  * convention (managementSyncController.js).
  */
-import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference } from '../services/smokecraft/playerStateService.js'
+import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference, submitKnowledgeCheck, submitLeafChallenge, correctReward } from '../services/smokecraft/playerStateService.js'
 import { getDb } from '../db/connection.js'
 
 function ownerGuestReference(identity) {
@@ -222,6 +222,106 @@ export async function handleConvertGuest(req, res) {
       deviceId: req.body?.deviceId || null,
     })
     res.status(result.alreadyConverted ? 200 : 201).json({ success: true, alreadyConverted: result.alreadyConverted, conversion: result.conversion })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+/**
+ * Holistic Fix 5A-2: the client submits raw per-question responses only
+ * — never a score/correctness value. The server re-derives the score
+ * from the real question data and is the sole authority for the XP
+ * grant (see submitKnowledgeCheck in playerStateService.js).
+ */
+export async function handleSubmitKnowledgeCheck(req, res) {
+  const idempotencyKey = requireIdempotencyKey(req, res)
+  if (!idempotencyKey) return
+  const moduleId = req.params.moduleId
+  const responses = req.body?.responses
+  const completionStepId = req.body?.completionStepId
+  if (!responses || typeof responses !== 'object') {
+    return res.status(400).json({ success: false, error: 'responses_required' })
+  }
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await submitKnowledgeCheck({
+      guestReference,
+      venueId: req.smokecraftIdentity.venueId || null,
+      moduleId, responses, completionStepId,
+      idempotencyKey,
+      sourceRoute: req.body?.sourceRoute || null,
+      requestId: req.id || null,
+      deviceId: req.body?.deviceId || null,
+    })
+    if (!result.ok) return res.status(400).json({ success: false, error: result.error })
+    res.status(result.alreadyScored ? 200 : 201).json({
+      success: true, alreadyScored: result.alreadyScored, score: result.score, total: result.total,
+      xpAwarded: result.xpAwarded || 0, rankPromotion: result.rankPromotion || null,
+    })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+/**
+ * Holistic Fix 5A-2: the client submits the 5 raw leaf-id answers only —
+ * never a score. The server scores against the real answer key and is
+ * the sole authority for XP, the botanist/leaf-scholar badges, and the
+ * leaf-recognition Passport stamp.
+ */
+export async function handleSubmitLeafChallenge(req, res) {
+  const idempotencyKey = requireIdempotencyKey(req, res)
+  if (!idempotencyKey) return
+  const answers = req.body?.answers
+  if (!Array.isArray(answers) || answers.length !== 5) {
+    return res.status(400).json({ success: false, error: 'five_answers_required' })
+  }
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await submitLeafChallenge({
+      guestReference,
+      venueId: req.smokecraftIdentity.venueId || null,
+      answers,
+      idempotencyKey,
+      sourceRoute: req.body?.sourceRoute || null,
+      requestId: req.id || null,
+      deviceId: req.body?.deviceId || null,
+    })
+    res.status(result.alreadyScored ? 200 : 201).json({
+      success: true, alreadyScored: result.alreadyScored, score: result.score, total: result.total,
+      xpAwarded: result.xpAwarded || 0, badgesGranted: result.badgesGranted || [],
+      passportStampGranted: result.passportStampGranted || null, rankPromotion: result.rankPromotion || null,
+    })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+/**
+ * Holistic Fix 5A-2: protected, staff-only reward correction/reversal.
+ * Route is gated by requireStaff (see routes file) — never reachable by
+ * an ordinary learner identity. Requires an explicit reason; the
+ * authorized-by identity is taken from the server-verified staff
+ * session, never the request body.
+ */
+export async function handleCorrectReward(req, res) {
+  const idempotencyKey = requireIdempotencyKey(req, res)
+  if (!idempotencyKey) return
+  const { guestReference, correctionType, targetTable, targetId, targetAwardKey, deltaXp, reason } = req.body || {}
+  if (!guestReference || typeof guestReference !== 'string') {
+    return res.status(400).json({ success: false, error: 'guest_reference_required' })
+  }
+  if (!correctionType || !targetTable || !reason) {
+    return res.status(400).json({ success: false, error: 'correction_type_target_table_and_reason_required' })
+  }
+  try {
+    const result = await correctReward({
+      guestReference, correctionType, targetTable, targetId: targetId || null, targetAwardKey: targetAwardKey || null,
+      deltaXp: Number.isFinite(deltaXp) ? deltaXp : 0, reason, authorizedBy: req.user?.id || 'unknown-staff',
+      idempotencyKey,
+    })
+    if (!result.ok) return res.status(400).json({ success: false, error: result.error })
+    res.status(result.alreadyApplied ? 200 : 201).json({ success: true, alreadyApplied: result.alreadyApplied, correction: result.correction, rankPromotion: result.rankPromotion || null })
   } catch (err) {
     dbErrorResponse(res, err)
   }

@@ -15,6 +15,7 @@ import { optionalAuth } from '../middleware/authMiddleware.js'
 import {
   attachSmokeCraftIdentity, ensureSmokeCraftGuestIdentity, requireSmokeCraftIdentity,
 } from '../middleware/smokecraftGuestIdentity.js'
+import { requireStaff } from '../middleware/roleMiddleware.js'
 import * as ctrl from '../controllers/playerStateController.js'
 
 const router = Router()
@@ -53,5 +54,13 @@ router.post('/convert-guest', writeLimiter, ctrl.handleConvertGuest)
 // ── Holistic Fix 5A: authoritative leaderboard ──
 router.get('/leaderboard', readLimiter, ctrl.handleGetLeaderboard)
 router.put('/leaderboard/preference', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSetLeaderboardPreference)
+
+// ── Holistic Fix 5A-2: server-verified quiz/skill-check scoring + corrections ──
+router.post('/knowledge-check/:moduleId/submit', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitKnowledgeCheck)
+router.post('/leaf-challenge/submit', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitLeafChallenge)
+// Staff-only, never reachable by a learner identity — requireStaff runs
+// AFTER optionalAuth (mounted above via router.use), so req.user is
+// already resolved from a real, server-verified session by this point.
+router.post('/corrections', writeLimiter, requireStaff, ctrl.handleCorrectReward)
 
 export default router
