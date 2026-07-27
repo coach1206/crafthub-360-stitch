@@ -12,7 +12,7 @@ export default function Art() {
   function handleContinue() {
     if (accepted) return
     setAccepted(true)
-    addXP(50)
+    addXP(50, 'art-observation')
     addBadge({ id: 'art-appreciation', name: 'Art Appreciation', icon: 'palette' })
     completeStep('art')
     setTimeout(() => navigate('/smokecraft/mentor'), 500)

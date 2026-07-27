@@ -74,3 +74,35 @@ export async function awardPassportStampOnServer(guestId, stampId, { sourceRoute
   const idempotencyKey = makeIdempotencyKey(guestId, `stamp:${stampId}`)
   return postJson('/awards/passport-stamp', { idempotencyKey, awardKey: stampId, sourceRoute, deviceId })
 }
+
+/**
+ * Holistic Fix 5A-2: server-verified named one-time XP activity (Origins
+ * module screens). `namedSource` must be a key the server already knows
+ * about (server/services/smokecraft/sessionRewardTable.js's
+ * NAMED_XP_SOURCES) — the server decides the amount, never the client.
+ */
+export async function awardNamedXpOnServer(guestId, namedSource, { sourceRoute, deviceId } = {}) {
+  const idempotencyKey = makeIdempotencyKey(guestId, `xp:${namedSource}`)
+  return postJson('/awards/xp', { idempotencyKey, awardKey: namedSource, sourceRoute, deviceId })
+}
+
+/**
+ * Holistic Fix 5A-2: submits raw per-question Knowledge Check responses
+ * (never a score/correctness value) — the server independently scores
+ * them and is the sole authority for the XP grant.
+ */
+export async function submitKnowledgeCheckOnServer(guestId, moduleId, responses, completionStepId, { sourceRoute, deviceId } = {}) {
+  const idempotencyKey = makeIdempotencyKey(guestId, `quiz:${moduleId}`)
+  return postJson(`/knowledge-check/${encodeURIComponent(moduleId)}/submit`, { idempotencyKey, responses, completionStepId, sourceRoute, deviceId })
+}
+
+/**
+ * Holistic Fix 5A-2: submits the 5 raw leaf-id answers (never a score) —
+ * the server scores against the real answer key and is the sole
+ * authority for XP, the botanist/leaf-scholar badges, and the
+ * leaf-recognition Passport stamp.
+ */
+export async function submitLeafChallengeOnServer(guestId, answers, { sourceRoute, deviceId } = {}) {
+  const idempotencyKey = makeIdempotencyKey(guestId, 'leaf-challenge')
+  return postJson('/leaf-challenge/submit', { idempotencyKey, answers, sourceRoute, deviceId })
+}

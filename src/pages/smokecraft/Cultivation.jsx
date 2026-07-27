@@ -117,7 +117,7 @@ export default function Cultivation() {
     if (saved) return
     setSaved(true)
     if (!session?.completedSteps?.includes('cultivation')) {
-      addXP(50)
+      addXP(50, 'cultivation-seed')
       completeStep('cultivation')
       awardStamp('cultivator', 'cultivation')
     }
@@ -127,7 +127,7 @@ export default function Cultivation() {
 
   function handleContinue() {
     if (!session?.completedSteps?.includes('cultivation')) {
-      addXP(50)
+      addXP(50, 'cultivation-water')
       completeStep('cultivation')
     }
     navigate('/smokecraft/blend')

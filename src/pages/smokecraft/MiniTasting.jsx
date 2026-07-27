@@ -142,7 +142,7 @@ export default function MiniTasting() {
         },
       }
     })
-    if (xpRule?.xp) addXP(xpRule.xp)
+    if (xpRule?.xp) addXP(xpRule.xp, 'mini-tasting-begin')
   }
 
   const compareCigars = compareIds.map(id => flight.find(c => c.id === id)).filter(Boolean)

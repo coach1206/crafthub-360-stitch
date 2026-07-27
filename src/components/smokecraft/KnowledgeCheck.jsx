@@ -229,7 +229,8 @@ function hasResponse(question, response) {
  *   onComplete(result) — optional callback fired once, on first completion.
  */
 export default function KnowledgeCheck({ moduleId, allowSkip = true, completionStepId, onComplete }) {
-  const { session, update, addXP } = useGuestSession()
+  const { session, update, submitKnowledgeCheck } = useGuestSession()
+  const allResponsesRef = useRef({})
   const set = useMemo(() => getKnowledgeCheckSet(moduleId), [moduleId])
 
   const [phase, setPhase] = useState('loading') // loading | error | in-progress | completed
@@ -284,6 +285,7 @@ export default function KnowledgeCheck({ moduleId, allowSkip = true, completionS
     if (!currentQuestion) return
     triggerHaptic(isCorrect(currentQuestion, response) ? 'medium' : 'light')
     setSubmitted(true)
+    allResponsesRef.current = { ...allResponsesRef.current, [currentQuestion.id]: response }
     setResults(prev => ({ ...prev, [currentQuestion.id]: { correct: isCorrect(currentQuestion, response), skipped: false } }))
   }
 
@@ -309,20 +311,23 @@ export default function KnowledgeCheck({ moduleId, allowSkip = true, completionS
       },
     }))
 
-    // Reuses an existing SESSION_REWARDS XP value verbatim when the caller
-    // points this Knowledge Check at a real, already-configured rule — never
-    // a fabricated quiz-specific amount, and never awarded more than once
-    // (guarded by xpAwardedRef, independent of the numbered session's own
-    // completedSteps ledger, so completing a quiz never falsely marks an
-    // unrelated spine session as complete).
-    if (xpRule && !xpAwardedRef.current) {
-      addXP(xpRule.xp)
+    // Holistic Fix 5A-2: the raw per-question responses (never a
+    // client-computed score or correctness flag) are submitted to the
+    // server, which independently re-scores against the same real
+    // question data (src/data/knowledgeCheckQuestions.js, dual-imported
+    // by server/services/smokecraft/quizScoringService.js) and is the
+    // sole authority for the XP grant — reusing the same
+    // already-approved SESSION_REWARDS amount verbatim, never a
+    // fabricated quiz-specific amount, never awarded more than once
+    // (guest+moduleId UNIQUE constraint server-side).
+    if (completionStepId && !xpAwardedRef.current) {
+      submitKnowledgeCheck(moduleId, allResponsesRef.current, completionStepId)
       xpAwardedRef.current = true
     }
 
     setPhase('completed')
     if (onComplete) onComplete({ score, total, skippedCount })
-  }, [set, moduleId, retryCount, xpRule, addXP, update, onComplete])
+  }, [set, moduleId, retryCount, completionStepId, submitKnowledgeCheck, update, onComplete])
 
   function goNext() {
     const nextResults = submitted ? results : { ...results, [currentQuestion.id]: { correct: false, skipped: true } }

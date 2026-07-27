@@ -191,7 +191,7 @@ export default function Leaves() {
   function handleReady() {
     if (accepted || studied.size < VARIETIES.length) return
     setAccepted(true)
-    addXP(75)
+    addXP(75, 'leaves-observation')
     completeStep('leaves')
     setTimeout(() => navigate('/smokecraft/leaf-challenge'), 400)
   }

@@ -33,7 +33,10 @@ import {
 import { calculateScore, getRankLabel } from '../services/leaderboardService.js'
 import { GOLD_BOX_RULE_VERSION } from '../utils/smokecraftGoldBoxRules.js'
 import { saveEvent } from '../services/syncQueueService.js'
-import { completeSessionOnServer, awardPassportStampOnServer } from '../services/smokecraft/playerStateApiClient.js'
+import {
+  completeSessionOnServer, awardPassportStampOnServer, awardNamedXpOnServer,
+  awardBadgeOnServer, submitKnowledgeCheckOnServer, submitLeafChallengeOnServer,
+} from '../services/smokecraft/playerStateApiClient.js'
 
 // SCHEMA_VERSION is now managed in sessionStorageService (v4)
 
@@ -92,22 +95,76 @@ export function GuestSessionProvider({ children }) {
   }, [update])
 
   // ── XP ────────────────────────────────────────────────────────────────────
-  const addXP = useCallback((amount) => {
+  /**
+   * Holistic Fix 5A-2: `namedSource`, when supplied, is a server-known key
+   * (sessionRewardTable.js's NAMED_XP_SOURCES) — the local `amount` here
+   * only drives the immediate UI (matches the existing
+   * awardSessionRewards/awardStamp "local optimistic + authoritative
+   * server grant" pattern); the actual, idempotent, server-decided XP
+   * amount is looked up and applied server-side, never trusted from this
+   * call. Callers that omit `namedSource` get local-only behavior (no
+   * server call) — used only for already-server-authoritative flows that
+   * grant XP through a different path (e.g. quiz/leaf-challenge submit).
+   */
+  const addXP = useCallback((amount, namedSource) => {
     update(prev => {
       const newXP = prev.xp + amount
       return { ...prev, xp: newXP, rank: getRankFromXP(newXP).name }
     })
+    if (namedSource) {
+      const guestId = sessionRef.current.guestId
+      awardNamedXpOnServer(guestId, namedSource, { sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null, deviceId: sessionRef.current.deviceId })
+        .catch(() => {})
+    }
   }, [update])
 
   // ── Badges ────────────────────────────────────────────────────────────────
+  /**
+   * Holistic Fix 5A-2: mirrors the award to the existing server-
+   * authoritative, idempotency-key-enforced /awards/badge endpoint
+   * (already used for curriculum session badges since Holistic Fix 5A) —
+   * the local update below remains the fast UI cache.
+   */
   const addBadge = useCallback((badge) => {
+    const alreadyLocally = !!sessionRef.current.badges.find(b => b.id === badge.id)
     update(prev => ({
       ...prev,
       badges: prev.badges.find(b => b.id === badge.id)
         ? prev.badges
         : [...prev.badges, { ...badge, earnedAt: Date.now() }],
     }))
+    if (!alreadyLocally) {
+      const guestId = sessionRef.current.guestId
+      awardBadgeOnServer(guestId, badge.id, { sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null, deviceId: sessionRef.current.deviceId })
+        .catch(() => {})
+    }
   }, [update])
+
+  /**
+   * Holistic Fix 5A-2: submits raw Knowledge Check responses to the
+   * server for authoritative scoring + XP grant. Fire-and-forget, like
+   * awardSessionRewards/awardStamp — this quiz's XP already has no local
+   * client-decided component (KnowledgeCheck.jsx no longer calls addXP).
+   */
+  const submitKnowledgeCheck = useCallback((moduleId, responses, completionStepId) => {
+    const guestId = sessionRef.current.guestId
+    submitKnowledgeCheckOnServer(guestId, moduleId, responses, completionStepId, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    }).catch(() => {})
+  }, [])
+
+  /**
+   * Holistic Fix 5A-2: submits the 5 raw leaf-id answers to the server
+   * for authoritative scoring + XP/badge/Passport-stamp grant.
+   */
+  const submitLeafChallenge = useCallback((answers) => {
+    const guestId = sessionRef.current.guestId
+    submitLeafChallengeOnServer(guestId, answers, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    }).catch(() => {})
+  }, [])
 
   // ── SmokeCraft: idempotent session reward award ───────────────────────────
   /**
@@ -991,6 +1048,8 @@ export function GuestSessionProvider({ children }) {
       completeStep,
       addXP,
       addBadge,
+      submitKnowledgeCheck,
+      submitLeafChallenge,
       awardSessionRewards,
       // Scoring + loyalty engine
       awardLoyaltyPoints:       awardLoyaltyPointsCb,

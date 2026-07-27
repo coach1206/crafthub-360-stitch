@@ -94,7 +94,7 @@ export default function Available() {
     addFavorite({ id: cigar.id, name: cigar.name, price: cigar.price, type: 'cigar' })
     if (!xpAwarded.current) {
       xpAwarded.current = true
-      addXP(XP_AWARDS.CIGAR_SELECTED)
+      addXP(XP_AWARDS.CIGAR_SELECTED, 'available-cigar-selected')
       completeStep('available')
     }
   }
