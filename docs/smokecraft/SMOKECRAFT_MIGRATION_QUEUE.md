@@ -158,3 +158,15 @@ for most sessions), a dedicated five-viewport curriculum sweep, and
 updates to `SMOKECRAFT_SCREEN_CLASSIFICATION.md` / `SMOKECRAFT_INTERACTION_MATRIX.md`
 / `SMOKECRAFT_LOCKED_BASELINE.md` reflecting the current 82-route adoption
 count.
+
+## Holistic Fix 2E-11 status note
+
+Shell/registry migration count is unchanged this pass (82 of 108 routes,
+same floor enforced by `validateSmokecraftManifest.mjs`) — 2E-11 closed
+Stage 2's control-architecture requirement (all 276 curriculum controls
+mapped to 7 tested implementation groups, coverage-validator locked) and
+did not migrate additional routes. No route classification changed.
+Server-side idempotency for XP/badges/Passport stamps remains an
+explicitly out-of-scope gameplay-engine requirement, handed off to
+Holistic Fix 4 / the gameplay-engine package rather than blocking Stage 2
+closure.

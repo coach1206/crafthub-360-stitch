@@ -405,3 +405,51 @@ retried network request after a dropped response). No engine-level
 awards was found or added this pass — this is recorded here as a real,
 disclosed gap for the later gameplay-engine package, not silently fixed
 or fabricated as already handled.
+## Holistic Fix 2E-11 update
+
+All 276 controls discovered in Holistic Fix 2E-9 are now mapped to exactly
+one of 7 source-derived implementation groups (not label-guessed) in
+`SMOKECRAFT_CONTROL_IMPLEMENTATION_MAP.md`:
+
+| Group | Controls | Persistence | Navigation | Duplicate-fire risk | Disabled-state |
+|---|---|---|---|---|---|
+| navigation | 55 | No | Yes | No | No |
+| selection-toggle | 94 | No | No | No | No |
+| rating-toggle | 67 | Yes | No | No | No |
+| tab-disclosure | 23 | No | No | No | No |
+| tasting-input | 12 | No | No | No | No |
+| completion | 23 | No | Yes | Yes | No |
+| honest-disabled | 2 | No | No | No | Yes |
+
+**Total: 276 mapped, 0 unmapped.** A new build-blocking validator,
+`scripts/validateSmokecraftControlCoverage.mjs`, asserts this mapping stays
+complete and consistent with the raw 2E-9 discovery data on every build
+(group counts, per-session coverage, and required test references for
+persistence/navigation/duplicate-risk/disabled-state groups).
+
+The 6th deep-tested implementation (tasting-input, FlavorMemory's
+flavor-wheel toggle) was added to
+`verify-smokecraft-hf2e10-control-state-persistence.mjs` this pass and
+passes 10/10 with the other 5 previously-verified implementations. The
+7th group, navigation, is covered by the existing
+`verify-smokecraft-hf2e5-curriculum-forward-backward.mjs` and
+`verify-smokecraft-full-journey-sequence-and-assets.mjs` suites — its
+behavior contract IS the forward/backward walk those scripts already run.
+
+**Engine-level idempotency disclosure (reaffirmed):** the duplicate-fire
+protection verified for the `completion` group is a client-side `if (done)
+return` guard only. It reliably prevents a rapid double-click within one
+page load from double-navigating or double-awarding, but it is not
+server-side idempotency against two genuinely independent requests (e.g.
+two browser tabs, a retried network request). Server-side idempotency for
+XP, badges, and Passport stamps is recorded as a gameplay-engine
+requirement for Holistic Fix 4 / the gameplay-engine package, not a Stage
+2 control-architecture defect.
+
+No new product control defects were found this pass. Two suspected
+failures during deep-test extension (a Terroir `role="tab"` vs
+`role="button"` selector mismatch, and a HumidorMatch double-click test
+using non-simultaneous `Promise.all([...])` clicks from the Node side)
+were both root-caused to test-harness mistakes, not product bugs, and
+fixed as such — the underlying product behavior was already correct in
+both cases.

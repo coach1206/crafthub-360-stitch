@@ -1,0 +1,68 @@
+── SmokeCraft control-coverage validator (Holistic Fix 2E-11)
+
+  OK    raw discovery total (276) equals inventory total (276)
+  OK    map doc declares "Total controls: 276. Total mapped: 276. Unmapped: 0."
+  OK    every control in the inventory has a non-empty group assignment
+  OK    group "navigation": inventory count (55) matches byGroupCounts (55)
+  OK    group "navigation": map doc summary table shows count 55
+  OK    group "selection-toggle": inventory count (94) matches byGroupCounts (94)
+  OK    group "selection-toggle": map doc summary table shows count 94
+  OK    group "rating-toggle": inventory count (67) matches byGroupCounts (67)
+  OK    group "rating-toggle": map doc summary table shows count 67
+  OK    group "tab-disclosure": inventory count (23) matches byGroupCounts (23)
+  OK    group "tab-disclosure": map doc summary table shows count 23
+  OK    group "tasting-input": inventory count (12) matches byGroupCounts (12)
+  OK    group "tasting-input": map doc summary table shows count 12
+  OK    group "completion": inventory count (23) matches byGroupCounts (23)
+  OK    group "completion": map doc summary table shows count 23
+  OK    group "honest-disabled": inventory count (2) matches byGroupCounts (2)
+  OK    group "honest-disabled": map doc summary table shows count 2
+  OK    sum of all group counts (276) equals total controls (276)
+  OK    group "navigation" has a browser-test reference
+  OK    group "navigation"'s referenced test script exists on disk (verify-smokecraft-hf2e5-curriculum-forward-backward.mjs)
+  OK    group "selection-toggle" has a browser-test reference
+  OK    group "selection-toggle"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    group "rating-toggle" has a browser-test reference
+  OK    group "rating-toggle"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    group "tab-disclosure" has a browser-test reference
+  OK    group "tab-disclosure"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    group "tasting-input" has a browser-test reference
+  OK    group "tasting-input"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    group "completion" has a browser-test reference
+  OK    group "completion"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    group "honest-disabled" has a browser-test reference
+  OK    group "honest-disabled"'s referenced test script exists on disk (verify-smokecraft-hf2e10-control-state-persistence.mjs)
+  OK    navigation-required group "navigation" has a destination-assertion reference
+  OK    persistence-required group "rating-toggle" has a reload-test reference
+  OK    navigation-required group "completion" has a destination-assertion reference
+  OK    duplicate-risk group "completion" has a rapid-double-action test reference
+  OK    disabled-state-expected group "honest-disabled" has an honest-state assertion reference
+  OK    session 1 has at least one mapped control
+  OK    session 2 has at least one mapped control
+  OK    session 3 has at least one mapped control
+  OK    session 4 has at least one mapped control
+  OK    session 5 has at least one mapped control
+  OK    session 6 has at least one mapped control
+  OK    session 7 has at least one mapped control
+  OK    session 8 has at least one mapped control
+  OK    session 10 has at least one mapped control
+  OK    session 11 has at least one mapped control
+  OK    session 12 has at least one mapped control
+  OK    session 14 has at least one mapped control
+  OK    session 15 has at least one mapped control
+  OK    session 16 has at least one mapped control
+  OK    session 19 has at least one mapped control
+  OK    session 21 has at least one mapped control
+  OK    session 22 has at least one mapped control
+  OK    session 23 has at least one mapped control
+  OK    session 24 has at least one mapped control
+  OK    session 25 has at least one mapped control
+  OK    session 26 has at least one mapped control
+  OK    session 27 has at least one mapped control
+  OK    all 22 primary sessions are represented in the inventory
+  OK    deep control-behavior proof file exists
+  OK    deep control-behavior proof reports 0 failures
+  OK    deep control-behavior proof covers the 6 non-navigation implementation groups
+  OK    navigation group's forward/backward test script exists on disk
+
+=== RESULT: PASS (0 checks failed) ===

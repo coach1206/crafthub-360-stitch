@@ -180,3 +180,20 @@ screens) — is **not yet verified** and must not be assumed correct. See
   duplicate protection for XP/badge/stamp awards (a real, disclosed gap
   for the later gameplay-engine package — see
   `SMOKECRAFT_INTERACTION_MATRIX.md`).
+
+## Holistic Fix 2E-11 additions
+
+Stage 2 control architecture is now closed: all 276 curriculum controls
+discovered in Holistic Fix 2E-9 are mapped to exactly one of 7 tested
+implementation groups (see `SMOKECRAFT_CONTROL_IMPLEMENTATION_MAP.md`),
+and a new build-blocking `validateSmokecraftControlCoverage.mjs` locks
+this mapping's completeness and consistency on every build. This is now
+part of the locked baseline alongside the existing shell-adoption,
+manifest, and asset-exclusivity locks.
+
+Locked as of this pass: 276/276 controls mapped, 7/7 implementation
+groups browser-tested (6 directly via
+`verify-smokecraft-hf2e10-control-state-persistence.mjs`, 1 —
+navigation — via the existing forward/backward and full-journey suites),
+22 primary curriculum sessions with confirmed control coverage, 0
+outstanding unmapped or untested controls.

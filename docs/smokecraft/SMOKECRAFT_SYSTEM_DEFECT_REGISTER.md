@@ -838,3 +838,34 @@ No product code was changed to close this — the underlying behavior was alread
 - **Session 27 (Session Complete): one "Blocked call to navigator.vibrate" console warning.** Traced to `triggerHaptic()` (`src/utils/haptics.js`), called from several handlers in `SessionComplete.jsx`. Chrome blocks `navigator.vibrate()` unless it's called from within a real, trusted user-gesture event handler — a Playwright-driven Tab keypress and hit-test evaluation in headless automation do not count as a trusted gesture, but a real user's touch/click on a physical device does. Confirmed via source read this is standard browser security policy, not a product defect — no real guest playing on a real device would ever see this.
 
 Both findings are disclosed here rather than silently dismissed, and neither required a code fix.
+
+## Holistic Fix 2E-11 — control taxonomy closure findings
+
+No new product control defects were found or fixed this pass. Two
+suspected failures encountered while extending
+`verify-smokecraft-hf2e10-control-state-persistence.mjs` were investigated
+to root cause and confirmed as test-harness mistakes, not product defects:
+
+1. **Terroir section-expand test failure**: initial test used
+   `getByRole('button', { name: /Country/i })`, which matched nothing.
+   Root cause: Terroir's sections are intentionally rendered with
+   `role="tab"` (source-confirmed, `Terroir.jsx` line ~170), not
+   `role="button"`. Fixed the test to use `getByRole('tab', ...)`. Not a
+   product defect — the real component's design was correct.
+2. **HumidorMatch duplicate-click test false positive**: initial test
+   dispatched `Promise.all([continueBtn.click(), continueBtn.click({force:
+   true})])` from the Node/Playwright side and observed an apparent
+   double-advance (landed on `/smokecraft/terroir` instead of
+   `/smokecraft/meet-your-cigar`). Root cause: the two clicks were not
+   truly simultaneous — the first click's navigation completed before the
+   second Playwright action resolved, so the second click landed on the
+   *next* page's own legitimate Continue button. Fixed the test to
+   dispatch both click events synchronously inside a single
+   `page.evaluate()` against the same pre-navigation DOM element. Re-test
+   confirmed the real `if (done) return` guard works correctly — no
+   product defect existed.
+
+Stage 2 control-architecture closure (Holistic Fix 2E-11): all 276
+controls mapped to 7 tested implementation groups, 0 unmapped, coverage
+validator passing. See `SMOKECRAFT_CONTROL_IMPLEMENTATION_MAP.md` and
+`SMOKECRAFT_INTERACTION_MATRIX.md`'s 2E-11 section for full detail.

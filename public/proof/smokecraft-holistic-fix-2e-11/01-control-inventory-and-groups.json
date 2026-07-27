@@ -1,0 +1,2318 @@
+{
+  "groupInfo": {
+    "navigation": {
+      "contract": "Real click navigates to the expected destination route (Back to Journey, Previous, Next, sidebar links). No persistence required (navigation is the state change itself).",
+      "test_ref": "verify-smokecraft-hf2e5-curriculum-forward-backward.mjs (forward walk + Session 1 Next + Session 2 Back), verify-smokecraft-full-journey-sequence-and-assets.mjs",
+      "representative_sessions": [
+        1,
+        7,
+        25,
+        26
+      ],
+      "persistence_required": false,
+      "navigation_required": true,
+      "duplicate_risk": false,
+      "disabled_state_expected": false
+    },
+    "selection-toggle": {
+      "contract": "Real click toggles a selection on/off (aria-pressed true/false), used for hotspot zones, cigar/shape/cut pickers, decision-support selections. Selection is ephemeral UI state; persisted only via the Continue action into journey context.",
+      "test_ref": "verify-smokecraft-hf2e10-control-state-persistence.mjs #1 (HumidorMatch)",
+      "representative_sessions": [
+        2,
+        5,
+        6,
+        11,
+        21,
+        22
+      ],
+      "persistence_required": false,
+      "navigation_required": false,
+      "duplicate_risk": false,
+      "disabled_state_expected": false
+    },
+    "rating-toggle": {
+      "contract": "Real click sets a rating/observation flag (aria-pressed), persisted into journey-context localStorage on every change (not just on explicit Save), surviving a full page reload.",
+      "test_ref": "verify-smokecraft-hf2e10-control-state-persistence.mjs #2 (FirstThird)",
+      "representative_sessions": [
+        8,
+        12,
+        16,
+        19
+      ],
+      "persistence_required": true,
+      "navigation_required": false,
+      "duplicate_risk": false,
+      "disabled_state_expected": false
+    },
+    "tab-disclosure": {
+      "contract": "Real click on a role=\"tab\" (or equivalent disclosure) element reveals additional real content that was not previously rendered \u2014 verified as an actual content-length increase, not decorative.",
+      "test_ref": "verify-smokecraft-hf2e10-control-state-persistence.mjs #3 (Terroir)",
+      "representative_sessions": [
+        3,
+        4,
+        15
+      ],
+      "persistence_required": false,
+      "navigation_required": false,
+      "duplicate_risk": false,
+      "disabled_state_expected": false
+    },
+    "tasting-input": {
+      "contract": "Real click toggles a flavor/aroma/intensity selection on/off (aria-pressed), feeding a client-state flavor/tasting profile object.",
+      "test_ref": "verify-smokecraft-hf2e10-control-state-persistence.mjs #6 (FlavorMemory)",
+      "representative_sessions": [
+        10
+      ],
+      "persistence_required": false,
+      "navigation_required": false,
+      "duplicate_risk": false,
+      "disabled_state_expected": false
+    },
+    "completion": {
+      "contract": "Real click on Continue/Complete/Claim triggers the done-flag guard (`if (done) return`), preventing a rapid double-click from producing two navigations/awards, then navigates to the correct next screen.",
+      "test_ref": "verify-smokecraft-hf2e10-control-state-persistence.mjs #4 (HumidorMatch double-click), verify-smokecraft-hf2e5-curriculum-forward-backward.mjs SC-D014 section (FlavorMemory backend-dependent Continue)",
+      "representative_sessions": [
+        2,
+        8,
+        10,
+        23,
+        24,
+        27
+      ],
+      "persistence_required": false,
+      "navigation_required": true,
+      "duplicate_risk": true,
+      "disabled_state_expected": false
+    },
+    "honest-disabled": {
+      "contract": "When a prerequisite is not met (e.g. no mentor selected), the screen renders an honest empty/disabled state with no fabricated content, and no interactive control that would falsely imply availability.",
+      "test_ref": "verify-smokecraft-hf2e10-control-state-persistence.mjs #5 (MentorCommentary)",
+      "representative_sessions": [
+        14
+      ],
+      "persistence_required": false,
+      "navigation_required": false,
+      "duplicate_risk": false,
+      "disabled_state_expected": true
+    }
+  },
+  "inventory": [
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Back to Journey",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Notifications",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Help",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Account",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Dashboard",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Sessions",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rewards",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Passport",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Leaderboard",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Events",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Collections",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Mentor",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Settings (not yet available)",
+      "group": "honest-disabled"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Sign out \u2014 return to SmokeCraft landing",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Home",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Journey",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Learn",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Create",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Pairing",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Mentor",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "TODAY\u2019S EXPERIENCE",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CIGAR PREVIEW",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Start Session 1 \u2014 Begin Experience",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "navigation"
+    },
+    {
+      "session": 1,
+      "route": "/smokecraft/welcome",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "BEGIN EXPERIENCE \u2192",
+      "group": "navigation"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Virtual Humidor",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Dry Box",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Travel Case",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2212",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "+",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2212",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "+",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Seal",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Airflow",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Apply Settings",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Oliva Serie V",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Arturo Fuente Opus X",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Padron 1964 Series",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Macanudo Caf\u00e9",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CAO Flathead",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Romeo y Julieta 1875",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "My Father Le Bijou",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Cohiba Siglo VI",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 2,
+      "route": "/smokecraft/humidor-match",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO MEET YOUR CIGAR \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Brand",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Blend",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Wrapper",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Binder",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Filler",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Factory",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Master Blender",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 3,
+      "route": "/smokecraft/meet-your-cigar",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Country",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Region",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Soil",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Climate",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Growing Conditions",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Why It Matters",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 4,
+      "route": "/smokecraft/terroir",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Robusto \u2014 5\" \u00d7 50 ring",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Toro \u2014 6\" \u00d7 52 ring",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Churchill \u2014 7\" \u00d7 48 ring",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Corona \u2014 5.5\" \u00d7 42 ring",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Gordo \u2014 6\" \u00d7 60 ring",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Torpedo \u2014 6.5\" \u00d7 52 ring",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 5,
+      "route": "/smokecraft/format",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO REQUEST / PURCHASE \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Straight Cut",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "V-Cut",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Punch Cut",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Learn Why \u25bc",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 6,
+      "route": "/smokecraft/cut-toast-light",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO LIGHTING TUTORIAL \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Step 1: Toasting the Foot (current)",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Step 2: Lighting Technique",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Step 3: Establishing an Even Burn",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Step 4: Avoiding Tunneling",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Step 5: Avoiding Overheating",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Step 6: Correct Flame Distance",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Step 7: The Proper First Draw",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Step 8: Burn Inspection",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "?",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "navigation"
+    },
+    {
+      "session": 7,
+      "route": "/smokecraft/lighting-tutorial",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "NEXT STEP \u2192",
+      "group": "navigation"
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Aroma Opening",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Draw Ease",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Body Start",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Flavor Notes",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Burn Line",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Ash Quality",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Save Draft",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 8,
+      "route": "/smokecraft/first-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO SECOND THIRD \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Earth flavor",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Wood flavor",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Spice flavor",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Cocoa flavor",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Coffee flavor",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Sweet flavor",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Nuts flavor",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Floral flavor",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "INPUT",
+      "type": "range",
+      "label": "Intensity perception",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "INPUT",
+      "type": "range",
+      "label": "Body perception",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "INPUT",
+      "type": "range",
+      "label": "Strength perception",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "tasting-input"
+    },
+    {
+      "session": 10,
+      "route": "/smokecraft/flavor-memory",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO SUGGESTED PAIRINGS \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Robusto",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Toro",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Churchill",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Figurado",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Connecticut",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Habano",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Maduro",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Corojo",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Dominican Republic",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Nicaragua",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Honduras",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Cuba",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Mexico",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Mild",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Medium",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Medium-Full",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Full",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Smooth",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Bold",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Creamy",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Sweet",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Smoky",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Balanced",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rich",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Complement",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Contrast",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Soften",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Brighten",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Deepen Finish",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Explore New Notes",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Whiskey",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rum",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Coffee",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Espresso",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Chocolate",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Nuts",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Nonalcoholic",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 11,
+      "route": "/smokecraft/pairing-lab",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO FLAVOR EVOLUTION \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Flavor Development",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Body Evolution",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Aroma Depth",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Burn Stability",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Smoke Texture",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Complexity Shift",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Save Draft",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 12,
+      "route": "/smokecraft/second-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO FLAVOR MEMORY \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 14,
+      "route": "/smokecraft/mentor-commentary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "honest-disabled"
+    },
+    {
+      "session": 14,
+      "route": "/smokecraft/mentor-commentary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "navigation"
+    },
+    {
+      "session": 14,
+      "route": "/smokecraft/mentor-commentary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE \u2192",
+      "group": "navigation"
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Tobacco",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Fermentation",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Aging",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Factory Story",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "tab-disclosure"
+    },
+    {
+      "session": 15,
+      "route": "/smokecraft/knowledge-drop",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Aroma Strength",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Flavor Intensity",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Burn Quality",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Aftertaste",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Earth flavor",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Leather flavor",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Wood flavor",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Spice flavor",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Coffee flavor",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Cocoa flavor",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Sweet flavor",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Creamy flavor",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Nuts flavor",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Floral flavor",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 16,
+      "route": "/smokecraft/final-third",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO SCORECARD \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Appearance 1 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Appearance 2 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Appearance 3 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Appearance 4 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Appearance 5 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Construction 1 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Construction 2 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Construction 3 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Construction 4 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Construction 5 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Draw 1 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Draw 2 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Draw 3 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Draw 4 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Draw 5 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Burn 1 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Burn 2 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Burn 3 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Burn 4 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Burn 5 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Flavor 1 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Flavor 2 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Flavor 3 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Flavor 4 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Flavor 5 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Pairing Match 1 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Pairing Match 2 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Pairing Match 3 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Pairing Match 4 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rate Pairing Match 5 out of 5",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "INPUT",
+      "type": "number",
+      "label": "e.g. 60",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "INPUT",
+      "type": "number",
+      "label": "approx.",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "INPUT",
+      "type": "number",
+      "label": "0",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "SAVE DRAFT",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "rating-toggle"
+    },
+    {
+      "session": 19,
+      "route": "/smokecraft/scorecard",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO AI SUMMARY \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "SESSION OVERVIEW",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2713 Accept",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2715 Dismiss",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "FLAVOR PROFILE SUMMARY",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "STRENGTH AND BODY PROGRESSION",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2713 Accept",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2715 Dismiss",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONSTRUCTION SUMMARY",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "PREFERRED FLAVOR NOTES",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 21,
+      "route": "/smokecraft/ai-summary",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO PAIRING RECOMMENDATIONS \u2192",
+      "group": "completion"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Wine \u00b7 100%",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u00d7",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Chocolate \u00b7 100%",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u00d7",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rum \u00b7 88%",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u00d7",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "VIEW ALTERNATE PAIRING",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "SAVE TO MY PAIRINGS",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "LEARN MORE",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE JOURNEY",
+      "group": "completion"
+    },
+    {
+      "session": 22,
+      "route": "/smokecraft/pairing-recommendations",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "selection-toggle"
+    },
+    {
+      "session": 23,
+      "route": "/smokecraft/passport-stamp",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "completion"
+    },
+    {
+      "session": 23,
+      "route": "/smokecraft/passport-stamp",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "navigation"
+    },
+    {
+      "session": 23,
+      "route": "/smokecraft/passport-stamp",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO COMPLETED SCORECARD \u2192",
+      "group": "navigation"
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Journey foundations reviewed",
+      "group": "navigation"
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Flavor memory captured",
+      "group": "completion"
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Pairing preference confirmed",
+      "group": "completion"
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Mentor guidance acknowledged",
+      "group": "navigation"
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Burn & draw quality noted",
+      "group": "completion"
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Ready to receive passport stamp",
+      "group": "navigation"
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "i",
+      "group": "completion"
+    },
+    {
+      "session": 24,
+      "route": "/smokecraft/final-review",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO REWARDS \u2192",
+      "group": "navigation"
+    },
+    {
+      "session": 25,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Claim",
+      "group": "completion"
+    },
+    {
+      "session": 25,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "navigation"
+    },
+    {
+      "session": 25,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO ACHIEVEMENTS \u2192",
+      "group": "navigation"
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Rewards & XP",
+      "group": "navigation"
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Achievements",
+      "group": "navigation"
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Challenge Hub \u2192",
+      "group": "navigation"
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Collections \u2192",
+      "group": "navigation"
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Skill Tree \u2192",
+      "group": "navigation"
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Claim",
+      "group": "completion"
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Claim",
+      "group": "completion"
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK TO REWARDS",
+      "group": "navigation"
+    },
+    {
+      "session": 26,
+      "route": "/smokecraft/rewards",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "CONTINUE TO RECOMMENDED NEXT JOURNEY \u2192",
+      "group": "navigation"
+    },
+    {
+      "session": 27,
+      "route": "/smokecraft/session-complete",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Start Journey",
+      "group": "navigation"
+    },
+    {
+      "session": 27,
+      "route": "/smokecraft/session-complete",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "Select",
+      "group": "completion"
+    },
+    {
+      "session": 27,
+      "route": "/smokecraft/session-complete",
+      "tag": "BUTTON",
+      "type": "button",
+      "label": "\u2190 BACK",
+      "group": "navigation"
+    }
+  ],
+  "byGroupCounts": {
+    "navigation": 55,
+    "honest-disabled": 2,
+    "selection-toggle": 94,
+    "completion": 23,
+    "tab-disclosure": 23,
+    "rating-toggle": 67,
+    "tasting-input": 12
+  }
+}

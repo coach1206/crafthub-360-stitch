@@ -114,6 +114,24 @@ assert('MentorCommentary: honestly shows "No Mentor Selected" rather than fabric
 assert('MentorCommentary: does not fabricate a mentor quote when none is selected', !hasFabricatedCommentary)
 results.push({ implementation: 'honest empty/disabled state (no fabrication)', representativeSession: 14, honestEmptyState: hasHonestEmptyState, noFabrication: !hasFabricatedCommentary })
 
+// ── 6. Tasting-input: FlavorMemory flavor-wheel toggle (Holistic Fix 2E-11) ──
+section('6. Tasting-input — FlavorMemory flavor-wheel selection')
+await go('/smokecraft'); await seed(['enroll', 'identity', 'entry', 'humidor-match', 'meet-your-cigar', 'terroir', 'format', 'cut-toast-light', 'lighting-tutorial', 'first-third'])
+await go('/smokecraft/flavor-memory')
+const flavorZone = page.locator('[aria-pressed]').first()
+const hasFlavorZone = (await flavorZone.count()) > 0
+if (hasFlavorZone) {
+  await flavorZone.click()
+  const flavorPressed = await flavorZone.getAttribute('aria-pressed')
+  assert('FlavorMemory: clicking a flavor-wheel zone sets aria-pressed=true (real tasting-input state change)', flavorPressed === 'true')
+  await flavorZone.click()
+  const flavorUnpressed = await flavorZone.getAttribute('aria-pressed')
+  assert('FlavorMemory: clicking the same flavor zone again toggles it back off', flavorUnpressed === 'false')
+  results.push({ implementation: 'tasting-input flavor-wheel toggle', representativeSession: 10, stateChange: flavorPressed === 'true', toggleOff: flavorUnpressed === 'false' })
+} else {
+  assert('FlavorMemory: a flavor-wheel control exists to test tasting-input', false, 'no [aria-pressed] element found')
+}
+
 await browser.close()
 
 console.log(`\n=== RESULT: ${pass} passed, ${fail} failed (of ${pass + fail} total) ===`)
