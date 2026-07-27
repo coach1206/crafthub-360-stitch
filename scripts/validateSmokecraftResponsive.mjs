@@ -50,23 +50,28 @@ check('no route has horizontal overflow at any of the 5 viewports', overflowCoun
 check('no route blocks vertical scrolling when content exceeds the viewport', scrollBlockedCount === 0, scrollBlockedRoutes.slice(0, 10).join(' | '))
 check('no route has a real control obscured behind the fixed bottom nav', obscuredCount === 0, obscuredRoutes.slice(0, 10).join(' | '))
 
-// Portrait-asset stretch check: for every route reporting a hero image,
-// confirm the rendered aspect ratio matches the natural aspect ratio
-// within tolerance (proves object-fit:contain math, not stretch/distort).
+// Portrait-asset stretch check: object-fit:'contain' or 'cover' NEVER
+// distort/skew an image's own pixel proportions (contain letterboxes,
+// cover crops) — only object-fit:'fill' (or no object-fit at all, whose
+// browser default IS 'fill') can stretch it non-proportionally. So this
+// checks the actual computed object-fit rather than inferring "stretch"
+// from a rendered-vs-natural aspect-ratio mismatch, which is expected
+// and legitimate for 'cover' hero banners.
 let stretchCount = 0
 const stretchRoutes = []
 for (const r of inventory) {
   for (const [vpName, m] of Object.entries(r.viewports)) {
     if (!m || !m.heroImage) continue
-    const { naturalW, naturalH, renderedW, renderedH } = m.heroImage
+    const { naturalW, naturalH, renderedW, renderedH, objectFit } = m.heroImage
     if (!renderedW || !renderedH) continue
+    if (objectFit === 'contain' || objectFit === 'cover') continue
     const naturalRatio = naturalW / naturalH
     const renderedRatio = renderedW / renderedH
     const drift = Math.abs(naturalRatio - renderedRatio) / naturalRatio
-    if (drift > 0.03) { stretchCount++; stretchRoutes.push(`${r.path} @ ${vpName} (natural ${naturalRatio.toFixed(2)} vs rendered ${renderedRatio.toFixed(2)})`) }
+    if (drift > 0.03) { stretchCount++; stretchRoutes.push(`${r.path} @ ${vpName} (objectFit=${objectFit}, natural ${naturalRatio.toFixed(2)} vs rendered ${renderedRatio.toFixed(2)})`) }
   }
 }
-check('no hero/backdrop image is stretched or distorted (aspect ratio preserved within 3%)', stretchCount === 0, stretchRoutes.slice(0, 10).join(' | '))
+check('no hero/backdrop image is stretched or distorted (object-fit:fill with a mismatched box)', stretchCount === 0, stretchRoutes.slice(0, 10).join(' | '))
 
 console.log(`\n=== RESULT: ${fail === 0 ? 'PASS' : 'FAIL'} (${fail} check${fail === 1 ? '' : 's'} failed) ===`)
 if (fail > 0) process.exit(1)

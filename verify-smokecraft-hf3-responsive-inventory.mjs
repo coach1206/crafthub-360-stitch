@@ -76,7 +76,7 @@ for (const r of routes) {
     let measured = null
     try {
       await page.goto(`${BASE}${url}`, { waitUntil: 'networkidle', timeout: 12000 })
-      await page.waitForTimeout(300)
+      await page.waitForTimeout(700)
       measured = await page.evaluate(() => {
         const doc = document.documentElement
         const body = document.body
@@ -141,6 +141,7 @@ for (const r of routes) {
             naturalW: largest.naturalWidth, naturalH: largest.naturalHeight,
             orientation: largest.naturalWidth >= largest.naturalHeight ? 'landscape' : 'portrait',
             renderedW: r.width, renderedH: r.height,
+            objectFit: getComputedStyle(largest).objectFit,
             src: largest.src.split('/').pop(),
           }
         }
