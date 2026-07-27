@@ -7,8 +7,15 @@ import SmokeCraftImageBoundsOverlay from '../../components/smokecraft/SmokeCraft
 import SmokeCraftNavBar from '../../components/smokecraft/SmokeCraftNavBar.jsx'
 import { SC_ASSETS } from '../../constants/smokecraftAssets.js'
 
-const NAT_W = 1672
-const NAT_H = 941
+// Holistic Fix 3: SC_ASSETS.connections (cropped/connections-hero.jpg) is a
+// 492x781 portrait crop, not the 1672x941 landscape dimensions previously
+// declared here — that mismatch fed the wrong aspect ratio into
+// SmokeCraftImageBoundsOverlay's scale math, causing the image to render
+// visibly stretched/distorted on every viewport (confirmed via
+// verify-smokecraft-hf3-responsive-inventory.mjs + direct PIL read of the
+// actual file). Corrected to the asset's real natural dimensions.
+const NAT_W = 492
+const NAT_H = 781
 
 const GOLD = '#E9C176'
 

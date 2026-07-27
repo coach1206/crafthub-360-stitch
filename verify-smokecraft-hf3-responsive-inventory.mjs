@@ -113,10 +113,25 @@ for (const r of routes) {
         // EXCLUDING controls that are themselves inside the fixed nav bar
         // (its own buttons legitimately sit in that band; that is not an
         // obscuring defect).
+        // A control merely starting below the fold on initial (unscrolled)
+        // load is normal, expected behavior for a scrollable page — not an
+        // obscuring defect, since scrolling reveals it. Only a control that
+        // is NOT inside any scrollable ancestor (so the user has no way to
+        // reach it) and sits under the fixed nav counts as truly obscured.
+        function hasScrollableAncestor(el) {
+          let node = el.parentElement
+          while (node) {
+            const cs = getComputedStyle(node)
+            if ((cs.overflowY === 'auto' || cs.overflowY === 'scroll') && node.scrollHeight > node.clientHeight + 4) return true
+            node = node.parentElement
+          }
+          return false
+        }
         let obscuredControls = 0
         if (bottomNavHeight > 0) {
           const controls = [...document.querySelectorAll('button, a[href], input, [role="button"]')]
             .filter(el => !fixedBottomEls.some(nav => nav.contains(el)))
+            .filter(el => !hasScrollableAncestor(el))
           for (const el of controls) {
             const r = el.getBoundingClientRect()
             if (r.width > 0 && r.height > 0 && r.bottom > viewportH - bottomNavHeight && r.top < viewportH - bottomNavHeight) obscuredControls++
