@@ -1366,6 +1366,21 @@
   },
   {
     "idx": 92,
+    "path": "/smokecraft/account",
+    "testedUrl": "/smokecraft/account",
+    "isDynamicSegment": false,
+    "status": "PASS",
+    "finalUrl": "http://localhost:5050/smokecraft/account",
+    "title": "NOVEE OS | CraftHub 360",
+    "bodyEmpty": false,
+    "crashed": false,
+    "consoleErrorCount": 0,
+    "firstConsoleError": null,
+    "screenshot": "092-account.png",
+    "isRedirectElement": false
+  },
+  {
+    "idx": 93,
     "path": "/smokecraft/event-challenge",
     "testedUrl": "/smokecraft/event-challenge",
     "isDynamicSegment": false,
@@ -1376,11 +1391,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "092-event-challenge.png",
+    "screenshot": "093-event-challenge.png",
     "isRedirectElement": false
   },
   {
-    "idx": 93,
+    "idx": 94,
     "path": "/smokecraft/how-it-works",
     "testedUrl": "/smokecraft/how-it-works",
     "isDynamicSegment": false,
@@ -1391,11 +1406,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "093-how-it-works.png",
+    "screenshot": "094-how-it-works.png",
     "isRedirectElement": false
   },
   {
-    "idx": 94,
+    "idx": 95,
     "path": "/smokecraft/demo-reset",
     "testedUrl": "/smokecraft/demo-reset",
     "isDynamicSegment": false,
@@ -1406,11 +1421,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "094-demo-reset.png",
+    "screenshot": "095-demo-reset.png",
     "isRedirectElement": false
   },
   {
-    "idx": 95,
+    "idx": 96,
     "path": "/smokecraft/session/start",
     "testedUrl": "/smokecraft/session/start",
     "isDynamicSegment": false,
@@ -1421,11 +1436,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "095-session_start.png",
+    "screenshot": "096-session_start.png",
     "isRedirectElement": true
   },
   {
-    "idx": 96,
+    "idx": 97,
     "path": "/smokecraft/guest-pass",
     "testedUrl": "/smokecraft/guest-pass",
     "isDynamicSegment": false,
@@ -1436,11 +1451,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "096-guest-pass.png",
+    "screenshot": "097-guest-pass.png",
     "isRedirectElement": false
   },
   {
-    "idx": 97,
+    "idx": 98,
     "path": "/smokecraft/demo",
     "testedUrl": "/smokecraft/demo",
     "isDynamicSegment": false,
@@ -1451,11 +1466,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "097-demo.png",
+    "screenshot": "098-demo.png",
     "isRedirectElement": false
   },
   {
-    "idx": 98,
+    "idx": 99,
     "path": "/smokecraft/scan",
     "testedUrl": "/smokecraft/scan",
     "isDynamicSegment": false,
@@ -1466,11 +1481,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "098-scan.png",
+    "screenshot": "099-scan.png",
     "isRedirectElement": false
   },
   {
-    "idx": 99,
+    "idx": 100,
     "path": "/smokecraft/passport",
     "testedUrl": "/smokecraft/passport",
     "isDynamicSegment": false,
@@ -1481,11 +1496,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "099-passport.png",
+    "screenshot": "100-passport.png",
     "isRedirectElement": false
   },
   {
-    "idx": 100,
+    "idx": 101,
     "path": "/smokecraft/crafthub",
     "testedUrl": "/smokecraft/crafthub",
     "isDynamicSegment": false,
@@ -1496,11 +1511,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "100-crafthub.png",
+    "screenshot": "101-crafthub.png",
     "isRedirectElement": false
   },
   {
-    "idx": 101,
+    "idx": 102,
     "path": "/smokecraft/menu",
     "testedUrl": "/smokecraft/menu",
     "isDynamicSegment": false,
@@ -1511,11 +1526,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "101-menu.png",
+    "screenshot": "102-menu.png",
     "isRedirectElement": false
   },
   {
-    "idx": 102,
+    "idx": 103,
     "path": "/smokecraft/venue-commerce",
     "testedUrl": "/smokecraft/venue-commerce",
     "isDynamicSegment": false,
@@ -1526,11 +1541,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "102-venue-commerce.png",
+    "screenshot": "103-venue-commerce.png",
     "isRedirectElement": false
   },
   {
-    "idx": 103,
+    "idx": 104,
     "path": "/smokecraft/order",
     "testedUrl": "/smokecraft/order",
     "isDynamicSegment": false,
@@ -1541,11 +1556,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "103-order.png",
+    "screenshot": "104-order.png",
     "isRedirectElement": false
   },
   {
-    "idx": 104,
+    "idx": 105,
     "path": "/smokecraft/ticket-tapper/staff-specials",
     "testedUrl": "/smokecraft/ticket-tapper/staff-specials",
     "isDynamicSegment": false,
@@ -1556,11 +1571,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "104-ticket-tapper_staff-specials.png",
+    "screenshot": "105-ticket-tapper_staff-specials.png",
     "isRedirectElement": false
   },
   {
-    "idx": 105,
+    "idx": 106,
     "path": "/smokecraft/cart",
     "testedUrl": "/smokecraft/cart",
     "isDynamicSegment": false,
@@ -1571,11 +1586,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "105-cart.png",
+    "screenshot": "106-cart.png",
     "isRedirectElement": false
   },
   {
-    "idx": 106,
+    "idx": 107,
     "path": "/smokecraft/checkout",
     "testedUrl": "/smokecraft/checkout",
     "isDynamicSegment": false,
@@ -1586,11 +1601,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "106-checkout.png",
+    "screenshot": "107-checkout.png",
     "isRedirectElement": false
   },
   {
-    "idx": 107,
+    "idx": 108,
     "path": "/smokecraft/payment-success",
     "testedUrl": "/smokecraft/payment-success",
     "isDynamicSegment": false,
@@ -1601,11 +1616,11 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "107-payment-success.png",
+    "screenshot": "108-payment-success.png",
     "isRedirectElement": false
   },
   {
-    "idx": 108,
+    "idx": 109,
     "path": "/smokecraft/order-status",
     "testedUrl": "/smokecraft/order-status",
     "isDynamicSegment": false,
@@ -1616,7 +1631,7 @@
     "crashed": false,
     "consoleErrorCount": 0,
     "firstConsoleError": null,
-    "screenshot": "108-order-status.png",
+    "screenshot": "109-order-status.png",
     "isRedirectElement": false
   }
 ]
