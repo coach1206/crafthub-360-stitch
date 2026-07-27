@@ -1,0 +1,83 @@
+{
+  "pass": 19,
+  "fail": 0,
+  "total": 19,
+  "results": [
+    {
+      "name": "Wrong answer submission (201) returns a server-computed score, not a client-trusted one",
+      "ok": true
+    },
+    {
+      "name": "Server awards the real, existing session-linked XP amount (seed-soil = 75)",
+      "ok": true
+    },
+    {
+      "name": "A second attempt at an already-scored quiz module is honestly rejected as already-scored, XP not re-granted",
+      "ok": true
+    },
+    {
+      "name": "Player state XP total reflects exactly one grant of the quiz XP, not two",
+      "ok": true
+    },
+    {
+      "name": "A genuinely perfect answer set scores 5/5 server-side",
+      "ok": true
+    },
+    {
+      "name": "Perfect score grants the tiered 125 XP (not a client-fabricated amount)",
+      "ok": true
+    },
+    {
+      "name": "Perfect score grants both the botanist AND leaf-scholar badges",
+      "ok": true
+    },
+    {
+      "name": "Perfect score grants the leaf-recognition Passport stamp",
+      "ok": true
+    },
+    {
+      "name": "An all-wrong answer set is scored 0/5 server-side, never trusting a claimed high score",
+      "ok": true
+    },
+    {
+      "name": "A 0-score attempt does not grant the leaf-scholar badge",
+      "ok": true
+    },
+    {
+      "name": "Re-submitting Leaf Challenge with a DIFFERENT (better) answer set after a first attempt is rejected — first real attempt is final, not farmable",
+      "ok": true
+    },
+    {
+      "name": "A real named XP source (art-observation) is granted its server-approved amount (50)",
+      "ok": true
+    },
+    {
+      "name": "An unknown/fabricated named XP source is rejected with 400, never silently granted",
+      "ok": true
+    },
+    {
+      "name": "The same named XP source cannot be granted twice to the same guest, even under a different idempotency key",
+      "ok": true
+    },
+    {
+      "name": "A direct-award Origins badge (art-appreciation) is granted server-side",
+      "ok": true
+    },
+    {
+      "name": "The same badge cannot be granted twice under a different idempotency key",
+      "ok": true
+    },
+    {
+      "name": "A plain guest identity attempting a correction is rejected (403), never applied",
+      "ok": true
+    },
+    {
+      "name": "Both concurrent requests return well-formed success (no 500)",
+      "ok": true
+    },
+    {
+      "name": "A two-tab race on the same quiz module grants XP exactly once, not twice",
+      "ok": true
+    }
+  ]
+}

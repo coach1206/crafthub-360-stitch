@@ -232,3 +232,16 @@ now derives them reactively FROM `journey.mentor` in a dedicated
 independent owners. **Duplicate-risk downgraded from High to Low.**
 **Migration status: Closed** (structural fix — derivation guarantees
 consistency; server authority already existed via the journey snapshot).
+
+## Holistic Fix 5A-2 update — addXP()/addBadge() authority closed
+
+`GuestSessionContext.addXP(amount, namedSource)` and `addBadge(badge)`
+now both mirror to server-authoritative, idempotent endpoints (same
+local-optimistic-UI + fire-and-forget-authoritative-server pattern
+already used by `awardSessionRewards`/`awardStamp` since Holistic Fix
+4). Knowledge Check and Leaf Challenge no longer call `addXP()` at all —
+they submit raw evidence via new `submitKnowledgeCheck`/
+`submitLeafChallenge` context methods, and the server is the sole author
+of the resulting score/XP/badge/stamp. See
+`SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md`'s Holistic Fix 5A-2 section for the
+full list of closed call sites and the still-disclosed remaining gaps.

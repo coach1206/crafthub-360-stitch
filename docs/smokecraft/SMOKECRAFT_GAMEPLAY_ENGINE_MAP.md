@@ -89,3 +89,53 @@ codebase, at three different levels of server authority:
   Holistic Fix 5C per this mandate's own scope boundary — not touched.
 - **Pairing/mentor intelligence** is explicitly deferred to Holistic
   Fix 5B per this mandate's own scope boundary — not touched.
+
+## Holistic Fix 5A-2 update — client-controlled-XP surface closed
+
+Following up on this document's own "Known Gaps" section, this pass
+closes the `addXP()` client-controlled-XP surface:
+
+- **7 named one-time XP activities** (Art, Available, Blend, Cultivation
+  x2, Leaves, MiniTasting) now route through
+  `server/services/smokecraft/sessionRewardTable.js`'s `NAMED_XP_SOURCES`
+  table (previously an empty placeholder — real dead code since Holistic
+  Fix 4) via the existing `/awards/xp` endpoint. The server decides the
+  amount; the client only names the activity.
+- **Knowledge Check quizzes** are now scored server-side
+  (`submitKnowledgeCheck` in `playerStateService.js`) against the real
+  question data (`src/data/knowledgeCheckQuestions.js`, dual-imported by
+  server and client via the extracted `src/utils/smokecraftQuizScoring.js`)
+  — the client submits raw per-question responses only, never a score.
+- **Leaf Challenge** (the third, previously-open Origins Passport gap) is
+  now scored server-side (`submitLeafChallenge`) against the real answer
+  key (extracted to `src/data/leafChallengeRounds.js`) — the client
+  submits the 5 raw leaf-id answers only, never a score. XP, the
+  botanist/leaf-scholar badges, and the leaf-recognition Passport stamp
+  are all granted atomically from that real server-side score.
+- **`addBadge()`** direct-award calls (Origins-module badges not tied to
+  a curriculum session) now mirror to the existing `/awards/badge`
+  endpoint, same idempotency guarantee as curriculum badges.
+- **A protected correction/reversal mechanism** (`correctReward`,
+  `POST /api/smokecraft/player-state/corrections`, staff-only via
+  `requireStaff`) now exists — append-only, requires a reason and an
+  authorized staff identity, never deletes the original record.
+
+### Still-disclosed gaps after this pass
+
+- The `master-blend` and `cultivator` Passport stamps still record
+  idempotently via the pre-existing HF4 `awardStamp` mirror without an
+  independent server-side evidence check beyond "the paired XP activity
+  was genuinely granted" — a real improvement over pure client-claim, but
+  not a full re-verification of the underlying blend/cultivation content
+  itself (their content is free-form user input, not a scoreable answer
+  key like the leaf challenge).
+- Tasting draft-vs-completion distinction, skill-checkpoint evidence
+  requirements, and Collections/Skill Tree unlock-from-ledger integration
+  (mandate tasks 7, 9's tasting item) are not rebuilt this pass — verified
+  compatible in Holistic Fix 5A, unchanged here.
+- Reward Center/Passport/Collections/Skill Tree/profile screens still
+  read the GuestSessionContext local mirror rather than an explicit fresh
+  server fetch on each view (the mirror IS kept honestly in sync via the
+  real award pipeline, but is not itself a live re-fetch).
+- Challenge Hub / Golden Box scoring (5C) and pairing/mentor intelligence
+  (5B) remain explicitly out of scope.

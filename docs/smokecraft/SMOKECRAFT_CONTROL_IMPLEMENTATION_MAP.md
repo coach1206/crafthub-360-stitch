@@ -341,3 +341,10 @@ behavior; only the server-side consequence of a successful completion
 changed (badges/Passport-stamp/rank now auto-computed server-side,
 documented in `SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md`). No new control
 group was introduced.
+
+## Holistic Fix 5A-2 update
+
+No new controls. Existing Knowledge Check / Leaf Challenge / Art /
+Available / Blend / Cultivation / Leaves / MiniTasting controls now fire
+server-verified reward calls instead of client-only ones — same visible
+behavior, different (now server-authoritative) underlying mutation path.

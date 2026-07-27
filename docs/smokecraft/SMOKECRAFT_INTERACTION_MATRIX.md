@@ -526,3 +526,9 @@ promotion, both idempotent). A real leaderboard now exists
 control's visible markup or click behavior changed. See
 `SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md`, `SMOKECRAFT_RULE_REGISTRY.md`,
 `SMOKECRAFT_LEADERBOARD_RULES.md`.
+
+## Holistic Fix 5A-2 update
+
+No visible control was added, removed, or relaid out this pass (server-
+side reward-authority work only). Interaction sweep re-verified: 88/88
+passed, 276 controls unchanged across all 21 curriculum sessions.

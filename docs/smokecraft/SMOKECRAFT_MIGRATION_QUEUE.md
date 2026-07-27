@@ -214,3 +214,19 @@ the primary 27-session curriculum — see
 (client-controlled `addXP()` surface, Origins-module stamp eligibility,
 Challenge Hub/Golden Box scoring deferred to 5C, pairing/mentor
 intelligence deferred to 5B).
+
+## Holistic Fix 5A-2 update
+
+**096_smokecraft_activity_ledger_and_rules.sql** — additive. Adds
+`smokecraft_activity_attempts` (evidence-bearing quiz/leaf-challenge/
+named-XP attempt ledger, `UNIQUE(guest_reference, activity_type,
+activity_key)` + `UNIQUE(guest_reference, idempotency_key)`) and
+`smokecraft_reward_corrections` (append-only correction/reversal ledger,
+`reason`/`authorized_by` required, `idempotency_key` UNIQUE). Rollback:
+`server/db/rollbacks/096_smokecraft_activity_ledger_and_rules.rollback.sql`
+(outside the migrations directory, matching the established convention).
+Verified apply/rollback/reapply clean, compatible with 092-095.
+
+Rule registry rows are seeded (not migrated) via the idempotent
+`scripts/seedSmokecraftGameplayRules.mjs` — 46 version-1 rows, safe to
+re-run.

@@ -1083,3 +1083,31 @@ stamps (`master-blend`, `cultivator`, `leaf-recognition`) have
 server-idempotent recording but client-decided eligibility; Challenge
 Hub and Golden Box scoring remain explicitly deferred to Holistic Fix
 5C; pairing/mentor intelligence remains deferred to Holistic Fix 5B.
+
+## Holistic Fix 5A-2 update
+
+**SC-D025 — CLOSED.** `addXP()` had no idempotency guard and no server
+mirror at all for 7 Origins-module named-XP call sites, and Knowledge
+Check / Leaf Challenge XP amounts were client-computed from a
+client-tracked score. Fixed: `NAMED_XP_SOURCES` is now populated
+server-side (previously an empty placeholder); Knowledge Check and Leaf
+Challenge now submit raw evidence (responses/answers) and are scored
+server-side against the same real question/answer data, dual-imported by
+client and server. See `SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md`'s Holistic Fix
+5A-2 section for the full closure list.
+
+**SC-D026 — CLOSED.** `addBadge()` (the direct-award path used by
+Origins-module badges not tied to a curriculum session) had zero server
+mirror — a real client-controlled-badge surface parallel to SC-D024's
+closure of session-tied badges in Holistic Fix 5A. Fixed: mirrors to the
+existing `/awards/badge` endpoint, same as curriculum badges.
+
+**Still disclosed, NOT closed this pass:** the `master-blend`/
+`cultivator` Passport stamps' eligibility is still the paired-activity
+XP grant succeeding (a real improvement, but not full free-form-content
+verification — their content is subjective, not a scoreable answer key);
+tasting draft/completion distinction and skill-checkpoint evidence
+requirements are not rebuilt; reward screens (Rewards Center/Passport/
+Collections/Skill Tree) still read the local GuestSessionContext mirror
+rather than an explicit fresh fetch on each view; Challenge Hub/Golden
+Box (5C) and pairing/mentor intelligence (5B) remain deferred.

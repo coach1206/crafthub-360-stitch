@@ -260,3 +260,9 @@ surface, the 3 Origins-module Passport stamps' client-decided
 eligibility, and Challenge Hub/Golden Box scoring (explicitly deferred
 to Holistic Fix 5C) — see `SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md`'s Known
 Gaps for full detail.
+
+## Holistic Fix 5A-2 update
+
+Baseline unchanged: 109 routes, 27 sessions, 6 phases, 276 controls. Full
+journey re-verified: 107/107. This pass is server + reward-authority only
+— no visual, layout, or navigation change.

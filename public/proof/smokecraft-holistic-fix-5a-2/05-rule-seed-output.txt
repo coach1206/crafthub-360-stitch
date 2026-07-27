@@ -1,0 +1,2 @@
+[NOVEE OS DB] PostgreSQL connected ✓
+[seedSmokecraftGameplayRules] Seeded/verified 46 version-1 rule rows.

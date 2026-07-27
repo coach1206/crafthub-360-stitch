@@ -1,0 +1,31 @@
+
+── SmokeCraft gameplay-reward-authority validator (Holistic Fix 5A-2)
+
+  OK    src/pages/smokecraft/Art.jsx: every addXP() call passes a named server-known source (no bare client-only XP grant)
+  OK    src/pages/smokecraft/Available.jsx: every addXP() call passes a named server-known source (no bare client-only XP grant)
+  OK    src/pages/smokecraft/Blend.jsx: every addXP() call passes a named server-known source (no bare client-only XP grant)
+  OK    src/pages/smokecraft/Cultivation.jsx: every addXP() call passes a named server-known source (no bare client-only XP grant)
+  OK    src/pages/smokecraft/Leaves.jsx: every addXP() call passes a named server-known source (no bare client-only XP grant)
+  OK    src/pages/smokecraft/MiniTasting.jsx: every addXP() call passes a named server-known source (no bare client-only XP grant)
+  OK    KnowledgeCheck.jsx no longer calls addXP() directly (server-verified quiz submit only)
+  OK    KnowledgeCheck.jsx submits raw responses via submitKnowledgeCheck, not a client score
+  OK    LeafChallenge.jsx no longer calls addXP()/addBadge()/awardStamp() directly for the final-round reward (server-verified submit only)
+  OK    LeafChallenge.jsx submits raw answers via submitLeafChallenge, not a client score
+  OK    LeafChallenge.jsx sources its answer key from the shared, server-dual-imported data module (not an inline duplicate)
+  OK    submitKnowledgeCheck scores server-side against the real question data (scoreQuestionSet), not a client-submitted score
+  OK    submitLeafChallenge scores server-side against the real answer key (scoreLeafChallenge), not a client-submitted score
+  OK    correctReward requires both a reason and an authorizedBy identity (never a silent/anonymous correction)
+  OK    correctReward never deletes/updates the original award/attempt row — only inserts a new correction row
+  OK    The /corrections route is gated by requireStaff (never reachable by a plain learner identity)
+  OK    Quiz and Leaf Challenge submit routes require a verified SmokeCraft identity
+  OK    NAMED_XP_SOURCES is populated (not the empty placeholder from Holistic Fix 4) — named XP is now real, not dead code
+  OK    Migration 096 (activity ledger + corrections) exists
+  OK    Migration 096 has a rollback script outside server/db/migrations
+  OK    smokecraft_activity_attempts has UNIQUE(guest_reference, activity_type, activity_key) — one scored attempt per activity ever
+  OK    smokecraft_reward_corrections is append-only structured (has a reason and authorized_by column)
+  OK    Seed script for the versioned rule registry exists
+  OK    Rule seed script sources values from existing constants (SESSION_REWARDS/SC_RANKS/question sets), never invents new numbers
+  OK    Rule seed script uses ON CONFLICT DO NOTHING on (rule_key, version) — a rule row is immutable once written
+
+=== RESULT: PASS (0 checks failed) ===
+
