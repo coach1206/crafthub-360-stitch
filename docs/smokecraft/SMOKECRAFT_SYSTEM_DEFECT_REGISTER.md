@@ -1144,3 +1144,37 @@ pass to close. Cultivator stamp remains open for the same
 unverified-content reason disclosed in Holistic Fix 5A-2 (no
 UI-behavior-changing evidence gate was added this pass to avoid risking
 a real regression under the same time constraint).
+
+## Holistic Fix 5A-3B update
+
+**SC-D027 — CLOSED.** Root cause: `src/components/system/
+BuildDiagnosticFooter.jsx`'s version-mismatch banner
+(`role="alert"`, mounted once globally in `App.jsx`, rendered on every
+route) is `position: fixed; top:0; left:0; right:0; zIndex: 9999` — a
+full-viewport-width strip at the very top of every screen. It had no
+`pointerEvents` override, so its ENTIRE bounding box (including the
+empty flex-gutter space around its centered text, not just the visible
+text/button) intercepted pointer events on anything underneath it,
+across the whole top strip of every route — real controls that happened
+to render near the top of the viewport (headers, Back buttons) became
+unclickable whenever a version mismatch was active.
+
+Fix: the outer alert wrapper is now `pointerEvents: 'none'` (never
+blocks anything underneath), and only the actually-interactive Refresh
+button opts back in with `pointerEvents: 'auto'` (stays fully clickable/
+focusable). `role="alert"` and all visible styling are unchanged — no
+visual redesign, no route-specific z-index patch (this was the one
+shared component causing it; every other `role="alert"` usage in the
+codebase is inline/page-scoped, confirmed by grep, not a global fixed
+overlay).
+
+Verified via a controlled before/after: the new deterministic regression
+test (`verify-smokecraft-hf5a3b-alert-pointer-regression.mjs`, forces the
+mismatch state via network interception rather than depending on real
+build drift) FAILS on the unfixed code (confirmed by reverting via `git
+stash`) and PASSES on the fixed code — a real, meaningful guard, not a
+tautology. Re-ran the previously-failing interaction sweep (was 73/88,
+now 88/88) and full-journey suite (the Rewards Center Back-button
+failure, the specific SC-D027 symptom, is gone — 106/107, one unrelated
+pre-existing S4 asset-fetch timing issue remains, disclosed separately,
+not a pointer-blocking symptom and out of this pass's scope).

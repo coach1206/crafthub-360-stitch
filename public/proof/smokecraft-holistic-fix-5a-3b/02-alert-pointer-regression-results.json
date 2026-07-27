@@ -1,0 +1,35 @@
+{
+  "pass": 7,
+  "fail": 0,
+  "total": 7,
+  "results": [
+    {
+      "name": "The version-mismatch banner renders with role=\"alert\" (screen-reader semantics intact)",
+      "ok": true
+    },
+    {
+      "name": "The alert banner occupies the top strip of the viewport (position:fixed, top:0)",
+      "ok": true
+    },
+    {
+      "name": "The banner's empty gutter area does not intercept pointer events (elementFromPoint resolves to something other than the alert div itself)",
+      "ok": true
+    },
+    {
+      "name": "A real control near the top of the viewport is genuinely clickable (real mouse click, not blocked by the alert)",
+      "ok": true
+    },
+    {
+      "name": "The alert's own interactive Refresh action remains clickable (not occluded by its own wrapper)",
+      "ok": true
+    },
+    {
+      "name": "Keyboard Tab navigation can reach the Refresh action",
+      "ok": true
+    },
+    {
+      "name": "No unexplained console error from this scenario",
+      "ok": true
+    }
+  ]
+}

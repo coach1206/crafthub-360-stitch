@@ -1,0 +1,39 @@
+diff --git a/src/components/system/BuildDiagnosticFooter.jsx b/src/components/system/BuildDiagnosticFooter.jsx
+index 1975754c..e9489b74 100644
+--- a/src/components/system/BuildDiagnosticFooter.jsx
++++ b/src/components/system/BuildDiagnosticFooter.jsx
+@@ -107,6 +107,18 @@ export default function BuildDiagnosticFooter() {
+   return (
+     <>
+       {mismatch && (
++        // SC-D027 fix: this banner is a full-viewport-width `position:fixed`
++        // strip at top:0 with the highest z-index in the app. It previously
++        // had no `pointerEvents` override, so its entire bounding box —
++        // including the empty flex-gutter space around the centered text —
++        // intercepted clicks on any control that happened to render near
++        // the top of the viewport on ANY screen, not just this banner's own
++        // text/button. The fix: the outer wrapper is pointer-transparent
++        // (`pointerEvents: 'none'`), so nothing underneath it is ever
++        // blocked; only the actually-interactive Refresh button opts back
++        // in (`pointerEvents: 'auto'`), so it stays fully clickable/
++        // focusable. role="alert" (announced to screen readers on mount)
++        // and the visible text/styling are unchanged — no visual redesign.
+         <div
+           role="alert"
+           style={{
+@@ -115,6 +127,7 @@ export default function BuildDiagnosticFooter() {
+             fontSize: 13, padding: '8px 16px', textAlign: 'center',
+             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+             borderBottom: `1px solid ${GOLD}`,
++            pointerEvents: 'none',
+           }}
+         >
+           <span>Version mismatch — a newer build is available. Refresh to get the latest SmokeCraft experience.</span>
+@@ -125,6 +138,7 @@ export default function BuildDiagnosticFooter() {
+               background: GOLD, color: '#241605', border: 'none', borderRadius: 999,
+               padding: '4px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+               fontFamily: 'Georgia, serif',
++              pointerEvents: 'auto',
+             }}
+           >
+             Refresh Now

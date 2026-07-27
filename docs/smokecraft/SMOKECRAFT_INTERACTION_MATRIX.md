@@ -532,3 +532,13 @@ control's visible markup or click behavior changed. See
 No visible control was added, removed, or relaid out this pass (server-
 side reward-authority work only). Interaction sweep re-verified: 88/88
 passed, 276 controls unchanged across all 21 curriculum sessions.
+
+## Holistic Fix 5A-3B update
+
+No visible control added/removed/relaid out. Fixes a real interaction
+defect (SC-D027): the global version-mismatch alert no longer intercepts
+clicks on controls underneath it. Interaction sweep re-verified: 88/88
+(was 73/88 before this fix), 276 real product controls (the transient
++22 discrepancy during this session was the alert's own Refresh button
+being counted while the mismatch happened to be active — not a real
+control-count drift).

@@ -1,0 +1,13 @@
+
+── SmokeCraft alert pointer-safety validator (Holistic Fix 5A-3B, SC-D027)
+
+  OK    BuildDiagnosticFooter.jsx exists and is readable
+  OK    The mismatch banner still has role="alert" (screen-reader semantics intact)
+  OK    The mismatch-banner JSX block is present and parseable
+  OK    The banner's outer wrapper is pointer-transparent (pointerEvents: 'none') — SC-D027 fix, empty regions never block controls underneath
+  OK    The Refresh button explicitly opts back into pointer events (pointerEvents: 'auto') — remains clickable
+  OK    The Refresh button still has a real onClick handler (interactive action not accidentally disabled)
+  OK    The banner is still full-viewport-width at top:0 (visual/position unchanged — no redesign)
+
+=== RESULT: PASS (0 checks failed) ===
+

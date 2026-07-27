@@ -266,3 +266,11 @@ Gaps for full detail.
 Baseline unchanged: 109 routes, 27 sessions, 6 phases, 276 controls. Full
 journey re-verified: 107/107. This pass is server + reward-authority only
 — no visual, layout, or navigation change.
+
+## Holistic Fix 5A-3B update
+
+Baseline unchanged: 109 routes, 27 sessions, 6 phases, 276 controls. This
+pass fixes a shared-component pointer-event bug (SC-D027) with zero
+visual/layout/route change — the version-mismatch banner's appearance,
+position, and role="alert" semantics are all unchanged; only its pointer
+behavior when covering other content was corrected.
