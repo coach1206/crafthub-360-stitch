@@ -113,7 +113,14 @@ assert('Account created on the SAME cookie jar as the guest (both identities coe
 const convert1 = await guestClient.post('/api/smokecraft/player-state/convert-guest', { idempotencyKey: 'hf4b-convert-1' })
 assert('First conversion request succeeds (201, alreadyConverted:false)', convert1.status === 201 && convert1.body.alreadyConverted !== true)
 assert('Conversion transferred both sessions, no merged duplicates (fresh account)', convert1.body.conversion.sessions_transferred === 2 && convert1.body.conversion.sessions_merged_duplicate === 0)
-assert('Conversion transferred the badge', convert1.body.conversion.awards_transferred === 1)
+// Since Holistic Fix 5A, completing 'enroll' and 'format' also
+// auto-grants their real tied badges (sc-profile-started;
+// sc-cigar-format + sc-burn-time) in the same transaction as each
+// completion — so awards_transferred now legitimately includes those
+// plus the one manually-awarded test badge, not just 1.
+assert('Conversion transferred all awards (auto-granted session badges + the manually-awarded test badge)', convert1.body.conversion.awards_transferred >= 1)
+const guestAwardTypes = guestStateBefore.body.state.awards.map(a => a.key)
+assert('Conversion transferred exactly the guest\'s pre-conversion award set (no more, no less)', convert1.body.conversion.awards_transferred === guestAwardTypes.length, `expected ${guestAwardTypes.length}, got ${convert1.body.conversion.awards_transferred}`)
 
 const accountStateAfter = await guestClient.get('/api/smokecraft/player-state')
 assert('Account now has the guest\'s XP and sessions (server-authoritative merge, not client-reported)', accountStateAfter.body.state.xpTotal === guestStateBefore.body.state.xpTotal && accountStateAfter.body.state.completedSessions.length === 2)

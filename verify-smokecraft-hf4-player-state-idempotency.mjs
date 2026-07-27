@@ -81,7 +81,15 @@ assert('First Passport-stamp award returns 201', stamp1.status === 201 && stamp1
 const stamp2 = await guestA.post('/api/smokecraft/player-state/awards/passport-stamp', { idempotencyKey: 'test-guestA-stamp-2-different-key', awardKey: 'sc-test-stamp' })
 assert('Duplicate Passport-stamp request is caught, not double-awarded', stamp2.body.alreadyAwarded === true)
 const afterAwards = await guestA.get('/api/smokecraft/player-state')
-assert('Exactly one badge and one stamp recorded', afterAwards.body.state.awards.filter(a => a.type === 'badge').length === 1 && afterAwards.body.state.awards.filter(a => a.type === 'passport_stamp').length === 1)
+// Filters to the specific award keys this section tests — since
+// Holistic Fix 5A, completing a curriculum session also auto-grants
+// its real tied badge(s) in the same transaction (guestA already
+// completed 'enroll' earlier in this suite, which auto-grants
+// sc-profile-started), so a plain total-badge-count assertion would
+// no longer reflect only this section's own manual award calls.
+assert('Exactly one of THIS section\'s specific badge/stamp recorded (not counting auto-granted session-completion badges from earlier sections)',
+  afterAwards.body.state.awards.filter(a => a.type === 'badge' && a.key === 'sc-test-badge').length === 1 &&
+  afterAwards.body.state.awards.filter(a => a.type === 'passport_stamp' && a.key === 'sc-test-stamp').length === 1)
 
 // ── 5. Concurrent duplicate request (true race, not sequential replay) ──
 section('5. Concurrent duplicate completion request (true race)')
