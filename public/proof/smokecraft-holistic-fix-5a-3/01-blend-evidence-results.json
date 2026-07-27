@@ -1,0 +1,27 @@
+{
+  "pass": 5,
+  "fail": 0,
+  "total": 5,
+  "results": [
+    {
+      "name": "A complete, well-formed blend selection grants the master-blend stamp",
+      "ok": true
+    },
+    {
+      "name": "Grants the server-owned XP amount (150)",
+      "ok": true
+    },
+    {
+      "name": "An incomplete filler set (2 instead of 3) is rejected 400, no stamp granted",
+      "ok": true
+    },
+    {
+      "name": "An out-of-range wrapper index is rejected, never silently accepted",
+      "ok": true
+    },
+    {
+      "name": "The blend stamp cannot be granted twice to the same guest, even with a different selection under a different idempotency key",
+      "ok": true
+    }
+  ]
+}

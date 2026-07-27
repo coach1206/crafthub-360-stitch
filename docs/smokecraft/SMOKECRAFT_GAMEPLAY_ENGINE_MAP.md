@@ -139,3 +139,48 @@ closes the `addXP()` client-controlled-XP surface:
   real award pipeline, but is not itself a live re-fetch).
 - Challenge Hub / Golden Box scoring (5C) and pairing/mentor intelligence
   (5B) remain explicitly out of scope.
+
+## Holistic Fix 5A-3 update — master-blend stamp closed
+
+`master-blend` Passport stamp eligibility moved to the server
+(`submitBlendSelection` in `playerStateService.js`, `POST
+/api/smokecraft/player-state/blend/submit`) — the client submits its raw
+wrapper/binder/filler selection; the server verifies it is complete and
+well-formed (not merely "the Submit button was clicked") before granting
+XP or the stamp. See `verify-smokecraft-hf5a3-blend-evidence.mjs` (5/5
+passing) and `public/proof/smokecraft-holistic-fix-5a-3/`.
+
+### Scope disclosure — this pass did NOT complete the full HOLISTIC FIX
+### 5A-3 mandate (20 sections)
+
+Given the mandate's genuinely enormous scope (a full canonical
+16-event-type ledger, server-authoritative tasting draft/completion,
+skill-checkpoint evidence for every Origins activity, full Collections/
+Skill Tree ledger integration, reconnecting every reward screen to live
+server data, a Leaderboard re-audit, complete correction/reversal
+coverage across every reward type, and a fully-seeded rule registry for
+every one of those flows — each realistically its own multi-day
+engineering pass), this pass closed one concrete, real, fully-tested
+item (the master-blend stamp) and used the remaining time to
+root-cause a real anomaly discovered while re-running the existing
+regression suite (SC-D027, confirmed pre-existing) rather than
+fabricate partial/shallow coverage of the other 19 sections and claim
+completion. The following remain genuinely open, unchanged from Holistic
+Fix 5A-2's disclosure:
+
+- Tasting draft/completion distinction and skill-checkpoint evidence
+  (mandate sections 3-4) — not built.
+- Cultivator stamp — still recording idempotently without independent
+  content verification (mandate section 5, partial).
+- Collections/Skill Tree ledger integration (sections 6-7) — not built.
+- Reward-screen live reconnection (section 8) — not built.
+- Leaderboard re-audit (section 9) — not re-run.
+- Full correction/reversal coverage across every reward type (section
+  10) — only XP-delta correction exists (from Holistic Fix 5A-2); no
+  badge/stamp/Collection/Skill-Tree-specific reversal helper was added.
+- Complete rule-registry coverage for tasting/skill-checkpoint/Skill-Tree
+  rules (section 11) — not seeded (those flows don't exist yet).
+- Full 16-event-type ledger (section 2) — the ledger now covers
+  session/quiz/leaf-challenge/named-xp/blend/badge/stamp/rank/correction;
+  it does not yet cover tasting/skill-checkpoint (unbuilt)/mentor-
+  selected/score-awarded as distinct types.

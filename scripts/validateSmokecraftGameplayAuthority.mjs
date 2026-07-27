@@ -16,7 +16,6 @@ function check(label, cond) {
 const CLIENT_ADDXP_FILES = [
   'src/pages/smokecraft/Art.jsx',
   'src/pages/smokecraft/Available.jsx',
-  'src/pages/smokecraft/Blend.jsx',
   'src/pages/smokecraft/Cultivation.jsx',
   'src/pages/smokecraft/Leaves.jsx',
   'src/pages/smokecraft/MiniTasting.jsx',
@@ -44,6 +43,15 @@ check('LeafChallenge.jsx no longer calls addXP()/addBadge()/awardStamp() directl
 check('LeafChallenge.jsx submits raw answers via submitLeafChallenge, not a client score', /submitLeafChallenge\(/.test(leafChallenge))
 check('LeafChallenge.jsx sources its answer key from the shared, server-dual-imported data module (not an inline duplicate)',
   /from ['"]\.\.\/\.\.\/data\/leafChallengeRounds\.js['"]/.test(leafChallenge))
+
+const blend = fs.readFileSync('src/pages/smokecraft/Blend.jsx', 'utf8')
+check('Blend.jsx no longer calls addXP()/awardStamp() directly (server-verified blend-selection submit only, Holistic Fix 5A-3)',
+  !/addXP\(|awardStamp\(/.test(blend))
+check('Blend.jsx submits its raw wrapper/binder/filler selection via submitBlendSelection, not a client claim', /submitBlendSelection\(/.test(blend))
+
+const svcHasBlend = fs.readFileSync('server/services/smokecraft/playerStateService.js', 'utf8')
+check('submitBlendSelection validates a complete, well-formed selection server-side (wrapper/binder/exactly-3-fillers), never trusting a bare completion claim',
+  /VALID_WRAPPER_INDICES/.test(svcHasBlend) && /fillers\.length === 3/.test(svcHasBlend))
 
 const svc = fs.readFileSync('server/services/smokecraft/playerStateService.js', 'utf8')
 check('submitKnowledgeCheck scores server-side against the real question data (scoreQuestionSet), not a client-submitted score', /scoreQuestionSet\(/.test(svc))

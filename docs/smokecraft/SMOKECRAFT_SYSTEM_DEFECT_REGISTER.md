@@ -1111,3 +1111,36 @@ requirements are not rebuilt; reward screens (Rewards Center/Passport/
 Collections/Skill Tree) still read the local GuestSessionContext mirror
 rather than an explicit fresh fetch on each view; Challenge Hub/Golden
 Box (5C) and pairing/mentor intelligence (5B) remain deferred.
+
+## Holistic Fix 5A-3 update
+
+**SC-D028 — CLOSED.** The `master-blend` Passport stamp had client-decided
+eligibility (the client claimed the stamp on any Submit click, regardless
+of whether a complete blend was actually selected). Fixed: the client now
+submits its raw wrapper/binder/filler selection as evidence
+(`POST /blend/submit`); the server independently verifies it is a
+complete, well-formed selection (valid wrapper, valid binder, exactly 3
+distinct fillers) before granting XP or the stamp. Verified: a
+2-filler (incomplete) submission and an out-of-range wrapper index are
+both rejected 400, never silently accepted; the stamp cannot be granted
+twice even under a different selection/idempotency key.
+
+**SC-D027 — FOUND, NOT CLOSED (newly discovered, confirmed PRE-EXISTING,
+not introduced by this pass).** A `role="alert"` element intercepts
+pointer events on some screens (observed: S4/terroir, the Rewards Center
+"Back" button), causing real clicks to retry/timeout under Playwright.
+Root-caused via a controlled before/after comparison: `git stash`'d this
+pass's entire diff, rebuilt, and reran both the interaction sweep
+(88-check) and full-journey (107-check) suites against the byte-identical
+unmodified commit `c77e4a44` — the SAME 15 interaction-sweep failures and
+the SAME 2 full-journey failures (S4 asset fetch, Rewards Center Back
+button blocked by the alert div) reproduced identically, twice, on fresh
+server/preview restarts each time. This conclusively rules out this
+pass's changes as the cause. Not investigated further or fixed this pass
+(out of scope for a reward-engine-focused mandate, and root-causing a UI
+alert-persistence defect responsibly needs its own dedicated pass) —
+flagged here as a real, disclosed, currently-open defect for a future
+pass to close. Cultivator stamp remains open for the same
+unverified-content reason disclosed in Holistic Fix 5A-2 (no
+UI-behavior-changing evidence gate was added this pass to avoid risking
+a real regression under the same time constraint).
