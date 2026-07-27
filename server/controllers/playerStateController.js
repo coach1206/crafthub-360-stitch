@@ -5,7 +5,7 @@
  * trusted from the request body — matches the existing Management Sync
  * convention (managementSyncController.js).
  */
-import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount } from '../services/smokecraft/playerStateService.js'
+import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference } from '../services/smokecraft/playerStateService.js'
 import { getDb } from '../db/connection.js'
 
 function ownerGuestReference(identity) {
@@ -79,7 +79,10 @@ export async function handleCompleteSession(req, res) {
       requestId: req.id || null,
       deviceId: req.body?.deviceId || null,
     })
-    res.status(result.alreadyCompleted ? 200 : 201).json({ success: true, alreadyCompleted: result.alreadyCompleted, completion: result.completion })
+    res.status(result.alreadyCompleted ? 200 : 201).json({
+      success: true, alreadyCompleted: result.alreadyCompleted, completion: result.completion,
+      badgesGranted: result.badgesGranted || [], passportStampGranted: result.passportStampGranted || null, rankPromotion: result.rankPromotion || null,
+    })
   } catch (err) {
     dbErrorResponse(res, err)
   }
@@ -172,6 +175,34 @@ export async function handleSaveJourneySnapshot(req, res) {
  * actually controls both identities simultaneously, not merely claims
  * to.
  */
+export async function handleGetLeaderboard(req, res) {
+  const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 50, 1), 100)
+  const offset = Math.max(parseInt(req.query.offset, 10) || 0, 0)
+  try {
+    const entries = await getLeaderboard({ limit, offset, venueId: req.query.venueId || null })
+    res.json({ success: true, entries, limit, offset })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+export async function handleSetLeaderboardPreference(req, res) {
+  const { displayName, eligible } = req.body || {}
+  if (displayName !== undefined && (typeof displayName !== 'string' || displayName.length > 40)) {
+    return res.status(400).json({ success: false, error: 'invalid_display_name' })
+  }
+  if (eligible !== undefined && typeof eligible !== 'boolean') {
+    return res.status(400).json({ success: false, error: 'invalid_eligible_flag' })
+  }
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    await setLeaderboardPreference({ guestReference, displayName, eligible })
+    res.json({ success: true })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
 export async function handleConvertGuest(req, res) {
   const idempotencyKey = requireIdempotencyKey(req, res)
   if (!idempotencyKey) return

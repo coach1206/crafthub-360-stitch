@@ -50,4 +50,8 @@ router.put('/journey-snapshot', writeLimiter, requireSmokeCraftIdentity, ctrl.ha
 // rest of this router's plain guest-identity routes.
 router.post('/convert-guest', writeLimiter, ctrl.handleConvertGuest)
 
+// ── Holistic Fix 5A: authoritative leaderboard ──
+router.get('/leaderboard', readLimiter, ctrl.handleGetLeaderboard)
+router.put('/leaderboard/preference', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSetLeaderboardPreference)
+
 export default router

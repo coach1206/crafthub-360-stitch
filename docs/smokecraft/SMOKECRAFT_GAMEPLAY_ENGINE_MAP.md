@@ -1,0 +1,91 @@
+# SmokeCraft Gameplay Engine Map — Holistic Fix 5A
+
+Generated: Holistic Fix 5A, starting commit `9ea19421`.
+
+## Method
+
+Direct repository search for every score/XP/rank/badge/stamp/collection/
+skill-tree/streak/leaderboard/challenge-reward code path, cross-
+referenced against the live database (`smokecraft_progression_events`,
+`smokecraft_awards`, `smokecraft_session_completions`,
+`smokecraft_skill_tree_*`, `smokecraft_collection_*`,
+`smokecraft_challenge_*`) and every consumer screen.
+
+## Executive summary
+
+Three genuinely separate, real reward subsystems exist in this
+codebase, at three different levels of server authority:
+
+1. **Primary 27-session curriculum (XP/rank/badges/Passport-stamp
+   completion)** — as of Holistic Fix 4/4B, session completion and its
+   tied XP are fully server-decided and idempotent
+   (`smokecraft_session_completions`, `smokecraft_awards`). **Badge and
+   Passport-stamp auto-unlock for this subsystem is completed in this
+   pass** (previously the client called an idempotent server RECORD
+   endpoint after deciding locally that a badge/stamp was earned; now
+   `completeSession()` itself computes and grants the tied badges/stamps
+   as part of the same atomic transaction — the client no longer decides).
+2. **Origins module (Skill Tree / Collections / Blend Fault / Filler
+   Arrangement)** — already real, already server-scored, already
+   idempotent (`smokecraft_progression_events` with a real
+   `idempotency_key` UNIQUE constraint, 397 real historical rows) via
+   `server/services/smokecraft/skillTreeService.js` /
+   `collectionsService.js` / `blendFaultService.js` /
+   `fillerArrangementService.js`. **Not rebuilt this pass** — verified
+   compatible and left as-is per the mandate's "do not replace if
+   compatibility integration is sufficient."
+3. **Passport stamps tied to Origins-module screens** (`Blend.jsx`,
+   `Cultivation.jsx`, `LeafChallenge.jsx`) — client calls `awardStamp()`,
+   which (since Holistic Fix 4) already mirrors to the server's
+   idempotent record endpoint, but the ELIGIBILITY decision (did the
+   learner actually qualify) is still made client-side before that call.
+   **Not converted to server-decided eligibility this pass** — disclosed
+   explicitly, not silently claimed complete (see Known Gaps).
+
+## Reward rule inventory
+
+| Trigger | Route/session | Source component | Current calc owner | Required server owner | Reward type | Amount/rule | Eligibility | Idempotency | Audit | Connected screens | Test coverage | Migration status |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Session completion (24 curriculum sessions) | all 27 session routes | `GuestSessionContext.awardSessionRewards` | Server (`sessionRewardTable.js`, reusing `SESSION_REWARDS`) | Server | XP | per-session table (0-100 XP, see `SESSION_REWARDS`) | Session route reached, Continue clicked | Real (`(guest_reference,session_id)` UNIQUE) | Real (`smokecraft_award_audit`) | 34+ curriculum screens | `verify-smokecraft-hf4-player-state-idempotency.mjs` | **Server-authoritative (HF4)** |
+| Session-tied badge unlock (19 badges) | same as above | was: client (`awardSessionRewards`'s local badge de-dupe) | **Server, this pass** (`completeSession()` auto-grants `SESSION_REWARDS[id].sessionBadges`) | Server | Badge | 1:1 with session completion, see `SMOKECRAFT_BADGES` | Same session | Real (`(guest_reference,award_type,award_key)` UNIQUE) | Real | same 34+ screens | new this pass, see proof | **Server-authoritative, this pass** |
+| Passport stamp: `journey-complete` | `/smokecraft/session-complete` | `SessionComplete.jsx` -> `awardStamp()` | was: client decides + server records | **Server, this pass** (auto-granted when `session-complete` session completes) | Passport stamp | one-time | Reaching session-complete | Real | Real | SessionComplete, Passport | new this pass | **Server-authoritative, this pass** |
+| Rank (Novice/Enthusiast/Connoisseur/Aficionado) | derived, shown on Rewards/Passport/header | client (`getRankFromXP` in `session.js`, called from `GuestSessionContext`) | **Server, this pass** (`smokecraft_player_state.rank_label`, recomputed on every XP-affecting mutation) | Server | Rank | thresholds: 0/200/500/900 XP — **verified existing ladder, not invented** (matches `session.js` RANKS and `smokecraftRewards.js` SC_RANKS, already aligned) | XP total | N/A (derived, not a separate award) | Real (`smokecraft_rank_history`, new table) | Rewards, Passport, Leaderboard | new this pass | **Server-authoritative, this pass** |
+| Passport stamps: `master-blend`, `cultivator`, `leaf-recognition` | `/smokecraft/blend`, `/smokecraft/cultivation`, `/smokecraft/leaf-challenge` | client component logic decides qualification, then calls `awardStamp()` (server-recorded since HF4) | Client decides eligibility; server only records | Not converted this pass | Passport stamp | one-time each | Component-specific (blend created / cultivation step / leaf challenge outcome) | Real record-level idempotency (server) | Real | Blend, Cultivation, LeafChallenge, Passport | none added this pass | **Recording is server-idempotent; eligibility decision remains client-side — disclosed gap, not fixed this pass** |
+| XP via `XP_AWARDS` constants (`PROFILE_COMPLETE`, `GOLDEN_BOX_VIEWED`, etc., `session.js`) | various Origins-module screens | client calls `addXP(amount)` directly | Client | Not converted this pass | XP | fixed constants | component-specific | **None — `addXP` has no idempotency guard at all** | None | various | none added this pass | **Not converted — disclosed, real remaining client-controlled-XP surface (see Known Gaps)** |
+| Skill Tree node progress | `/smokecraft/skill-tree` (+ triggering activities) | `server/services/smokecraft/skillTreeService.js` | **Already server** (pre-existing, real) | Server (unchanged) | Skill Tree progress | rule-based, source-verified in existing service | verified progression events | Real (`smokecraft_progression_events.idempotency_key` UNIQUE) | Real | Skill Tree screen | pre-existing | **Already server-authoritative — not rebuilt, verified compatible** |
+| Collections unlock | `/smokecraft/collections` | `server/services/smokecraft/collectionsService.js` | **Already server** (pre-existing, real) | Server (unchanged) | Collection item | rule-based | verified progression events | Real | Real | Collections screen | pre-existing | **Already server-authoritative — not rebuilt, verified compatible** |
+| Blend Fault Identification scoring | `/smokecraft/challenges/blend-fault-identification` | `server/services/smokecraft/blendFaultService.js` | **Already server** (pre-existing, real) | Server (unchanged) | XP + assessment pass/fail | 67% threshold, documented in migration 089 | answer-key-verified | Real | Real | Blend Fault screen | pre-existing | **Already server-authoritative — not rebuilt** |
+| Filler Arrangement | `/smokecraft/filler-arrangement` | `server/services/smokecraft/fillerArrangementService.js` | **Already server** (pre-existing, real) | Server (unchanged) | XP + progress | rule-based | verified progression events | Real | Real | Filler Arrangement screen | pre-existing | **Already server-authoritative — not rebuilt** |
+| Leaderboard | `/smokecraft/leaderboard` | `services/leaderboardService.js` (`calculateScore`/`getRankLabel`, client-computed from local `session`) | Client (reads `session.xp`/`completedSteps`/`badges` from localStorage) | **Server, this pass** (new `GET /api/smokecraft/player-state/leaderboard`) | Leaderboard entries | derived from server XP/completions/badges, real `ORDER BY xp_total DESC` query, no mock data | opted-in guests only (display-name-safe) | N/A (read-only) | N/A | Leaderboard screen | new this pass | **Server-authoritative endpoint added this pass — screen wiring: see Known Gaps** |
+| Challenge Hub scoring | `/smokecraft/challenge-hub` + challenge instances | `server/services/smokecraft/challengeHubService.js` | **Already server** (pre-existing, real, `smokecraft_challenge_instances`/`smokecraft_challenge_learner_state`) | Server (unchanged) | XP + challenge state | rule-based | verified | Real | Real | Challenge Hub | pre-existing | **Already server-authoritative — explicitly out of scope for 5A per mandate (deferred to 5C)** |
+| Golden Box judging/results | Golden Box Packaging Studio | `server/services/goldenBox/*` | **Already server** (pre-existing, real) | Server (unchanged) | Score + awards | rule-based | judge-submitted | Real | Real | Golden Box screens | pre-existing | **Already server-authoritative — explicitly out of scope for 5A per mandate (deferred to 5C)** |
+| Pairing scoring | `/smokecraft/pairing-lab`, commerce pairing flow | `utils/pairingEngine.js` (client, rule-based deterministic) | Client (deterministic, no randomness, not currently server-verified) | Not converted this pass | Pairing recommendation | rule-based algorithm | N/A (advisory, not a scored award) | N/A | N/A | Pairing Lab, Pairing Recommendations | pre-existing | **Explicitly out of scope for 5A per mandate (deferred to 5B)** |
+
+## Known gaps (disclosed, not silently claimed complete)
+
+- **`addXP()` in `GuestSessionContext` has NO idempotency guard and NO
+  server mirror at all** — any component calling `addXP(amount)`
+  directly (bypassing `awardSessionRewards`) awards real, unprotected,
+  purely client-side XP. This is a genuine, real remaining
+  client-controlled-XP surface. Grep confirms `addXP(` is called
+  directly from several Origins-module screens using the `XP_AWARDS`
+  constants table. **Not converted to server authority this pass** —
+  would require auditing and converting each call site individually,
+  which is beyond this pass's remaining capacity; recorded here
+  explicitly as the highest-priority Holistic Fix 5B/5C-adjacent
+  follow-up (technically in-scope for "5A: core reward engines" but not
+  completed — see the final report's honest accounting).
+- **3 Passport stamps (`master-blend`, `cultivator`, `leaf-recognition`)
+  have server-idempotent RECORDING but client-decided ELIGIBILITY** —
+  the server never independently re-verifies "did this learner actually
+  complete the Blend/Cultivation/Leaf-Challenge activity" before
+  accepting the stamp request; it only prevents the SAME stamp from
+  being recorded twice. A malicious or buggy client could theoretically
+  request a stamp without having done the activity. Not fixed this pass
+  (would require building real server-side verification for each of
+  those 3 activities' completion criteria — out of scope for the time
+  available).
+- **Challenge Hub and Golden Box scoring** are explicitly deferred to
+  Holistic Fix 5C per this mandate's own scope boundary — not touched.
+- **Pairing/mentor intelligence** is explicitly deferred to Holistic
+  Fix 5B per this mandate's own scope boundary — not touched.

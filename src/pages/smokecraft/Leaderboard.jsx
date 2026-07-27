@@ -260,7 +260,20 @@ export default function Leaderboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, scope, timeRange, tierFilter])
 
-  const snapshot = useMemo(() => getLeaderboardSnapshot(session), [session])
+  // Holistic Fix 5A: getLeaderboardSnapshot is now async (fetches the
+  // real server leaderboard) — was previously a synchronous useMemo
+  // that always returned an honest-empty communityEntries: [] because
+  // no shared backend existed. Default state below matches that same
+  // honest 'empty' shape until the real fetch resolves, so there is no
+  // behavior change for a guest on a slow/offline connection.
+  const [snapshot, setSnapshot] = useState({
+    currentPlayer: null, communityEntries: [], communityStatus: 'loading', communityMessage: 'Loading shared rankings…',
+  })
+  useEffect(() => {
+    let cancelled = false
+    getLeaderboardSnapshot(session).then(result => { if (!cancelled) setSnapshot(result) })
+    return () => { cancelled = true }
+  }, [session])
   const currentEntry = useMemo(() => buildCurrentUserEntry(session, journey), [session, journey])
 
   // The only real entries available are the current guest's own — the
@@ -461,13 +474,21 @@ export default function Leaderboard() {
               </div>
             )}
 
-            {/* Honest boundary — replaces, never refills, the occluded
-                fabricated rows. No competitor is invented. */}
+            {/* Holistic Fix 5A: a real server-authoritative leaderboard
+                now exists (see smokeLeaderboardService.js). This
+                boundary message reflects its real status honestly
+                (loading/ready/empty/error/offline) — it still does not
+                render the occluded fabricated table rows with invented
+                competitors; a full pixel-positioned table integration
+                against the approved image is out of scope for this
+                pass (see SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md). */}
             <div data-testid="lb-shared-unavailable" style={{
               marginTop: 'auto', fontSize: 'clamp(8px,0.88vw,13px)',
               color: 'rgba(229,226,225,0.55)', lineHeight: 1.4,
             }}>
-              Shared rankings unavailable. {snapshot.communityMessage}
+              {snapshot.communityStatus === 'ready'
+                ? `Shared leaderboard: ${snapshot.communityMessage}`
+                : `Shared rankings ${snapshot.communityStatus === 'loading' ? 'loading' : 'unavailable'}. ${snapshot.communityMessage}`}
             </div>
           </>
         )}

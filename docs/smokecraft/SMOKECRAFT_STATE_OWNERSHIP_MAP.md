@@ -214,3 +214,21 @@ Golden Box Packaging Studio's own separate, pre-existing, already-
 server-authoritative state (untouched, out of scope); the narrower
 mini-features (Skill Tree, Collections, Blend Fault, Challenge Hub) that
 already had their own real persistence before this operation began.
+
+## Holistic Fix 5A update — mentor dual-ownership defect CLOSED
+
+`SmokeCraftJourneyContext.mentor` (already server-synced via the
+Holistic Fix 4B `journey_snapshot` mechanism) is now the sole write
+target for a mentor selection. `GuestSessionContext.selectedMentor`/
+`selectedMentorCountry` remain as fields (real, active cross-module
+consumers outside the `/smokecraft` route tree — NCIE, POS3, staff
+handoff, EAT analytics, leaderboard service — read them and are not
+wrapped by `SmokeCraftJourneyProvider`, so they cannot be removed or
+made to read `journey.mentor` directly), but they are no longer
+independently settable by user action: `src/pages/smokecraft/Mentor.jsx`
+now derives them reactively FROM `journey.mentor` in a dedicated
+`useEffect`, so the two values can never diverge — one write path
+(`setMentor`), one derived mirror (`setSelectedMentor`), not two
+independent owners. **Duplicate-risk downgraded from High to Low.**
+**Migration status: Closed** (structural fix — derivation guarantees
+consistency; server authority already existed via the journey snapshot).

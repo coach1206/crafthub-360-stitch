@@ -29,9 +29,79 @@
  * ensureSmokeCraftGuestIdentity middleware without modification.
  */
 import { getDb } from '../../db/connection.js'
+import { getSessionBadgeIds, getRankForXp } from './sessionRewardTable.js'
 
 const UNIQUE_VIOLATION = '23505'
 const STALE_VERSION = 'stale_version'
+
+// Holistic Fix 5A: session id -> Passport stamp id, for the one
+// curriculum session whose completion is also a Passport-stamp
+// criterion (SESSION_REWARDS['session-complete'].unlockSignal ===
+// 'journey-complete', matching the existing awardStamp('journey-
+// complete', 'session-complete') call in SessionComplete.jsx — this
+// server-side table makes that same criterion authoritative instead of
+// only client-decided).
+const SESSION_PASSPORT_STAMPS = {
+  'session-complete': 'journey-complete',
+}
+
+/** Server-side, transaction-scoped: grants every badge tied to a
+ * session's completion, idempotent via ON CONFLICT DO NOTHING (the
+ * existing (guest_reference, award_type, award_key) UNIQUE index). */
+async function grantSessionBadgesInTx(client, guestReference, sessionId, completionIdempotencyKey, requestId, deviceId) {
+  const badgeIds = getSessionBadgeIds(sessionId)
+  const granted = []
+  for (const badgeId of badgeIds) {
+    const result = await client.query(
+      `INSERT INTO smokecraft_awards (guest_reference, award_type, award_key, amount, idempotency_key, source_route, request_id, device_id)
+       VALUES ($1, 'badge', $2, 0, $3, $4, $5, $6)
+       ON CONFLICT (guest_reference, award_type, award_key) DO NOTHING
+       RETURNING *`,
+      [guestReference, badgeId, `${completionIdempotencyKey}:badge:${badgeId}`, sessionId, requestId || null, deviceId || null]
+    )
+    if (result.rows.length > 0) granted.push(result.rows[0])
+  }
+  return granted
+}
+
+/** Server-side, transaction-scoped: grants the Passport stamp tied to a
+ * session's completion, if any, idempotent the same way as badges. */
+async function grantSessionPassportStampInTx(client, guestReference, sessionId, completionIdempotencyKey, requestId, deviceId) {
+  const stampId = SESSION_PASSPORT_STAMPS[sessionId]
+  if (!stampId) return null
+  const result = await client.query(
+    `INSERT INTO smokecraft_awards (guest_reference, award_type, award_key, amount, idempotency_key, source_route, request_id, device_id)
+     VALUES ($1, 'passport_stamp', $2, 0, $3, $4, $5, $6)
+     ON CONFLICT (guest_reference, award_type, award_key) DO NOTHING
+     RETURNING *`,
+    [guestReference, stampId, `${completionIdempotencyKey}:stamp:${stampId}`, sessionId, requestId || null, deviceId || null]
+  )
+  return result.rows[0] || null
+}
+
+/** Server-side, transaction-scoped: recomputes rank from the guest's
+ * CURRENT xp_total (post-update) and records a promotion event if it
+ * changed. Idempotent via UNIQUE(guest_reference, rank_label) — a
+ * promotion to a given rank is only ever recorded once, even if this
+ * function runs again after the guest's XP later drops (no automatic
+ * demotion is ever applied — matches the mandate's "no automatic
+ * demotion unless an approved reversal requires it"). */
+async function recomputeRankInTx(client, guestReference) {
+  const stateResult = await client.query(`SELECT xp_total, rank_label FROM smokecraft_player_state WHERE guest_reference = $1`, [guestReference])
+  const state = stateResult.rows[0]
+  if (!state) return null
+  const newRank = getRankForXp(state.xp_total)
+  if (newRank === state.rank_label) return null
+  await client.query(`UPDATE smokecraft_player_state SET rank_label = $2, updated_at = now() WHERE guest_reference = $1`, [guestReference, newRank])
+  const inserted = await client.query(
+    `INSERT INTO smokecraft_rank_history (guest_reference, rank_label, xp_at_promotion)
+     VALUES ($1, $2, $3)
+     ON CONFLICT (guest_reference, rank_label) DO NOTHING
+     RETURNING *`,
+    [guestReference, newRank, state.xp_total]
+  )
+  return inserted.rows[0] || null
+}
 
 async function recordAudit(client, { guestReference, mutationType, idempotencyKey, outcome, rejectReason, requestId, deviceId }) {
   await client.query(
@@ -138,9 +208,18 @@ export async function completeSession({ guestReference, venueId, sessionId, xpAw
         [guestReference, xpAwarded]
       )
     }
+
+    // Holistic Fix 5A: badges, the tied Passport stamp (if any), and a
+    // rank recompute all happen automatically, server-side, in this
+    // SAME atomic transaction as the completion itself — the client
+    // never separately claims any of these.
+    const badgesGranted = await grantSessionBadgesInTx(client, guestReference, sessionId, idempotencyKey, requestId, deviceId)
+    const passportStampGranted = await grantSessionPassportStampInTx(client, guestReference, sessionId, idempotencyKey, requestId, deviceId)
+    const rankPromotion = await recomputeRankInTx(client, guestReference)
+
     await recordAudit(client, { guestReference, mutationType: 'session_complete', idempotencyKey, outcome: 'applied', requestId, deviceId })
     await client.query('COMMIT')
-    return { ok: true, alreadyCompleted: false, completion }
+    return { ok: true, alreadyCompleted: false, completion, badgesGranted, passportStampGranted, rankPromotion }
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {})
     throw err
@@ -393,4 +472,63 @@ export async function convertGuestToAccount({ guestReference, userReference, ven
   } finally {
     client.release()
   }
+}
+
+/**
+ * Holistic Fix 5A — authoritative leaderboard. Derives entirely from
+ * real server data (smokecraft_player_state + a completed-session
+ * count from smokecraft_session_completions + badge count from
+ * smokecraft_awards) — no mock/hardcoded entries. Only guests with an
+ * explicit eligibility row marked eligible=true (or no row at all —
+ * defaults to eligible, matching the pre-existing product behavior of
+ * showing all active guests, per smokecraft_leaderboard_eligibility's
+ * DEFAULT true) appear. Tie-break: xp_total DESC, then completed-
+ * session count DESC (more genuine gameplay activity ranks higher on a
+ * tie), then guest_reference ASC (fully deterministic, never
+ * order-unstable across repeated identical queries).
+ */
+export async function getLeaderboard({ limit = 50, offset = 0, venueId = null } = {}) {
+  const db = dbOrThrow()
+  const params = [limit, offset]
+  let venueFilter = ''
+  if (venueId) { params.push(venueId); venueFilter = `AND (le.venue_id = $${params.length} OR le.venue_id IS NULL)` }
+  const result = await db.query(
+    `SELECT
+       ps.guest_reference,
+       ps.xp_total,
+       ps.rank_label,
+       COALESCE(le.display_name, 'Guest ' || RIGHT(ps.guest_reference, 4)) AS display_name,
+       (SELECT COUNT(*) FROM smokecraft_session_completions sc WHERE sc.guest_reference = ps.guest_reference) AS completed_session_count,
+       (SELECT COUNT(*) FROM smokecraft_awards a WHERE a.guest_reference = ps.guest_reference AND a.award_type = 'badge') AS badge_count
+     FROM smokecraft_player_state ps
+     LEFT JOIN smokecraft_leaderboard_eligibility le ON le.guest_reference = ps.guest_reference
+     WHERE COALESCE(le.eligible, true) = true
+       AND ps.xp_total > 0
+       ${venueFilter}
+     ORDER BY ps.xp_total DESC, completed_session_count DESC, ps.guest_reference ASC
+     LIMIT $1 OFFSET $2`,
+    params
+  )
+  return result.rows.map((r, i) => ({
+    position: offset + i + 1,
+    displayName: r.display_name,
+    xpTotal: r.xp_total,
+    rankLabel: r.rank_label,
+    completedSessionCount: Number(r.completed_session_count),
+    badgeCount: Number(r.badge_count),
+  }))
+}
+
+/** Sets a guest's leaderboard display name and/or eligibility (self-service, own identity only — enforced by the caller passing only their own guestReference). */
+export async function setLeaderboardPreference({ guestReference, displayName, eligible }) {
+  const db = dbOrThrow()
+  await db.query(
+    `INSERT INTO smokecraft_leaderboard_eligibility (guest_reference, display_name, eligible)
+     VALUES ($1, $2, COALESCE($3, true))
+     ON CONFLICT (guest_reference) DO UPDATE SET
+       display_name = COALESCE(EXCLUDED.display_name, smokecraft_leaderboard_eligibility.display_name),
+       eligible = COALESCE(EXCLUDED.eligible, smokecraft_leaderboard_eligibility.eligible),
+       updated_at = now()`,
+    [guestReference, displayName || null, eligible === undefined ? null : eligible]
+  )
 }

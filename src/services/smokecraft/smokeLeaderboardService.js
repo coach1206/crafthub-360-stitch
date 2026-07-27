@@ -1,7 +1,9 @@
-// Reads the real guest session only — never fabricates other players.
-// A true multi-user leaderboard requires a backend or shared event store;
-// until that exists, this reports the current guest's standing honestly
-// and an explicit empty state for the community board.
+// Holistic Fix 5A: a real, server-authoritative multi-guest leaderboard
+// now exists (GET /api/smokecraft/player-state/leaderboard, derived
+// from smokecraft_player_state — no mock/fabricated entries). This
+// service still reads the real guest session for the current player's
+// own standing (unchanged), and now also fetches the real community
+// leaderboard instead of returning a hardcoded empty array.
 
 import { getRankFromXP } from '../../constants/session.js'
 import { calculateWinnerEligibility, getWinnerProgress } from './smokeWinnerService.js'
@@ -32,11 +34,28 @@ export function getCurrentPlayerSnapshot(session) {
   }
 }
 
-export function getLeaderboardSnapshot(session) {
-  return {
-    currentPlayer: getCurrentPlayerSnapshot(session),
-    communityEntries: [],
-    communityStatus: 'empty',
-    communityMessage: 'A shared venue leaderboard requires a backend or shared event store. Only your own session is shown until that exists.',
+/**
+ * Async — fetches the real server leaderboard. Callers must handle
+ * loading/error states themselves (this never fabricates entries on
+ * failure; it returns an honest 'error' or 'offline' communityStatus).
+ */
+export async function getLeaderboardSnapshot(session) {
+  const currentPlayer = getCurrentPlayerSnapshot(session)
+  try {
+    const res = await fetch('/api/smokecraft/player-state/leaderboard?limit=20', { credentials: 'include' })
+    if (!res.ok) return { currentPlayer, communityEntries: [], communityStatus: 'error', communityMessage: 'Leaderboard is temporarily unavailable.' }
+    const data = await res.json()
+    if (!data.success) return { currentPlayer, communityEntries: [], communityStatus: 'error', communityMessage: 'Leaderboard is temporarily unavailable.' }
+    if (data.entries.length === 0) {
+      return { currentPlayer, communityEntries: [], communityStatus: 'empty', communityMessage: 'No ranked guests yet — be the first to earn XP.' }
+    }
+    return {
+      currentPlayer,
+      communityEntries: data.entries,
+      communityStatus: 'ready',
+      communityMessage: `${data.entries.length} ranked guest${data.entries.length === 1 ? '' : 's'} shown.`,
+    }
+  } catch {
+    return { currentPlayer, communityEntries: [], communityStatus: 'offline', communityMessage: "You're offline — shared rankings can't be loaded right now." }
   }
 }

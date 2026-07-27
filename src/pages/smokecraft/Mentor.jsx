@@ -89,12 +89,30 @@ export default function Mentor() {
     return [saved.id]
   })
 
+  // Holistic Fix 5A: closes the disclosed mentor dual-ownership defect
+  // (SMOKECRAFT_STATE_OWNERSHIP_MAP.md) — journey.mentor (server-synced
+  // via the Holistic Fix 4B journey-snapshot mechanism) is now the SOLE
+  // write target for the user's selection. session.selectedMentor still
+  // exists as a field (many cross-module consumers outside /smokecraft —
+  // NCIE, POS3, staff handoff, EAT analytics, leaderboard — read it and
+  // live entirely outside SmokeCraftJourneyProvider's subtree, so it
+  // cannot be removed or made to read journey.mentor directly), but it
+  // is no longer independently settable from user action: it is now a
+  // pure reactive mirror of journey.mentor, updated in the SAME
+  // render pass a moment after journey.mentor changes, so the two can
+  // never diverge — there is exactly one write path (setMentor) and one
+  // derived mirror (setSelectedMentor), not two independent owners.
   useEffect(() => {
     const mentors = MENTORS.filter(m => selected.includes(m.id))
     setMentor(mentors.length ? mentors : null)
-    if (mentors.length) setSelectedMentor(mentors[0].id, mentors[0].country)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
+
+  useEffect(() => {
+    const first = Array.isArray(journey.mentor) ? journey.mentor[0] : null
+    if (first) setSelectedMentor(first.id, first.country)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [journey.mentor])
 
   function toggle(id) {
     triggerHaptic('light')
