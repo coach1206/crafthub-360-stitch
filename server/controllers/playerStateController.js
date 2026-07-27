@@ -5,7 +5,7 @@
  * trusted from the request body — matches the existing Management Sync
  * convention (managementSyncController.js).
  */
-import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference, submitKnowledgeCheck, submitLeafChallenge, correctReward } from '../services/smokecraft/playerStateService.js'
+import { getPlayerState, completeSession, grantAward, getJourneySnapshot, saveJourneySnapshot, convertGuestToAccount, getLeaderboard, setLeaderboardPreference, submitKnowledgeCheck, submitLeafChallenge, correctReward, submitBlendSelection } from '../services/smokecraft/playerStateService.js'
 import { getDb } from '../db/connection.js'
 
 function ownerGuestReference(identity) {
@@ -322,6 +322,37 @@ export async function handleCorrectReward(req, res) {
     })
     if (!result.ok) return res.status(400).json({ success: false, error: result.error })
     res.status(result.alreadyApplied ? 200 : 201).json({ success: true, alreadyApplied: result.alreadyApplied, correction: result.correction, rankPromotion: result.rankPromotion || null })
+  } catch (err) {
+    dbErrorResponse(res, err)
+  }
+}
+
+/**
+ * Holistic Fix 5A-3: closes the master-blend Passport stamp's previously
+ * client-decided eligibility. The client submits its raw wrapper/binder/
+ * filler selection (structured evidence) — the server independently
+ * verifies it is a well-formed, complete selection before granting
+ * anything.
+ */
+export async function handleSubmitBlend(req, res) {
+  const idempotencyKey = requireIdempotencyKey(req, res)
+  if (!idempotencyKey) return
+  const { wrapperIndex, binderIndex, fillerIndices } = req.body || {}
+  if (typeof wrapperIndex !== 'number' || typeof binderIndex !== 'number' || !Array.isArray(fillerIndices)) {
+    return res.status(400).json({ success: false, error: 'wrapper_binder_filler_selection_required' })
+  }
+  try {
+    const guestReference = ownerGuestReference(req.smokecraftIdentity)
+    const result = await submitBlendSelection({
+      guestReference, venueId: req.smokecraftIdentity.venueId || null,
+      wrapperIndex, binderIndex, fillerIndices,
+      idempotencyKey, sourceRoute: req.body?.sourceRoute || null, requestId: req.id || null, deviceId: req.body?.deviceId || null,
+    })
+    if (!result.ok) return res.status(400).json({ success: false, error: result.error })
+    res.status(result.alreadyScored ? 200 : 201).json({
+      success: true, alreadyScored: result.alreadyScored, xpAwarded: result.xpAwarded || 0,
+      passportStampGranted: result.passportStampGranted || null, rankPromotion: result.rankPromotion || null,
+    })
   } catch (err) {
     dbErrorResponse(res, err)
   }

@@ -509,6 +509,85 @@ export async function correctReward({ guestReference, correctionType, targetTabl
   }
 }
 
+const VALID_WRAPPER_INDICES = new Set([0, 1])
+const VALID_BINDER_INDICES = new Set([0, 1])
+const VALID_FILLER_INDICES = new Set([0, 1, 2])
+
+/**
+ * Holistic Fix 5A-3: server-verifiable evidence for the master-blend
+ * Passport stamp. The client submits its raw wrapper/binder/filler
+ * selection (structured evidence, not a claim of "I completed the
+ * blend") — the server independently checks it is a well-formed,
+ * complete selection (a valid wrapper, a valid binder, exactly 3 valid
+ * distinct fillers) before granting anything. Not a subjective-quality
+ * judgment (which would be genuinely unverifiable server-side) — a real,
+ * mechanical completeness check, closing the previously-disclosed
+ * "unverified free-form client claim" gap for this specific stamp.
+ */
+export async function submitBlendSelection({ guestReference, venueId, wrapperIndex, binderIndex, fillerIndices, idempotencyKey, sourceRoute, requestId, deviceId }) {
+  const fillers = Array.isArray(fillerIndices) ? [...new Set(fillerIndices)] : []
+  const valid = VALID_WRAPPER_INDICES.has(wrapperIndex) && VALID_BINDER_INDICES.has(binderIndex)
+    && fillers.length === 3 && fillers.every(i => VALID_FILLER_INDICES.has(i))
+  if (!valid) return { ok: false, error: 'incomplete_blend_selection' }
+
+  const xpAmount = 150 // XP_AWARDS.BLEND_CREATED, server-owned copy — see sessionRewardTable.js NAMED_XP_SOURCES['blend-created']
+
+  const db = dbOrThrow()
+  const client = await db.connect()
+  try {
+    await client.query('BEGIN')
+    await ensurePlayerStateRow(client, guestReference, venueId)
+
+    const existing = await client.query(
+      `SELECT * FROM smokecraft_activity_attempts WHERE guest_reference = $1 AND activity_type = 'skill_checkpoint' AND activity_key = 'master-blend'`,
+      [guestReference]
+    )
+    if (existing.rows.length > 0) {
+      await recordAudit(client, { guestReference, mutationType: 'blend_submit', idempotencyKey, outcome: 'duplicate_replay', requestId, deviceId })
+      await client.query('COMMIT')
+      return { ok: true, alreadyScored: true, attempt: existing.rows[0] }
+    }
+
+    let attempt
+    try {
+      const inserted = await client.query(
+        `INSERT INTO smokecraft_activity_attempts
+           (guest_reference, activity_type, activity_key, evidence, score, total, xp_awarded, idempotency_key, source_route, request_id, device_id)
+         VALUES ($1, 'skill_checkpoint', 'master-blend', $2, 1, 1, $3, $4, $5, $6, $7)
+         RETURNING *`,
+        [guestReference, JSON.stringify({ wrapperIndex, binderIndex, fillerIndices: fillers }), xpAmount, idempotencyKey, sourceRoute || null, requestId || null, deviceId || null]
+      )
+      attempt = inserted.rows[0]
+    } catch (err) {
+      if (err.code === UNIQUE_VIOLATION) {
+        await client.query('ROLLBACK').catch(() => {})
+        const dup = await db.query(`SELECT * FROM smokecraft_activity_attempts WHERE guest_reference = $1 AND activity_type = 'skill_checkpoint' AND activity_key = 'master-blend'`, [guestReference])
+        return { ok: true, alreadyScored: true, attempt: dup.rows[0] }
+      }
+      throw err
+    }
+
+    await client.query(
+      `UPDATE smokecraft_player_state SET xp_total = xp_total + $2, last_synced_at = now(), updated_at = now() WHERE guest_reference = $1`,
+      [guestReference, xpAmount]
+    )
+    const stampResult = await client.query(
+      `INSERT INTO smokecraft_awards (guest_reference, award_type, award_key, amount, idempotency_key, source_route, request_id, device_id)
+       VALUES ($1, 'passport_stamp', 'master-blend', 0, $2, $3, $4, $5) ON CONFLICT (guest_reference, award_type, award_key) DO NOTHING RETURNING *`,
+      [guestReference, `${idempotencyKey}:stamp:master-blend`, sourceRoute || null, requestId || null, deviceId || null]
+    )
+    const rankPromotion = await recomputeRankInTx(client, guestReference)
+    await recordAudit(client, { guestReference, mutationType: 'blend_submit', idempotencyKey, outcome: 'applied', requestId, deviceId })
+    await client.query('COMMIT')
+    return { ok: true, alreadyScored: false, attempt, xpAwarded: xpAmount, passportStampGranted: stampResult.rows[0] || null, rankPromotion }
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {})
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
 /**
  * Loads the journey content snapshot for a guest/account reference.
  */

@@ -106,3 +106,13 @@ export async function submitLeafChallengeOnServer(guestId, answers, { sourceRout
   const idempotencyKey = makeIdempotencyKey(guestId, 'leaf-challenge')
   return postJson('/leaf-challenge/submit', { idempotencyKey, answers, sourceRoute, deviceId })
 }
+
+/**
+ * Holistic Fix 5A-3: submits the raw wrapper/binder/filler selection
+ * (structured evidence, not a completion claim) — the server verifies
+ * it is well-formed before granting XP/the master-blend Passport stamp.
+ */
+export async function submitBlendSelectionOnServer(guestId, wrapperIndex, binderIndex, fillerIndices, { sourceRoute, deviceId } = {}) {
+  const idempotencyKey = makeIdempotencyKey(guestId, 'blend-submit')
+  return postJson('/blend/submit', { idempotencyKey, wrapperIndex, binderIndex, fillerIndices, sourceRoute, deviceId })
+}

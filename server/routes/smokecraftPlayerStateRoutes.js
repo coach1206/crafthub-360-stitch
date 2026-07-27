@@ -58,6 +58,7 @@ router.put('/leaderboard/preference', writeLimiter, requireSmokeCraftIdentity, c
 // ── Holistic Fix 5A-2: server-verified quiz/skill-check scoring + corrections ──
 router.post('/knowledge-check/:moduleId/submit', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitKnowledgeCheck)
 router.post('/leaf-challenge/submit', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitLeafChallenge)
+router.post('/blend/submit', writeLimiter, requireSmokeCraftIdentity, ctrl.handleSubmitBlend)
 // Staff-only, never reachable by a learner identity — requireStaff runs
 // AFTER optionalAuth (mounted above via router.use), so req.user is
 // already resolved from a real, server-verified session by this point.

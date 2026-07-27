@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuestSession } from '../../context/GuestSessionContext.jsx'
-import { XP_AWARDS } from '../../constants/session.js'
 import {
   SmokeCraftAtmosphericBackground,
   SmokeCraftBottomNav,
@@ -78,7 +77,7 @@ const FILLERS = [
 
 export default function Blend() {
   const navigate = useNavigate()
-  const { addXP, completeStep, awardStamp } = useGuestSession()
+  const { completeStep, submitBlendSelection } = useGuestSession()
 
   const [selectedWrapper, setSelectedWrapper] = useState(0)
   const [selectedBinder, setSelectedBinder] = useState(0)
@@ -93,9 +92,13 @@ export default function Blend() {
   }
 
   function handleSubmit() {
-    addXP(XP_AWARDS.BLEND_CREATED, 'blend-created')
+    // Holistic Fix 5A-3: submits the raw selection as evidence — the
+    // server independently verifies it is a complete, well-formed blend
+    // (valid wrapper, valid binder, exactly 3 distinct fillers) before
+    // granting XP or the master-blend Passport stamp; the client no
+    // longer claims either directly.
+    submitBlendSelection(selectedWrapper, selectedBinder, [...selectedFillers])
     completeStep('blend')
-    awardStamp('master-blend', 'blend')
     navigate('/smokecraft/flavor-dna')
   }
 

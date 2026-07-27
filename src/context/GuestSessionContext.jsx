@@ -36,6 +36,7 @@ import { saveEvent } from '../services/syncQueueService.js'
 import {
   completeSessionOnServer, awardPassportStampOnServer, awardNamedXpOnServer,
   awardBadgeOnServer, submitKnowledgeCheckOnServer, submitLeafChallengeOnServer,
+  submitBlendSelectionOnServer,
 } from '../services/smokecraft/playerStateApiClient.js'
 
 // SCHEMA_VERSION is now managed in sessionStorageService (v4)
@@ -161,6 +162,20 @@ export function GuestSessionProvider({ children }) {
   const submitLeafChallenge = useCallback((answers) => {
     const guestId = sessionRef.current.guestId
     submitLeafChallengeOnServer(guestId, answers, {
+      sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
+      deviceId: sessionRef.current.deviceId,
+    }).catch(() => {})
+  }, [])
+
+  /**
+   * Holistic Fix 5A-3: submits the raw wrapper/binder/filler selection —
+   * the server verifies it is well-formed and is the sole authority for
+   * the master-blend Passport stamp (closes the previously-disclosed
+   * unverified-client-claim gap for this stamp).
+   */
+  const submitBlendSelection = useCallback((wrapperIndex, binderIndex, fillerIndices) => {
+    const guestId = sessionRef.current.guestId
+    submitBlendSelectionOnServer(guestId, wrapperIndex, binderIndex, fillerIndices, {
       sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null,
       deviceId: sessionRef.current.deviceId,
     }).catch(() => {})
@@ -1050,6 +1065,7 @@ export function GuestSessionProvider({ children }) {
       addBadge,
       submitKnowledgeCheck,
       submitLeafChallenge,
+      submitBlendSelection,
       awardSessionRewards,
       // Scoring + loyalty engine
       awardLoyaltyPoints:       awardLoyaltyPointsCb,
