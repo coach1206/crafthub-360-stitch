@@ -510,3 +510,19 @@ including a real stale-write 409 rejection and true cross-device resume
 via a second real login). No existing control's visible behavior
 changed. See `SMOKECRAFT_GUEST_ACCOUNT_MERGE_POLICY.md` and
 `public/proof/smokecraft-holistic-fix-4b/`.
+
+## Holistic Fix 5A — server-side badge/Passport-stamp auto-unlock, rank, leaderboard
+
+The `completion` control-implementation group's server-side behavior
+(unchanged client-side guard) now automatically grants tied badges/
+Passport stamps and recomputes rank in the SAME atomic transaction as
+the session-completion mutation — the client no longer separately
+claims these. Verified live (22/22,
+`verify-smokecraft-hf5a-gameplay-engine.mjs`), including a two-tab race
+on a badge-and-rank-granting completion (exactly one badge, one rank
+promotion, both idempotent). A real leaderboard now exists
+(`GET /api/smokecraft/player-state/leaderboard`), wired into
+`Leaderboard.jsx`'s existing honest-disclosure boundary message. No
+control's visible markup or click behavior changed. See
+`SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md`, `SMOKECRAFT_RULE_REGISTRY.md`,
+`SMOKECRAFT_LEADERBOARD_RULES.md`.

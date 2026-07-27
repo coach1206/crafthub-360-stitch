@@ -1036,3 +1036,50 @@ giving every re-seeded iteration a timestampless local cache (something
 no real client write ever produces, since `updateJourney()` always
 stamps `journeyUpdatedAt`) — both fixes were required together.
 Re-verified: full journey 107/107.
+
+## Holistic Fix 5A — gameplay ledger findings
+
+**SC-D023 (new, CLOSED)**: the mentor selection dual-ownership defect
+disclosed in Holistic Fix 4's ownership map
+(`SmokeCraftJourneyContext.mentor` vs `GuestSessionContext.selectedMentor`,
+two independently-settable fields for one concept) is closed:
+`Mentor.jsx` now writes only `journey.mentor` (already server-synced);
+`session.selectedMentor` is a pure reactive mirror derived from it in a
+dedicated effect, never independently settable. Both fields are kept
+(real cross-module consumers outside `/smokecraft` — NCIE, POS3, staff
+handoff, EAT analytics — read `session.selectedMentor` and cannot reach
+`SmokeCraftJourneyProvider`), but they can no longer diverge.
+
+**SC-D024 (new, CLOSED)**: badges and the one curriculum-tied Passport
+stamp were previously claimed by the client (which decided locally that
+a badge/stamp was earned, then called an idempotent server RECORD
+endpoint) rather than calculated and issued by the server, violating
+this mandate's core non-negotiable rule. Fixed: `completeSession()`
+now auto-grants the session's tied badges (from the existing, real
+`SESSION_REWARDS[id].sessionBadges` table) and the `session-complete`
+session's tied Passport stamp, in the same atomic transaction as the
+completion — the client only ever requests "complete this session,"
+never "grant me this badge."
+
+**Test-harness assumptions found stale by this pass's own new
+functionality (not product regressions)**: two pre-existing automated
+tests (`verify-smokecraft-hf4-player-state-idempotency.mjs` section 4,
+`verify-smokecraft-hf4b-account-and-conversion.mjs` section 4) asserted
+exact total badge counts that were correct before Holistic Fix 5A but
+became stale once session completion started auto-granting real tied
+badges in the same guest identity's award list. Both were investigated,
+confirmed to be test-assumption staleness (not defects — the new badge
+counts are the CORRECT, expected result of real new functionality), and
+fixed to assert against the specific award keys each test actually
+exercises rather than a total count that a real, working feature now
+legitimately changes.
+
+**Known, disclosed, NOT closed this pass** (see
+`SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md`'s Known Gaps): `addXP()` in
+`GuestSessionContext` has no idempotency guard and no server mirror at
+all — a genuine remaining client-controlled-XP surface for the
+Origins-module `XP_AWARDS` call sites; the 3 Origins-module Passport
+stamps (`master-blend`, `cultivator`, `leaf-recognition`) have
+server-idempotent recording but client-decided eligibility; Challenge
+Hub and Golden Box scoring remain explicitly deferred to Holistic Fix
+5C; pairing/mentor intelligence remains deferred to Holistic Fix 5B.

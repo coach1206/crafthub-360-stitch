@@ -333,3 +333,11 @@ explicitly scoped to the 21-session curriculum's discovered controls
 this is a supporting/entry-layer screen, consistent with how other
 supporting screens (Rewards Center, How It Works) are also outside that
 276-count scope.
+
+## Holistic Fix 5A update — no control redesign, server behavior only
+
+The `completion` group's controls are unchanged in markup and click
+behavior; only the server-side consequence of a successful completion
+changed (badges/Passport-stamp/rank now auto-computed server-side,
+documented in `SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md`). No new control
+group was introduced.

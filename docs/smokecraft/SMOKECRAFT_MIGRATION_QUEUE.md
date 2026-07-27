@@ -202,3 +202,15 @@ journey-snapshot columns). Route count is now 109 (was 108) — the new
 `/smokecraft/account` screen. Shell-adoption floor and classification
 counts otherwise unchanged. See `SMOKECRAFT_STATE_OWNERSHIP_MAP.md`'s
 Holistic Fix 4B section for the full state-migration accounting.
+
+## Holistic Fix 5A status note
+
+One new migration this pass (095: gameplay rule registry, rank history,
+leaderboard eligibility). No route/shell-adoption changes. Server-side
+gameplay ledger now covers session-completion XP, badge auto-unlock,
+one Passport-stamp auto-unlock, rank promotion, and the leaderboard for
+the primary 27-session curriculum — see
+`SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md` for what remains queued
+(client-controlled `addXP()` surface, Origins-module stamp eligibility,
+Challenge Hub/Golden Box scoring deferred to 5C, pairing/mentor
+intelligence deferred to 5B).

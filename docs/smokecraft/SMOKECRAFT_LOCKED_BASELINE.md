@@ -244,3 +244,19 @@ existing-account conversion where both sides had independent prior
 state (merge policy applied correctly, nothing silently lost). Not
 locked: per-field (rather than whole-blob) conflict resolution for
 journey content — disclosed trade-off, see the merge policy doc.
+
+## Holistic Fix 5A additions
+
+Server-side badge/Passport-stamp auto-unlock and rank promotion for the
+primary curriculum are now locked: `completeSession()` grants tied
+badges/stamps and recomputes rank atomically with the completion
+itself, enforced by real database UNIQUE constraints (not
+application-level checks alone) and the new build-blocking
+`scripts/validateSmokecraftGameplayIntegrity.mjs` (20/20 checks). The
+mentor selection dual-ownership defect is closed (single write path,
+one derived mirror). A real, mock-free leaderboard endpoint is locked
+in. Not locked: `addXP()`'s remaining unguarded client-controlled-XP
+surface, the 3 Origins-module Passport stamps' client-decided
+eligibility, and Challenge Hub/Golden Box scoring (explicitly deferred
+to Holistic Fix 5C) — see `SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md`'s Known
+Gaps for full detail.

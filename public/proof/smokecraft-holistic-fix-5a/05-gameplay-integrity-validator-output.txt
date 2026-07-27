@@ -1,0 +1,25 @@
+── SmokeCraft gameplay-integrity validator (Holistic Fix 5A)
+
+  OK    docs/smokecraft/SMOKECRAFT_GAMEPLAY_ENGINE_MAP.md exists
+  OK    migration 095 exists
+  OK    migration 095 has a rollback script
+  OK    rollback file does not live inside server/db/migrations
+  OK    smokecraft_rank_history has UNIQUE(guest_reference, rank_label) — idempotent promotion
+  OK    smokecraft_gameplay_rules has UNIQUE(rule_key, version) — versioned, not overwritable
+  OK    grantSessionBadgesInTx runs inside completeSession's transaction (client never separately claims a session-tied badge)
+  OK    grantSessionPassportStampInTx runs inside the same transaction
+  OK    badge/stamp grants use ON CONFLICT DO NOTHING against the real UNIQUE index (duplicate-protected, not app-level only)
+  OK    rank is recomputed server-side from xp_total, never trusted from the client
+  OK    no automatic demotion — recomputeRankInTx only ever changes rank when the newly computed rank differs (promotion), never compares for a lower value to force a downgrade
+  OK    badge criteria are read from SESSION_REWARDS (existing single source of truth), not duplicated
+  OK    rank ladder is read from SC_RANKS (existing, already-approved, already-aligned constant) — not a newly invented ladder
+  OK    leaderboard query selects from smokecraft_player_state (real data)
+  OK    leaderboard query has no hardcoded/mock guest names or scores
+  OK    client leaderboard service fetches the real API, never returns a hardcoded communityEntries array
+  OK    leaderboard preference endpoint validates displayName/eligible types, never trusts arbitrary client fields for scoring
+  OK    no controller path accepts a client-supplied XP/score/badge/rank amount for the completion or award endpoints (still true from Holistic Fix 4)
+  OK    Mentor.jsx has exactly one setSelectedMentor call site, reactive to journey.mentor (not an independent write)
+  OK    leaderboard read route is mounted
+  OK    leaderboard preference route requires identity (not anonymous-writable)
+
+=== RESULT: PASS (0 checks failed) ===
