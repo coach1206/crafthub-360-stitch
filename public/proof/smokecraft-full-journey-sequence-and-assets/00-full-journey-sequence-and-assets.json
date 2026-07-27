@@ -1,6 +1,6 @@
 {
-  "startedAt": "2026-07-27T18:06:03.761Z",
-  "commit": "b0fa85aa81db7ca7ff52f10e44d6c67827f1c0e1",
+  "startedAt": "2026-07-27T19:27:54.785Z",
+  "commit": "c8a4272cb5e85c990554fba0d78cb75d863a8b75",
   "branch": "recovery/smokecraft-codex-final",
   "entry": [
     {
@@ -13,7 +13,7 @@
     },
     {
       "step": "begin-experience",
-      "route": "/smokecraft/humidor-match"
+      "route": "/smokecraft/venue-select"
     }
   ],
   "sessions": [
@@ -23,9 +23,7 @@
       "phaseTitle": "Session Preparation",
       "label": "Welcome to Today’s Experience",
       "route": "/smokecraft/welcome",
-      "resolved": "/smokecraft/welcome",
-      "screenId": "session-1",
-      "component": "session-1",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "session1",
       "approvedAsset": "/assets/smokecraft/session 1.png",
       "renderedSha256": "8394f96f915020c6630d2407518a3db1eea7e2c5d07dbdcbee1ffe4d6f2fd4e5",
@@ -35,8 +33,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/venue-select",
       "nextRoute": "/smokecraft/humidor-match",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-01.png"
     },
     {
@@ -45,9 +41,7 @@
       "phaseTitle": "Session Preparation",
       "label": "Choose Your Cigar",
       "route": "/smokecraft/humidor-match",
-      "resolved": "/smokecraft/humidor-match",
-      "screenId": "session-2",
-      "component": "session-2",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "humidorMatch",
       "approvedAsset": "/assets/smokecraft/Humidor Match 1.png",
       "renderedSha256": "63c6510b549a89cafb7e2b293afce68dcf2895830f9a0a52e2883be62a380c28",
@@ -57,8 +51,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/welcome",
       "nextRoute": "/smokecraft/meet-your-cigar",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-02.png"
     },
     {
@@ -67,9 +59,7 @@
       "phaseTitle": "Session Preparation",
       "label": "Meet Your Cigar",
       "route": "/smokecraft/meet-your-cigar",
-      "resolved": "/smokecraft/meet-your-cigar",
-      "screenId": "session-3",
-      "component": "session-3",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "meetYourCigar",
       "approvedAsset": "/assets/smokecraft/DISOVER YOUR CIGAR PROFILE.png",
       "renderedSha256": "6fc13ac032af8e5f7c04e7e138a7aa0df31579dde1ab6cea2ca0be22418db6a4",
@@ -79,8 +69,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/humidor-match",
       "nextRoute": "/smokecraft/terroir",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-03.png"
     },
     {
@@ -89,20 +77,16 @@
       "phaseTitle": "Session Preparation",
       "label": "Terroir",
       "route": "/smokecraft/terroir",
-      "resolved": "/smokecraft/terroir",
-      "screenId": "session-4",
-      "component": "session-4",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "terroir",
       "approvedAsset": "/assets/smokecraft-reference/approved/smokecraft-terroir.png",
-      "renderedSha256": "e671a9a296f1162ca086e343b04d0e171aa1b24d236d93c96d187d8465bd4908",
+      "renderedSha256": null,
       "diskSha256": "e671a9a296f1162ca086e343b04d0e171aa1b24d236d93c96d187d8465bd4908",
-      "hashMatch": true,
+      "hashMatch": null,
       "mergedInto": null,
       "sharedComponent": null,
       "previousRoute": "/smokecraft/meet-your-cigar",
       "nextRoute": "/smokecraft/format",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-04.png"
     },
     {
@@ -111,9 +95,7 @@
       "phaseTitle": "Session Preparation",
       "label": "Construction Inspection",
       "route": "/smokecraft/format",
-      "resolved": "/smokecraft/format",
-      "screenId": "session-5",
-      "component": "session-5",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "format",
       "approvedAsset": "/assets/smokecraft-reference/approved/smokecraft-vitola.png",
       "renderedSha256": "a7c1147e1b9b6bb33432de7f33fb3f622adaa4fc1782511ceccb52ad44d14136",
@@ -123,8 +105,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/terroir",
       "nextRoute": "/smokecraft/request-purchase",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-05.png"
     },
     {
@@ -133,9 +113,7 @@
       "phaseTitle": "Session Preparation",
       "label": "Choose Your Cut",
       "route": "/smokecraft/cut-toast-light",
-      "resolved": "/smokecraft/cut-toast-light",
-      "screenId": "session-6",
-      "component": "session-6",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "cutToastLight",
       "approvedAsset": "/assets/smokecraft/CUT  TOAST, & LIGHT.png",
       "renderedSha256": "09a4257a15bf400150f4e89df3ff91e7e3a7b057b17bbc8c7c3334eefddd4b43",
@@ -145,8 +123,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/format",
       "nextRoute": "/smokecraft/lighting-tutorial",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-06.png"
     },
     {
@@ -155,9 +131,7 @@
       "phaseTitle": "Session Preparation",
       "label": "Lighting Tutorial",
       "route": "/smokecraft/lighting-tutorial",
-      "resolved": "/smokecraft/lighting-tutorial",
-      "screenId": "session-7",
-      "component": "session-7",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "lightingTutorial",
       "approvedAsset": "/assets/smokecraft/LIGHTING TUTORIAL 1.png",
       "renderedSha256": "0b9e31a4821a686d547810cf8051b4d34f1c446ed97bf3a2fb79d5f9fa36000b",
@@ -167,8 +141,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/cut-toast-light",
       "nextRoute": "/smokecraft/first-third",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-07.png"
     },
     {
@@ -177,9 +149,7 @@
       "phaseTitle": "First Third",
       "label": "First Draw",
       "route": "/smokecraft/first-third",
-      "resolved": "/smokecraft/first-third",
-      "screenId": "session-8",
-      "component": "session-8",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "firstThird",
       "approvedAsset": "/assets/smokecraft/FIRST  THIRD1.png",
       "renderedSha256": "18a997c3d1de12ce21627b903280f57ea2eaee4ed96f31d0051c8dac2c8f295b",
@@ -189,8 +159,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/lighting-tutorial",
       "nextRoute": "/smokecraft/first-third",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-08.png"
     },
     {
@@ -199,9 +167,7 @@
       "phaseTitle": "First Third",
       "label": "Flavor Discovery",
       "route": "/smokecraft/first-third",
-      "resolved": "/smokecraft/first-third",
-      "screenId": "session-8",
-      "component": "session-8",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "firstThird",
       "approvedAsset": "/assets/smokecraft/FIRST  THIRD1.png",
       "renderedSha256": "18a997c3d1de12ce21627b903280f57ea2eaee4ed96f31d0051c8dac2c8f295b",
@@ -211,8 +177,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/first-third",
       "nextRoute": "/smokecraft/flavor-memory",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-09.png"
     },
     {
@@ -221,9 +185,7 @@
       "phaseTitle": "First Third",
       "label": "Flavor Memory Exercise",
       "route": "/smokecraft/flavor-memory",
-      "resolved": "/smokecraft/flavor-memory",
-      "screenId": "session-10",
-      "component": "session-10",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "flavorMemory",
       "approvedAsset": "/assets/smokecraft/FLAVOR MEMORY.png",
       "renderedSha256": "297eb2b15d96a58dbda1ffa3878a962a33a0f242199a0595b655f2aeca71310d",
@@ -233,8 +195,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/first-third",
       "nextRoute": "/smokecraft/pairing-lab",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-10.png"
     },
     {
@@ -243,9 +203,7 @@
       "phaseTitle": "First Third",
       "label": "Suggested Pairings",
       "route": "/smokecraft/pairing-lab",
-      "resolved": "/smokecraft/pairing-lab",
-      "screenId": "session-11",
-      "component": "session-11",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "pairingLab",
       "approvedAsset": "/assets/smokecraft/PAIRING LAB1.png",
       "renderedSha256": "274fc143e8d5f525b64f853402d83ba1843a11e38e86e7f1138e57ea325bad93",
@@ -255,8 +213,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/flavor-memory",
       "nextRoute": "/smokecraft/second-third",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-11.png"
     },
     {
@@ -265,9 +221,7 @@
       "phaseTitle": "Second Third",
       "label": "Flavor Evolution",
       "route": "/smokecraft/second-third",
-      "resolved": "/smokecraft/second-third",
-      "screenId": "session-12",
-      "component": "session-12",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "secondThird",
       "approvedAsset": "/assets/smokecraft/SECOND THIRD.png",
       "renderedSha256": "0a8ec771f6bf71d21fc5533096a4a4efb44b10453b7105067d0e3c8123768a88",
@@ -277,8 +231,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/pairing-lab",
       "nextRoute": "/smokecraft/second-third",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-12.png"
     },
     {
@@ -287,9 +239,7 @@
       "phaseTitle": "Second Third",
       "label": "Construction Check",
       "route": "/smokecraft/second-third",
-      "resolved": "/smokecraft/second-third",
-      "screenId": "session-12",
-      "component": "session-12",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "secondThird",
       "approvedAsset": "/assets/smokecraft/SECOND THIRD.png",
       "renderedSha256": "0a8ec771f6bf71d21fc5533096a4a4efb44b10453b7105067d0e3c8123768a88",
@@ -299,8 +249,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/second-third",
       "nextRoute": "/smokecraft/mentor-commentary",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-13.png"
     },
     {
@@ -309,9 +257,7 @@
       "phaseTitle": "Second Third",
       "label": "Mentor Commentary",
       "route": "/smokecraft/mentor-commentary",
-      "resolved": "/smokecraft/mentor-commentary",
-      "screenId": "session-14",
-      "component": "session-14",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "mentorCommentary",
       "approvedAsset": "/assets/smokecraft/MENTOR :COMMENTARY.png",
       "renderedSha256": "3959f46c029b02968c26666ae68a6f03c1a0341917abe75207a891f917933e56",
@@ -321,8 +267,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/second-third",
       "nextRoute": "/smokecraft/knowledge-drop",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-14.png"
     },
     {
@@ -331,9 +275,7 @@
       "phaseTitle": "Second Third",
       "label": "Knowledge Drop",
       "route": "/smokecraft/knowledge-drop",
-      "resolved": "/smokecraft/knowledge-drop",
-      "screenId": "session-15",
-      "component": "session-15",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "knowledgeDrop",
       "approvedAsset": "/assets/smokecraft/KNOWLEDGE DROP.png",
       "renderedSha256": "27b3c600ed0be03eb1f8fdb4ad62e2ec274c3e3f24581f151ccca820529eff5f",
@@ -343,8 +285,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/mentor-commentary",
       "nextRoute": "/smokecraft/final-third",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-15.png"
     },
     {
@@ -353,9 +293,7 @@
       "phaseTitle": "Final Third",
       "label": "Flavor Finish",
       "route": "/smokecraft/final-third",
-      "resolved": "/smokecraft/final-third",
-      "screenId": "session-16",
-      "component": "session-16",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "finalThird",
       "approvedAsset": "/assets/smokecraft/FINAL THIRD.png",
       "renderedSha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0",
@@ -365,8 +303,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/knowledge-drop",
       "nextRoute": "/smokecraft/final-third",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-16.png"
     },
     {
@@ -375,9 +311,7 @@
       "phaseTitle": "Final Third",
       "label": "Strength Progression",
       "route": "/smokecraft/final-third",
-      "resolved": "/smokecraft/final-third",
-      "screenId": "session-16",
-      "component": "session-16",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "finalThird",
       "approvedAsset": "/assets/smokecraft/FINAL THIRD.png",
       "renderedSha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0",
@@ -387,8 +321,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/final-third",
       "nextRoute": "/smokecraft/final-third",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-17.png"
     },
     {
@@ -397,9 +329,7 @@
       "phaseTitle": "Final Third",
       "label": "Overall Experience Notes",
       "route": "/smokecraft/final-third",
-      "resolved": "/smokecraft/final-third",
-      "screenId": "session-16",
-      "component": "session-16",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "finalThird",
       "approvedAsset": "/assets/smokecraft/FINAL THIRD.png",
       "renderedSha256": "6ce38723011af64a7d5e20593f637d3af770e60eb40f24a1e3c92f091c0787b0",
@@ -409,8 +339,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/final-third",
       "nextRoute": "/smokecraft/scorecard",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-18.png"
     },
     {
@@ -419,9 +347,7 @@
       "phaseTitle": "Reflection",
       "label": "Rate Every Category",
       "route": "/smokecraft/scorecard",
-      "resolved": "/smokecraft/scorecard",
-      "screenId": "session-19",
-      "component": "session-19",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "scorecard",
       "approvedAsset": "/assets/smokecraft/Scorecard.png",
       "renderedSha256": "a577973797590d326a1f14f645262bcc886ee61e9cca4c3fc723ef3b410e9580",
@@ -431,8 +357,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/final-third",
       "nextRoute": "/smokecraft/scorecard",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-19.png"
     },
     {
@@ -441,9 +365,7 @@
       "phaseTitle": "Reflection",
       "label": "Personal Notes",
       "route": "/smokecraft/scorecard",
-      "resolved": "/smokecraft/scorecard",
-      "screenId": "session-19",
-      "component": "session-19",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "scorecard",
       "approvedAsset": "/assets/smokecraft/Scorecard.png",
       "renderedSha256": "a577973797590d326a1f14f645262bcc886ee61e9cca4c3fc723ef3b410e9580",
@@ -453,8 +375,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/scorecard",
       "nextRoute": "/smokecraft/ai-summary",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-20.png"
     },
     {
@@ -463,9 +383,7 @@
       "phaseTitle": "Results",
       "label": "AI Summary",
       "route": "/smokecraft/ai-summary",
-      "resolved": "/smokecraft/ai-summary",
-      "screenId": "session-21",
-      "component": "session-21",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "aiSummary",
       "approvedAsset": "/assets/smokecraft/AI SUMMARY.png",
       "renderedSha256": "1d05f50d0eb713605ccdab57acc5bb0004b114bc79f3b224772465d6e08c01e2",
@@ -475,8 +393,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/scorecard",
       "nextRoute": "/smokecraft/pairing-recommendations",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-21.png"
     },
     {
@@ -485,9 +401,7 @@
       "phaseTitle": "Results",
       "label": "Personalized Pairing Recommendations",
       "route": "/smokecraft/pairing-recommendations",
-      "resolved": "/smokecraft/pairing-recommendations",
-      "screenId": "session-22",
-      "component": "session-22",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "pairingRecommendations",
       "approvedAsset": "/assets/smokecraft/personlized pairing 222.png",
       "renderedSha256": "f060831b151cbefc6d265b962793498eea116faa8ec80cdae81788279201e075",
@@ -497,8 +411,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/ai-summary",
       "nextRoute": "/smokecraft/passport-stamp",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-22.png"
     },
     {
@@ -507,9 +419,7 @@
       "phaseTitle": "Results",
       "label": "Passport Stamp Animation",
       "route": "/smokecraft/passport-stamp",
-      "resolved": "/smokecraft/passport-stamp",
-      "screenId": "session-23",
-      "component": "session-23",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "passportStamp",
       "approvedAsset": "/assets/smokecraft/PASSPORT STAMP.png",
       "renderedSha256": "4d9fb28ac0108a8d36f291abf53987125e3e8388f648a091cfacf9246f6f483a",
@@ -519,8 +429,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/pairing-recommendations",
       "nextRoute": "/smokecraft/final-review",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-23.png"
     },
     {
@@ -529,9 +437,7 @@
       "phaseTitle": "Results",
       "label": "Completed Scorecard",
       "route": "/smokecraft/final-review",
-      "resolved": "/smokecraft/final-review",
-      "screenId": "session-24",
-      "component": "session-24",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "finalReview",
       "approvedAsset": "/assets/smokecraft/FINAL REVIEW.png",
       "renderedSha256": "df16f309ce138aa0cd9a2f6f950124e65dc705ed23134b3d2a4551979a7d607c",
@@ -541,8 +447,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/passport-stamp",
       "nextRoute": "/smokecraft/rewards",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-24.png"
     },
     {
@@ -551,9 +455,7 @@
       "phaseTitle": "Results",
       "label": "Rewards and XP",
       "route": "/smokecraft/rewards",
-      "resolved": "/smokecraft/rewards",
-      "screenId": "session-25",
-      "component": "session-25",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "rewards",
       "approvedAsset": "/assets/smokecraft/session 25 rewards.png",
       "renderedSha256": "683892e9df2ca8193de4d469ccffc23570f9735d00a629244331471c9d1f88e8",
@@ -563,8 +465,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/final-review",
       "nextRoute": "/smokecraft/rewards",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-25.png"
     },
     {
@@ -573,9 +473,7 @@
       "phaseTitle": "Results",
       "label": "Achievements",
       "route": "/smokecraft/rewards",
-      "resolved": "/smokecraft/rewards",
-      "screenId": "session-25",
-      "component": "session-25",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "achievements",
       "approvedAsset": "/assets/smokecraft/ACHIEVMENTS.png",
       "renderedSha256": "32e64aadd40d56102de3a4fb8667fe4c030d84c0377ff2f4b8b48a2d6191d24f",
@@ -585,8 +483,6 @@
       "sharedComponent": "/smokecraft/rewards",
       "previousRoute": "/smokecraft/rewards",
       "nextRoute": "/smokecraft/session-complete",
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-26.png"
     },
     {
@@ -595,9 +491,7 @@
       "phaseTitle": "Results",
       "label": "Recommended Next Journey",
       "route": "/smokecraft/session-complete",
-      "resolved": "/smokecraft/session-complete",
-      "screenId": "session-27",
-      "component": "session-27",
+      "resolved": "/smokecraft/venue-select",
       "assetKey": "recommendedNextJourney",
       "approvedAsset": "/assets/smokecraft/Recommend next journey.png",
       "renderedSha256": "2c5a402c0063a7dc87bc740f8242234e8c6d20f759dfd29b6b1e471386a221a6",
@@ -607,8 +501,6 @@
       "sharedComponent": null,
       "previousRoute": "/smokecraft/rewards",
       "nextRoute": null,
-      "visualSource": "user-approved",
-      "staticOnly": "false",
       "screenshot": "/proof/smokecraft-full-journey-sequence-and-assets/screenshots/session-27.png"
     }
   ],
@@ -618,42 +510,42 @@
       "route": "/smokecraft/pairing",
       "resolved": "/smokecraft/pairing",
       "steps": 12,
-      "venue": "Test Lounge"
+      "venue": null
     },
     {
       "label": "Passport",
       "route": "/smokecraft/passport",
       "resolved": "/smokecraft/passport",
       "steps": 12,
-      "venue": "Test Lounge"
+      "venue": null
     },
     {
       "label": "Rewards Center",
       "route": "/smokecraft/rewards-center",
       "resolved": "/smokecraft/rewards-center",
       "steps": 12,
-      "venue": "Test Lounge"
+      "venue": null
     },
     {
       "label": "Rankings / Leaderboard",
       "route": "/smokecraft/leaderboard",
       "resolved": "/smokecraft/leaderboard",
       "steps": 12,
-      "venue": "Test Lounge"
+      "venue": null
     },
     {
       "label": "CraftHub",
       "route": "/smokecraft/crafthub",
       "resolved": "/smokecraft/crafthub",
       "steps": 12,
-      "venue": "Test Lounge"
+      "venue": null
     },
     {
       "label": "Challenge Hub",
       "route": "/smokecraft/challenge-hub",
       "resolved": "/smokecraft/challenge-hub",
       "steps": 12,
-      "venue": "Test Lounge"
+      "venue": null
     }
   ],
   "viewports": [
@@ -1559,8 +1451,39 @@
       "sha256": "2c5a402c0063a7dc87bc740f8242234e8c6d20f759dfd29b6b1e471386a221a6"
     }
   },
-  "finishedAt": "2026-07-27T18:09:00.623Z",
-  "pass": 107,
-  "fail": 0,
-  "failures": []
+  "finishedAt": "2026-07-27T19:31:02.387Z",
+  "pass": 77,
+  "fail": 30,
+  "failures": [
+    "Entry complete: destination is Welcome / Session 1 — /smokecraft/venue-select",
+    "Welcome renders canonical screenId session-1",
+    "Welcome reports phase 1, session 1",
+    "Welcome honestly declares its real approved asset (session1, never fabricated)",
+    "Welcome reflects the real selected venue",
+    "Begin Experience control clicked",
+    "Begin Experience opens Session 2 (Humidor Match), the next canonical screen — /smokecraft/venue-select",
+    "All 27 sessions resolve at their exact canonical route",
+    "All 27 sessions render their canonical screenId/component",
+    "All 27 sessions report their correct phase (1..6)",
+    "All 27 sessions report their canonical approved asset key",
+    "No Claude-composed replacement / static-only visual on any of the 27 sessions",
+    "Every session with an approved asset actually fetched it — S4",
+    "Previous on S4 returns to the immediate prior canonical screen (S3) — /smokecraft/identity vs /smokecraft/meet-your-cigar",
+    "Continue from S2 advances to a different canonical route — /smokecraft/venue-select",
+    "Refresh preserves the current screen (S6 stays S6) — /smokecraft/venue-select",
+    "Refresh preserves the canonical markers",
+    "Deep link to an unlocked screen (S8) loads at its own route — /smokecraft/venue-select",
+    "Resume opens the earliest incomplete session (S10 flavor-memory) — /smokecraft/venue-select vs /smokecraft/flavor-memory",
+    "Blocked future session shows a real lock state, not the protected content",
+    "Lock screen exposes a return control — no return control found",
+    "Pairing (landing destination): preserves the selected venue",
+    "Passport: preserves the selected venue",
+    "Rewards Center: preserves the selected venue",
+    "Rankings / Leaderboard: preserves the selected venue",
+    "CraftHub: preserves the selected venue",
+    "Challenge Hub: preserves the selected venue",
+    "Pairing Lab opens at its canonical point (S11)",
+    "Pairing Recommendations opens at its canonical point (S22)",
+    "S25 Rewards renders the canonical screen"
+  ]
 }

@@ -305,21 +305,35 @@ export function SmokeCraftJourneyProvider({ children }) {
   }, [journey])
 
   // Holistic Fix 4B: on first mount, adopt the server's journey snapshot
-  // if it has real data (version > 0) — this is what makes cross-device
-  // resume of journey CONTENT (not just awards) actually work: a second
-  // device's localStorage starts empty, but the server snapshot (synced
-  // from device 1) is not. Per the merge policy, server-authoritative
-  // value wins when it exists. If the server has no snapshot yet
-  // (version 0 — brand-new guest/account, or pre-4B data), the local
-  // cache is left as-is and will become the seed for the first save.
+  // ONLY when it is genuinely newer than the local cache — this is what
+  // makes cross-device resume of journey CONTENT work (a second device's
+  // localStorage starts empty/stale, so the server snapshot, synced from
+  // device 1, is newer and correctly wins). Comparing timestamps (not
+  // just "does a server snapshot exist") is required: a real regression
+  // was found live during this pass's full-journey regression run — the
+  // original version of this effect adopted the server snapshot
+  // unconditionally whenever version > 0, which silently overwrote
+  // freshly-seeded/freshly-reset local state (e.g. right after
+  // startNewJourney() resets local fields to null, or a test harness
+  // re-seeding localStorage) with an OLDER server snapshot from before
+  // that reset — the exact "silent overwrite of newer state" the mandate
+  // explicitly prohibits, just in the opposite direction from the
+  // documented journey-snapshot save conflict. Fixed by only adopting
+  // when the server's journey_updated_at is strictly newer than the
+  // local journeyUpdatedAt (or local has none at all — a truly fresh
+  // cache, the common cross-device case).
   useEffect(() => {
     if (hasLoadedServerSnapshot.current) return
     hasLoadedServerSnapshot.current = true
     stateAdapter.subscribe(setSyncStatus)
     stateAdapter.load().then(result => {
-      if (result.ok && result.version > 0 && result.snapshot && Object.keys(result.snapshot).length > 0) {
-        setJourney(prev => ({ ...prev, ...result.snapshot, stateVersion: STATE_VERSION, spineVersion: SPINE_VERSION }))
-      }
+      if (!result.ok || result.version === 0 || !result.snapshot || Object.keys(result.snapshot).length === 0) return
+      const serverUpdatedAtMs = result.updatedAt ? new Date(result.updatedAt).getTime() : 0
+      setJourney(prev => {
+        const localUpdatedAtMs = prev.journeyUpdatedAt || 0
+        if (localUpdatedAtMs && serverUpdatedAtMs <= localUpdatedAtMs) return prev // local is newer or equal — never overwritten
+        return { ...prev, ...result.snapshot, stateVersion: STATE_VERSION, spineVersion: SPINE_VERSION }
+      })
     })
   }, [])
 

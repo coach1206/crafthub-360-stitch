@@ -150,7 +150,20 @@ try {
   async function seed(ids, journey = {}) {
     await page.evaluate(([v, j]) => {
       localStorage.setItem('novee_guest_session', JSON.stringify({ completedSteps: v, profile: { firstName: 'Test Player' } }))
-      localStorage.setItem('sc_journey_v1', JSON.stringify({ stateVersion: 3, identity: { preferredName: 'Test Player' }, ...j }))
+      // journeyUpdatedAt is stamped here matching what every real client
+      // write always includes (SmokeCraftJourneyContext.updateJourney
+      // bumps it on every canonical write) — a real freshly-seeded local
+      // cache is never timestampless. Holistic Fix 4B's client adopts a
+      // server journey snapshot only when it is genuinely newer than the
+      // local cache; omitting this stamp here made every re-seeded
+      // iteration of this loop look like a "fresh/empty" cache to that
+      // comparison, causing a same-guest-cookie server snapshot from an
+      // earlier iteration in this same run to incorrectly overwrite a
+      // later iteration's fresh seed — a test-harness gap, not a real
+      // user scenario (a real client never has local data without a
+      // timestamp), found and fixed alongside the client-side timestamp-
+      // comparison fix itself.
+      localStorage.setItem('sc_journey_v1', JSON.stringify({ stateVersion: 3, identity: { preferredName: 'Test Player' }, journeyUpdatedAt: Date.now(), ...j }))
     }, [ids, journey])
   }
   // networkidle is what makes the approved-asset capture reliable, but under
