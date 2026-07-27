@@ -148,6 +148,7 @@ import smokecraftEnterpriseRoutes   from './routes/smokecraftEnterpriseRoutes.js
 import smokecraftFinalQaRoutes      from './routes/smokecraftFinalQaRoutes.js'
 import smokecraftErrorLogRoutes     from './routes/smokecraftErrorLogRoutes.js'
 import smokecraftPersistenceRoutes  from './routes/smokecraftPersistenceRoutes.js'
+import smokecraftPlayerStateRoutes  from './routes/smokecraftPlayerStateRoutes.js'
 import { errorHandler }       from './middleware/errorHandler.js'
 import { seedPrototypeUsers } from './db/seeds/seedPrototypeUsers.js'
 import { seedMentorUsers }    from './db/seeds/seedMentorUsers.js'
@@ -249,6 +250,7 @@ app.use('/api/eat-360/smokecraft',     eatSmokeCraftLiveSyncRoutes)
 app.use('/api/pos360/smokecraft',      pos360SmokeCraftOrderBridgeRoutes)
 app.use('/api/ticket-tapper/promotions', ticketTapperPromotionRoutes)
 app.use('/api/smokecraft/management-sync', managementSyncRoutes)
+app.use('/api/smokecraft/player-state', smokecraftPlayerStateRoutes)
 app.use('/api/venue-management', venueManagementRoutes)
 app.use('/api/smokecraft/golden-box', goldenBoxRoutes)
 app.use('/api/smokecraft/golden-box/packaging-studio', packagingStudioRoutes)

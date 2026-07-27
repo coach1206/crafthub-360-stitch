@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react'
 import { registerSmokeEventLogSink } from '../services/smokecraft/smokeSharedStorageService.js'
 import { getRankFromXP } from '../constants/session.js'
 import { getSessionRewards } from '../constants/smokecraftRewards.js'
@@ -33,6 +33,7 @@ import {
 import { calculateScore, getRankLabel } from '../services/leaderboardService.js'
 import { GOLD_BOX_RULE_VERSION } from '../utils/smokecraftGoldBoxRules.js'
 import { saveEvent } from '../services/syncQueueService.js'
+import { completeSessionOnServer, awardPassportStampOnServer } from '../services/smokecraft/playerStateApiClient.js'
 
 // SCHEMA_VERSION is now managed in sessionStorageService (v4)
 
@@ -40,6 +41,12 @@ const GuestSessionContext = createContext(null)
 
 export function GuestSessionProvider({ children }) {
   const [session, setSession] = useState(() => loadSession() || createNewSession())
+
+  // Holistic Fix 4 — always-current session snapshot for use inside
+  // useCallback closures without adding `session` to their dependency
+  // arrays (which would recreate every callback on every state change).
+  const sessionRef = useRef(session)
+  useEffect(() => { sessionRef.current = session }, [session])
 
   /** Atomic update: applies updater, saves to localStorage, returns next state. */
   const update = useCallback((updater) => {
@@ -114,6 +121,15 @@ export function GuestSessionProvider({ children }) {
   const awardSessionRewards = useCallback((sessionId) => {
     const rewards = getSessionRewards(sessionId)
     if (!rewards) return
+    // Holistic Fix 4: was already the sole source of truth for XP/badges,
+    // guarded only by this in-memory `if (prev.completedSteps.includes())`
+    // check — a real client-side-only duplicate guard, insufficient
+    // against a second tab, a second device, or a retried request (see
+    // SMOKECRAFT_STATE_OWNERSHIP_MAP.md). localStorage/this update() call
+    // remains the fast, offline-safe UI cache; the fire-and-forget server
+    // call below is now the authoritative, idempotent record — its
+    // (guest_reference, session_id) UNIQUE constraint is the real guard.
+    const alreadyCompletedLocally = sessionRef.current.completedSteps.includes(sessionId)
     update(prev => {
       // Guard: already completed — skip entirely
       if (prev.completedSteps.includes(sessionId)) return prev
@@ -140,6 +156,11 @@ export function GuestSessionProvider({ children }) {
         badges: [...prev.badges, ...newBadges],
       }
     })
+    if (!alreadyCompletedLocally) {
+      const guestId = sessionRef.current.guestId
+      completeSessionOnServer(guestId, sessionId, { sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null, deviceId: sessionRef.current.deviceId })
+        .catch(() => {}) // network/offline failure is honestly swallowed here — localStorage cache still reflects the award; a real sync-reconciliation pass is future work (see Known Gaps)
+    }
   }, [update])
 
   // ── Scoring + loyalty engine ─────────────────────────────────────────────
@@ -179,7 +200,16 @@ export function GuestSessionProvider({ children }) {
   // ── Passport stamps ───────────────────────────────────────────────────────
   /** Primary stamp award — validates against catalog, prevents duplicates, sets latestStampId. */
   const awardStamp = useCallback((stampId, source = 'unknown', extra = {}) => {
+    const alreadyStampedLocally = (sessionRef.current.smokecraftStamps || []).some(s => s.id === stampId)
     update(prev => awardPassportStamp(prev, stampId, source, extra))
+    // Holistic Fix 4: mirror the award to the server-authoritative,
+    // idempotency-key-enforced record (see awardSessionRewards above for
+    // the same rationale — this was previously client-only).
+    if (!alreadyStampedLocally) {
+      const guestId = sessionRef.current.guestId
+      awardPassportStampOnServer(guestId, stampId, { sourceRoute: typeof window !== 'undefined' ? window.location.pathname : null, deviceId: sessionRef.current.deviceId })
+        .catch(() => {})
+    }
   }, [update])
 
   /** @deprecated Use awardStamp(stampId, source). Kept for backward compat. */

@@ -71,6 +71,24 @@ export default defineConfig({
       },
     },
   },
+  // Holistic Fix 4: `vite preview` does NOT inherit `server.proxy` (it's a
+  // separate config key) — needed so browser-test scripts that run
+  // `vite preview` against a separately-running backend (rather than the
+  // unified `npm start` topology where server/index.js serves both dist
+  // and the API on one port) can still reach the new
+  // /api/smokecraft/player-state/* endpoints. Real production always uses
+  // the unified single-port topology (npm start); this only affects the
+  // preview-mode test harness.
+  preview: {
+    host:  '0.0.0.0',
+    proxy: {
+      '/api': {
+        target:       'http://localhost:3001',
+        changeOrigin: true,
+        secure:       false,
+      },
+    },
+  },
   optimizeDeps: {
     include: [
       'react',
