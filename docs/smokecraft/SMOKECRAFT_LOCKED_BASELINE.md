@@ -274,3 +274,11 @@ pass fixes a shared-component pointer-event bug (SC-D027) with zero
 visual/layout/route change — the version-mismatch banner's appearance,
 position, and role="alert" semantics are all unchanged; only its pointer
 behavior when covering other content was corrected.
+
+## Holistic Fix 5A-3C update
+
+Baseline unchanged: 109 routes, 27 sessions, 6 phases, 276 controls, S4's
+approved `smokecraft-terroir.png` asset unchanged on disk. This pass
+fixes only the full-journey test harness's readiness-wait logic
+(`revealSections()`) — zero product code change, zero visual change.
+Full journey now reliably reports 107/107.

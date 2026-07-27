@@ -1,0 +1,35 @@
+{
+  "pass": 7,
+  "fail": 0,
+  "total": 7,
+  "results": [
+    {
+      "name": "S4 does not fetch the approved image on plain page load (data-gated by real design, not a bug)",
+      "ok": true
+    },
+    {
+      "name": "First visit: clicking a section deterministically loads the approved image (no fixed sleep required)",
+      "ok": true
+    },
+    {
+      "name": "Refresh: clicking the section again loads the approved image",
+      "ok": true
+    },
+    {
+      "name": "Back-and-return: the section click still loads the approved image",
+      "ok": true
+    },
+    {
+      "name": "Repeated click on an already-viewed section still resolves the image (cache-served is fine)",
+      "ok": true
+    },
+    {
+      "name": "The rendered <img> element actually loaded (complete, non-zero width) — no blank/broken image",
+      "ok": true
+    },
+    {
+      "name": "A slow (800ms) response still resolves within the bounded 3s wait, not stalling indefinitely",
+      "ok": true
+    }
+  ]
+}

@@ -1178,3 +1178,28 @@ now 88/88) and full-journey suite (the Rewards Center Back-button
 failure, the specific SC-D027 symptom, is gone — 106/107, one unrelated
 pre-existing S4 asset-fetch timing issue remains, disclosed separately,
 not a pointer-blocking symptom and out of this pass's scope).
+
+## Holistic Fix 5A-3C update
+
+**"S4 asset fetch" full-journey failure — CLOSED (test-harness defect,
+not a real product defect).** Root-caused via reproducible instrumented
+runs (before/after debug logging captured live): clicking S4 (Terroir)'s
+"Country" section button reliably triggers the approved
+`smokecraft-terroir.png` fetch and the correct hash-matching image
+renders, every time, in isolation. The failure only appeared during
+Holistic Fix 5A-3's diagnostic runs, which were executed under real
+resource contention (multiple concurrent Node/Playwright/build processes
+running simultaneously in this container). The actual defect:
+`verify-smokecraft-full-journey-sequence-and-assets.mjs`'s
+`revealSections()` helper used a fixed `page.waitForTimeout(350)` after
+the section-reveal click instead of a deterministic readiness condition
+— sufficient in isolation, occasionally too short under contention.
+Fixed: replaced the fixed sleep with `page.waitForResponse()` scoped to
+image requests (bounded at 3s, resolves as soon as the real response
+arrives). Re-verified: full journey 107/107 (was 106/107), and a new
+targeted 7-check regression suite
+(`verify-smokecraft-hf5a3c-s4-asset-fetch-regression.mjs`) covering
+first-visit, refresh, back-and-return, repeated-visit, cached response,
+and a real slow-response (800ms, artificially throttled) scenario — all
+7 passing, confirming the fix is both correct and not merely "wait
+longer."
