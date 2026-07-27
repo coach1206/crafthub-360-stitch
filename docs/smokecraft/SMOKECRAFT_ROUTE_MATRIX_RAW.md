@@ -1,8 +1,8 @@
 # SmokeCraft Route Matrix (Prompt 1/2 — programmatically generated, full nested paths)
 
-Generated from `src/App.jsx` lines 326-584 (the `/smokecraft` parent route group) at commit `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7`, tracking real JSX nesting depth so full paths are reconstructed correctly (e.g. `golden-box/status` -> `/smokecraft/golden-box/status`), not just a flat list of relative path fragments.
+Generated from `src/App.jsx` lines 327-586 (the `/smokecraft` parent route group) at commit `67fe8f9ac872e1b784911da2a92fc15c9edc6ee7`, tracking real JSX nesting depth so full paths are reconstructed correctly (e.g. `golden-box/status` -> `/smokecraft/golden-box/status`), not just a flat list of relative path fragments.
 
-**Total routes found in the /smokecraft group: 108**
+**Total routes found in the /smokecraft group: 109**
 
 | # | Full path | Index | Element (raw JSX, truncated) |
 |---|---|---|---|
@@ -97,20 +97,21 @@ Generated from `src/App.jsx` lines 326-584 (the `/smokecraft` parent route group
 | 89 | `/smokecraft/resume` | no | `<SmokeCraftSessionGuard requires="enroll"><ResumeJourney /></SmokeCraftSessionGuard>` |
 | 90 | `/smokecraft/leaderboard` | no | `<Leaderboard />` |
 | 91 | `/smokecraft/rewards-center` | no | `<RewardsCenter />` |
-| 92 | `/smokecraft/event-challenge` | no | `<EventChallenge />` |
-| 93 | `/smokecraft/how-it-works` | no | `<HowItWorks />` |
-| 94 | `/smokecraft/demo-reset` | no | `<SmokeCraftDemoReset />` |
-| 95 | `/smokecraft/session/start` | no | `<Navigate to="/smokecraft/enroll" replace />` |
-| 96 | `/smokecraft/guest-pass` | no | `<GuestPass />` |
-| 97 | `/smokecraft/demo` | no | `<Demo />` |
-| 98 | `/smokecraft/scan` | no | `<Scan />` |
-| 99 | `/smokecraft/passport` | no | `<SmokeCraftPassport />` |
-| 100 | `/smokecraft/crafthub` | no | `<SmokeCraftCraftHub />` |
-| 101 | `/smokecraft/menu` | no | `<SmokeCraftMenu />` |
-| 102 | `/smokecraft/venue-commerce` | no | `<SmokeCraftVenueCommerce />` |
-| 103 | `/smokecraft/order` | no | `<SmokeCraftVenueCommerce />` |
-| 104 | `/smokecraft/ticket-tapper/staff-specials` | no | `<SmokeCraftVenueCommerce />` |
-| 105 | `/smokecraft/cart` | no | `<SmokeCraftCart />` |
-| 106 | `/smokecraft/checkout` | no | `<SmokeCraftCheckout />` |
-| 107 | `/smokecraft/payment-success` | no | `<SmokeCraftPaymentSuccess />` |
-| 108 | `/smokecraft/order-status` | no | `<SmokeCraftOrderStatus />` |
+| 92 | `/smokecraft/account` | no | `<Account />` |
+| 93 | `/smokecraft/event-challenge` | no | `<EventChallenge />` |
+| 94 | `/smokecraft/how-it-works` | no | `<HowItWorks />` |
+| 95 | `/smokecraft/demo-reset` | no | `<SmokeCraftDemoReset />` |
+| 96 | `/smokecraft/session/start` | no | `<Navigate to="/smokecraft/enroll" replace />` |
+| 97 | `/smokecraft/guest-pass` | no | `<GuestPass />` |
+| 98 | `/smokecraft/demo` | no | `<Demo />` |
+| 99 | `/smokecraft/scan` | no | `<Scan />` |
+| 100 | `/smokecraft/passport` | no | `<SmokeCraftPassport />` |
+| 101 | `/smokecraft/crafthub` | no | `<SmokeCraftCraftHub />` |
+| 102 | `/smokecraft/menu` | no | `<SmokeCraftMenu />` |
+| 103 | `/smokecraft/venue-commerce` | no | `<SmokeCraftVenueCommerce />` |
+| 104 | `/smokecraft/order` | no | `<SmokeCraftVenueCommerce />` |
+| 105 | `/smokecraft/ticket-tapper/staff-specials` | no | `<SmokeCraftVenueCommerce />` |
+| 106 | `/smokecraft/cart` | no | `<SmokeCraftCart />` |
+| 107 | `/smokecraft/checkout` | no | `<SmokeCraftCheckout />` |
+| 108 | `/smokecraft/payment-success` | no | `<SmokeCraftPaymentSuccess />` |
+| 109 | `/smokecraft/order-status` | no | `<SmokeCraftOrderStatus />` |

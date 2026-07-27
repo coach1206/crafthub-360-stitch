@@ -455,6 +455,11 @@
     "elementRaw": "<RewardsCenter />"
   },
   {
+    "fullPath": "account",
+    "isIndex": false,
+    "elementRaw": "<Account />"
+  },
+  {
     "fullPath": "event-challenge",
     "isIndex": false,
     "elementRaw": "<EventChallenge />"
